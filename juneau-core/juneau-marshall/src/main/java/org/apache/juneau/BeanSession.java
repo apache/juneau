@@ -618,7 +618,7 @@ public class BeanSession extends Session {
 				return type.newInstanceFromString(outer, value.toString());
 			}
 
-			if (type.isBoolean()) {
+			if (type.isBoolean() && ! hasTransform(vt, type)) {
 				if (value instanceof Number)
 					return (T)(Boolean.valueOf(((Number)value).intValue() != 0));
 				return (T)Boolean.valueOf(value.toString());
@@ -655,12 +655,6 @@ public class BeanSession extends Session {
 				return (T)new StringReader(value.toString());
 			}
 
-			if (type.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
-				return type.newInstanceFromNumber(this, outer, (Number)value);
-
-			if (type.canCreateNewInstanceFromString(outer))
-				return type.newInstanceFromString(outer, value.toString());
-
 			if (type.isCalendar()) {
 				if (vt.isCalendar()) {
 					Calendar c = (Calendar)value;
@@ -694,11 +688,21 @@ public class BeanSession extends Session {
 			if (type.isBean())
 				return newBeanMap(type.getInnerClass()).load(value.toString()).getBean();
 
+			if (type.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
+				return type.newInstanceFromNumber(this, outer, (Number)value);
+
+			if (type.canCreateNewInstanceFromString(outer))
+				return type.newInstanceFromString(outer, value.toString());
+
 		} catch (Exception e) {
 			throw new InvalidDataConversionException(value, type, e);
 		}
 
 		throw new InvalidDataConversionException(value, type, null);
+	}
+
+	private static boolean hasTransform(ClassMeta<?> from, ClassMeta<?> to) {
+		return to.hasTransformFrom(from) || from.hasTransformTo(to);
 	}
 
 	private static int getMultiplier(String s) {

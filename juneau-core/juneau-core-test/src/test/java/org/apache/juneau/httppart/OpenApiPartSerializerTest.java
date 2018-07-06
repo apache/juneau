@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -274,12 +275,12 @@ public class OpenApiPartSerializerTest {
 	public void c10_stringType_noneFormat_2d() throws Exception {
 		HttpPartSchema ps = schema("array").items(schema("string")).build();
 		assertEquals("foo,bar", s.serialize(ps, new String[]{"foo","bar"}));
-		assertEquals("foo,bar", s.serialize(ps, new AList<String>().appendAll("foo","bar")));
+		assertEquals("foo,bar", s.serialize(ps, AList.create("foo","bar")));
 		assertEquals("foo,bar", s.serialize(ps, new Object[]{"foo","bar"}));
-		assertEquals("foo,bar", s.serialize(ps, new AList<String>().appendAll("foo","bar")));
+		assertEquals("foo,bar", s.serialize(ps, AList.create((Object)"foo",(Object)"bar")));
 		assertEquals("C2-foo,C2-bar", s.serialize(ps, new C2[] {new C2("foo"), new C2("bar")}));
-		assertEquals("C2-foo,C2-bar", s.serialize(ps, new AList<C2>().appendAll(new C2("foo"), new C2("bar"))));
-//		assertEquals("['foo','bar']", s.serialize(ps, new C3("foo","bar")));
+		assertEquals("C2-foo,C2-bar", s.serialize(ps, AList.create(new C2("foo"), new C2("bar"))));
+		assertEquals("foo,bar", s.serialize(ps, new C3("foo","bar")));
 	}
 
 	@Test
@@ -294,228 +295,221 @@ public class OpenApiPartSerializerTest {
 		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, new C2[][]{{new C2("foo"),new C2("bar")},{new C2("baz")}}));
 		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, AList.create(new C2[]{new C2("foo"),new C2("bar")}, new C2[]{new C2("baz")})));
 		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, AList.create(AList.create(new C2("foo"),new C2("bar")),AList.create(new C2("baz")))));
-//		assertEquals("['foo','bar']|['baz']", s.serialize(ps, new C3[]{new C3("foo","bar"),new C3("baz")}));
-//		assertEquals("['foo','bar']|['baz']", s.serialize(ps, AList.create(AList.create(new C3("foo","bar"), new C3("baz")))));
+		assertEquals("foo,bar|baz", s.serialize(ps, new C3[]{new C3("foo","bar"),new C3("baz")}));
+		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(new C3("foo","bar"), new C3("baz"))));
 	}
 
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// type = array
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	public static class D {
-//		private String f;
-//		public D(String in) {
-//			this.f = "D-" + in;
-//		}
-//		@Override
-//		public String toString() {
-//			return f;
-//		}
-//	}
-//
-//	@Test
-//	public void d01_arrayType_collectionFormatCsv() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("csv").build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", Object[].class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo,bar", D[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", List.class, Object.class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo,bar", List.class, D.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", Object.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", ObjectList.class));
-//	}
-//
-//	@Test
-//	public void d02_arrayType_collectionFormatPipes() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("pipes").build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo|bar", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo|bar", Object[].class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo|bar", D[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo|bar", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo|bar", List.class, Object.class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo|bar", List.class, D.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo|bar", Object.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo|bar", ObjectList.class));
-//	}
-//
-//	@Test
-//	public void d03_arrayType_collectionFormatSsv() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("ssv").build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo bar", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo bar", Object[].class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo bar", D[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo bar", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo bar", List.class, Object.class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo bar", List.class, D.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo bar", Object.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo bar", ObjectList.class));
-//	}
-//
-//	@Test
-//	public void d04_arrayType_collectionFormatTsv() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("tsv").build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo\tbar", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo\tbar", Object[].class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo\tbar", D[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo\tbar", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo\tbar", List.class, Object.class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo\tbar", List.class, D.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo\tbar", Object.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo\tbar", ObjectList.class));
-//	}
-//
-//	@Test
-//	public void d05_arrayType_collectionFormatUon() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("uon").build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", Object[].class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "@(foo,bar)", D[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", List.class, Object.class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "@(foo,bar)", List.class, D.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", Object.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", ObjectList.class));
-//	}
-//
-//	@Test
-//	public void d06a_arrayType_collectionFormatNone() throws Exception {
-//		HttpPartSchema ps = schema("array").build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", Object[].class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo,bar", D[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", List.class, Object.class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "foo,bar", List.class, D.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "foo,bar", Object.class));
-//	}
-//
-//	@Test
-//	public void d06b_arrayType_collectionFormatNone_autoDetectUon() throws Exception {
-//		HttpPartSchema ps = schema("array").build();
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", String[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", Object[].class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "@(foo,bar)", D[].class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", List.class, String.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", List.class, Object.class));
-//		assertObjectEquals("['D-foo','D-bar']", s.serialize(ps, "@(foo,bar)", List.class, D.class));
-//		assertObjectEquals("['foo','bar']", s.serialize(ps, "@(foo,bar)", Object.class));
-//	}
-//
-//	@Test
-//	public void d07_arrayType_collectionFormatMulti() throws Exception {
-//		// collectionFormat=multi should not do any sort of splitting.
-//		HttpPartSchema ps = schema("array").collectionFormat("multi").build();
-//		assertObjectEquals("['foo,bar']", s.serialize(ps, "foo,bar", String[].class));
-//		assertObjectEquals("['foo,bar']", s.serialize(ps, "foo,bar", Object[].class));
-//		assertObjectEquals("['D-foo,bar']", s.serialize(ps, "foo,bar", D[].class));
-//		assertObjectEquals("['foo,bar']", s.serialize(ps, "foo,bar", List.class, String.class));
-//		assertObjectEquals("['foo,bar']", s.serialize(ps, "foo,bar", List.class, Object.class));
-//		assertObjectEquals("['D-foo,bar']", s.serialize(ps, "foo,bar", List.class, D.class));
-//		assertObjectEquals("['foo,bar']", s.serialize(ps, "foo,bar", Object.class));
-//	}
-//
-//	@Test
-//	public void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").collectionFormat("csv")).build();
-//		assertObjectEquals("[['foo','bar'],['baz','qux']]", s.serialize(ps, "foo,bar|baz,qux", String[][].class));
-//		assertObjectEquals("[['foo','bar'],['baz','qux']]", s.serialize(ps, "foo,bar|baz,qux", Object[][].class));
-//		assertObjectEquals("[['D-foo','D-bar'],['D-baz','D-qux']]", s.serialize(ps, "foo,bar|baz,qux", D[][].class));
-//		assertObjectEquals("[['foo','bar'],['baz','qux']]", s.serialize(ps, "foo,bar|baz,qux", List.class, List.class, String.class));
-//		assertObjectEquals("[['foo','bar'],['baz','qux']]", s.serialize(ps, "foo,bar|baz,qux", List.class, List.class, Object.class));
-//		assertObjectEquals("[['D-foo','D-bar'],['D-baz','D-qux']]", s.serialize(ps, "foo,bar|baz,qux", List.class, List.class, D.class));
-//		assertObjectEquals("[['foo','bar'],['baz','qux']]", s.serialize(ps, "foo,bar|baz,qux", Object.class));
-//	}
-//
-//	@Test
-//	public void d09_arrayType_itemsInteger() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("csv").items(schema("integer")).build();
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", int[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Integer[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Object[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Integer.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Object.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Object.class));
-//	}
-//
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// type = boolean
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	public static class E1 {
-//		private String f;
-//		public E1(Boolean in) {
-//			this.f = "E1-" + in.toString();
-//		}
-//		@Override
-//		public String toString() {
-//			return f;
-//		}
-//	}
-//
-//	public static class E2 {
-//		private String f;
-//		public E2(Boolean[] in) {
-//			this.f = "E2-" + JsonSerializer.DEFAULT_LAX.toString(in);
-//		}
-//		@Override
-//		public String toString() {
-//			return f;
-//		}
-//	}
-//
-//	@Test
-//	public void e01_booleanType() throws Exception {
-//		HttpPartSchema ps = schema("boolean").build();
-//		assertEquals(true, s.serialize(ps, "true", boolean.class));
-//		assertEquals(true, s.serialize(ps, "true", Boolean.class));
-//		assertEquals(true, s.serialize(ps, "True", boolean.class));
-//		assertEquals(true, s.serialize(ps, "TRUE", boolean.class));
-//		assertEquals("true", s.serialize(ps, "true", String.class));
-//		assertEquals(true, s.serialize(ps, "true", Object.class));
-//		assertObjectEquals("'E1-true'", s.serialize(ps, "true", E1.class));
-//	}
-//
-//	@Test
-//	public void e02_booleanType_2d() throws Exception {
-//		HttpPartSchema ps = schema("array").items(schema("boolean")).build();
-//		assertObjectEquals("[true,true]", s.serialize(ps, "true,true", boolean[].class));
-//		assertObjectEquals("[true,true]", s.serialize(ps, "true,true", Boolean[].class));
-//		assertObjectEquals("[true,true]", s.serialize(ps, "true,true", List.class, Boolean.class));
-//		assertObjectEquals("['true','true']", s.serialize(ps, "true,true", String[].class));
-//		assertObjectEquals("['true','true']", s.serialize(ps, "true,true", List.class, String.class));
-//		assertObjectEquals("[true,true]", s.serialize(ps, "true,true", Object[].class));
-//		assertObjectEquals("[true,true]", s.serialize(ps, "true,true", List.class, Object.class));
-//		assertObjectEquals("['E1-true','E1-true']", s.serialize(ps, "true,true", E1[].class));
-//		assertObjectEquals("['E1-true','E1-true']", s.serialize(ps, "true,true", List.class, E1.class));
-//		assertObjectEquals("'E2-[true,true]'", s.serialize(ps, "true,true", E2.class));
-//
-//		assertObjectEquals("[true,true]", s.serialize(ps, "True,true", boolean[].class));
-//		assertObjectEquals("[true,true]", s.serialize(ps, "TRUE,true", boolean[].class));
-//	}
-//
-//	@Test
+	@Test
+	public void c12a_stringType_uonKeywords_plain() throws Exception {
+		HttpPartSchema ps = schema("string").build();
+		// When serialized normally, the following should not be quoted.
+		assertEquals("true", s.serialize(ps, "true"));
+		assertEquals("false", s.serialize(ps, "false"));
+		assertEquals("null", s.serialize(ps, "null"));
+		assertEquals("123", s.serialize(ps, "123"));
+		assertEquals("1.23", s.serialize(ps, "1.23"));
+	}
+
+	@Test
+	public void c12b_stringType_uonKeywords_uon() throws Exception {
+		HttpPartSchema ps = schema("string","uon").build();
+		// When serialized as UON, the following should be quoted so that they're not confused with booleans or numbers.
+		assertEquals("'true'", s.serialize(ps, "true"));
+		assertEquals("'false'", s.serialize(ps, "false"));
+		assertEquals("'null'", s.serialize(ps, "null"));
+		assertEquals("'123'", s.serialize(ps, "123"));
+		assertEquals("'1.23'", s.serialize(ps, "1.23"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// type = array
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class D {
+		private String f;
+		public D(String in) {
+			this.f = "D-" + in;
+		}
+		@Override
+		public String toString() {
+			return f;
+		}
+	}
+
+	@Test
+	public void d01_arrayType_collectionFormatCsv() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("csv").build();
+		assertEquals("foo,bar", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("foo,bar", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("D-foo,D-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
+		assertEquals("foo,bar", s.serialize(ps, AList.create("foo","bar")));
+		assertEquals("foo,bar", s.serialize(ps, AList.<Object>create("foo","bar")));
+		assertEquals("D-foo,D-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
+		assertEquals("foo,bar", s.serialize(ps, new ObjectList().append("foo","bar")));
+	}
+
+	@Test
+	public void d02_arrayType_collectionFormatPipes() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").build();
+		assertEquals("foo|bar", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("foo|bar", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("D-foo|D-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
+		assertEquals("foo|bar", s.serialize(ps, AList.create("foo","bar")));
+		assertEquals("foo|bar", s.serialize(ps, AList.<Object>create("foo","bar")));
+		assertEquals("D-foo|D-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
+		assertEquals("foo|bar", s.serialize(ps, new ObjectList().append("foo","bar")));
+	}
+
+	@Test
+	public void d03_arrayType_collectionFormatSsv() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("ssv").build();
+		assertEquals("foo bar", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("foo bar", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("D-foo D-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
+		assertEquals("foo bar", s.serialize(ps, AList.create("foo","bar")));
+		assertEquals("foo bar", s.serialize(ps, AList.<Object>create("foo","bar")));
+		assertEquals("D-foo D-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
+		assertEquals("foo bar", s.serialize(ps, new ObjectList().append("foo","bar")));
+	}
+
+	@Test
+	public void d04_arrayType_collectionFormatTsv() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("tsv").build();
+		assertEquals("foo\tbar", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("foo\tbar", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("D-foo\tD-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
+		assertEquals("foo\tbar", s.serialize(ps, AList.create("foo","bar")));
+		assertEquals("foo\tbar", s.serialize(ps, AList.<Object>create("foo","bar")));
+		assertEquals("D-foo\tD-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
+		assertEquals("foo\tbar", s.serialize(ps, new ObjectList().append("foo","bar")));
+	}
+
+	@Test
+	public void d05_arrayType_collectionFormatUon() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("uon").build();
+		assertEquals("@(foo,bar)", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("@(foo,bar)", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("@(D-foo,D-bar)", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
+		assertEquals("@(foo,bar)", s.serialize(ps, AList.create("foo","bar")));
+		assertEquals("@(foo,bar)", s.serialize(ps, AList.<Object>create("foo","bar")));
+		assertEquals("@(D-foo,D-bar)", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
+		assertEquals("@(foo,bar)", s.serialize(ps, new ObjectList().append("foo","bar")));
+	}
+
+	@Test
+	public void d06a_arrayType_collectionFormatNone() throws Exception {
+		HttpPartSchema ps = schema("array").build();
+		assertEquals("foo,bar", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("foo,bar", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("D-foo,D-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
+		assertEquals("foo,bar", s.serialize(ps, AList.create("foo","bar")));
+		assertEquals("foo,bar", s.serialize(ps, AList.<Object>create("foo","bar")));
+		assertEquals("D-foo,D-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
+		assertEquals("foo,bar", s.serialize(ps, new ObjectList().append("foo","bar")));
+	}
+
+	@Test
+	public void d07_arrayType_collectionFormatMulti() throws Exception {
+		// collectionFormat=multi really shouldn't be applicable to collections of values, so just use csv.
+		HttpPartSchema ps = schema("array").collectionFormat("multi").build();
+		assertEquals("foo,bar", s.serialize(ps, new String[]{"foo","bar"}));
+		assertEquals("foo,bar", s.serialize(ps, new Object[]{"foo","bar"}));
+		assertEquals("D-foo,D-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
+		assertEquals("foo,bar", s.serialize(ps, AList.create("foo","bar")));
+		assertEquals("foo,bar", s.serialize(ps, AList.<Object>create("foo","bar")));
+		assertEquals("D-foo,D-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
+		assertEquals("foo,bar", s.serialize(ps, new ObjectList().append("foo","bar")));
+	}
+
+	@Test
+	public void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").collectionFormat("csv")).build();
+		assertEquals("foo,bar|baz,qux", s.serialize(ps, new String[][]{{"foo","bar"},{"baz","qux"}}));
+		assertEquals("foo,bar|baz,qux", s.serialize(ps, new Object[][]{{"foo","bar"},{"baz","qux"}}));
+		assertEquals("D-foo,D-bar|D-baz,D-qux", s.serialize(ps, new D[][]{{new D("foo"),new D("bar")},{new D("baz"),new D("qux")}}));
+		assertEquals("foo,bar|baz,qux", s.serialize(ps, AList.create(AList.create("foo","bar"),AList.create("baz","qux"))));
+		assertEquals("foo,bar|baz,qux", s.serialize(ps, AList.create(AList.<Object>create("foo","bar"),AList.<Object>create("baz","qux"))));
+		assertEquals("D-foo,D-bar|D-baz,D-qux", s.serialize(ps, AList.create(AList.create(new D("foo"),new D("bar")),AList.create(new D("baz"),new D("qux")))));
+	}
+
+	@Test
+	public void d09_arrayType_itemsInteger() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("csv").items(schema("integer")).build();
+		assertEquals("1,2", s.serialize(ps, new int[]{1,2}));
+		assertEquals("1,2", s.serialize(ps, new Integer[]{1,2}));
+		assertEquals("1,2", s.serialize(ps, new Object[]{1,2}));
+		assertEquals("1,2", s.serialize(ps, AList.create(1,2)));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// type = boolean
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class E1 {
+		private Boolean f;
+		public E1(Boolean in) {
+			this.f = in;
+		}
+		public Boolean toBoolean() {
+			return f;
+		}
+	}
+
+	public static class E2 {
+		private Boolean[] f;
+		public E2(Boolean...in) {
+			this.f = in;
+		}
+		public Boolean[] toBooleanArray() {
+			return f;
+		}
+	}
+
+	@Test
+	public void e01_booleanType() throws Exception {
+		HttpPartSchema ps = schema("boolean").build();
+		assertEquals("true", s.serialize(ps, true));
+		assertEquals("false", s.serialize(ps, false));
+		assertEquals("null", s.serialize(ps, null));
+	}
+
+	@Test
+	public void e02_booleanType_2d() throws Exception {
+		HttpPartSchema ps = schema("array").items(schema("boolean")).build();
+		assertEquals("true,true", s.serialize(ps, new boolean[]{true,true}));
+		assertEquals("true,true", s.serialize(ps, new Boolean[]{true,true}));
+		assertEquals("true,true", s.serialize(ps, AList.create(true,true)));
+		assertEquals("true,true", s.serialize(ps, new String[]{"true","true"}));
+		assertEquals("true,true", s.serialize(ps, AList.create("true","true")));
+		assertEquals("true,true", s.serialize(ps, new Object[]{true,true}));
+		assertEquals("true,true", s.serialize(ps, AList.<Object>create(true,true)));
+		assertEquals("true,true", s.serialize(ps, new E1[]{new E1(true),new E1(true)}));
+		assertEquals("true,true", s.serialize(ps, AList.create(new E1(true),new E1(true))));
+		assertEquals("true,true", s.serialize(ps, new E2(true,true)));
+	}
+
+	//	@Test
 //	public void e03_booleanType_3d() throws Exception {
 //		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("boolean"))).build();
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", boolean[][].class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, boolean[].class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", Boolean[][].class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, Boolean[].class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, List.class, Boolean.class));
-//		assertObjectEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", String[][].class));
-//		assertObjectEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", List.class, List.class, String.class));
-//		assertObjectEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", List.class, String[].class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", Object[][].class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, List.class, Object.class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, Object[].class));
-//		assertObjectEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", E1[][].class));
-//		assertObjectEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", List.class, List.class, E1.class));
-//		assertObjectEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", List.class, E1[].class));
-//		assertObjectEquals("['E2-[true,true]','E2-[false]']", s.serialize(ps, "true,true|false", E2[].class));
-//		assertObjectEquals("['E2-[true,true]','E2-[false]']", s.serialize(ps, "true,true|false", List.class, E2.class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", boolean[][].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, boolean[].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", Boolean[][].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, Boolean[].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, List.class, Boolean.class));
+//		assertEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", String[][].class));
+//		assertEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", List.class, List.class, String.class));
+//		assertEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", List.class, String[].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", Object[][].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, List.class, Object.class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, Object[].class));
+//		assertEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", E1[][].class));
+//		assertEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", List.class, List.class, E1.class));
+//		assertEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", List.class, E1[].class));
+//		assertEquals("['E2-[true,true]','E2-[false]']", s.serialize(ps, "true,true|false", E2[].class));
+//		assertEquals("['E2-[true,true]','E2-[false]']", s.serialize(ps, "true,true|false", List.class, E2.class));
 //
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "True,true|false", boolean[][].class));
-//		assertObjectEquals("[[true,true],[false]]", s.serialize(ps, "TRUE,true|false", boolean[][].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "True,true|false", boolean[][].class));
+//		assertEquals("[[true,true],[false]]", s.serialize(ps, "TRUE,true|false", boolean[][].class));
 //	}
 //
 //	//-----------------------------------------------------------------------------------------------------------------
@@ -569,137 +563,137 @@ public class OpenApiPartSerializerTest {
 //	@Test
 //	public void f01_integerType_int32() throws Exception {
 //		HttpPartSchema ps = schema("integer", "int32").build();
-//		assertObjectEquals("1", s.serialize(ps, "1", int.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", Integer.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", short.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", Short.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", long.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", Long.class));
-//		assertObjectEquals("'1'", s.serialize(ps, "1", String.class));
+//		assertEquals("1", s.serialize(ps, "1", int.class));
+//		assertEquals("1", s.serialize(ps, "1", Integer.class));
+//		assertEquals("1", s.serialize(ps, "1", short.class));
+//		assertEquals("1", s.serialize(ps, "1", Short.class));
+//		assertEquals("1", s.serialize(ps, "1", long.class));
+//		assertEquals("1", s.serialize(ps, "1", Long.class));
+//		assertEquals("'1'", s.serialize(ps, "1", String.class));
 //		Object o = s.serialize(ps, "1", Object.class);
-//		assertObjectEquals("1", o);
+//		assertEquals("1", o);
 //		assertClass(Integer.class, o);
-//		assertObjectEquals("'F1-1'", s.serialize(ps,  "1", F1.class));
+//		assertEquals("'F1-1'", s.serialize(ps,  "1", F1.class));
 //	}
 //
 //	@Test
 //	public void f02_integerType_int32_2d() throws Exception {
 //		HttpPartSchema ps = schema("array").items(schema("integer", "int32")).build();
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", int[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Integer[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Integer.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", short[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Short[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Short.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", long[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Long[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Long.class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Object[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Object.class));
-//		assertObjectEquals("['F1-1','F1-2']", s.serialize(ps,  "1,2", F1[].class));
-//		assertObjectEquals("['F1-1','F1-2']", s.serialize(ps,  "1,2", List.class, F1.class));
-//		assertObjectEquals("'F2-[1,2]'", s.serialize(ps,  "1,2", F2.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", int[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Integer[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Integer.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", short[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Short[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Short.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", long[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Long[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Long.class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Object[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Object.class));
+//		assertEquals("['F1-1','F1-2']", s.serialize(ps,  "1,2", F1[].class));
+//		assertEquals("['F1-1','F1-2']", s.serialize(ps,  "1,2", List.class, F1.class));
+//		assertEquals("'F2-[1,2]'", s.serialize(ps,  "1,2", F2.class));
 //	}
 //
 //	@Test
 //	public void f03_integerType_int32_3d() throws Exception {
 //		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("integer", "int32"))).build();
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", int[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, int[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Integer[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Integer[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Integer.class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", short[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, short[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Short[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Short[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Short.class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", long[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, long[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Long[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Long[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Long.class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Object[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
-//		assertObjectEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", F1[][].class));
-//		assertObjectEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", List.class, F1[].class));
-//		assertObjectEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", List.class, List.class, F1.class));
-//		assertObjectEquals("['F2-[1,2]','F2-[3]']", s.serialize(ps, "1,2|3", F2[].class));
-//		assertObjectEquals("['F2-[1,2]','F2-[3]']", s.serialize(ps, "1,2|3", List.class, F2.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", int[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, int[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Integer[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Integer[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Integer.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", short[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, short[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Short[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Short[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Short.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", long[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, long[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Long[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Long[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Long.class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Object[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
+//		assertEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", F1[][].class));
+//		assertEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", List.class, F1[].class));
+//		assertEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", List.class, List.class, F1.class));
+//		assertEquals("['F2-[1,2]','F2-[3]']", s.serialize(ps, "1,2|3", F2[].class));
+//		assertEquals("['F2-[1,2]','F2-[3]']", s.serialize(ps, "1,2|3", List.class, F2.class));
 //	}
 //
 //	@Test
 //	public void f04_integerType_int64() throws Exception {
 //		HttpPartSchema ps = schema("integer", "int64").build();
-//		assertObjectEquals("1", s.serialize(ps, "1", int.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", Integer.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", short.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", Short.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", long.class));
-//		assertObjectEquals("1", s.serialize(ps, "1", Long.class));
-//		assertObjectEquals("'1'", s.serialize(ps, "1", String.class));
+//		assertEquals("1", s.serialize(ps, "1", int.class));
+//		assertEquals("1", s.serialize(ps, "1", Integer.class));
+//		assertEquals("1", s.serialize(ps, "1", short.class));
+//		assertEquals("1", s.serialize(ps, "1", Short.class));
+//		assertEquals("1", s.serialize(ps, "1", long.class));
+//		assertEquals("1", s.serialize(ps, "1", Long.class));
+//		assertEquals("'1'", s.serialize(ps, "1", String.class));
 //		Object o = s.serialize(ps, "1", Object.class);
-//		assertObjectEquals("1", o);
+//		assertEquals("1", o);
 //		assertClass(Long.class, o);
-//		assertObjectEquals("'F3-1'", s.serialize(ps,  "1", F3.class));
+//		assertEquals("'F3-1'", s.serialize(ps,  "1", F3.class));
 //	}
 //
 //	@Test
 //	public void f05_integerType_int64_2d() throws Exception {
 //		HttpPartSchema ps = schema("array").items(schema("integer", "int64")).build();
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", int[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Integer[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Integer.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", short[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Short[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Short.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", long[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Long[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Long.class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", Object[].class));
-//		assertObjectEquals("[1,2]", s.serialize(ps, "1,2", List.class, Object.class));
-//		assertObjectEquals("['F3-1','F3-2']", s.serialize(ps,  "1,2", F3[].class));
-//		assertObjectEquals("['F3-1','F3-2']", s.serialize(ps,  "1,2", List.class, F3.class));
-//		assertObjectEquals("'F4-[1,2]'", s.serialize(ps,  "1,2", F4.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", int[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Integer[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Integer.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", short[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Short[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Short.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", long[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Long[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Long.class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", Object[].class));
+//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Object.class));
+//		assertEquals("['F3-1','F3-2']", s.serialize(ps,  "1,2", F3[].class));
+//		assertEquals("['F3-1','F3-2']", s.serialize(ps,  "1,2", List.class, F3.class));
+//		assertEquals("'F4-[1,2]'", s.serialize(ps,  "1,2", F4.class));
 //	}
 //
 //	@Test
 //	public void f06_integerType_int64_3d() throws Exception {
 //		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("integer", "int64"))).build();
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", int[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, int[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Integer[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Integer[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Integer.class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", short[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, short[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Short[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Short[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Short.class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", long[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, long[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Long[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Long[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Long.class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Object[][].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
-//		assertObjectEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
-//		assertObjectEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", F3[][].class));
-//		assertObjectEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", List.class, F3[].class));
-//		assertObjectEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", List.class, List.class, F3.class));
-//		assertObjectEquals("['F4-[1,2]','F4-[3]']", s.serialize(ps, "1,2|3", F4[].class));
-//		assertObjectEquals("['F4-[1,2]','F4-[3]']", s.serialize(ps, "1,2|3", List.class, F4.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", int[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, int[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Integer[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Integer[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Integer.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", short[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, short[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Short[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Short[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Short.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", long[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, long[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Long[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Long[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Long.class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Object[][].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
+//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
+//		assertEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", F3[][].class));
+//		assertEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", List.class, F3[].class));
+//		assertEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", List.class, List.class, F3.class));
+//		assertEquals("['F4-[1,2]','F4-[3]']", s.serialize(ps, "1,2|3", F4[].class));
+//		assertEquals("['F4-[1,2]','F4-[3]']", s.serialize(ps, "1,2|3", List.class, F4.class));
 //	}
 //
 //
@@ -754,117 +748,117 @@ public class OpenApiPartSerializerTest {
 //	@Test
 //	public void g01_numberType_float() throws Exception {
 //		HttpPartSchema ps = schema("number", "float").build();
-//		assertObjectEquals("1.0", s.serialize(ps, "1", float.class));
-//		assertObjectEquals("1.0", s.serialize(ps, "1", Float.class));
-//		assertObjectEquals("1.0", s.serialize(ps, "1", double.class));
-//		assertObjectEquals("1.0", s.serialize(ps, "1", Double.class));
-//		assertObjectEquals("'1'", s.serialize(ps, "1", String.class));
+//		assertEquals("1.0", s.serialize(ps, "1", float.class));
+//		assertEquals("1.0", s.serialize(ps, "1", Float.class));
+//		assertEquals("1.0", s.serialize(ps, "1", double.class));
+//		assertEquals("1.0", s.serialize(ps, "1", Double.class));
+//		assertEquals("'1'", s.serialize(ps, "1", String.class));
 //		Object o =  s.serialize(ps, "1", Object.class);
-//		assertObjectEquals("1.0",o);
+//		assertEquals("1.0",o);
 //		assertClass(Float.class, o);
-//		assertObjectEquals("'G1-1.0'", s.serialize(ps,  "1", G1.class));
+//		assertEquals("'G1-1.0'", s.serialize(ps,  "1", G1.class));
 //	}
 //
 //	@Test
 //	public void g02_numberType_float_2d() throws Exception {
 //		HttpPartSchema ps = schema("array").items(schema("number", "float")).build();
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", float[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", Float[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Float.class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", double[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", Double[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Double.class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", Object[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Object.class));
-//		assertObjectEquals("['G1-1.0','G1-2.0']", s.serialize(ps,  "1,2", G1[].class));
-//		assertObjectEquals("['G1-1.0','G1-2.0']", s.serialize(ps,  "1,2", List.class, G1.class));
-//		assertObjectEquals("'G2-[1.0,2.0]'", s.serialize(ps,  "1,2", G2.class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", float[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", Float[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Float.class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", double[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", Double[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Double.class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", Object[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Object.class));
+//		assertEquals("['G1-1.0','G1-2.0']", s.serialize(ps,  "1,2", G1[].class));
+//		assertEquals("['G1-1.0','G1-2.0']", s.serialize(ps,  "1,2", List.class, G1.class));
+//		assertEquals("'G2-[1.0,2.0]'", s.serialize(ps,  "1,2", G2.class));
 //	}
 //
 //	@Test
 //	public void g03_numberType_float_3d() throws Exception {
 //		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("number", "float"))).build();
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", float[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, float[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Float[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Float[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Float.class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", double[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, double[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Double[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Double[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Double.class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Object[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
-//		assertObjectEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", s.serialize(ps,  "1,2|3", G1[][].class));
-//		assertObjectEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", s.serialize(ps,  "1,2|3", List.class, G1[].class));
-//		assertObjectEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", s.serialize(ps,  "1,2|3", List.class, List.class, G1.class));
-//		assertObjectEquals("['G2-[1.0,2.0]','G2-[3.0]']", s.serialize(ps, "1,2|3", G2[].class));
-//		assertObjectEquals("['G2-[1.0,2.0]','G2-[3.0]']", s.serialize(ps, "1,2|3", List.class, G2.class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", float[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, float[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Float[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Float[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Float.class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", double[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, double[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Double[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Double[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Double.class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Object[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
+//		assertEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", s.serialize(ps,  "1,2|3", G1[][].class));
+//		assertEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", s.serialize(ps,  "1,2|3", List.class, G1[].class));
+//		assertEquals("[['G1-1.0','G1-2.0'],['G1-3.0']]", s.serialize(ps,  "1,2|3", List.class, List.class, G1.class));
+//		assertEquals("['G2-[1.0,2.0]','G2-[3.0]']", s.serialize(ps, "1,2|3", G2[].class));
+//		assertEquals("['G2-[1.0,2.0]','G2-[3.0]']", s.serialize(ps, "1,2|3", List.class, G2.class));
 //	}
 //
 //	@Test
 //	public void g04_numberType_double() throws Exception {
 //		HttpPartSchema ps = schema("number", "double").build();
-//		assertObjectEquals("1.0", s.serialize(ps, "1", float.class));
-//		assertObjectEquals("1.0", s.serialize(ps, "1", Float.class));
-//		assertObjectEquals("1.0", s.serialize(ps, "1", double.class));
-//		assertObjectEquals("1.0", s.serialize(ps, "1", Double.class));
-//		assertObjectEquals("'1'", s.serialize(ps, "1", String.class));
+//		assertEquals("1.0", s.serialize(ps, "1", float.class));
+//		assertEquals("1.0", s.serialize(ps, "1", Float.class));
+//		assertEquals("1.0", s.serialize(ps, "1", double.class));
+//		assertEquals("1.0", s.serialize(ps, "1", Double.class));
+//		assertEquals("'1'", s.serialize(ps, "1", String.class));
 //		Object o = s.serialize(ps, "1", Object.class);
-//		assertObjectEquals("1.0", o);
+//		assertEquals("1.0", o);
 //		assertClass(Double.class, o);
-//		assertObjectEquals("'G3-1.0'", s.serialize(ps,  "1", G3.class));
+//		assertEquals("'G3-1.0'", s.serialize(ps,  "1", G3.class));
 //	}
 //
 //	@Test
 //	public void g05_numberType_double_2d() throws Exception {
 //		HttpPartSchema ps = schema("array").items(schema("number", "double")).build();
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", float[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", Float[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Float.class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", double[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", Double[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Double.class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
-//		assertObjectEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", Object[].class));
-//		assertObjectEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Object.class));
-//		assertObjectEquals("['G3-1.0','G3-2.0']", s.serialize(ps,  "1,2", G3[].class));
-//		assertObjectEquals("['G3-1.0','G3-2.0']", s.serialize(ps,  "1,2", List.class, G3.class));
-//		assertObjectEquals("'G4-[1.0,2.0]'", s.serialize(ps,  "1,2", G4.class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", float[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", Float[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Float.class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", double[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", Double[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Double.class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
+//		assertEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", Object[].class));
+//		assertEquals("[1.0,2.0]", s.serialize(ps, "1,2", List.class, Object.class));
+//		assertEquals("['G3-1.0','G3-2.0']", s.serialize(ps,  "1,2", G3[].class));
+//		assertEquals("['G3-1.0','G3-2.0']", s.serialize(ps,  "1,2", List.class, G3.class));
+//		assertEquals("'G4-[1.0,2.0]'", s.serialize(ps,  "1,2", G4.class));
 //	}
 //
 //	@Test
 //	public void g06_numberType_double_3d() throws Exception {
 //		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("number", "double"))).build();
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", float[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, float[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Float[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Float[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Float.class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", double[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, double[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Double[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Double[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Double.class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
-//		assertObjectEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Object[][].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
-//		assertObjectEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
-//		assertObjectEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", s.serialize(ps,  "1,2|3", G3[][].class));
-//		assertObjectEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", s.serialize(ps,  "1,2|3", List.class, G3[].class));
-//		assertObjectEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", s.serialize(ps,  "1,2|3", List.class, List.class, G3.class));
-//		assertObjectEquals("['G4-[1.0,2.0]','G4-[3.0]']", s.serialize(ps, "1,2|3", G4[].class));
-//		assertObjectEquals("['G4-[1.0,2.0]','G4-[3.0]']", s.serialize(ps, "1,2|3", List.class, G4.class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", float[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, float[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Float[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Float[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Float.class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", double[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, double[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Double[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Double[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Double.class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
+//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", Object[][].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
+//		assertEquals("[[1.0,2.0],[3.0]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
+//		assertEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", s.serialize(ps,  "1,2|3", G3[][].class));
+//		assertEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", s.serialize(ps,  "1,2|3", List.class, G3[].class));
+//		assertEquals("[['G3-1.0','G3-2.0'],['G3-3.0']]", s.serialize(ps,  "1,2|3", List.class, List.class, G3.class));
+//		assertEquals("['G4-[1.0,2.0]','G4-[3.0]']", s.serialize(ps, "1,2|3", G4[].class));
+//		assertEquals("['G4-[1.0,2.0]','G4-[3.0]']", s.serialize(ps, "1,2|3", List.class, G4.class));
 //	}
 //
 //
@@ -879,41 +873,41 @@ public class OpenApiPartSerializerTest {
 //	@Test
 //	public void h01_objectType() throws Exception {
 //		HttpPartSchema ps = HttpPartSchema.create().type("object").build();
-//		assertObjectEquals("{f:1}", s.serialize(ps, "(f=1)", H1.class));
-//		assertObjectEquals("{f:1}", s.serialize(ps, "(f=1)", ObjectMap.class));
+//		assertEquals("{f:1}", s.serialize(ps, "(f=1)", H1.class));
+//		assertEquals("{f:1}", s.serialize(ps, "(f=1)", ObjectMap.class));
 //		Object o = s.serialize(ps, "(f=1)", Object.class);
-//		assertObjectEquals("{f:1}", o);
+//		assertEquals("{f:1}", o);
 //		assertClass(ObjectMap.class, o);
 //	}
 //
 //	@Test
 //	public void h02_objectType_2d() throws Exception {
 //		HttpPartSchema ps = schema("array").format("uon").items(schema("object")).build();
-//		assertObjectEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", H1[].class));
-//		assertObjectEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, H1.class));
-//		assertObjectEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", ObjectMap[].class));
-//		assertObjectEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, ObjectMap.class));
-//		assertObjectEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", Object[].class));
-//		assertObjectEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, Object.class));
+//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", H1[].class));
+//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, H1.class));
+//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", ObjectMap[].class));
+//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, ObjectMap.class));
+//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", Object[].class));
+//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, Object.class));
 //		Object o = s.serialize(ps, "@((f=1),(f=2))", Object.class);
-//		assertObjectEquals("[{f:1},{f:2}]", o);
+//		assertEquals("[{f:1},{f:2}]", o);
 //		assertClass(ObjectList.class, o);
 //	}
 //
 //	@Test
 //	public void h03_objectType_3d() throws Exception {
 //		HttpPartSchema ps = schema("array").format("uon").items(schema("array").items(schema("object"))).build();
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, H1.class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", ObjectMap[][].class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, ObjectMap[].class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, ObjectMap.class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class));
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, H1.class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", ObjectMap[][].class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, ObjectMap[].class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, ObjectMap.class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class));
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class));
 //		Object o =  s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
-//		assertObjectEquals("[[{f:1},{f:2}],[{f:3}]]", o);
+//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", o);
 //		assertClass(ObjectList.class, o);
 //	}
 //
@@ -942,7 +936,7 @@ public class OpenApiPartSerializerTest {
 //		String in = "(f1=foo,f2="+base64Encode(foob)+",f4=2012-12-21T12:34:56Z,f5="+toHex(foob)+",f6='"+toSpacedHex(foob)+"',f7=foo,f8=1,f9=1,f10=1,f11=1,f12=true,f99=1)";
 //
 //		H2 h2 = s.serialize(ps, in, H2.class);
-//		assertObjectEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", h2);
+//		assertEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", h2);
 //		assertClass(String.class, h2.f1);
 //		assertClass(byte[].class, h2.f2);
 //		assertClass(GregorianCalendar.class, h2.f4);
@@ -957,7 +951,7 @@ public class OpenApiPartSerializerTest {
 //		assertClass(Integer.class, h2.f99);
 //
 //		ObjectMap om = s.serialize(ps, in, ObjectMap.class);
-//		assertObjectEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
+//		assertEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
 //		assertClass(String.class, om.get("f1"));
 //		assertClass(byte[].class, om.get("f2"));
 //		assertClass(GregorianCalendar.class, om.get("f4"));
@@ -972,7 +966,7 @@ public class OpenApiPartSerializerTest {
 //		assertClass(Integer.class, om.get("f99"));
 //
 //		om = (ObjectMap)s.serialize(ps, in, Object.class);
-//		assertObjectEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
+//		assertEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
 //		assertClass(String.class, om.get("f1"));
 //		assertClass(byte[].class, om.get("f2"));
 //		assertClass(GregorianCalendar.class, om.get("f4"));
@@ -1008,13 +1002,13 @@ public class OpenApiPartSerializerTest {
 //		String in = "(f1=foo,f2="+base64Encode(foob)+",f4=2012-12-21T12:34:56Z,f5="+toHex(foob)+",f6='"+toSpacedHex(foob)+"',f7=foo,f8=1,f9=1,f10=1,f11=1,f12=true,f99=1)";
 //
 //		H2 h2 = s.serialize(ps, in, H2.class);
-//		assertObjectEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", h2);
+//		assertEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", h2);
 //
 //		ObjectMap om = s.serialize(ps, in, ObjectMap.class);
-//		assertObjectEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
+//		assertEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
 //
 //		om = (ObjectMap)s.serialize(ps, in, Object.class);
-//		assertObjectEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
+//		assertEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
 //	}
 //
 //	@Test
@@ -1038,13 +1032,13 @@ public class OpenApiPartSerializerTest {
 //		String in = "(f1=foo|bar,f2="+base64Encode(foob)+"|"+base64Encode(barb)+",f4=2012-12-21T12:34:56Z|2012-12-21T12:34:56Z,f5="+toHex(foob)+"|"+toHex(barb)+",f6='"+toSpacedHex(foob)+"|"+toSpacedHex(barb)+"',f7=foo|bar,f8=1|2,f9=1|2,f10=1|2,f11=1|2,f12=true|true,f99=1|2)";
 //
 //		H2 h2 = s.serialize(ps, in, H2.class);
-//		assertObjectEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", h2);
+//		assertEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", h2);
 //
 //		ObjectMap om = s.serialize(ps, in, ObjectMap.class);
-//		assertObjectEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
+//		assertEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
 //
 //		om = (ObjectMap)s.serialize(ps, in, Object.class);
-//		assertObjectEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
+//		assertEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
 //	}
 //
 	//-----------------------------------------------------------------------------------------------------------------

@@ -149,6 +149,11 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 
 		schema.validateOutput(value, this);
 
+		if (type.hasTransformTo(schema.getParsedType()) || schema.getParsedType().hasTransformFrom(type)) {
+			value = toType(value, schema.getParsedType());
+			type = schema.getParsedType();
+		}
+
 		if (t == STRING) {
 
 			if (f == BYTE)
@@ -171,9 +176,6 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 			List<String> l = new ArrayList<>();
 			HttpPartSchema items = schema.getItems();
 			ClassMeta<?> vt = getClassMetaForObject(value);
-
-			if (type.hasTransformTo(schema.getParsedType()) || schema.getParsedType().hasTransformFrom(type))
-				value = toType(value, schema.getParsedType());
 
 			if (type.isArray()) {
 				for (int i = 0; i < Array.getLength(value); i++)
@@ -199,9 +201,10 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 				out = join(l, ',');
 
 		} else if (t == BOOLEAN || t == INTEGER || t == NUMBER) {
-			out = super.serialize(partType, null, value);
+			out = value == null ? "null" : value.toString();
 
 		} else if (t == OBJECT) {
+
 			if (schema.hasProperties() && type.isMapOrBean()) {
 				ObjectMap m = new ObjectMap();
 				if (type.isBean()) {
