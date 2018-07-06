@@ -364,6 +364,36 @@ public class OpenApiPartParserTest {
 		assertObjectEquals("['C3-[\\'foo\\',\\'bar\\']','C3-[\\'baz\\']']", p.parse(s, "foo,bar|baz", List.class, C3.class));
 	}
 
+	@Test
+	public void c12a_stringType_nullKeyword_plain() throws Exception {
+		HttpPartSchema s = schema("string").build();
+		assertEquals("null", p.parse(s, "null", String.class));
+	}
+
+	@Test
+	public void c12b_stringType_nullKeyword_plain_2d() throws Exception {
+		HttpPartSchema s = schema("array").items(schema("string")).build();
+		assertObjectEquals("['null']", p.parse(s, "null", String[].class));
+		assertObjectEquals("[null]", p.parse(s, "@(null)", String[].class));
+	}
+
+	@Test
+	public void c12c_stringType_nullKeyword_uon() throws Exception {
+		HttpPartSchema s = schema("string","uon").build();
+		assertEquals(null, p.parse(s, "null", String.class));
+		assertEquals("null", p.parse(s, "'null'", String.class));
+	}
+
+	@Test
+	public void c12d_stringType_nullKeyword_uon_2d() throws Exception {
+		HttpPartSchema s = schema("array").items(schema("string","uon")).build();
+		assertObjectEquals("[null,'x']", p.parse(s, "null,x", String[].class));
+		assertObjectEquals("[null]", p.parse(s, "null", String[].class));
+		assertObjectEquals("[null]", p.parse(s, "@(null)", String[].class));
+		assertObjectEquals("['null']", p.parse(s, "'null'", String[].class));
+		assertObjectEquals("['null']", p.parse(s, "@('null')", String[].class));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// type = array
 	//-----------------------------------------------------------------------------------------------------------------

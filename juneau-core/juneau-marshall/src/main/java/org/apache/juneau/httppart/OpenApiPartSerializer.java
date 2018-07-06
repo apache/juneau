@@ -190,7 +190,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 			HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
 
 			if (cf == PIPES)
-				out = join(l, '|');
+				out = joine(l, '|');
 			else if (cf == SSV)
 				out = join(l, ' ');
 			else if (cf == TSV)
@@ -198,7 +198,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 			else if (cf == HttpPartSchema.CollectionFormat.UON)
 				out = super.serialize(partType, null, l);
 			else
-				out = join(l, ',');
+				out = joine(l, ',');
 
 		} else if (t == BOOLEAN || t == INTEGER || t == NUMBER) {
 			out = value == null ? "null" : value.toString();

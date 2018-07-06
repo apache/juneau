@@ -22,6 +22,7 @@ import java.nio.*;
 import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.regex.*;
 
@@ -428,6 +429,29 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Same as {@link #join(Object[], char)} except escapes the delimiter character if found in the tokens.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String joine(Object[] tokens, char d) {
+		if (tokens == null)
+			return null;
+		return joine(tokens, d, new StringBuilder()).toString();
+	}
+
+	private static AsciiSet getEscapeSet(char c) {
+		AsciiSet s = ESCAPE_SETS.get(c);
+		if (s == null) {
+			s = AsciiSet.create().chars(c, '\\').build();
+			ESCAPE_SETS.put(c, s);
+		}
+		return s;
+	}
+	static Map<Character,AsciiSet> ESCAPE_SETS = new ConcurrentHashMap<>();
+
+	/**
 	 * Join the specified tokens into a delimited string and writes the output to the specified string builder.
 	 *
 	 * @param tokens The tokens to join.
@@ -442,6 +466,26 @@ public final class StringUtils {
 			if (i > 0)
 				sb.append(d);
 			sb.append(tokens[i]);
+		}
+		return sb;
+	}
+
+	/**
+	 * Same as {@link #join(Object[], char, StringBuilder)} but escapes the delimiter character if found in the tokens.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <code>sb</code>.
+	 */
+	public static StringBuilder joine(Object[] tokens, char d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		AsciiSet as = getEscapeSet(d);
+		for (int i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(escapeChars(asString(tokens[i]), as));
 		}
 		return sb;
 	}
@@ -478,6 +522,26 @@ public final class StringUtils {
 		StringBuilder sb = new StringBuilder();
 		for (Iterator<?> iter = tokens.iterator(); iter.hasNext();) {
 			sb.append(iter.next());
+			if (iter.hasNext())
+				sb.append(d);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Same as {@link #join(Collection, char)} but escapes the delimiter if found in the tokens.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <code>tokens</code> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String joine(Collection<?> tokens, char d) {
+		if (tokens == null)
+			return null;
+		AsciiSet as = getEscapeSet(d);
+		StringBuilder sb = new StringBuilder();
+		for (Iterator<?> iter = tokens.iterator(); iter.hasNext();) {
+			sb.append(escapeChars(asString(iter.next()), as));
 			if (iter.hasNext())
 				sb.append(d);
 		}
@@ -541,7 +605,7 @@ public final class StringUtils {
 	 */
 	public static String[] split(String s, char c, int limit) {
 
-		char[] unEscapeChars = new char[]{'\\', c};
+		AsciiSet escapeChars = getEscapeSet(c);
 
 		if (s == null)
 			return null;
@@ -558,7 +622,7 @@ public final class StringUtils {
 			if (sArray[i] == '\\') escapeCount++;
 			else if (sArray[i]==c && escapeCount % 2 == 0) {
 				String s2 = new String(sArray, x1, i-x1);
-				String s3 = unEscapeChars(s2, unEscapeChars);
+				String s3 = unEscapeChars(s2, escapeChars);
 				l.add(s3.trim());
 				limit--;
 				x1 = i+1;
@@ -566,7 +630,7 @@ public final class StringUtils {
 			if (sArray[i] != '\\') escapeCount = 0;
 		}
 		String s2 = new String(sArray, x1, sArray.length-x1);
-		String s3 = unEscapeChars(s2, unEscapeChars);
+		String s3 = unEscapeChars(s2, escapeChars);
 		l.add(s3.trim());
 
 		return l.toArray(new String[l.size()]);
@@ -603,14 +667,10 @@ public final class StringUtils {
 	 * </p>
 	 *
 	 * @param s The string to split.
-	 * @param delim The delimiter between the key-value pairs.
-	 * @param eq The delimiter between the key and value.
 	 * @param trim Trim strings after parsing.
 	 * @return The parsed map.  Never <jk>null</jk>.
 	 */
-	public static Map<String,String> splitMap(String s, char delim, char eq, boolean trim) {
-
-		char[] unEscapeChars = new char[]{'\\', delim, eq};
+	public static Map<String,String> splitMap(String s, boolean trim) {
 
 		if (s == null)
 			return null;
@@ -629,33 +689,33 @@ public final class StringUtils {
 		int x1 = 0, escapeCount = 0;
 		String key = null;
 		for (int i = 0; i < sArray.length + 1; i++) {
-			char c = i == sArray.length ? delim : sArray[i];
+			char c = i == sArray.length ? ',' : sArray[i];
 			if (c == '\\')
 				escapeCount++;
 			if (escapeCount % 2 == 0) {
 				if (state == S1) {
-					if (c == eq) {
+					if (c == '=') {
 						key = s.substring(x1, i);
 						if (trim)
 							key = trim(key);
-						key = unEscapeChars(key, unEscapeChars);
+						key = unEscapeChars(key, MAP_ESCAPE_SET);
 						state = S2;
 						x1 = i+1;
-					} else if (c == delim) {
+					} else if (c == ',') {
 						key = s.substring(x1, i);
 						if (trim)
 							key = trim(key);
-						key = unEscapeChars(key, unEscapeChars);
+						key = unEscapeChars(key, MAP_ESCAPE_SET);
 						m.put(key, "");
 						state = S1;
 						x1 = i+1;
 					}
 				} else if (state == S2) {
-					if (c == delim) {
+					if (c == ',') {
 						String val = s.substring(x1, i);
 						if (trim)
 							val = trim(val);
-						val = unEscapeChars(val, unEscapeChars);
+						val = unEscapeChars(val, MAP_ESCAPE_SET);
 						m.put(key, val);
 						key = null;
 						x1 = i+1;
@@ -668,6 +728,8 @@ public final class StringUtils {
 
 		return m;
 	}
+
+	private static final AsciiSet MAP_ESCAPE_SET = AsciiSet.create(",=\\");
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains any of the specified characters.
@@ -710,7 +772,6 @@ public final class StringUtils {
 	 * 	<br>An empty string results in an empty array.
 	 */
 	public static String[] splitQuoted(String s) {
-		char[] unEscapeChars = new char[]{'\\', '\'', '"'};
 
 		if (s == null)
 			return null;
@@ -757,7 +818,7 @@ public final class StringUtils {
 					if (c == (state == S2 ? '\'' : '"')) {
 						String s2 = s.substring(mark, i);
 						if (needsUnescape)
-							s2 = unEscapeChars(s2, unEscapeChars, '\\');
+							s2 = unEscapeChars(s2, QUOTE_ESCAPE_SET);
 						l.add(s2);
 						state = S1;
 						isInEscape = needsUnescape = false;
@@ -778,6 +839,8 @@ public final class StringUtils {
 			throw new RuntimeException("Unmatched string quotes: " + s);
 		return l.toArray(new String[l.size()]);
 	}
+
+	private static final AsciiSet QUOTE_ESCAPE_SET = AsciiSet.create("\"'\\");
 
 	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty.
@@ -848,47 +911,65 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Removes escape characters (\) from the specified characters.
+	 * Removes escape characters from the specified characters.
 	 *
 	 * @param s The string to remove escape characters from.
-	 * @param toEscape The characters escaped.
+	 * @param escaped The characters escaped.
 	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
 	 */
-	public static String unEscapeChars(String s, char[] toEscape) {
-		return unEscapeChars(s, toEscape, '\\');
-	}
+	public static String unEscapeChars(String s, AsciiSet escaped) {
+		if (s == null || s.length() == 0)
+			return s;
+		int count = 0;
+		for (int i = 0; i < s.length(); i++)
+			if (escaped.contains(s.charAt(i)))
+				count++;
+		if (count == 0)
+			return s;
+		StringBuffer sb = new StringBuffer(s.length()-count);
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
 
-	/**
-	 * Removes escape characters (specified by escapeChar) from the specified characters.
-	 *
-	 * @param s The string to remove escape characters from.
-	 * @param toEscape The characters escaped.
-	 * @param escapeChar The escape character.
-	 * @return A new string if characters were removed, or the same string if not or if the input was <jk>null</jk>.
-	 */
-	public static String unEscapeChars(String s, char[] toEscape, char escapeChar) {
-		if (s == null) return null;
-		if (s.length() == 0 || toEscape == null || toEscape.length == 0 || escapeChar == 0) return s;
-		StringBuffer sb = new StringBuffer(s.length());
-		char[] sArray = s.toCharArray();
-		for (int i = 0; i < sArray.length; i++) {
-			char c = sArray[i];
-
-			if (c == escapeChar) {
-				if (i+1 != sArray.length) {
-					char c2 = sArray[i+1];
-					boolean isOneOf = false;
-					for (int j = 0; j < toEscape.length && ! isOneOf; j++)
-						isOneOf = (c2 == toEscape[j]);
-					if (isOneOf) {
+			if (c == '\\') {
+				if (i+1 != s.length()) {
+					char c2 = s.charAt(i+1);
+					if (escaped.contains(c2)) {
 						i++;
-					} else if (c2 == escapeChar) {
-						sb.append(escapeChar);
+					} else if (c2 == '\\') {
+						sb.append('\\');
 						i++;
 					}
 				}
 			}
-			sb.append(sArray[i]);
+			sb.append(s.charAt(i));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Escapes the specified characters in the string.
+	 *
+	 * @param s The string with characters to escape.
+	 * @param escaped The characters to escape.
+	 * @return The string with characters escaped, or the same string if no escapable characters were found.
+	 */
+	public static String escapeChars(String s, AsciiSet escaped) {
+		if (s == null || s.length() == 0)
+			return s;
+
+		int count = 0;
+		for (int i = 0; i < s.length(); i++)
+			if (escaped.contains(s.charAt(i)))
+				count++;
+		if (count == 0)
+			return s;
+
+		StringBuffer sb = new StringBuffer(s.length() + count);
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (escaped.contains(c))
+				sb.append('\\');
+			sb.append(c);
 		}
 		return sb.toString();
 	}

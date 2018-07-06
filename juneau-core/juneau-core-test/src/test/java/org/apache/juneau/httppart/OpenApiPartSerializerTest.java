@@ -339,25 +339,27 @@ public class OpenApiPartSerializerTest {
 	@Test
 	public void d01_arrayType_collectionFormatCsv() throws Exception {
 		HttpPartSchema ps = schema("array").collectionFormat("csv").build();
-		assertEquals("foo,bar", s.serialize(ps, new String[]{"foo","bar"}));
-		assertEquals("foo,bar", s.serialize(ps, new Object[]{"foo","bar"}));
-		assertEquals("D-foo,D-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
-		assertEquals("foo,bar", s.serialize(ps, AList.create("foo","bar")));
-		assertEquals("foo,bar", s.serialize(ps, AList.<Object>create("foo","bar")));
-		assertEquals("D-foo,D-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
-		assertEquals("foo,bar", s.serialize(ps, new ObjectList().append("foo","bar")));
+		assertEquals("foo,bar,null", s.serialize(ps, new String[]{"foo","bar",null}));
+		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
+		assertEquals("D-foo,D-bar,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo,bar,null", s.serialize(ps, AList.create("foo","bar",null)));
+		assertEquals("foo,bar,null", s.serialize(ps, AList.<Object>create("foo","bar",null)));
+		assertEquals("D-foo,D-bar,null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo,bar,null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
+
+		assertEquals("foo\\,bar,null", s.serialize(ps, new String[]{"foo,bar",null}));
 	}
 
 	@Test
 	public void d02_arrayType_collectionFormatPipes() throws Exception {
 		HttpPartSchema ps = schema("array").collectionFormat("pipes").build();
-		assertEquals("foo|bar", s.serialize(ps, new String[]{"foo","bar"}));
-		assertEquals("foo|bar", s.serialize(ps, new Object[]{"foo","bar"}));
-		assertEquals("D-foo|D-bar", s.serialize(ps, new D[]{new D("foo"),new D("bar")}));
-		assertEquals("foo|bar", s.serialize(ps, AList.create("foo","bar")));
-		assertEquals("foo|bar", s.serialize(ps, AList.<Object>create("foo","bar")));
-		assertEquals("D-foo|D-bar", s.serialize(ps, AList.create(new D("foo"),new D("bar"))));
-		assertEquals("foo|bar", s.serialize(ps, new ObjectList().append("foo","bar")));
+		assertEquals("foo|bar|null", s.serialize(ps, new String[]{"foo","bar",null}));
+		assertEquals("foo|bar|null", s.serialize(ps, new Object[]{"foo","bar",null}));
+		assertEquals("D-foo|D-bar|null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo|bar|null", s.serialize(ps, AList.create("foo","bar",null)));
+		assertEquals("foo|bar|null", s.serialize(ps, AList.<Object>create("foo","bar",null)));
+		assertEquals("D-foo|D-bar|null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo|bar|null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
 
 	@Test
@@ -477,7 +479,7 @@ public class OpenApiPartSerializerTest {
 	public void e02_booleanType_2d() throws Exception {
 		HttpPartSchema ps = schema("array").items(schema("boolean")).build();
 		assertEquals("true,true", s.serialize(ps, new boolean[]{true,true}));
-		assertEquals("true,true", s.serialize(ps, new Boolean[]{true,true}));
+		assertEquals("true,null", s.serialize(ps, new Boolean[]{true,null}));
 		assertEquals("true,true", s.serialize(ps, AList.create(true,true)));
 		assertEquals("true,true", s.serialize(ps, new String[]{"true","true"}));
 		assertEquals("true,true", s.serialize(ps, AList.create("true","true")));
@@ -488,30 +490,27 @@ public class OpenApiPartSerializerTest {
 		assertEquals("true,true", s.serialize(ps, new E2(true,true)));
 	}
 
-	//	@Test
-//	public void e03_booleanType_3d() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("boolean"))).build();
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", boolean[][].class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, boolean[].class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", Boolean[][].class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, Boolean[].class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, List.class, Boolean.class));
-//		assertEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", String[][].class));
-//		assertEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", List.class, List.class, String.class));
-//		assertEquals("[['true','true'],['false']]", s.serialize(ps, "true,true|false", List.class, String[].class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", Object[][].class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, List.class, Object.class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "true,true|false", List.class, Object[].class));
-//		assertEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", E1[][].class));
-//		assertEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", List.class, List.class, E1.class));
-//		assertEquals("[['E1-true','E1-true'],['E1-false']]", s.serialize(ps, "true,true|false", List.class, E1[].class));
-//		assertEquals("['E2-[true,true]','E2-[false]']", s.serialize(ps, "true,true|false", E2[].class));
-//		assertEquals("['E2-[true,true]','E2-[false]']", s.serialize(ps, "true,true|false", List.class, E2.class));
-//
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "True,true|false", boolean[][].class));
-//		assertEquals("[[true,true],[false]]", s.serialize(ps, "TRUE,true|false", boolean[][].class));
-//	}
-//
+	@Test
+	public void e03_booleanType_3d() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("boolean"))).build();
+		assertEquals("true,true|false", s.serialize(ps, new boolean[][]{{true,true},{false}}));
+		assertEquals("true,true|false", s.serialize(ps, AList.create(new boolean[]{true,true},new boolean[]{false})));
+		assertEquals("true,true|false,null", s.serialize(ps, new Boolean[][]{{true,true},{false,null}}));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(new Boolean[]{true,true},new Boolean[]{false,null})));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(AList.create(true,true),AList.create(false,null))));
+		assertEquals("true,true|false,null", s.serialize(ps, new String[][]{{"true","true"},{"false",null}}));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(AList.create("true","true"),AList.create("false",null))));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(new String[]{"true","true"},new String[]{"false",null})));
+		assertEquals("true,true|false,null", s.serialize(ps, new Object[][]{{true,true},{false,null}}));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(AList.create((Object)true,(Object)true),AList.create((Object)false,null))));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(new Object[]{true,true},new Object[]{false,null})));
+		assertEquals("true,true|false,null", s.serialize(ps, new E1[][]{{new E1(true),new E1(true)},{new E1(false),new E1(null)}}));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(AList.create(new E1(true),new E1(true)), AList.create(new E1(false),new E1(null)))));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(new E1[]{new E1(true),new E1(true)},new E1[]{new E1(false),new E1(null)})));
+		assertEquals("true,true|false,null", s.serialize(ps, new E2[]{new E2(true,true),new E2(false,null)}));
+		assertEquals("true,true|false,null", s.serialize(ps, AList.create(new E2(true,true),new E2(false,null))));
+	}
+
 //	//-----------------------------------------------------------------------------------------------------------------
 //	// type = integer
 //	//-----------------------------------------------------------------------------------------------------------------

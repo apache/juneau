@@ -18,6 +18,8 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
  *
@@ -306,7 +308,7 @@ public class VarResolverSession {
 					state = S3;
 				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {  // False trigger "$X "
 					if (hasInnerEscapes)
-						out.append(unEscapeChars(s.substring(x, i+1), new char[]{'\\','{'}));
+						out.append(unEscapeChars(s.substring(x, i+1), AS1));
 					else
 						out.append(s, x, i+1);
 					x = i + 1;
@@ -330,7 +332,7 @@ public class VarResolverSession {
 						Var r = getVar(varType);
 						if (r == null) {
 							if (hasInnerEscapes)
-								out.append(unEscapeChars(s.substring(x2, i+1), new char[]{'\\','$','{','}'}));
+								out.append(unEscapeChars(s.substring(x2, i+1), AS2));
 							else
 								out.append(s, x2, i+1);
 							x = i+1;
@@ -364,12 +366,16 @@ public class VarResolverSession {
 		if (isInEscape)
 			out.append('\\');
 		else if (state == S2)
-			out.append('$').append(unEscapeChars(s.substring(x+1), new char[]{'{', '\\'}));
+			out.append('$').append(unEscapeChars(s.substring(x+1), AS1));
 		else if (state == S3)
-			out.append('$').append(varType).append('{').append(unEscapeChars(s.substring(x+1), new char[]{'\\','$','{','}'}));
+			out.append('$').append(varType).append('{').append(unEscapeChars(s.substring(x+1), AS2));
 		return out;
 	}
 
+	private static final AsciiSet
+		AS1 = AsciiSet.create("\\{"),
+		AS2 = AsciiSet.create("\\${}")
+	;
 
 	/**
 	 * Returns the session object with the specified name.

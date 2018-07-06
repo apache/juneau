@@ -50,7 +50,7 @@ public class HeaderStringArray {
 	 * @return This header as a simple string.
 	 */
 	public String asString() {
-		return StringUtils.join(value, ',');
+		return StringUtils.joine(value, ',');
 	}
 
 	/**

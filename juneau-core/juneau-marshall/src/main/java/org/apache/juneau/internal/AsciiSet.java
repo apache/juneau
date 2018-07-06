@@ -106,6 +106,19 @@ public final class AsciiSet {
 		}
 
 		/**
+		 * Adds a set of characters to this set.
+		 *
+		 * @param chars The characters to keep in this store.
+		 * @return This object (for method chaining).
+		 */
+		public Builder chars(char...chars) {
+			for (int i = 0; i < chars.length; i++)
+				if (chars[i] < 128)
+					store[chars[i]] = true;
+			return this;
+		}
+
+		/**
 		 * Create a new {@link AsciiSet} object with the contents of this builder.
 		 *
 		 * @return A new {link AsciiSet} object.

@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -464,8 +465,10 @@ public class StringUtilsTest {
 		assertEquals("1,2", join(Arrays.asList(new Integer[]{1,2}), ","));
 
 		assertNull(join((Object[])null, ','));
-		assertEquals("1", join(new Object[]{1}, ','));
-		assertEquals("1,2", join(new Object[]{1,2}, ','));
+		assertEquals("x,y,z", join(new Object[]{"x,y","z"}, ','));
+
+		assertNull(joine((Object[])null, ','));
+		assertEquals("x\\,y,z", joine(new Object[]{"x,y","z"}, ','));
 
 		assertNull(join((int[])null, ','));
 		assertEquals("1", join(new int[]{1}, ','));
@@ -474,6 +477,9 @@ public class StringUtilsTest {
 		assertNull(join((Collection<?>)null, ','));
 		assertEquals("1", join(Arrays.asList(new Integer[]{1}), ','));
 		assertEquals("1,2", join(Arrays.asList(new Integer[]{1,2}), ','));
+
+		assertNull(joine((Collection<?>)null, ','));
+		assertEquals("x\\,y,z", joine(Arrays.asList(new String[]{"x,y","z"}), ','));
 	}
 
 	//====================================================================================================
@@ -555,25 +561,22 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testUnescapeChars() throws Exception {
-		char[] toEscape = {'\\',',','|'};
-		char escape = '\\';
+		AsciiSet escape = AsciiSet.create("\\,|");
 
-		assertNull(unEscapeChars(null, toEscape, escape));
-		assertEquals("xxx", unEscapeChars("xxx", new char[0], escape));
-		assertEquals("xxx", unEscapeChars("xxx", null, escape));
-		assertEquals("xxx", unEscapeChars("xxx", toEscape, (char)0));
+		assertNull(unEscapeChars(null, escape));
+		assertEquals("xxx", unEscapeChars("xxx", escape));
 
-		assertEquals("xxx", unEscapeChars("xxx", toEscape, escape));
-		assertEquals("x,xx", unEscapeChars("x\\,xx", toEscape, escape));
-		assertEquals("x\\xx", unEscapeChars("x\\xx", toEscape, escape));
-		assertEquals("x\\,xx", unEscapeChars("x\\\\,xx", toEscape, escape));
-		assertEquals("x\\,xx", unEscapeChars("x\\\\\\,xx", toEscape, escape));
-		assertEquals("\\", unEscapeChars("\\", toEscape, escape));
-		assertEquals(",", unEscapeChars("\\,", toEscape, escape));
-		assertEquals("|", unEscapeChars("\\|", toEscape, escape));
+		assertEquals("xxx", unEscapeChars("xxx", escape));
+		assertEquals("x,xx", unEscapeChars("x\\,xx", escape));
+		assertEquals("x\\xx", unEscapeChars("x\\xx", escape));
+		assertEquals("x\\,xx", unEscapeChars("x\\\\,xx", escape));
+		assertEquals("x\\,xx", unEscapeChars("x\\\\\\,xx", escape));
+		assertEquals("\\", unEscapeChars("\\", escape));
+		assertEquals(",", unEscapeChars("\\,", escape));
+		assertEquals("|", unEscapeChars("\\|", escape));
 
-		toEscape = new char[] {',','|'};
-		assertEquals("x\\\\xx", unEscapeChars("x\\\\xx", toEscape, escape));
+		escape = AsciiSet.create(",|");
+		assertEquals("x\\\\xx", unEscapeChars("x\\\\xx", escape));
 	}
 
 	//====================================================================================================
@@ -735,16 +738,16 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testSplitMap() {
-		assertObjectEquals("{a:'1'}", splitMap("a=1", ',', '=', true));
-		assertObjectEquals("{a:'1',b:'2'}", splitMap("a=1,b=2", ',', '=', true));
-		assertObjectEquals("{a:'1',b:'2'}", splitMap(" a = 1 , b = 2 ", ',', '=', true));
-		assertObjectEquals("{' a ':' 1 ',' b ':' 2 '}", splitMap(" a = 1 , b = 2 ", ',', '=', false));
-		assertObjectEquals("{a:''}", splitMap("a", ',', '=', true));
-		assertObjectEquals("{a:'',b:''}", splitMap("a,b", ',', '=', true));
-		assertObjectEquals("{a:'1',b:''}", splitMap("a=1,b", ',', '=', true));
-		assertObjectEquals("{a:'',b:'1'}", splitMap("a,b=1", ',', '=', true));
-		assertObjectEquals("{'a=':'1'}", splitMap("a\\==1", ',', '=', true));
-		assertObjectEquals("{'a\\\\':'1'}", splitMap("a\\\\=1", ',', '=', true));
+		assertObjectEquals("{a:'1'}", splitMap("a=1", true));
+		assertObjectEquals("{a:'1',b:'2'}", splitMap("a=1,b=2", true));
+		assertObjectEquals("{a:'1',b:'2'}", splitMap(" a = 1 , b = 2 ", true));
+		assertObjectEquals("{' a ':' 1 ',' b ':' 2 '}", splitMap(" a = 1 , b = 2 ", false));
+		assertObjectEquals("{a:''}", splitMap("a", true));
+		assertObjectEquals("{a:'',b:''}", splitMap("a,b", true));
+		assertObjectEquals("{a:'1',b:''}", splitMap("a=1,b", true));
+		assertObjectEquals("{a:'',b:'1'}", splitMap("a,b=1", true));
+		assertObjectEquals("{'a=':'1'}", splitMap("a\\==1", true));
+		assertObjectEquals("{'a\\\\':'1'}", splitMap("a\\\\=1", true));
 	}
 
 	//====================================================================================================
