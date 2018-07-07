@@ -144,6 +144,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 			type = object();
 		HttpPartSchema.Type t = schema.getType(type);
 		HttpPartSchema.Format f = schema.getFormat();
+		HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
 
 		String out = null;
 
@@ -154,82 +155,94 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 			type = schema.getParsedType();
 		}
 
-		if (t == STRING) {
+		if (value != null) {
 
-			if (f == BYTE)
-				out = base64Encode(toType(value, CM_ByteArray));
-			else if (f == BINARY)
-				out = toHex(toType(value, CM_ByteArray));
-			else if (f == BINARY_SPACED)
-				out = toSpacedHex(toType(value, CM_ByteArray));
-			else if (f == DATE)
-				out = toIsoDate(toType(value, CM_Calendar));
-			else if (f == DATE_TIME)
-				out = toIsoDateTime(toType(value, CM_Calendar));
-			else if (f == HttpPartSchema.Format.UON)
-				out = super.serialize(partType, schema, value);
-			else
-				out = toType(value, string());
+			if (t == STRING) {
 
-		} else if (t == ARRAY) {
+				if (f == BYTE)
+					out = base64Encode(toType(value, CM_ByteArray));
+				else if (f == BINARY)
+					out = toHex(toType(value, CM_ByteArray));
+				else if (f == BINARY_SPACED)
+					out = toSpacedHex(toType(value, CM_ByteArray));
+				else if (f == DATE)
+					out = toIsoDate(toType(value, CM_Calendar));
+				else if (f == DATE_TIME)
+					out = toIsoDateTime(toType(value, CM_Calendar));
+				else if (f == HttpPartSchema.Format.UON)
+					out = super.serialize(partType, schema, value);
+				else
+					out = toType(value, string());
 
-			List<String> l = new ArrayList<>();
-			HttpPartSchema items = schema.getItems();
-			ClassMeta<?> vt = getClassMetaForObject(value);
+			} else if (t == ARRAY) {
 
-			if (type.isArray()) {
-				for (int i = 0; i < Array.getLength(value); i++)
-					l.add(serialize(partType, items, Array.get(value, i)));
-			} else if (type.isCollection()) {
-				for (Object o : (Collection<?>)value)
-					l.add(serialize(partType, items, o));
-			} else if (vt.hasTransformTo(String[].class)) {
-				l.add(serialize(partType, items, value));
-			}
+				if (cf == HttpPartSchema.CollectionFormat.UON)
+					out = super.serialize(partType, null, value);
+				else {
+					List<String> l = new ArrayList<>();
 
-			HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
+					HttpPartSchema items = schema.getItems();
+					ClassMeta<?> vt = getClassMetaForObject(value);
 
-			if (cf == PIPES)
-				out = joine(l, '|');
-			else if (cf == SSV)
-				out = join(l, ' ');
-			else if (cf == TSV)
-				out = join(l, '\t');
-			else if (cf == HttpPartSchema.CollectionFormat.UON)
-				out = super.serialize(partType, null, l);
-			else
-				out = joine(l, ',');
+					if (type.isArray()) {
+						for (int i = 0; i < Array.getLength(value); i++)
+							l.add(serialize(partType, items, Array.get(value, i)));
+					} else if (type.isCollection()) {
+						for (Object o : (Collection<?>)value)
+							l.add(serialize(partType, items, o));
+					} else if (vt.hasTransformTo(String[].class)) {
+						l.add(serialize(partType, items, value));
+					}
 
-		} else if (t == BOOLEAN || t == INTEGER || t == NUMBER) {
-			out = value == null ? "null" : value.toString();
-
-		} else if (t == OBJECT) {
-
-			if (schema.hasProperties() && type.isMapOrBean()) {
-				ObjectMap m = new ObjectMap();
-				if (type.isBean()) {
-					for (Map.Entry<String,Object> e : BC.createBeanSession().toBeanMap(value).entrySet())
-						m.put(e.getKey(), serialize(partType, schema.getProperty(e.getKey()), e.getValue()));
-				} else {
-					for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet())
-						m.put(asString(e.getKey()), serialize(partType, schema.getProperty(asString(e.getKey())), e.getValue()));
+					if (cf == PIPES)
+						out = joine(l, '|');
+					else if (cf == SSV)
+						out = join(l, ' ');
+					else if (cf == TSV)
+						out = join(l, '\t');
+					else
+						out = joine(l, ',');
 				}
-				out = super.serialize(m);
-			} else {
-				out = super.serialize(partType, schema, value);
+
+			} else if (t == BOOLEAN || t == INTEGER || t == NUMBER) {
+
+				if (cf == HttpPartSchema.CollectionFormat.UON)
+					out = super.serialize(partType, null, value);
+				else
+					out = value.toString();
+
+			} else if (t == OBJECT) {
+
+				if (cf == HttpPartSchema.CollectionFormat.UON) {
+					out = super.serialize(partType, null, value);
+				} else if (schema.hasProperties() && type.isMapOrBean()) {
+					ObjectMap m = new ObjectMap();
+					if (type.isBean()) {
+						for (Map.Entry<String,Object> e : BC.createBeanSession().toBeanMap(value).entrySet())
+							m.put(e.getKey(), serialize(partType, schema.getProperty(e.getKey()), e.getValue()));
+					} else {
+						for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet())
+							m.put(asString(e.getKey()), serialize(partType, schema.getProperty(asString(e.getKey())), e.getValue()));
+					}
+					out = super.serialize(m);
+				} else {
+					out = super.serialize(partType, schema, value);
+				}
+
+			} else if (t == FILE) {
+				throw new SerializeException("File part not supported.");
+
+			} else if (t == NO_TYPE) {
+				// This should never be returned by HttpPartSchema.getType(ClassMeta).
+				throw new SerializeException("Invalid type.");
 			}
-
-		} else if (t == FILE) {
-			throw new SerializeException("File part not supported.");
-
-		} else if (t == NO_TYPE) {
-			// This should never be returned by HttpPartSchema.getType(ClassMeta).
-			throw new SerializeException("Invalid type.");
 		}
 
 		schema.validateInput(out);
 		if (out == null)
 			out = schema.getDefault();
+		if (out == null)
+			out = "null";
 		return out;
 	}
 

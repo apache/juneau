@@ -330,55 +330,52 @@ public class BeanSession extends Session {
 	 * 	If class is a member class, this is the instance of the containing class.
 	 * 	Should be <jk>null</jk> if not a member class.
 	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
+	 * @param to The class type to convert the value to.
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> type) throws InvalidDataConversionException {
-		if (type == null)
-			type = (ClassMeta<T>)ctx.object();
+	public final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
+		if (to == null)
+			to = (ClassMeta<T>)ctx.object();
 
 		try {
 			// Handle the case of a null value.
 			if (value == null) {
 
 				// If it's a primitive, then use the converters to get the default value for the primitive type.
-				if (type.isPrimitive())
-					return type.getPrimitiveDefault();
+				if (to.isPrimitive())
+					return to.getPrimitiveDefault();
 
 				// Otherwise, just return null.
 				return null;
 			}
 
-			Class<T> tc = type.getInnerClass();
+			Class<T> tc = to.getInnerClass();
 
 			// If no conversion needed, then just return the value.
 			// Don't include maps or collections, because child elements may need conversion.
 			if (tc.isInstance(value))
-				if (! ((type.isMap() && type.getValueType().isNotObject()) || (type.isCollection() && type.getElementType().isNotObject())))
+				if (! ((to.isMap() && to.getValueType().isNotObject()) || (to.isCollection() && to.getElementType().isNotObject())))
 					return (T)value;
 
-			PojoSwap swap = type.getPojoSwap(this);
+			PojoSwap swap = to.getPojoSwap(this);
 			if (swap != null) {
 				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (isParentClass(nc, tc) && isParentClass(fc, value.getClass()))
-					return (T)swap.unswap(this, value, type);
+					return (T)swap.unswap(this, value, to);
 			}
 
-			ClassMeta<?> vt = ctx.getClassMetaForObject(value);
-			swap = vt.getPojoSwap(this);
+			ClassMeta<?> from = ctx.getClassMetaForObject(value);
+			swap = from.getPojoSwap(this);
 			if (swap != null) {
 				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
-				if (isParentClass(nc, vt.getInnerClass()) && isParentClass(fc, tc))
+				if (isParentClass(nc, from.getInnerClass()) && isParentClass(fc, tc))
 					return (T)swap.swap(this, value);
 			}
 
-			if (type.isPrimitive()) {
-				if (value.toString().isEmpty())
-					return type.getPrimitiveDefault();
-
-				if (type.isNumber()) {
-					if (value instanceof Number) {
+			if (to.isPrimitive()) {
+				if (to.isNumber()) {
+					if (from.isNumber()) {
 						Number n = (Number)value;
 						if (tc == Integer.TYPE)
 							return (T)Integer.valueOf(n.intValue());
@@ -392,17 +389,28 @@ public class BeanSession extends Session {
 							return (T)Double.valueOf(n.doubleValue());
 						if (tc == Byte.TYPE)
 							return (T)Byte.valueOf(n.byteValue());
+					} else if (from.isBoolean()) {
+						Boolean b = (Boolean)value;
+						if (tc == Integer.TYPE)
+							return (T)(Integer.valueOf(b ? 1 : 0));
+						if (tc == Short.TYPE)
+							return (T)(Short.valueOf(b ? (short)1 : 0));
+						if (tc == Long.TYPE)
+							return (T)(Long.valueOf(b ? 1l : 0));
+						if (tc == Float.TYPE)
+							return (T)(Float.valueOf(b ? 1f : 0));
+						if (tc == Double.TYPE)
+							return (T)(Double.valueOf(b ? 1d : 0));
+						if (tc == Byte.TYPE)
+							return (T)(Byte.valueOf(b ? (byte)1 : 0));
+					} else if (isNullOrEmpty(value)) {
+						return (T)getPrimitiveDefault(to.innerClass);
 					} else {
-						String n = null;
-						if (value instanceof Boolean)
-							n = ((Boolean)value).booleanValue() ? "1" : "0";
-						else
-							n = value.toString();
-
-						int multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(n) : 1;
+						String s = value.toString();
+						int multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(s) : 1;
 						if (multiplier != 1) {
-							n = n.substring(0, n.length()-1).trim();
-							Long l = Long.valueOf(n) * multiplier;
+							s = s.substring(0, s.length()-1).trim();
+							Long l = Long.valueOf(s) * multiplier;
 							if (tc == Integer.TYPE)
 								return (T)Integer.valueOf(l.intValue());
 							if (tc == Short.TYPE)
@@ -411,32 +419,37 @@ public class BeanSession extends Session {
 								return (T)Long.valueOf(l.longValue());
 						} else {
 							if (tc == Integer.TYPE)
-								return (T)Integer.valueOf(n);
+								return (T)Integer.valueOf(s);
 							if (tc == Short.TYPE)
-								return (T)Short.valueOf(n);
+								return (T)Short.valueOf(s);
 							if (tc == Long.TYPE)
-								return (T)Long.valueOf(n);
+								return (T)Long.valueOf(s);
 							if (tc == Float.TYPE)
-								return (T)new Float(n);
+								return (T)new Float(s);
 							if (tc == Double.TYPE)
-								return (T)new Double(n);
+								return (T)new Double(s);
 							if (tc == Byte.TYPE)
-								return (T)Byte.valueOf(n);
+								return (T)Byte.valueOf(s);
 						}
 					}
-				} else if (type.isChar()) {
+				} else if (to.isChar()) {
+					if (isNullOrEmpty(value))
+						return (T)getPrimitiveDefault(to.innerClass);
 					return (T)parseCharacter(value);
-				} else if (type.isBoolean()) {
-					if (value instanceof Number) {
+				} else if (to.isBoolean()) {
+					if (from.isNumber()) {
 						int i = ((Number)value).intValue();
 						return (T)(i == 0 ? Boolean.FALSE : Boolean.TRUE);
+					} else if (isNullOrEmpty(value)) {
+						return (T)getPrimitiveDefault(to.innerClass);
+					} else {
+						return (T)Boolean.valueOf(value.toString());
 					}
-					return (T)Boolean.valueOf(value.toString());
 				}
 			}
 
-			if (type.isNumber() && (isEmpty(value) || ! hasTransform(vt, type))) {
-				if (value instanceof Number) {
+			if (to.isNumber()) {
+				if (from.isNumber()) {
 					Number n = (Number)value;
 					if (tc == Integer.class)
 						return (T)Integer.valueOf(n.intValue());
@@ -450,25 +463,37 @@ public class BeanSession extends Session {
 						return (T)Double.valueOf(n.doubleValue());
 					if (tc == Byte.class)
 						return (T)Byte.valueOf(n.byteValue());
-					if (tc == Byte.class)
-						return (T)Byte.valueOf(n.byteValue());
 					if (tc == AtomicInteger.class)
 						return (T)new AtomicInteger(n.intValue());
 					if (tc == AtomicLong.class)
 						return (T)new AtomicLong(n.intValue());
-				} else {
-					if (value.toString().isEmpty())
-						return null;
-					String n = null;
-					if (value instanceof Boolean)
-						n = ((Boolean)value).booleanValue() ? "1" : "0";
-					else
-						n = value.toString();
+				} else if (from.isBoolean()) {
+					Boolean b = (Boolean)value;
+					if (tc == Integer.class)
+						return (T)Integer.valueOf(b ? 1 : 0);
+					if (tc == Short.class)
+						return (T)Short.valueOf(b ? (short)1 : 0);
+					if (tc == Long.class)
+						return (T)Long.valueOf(b ? 1 : 0);
+					if (tc == Float.class)
+						return (T)Float.valueOf(b ? 1 : 0);
+					if (tc == Double.class)
+						return (T)Double.valueOf(b ? 1 : 0);
+					if (tc == Byte.class)
+						return (T)Byte.valueOf(b ? (byte)1 : 0);
+					if (tc == AtomicInteger.class)
+						return (T)new AtomicInteger(b ? 1 : 0);
+					if (tc == AtomicLong.class)
+						return (T)new AtomicLong(b ? 1 : 0);
+				} else if (isNullOrEmpty(value)) {
+					return null;
+				} else if (! hasTransform(from, to)) {
+					String s = value.toString();
 
-					int multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(n) : 1;
+					int multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(s) : 1;
 					if (multiplier != 1) {
-						n = n.substring(0, n.length()-1).trim();
-						Long l = Long.valueOf(n) * multiplier;
+						s = s.substring(0, s.length()-1).trim();
+						Long l = Long.valueOf(s) * multiplier;
 						if (tc == Integer.TYPE)
 							return (T)Integer.valueOf(l.intValue());
 						if (tc == Short.TYPE)
@@ -477,54 +502,57 @@ public class BeanSession extends Session {
 							return (T)Long.valueOf(l.longValue());
 					} else {
 						if (tc == Integer.class)
-							return (T)Integer.valueOf(n);
+							return (T)Integer.valueOf(s);
 						if (tc == Short.class)
-							return (T)Short.valueOf(n);
+							return (T)Short.valueOf(s);
 						if (tc == Long.class)
-							return (T)Long.valueOf(n);
+							return (T)Long.valueOf(s);
 						if (tc == Float.class)
-							return (T)new Float(n);
+							return (T)new Float(s);
 						if (tc == Double.class)
-							return (T)new Double(n);
+							return (T)new Double(s);
 						if (tc == Byte.class)
-							return (T)Byte.valueOf(n);
+							return (T)Byte.valueOf(s);
 						if (tc == AtomicInteger.class)
-							return (T)new AtomicInteger(Integer.valueOf(n));
+							return (T)new AtomicInteger(Integer.valueOf(s));
 						if (tc == AtomicLong.class)
-							return (T)new AtomicLong(Long.valueOf(n));
+							return (T)new AtomicLong(Long.valueOf(s));
 						if (tc == Number.class)
-							return (T)StringUtils.parseNumber(n, Number.class);
+							return (T)StringUtils.parseNumber(s, Number.class);
 					}
 				}
 			}
 
-			if (type.isChar() && value.toString().length() == 1) {
+			if (to.isChar()) {
+				if (isNullOrEmpty(value))
+					return null;
 				String s = value.toString();
-				return (T)Character.valueOf(s.charAt(0));
+				if (s.length() == 1)
+					return (T)Character.valueOf(s.charAt(0));
 			}
 
 			// Handle setting of array properties
-			if (type.isArray()) {
-				if (vt.isCollection())
-					return (T)toArray(type, (Collection)value);
-				else if (vt.isArray())
-					return (T)toArray(type, Arrays.asList((Object[])value));
+			if (to.isArray()) {
+				if (from.isCollection())
+					return (T)toArray(to, (Collection)value);
+				else if (from.isArray())
+					return (T)toArray(to, Arrays.asList((Object[])value));
 				else if (startsWith(value.toString(), '['))
-					return (T)toArray(type, new ObjectList(value.toString()).setBeanSession(this));
-				else if (type.hasTransformFrom(vt))
-					return type.transformFrom(value);
-				else if (vt.hasTransformTo(type))
-					return vt.transformTo(value, type);
+					return (T)toArray(to, new ObjectList(value.toString()).setBeanSession(this));
+				else if (to.hasTransformFrom(from))
+					return to.transformFrom(value);
+				else if (from.hasTransformTo(to))
+					return from.transformTo(value, to);
 				else
-					return (T)toArray(type, new ObjectList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
+					return (T)toArray(to, new ObjectList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
 			}
 
 			// Target type is some sort of Map that needs to be converted.
-			if (type.isMap()) {
+			if (to.isMap()) {
 				try {
-					if (value instanceof Map) {
-						Map m = type.canCreateNewInstance(outer) ? (Map)type.newInstance(outer) : new ObjectMap(this);
-						ClassMeta keyType = type.getKeyType(), valueType = type.getValueType();
+					if (from.isMap()) {
+						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : new ObjectMap(this);
+						ClassMeta keyType = to.getKeyType(), valueType = to.getValueType();
 						for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet()) {
 							Object k = e.getKey();
 							if (keyType.isNotObject()) {
@@ -539,31 +567,33 @@ public class BeanSession extends Session {
 							m.put(k, v);
 						}
 						return (T)m;
-					} else if (!type.canCreateNewInstanceFromString(outer)) {
+					} else if (!to.canCreateNewInstanceFromString(outer)) {
 						ObjectMap m = new ObjectMap(value.toString());
 						m.setBeanSession(this);
-						return convertToMemberType(outer, m, type);
+						return convertToMemberType(outer, m, to);
 					}
 				} catch (Exception e) {
-					throw new InvalidDataConversionException(value.getClass(), type, e);
+					throw new InvalidDataConversionException(value.getClass(), to, e);
 				}
 			}
 
 			// Target type is some sort of Collection
-			if (type.isCollection()) {
+			if (to.isCollection()) {
 				try {
-					Collection l = type.canCreateNewInstance(outer) ? (Collection)type.newInstance(outer) : type.isSet() ? new LinkedHashSet<>() : new ObjectList(this);
-					ClassMeta elementType = type.getElementType();
+					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? new LinkedHashSet<>() : new ObjectList(this);
+					ClassMeta elementType = to.getElementType();
 
-					if (value.getClass().isArray())
+					if (from.isArray())
 						for (Object o : (Object[])value)
 							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
-					else if (value instanceof Collection)
+					else if (from.isCollection())
 						for (Object o : (Collection)value)
 							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
-					else if (value instanceof Map)
+					else if (from.isMap())
 						l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
-					else if (value instanceof String) {
+					else if (isNullOrEmpty(value))
+						return null;
+					else if (from.isString()) {
 						String s = value.toString();
 						if (isObjectList(s, false)) {
 							ObjectList l2 = new ObjectList(s);
@@ -571,38 +601,40 @@ public class BeanSession extends Session {
 							for (Object o : l2)
 								l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 						} else {
-							throw new InvalidDataConversionException(value.getClass(), type, null);
+							throw new InvalidDataConversionException(value.getClass(), to, null);
 						}
 					}
-					else if (! value.toString().isEmpty())
-						throw new InvalidDataConversionException(value.getClass(), type, null);
+					else
+						throw new InvalidDataConversionException(value.getClass(), to, null);
 					return (T)l;
 				} catch (InvalidDataConversionException e) {
 					throw e;
 				} catch (Exception e) {
-					throw new InvalidDataConversionException(value.getClass(), type, e);
+					throw new InvalidDataConversionException(value.getClass(), to, e);
 				}
 			}
 
-			if (type.isEnum()) {
-				if (type.canCreateNewInstanceFromString(outer))
-					return type.newInstanceFromString(outer, value.toString());
+			if (to.isEnum()) {
+				if (to.canCreateNewInstanceFromString(outer))
+					return to.newInstanceFromString(outer, value.toString());
+				if (isNullOrEmpty(value))
+					return null;
 				return (T)Enum.valueOf((Class<? extends Enum>)tc, value.toString());
 			}
 
-			if (type.isString()) {
-				if (vt.isByteArray()) {
+			if (to.isString()) {
+				if (from.isByteArray()) {
 					return (T) new String((byte[])value);
-				} else if (vt.isMapOrBean() || vt.isCollectionOrArray()) {
+				} else if (from.isMapOrBean() || from.isCollectionOrArray()) {
 					if (JsonSerializer.DEFAULT_LAX != null)
 						return (T)JsonSerializer.DEFAULT_LAX.serialize(value);
-				} else if (vt.isClass()) {
+				} else if (from.isClass()) {
 					return (T)((Class<?>)value).getName();
 				}
 				return (T)value.toString();
 			}
 
-			if (type.isCharSequence()) {
+			if (to.isCharSequence()) {
 				Class<?> c = value.getClass();
 				if (c.isArray()) {
 					if (c.getComponentType().isPrimitive()) {
@@ -615,31 +647,34 @@ public class BeanSession extends Session {
 					value = new ObjectList((Object[])value).setBeanSession(this);
 				}
 
-				return type.newInstanceFromString(outer, value.toString());
+				return to.newInstanceFromString(outer, value.toString());
 			}
 
-			if (type.isBoolean() && ! hasTransform(vt, type)) {
-				if (value instanceof Number)
+			if (to.isBoolean()) {
+				if (from.isNumber())
 					return (T)(Boolean.valueOf(((Number)value).intValue() != 0));
-				return (T)Boolean.valueOf(value.toString());
+				if (isNullOrEmpty(value))
+					return null;
+				if (! hasTransform(from, to))
+					return (T)Boolean.valueOf(value.toString());
 			}
 
 			// It's a bean being initialized with a Map
-			if (type.isBean() && value instanceof Map) {
+			if (to.isBean() && value instanceof Map) {
 				if (value instanceof ObjectMap) {
 					ObjectMap m2 = (ObjectMap)value;
-					String typeName = m2.getString(getBeanTypePropertyName(type));
+					String typeName = m2.getString(getBeanTypePropertyName(to));
 					if (typeName != null) {
-						ClassMeta cm = type.getBeanRegistry().getClassMeta(typeName);
-						if (cm != null && isParentClass(type.innerClass, cm.innerClass))
+						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
+						if (cm != null && isParentClass(to.innerClass, cm.innerClass))
 							return (T)m2.cast(cm);
 					}
 				}
 				return newBeanMap(tc).load((Map<?,?>) value).getBean();
 			}
 
-			if (type.isInputStream()) {
-				if (vt.isByteArray()) {
+			if (to.isInputStream()) {
+				if (from.isByteArray()) {
 					byte[] b = (byte[])value;
 					return (T) new ByteArrayInputStream(b, 0, b.length);
 				}
@@ -647,16 +682,16 @@ public class BeanSession extends Session {
 				return (T)new ByteArrayInputStream(b, 0, b.length);
 			}
 
-			if (type.isReader()) {
-				if (vt.isByteArray()) {
+			if (to.isReader()) {
+				if (from.isByteArray()) {
 					byte[] b = (byte[])value;
 					return (T) new StringReader(new String(b));
 				}
 				return (T)new StringReader(value.toString());
 			}
 
-			if (type.isCalendar() && ! hasTransform(vt, type)) {
-				if (vt.isCalendar()) {
+			if (to.isCalendar()) {
+				if (from.isCalendar()) {
 					Calendar c = (Calendar)value;
 					if (value instanceof GregorianCalendar) {
 						GregorianCalendar c2 = new GregorianCalendar(c.getTimeZone());
@@ -664,7 +699,7 @@ public class BeanSession extends Session {
 						return (T)c2;
 					}
 				}
-				if (vt.isDate()) {
+				if (from.isDate()) {
 					Date d = (Date)value;
 					if (value instanceof GregorianCalendar) {
 						GregorianCalendar c2 = new GregorianCalendar(TimeZone.getDefault());
@@ -674,35 +709,39 @@ public class BeanSession extends Session {
 				}
 			}
 
-			if (type.isDate() && type.getInnerClass() == Date.class) {
-				if (vt.isCalendar())
+			if (to.isDate() && to.getInnerClass() == Date.class) {
+				if (from.isCalendar())
 					return (T)((Calendar)value).getTime();
 			}
 
-			if (type.hasTransformFrom(vt))
-				return type.transformFrom(value);
+			if (to.hasTransformFrom(from))
+				return to.transformFrom(value);
 
-			if (vt.hasTransformTo(type))
-				return vt.transformTo(value, type);
+			if (from.hasTransformTo(to))
+				return from.transformTo(value, to);
 
-			if (type.isBean())
-				return newBeanMap(type.getInnerClass()).load(value.toString()).getBean();
+			if (to.isBean())
+				return newBeanMap(to.getInnerClass()).load(value.toString()).getBean();
 
-			if (type.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
-				return type.newInstanceFromNumber(this, outer, (Number)value);
+			if (to.canCreateNewInstanceFromNumber(outer) && value instanceof Number)
+				return to.newInstanceFromNumber(this, outer, (Number)value);
 
-			if (type.canCreateNewInstanceFromString(outer))
-				return type.newInstanceFromString(outer, value.toString());
+			if (to.canCreateNewInstanceFromString(outer))
+				return to.newInstanceFromString(outer, value.toString());
 
 		} catch (Exception e) {
-			throw new InvalidDataConversionException(value, type, e);
+			throw new InvalidDataConversionException(value, to, e);
 		}
 
-		throw new InvalidDataConversionException(value, type, null);
+		throw new InvalidDataConversionException(value, to, null);
 	}
 
 	private static boolean hasTransform(ClassMeta<?> from, ClassMeta<?> to) {
 		return to.hasTransformFrom(from) || from.hasTransformTo(to);
+	}
+
+	private static final boolean isNullOrEmpty(Object o) {
+		return o == null || o.toString().equals("") || o.toString().equals("null");
 	}
 
 	private static int getMultiplier(String s) {

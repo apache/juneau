@@ -833,6 +833,6 @@ public class BeanConfigTest {
 		// Booleans are handled different since 'new Boolean("")' is valid and resolves to false
 		// while 'new Integer("")' produces an exception.
 		assertEquals(false, (boolean)session.convertToType("", boolean.class));
-		assertEquals(false, session.convertToType("", Boolean.class));
+		assertEquals(null, session.convertToType("", Boolean.class));
 	}
 }

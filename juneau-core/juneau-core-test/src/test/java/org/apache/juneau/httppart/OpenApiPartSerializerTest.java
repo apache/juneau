@@ -21,7 +21,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
+import org.junit.runners.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenApiPartSerializerTest {
 
 	static OpenApiPartSerializer s = OpenApiPartSerializer.DEFAULT;
@@ -33,10 +35,10 @@ public class OpenApiPartSerializerTest {
 	@Test
 	public void a01_outputValidations_nullOutput() throws Exception {
 		HttpPartSchema ps = schema().build();
-		assertNull(s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, null));
 
 		ps = schema().required(false).build();
-		assertNull(s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, null));
 
 		ps = schema().required().build();
 		try {
@@ -87,7 +89,7 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema().pattern("x.*").allowEmptyValue().build();
 		assertEquals("x", s.serialize(ps, "x"));
 		assertEquals("xx", s.serialize(ps, "xx"));
-		assertEquals(null, s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, null));
 
 		try {
 			s.serialize(ps, "y");
@@ -115,7 +117,7 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema()._enum("foo").allowEmptyValue().build();
 
 		assertEquals("foo", s.serialize(ps, "foo"));
-		assertEquals(null, s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, null));
 
 		try {
 			s.serialize(ps, "bar");
@@ -144,7 +146,7 @@ public class OpenApiPartSerializerTest {
 	public void a05_outputValidations_minMaxLength() throws Exception {
 		HttpPartSchema ps = schema().minLength(1l).maxLength(2l).allowEmptyValue().build();
 
-		assertEquals(null, s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, null));
 		assertEquals("1", s.serialize(ps, "1"));
 		assertEquals("12", s.serialize(ps, "12"));
 
@@ -180,7 +182,7 @@ public class OpenApiPartSerializerTest {
 	public static class C2 {
 		private String f;
 		public C2(String s) {
-			f = "C2-" + s;
+			f = s;
 		}
 		@Override
 		public String toString() {
@@ -219,6 +221,8 @@ public class OpenApiPartSerializerTest {
 		String expected = base64Encode(foob);
 		assertEquals(expected, s.serialize(ps, foob));
 		assertEquals(expected, s.serialize(ps, new C1(foob)));
+		assertEquals("null", s.serialize(ps, new C1(null)));
+		assertEquals("null", s.serialize(ps, null));
 	}
 
 	@Test
@@ -228,6 +232,8 @@ public class OpenApiPartSerializerTest {
 		String expected = toHex(foob);
 		assertEquals(expected, s.serialize(ps, foob));
 		assertEquals(expected, s.serialize(ps, new C1(foob)));
+		assertEquals("null", s.serialize(ps, new C1(null)));
+		assertEquals("null", s.serialize(ps, null));
 	}
 
 	@Test
@@ -237,6 +243,8 @@ public class OpenApiPartSerializerTest {
 		String expected = toSpacedHex(foob);
 		assertEquals(expected, s.serialize(ps, foob));
 		assertEquals(expected, s.serialize(ps, new C1(foob)));
+		assertEquals("null", s.serialize(ps, new C1(null)));
+		assertEquals("null", s.serialize(ps, null));
 	}
 
 	@Test
@@ -244,6 +252,7 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("string", "date").build();
 		Calendar in = StringUtils.parseIsoCalendar("2012-12-21");
 		assertTrue(s.serialize(ps, in).contains("2012"));
+		assertEquals("null", s.serialize(ps, null));
 	}
 
 	@Test
@@ -251,6 +260,7 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("string", "date-time").build();
 		Calendar in = StringUtils.parseIsoCalendar("2012-12-21T12:34:56.789");
 		assertTrue(s.serialize(ps, in).contains("2012"));
+		assertEquals("null", s.serialize(ps, null));
 	}
 
 	@Test
@@ -258,7 +268,10 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("string", "uon").build();
 		assertEquals("foo", s.serialize(ps, "foo"));
 		assertEquals("'foo'", s.serialize(ps, "'foo'"));
-		assertEquals("C2-foo", s.serialize(ps, new C2("foo")));
+		assertEquals("foo", s.serialize(ps, new C2("foo")));
+		assertEquals("null", s.serialize(ps, new C2(null)));
+		assertEquals("'null'", s.serialize(ps, new C2("null")));
+		assertEquals("null", s.serialize(ps, null));
 		// UonPartSerializerTest should handle all other cases.
 	}
 
@@ -268,55 +281,60 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("string").build();
 		assertEquals("foo", s.serialize(ps, "foo"));
 		assertEquals("'foo'", s.serialize(ps, "'foo'"));
-		assertEquals("C2-foo", s.serialize(ps, new C2("foo")));
+		assertEquals("foo", s.serialize(ps, new C2("foo")));
+		assertEquals("null", s.serialize(ps, new C2(null)));
+		assertEquals("null", s.serialize(ps, new C2("null")));
+		assertEquals("null", s.serialize(ps, null));
 	}
 
 	@Test
 	public void c10_stringType_noneFormat_2d() throws Exception {
 		HttpPartSchema ps = schema("array").items(schema("string")).build();
-		assertEquals("foo,bar", s.serialize(ps, new String[]{"foo","bar"}));
-		assertEquals("foo,bar", s.serialize(ps, AList.create("foo","bar")));
-		assertEquals("foo,bar", s.serialize(ps, new Object[]{"foo","bar"}));
-		assertEquals("foo,bar", s.serialize(ps, AList.create((Object)"foo",(Object)"bar")));
-		assertEquals("C2-foo,C2-bar", s.serialize(ps, new C2[] {new C2("foo"), new C2("bar")}));
-		assertEquals("C2-foo,C2-bar", s.serialize(ps, AList.create(new C2("foo"), new C2("bar"))));
-		assertEquals("foo,bar", s.serialize(ps, new C3("foo","bar")));
+		assertEquals("foo,bar,null", s.serialize(ps, new String[]{"foo","bar",null}));
+		assertEquals("foo,bar,null", s.serialize(ps, AList.create("foo","bar",null)));
+		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
+		assertEquals("foo,bar,null", s.serialize(ps, AList.create((Object)"foo",(Object)"bar",null)));
+		assertEquals("foo,bar,null,null", s.serialize(ps, new C2[]{new C2("foo"),new C2("bar"),new C2(null),null}));
+		assertEquals("foo,bar,null,null", s.serialize(ps, AList.create(new C2("foo"),new C2("bar"),new C2(null),null)));
+		assertEquals("foo,bar,null", s.serialize(ps, new C3("foo","bar",null)));
 	}
 
 	@Test
 	public void c11_stringType_noneFormat_3d() throws Exception {
 		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("string"))).build();
-		assertEquals("foo,bar|baz", s.serialize(ps, new String[][]{{"foo","bar"},{"baz"}}));
-		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(new String[]{"foo","bar"}, new String[]{"baz"})));
-		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(AList.create("foo","bar"),AList.create("baz"))));
-		assertEquals("foo,bar|baz", s.serialize(ps, new Object[][]{{"foo","bar"},{"baz"}}));
-		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(new Object[]{"foo","bar"}, new String[]{"baz"})));
-		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(AList.create((Object)"foo",(Object)"bar"),AList.create((Object)"baz"))));
-		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, new C2[][]{{new C2("foo"),new C2("bar")},{new C2("baz")}}));
-		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, AList.create(new C2[]{new C2("foo"),new C2("bar")}, new C2[]{new C2("baz")})));
-		assertEquals("C2-foo,C2-bar|C2-baz", s.serialize(ps, AList.create(AList.create(new C2("foo"),new C2("bar")),AList.create(new C2("baz")))));
-		assertEquals("foo,bar|baz", s.serialize(ps, new C3[]{new C3("foo","bar"),new C3("baz")}));
-		assertEquals("foo,bar|baz", s.serialize(ps, AList.create(new C3("foo","bar"), new C3("baz"))));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.create(new String[]{"foo","bar"}, new String[]{"baz",null},null)));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.create(AList.create("foo","bar"),AList.create("baz",null),null)));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, new Object[][]{{"foo","bar"},{"baz",null},null}));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.create(new Object[]{"foo","bar"}, new String[]{"baz",null},null)));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.create(AList.create((Object)"foo",(Object)"bar"),AList.create((Object)"baz",null),null)));
+		assertEquals("foo,bar|baz,null,null|null", s.serialize(ps, new C2[][]{{new C2("foo"),new C2("bar")},{new C2("baz"),new C2(null),null},null}));
+		assertEquals("foo,bar|baz,null,null|null", s.serialize(ps, AList.create(new C2[]{new C2("foo"),new C2("bar")}, new C2[]{new C2("baz"),new C2(null),null},null)));
+		assertEquals("foo,bar|baz,null,null|null", s.serialize(ps, AList.create(AList.create(new C2("foo"),new C2("bar")),AList.create(new C2("baz"),new C2(null),null),null)));
+		assertEquals("foo,bar|baz,null|null|null", s.serialize(ps, new C3[]{new C3("foo","bar"),new C3("baz",null),new C3((String)null),null}));
+		assertEquals("foo,bar|baz,null|null|null", s.serialize(ps, AList.create(new C3("foo","bar"),new C3("baz",null),new C3((String)null),null)));
 	}
 
 	@Test
-	public void c12a_stringType_uonKeywords_plain() throws Exception {
+	public void c12_stringType_uonKeywords_plain() throws Exception {
 		HttpPartSchema ps = schema("string").build();
 		// When serialized normally, the following should not be quoted.
 		assertEquals("true", s.serialize(ps, "true"));
 		assertEquals("false", s.serialize(ps, "false"));
 		assertEquals("null", s.serialize(ps, "null"));
+		assertEquals("null", s.serialize(ps, null));
 		assertEquals("123", s.serialize(ps, "123"));
 		assertEquals("1.23", s.serialize(ps, "1.23"));
 	}
 
 	@Test
-	public void c12b_stringType_uonKeywords_uon() throws Exception {
+	public void c13_stringType_uonKeywords_uon() throws Exception {
 		HttpPartSchema ps = schema("string","uon").build();
 		// When serialized as UON, the following should be quoted so that they're not confused with booleans or numbers.
 		assertEquals("'true'", s.serialize(ps, "true"));
 		assertEquals("'false'", s.serialize(ps, "false"));
 		assertEquals("'null'", s.serialize(ps, "null"));
+		assertEquals("null", s.serialize(ps, null));
 		assertEquals("'123'", s.serialize(ps, "123"));
 		assertEquals("'1.23'", s.serialize(ps, "1.23"));
 	}
@@ -328,7 +346,7 @@ public class OpenApiPartSerializerTest {
 	public static class D {
 		private String f;
 		public D(String in) {
-			this.f = "D-" + in;
+			this.f = in;
 		}
 		@Override
 		public String toString() {
@@ -341,10 +359,10 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("array").collectionFormat("csv").build();
 		assertEquals("foo,bar,null", s.serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("D-foo,D-bar,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo,bar,null,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.create("foo","bar",null)));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.<Object>create("foo","bar",null)));
-		assertEquals("D-foo,D-bar,null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo,bar,null,null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 
 		assertEquals("foo\\,bar,null", s.serialize(ps, new String[]{"foo,bar",null}));
@@ -355,10 +373,10 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("array").collectionFormat("pipes").build();
 		assertEquals("foo|bar|null", s.serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo|bar|null", s.serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("D-foo|D-bar|null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo|bar|null|null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo|bar|null", s.serialize(ps, AList.create("foo","bar",null)));
 		assertEquals("foo|bar|null", s.serialize(ps, AList.<Object>create("foo","bar",null)));
-		assertEquals("D-foo|D-bar|null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo|bar|null|null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo|bar|null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
 
@@ -367,10 +385,10 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("array").collectionFormat("ssv").build();
 		assertEquals("foo bar null", s.serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo bar null", s.serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("D-foo D-bar null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo bar null null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo bar null", s.serialize(ps, AList.create("foo","bar",null)));
 		assertEquals("foo bar null", s.serialize(ps, AList.<Object>create("foo","bar",null)));
-		assertEquals("D-foo D-bar null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo bar null null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo bar null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
 
@@ -379,10 +397,10 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("array").collectionFormat("tsv").build();
 		assertEquals("foo\tbar\tnull", s.serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo\tbar\tnull", s.serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("D-foo\tD-bar\tnull", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo\tbar\tnull\tnull", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo\tbar\tnull", s.serialize(ps, AList.create("foo","bar",null)));
 		assertEquals("foo\tbar\tnull", s.serialize(ps, AList.<Object>create("foo","bar",null)));
-		assertEquals("D-foo\tD-bar\tnull", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo\tbar\tnull\tnull", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo\tbar\tnull", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
 
@@ -391,10 +409,10 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("array").collectionFormat("uon").build();
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new String[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new Object[]{"foo","bar","null",null}));
-		assertEquals("@(D-foo,D-bar,D-null,null)", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
+		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, AList.create("foo","bar","null",null)));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, AList.<Object>create("foo","bar","null",null)));
-		assertEquals("@(D-foo,D-bar,D-null,null)", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D("null"),null)));
+		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D("null"),null)));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new ObjectList().append("foo","bar","null",null)));
 	}
 
@@ -403,10 +421,10 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("array").build();
 		assertEquals("foo,bar,null", s.serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("D-foo,D-bar,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo,bar,null,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.create("foo","bar",null)));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.<Object>create("foo","bar",null)));
-		assertEquals("D-foo,D-bar,null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo,bar,null,null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
 
@@ -416,22 +434,22 @@ public class OpenApiPartSerializerTest {
 		HttpPartSchema ps = schema("array").collectionFormat("multi").build();
 		assertEquals("foo,bar,null", s.serialize(ps, new String[]{"foo","bar",null}));
 		assertEquals("foo,bar,null", s.serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("D-foo,D-bar,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),null}));
+		assertEquals("foo,bar,null,null", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.create("foo","bar",null)));
 		assertEquals("foo,bar,null", s.serialize(ps, AList.<Object>create("foo","bar",null)));
-		assertEquals("D-foo,D-bar,null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),null)));
+		assertEquals("foo,bar,null,null", s.serialize(ps, AList.create(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", s.serialize(ps, new ObjectList().append("foo","bar",null)));
 	}
 
 	@Test
 	public void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
 		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").collectionFormat("csv")).build();
-		assertEquals("foo,bar|baz,null", s.serialize(ps, new String[][]{{"foo","bar"},{"baz",null}}));
-		assertEquals("foo,bar|baz,null", s.serialize(ps, new Object[][]{{"foo","bar"},{"baz",null}}));
-		assertEquals("D-foo,D-bar|D-baz,D-null", s.serialize(ps, new D[][]{{new D("foo"),new D("bar")},{new D("baz"),new D(null)}}));
-		assertEquals("foo,bar|baz,null", s.serialize(ps, AList.create(AList.create("foo","bar"),AList.create("baz",null))));
-		assertEquals("foo,bar|baz,null", s.serialize(ps, AList.create(AList.<Object>create("foo","bar"),AList.<Object>create("baz",null))));
-		assertEquals("D-foo,D-bar|D-baz,D-null", s.serialize(ps, AList.create(AList.create(new D("foo"),new D("bar")),AList.create(new D("baz"),new D(null)))));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, new Object[][]{{"foo","bar"},{"baz",null},null}));
+		assertEquals("foo,bar|baz,null,null|null", s.serialize(ps, new D[][]{{new D("foo"),new D("bar")},{new D("baz"),new D(null),null},null}));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.create(AList.create("foo","bar"),AList.create("baz",null),null)));
+		assertEquals("foo,bar|baz,null|null", s.serialize(ps, AList.create(AList.<Object>create("foo","bar"),AList.<Object>create("baz",null),null)));
+		assertEquals("foo,bar|baz,null,null|null", s.serialize(ps, AList.create(AList.create(new D("foo"),new D("bar")),AList.create(new D("baz"),new D(null),null),null)));
 	}
 
 	@Test
@@ -441,6 +459,15 @@ public class OpenApiPartSerializerTest {
 		assertEquals("1,2,null", s.serialize(ps, new Integer[]{1,2,null}));
 		assertEquals("1,2,null", s.serialize(ps, new Object[]{1,2,null}));
 		assertEquals("1,2,null", s.serialize(ps, AList.create(1,2,null)));
+	}
+
+	@Test
+	public void d10_arrayType_itemsInteger_2d() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").collectionFormat("csv").allowEmptyValue().items(schema("integer"))).build();
+		assertEquals("1,2||null", s.serialize(ps, new int[][]{{1,2},{},null}));
+		assertEquals("1,2,null||null", s.serialize(ps, new Integer[][]{{1,2,null},{},null}));
+		assertEquals("1,2,null||null", s.serialize(ps, new Object[][]{{1,2,null},{},null}));
+		assertEquals("1,2,null||null", s.serialize(ps, AList.create(AList.create(1,2,null),AList.create(),null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -471,12 +498,32 @@ public class OpenApiPartSerializerTest {
 	public void e01_booleanType() throws Exception {
 		HttpPartSchema ps = schema("boolean").build();
 		assertEquals("true", s.serialize(ps, true));
+		assertEquals("true", s.serialize(ps, "true"));
+		assertEquals("true", s.serialize(ps, new E1(true)));
 		assertEquals("false", s.serialize(ps, false));
+		assertEquals("false", s.serialize(ps, "false"));
+		assertEquals("false", s.serialize(ps, new E1(false)));
 		assertEquals("null", s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, "null"));
+		assertEquals("null", s.serialize(ps, new E1(null)));
 	}
 
 	@Test
-	public void e02_booleanType_2d() throws Exception {
+	public void e02_booleanType_uon() throws Exception {
+		HttpPartSchema ps = schema("boolean","uon").build();
+		assertEquals("true", s.serialize(ps, true));
+		assertEquals("true", s.serialize(ps, "true"));
+		assertEquals("true", s.serialize(ps, new E1(true)));
+		assertEquals("false", s.serialize(ps, false));
+		assertEquals("false", s.serialize(ps, "false"));
+		assertEquals("false", s.serialize(ps, new E1(false)));
+		assertEquals("null", s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, "null"));
+		assertEquals("null", s.serialize(ps, new E1(null)));
+	}
+
+	@Test
+	public void e03_booleanType_2d() throws Exception {
 		HttpPartSchema ps = schema("array").items(schema("boolean")).build();
 		assertEquals("true", s.serialize(ps, new boolean[]{true}));
 		assertEquals("true,null", s.serialize(ps, new Boolean[]{true,null}));
@@ -491,7 +538,7 @@ public class OpenApiPartSerializerTest {
 	}
 
 	@Test
-	public void e03_booleanType_3d() throws Exception {
+	public void e04_booleanType_3d() throws Exception {
 		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("boolean"))).build();
 		assertEquals("true,true|false", s.serialize(ps, new boolean[][]{{true,true},{false}}));
 		assertEquals("true,true|false", s.serialize(ps, AList.create(new boolean[]{true,true},new boolean[]{false})));
@@ -527,7 +574,7 @@ public class OpenApiPartSerializerTest {
 
 	public static class F2 {
 		private Integer[] f;
-		public F2(Integer[] in) {
+		public F2(Integer...in) {
 			this.f = in;
 		}
 		public Integer[] toIntegerArray() {
@@ -547,7 +594,7 @@ public class OpenApiPartSerializerTest {
 
 	public static class F4 {
 		private Long[] f;
-		public F4(Long[] in) {
+		public F4(Long...in) {
 			this.f = in;
 		}
 		public Long[] toLongArray() {
@@ -566,127 +613,128 @@ public class OpenApiPartSerializerTest {
 		assertEquals("1", s.serialize(ps, new Long(1)));
 		assertEquals("1", s.serialize(ps, "1"));
 		assertEquals("1", s.serialize(ps, new F1(1)));
+		assertEquals("null", s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, "null"));
 	}
-//
-//	@Test
-//	public void f02_integerType_int32_2d() throws Exception {
-//		HttpPartSchema ps = schema("array").items(schema("integer", "int32")).build();
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", int[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Integer[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Integer.class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", short[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Short[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Short.class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", long[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Long[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Long.class));
-//		assertEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
-//		assertEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Object[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Object.class));
-//		assertEquals("['F1-1','F1-2']", s.serialize(ps,  "1,2", F1[].class));
-//		assertEquals("['F1-1','F1-2']", s.serialize(ps,  "1,2", List.class, F1.class));
-//		assertEquals("'F2-[1,2]'", s.serialize(ps,  "1,2", F2.class));
-//	}
-//
-//	@Test
-//	public void f03_integerType_int32_3d() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("integer", "int32"))).build();
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", int[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, int[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Integer[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Integer[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Integer.class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", short[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, short[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Short[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Short[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Short.class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", long[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, long[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Long[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Long[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Long.class));
-//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
-//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
-//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Object[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
-//		assertEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", F1[][].class));
-//		assertEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", List.class, F1[].class));
-//		assertEquals("[['F1-1','F1-2'],['F1-3']]", s.serialize(ps,  "1,2|3", List.class, List.class, F1.class));
-//		assertEquals("['F2-[1,2]','F2-[3]']", s.serialize(ps, "1,2|3", F2[].class));
-//		assertEquals("['F2-[1,2]','F2-[3]']", s.serialize(ps, "1,2|3", List.class, F2.class));
-//	}
-//
-//	@Test
-//	public void f04_integerType_int64() throws Exception {
-//		HttpPartSchema ps = schema("integer", "int64").build();
-//		assertEquals("1", s.serialize(ps, "1", int.class));
-//		assertEquals("1", s.serialize(ps, "1", Integer.class));
-//		assertEquals("1", s.serialize(ps, "1", short.class));
-//		assertEquals("1", s.serialize(ps, "1", Short.class));
-//		assertEquals("1", s.serialize(ps, "1", long.class));
-//		assertEquals("1", s.serialize(ps, "1", Long.class));
-//		assertEquals("'1'", s.serialize(ps, "1", String.class));
-//		Object o = s.serialize(ps, "1", Object.class);
-//		assertEquals("1", o);
-//		assertClass(Long.class, o);
-//		assertEquals("'F3-1'", s.serialize(ps,  "1", F3.class));
-//	}
-//
-//	@Test
-//	public void f05_integerType_int64_2d() throws Exception {
-//		HttpPartSchema ps = schema("array").items(schema("integer", "int64")).build();
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", int[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Integer[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Integer.class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", short[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Short[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Short.class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", long[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Long[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Long.class));
-//		assertEquals("['1','2']", s.serialize(ps, "1,2", String[].class));
-//		assertEquals("['1','2']", s.serialize(ps, "1,2", List.class, String.class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", Object[].class));
-//		assertEquals("[1,2]", s.serialize(ps, "1,2", List.class, Object.class));
-//		assertEquals("['F3-1','F3-2']", s.serialize(ps,  "1,2", F3[].class));
-//		assertEquals("['F3-1','F3-2']", s.serialize(ps,  "1,2", List.class, F3.class));
-//		assertEquals("'F4-[1,2]'", s.serialize(ps,  "1,2", F4.class));
-//	}
-//
-//	@Test
-//	public void f06_integerType_int64_3d() throws Exception {
-//		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("integer", "int64"))).build();
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", int[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, int[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Integer[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Integer[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Integer.class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", short[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, short[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Short[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Short[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Short.class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", long[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, long[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Long[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Long[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Long.class));
-//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", String[][].class));
-//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, String[].class));
-//		assertEquals("[['1','2'],['3']]", s.serialize(ps, "1,2|3", List.class, List.class, String.class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", Object[][].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, Object[].class));
-//		assertEquals("[[1,2],[3]]", s.serialize(ps, "1,2|3", List.class, List.class, Object.class));
-//		assertEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", F3[][].class));
-//		assertEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", List.class, F3[].class));
-//		assertEquals("[['F3-1','F3-2'],['F3-3']]", s.serialize(ps,  "1,2|3", List.class, List.class, F3.class));
-//		assertEquals("['F4-[1,2]','F4-[3]']", s.serialize(ps, "1,2|3", F4[].class));
-//		assertEquals("['F4-[1,2]','F4-[3]']", s.serialize(ps, "1,2|3", List.class, F4.class));
-//	}
+
+	@Test
+	public void f02_integerType_int32_2d() throws Exception {
+		HttpPartSchema ps = schema("array").items(schema("integer", "int32")).build();
+		assertEquals("1,2", s.serialize(ps, new int[]{1,2}));
+		assertEquals("1,2,null", s.serialize(ps, new Integer[]{1,2,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create(1,2,null)));
+		assertEquals("1,2", s.serialize(ps, new short[]{1,2}));
+		assertEquals("1,2,null", s.serialize(ps, new Short[]{1,2,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create(new Short((short)1),new Short((short)2),null)));
+		assertEquals("1,2", s.serialize(ps, new long[]{1l,2l}));
+		assertEquals("1,2,null", s.serialize(ps, new Long[]{1l,2l,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create(1l,2l,null)));
+		assertEquals("1,2,null", s.serialize(ps, new String[]{"1","2",null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create("1","2",null)));
+		assertEquals("1,2,null", s.serialize(ps, new Object[]{1,2,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.<Object>create(1,2,null)));
+		assertEquals("1,2,null,null", s.serialize(ps, new F1[]{new F1(1),new F1(2),new F1(null),null}));
+		assertEquals("1,2,null,null", s.serialize(ps, AList.create(new F1(1),new F1(2),new F1(null),null)));
+		assertEquals("1,2,null", s.serialize(ps, new F2(1,2,null)));
+	}
+
+	@Test
+	public void f03_integerType_int32_3d() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("integer", "int32"))).build();
+		assertEquals("1,2|3|null", s.serialize(ps, new int[][]{{1,2},{3},null}));
+		assertEquals("1,2|3|null", s.serialize(ps, AList.create(new int[]{1,2},new int[]{3},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Integer[][]{{1,2},{3,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Integer[]{1,2},new Integer[]{3,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create(1,2),AList.create(3,null),null)));
+		assertEquals("1,2|3|null", s.serialize(ps, new short[][]{{1,2},{3},null}));
+		assertEquals("1,2|3|null", s.serialize(ps, AList.create(new short[]{1,2},new short[]{3},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Short[][]{{1,2},{3,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Short[]{1,2},new Short[]{3,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create(new Short((short)1),new Short((short)2)),AList.create(new Short((short)3),null),null)));
+		assertEquals("1,2|3|null", s.serialize(ps, new long[][]{{1l,2l},{3l},null}));
+		assertEquals("1,2|3|null", s.serialize(ps, AList.create(new long[]{1l,2l},new long[]{3l},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Long[][]{{1l,2l},{3l,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Long[]{1l,2l},new Long[]{3l,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create(new Long(1),new Long(2)),AList.create(new Long(3),null),null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new String[][]{{"1","2"},{"3",null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new String[]{"1","2"},new String[]{"3",null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create("1","2"),AList.create("3",null),null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Object[][]{{1,2},{3,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Object[]{1,2},new Object[]{3,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.<Object>create(1,2),AList.<Object>create(3,null),null)));
+		assertEquals("1,2|3,null,null|null", s.serialize(ps, new F1[][]{{new F1(1),new F1(2)},{new F1(3),new F1(null),null},null}));
+		assertEquals("1,2|3,null,null|null", s.serialize(ps, AList.create(new F1[]{new F1(1),new F1(2)},new F1[]{new F1(3),new F1(null),null},null)));
+		assertEquals("1,2|3,null,null|null", s.serialize(ps, AList.create(AList.create(new F1(1),new F1(2)),AList.create(new F1(3),new F1(null),null),null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new F2[]{new F2(1,2),new F2(3,null),null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new F2(1,2),new F2(3,null),null)));
+	}
+
+	@Test
+	public void f04_integerType_int64() throws Exception {
+		HttpPartSchema ps = schema("integer", "int64").build();
+		assertEquals("1", s.serialize(ps, 1));
+		assertEquals("1", s.serialize(ps, new Integer(1)));
+		assertEquals("1", s.serialize(ps, (short)1));
+		assertEquals("1", s.serialize(ps, new Short((short)1)));
+		assertEquals("1", s.serialize(ps, 1l));
+		assertEquals("1", s.serialize(ps, new Long(1l)));
+		assertEquals("1", s.serialize(ps, "1"));
+		assertEquals("1", s.serialize(ps,  new F3(1l)));
+		assertEquals("null", s.serialize(ps, null));
+		assertEquals("null", s.serialize(ps, "null"));
+	}
+
+	@Test
+	public void f05_integerType_int64_2d() throws Exception {
+		HttpPartSchema ps = schema("array").items(schema("integer", "int64")).build();
+		assertEquals("1,2", s.serialize(ps, new int[]{1,2}));
+		assertEquals("1,2,null", s.serialize(ps, new Integer[]{1,2,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create(1,2,null)));
+		assertEquals("1,2", s.serialize(ps, new short[]{1,2}));
+		assertEquals("1,2,null", s.serialize(ps, new Short[]{1,2,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create((short)1,(short)2,null)));
+		assertEquals("1,2", s.serialize(ps, new long[]{1l,2l}));
+		assertEquals("1,2,null", s.serialize(ps, new Long[]{1l,2l,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create(1l,2l,null)));
+		assertEquals("1,2,null", s.serialize(ps, new String[]{"1","2",null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create("1","2",null)));
+		assertEquals("1,2,null", s.serialize(ps, new Object[]{1,2,null}));
+		assertEquals("1,2,null", s.serialize(ps, AList.create((Object)1,(Object)2,null)));
+		assertEquals("1,2,null,null", s.serialize(ps, new F3[]{new F3(1l),new F3(2l),new F3(null),null}));
+		assertEquals("1,2,null,null", s.serialize(ps, AList.create(new F3(1l),new F3(2l),new F3(null),null)));
+		assertEquals("1,2,null", s.serialize(ps, new F4(1l,2l,null)));
+	}
+
+	@Test
+	public void f06_integerType_int64_3d() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("array").items(schema("integer", "int64"))).build();
+		assertEquals("1,2|3|null", s.serialize(ps, new int[][]{{1,2},{3},null}));
+		assertEquals("1,2|3|null", s.serialize(ps, AList.create(new int[]{1,2},new int[]{3},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Integer[][]{{1,2},{3,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Integer[]{1,2},new Integer[]{3,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create(1,2),AList.create(3,null),null)));
+		assertEquals("1,2|3|null", s.serialize(ps, new short[][]{{1,2},{3},null}));
+		assertEquals("1,2|3|null", s.serialize(ps, AList.create(new short[]{1,2},new short[]{3},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Short[][]{{1,2},{3,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Short[]{1,2},new Short[]{3,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create((short)1,(short)2),AList.create((short)3,null),null)));
+		assertEquals("1,2|3|null", s.serialize(ps, new long[][]{{1l,2l},{3l},null}));
+		assertEquals("1,2|3|null", s.serialize(ps, AList.create(new long[]{1l,2l},new long[]{3l},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Long[][]{{1l,2l},{3l,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Long[]{1l,2l},new Long[]{3l,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create(1l,2l),AList.create(3l,null),null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new String[][]{{"1","2"},{"3",null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new String[]{"1","2"},new String[]{"3",null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create("1","2"),AList.create("3",null),null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new Object[][]{{1,2},{3,null},null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new Object[]{1,2},new Object[]{3,null},null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(AList.create((Object)1,(Object)2),AList.create((Object)3,null),null)));
+		assertEquals("1,2|3,null,null|null", s.serialize(ps, new F3[][]{{new F3(1l),new F3(2l)},{new F3(3l),new F3(null),null},null}));
+		assertEquals("1,2|3,null,null|null", s.serialize(ps, AList.create(new F3[]{new F3(1l),new F3(2l)},new F3[]{new F3(3l),new F3(null),null},null)));
+		assertEquals("1,2|3,null,null|null", s.serialize(ps, AList.create(AList.create(new F3(1l),new F3(2l)),AList.create(new F3(3l),new F3(null),null),null)));
+		assertEquals("1,2|3,null|null", s.serialize(ps, new F4[]{new F4(1l,2l),new F4(3l,null),null}));
+		assertEquals("1,2|3,null|null", s.serialize(ps, AList.create(new F4(1l,2l),new F4(3l,null),null)));
+	}
 //
 //
 //	//-----------------------------------------------------------------------------------------------------------------

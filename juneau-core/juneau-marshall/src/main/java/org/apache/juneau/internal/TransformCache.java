@@ -64,6 +64,18 @@ public class TransformCache {
 				}
 			}
 		);
+
+		// String-to-Boolean transform should allow for "null" keyword.
+		add(String.class, Boolean.class,
+			new Transform<String,Boolean>() {
+				@Override
+				public Boolean transform(Object outer, String in) {
+					if (in == null || "null".equals(in) || in.isEmpty())
+						return null;
+					return Boolean.valueOf(in);
+				}
+			}
+		);
 	}
 
 	/**

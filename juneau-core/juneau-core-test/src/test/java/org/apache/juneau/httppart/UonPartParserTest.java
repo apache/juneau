@@ -19,8 +19,10 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
+import org.junit.runners.*;
 
 @SuppressWarnings({"rawtypes"})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UonPartParserTest {
 
 	static UonPartParser p = UonPartParser.DEFAULT;

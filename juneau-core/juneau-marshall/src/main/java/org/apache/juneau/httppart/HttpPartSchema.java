@@ -357,7 +357,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minLength != null, "minLength");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON);
 				break;
 			}
 			case FILE: {
@@ -376,7 +376,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minLength != null, "minLength");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.INT32, Format.INT64);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON, Format.INT32, Format.INT64);
 				break;
 			}
 			case NUMBER: {
@@ -392,7 +392,7 @@ public class HttpPartSchema {
 				notAllowed.appendIf(minItems != null, "minItems");
 				notAllowed.appendIf(minLength != null, "minLength");
 				notAllowed.appendIf(minProperties != null, "minProperties");
-				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.FLOAT, Format.DOUBLE);
+				invalidFormat = ! format.isOneOf(Format.NO_FORMAT, Format.UON, Format.FLOAT, Format.DOUBLE);
 				break;
 			}
 			case OBJECT: {

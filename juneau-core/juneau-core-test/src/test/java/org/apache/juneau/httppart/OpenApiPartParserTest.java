@@ -23,7 +23,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
+import org.junit.runners.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenApiPartParserTest {
 
 	static OpenApiPartParser p = OpenApiPartParser.DEFAULT;
