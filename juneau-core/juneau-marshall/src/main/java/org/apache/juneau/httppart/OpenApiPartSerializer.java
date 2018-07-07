@@ -72,6 +72,11 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 	private static final BeanContext BC = BeanContext.DEFAULT;
 	private static final ClassMeta<byte[]> CM_ByteArray = BC.getClassMeta(byte[].class);
 	private static final ClassMeta<Calendar> CM_Calendar = BC.getClassMeta(Calendar.class);
+	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
+	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
+	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
+	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
+	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
 
 	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
 
@@ -80,6 +85,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final HttpPartSchema schema;
+	final BeanSession bs;
 
 	/**
 	 * Constructor.
@@ -93,6 +99,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 				.set(UON_encoding, false)
 				.build()
 		);
+		this.bs = createBeanSession();
 		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, HttpPartSchema.DEFAULT);
 	}
 
@@ -204,12 +211,30 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 						out = joine(l, ',');
 				}
 
-			} else if (t == BOOLEAN || t == INTEGER || t == NUMBER) {
+			} else if (t == BOOLEAN) {
 
-				if (cf == HttpPartSchema.CollectionFormat.UON)
+				if (f == HttpPartSchema.Format.UON)
 					out = super.serialize(partType, null, value);
 				else
-					out = value.toString();
+					out = asString(toType(value, CM_Boolean));
+
+			} else if (t == INTEGER) {
+
+				if (f == HttpPartSchema.Format.UON)
+					out = super.serialize(partType, null, value);
+				else if (f == INT64)
+					out = asString(toType(value, CM_Long));
+				else
+					out = asString(toType(value, CM_Integer));
+
+			} else if (t == NUMBER) {
+
+				if (f == HttpPartSchema.Format.UON)
+					out = super.serialize(partType, null, value);
+				else if (f == DOUBLE)
+					out = asString(toType(value, CM_Double));
+				else
+					out = asString(toType(value, CM_Float));
 
 			} else if (t == OBJECT) {
 
@@ -248,7 +273,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 
 	private <T> T toType(Object in, ClassMeta<T> type) throws SerializeException {
 		try {
-			return createBeanSession().convertToType(in, type);
+			return bs.convertToType(in, type);
 		} catch (InvalidDataConversionException e) {
 			throw new SerializeException(e.getMessage());
 		}

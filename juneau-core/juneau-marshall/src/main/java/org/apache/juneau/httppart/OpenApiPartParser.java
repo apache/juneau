@@ -179,6 +179,7 @@ public class OpenApiPartParser extends UonPartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	final HttpPartSchema schema;
+	final BeanSession bs;
 
 	/**
 	 * Constructor.
@@ -189,6 +190,7 @@ public class OpenApiPartParser extends UonPartParser {
 		super(
 			ps.builder().build()
 		);
+		this.bs = createBeanSession();
 		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, DEFAULT_SCHEMA);
 	}
 
@@ -406,7 +408,7 @@ public class OpenApiPartParser extends UonPartParser {
 
 	private <T> T toType(Object in, ClassMeta<T> type) throws ParseException {
 		try {
-			return createBeanSession().convertToType(in, type);
+			return bs.convertToType(in, type);
 		} catch (InvalidDataConversionException e) {
 			throw new ParseException(e.getMessage());
 		}
