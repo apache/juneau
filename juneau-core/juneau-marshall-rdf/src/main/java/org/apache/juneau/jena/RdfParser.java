@@ -260,7 +260,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * @return
 	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
 	 */
-	public final boolean isTrimWhitespace() {
+	protected final boolean isTrimWhitespace() {
 		return trimWhitespace;
 	}
 
@@ -272,7 +272,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 */
-	public final boolean isLooseCollections() {
+	protected final boolean isLooseCollections() {
 		return looseCollections;
 	}
 
@@ -283,7 +283,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * @return
 	 * 	The RDF language to use.
 	 */
-	public final String getRdfLanguage() {
+	protected final String getRdfLanguage() {
 		return rdfLanguage;
 	}
 
@@ -294,7 +294,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * @return
 	 * 	XML namespace for Juneau properties.
 	 */
-	public final Namespace getJuneauNs() {
+	protected final Namespace getJuneauNs() {
 		return juneauNs;
 	}
 
@@ -305,7 +305,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * @return
 	 * 	Default XML namespace for bean properties.
 	 */
-	public final Namespace getJuneauBpNs() {
+	protected final Namespace getJuneauBpNs() {
 		return juneauBpNs;
 	}
 
@@ -316,7 +316,7 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
-	public final RdfCollectionFormat getCollectionFormat() {
+	protected final RdfCollectionFormat getCollectionFormat() {
 		return collectionFormat;
 	}
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -63,7 +65,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
-			if (ctx.isExpandedParams())
+			if (isExpandedParams())
 				return true;
 			if (pMeta.getBeanMeta().getClassMeta().getExtendedMeta(UrlEncodingClassMeta.class).isExpandedParams())
 				return true;
@@ -356,5 +358,21 @@ public class UrlEncodingParserSession extends UonParserSession {
 		}
 
 		return null; // Unreachable.
+	}
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
+	 *
+	 * @see #URLENC_expandedParams
+	 * @return
+	 * <jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * <br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 */
+	protected final boolean isExpandedParams() {
+		return ctx.isExpandedParams();
 	}
 }

@@ -261,7 +261,7 @@ public class XmlParser extends ReaderParser {
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */
-	public final boolean isValidating() {
+	protected final boolean isValidating() {
 		return validating;
 	}
 
@@ -273,7 +273,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<jk>true</jk> if when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
 	 */
-	public final boolean isPreserveRootElement() {
+	protected final boolean isPreserveRootElement() {
 		return preserveRootElement;
 	}
 
@@ -284,7 +284,7 @@ public class XmlParser extends ReaderParser {
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	public final XMLReporter getReporter() {
+	protected final XMLReporter getReporter() {
 		return reporter;
 	}
 
@@ -295,7 +295,7 @@ public class XmlParser extends ReaderParser {
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	public final XMLResolver getResolver() {
+	protected final XMLResolver getResolver() {
 		return resolver;
 	}
 
@@ -306,7 +306,7 @@ public class XmlParser extends ReaderParser {
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	public final XMLEventAllocator getEventAllocator() {
+	protected final XMLEventAllocator getEventAllocator() {
 		return eventAllocator;
 	}
 

@@ -750,7 +750,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
 	private void validateEnd(UonReader r) throws Exception {
-		if (! ctx.isValidateEnd())
+		if (! isValidateEnd())
 			return;
 		while (true) {
 			int c = r.read();
@@ -784,5 +784,33 @@ public class UonParserSession extends ReaderParserSession {
 		if (r instanceof UonReader)
 			return (UonReader)r;
 		return new UonReader(pipe, decodeChars);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property: Decode <js>"%xx"</js> sequences.
+	 *
+	 * @see #UON_decoding
+	 * @return
+	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
+	 * 	before being passed to this parser.
+	 */
+	protected final boolean isDecodeChars() {
+		return decodeChars;
+	}
+
+	/**
+	 * Configuration property:  Validate end.
+	 *
+	 * @see #UON_validateEnd
+	 * @return
+	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
+	 * 	the stream consists of only comments or whitespace.
+	 */
+	protected final boolean isValidateEnd() {
+		return ctx.isValidateEnd();
 	}
 }

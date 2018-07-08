@@ -166,7 +166,7 @@ public abstract class ReaderParser extends Parser {
 	 * @return
 	 * 	The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 */
-	public final String getInputStreamCharset() {
+	protected final String getInputStreamCharset() {
 		return inputStreamCharset;
 	}
 
@@ -177,7 +177,7 @@ public abstract class ReaderParser extends Parser {
 	 * @return
 	 * 	The character set to use for reading <code>Files</code> from the file system.
 	 */
-	public final String getFileCharset() {
+	protected final String getFileCharset() {
 		return fileCharset;
 	}
 

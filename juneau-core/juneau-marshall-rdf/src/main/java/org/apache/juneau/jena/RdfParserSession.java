@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.jena.RdfParser.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jena.Constants.*;
 
@@ -85,7 +86,7 @@ public class RdfParserSession extends ReaderParserSession {
 		List<Resource> roots = getRoots(model);
 
 		// Special case where we're parsing a loose collection of resources.
-		if (ctx.isLooseCollections() && type.isCollectionOrArray()) {
+		if (isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c = null;
 			if (type.isArray() || type.isArgs())
 				c = new ArrayList();
@@ -130,7 +131,7 @@ public class RdfParserSession extends ReaderParserSession {
 		String s = o.toString();
 		if (s.isEmpty())
 			return s;
-		if (ctx.isTrimWhitespace())
+		if (isTrimWhitespace())
 			s = s.trim();
 		s = XmlUtils.decode(s, null);
 		if (isTrimStrings())
@@ -146,7 +147,7 @@ public class RdfParserSession extends ReaderParserSession {
 		List<Resource> l = new LinkedList<>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
-		Property root = m.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
+		Property root = m.createProperty(getJuneauNs().getUri(), RDF_juneauNs_ROOT);
 		for (ResIterator i  = m.listResourcesWithProperty(root); i.hasNext();)
 			l.add(i.next());
 
@@ -210,7 +211,7 @@ public class RdfParserSession extends ReaderParserSession {
 		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 
-		return ctx.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
+		return getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 	}
 
 	private <T> T parseAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws Exception {
@@ -397,7 +398,7 @@ public class RdfParserSession extends ReaderParserSession {
 			Statement st = i.next();
 			Property p = st.getPredicate();
 			String key = p.getLocalName();
-			if (! (key.equals("root") && p.getURI().equals(ctx.getJuneauNs().getUri()))) {
+			if (! (key.equals("root") && p.getURI().equals(getJuneauNs().getUri()))) {
 				key = decodeString(key);
 				RDFNode o = st.getObject();
 				K key2 = convertAttrToType(m, key, keyType);
@@ -428,5 +429,76 @@ public class RdfParserSession extends ReaderParserSession {
 			l.add(e);
 		}
 		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Trim whitespace from text elements.
+	 *
+	 * @see #RDF_trimWhitespace
+	 * @return
+	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
+	 */
+	protected final boolean isTrimWhitespace() {
+		return ctx.isTrimWhitespace();
+	}
+
+	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see #RDF_looseCollections
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	protected final boolean isLooseCollections() {
+		return ctx.isLooseCollections();
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 *
+	 * @see #RDF_language
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	protected final String getRdfLanguage() {
+		return ctx.getRdfLanguage();
+	}
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 *
+	 * @see #RDF_juneauNs
+	 * @return
+	 * 	XML namespace for Juneau properties.
+	 */
+	protected final Namespace getJuneauNs() {
+		return ctx.getJuneauNs();
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 *
+	 * @see #RDF_juneauBpNs
+	 * @return
+	 * 	Default XML namespace for bean properties.
+	 */
+	protected final Namespace getJuneauBpNs() {
+		return ctx.getJuneauBpNs();
+	}
+
+	/**
+	 * Configuration property:  RDF format for representing collections and arrays.
+	 *
+	 * @see #RDF_collectionFormat
+	 * @return
+	 * 	RDF format for representing collections and arrays.
+	 */
+	protected final RdfCollectionFormat getCollectionFormat() {
+		return ctx.getCollectionFormat();
 	}
 }

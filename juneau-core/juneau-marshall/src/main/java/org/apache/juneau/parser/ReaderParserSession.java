@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.parser.ReaderParser.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -80,7 +82,33 @@ public abstract class ReaderParserSession extends ParserSession {
 	@SuppressWarnings("resource")
 	@Override /* ParserSesson */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), ctx.getFileCharset(), ctx.getInputStreamCharset()));
+		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), getFileCharset(), getInputStreamCharset()));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Input stream charset.
+	 *
+	 * @see #RPARSER_inputStreamCharset
+	 * @return
+	 * 	The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 */
+	protected final String getInputStreamCharset() {
+		return ctx.getInputStreamCharset();
+	}
+
+	/**
+	 * Configuration property:  File charset.
+	 *
+	 * @see #RPARSER_fileCharset
+	 * @return
+	 * 	The character set to use for reading <code>Files</code> from the file system.
+	 */
+	protected final String getFileCharset() {
+		return ctx.getFileCharset();
 	}
 
 	@Override /* Session */

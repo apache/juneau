@@ -203,24 +203,6 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the {@link Parser#PARSER_trimStrings} setting value for this session.
-	 *
-	 * @return The {@link Parser#PARSER_trimStrings} setting value for this session.
-	 */
-	protected final boolean isTrimStrings() {
-		return ctx.isTrimStrings();
-	}
-
-	/**
-	 * Returns the {@link Parser#PARSER_strict} setting value for this session.
-	 *
-	 * @return The {@link Parser#PARSER_strict} setting value for this session.
-	 */
-	protected final boolean isStrict() {
-		return ctx.isStrict();
-	}
-
-	/**
 	 * Trims the specified object if it's a <code>String</code> and {@link #isTrimStrings()} returns <jk>true</jk>.
 	 *
 	 * @param o The object to trim.
@@ -228,7 +210,7 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	protected final <K> K trim(K o) {
-		if (ctx.isTrimStrings() && o instanceof String)
+		if (isTrimStrings() && o instanceof String)
 			return (K)o.toString().trim();
 		return o;
 
@@ -824,13 +806,70 @@ public abstract class ParserSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * @see #PARSER_trimStrings
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * 	the POJO.
+	 */
+	protected final boolean isTrimStrings() {
+		return ctx.isTrimStrings();
+	}
+
+	/**
+	 * Configuration property:  Strict mode.
+	 *
+	 * @see #PARSER_strict
+	 * @return
+	 * 	<jk>true</jk> if strict mode for the parser is enabled.
+	 */
+	protected final boolean isStrict() {
+		return ctx.isStrict();
+	}
+
+	/**
+	 * Configuration property:  Auto-close streams.
+	 *
+	 * @see #PARSER_autoCloseStreams
+	 * @return
+	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * 	after parsing is complete.
+	 */
+	protected final boolean isAutoCloseStreams() {
+		return ctx.isAutoCloseStreams();
+	}
+
+	/**
+	 * Configuration property:  Unbuffered.
+	 *
+	 * @see #PARSER_unbuffered
+	 * @return
+	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
+	 */
+	protected final boolean isUnbuffered() {
+		return ctx.isUnbuffered();
+	}
+
+	/**
 	 * Configuration property:  Debug output lines.
 	 *
 	 * @see #PARSER_debugOutputLines
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
-	public final int getDebugOutputLines() {
-		return ctx.isDebugOutputLines();
+	protected final int getDebugOutputLines() {
+		return ctx.getDebugOutputLines();
+	}
+
+	/**
+	 * Configuration property:  Parser listener.
+	 *
+	 * @see #PARSER_listener
+	 * @return
+	 * 	Class used to listen for errors and warnings that occur during parsing.
+	 */
+	protected final Class<? extends ParserListener> getListenerClass() {
+		return ctx.getListenerClass();
 	}
 }

@@ -253,7 +253,7 @@ public class JsonParser extends ReaderParser {
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	public final boolean isValidateEnd() {
+	protected final boolean isValidateEnd() {
 		return validateEnd;
 	}
 

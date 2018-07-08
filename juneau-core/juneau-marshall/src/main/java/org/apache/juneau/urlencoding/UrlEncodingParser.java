@@ -168,7 +168,7 @@ public class UrlEncodingParser extends UonParser {
 	 * <jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * <br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 */
-	public final boolean isExpandedParams() {
+	protected final boolean isExpandedParams() {
 		return expandedParams;
 	}
 

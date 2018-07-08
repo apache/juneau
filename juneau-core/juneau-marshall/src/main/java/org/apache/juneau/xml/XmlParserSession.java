@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.xml.XmlParser.*;
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
@@ -20,6 +21,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import javax.xml.stream.*;
+import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -70,7 +72,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @throws Exception If problem occurred trying to create reader.
 	 */
 	protected final XmlReader getXmlReader(ParserPipe pipe) throws Exception {
-		return new XmlReader(pipe, ctx.isValidating(), ctx.getReporter(), ctx.getResolver(), ctx.getEventAllocator());
+		return new XmlReader(pipe, isValidating(), getReporter(), getResolver(), getEventAllocator());
 	}
 
 	/**
@@ -280,7 +282,7 @@ public class XmlParserSession extends ReaderParserSession {
 			sType = eType;
 		setCurrentClass(sType);
 
-		String wrapperAttr = (isRoot && ctx.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
+		String wrapperAttr = (isRoot && isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		String typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
 		int jsonType = getJsonType(typeAttr);
 		String elementName = getElementName(r);
@@ -679,5 +681,64 @@ public class XmlParserSession extends ReaderParserSession {
 			return m;
 		}
 		return s;
+	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Enable validation.
+	 *
+	 * @see #XML_validating
+	 * @return
+	 * 	<jk>true</jk> if XML document will be validated.
+	 */
+	protected final boolean isValidating() {
+		return ctx.isValidating();
+	}
+
+	/**
+	 * Configuration property:  Preserve root element during generalized parsing.
+	 *
+	 * @see #XML_preserveRootElement
+	 * @return
+	 * 	<jk>true</jk> if when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
+	 * 	is the root element name.
+	 */
+	protected final boolean isPreserveRootElement() {
+		return ctx.isPreserveRootElement();
+	}
+
+	/**
+	 * Configuration property:  XML reporter.
+	 *
+	 * @see #XML_reporter
+	 * @return
+	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	protected final XMLReporter getReporter() {
+		return ctx.getReporter();
+	}
+
+	/**
+	 * Configuration property:  XML resolver.
+	 *
+	 * @see #XML_resolver
+	 * @return
+	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	protected final XMLResolver getResolver() {
+		return ctx.getResolver();
+	}
+
+	/**
+	 * Configuration property:  XML event allocator.
+	 *
+	 * @see #XML_eventAllocator
+	 * @return
+	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	protected final XMLEventAllocator getEventAllocator() {
+		return ctx.getEventAllocator();
 	}
 }

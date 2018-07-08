@@ -844,7 +844,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
 	 */
-	public final boolean isTrimStrings() {
+	protected final boolean isTrimStrings() {
 		return trimStrings;
 	}
 
@@ -855,7 +855,7 @@ public abstract class Parser extends BeanContext {
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
-	public final boolean isStrict() {
+	protected final boolean isStrict() {
 		return strict;
 	}
 
@@ -867,7 +867,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
 	 */
-	public final boolean isAutoCloseStreams() {
+	protected final boolean isAutoCloseStreams() {
 		return autoCloseStreams;
 	}
 
@@ -878,7 +878,7 @@ public abstract class Parser extends BeanContext {
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
-	public final boolean isUnbuffered() {
+	protected final boolean isUnbuffered() {
 		return unbuffered;
 	}
 
@@ -889,7 +889,7 @@ public abstract class Parser extends BeanContext {
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
-	public final int isDebugOutputLines() {
+	protected final int getDebugOutputLines() {
 		return debugOutputLines;
 	}
 
@@ -900,7 +900,7 @@ public abstract class Parser extends BeanContext {
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
-	public final Class<? extends ParserListener> getListenerClass() {
+	protected final Class<? extends ParserListener> getListenerClass() {
 		return listener;
 	}
 }

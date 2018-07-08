@@ -112,7 +112,7 @@ public abstract class InputStreamParser extends Parser {
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */
-	public final BinaryFormat getBinaryFormat() {
+	protected final BinaryFormat getBinaryFormat() {
 		return binaryFormat;
 	}
 

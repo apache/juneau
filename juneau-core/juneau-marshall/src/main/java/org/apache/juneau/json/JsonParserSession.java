@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
+import static org.apache.juneau.json.JsonParser.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -774,11 +775,27 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
 	private void validateEnd(ParserReader r) throws Exception {
-		if (! ctx.isValidateEnd())
+		if (! isValidateEnd())
 			return;
 		skipCommentsAndSpace(r);
 		int c = r.read();
 		if (c != -1 && c != ';')  // var x = {...}; expressions can end with a semicolon.
 			throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Validate end.
+	 *
+	 * @see #JSON_validateEnd
+	 * @return
+	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
+	 * 	the stream consists of only comments or whitespace.
+	 */
+	protected final boolean isValidateEnd() {
+		return ctx.isValidateEnd();
 	}
 }

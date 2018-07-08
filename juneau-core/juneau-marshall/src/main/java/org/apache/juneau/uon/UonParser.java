@@ -225,7 +225,7 @@ public class UonParser extends ReaderParser {
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
 	 */
-	public final boolean isDecodeChars() {
+	protected final boolean isDecodeChars() {
 		return decodeChars;
 	}
 
@@ -237,7 +237,7 @@ public class UonParser extends ReaderParser {
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	public final boolean isValidateEnd() {
+	protected final boolean isValidateEnd() {
 		return validateEnd;
 	}
 
