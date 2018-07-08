@@ -14,14 +14,12 @@ package org.apache.juneau.xml;
 
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.xml.XmlParser.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import javax.xml.stream.*;
-import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;

@@ -13,7 +13,6 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.json.JsonParser.*;
 
 import java.io.*;
 import java.lang.reflect.*;

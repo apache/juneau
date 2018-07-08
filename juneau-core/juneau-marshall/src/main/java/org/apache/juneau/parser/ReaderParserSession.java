@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.ReaderParser.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;

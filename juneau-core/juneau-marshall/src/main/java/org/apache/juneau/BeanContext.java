@@ -2680,7 +2680,7 @@ public class BeanContext extends Context {
 	 * @param c The class.
 	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
 	 */
-	public String[] getIncludeProperties(Class<?> c) {
+	protected String[] getIncludeProperties(Class<?> c) {
 		if (includeProperties.isEmpty())
 			return null;
 		String[] s = null;
@@ -2702,7 +2702,7 @@ public class BeanContext extends Context {
 	 * @param c The class.
 	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
 	 */
-	public String[] getExcludeProperties(Class<?> c) {
+	protected String[] getExcludeProperties(Class<?> c) {
 		if (excludeProperties.isEmpty())
 			return null;
 		String[] s = null;
@@ -2837,7 +2837,7 @@ public class BeanContext extends Context {
 	 *
 	 * @return The lookup table for resolving bean types by name.
 	 */
-	public final BeanRegistry getBeanRegistry() {
+	protected final BeanRegistry getBeanRegistry() {
 		return beanRegistry;
 	}
 
@@ -2853,7 +2853,7 @@ public class BeanContext extends Context {
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansRequireDefaultConstructor() {
+	protected final boolean isBeansRequireDefaultConstructor() {
 		return beansRequireDefaultConstructor;
 	}
 
@@ -2865,7 +2865,7 @@ public class BeanContext extends Context {
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansRequireSerializable() {
+	protected final boolean isBeansRequireSerializable() {
 		return beansRequireSerializable;
 	}
 
@@ -2877,7 +2877,7 @@ public class BeanContext extends Context {
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
 	 */
-	public final boolean isBeansRequireSettersForGetters() {
+	protected final boolean isBeansRequireSettersForGetters() {
 		return beansRequireSettersForGetters;
 	}
 
@@ -2889,7 +2889,7 @@ public class BeanContext extends Context {
 	 * 	<jk>true</jk> if a Java class must contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansRequireSomeProperties() {
+	protected final boolean isBeansRequireSomeProperties() {
 		return beansRequireSomeProperties;
 	}
 
@@ -2901,7 +2901,7 @@ public class BeanContext extends Context {
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
 	 */
-	public final boolean isBeanMapPutReturnsOldValue() {
+	protected final boolean isBeanMapPutReturnsOldValue() {
 		return beanMapPutReturnsOldValue;
 	}
 
@@ -2913,7 +2913,7 @@ public class BeanContext extends Context {
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
 	 */
-	public final boolean isUseInterfaceProxies() {
+	protected final boolean isUseInterfaceProxies() {
 		return useInterfaceProxies;
 	}
 
@@ -2925,7 +2925,7 @@ public class BeanContext extends Context {
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public final boolean isIgnoreUnknownBeanProperties() {
+	protected final boolean isIgnoreUnknownBeanProperties() {
 		return ignoreUnknownBeanProperties;
 	}
 
@@ -2936,7 +2936,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property is silently ignored.
 	 */
-	public final boolean isIgnoreUnknownNullBeanProperties() {
+	protected final boolean isIgnoreUnknownNullBeanProperties() {
 		return ignoreUnknownNullBeanProperties;
 	}
 
@@ -2949,7 +2949,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
 	 */
-	public final boolean isIgnorePropertiesWithoutSetters() {
+	protected final boolean isIgnorePropertiesWithoutSetters() {
 		return ignorePropertiesWithoutSetters;
 	}
 
@@ -2960,7 +2960,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
-	public final boolean isIgnoreInvocationExceptionsOnGetters() {
+	protected final boolean isIgnoreInvocationExceptionsOnGetters() {
 		return ignoreInvocationExceptionsOnGetters;
 	}
 
@@ -2971,7 +2971,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
-	public final boolean isIgnoreInvocationExceptionsOnSetters() {
+	protected final boolean isIgnoreInvocationExceptionsOnSetters() {
 		return ignoreInvocationExceptionsOnSetters;
 	}
 
@@ -2982,7 +2982,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */
-	public final boolean isUseJavaBeanIntrospector() {
+	protected final boolean isUseJavaBeanIntrospector() {
 		return useJavaBeanIntrospector;
 	}
 
@@ -2993,7 +2993,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
-	public final boolean isUseEnumNames() {
+	protected final boolean isUseEnumNames() {
 		return useEnumNames;
 	}
 
@@ -3004,7 +3004,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
 	 */
-	public final boolean isSortProperties() {
+	protected final boolean isSortProperties() {
 		return sortProperties;
 	}
 
@@ -3018,7 +3018,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
-	public final boolean isFluentSetters() {
+	protected final boolean isFluentSetters() {
 		return fluentSetters;
 	}
 
@@ -3029,7 +3029,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	public boolean isDebug() {
+	protected boolean isDebug() {
 		return debug;
 	}
 
@@ -3040,7 +3040,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
-	public final Visibility getBeanConstructorVisibility() {
+	protected final Visibility getBeanConstructorVisibility() {
 		return beanConstructorVisibility;
 	}
 
@@ -3051,7 +3051,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
-	public final Visibility getBeanClassVisibility() {
+	protected final Visibility getBeanClassVisibility() {
 		return beanClassVisibility;
 	}
 
@@ -3062,7 +3062,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
-	public final Visibility getBeanMethodVisibility() {
+	protected final Visibility getBeanMethodVisibility() {
 		return beanMethodVisibility;
 	}
 
@@ -3074,7 +3074,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
-	public final Visibility getBeanFieldVisibility() {
+	protected final Visibility getBeanFieldVisibility() {
 		return beanFieldVisibility;
 	}
 
@@ -3085,7 +3085,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 */
-	public final List<Class<?>> getBeanDictionaryClasses() {
+	protected final List<Class<?>> getBeanDictionaryClasses() {
 		return beanDictionaryClasses;
 	}
 
@@ -3096,7 +3096,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	The default locale for serializer and parser sessions.
 	 */
-	public final Locale getLocale() {
+	protected final Locale getLocale() {
 		return locale;
 	}
 
@@ -3107,7 +3107,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	The default timezone for serializer and parser sessions.
 	 */
-	public final TimeZone getTimeZone() {
+	protected final TimeZone getTimeZone() {
 		return timeZone;
 	}
 
@@ -3118,7 +3118,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	The default media type value for serializer and parser sessions.
 	 */
-	public final MediaType getMediaType() {
+	protected final MediaType getMediaType() {
 		return mediaType;
 	}
 
@@ -3129,7 +3129,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
-	public final PropertyNamer getPropertyNamer() {
+	protected final PropertyNamer getPropertyNamer() {
 		return propertyNamer;
 	}
 
@@ -3140,7 +3140,7 @@ public class BeanContext extends Context {
 	 * @return
 	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
-	public final String getBeanTypePropertyName() {
+	protected final String getBeanTypePropertyName() {
 		return beanTypePropertyName;
 	}
 

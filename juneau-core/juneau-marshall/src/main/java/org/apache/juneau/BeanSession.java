@@ -93,7 +93,7 @@ public class BeanSession extends Session {
 		// Shortcut for most common case.
 		if (value != null && value.getClass() == type)
 			return (T)value;
-		return convertToMemberType(null, value, ctx.getClassMeta(type));
+		return convertToMemberType(null, value, getClassMeta(type));
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class BeanSession extends Session {
 	 * @return The converted value.
 	 */
 	public final <T> T convertToMemberType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
-		return convertToMemberType(outer, value, ctx.getClassMeta(type));
+		return convertToMemberType(outer, value, getClassMeta(type));
 	}
 
 	/**
@@ -279,9 +279,9 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	public final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
+	protected final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
 		if (to == null)
-			to = (ClassMeta<T>)ctx.object();
+			to = (ClassMeta<T>)object();
 
 		try {
 			// Handle the case of a null value.
@@ -310,7 +310,7 @@ public class BeanSession extends Session {
 					return (T)swap.unswap(this, value, to);
 			}
 
-			ClassMeta<?> from = ctx.getClassMetaForObject(value);
+			ClassMeta<?> from = getClassMetaForObject(value);
 			swap = from.getPojoSwap(this);
 			if (swap != null) {
 				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
@@ -714,7 +714,7 @@ public class BeanSession extends Session {
 	 * @param list The contents to populate the array with.
 	 * @return A new object or primitive array.
 	 */
-	public final Object toArray(ClassMeta<?> type, Collection<?> list) {
+	protected final Object toArray(ClassMeta<?> type, Collection<?> list) {
 		if (list == null)
 			return null;
 		ClassMeta<?> componentType = type.isArgs() ? object() : type.getElementType();
@@ -993,7 +993,7 @@ public class BeanSession extends Session {
 	 * @param classes The array of classes to get class metas for.
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
-	public final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
+	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
 		assertFieldNotNull(classes, "classes");
 		ClassMeta[] cm = new ClassMeta<?>[classes.length];
 		for (int i = 0; i < classes.length; i++)
@@ -1024,7 +1024,7 @@ public class BeanSession extends Session {
 	 */
 	public final String getBeanTypePropertyName(ClassMeta cm) {
 		String s = cm == null ? null : cm.getBeanTypePropertyName();
-		return s == null ? ctx.getBeanTypePropertyName() : s;
+		return s == null ? getBeanTypePropertyName() : s;
 	}
 
 	/**
@@ -1032,7 +1032,7 @@ public class BeanSession extends Session {
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
-	public final BeanRegistry getBeanRegistry() {
+	protected final BeanRegistry getBeanRegistry() {
 		return ctx.getBeanRegistry();
 	}
 
@@ -1110,7 +1110,7 @@ public class BeanSession extends Session {
 	 *
 	 * @return A new or previously returned string builder.
 	 */
-	public final StringBuilder getStringBuilder() {
+	protected final StringBuilder getStringBuilder() {
 		if (sbStack.isEmpty())
 			return new StringBuilder();
 		return sbStack.pop();
@@ -1121,7 +1121,7 @@ public class BeanSession extends Session {
 	 *
 	 * @param sb The string builder to return to the pool.  No-op if <jk>null</jk>.
 	 */
-	public final void returnStringBuilder(StringBuilder sb) {
+	protected final void returnStringBuilder(StringBuilder sb) {
 		if (sb == null)
 			return;
 		sb.setLength(0);
@@ -1181,6 +1181,78 @@ public class BeanSession extends Session {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  Beans require no-arg constructors.
+	 *
+	 * @see #BEAN_beansRequireDefaultConstructor
+	 * @return
+	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
+	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 */
+	protected final boolean isBeansRequireDefaultConstructor() {
+		return ctx.isBeansRequireDefaultConstructor();
+	}
+
+	/**
+	 * Configuration property:  Beans require Serializable interface.
+	 *
+	 * @see #BEAN_beansRequireSerializable
+	 * @return
+	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
+	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 */
+	protected final boolean isBeansRequireSerializable() {
+		return ctx.isBeansRequireSerializable();
+	}
+
+	/**
+	 * Configuration property:  Beans require setters for getters.
+	 *
+	 * @see #BEAN_beansRequireSettersForGetters
+	 * @return
+	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
+	 * 	<br>Otherwise, they are ignored.
+	 */
+	protected final boolean isBeansRequireSettersForGetters() {
+		return ctx.isBeansRequireSettersForGetters();
+	}
+
+	/**
+	 * Configuration property:  Beans require at least one property.
+	 *
+	 * @see #BEAN_beansRequireSomeProperties
+	 * @return
+	 * 	<jk>true</jk> if a Java class must contain at least 1 property to be considered a bean.
+	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
+	 */
+	protected final boolean isBeansRequireSomeProperties() {
+		return ctx.isBeansRequireSomeProperties();
+	}
+
+	/**
+	 * Configuration property:  BeanMap.put() returns old property value.
+	 *
+	 * @see #BEAN_beanMapPutReturnsOldValue
+	 * @return
+	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
+	 * 	<br>Otherwise, it returns <jk>null</jk>.
+	 */
+	protected final boolean isBeanMapPutReturnsOldValue() {
+		return ctx.isBeanMapPutReturnsOldValue();
+	}
+
+	/**
+	 * Configuration property:  Use interface proxies.
+	 *
+	 * @see #BEAN_useInterfaceProxies
+	 * @return
+	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
+	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
+	 */
+	protected final boolean isUseInterfaceProxies() {
+		return ctx.isUseInterfaceProxies();
+	}
+
+	/**
 	 * Configuration property:  Ignore unknown properties.
 	 *
 	 * @see #BEAN_ignoreUnknownBeanProperties
@@ -1188,9 +1260,181 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public final boolean isIgnoreUnknownBeanProperties() {
+	protected final boolean isIgnoreUnknownBeanProperties() {
 		return ctx.isIgnoreUnknownBeanProperties();
 	}
+
+	/**
+	 * Configuration property:  Ignore unknown properties with null values.
+	 *
+	 * @see #BEAN_ignoreUnknownNullBeanProperties
+	 * @return
+	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property is silently ignored.
+	 */
+	protected final boolean isIgnoreUnknownNullBeanProperties() {
+		return ctx.isIgnoreUnknownNullBeanProperties();
+	}
+
+	/**
+	 * Configuration property:  Ignore properties without setters.
+	 *
+	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 *
+	 * @see #BEAN_ignorePropertiesWithoutSetters
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
+	 */
+	protected final boolean isIgnorePropertiesWithoutSetters() {
+		return ctx.isIgnorePropertiesWithoutSetters();
+	}
+
+	/**
+	 * Configuration property:  Ignore invocation errors on getters.
+	 *
+	 * @see #BEAN_ignoreInvocationExceptionsOnGetters
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
+	 */
+	protected final boolean isIgnoreInvocationExceptionsOnGetters() {
+		return ctx.isIgnoreInvocationExceptionsOnGetters();
+	}
+
+	/**
+	 * Configuration property:  Ignore invocation errors on setters.
+	 *
+	 * @see #BEAN_ignoreInvocationExceptionsOnSetters
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
+	 */
+	protected final boolean isIgnoreInvocationExceptionsOnSetters() {
+		return ctx.isIgnoreInvocationExceptionsOnSetters();
+	}
+
+	/**
+	 * Configuration property:  Use Java Introspector.
+	 *
+	 * @see #BEAN_useJavaBeanIntrospector
+	 * @return
+	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
+	 */
+	protected final boolean isUseJavaBeanIntrospector() {
+		return ctx.isUseJavaBeanIntrospector();
+	}
+
+	/**
+	 * Configuration property:  Use enum names.
+	 *
+	 * @see #BEAN_useEnumNames
+	 * @return
+	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
+	 */
+	protected final boolean isUseEnumNames() {
+		return ctx.isUseEnumNames();
+	}
+
+	/**
+	 * Configuration property:  Sort bean properties.
+	 *
+	 * @see #BEAN_sortProperties
+	 * @return
+	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
+	 */
+	protected final boolean isSortProperties() {
+		return ctx.isSortProperties();
+	}
+
+	/**
+	 * Configuration property:  Find fluent setters.
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 *
+	 * @see #BEAN_fluentSetters
+	 * @return
+	 * 	<jk>true</jk> if fluent setters are detected on beans.
+	 */
+	protected final boolean isFluentSetters() {
+		return ctx.isFluentSetters();
+	}
+
+	/**
+	 * Configuration property:  Minimum bean constructor visibility.
+	 *
+	 * @see #BEAN_beanConstructorVisibility
+	 * @return
+	 * 	Only look for constructors with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanConstructorVisibility() {
+		return ctx.getBeanConstructorVisibility();
+	}
+
+	/**
+	 * Configuration property:  Minimum bean class visibility.
+	 *
+	 * @see #BEAN_beanClassVisibility
+	 * @return
+	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
+	 */
+	protected final Visibility getBeanClassVisibility() {
+		return ctx.getBeanClassVisibility();
+	}
+
+	/**
+	 * Configuration property:  Minimum bean method visibility.
+	 *
+	 * @see #BEAN_beanMethodVisibility
+	 * @return
+	 * 	Only look for bean methods with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanMethodVisibility() {
+		return ctx.getBeanMethodVisibility();
+	}
+
+	/**
+	 * Configuration property:  Minimum bean field visibility.
+	 *
+	 *
+	 * @see #BEAN_beanFieldVisibility
+	 * @return
+	 * 	Only look for bean fields with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanFieldVisibility() {
+		return ctx.getBeanFieldVisibility();
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * @see #BEAN_beanDictionary
+	 * @return
+	 * 	The list of classes that make up the bean dictionary in this bean context.
+	 */
+	protected final List<Class<?>> getBeanDictionaryClasses() {
+		return ctx.getBeanDictionaryClasses();
+	}
+
+	/**
+	 * Configuration property:  Bean property namer.
+	 *
+	 * @see #BEAN_propertyNamer
+	 * @return
+	 * 	The interface used to calculate bean property names.
+	 */
+	protected final PropertyNamer getPropertyNamer() {
+		return ctx.getPropertyNamer();
+	}
+
+	/**
+	 * Configuration property:  Bean type property name.
+	 *
+	 * @see #BEAN_beanTypePropertyName
+	 * @return
+	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
+	 */
+	protected final String getBeanTypePropertyName() {
+		return ctx.getBeanTypePropertyName();
+	}
+
 
 	/**
 	 * Configuration property:  Debug mode.
@@ -1199,7 +1443,7 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	public final boolean isDebug() {
+	protected final boolean isDebug() {
 		return debug;
 	}
 
