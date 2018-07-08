@@ -49,7 +49,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	protected OutputStreamSerializerSession(OutputStreamSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 
-		binaryFormat = getProperty(OSSERIALIZER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
+		binaryFormat = getProperty(OSSERIALIZER_binaryFormat, BinaryFormat.class, ctx.binaryFormat);
 	}
 
 	/**

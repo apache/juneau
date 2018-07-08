@@ -42,7 +42,7 @@ public abstract class InputStreamParser extends Parser {
 	 * 	<li><b>Name:</b>  <js>"InputStreamParser.binaryFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
 	 * 	<li><b>Default:</b>  {@link BinaryFormat#HEX}
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link InputStreamParserBuilder#binaryFormat(BinaryFormat)}
@@ -83,7 +83,7 @@ public abstract class InputStreamParser extends Parser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final BinaryFormat binaryFormat;
+	private final BinaryFormat binaryFormat;
 
 	/**
 	 * Constructor.
@@ -93,13 +93,27 @@ public abstract class InputStreamParser extends Parser {
 	 */
 	protected InputStreamParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-
 		binaryFormat = getProperty(ISPARSER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 	@Override /* Parser */
 	public final boolean isReaderParser() {
 		return false;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Binary input format.
+	 *
+	 * @see #ISPARSER_binaryFormat
+	 * @return
+	 * 	The format to use when converting strings to byte arrays.
+	 */
+	public final BinaryFormat getBinaryFormat() {
+		return binaryFormat;
 	}
 
 	@Override /* Context */

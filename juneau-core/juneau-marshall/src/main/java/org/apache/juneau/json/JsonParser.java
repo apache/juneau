@@ -114,7 +114,7 @@ public class JsonParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"JsonParser.validateEnd.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonParserBuilder#validateEnd(boolean)}
@@ -193,7 +193,7 @@ public class JsonParser extends ReaderParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean validateEnd;
+	private final boolean validateEnd;
 
 	/**
 	 * Constructor.
@@ -239,6 +239,22 @@ public class JsonParser extends ReaderParser {
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new JsonParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Validate end.
+	 *
+	 * @see #JSON_validateEnd
+	 * @return
+	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
+	 * 	the stream consists of only comments or whitespace.
+	 */
+	public final boolean isValidateEnd() {
+		return validateEnd;
 	}
 
 	@Override /* Context */

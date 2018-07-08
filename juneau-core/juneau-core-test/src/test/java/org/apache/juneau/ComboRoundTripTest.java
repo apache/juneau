@@ -595,8 +595,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// MsgPack
 	//--------------------------------------------------------------------------------
-	OutputStreamSerializer sMsgPack = MsgPackSerializer.DEFAULT_SPACED_HEX.builder().addBeanTypes().addRootType().build();
-	InputStreamParser pMsgPack = MsgPackParser.DEFAULT_SPACED_HEX;
+	OutputStreamSerializer sMsgPack = MsgPackSerializer.create().addBeanTypes().addRootType().build();
+	InputStreamParser pMsgPack = MsgPackParser.DEFAULT;
 
 	@Test
 	public void f11_serializeMsgPack() throws Exception {

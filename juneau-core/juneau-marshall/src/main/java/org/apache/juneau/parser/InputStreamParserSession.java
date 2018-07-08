@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.InputStreamParser.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -27,7 +25,6 @@ import org.apache.juneau.*;
 public abstract class InputStreamParserSession extends ParserSession {
 
 	private final InputStreamParser ctx;
-	private final BinaryFormat binaryFormat;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -41,7 +38,6 @@ public abstract class InputStreamParserSession extends ParserSession {
 	protected InputStreamParserSession(InputStreamParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		binaryFormat = getProperty(ISPARSER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
 	/**
@@ -80,14 +76,13 @@ public abstract class InputStreamParserSession extends ParserSession {
 	@SuppressWarnings("resource")
 	@Override /* ParserSession */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), binaryFormat));
+		return setPipe(new ParserPipe(input, isDebug(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), ctx.getBinaryFormat()));
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("InputStreamParserSession", new ObjectMap()
-				.append("binaryFormat", binaryFormat)
 			);
 	}
 }

@@ -191,10 +191,11 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean trimWhitespace, looseCollections;
-	final String rdfLanguage;
-	final Namespace juneauNs, juneauBpNs;
-	final RdfCollectionFormat collectionFormat;
+	private final boolean trimWhitespace, looseCollections;
+	private final String rdfLanguage;
+	private final Namespace juneauNs, juneauBpNs;
+	private final RdfCollectionFormat collectionFormat;
+
 	final Map<String,Object> jenaSettings = new HashMap<>();
 
 	/**
@@ -246,6 +247,77 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new RdfParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Trim whitespace from text elements.
+	 *
+	 * @see #RDF_trimWhitespace
+	 * @return
+	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
+	 */
+	public final boolean isTrimWhitespace() {
+		return trimWhitespace;
+	}
+
+	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see #RDF_looseCollections
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	public final boolean isLooseCollections() {
+		return looseCollections;
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 *
+	 * @see #RDF_language
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	public final String getRdfLanguage() {
+		return rdfLanguage;
+	}
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 *
+	 * @see #RDF_juneauNs
+	 * @return
+	 * 	XML namespace for Juneau properties.
+	 */
+	public final Namespace getJuneauNs() {
+		return juneauNs;
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 *
+	 * @see #RDF_juneauBpNs
+	 * @return
+	 * 	Default XML namespace for bean properties.
+	 */
+	public final Namespace getJuneauBpNs() {
+		return juneauBpNs;
+	}
+
+	/**
+	 * Configuration property:  RDF format for representing collections and arrays.
+	 *
+	 * @see #RDF_collectionFormat
+	 * @return
+	 * 	RDF format for representing collections and arrays.
+	 */
+	public final RdfCollectionFormat getCollectionFormat() {
+		return collectionFormat;
 	}
 
 	@Override /* Context */

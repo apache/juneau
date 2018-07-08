@@ -36,7 +36,7 @@ public final class JsonParserSession extends ReaderParserSession {
 
 	private static final AsciiSet decChars = AsciiSet.create().ranges("0-9").build();
 
-	private final boolean validateEnd;
+	private final JsonParser ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -49,7 +49,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 */
 	protected JsonParserSession(JsonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		validateEnd = getProperty(JSON_validateEnd, boolean.class, ctx.validateEnd);
+		this.ctx = ctx;
 	}
 
 	/**
@@ -775,7 +775,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
 	private void validateEnd(ParserReader r) throws Exception {
-		if (! validateEnd)
+		if (! ctx.isValidateEnd())
 			return;
 		skipCommentsAndSpace(r);
 		int c = r.read();

@@ -68,6 +68,8 @@ public interface RdfCommon {
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
+	 * 	The RDF language to use.
+	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
 	 * 	<li>

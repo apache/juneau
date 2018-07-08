@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 public abstract class ReaderParserSession extends ParserSession {
 
 	private final ReaderParser ctx;
-	private final String inputStreamCharset, fileCharset;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -41,8 +40,6 @@ public abstract class ReaderParserSession extends ParserSession {
 	protected ReaderParserSession(ReaderParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		inputStreamCharset = getProperty(RPARSER_inputStreamCharset, String.class, ctx.inputStreamCharset);
-		fileCharset = getProperty(RPARSER_fileCharset, String.class, ctx.fileCharset);
 	}
 
 	/**
@@ -85,15 +82,13 @@ public abstract class ReaderParserSession extends ParserSession {
 	@SuppressWarnings("resource")
 	@Override /* ParserSesson */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), fileCharset, inputStreamCharset));
+		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), ctx.getFileCharset(), ctx.getInputStreamCharset()));
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("ReaderParserSession", new ObjectMap()
-				.append("fileCharset", fileCharset)
-				.append("inputStreamCharset", inputStreamCharset)
 			);
 	}
 }

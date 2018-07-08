@@ -89,7 +89,7 @@ public abstract class ReaderParser extends Parser {
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.inputStreamCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"UTF-8"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ReaderParserBuilder#inputStreamCharset(String)}
@@ -135,7 +135,7 @@ public abstract class ReaderParser extends Parser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final String inputStreamCharset, fileCharset;
+	private final String inputStreamCharset, fileCharset;
 
 	/**
 	 * Constructor.
@@ -153,6 +153,32 @@ public abstract class ReaderParser extends Parser {
 	@Override /* Parser */
 	public final boolean isReaderParser() {
 		return true;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Input stream charset.
+	 *
+	 * @see #RPARSER_inputStreamCharset
+	 * @return
+	 * 	The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
+	 */
+	public final String getInputStreamCharset() {
+		return inputStreamCharset;
+	}
+
+	/**
+	 * Configuration property:  File charset.
+	 *
+	 * @see #RPARSER_fileCharset
+	 * @return
+	 * 	The character set to use for reading <code>Files</code> from the file system.
+	 */
+	public final String getFileCharset() {
+		return fileCharset;
 	}
 
 	@Override /* Context */

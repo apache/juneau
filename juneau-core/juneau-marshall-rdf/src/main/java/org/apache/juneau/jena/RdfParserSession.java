@@ -14,8 +14,6 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.jena.RdfParser.*;
 
 import java.util.*;
 
@@ -37,14 +35,11 @@ import com.hp.hpl.jena.util.iterator.*;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class RdfParserSession extends ReaderParserSession {
 
-	private final String rdfLanguage;
-	private final Namespace juneauNs, juneauBpNs;
+	private final RdfParser ctx;
 	private final Property pRoot, pValue, pType, pRdfType;
 	private final Model model;
-	private final boolean trimWhitespace, looseCollections;
 	private final RDFReader rdfReader;
 	private final Set<Resource> urisVisited = new HashSet<>();
-	private final RdfCollectionFormat collectionFormat;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -57,23 +52,18 @@ public class RdfParserSession extends ReaderParserSession {
 	 */
 	protected RdfParserSession(RdfParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		rdfLanguage = getProperty(RDF_language, String.class, ctx.rdfLanguage);
-		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, ctx.juneauNs);
-		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, ctx.juneauBpNs);
-		trimWhitespace = getProperty(RDF_trimWhitespace, boolean.class, ctx.trimWhitespace);
-		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, ctx.collectionFormat);
-		looseCollections = getProperty(RDF_looseCollections, boolean.class, ctx.looseCollections);
+		this.ctx = ctx;
 		model = ModelFactory.createDefaultModel();
-		addModelPrefix(juneauNs);
-		addModelPrefix(juneauBpNs);
-		pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
-		pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
-		pType = model.createProperty(juneauBpNs.getUri(), RDF_juneauNs_TYPE);
+		addModelPrefix(ctx.getJuneauNs());
+		addModelPrefix(ctx.getJuneauBpNs());
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
+		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), RDF_juneauNs_TYPE);
 		pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-		rdfReader = model.getReader(rdfLanguage);
+		rdfReader = model.getReader(ctx.getRdfLanguage());
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
-		if (! rdfLanguage.equals(LANG_NTRIPLE)) {
+		if (! ctx.getRdfLanguage().equals(LANG_NTRIPLE)) {
 			for (Map.Entry<String,Object> e : ctx.jenaSettings.entrySet())
 				rdfReader.setProperty(e.getKey(), e.getValue());
 		}
@@ -83,12 +73,6 @@ public class RdfParserSession extends ReaderParserSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("RdfParser", new ObjectMap()
-				.append("collectionFormat", collectionFormat)
-				.append("looseCollections", looseCollections)
-				.append("juneauNs", juneauNs)
-				.append("juneauBpNs", juneauBpNs)
-				.append("rdfLanguage", rdfLanguage)
-				.append("trimWhitespace", trimWhitespace)
 			);
 	}
 
@@ -101,7 +85,7 @@ public class RdfParserSession extends ReaderParserSession {
 		List<Resource> roots = getRoots(model);
 
 		// Special case where we're parsing a loose collection of resources.
-		if (looseCollections && type.isCollectionOrArray()) {
+		if (ctx.isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c = null;
 			if (type.isArray() || type.isArgs())
 				c = new ArrayList();
@@ -146,7 +130,7 @@ public class RdfParserSession extends ReaderParserSession {
 		String s = o.toString();
 		if (s.isEmpty())
 			return s;
-		if (trimWhitespace)
+		if (ctx.isTrimWhitespace())
 			s = s.trim();
 		s = XmlUtils.decode(s, null);
 		if (isTrimStrings())
@@ -162,7 +146,7 @@ public class RdfParserSession extends ReaderParserSession {
 		List<Resource> l = new LinkedList<>();
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
-		Property root = m.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
+		Property root = m.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
 		for (ResIterator i  = m.listResourcesWithProperty(root); i.hasNext();)
 			l.add(i.next());
 
@@ -226,7 +210,7 @@ public class RdfParserSession extends ReaderParserSession {
 		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 
-		return collectionFormat == RdfCollectionFormat.MULTI_VALUED;
+		return ctx.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 	}
 
 	private <T> T parseAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws Exception {
@@ -413,7 +397,7 @@ public class RdfParserSession extends ReaderParserSession {
 			Statement st = i.next();
 			Property p = st.getPredicate();
 			String key = p.getLocalName();
-			if (! (key.equals("root") && p.getURI().equals(juneauNs.getUri()))) {
+			if (! (key.equals("root") && p.getURI().equals(ctx.getJuneauNs().getUri()))) {
 				key = decodeString(key);
 				RDFNode o = st.getObject();
 				K key2 = convertAttrToType(m, key, keyType);
