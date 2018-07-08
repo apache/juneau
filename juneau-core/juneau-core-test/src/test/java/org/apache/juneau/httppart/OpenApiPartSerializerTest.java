@@ -406,7 +406,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d05_arrayType_collectionFormatUon() throws Exception {
-		HttpPartSchema ps = schema("array").collectionFormat("uon").build();
+		HttpPartSchema ps = schema("array","uon").build();
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new String[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new Object[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
@@ -897,185 +897,191 @@ public class OpenApiPartSerializerTest {
 	}
 
 
-//	//-----------------------------------------------------------------------------------------------------------------
-//	// type = object
-//	//-----------------------------------------------------------------------------------------------------------------
-//
-//	public static class H1 {
-//		public int f;
-//	}
-//
-//	@Test
-//	public void h01_objectType() throws Exception {
-//		HttpPartSchema ps = HttpPartSchema.create().type("object").build();
-//		assertEquals("{f:1}", s.serialize(ps, "(f=1)", H1.class));
-//		assertEquals("{f:1}", s.serialize(ps, "(f=1)", ObjectMap.class));
-//		Object o = s.serialize(ps, "(f=1)", Object.class);
-//		assertEquals("{f:1}", o);
-//		assertClass(ObjectMap.class, o);
-//	}
-//
-//	@Test
-//	public void h02_objectType_2d() throws Exception {
-//		HttpPartSchema ps = schema("array").format("uon").items(schema("object")).build();
-//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", H1[].class));
-//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, H1.class));
-//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", ObjectMap[].class));
-//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, ObjectMap.class));
-//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", Object[].class));
-//		assertEquals("[{f:1},{f:2}]", s.serialize(ps, "@((f=1),(f=2))", List.class, Object.class));
-//		Object o = s.serialize(ps, "@((f=1),(f=2))", Object.class);
-//		assertEquals("[{f:1},{f:2}]", o);
-//		assertClass(ObjectList.class, o);
-//	}
-//
-//	@Test
-//	public void h03_objectType_3d() throws Exception {
-//		HttpPartSchema ps = schema("array").format("uon").items(schema("array").items(schema("object"))).build();
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, H1.class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", ObjectMap[][].class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, ObjectMap[].class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, ObjectMap.class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class));
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class));
-//		Object o =  s.serialize(ps, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
-//		assertEquals("[[{f:1},{f:2}],[{f:3}]]", o);
-//		assertClass(ObjectList.class, o);
-//	}
-//
-//	public static class H2 {
-//		public Object f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f99;
-//	}
-//
-//	@Test
-//	public void h04_objectType_simpleProperties() throws Exception {
-//		HttpPartSchema ps = schema("object")
-//			.property("f1", schema("string"))
-//			.property("f2", schema("string", "byte"))
-//			.property("f4", schema("string", "date-time"))
-//			.property("f5", schema("string", "binary"))
-//			.property("f6", schema("string", "binary-spaced"))
-//			.property("f7", schema("string", "uon"))
-//			.property("f8", schema("integer"))
-//			.property("f9", schema("integer", "int64"))
-//			.property("f10", schema("number"))
-//			.property("f11", schema("number", "double"))
-//			.property("f12", schema("boolean"))
-//			.additionalProperties(schema("integer"))
-//			.build();
-//
-//		byte[] foob = "foo".getBytes();
-//		String in = "(f1=foo,f2="+base64Encode(foob)+",f4=2012-12-21T12:34:56Z,f5="+toHex(foob)+",f6='"+toSpacedHex(foob)+"',f7=foo,f8=1,f9=1,f10=1,f11=1,f12=true,f99=1)";
-//
-//		H2 h2 = s.serialize(ps, in, H2.class);
-//		assertEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", h2);
-//		assertClass(String.class, h2.f1);
-//		assertClass(byte[].class, h2.f2);
-//		assertClass(GregorianCalendar.class, h2.f4);
-//		assertClass(byte[].class, h2.f5);
-//		assertClass(byte[].class, h2.f6);
-//		assertClass(String.class, h2.f7);
-//		assertClass(Integer.class, h2.f8);
-//		assertClass(Long.class, h2.f9);
-//		assertClass(Float.class, h2.f10);
-//		assertClass(Double.class, h2.f11);
-//		assertClass(Boolean.class, h2.f12);
-//		assertClass(Integer.class, h2.f99);
-//
-//		ObjectMap om = s.serialize(ps, in, ObjectMap.class);
-//		assertEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
-//		assertClass(String.class, om.get("f1"));
-//		assertClass(byte[].class, om.get("f2"));
-//		assertClass(GregorianCalendar.class, om.get("f4"));
-//		assertClass(byte[].class, om.get("f5"));
-//		assertClass(byte[].class, om.get("f6"));
-//		assertClass(String.class, om.get("f7"));
-//		assertClass(Integer.class, om.get("f8"));
-//		assertClass(Long.class, om.get("f9"));
-//		assertClass(Float.class, om.get("f10"));
-//		assertClass(Double.class, om.get("f11"));
-//		assertClass(Boolean.class, om.get("f12"));
-//		assertClass(Integer.class, om.get("f99"));
-//
-//		om = (ObjectMap)s.serialize(ps, in, Object.class);
-//		assertEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
-//		assertClass(String.class, om.get("f1"));
-//		assertClass(byte[].class, om.get("f2"));
-//		assertClass(GregorianCalendar.class, om.get("f4"));
-//		assertClass(byte[].class, om.get("f5"));
-//		assertClass(byte[].class, om.get("f6"));
-//		assertClass(String.class, om.get("f7"));
-//		assertClass(Integer.class, om.get("f8"));
-//		assertClass(Long.class, om.get("f9"));
-//		assertClass(Float.class, om.get("f10"));
-//		assertClass(Double.class, om.get("f11"));
-//		assertClass(Boolean.class, om.get("f12"));
-//		assertClass(Integer.class, om.get("f99"));
-//	}
-//
-//	@Test
-//	public void h05_objectType_arrayProperties() throws Exception {
-//		HttpPartSchema ps = schema("object")
-//			.property("f1", schema("array").items(schema("string")))
-//			.property("f2", schema("array").items(schema("string", "byte")))
-//			.property("f4", schema("array").items(schema("string", "date-time")))
-//			.property("f5", schema("array").items(schema("string", "binary")))
-//			.property("f6", schema("array").items(schema("string", "binary-spaced")))
-//			.property("f7", schema("array").items(schema("string", "uon")))
-//			.property("f8", schema("array").items(schema("integer")))
-//			.property("f9", schema("array").items(schema("integer", "int64")))
-//			.property("f10", schema("array").items(schema("number")))
-//			.property("f11", schema("array").items(schema("number", "double")))
-//			.property("f12", schema("array").items(schema("boolean")))
-//			.additionalProperties(schema("array").items(schema("integer")))
-//			.build();
-//
-//		byte[] foob = "foo".getBytes();
-//		String in = "(f1=foo,f2="+base64Encode(foob)+",f4=2012-12-21T12:34:56Z,f5="+toHex(foob)+",f6='"+toSpacedHex(foob)+"',f7=foo,f8=1,f9=1,f10=1,f11=1,f12=true,f99=1)";
-//
-//		H2 h2 = s.serialize(ps, in, H2.class);
-//		assertEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", h2);
-//
-//		ObjectMap om = s.serialize(ps, in, ObjectMap.class);
-//		assertEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
-//
-//		om = (ObjectMap)s.serialize(ps, in, Object.class);
-//		assertEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
-//	}
-//
-//	@Test
-//	public void h06_objectType_arrayProperties_pipes() throws Exception {
-//		HttpPartSchema ps = schema("object")
-//			.property("f1", schema("array").collectionFormat("pipes").items(schema("string")))
-//			.property("f2", schema("array").collectionFormat("pipes").items(schema("string", "byte")))
-//			.property("f4", schema("array").collectionFormat("pipes").items(schema("string", "date-time")))
-//			.property("f5", schema("array").collectionFormat("pipes").items(schema("string", "binary")))
-//			.property("f6", schema("array").collectionFormat("pipes").items(schema("string", "binary-spaced")))
-//			.property("f7", schema("array").collectionFormat("pipes").items(schema("string", "uon")))
-//			.property("f8", schema("array").collectionFormat("pipes").items(schema("integer")))
-//			.property("f9", schema("array").collectionFormat("pipes").items(schema("integer", "int64")))
-//			.property("f10", schema("array").collectionFormat("pipes").items(schema("number")))
-//			.property("f11", schema("array").collectionFormat("pipes").items(schema("number", "double")))
-//			.property("f12", schema("array").collectionFormat("pipes").items(schema("boolean")))
-//			.additionalProperties(schema("array").collectionFormat("pipes").items(schema("integer")))
-//			.build();
-//
-//		byte[] foob = "foo".getBytes(), barb = "bar".getBytes();
-//		String in = "(f1=foo|bar,f2="+base64Encode(foob)+"|"+base64Encode(barb)+",f4=2012-12-21T12:34:56Z|2012-12-21T12:34:56Z,f5="+toHex(foob)+"|"+toHex(barb)+",f6='"+toSpacedHex(foob)+"|"+toSpacedHex(barb)+"',f7=foo|bar,f8=1|2,f9=1|2,f10=1|2,f11=1|2,f12=true|true,f99=1|2)";
-//
-//		H2 h2 = s.serialize(ps, in, H2.class);
-//		assertEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", h2);
-//
-//		ObjectMap om = s.serialize(ps, in, ObjectMap.class);
-//		assertEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
-//
-//		om = (ObjectMap)s.serialize(ps, in, Object.class);
-//		assertEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
-//	}
-//
+	//-----------------------------------------------------------------------------------------------------------------
+	// type = object
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class H1 {
+		public String f1;
+		public Integer f2;
+		public Boolean f3;
+		public H1(String f1, Integer f2, Boolean f3) {
+			this.f1 = f1;
+			this.f2 = f2;
+			this.f3 = f3;
+		}
+	}
+
+	@Test
+	public void h01_objectType() throws Exception {
+		HttpPartSchema ps = schema("object").build();
+		assertEquals("(f1='1',f2=2,f3=true)", s.serialize(ps, new H1("1",2,true)));
+		assertEquals("()", s.serialize(ps, new H1(null,null,null)));
+		assertEquals("(f1='1',f2=2,f3=true)", s.serialize(ps, new ObjectMap("{f1:'1',f2:2,f3:true}")));
+		assertEquals("(f1=null,f2=null,f3=null)", s.serialize(ps, new ObjectMap("{f1:null,f2:null,f3:null}")));
+		assertEquals("null", s.serialize(ps, null));
+	}
+
+	@Test
+	public void h02_objectType_uon() throws Exception {
+		HttpPartSchema ps = schema("object","uon").build();
+		assertEquals("(f1='1',f2=2,f3=true)", s.serialize(ps, new H1("1",2,true)));
+		assertEquals("()", s.serialize(ps, new H1(null,null,null)));
+		assertEquals("(f1='1',f2=2,f3=true)", s.serialize(ps, new ObjectMap("{f1:'1',f2:2,f3:true}")));
+		assertEquals("(f1=null,f2=null,f3=null)", s.serialize(ps, new ObjectMap("{f1:null,f2:null,f3:null}")));
+		assertEquals("null", s.serialize(ps, null));
+	}
+
+	@Test
+	public void h03_objectType_2d() throws Exception {
+		HttpPartSchema ps = schema("array").items(schema("object")).build();
+		assertEquals("(f1='1'\\,f2=2\\,f3=true),(),null", s.serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
+		assertEquals("(f1='1'\\,f2=2\\,f3=true),(),null", s.serialize(ps, AList.create(new H1("1",2,true),new H1(null,null,null),null)));
+		assertEquals("(f1='1'\\,f2=2\\,f3=true),(f1=null\\,f2=null\\,f3=null),null", s.serialize(ps, new ObjectMap[]{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("(f1='1'\\,f2=2\\,f3=true),(f1=null\\,f2=null\\,f3=null),null", s.serialize(ps, AList.create(new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("(f1='1'\\,f2=2\\,f3=true),(f1='1'\\,f2=2\\,f3=true),null", s.serialize(ps, new Object[]{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("(f1='1'\\,f2=2\\,f3=true),(f1='1'\\,f2=2\\,f3=true),null", s.serialize(ps, AList.create(new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}"),null)));
+	}
+
+	@Test
+	public void h03_objectType_2d_pipes() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("pipes").items(schema("object")).build();
+		assertEquals("(f1='1',f2=2,f3=true)|()|null", s.serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
+		assertEquals("(f1='1',f2=2,f3=true)|()|null", s.serialize(ps, AList.create(new H1("1",2,true),new H1(null,null,null),null)));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=null,f2=null,f3=null)|null", s.serialize(ps, new ObjectMap[]{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=null,f2=null,f3=null)|null", s.serialize(ps, AList.create(new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1='1',f2=2,f3=true)|null", s.serialize(ps, new Object[]{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1='1',f2=2,f3=true)|null", s.serialize(ps, AList.create(new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}"),null)));
+	}
+
+	@Test
+	public void h04_objectType_2d_uon() throws Exception {
+		HttpPartSchema ps = schema("array","uon").items(schema("object")).build();
+		assertEquals("@((f1='1',f2=2,f3=true),(),null)", s.serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(),null)", s.serialize(ps, AList.create(new H1("1",2,true),new H1(null,null,null),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", s.serialize(ps, new ObjectMap[]{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", s.serialize(ps, AList.create(new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", s.serialize(ps, new Object[]{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", s.serialize(ps, AList.create(new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}"),null)));
+	}
+
+	@Test
+	public void h03_objectType_3d() throws Exception {
+		HttpPartSchema ps = schema("array").items(schema("array").items(schema("object"))).build();
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1=x\\\\\\,f2=3\\\\\\,f3=false),()\\,null,null", s.serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1=x\\\\\\,f2=3\\\\\\,f3=false),()\\,null,null", s.serialize(ps, AList.create(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1=x\\\\\\,f2=3\\\\\\,f3=false),()\\,null,null", s.serialize(ps, AList.create(AList.create(new H1("1",2,true),new H1("x",3,false)),AList.create(new H1(null,null,null),null),null)));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1=x\\\\\\,f2=4\\\\\\,f3=false),(f1=null\\\\\\,f2=null\\\\\\,f3=null)\\,null,null", s.serialize(ps, new ObjectMap[][]{{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")},{new ObjectMap("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1=x\\\\\\,f2=4\\\\\\,f3=false),(f1=null\\\\\\,f2=null\\\\\\,f3=null)\\,null,null", s.serialize(ps, AList.create(new ObjectMap[]{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")},new ObjectMap[]{new ObjectMap("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1=x\\\\\\,f2=4\\\\\\,f3=false),(f1=null\\\\\\,f2=null\\\\\\,f3=null)\\,null,null", s.serialize(ps, AList.create(AList.create(new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")),AList.create(new ObjectMap("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1='1'\\\\\\,f2=2\\\\\\,f3=true),()\\,(f1=null\\\\\\,f2=null\\\\\\,f3=null)\\,null,null", s.serialize(ps, new Object[][]{{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1='1'\\\\\\,f2=2\\\\\\,f3=true),()\\,(f1=null\\\\\\,f2=null\\\\\\,f3=null)\\,null,null", s.serialize(ps, AList.create(new Object[]{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("(f1='1'\\\\\\,f2=2\\\\\\,f3=true)\\,(f1='1'\\\\\\,f2=2\\\\\\,f3=true),()\\,(f1=null\\\\\\,f2=null\\\\\\,f3=null)\\,null,null", s.serialize(ps, AList.create(AList.create(new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")),AList.create(new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null),null)));
+	}
+
+	@Test
+	public void h03_objectType_3d_ssvAndPipes() throws Exception {
+		HttpPartSchema ps = schema("array").collectionFormat("ssv").items(schema("array").collectionFormat("pipes").items(schema("object"))).build();
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=x,f2=3,f3=false) ()|null null", s.serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=x,f2=3,f3=false) ()|null null", s.serialize(ps, AList.create(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=x,f2=3,f3=false) ()|null null", s.serialize(ps, AList.create(AList.create(new H1("1",2,true),new H1("x",3,false)),AList.create(new H1(null,null,null),null),null)));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=x,f2=4,f3=false) (f1=null,f2=null,f3=null)|null null", s.serialize(ps, new ObjectMap[][]{{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")},{new ObjectMap("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=x,f2=4,f3=false) (f1=null,f2=null,f3=null)|null null", s.serialize(ps, AList.create(new ObjectMap[]{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")},new ObjectMap[]{new ObjectMap("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1=x,f2=4,f3=false) (f1=null,f2=null,f3=null)|null null", s.serialize(ps, AList.create(AList.create(new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")),AList.create(new ObjectMap("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1='1',f2=2,f3=true) ()|(f1=null,f2=null,f3=null)|null null", s.serialize(ps, new Object[][]{{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1='1',f2=2,f3=true) ()|(f1=null,f2=null,f3=null)|null null", s.serialize(ps, AList.create(new Object[]{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("(f1='1',f2=2,f3=true)|(f1='1',f2=2,f3=true) ()|(f1=null,f2=null,f3=null)|null null", s.serialize(ps, AList.create(AList.create(new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")),AList.create(new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null),null)));
+	}
+
+	@Test
+	public void h03_objectType_3d_uon() throws Exception {
+		HttpPartSchema ps = schema("array","uon").items(schema("array").items(schema("object"))).build();
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", s.serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", s.serialize(ps, AList.create(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", s.serialize(ps, AList.create(AList.create(new H1("1",2,true),new H1("x",3,false)),AList.create(new H1(null,null,null),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", s.serialize(ps, new ObjectMap[][]{{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")},{new ObjectMap("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", s.serialize(ps, AList.create(new ObjectMap[]{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")},new ObjectMap[]{new ObjectMap("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", s.serialize(ps, AList.create(AList.create(new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:'x',f2:4,f3:false}")),AList.create(new ObjectMap("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", s.serialize(ps, new Object[][]{{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", s.serialize(ps, AList.create(new Object[]{new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", s.serialize(ps, AList.create(AList.create(new H1("1",2,true),new ObjectMap("{f1:'1',f2:2,f3:true}")),AList.create(new H1(null,null,null),new ObjectMap("{f1:null,f2:null,f3:null}"),null),null)));
+	}
+
+	public static class H2 {
+		public Object f1, f2, f4, f5, f6, f7, f8, f9, f10, f11, f12, f99;
+		public H2(Object f1, Object f2, Object f4, Object f5, Object f6, Object f7, Object f8, Object f9, Object f10, Object f11, Object f12, Object f99) {
+			this.f1 = f1;
+			this.f2 = f2;
+			this.f4 = f4;
+			this.f5 = f5;
+			this.f6 = f6;
+			this.f7 = f7;
+			this.f8 = f8;
+			this.f9 = f9;
+			this.f10 = f10;
+			this.f11 = f11;
+			this.f12 = f12;
+			this.f99 = f99;
+		}
+	}
+
+	@Test
+	public void h04_objectType_simpleProperties() throws Exception {
+		HttpPartSchema ps = schema("object")
+			.property("f1", schema("string"))
+			.property("f2", schema("string", "byte"))
+			.property("f4", schema("string", "date-time"))
+			.property("f5", schema("string", "binary"))
+			.property("f6", schema("string", "binary-spaced"))
+			.property("f7", schema("string", "uon"))
+			.property("f8", schema("integer"))
+			.property("f9", schema("integer", "int64"))
+			.property("f10", schema("number"))
+			.property("f11", schema("number", "double"))
+			.property("f12", schema("boolean"))
+			.additionalProperties(schema("integer"))
+			.build();
+
+		byte[] foob = "foo".getBytes();
+
+		assertEquals(
+			"(f1=foo,f2=Zm9v,f4=2012-12-21T12:34:56Z,f5=666F6F,f6='66 6F 6F',f7=foo,f8=1,f9=2,f10=1.0,f11=1.0,f12=true,f99=1)",
+			s.serialize(ps, new H2("foo",foob,parseIsoCalendar("2012-12-21T12:34:56Z"),foob,foob,"foo",1,2,1.0,1.0,true,1))
+		);
+		assertEquals("()", s.serialize(ps, new H2(null,null,null,null,null,null,null,null,null,null,null,null)));
+		assertEquals("null", s.serialize(ps, null));
+		assertEquals(
+			"(f1=foo,f2=Zm9v,f4=2012-12-21T12:34:56Z,f5=666F6F,f6='66 6F 6F',f7=foo,f8=1,f9=2,f10=1.0,f11=1.0,f12=true,f99=1)",
+			s.serialize(ps, new ObjectMap().append("f1","foo").append("f2",foob).append("f4",parseIsoCalendar("2012-12-21T12:34:56Z")).append("f5",foob).append("f6",foob).append("f7","foo").append("f8",1).append("f9",2).append("f10",1.0).append("f11",1.0).append("f12",true).append("f99",1))
+		);
+	}
+
+	@Test
+	public void h05_objectType_arrayProperties() throws Exception {
+		HttpPartSchema ps = schema("object")
+			.property("f1", schema("array").items(schema("string")))
+			.property("f2", schema("array").items(schema("string", "byte")))
+			.property("f4", schema("array").items(schema("string", "date-time")))
+			.property("f5", schema("array").items(schema("string", "binary")))
+			.property("f6", schema("array").items(schema("string", "binary-spaced")))
+			.property("f7", schema("array").items(schema("string", "uon")))
+			.property("f8", schema("array").items(schema("integer")))
+			.property("f9", schema("array").items(schema("integer", "int64")))
+			.property("f10", schema("array").items(schema("number")))
+			.property("f11", schema("array").items(schema("number", "double")))
+			.property("f12", schema("array").items(schema("boolean")))
+			.additionalProperties(schema("array").items(schema("integer")))
+			.build();
+
+		byte[] foob = "foo".getBytes();
+
+		assertEquals(
+			"(f1=@('a,b',null),f2=@(Zm9v,null),f4=@(2012-12-21T12:34:56Z,null),f5=@(666F6F,null),f6=@('66 6F 6F',null),f7=@(a,b,null),f8=@(1,2,null),f9=@(3,4,null),f10=@(1.0,2.0,null),f11=@(3.0,4.0,null),f12=@(true,false,null),f99=@(1,x,null))",
+			s.serialize(ps, new H2(new String[]{"a,b",null},new byte[][]{foob,null},new Calendar[]{parseIsoCalendar("2012-12-21T12:34:56Z"),null},new byte[][]{foob,null},new byte[][]{foob,null},new String[]{"a","b",null},new Integer[]{1,2,null},new Integer[]{3,4,null},new Float[]{1f,2f,null},new Float[]{3f,4f,null},new Boolean[]{true,false,null},new Object[]{1,"x",null}))
+		);
+
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------

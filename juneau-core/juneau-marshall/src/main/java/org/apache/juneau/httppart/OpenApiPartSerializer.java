@@ -142,7 +142,6 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 	}
 
 	@Override /* PartSerializer */
-	@SuppressWarnings("rawtypes")
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
 		schema = ObjectUtils.firstNonNull(schema, this.schema, DEFAULT_SCHEMA);
@@ -183,8 +182,8 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 
 			} else if (t == ARRAY) {
 
-				if (cf == HttpPartSchema.CollectionFormat.UON)
-					out = super.serialize(partType, null, value);
+				if (f == HttpPartSchema.Format.UON)
+					out = super.serialize(partType, null, toList(partType, type, value, schema));
 				else {
 					List<String> l = new ArrayList<>();
 
@@ -238,20 +237,12 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 
 			} else if (t == OBJECT) {
 
-				if (cf == HttpPartSchema.CollectionFormat.UON) {
+				if (f == HttpPartSchema.Format.UON) {
 					out = super.serialize(partType, null, value);
 				} else if (schema.hasProperties() && type.isMapOrBean()) {
-					ObjectMap m = new ObjectMap();
-					if (type.isBean()) {
-						for (Map.Entry<String,Object> e : BC.createBeanSession().toBeanMap(value).entrySet())
-							m.put(e.getKey(), serialize(partType, schema.getProperty(e.getKey()), e.getValue()));
-					} else {
-						for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet())
-							m.put(asString(e.getKey()), serialize(partType, schema.getProperty(asString(e.getKey())), e.getValue()));
-					}
-					out = super.serialize(m);
+					out = super.serialize(partType, null, toMap(partType, type, value, schema));
 				} else {
-					out = super.serialize(partType, schema, value);
+					out = super.serialize(partType, null, value);
 				}
 
 			} else if (t == FILE) {
@@ -269,6 +260,82 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 		if (out == null)
 			out = "null";
 		return out;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private ObjectMap toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+		if (s == null)
+			s = DEFAULT_SCHEMA;
+		ObjectMap m = new ObjectMap();
+		if (type.isBean()) {
+			for (BeanPropertyValue p : bs.toBeanMap(o).getValues(isTrimNulls())) {
+				if (p.getMeta().canRead()) {
+					Throwable t = p.getThrown();
+					if (t == null)
+						m.put(p.getName(), toObject(partType, p.getValue(), s.getProperty(p.getName())));
+				}
+			}
+		} else {
+			for (Map.Entry e : (Set<Map.Entry>)((Map)o).entrySet())
+				m.put(asString(e.getKey()), toObject(partType, e.getValue(), s.getProperty(asString(e.getKey()))));
+		}
+		return m;
+	}
+
+	private ObjectList toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+		if (s == null)
+			s = DEFAULT_SCHEMA;
+		ObjectList l = new ObjectList();
+		HttpPartSchema items = s.getItems();
+		if (type.isArray()) {
+			for (int i = 0; i < Array.getLength(o); i++)
+				l.add(toObject(partType, Array.get(o, i), items));
+		} else if (type.isCollection()) {
+			for (Object o2 : (Collection<?>)o)
+				l.add(toObject(partType, o2, items));
+		} else {
+			l.add(toObject(partType, o, items));
+		}
+		return l;
+	}
+
+	private Object toObject(HttpPartType partType, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+		if (o == null)
+			return null;
+		if (s == null)
+			s = DEFAULT_SCHEMA;
+		HttpPartSchema.Type t = s.getType();
+		HttpPartSchema.Format f = s.getFormat();
+		HttpPartSchema.CollectionFormat cf = s.getCollectionFormat();
+
+		if (t == STRING) {
+			if (f == BYTE)
+				return base64Encode(toType(o, CM_ByteArray));
+			if (f == BINARY)
+				return toHex(toType(o, CM_ByteArray));
+			if (f == BINARY_SPACED)
+				return toSpacedHex(toType(o, CM_ByteArray));
+			if (f == DATE)
+				return toIsoDate(toType(o, CM_Calendar));
+			if (f == DATE_TIME)
+				return toIsoDateTime(toType(o, CM_Calendar));
+			return o;
+		} else if (t == ARRAY) {
+			ObjectList l = toList(partType, getClassMetaForObject(o), o, s);
+			if (cf == CSV)
+				return joine(l, ',');
+			if (cf == PIPES)
+				return joine(l, '|');
+			if (cf == SSV)
+				return join(l, ' ');
+			if (cf == TSV)
+				return join(l, '\t');
+			return l;
+		} else if (t == OBJECT) {
+			return toMap(partType, getClassMetaForObject(o), o, s);
+		}
+
+		return o;
 	}
 
 	private <T> T toType(Object in, ClassMeta<T> type) throws SerializeException {

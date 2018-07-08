@@ -213,6 +213,26 @@ public class OpenApiPartParserTest {
 		assertEquals(0, p.parse(null, null, byte.class).intValue());
 	}
 
+	@Test
+	public void b02_primitiveDefaults_nullKeyword() throws Exception {
+		assertEquals(null, p.parse(null, "null", Boolean.class));
+		assertEquals(false, p.parse(null, "null", boolean.class));
+		assertEquals(null, p.parse(null, "null", Character.class));
+		assertEquals("\0", p.parse(null, "null", char.class).toString());
+		assertEquals(null, p.parse(null, "null", Short.class));
+		assertEquals(0, p.parse(null, "null", short.class).intValue());
+		assertEquals(null, p.parse(null, "null", Integer.class));
+		assertEquals(0, p.parse(null, "null", int.class).intValue());
+		assertEquals(null, p.parse(null, "null", Long.class));
+		assertEquals(0, p.parse(null, "null", long.class).intValue());
+		assertEquals(null, p.parse(null, "null", Float.class));
+		assertEquals(0, p.parse(null, "null", float.class).intValue());
+		assertEquals(null, p.parse(null, "null", Double.class));
+		assertEquals(0, p.parse(null, "null", double.class).intValue());
+		assertEquals(null, p.parse(null, "null", Byte.class));
+		assertEquals(0, p.parse(null, "null", byte.class).intValue());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// type = string
 	//-----------------------------------------------------------------------------------------------------------------
@@ -526,14 +546,36 @@ public class OpenApiPartParserTest {
 	}
 
 	@Test
-	public void d09_arrayType_itemsInteger() throws Exception {
+	public void d09_arrayType_itemsBoolean() throws Exception {
+		HttpPartSchema s = schema("array").collectionFormat("csv").items(schema("boolean")).build();
+		assertObjectEquals("[true,false]", p.parse(s, "true,false", boolean[].class));
+		assertObjectEquals("[true,false,null]", p.parse(s, "true,false,null", Boolean[].class));
+		assertObjectEquals("[true,false,null]", p.parse(s, "true,false,null", Object[].class));
+		assertObjectEquals("[true,false,null]", p.parse(s, "true,false,null", List.class, Boolean.class));
+		assertObjectEquals("[true,false,null]", p.parse(s, "true,false,null", List.class, Object.class));
+		assertObjectEquals("[true,false,null]", p.parse(s, "true,false,null", Object.class));
+	}
+
+	@Test
+	public void d10_arrayType_itemsInteger() throws Exception {
 		HttpPartSchema s = schema("array").collectionFormat("csv").items(schema("integer")).build();
 		assertObjectEquals("[1,2]", p.parse(s, "1,2", int[].class));
-		assertObjectEquals("[1,2]", p.parse(s, "1,2", Integer[].class));
-		assertObjectEquals("[1,2]", p.parse(s, "1,2", Object[].class));
-		assertObjectEquals("[1,2]", p.parse(s, "1,2", List.class, Integer.class));
-		assertObjectEquals("[1,2]", p.parse(s, "1,2", List.class, Object.class));
-		assertObjectEquals("[1,2]", p.parse(s, "1,2", Object.class));
+		assertObjectEquals("[1,2,null]", p.parse(s, "1,2,null", Integer[].class));
+		assertObjectEquals("[1,2,null]", p.parse(s, "1,2,null", Object[].class));
+		assertObjectEquals("[1,2,null]", p.parse(s, "1,2,null", List.class, Integer.class));
+		assertObjectEquals("[1,2,null]", p.parse(s, "1,2,null", List.class, Object.class));
+		assertObjectEquals("[1,2,null]", p.parse(s, "1,2,null", Object.class));
+	}
+
+	@Test
+	public void d11_arrayType_itemsFloat() throws Exception {
+		HttpPartSchema s = schema("array").collectionFormat("csv").items(schema("number")).build();
+		assertObjectEquals("[1.0,2.0]", p.parse(s, "1.0,2.0", float[].class));
+		assertObjectEquals("[1.0,2.0,null]", p.parse(s, "1.0,2.0,null", Float[].class));
+		assertObjectEquals("[1.0,2.0,null]", p.parse(s, "1.0,2.0,null", Object[].class));
+		assertObjectEquals("[1.0,2.0,null]", p.parse(s, "1.0,2.0,null", List.class, Float.class));
+		assertObjectEquals("[1.0,2.0,null]", p.parse(s, "1.0,2.0,null", List.class, Object.class));
+		assertObjectEquals("[1.0,2.0,null]", p.parse(s, "1.0,2.0,null", Object.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

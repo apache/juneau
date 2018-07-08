@@ -1025,6 +1025,114 @@ public abstract class Serializer extends BeanContext {
 	//--------------------------------------------------------------------------------
 
 	/**
+	 * Returns the {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
+	 */
+	public final int getMaxDepth() {
+		return maxDepth;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
+	 */
+	public final int getInitialDepth() {
+		return initialDepth;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
+	 */
+	public final boolean isDetectRecursions() {
+		return detectRecursions;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
+	 */
+	public final boolean isIgnoreRecursions() {
+		return ignoreRecursions;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
+	 */
+	public boolean isAddBeanTypes() {
+		return addBeanTypes;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_addRootType} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_addRootType} setting value for this session.
+	 */
+	public boolean isAddRootType() {
+		return addRootType;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
+	 */
+	public final boolean isTrimNulls() {
+		return trimNulls;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
+	 */
+	public final boolean isTrimEmptyCollections() {
+		return trimEmptyCollections;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
+	 */
+	public final boolean isTrimEmptyMaps() {
+		return trimEmptyMaps;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
+	 */
+	public boolean isTrimStrings() {
+		return trimStrings;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
+	 */
+	public final boolean isSortCollections() {
+		return sortCollections;
+	}
+
+	/**
+	 * Returns the {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
+	 *
+	 * @return The {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
+	 */
+	public final boolean isSortMaps() {
+		return sortMaps;
+	}
+
+	/**
 	 * Returns the media types handled based on the value of the <code>accept</code> parameter passed into the constructor.
 	 *
 	 * <p>
