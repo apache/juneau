@@ -50,7 +50,7 @@ public class BeanRegistry {
 		this.beanContext = beanContext;
 		this.map = new ConcurrentHashMap<>();
 		this.reverseMap = new ConcurrentHashMap<>();
-		for (Class<?> c : beanContext.beanDictionaryClasses)
+		for (Class<?> c : beanContext.getBeanDictionaryClasses())
 			addClass(c);
 		if (parent != null)
 			for (Map.Entry<String,ClassMeta<?>> e : parent.map.entrySet())

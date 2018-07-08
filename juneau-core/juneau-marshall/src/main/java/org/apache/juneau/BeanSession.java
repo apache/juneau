@@ -58,10 +58,10 @@ public class BeanSession extends Session {
 	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
 		super(args);
 		this.ctx = ctx;
-		locale = getProperty(BEAN_locale, Locale.class, args.locale, ctx.locale, Locale.getDefault());
-		timeZone = getProperty(BEAN_timeZone, TimeZone.class, args.timeZone, ctx.timeZone);
-		debug = getProperty(BEAN_debug, boolean.class, ctx.debug);
-		mediaType = getProperty(BEAN_mediaType, MediaType.class, args.mediaType, ctx.mediaType);
+		locale = getProperty(BEAN_locale, Locale.class, args.locale, ctx.getLocale(), Locale.getDefault());
+		timeZone = getProperty(BEAN_timeZone, TimeZone.class, args.timeZone, ctx.getTimeZone());
+		debug = getProperty(BEAN_debug, boolean.class, ctx.isDebug());
+		mediaType = getProperty(BEAN_mediaType, MediaType.class, args.mediaType, ctx.getMediaType());
 	}
 
 	@Override /* Session */
@@ -129,7 +129,7 @@ public class BeanSession extends Session {
 	 * @return The value of the <property>ignoreUnknownBeanProperties</property> property on this bean.
 	 */
 	public final boolean isIgnoreUnknownBeanProperties() {
-		return ctx.ignoreUnknownBeanProperties;
+		return ctx.isIgnoreUnknownBeanProperties();
 	}
 
 	/**
@@ -1079,7 +1079,7 @@ public class BeanSession extends Session {
 	 */
 	public final String getBeanTypePropertyName(ClassMeta cm) {
 		String s = cm == null ? null : cm.getBeanTypePropertyName();
-		return s == null ? ctx.beanTypePropertyName : s;
+		return s == null ? ctx.getBeanTypePropertyName() : s;
 	}
 
 	/**
@@ -1088,7 +1088,7 @@ public class BeanSession extends Session {
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
 	public final BeanRegistry getBeanRegistry() {
-		return ctx.beanRegistry;
+		return ctx.getBeanRegistry();
 	}
 
 	/**
@@ -1196,7 +1196,7 @@ public class BeanSession extends Session {
 	 * @return The {@link ClassMeta} object associated with the <code>Object</code> class.
 	 */
 	public final ClassMeta<Object> object() {
-		return ctx.cmObject;
+		return ctx.object();
 	}
 
 	/**
@@ -1212,7 +1212,7 @@ public class BeanSession extends Session {
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
 	public final ClassMeta<String> string() {
-		return ctx.cmString;
+		return ctx.string();
 	}
 
 	/**
@@ -1228,7 +1228,7 @@ public class BeanSession extends Session {
 	 * @return The {@link ClassMeta} object associated with the <code>String</code> class.
 	 */
 	public final ClassMeta<Class> _class() {
-		return ctx.cmClass;
+		return ctx._class();
 	}
 
 	/**

@@ -167,7 +167,7 @@ public final class BeanPropertyMeta {
 			if (field == null && getter == null && setter == null)
 				return false;
 
-			if (field == null && setter == null && f.beansRequireSettersForGetters && ! isConstructorArg)
+			if (field == null && setter == null && f.isBeansRequireSettersForGetters() && ! isConstructorArg)
 				return false;
 
 			canRead |= (field != null || getter != null);
@@ -523,7 +523,7 @@ public final class BeanPropertyMeta {
 			return toSerializedForm(m.getBeanSession(), getRaw(m, pName));
 
 		} catch (Throwable e) {
-			if (beanContext.ignoreInvocationExceptionsOnGetters) {
+			if (beanContext.isIgnoreInvocationExceptionsOnGetters()) {
 				if (rawTypeMeta.isPrimitive())
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
@@ -549,7 +549,7 @@ public final class BeanPropertyMeta {
 			return invokeGetter(bean, pName);
 
 		} catch (Throwable e) {
-			if (beanContext.ignoreInvocationExceptionsOnGetters) {
+			if (beanContext.isIgnoreInvocationExceptionsOnGetters()) {
 				if (rawTypeMeta.isPrimitive())
 					return rawTypeMeta.getPrimitiveDefault();
 				return null;
@@ -623,7 +623,7 @@ public final class BeanPropertyMeta {
 			boolean isCollection = rawTypeMeta.isCollection();
 
 			if ((! isDyna) && field == null && setter == null && ! (isMap || isCollection)) {
-				if ((value == null && beanContext.ignoreUnknownNullBeanProperties) || beanContext.ignorePropertiesWithoutSetters)
+				if ((value == null && beanContext.isIgnoreUnknownNullBeanProperties()) || beanContext.isIgnorePropertiesWithoutSetters())
 					return null;
 				throw new BeanRuntimeException(beanMeta.c, "Setter or public field not defined on property ''{0}''", name);
 			}
@@ -632,7 +632,7 @@ public final class BeanPropertyMeta {
 
 			try {
 
-				Object r = beanContext.beanMapPutReturnsOldValue || isMap || isCollection ? get(m, pName) : null;
+				Object r = beanContext.isBeanMapPutReturnsOldValue() || isMap || isCollection ? get(m, pName) : null;
 				Class<?> propertyClass = rawTypeMeta.getInnerClass();
 
 				if (value == null && (isMap || isCollection)) {
@@ -765,7 +765,7 @@ public final class BeanPropertyMeta {
 				throw e;
 			} catch (Exception e) {
 				e.printStackTrace();
-				if (beanContext.ignoreInvocationExceptionsOnSetters) {
+				if (beanContext.isIgnoreInvocationExceptionsOnSetters()) {
 						if (rawTypeMeta.isPrimitive())
 							return rawTypeMeta.getPrimitiveDefault();
 					return null;

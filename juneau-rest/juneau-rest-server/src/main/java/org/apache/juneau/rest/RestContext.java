@@ -2903,7 +2903,7 @@ public final class RestContext extends BeanContext {
 			allowedMethodParams = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(StringUtils.split(getStringProperty(REST_allowedMethodParams, "HEAD,OPTIONS")))));
 			renderResponseStackTraces = getBooleanProperty(REST_renderResponseStackTraces, false);
 			useStackTraceHashes = getBooleanProperty(REST_useStackTraceHashes, true);
-			debug = getBooleanProperty(REST_debug, false);
+			debug = getBooleanProperty(REST_debug, super.isDebug());
 			defaultCharset = getStringProperty(REST_defaultCharset, "utf-8");
 			maxInput = getLongProperty(REST_maxInput, 100_000_000l);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
@@ -3939,6 +3939,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
+	@Override
 	public boolean isDebug() {
 		return debug;
 	}

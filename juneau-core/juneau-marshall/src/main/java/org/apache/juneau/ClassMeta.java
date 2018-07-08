@@ -635,7 +635,7 @@ public final class ClassMeta<T> implements Type {
 				this.pojoSwaps.addAll(Arrays.asList(pojoSwaps));
 
 			if (beanContext != null)
-				this.builderSwap = BuilderSwap.findSwapFromPojoClass(c, beanContext.beanConstructorVisibility, beanContext.beanMethodVisibility);
+				this.builderSwap = BuilderSwap.findSwapFromPojoClass(c, beanContext.getBeanConstructorVisibility(), beanContext.getBeanMethodVisibility());
 
 			findPojoSwaps(this.pojoSwaps);
 
@@ -698,7 +698,7 @@ public final class ClassMeta<T> implements Type {
 			if (beanMeta != null)
 				dictionaryName = beanMeta.getDictionaryName();
 
-			if (beanMeta != null && beanContext != null && beanContext.useInterfaceProxies && innerClass.isInterface())
+			if (beanMeta != null && beanContext != null && beanContext.isUseInterfaceProxies() && innerClass.isInterface())
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			Bean b = c.getAnnotation(Bean.class);
@@ -1781,7 +1781,7 @@ public final class ClassMeta<T> implements Type {
 	public String toString(Object t) {
 		if (t == null)
 			return null;
-		if (isEnum() && beanContext.useEnumNames)
+		if (isEnum() && beanContext.isUseEnumNames())
 			return ((Enum<?>)t).name();
 		return t.toString();
 	}
@@ -1813,7 +1813,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public T newInstanceFromString(Object outer, String arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
-		if (isEnum() && beanContext.useEnumNames)
+		if (isEnum() && beanContext.isUseEnumNames())
 			return (T)Enum.valueOf((Class<? extends Enum>)this.innerClass, arg);
 
 		Method m = fromStringMethod;

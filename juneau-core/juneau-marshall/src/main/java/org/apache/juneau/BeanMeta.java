@@ -168,10 +168,10 @@ public class BeanMeta<T> {
 
 			try {
 				Visibility
-					conVis = ctx.beanConstructorVisibility,
-					cVis = ctx.beanClassVisibility,
-					mVis = ctx.beanMethodVisibility,
-					fVis = ctx.beanFieldVisibility;
+					conVis = ctx.getBeanConstructorVisibility(),
+					cVis = ctx.getBeanClassVisibility(),
+					mVis = ctx.getBeanMethodVisibility(),
+					fVis = ctx.getBeanFieldVisibility();
 
 				List<Class<?>> bdClasses = new ArrayList<>();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
@@ -189,7 +189,7 @@ public class BeanMeta<T> {
 				if (typePropertyName == null)
 					typePropertyName = ctx.getBeanTypePropertyName();
 
-				fluentSetters = (ctx.fluentSetters || (beanFilter != null && beanFilter.isFluentSetters()));
+				fluentSetters = (ctx.isFluentSetters() || (beanFilter != null && beanFilter.isFluentSetters()));
 
 				// If @Bean.interfaceClass is specified on the parent class, then we want
 				// to use the properties defined on that class, not the subclass.
@@ -212,7 +212,7 @@ public class BeanMeta<T> {
 					return "Class is annotated with @BeanIgnore";
 
 				// Make sure it's serializable.
-				if (beanFilter == null && ctx.beansRequireSerializable && ! isParentClass(Serializable.class, c))
+				if (beanFilter == null && ctx.isBeansRequireSerializable() && ! isParentClass(Serializable.class, c))
 					return "Class is not serializable";
 
 				// Look for @BeanConstructor constructor.
@@ -235,7 +235,7 @@ public class BeanMeta<T> {
 				if (constructor == null)
 					constructor = (Constructor<T>)findNoArgConstructor(c, conVis);
 
-				if (constructor == null && beanFilter == null && ctx.beansRequireDefaultConstructor)
+				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";
 
 				setAccessible(constructor, false);
@@ -265,14 +265,14 @@ public class BeanMeta<T> {
 					fixedBeanProps.addAll(Arrays.asList(includeProperties));
 
 				if (propertyNamer == null)
-					propertyNamer = ctx.propertyNamer;
+					propertyNamer = ctx.getPropertyNamer();
 
 				// First populate the properties with those specified in the bean annotation to
 				// ensure that ordering first.
 				for (String name : fixedBeanProps)
 					normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
 
-				if (ctx.useJavaBeanIntrospector) {
+				if (ctx.isUseJavaBeanIntrospector()) {
 					BeanInfo bi = null;
 					if (! c2.isInterface())
 						bi = Introspector.getBeanInfo(c2, stopClass);
@@ -378,10 +378,10 @@ public class BeanMeta<T> {
 				}
 
 				// Make sure at least one property was found.
-				if (beanFilter == null && ctx.beansRequireSomeProperties && normalProps.size() == 0)
+				if (beanFilter == null && ctx.isBeansRequireSomeProperties() && normalProps.size() == 0)
 					return "No properties detected on bean class";
 
-				sortProperties = (ctx.sortProperties || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
+				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
 				properties = sortProperties ? new TreeMap<String,BeanPropertyMeta>() : new LinkedHashMap<String,BeanPropertyMeta>();
 
