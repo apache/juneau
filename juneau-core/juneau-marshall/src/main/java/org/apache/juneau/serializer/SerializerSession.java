@@ -49,18 +49,7 @@ import org.apache.juneau.transform.*;
  */
 public abstract class SerializerSession extends BeanSession {
 
-	private final int maxDepth, initialDepth;
-	private final boolean
-		detectRecursions,
-		ignoreRecursions,
-		addBeanTypes,
-		trimNulls,
-		trimEmptyCollections,
-		trimEmptyMaps,
-		trimStrings,
-		sortCollections,
-		sortMaps,
-		addRootType;
+	private final Serializer ctx;
 	private final UriResolver uriResolver;
 
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
@@ -92,33 +81,22 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	protected SerializerSession(Serializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
+		this.ctx = ctx;
 		this.javaMethod = args.javaMethod;
 		UriResolution uriResolution;
 		UriRelativity uriRelativity;
 		Class<?> listenerClass;
 
-		maxDepth = getProperty(SERIALIZER_maxDepth, int.class, ctx.maxDepth);
-		initialDepth = getProperty(SERIALIZER_initialDepth, int.class, ctx.initialDepth);
-		detectRecursions = getProperty(SERIALIZER_detectRecursions, boolean.class, ctx.detectRecursions);
-		ignoreRecursions = getProperty(SERIALIZER_ignoreRecursions, boolean.class, ctx.ignoreRecursions);
-		addBeanTypes = getProperty(SERIALIZER_addBeanTypes, boolean.class, ctx.addBeanTypes);
-		trimNulls = getProperty(SERIALIZER_trimNullProperties, boolean.class, ctx.trimNulls);
-		trimEmptyCollections = getProperty(SERIALIZER_trimEmptyCollections, boolean.class, ctx.trimEmptyCollections);
-		trimEmptyMaps = getProperty(SERIALIZER_trimEmptyMaps, boolean.class, ctx.trimEmptyMaps);
-		trimStrings = getProperty(SERIALIZER_trimStrings, boolean.class, ctx.trimStrings);
-		sortCollections = getProperty(SERIALIZER_sortCollections, boolean.class, ctx.sortMaps);
-		sortMaps = getProperty(SERIALIZER_sortMaps, boolean.class, ctx.sortMaps);
-		addRootType = getProperty(SERIALIZER_addRootType, boolean.class, ctx.addRootType);
-		uriResolution = getInstanceProperty(SERIALIZER_uriResolution, UriResolution.class, ctx.uriResolution);
-		uriRelativity = getInstanceProperty(SERIALIZER_uriRelativity, UriRelativity.class, ctx.uriRelativity);
-		listenerClass = getProperty(SERIALIZER_listener, Class.class, ctx.listener);
+		uriResolution = getInstanceProperty(SERIALIZER_uriResolution, UriResolution.class, ctx.getUriResolution());
+		uriRelativity = getInstanceProperty(SERIALIZER_uriRelativity, UriRelativity.class, ctx.getUriRelativity());
+		listenerClass = getProperty(SERIALIZER_listener, Class.class, ctx.getListener());
 
-		uriResolver = new UriResolver(uriResolution, uriRelativity, args.uriContext == null ? ctx.uriContext : args.uriContext);
+		uriResolver = new UriResolver(uriResolution, uriRelativity, args.uriContext == null ? ctx.getUriContext() : args.uriContext);
 
 		listener = newInstance(SerializerListener.class, listenerClass);
 
-		this.indent = initialDepth;
-		if (detectRecursions || isDebug()) {
+		this.indent = getInitialDepth();
+		if (isDetectRecursions() || isDebug()) {
 			set = new IdentityHashMap<>();
 		} else {
 			set = Collections.emptyMap();
@@ -142,18 +120,6 @@ public abstract class SerializerSession extends BeanSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("SerializerSession", new ObjectMap()
-				.append("maxDepth", maxDepth)
-				.append("initialDepth", initialDepth)
-				.append("detectRecursions", detectRecursions)
-				.append("ignoreRecursions", ignoreRecursions)
-				.append("addBeanTypes", addBeanTypes)
-				.append("trimNulls", trimNulls)
-				.append("trimEmptyCollections", trimEmptyCollections)
-				.append("trimEmptyMaps", trimEmptyMaps)
-				.append("trimStrings", trimStrings)
-				.append("sortCollections", sortCollections)
-				.append("sortMaps", sortMaps)
-				.append("addRootType", addRootType)
 				.append("uriResolver", uriResolver)
 			);
 	}
@@ -300,114 +266,6 @@ public abstract class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_maxDepth} setting value for this session.
-	 */
-	protected final int getMaxDepth() {
-		return maxDepth;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_initialDepth} setting value for this session.
-	 */
-	protected final int getInitialDepth() {
-		return initialDepth;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_detectRecursions} setting value for this session.
-	 */
-	protected final boolean isDetectRecursions() {
-		return detectRecursions;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_ignoreRecursions} setting value for this session.
-	 */
-	protected final boolean isIgnoreRecursions() {
-		return ignoreRecursions;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
-	 */
-	protected boolean isAddBeanTypes() {
-		return addBeanTypes;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_addRootType} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_addRootType} setting value for this session.
-	 */
-	protected boolean isAddRootType() {
-		return addRootType;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_trimNullProperties} setting value for this session.
-	 */
-	protected final boolean isTrimNulls() {
-		return trimNulls;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_trimEmptyCollections} setting value for this session.
-	 */
-	protected final boolean isTrimEmptyCollections() {
-		return trimEmptyCollections;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_trimEmptyMaps} setting value for this session.
-	 */
-	protected final boolean isTrimEmptyMaps() {
-		return trimEmptyMaps;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_trimStrings} setting value for this session.
-	 */
-	protected boolean isTrimStrings() {
-		return trimStrings;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_sortCollections} setting value for this session.
-	 */
-	protected final boolean isSortCollections() {
-		return sortCollections;
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_sortMaps} setting value for this session.
-	 */
-	protected final boolean isSortMaps() {
-		return sortMaps;
-	}
-
-	/**
 	 * Push the specified object onto the stack.
 	 *
 	 * @param attrName The attribute name.
@@ -427,8 +285,8 @@ public abstract class SerializerSession extends BeanSession {
 		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : getClassMeta(c);
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
-		if (detectRecursions || isDebug()) {
-			if (stack.size() > maxDepth)
+		if (isDetectRecursions() || isDebug()) {
+			if (stack.size() > getMaxDepth())
 				return null;
 			if (willRecurse(attrName, o, cm))
 				return null;
@@ -452,11 +310,11 @@ public abstract class SerializerSession extends BeanSession {
 	 * @throws SerializeException If recursion occurred.
 	 */
 	protected final boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws SerializeException {
-		if (! (detectRecursions || isDebug()))
+		if (! (isDetectRecursions() || isDebug()))
 			return false;
 		if (! set.containsKey(o))
 			return false;
-		if (ignoreRecursions && ! isDebug())
+		if (isIgnoreRecursions() && ! isDebug())
 			return true;
 
 		stack.add(new StackElement(stack.size(), attrName, o, cm));
@@ -468,7 +326,7 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	protected final void pop() {
 		indent--;
-		if ((detectRecursions || isDebug()) && ! isBottom)  {
+		if ((isDetectRecursions() || isDebug()) && ! isBottom)  {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
@@ -515,7 +373,7 @@ public abstract class SerializerSession extends BeanSession {
 		if (o == null)
 			return null;
 		String s = o.toString();
-		if (trimStrings)
+		if (isTrimStrings())
 			s = s.trim();
 		return s;
 	}
@@ -555,7 +413,7 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	protected final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
 
-		if (trimNulls && value == null)
+		if (isTrimNullProperties() && value == null)
 			return true;
 
 		if (value == null)
@@ -564,7 +422,7 @@ public abstract class SerializerSession extends BeanSession {
 		if (cm == null)
 			cm = object();
 
-		if (trimEmptyCollections) {
+		if (isTrimEmptyCollections()) {
 			if (cm.isArray() || (cm.isObject() && value.getClass().isArray())) {
 				if (((Object[])value).length == 0)
 					return true;
@@ -575,14 +433,14 @@ public abstract class SerializerSession extends BeanSession {
 			}
 		}
 
-		if (trimEmptyMaps) {
+		if (isTrimEmptyMaps()) {
 			if (cm.isMap() || (cm.isObject() && isParentClass(Map.class, value.getClass()))) {
 				if (((Map<?,?>)value).isEmpty())
 					return true;
 			}
 		}
 
-		if (trimNulls && willRecurse(attrName, value, cm))
+		if (isTrimNullProperties() && willRecurse(attrName, value, cm))
 			return true;
 
 		return false;
@@ -595,7 +453,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @return A new sorted {@link TreeMap}.
 	 */
 	protected final <K,V> Map<K,V> sort(Map<K,V> m) {
-		if (sortMaps && m != null && (! m.isEmpty()) && m.keySet().iterator().next() instanceof Comparable<?>)
+		if (isSortMaps() && m != null && (! m.isEmpty()) && m.keySet().iterator().next() instanceof Comparable<?>)
 			return new TreeMap<>(m);
 		return m;
 	}
@@ -607,7 +465,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	protected final <E> Collection<E> sort(Collection<E> c) {
-		if (sortCollections && c != null && (! c.isEmpty()) && c.iterator().next() instanceof Comparable<?>)
+		if (isSortCollections() && c != null && (! c.isEmpty()) && c.iterator().next() instanceof Comparable<?>)
 			return new TreeSet<>(c);
 		return c;
 	}
@@ -729,7 +587,7 @@ public abstract class SerializerSession extends BeanSession {
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
 		String s = o.toString();
-		if (trimStrings)
+		if (isTrimStrings())
 			s = s.trim();
 		return s;
 	}
@@ -865,7 +723,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @return The expected type.
 	 */
 	protected final ClassMeta<?> getExpectedRootType(Object o) {
-		return addRootType ? object() : getClassMetaForObject(o);
+		return isAddRootType() ? object() : getClassMetaForObject(o);
 	}
 
 	/**
@@ -905,5 +763,176 @@ public abstract class SerializerSession extends BeanSession {
 	@SuppressWarnings("unchecked")
 	public <T extends SerializerListener> T getListener(Class<T> c) {
 		return (T)listener;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Initial depth.
+	 *
+	 * @see #SERIALIZER_initialDepth
+	 * @return
+	 * 	The initial indentation level at the root.
+	 */
+	protected final int getInitialDepth() {
+		return ctx.getInitialDepth();
+	}
+
+	/**
+	 * Configuration property:  Max serialization depth.
+	 *
+	 * @see #SERIALIZER_maxDepth
+	 * @return
+	 * 	The depth at which serialization is aborted if depth is reached in the POJO tree.
+	 *	<br>If this depth is exceeded, an exception is thrown.
+	 */
+	protected final int getMaxDepth() {
+		return ctx.getMaxDepth();
+	}
+
+	/**
+	 * Configuration property:  Automatically detect POJO recursions.
+	 * @see #SERIALIZER_detectRecursions
+	 * @return
+	 * 	<jk>true</jk> if recursions should be checked for during serialization.
+	 */
+	protected final boolean isDetectRecursions() {
+		return ctx.isDetectRecursions();
+	}
+
+	/**
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * @see #SERIALIZER_ignoreRecursions
+	 * @return
+	 * 	<jk>true</jk> if when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
+	 * 	<br>Otherwise, a {@link SerializeException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 */
+	protected final boolean isIgnoreRecursions() {
+		return ctx.isIgnoreRecursions();
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #SERIALIZER_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	protected boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
+
+	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 * @see #SERIALIZER_trimNullProperties
+	 * @return
+	 * 	<jk>true</jk> if null bean values are not serialized to the output.
+	 */
+	protected final boolean isTrimNullProperties() {
+		return ctx.isTrimNullProperties();
+	}
+
+	/**
+	 * Configuration property:  Trim empty lists and arrays.
+	 *
+	 * @see #SERIALIZER_trimEmptyCollections
+	 * @return
+	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
+	 */
+	protected final boolean isTrimEmptyCollections() {
+		return ctx.isTrimEmptyCollections();
+	}
+
+	/**
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * @see #SERIALIZER_trimEmptyMaps
+	 * @return
+	 * 	<jk>true</jk> if empty map values are not serialized to the output.
+	 */
+	protected final boolean isTrimEmptyMaps() {
+		return ctx.isTrimEmptyMaps();
+	}
+
+	/**
+	 * Configuration property:  Trim strings.
+	 *
+	 * @see #SERIALIZER_trimStrings
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 */
+	protected boolean isTrimStrings() {
+		return ctx.isTrimStrings();
+	}
+
+	/**
+	 * Configuration property:  Sort arrays and collections alphabetically.
+	 *
+	 * @see #SERIALIZER_sortCollections
+	 * @return
+	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
+	 */
+	protected final boolean isSortCollections() {
+		return ctx.isSortCollections();
+	}
+
+	/**
+	 * Configuration property:  Sort maps alphabetically.
+	 *
+	 * @see #SERIALIZER_sortMaps
+	 * @return
+	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
+	 */
+	protected final boolean isSortMaps() {
+		return ctx.isSortMaps();
+	}
+
+	/**
+	 * Configuration property:  Add type attribute to root nodes.
+	 *
+	 * @see #SERIALIZER_addRootType
+	 * @return
+	 * 	<jk>true</jk> if type property should be added to root node.
+	 */
+	protected final boolean isAddRootType() {
+		return ctx.isAddRootType();
+	}
+
+	/**
+	 * Configuration property:  URI context bean.
+	 *
+	 * @see #SERIALIZER_uriContext
+	 * @return
+	 * 	Bean used for resolution of URIs to absolute or root-relative form.
+	 */
+	protected final UriContext getUriContext() {
+		return getUriContext();
+	}
+
+	/**
+	 * Configuration property:  URI resolution.
+	 *
+	 * @see #SERIALIZER_uriResolution
+	 * @return
+	 * 	Defines the resolution level for URIs when serializing URIs.
+	 */
+	protected final UriResolution getUriResolution() {
+		return ctx.getUriResolution();
+	}
+
+	/**
+	 * Configuration property:  URI relativity.
+	 *
+	 * @see #SERIALIZER_uriRelativity
+	 * @return
+	 * 	Defines what relative URIs are relative to when serializing any of the following:
+	 */
+	protected final UriRelativity getUriRelativity() {
+		return ctx.getUriRelativity();
 	}
 }

@@ -233,7 +233,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 		if (o == null || sType.isChar() && ((Character)o).charValue() == 0) {
 			if (bpm != null) {
-				if (! isTrimNulls()) {
+				if (! isTrimNullProperties()) {
 					n = m.createResource(RDF_NIL);
 				}
 			} else {
@@ -347,7 +347,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws Exception {
-		List<BeanPropertyValue> l = m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
+		List<BeanPropertyValue> l = m.getValues(isTrimNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
 		Collections.reverse(l);
 		for (BeanPropertyValue bpv : l) {
 

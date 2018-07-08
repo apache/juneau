@@ -172,7 +172,7 @@ public class YamlSerializerSession extends WriterSerializerSession {
 		out.append('{');
 
 		boolean addComma = false;
-		for (BeanPropertyValue p : m.getValues(isTrimNulls(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
+		for (BeanPropertyValue p : m.getValues(isTrimNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			if (pMeta.canRead()) {
 				ClassMeta<?> cMeta = p.getClassMeta();

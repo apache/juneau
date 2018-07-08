@@ -268,7 +268,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 			s = DEFAULT_SCHEMA;
 		ObjectMap m = new ObjectMap();
 		if (type.isBean()) {
-			for (BeanPropertyValue p : bs.toBeanMap(o).getValues(isTrimNulls())) {
+			for (BeanPropertyValue p : bs.toBeanMap(o).getValues(isTrimNullProperties())) {
 				if (p.getMeta().canRead()) {
 					Throwable t = p.getThrown();
 					if (t == null)

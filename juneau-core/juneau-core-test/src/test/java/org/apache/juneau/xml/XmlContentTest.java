@@ -12,14 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.annotation.*;
@@ -33,8 +31,8 @@ public class XmlContentTest {
 	@Test
 	public void testContentFormat() throws Exception {
 		A t = A.newInstance(), t2;
-		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ,
-			s2 = XmlSerializer.create().sq().ws().enableNamespaces(false).build();
+		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.builder().trimNullProperties(false).build(),
+			s2 = XmlSerializer.create().sq().ws().enableNamespaces(false).trimNullProperties(false).build();
 		XmlParser p = XmlParser.DEFAULT;
 		WriterSerializerSession session;
 		String r;
@@ -46,7 +44,7 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session = s1.createSession(new SerializerSessionArgs(null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
@@ -54,7 +52,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session = s2.createSession(new SerializerSessionArgs(null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
@@ -141,8 +139,8 @@ public class XmlContentTest {
 	@Test
 	public void testXmlMixed() throws Exception {
 		B t = B.newInstance(), t2;
-		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ,
-			s2 = XmlSerializer.create().sq().ws().enableNamespaces(false).build();
+		XmlSerializer s1 = XmlSerializer.DEFAULT_SQ.builder().trimNullProperties(false).build(),
+			s2 = XmlSerializer.create().sq().ws().enableNamespaces(false).trimNullProperties(false).build();
 		XmlParser p = XmlParser.DEFAULT;
 		WriterSerializerSession session;
 		String r;
@@ -154,7 +152,7 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session = s1.createSession(new SerializerSessionArgs(null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
@@ -162,7 +160,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(new SerializerSessionArgs(new ObjectMap("{"+SERIALIZER_trimNullProperties+":false}"), null, null, null, null, null));
+		session = s2.createSession(new SerializerSessionArgs(null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);

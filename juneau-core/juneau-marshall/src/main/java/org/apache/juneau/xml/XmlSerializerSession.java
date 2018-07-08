@@ -236,7 +236,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					findNsfMappings(o2);
 			}
 			if (bm != null) {
-				for (BeanPropertyValue p : bm.getValues(isTrimNulls())) {
+				for (BeanPropertyValue p : bm.getValues(isTrimNullProperties())) {
 
 					Namespace ns = bpXml(p.getMeta()).getNamespace();
 					if (ns != null && ns.uri != null)
@@ -544,7 +544,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
-		List<BeanPropertyValue> lp = m.getValues(isTrimNulls());
+		List<BeanPropertyValue> lp = m.getValues(isTrimNullProperties());
 
 		XmlBeanMeta xbm = bXml(bm);
 
@@ -672,7 +672,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				serializeAnything(out, content, contentType, null, null, false, cf, isMixed, preserveWhitespace, null);
 			}
 		} else {
-			if (! isTrimNulls()) {
+			if (! isTrimNullProperties()) {
 				if (! isMixed)
 					out.i(indent);
 				out.text(content);
