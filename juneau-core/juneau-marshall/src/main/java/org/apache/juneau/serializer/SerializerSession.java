@@ -83,17 +83,8 @@ public abstract class SerializerSession extends BeanSession {
 		super(ctx, args);
 		this.ctx = ctx;
 		this.javaMethod = args.javaMethod;
-		UriResolution uriResolution;
-		UriRelativity uriRelativity;
-		Class<?> listenerClass;
-
-		uriResolution = getInstanceProperty(SERIALIZER_uriResolution, UriResolution.class, ctx.getUriResolution());
-		uriRelativity = getInstanceProperty(SERIALIZER_uriRelativity, UriRelativity.class, ctx.getUriRelativity());
-		listenerClass = getProperty(SERIALIZER_listener, Class.class, ctx.getListener());
-
-		uriResolver = new UriResolver(uriResolution, uriRelativity, args.uriContext == null ? ctx.getUriContext() : args.uriContext);
-
-		listener = newInstance(SerializerListener.class, listenerClass);
+		uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
+		listener = newInstance(SerializerListener.class, ctx.getListener());
 
 		this.indent = getInitialDepth();
 		if (isDetectRecursions() || isDebug()) {
