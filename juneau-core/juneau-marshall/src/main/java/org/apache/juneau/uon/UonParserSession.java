@@ -39,8 +39,8 @@ public class UonParserSession extends ReaderParserSession {
 
 	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
 
-
-	private final boolean decodeChars, validateEnd;
+	private final UonParser ctx;
+	private final boolean decodeChars;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -53,8 +53,8 @@ public class UonParserSession extends ReaderParserSession {
 	 */
 	protected UonParserSession(UonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		decodeChars = getProperty(UON_decoding, boolean.class, ctx.decodeChars);
-		validateEnd = getProperty(UON_validateEnd, boolean.class, ctx.validateEnd);
+		this.ctx = ctx;
+		decodeChars = getProperty(UON_decoding, boolean.class, ctx.isDecodeChars());
 	}
 
 	@Override /* Session */
@@ -82,8 +82,8 @@ public class UonParserSession extends ReaderParserSession {
 	 */
 	protected UonParserSession(UonParser ctx, ParserSessionArgs args, boolean decodeChars) {
 		super(ctx, args);
+		this.ctx = ctx;
 		this.decodeChars = decodeChars;
-		this.validateEnd = true;
 	}
 
 	@Override /* ParserSession */
@@ -750,7 +750,7 @@ public class UonParserSession extends ReaderParserSession {
 	 * remainder in the input, that it consists only of whitespace and comments.
 	 */
 	private void validateEnd(UonReader r) throws Exception {
-		if (! validateEnd)
+		if (! ctx.isValidateEnd())
 			return;
 		while (true) {
 			int c = r.read();
@@ -779,7 +779,6 @@ public class UonParserSession extends ReaderParserSession {
 	 * @return A new {@link UonReader} object.
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ })
 	public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws Exception {
 		Reader r = pipe.getReader();
 		if (r instanceof UonReader)

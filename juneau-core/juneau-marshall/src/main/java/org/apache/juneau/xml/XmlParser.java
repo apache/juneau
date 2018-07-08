@@ -66,7 +66,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.preserveRootElement.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#preserveRootElement(boolean)}
@@ -112,7 +112,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#reporter(XMLReporter)}
@@ -139,7 +139,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#resolver(XMLResolver)}
@@ -160,7 +160,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#validating(boolean)}
@@ -190,12 +190,12 @@ public class XmlParser extends ReaderParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean
+	private final boolean
 		validating,
 		preserveRootElement;
-	final XMLReporter reporter;
-	final XMLResolver resolver;
-	final XMLEventAllocator eventAllocator;
+	private final XMLReporter reporter;
+	private final XMLResolver resolver;
+	private final XMLEventAllocator eventAllocator;
 
 	/**
 	 * Constructor.
@@ -248,6 +248,66 @@ public class XmlParser extends ReaderParser {
 	@Override /* Parser */
 	public ReaderParserSession createSession(ParserSessionArgs args) {
 		return new XmlParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Enable validation.
+	 *
+	 * @see #XML_validating
+	 * @return
+	 * 	<jk>true</jk> if XML document will be validated.
+	 */
+	public final boolean isValidating() {
+		return validating;
+	}
+
+	/**
+	 * Configuration property:  Preserve root element during generalized parsing.
+	 *
+	 * @see #XML_preserveRootElement
+	 * @return
+	 * 	<jk>true</jk> if when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
+	 * 	is the root element name.
+	 */
+	public final boolean isPreserveRootElement() {
+		return preserveRootElement;
+	}
+
+	/**
+	 * Configuration property:  XML reporter.
+	 *
+	 * @see #XML_reporter
+	 * @return
+	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	public final XMLReporter getReporter() {
+		return reporter;
+	}
+
+	/**
+	 * Configuration property:  XML resolver.
+	 *
+	 * @see #XML_resolver
+	 * @return
+	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	public final XMLResolver getResolver() {
+		return resolver;
+	}
+
+	/**
+	 * Configuration property:  XML event allocator.
+	 *
+	 * @see #XML_eventAllocator
+	 * @return
+	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
+	 */
+	public final XMLEventAllocator getEventAllocator() {
+		return eventAllocator;
 	}
 
 	@Override /* Context */

@@ -178,8 +178,8 @@ public class OpenApiPartParser extends UonPartParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final HttpPartSchema schema;
-	final BeanSession bs;
+	private final HttpPartSchema schema;
+	private final BeanSession bs;
 
 	/**
 	 * Constructor.

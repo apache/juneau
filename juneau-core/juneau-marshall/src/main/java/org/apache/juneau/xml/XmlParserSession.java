@@ -40,12 +40,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 	private static final int UNKNOWN=0, OBJECT=1, ARRAY=2, STRING=3, NUMBER=4, BOOLEAN=5, NULL=6;
 
-	private final boolean
-		validating,
-		preserveRootElement;
-	private final XMLReporter reporter;
-	private final XMLResolver resolver;
-	private final XMLEventAllocator eventAllocator;
+	private final XmlParser ctx;
 	private final StringBuilder rsb = new StringBuilder();  // Reusable string builder used in this class.
 
 	/**
@@ -59,22 +54,13 @@ public class XmlParserSession extends ReaderParserSession {
 	 */
 	protected XmlParserSession(XmlParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		validating = getProperty(XML_validating, boolean.class, ctx.validating);
-		reporter = getInstanceProperty(XML_reporter, XMLReporter.class, ctx.reporter);
-		resolver = getInstanceProperty(XML_resolver, XMLResolver.class, ctx.resolver);
-		eventAllocator = getInstanceProperty(XML_eventAllocator, XMLEventAllocator.class, ctx.eventAllocator);
-		preserveRootElement = getProperty(XML_preserveRootElement, boolean.class, ctx.preserveRootElement);
+		this.ctx = ctx;
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("XmlParser", new ObjectMap()
-				.append("eventAllocator", eventAllocator)
-				.append("preserveRootElement", preserveRootElement)
-				.append("reporter", reporter)
-				.append("resolver", resolver)
-				.append("validating", validating)
 			);
 	}
 
@@ -86,7 +72,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @throws Exception If problem occurred trying to create reader.
 	 */
 	protected final XmlReader getXmlReader(ParserPipe pipe) throws Exception {
-		return new XmlReader(pipe, validating, reporter, resolver, eventAllocator);
+		return new XmlReader(pipe, ctx.isValidating(), ctx.getReporter(), ctx.getResolver(), ctx.getEventAllocator());
 	}
 
 	/**
@@ -296,7 +282,7 @@ public class XmlParserSession extends ReaderParserSession {
 			sType = eType;
 		setCurrentClass(sType);
 
-		String wrapperAttr = (isRoot && preserveRootElement) ? r.getName().getLocalPart() : null;
+		String wrapperAttr = (isRoot && ctx.isPreserveRootElement()) ? r.getName().getLocalPart() : null;
 		String typeAttr = r.getAttributeValue(null, getBeanTypePropertyName(eType));
 		int jsonType = getJsonType(typeAttr);
 		String elementName = getElementName(r);

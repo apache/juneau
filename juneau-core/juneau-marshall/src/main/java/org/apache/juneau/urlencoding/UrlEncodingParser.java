@@ -50,7 +50,7 @@ public class UrlEncodingParser extends UonParser {
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingParser.expandedParams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UrlEncodingParserBuilder#expandedParams(boolean)}
@@ -108,8 +108,7 @@ public class UrlEncodingParser extends UonParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean
-		expandedParams;
+	private final boolean expandedParams;
 
 	/**
 	 * Constructor.
@@ -155,6 +154,22 @@ public class UrlEncodingParser extends UonParser {
 	@Override /* Parser */
 	public UrlEncodingParserSession createSession(ParserSessionArgs args) {
 		return new UrlEncodingParserSession(this, args);
+	}
+
+	//--------------------------------------------------------------------------------
+	// Properties
+	//--------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
+	 *
+	 * @see #URLENC_expandedParams
+	 * @return
+	 * <jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * <br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 */
+	public final boolean isExpandedParams() {
+		return expandedParams;
 	}
 
 	@Override /* Context */

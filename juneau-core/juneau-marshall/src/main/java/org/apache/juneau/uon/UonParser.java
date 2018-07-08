@@ -43,7 +43,7 @@ public class UonParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonParserBuilder#decoding(boolean)}
@@ -84,7 +84,7 @@ public class UonParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"UonParser.validateEnd.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonParserBuilder#validateEnd(boolean)}
@@ -151,7 +151,7 @@ public class UonParser extends ReaderParser {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean
+	private final boolean
 		decodeChars, validateEnd;
 
 	/**
@@ -211,6 +211,34 @@ public class UonParser extends ReaderParser {
 	@Override /* Parser */
 	public UonParserSession createSession(ParserSessionArgs args) {
 		return new UonParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property: Decode <js>"%xx"</js> sequences.
+	 *
+	 * @see #UON_decoding
+	 * @return
+	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
+	 * 	before being passed to this parser.
+	 */
+	public final boolean isDecodeChars() {
+		return decodeChars;
+	}
+
+	/**
+	 * Configuration property:  Validate end.
+	 *
+	 * @see #UON_validateEnd
+	 * @return
+	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
+	 * 	the stream consists of only comments or whitespace.
+	 */
+	public final boolean isValidateEnd() {
+		return validateEnd;
 	}
 
 	@Override /* Context */

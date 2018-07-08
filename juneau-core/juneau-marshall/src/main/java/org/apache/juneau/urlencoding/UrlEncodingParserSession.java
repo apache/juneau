@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -33,7 +31,7 @@ import org.apache.juneau.uon.*;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UrlEncodingParserSession extends UonParserSession {
 
-	private final boolean expandedParams;
+	private final UrlEncodingParser ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -46,14 +44,13 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 */
 	protected UrlEncodingParserSession(UrlEncodingParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		expandedParams = getProperty(URLENC_expandedParams, boolean.class, ctx.expandedParams);
+		this.ctx = ctx;
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UrlEncodingParser", new ObjectMap()
-				.append("expandedParams", expandedParams)
 			);
 	}
 
@@ -66,7 +63,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	public final boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
-			if (expandedParams)
+			if (ctx.isExpandedParams())
 				return true;
 			if (pMeta.getBeanMeta().getClassMeta().getExtendedMeta(UrlEncodingClassMeta.class).isExpandedParams())
 				return true;
