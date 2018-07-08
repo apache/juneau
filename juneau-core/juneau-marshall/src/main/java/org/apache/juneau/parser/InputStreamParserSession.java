@@ -26,6 +26,7 @@ import org.apache.juneau.*;
  */
 public abstract class InputStreamParserSession extends ParserSession {
 
+	private final InputStreamParser ctx;
 	private final BinaryFormat binaryFormat;
 
 	/**
@@ -39,7 +40,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 */
 	protected InputStreamParserSession(InputStreamParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-
+		this.ctx = ctx;
 		binaryFormat = getProperty(ISPARSER_binaryFormat, BinaryFormat.class, BinaryFormat.HEX);
 	}
 
@@ -79,7 +80,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	@SuppressWarnings("resource")
 	@Override /* ParserSession */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), autoCloseStreams, unbuffered, binaryFormat));
+		return setPipe(new ParserPipe(input, isDebug(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), binaryFormat));
 	}
 
 	@Override /* Session */

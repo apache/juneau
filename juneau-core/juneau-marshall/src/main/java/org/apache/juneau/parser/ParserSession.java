@@ -33,8 +33,7 @@ import org.apache.juneau.utils.*;
  */
 public abstract class ParserSession extends BeanSession {
 
-	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
-	final int debugOutputLines;
+	private final Parser ctx;
 	private final Method javaMethod;
 	private final Object outer;
 
@@ -58,14 +57,10 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	protected ParserSession(Parser ctx, ParserSessionArgs args) {
 		super(ctx, args);
-		trimStrings = getProperty(PARSER_trimStrings, boolean.class, ctx.trimStrings);
-		strict = getProperty(PARSER_strict, boolean.class, ctx.strict);
-		autoCloseStreams = getProperty(PARSER_autoCloseStreams, boolean.class, ctx.autoCloseStreams);
-		debugOutputLines = getProperty(PARSER_debugOutputLines, int.class, ctx.debugOutputLines);
-		unbuffered = getProperty(PARSER_unbuffered, boolean.class, ctx.unbuffered);
+		this.ctx = ctx;
 		javaMethod = args.javaMethod;
 		outer = args.outer;
-		listener = getInstanceProperty(PARSER_listener, ParserListener.class, ctx.listener);
+		listener = getInstanceProperty(PARSER_listener, ParserListener.class, ctx.getListenerClass());
 	}
 
 	/**
@@ -85,8 +80,6 @@ public abstract class ParserSession extends BeanSession {
 				.append("javaMethod", javaMethod)
 				.append("listener", listener)
 				.append("outer", outer)
-				.append("strict", strict)
-				.append("trimStrings", trimStrings)
 			);
 	}
 
@@ -215,7 +208,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @return The {@link Parser#PARSER_trimStrings} setting value for this session.
 	 */
 	protected final boolean isTrimStrings() {
-		return trimStrings;
+		return ctx.isTrimStrings();
 	}
 
 	/**
@@ -224,7 +217,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @return The {@link Parser#PARSER_strict} setting value for this session.
 	 */
 	protected final boolean isStrict() {
-		return strict;
+		return ctx.isStrict();
 	}
 
 	/**
@@ -235,7 +228,7 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	@SuppressWarnings("unchecked")
 	protected final <K> K trim(K o) {
-		if (trimStrings && o instanceof String)
+		if (ctx.isTrimStrings() && o instanceof String)
 			return (K)o.toString().trim();
 		return o;
 
@@ -248,7 +241,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	protected final String trim(String s) {
-		if (trimStrings && s != null)
+		if (isTrimStrings() && s != null)
 			return s.trim();
 		return s;
 	}
@@ -766,15 +759,6 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Returns the number of lines to include in exception messages before and after the error location in the input.
-	 *
-	 * @return The number of lines before and after the error.
-	 */
-	public int getDebugOutputLines() {
-		return debugOutputLines;
-	}
-
-	/**
 	 * The {@link #createPipe(Object)} method should call this method to set the pipe for debugging purposes.
 	 *
 	 * @param pipe The pipe created for this session.
@@ -833,5 +817,20 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	public String getInputAsString() {
 		return pipe == null ? null : pipe.getInputAsString();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Debug output lines.
+	 *
+	 * @see #PARSER_debugOutputLines
+	 * @return
+	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
+	 */
+	public final int getDebugOutputLines() {
+		return ctx.isDebugOutputLines();
 	}
 }

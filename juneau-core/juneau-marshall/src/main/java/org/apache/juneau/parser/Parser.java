@@ -132,7 +132,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams(boolean)}
@@ -284,7 +284,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#strict(boolean)}
@@ -357,7 +357,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#trimStrings(boolean)}
@@ -400,7 +400,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#unbuffered(boolean)}
@@ -472,9 +472,9 @@ public abstract class Parser extends BeanContext {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
-	final int debugOutputLines;
-	final Class<? extends ParserListener> listener;
+	private final boolean trimStrings, strict, autoCloseStreams, unbuffered;
+	private final int debugOutputLines;
+	private final Class<? extends ParserListener> listener;
 
 	/** General parser properties currently set on this parser. */
 	private final MediaType[] consumes;
@@ -830,5 +830,77 @@ public abstract class Parser extends BeanContext {
 				if (contentType.equals(mt.toString()))
 					return true;
 		return false;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * @see #PARSER_trimStrings
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * 	the POJO.
+	 */
+	public final boolean isTrimStrings() {
+		return trimStrings;
+	}
+
+	/**
+	 * Configuration property:  Strict mode.
+	 *
+	 * @see #PARSER_strict
+	 * @return
+	 * 	<jk>true</jk> if strict mode for the parser is enabled.
+	 */
+	public final boolean isStrict() {
+		return strict;
+	}
+
+	/**
+	 * Configuration property:  Auto-close streams.
+	 *
+	 * @see #PARSER_autoCloseStreams
+	 * @return
+	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * 	after parsing is complete.
+	 */
+	public final boolean isAutoCloseStreams() {
+		return autoCloseStreams;
+	}
+
+	/**
+	 * Configuration property:  Unbuffered.
+	 *
+	 * @see #PARSER_unbuffered
+	 * @return
+	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
+	 */
+	public final boolean isUnbuffered() {
+		return unbuffered;
+	}
+
+	/**
+	 * Configuration property:  Debug output lines.
+	 *
+	 * @see #PARSER_debugOutputLines
+	 * @return
+	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
+	 */
+	public final int isDebugOutputLines() {
+		return debugOutputLines;
+	}
+
+	/**
+	 * Configuration property:  Parser listener.
+	 *
+	 * @see #PARSER_listener
+	 * @return
+	 * 	Class used to listen for errors and warnings that occur during parsing.
+	 */
+	public final Class<? extends ParserListener> getListenerClass() {
+		return listener;
 	}
 }

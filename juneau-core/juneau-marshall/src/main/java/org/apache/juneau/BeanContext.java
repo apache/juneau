@@ -2923,6 +2923,7 @@ public class BeanContext extends Context {
 	 * @see #BEAN_ignoreUnknownBeanProperties
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
+	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
 	 */
 	public final boolean isIgnoreUnknownBeanProperties() {
 		return ignoreUnknownBeanProperties;

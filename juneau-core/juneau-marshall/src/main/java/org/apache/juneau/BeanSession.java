@@ -77,61 +77,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Returns the locale defined on this session.
-	 *
-	 * <p>
-	 * The locale is determined in the following order:
-	 * <ol>
-	 * 	<li><code>locale</code> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_locale} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
-	 * 	<li>Locale returned by {@link Locale#getDefault()}.
-	 * </ol>
-	 *
-	 * @return The session locale.
-	 */
-	public final Locale getLocale() {
-		return locale;
-	}
-
-	/**
-	 * Returns the timezone defined on this session.
-	 *
-	 * <p>
-	 * The timezone is determined in the following order:
-	 * <ol>
-	 * 	<li><code>timeZone</code> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
-	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
-	 * </ol>
-	 *
-	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
-	 */
-	public final TimeZone getTimeZone() {
-		return timeZone;
-	}
-
-	/**
-	 * Returns the {@link BeanContext#BEAN_debug} setting value for this session.
-	 *
-	 * @return The {@link BeanContext#BEAN_debug} setting value for this session.
-	 */
-	public final boolean isDebug() {
-		return debug;
-	}
-
-	/**
-	 * Bean property getter:  <property>ignoreUnknownBeanProperties</property>.
-	 *
-	 * <p>
-	 * See {@link BeanContext#BEAN_ignoreUnknownBeanProperties}.
-	 *
-	 * @return The value of the <property>ignoreUnknownBeanProperties</property> property on this bean.
-	 */
-	public final boolean isIgnoreUnknownBeanProperties() {
-		return ctx.isIgnoreUnknownBeanProperties();
-	}
-
 	/**
 	 * Converts the specified value to the specified class type.
 	 *
@@ -1231,12 +1176,77 @@ public class BeanSession extends Session {
 		return ctx._class();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns the media type specified for this session.
+	 * Configuration property:  Ignore unknown properties.
+	 *
+	 * @see #BEAN_ignoreUnknownBeanProperties
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
+	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
+	 */
+	public final boolean isIgnoreUnknownBeanProperties() {
+		return ctx.isIgnoreUnknownBeanProperties();
+	}
+
+	/**
+	 * Configuration property:  Debug mode.
+	 *
+	 * @see #BEAN_debug
+	 * @return
+	 * 	<jk>true</jk> if debug mode is enabled.
+	 */
+	public final boolean isDebug() {
+		return debug;
+	}
+
+	/**
+	 * Configuration property:  Locale.
+	 *
+	 * <p>
+	 * The locale is determined in the following order:
+	 * <ol>
+	 * 	<li><code>locale</code> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_locale} entry in parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_locale} setting on bean context.
+	 * 	<li>Locale returned by {@link Locale#getDefault()}.
+	 * </ol>
+	 *
+	 * @see #BEAN_locale
+	 * @return The session locale.
+	 */
+	public final Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * Configuration property:  Time zone.
+	 *
+	 * <p>
+	 * The timezone is determined in the following order:
+	 * <ol>
+	 * 	<li><code>timeZone</code> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} entry in parameter passed in through constructor.
+	 * 	<li>{@link BeanContext#BEAN_timeZone} setting on bean context.
+	 * </ol>
+	 *
+	 * @see #BEAN_timeZone
+	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
+	 */
+	public final TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * Configuration property:  Media type.
 	 *
 	 * <p>
 	 * For example, <js>"application/json"</js>.
 	 *
+	 * @see #BEAN_mediaType
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
 	public final MediaType getMediaType() {
