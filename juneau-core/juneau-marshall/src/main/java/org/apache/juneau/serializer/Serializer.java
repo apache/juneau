@@ -55,7 +55,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#addBeanTypes()}
@@ -115,7 +115,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.addRootType.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#addRootType(boolean)}
@@ -171,7 +171,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.detectRecursions.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions(boolean)}
@@ -242,7 +242,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.ignoreRecursions.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions(boolean)}
@@ -269,7 +269,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.initialDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>0</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#initialDepth(int)}
@@ -311,7 +311,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends SerializerListener&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#listener(Class)}
@@ -374,7 +374,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.maxDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>100</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#maxDepth(int)}
@@ -411,7 +411,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#sortCollections(boolean)}
@@ -452,7 +452,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.sortMaps.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#sortMaps(boolean)}
@@ -493,7 +493,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyCollections.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyCollections(boolean)}
@@ -540,7 +540,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimEmptyMaps.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimEmptyMaps(boolean)}
@@ -584,7 +584,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimNullProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimNullProperties(boolean)}
@@ -627,7 +627,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#trimStrings(boolean)}
@@ -733,7 +733,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriRelativity.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriRelativity})
 	 * 	<li><b>Default:</b>  <js>"RESOURCE"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#uriRelativity(UriRelativity)}
@@ -785,7 +785,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Serializer.uriResolution.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link UriResolution})
 	 * 	<li><b>Default:</b>  <js>"NONE"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link SerializerBuilder#uriResolution(UriResolution)}

@@ -43,7 +43,7 @@ public abstract class ReaderParser extends Parser {
 	 * 	<li><b>Name:</b>  <js>"ReaderParser.fileCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"DEFAULT"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ReaderParserBuilder#fileCharset(String)}

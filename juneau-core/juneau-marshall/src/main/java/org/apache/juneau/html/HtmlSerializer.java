@@ -139,7 +139,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link HtmlSerializerBuilder#addBeanTypes(boolean)}
@@ -165,7 +165,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Html#noTableHeaders()}
@@ -236,7 +236,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLinksInStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link HtmlSerializerBuilder#detectLinksInStrings(boolean)}
@@ -306,7 +306,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.labelParameter.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"label"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link HtmlSerializerBuilder#labelParameter(String)}
@@ -331,7 +331,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.detectLabelParameters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link HtmlSerializerBuilder#detectLabelParameters(boolean)}
@@ -404,7 +404,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlSerializer.uriAnchorText.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link AnchorText})
 	 * 	<li><b>Default:</b>  <js>"TO_STRING"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Html#anchorText()}

@@ -103,7 +103,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#addBeanTypes(boolean)}
@@ -129,7 +129,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.escapeSolidus.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#escapeSolidus(boolean)}
@@ -174,7 +174,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSerializer.simpleMode.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSerializerBuilder#simple(boolean)}

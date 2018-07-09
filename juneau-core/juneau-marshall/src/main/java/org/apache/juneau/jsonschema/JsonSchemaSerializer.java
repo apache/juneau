@@ -48,7 +48,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addDescriptionsTo.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  Empty string.
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addDescriptionsTo(String)}
@@ -85,7 +85,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addExamplesTo.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  Empty string.
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addExamplesTo(String)}
@@ -128,7 +128,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.allowNestedDescriptions.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#allowNestedDescriptions()}
@@ -149,7 +149,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.allowNestedExamples.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#allowNestedExamples()}
@@ -170,7 +170,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.beanDefMapper.o"</js>
 	 * 	<li><b>Data type:</b>  {@link BeanDefMapper}
 	 * 	<li><b>Default:</b>  {@link BasicBeanDefMapper}
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#beanDefMapper(Class)}
@@ -196,7 +196,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.defaultSchema.smo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,ObjectMap&gt;</code>
 	 * 	<li><b>Default:</b>  Empty map.
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#defaultSchema(Class,ObjectMap)}
@@ -219,7 +219,6 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.useBeanDefs.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#useBeanDefs()}
@@ -322,10 +321,10 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
-	final BeanDefMapper beanDefMapper;
-	final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
-	final Map<String,ObjectMap> defaultSchemas;
+	private final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
+	private final BeanDefMapper beanDefMapper;
+	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
+	private final Map<String,ObjectMap> defaultSchemas;
 
 	/**
 	 * Constructor.
@@ -375,5 +374,86 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	@Override /* Serializer */
 	public JsonSchemaSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsonSchemaSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Use bean definitions.
+	 *
+	 * @see #JSONSCHEMA_useBeanDefs
+	 * @return
+	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
+	 */
+	protected final boolean isUseBeanDefs() {
+		return useBeanDefs;
+	}
+
+	/**
+	 * Configuration property:  Allow nested examples.
+	 *
+	 * @see #JSONSCHEMA_allowNestedExamples
+	 * @return
+	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedExamples() {
+		return allowNestedExamples;
+	}
+
+	/**
+	 * Configuration property:  Allow nested descriptions.
+	 *
+	 * @see #JSONSCHEMA_allowNestedDescriptions
+	 * @return
+	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedDescriptions() {
+		return allowNestedDescriptions;
+	}
+
+	/**
+	 * Configuration property:  Bean schema definition mapper.
+	 *
+	 * @see #JSONSCHEMA_beanDefMapper
+	 * @return
+	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
+	 */
+	protected final BeanDefMapper getBeanDefMapper() {
+		return beanDefMapper;
+	}
+
+	/**
+	 * Configuration property:  Add examples.
+	 *
+	 * @see #JSONSCHEMA_addExamplesTo
+	 * @return
+	 * 	Set of categories of types that examples should be automatically added to generated schemas.
+	 */
+	protected final Set<TypeCategory> getAddExamplesTo() {
+		return addExamplesTo;
+	}
+
+	/**
+	 * Configuration property:  Add descriptions to types.
+	 *
+	 * @see #JSONSCHEMA_addDescriptionsTo
+	 * @return
+	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
+	 */
+	protected final Set<TypeCategory> getAddDescriptionsTo() {
+		return addDescriptionsTo;
+	}
+
+	/**
+	 * Configuration property:  Default schemas.
+	 *
+	 * @see #JSONSCHEMA_defaultSchemas
+	 * @return
+	 * 	Custom schema information for particular class types.
+	 */
+	protected final Map<String,ObjectMap> getDefaultSchemas() {
+		return defaultSchemas;
 	}
 }

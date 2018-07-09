@@ -34,7 +34,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.maxIndent.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>100</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#maxIndent(int)}
@@ -73,7 +73,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.quoteChar.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"\""</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#quoteChar(char)}
@@ -113,7 +113,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace(boolean)}

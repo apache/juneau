@@ -35,11 +35,8 @@ import org.apache.juneau.transform.*;
  */
 public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
-	private final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
-	private final BeanDefMapper beanDefMapper;
+	private final JsonSchemaSerializer ctx;
 	private final Map<String,ObjectMap> defs;
-	private final Map<String,ObjectMap> defaultSchemas;
-	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -55,14 +52,8 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 */
 	protected JsonSchemaSerializerSession(JsonSchemaSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		useBeanDefs = getProperty(JSONSCHEMA_useBeanDefs, boolean.class, ctx.useBeanDefs);
-		allowNestedExamples = getProperty(JSONSCHEMA_allowNestedExamples, boolean.class, ctx.allowNestedExamples);
-		allowNestedDescriptions = getProperty(JSONSCHEMA_allowNestedDescriptions, boolean.class, ctx.allowNestedDescriptions);
-		beanDefMapper = getInstanceProperty(JSONSCHEMA_beanDefMapper, BeanDefMapper.class, ctx.beanDefMapper);
-		defaultSchemas = getProperty(JSONSCHEMA_defaultSchemas, Map.class, ctx.defaultSchemas);
-		addExamplesTo = hasProperty(JSONSCHEMA_addExamplesTo) ? TypeCategory.parse(getProperty(JSONSCHEMA_addExamplesTo, String.class)) : ctx.addExamplesTo;
-		addDescriptionsTo = hasProperty(JSONSCHEMA_addDescriptionsTo) ? TypeCategory.parse(getProperty(JSONSCHEMA_addDescriptionsTo, String.class)) : ctx.addDescriptionsTo;
-		defs = useBeanDefs ? new TreeMap<String,ObjectMap>() : null;
+		this.ctx = ctx;
+		defs = isUseBeanDefs() ? new TreeMap<String,ObjectMap>() : null;
 	}
 
 	@Override /* SerializerSession */
@@ -112,7 +103,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		String type = null, format = null;
 		Object example = null, description = null;
 
-		boolean useDef = useBeanDefs && sType.isBean() && pNames == null;
+		boolean useDef = isUseBeanDefs() && sType.isBean() && pNames == null;
 
 		if (useDef) {
 			exampleAdded = false;
@@ -122,7 +113,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		if (useDef && defs.containsKey(getBeanDefId(sType)))
 			return new ObjectMap().append("$ref", getBeanDefUri(sType));
 
-		ObjectMap ds = defaultSchemas.get(sType.getInnerClass().getName());
+		ObjectMap ds = getDefaultSchemas().get(sType.getInnerClass().getName());
 		if (ds != null && ds.containsKey("type"))
 			return out.appendAll(ds);
 
@@ -270,8 +261,8 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	}
 
 	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws Exception {
-		boolean canAdd = allowNestedExamples || ! exampleAdded;
-		if (canAdd && (addExamplesTo.contains(t) || addExamplesTo.contains(ANY))) {
+		boolean canAdd = isAllowNestedExamples() || ! exampleAdded;
+		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
 			Object example = sType.getExample(this);
 			if (example != null)
 				return JsonParser.DEFAULT.parse(serializeJson(example), Object.class);
@@ -280,8 +271,8 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	}
 
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
-		boolean canAdd = allowNestedDescriptions || ! descriptionAdded;
-		if (canAdd && (addDescriptionsTo.contains(t) || addDescriptionsTo.contains(ANY)))
+		boolean canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
+		if (canAdd && (getAddDescriptionsTo().contains(t) || getAddDescriptionsTo().contains(ANY)))
 			return sType.toString();
 		return null;
 	}
@@ -293,7 +284,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * @return The definition ID for the specified class.
 	 */
 	public String getBeanDefId(ClassMeta<?> cm) {
-		return beanDefMapper.getId(cm);
+		return getBeanDefMapper().getId(cm);
 	}
 
 	/**
@@ -303,7 +294,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * @return The definition URI for the specified class.
 	 */
 	public java.net.URI getBeanDefUri(ClassMeta<?> cm) {
-		return beanDefMapper.getURI(cm);
+		return getBeanDefMapper().getURI(cm);
 	}
 
 	/**
@@ -313,7 +304,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * @return The definition URI for the specified class.
 	 */
 	public java.net.URI getBeanDefUri(String id) {
-		return beanDefMapper.getURI(id);
+		return getBeanDefMapper().getURI(id);
 	}
 
 	/**
@@ -342,12 +333,84 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns the value of the {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} setting.
+	 * Configuration property:  Use bean definitions.
 	 *
-	 * @return The value of the {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} setting.
+	 * @see #JSONSCHEMA_useBeanDefs
+	 * @return
+	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
 	 */
-	public boolean isUseBeanDefs() {
-		return useBeanDefs;
+	protected final boolean isUseBeanDefs() {
+		return ctx.isUseBeanDefs();
+	}
+
+	/**
+	 * Configuration property:  Allow nested examples.
+	 *
+	 * @see #JSONSCHEMA_allowNestedExamples
+	 * @return
+	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedExamples() {
+		return ctx.isAllowNestedExamples();
+	}
+
+	/**
+	 * Configuration property:  Allow nested descriptions.
+	 *
+	 * @see #JSONSCHEMA_allowNestedDescriptions
+	 * @return
+	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedDescriptions() {
+		return ctx.isAllowNestedDescriptions();
+	}
+
+	/**
+	 * Configuration property:  Bean schema definition mapper.
+	 *
+	 * @see #JSONSCHEMA_beanDefMapper
+	 * @return
+	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
+	 */
+	protected final BeanDefMapper getBeanDefMapper() {
+		return ctx.getBeanDefMapper();
+	}
+
+	/**
+	 * Configuration property:  Add examples.
+	 *
+	 * @see #JSONSCHEMA_addExamplesTo
+	 * @return
+	 * 	Set of categories of types that examples should be automatically added to generated schemas.
+	 */
+	protected final Set<TypeCategory> getAddExamplesTo() {
+		return ctx.getAddExamplesTo();
+	}
+
+	/**
+	 * Configuration property:  Add descriptions to types.
+	 *
+	 * @see #JSONSCHEMA_addDescriptionsTo
+	 * @return
+	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
+	 */
+	protected final Set<TypeCategory> getAddDescriptionsTo() {
+		return ctx.getAddDescriptionsTo();
+	}
+
+	/**
+	 * Configuration property:  Default schemas.
+	 *
+	 * @see #JSONSCHEMA_defaultSchemas
+	 * @return
+	 * 	Custom schema information for particular class types.
+	 */
+	protected final Map<String,ObjectMap> getDefaultSchemas() {
+		return ctx.getDefaultSchemas();
 	}
 }

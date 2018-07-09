@@ -129,7 +129,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.addBeanTypes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#addBeanTypes(boolean)}
@@ -155,7 +155,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<li><b>Name:</b>  <js>"UonSerializer.encoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonSerializer}, <jk>true</jk> for {@link UrlEncodingSerializer}
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#encoding(boolean)}
@@ -204,7 +204,7 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.paramFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link ParamFormat})
 	 * 	<li><b>Default:</b>  <js>"UON"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonSerializerBuilder#paramFormat(ParamFormat)}

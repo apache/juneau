@@ -175,7 +175,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>5</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#debugOutputLines(int)}
@@ -221,7 +221,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#listener(Class)}
