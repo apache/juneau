@@ -32,10 +32,7 @@ import org.apache.juneau.transform.*;
  */
 public class JsonSerializerSession extends WriterSerializerSession {
 
-	private final boolean
-		simpleMode,
-		escapeSolidus,
-		addBeanTypes;
+	private final JsonSerializer ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -51,18 +48,13 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 */
 	protected JsonSerializerSession(JsonSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		simpleMode = getProperty(JSON_simpleMode, boolean.class, ctx.simpleMode);
-		escapeSolidus = getProperty(JSON_escapeSolidus, boolean.class, ctx.escapeSolidus);
-		addBeanTypes = getProperty(JSON_addBeanTypes, boolean.class, ctx.addBeanTypes);
+		this.ctx = ctx;
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("JsonSerializerSession", new ObjectMap()
-				.append("addBeanTypes", addBeanTypes)
-				.append("escapeSolidus", escapeSolidus)
-				.append("simpleMode", simpleMode)
 			);
 	}
 
@@ -260,17 +252,6 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		return out;
 	}
 
-
-	/**
-	 * Returns the {@link JsonSerializer#JSON_addBeanTypes} setting value for this session.
-	 *
-	 * @return The {@link JsonSerializer#JSON_addBeanTypes} setting value for this session.
-	 */
-	@Override /* SerializerSession */
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
-	}
-
 	/**
 	 * Converts the specified output target object to an {@link JsonWriter}.
 	 *
@@ -282,9 +263,49 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;
-		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), escapeSolidus, getQuoteChar(),
-			simpleMode, isTrimStrings(), getUriResolver());
+		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(),
+			isSimpleMode(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Simple JSON mode.
+	 *
+	 * @see #JSON_simpleMode
+	 * @return
+	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
+	 * 	<br>Otherwise, they are always quoted.
+	 */
+	protected final boolean isSimpleMode() {
+		return ctx.isSimpleMode();
+	}
+
+	/**
+	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 *
+	 * @see #JSON_escapeSolidus
+	 * @return
+	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
+	 */
+	protected final boolean isEscapeSolidus() {
+		return ctx.isEscapeSolidus();
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #JSON_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
 	}
 }

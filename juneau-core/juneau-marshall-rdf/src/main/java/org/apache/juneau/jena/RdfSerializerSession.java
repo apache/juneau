@@ -20,9 +20,11 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.xml.annotation.*;
 
 import com.hp.hpl.jena.rdf.model.*;
 
@@ -36,19 +38,10 @@ import com.hp.hpl.jena.rdf.model.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public final class RdfSerializerSession extends WriterSerializerSession {
 
-	private final String rdfLanguage;
-	private final Namespace juneauNs, juneauBpNs;
-	private final boolean
-		addLiteralTypes,
-		addRootProperty,
-		useXmlNamespaces,
-		looseCollections,
-		autoDetectNamespaces,
-		addBeanTypes;
+	private final RdfSerializer ctx;
 	private final Property pRoot, pValue;
 	private final Model model;
 	private final RDFWriter writer;
-	private final RdfCollectionFormat collectionFormat;
 	private final Namespace[] namespaces;
 
 	/**
@@ -65,31 +58,22 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	protected RdfSerializerSession(RdfSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
+		this.ctx = ctx;
 
-		rdfLanguage = getProperty(RDF_language, String.class, ctx.rdfLanguage);
-		juneauNs = getInstanceProperty(RDF_juneauNs, Namespace.class, ctx.juneauNs);
-		juneauBpNs = getInstanceProperty(RDF_juneauBpNs, Namespace.class, ctx.juneauBpNs);
-		addLiteralTypes = getProperty(RDF_addLiteralTypes, boolean.class, ctx.addLiteralTypes);
-		addRootProperty = getProperty(RDF_addRootProperty, boolean.class, ctx.addRootProperty);
-		collectionFormat = getProperty(RDF_collectionFormat, RdfCollectionFormat.class, ctx.collectionFormat);
-		looseCollections = getProperty(RDF_looseCollections, boolean.class, ctx.looseCollections);
-		useXmlNamespaces = getProperty(RDF_useXmlNamespaces, boolean.class, ctx.useXmlNamespaces);
-		autoDetectNamespaces = getProperty(RDF_autoDetectNamespaces, boolean.class, ctx.autoDetectNamespaces);
 		namespaces = getInstanceArrayProperty(RDF_namespaces, Namespace.class, ctx.namespaces);
-		addBeanTypes = getProperty(RDF_addBeanTypes, boolean.class, ctx.addBeanTypes);
 		model = ModelFactory.createDefaultModel();
-		addModelPrefix(juneauNs);
-		addModelPrefix(juneauBpNs);
+		addModelPrefix(ctx.getJuneauNs());
+		addModelPrefix(ctx.getJuneauBpNs());
 		for (Namespace ns : this.namespaces)
 			addModelPrefix(ns);
-		pRoot = model.createProperty(juneauNs.getUri(), RDF_juneauNs_ROOT);
-		pValue = model.createProperty(juneauNs.getUri(), RDF_juneauNs_VALUE);
-		writer = model.getWriter(rdfLanguage);
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
+		writer = model.getWriter(ctx.getRdfLanguage());
 
 		// Only apply properties with this prefix!
-		String propPrefix = RdfCommon.LANG_PROP_MAP.get(rdfLanguage);
+		String propPrefix = RdfCommon.LANG_PROP_MAP.get(ctx.getRdfLanguage());
 		if (propPrefix == null)
-			throw new FormattedRuntimeException("Unknown RDF language encountered: ''{0}''", rdfLanguage);
+			throw new FormattedRuntimeException("Unknown RDF language encountered: ''{0}''", ctx.getRdfLanguage());
 
 		// RDF/XML specific properties.
 		if (propPrefix.equals("rdfXml.")) {
@@ -110,17 +94,6 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("RdfSerializerSession", new ObjectMap()
-				.append("addBeanTypes", addBeanTypes)
-				.append("addLiteralTypes", addLiteralTypes)
-				.append("addRootProperty", addRootProperty)
-				.append("autoDetectNamespaces", autoDetectNamespaces)
-				.append("collectionFormat", collectionFormat)
-				.append("juneauNs", juneauNs)
-				.append("juneauBpNs", juneauBpNs)
-				.append("looseCollections", looseCollections)
-				.append("namespaces", namespaces)
-				.append("rdfLanguage", rdfLanguage)
-				.append("useXmlNamespaces", useXmlNamespaces)
 			);
 	}
 
@@ -129,16 +102,6 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	private void addModelPrefix(Namespace ns) {
 		model.setNsPrefix(ns.getName(), ns.getUri());
-	}
-
-	/**
-	 * Returns the {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
-	 *
-	 * @return The {@link Serializer#SERIALIZER_addBeanTypes} setting value for this session.
-	 */
-	@Override /* SerializerSession */
-	public final boolean isAddBeanTypes() {
-		return addBeanTypes;
 	}
 
 	/*
@@ -164,7 +127,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		Resource r = null;
 
 		ClassMeta<?> cm = getClassMetaForObject(o);
-		if (looseCollections && cm != null && cm.isCollectionOrArray()) {
+		if (isLooseCollections() && cm != null && cm.isCollectionOrArray()) {
 			Collection c = sort(cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o));
 			for (Object o2 : c)
 				serializeAnything(o2, false, object(), "root", null, null);
@@ -177,7 +140,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				r = n.asResource();
 			}
 
-			if (addRootProperty)
+			if (isAddRootProperty())
 				r.addProperty(pRoot, "true");
 		}
 
@@ -252,7 +215,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			n = m.createLiteral(encodeTextInvalidChars(o));
 
 		} else if (sType.isNumber() || sType.isBoolean()) {
-			if (! addLiteralTypes)
+			if (! isAddLiteralTypes())
 				n = m.createLiteral(o.toString());
 			else
 				n = m.createTypedLiteral(o);
@@ -286,7 +249,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		} else if (sType.isCollectionOrArray() || (wType != null && wType.isCollection())) {
 
 			Collection c = sort(sType.isCollection() ? (Collection)o : toList(sType.getInnerClass(), o));
-			RdfCollectionFormat f = collectionFormat;
+			RdfCollectionFormat f = getCollectionFormat();
 			RdfClassMeta cRdf = cRdf(sType);
 			RdfBeanPropertyMeta bpRdf = bpRdf(bpm);
 
@@ -338,7 +301,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 			Object key = generalize(me.getKey(), keyType);
 
-			Namespace ns = juneauBpNs;
+			Namespace ns = getJuneauBpNs();
 			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
 			RDFNode n = serializeAnything(value, false, valueType, toString(key), null, r);
 			if (n != null)
@@ -369,11 +332,11 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				continue;
 
 			Namespace ns = bpRdf.getNamespace();
-			if (ns == null && useXmlNamespaces)
+			if (ns == null && isUseXmlNamespaces())
 				ns = bpXml.getNamespace();
 			if (ns == null)
-				ns = juneauBpNs;
-			else if (autoDetectNamespaces)
+				ns = getJuneauBpNs();
+			else if (isAutoDetectNamespaces())
 				addModelPrefix(ns);
 
 			Property p = model.createProperty(ns.getUri(), encodeElementName(key));
@@ -412,11 +375,11 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 		for (Object e : c) {
 			Namespace ns = bpRdf.getNamespace();
-			if (ns == null && useXmlNamespaces)
+			if (ns == null && isUseXmlNamespaces())
 				ns = bpXml.getNamespace();
 			if (ns == null)
-				ns = juneauBpNs;
-			else if (autoDetectNamespaces)
+				ns = getJuneauBpNs();
+			else if (isAutoDetectNamespaces())
 				addModelPrefix(ns);
 			RDFNode n2 = serializeAnything(e, false, elementType, null, null, null);
 			Property p = model.createProperty(ns.getUri(), encodeElementName(attrName));
@@ -438,5 +401,124 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 	private static RdfBeanMeta bRdf(BeanMeta bm) {
 		return (RdfBeanMeta)bm.getExtendedMeta(RdfBeanMeta.class);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
+	 *
+	 * @see #RDF_addLiteralTypes
+	 * @return
+	 * 	<jk>true</jk> if XSI data types should be added to string literals.
+	 */
+	protected final boolean isAddLiteralTypes() {
+		return ctx.isAddLiteralTypes();
+	}
+
+	/**
+	 * Configuration property:  Add RDF root identifier property to root node.
+	 *
+	 * @see #RDF_addRootProperty
+	 * @return
+	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * 	to identify the root node in the graph.
+	 */
+	protected final boolean isAddRootProperty() {
+		return ctx.isAddRootProperty();
+	}
+
+	/**
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 *
+	 * @see #RDF_useXmlNamespaces
+	 * @return
+	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be inherited by the RDF serializers.
+	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
+	 */
+	protected final boolean isUseXmlNamespaces() {
+		return ctx.isUseXmlNamespaces();
+	}
+
+	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see #RDF_looseCollections
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	protected final boolean isLooseCollections() {
+		return ctx.isLooseCollections();
+	}
+
+	/**
+	 * Configuration property:  Auto-detect namespace usage.
+	 *
+	 * @see #RDF_autoDetectNamespaces
+	 * @return
+	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
+	 */
+	protected final boolean isAutoDetectNamespaces() {
+		return ctx.isAutoDetectNamespaces();
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #RDF_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 *
+	 * @see #RDF_language
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	protected final String getRdfLanguage() {
+		return ctx.getRdfLanguage();
+	}
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 *
+	 * @see #RDF_juneauNs
+	 * @return
+	 * 	The XML namespace to use for Juneau properties.
+	 */
+	protected final Namespace getJuneauNs() {
+		return ctx.getJuneauNs();
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 *
+	 * @see #RDF_juneauBpNs
+	 * @return
+	 * 	The XML namespace to use for bean properties.
+	 */
+	protected final Namespace getJuneauBpNs() {
+		return ctx.getJuneauBpNs();
+	}
+
+	/**
+	 * Configuration property:  RDF format for representing collections and arrays.
+	 *
+	 * @see #RDF_collectionFormat
+	 * @return
+	 * 	RDF format for representing collections and arrays.
+	 */
+	protected final RdfCollectionFormat getCollectionFormat() {
+		return ctx.getCollectionFormat();
 	}
 }

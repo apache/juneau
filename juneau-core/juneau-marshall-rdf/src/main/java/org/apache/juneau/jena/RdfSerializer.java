@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * Serializes POJOs to RDF.
@@ -295,17 +296,17 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean
+	private final boolean
 		addLiteralTypes,
 		addRootProperty,
 		useXmlNamespaces,
 		looseCollections,
 		autoDetectNamespaces,
 		addBeanTypes;
-	final String rdfLanguage;
-	final Namespace juneauNs;
-	final Namespace juneauBpNs;
-	final RdfCollectionFormat collectionFormat;
+	private final String rdfLanguage;
+	private final Namespace juneauNs;
+	private final Namespace juneauBpNs;
+	private final RdfCollectionFormat collectionFormat;
 	final Map<String,Object> jenaSettings;
 	final Namespace[] namespaces;
 
@@ -392,6 +393,125 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new RdfSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
+	 *
+	 * @see #RDF_addLiteralTypes
+	 * @return
+	 * 	<jk>true</jk> if XSI data types should be added to string literals.
+	 */
+	protected final boolean isAddLiteralTypes() {
+		return addLiteralTypes;
+	}
+
+	/**
+	 * Configuration property:  Add RDF root identifier property to root node.
+	 *
+	 * @see #RDF_addRootProperty
+	 * @return
+	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
+	 * 	to identify the root node in the graph.
+	 */
+	protected final boolean isAddRootProperty() {
+		return addRootProperty;
+	}
+
+	/**
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 *
+	 * @see #RDF_useXmlNamespaces
+	 * @return
+	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
+	 */
+	protected final boolean isUseXmlNamespaces() {
+		return useXmlNamespaces;
+	}
+
+	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see #RDF_looseCollections
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	protected final boolean isLooseCollections() {
+		return looseCollections;
+	}
+
+	/**
+	 * Configuration property:  Auto-detect namespace usage.
+	 *
+	 * @see #RDF_autoDetectNamespaces
+	 * @return
+	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
+	 */
+	protected final boolean isAutoDetectNamespaces() {
+		return autoDetectNamespaces;
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #RDF_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 *
+	 * @see #RDF_language
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	protected final String getRdfLanguage() {
+		return rdfLanguage;
+	}
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 *
+	 * @see #RDF_juneauNs
+	 * @return
+	 * 	The XML namespace to use for Juneau properties.
+	 */
+	protected final Namespace getJuneauNs() {
+		return juneauNs;
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 *
+	 * @see #RDF_juneauBpNs
+	 * @return
+	 * 	The XML namespace to use for bean properties.
+	 */
+	protected final Namespace getJuneauBpNs() {
+		return juneauBpNs;
+	}
+
+	/**
+	 * Configuration property:  RDF format for representing collections and arrays.
+	 *
+	 * @see #RDF_collectionFormat
+	 * @return
+	 * 	RDF format for representing collections and arrays.
+	 */
+	protected final RdfCollectionFormat getCollectionFormat() {
+		return collectionFormat;
 	}
 
 	@Override /* Context */
