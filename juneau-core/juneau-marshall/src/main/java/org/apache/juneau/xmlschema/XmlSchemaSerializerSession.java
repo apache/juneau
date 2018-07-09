@@ -226,23 +226,8 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* SerializerSession */
-	protected boolean isUseWhitespace() {
-		return super.isUseWhitespace();
-	}
-
-	@Override /* SerializerSession */
-	protected int getMaxIndent() {
-		return super.getMaxIndent();
-	}
-
-	@Override /* SerializerSession */
 	protected boolean isTrimStrings() {
 		return super.isTrimStrings();
-	}
-
-	@Override /* SerializerSession */
-	protected char getQuoteChar() {
-		return super.getQuoteChar();
 	}
 
 	/* An encapsulation of a single schema. */

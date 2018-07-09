@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.msgpack.MsgPackSerializer.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -30,8 +28,7 @@ import org.apache.juneau.transform.*;
  */
 public final class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
-	private final boolean
-		addBeanTypes;
+	private final MsgPackSerializer ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -47,25 +44,14 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	 */
 	protected MsgPackSerializerSession(MsgPackSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		addBeanTypes = getProperty(MSGPACK_addBeanTypes, boolean.class, ctx.addBeanTypes);
+		this.ctx = ctx;
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("MsgPackSerializerSession", new ObjectMap()
-				.append("addBeanTypes", addBeanTypes)
 			);
-	}
-
-	/**
-	 * Returns the {@link MsgPackSerializer#MSGPACK_addBeanTypes} setting value for this session.
-	 *
-	 * @return The {@link MsgPackSerializer#MSGPACK_addBeanTypes} setting value for this session.
-	 */
-	@Override /* SerializerSession */
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
 	}
 
 	@Override /* SerializerSession */
@@ -233,5 +219,14 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 
 		for (Object o : l)
 			serializeAnything(out, o, elementType, "<iterator>", null);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
 	}
 }

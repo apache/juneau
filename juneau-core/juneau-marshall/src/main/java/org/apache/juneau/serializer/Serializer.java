@@ -1137,7 +1137,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
 	 */
-	protected final boolean isAddBeanTypes() {
+	protected boolean isAddBeanTypes() {
 		return addBeanTypes;
 	}
 

@@ -157,9 +157,9 @@ public abstract class WriterSerializer extends Serializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final int maxIndent;
-	final boolean useWhitespace;
-	final char quoteChar;
+	private final int maxIndent;
+	private final boolean useWhitespace;
+	private final char quoteChar;
 
 	/**
 	 * Constructor.
@@ -262,6 +262,43 @@ public abstract class WriterSerializer extends Serializer {
 	public final WriterSerializer println(Object o) {
 		System.out.println(toString(o));  // NOT DEBUG
 		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Maximum indentation.
+	 *
+	 * @see #WSERIALIZER_maxIndent
+	 * @return
+	 * 	The maximum indentation level in the serialized document.
+	 */
+	protected final int getMaxIndent() {
+		return maxIndent;
+	}
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * @see #WSERIALIZER_useWhitespace
+	 * @return
+	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
+	 */
+	protected final boolean isUseWhitespace() {
+		return useWhitespace;
+	}
+
+	/**
+	 * Configuration property:  Quote character.
+	 *
+	 * @see #WSERIALIZER_quoteChar
+	 * @return
+	 * 	The character used for quoting attributes and values.
+	 */
+	protected final char getQuoteChar() {
+		return quoteChar;
 	}
 
 	@Override /* Context */

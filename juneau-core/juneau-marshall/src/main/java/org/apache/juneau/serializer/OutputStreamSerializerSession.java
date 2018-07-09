@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  */
 public abstract class OutputStreamSerializerSession extends SerializerSession {
 
-	private final BinaryFormat binaryFormat;
+	private final OutputStreamSerializer ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -48,8 +48,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	 */
 	protected OutputStreamSerializerSession(OutputStreamSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-
-		binaryFormat = getProperty(OSSERIALIZER_binaryFormat, BinaryFormat.class, ctx.binaryFormat);
+		this.ctx = ctx;
 	}
 
 	/**
@@ -84,11 +83,26 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	@Override /* SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		byte[] b = serialize(o);
-		switch(binaryFormat) {
+		switch(getBinaryFormat()) {
 			case SPACED_HEX:  return StringUtils.toSpacedHex(b);
 			case HEX:  return StringUtils.toHex(b);
 			case BASE64:  return StringUtils.base64Encode(b);
 			default: return null;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Binary output format.
+	 *
+	 * @see #OSSERIALIZER_binaryFormat
+	 * @return
+	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
+	 */
+	protected final BinaryFormat getBinaryFormat() {
+		return ctx.getBinaryFormat();
 	}
 }

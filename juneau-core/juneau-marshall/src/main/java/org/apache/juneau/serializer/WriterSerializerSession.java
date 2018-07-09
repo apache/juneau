@@ -36,9 +36,7 @@ import org.apache.juneau.*;
  */
 public abstract class WriterSerializerSession extends SerializerSession {
 
-	private final int maxIndent;
-	private final boolean useWhitespace;
-	private final char quoteChar;
+	private final WriterSerializer ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -54,10 +52,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 */
 	protected WriterSerializerSession(WriterSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-
-		useWhitespace = getProperty(WSERIALIZER_useWhitespace, boolean.class, ctx.useWhitespace);
-		maxIndent = getProperty(WSERIALIZER_maxIndent, int.class, ctx.maxIndent);
-		quoteChar = getProperty(WSERIALIZER_quoteChar, String.class, ""+ctx.quoteChar).charAt(0);
+		this.ctx = ctx;
 	}
 
 	/**
@@ -94,40 +89,47 @@ public abstract class WriterSerializerSession extends SerializerSession {
 		return serialize(o);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns the {@link WriterSerializer#WSERIALIZER_useWhitespace} setting value for this session.
+	 * Configuration property:  Maximum indentation.
 	 *
-	 * @return The {@link WriterSerializer#WSERIALIZER_useWhitespace} setting value for this session.
+	 * @see #WSERIALIZER_maxIndent
+	 * @return
+	 * 	The maximum indentation level in the serialized document.
 	 */
-	protected boolean isUseWhitespace() {
-		return useWhitespace;
+	public final int getMaxIndent() {
+		return ctx.getMaxIndent();
 	}
 
 	/**
-	 * Returns the {@link WriterSerializer#WSERIALIZER_maxIndent} setting value for this session.
+	 * Configuration property:  Use whitespace.
 	 *
-	 * @return The {@link WriterSerializer#WSERIALIZER_maxIndent} setting value for this session.
+	 * @see #WSERIALIZER_useWhitespace
+	 * @return
+	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
 	 */
-	protected int getMaxIndent() {
-		return maxIndent;
+	public final boolean isUseWhitespace() {
+		return ctx.isUseWhitespace();
 	}
 
 	/**
-	 * Returns the {@link WriterSerializer#WSERIALIZER_quoteChar} setting value for this session.
+	 * Configuration property:  Quote character.
 	 *
-	 * @return The {@link WriterSerializer#WSERIALIZER_quoteChar} setting value for this session.
+	 * @see #WSERIALIZER_quoteChar
+	 * @return
+	 * 	The character used for quoting attributes and values.
 	 */
-	protected char getQuoteChar() {
-		return quoteChar;
+	public final char getQuoteChar() {
+		return ctx.getQuoteChar();
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("WriterSerializerSession", new ObjectMap()
-				.append("maxIndent", maxIndent)
-				.append("useWhitespace", useWhitespace)
-				.append("quoteChar", quoteChar)
 			);
 	}
 }

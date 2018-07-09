@@ -55,15 +55,15 @@ public class RootContentTest extends ContentComboTestBase {
 			{ 	/* 4 */
 				new ComboInput("HTML-nav-popup-contentType", "/", MediaType.HTML,
 					"<div class='popup-content'>",
-					"<a href='/?plainText=true&Accept=application%2Fjson'>application/json</a>"
+					"/?plainText=true&Accept=application%2Fjson"
 				)
 			},
 			{ 	/* 5 */
 				new ComboInput("HTML-nav-popup-styles", "/", MediaType.HTML,
-					"<a href='/?stylesheet=htdocs%2Fthemes%2Fdevops.css'>devops</a>",
-					"<a href='/?stylesheet=htdocs%2Fthemes%2Flight.css'>light</a>",
-					"<a href='/?stylesheet=htdocs%2Fthemes%2Foriginal.css'>original</a>",
-					"<a href='/?stylesheet=htdocs%2Fthemes%2Fdark.css'>dark</a>"
+					"/?stylesheet=htdocs%2Fthemes%2Fdevops.css",
+					"/?stylesheet=htdocs%2Fthemes%2Flight.css",
+					"/?stylesheet=htdocs%2Fthemes%2Foriginal.css",
+					"/?stylesheet=htdocs%2Fthemes%2Fdark.css"
 				)
 			},
 			{ 	/* 6 */

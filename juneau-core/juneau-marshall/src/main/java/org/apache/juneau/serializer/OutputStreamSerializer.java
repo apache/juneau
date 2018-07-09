@@ -80,7 +80,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final BinaryFormat binaryFormat;
+	private final BinaryFormat binaryFormat;
 
 	/**
 	 * Constructor.
@@ -143,6 +143,21 @@ public abstract class OutputStreamSerializer extends Serializer {
 	@Override
 	public final byte[] serialize(Object o) throws SerializeException {
 		return createSession(createDefaultSessionArgs()).serialize(o);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Binary output format.
+	 *
+	 * @see #OSSERIALIZER_binaryFormat
+	 * @return
+	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
+	 */
+	protected final BinaryFormat getBinaryFormat() {
+		return binaryFormat;
 	}
 
 	@Override /* Context */

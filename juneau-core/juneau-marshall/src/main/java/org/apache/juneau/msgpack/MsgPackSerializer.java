@@ -110,7 +110,7 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean
+	private final boolean
 		addBeanTypes;
 
 	/**
@@ -147,6 +147,15 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 	@Override /* Serializer */
 	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
 		return new MsgPackSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	@Override /* Context */
