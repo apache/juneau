@@ -30,10 +30,8 @@ import org.apache.juneau.transform.*;
  */
 public class UonSerializerSession extends WriterSerializerSession {
 
-	private final boolean
-		encodeChars,
-		addBeanTypes,
-		plainTextParams;
+	private final UonSerializer ctx;
+	private final boolean plainTextParams;
 
 	/**
 	 * @param ctx
@@ -48,29 +46,15 @@ public class UonSerializerSession extends WriterSerializerSession {
 	 */
 	public UonSerializerSession(UonSerializer ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
-		encodeChars = encode == null ? getProperty(UON_encoding, boolean.class, ctx.encodeChars) : encode;
-		addBeanTypes = getProperty(UON_addBeanTypes, boolean.class, ctx.addBeanTypes);
-		plainTextParams = getProperty(UON_paramFormat, ParamFormat.class, ctx.paramFormat) == ParamFormat.PLAINTEXT;
+		this.ctx = ctx;
+		plainTextParams = getProperty(UON_paramFormat, ParamFormat.class, ctx.getParamFormat()) == ParamFormat.PLAINTEXT;
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UonSerializerSession", new ObjectMap()
-				.append("addBeanTypes", addBeanTypes)
-				.append("encodeChars", encodeChars)
-				.append("plainTextParams", plainTextParams)
 			);
-	}
-
-	/**
-	 * Returns the {@link UonSerializer#UON_addBeanTypes} setting value for this session.
-	 *
-	 * @return The {@link UonSerializer#UON_addBeanTypes} setting value for this session.
-	 */
-	@Override /* SerializerSession */
-	public final boolean isAddBeanTypes() {
-		return addBeanTypes;
 	}
 
 	/**
@@ -84,7 +68,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), encodeChars, isTrimStrings(), plainTextParams, getUriResolver());
+		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), plainTextParams, getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -275,5 +259,44 @@ public class UonSerializerSession extends WriterSerializerSession {
 			out.append(')');
 
 		return out;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Encode non-valid URI characters.
+	 *
+	 * @see #UON_encoding
+	 * @return
+	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
+	 */
+	protected final boolean isEncodeChars() {
+		return ctx.isEncodeChars();
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #UON_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
+
+	/**
+	 * Configuration property:  Format to use for query/form-data/header values.
+	 *
+	 * @see #UON_paramFormat
+	 * @return
+	 * 	Specifies the format to use for URL GET parameter keys and values.
+	 */
+	protected final ParamFormat getParamFormat() {
+		return ctx.getParamFormat();
 	}
 }

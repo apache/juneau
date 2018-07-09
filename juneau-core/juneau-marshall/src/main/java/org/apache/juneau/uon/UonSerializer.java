@@ -303,11 +303,11 @@ public class UonSerializer extends WriterSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean
+	private final boolean
 		encodeChars,
 		addBeanTypes;
 
-	final ParamFormat
+	private final ParamFormat
 		paramFormat;
 
 	/**
@@ -383,6 +383,45 @@ public class UonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new UonSerializerSession(this, null, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Encode non-valid URI characters.
+	 *
+	 * @see #UON_encoding
+	 * @return
+	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
+	 */
+	protected final boolean isEncodeChars() {
+		return encodeChars;
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #UON_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
+	}
+
+	/**
+	 * Configuration property:  Format to use for query/form-data/header values.
+	 *
+	 * @see #UON_paramFormat
+	 * @return
+	 * 	Specifies the format to use for URL GET parameter keys and values.
+	 */
+	protected final ParamFormat getParamFormat() {
+		return paramFormat;
 	}
 
 	@Override /* Context */

@@ -26,6 +26,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xmlschema.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlSerializer}.
@@ -37,17 +38,9 @@ import org.apache.juneau.xml.annotation.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class XmlSerializerSession extends WriterSerializerSession {
 
-	private final boolean
-		autoDetectNamespaces,
-		enableNamespaces,
-		addNamespaceUrlsToRoot,
-		addBeanTypes;
-
+	private final XmlSerializer ctx;
 	private Namespace
 		defaultNamespace;
-	private final Namespace
-		xsNamespace;
-
 	private Namespace[] namespaces = new Namespace[0];
 
 	/**
@@ -64,13 +57,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	protected XmlSerializerSession(XmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		enableNamespaces = getProperty(XML_enableNamespaces, boolean.class, ctx.enableNamespaces);
-		autoDetectNamespaces = getProperty(XML_autoDetectNamespaces, boolean.class, ctx.autoDetectNamespaces);
-		addNamespaceUrlsToRoot = getProperty(XML_addNamespaceUrisToRoot, boolean.class, ctx.addNamespaceUrlsToRoot);
-		addBeanTypes = getProperty(XML_addBeanTypes, boolean.class, ctx.addBeanTypes);
-		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, ctx.namespaces);
-		defaultNamespace = findDefaultNamespace(getInstanceProperty(XML_defaultNamespace, Namespace.class, ctx.defaultNamespace));
-		xsNamespace = getInstanceProperty(XML_xsNamespace, Namespace.class, ctx.xsNamespace);
+		this.ctx = ctx;
+		namespaces = getInstanceArrayProperty(XML_namespaces, Namespace.class, ctx.getNamespaces());
+		defaultNamespace = findDefaultNamespace(getInstanceProperty(XML_defaultNamespace, Namespace.class, ctx.getDefaultNamespace()));
 	}
 
 	private Namespace findDefaultNamespace(Namespace n) {
@@ -79,12 +68,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (n.name != null && n.uri != null)
 			return n;
 		if (n.uri == null) {
-			for (Namespace n2 : namespaces)
+			for (Namespace n2 : getNamespaces())
 				if (n2.name.equals(n.name))
 					return n2;
 		}
 		if (n.name == null) {
-			for (Namespace n2 : namespaces)
+			for (Namespace n2 : getNamespaces())
 				if (n2.uri.equals(n.uri))
 					return n2;
 		}
@@ -95,13 +84,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("XmlSerializerSession", new ObjectMap()
-				.append("addBeanTypes", addBeanTypes)
-				.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
-				.append("autoDetectNamespaces", autoDetectNamespaces)
-				.append("defaultNamespace", defaultNamespace)
-				.append("enableNamespaces", enableNamespaces)
-				.append("namespaces", namespaces)
-				.append("xsNamespace", xsNamespace)
 			);
 	}
 
@@ -122,16 +104,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			defaultNamespace = ns;
 		else
 			namespaces = append(namespaces, ns);
-	}
-
-	/**
-	 * Returns the {@link XmlSerializer#XML_addBeanTypes} setting value for this session.
-	 *
-	 * @return The {@link XmlSerializer#XML_addBeanTypes} setting value for this session.
-	 */
-	@Override /* SerializerSession */
-	protected boolean isAddBeanTypes() {
-		return addBeanTypes;
 	}
 
 	/**
@@ -158,16 +130,16 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
-		XmlWriter w = new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), enableNamespaces, defaultNamespace);
+		XmlWriter w = new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), defaultNamespace);
 		out.setWriter(w);
 		return w;
 	}
 
 	@Override /* Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		if (enableNamespaces && autoDetectNamespaces)
+		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);
-		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, enableNamespaces && addNamespaceUrlsToRoot, XmlFormat.DEFAULT, false, false, null);
+		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, isEnableNamespaces() && isAddNamespaceUrlsToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
 
 	/**
@@ -380,7 +352,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			isExpectedType = true;
 		}
 
-		if (enableNamespaces) {
+		if (isEnableNamespaces()) {
 			if (elementNamespace == null)
 				elementNamespace = cXml(sType).getNamespace();
 			if (elementNamespace == null)
@@ -404,7 +376,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		boolean encodeEn = elementName != null;
 		String ns = (elementNamespace == null ? null : elementNamespace.name);
 		String dns = null, elementNs = null;
-		if (enableNamespaces) {
+		if (isEnableNamespaces()) {
 			dns = elementName == null && defaultNamespace != null ? defaultNamespace.name : null;
 			elementNs = elementName == null ? dns : ns;
 			if (elementName == null)
@@ -577,7 +549,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						continue;
 
 					XmlBeanPropertyMeta bpXml = bpXml(pMeta);
-					Namespace ns = (enableNamespaces && bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);
+					Namespace ns = (isEnableNamespaces() && bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);
 
 					if (pMeta.isUri()  ) {
 						out.attrUri(ns, key, value);
@@ -754,57 +726,87 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		CR_ELEMENTS   // Elements...use normal whitespace rules.
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Bean property getter:  <property>defaultNamespace</property>.
+	 * Configuration property:  Auto-detect namespace usage.
 	 *
-	 * @return The value of the <property>defaultNamespace</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @see #XML_autoDetectNamespaces
+	 * @return
+	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
-	protected Namespace getDefaultNamespace() {
+	protected final boolean isAutoDetectNamespaces() {
+		return ctx.isAutoDetectNamespaces();
+	}
+
+	/**
+	 * Configuration property:  Enable support for XML namespaces.
+	 *
+	 * @see #XML_enableNamespaces
+	 * @return
+	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
+	 */
+	protected final boolean isEnableNamespaces() {
+		return ctx.isEnableNamespaces();
+	}
+
+	/**
+	 * Configuration property:  Add namespace URLs to the root element.
+	 *
+	 * @see #XML_addNamespaceUrisToRoot
+	 * @return
+	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
+	 */
+	protected final boolean isAddNamespaceUrlsToRoot() {
+		return ctx.isAddNamespaceUrlsToRoot();
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #XML_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if<js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
+
+	/**
+	 * Configuration property:  Default namespace.
+	 *
+	 * @see #XML_defaultNamespace
+	 * @return
+	 * 	The default namespace URI for this document.
+	 */
+	protected final Namespace getDefaultNamespace() {
 		return defaultNamespace;
 	}
 
 	/**
-	 * Bean property getter:  <property>namespaces</property>.
+	 * Configuration property:  XMLSchema namespace.
 	 *
-	 * @return The value of the <property>namespaces</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @see #XML_xsNamespace
+	 * @return
+	 * 	The namespace for the <code>XMLSchema</code> namespace, used by the schema generated by the
+	 * 	{@link XmlSchemaSerializer} class.
 	 */
-	protected Namespace[] getNamespaces() {
+	protected final Namespace getXsNamespace() {
+		return ctx.getXsNamespace();
+	}
+
+	/**
+	 * Configuration property:  Default namespaces.
+	 *
+	 * @see #XML_namespaces
+	 * @return
+	 * 	The default list of namespaces associated with this serializer.
+	 */
+	protected final Namespace[] getNamespaces() {
 		return namespaces;
-	}
-
-	/**
-	 * Bean property getter:  <property>autoDetectNamespaces</property>.
-	 *
-	 * @return The value of the <property>autoDetectNamespaces</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	protected boolean isAutoDetectNamespaces() {
-		return autoDetectNamespaces;
-	}
-
-	/**
-	 * Bean property getter:  <property>enableNamespaces</property>.
-	 *
-	 * @return The value of the <property>enableNamespaces</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	protected boolean isEnableNamespaces() {
-		return enableNamespaces;
-	}
-
-	/**
-	 * Bean property getter:  <property>addNamespaceUrlsToRoot</property>.
-	 *
-	 * @return The value of the <property>addNamespaceUrlsToRoot</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	protected boolean isAddNamespaceUrlsToRoot() {
-		return addNamespaceUrlsToRoot;
-	}
-
-	/**
-	 * Bean property getter:  <property>xsNamespace</property>.
-	 *
-	 * @return The value of the <property>xsNamespace</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	protected Namespace getXsNamespace() {
-		return xsNamespace;
 	}
 }

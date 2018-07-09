@@ -34,7 +34,7 @@ import org.apache.juneau.uon.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class UrlEncodingSerializerSession extends UonSerializerSession {
 
-	private final boolean expandedParams;
+	private final UrlEncodingSerializer ctx;
 
 	/**
 	 * Constructor.
@@ -51,14 +51,13 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	protected UrlEncodingSerializerSession(UrlEncodingSerializer ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, encode, args);
-		expandedParams = getProperty(URLENC_expandedParams, boolean.class, ctx.expandedParams);
+		this.ctx = ctx;
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UrlEncodingSerializerSession", new ObjectMap()
-				.append("expandedParams", expandedParams)
 			);
 	}
 
@@ -68,7 +67,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
-			if (expandedParams)
+			if (isExpandedParams())
 				return true;
 			if (pMeta.getBeanMeta().getClassMeta().getExtendedMeta(UrlEncodingClassMeta.class).isExpandedParams())
 				return true;
@@ -80,11 +79,11 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * Returns <jk>true</jk> if the specified value should be represented as an expanded parameter list.
 	 */
 	private boolean shouldUseExpandedParams(Object value) {
-		if (value == null || ! expandedParams)
+		if (value == null || ! isExpandedParams())
 			return false;
 		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
-			if (expandedParams)
+			if (isExpandedParams())
 				return true;
 		}
 		return false;
@@ -264,5 +263,21 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			}
 		}
 		return out;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
+	 *
+	 * @see #URLENC_expandedParams
+	 * @return
+	 * 	<jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * 	<br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 */
+	protected final boolean isExpandedParams() {
+		return ctx.isExpandedParams();
 	}
 }

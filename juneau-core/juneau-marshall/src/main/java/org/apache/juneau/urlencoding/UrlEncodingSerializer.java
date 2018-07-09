@@ -246,7 +246,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final boolean
+	private final boolean
 		expandedParams;
 
 	/**
@@ -326,6 +326,22 @@ public class UrlEncodingSerializer extends UonSerializer {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new UrlEncodingSerializerSession(this, null, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
+	 *
+	 * @see #URLENC_expandedParams
+	 * @return
+	 * 	<jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
+	 * 	<br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
+	 */
+	protected final boolean isExpandedParams() {
+		return expandedParams;
 	}
 
 	@Override /* Context */
