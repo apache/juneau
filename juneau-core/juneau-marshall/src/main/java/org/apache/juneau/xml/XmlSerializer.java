@@ -592,7 +592,7 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
+	protected boolean isAddBeanTypes() {
 		return addBeanTypes;
 	}
 

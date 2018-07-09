@@ -628,13 +628,13 @@ public class HtmlSerializer extends XmlSerializer {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final AnchorText uriAnchorText;
-	final boolean
+	private final AnchorText uriAnchorText;
+	private final boolean
 		lookForLabelParameters,
 		detectLinksInStrings,
 		addKeyValueTableHeaders,
 		addBeanTypes;
-	final String labelParameter;
+	private final String labelParameter;
 
 	private volatile HtmlSchemaDocSerializer schemaSerializer;
 
@@ -716,6 +716,79 @@ public class HtmlSerializer extends XmlSerializer {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Look for link labels in URIs.
+	 *
+	 * @see #HTML_detectLabelParameters
+	 * @return
+	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 */
+	protected final boolean isLookForLabelParameters() {
+		return lookForLabelParameters;
+	}
+
+	/**
+	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 *
+	 * @see #HTML_detectLinksInStrings
+	 * @return
+	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
+	 */
+	protected final boolean isDetectLinksInStrings() {
+		return detectLinksInStrings;
+	}
+
+	/**
+	 * Configuration property:  Add key/value headers on bean/map tables.
+	 *
+	 * @see #HTML_addKeyValueTableHeaders
+	 * @return
+	 * 	<jk>true</jk> if <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
+	 */
+	protected final boolean isAddKeyValueTableHeaders() {
+		return addKeyValueTableHeaders;
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #HTML_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
+	}
+
+	/**
+	 * Configuration property:  Link label parameter name.
+	 *
+	 * @see #HTML_labelParameter
+	 * @return
+	 * 	The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
+	 */
+	protected final String getLabelParameter() {
+		return labelParameter;
+	}
+
+	/**
+	 * Configuration property:  Anchor text source.
+	 *
+	 * @see #HTML_uriAnchorText
+	 * @return
+	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
+	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
+	 */
+	protected final AnchorText getUriAnchorText() {
+		return uriAnchorText;
 	}
 
 	@Override /* Context */

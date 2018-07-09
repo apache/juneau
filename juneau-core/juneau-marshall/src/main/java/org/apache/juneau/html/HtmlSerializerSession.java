@@ -38,12 +38,7 @@ import org.apache.juneau.xml.annotation.*;
  */
 public class HtmlSerializerSession extends XmlSerializerSession {
 
-	private final AnchorText anchorText;
-	private final boolean
-		detectLinksInStrings,
-		lookForLabelParameters,
-		addKeyValueTableHeaders,
-		addBeanTypes;
+	private final HtmlSerializer ctx;
 	private final Pattern urlPattern = Pattern.compile("http[s]?\\:\\/\\/.*");
 	private final Pattern labelPattern;
 
@@ -62,25 +57,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	protected HtmlSerializerSession(HtmlSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		anchorText = getProperty(HTML_uriAnchorText, AnchorText.class, ctx.uriAnchorText);
-		detectLinksInStrings = getProperty(HTML_detectLinksInStrings, boolean.class, ctx.detectLinksInStrings);
-		lookForLabelParameters = getProperty(HTML_detectLabelParameters, boolean.class, ctx.lookForLabelParameters);
-		addKeyValueTableHeaders = getProperty(HTML_addKeyValueTableHeaders, boolean.class, ctx.addKeyValueTableHeaders);
-		addBeanTypes = getProperty(HTML_addBeanTypes, boolean.class, ctx.addBeanTypes);
-		String labelParameter = getProperty(HTML_labelParameter, String.class, ctx.labelParameter);
-		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(labelParameter) + "=([^\\&]*)");
+		this.ctx = ctx;
+		labelPattern = Pattern.compile("[\\?\\&]" + Pattern.quote(ctx.getLabelParameter()) + "=([^\\&]*)");
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("HtmlSerializerSession", new ObjectMap()
-				.append("addBeanTypes", addBeanTypes)
-				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
-				.append("anchorText", anchorText)
-				.append("detectLinksInStrings", detectLinksInStrings)
-				.append("labelPattern", labelPattern)
-				.append("lookForLabelParameters", lookForLabelParameters)
 			);
 	}
 
@@ -116,7 +100,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return true;
 		if (pMeta != null && pMeta.isUri())
 			return true;
-		if (detectLinksInStrings && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
+		if (isDetectLinksInStrings() && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
 			return true;
 		return false;
 	}
@@ -132,12 +116,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	public String getAnchorText(BeanPropertyMeta pMeta, Object o) {
 		String s = o.toString();
-		if (lookForLabelParameters) {
+		if (isLookForLabelParameters()) {
 			Matcher m = labelPattern.matcher(s);
 			if (m.find())
 				return urlDecode(m.group(1));
 		}
-		switch (anchorText) {
+		switch (getUriAnchorText()) {
 			case LAST_TOKEN:
 				s = resolveUri(s);
 				if (s.indexOf('/') != -1)
@@ -166,25 +150,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			default /* TO_STRING */:
 				return s;
 		}
-	}
-
-	/**
-	 * Returns the {@link HtmlSerializer#HTML_addKeyValueTableHeaders} setting value for this session.
-	 *
-	 * @return The {@link HtmlSerializer#HTML_addKeyValueTableHeaders} setting value for this session.
-	 */
-	public final boolean isAddKeyValueTableHeaders() {
-		return addKeyValueTableHeaders;
-	}
-
-	/**
-	 * Returns the {@link HtmlSerializer#HTML_addBeanTypes} setting value for this session.
-	 *
-	 * @return The {@link HtmlSerializer#HTML_addBeanTypes} setting value for this session.
-	 */
-	@Override /* SerializerSession */
-	public final boolean isAddBeanTypes() {
-		return addBeanTypes;
 	}
 
 	@Override /* XmlSerializer */
@@ -853,5 +818,77 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			}
 		}
 		return th;
+	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Look for link labels in URIs.
+	 *
+	 * @see #HTML_detectLabelParameters
+	 * @return
+	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 */
+	protected final boolean isLookForLabelParameters() {
+		return ctx.isLookForLabelParameters();
+	}
+
+	/**
+	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 *
+	 * @see #HTML_detectLinksInStrings
+	 * @return
+	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
+	 */
+	protected final boolean isDetectLinksInStrings() {
+		return ctx.isDetectLinksInStrings();
+	}
+
+	/**
+	 * Configuration property:  Add key/value headers on bean/map tables.
+	 *
+	 * @see #HTML_addKeyValueTableHeaders
+	 * @return
+	 * 	<jk>true</jk> if <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
+	 */
+	protected final boolean isAddKeyValueTableHeaders() {
+		return ctx.isAddKeyValueTableHeaders();
+	}
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #HTML_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
+
+	/**
+	 * Configuration property:  Link label parameter name.
+	 *
+	 * @see #HTML_labelParameter
+	 * @return
+	 * 	The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
+	 */
+	protected final String getLabelParameter() {
+		return ctx.getLabelParameter();
+	}
+
+	/**
+	 * Configuration property:  Anchor text source.
+	 *
+	 * @see #HTML_uriAnchorText
+	 * @return
+	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
+	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
+	 */
+	protected final AnchorText getUriAnchorText() {
+		return ctx.getUriAnchorText();
 	}
 }

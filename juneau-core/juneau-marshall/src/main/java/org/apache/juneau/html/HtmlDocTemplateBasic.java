@@ -48,7 +48,7 @@ public class HtmlDocTemplateBasic implements HtmlDocTemplate {
 		for (String s : session.getStylesheet())
 			w.sIf(i++ > 0).append(3, "@import ").q().append(session.resolveUri(s)).q().appendln(";");
 
-		if (session.isNoWrap())
+		if (session.isNowrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 
 		for (String s : session.getStyle())

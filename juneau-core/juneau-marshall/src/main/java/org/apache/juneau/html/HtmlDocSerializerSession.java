@@ -30,11 +30,9 @@ import org.apache.juneau.serializer.*;
  */
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
-	private final String noResultsMessage;
+	private final HtmlDocSerializer ctx;
 	private final String[] navlinks, head, header, nav, aside, footer;
 	private final Set<String> style, stylesheet, script;
-	private final boolean nowrap;
-	private final HtmlDocTemplate template;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -47,21 +45,20 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	protected HtmlDocSerializerSession(HtmlDocSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		header = getProperty(HTMLDOC_header, String[].class, ctx.nav);
-		nav = getProperty(HTMLDOC_nav, String[].class, ctx.nav);
-		aside = getProperty(HTMLDOC_aside, String[].class, ctx.aside);
-		footer = getProperty(HTMLDOC_footer, String[].class, ctx.footer);
-		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.navlinks);
+		this.ctx = ctx;
+
+		header = getProperty(HTMLDOC_header, String[].class, ctx.getHeader());
+		nav = getProperty(HTMLDOC_nav, String[].class, ctx.getNav());
+		aside = getProperty(HTMLDOC_aside, String[].class, ctx.getAside());
+		footer = getProperty(HTMLDOC_footer, String[].class, ctx.getFooter());
+		navlinks = getProperty(HTMLDOC_navlinks, String[].class, ctx.getNavlinks());
 
 		// These can contain dups after variable resolution, so de-dup them with hashsets.
-		style = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_style, String[].class, ctx.style)));
-		stylesheet = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_stylesheet, String[].class, ctx.stylesheet)));
-		script = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_script, String[].class, ctx.script)));
+		style = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_style, String[].class, ctx.getStyle())));
+		stylesheet = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_stylesheet, String[].class, ctx.getStylesheet())));
+		script = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_script, String[].class, ctx.getScript())));
 
-		head = getProperty(HTMLDOC_head, String[].class, ctx.head);
-		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.nowrap);
-		noResultsMessage = getProperty(HTMLDOC_noResultsMessage, String.class, ctx.noResultsMessage);
-		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, ctx.template);
+		head = getProperty(HTMLDOC_head, String[].class, ctx.getHead());
 	}
 
 	@Override /* Session */
@@ -74,82 +71,10 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 				.append("footer", footer)
 				.append("nav", nav)
 				.append("navlinks", navlinks)
-				.append("noResultsMessage", noResultsMessage)
-				.append("nowrap", nowrap)
 				.append("script", script)
 				.append("style", style)
 				.append("stylesheet", stylesheet)
-				.append("template", template)
 			);
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_style} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_style} setting value in this context.
-	 * 	An empty array if not specified.
-	 * 	Never <jk>null</jk>.
-	 */
-	public final Set<String> getStyle() {
-		return style;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_stylesheet} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_stylesheet} setting value in this context.
-	 * 	An empty array if not specified.
-	 * 	Never <jk>null</jk>.
-	 */
-	public final Set<String> getStylesheet() {
-		return stylesheet;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_script} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_script} setting value in this context.
-	 * 	An empty array if not specified.
-	 * 	Never <jk>null</jk>.
-	 */
-	public final Set<String> getScript() {
-		return script;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_head} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_head} setting value in this context.
-	 * 	An empty array if not specified.
-	 * 	Never <jk>null</jk>.
-	 */
-	public final String[] getHead() {
-		return head;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_nowrap} setting value in this context.
-	 *
-	 * @return The {@link HtmlDocSerializer#HTMLDOC_nowrap} setting value in this context.
-	 */
-	public final boolean isNoWrap() {
-		return nowrap;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_header} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_header} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 * 	 Never an empty string.
-	 */
-	public final String[] getHeader() {
-		return header;
 	}
 
 	/**
@@ -162,65 +87,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	public final String[] getNavLinks() {
 		return navlinks;
-	}
-
-	/**
-	 * Returns the template to use for generating the HTML page.
-	 *
-	 * @return
-	 * 	The HTML page generator.
-	 * 	Never <jk>null</jk>.
-	 */
-	public final HtmlDocTemplate getTemplate() {
-		return template;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_nav} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_nav} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 * 	Never an empty string.
-	 */
-	public final String[] getNav() {
-		return nav;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_aside} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_aside} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 *  	Never an empty string.
-	 */
-	public final String[] getAside() {
-		return aside;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_footer} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_footer} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 * 	Never an empty string.
-	 */
-	public final String[] getFooter() {
-		return footer;
-	}
-
-	/**
-	 * Returns the {@link HtmlDocSerializer#HTMLDOC_noResultsMessage} setting value in this context.
-	 *
-	 * @return
-	 * 	The {@link HtmlDocSerializer#HTMLDOC_noResultsMessage} setting value in this context.
-	 * 	<jk>null</jk> if not specified.
-	 * 	Never an empty string.
-	 */
-	public final String getNoResultsMessage() {
-		return noResultsMessage;
 	}
 
 	@Override /* Serializer */
@@ -252,5 +118,140 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		try (SerializerPipe pipe = createPipe(out)) {
 			super.doSerialize(pipe, o);
 		}
+	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  CSS style code.
+	 *
+	 * @see #HTMLDOC_style
+	 * @return
+	 * 	The CSS instructions to add to the HTML page.
+	 */
+	protected final Set<String> getStyle() {
+		return style;
+	}
+
+	/**
+	 * Configuration property:  Stylesheet import URLs.
+	 *
+	 * @see #HTMLDOC_stylesheet
+	 * @return
+	 * 	The link to the stylesheet of the HTML page.
+	 */
+	protected final Set<String> getStylesheet() {
+		return stylesheet;
+	}
+
+	/**
+	 * Configuration property:  Javascript code.
+	 *
+	 * @see #HTMLDOC_script
+	 * @return
+	 * 	Arbitrary Javascript to add to the HTML page.
+	 */
+	protected final Set<String> getScript() {
+		return script;
+	}
+
+	/**
+	 * Configuration property:  Page navigation links.
+	 *
+	 * @see #HTMLDOC_navlinks
+	 * @return
+	 * 	Navigation links to add to the HTML page.
+	 */
+	protected final String[] getNavlinks() {
+		return navlinks;
+	}
+
+	/**
+	 * Configuration property:  Additional head section content.
+	 *
+	 * @see #HTMLDOC_head
+	 * @return
+	 * 	HTML content to add to the head section of the HTML page.
+	 */
+	protected final String[] getHead() {
+		return head;
+	}
+
+	/**
+	 * Configuration property:  Header section contents.
+	 *
+	 * @see #HTMLDOC_header
+	 * @return
+	 * 	The overridden contents of the header section on the HTML page.
+	 */
+	protected final String[] getHeader() {
+		return header;
+	}
+
+	/**
+	 * Configuration property:  Nav section contents.
+	 *
+	 * @see #HTMLDOC_nav
+	 * @return
+	 * 	The overridden contents of the nav section on the HTML page.
+	 */
+	protected final String[] getNav() {
+		return nav;
+	}
+
+	/**
+	 * Configuration property:  Aside section contents.
+	 *
+	 * @see #HTMLDOC_aside
+	 * @return
+	 * 	The overridden contents of the aside section on the HTML page.
+	 */
+	protected final String[] getAside() {
+		return aside;
+	}
+
+	/**
+	 * Configuration property:  Footer section contents.
+	 *
+	 * @see #HTMLDOC_footer
+	 * @return
+	 * 	The overridden contents of the footer section on the HTML page.
+	 */
+	protected final String[] getFooter() {
+		return footer;
+	}
+
+	/**
+	 * Configuration property:  No-results message.
+	 *
+	 * @see #HTMLDOC_noResultsMessage
+	 * @return
+	 * 	The message used when serializing an empty array or empty list.
+	 */
+	protected final String getNoResultsMessage() {
+		return ctx.getNoResultsMessage();
+	}
+
+	/**
+	 * Configuration property:  Prevent word wrap on page.
+	 *
+	 * @see #HTMLDOC_nowrap
+	 * @return
+	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
+	 */
+	protected final boolean isNowrap() {
+		return ctx.isNowrap();
+	}
+
+	/**
+	 * Configuration property:  HTML document template.
+	 *
+	 * @see #HTMLDOC_template
+	 * @return
+	 * 	The template to use for serializing the page.
+	 */
+	protected final HtmlDocTemplate getTemplate() {
+		return ctx.getTemplate();
 	}
 }
