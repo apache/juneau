@@ -95,7 +95,7 @@ public abstract class MenuItemWidget extends Widget {
 		} else if (o instanceof CharSequence) {
 			sb.append((CharSequence)o);
 		} else {
-			SerializerSessionArgs args = new SerializerSessionArgs(req.getProperties(), null, req.getLocale(), null, null, req.getUriContext());
+			SerializerSessionArgs args = new SerializerSessionArgs(req.getProperties(), null, req.getLocale(), null, null, req.isDebug() ? true : null, req.getUriContext());
 			WriterSerializerSession session = HtmlSerializer.DEFAULT.createSession(args);
 			session.indent = 2;
 			session.serialize(o, sb);

@@ -959,7 +959,7 @@ public abstract class Serializer extends BeanContext {
 
 	@Override /* Context */
 	public final SerializerSessionArgs createDefaultSessionArgs() {
-		return new SerializerSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, getResponseContentType(), null);
+		return new SerializerSessionArgs().mediaType(getResponseContentType());
 	}
 
 	/**

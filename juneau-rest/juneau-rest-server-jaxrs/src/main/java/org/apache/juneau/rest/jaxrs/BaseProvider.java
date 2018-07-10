@@ -121,7 +121,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
 
-			SerializerSession session = s.createSession(new SerializerSessionArgs(mp, null, locale, timeZone, sm.getMediaType(), null));
+			SerializerSession session = s.createSession(new SerializerSessionArgs(mp, null, locale, timeZone, sm.getMediaType(), null, null));
 
 			// Leave this open in case an error occurs.
 			Closeable c = s.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os;
@@ -149,7 +149,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			mp.put("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
-			ParserSession session = p.createSession(new ParserSessionArgs(mp, null, locale, timeZone, pm.getMediaType(), null));
+			ParserSession session = p.createSession(new ParserSessionArgs(mp, null, locale, timeZone, pm.getMediaType(), null, null));
 			Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
 			return session.parse(in2, p.getClassMeta(gType));
 		} catch (ParseException e) {

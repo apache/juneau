@@ -699,7 +699,7 @@ public abstract class Parser extends BeanContext {
 
 	@Override /* Context */
 	public final ParserSessionArgs createDefaultSessionArgs() {
-		return new ParserSessionArgs(ObjectMap.EMPTY_MAP, null, null, null, getPrimaryMediaType(), null);
+		return new ParserSessionArgs().mediaType(getPrimaryMediaType());
 	}
 
 	//--------------------------------------------------------------------------------

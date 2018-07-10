@@ -752,6 +752,7 @@ public class BeanContext extends Context {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#debug(boolean)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#debug()}
+	 * 			<li class='jm'>{@link BeanSessionArgs#debug(Boolean)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2141,7 +2142,7 @@ public class BeanContext extends Context {
 	 * @return A new session arguments object.
 	 */
 	public final BeanSessionArgs createDefaultBeanSessionArgs() {
-		return new BeanSessionArgs(null, null, null, null);
+		return new BeanSessionArgs();
 	}
 
 	/**

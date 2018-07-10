@@ -45,7 +45,7 @@ public abstract class Session {
 	 * 	Runtime arguments.
 	 */
 	protected Session(SessionArgs args) {
-		this.properties = args.properties;
+		this.properties = args.properties == null ? ObjectMap.EMPTY_MAP : args.properties;
 	}
 
 	/**

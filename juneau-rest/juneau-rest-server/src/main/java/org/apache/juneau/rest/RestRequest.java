@@ -1232,6 +1232,17 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if debug mode is enabled.
+	 *
+	 * Debug mode is enabled by simply adding <js>"?debug=true"</js> to the query string or adding a <code>Debug: true</code> header on the request.
+	 *
+	 * @return <jk>true</jk> if debug mode is enabled.
+	 */
+	public boolean isDebug() {
+		return debug;
+	}
+
+	/**
 	 * Request-level variable resolver session.
 	 *
 	 * <p>

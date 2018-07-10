@@ -83,8 +83,8 @@ public abstract class SerializerSession extends BeanSession {
 		super(ctx, args);
 		this.ctx = ctx;
 		this.javaMethod = args.javaMethod;
-		uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
-		listener = newInstance(SerializerListener.class, ctx.getListener());
+		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
+		this.listener = newInstance(SerializerListener.class, ctx.getListener());
 
 		this.indent = getInitialDepth();
 		if (isDetectRecursions() || isDebug()) {
@@ -360,7 +360,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param o The input string to trim.
 	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	protected final String trim(Object o) {
+	public final String trim(Object o) {
 		if (o == null)
 			return null;
 		String s = o.toString();
@@ -402,7 +402,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @return <jk>true</jk> if the specified value should not be serialized.
 	 * @throws SerializeException If recursion occurred.
 	 */
-	protected final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
+	public final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
 
 		if (isTrimNullProperties() && value == null)
 			return true;
@@ -443,7 +443,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param m The map being sorted.
 	 * @return A new sorted {@link TreeMap}.
 	 */
-	protected final <K,V> Map<K,V> sort(Map<K,V> m) {
+	public final <K,V> Map<K,V> sort(Map<K,V> m) {
 		if (isSortMaps() && m != null && (! m.isEmpty()) && m.keySet().iterator().next() instanceof Comparable<?>)
 			return new TreeMap<>(m);
 		return m;
@@ -455,7 +455,7 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param c The collection being sorted.
 	 * @return A new sorted {@link TreeSet}.
 	 */
-	protected final <E> Collection<E> sort(Collection<E> c) {
+	public final <E> Collection<E> sort(Collection<E> c) {
 		if (isSortCollections() && c != null && (! c.isEmpty()) && c.iterator().next() instanceof Comparable<?>)
 			return new TreeSet<>(c);
 		return c;

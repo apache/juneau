@@ -58,10 +58,10 @@ public class BeanSession extends Session {
 	protected BeanSession(BeanContext ctx, BeanSessionArgs args) {
 		super(args);
 		this.ctx = ctx;
-		locale = getProperty(BEAN_locale, Locale.class, args.locale, ctx.getLocale(), Locale.getDefault());
-		timeZone = getProperty(BEAN_timeZone, TimeZone.class, args.timeZone, ctx.getTimeZone());
-		debug = getProperty(BEAN_debug, boolean.class, ctx.isDebug());
-		mediaType = getProperty(BEAN_mediaType, MediaType.class, args.mediaType, ctx.getMediaType());
+		locale = ObjectUtils.firstNonNull(args.locale, ctx.getLocale(), Locale.getDefault());
+		timeZone = ObjectUtils.firstNonNull(args.timeZone, ctx.getTimeZone());
+		debug = ObjectUtils.firstNonNull(args.debug, ctx.isDebug(), false);
+		mediaType = ObjectUtils.firstNonNull(args.mediaType, ctx.getMediaType());
 	}
 
 	@Override /* Session */

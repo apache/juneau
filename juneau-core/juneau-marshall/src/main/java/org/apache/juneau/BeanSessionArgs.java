@@ -24,11 +24,12 @@ public class BeanSessionArgs extends SessionArgs {
 	/**
 	 * Default empty session arguments.
 	 */
-	public static final BeanSessionArgs DEFAULT = new BeanSessionArgs(ObjectMap.EMPTY_MAP, null, null, null);
+	public static final BeanSessionArgs DEFAULT = new BeanSessionArgs();
 
 	Locale locale;
 	TimeZone timeZone;
 	MediaType mediaType;
+	Boolean debug;
 
 	/**
 	 * Constructor
@@ -51,12 +52,16 @@ public class BeanSessionArgs extends SessionArgs {
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
 	 * 	<br>Can be <jk>null</jk>.
+	 * @param debug
+	 * 	Enable debug mode for this session.
+	 * 	<br>Can be <jk>null</jk> to use the debug setting on the bean context..
 	 */
-	public BeanSessionArgs(ObjectMap properties, Locale locale, TimeZone timeZone, MediaType mediaType) {
+	public BeanSessionArgs(ObjectMap properties, Locale locale, TimeZone timeZone, MediaType mediaType, Boolean debug) {
 		super(properties);
 		this.locale = locale;
 		this.timeZone = timeZone;
 		this.mediaType = mediaType;
+		this.debug = debug;
 	}
 
 	/**
@@ -95,6 +100,19 @@ public class BeanSessionArgs extends SessionArgs {
 	 */
 	public BeanSessionArgs mediaType(MediaType mediaType) {
 		this.mediaType = mediaType;
+		return this;
+	}
+
+	/**
+	 * Debug mode.
+	 *
+	 * @param debug
+	 * 	Debug mode flag.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public BeanSessionArgs debug(Boolean debug) {
+		this.debug = debug;
 		return this;
 	}
 

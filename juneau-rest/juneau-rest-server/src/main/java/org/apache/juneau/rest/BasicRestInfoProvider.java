@@ -922,7 +922,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				if (mt != MediaType.HTML) {
 					Serializer s2 = sm.getSerializers().getSerializer(mt);
 					if (s2 != null) {
-						SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.getUriContext());
+						SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.isDebug() ? true : null, req.getUriContext());
 						try {
 							String eVal = s2.createSession(args).serializeToString(example);
 							examples.put(s2.getPrimaryMediaType().toString(), eVal);

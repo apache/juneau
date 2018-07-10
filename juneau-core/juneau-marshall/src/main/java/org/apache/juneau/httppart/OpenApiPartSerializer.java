@@ -263,7 +263,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private ObjectMap toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+	private Map toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
 		ObjectMap m = new ObjectMap();
@@ -279,10 +279,13 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 			for (Map.Entry e : (Set<Map.Entry>)((Map)o).entrySet())
 				m.put(asString(e.getKey()), toObject(partType, e.getValue(), s.getProperty(asString(e.getKey()))));
 		}
+		if (isSortMaps())
+			return createSession().sort(m);
 		return m;
 	}
 
-	private ObjectList toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+	@SuppressWarnings("rawtypes")
+	private Collection toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
 		ObjectList l = new ObjectList();
@@ -296,9 +299,12 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 		} else {
 			l.add(toObject(partType, o, items));
 		}
+		if (isSortCollections())
+			return createSession().sort(l);
 		return l;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Object toObject(HttpPartType partType, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (o == null)
 			return null;
@@ -321,7 +327,7 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 				return toIsoDateTime(toType(o, CM_Calendar));
 			return o;
 		} else if (t == ARRAY) {
-			ObjectList l = toList(partType, getClassMetaForObject(o), o, s);
+			Collection l = toList(partType, getClassMetaForObject(o), o, s);
 			if (cf == CSV)
 				return joine(l, ',');
 			if (cf == PIPES)

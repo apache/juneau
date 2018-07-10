@@ -53,12 +53,15 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
 	 * 	<br>Can be <jk>null</jk>.
+	 * @param debug
+	 * 	Enable debug mode for this session.
+	 * 	<br>Can be <jk>null</jk> to use the debug setting on the bean context..
 	 * @param uriContext
 	 * 	The URI context.
 	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 */
-	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		super(properties, locale, timeZone, mediaType);
+	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, Boolean debug, UriContext uriContext) {
+		super(properties, locale, timeZone, mediaType, debug);
 		this.javaMethod = javaMethod;
 		this.uriContext = uriContext;
 	}
@@ -104,6 +107,12 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	@Override /* BeanSessionArgs */
 	public SerializerSessionArgs mediaType(MediaType mediaType) {
 		super.mediaType(mediaType);
+		return this;
+	}
+
+	@Override /* BeanSessionArgs */
+	public SerializerSessionArgs debug(Boolean debug) {
+		super.debug(debug);
 		return this;
 	}
 

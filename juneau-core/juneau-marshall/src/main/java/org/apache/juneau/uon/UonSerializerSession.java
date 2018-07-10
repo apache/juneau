@@ -47,7 +47,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	public UonSerializerSession(UonSerializer ctx, Boolean encode, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		plainTextParams = getProperty(UON_paramFormat, ParamFormat.class, ctx.getParamFormat()) == ParamFormat.PLAINTEXT;
+		plainTextParams = ctx.getParamFormat() == ParamFormat.PLAINTEXT;
 	}
 
 	@Override /* Session */

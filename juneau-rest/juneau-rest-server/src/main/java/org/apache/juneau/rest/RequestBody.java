@@ -462,7 +462,7 @@ public class RequestBody {
 			Parser p = pm.getParser();
 			MediaType mediaType = pm.getMediaType();
 			req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
-			ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.getContext().getResource()));
+			ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.isDebug() ? true : null, req.getContext().getResource()));
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				T o = session.parse(in, cm);
 				if (schema != null)
