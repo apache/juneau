@@ -45,7 +45,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.eventAllocator.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLEventAllocator}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#eventAllocator(XMLEventAllocator)}
@@ -66,7 +66,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.preserveRootElement.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#preserveRootElement(boolean)}
@@ -112,7 +112,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.reporter.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLReporter}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#reporter(XMLReporter)}
@@ -139,7 +139,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.resolver.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> {@link XMLResolver}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#resolver(XMLResolver)}
@@ -160,7 +160,7 @@ public class XmlParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"XmlParser.validating.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link XmlParserBuilder#validating(boolean)}

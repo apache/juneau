@@ -48,7 +48,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addDescriptionsTo.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  Empty string.
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addDescriptionsTo(String)}
@@ -85,7 +85,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addExamplesTo.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  Empty string.
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addExamplesTo(String)}
@@ -128,7 +128,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.allowNestedDescriptions.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#allowNestedDescriptions()}
@@ -149,7 +149,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.allowNestedExamples.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#allowNestedExamples()}
@@ -170,7 +170,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.beanDefMapper.o"</js>
 	 * 	<li><b>Data type:</b>  {@link BeanDefMapper}
 	 * 	<li><b>Default:</b>  {@link BasicBeanDefMapper}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#beanDefMapper(Class)}
@@ -196,7 +196,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.defaultSchema.smo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,ObjectMap&gt;</code>
 	 * 	<li><b>Default:</b>  Empty map.
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#defaultSchema(Class,ObjectMap)}

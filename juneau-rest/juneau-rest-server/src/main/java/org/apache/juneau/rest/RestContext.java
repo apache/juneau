@@ -86,7 +86,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowBodyParam.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#allowBodyParam()}
@@ -149,7 +149,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowedMethodParams.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"HEAD,OPTIONS"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#allowedMethodParams()}
@@ -219,7 +219,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.allowHeaderParams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#allowHeaderParams()}
@@ -282,7 +282,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.callHandler.o"</js>
 	 * 	<li><b>Data type:</b>  {@link RestCallHandler} | <code>Class&lt;? <jk>extends</jk> {@link RestCallHandler}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link BasicRestCallHandler}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#callHandler()}
@@ -372,7 +372,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.children.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class | Object | {@link RestChild}&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#children()}
@@ -485,7 +485,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.classpathResourceFinder.o"</js>
 	 * 	<li><b>Data type:</b>  {@link ClasspathResourceFinder}
 	 * 	<li><b>Default:</b>  {@link ClasspathResourceFinderBasic}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#classpathResourceFinder()}
@@ -587,7 +587,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.clientVersionHeader.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"X-Client-Version"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#clientVersionHeader()}
@@ -660,7 +660,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.contextPath.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#contextPath()}
@@ -720,7 +720,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.converters.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestConverter} | Class&lt;? <jk>extends</jk> {@link RestConverter}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#converters()}
@@ -818,7 +818,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#debug()}
@@ -846,7 +846,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultCharset.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"utf-8"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#defaultCharset()}
@@ -901,7 +901,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultRequestHeaders.smo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#defaultRequestHeaders()}
@@ -969,7 +969,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.defaultResponseHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#defaultResponseHeaders()}
@@ -1034,7 +1034,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.encoders.o"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Encoder} | Class&lt;? <jk>extends</jk> {@link Encoder}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#encoders()}
@@ -1106,7 +1106,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.guards.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestGuard} | Class&lt;? <jk>extends</jk> {@link RestGuard}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#guards()}
@@ -1191,7 +1191,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.infoProvider.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link RestInfoProvider} | Class&lt;? <jk>extends</jk> {@link RestInfoProvider}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link BasicRestInfoProvider}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#infoProvider()}
@@ -1280,7 +1280,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.logger.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link RestLogger} | Class&lt;? <jk>extends</jk> {@link RestLogger}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link BasicRestLogger}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#logger()}
@@ -1358,7 +1358,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.maxInput.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"100M"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#maxInput()}
@@ -1424,7 +1424,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.messages.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link MessageBundleLocation}&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#messages()}
@@ -1511,7 +1511,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.mimeTypes.ss"</js>
 	 * 	<li><b>Data type:</b>  <code>Set&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#mimeTypes()}
@@ -1579,7 +1579,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.paramResolvers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link RestMethodParam} | Class&lt;? <jk>extends</jk> {@link RestMethodParam}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#paramResolvers()}
@@ -1669,7 +1669,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.parsers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Parser} | Class&lt;? <jk>extends</jk> {@link Parser}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#parsers()}
@@ -1764,7 +1764,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.partParser.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link HttpPartParser} | Class&lt;? <jk>extends</jk> {@link HttpPartParser}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link OpenApiPartSerializer}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#partParser()}
@@ -1832,7 +1832,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.partSerializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link HttpPartSerializer} | Class&lt;? <jk>extends</jk> {@link HttpPartSerializer}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link OpenApiPartSerializer}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#partSerializer()}
@@ -1907,7 +1907,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.path.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#path()}
@@ -1979,7 +1979,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.renderResponseStackTraces.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#renderResponseStackTraces()}
@@ -2042,7 +2042,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.resourceResolver.o"</js>
 	 * 	<li><b>Data type:</b>  <code>{@link RestResourceResolver} | Class&lt;? <jk>extends</jk> {@link RestResourceResolver}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link BasicRestResourceResolver}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#resourceResolver()}
@@ -2130,7 +2130,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.responseHandlers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link ResponseHandler} | Class&lt;? <jk>extends</jk> {@link ResponseHandler}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#responseHandlers()}
@@ -2228,7 +2228,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.serializers.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Serializer} | Class&lt;? <jk>extends</jk> {@link Serializer}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#serializers()}
@@ -2331,7 +2331,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFileResponseHeaders.omo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#staticFileResponseHeaders()}
@@ -2396,7 +2396,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.staticFiles.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;StaticFileMapping&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#staticFiles()}
@@ -2469,7 +2469,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.produces.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#produces()}
@@ -2530,7 +2530,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.consumes.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#consumes()}
@@ -2591,7 +2591,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.useClasspathResourceCaching.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#useClasspathResourceCaching()}
@@ -2646,7 +2646,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.useStackTraceHashes.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link RestResource#useStackTraceHashes()}
@@ -2703,7 +2703,7 @@ public final class RestContext extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"RestContext.widgets.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;{@link Widget} | Class&lt;? <jk>extends</jk> {@link Widget}&gt;&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link HtmlDoc#widgets()}

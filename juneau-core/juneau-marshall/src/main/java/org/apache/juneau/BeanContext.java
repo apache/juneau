@@ -157,7 +157,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanClassVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanClassVisibility(Visibility)}
@@ -198,7 +198,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanConstructorVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanConstructorVisibility(Visibility)}
@@ -239,7 +239,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanDictionary.lc"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#beanDictionary()}
@@ -330,7 +330,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFieldVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFieldVisibility(Visibility)}
@@ -377,7 +377,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanFilters.lc"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Object...)}
@@ -455,7 +455,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanMapPutReturnsOldValue(boolean)}
@@ -501,7 +501,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanMethodVisibility.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Visibility})
 	 * 	<li><b>Default:</b>  <js>"PUBLIC"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanMethodVisibility(Visibility)}
@@ -542,7 +542,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireDefaultConstructor.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireDefaultConstructor(boolean)}
@@ -583,7 +583,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSerializable.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSerializable(boolean)}
@@ -624,7 +624,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSettersForGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSettersForGetters(boolean)}
@@ -662,7 +662,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beansRequireSomeProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beansRequireSomeProperties(boolean)}
@@ -702,7 +702,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.beanTypePropertyName.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"_type"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#typePropertyName()}
@@ -747,7 +747,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.debug.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#debug(boolean)}
@@ -799,7 +799,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.examples.smo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Object&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Example}
@@ -852,7 +852,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.excludeProperties.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#excludeProperties()}
@@ -913,7 +913,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.fluentSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#fluentSetters()}
@@ -965,7 +965,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnGetters(boolean)}
@@ -1003,7 +1003,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreInvocationExceptionsOnSetters(boolean)}
@@ -1041,7 +1041,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignorePropertiesWithoutSetters(boolean)}
@@ -1078,7 +1078,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownBeanProperties(boolean)}
@@ -1116,7 +1116,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#ignoreUnknownNullBeanProperties(boolean)}
@@ -1153,7 +1153,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.implClasses.smc"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty map
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#implClasses(Map)}
@@ -1192,7 +1192,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.properties.sms"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,String&gt;</code>
 	 * 	<li><b>Default:</b>  <code>{}</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#properties()}
@@ -1254,7 +1254,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.locale.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link Locale})
 	 * 	<li><b>Default:</b>  <jk>null</jk> (defaults to {@link Locale#getDefault()})
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#locale(Locale)}
@@ -1297,7 +1297,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.mediaType.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link MediaType})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#mediaType(MediaType)}
@@ -1340,7 +1340,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.notBeanClasses.sc"</js>
 	 * 	<li><b>Data type:</b>  <code>Set&lt;Class&gt;</code>
 	 * 	<li><b>Default:</b>  empty set
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link BeanIgnore}
@@ -1411,7 +1411,7 @@ public class BeanContext extends Context {
 	 * 		<li><code>java.nio.*</code>
 	 * 		<li><code>java.util.*</code>
 	 * 	</ul>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
@@ -1474,7 +1474,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.pojoSwaps.lo"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;Object&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Swap}
@@ -1589,7 +1589,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.propertyNamer.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> {@link PropertyNamer}&gt;</code>
 	 * 	<li><b>Default:</b>  {@link PropertyNamerDefault}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#propertyNamer()}
@@ -1639,7 +1639,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.sortProperties.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Annotations:</b>
 	 * 		<ul>
 	 * 			<li class='ja'>{@link Bean#sort()}
@@ -1690,7 +1690,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.timeZone.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link TimeZone})
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#timeZone(TimeZone)}
@@ -1733,7 +1733,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useEnumNames.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#useEnumNames()}
@@ -1787,7 +1787,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useInterfaceProxies.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#useInterfaceProxies(boolean)}
@@ -1825,7 +1825,7 @@ public class BeanContext extends Context {
 	 * 	<li><b>Name:</b>  <js>"BeanContext.useJavaBeanIntrospector.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#useJavaBeanIntrospector(boolean)}

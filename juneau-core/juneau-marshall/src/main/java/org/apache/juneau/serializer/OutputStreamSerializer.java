@@ -33,7 +33,7 @@ public abstract class OutputStreamSerializer extends Serializer {
 	 * 	<li><b>Name:</b>  <js>"OutputStreamSerializer.binaryFormat.s"</js>
 	 * 	<li><b>Data type:</b>  {@link BinaryFormat}
 	 * 	<li><b>Default:</b>  {@link BinaryFormat#HEX}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link OutputStreamSerializerBuilder#binaryFormat(BinaryFormat)}

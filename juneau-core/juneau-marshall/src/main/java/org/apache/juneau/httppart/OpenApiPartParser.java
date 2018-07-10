@@ -141,7 +141,7 @@ public class OpenApiPartParser extends UonPartParser {
 	 * 	<li><b>Name:</b>  <js>"OpenApiPartParser.schema"</js>
 	 * 	<li><b>Data type:</b>  <code>HttpPartSchema</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link OpenApiPartParserBuilder#schema(HttpPartSchema)}

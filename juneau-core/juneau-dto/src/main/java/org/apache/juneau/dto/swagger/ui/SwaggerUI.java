@@ -44,7 +44,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 * 	<li><b>Name:</b>  <js>"SwaggerUI.resolveRefsMaxDepth.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>1</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>

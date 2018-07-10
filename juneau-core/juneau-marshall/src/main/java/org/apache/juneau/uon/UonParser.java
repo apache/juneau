@@ -43,7 +43,7 @@ public class UonParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"UonParser.decoding.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonParserBuilder#decoding(boolean)}
@@ -84,7 +84,7 @@ public class UonParser extends ReaderParser {
 	 * 	<li><b>Name:</b>  <js>"UonParser.validateEnd.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link UonParserBuilder#validateEnd(boolean)}

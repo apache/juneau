@@ -132,7 +132,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.autoCloseStreams.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#autoCloseStreams(boolean)}
@@ -175,7 +175,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.debugOutputLines.i"</js>
 	 * 	<li><b>Data type:</b>  <code>Integer</code>
 	 * 	<li><b>Default:</b>  <code>5</code>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#debugOutputLines(int)}
@@ -221,7 +221,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.listener.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? extends ParserListener&gt;</code>
 	 * 	<li><b>Default:</b>  <jk>null</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#listener(Class)}
@@ -284,7 +284,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.strict.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#strict(boolean)}
@@ -357,7 +357,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.trimStrings.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#trimStrings(boolean)}
@@ -400,7 +400,7 @@ public abstract class Parser extends BeanContext {
 	 * 	<li><b>Name:</b>  <js>"Parser.unbuffered.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ParserBuilder#unbuffered(boolean)}

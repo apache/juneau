@@ -84,7 +84,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.aside.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -121,7 +121,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.footer.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -152,7 +152,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.head.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -191,7 +191,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -220,7 +220,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nav.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -252,7 +252,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.navlinks.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -324,7 +324,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.noResultsMessage.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  <js>"&lt;p&gt;no results&lt;/p&gt;"</js>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -353,7 +353,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.nowrap.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -370,7 +370,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.script.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -414,7 +414,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.style.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -459,7 +459,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.stylesheet.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
-	 * 	<li><b>Session-overridable:</b>  <jk>true</jk>
+	 * 	<li><b>Session property:</b>  <jk>true</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
@@ -484,7 +484,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.template.c"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>extends</jk> HtmlDocTemplate&gt;</code>
 	 * 	<li><b>Default:</b>  <code>HtmlDocTemplateBasic.<jk>class</jk></code>
-	 * 	<li><b>Session-overridable:</b>  <jk>false</jk>
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Description:</h5>
