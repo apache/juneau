@@ -693,7 +693,7 @@ public abstract class Parser extends BeanContext {
 	}
 
 	@Override /* Context */
-	public final ParserSession createSession() {
+	public ParserSession createSession() {
 		return createSession(createDefaultSessionArgs());
 	}
 

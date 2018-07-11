@@ -16,35 +16,27 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
+ * Session object that lives for the duration of a single use of {@link HttpPartParser}.
  *
  * <p>
- * The following default implementations are provided:
- * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parts encoded in based on OpenAPI schema.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parts encoded in plain text.
- * </ul>
- *
- * <p>
- * Implementations must include either a public no-args constructor or a public constructor that takes in a single
- * {@link PropertyStore} object.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public interface HttpPartParser {
+public interface HttpPartParserSession {
 
 	/**
-	 * Represent "no" part parser.
+	 * Converts the specified input to the specified class type.
 	 *
-	 * <p>
-	 * Used to represent the absence of a part parser in annotations.
+	 * @param partType The part type being parsed.
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * @param type The category of value being parsed.
+	 * @return The parsed value.
+	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
 	 */
-	public static interface Null extends HttpPartParser {}
-
-	/**
-	 * Creates a new parser session.
-	 *
-	 * @param args The runtime arguments for the session.
-	 * @return A new parser session.
-	 */
-	public HttpPartParserSession createSession(ParserSessionArgs args);
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException;
 }

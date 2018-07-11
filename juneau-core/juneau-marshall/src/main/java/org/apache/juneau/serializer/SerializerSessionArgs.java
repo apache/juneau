@@ -26,8 +26,14 @@ import org.apache.juneau.http.*;
  */
 public final class SerializerSessionArgs extends BeanSessionArgs {
 
+	/**
+	 * Default serializer session args.
+	 */
+	public static final SerializerSessionArgs DEFAULT = new SerializerSessionArgs();
+
 	Method javaMethod;
 	UriContext uriContext;
+	Boolean useWhitespace;
 
 	/**
 	 * Constructor
@@ -59,11 +65,14 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * @param uriContext
 	 * 	The URI context.
 	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
+	 * @param useWhitespace
+	 * 	Override the use-whitespace flag on the serializer.
 	 */
-	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, Boolean debug, UriContext uriContext) {
+	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, Boolean debug, UriContext uriContext, Boolean 	useWhitespace) {
 		super(properties, locale, timeZone, mediaType, debug);
 		this.javaMethod = javaMethod;
 		this.uriContext = uriContext;
+		this.useWhitespace = useWhitespace;
 	}
 
 	/**
@@ -89,6 +98,19 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 */
 	public SerializerSessionArgs uriContext(UriContext uriContext) {
 		this.uriContext = uriContext;
+		return this;
+	}
+
+	/**
+	 * Use-whitespace flag
+	 *
+	 * @param useWhitespace
+	 * 	The use-whitespace flag.
+	 * 	<br>Overrides the use-whitespace flag on the serializer.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSessionArgs useWhitespace(Boolean useWhitespace) {
+		this.useWhitespace = useWhitespace;
 		return this;
 	}
 

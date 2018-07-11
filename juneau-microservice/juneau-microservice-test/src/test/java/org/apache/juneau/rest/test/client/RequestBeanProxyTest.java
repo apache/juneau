@@ -28,6 +28,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -1158,27 +1159,37 @@ public class RequestBeanProxyTest {
 
 	public static class XSerializer implements HttpPartSerializer {
 		@Override
-		public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-			if (value == null)
-				return "NULL";
-			if (value instanceof Collection)
-				return join((Collection<?>)value, "X");
-			if (isArray(value))
-				return join(toList(value, Object.class), "X");
-			return "x" + value + "x";
+		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
+			return new HttpPartSerializerSession() {
+				@Override
+				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+					if (value == null)
+						return "NULL";
+					if (value instanceof Collection)
+						return join((Collection<?>)value, "X");
+					if (isArray(value))
+						return join(toList(value, Object.class), "X");
+					return "x" + value + "x";
+				}
+			};
 		}
 	}
 
 	public static class ListSerializer implements HttpPartSerializer {
 		@Override
-		public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-			if (value == null)
-				return "NULL";
-			if (value instanceof Collection)
-				return join((Collection<?>)value, '|');
-			if (isArray(value))
-				return join(toList(value, Object.class), "|");
-			return "?" + value + "?";
+		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
+			return new HttpPartSerializerSession() {
+				@Override
+				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+					if (value == null)
+						return "NULL";
+					if (value instanceof Collection)
+						return join((Collection<?>)value, '|');
+					if (isArray(value))
+						return join(toList(value, Object.class), "|");
+					return "?" + value + "?";
+				}
+			};
 		}
 	}
 }

@@ -60,6 +60,7 @@ public abstract class SerializerSession extends BeanSession {
 	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	private BeanPropertyMeta currentProperty;
 	private ClassMeta<?> currentClass;
+	private final boolean useWhitespace;
 	private final SerializerListener listener;
 
 	/** The current indentation depth into the model. */
@@ -80,11 +81,13 @@ public abstract class SerializerSession extends BeanSession {
 	 * 	serializer contexts.
 	 */
 	protected SerializerSession(Serializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
+		super(ctx, args == null ? SerializerSessionArgs.DEFAULT : args);
 		this.ctx = ctx;
+		args = args == null ? SerializerSessionArgs.DEFAULT : args;
 		this.javaMethod = args.javaMethod;
 		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
 		this.listener = newInstance(SerializerListener.class, ctx.getListener());
+		this.useWhitespace = args.useWhitespace != null ? args.useWhitespace : ctx.isUseWhitespace();
 
 		this.indent = getInitialDepth();
 		if (isDetectRecursions() || isDebug()) {
@@ -759,6 +762,17 @@ public abstract class SerializerSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Use whitespace.
+	 *
+	 * @see #SERIALIZER_useWhitespace
+	 * @return
+	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
+	 */
+	public final boolean isUseWhitespace() {
+		return useWhitespace;
+	}
 
 	/**
 	 * Configuration property:  Initial depth.

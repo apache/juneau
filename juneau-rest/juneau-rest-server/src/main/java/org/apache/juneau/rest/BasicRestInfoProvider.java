@@ -14,10 +14,8 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
 import static org.apache.juneau.rest.RestParamType.*;
 import static org.apache.juneau.rest.util.AnnotationUtils.*;
-import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
@@ -916,13 +914,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 		if (isOk || isBody) {
 			List<MediaType> mediaTypes = isOk ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
-			ObjectMap sprops = new ObjectMap().append(WSERIALIZER_useWhitespace, true).append(OSSERIALIZER_binaryFormat, BinaryFormat.SPACED_HEX);
 
 			for (MediaType mt : mediaTypes) {
 				if (mt != MediaType.HTML) {
 					Serializer s2 = sm.getSerializers().getSerializer(mt);
 					if (s2 != null) {
-						SerializerSessionArgs args = new SerializerSessionArgs(sprops, req.getJavaMethod(), req.getLocale(), null, mt, req.isDebug() ? true : null, req.getUriContext());
+						SerializerSessionArgs args = new SerializerSessionArgs(null, req.getJavaMethod(), req.getLocale(), null, mt, req.isDebug() ? true : null, req.getUriContext(), true);
 						try {
 							String eVal = s2.createSession(args).serializeToString(example);
 							examples.put(s2.getPrimaryMediaType().toString(), eVal);
@@ -934,7 +931,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		} else {
 			String paramName = piri.getString("name");
-			String s = sm.partSerializer.serialize(HttpPartType.valueOf(in.toUpperCase()), null, example);
+			String s = sm.partSerializer.createSession(req.getSerializerSessionArgs()).serialize(HttpPartType.valueOf(in.toUpperCase()), null, example);
 			if ("query".equals(in))
 				s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
 			else if ("formData".equals(in))

@@ -12,39 +12,54 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import java.io.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 
 /**
- * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
+ * Session object that lives for the duration of a single use of {@link UonPartSerializer}.
  *
  * <p>
- * The following default implementations are provided:
- * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parts encoded in based on OpenAPI schema.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parts encoded in plain text.
- * </ul>
- *
- * <p>
- * Implementations must include either a public no-args constructor or a public constructor that takes in a single
- * {@link PropertyStore} object.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public interface HttpPartParser {
+public class UonPartSerializerSession extends UonSerializerSession implements HttpPartSerializerSession {
 
 	/**
-	 * Represent "no" part parser.
+	 * Create a new session using properties specified in the context.
 	 *
-	 * <p>
-	 * Used to represent the absence of a part parser in annotations.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
+	 * @param args
+	 * 	Runtime session arguments.
 	 */
-	public static interface Null extends HttpPartParser {}
+	protected UonPartSerializerSession(UonPartSerializer ctx, SerializerSessionArgs args) {
+		super(ctx, false, args);
+	}
 
-	/**
-	 * Creates a new parser session.
-	 *
-	 * @param args The runtime arguments for the session.
-	 * @return A new parser session.
-	 */
-	public HttpPartParserSession createSession(ParserSessionArgs args);
+	@Override /* PartSerializer */
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+		try {
+			// Shortcut for simple types.
+			ClassMeta<?> cm = getClassMetaForObject(value);
+			if (cm != null) {
+				if (cm.isNumber() || cm.isBoolean())
+					return ClassUtils.toString(value);
+				if (cm.isString()) {
+					String s = ClassUtils.toString(value);
+					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
+						return s;
+				}
+			}
+			StringWriter w = new StringWriter();
+			super.serialize(value, w);
+			return w.toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

@@ -69,7 +69,7 @@ public class DefaultHandler implements ResponseHandler {
 				}
 				p.append("mediaType", mediaType).append("characterEncoding", res.getCharacterEncoding());
 
-				SerializerSession session = s.createSession(new SerializerSessionArgs(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.isDebug() ? true : null, req.getUriContext()));
+				SerializerSession session = s.createSession(new SerializerSessionArgs(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.isDebug() ? true : null, req.getUriContext(), req.isPlainText() ? true : null));
 
 				for (Map.Entry<String,String> h : session.getResponseHeaders().entrySet())
 					res.setHeader(h.getKey(), h.getValue());

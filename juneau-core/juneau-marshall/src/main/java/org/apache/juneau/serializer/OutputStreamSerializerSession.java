@@ -85,7 +85,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 		byte[] b = serialize(o);
 		switch(getBinaryFormat()) {
 			case SPACED_HEX:  return StringUtils.toSpacedHex(b);
-			case HEX:  return StringUtils.toHex(b);
+			case HEX:  return isUseWhitespace() ? StringUtils.toSpacedHex(b) : StringUtils.toHex(b);
 			case BASE64:  return StringUtils.base64Encode(b);
 			default: return null;
 		}

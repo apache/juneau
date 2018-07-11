@@ -57,21 +57,10 @@ public interface HttpPartSerializer {
 	public static interface Null extends HttpPartSerializer {}
 
 	/**
-	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
-	 * form-data parameter, or URI path variable.
+	 * Creates a new serializer session.
 	 *
-	 * <p>
-	 * Returned values should NOT be URL-encoded.
-	 *
-	 * @param type The category of value being serialized.
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part serializer use the schema information.
-	 * @param value The value being serialized.
-	 * @return The serialized value.
-	 * @throws SerializeException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the output fails schema validation.
+	 * @param args The runtime arguments for the session.
+	 * @return A new serializer session.
 	 */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException;
+	public HttpPartSerializerSession createSession(SerializerSessionArgs args);
 }

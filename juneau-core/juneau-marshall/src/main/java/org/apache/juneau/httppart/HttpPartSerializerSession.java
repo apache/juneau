@@ -12,39 +12,33 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 
 /**
- * Interface used to convert HTTP headers, query parameters, form-data parameters, and URI path variables to POJOs
+ * Session object that lives for the duration of a single use of {@link HttpPartSerializer}.
  *
  * <p>
- * The following default implementations are provided:
- * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parts encoded in based on OpenAPI schema.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parts encoded in plain text.
- * </ul>
- *
- * <p>
- * Implementations must include either a public no-args constructor or a public constructor that takes in a single
- * {@link PropertyStore} object.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public interface HttpPartParser {
+public interface HttpPartSerializerSession {
 
 	/**
-	 * Represent "no" part parser.
+	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
+	 * form-data parameter, or URI path variable.
 	 *
 	 * <p>
-	 * Used to represent the absence of a part parser in annotations.
-	 */
-	public static interface Null extends HttpPartParser {}
-
-	/**
-	 * Creates a new parser session.
+	 * Returned values should NOT be URL-encoded.
 	 *
-	 * @param args The runtime arguments for the session.
-	 * @return A new parser session.
+	 * @param type The category of value being serialized.
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part serializer use the schema information.
+	 * @param value The value being serialized.
+	 * @return The serialized value.
+	 * @throws SerializeException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
-	public HttpPartParserSession createSession(ParserSessionArgs args);
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException;
 }

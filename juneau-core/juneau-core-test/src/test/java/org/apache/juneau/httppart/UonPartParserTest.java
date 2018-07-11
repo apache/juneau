@@ -25,8 +25,8 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UonPartParserTest {
 
-	static UonPartParser p = UonPartParser.DEFAULT;
-	static BeanSession bs = p.createBeanSession();
+	static UonPartParserSession p = UonPartParser.DEFAULT.createSession();
+	static BeanSession bs = p;
 
 	//====================================================================================================
 	// Basic test
@@ -250,7 +250,7 @@ public class UonPartParserTest {
 	//====================================================================================================
 	@Test
 	public void testSimpleBean() throws Exception {
-		UonPartParser p = UonPartParser.DEFAULT;
+		UonPartParserSession p = UonPartParser.DEFAULT.createSession();
 		A t;
 		String s = null;
 
@@ -274,7 +274,7 @@ public class UonPartParserTest {
 	public void testParseParameterObjectMap() throws Exception {
 		String in = "(name='foo bar')";
 
-		ObjectMap r =  UonPartParser.DEFAULT.parse(HttpPartType.QUERY, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
+		ObjectMap r =  UonPartParser.DEFAULT.createSession().parse(HttpPartType.QUERY, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
 
 		assertEquals("{name:'foo bar'}", JsonSerializer.DEFAULT_LAX.toString(r));
 	}

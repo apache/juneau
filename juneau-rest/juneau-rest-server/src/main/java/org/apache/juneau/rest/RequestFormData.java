@@ -56,17 +56,12 @@ import org.apache.juneau.rest.exception.*;
 public class RequestFormData extends LinkedHashMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
-	private HttpPartParser parser;
-	private BeanSession beanSession;
+	private final RestRequest req;
+	private final HttpPartParser parser;
 
-	RequestFormData setParser(HttpPartParser parser) {
+	RequestFormData(RestRequest req, HttpPartParser parser) {
+		this.req = req;
 		this.parser = parser;
-		return this;
-	}
-
-	RequestFormData setBeanSession(BeanSession beanSession) {
-		this.beanSession = beanSession;
-		return this;
 	}
 
 	/**
@@ -576,7 +571,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.parse(HttpPartType.FORMDATA, schema, val, c);
+		return parser.createSession(req.getParserSessionArgs()).parse(HttpPartType.FORMDATA, schema, val, c);
 	}
 
 	/**
@@ -605,10 +600,10 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return beanSession.getClassMeta(type, args);
+		return req.getBeanSession().getClassMeta(type, args);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return beanSession.getClassMeta(type);
+		return req.getBeanSession().getClassMeta(type);
 	}
 }

@@ -102,59 +102,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 		return quoteChar('\'');
 	}
 
-	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, newlines and indentation and spaces are added to the output to improve readability.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public WriterSerializerBuilder useWhitespace(boolean value) {
-		return set(WSERIALIZER_useWhitespace, value);
-	}
-
-	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-	 * </ul>
-	 * @return This object (for method chaining).
-	 */
-	public WriterSerializerBuilder useWhitespace() {
-		return set(WSERIALIZER_useWhitespace, true);
-	}
-
-	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>useWhitespace(<jk>true</jk>)</code>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public WriterSerializerBuilder ws() {
-		return useWhitespace();
-	}
-
 	@Override /* BeanContextBuilder */
 	public WriterSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);

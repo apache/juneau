@@ -12,61 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.parser.*;
+import org.apache.juneau.internal.*;
 
 /**
- * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.
+ * Session object that lives for the duration of a single use of {@link SimplePartSerializer}.
  *
  * <p>
- * The class being created must be one of the following in order to convert it from a string:
- *
- * <ul>
- * 	<li>
- * 		An <jk>enum</jk>.
- * 	<li>
- * 		Have a public constructor with a single <code>String</code> parameter.
- * 	<li>
- * 		Have one of the following public static methods that takes in a single <code>String</code> parameter:
- * 		<ul>
- * 			<li><code>fromString</code>
- * 			<li><code>fromValue</code>
- * 			<li><code>valueOf</code>
- * 			<li><code>parse</code>
- * 			<li><code>parseString</code>
- * 			<li><code>forName</code>
- * 			<li><code>forString</code>
- * 	</ul>
- * </ul>
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class SimplePartParser implements HttpPartParser {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Reusable instance of {@link SimplePartParser}, all default settings. */
-	public static final SimplePartParser DEFAULT = new SimplePartParser();
+public class SimplePartSerializerSession implements HttpPartSerializerSession {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	@Override
-	public SimplePartParserSession createSession(ParserSessionArgs args) {
-		return new SimplePartParserSession();
+	@Override /* PartSerializer */
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
+		return ClassUtils.toString(value);
 	}
-
-	/**
-	 * Create a new parser session on the properties defined on this context.
-	 *
-	 * <p>
-	 * Use this method for creating sessions if you don't need to override any
-	 * properties or locale/timezone currently set on this context.
-	 *
-	 * @return A new session object.
-	 */
-	public SimplePartParserSession createSession() {
-		return new SimplePartParserSession();
-	}
-
 }

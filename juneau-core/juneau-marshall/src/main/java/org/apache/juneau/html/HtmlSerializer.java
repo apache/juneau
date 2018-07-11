@@ -617,7 +617,7 @@ public class HtmlSerializer extends XmlSerializer {
 			super(
 				ps.builder()
 					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
+					.set(SERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}

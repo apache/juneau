@@ -12,16 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
-import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
-
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -154,7 +148,6 @@ public class OpenApiPartParser extends UonPartParser {
 	 */
 	public static final String OAPI_schema = PREFIX + "schema.o";
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
@@ -163,23 +156,13 @@ public class OpenApiPartParser extends UonPartParser {
 	public static final OpenApiPartParser DEFAULT = new OpenApiPartParser(PropertyStore.DEFAULT);
 
 	// Cache these for faster lookup
-	private static final BeanContext BC = BeanContext.DEFAULT;
-	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
-	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
-	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
-	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
-	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
-	private static final ClassMeta<ObjectList> CM_ObjectList = BC.getClassMeta(ObjectList.class);
-	private static final ClassMeta<ObjectMap> CM_ObjectMap = BC.getClassMeta(ObjectMap.class);
-
 	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
+	
 	private final HttpPartSchema schema;
-	private final BeanSession bs;
 
 	/**
 	 * Constructor.
@@ -190,7 +173,6 @@ public class OpenApiPartParser extends UonPartParser {
 		super(
 			ps.builder().build()
 		);
-		this.bs = createBeanSession();
 		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, DEFAULT_SCHEMA);
 	}
 
@@ -215,202 +197,32 @@ public class OpenApiPartParser extends UonPartParser {
 		return new UonPartParserBuilder();
 	}
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Entry point methods
+	//-------------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public OpenApiPartParserSession createSession() {
+		return new OpenApiPartParserSession(this, ParserSessionArgs.DEFAULT);
+	}
+
+	@Override
+	public OpenApiPartParserSession createSession(ParserSessionArgs args) {
+		return new OpenApiPartParserSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Convenience method for parsing a part.
+	 * Configuration property:  OpenAPI schema description.
 	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The input being parsed.
-	 * @param type The category of value being parsed.
-	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 * @see #OAPI_schema
+	 * @return
+	 * 	The default part schema on this serializer, or <jk>null</jk> if none is defined.
 	 */
-	public <T> T parse(HttpPartSchema schema, String in, Class<T> type) throws ParseException, SchemaValidationException {
-		return parse(null, schema, in, getClassMeta(type));
-	}
-
-	/**
-	 * Convenience method for parsing a part to a map or collection.
-	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The input being parsed.
-	 * @param type The category of value being parsed.
-	 * @param args The type arguments of the map or collection.
-	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T parse(HttpPartSchema schema, String in, java.lang.reflect.Type type, java.lang.reflect.Type...args) throws ParseException, SchemaValidationException {
-		return (T)parse(null, schema, in, getClassMeta(type, args));
-	}
-
-	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
-		schema = ObjectUtils.firstNonNull(schema, this.schema, DEFAULT_SCHEMA);
-		T t = parseInner(partType, schema, in, type);
-		if (t == null && type.isPrimitive())
-			t = type.getPrimitiveDefault();
-		schema.validateOutput(t, this);
-		return t;
-	}
-
-	@SuppressWarnings({ "unchecked" })
-	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
-		schema.validateInput(in);
-		if (in == null) {
-			if (schema.getDefault() == null)
-				return null;
-			in = schema.getDefault();
-		} else {
-			HttpPartSchema.Type t = schema.getType(type);
-			HttpPartSchema.Format f = schema.getFormat();
-
-			if (t == STRING) {
-				if (type.isObject()) {
-					if (f == BYTE)
-						return (T)base64Decode(in);
-					if (f == DATE || f == DATE_TIME)
-						return (T)parseIsoCalendar(in);
-					if (f == BINARY)
-						return (T)fromHex(in);
-					if (f == BINARY_SPACED)
-						return (T)fromSpacedHex(in);
-					if (f == HttpPartSchema.Format.UON)
-						return super.parse(partType, schema, in, type);
-					return (T)in;
-				}
-				if (f == BYTE)
-					return toType(base64Decode(in), type);
-				if (f == DATE || f == DATE_TIME)
-					return toType(parseIsoCalendar(in), type);
-				if (f == BINARY)
-					return toType(fromHex(in), type);
-				if (f == BINARY_SPACED)
-					return toType(fromSpacedHex(in), type);
-				if (f == HttpPartSchema.Format.UON)
-					return super.parse(partType, schema, in, type);
-				return toType(in, type);
-
-			} else if (t == ARRAY) {
-				if (type.isObject())
-					type = (ClassMeta<T>)CM_ObjectList;
-
-				ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
-				if (eType == null)
-					eType = schema.getParsedType().getElementType();
-
-				HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
-				String[] ss = new String[0];
-
-				if (cf == MULTI)
-					ss = new String[]{in};
-				else if (cf == CSV)
-					ss = split(in, ',');
-				else if (cf == PIPES)
-					ss = split(in, '|');
-				else if (cf == SSV)
-					ss = splitQuoted(in);
-				else if (cf == TSV)
-					ss = split(in, '\t');
-				else if (cf == HttpPartSchema.CollectionFormat.UON)
-					return super.parse(partType, null, in, type);
-				else if (cf == NO_COLLECTION_FORMAT) {
-					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
-						return super.parse(partType, null, in, type);
-					ss = split(in, ',');
-				}
-
-				Object[] o = null;
-				if (schema.getItems() != null) {
-					o = new Object[ss.length];
-					for (int i = 0; i < ss.length; i++)
-						o[i] = parse(partType, schema.getItems(), ss[i], eType);
-				} else {
-					o = ss;
-				}
-				if (type.hasTransformFrom(schema.getParsedType()) || schema.getParsedType().hasTransformTo(type))
-					return toType(toType(o, schema.getParsedType()), type);
-				return toType(o, type);
-
-			} else if (t == BOOLEAN) {
-				if (type.isObject())
-					type = (ClassMeta<T>)CM_Boolean;
-				if (type.isBoolean())
-					return super.parse(partType, schema, in, type);
-				return toType(super.parse(partType, schema, in, CM_Boolean), type);
-
-			} else if (t == INTEGER) {
-				if (type.isObject()) {
-					if (f == INT64)
-						type = (ClassMeta<T>)CM_Long;
-					else
-						type = (ClassMeta<T>)CM_Integer;
-				}
-				if (type.isNumber())
-					return super.parse(partType, schema, in, type);
-				return toType(super.parse(partType, schema, in, CM_Integer), type);
-
-			} else if (t == NUMBER) {
-				if (type.isObject()) {
-					if (f == DOUBLE)
-						type = (ClassMeta<T>)CM_Double;
-					else
-						type = (ClassMeta<T>)CM_Float;
-				}
-				if (type.isNumber())
-					return super.parse(partType, schema, in, type);
-				return toType(super.parse(partType, schema, in, CM_Integer), type);
-
-			} else if (t == OBJECT) {
-				if (type.isObject())
-					type = (ClassMeta<T>)CM_ObjectMap;
-				if (schema.hasProperties() && type.isMapOrBean()) {
-					try {
-						if (type.isBean()) {
-							BeanMap<T> m = BC.createBeanSession().newBeanMap(type.getInnerClass());
-							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
-								String key = e.getKey();
-								BeanPropertyMeta bpm = m.getPropertyMeta(key);
-								m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
-							}
-							return m.getBean();
-						}
-						Map<String,Object> m = (Map<String,Object>)type.newInstance();
-						for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
-							String key = e.getKey();
-							m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), object()));
-						}
-						return (T)m;
-					} catch (Exception e1) {
-						throw new ParseException(e1, "Could not instantiate type ''{0}''.", type);
-					}
-				}
-				return super.parse(partType, schema, in, type);
-
-			} else if (t == FILE) {
-				throw new ParseException("File part not supported.");
-
-			} else if (t == NO_TYPE) {
-				// This should never be returned by HttpPartSchema.getType(ClassMeta).
-				throw new ParseException("Invalid type.");
-			}
-		}
-
-		return super.parse(partType, schema, in, type);
-	}
-
-	private <T> T toType(Object in, ClassMeta<T> type) throws ParseException {
-		try {
-			return bs.convertToType(in, type);
-		} catch (InvalidDataConversionException e) {
-			throw new ParseException(e.getMessage());
-		}
+	protected final HttpPartSchema getSchema() {
+		return schema;
 	}
 }

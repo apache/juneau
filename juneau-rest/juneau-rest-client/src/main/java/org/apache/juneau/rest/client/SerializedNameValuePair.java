@@ -63,7 +63,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {
-			return serializer.serialize(HttpPartType.FORMDATA, schema, value);
+			return serializer.createSession(null).serialize(HttpPartType.FORMDATA, schema, value);
 		} catch (SerializeException | SchemaValidationException e) {
 			throw new RuntimeException(e);
 		}

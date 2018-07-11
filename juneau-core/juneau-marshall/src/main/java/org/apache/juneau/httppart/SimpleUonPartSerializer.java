@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -36,7 +37,6 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 
 	/** Reusable instance of {@link SimpleUonPartSerializer}, all default settings. */
 	public static final SimpleUonPartSerializer DEFAULT = new SimpleUonPartSerializer(PropertyStore.DEFAULT);
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -72,5 +72,19 @@ public class SimpleUonPartSerializer extends UonPartSerializer {
 	 */
 	public static SimpleUonPartSerializerBuilder create() {
 		return new SimpleUonPartSerializerBuilder();
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Entry point methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public SimpleUonPartSerializerSession createSession(SerializerSessionArgs args) {
+		return new SimpleUonPartSerializerSession(this, args);
+	}
+
+	@Override
+	public SimpleUonPartSerializerSession createSession() {
+		return new SimpleUonPartSerializerSession(this, SerializerSessionArgs.DEFAULT);
 	}
 }

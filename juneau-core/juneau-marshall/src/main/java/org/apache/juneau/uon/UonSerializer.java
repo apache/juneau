@@ -279,7 +279,7 @@ public class UonSerializer extends WriterSerializer {
 		 * @param ps The property store containing all the settings for this object.
 		 */
 		public Readable(PropertyStore ps) {
-			super(ps.builder().set(WSERIALIZER_useWhitespace, true).build());
+			super(ps.builder().set(SERIALIZER_useWhitespace, true).build());
 		}
 	}
 

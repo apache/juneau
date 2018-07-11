@@ -56,7 +56,8 @@ public abstract class ParserSession extends BeanSession {
 	 * 	Runtime session arguments.
 	 */
 	protected ParserSession(Parser ctx, ParserSessionArgs args) {
-		super(ctx, args);
+		super(ctx, args == null ? ParserSessionArgs.DEFAULT : args);
+		args = args == null ? ParserSessionArgs.DEFAULT : args;
 		this.ctx = ctx;
 		javaMethod = args.javaMethod;
 		outer = args.outer;

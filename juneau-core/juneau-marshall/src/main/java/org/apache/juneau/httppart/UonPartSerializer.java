@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import java.io.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
@@ -34,7 +31,6 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 
 	/** Reusable instance of {@link UonPartSerializer}, all default settings. */
 	public static final UonPartSerializer DEFAULT = new UonPartSerializer(PropertyStore.DEFAULT);
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
@@ -72,43 +68,17 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 		return new UonPartSerializerBuilder();
 	}
 
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 	// Entry point methods
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Convenience method for calling the parse method without a schema object.
-	 *
-	 * @param type The category of value being serialized.
-	 * @param value The value being serialized.
-	 * @return The serialized value.
-	 * @throws SerializeException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the output fails schema validation.
-	 */
-	public String serialize(HttpPartType type, Object value) throws SerializeException, SchemaValidationException {
-		return serialize(type, null, value);
+	@Override
+	public UonPartSerializerSession createSession(SerializerSessionArgs args) {
+		return new UonPartSerializerSession(this, args);
 	}
 
-	@Override /* PartSerializer */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-		try {
-			// Shortcut for simple types.
-			ClassMeta<?> cm = getClassMetaForObject(value);
-			if (cm != null) {
-				if (cm.isNumber() || cm.isBoolean())
-					return ClassUtils.toString(value);
-				if (cm.isString()) {
-					String s = ClassUtils.toString(value);
-					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
-						return s;
-				}
-			}
-			StringWriter w = new StringWriter();
-			UonSerializerSession s = new UonSerializerSession(this, false, createDefaultSessionArgs());
-			s.serialize(value, w);
-			return w.toString();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	@Override
+	public UonPartSerializerSession createSession() {
+		return new UonPartSerializerSession(this, SerializerSessionArgs.DEFAULT);
 	}
 }

@@ -274,7 +274,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 		 */
 		public Readable(PropertyStore ps) {
 			super(
-				ps.builder().set(WSERIALIZER_useWhitespace, true).build()
+				ps.builder().set(SERIALIZER_useWhitespace, true).build()
 			);
 		}
 	}
@@ -310,7 +310,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 				ps.builder()
 					.set(JSON_simpleMode, true)
 					.set(WSERIALIZER_quoteChar, '\'')
-					.set(WSERIALIZER_useWhitespace, true)
+					.set(SERIALIZER_useWhitespace, true)
 					.build()
 			);
 		}

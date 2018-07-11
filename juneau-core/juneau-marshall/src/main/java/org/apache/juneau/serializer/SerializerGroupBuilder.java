@@ -679,7 +679,7 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @param value
@@ -688,7 +688,7 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder useWhitespace(boolean value) {
-		return set(WSERIALIZER_useWhitespace, value);
+		return set(SERIALIZER_useWhitespace, value);
 	}
 
 	/**
@@ -699,12 +699,12 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
 	public SerializerGroupBuilder useWhitespace() {
-		return set(WSERIALIZER_useWhitespace, true);
+		return set(SERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -715,7 +715,7 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).

@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
@@ -29,13 +30,21 @@ public class SimplePartSerializer implements HttpPartSerializer {
 	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
 	public static final SimplePartSerializer DEFAULT = new SimplePartSerializer();
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	@Override /* PartSerializer */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
-		return ClassUtils.toString(value);
+	@Override
+	public SimplePartSerializerSession createSession(SerializerSessionArgs args) {
+		return new SimplePartSerializerSession();
+	}
+
+	/**
+	 * Convenience method for creating a new serializer session with default session args.
+	 *
+	 * @return A new session object.
+	 */
+	public SimplePartSerializerSession createSession() {
+		return new SimplePartSerializerSession();
 	}
 }

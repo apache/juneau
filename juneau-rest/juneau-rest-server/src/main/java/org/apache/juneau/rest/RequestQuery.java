@@ -45,16 +45,15 @@ import org.apache.juneau.utils.*;
 public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
+	private final RestRequest req;
 	private HttpPartParser parser;
-	private BeanSession beanSession;
+
+	RequestQuery(RestRequest req) {
+		this.req = req;
+	}
 
 	RequestQuery parser(HttpPartParser parser) {
 		this.parser = parser;
-		return this;
-	}
-
-	RequestQuery beanSession(BeanSession beanSession) {
-		this.beanSession = beanSession;
 		return this;
 	}
 
@@ -62,7 +61,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * Create a copy of the request query parameters.
 	 */
 	RequestQuery copy() {
-		RequestQuery rq = new RequestQuery();
+		RequestQuery rq = new RequestQuery(req);
 		rq.putAll(this);
 		return rq;
 	}
@@ -454,7 +453,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public <T> T getAll(String name, Class<T> c) throws BadRequest, InternalServerError {
-		return getAllInner(null, null, name, null, beanSession.getClassMeta(c));
+		return getAllInner(null, null, name, null, getClassMeta(c));
 	}
 
 	/**
@@ -634,7 +633,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> c) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.parse(HttpPartType.QUERY, schema, val, c);
+		return parser.createSession(req.getParserSessionArgs()).parse(HttpPartType.QUERY, schema, val, c);
 	}
 
 	/**
@@ -682,10 +681,10 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return beanSession.getClassMeta(type, args);
+		return req.getBeanSession().getClassMeta(type, args);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return beanSession.getClassMeta(type);
+		return req.getBeanSession().getClassMeta(type);
 	}
 }

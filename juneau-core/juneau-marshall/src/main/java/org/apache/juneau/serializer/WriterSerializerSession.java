@@ -105,17 +105,6 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * @see #WSERIALIZER_useWhitespace
-	 * @return
-	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
-	 */
-	public final boolean isUseWhitespace() {
-		return ctx.isUseWhitespace();
-	}
-
-	/**
 	 * Configuration property:  Quote character.
 	 *
 	 * @see #WSERIALIZER_quoteChar

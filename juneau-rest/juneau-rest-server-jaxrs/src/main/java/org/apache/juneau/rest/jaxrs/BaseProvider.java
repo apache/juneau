@@ -121,7 +121,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
 
-			SerializerSession session = s.createSession(new SerializerSessionArgs(mp, null, locale, timeZone, sm.getMediaType(), null, null));
+			SerializerSession session = s.createSession(new SerializerSessionArgs(mp, null, locale, timeZone, sm.getMediaType(), null, null, null));
 
 			// Leave this open in case an error occurs.
 			Closeable c = s.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os;

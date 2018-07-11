@@ -1805,7 +1805,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @param value
@@ -1814,7 +1814,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder useWhitespace(boolean value) {
-		return set(WSERIALIZER_useWhitespace, value);
+		return set(SERIALIZER_useWhitespace, value);
 	}
 
 	/**
@@ -1825,12 +1825,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder useWhitespace() {
-		return set(WSERIALIZER_useWhitespace, true);
+		return set(SERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -1841,13 +1841,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link WriterSerializer#WSERIALIZER_useWhitespace}
+	 * 	<li class='jf'>{@link Serializer#SERIALIZER_useWhitespace}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder ws() {
-		return set(WSERIALIZER_useWhitespace, true);
+		return set(SERIALIZER_useWhitespace, true);
 	}
 
 	/**

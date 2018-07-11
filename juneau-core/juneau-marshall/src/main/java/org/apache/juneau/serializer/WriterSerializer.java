@@ -105,47 +105,6 @@ public abstract class WriterSerializer extends Serializer {
 	 */
 	public static final String WSERIALIZER_quoteChar = PREFIX + "quoteChar.s";
 
-	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"WriterSerializer.useWhitespace.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace(boolean)}
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#useWhitespace()}
-	 * 			<li class='jm'>{@link WriterSerializerBuilder#ws()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ws()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces "\{\n\t'foo': 'bar'\n\}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 */
-	public static final String WSERIALIZER_useWhitespace = PREFIX + "useWhitespace.b";
-
 	static final WriterSerializer DEFAULT = new WriterSerializer(PropertyStore.create().build(), "", "") {
 		@Override
 		public WriterSerializerSession createSession(SerializerSessionArgs args) {
@@ -158,7 +117,6 @@ public abstract class WriterSerializer extends Serializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final int maxIndent;
-	private final boolean useWhitespace;
 	private final char quoteChar;
 
 	/**
@@ -191,7 +149,6 @@ public abstract class WriterSerializer extends Serializer {
 	protected WriterSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 
-		useWhitespace = getBooleanProperty(WSERIALIZER_useWhitespace, false);
 		maxIndent = getIntegerProperty(WSERIALIZER_maxIndent, 100);
 		quoteChar = getStringProperty(WSERIALIZER_quoteChar, "\"").charAt(0);
 	}
@@ -280,17 +237,6 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * @see #WSERIALIZER_useWhitespace
-	 * @return
-	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
-	 */
-	protected final boolean isUseWhitespace() {
-		return useWhitespace;
-	}
-
-	/**
 	 * Configuration property:  Quote character.
 	 *
 	 * @see #WSERIALIZER_quoteChar
@@ -305,7 +251,6 @@ public abstract class WriterSerializer extends Serializer {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("WriterSerializer", new ObjectMap()
-				.append("useWhitespace", useWhitespace)
 				.append("maxIndent", maxIndent)
 				.append("quoteChar", quoteChar)
 			);

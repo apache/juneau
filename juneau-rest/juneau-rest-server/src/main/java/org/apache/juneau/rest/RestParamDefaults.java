@@ -622,13 +622,13 @@ class RestParamDefaults {
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
+		public Object resolve(final RestRequest req, final RestResponse res) throws Exception {
 			Value<Object> v = (Value<Object>)getTypeClass().newInstance();
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object newValue) {
 					try {
-						res.setHeader(name, partSerializer.serialize(HttpPartType.HEADER, schema, newValue));
+						res.setHeader(name, partSerializer.createSession(req.getSerializerSessionArgs()).serialize(HttpPartType.HEADER, schema, newValue));
 					} catch (SerializeException | SchemaValidationException e) {
 						throw new RuntimeException(e);
 					}

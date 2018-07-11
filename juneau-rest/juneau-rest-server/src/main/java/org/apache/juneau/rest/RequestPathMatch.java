@@ -36,21 +36,17 @@ import org.apache.juneau.rest.exception.*;
 public class RequestPathMatch extends TreeMap<String,String> {
 	private static final long serialVersionUID = 1L;
 
+	private final RestRequest req;
 	private HttpPartParser parser;
-	private BeanSession beanSession;
 	private String remainder, pattern;
 
-	RequestPathMatch() {
+	RequestPathMatch(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
+		this.req = req;
 	}
 
 	RequestPathMatch parser(HttpPartParser parser) {
 		this.parser = parser;
-		return this;
-	}
-
-	RequestPathMatch beanSession(BeanSession beanSession) {
-		this.beanSession = beanSession;
 		return this;
 	}
 
@@ -83,7 +79,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * @throws InternalServerError Thrown if any other exception occurs.
 	 */
 	public String getString(String name) throws BadRequest, InternalServerError {
-		return getInner(parser, null, name, null, beanSession.string());
+		return getInner(parser, null, name, null, req.getBeanSession().string());
 	}
 
 	/**
@@ -269,7 +265,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.parse(HttpPartType.PATH, schema, val, cm);
+		return parser.createSession(req.getParserSessionArgs()).parse(HttpPartType.PATH, schema, val, cm);
 	}
 
 	/**
@@ -350,10 +346,10 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return beanSession.getClassMeta(type, args);
+		return req.getBeanSession().getClassMeta(type, args);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return beanSession.getClassMeta(type);
+		return req.getBeanSession().getClassMeta(type);
 	}
 }

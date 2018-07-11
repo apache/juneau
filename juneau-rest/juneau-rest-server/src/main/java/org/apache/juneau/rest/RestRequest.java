@@ -94,6 +94,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private RequestHeaders headers;
 	private Config cf;
 	private Swagger swagger;
+	private SerializerSessionArgs serializerSessionArgs;
+	private ParserSessionArgs parserSessionArgs;
 
 	/**
 	 * Constructor.
@@ -107,7 +109,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			// If this is a POST, we want to parse the query parameters ourselves to prevent
 			// the servlet code from processing the HTTP body as URL-Encoded parameters.
-			queryParams = new RequestQuery();
+			queryParams = new RequestQuery(this);
 			if (isPost)
 				RestUtils.parseQuery(getQueryString(), queryParams);
 			else
@@ -124,7 +126,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			method = _method;
 
-			headers = new RequestHeaders();
+			headers = new RequestHeaders(this);
 			for (Enumeration<String> e = getHeaderNames(); e.hasMoreElements();) {
 				String name = e.nextElement();
 				headers.put(name, super.getHeaders(name));
@@ -141,11 +143,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			}
 
 			if (context.isAllowHeaderParams())
-				headers.setQueryParams(queryParams);
+				headers.queryParams(queryParams);
 
 			debug = "true".equals(getQuery().getString("debug", "false")) || "true".equals(getHeaders().getString("Debug", "false"));
 
-			this.pathParams = new RequestPathMatch();
+			this.pathParams = new RequestPathMatch(this);
 
 		} catch (RestException e) {
 			throw e;
@@ -163,22 +165,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.properties = properties;
 		this.beanSession = rjm.beanContext.createSession();
 		this.pathParams
-			.parser(rjm.partParser)
-			.beanSession(beanSession);
+			.parser(rjm.partParser);
 		this.queryParams
 			.addDefault(rjm.defaultQuery)
-			.parser(rjm.partParser)
-			.beanSession(beanSession);
+			.parser(rjm.partParser);
 		this.headers
 			.addDefault(rjm.defaultRequestHeaders)
 			.addDefault(context.getDefaultRequestHeaders())
-			.parser(rjm.partParser)
-			.beanSession(beanSession);
+			.parser(rjm.partParser);
 		this.body
 			.encoders(rjm.encoders)
 			.parsers(rjm.parsers)
 			.headers(headers)
-			.beanSession(beanSession)
 			.maxInput(rjm.maxInput);
 
 		String stylesheet = getQuery().getString("stylesheet");
@@ -195,9 +193,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				+ "\n=== END ========================================================================";
 			context.getLogger().log(Level.WARNING, msg);
 		}
-
-		if (isPlainText())
-			this.properties.put(WSERIALIZER_useWhitespace, true);
 	}
 
 	/**
@@ -560,8 +555,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public RequestFormData getFormData() throws InternalServerError {
 		try {
 			if (formData == null) {
-				formData = new RequestFormData();
-				formData.setParser(restJavaMethod.partParser).setBeanSession(beanSession);
+				formData = new RequestFormData(this, restJavaMethod.partParser);
 				if (! body.isLoaded()) {
 					formData.putAll(getParameterMap());
 				} else {
@@ -1435,6 +1429,18 @@ public final class RestRequest extends HttpServletRequestWrapper {
 			}
 		}
 		return sb.toString();
+	}
+
+	SerializerSessionArgs getSerializerSessionArgs() {
+		if (serializerSessionArgs == null)
+			serializerSessionArgs = new SerializerSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, isDebug() ? true : null, getUriContext(), isPlainText() ? true : null);
+		return serializerSessionArgs;
+	}
+
+	ParserSessionArgs getParserSessionArgs() {
+		if (parserSessionArgs == null)
+			parserSessionArgs = new ParserSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, isDebug() ? true : null, getUriContext());
+		return parserSessionArgs;
 	}
 
 	/**

@@ -26,7 +26,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenApiPartSerializerTest {
 
-	static OpenApiPartSerializer s = OpenApiPartSerializer.DEFAULT;
+	static OpenApiPartSerializerSession s = OpenApiPartSerializer.DEFAULT.createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Input validations

@@ -48,7 +48,6 @@ public class RequestBody {
 	private ParserGroup parsers;
 	private long maxInput;
 	private RequestHeaders headers;
-	private BeanSession beanSession;
 	private int contentLength = 0;
 	private MediaType mediaType;
 	private Parser parser;
@@ -74,11 +73,6 @@ public class RequestBody {
 
 	RequestBody maxInput(long maxInput) {
 		this.maxInput = maxInput;
-		return this;
-	}
-
-	RequestBody beanSession(BeanSession beanSession) {
-		this.beanSession = beanSession;
 		return this;
 	}
 
@@ -481,7 +475,7 @@ public class RequestBody {
 		if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
 			if (partParser != null) {
 				String in = asString();
-				return partParser.parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
+				return partParser.createSession(req.getParserSessionArgs()).parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
 			} else if (cm.hasStringTransform()) {
 				return cm.getStringTransform().transform(asString());
 			}
@@ -531,10 +525,10 @@ public class RequestBody {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return beanSession.getClassMeta(type, args);
+		return req.getBeanSession().getClassMeta(type, args);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return beanSession.getClassMeta(type);
+		return req.getBeanSession().getClassMeta(type);
 	}
 }

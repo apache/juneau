@@ -121,7 +121,7 @@ public class LinkString implements Comparable<LinkString> {
 	public LinkString uri(String uri, Object...args) {
 		for (int i = 0; i < args.length; i++)
 			try {
-				args[i] = SimpleUonPartSerializer.DEFAULT.serialize(HttpPartType.PATH, args[i]);
+				args[i] = SimpleUonPartSerializer.DEFAULT.createSession().serialize(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) {
 				throw new RuntimeException(e);
 			}

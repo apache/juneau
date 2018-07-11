@@ -41,12 +41,13 @@ import org.apache.juneau.rest.exception.*;
 public class RequestHeaders extends TreeMap<String,String[]> {
 	private static final long serialVersionUID = 1L;
 
+	private final RestRequest req;
 	private HttpPartParser parser;
-	private BeanSession beanSession;
 	private RequestQuery queryParams;
 
-	RequestHeaders() {
+	RequestHeaders(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
+		this.req = req;
 	}
 
 	RequestHeaders parser(HttpPartParser parser) {
@@ -54,12 +55,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 		return this;
 	}
 
-	RequestHeaders beanSession(BeanSession beanSession) {
-		this.beanSession = beanSession;
-		return this;
-	}
-
-	RequestHeaders setQueryParams(RequestQuery queryParams) {
+	RequestHeaders queryParams(RequestQuery queryParams) {
 		this.queryParams = queryParams;
 		return this;
 	}
@@ -408,7 +404,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.parse(HttpPartType.HEADER, schema, val, cm);
+		return parser.createSession(req.getParserSessionArgs()).parse(HttpPartType.HEADER, schema, val, cm);
 	}
 
 	/**
@@ -418,7 +414,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @return A new headers object.
 	 */
 	public RequestHeaders subset(String...headers) {
-		RequestHeaders rh2 = new RequestHeaders().parser(parser).beanSession(beanSession).setQueryParams(queryParams);
+		RequestHeaders rh2 = new RequestHeaders(req).parser(parser).queryParams(queryParams);
 		for (String h : headers)
 			if (containsKey(h))
 				rh2.put(h, get(h));
@@ -958,10 +954,10 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return beanSession.getClassMeta(type, args);
+		return req.getBeanSession().getClassMeta(type, args);
 	}
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return beanSession.getClassMeta(type);
+		return req.getBeanSession().getClassMeta(type);
 	}
 }

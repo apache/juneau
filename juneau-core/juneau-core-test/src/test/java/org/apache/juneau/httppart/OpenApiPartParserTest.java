@@ -28,7 +28,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenApiPartParserTest {
 
-	static OpenApiPartParser p = OpenApiPartParser.DEFAULT;
+	static OpenApiPartParserSession p = OpenApiPartParser.DEFAULT.createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Input validations

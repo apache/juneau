@@ -27,6 +27,11 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	Object outer;
 
 	/**
+	 * Default parser session args.
+	 */
+	public static final ParserSessionArgs DEFAULT = new ParserSessionArgs();
+
+	/**
 	 * Constructor
 	 */
 	public ParserSessionArgs() {}
