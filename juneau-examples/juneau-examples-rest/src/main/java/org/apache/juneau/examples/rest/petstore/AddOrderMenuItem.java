@@ -15,10 +15,6 @@ package org.apache.juneau.examples.rest.petstore;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import java.util.*;
-import java.util.Map;
-
-import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -32,15 +28,13 @@ public class AddOrderMenuItem extends MenuItemWidget {
 		return "add";
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override /* MenuItemWidget */
+	public String getBeforeShowScript(RestRequest req) throws Exception {
+		return loadScript("AddOrderMenuItem_beforeShow.js");
+	}
+
 	@Override /* Widget */
 	public Object getContent(RestRequest req) throws Exception {
-		Map<Long,String> petNames = (Map<Long,String>)req.getAttribute("availablePets");
-
-		List<Option> options = new ArrayList<>();
-		for (Map.Entry<Long,String> e : petNames.entrySet())
-			options.add(option(e.getKey(), e.getValue()));
-
 
 		return div(
 			form().id("form").action("servlet:/store/order").method(POST).children(
@@ -48,9 +42,7 @@ public class AddOrderMenuItem extends MenuItemWidget {
 					tr(
 						th("Pet:"),
 						td(
-							select().name("petId").children(
-								options.toArray()
-							)
+							select().id("addPet_names").name("petId")
 						),
 						td(new Tooltip("(?)", "The pet to purchase."))
 					),
@@ -62,7 +54,6 @@ public class AddOrderMenuItem extends MenuItemWidget {
 					tr(
 						td().colspan(2).style("text-align:right").children(
 							button("reset", "Reset"),
-							button("button","Cancel").onclick("window.location.href='/'"),
 							button("submit", "Submit")
 						)
 					)

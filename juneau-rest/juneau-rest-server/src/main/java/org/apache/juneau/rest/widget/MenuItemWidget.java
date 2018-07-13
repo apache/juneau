@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.html.*;
@@ -71,6 +73,70 @@ public abstract class MenuItemWidget extends Widget {
 	}
 
 	/**
+	 * Optional Javascript to execute immediately before a menu item is shown.
+	 *
+	 * <p>
+	 * For example, the following shows how the method could be used to make an AJAX call back to the REST
+	 * interface to populate a SELECT element in the contents of the popup dialog:
+	 *
+	 * <p class='bcode'>
+	 * 	<ja>@Override</ja>
+	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest req) {
+	 * 		<jk>return</jk> <js>""</js>
+	 * 			+ <js>"\n	var xhr = new XMLHttpRequest();"</js>
+	 * 			+ <js>"\n	xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&v=id,name', true);"</js>
+	 * 			+ <js>"\n	xhr.setRequestHeader('Accept', 'application/json');"</js>
+	 * 			+ <js>"\n	xhr.onload = function() {"</js>
+	 * 			+ <js>"\n       var pets = JSON.parse(xhr.responseText);"</js>
+	 * 			+ <js>"\n 		var select = document.getElementById('addPet_names');"</js>
+	 * 			+ <js>"\n 		select.innerHTML = '';"</js>
+	 * 			+ <js>"\n 		for (var i in pets) {"</js>
+	 * 			+ <js>"\n 			var pet = pets[i];"</js>
+	 * 			+ <js>"\n 			var opt = document.createElement('option');"</js>
+	 * 			+ <js>"\n 			opt.value = pet.id;"</js>
+	 * 			+ <js>"\n 			opt.innerHTML = pet.name;"</js>
+	 * 			+ <js>"\n 			select.appendChild(opt);"</js>
+	 * 			+ <js>"\n 		}"</js>
+	 * 			+ <js>"\n	}"</js>
+	 * 			+ <js>"\n	xhr.send();"</js>
+	 * 		;
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * Note that it's often easier (and cleaner) to use the {@link #loadScript(String)} method and read the Javascript from
+	 * your classpath:
+	 *
+	 * <p class='bcode'>
+	 * 	<ja>@Override</ja>
+	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest req) <jk>throws</jk> Exception {
+	 * 		<jk>return</jk> loadScript(<js>"AddOrderMenuItem_beforeShow.js"</js>);
+	 * 	}
+	 * </p>
+	 *
+	 * @param req The current request.
+	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
+	 * @throws Exception
+	 */
+	public String getBeforeShowScript(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * Optional Javascript to execute immediately after a menu item is shown.
+	 *
+	 * <p>
+	 * Same as {@link #getBeforeShowScript(RestRequest)} except this Javascript gets executed after the popup dialog has become visible.
+	 *
+	 * @param req The current request.
+	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
+	 * @throws Exception
+	 */
+	public String getAfterShowScript(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
 	 * Defines a <js>"menu-item"</js> class that needs to be used on the outer element of the HTML returned by the
 	 * {@link #getHtml(RestRequest)} method.
 	 */
@@ -82,10 +148,33 @@ public abstract class MenuItemWidget extends Widget {
 	@Override /* Widget */
 	public String getHtml(RestRequest req) throws Exception {
 		StringBuilder sb = new StringBuilder();
+
+		// Need a unique number to define unique function names.
+		Integer id = null;
+
+		String pre = nullIfEmpty(getBeforeShowScript(req)), post = nullIfEmpty(getAfterShowScript(req));
+
+		sb.append("\n<div class='menu-item'>");
+		if (pre != null || post != null) {
+			id = getId(req);
+
+			sb.append("\n\t<script>");
+			if (pre != null) {
+				sb.append("\n\t\tfunction onPreShow" + id + "() {");
+				sb.append("\n").append(pre);
+				sb.append("\n\t\t}");
+			}
+			if (post != null) {
+				sb.append("\n\t\tfunction onPostShow" + id + "() {");
+				sb.append("\n").append(pre);
+				sb.append("\n\t\t}");
+			}
+			sb.append("\n\t</script>");
+		}
+		String onclick = (pre == null ? "" : "onPreShow"+id+"();") + "menuClick(this);" + (post == null ? "" : "onPostShow"+id+"();");
 		sb.append(""
-			+ "<div class='menu-item'>"
-			+ "\n\t<a onclick='menuClick(this)'>"+getLabel(req)+"</a>"
-			+ "\n\t<div class='popup-content'>\n"
+			+ "\n\t<a onclick='"+onclick+"'>"+getLabel(req)+"</a>"
+			+ "\n<div class='popup-content'>"
 		);
 		Object o = getContent(req);
 		if (o instanceof Reader) {
@@ -105,6 +194,16 @@ public abstract class MenuItemWidget extends Widget {
 			+ "\n</div>"
 		);
 		return sb.toString();
+	}
+
+	private Integer getId(RestRequest req) {
+		Integer id = (Integer)req.getAttribute("LastMenuItemId");
+		if (id == null)
+			id = 1;
+		else
+			id = id + 1;
+		req.setAttribute("LastMenuItemId", id);
+		return id;
 	}
 
 	/**
