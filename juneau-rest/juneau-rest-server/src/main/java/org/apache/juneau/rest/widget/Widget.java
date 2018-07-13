@@ -251,6 +251,24 @@ public abstract class Widget {
 	}
 
 	/**
+	 * Same as {@link #loadScript(String)} but replaces request-time SVL variables.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+	 * </ul>
+	 *
+	 * @param req The current HTTP request.
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException
+	 */
+	protected String loadScriptWithVars(RestRequest req, String name) throws IOException {
+		return req.getVarResolverSession().resolve(loadScript(name));
+	}
+
+	/**
 	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips CSS comments from
 	 * the file.
 	 *
@@ -269,6 +287,24 @@ public abstract class Widget {
 	}
 
 	/**
+	 * Same as {@link #loadStyle(String)} but replaces request-time SVL variables.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+	 * </ul>
+	 *
+	 * @param req The current HTTP request.
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException
+	 */
+	protected String loadStyleWithVars(RestRequest req, String name) throws IOException {
+		return req.getVarResolverSession().resolve(loadStyle(name));
+	}
+
+	/**
 	 * Convenience method for calling {@link #getClasspathResourceAsString(String)} except also strips HTML comments from the
 	 * file.
 	 *
@@ -284,5 +320,23 @@ public abstract class Widget {
 		if (s != null)
 			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
 		return s;
+	}
+
+	/**
+	 * Same as {@link #loadHtml(String)} but replaces request-time SVL variables.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+	 * </ul>
+	 *
+	 * @param req The current HTTP request.
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException
+	 */
+	protected String loadHtmlWithVars(RestRequest req, String name) throws IOException {
+		return req.getVarResolverSession().resolve(loadHtml(name));
 	}
 }

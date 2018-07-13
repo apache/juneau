@@ -21820,6 +21820,14 @@
 					<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
 					<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
 				</ul>
+			<li>
+				New methods added to {@link org.apache.juneau.rest.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
+				<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
+				<ul>
+					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
+					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
+					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
+				</ul>
 		</ul>
 
 		<h5 class='topic w800'>juneau-rest-microservice</h5>
