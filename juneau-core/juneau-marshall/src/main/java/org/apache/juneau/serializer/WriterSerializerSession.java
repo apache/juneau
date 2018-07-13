@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.WriterSerializer.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -96,7 +94,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Configuration property:  Maximum indentation.
 	 *
-	 * @see #WSERIALIZER_maxIndent
+	 * @see WriterSerializer#WSERIALIZER_maxIndent
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
@@ -107,7 +105,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	/**
 	 * Configuration property:  Quote character.
 	 *
-	 * @see #WSERIALIZER_quoteChar
+	 * @see WriterSerializer#WSERIALIZER_quoteChar
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */

@@ -126,7 +126,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  CSS style code.
 	 *
-	 * @see #HTMLDOC_style
+	 * @see HtmlDocSerializer#HTMLDOC_style
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
@@ -137,7 +137,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Stylesheet import URLs.
 	 *
-	 * @see #HTMLDOC_stylesheet
+	 * @see HtmlDocSerializer#HTMLDOC_stylesheet
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
@@ -148,7 +148,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Javascript code.
 	 *
-	 * @see #HTMLDOC_script
+	 * @see HtmlDocSerializer#HTMLDOC_script
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
@@ -159,7 +159,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Page navigation links.
 	 *
-	 * @see #HTMLDOC_navlinks
+	 * @see HtmlDocSerializer#HTMLDOC_navlinks
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
@@ -170,7 +170,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Additional head section content.
 	 *
-	 * @see #HTMLDOC_head
+	 * @see HtmlDocSerializer#HTMLDOC_head
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
@@ -181,7 +181,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Header section contents.
 	 *
-	 * @see #HTMLDOC_header
+	 * @see HtmlDocSerializer#HTMLDOC_header
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
@@ -192,7 +192,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Nav section contents.
 	 *
-	 * @see #HTMLDOC_nav
+	 * @see HtmlDocSerializer#HTMLDOC_nav
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
@@ -203,7 +203,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Aside section contents.
 	 *
-	 * @see #HTMLDOC_aside
+	 * @see HtmlDocSerializer#HTMLDOC_aside
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
@@ -214,7 +214,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Footer section contents.
 	 *
-	 * @see #HTMLDOC_footer
+	 * @see HtmlDocSerializer#HTMLDOC_footer
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
@@ -225,7 +225,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  No-results message.
 	 *
-	 * @see #HTMLDOC_noResultsMessage
+	 * @see HtmlDocSerializer#HTMLDOC_noResultsMessage
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
@@ -236,7 +236,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  Prevent word wrap on page.
 	 *
-	 * @see #HTMLDOC_nowrap
+	 * @see HtmlDocSerializer#HTMLDOC_nowrap
 	 * @return
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
 	 */
@@ -247,7 +247,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	/**
 	 * Configuration property:  HTML document template.
 	 *
-	 * @see #HTMLDOC_template
+	 * @see HtmlDocSerializer#HTMLDOC_template
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */

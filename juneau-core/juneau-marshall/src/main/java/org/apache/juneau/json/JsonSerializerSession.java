@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonSerializer.*;
-
 import java.io.*;
 import java.util.*;
 
@@ -276,7 +274,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Simple JSON mode.
 	 *
-	 * @see #JSON_simpleMode
+	 * @see JsonSerializer#JSON_simpleMode
 	 * @return
 	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
 	 * 	<br>Otherwise, they are always quoted.
@@ -288,7 +286,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
 	 *
-	 * @see #JSON_escapeSolidus
+	 * @see JsonSerializer#JSON_escapeSolidus
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
@@ -299,7 +297,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #JSON_addBeanTypes
+	 * @see JsonSerializer#JSON_addBeanTypes
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.

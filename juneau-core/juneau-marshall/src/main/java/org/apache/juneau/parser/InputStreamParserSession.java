@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.InputStreamParser.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -88,7 +86,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	/**
 	 * Configuration property:  Binary input format.
 	 *
-	 * @see #ISPARSER_binaryFormat
+	 * @see InputStreamParser#ISPARSER_binaryFormat
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */

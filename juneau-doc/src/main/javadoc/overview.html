@@ -1146,11 +1146,11 @@
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
 					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
+					<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace}
 					<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
 					<ul>
 						<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
 						<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
-						<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_useWhitespace WSERIALIZER_useWhitespace}
 					</ul>
 					<li class='jc'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
 					<ul>
@@ -1240,7 +1240,7 @@
 		</ul>
 		<p>
 			Each context object in the hierarchy define properties that can be stored in a <code>PropertyStore</code>
-			such as <jsf>WSERIALIZER_useWhitespace</jsf> or <jsf>JSON_simpleMode</jsf>.
+			such as <jsf>SERIALIZER_useWhitespace</jsf> or <jsf>JSON_simpleMode</jsf>.
 		</p>
 		<p>
 			The class hierarchy for <code>JsonSerializerBuilder</code> is:
@@ -11545,15 +11545,15 @@
 					</ul>
 				<li><b>Annotated parameters:</b>
 					<ul>
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.Path} - Variables in matched URL path patterns.
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.FormData} - Multipart form post parameter values.
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.HasFormData} - Denotes whether the form data parameter exists.
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.Query} - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.HasQuery} - Denotes whether the query parameter exists.
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.Header} - A header value.
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.Method} - The HTTP method name. 
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.PathRemainder} - The remainder value after path pattern match.
-						<li class='ja'>{@link org.apache.juneau.rest.annotation.Body} - The HTTP content parsed as a POJO.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Path</del></code> - Variables in matched URL path patterns.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.FormData</del></code> - Multipart form post parameter values.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.HasFormData</del></code> - Denotes whether the form data parameter exists.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Query</del></code> - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.HasQuery</del></code> - Denotes whether the query parameter exists.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Header</del></code> - A header value.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Method</del></code> - The HTTP method name. 
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.PathRemainder</del></code> - The remainder value after path pattern match.
+						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Body</del></code> - The HTTP content parsed as a POJO.
 					</ul>
 			</ul>
 			<h5 class='figure'>Example:</h5>
@@ -11896,7 +11896,7 @@
 				Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
 				<br>Any remainder after the match can be accessed through 
 				{@link org.apache.juneau.rest.RequestPathMatch#getRemainder()} or parameters with the 
-				{@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder} annotation.
+				{@link org.apache.juneau.http.annotation.PathRemainder @PathRemainder} annotation.
 				<br>On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 				require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
 			</p>
@@ -11928,8 +11928,8 @@
 			<h5 class='section'>See Also:</h5>
 			<ul>
 				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_path}
-				<li class='ja'>{@link org.apache.juneau.rest.annotation.Path}
-				<li class='ja'>{@link org.apache.juneau.rest.annotation.PathRemainder}
+				<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+				<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder}
 				<li class='jc'>{@link org.apache.juneau.rest.RequestPathMatch}
 			</ul>
 		</div>	
@@ -12280,7 +12280,7 @@
 	<h3 class='topic' onclick='toggle(this)'>7.7 - @Body</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
+			The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 		</p>
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
@@ -12447,13 +12447,13 @@
 			<br>These do not have any affects on the running code except for the generated Swagger:
 		</p>
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.Body}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 			<ul>
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#description() description()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#required() required()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#schema() schema()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#example() example()}
-				<li class='jf'>{@link org.apache.juneau.rest.annotation.Body#examples() examples()}
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()}
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required()}
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()}
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()}
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()}
 			</ul>
 		</ul>
 		
@@ -12471,7 +12471,7 @@
 		
 		<h5 class='section'>See Also:</h5>
 		<ul>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.Body}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
 		</ul>
 
@@ -12587,7 +12587,7 @@
 	<h3 class='topic' onclick='toggle(this)'>7.8 - @FormData</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
+			The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
 		</p>
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>	
@@ -12616,16 +12616,16 @@
 		</p>
 		<ul class='doctree'>
 			<li class='warn'>
- 				This annotation should not be combined with the {@link org.apache.juneau.rest.annotation.Body @Body} annotation or {@link org.apache.juneau.rest.RestRequest#getBody()} method
+ 				This annotation should not be combined with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or {@link org.apache.juneau.rest.RestRequest#getBody()} method
  				for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet
 				API to parse the body content as key-value pairs resulting in empty content.
-				<br>The {@link org.apache.juneau.rest.annotation.Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
+				<br>The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
 				servlet to drain the body content.
 		</ul>
 		<h5 class='section'>See Also:</h5>
 		<ul>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.FormData}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.HasFormData}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
 		</ul>
 	</div>
@@ -12635,13 +12635,13 @@
 	<h3 class='topic' onclick='toggle(this)'>7.9 - @Query</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
-			<br>It's identical to {@link org.apache.juneau.rest.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
+			The {@link org.apache.juneau.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
+			<br>It's identical to {@link org.apache.juneau.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
 		</p>
 		<p>
-			Unlike {@link org.apache.juneau.rest.annotation.FormData @FormData}, using this annotation does not result in the servlet reading the contents of
+			Unlike {@link org.apache.juneau.http.annotation.FormData @FormData}, using this annotation does not result in the servlet reading the contents of
 			URL-encoded form posts.
-			<br>Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.rest.annotation.Body @Body} annotation or
+			<br>Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
 			{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
 		</p>
 		<h5 class='figure'>Example:</h5>
@@ -12671,8 +12671,8 @@
 		</p>
 		<h5 class='section'>See Also:</h5>
 		<ul>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.Query}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.HasQuery}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
 		</ul>
 	</div>
@@ -12682,7 +12682,7 @@
 	<h3 class='topic' onclick='toggle(this)'>7.10 - @Header</h3>
 	<div class='topic'>
 		<p>
-			The {@link org.apache.juneau.rest.annotation.Header @Header} annotation is used to retrieve request headers.
+			The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
 		</p>
 		<h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
@@ -12706,7 +12706,7 @@
 		</p>
 		<h5 class='section'>See Also:</h5>
 		<ul>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.Header}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
 		</ul>
 	</div>
@@ -14696,7 +14696,7 @@
 				<td class='code'>&amp;plainText=true</td>
 				<td>
 					Response will always be <l>Content-Type: text/plain</l> and the returned text will be human-readable
-					({@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_useWhitespace WSERIALIZER_useWhitespace} enabled).
+					({@link org.apache.juneau.serializer.WriterSerializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace} enabled).
 					<br>Useful for debugging.
 				</td>
 			</tr>
@@ -16158,53 +16158,44 @@
 		</p>
 		<ul class='spaced-list'>
 			<li class='ja'>
-				{@link org.apache.juneau.remoteable.Query} - A URL query parameter.
+				{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
 				<br>The argument can be any of the following types:
 				<ul>
 					<li class='normal'>Any serializable POJO 
-						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
 						- Individual name-value pairs.
-						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 					<li class='normal'><code>String</code> 
 						- Treated as a query string.
 				</ul>
 			<li class='ja'>
-				{@link org.apache.juneau.remoteable.QueryIfNE} 
-				- Same as <ja>@Query</ja> except skips the value if it's null/empty.
-			<li class='ja'>
-				{@link org.apache.juneau.remoteable.FormData} 
+				{@link org.apache.juneau.http.annotation.FormData} 
 				- A form-data parameter.
 				<br>Note that this is only available if the HTTP method is <code>POST</code>.
 				<br>The argument can be any of the following types:
 				<ul>
 					<li class='normal'>Any serializable POJO 
-						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
 						- Individual name-value pairs.
 					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
 						- Individual name-value pairs.
-						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 				</ul>
 			<li class='ja'>
-				{@link org.apache.juneau.remoteable.FormDataIfNE} 
-				- Same as <ja>@FormData</ja> except skips the value if it's null/empty.
-			<li class='ja'>
-				{@link org.apache.juneau.remoteable.Header} 
+				{@link org.apache.juneau.http.annotation.Header} 
 				- A request header.
 				<br>The argument can be any of the following types:
 				<ul>
 					<li class='normal'>Any serializable POJO 
-						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
 						- Individual name-value pairs.
-						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializer#serialize(HttpPartType,Object)}.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 				</ul>
 			<li class='ja'>
-				{@link org.apache.juneau.remoteable.HeaderIfNE} 
-				- Same as <ja>@Header</ja> except skips the value if it's null/empty.
-			<li class='ja'>
-				{@link org.apache.juneau.remoteable.Body} 
+				{@link org.apache.juneau.http.annotation.Body} 
 				- The HTTP request body.
 				<br>The argument can be any of the following types:
 				<ul>
@@ -18393,11 +18384,11 @@
 				<l>example1()</l>
 				<br>Shows how to use the following annotations:
 				<ul>
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.Path @Path}
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.Query @Query}
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.Header @Header}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Path @Path}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Query @Query}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Header @Header}
 					<li class='ja'>{@link org.apache.juneau.rest.annotation.Method @Method}
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder @PathRemainder}
 				</ul>
 				Method returns a POJO to be serialized as the output.
 			<li class='jm'>
@@ -21656,16 +21647,16 @@
 			<li>
 				Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
 			<li>
-				New {@link org.apache.juneau.rest.annotation.Response @Response} and {@link org.apache.juneau.rest.annotation.Responses @Responses} annotations that can be applied to
+				New {@link org.apache.juneau.http.annotation.Response @Response} and {@link org.apache.juneau.http.annotation.Responses @Responses} annotations that can be applied to
 				throwables thrown from REST methods and POJOs returned by REST methods to specify non-200 status return codes and descriptions in Swagger documentation.
 			<li>
 				Swagger fields added to the following annotations:
 				<ul class='doctree'>
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.Body}
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.FormData}
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.Header}
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.Path}
-					<li class='ja'>{@link org.apache.juneau.rest.annotation.Query}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 				</ul>
 			<li>
 				"Helper" classes (i.e. reusable beans that can be returned by REST methods) have been moved to the following package with some new additions:
@@ -21754,7 +21745,7 @@
 				The <code><del>RestResource.nowrap()</del></code> annotation has been changed to a string with a default value of <js>"true"</js>.
 				<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
 			<li>
-				The {@link org.apache.juneau.rest.annotation.Path#name()} annotation parameter is now required.
+				The {@link org.apache.juneau.http.annotation.Path#name()} annotation parameter is now required.
 			<li>
 				New class for mock unit testing of REST resources:
 				<ul>
@@ -21826,7 +21817,7 @@
 				New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
 				<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforShowScript(RestRequest) getBeforShowScript(RestRequest)}
+					<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
 					<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
 				</ul>
 		</ul>
@@ -23300,14 +23291,14 @@
 				<br>Allows easy user-defined serialization of these objects.
 				<br>The interface can be used in the following locations:
 				<ul>
-					<li>{@link org.apache.juneau.rest.client.RestClientBuilder#partSerializer(Class)}
-					<li>{@link org.apache.juneau.remoteable.Path#serializer} 
-					<li>{@link org.apache.juneau.remoteable.Query#serializer} 
-					<li>{@link org.apache.juneau.remoteable.QueryIfNE#serializer} 
-					<li>{@link org.apache.juneau.remoteable.FormData#serializer} 
-					<li>{@link org.apache.juneau.remoteable.FormDataIfNE#serializer} 
-					<li>{@link org.apache.juneau.remoteable.Header#serializer} 
-					<li>{@link org.apache.juneau.remoteable.HeaderIfNE#serializer} 
+					<li><code><del>org.apache.juneau.rest.client.RestClientBuilder#partSerializer(Class)}
+					<li><code><del>org.apache.juneau.remoteable.Path.serializer</del></code> 
+					<li><code><del>org.apache.juneau.remoteable.Query.serializer</del></code> 
+					<li><code><del>org.apache.juneau.remoteable.QueryIfNE.serializer</del></code> 
+					<li><code><del>org.apache.juneau.remoteable.FormData.serializer</del></code> 
+					<li><code><del>org.apache.juneau.remoteable.FormDataIfNE.serializer</del></code> 
+					<li><code><del>org.apache.juneau.remoteable.Header.serializer</del></code> 
+					<li><code><del>org.apache.juneau.remoteable.HeaderIfNE.serializer</del></code> 
 				</ul>
 			<li>Across-the-board improvements to the URI-resolution support (i.e. how URIs get serialized).
 				<ul>
@@ -23613,12 +23604,12 @@
 			<li>
 				New annotation attributes:
 				<ul>
-					<li>{@link org.apache.juneau.rest.annotation.Query#name() @Query.name()}
-					<li>{@link org.apache.juneau.rest.annotation.FormData#name() @FormData.name()}
-					<li>{@link org.apache.juneau.rest.annotation.Header#name() @Header.name()}
-					<li>{@link org.apache.juneau.rest.annotation.Path#name() @Path.name()}
-					<li>{@link org.apache.juneau.rest.annotation.HasQuery#name() @HasQuery.name()}
-					<li>{@link org.apache.juneau.rest.annotation.HasFormData#name() @HasFormData.name()}
+					<li>{@link org.apache.juneau.http.annotation.Query#name() @Query.name()}
+					<li>{@link org.apache.juneau.http.annotation.FormData#name() @FormData.name()}
+					<li>{@link org.apache.juneau.http.annotation.Header#name() @Header.name()}
+					<li>{@link org.apache.juneau.http.annotation.Path#name() @Path.name()}
+					<li>{@link org.apache.juneau.http.annotation.HasQuery#name() @HasQuery.name()}
+					<li>{@link org.apache.juneau.http.annotation.HasFormData#name() @HasFormData.name()}
 				</ul>
 			</li>
 		</ul>
@@ -23626,16 +23617,16 @@
 		<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
 		<ul class='spaced-list'>
 			<li>
-				New {@link org.apache.juneau.remoteable.Path @Path} annotation for specifying path variables on remoteable interfaces.
+				New <code><del>org.apache.juneau.remoteable.Path</del></code> annotation for specifying path variables on remoteable interfaces.
 			<li>
 				New {@link org.apache.juneau.remoteable.RequestBean @RequestBean} annotation for specifying beans with remoteable annotations
 				defined on properties.
 			<li>
 				The following annotations (and related methods on RestCall) can now take <code>NameValuePairs</code> and beans as input 
 				when using <js>"*"</js> as the name.
-				<br>{@link org.apache.juneau.remoteable.FormData @FormData},{@link org.apache.juneau.remoteable.FormDataIfNE @FormDataIfNE},
-				{@link org.apache.juneau.remoteable.Query @Query},{@link org.apache.juneau.remoteable.QueryIfNE @QueryIfNE},
-				{@link org.apache.juneau.remoteable.Header @Header},{@link org.apache.juneau.remoteable.HeaderIfNE @HeaderIfNE}, 
+				<br><code><del>org.apache.juneau.remoteable.FormData</del></code>,<code><del>org.apache.juneau.remoteable.FormDataIfNE</del></code>,
+				<code><del>org.apache.juneau.remoteable.Query</del></code>,<code><del>org.apache.juneau.remoteable.QueryIfNE</del></code>,
+				<code><del>org.apache.juneau.remoteable.Header</del></code>,<code><del>org.apache.juneau.remoteable.HeaderIfNE</del></code> 
 		</ul>
 
 		<h5 class='topic w800'>org.apache.juneau.microservice</h5>
@@ -25738,7 +25729,7 @@
 			<li>Fixed bug involving incorrect resolution of overlapping URL match patterns.
 			<li>Overall improvements in HTTP request parameter and header value resolution.  
 			<li>Made workspace changes so as not to be dependent on the WAS test environment being loaded.
-			<li>Renamed <ja>@Remainder</ja> annotation to {@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder}.
+			<li>Renamed <ja>@Remainder</ja> annotation to <code><del>@PathRemainder</del></code>.
 			<li>Fixed bug involving incorrect calculation of <code>pathInfo</code> on child resources.
 		</ul>	
 	</div>
@@ -26947,8 +26938,8 @@
 				<ul>
 					<li><del><code>@Attr</code></del> - A parameter or URL variable value as a parsed POJO.</li>
 					<li><del><code>@Param</code></del> - A query parameter value as a parsed POJO.</li>
-					<li>{@link org.apache.juneau.rest.annotation.PathRemainder @PathRemainder} - The remainder after a URL pattern match as a String.</li>
-					<li>{@link org.apache.juneau.rest.annotation.Header @Header} - An HTTP header value as a parsed POJO.</li>
+					<li><del><code>@PathRemainder</code></del>- The remainder after a URL pattern match as a String.</li>
+					<li><del><code>@Header</code></del> - An HTTP header value as a parsed POJO.</li>
 					<li><del><code>@Content</code></del> - The HTTP content as a parsed POJO.</li>
 					<li>{@link org.apache.juneau.rest.annotation.Method @Method} - The HTTP method name as a String.</li>
 				</ul>

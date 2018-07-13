@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.json.JsonParser.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -790,7 +789,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Validate end.
 	 *
-	 * @see #JSON_validateEnd
+	 * @see JsonParser#JSON_validateEnd
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

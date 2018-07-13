@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
@@ -826,7 +825,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Look for link labels in URIs.
 	 *
-	 * @see #HTML_detectLabelParameters
+	 * @see HtmlSerializer#HTML_detectLabelParameters
 	 * @return
 	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
@@ -837,7 +836,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Look for URLs in {@link String Strings}.
 	 *
-	 * @see #HTML_detectLinksInStrings
+	 * @see HtmlSerializer#HTML_detectLinksInStrings
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
@@ -848,7 +847,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Add key/value headers on bean/map tables.
 	 *
-	 * @see #HTML_addKeyValueTableHeaders
+	 * @see HtmlSerializer#HTML_addKeyValueTableHeaders
 	 * @return
 	 * 	<jk>true</jk> if <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
 	 */
@@ -859,7 +858,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #HTML_addBeanTypes
+	 * @see HtmlSerializer#HTML_addBeanTypes
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -872,9 +871,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Link label parameter name.
 	 *
-	 * @see #HTML_labelParameter
+	 * @see HtmlSerializer#HTML_labelParameter
 	 * @return
-	 * 	The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
+	 * 	The parameter name to look for when resolving link labels via {@link HtmlSerializer#HTML_detectLabelParameters}.
 	 */
 	protected final String getLabelParameter() {
 		return ctx.getLabelParameter();
@@ -883,7 +882,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	/**
 	 * Configuration property:  Anchor text source.
 	 *
-	 * @see #HTML_uriAnchorText
+	 * @see HtmlSerializer#HTML_uriAnchorText
 	 * @return
 	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.

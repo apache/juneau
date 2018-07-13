@@ -809,7 +809,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Trim parsed strings.
 	 *
-	 * @see #PARSER_trimStrings
+	 * @see Parser#PARSER_trimStrings
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
@@ -821,7 +821,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Strict mode.
 	 *
-	 * @see #PARSER_strict
+	 * @see Parser#PARSER_strict
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
@@ -832,7 +832,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Auto-close streams.
 	 *
-	 * @see #PARSER_autoCloseStreams
+	 * @see Parser#PARSER_autoCloseStreams
 	 * @return
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
@@ -844,7 +844,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Unbuffered.
 	 *
-	 * @see #PARSER_unbuffered
+	 * @see Parser#PARSER_unbuffered
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
@@ -855,7 +855,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Debug output lines.
 	 *
-	 * @see #PARSER_debugOutputLines
+	 * @see Parser#PARSER_debugOutputLines
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
@@ -866,7 +866,7 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Configuration property:  Parser listener.
 	 *
-	 * @see #PARSER_listener
+	 * @see Parser#PARSER_listener
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */

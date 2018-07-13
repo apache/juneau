@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.xml.XmlParser.*;
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
@@ -689,7 +688,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Enable validation.
 	 *
-	 * @see #XML_validating
+	 * @see XmlParser#XML_validating
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */
@@ -700,7 +699,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
-	 * @see #XML_preserveRootElement
+	 * @see XmlParser#XML_preserveRootElement
 	 * @return
 	 * 	<jk>true</jk> if when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
@@ -712,7 +711,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  XML reporter.
 	 *
-	 * @see #XML_reporter
+	 * @see XmlParser#XML_reporter
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -723,7 +722,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  XML resolver.
 	 *
-	 * @see #XML_resolver
+	 * @see XmlParser#XML_resolver
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
@@ -734,7 +733,7 @@ public class XmlParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  XML event allocator.
 	 *
-	 * @see #XML_eventAllocator
+	 * @see XmlParser#XML_eventAllocator
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */

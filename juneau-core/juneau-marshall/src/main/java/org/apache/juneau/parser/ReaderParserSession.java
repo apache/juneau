@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.parser.ReaderParser.*;
 
 import java.io.*;
 
@@ -92,7 +91,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	/**
 	 * Configuration property:  Input stream charset.
 	 *
-	 * @see #RPARSER_inputStreamCharset
+	 * @see ReaderParser#RPARSER_inputStreamCharset
 	 * @return
 	 * 	The character set to use for converting <code>InputStreams</code> and byte arrays to readers.
 	 */
@@ -103,7 +102,7 @@ public abstract class ReaderParserSession extends ParserSession {
 	/**
 	 * Configuration property:  File charset.
 	 *
-	 * @see #RPARSER_fileCharset
+	 * @see ReaderParser#RPARSER_fileCharset
 	 * @return
 	 * 	The character set to use for reading <code>Files</code> from the file system.
 	 */

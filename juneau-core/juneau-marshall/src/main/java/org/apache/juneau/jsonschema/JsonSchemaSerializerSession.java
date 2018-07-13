@@ -14,7 +14,6 @@ package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 
 import java.lang.reflect.*;
@@ -340,7 +339,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Use bean definitions.
 	 *
-	 * @see #JSONSCHEMA_useBeanDefs
+	 * @see JsonSchemaSerializer#JSONSCHEMA_useBeanDefs
 	 * @return
 	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
 	 */
@@ -351,7 +350,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Allow nested examples.
 	 *
-	 * @see #JSONSCHEMA_allowNestedExamples
+	 * @see JsonSchemaSerializer#JSONSCHEMA_allowNestedExamples
 	 * @return
 	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
 	 */
@@ -362,7 +361,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Allow nested descriptions.
 	 *
-	 * @see #JSONSCHEMA_allowNestedDescriptions
+	 * @see JsonSchemaSerializer#JSONSCHEMA_allowNestedDescriptions
 	 * @return
 	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
@@ -373,7 +372,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Bean schema definition mapper.
 	 *
-	 * @see #JSONSCHEMA_beanDefMapper
+	 * @see JsonSchemaSerializer#JSONSCHEMA_beanDefMapper
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
@@ -384,7 +383,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Add examples.
 	 *
-	 * @see #JSONSCHEMA_addExamplesTo
+	 * @see JsonSchemaSerializer#JSONSCHEMA_addExamplesTo
 	 * @return
 	 * 	Set of categories of types that examples should be automatically added to generated schemas.
 	 */
@@ -395,7 +394,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Add descriptions to types.
 	 *
-	 * @see #JSONSCHEMA_addDescriptionsTo
+	 * @see JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo
 	 * @return
 	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
@@ -406,7 +405,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Default schemas.
 	 *
-	 * @see #JSONSCHEMA_defaultSchemas
+	 * @see JsonSchemaSerializer#JSONSCHEMA_defaultSchemas
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */

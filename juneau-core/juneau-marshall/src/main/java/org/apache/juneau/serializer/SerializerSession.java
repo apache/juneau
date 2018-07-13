@@ -14,7 +14,6 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.serializer.Serializer.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -766,7 +765,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Use whitespace.
 	 *
-	 * @see #SERIALIZER_useWhitespace
+	 * @see Serializer#SERIALIZER_useWhitespace
 	 * @return
 	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
 	 */
@@ -777,7 +776,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Initial depth.
 	 *
-	 * @see #SERIALIZER_initialDepth
+	 * @see Serializer#SERIALIZER_initialDepth
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
@@ -788,7 +787,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Max serialization depth.
 	 *
-	 * @see #SERIALIZER_maxDepth
+	 * @see Serializer#SERIALIZER_maxDepth
 	 * @return
 	 * 	The depth at which serialization is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.
@@ -799,7 +798,8 @@ public abstract class SerializerSession extends BeanSession {
 
 	/**
 	 * Configuration property:  Automatically detect POJO recursions.
-	 * @see #SERIALIZER_detectRecursions
+	 *
+	 * @see Serializer#SERIALIZER_detectRecursions
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during serialization.
 	 */
@@ -810,7 +810,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Ignore recursion errors.
 	 *
-	 * @see #SERIALIZER_ignoreRecursions
+	 * @see Serializer#SERIALIZER_ignoreRecursions
 	 * @return
 	 * 	<jk>true</jk> if when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, a {@link SerializeException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
@@ -822,7 +822,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #SERIALIZER_addBeanTypes
+	 * @see Serializer#SERIALIZER_addBeanTypes
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -834,7 +834,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Trim null bean property values.
 	 *
-	 * @see #SERIALIZER_trimNullProperties
+	 * @see Serializer#SERIALIZER_trimNullProperties
 	 * @return
 	 * 	<jk>true</jk> if null bean values are not serialized to the output.
 	 */
@@ -845,7 +845,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Trim empty lists and arrays.
 	 *
-	 * @see #SERIALIZER_trimEmptyCollections
+	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
@@ -856,7 +856,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Trim empty maps.
 	 *
-	 * @see #SERIALIZER_trimEmptyMaps
+	 * @see Serializer#SERIALIZER_trimEmptyMaps
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
@@ -867,7 +867,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Trim strings.
 	 *
-	 * @see #SERIALIZER_trimStrings
+	 * @see Serializer#SERIALIZER_trimStrings
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
@@ -878,7 +878,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
 	 *
-	 * @see #SERIALIZER_sortCollections
+	 * @see Serializer#SERIALIZER_sortCollections
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
@@ -889,7 +889,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Sort maps alphabetically.
 	 *
-	 * @see #SERIALIZER_sortMaps
+	 * @see Serializer#SERIALIZER_sortMaps
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
@@ -900,7 +900,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  Add type attribute to root nodes.
 	 *
-	 * @see #SERIALIZER_addRootType
+	 * @see Serializer#SERIALIZER_addRootType
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
@@ -911,7 +911,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  URI context bean.
 	 *
-	 * @see #SERIALIZER_uriContext
+	 * @see Serializer#SERIALIZER_uriContext
 	 * @return
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
@@ -922,7 +922,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  URI resolution.
 	 *
-	 * @see #SERIALIZER_uriResolution
+	 * @see Serializer#SERIALIZER_uriResolution
 	 * @return
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */
@@ -933,7 +933,7 @@ public abstract class SerializerSession extends BeanSession {
 	/**
 	 * Configuration property:  URI relativity.
 	 *
-	 * @see #SERIALIZER_uriRelativity
+	 * @see Serializer#SERIALIZER_uriRelativity
 	 * @return
 	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */

@@ -13,7 +13,6 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.urlencoding.UrlEncodingSerializer.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -272,7 +271,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	/**
 	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
 	 *
-	 * @see #URLENC_expandedParams
+	 * @see UrlEncodingSerializer#URLENC_expandedParams
 	 * @return
 	 * 	<jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * 	<br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.

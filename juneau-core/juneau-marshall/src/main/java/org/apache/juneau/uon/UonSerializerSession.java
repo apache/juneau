@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.uon.UonSerializer.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -268,7 +266,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Encode non-valid URI characters.
 	 *
-	 * @see #UON_encoding
+	 * @see UonSerializer#UON_encoding
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */
@@ -279,7 +277,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #UON_addBeanTypes
+	 * @see UonSerializer#UON_addBeanTypes
 	 * @return
 	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * 	through reflection.
@@ -292,7 +290,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
-	 * @see #UON_paramFormat
+	 * @see UonSerializer#UON_paramFormat
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */

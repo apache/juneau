@@ -793,7 +793,7 @@ public class UonParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property: Decode <js>"%xx"</js> sequences.
 	 *
-	 * @see #UON_decoding
+	 * @see UonParser#UON_decoding
 	 * @return
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
@@ -805,7 +805,7 @@ public class UonParserSession extends ReaderParserSession {
 	/**
 	 * Configuration property:  Validate end.
 	 *
-	 * @see #UON_validateEnd
+	 * @see UonParser#UON_validateEnd
 	 * @return
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.

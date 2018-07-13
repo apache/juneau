@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.serializer.OutputStreamSerializer.*;
-
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -98,7 +96,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	/**
 	 * Configuration property:  Binary output format.
 	 *
-	 * @see #OSSERIALIZER_binaryFormat
+	 * @see OutputStreamSerializer#OSSERIALIZER_binaryFormat
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */

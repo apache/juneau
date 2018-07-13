@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.urlencoding.UrlEncodingParser.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -367,7 +365,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	/**
 	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
 	 *
-	 * @see #URLENC_expandedParams
+	 * @see UrlEncodingParser#URLENC_expandedParams
 	 * @return
 	 * <jk>false</jk> if serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * <br><jk>true</jk> if serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
