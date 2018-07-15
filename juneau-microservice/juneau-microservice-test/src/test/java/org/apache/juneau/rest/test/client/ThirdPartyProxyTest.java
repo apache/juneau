@@ -2865,10 +2865,15 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
 			return new HttpPartSerializerSession() {
 				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 					return "dummy-"+value;
 				}
 			};
+		}
+
+		@Override
+		public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+			return createSession(null).serialize(partType, schema, value);
 		}
 	}
 }

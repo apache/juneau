@@ -14,6 +14,8 @@ package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
@@ -41,62 +43,11 @@ public class UonPartParserSession extends UonParserSession implements HttpPartPa
 		super(ctx, args);
 	}
 
-	/**
-	 * Convenience method for parsing a part to a map or collection.
-	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The input being parsed.
-	 * @param type The category of value being parsed.
-	 * @param args The type arguments of the map or collection.
-	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
-	public <T> T parse(HttpPartSchema schema, String in, java.lang.reflect.Type type, java.lang.reflect.Type...args) throws ParseException, SchemaValidationException {
-		return (T)parse(null, schema, in, getClassMeta(type, args));
-	}
-
-	/**
-	 * Convenience method for parsing a part.
-	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The input being parsed.
-	 * @param type The category of value being parsed.
-	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
-	public <T> T parse(HttpPartSchema schema, String in, Class<T> type) throws ParseException, SchemaValidationException {
-		return parse(null, schema, in, getClassMeta(type));
-	}
-
-	/**
-	 * Convenience method for parsing a part.
-	 *
-	 * @param partType
-	 * 	The part type being parsed.
-	 * 	<br>May be <jk>null</jk>.
-	 * @param in The input being parsed.
-	 * @param type The category of value being parsed.
-	 * @return The parsed value.
-	 * @throws ParseException If a problem occurred while trying to parse the input.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
-	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
-		return parse(partType, null, in, type);
-	}
-
 	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
 		if (in == null)
 			return null;
-		if (type.isString() && in.length() > 0) {
+		if (toType.isString() && in.length() > 0) {
 			// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
 			// just return the string since it's a plain value.
 			// This allows us to bypass the creation of a UonParserSession object.
@@ -108,12 +59,74 @@ public class UonPartParserSession extends UonParserSession implements HttpPartPa
 		}
 		try (ParserPipe pipe = createPipe(in)) {
 			try (UonReader r = getUonReader(pipe, false)) {
-				return parseAnything(type, r, null, true, null);
+				return parseAnything(toType, r, null, true, null);
 			}
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new ParseException(e);
 		}
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, getClassMeta(toType));
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return (T)parse(null, schema, in, getClassMeta(toType, toTypeArgs));
+	}
+
+	/**
+	 * Convenience method for parsing a part.
+	 *
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * @param toType The POJO type being created.
+	 * @return The parsed value.
+	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, getClassMeta(toType));
+	}
+
+	/**
+	 * Convenience method for parsing a part.
+	 *
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * @param toType The POJO type being created.
+	 * @return The parsed value.
+	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, toType);
+	}
+
+	/**
+	 * Convenience method for parsing a part.
+	 *
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * @param toType The POJO type being created.
+	 * @param toTypeArgs The type arguments for the POJO collection or map type being created.
+	 * @return The parsed value.
+	 * @throws ParseException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return (T)parse(null, schema, in, getClassMeta(toType, toTypeArgs));
 	}
 }

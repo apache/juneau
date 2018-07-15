@@ -34,7 +34,7 @@ public interface HttpPartSerializerSession {
 	 * @param schema
 	 * 	Schema information about the part.
 	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part serializer use the schema information.
+	 * 	<br>Not all part serializers use the schema information.
 	 * @param value The value being serialized.
 	 * @return The serialized value.
 	 * @throws SerializeException If a problem occurred while trying to parse the input.

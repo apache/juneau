@@ -86,7 +86,13 @@
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall'><i>juneau-marshall</i></a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-marshall.Serializers'>Serializers</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-marshall.HttpPartSerializers'>HTTP Part Serializers</a></p>
+		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.Parsers'>Parsers</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-marshall.HttpPartParsers'>HTTP Part Parsers</a></p>
+		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.Groups'>SerializerGroups and ParserGroups</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ObjectMap'>ObjectMap and ObjectList</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a></p>
@@ -130,18 +136,18 @@
 		<li><p><a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.JsonDetails'>JSON Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonMethodology'>JSON Methodology</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonSerializers'>JSON Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.Methodology'>JSON Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.Serializers'>JSON Serializers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonParsers'>JSON Parsers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.Parsers'>JSON Parsers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonAnnotation'>@Json Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonSchema'>JSON-Schema Support</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.XmlDetails'>XML Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlMethodology'>XML Methodology</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlSerializers'>XML Serializers</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlParsers'>XML Parsers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.Methodology'>XML Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.Serializers'>XML Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.Parsers'>XML Parsers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.BeanTypeNameAnnotation'>@Bean(typeName) Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlChildNameAnnotation'>@Xml(childName) Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlFormatAnnotation'>@Xml(format) Annotation</a></p>
@@ -151,9 +157,9 @@
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails'>HTML Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlMethodology'>HTML Methodology</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlSerializers'>HTML Serializers</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlParsers'>HTML Parsers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.Methodology'>HTML Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.Serializers'>HTML Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.Parsers'>HTML Parsers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlAnnotation'>@Html Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlRenderAnnotation'>@Html(render) Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlDocSerializer'>HtmlDocSerializer</a></p>
@@ -162,22 +168,28 @@
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.UonDetails'>UON Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.UonDetails.UonMethodology'>UON Methodology</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.UonDetails.UonSerializers'>UON Serializers</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.UonDetails.UonParsers'>UON Parsers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.UonDetails.Methodology'>UON Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.UonDetails.Serializers'>UON Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.UonDetails.Parsers'>UON Parsers</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails'>URL-Encoding Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.UrlEncodingMethodology'>URL-Encoding Methodology</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.UrlEncodingSerializers'>URL-Encoding Serializers</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.UrlEncodingParsers'>URL-Encoding Parsers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.Methodology'>URL-Encoding Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.Serializers'>URL-Encoding Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.Parsers'>URL-Encoding Parsers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>@UrlEncoding Annotation</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.MsgPackDetails'>MessagePack Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.MsgPackMethodology'>MessagePack Methodology</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.MspPackSerializers'>MessagePack Serializers</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.MsgPackParsers'>MessagePack Parsers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.MsgPackDetails.Methodology'>MessagePack Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.MsgPackDetails.Serializers'>MessagePack Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.MsgPackDetails.Parsers'>MessagePack Parsers</a></p>
+		</ol>
+		<li><p><a class='doclink' href='#juneau-marshall.OpenApiDetails'>OpenApi Details</a></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-marshall.OpenApiDetails.Methodology'>OpenApi Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenApi Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenApi Parsers</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.SoapDetails'>SOAP Details</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.CsvDetails'>CSV Details</a></p>
@@ -188,9 +200,9 @@
 	<ol>
 		<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails'>RDF Details</a></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.RdfMethodology'>RDF Methodology</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.RdfSerializers'>RDF Serializers</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.RdfParsers'>RDF Parsers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.Methodology'>RDF Methodology</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.Serializers'>RDF Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.Parsers'>RDF Parsers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.RdfAnnotation'>@Rdf Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.Namespaces'>Namespaces</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall-rdf.RdfDetails.UriProperties'>URI Properties</a></p>
@@ -773,8 +785,12 @@
 	Person p = <jk>new</jk> Person();
 
 	<jc>// Produces:
-	//	"{name:'John Smith',age:21}"</jc>
+	//	"{\"name\":\"John Smith\",\"age\":21}"</jc>
 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+
+	<jc>// Produces:
+	//	"{name:'John Smith',age:21}"</jc>
+	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
 
 	<jc>// Produces:
 	//	&lt;object&gt;
@@ -885,6 +901,52 @@
 				</ul>
 			</ul>
 		</ul>
+		
+		<!-- === 2.1.1 - HTTP Part Serializers ================================================================ -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HttpPartSerializers' id='juneau-marshall.HttpPartSerializers'>2.1.1 - HTTP Part Serializers</a></h4>
+		<div class='topic'>
+			<p>
+				There is a separate set of serializers for serializing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
+				<br>The distinction is that these are designed to serialize directly to strings based on Open-API schema information.
+			</p>
+			<p class='bcode w800'>
+	<jc>// Schema information about our part.</jc>
+	HttpPartSchema schema = HttpPartSchema
+		.<jsm>create</jsm>(<js>"array"</js>)
+		.collectionFormat(<js>"pipes"</js>)
+		.items(
+			HttpPartSchema
+				.<jsm>create</jsm>(<js>"array"</js>)
+				.collectionFormat(<js>"csv"</js>)
+				.items(
+					HttpPartSchema.<jsm>create</jsm>(<js>"integer"</js>,<js>"int64"</js>)
+				)
+		)
+		.build();
+
+	<jc>// Our value to serialize</jc>
+	Object value = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
+
+	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
+	String output = OpenApiPartSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, value);
+			</p>
+			<p>
+				The class hierarchy for the part serializers are:
+			</p>
+			
+			<ul class='doctree'>
+				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Serializes directly to strings.
+					<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer} - Serializes to UON notation.
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Serializes using Open-API schema rules.
+						<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer} - Serializes to UON notation for beans and maps only.
+					</ul>
+				</ul>
+			</ul>
+		</div>
 	</div>
 	
 	<!-- === 2.2 - Parsers ============================================================================== -->
@@ -964,6 +1026,90 @@
 				Many of the JSON examples provided will use lax syntax which is easier to read since we don't have to deal 
 				with escapes.  
 		</ul>
+		
+		<p>
+			The class hierarchy for the parsers (excluding specialized subclasses) are:
+		</p>
+		<ul class='doctree'>
+			<li class='jac'>{@link org.apache.juneau.parser.Parser}
+			<ul>
+				<li class='jac'>{@link org.apache.juneau.parser.ReaderParser}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.json.JsonParser}
+					<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextParser}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}
+						<li class='jc'>{@link org.apache.juneau.jena.N3Parser}
+						<li class='jc'>{@link org.apache.juneau.jena.NTripleParser}
+						<li class='jc'>{@link org.apache.juneau.jena.TurtleParser}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.uon.UonParser}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser}
+						<ul>
+							<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser}
+						</ul>
+						<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.html.HtmlParser}
+					</ul>
+				</ul>
+				<li class='jac'>{@link org.apache.juneau.parser.InputStreamParser}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.jso.JsoParser}
+					<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}
+				</ul>
+			</ul>
+		</ul>		
+		
+		
+		<!-- === 2.2.1 - HTTP Part Parsers ============================================================== -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HttpPartParsers' id='juneau-marshall.HttpPartParsers'>2.2.1 - HTTP Part Parsers</a></h4>
+		<div class='topic'>
+			<p>
+				There is a separate set of parsers for parsing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
+				<br>The distinction is that these are designed to parse directly from strings based on Open-API schema information.
+			</p>
+			<p class='bcode w800'>
+	<jc>// Schema information about our part.</jc>
+	HttpPartSchema schema = HttpPartSchema
+		.<jsm>create</jsm>(<js>"array"</js>)
+		.collectionFormat(<js>"pipes"</js>)
+		.items(
+			HttpPartSchema
+				.<jsm>create</jsm>(<js>"array"</js>)
+				.collectionFormat(<js>"csv"</js>)
+				.items(
+					HttpPartSchema.<jsm>create</jsm>(<js>"integer"</js>,<js>"int64"</js>)
+				)
+		)
+		.build();
+
+	<jc>// Our input to parse.</jc>
+	String input = <js>"1,2,3|4,5,6|7,8,9"</js>;
+
+	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
+	<jk>long</jk>[][] value = OpenApiPartParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, schema, input, <jk>long</jk>[][].<jk>class</jk>);
+			</p>
+			<p>
+				The class hierarchy for the part serializers are:
+			</p>
+			
+			<ul class='doctree'>
+				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parses directly from strings.
+					<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parses from UON notation.
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parses using Open-API schema rules.
+					</ul>
+				</ul>
+			</ul>
+		</div>
 	</div>
 	
 	<!-- === 2.3 - SerializerGroups and ParserGroups ==================================================== -->
@@ -1175,8 +1321,7 @@
 		</p>
 		<p class='bcode w800'>
 	<jc>// Serialize a POJO to LAX JSON.</jc>
-	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
-.serialize(myPojo);
+	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(myPojo);
 		</p>
 		<p>
 			For performance reasons, serializers and parsers are immutable.
@@ -1193,7 +1338,7 @@
 
 		<!-- === 2.5.1 - Common Properties ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.Common' id='juneau-marshall.ConfigurableProperties.Common'></a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.Common' id='juneau-marshall.ConfigurableProperties.Common'>2.5.1 - Common Properties</a></h4>
 		<div class='topic'>
 			<p>
 				All serializers and parsers extend from the {@link org.apache.juneau.BeanContext} class.
@@ -1242,7 +1387,7 @@
 		
 		<!-- === 2.5.2 - Common Serializer Properties =================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.CommonSerializer' id='juneau-marshall.ConfigurableProperties.CommonSerializer'></a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.CommonSerializer' id='juneau-marshall.ConfigurableProperties.CommonSerializer'>2.5.2 - Common Serializer Properties</a></h4>
 		<div class='topic'>
 			<p>
 				In addition to the common properties above, the following properties are common to all serializers:
@@ -4110,7 +4255,7 @@
 		
 		<!-- === 2.15.1 - JSON Methodology ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonMethodology' id='juneau-marshall.JsonDetails.JsonMethodology'>2.15.1 - JSON Methodology</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.Methodology' id='juneau-marshall.JsonDetails.Methodology'>2.15.1 - JSON Methodology</a></h4>
 		<div class='topic'>
 			<p>
 				The JSON data type produced depends on the Java object type being serialized.
@@ -4186,7 +4331,7 @@
 		
 		<!-- === 2.15.2 - JSON Serializers ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSerializers' id='juneau-marshall.JsonDetails.JsonSerializers'>2.15.2 - JSON Serializers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.Serializers' id='juneau-marshall.JsonDetails.Serializers'>2.15.2 - JSON Serializers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.json.JsonSerializer} class is used to serialize POJOs into JSON.
@@ -4230,7 +4375,7 @@
 		
 		<!-- === 2.15.4 - JSON Parsers ================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonParsers' id='juneau-marshall.JsonDetails.JsonParsers'>2.15.4 - JSON Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.Parsers' id='juneau-marshall.JsonDetails.Parsers'>2.15.4 - JSON Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.json.JsonParser} class is used to parse JSON into POJOs.
@@ -4495,7 +4640,7 @@
 
 		<!-- === 2.16.1 - XML Methodology =============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlMethodology' id='juneau-marshall.XmlDetails.XmlMethodology'>2.16.1 - XML Methodology</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.Methodology' id='juneau-marshall.XmlDetails.Methodology'>2.16.1 - XML Methodology</a></h4>
 		<div class='topic'>
 
 			<p>
@@ -4903,7 +5048,7 @@
 		
 		<!-- === 2.16.2 - XML Serializers =============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlSerializers' id='juneau-marshall.XmlDetails.XmlSerializers'>2.16.2 - XML Serializers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.Serializers' id='juneau-marshall.XmlDetails.Serializers'>2.16.2 - XML Serializers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.xml.XmlSerializer} class is used to serialize POJOs into XML.
@@ -4949,7 +5094,7 @@
 		
 		<!-- === 2.16.3 - XML Parsers =================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlParsers' id='juneau-marshall.XmlDetails.XmlParsers'>2.16.3 - XML Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.Parsers' id='juneau-marshall.XmlDetails.Parsers'>2.16.3 - XML Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.xml.XmlParser} class is used to parse XML into POJOs.
@@ -6712,7 +6857,7 @@
 		
 		<!-- === 2.17.1 - HTML Methodology ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlMethodology' id='juneau-marshall.HtmlDetails.HtmlMethodology'>2.17.1 - HTML Methodology</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.Methodology' id='juneau-marshall.HtmlDetails.Methodology'>2.17.1 - HTML Methodology</a></h4>
 		<div class='topic'>
 
 			<p>
@@ -7227,7 +7372,7 @@
 		
 		<!-- === 2.17.2 - HTML Serializers ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSerializers' id='juneau-marshall.HtmlDetails.HtmlSerializers'>2.17.2 - HTML Serializers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.Serializers' id='juneau-marshall.HtmlDetails.Serializers'>2.17.2 - HTML Serializers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.html.HtmlSerializer} class is used to serialize POJOs into HTML.
@@ -7286,7 +7431,7 @@
 		
 		<!-- === 2.17.3 - HTML Parsers ================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlParsers' id='juneau-marshall.HtmlDetails.HtmlParsers'>2.17.3 - HTML Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.Parsers' id='juneau-marshall.HtmlDetails.Parsers'>2.17.3 - HTML Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.html.HtmlParser} class is used to parse HTML into POJOs.
@@ -7422,7 +7567,7 @@
 		
 		<!-- === 2.18.1 - UON Methodology =============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonMethodology' id='juneau-marshall.UonDetails.UonMethodology'>2.18.1 - UON Methodology</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.Methodology' id='juneau-marshall.UonDetails.Methodology'>2.18.1 - UON Methodology</a></h4>
 		<div class='topic'>
 			<h5 class='figure'>General methodology:</h5>
 			<table class='styled w800' style='border-collapse:collapse'>
@@ -7485,7 +7630,7 @@
 		
 		<!-- === 2.18.2 - UON Serializers =============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonSerializers' id='juneau-marshall.UonDetails.UonSerializers'>2.18.2 - UON Serializers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.Serializers' id='juneau-marshall.UonDetails.Serializers'>2.18.2 - UON Serializers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.uon.UonSerializer} class is used to serialize POJOs into UON.
@@ -7518,7 +7663,7 @@
 		
 		<!-- === 2.18.3 - UON Parsers =================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.UonParsers' id='juneau-marshall.UonDetails.UonParsers'>2.18.3 - UON Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UonDetails.Parsers' id='juneau-marshall.UonDetails.Parsers'>2.18.3 - UON Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.uon.UonParser} class is used to parse UON into POJOs.
@@ -7621,7 +7766,7 @@
 		
 		<!-- === 2.19.1 - URL-Encoding Methodology ====================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncodingMethodology' id='juneau-marshall.UrlEncodingDetails.UrlEncodingMethodology'>2.19.1 - URL-Encoding Methodology</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.Methodology' id='juneau-marshall.UrlEncodingDetails.Methodology'>2.19.1 - URL-Encoding Methodology</a></h4>
 		<div class='topic'>
 			<h5 class='figure'>General methodology:</h5>
 			<table class='styled w800' style='border-collapse:collapse'>
@@ -7684,7 +7829,7 @@
 		
 		<!-- === 2.19.2 - URL-Encoding Serializers ====================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncodingSerializers' id='juneau-marshall.UrlEncodingDetails.UrlEncodingSerializers'>2.19.2 - URL-Encoding Serializers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.Serializers' id='juneau-marshall.UrlEncodingDetails.Serializers'>2.19.2 - URL-Encoding Serializers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} class is used to serialize POJOs into URL-Encoding.
@@ -7717,7 +7862,7 @@
 		
 		<!-- === 2.19.3 - URL-Encoding Parsers ========================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncodingParsers' id='juneau-marshall.UrlEncodingDetails.UrlEncodingParsers'>2.19.3 - URL-Encoding Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.Parsers' id='juneau-marshall.UrlEncodingDetails.Parsers'>2.19.3 - URL-Encoding Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.urlencoding.UrlEncodingParser} class is used to parse URL-Encoding into POJOs.
@@ -7760,7 +7905,7 @@
 	
 		<!-- === 2.20.1 - MessagePack Methodology ======================================================= -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.MsgPackMethodology' id='juneau-marshall.MsgPackDetails.MsgPackMethodology'>2.20.1 - MessagePack Methodology</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.Methodology' id='juneau-marshall.MsgPackDetails.Methodology'>2.20.1 - MessagePack Methodology</a></h4>
 		<div class='topic'>
 		</div>
 	
@@ -7796,7 +7941,7 @@
 
 		<!-- === 2.20.3 - MessagePack Parsers =========================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.MsgPackParsers' id='juneau-marshall.MsgPackDetails.MsgPackParsers'>2.20.3 - MessagePack Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.MsgPackDetails.Parsers' id='juneau-marshall.MsgPackDetails.Parsers'>2.20.3 - MessagePack Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.msgpack.MsgPackParser} class is used to parse MessagePack into POJOs.
@@ -7821,30 +7966,59 @@
 		
 	</div>
 
-	<!-- === 2.21 - SOAP Details ======================================================================== -->
+	<!-- === 2.21 - OpenApi Details ================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SoapDetails' id='juneau-marshall.SoapDetails'>2.21 - SOAP Details</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails' id='juneau-marshall.OpenApiDetails'>2.21 - OpenApi Details</a></h3>
+	<div class='topic'>
+		TODO
+	
+		<!-- === 2.21.1 - OpenApi Methodology ======================================================= -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Methodology' id='juneau-marshall.OpenApiDetails.Methodology'>2.21.1 - OpenApi Methodology</a></h4>
+		<div class='topic'>
+			TODO
+		</div>
+	
+		<!-- === 2.21.2 - OpenApi Serializers ======================================================= -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.OpenApiSerializers' id='juneau-marshall.OpenApiDetails.OpenApiSerializers'>2.21.2 - OpenApi Serializers</a></h4>
+		<div class='topic'>
+			TODO
+		</div>
+
+		<!-- === 2.21.3 - OpenApi Parsers =========================================================== -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Parsers' id='juneau-marshall.OpenApiDetails.Parsers'>2.21.3 - OpenApi Parsers</a></h4>
+		<div class='topic'>
+			TODO
+		</div>
+		
+	</div>
+
+	<!-- === 2.22 - SOAP Details ======================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.SoapDetails' id='juneau-marshall.SoapDetails'>2.22 - SOAP Details</a></h3>
 	<div class='topic'>
 		TODO
 	</div>
 
-	<!-- === 2.22 - CSV Details ========================================================================= -->
+	<!-- === 2.23 - CSV Details ========================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.CsvDetails' id='juneau-marshall.CsvDetails'>2.22 - CSV Details</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.CsvDetails' id='juneau-marshall.CsvDetails'>2.23 - CSV Details</a></h3>
 	<div class='topic'>
 		TODO
 	</div>
 
-	<!-- === 2.23 - Java Serialized Object Details ====================================================== -->
+	<!-- === 2.24 - Java Serialized Object Details ====================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsoDetails' id='juneau-marshall.JsoDetails'>2.23 - Java Serialized Object Details</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsoDetails' id='juneau-marshall.JsoDetails'>2.24 - Java Serialized Object Details</a></h3>
 	<div class='topic'>
 		TODO
 	</div>
 	
-	<!-- === 2.24 - Best Practices ====================================================================== -->
+	<!-- === 2.25 - Best Practices ====================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BestPractices' id='juneau-marshall.BestPractices'>2.24 - Best Practices</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.BestPractices' id='juneau-marshall.BestPractices'>2.25 - Best Practices</a></h3>
 	<div class='topic'>
 		<ol class='spaced-list'>
 			<li>
@@ -7966,14 +8140,14 @@
 
 		<!-- === 3.1.1 - RDF Methodology ================================================================ -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall-rdf.RdfDetails.RdfMethodology' id='juneau-marshall-rdf.RdfDetails.RdfMethodology'>3.1.1 - RDF Methodology</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall-rdf.RdfDetails.Methodology' id='juneau-marshall-rdf.RdfDetails.Methodology'>3.1.1 - RDF Methodology</a></h4>
 		<div class='topic'>
 			TODO
 		</div>
 
 		<!-- === 3.1.2 - RDF Serializers ================================================================ -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall-rdf.RdfDetails.RdfSerializers' id='juneau-marshall-rdf.RdfDetails.RdfSerializers'>3.1.2 - RDF Serializers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall-rdf.RdfDetails.Serializers' id='juneau-marshall-rdf.RdfDetails.Serializers'>3.1.2 - RDF Serializers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
@@ -8072,7 +8246,7 @@
 		
 		<!-- === 3.1.3 - Rdf Parsers ==================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall-rdf.RdfDetails.RdfParsers' id='juneau-marshall-rdf.RdfDetails.RdfParsers'>3.1.3 - Rdf Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall-rdf.RdfDetails.Parsers' id='juneau-marshall-rdf.RdfDetails.Parsers'>3.1.3 - Rdf Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.jena.RdfParser} class is the top-level class for all Jena-based parsers.
@@ -14243,8 +14417,7 @@
 		<p>
 			The following is the default list of supported variables.
 		</p>
-		<a href='#DefaultRestSvlVariables' id='DefaultRestSvlVariables'></a>
-		<h5 class='figure'>Default REST SVL Variables:</h5>
+		<h5 class='figure'><a href='#DefaultRestSvlVariables' id='DefaultRestSvlVariables'>Default REST SVL Variables:</a></h5>
 		<table class='styled w800'>
 			<tr>
 				<th>Module</th><th>Class</th><th>Pattern</th><th>Initialization<br>time</th><th>Request<br>time</th>
@@ -24185,7 +24358,7 @@
 				<br>Allows easy user-defined serialization of these objects.
 				<br>The interface can be used in the following locations:
 				<ul>
-					<li><code><del>org.apache.juneau.rest.client.RestClientBuilder#partSerializer(Class)}
+					<li><code><del>org.apache.juneau.rest.client.RestClientBuilder.partSerializer(Class)</del></code> 
 					<li><code><del>org.apache.juneau.remoteable.Path.serializer</del></code> 
 					<li><code><del>org.apache.juneau.remoteable.Query.serializer</del></code> 
 					<li><code><del>org.apache.juneau.remoteable.QueryIfNE.serializer</del></code> 

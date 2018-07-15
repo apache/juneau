@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.uon.*;
@@ -82,5 +84,20 @@ public class UonPartParser extends UonParser implements HttpPartParser {
 	@Override
 	public UonPartParserSession createSession() {
 		return new UonPartParserSession(this, ParserSessionArgs.DEFAULT);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		return createSession().parse(partType, schema, in, toType);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return createSession().parse(partType, schema, in, toType);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return createSession().parse(partType, schema, in, toType, toTypeArgs);
 	}
 }

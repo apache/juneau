@@ -1162,7 +1162,7 @@ public class RequestBeanProxyTest {
 		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
 			return new HttpPartSerializerSession() {
 				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 					if (value == null)
 						return "NULL";
 					if (value instanceof Collection)
@@ -1173,6 +1173,11 @@ public class RequestBeanProxyTest {
 				}
 			};
 		}
+
+		@Override
+		public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+			return createSession(null).serialize(partType, schema, value);
+		}
 	}
 
 	public static class ListSerializer implements HttpPartSerializer {
@@ -1180,7 +1185,7 @@ public class RequestBeanProxyTest {
 		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
 			return new HttpPartSerializerSession() {
 				@Override
-				public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 					if (value == null)
 						return "NULL";
 					if (value instanceof Collection)
@@ -1190,6 +1195,11 @@ public class RequestBeanProxyTest {
 					return "?" + value + "?";
 				}
 			};
+		}
+
+		@Override
+		public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+			return createSession(null).serialize(partType, schema, value);
 		}
 	}
 }

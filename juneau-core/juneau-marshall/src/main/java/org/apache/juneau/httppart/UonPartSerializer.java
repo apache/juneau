@@ -72,13 +72,18 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 	// Entry point methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override
+	@Override /* HttpPartSerializer */
 	public UonPartSerializerSession createSession(SerializerSessionArgs args) {
 		return new UonPartSerializerSession(this, args);
 	}
 
-	@Override
+	@Override /* HttpPartSerializer */
 	public UonPartSerializerSession createSession() {
 		return new UonPartSerializerSession(this, SerializerSessionArgs.DEFAULT);
+	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createSession().serialize(partType, schema, value);
 	}
 }
