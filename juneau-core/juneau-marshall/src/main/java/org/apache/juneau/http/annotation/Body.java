@@ -93,10 +93,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <p>
- * This is used to populate the auto-generated Swagger documentation and UI:
- *
- * <p>
- * <img class='bordered' src='doc-files/Body_Swagger.png' style='width:860px'>
+ * This is used to populate the auto-generated Swagger documentation and UI.
  *
  * <p>
  * This annotation can be applied to the following:
@@ -329,7 +326,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
+	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
@@ -353,7 +350,7 @@ public @interface Body {
 	 * A serialized example of the body of a request.
 	 *
 	 * <p>
-	 * This is the {@link JsonSerializer#DEFAULT_LAX Simple-JSON} or String representation of an example of the body.
+	 * This is the <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> or String representation of an example of the body.
 	 *
 	 * <p>
 	 * This value is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
@@ -437,7 +434,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is any {@link JsonSerializer#DEFAULT_LAX Simple-JSON} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
+	 * 		The format is any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
 	 * 		can be converted from a String.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
@@ -451,7 +448,7 @@ public @interface Body {
 	 * Serialized examples of the body of a request.
 	 *
 	 * <p>
-	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object whose keys are media types and values are string representations of that value.
+	 * This is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object whose keys are media types and values are string representations of that value.
 	 *
 	 * <p>
 	 * In general you won't need to populate this value directly since it will automatically be calculated based on the value provided in the {@link #example()} field.
@@ -469,7 +466,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object with string keys (media type) and string values (example for that media type) .
+	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object with string keys (media type) and string values (example for that media type) .
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 	<li>
@@ -488,7 +485,7 @@ public @interface Body {
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 *
 	 * <p>
-	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this parameter-info.
+	 * This is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object that makes up the swagger information for this parameter-info.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the body:
@@ -536,7 +533,7 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
+	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
 	 * 	<li>
 	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>

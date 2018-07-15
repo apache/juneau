@@ -132,6 +132,7 @@
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonMethodology'>JSON Methodology</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonSerializers'>JSON Serializers</a></p>
+			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonParsers'>JSON Parsers</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonAnnotation'>@Json Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.JsonDetails.JsonSchema'>JSON-Schema Support</a></p>
@@ -291,10 +292,23 @@
 			<li><p><a class='doclink' href='#juneau-rest-server.HandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.FormData'>@FormData</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.HasFormData'>@HasFormData</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Query'>@Query</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.HasQuery'>@HasQuery</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Header'>@Header</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.Path'>@Path</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.PathRemainder'>@PathRemainder</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.Response'>@Response</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.Responses'>@Responses</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.ResponseHeader'>@ResponseHeader</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.ResponseStatus'>@ResponseStatus</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.ResponseStatuses'>@ResponseStatuses</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartSerializing'>Swagger Schema Part Serializing</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Serializers'>Serializers</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.PartSerializers'>PartSerializers</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Parsers'>Parsers</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.PartParsers'>PartParsers</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Properties'>Properties</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Transforms'>Transforms</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Guards'>Guards</a></p>
@@ -813,6 +827,64 @@
 			<br>Extensible support for other data types such as <code>Calendars</code>, <code>Dates</code>, 
 			<code>Iterators</code> is available through the use of POJO swaps (described later).
 		</p>
+		<p>
+			The class hierarchy for the serializers (excluding specialized subclasses) are:
+		</p>
+		<ul class='doctree'>
+			<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
+			<ul>
+				<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
+					<ul>
+					<li class='jc'>{@link org.apache.juneau.jsonschema.JsonSchemaSerializer}
+					<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextSerializer}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.jena.N3Serializer}
+						<li class='jc'>{@link org.apache.juneau.jena.NTripleSerializer}
+						<li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}
+						<li class='jc'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
+						<li class='jc'>{@link org.apache.juneau.jena.TurtleSerializer}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer}
+						<ul>
+							<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer}
+							<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer}
+						</ul>
+						<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
+						<ul>
+							<li class='jc'>{@link org.apache.juneau.html.HtmlStrippedDocSerializer}
+							<ul>
+								<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
+								<ul>
+									<li class='jc'>{@link org.apache.juneau.htmlschema.HtmlSchemaDocSerializer}
+								</ul>
+							</ul>
+						</ul>
+						<li class='jc'>{@link org.apache.juneau.soap.SoapXmlSerializer}
+						<li class='jc'>{@link org.apache.juneau.xml.XmlDocSerializer}
+						<li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaSerializer}
+						<ul>
+							<li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaDocSerializer}
+						</ul>
+					</ul>
+				</ul>
+				<li class='jac'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.jso.JsoSerializer}
+					<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
+				</ul>
+			</ul>
+		</ul>
 	</div>
 	
 	<!-- === 2.2 - Parsers ============================================================================== -->
@@ -1082,10 +1154,13 @@
 			<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 				<ul>
 					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT DEFAULT}
-					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX DEFAULT_LAX}
 					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
-					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE DEFAULT_LAX_READABLE}
-					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE_SAFE DEFAULT_LAX_READABLE_SAFE}
+				</ul>
+			</li>
+			<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT DEFAULT}
+					<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
 				</ul>
 			</li>
 			<li class='jc'>{@link org.apache.juneau.json.JsonParser} 
@@ -1100,7 +1175,8 @@
 		</p>
 		<p class='bcode w800'>
 	<jc>// Serialize a POJO to LAX JSON.</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.serialize(myPojo);
+	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+.serialize(myPojo);
 		</p>
 		<p>
 			For performance reasons, serializers and parsers are immutable.
@@ -1108,7 +1184,8 @@
 		</p>
 		<p class='bcode w800'>
 	<jc>// Clone and customize an existing serializer.</jc>
-	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>
+	WriterSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+
 		.builder()  <jc>// Create a new builder with copied settings.</jc>
 		.quoteChar(<js>'"'</js>)  <jc>// Use a different quote character.</jc>
 		.build();
@@ -2127,7 +2204,8 @@
 		<jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
 	}
 
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>;
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+;
 	A1 a1 = <jk>new</jk> A1();
 	String r = s.serialize(a1);
 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized.</jc>
@@ -3022,7 +3100,8 @@
 	}	
 	
 	<jc>// Produces "{f1:{'foo':'bar'}}"</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.toString(<jk>new</jk> MyBean());
+	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+.toString(<jk>new</jk> MyBean());
 			</p>			
 			<p>
 				Note that if you're serializing Readers and InputStreams, it's up to you to make sure you're producing
@@ -3200,7 +3279,8 @@
 	MyInterface[] x = <jk>new</jk> MyInterface[]{ <jk>new</jk> MyClass1(), <jk>new</jk> MyClass2() };
 
 	<jc>// Produces "[{mytype:'C1',...},{mytype:'C2',...}]"</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.serialize(x);
+	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+.serialize(x);
 		</p>
 		<ul class='doctree'>
 			<li class='info'>
@@ -3259,7 +3339,8 @@
 				When serialized, the subtype is serialized as a virtual <js>"_type"</js> property:
 			</p>	
 			<p class='bcode w800'>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>;
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+;
 	A1 a1 = <jk>new</jk> A1();
 	a1.<jf>f1</jf> = <js>"f1"</js>;
 	String r = s.serialize(a1);
@@ -3367,7 +3448,7 @@
 		</p>
 		<p class='bcode w800'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
 
 	<jc>// Create a recursive loop.</jc>
 	A a = <jk>new</jk> A();
@@ -3453,7 +3534,7 @@
 	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
 
 	<jc>// Convert it back to JSON.</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(m);
+	String json = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(m);
 		</p>
 		<p>
 			What we end up with is the exact same output.
@@ -4010,7 +4091,7 @@
       ]
    } 
    		</p>
-		<h5 class='figure'>Lax JSON</h5>
+		<h5 class='figure'>Simplified JSON</h5>
 		<p class='bcode w800'>
    {
       name: <js>'John Smith'</js>, 
@@ -4130,17 +4211,26 @@
 				<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 				<ul>
 					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT DEFAULT}
-					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX DEFAULT_LAX}
-					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE DEFAULT_LAX_READABLE}
-					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE_SAFE DEFAULT_LAX_READABLE_SAFE}
 					<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
+				<ul>
+					<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT DEFAULT}
+					<li class='jf'>{@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE DEFAULT_READABLE}
 				</ul>
 			</ul>
 		</div>		
 		
-		<!-- === 2.15.3 - JSON Parsers ================================================================== -->
+		<!-- === 2.15.3 - Simplified JSON ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonParsers' id='juneau-marshall.JsonDetails.JsonParsers'>2.15.3 - JSON Parsers</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.SimplifiedJson' id='juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a></h4>
+		<div class='topic'>
+			TODO
+		</div>
+		
+		<!-- === 2.15.4 - JSON Parsers ================================================================== -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonParsers' id='juneau-marshall.JsonDetails.JsonParsers'>2.15.4 - JSON Parsers</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.json.JsonParser} class is used to parse JSON into POJOs.
@@ -4183,9 +4273,9 @@
 			</ul>	
 		</div>		
 		
-		<!-- === 2.15.4 - @Json Annotation ============================================================== -->
+		<!-- === 2.15.5 - @Json Annotation ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonAnnotation' id='juneau-marshall.JsonDetails.JsonAnnotation'>2.15.4 - @Json Annotation</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonAnnotation' id='juneau-marshall.JsonDetails.JsonAnnotation'>2.15.5 - @Json Annotation</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
@@ -4226,9 +4316,9 @@
 			</table>
 		</div>		
 
-		<!-- === 2.15.5 - JSON-Schema Support =========================================================== -->
+		<!-- === 2.15.6 - JSON-Schema Support =========================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSchema' id='juneau-marshall.JsonDetails.JsonSchema'>2.15.5 - JSON-Schema Support</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSchema' id='juneau-marshall.JsonDetails.JsonSchema'>2.15.6 - JSON-Schema Support</a></h4>
 		<div class='topic'>
 			<p>
 				Juneau provides the {@link org.apache.juneau.jsonschema.JsonSchemaSerializer} class for generating JSON-Schema 
@@ -4269,7 +4359,7 @@
 			</p>
 			<p class='bcode w800'>
 	<jc>// Get the one of the default schema serializers.</jc>
-	JsonSchemaSerializer s = JsonSchemaSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
+	JsonSchemaSerializer s = JsonSchemaSerializer.<jsf>DEFAULT_SIMPLE_READABLE</jsf>;
 	
 	<jc>// Get the JSON Schema for the POJO.</jc>
 	String jsonSchema = s.serialize(<jk>new</jk> Person());
@@ -7866,7 +7956,7 @@
 	// @prefix j:       &lt;http://www.apache.org/juneau/&gt; .
 	//	[]    jp:age  "21" ;
 	//	      jp:name "John Smith" .</jc>
-	String rdfN3 = RdfSerializer.<jsf>DEFAULT_N3</jsf>.serialize(p);
+	String rdfN3 = N3Serializer.<jsf>DEFAULT</jsf>.serialize(p);
 
 	<jc>// Produces:
 	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/name&gt; "John Smith" .
@@ -7892,11 +7982,11 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.Xml}
-					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.XmlAbbrev}
-					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.NTriple}
-					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.Turtle}
-					<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer.N3}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
+					<li class='jc'>{@link org.apache.juneau.jena.N3Serializer}
+					<li class='jc'>{@link org.apache.juneau.jena.NTripleSerializer}
+					<li class='jc'>{@link org.apache.juneau.jena.TurtleSerializer}
 				</ul>
 			</ul>
 			
@@ -7952,13 +8042,26 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_JUNEAU_NS DEFAULT_JUNEAU_NS}
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_JUNEAUBP_NS DEFAULT_JUNEAUBP_NS}
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_N3 DEFAULT_N3}
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_NTRIPLE DEFAULT_NTRIPLE}
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_TURTLE DEFAULT_TURTLE}
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XML DEFAULT_XML}
-					<li class='jf'>{@link org.apache.juneau.jena.RdfSerializer#DEFAULT_XMLABBREV DEFAULT_XMLABBREV}				
+					<li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.RdfXmlSerializer#DEFAULT DEFAULT}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer#DEFAULT DEFAULT}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.jena.N3Serializer}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.N3Serializer#DEFAULT DEFAULT}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.jena.NTripleSerializer}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.NTripleSerializer#DEFAULT DEFAULT}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.jena.TurtleSerializer}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.TurtleSerializer#DEFAULT DEFAULT}
+					</ul>
 				</ul>
 			</ul>
 			<p>
@@ -7978,10 +8081,10 @@
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.Xml}
-					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.NTriple}
-					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.Turtle}
-					<li class='jc'>{@link org.apache.juneau.jena.RdfParser.N3}
+					<li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}
+					<li class='jc'>{@link org.apache.juneau.jena.NTripleParser}
+					<li class='jc'>{@link org.apache.juneau.jena.TurtleParser}
+					<li class='jc'>{@link org.apache.juneau.jena.N3Parser}
 				</ul>
 			</ul>
 			<p>
@@ -8030,6 +8133,30 @@
 				<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
 				<ul>
 					<li class='jf'>{@link org.apache.juneau.jena.RdfParser#RDF_trimWhitespace RDF_trimWhitespace}
+				</ul>
+			</ul>
+			<p>
+				The following pre-configured parsers are provided for convenience:
+			</p>
+			<ul class='doctree'>
+				<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.RdfXmlParser#DEFAULT DEFAULT}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.jena.N3Parser}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.N3Parser#DEFAULT DEFAULT}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.jena.NTripleParser}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.NTripleParser#DEFAULT DEFAULT}
+					</ul>
+					<li class='jc'>{@link org.apache.juneau.jena.TurtleParser}
+					<ul>
+						<li class='jf'>{@link org.apache.juneau.jena.TurtleParser#DEFAULT DEFAULT}
+					</ul>
 				</ul>
 			</ul>
 		</div>		
@@ -9452,7 +9579,7 @@
 	URL key4 = c.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
 			</p>
 			<p>
-				Beans are represented as {@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX Lax JSON} by default:
+				Beans are represented as <a class='doclink' href='#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> by default:
 			</p>
 			<p class='bcode w800'>
 	<jc>// Contact information</jc>
@@ -10938,7 +11065,32 @@
 			<li class='jm'><code><jk>public</jk> T(RestContextBuilder)</code>
 		</ul>
 		<p>
-			And even that restriction is relaxed if you implement your own REST resource resolver (described later).
+			And even that requirement is relaxed if you implement your own REST resource resolver (described later).
+		</p>
+		<p>
+			For example:
+		</p>
+		<p class='bcode w800'>
+	<jc>// Top level resource is deployed like any other servlet and must subclass from RestServlet.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/top"</js>,
+		children={
+			ChildResource.<jk>class</jk>  <jc>// Accessed via URI "/top/child"</jc>
+		}
+	)
+	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
+		</p>
+		<p class='bcode w800'>
+	<jc>// Child resources can inherit from RestServlet but it's not a requirement.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/child"</js>
+	)
+	<jk>public class</jk> ChildResource <jk>extends</jk> WhateverYouWant {...}
+		</p>		
+		<p>
+			That's all there is to it!
+			There's no code scanning, module configuration/initialization classes, or anything complex like that.
+			It's just a servlet.
 		</p>
 
 		<!-- === 7.3.1 - RestServlet ==================================================================== -->
@@ -10960,19 +11112,19 @@
 				extend from one of the preconfigured default servlets such as {@link org.apache.juneau.rest.BasicRestServlet}.
 				<br>The <l>RestServlet</l> class by itself is not configured with any serializers and parsers, and therefore
 				not very useful on it's own.
-				<br>However, the class does provide a couple of convenience methods to be aware of:
+				However, the class does provide a couple of convenience methods to be aware of:
 			</p>
 			<ul class='doctree'>
 				<li class='jac'><code>{@link org.apache.juneau.rest.RestServlet} <jk>extends</jk> HttpServlet</code>
 				<ul>
-					<li class='jf'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...) log(Level,String,Object...)}
-					<li class='jf'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)}
-					<li class='jf'>{@link org.apache.juneau.rest.RestServlet#getContext() getContext()}
+					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#init(ServletConfig) init(ServletConfig)} - Can override to provide custom initialization.
+					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#service(HttpServletRequest,HttpServletResponse) service(HttpServletRequest,HttpServletResponse)} - Can override to provide custom request handling.
+					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#destroy() destroy()} - Can override to provide custom cleanup.
+					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getContext() getContext()} - Returns all aspects of the configuration of your resource pulled from all annotations on the class/parent-classes and methods.
+					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...) log(Level,String,Object...)} - Convenience logging method.
+					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)} - Convenience logging method.
 				</ul>
 			</ul>
-			<p>
-				Since this is a servlet, you also have the ability to intercept calls to the <l>init</l> and <l>service</l> methods
-				in your subclass.
 		</div>
 
 		<!-- === 7.3.2 - BasicRestServlet =============================================================== -->
@@ -10988,16 +11140,90 @@
 				<li>Some basic HTML boilerplate for the HTML representation of your POJOs.
 				<li>Support for auto-generated Swagger documentation through OPTIONS page requests.
 				<li>Configuration of default CSS stylesheets.
+				<li>Default contents for HTML views.
 			</ul>
 			<p>
-				The entirety of the class is shown below.
+				The contents of the class is shown below.
 				<br>You should notice that very little code is being used and everything is configurable through
 				annotations:
 			</p>
 			<p class='bcode w800'>
 	<ja>@RestResource</ja>(
+	
+		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter. </jc>
+		allowedMethodParams=<js>"OPTIONS"</js>,
+		
+		<jc>// HTML-page specific settings.</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			<jc>// Basic page navigation links.</jc>
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
+		),
+		
+		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
+		pojoSwaps={
+			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+			SwaggerUI.<jk>class</jk>
+		},
+		
+		<jc>// Properties to apply to all serializers/parsers and REST-specific API objects.</jc>
+		properties={
+			<jc>// Add descriptions to the following types when not specified:</jc>
+			<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addDescriptionsTo</jsf>, value=<js>"bean,collection,array,map,enum"</js>),
+	
+			<jc>// Automatically add examples to the following types:</jc>
+			<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addExamplesTo</jsf>, value=<js>"bean,collection,array,map"</js>),
+	
+			<jc>// Don't generate schema information on the Swagger bean itself or HTML beans.</jc>
+			<ja>@Property</ja>(name=<jsf>INFOPROVIDER_ignoreTypes</jsf>, value="<js>Swagger,org.apache.juneau.dto.html5.*"</js>)
+		},
+		
+		<jc>// Shortcut for boolean properties.</jc>
+		flags={
+			<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
+			<jsf>JSONSCHEMA_useBeanDefs</jsf>
+		}
+	)
+	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+	
+		<jd>/**
+		 * [OPTIONS /*] - Show resource options.
+		 *
+		 * @param req The HTTP request.
+		 * @return A bean containing the contents for the OPTIONS page.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+			summary=<js>"Swagger documentation"</js>,
+			description=<js>"Swagger documentation for this resource."</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				<jc>// Override the nav links for the swagger page.</jc>
+				navlinks={
+					<js>"back: servlet:/"</js>,
+					<js>"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"</js>
+				},
+				<jc>// Never show aside contents of page inherited from class.</jc>
+				aside=<js>"NONE"</js>
+			)
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
+			<jk>return</jk> req.getSwagger();
+		}
+	}
+			</p>
+			<p>
+				Additional annotations are pulled in from the {@link org.apache.juneau.rest.BasicRestConfig} interface which simply
+				exists to define a common set of annotations.  
+				Notice that it has no code at all.
+			</p>
+			<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+	
+		<jc>// Default serializers for all Java methods in the class.</jc>
 		serializers={
-			HtmlDocSerializer.<jk>class</jk>,
+			HtmlDocSerializer.<jk>class</jk>, 
 			HtmlStrippedDocSerializer.<jk>class</jk>,
 			HtmlSchemaDocSerializer.<jk>class</jk>,
 			JsonSerializer.<jk>class</jk>,
@@ -11011,65 +11237,82 @@
 			SoapXmlSerializer.<jk>class</jk>,
 			PlainTextSerializer.<jk>class</jk>
 		},
+		
+		<jc>// Default parsers for all Java methods in the class.</jc>
 		parsers={
 			JsonParser.<jk>class</jk>,
+			JsonParser.Simple.<jk>class</jk>,
 			XmlParser.<jk>class</jk>,
 			HtmlParser.<jk>class</jk>,
 			UonParser.<jk>class</jk>,
 			UrlEncodingParser.<jk>class</jk>,
-			MsgPackParser<jk>.class</jk>,
+			MsgPackParser.<jk>class</jk>,
 			PlainTextParser.<jk>class</jk>
 		},
+		
+		<jc>// Properties to apply to all serializers/parsers and REST-specific API objects.</jc>
 		properties={
-			<jc>// URI-resolution is disabled by default.  Need to enable it.</jc>
+			<jc>// Enable automatic resolution of URI objects to root-relative values.</jc>
 			<ja>@Property</ja>(name=<jsf>SERIALIZER_uriResolution</jsf>, value=<js>"ROOT_RELATIVE"</js>)
 		},
-		allowedMethodParams=<js>"OPTIONS"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			header={
-				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
-				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
-				<js>"&lt;a href='http://juneau.apache.org'&gt;&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;"</js>
-			},
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			},
-			stylesheet=<js>"servlet:/styles/light.css"</js>,
-			head={
-				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
-			}
-		),
 		
+		<jc>// HTML-page specific settings</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+		
+			<jc>// Default page header contents.</jc>
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>, <jc>// Use @RestResource(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"$C{REST/header}"</js> <jc>// Extra header HTML defined in external config file.</jc>
+			},
+			
+			<jc>// Basic page navigation links.</jc>
+			navlinks={
+				<js>"up: request:/.."</js>
+			},
+			
+			<jc>// Default stylesheet to use for the page.
+			// Can be overridden from external config file.
+			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+			
+			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+			// Use it to add a favicon link to the page.</jc>
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+			},
+			
+			<jc>// No default page footer contents.
+			// Can be overridden from external config file.</jc>
+			footer=<js>"$C{REST/footer}"</js>,
+			
+			<jc>// By default, table cell contents should not wrap.</jc>
+			nowrap=<js>"true"</js>
+		),
+	
 		<jc>// Optional external configuration file.</jc>
 		config=<js>"$S{juneau.configFile}"</js>,
 	
 		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
-		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"</jc>
-		staticFiles={<js>"htdocs:htdocs"</js>,<js>"styles:styles"</js>}
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+		// By default, we define static files through the external configuration file.</jc>
+		staticFiles={<js>"$C{REST/staticFiles}"</js>}
 	)
-	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet {
-	
-		<jc>// Show resource options.</jc>
-		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
-			htmldoc=<ja>@HtmlDoc</ja>(
-				navlinks={
-					<js>"back: servlet:/"</js>,
-					<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
-				},
-				aside=<js>"NONE"</js>
-			),
-			summary=<js>"Swagger documentation",</js>
-			description=<js>"Auto-generated swagger documentation for this resource"</js>
-		)
-		<jk>public</jk> Swagger getOptions(RestRequest req) {
-			<jk>return</jk> req.getSwagger();
-		}
-	}
+	<jk>public interface</jk> BasicRestConfig {}
 			</p>
 			<p>
 				Your top-level resource will simply extend from this class, as shown in the Hello World example
 				from a couple sections back.
+			</p>
+			<p>
+				It's important to notice that the <ja>@RestResource</ja> annotation is inheritable and overridable from parent
+				class and interfaces.  
+				They'll all get merged into a single set of annotation values for the resource class.
+			</p>
+			<p>
+				Not shown but equally important is that all of the annotations shown have programmatic equivalents via the {@link org.apache.juneau.rest.RestContextBuilder} class
+				which can be manipulated during servlet initialization.
+				<br>(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
 			</p>
 			<p>
 				There's a lot going on in this class.
@@ -11310,6 +11553,7 @@
 				resource classes that can be extended by all your child resources so that they all share common
 				settings.
 			</p>
+			<h5 class='figure'>Inheritance rules</h5>
 			<table class='styled w800'>
 				<tr>
 					<th><l>Annotation</l></th>
@@ -11334,13 +11578,17 @@
 				<tr>
 					<td>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() beanFilters()}</td>
 					<td>
-						Bean filters on child are combined with those on parent class.
+						Bean filters on child override those on parent class.
+						<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+						<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
 					</td>
 				</tr>
 				<tr>
 					<td>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() pojoSwaps()}</td>
 					<td>
-						POJO swaps on child are combined with those on parent class.
+						POJO swaps on child override those on parent class.
+						<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+						<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
 					</td>
 				</tr>
 				<tr>
@@ -11354,14 +11602,18 @@
 				<tr>
 					<td>{@link org.apache.juneau.rest.annotation.RestResource#serializers() serializers()}</td>
 					<td>
-						Serializers on child are combined with those on parent class.
+						Serializers on child override those on parent class.
+						<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+						<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
 						<br>Serializers on methods take precedence over those on classes.
 					</td>
 				</tr>
 				<tr>
 					<td>{@link org.apache.juneau.rest.annotation.RestResource#parsers() parsers()}</td>
 					<td>
-						Parsers on child are combined with those on parent class.
+						Parsers on child override those on parent class.
+						<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+						<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
 						<br>Parsers on methods take precedence over those on classes.
 					</td>
 				</tr>
@@ -11481,8 +11733,8 @@
 	}
 		</p>
 		<p>
-			Warning:  This class is huge.
-			<br>Through it, you can configure bean/serializer/parser settings, define config files, children, 
+			Warning:  The builder class is huge.
+			Through it, you can configure bean/serializer/parser settings, define config files, children, 
 				resource finders, info providers, etc...
 		</p>
 	</div>
@@ -11518,7 +11770,7 @@
 			<ul class='spaced-list'>
 				<li>
 					<b>Parameters based on class types:</b>
-					<ul>
+					<ul class='spaced-list'>
 						<li><b>Request/response objects:</b>
 							<ul>
 								<li class='jc'>{@link org.apache.juneau.rest.RestRequest} - The request object.
@@ -11596,15 +11848,15 @@
 					</ul>
 				<li><b>Annotated parameters:</b>
 					<ul>
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Path</del></code> - Variables in matched URL path patterns.
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.FormData</del></code> - Multipart form post parameter values.
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.HasFormData</del></code> - Denotes whether the form data parameter exists.
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Query</del></code> - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.HasQuery</del></code> - Denotes whether the query parameter exists.
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Header</del></code> - A header value.
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Method</del></code> - The HTTP method name. 
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.PathRemainder</del></code> - The remainder value after path pattern match.
-						<li class='ja'><code><del>org.apache.juneau.rest.annotation.Body</del></code> - The HTTP content parsed as a POJO.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.Path} - Variables in matched URL path patterns.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder} - The remainder value after path pattern match.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - Multipart form post parameter values.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData} - Denotes whether the form data parameter exists.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery} - Denotes whether the query parameter exists.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A header value.
+						<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP content parsed as a POJO.
+						<li class='ja'>{@link org.apache.juneau.rest.annotation.Method} - The HTTP method name. 
 					</ul>
 			</ul>
 			<h5 class='figure'>Example:</h5>
@@ -11660,19 +11912,19 @@
 			<ul class='doctree'>
 				<li class='jc'><code>{@link org.apache.juneau.rest.RestRequest} <jk>extends</jk> HttpServletRequest</code>
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders() getHeaders()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getQuery() getQuery()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getFormData() getFormData()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getBody() getBody()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getPathMatch() getPathMatch()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger() getLogger()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider() getInfoProvider()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfig() getConfig()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession() getVarResolverSession()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessageBundle() getMessageBundle()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties() getProperties()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders() getHeaders()} - HTTP request headers.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getQuery() getQuery()} - Query parameters.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getFormData() getFormData()} - Form-data parameters.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getBody() getBody()} - HTTP request body.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getPathMatch() getPathMatch()} - Path match variables.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger() getLogger()} - Logging.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider() getInfoProvider()} - Swagger documentation provider.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()} - Generated Swagger information.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfig() getConfig()} - External configuration API.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession() getVarResolverSession()} - String variable resolver.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessageBundle() getMessageBundle()} - Localized messages.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties() getProperties()} - Configuration properties.
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)} - Various methods for retrieving static files from classpath.
 				</ul>
 			</ul>
 		</div>
@@ -11691,15 +11943,14 @@
 	<jk>public</jk> Object myMethod(RestResponse req) {...}			
 			</p>
 			<p>
-				The important methods on this class are shown below:
+				Some important methods on this class are:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'><code>{@link org.apache.juneau.rest.RestResponse} <jk>extends</jk> HttpServletResponse</code>
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RestResponse#setOutput(Object) setOutput(Object)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getProperties() getProperties()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getHtmlDocBuilder() getHtmlDocBuilder()}
-					<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getDirectWriter(String) getDirectWriter(String)}
+					<li class='jm'>{@link org.apache.juneau.rest.RestResponse#setOutput(Object) setOutput(Object)} - Set response output programmatically.
+					<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getHtmlDocBuilder() getHtmlDocBuilder()} - Set HTTP page contents programmatically.
+					<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getDirectWriter(String) getDirectWriter(String)} - Direct access to underlying response writer.
 				</ul>
 			</ul>
 		</div>
@@ -11726,19 +11977,24 @@
 	}
 			</p>
 			<p>
-				The important methods on this class are:
+				Some important methods on this class are:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'>{@link org.apache.juneau.rest.RequestBody} 
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getReader() getReader()}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getInputStream() getInputStream()}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Class) asType(Class)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Type,Type...) asType(Type,Type...)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asString() asString()}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asHex() asHex()}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asSpacedHex() asSpacedHex()}
+					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getReader() getReader()} - Get body as a Reader.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getInputStream() getInputStream()} - Get body as an InputStream.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Class) asType(Class)} - Get body converted to a POJO.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Type,Type...) asType(Type,Type...)} - Get body converted to a map or collection of POJOs.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asString() asString()} - Get body as a simple string.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asHex() asHex()} - Get body as a hex-encoded string.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asSpacedHex() asSpacedHex()} - Get body as spaced-hex-encoded string.
 				</ul>
+			</ul>
+			
+			<h5 class='section'>See Also:</h5>
+			<ul>
+				<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 			</ul>
 		</div>
 
@@ -11770,18 +12026,23 @@
 	 }			
 			</p>
 			<p>
-				The important methods on this class are:
+				Some important methods on this class are:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'><code>{@link org.apache.juneau.rest.RequestHeaders} <jk>extends</jk> TreeMap&lt;String,String[]&gt;</code>
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Class) get(String,Class)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Type,Type...) get(String,Type,Type)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getString(String,String) getString(String,String)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getInt(String,int) getInt(String,int)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getBoolean(String,boolean) getBoolean(String,boolean)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#addDefault(String,Object) addDefault(String,Object)}
+					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Class) get(String,Class)} - Get header value converted to a POJO.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Type,Type...) get(String,Type,Type)} - Get header value converted to a map or collection of POJOs.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getString(String,String) getString(String,String)} - Get header value as a simple string.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getInt(String,int) getInt(String,int)} - Get header value as an integer.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getBoolean(String,boolean) getBoolean(String,boolean)} - Get header value as a boolean.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a header.
 				</ul>
+			</ul>
+			
+			<h5 class='section'>See Also:</h5>
+			<ul>
+				<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 			</ul>
 		</div>
 
@@ -11813,22 +12074,28 @@
 				that the former will NOT load the body of the request on FORM POSTS and will only look at parameters
 				found in the query string.
 				<br>This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to 
-				inadvertantly read the body of the request to get a query parameter.
+				inadvertently read the body of the request to get a query parameter.
 			</p>
 			<p>
-				The important methods on this class are:
+				Some important methods on this class are:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'><code>{@link org.apache.juneau.rest.RequestQuery} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</code>
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Class) get(String,Class)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Type,Type...) get(String,Type,Type)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getString(String,String) getString(String,String)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getInt(String,int) getInt(String,int)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getBoolean(String,boolean) getBoolean(String,boolean)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#addDefault(String,Object) addDefault(String,Object)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getSearchArgs() getSearchArgs()}
+					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Class) get(String,Class)} - Get query parameter value converted to a POJO.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Type,Type...) get(String,Type,Type)} - Get query parameter value converted to a map or collection of POJOs.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getString(String,String) getString(String,String)} - Get query parameter value as a simple string.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getInt(String,int) getInt(String,int)} - Get query parameter value as an integer.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getBoolean(String,boolean) getBoolean(String,boolean)} - Get query parameter value as a boolean.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a query parameter.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getSearchArgs() getSearchArgs()} - Returns query parameter search arguments.
 				</ul>
+			</ul>
+			
+			<h5 class='section'>See Also:</h5>
+			<ul>
+				<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+				<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 			</ul>
 		</div>
 
@@ -11859,18 +12126,24 @@
 				Note that this object does NOT take GET parameters into account and only returns values found in the body of the request.
 			</p>
 			<p>
-				The important methods on this class are:
+				Some important methods on this class are:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'><code>{@link org.apache.juneau.rest.RequestFormData} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</code>
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Class) get(String,Class)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Type,Type...) get(String,Type,Type)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getString(String,String) getString(String,String)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getInt(String,int) getInt(String,int)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getBoolean(String,boolean) getBoolean(String,boolean)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#addDefault(String,Object) addDefault(String,Object)}
+					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Class) get(String,Class)} - Get form-data parameter values converted to a POJO.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Type,Type...) get(String,Type,Type)} - Get form-data parameter value converted to a map or collection of POJOs.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getString(String,String) getString(String,String)} - Get form-data parameter value as a simple string.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getInt(String,int) getInt(String,int)} - Get form-data parameter value as an integer.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getBoolean(String,boolean) getBoolean(String,boolean)} - Get form-data parameter value as a boolean.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a form-data parameter.
 				</ul>
+			</ul>
+
+			<h5 class='section'>See Also:</h5>
+			<ul>
+				<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+				<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 			</ul>
 		</div>
 
@@ -12010,18 +12283,24 @@
 	}
 			</p>
 			<p>
-				The important methods on this class are:
+				Some important methods on this class are:
 			</p>
 			<ul class='doctree'>
 				<li class='jc'><code>{@link org.apache.juneau.rest.RequestPathMatch} <jk>extends</jk> TreeMap&lt;String,String&gt;</code>
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Class) get(String,Class)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Type,Type...) get(String,Type,Type)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getString(String) getString(String)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getInt(String) getInt(String)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getBoolean(String) getBoolean(String)}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getRemainder() getRemainder()}
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Class) get(String,Class)} - Get path match variable converted to a POJO.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Type,Type...) get(String,Type,Type)} - Get path match variable converted to a map or collection of POJOs.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getString(String) getString(String)} - Get patch match variable as a simple string.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getInt(String) getInt(String)} - Get path match variable as an integer.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getBoolean(String) getBoolean(String)} - Get path match variable as a boolean.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getRemainder() getRemainder()} - Get the path match remainder.
 				</ul>
+			</ul>
+
+			<h5 class='section'>See Also:</h5>
+			<ul>
+				<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+				<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder}
 			</ul>
 		</div>
 
@@ -12333,13 +12612,23 @@
 		<p>
 			The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 		</p>
-		<h5 class='figure'>Example:</h5>
+		<p>
+			This annotation can be applied at the following locations:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				Parameters on a  {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}.
+			<li>
+				POJO classes.
+		</ul>
+		<h5 class='figure'>Examples:</h5>
 		<p class='bcode w800'>
+	<jc>// Defined on parameter</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {... }
-	
-	<jc>// ...or...</jc>
-	
+	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {...}
+		</p>
+		<p class='bcode w800'>
+	<jc>// Defined on POJO class</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	<jk>public void</jk> addPerson(Person person) {...}
 	
@@ -12356,15 +12645,6 @@
 		...
 	}
 		</p>
-		<p>
-			This annotation can be applied at the following locations:
-		</p>
-		<ul class='spaced-list'>
-			<li>
-				Parameters on a  {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}.
-			<li>
-				POJO classes.
-		</ul>
 		
 		<p>
 			Any of the following types can be used for the parameter or POJO class (matched in the specified order):
@@ -12411,35 +12691,20 @@
 					<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
 				</ul>
 				<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+			<li>
+				Objects convertible from data types inferred from Swagger schema annotations using the registered {@link org.apache.juneau.rest.RestContext#REST_partParser}.
+				<br>
+				<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
 		</ol>
-		<p>
-			Special note should be taken on using {@link java.lang.String} as the body object:
-		</p>
-		<p class='bcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> add(<ja>@Body</ja> String body) { 
-		... 
-	}
-		</p>
-		<p>
-			In the case above, when the <code>Content-Type</code> header is present and matches a parser, the body will be parsed into a <code>String</code> using the matched parser
-			using rule #3 above.
-			<br>For example, passing in a body of <js>"'foo'"</js> with the header <code>Content-Type: application/json</code> will result in the body being populated with
-			<js>"foo"</js>.
-		</p>
-		<p>
-			When the <code>Content-Type</code> header is not present or is <code>text/plain</code>, the body is pass as-is using rule #6 above.
-			<br>For example, passing in a body of <js>"'foo'"</js> with no <code>Content-Type</code> header will result in the body being populated with
-			<js>"'foo'"</js>.
-		</p>
-		<p>
-			The <ja>@Body</ja> annotation can also be used on POJO classes used as parameters on a REST method.
-			<br>This can be useful if you're reusing the same POJOs often in your REST interface and don't want to redefine your Swagger on each method.
-		</p>
 		
 		<h5 class='figure'>Examples:</h5>
 		<p class='bcode w800'>
-	<ja>@Body</ja>(description=<js>"POJO convertible from String"</js>)</ja>
+	<jc>// POJO convertible from string</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
+	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
+		<jk>return</jk> p;
+	}
+	
 	<jk>public static class</jk> MyPojo {
 		<jk>private</jk> String <jf>val</jf>;
 		<jk>public</jk> MyPojo(String val) {
@@ -12449,34 +12714,35 @@
 			<jk>return</jk> <jf>val</jf>;
 		}
 	}
-
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
-	<jk>public</jk> MyPojo echo(MyPojo p) {
-		<jk>return</jk> p;
-	}
 		</p>
 		<p class='bcode w800'>
-	<ja>@Body</ja>(description=<js>"Bean POJO"</js>)</ja>
+	<jc>// Parsable bean</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBean"</js>)
+	<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean b) {
+		<jk>return</jk> b;
+	}
+	
 	<jk>public static class</jk> MyBean {
 		<jk>public</jk> String <jf>f1</jf>;
 	}
-
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBean"</js>)
-	<jk>public</jk> MyBean echo(MyBean b) {
-		<jk>return</jk> b;
-	}
 		</p>
 		<p class='bcode w800'>
-	<ja>@Body</ja>(description=<js>"Bean list"</js>)</ja>
-	<jk>public static class</jk> MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
-	
+	<jc>// List of parsable beans</jc>
 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBeanList"</js>)
-	<jk>public</jk> MyBeanList echo(MyBeanList l) {
+	<jk>public</jk> MyBeanList echo(<ja>@Body</ja> MyBeanList l) {
 		<jk>return</jk> l;
 	}
+	
+	<jk>public static class</jk> MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
+	
 		</p>
 		<p class='bcode w800'>
-	<ja>@Body</ja>(description=<js>"POJO convertible from input stream"</js>)</ja>
+	<jc>// POJO convertible from an input stream</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
+	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
+		<jk>return</jk> p;
+	}
+	
 	<jk>public static class</jk> MyPojo {
 		<jk>private</jk> String <jf>val</jf>;
 		<jk>public</jk> MyPojo(InputStream is) {
@@ -12486,29 +12752,9 @@
 			<jk>return</jk> <jf>val</jf>;
 		}
 	}
-
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
-	<jk>public</jk> MyPojo echo(MyPojo p) {
-		<jk>return</jk> p;
-	}
 		</p>
 		
-		<p>
-			Several of the attributes on the <ja>@Body</ja> annotation are used for specifying additional information for the auto-generated Swagger documentation.
-			<br>These do not have any affects on the running code except for the generated Swagger:
-		</p>
-		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
-			<ul>
-				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()}
-				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required()}
-				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()}
-				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()}
-				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()}
-			</ul>
-		</ul>
-		
-		<h5 class='section'>Notes:</h5>
+		<h5 class='section'>Other Notes:</h5>
 		<ul class='spaced-list'>
 			<li>
 				Annotation parameter values will be aggregated when used on POJO parent and child classes. 
@@ -12516,22 +12762,21 @@
 			<li>
 				Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
 				<br>Values on methods override values on POJO classes.
-			<li>
-				A future feature enhancement exists for enabling Swagger validation of the request body using the annotation values above.
 		</ul>
 		
 		<h5 class='section'>See Also:</h5>
 		<ul>
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
+			<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
 		</ul>
-
+	
 		<!-- === 7.7.1 - Handling Form Posts ============================================================ -->
 		
 		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HandlingFormPosts' id='juneau-rest-server.HandlingFormPosts'>7.7.1 - Handling Form Posts</a></h4>
 		<div class='topic'>
 			<p>
-				The best way to handle a form post is by using an input bean.
+				The best way to handle a form post is usually by using an input bean.
 				<br>The samples include a <l>UrlEncodedFormResource</l> class that takes in URL-Encoded form post of the 
 				form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
 				<br>The code is shown here:
@@ -12632,7 +12877,7 @@
 			</p>
 		</div>
 	</div>
-	
+
 	<!-- === 7.8 - @FormData ============================================================================ -->
 	
 	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.FormData' id='juneau-rest-server.FormData'>7.8 - @FormData</a></h3>
@@ -12663,7 +12908,7 @@
 		<p>
 			The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
 			to POJOs and controls what POJO types are supported.
-			<br>As a general rule, any POJO convertible from a String is supported.
+			<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 		</p>
 		<ul class='doctree'>
 			<li class='warn'>
@@ -12678,12 +12923,20 @@
 			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
+			<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
 		</ul>
 	</div>
 	
-	<!-- === 7.9 - @Query =============================================================================== -->
+	<!-- === 7.9 - @HasFormData ============================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Query' id='juneau-rest-server.Query'>7.9 - @Query</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HasFormData' id='juneau-rest-server.HasFormData'>7.9 - @HasFormData</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+	
+	<!-- === 7.10 - @Query =============================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Query' id='juneau-rest-server.Query'>7.10 - @Query</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
@@ -12718,19 +12971,27 @@
 		<p>
 			The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
 			to POJOs and controls what POJO types are supported.
-			<br>As a general rule, any POJO convertible from a String is supported.
+			<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 		</p>
 		<h5 class='section'>See Also:</h5>
 		<ul>
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
+			<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
 		</ul>
 	</div>
 	
-	<!-- === 7.10 - @Header ============================================================================= -->
+	<!-- === 7.11 - @HasQuery =========================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Header' id='juneau-rest-server.Header'>7.10 - @Header</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HasQuery' id='juneau-rest-server.HasQuery'>7.11 - @HasQuery</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- === 7.12 - @Header ============================================================================= -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Header' id='juneau-rest-server.Header'>7.12 - @Header</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
@@ -12753,18 +13014,564 @@
 		<p>
 			The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
 			to POJOs and controls what POJO types are supported.
-			<br>As a general rule, any POJO convertible from a String is supported.
+			<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 		</p>
 		<h5 class='section'>See Also:</h5>
 		<ul>
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 			<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
+			<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
 		</ul>
 	</div>
 	
-	<!-- === 7.11 - Serializers ========================================================================= -->
+	<!-- === 7.13 - @Path =============================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Serializers' id='juneau-rest-server.Serializers'>7.11 - Serializers</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Path' id='juneau-rest-server.Path'>7.13 - @Path</a></h3>
+	<div class='topic'>
+		<p>
+			The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
+		</p>
+		<h5 class='figure'>Example:</h5>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
+		</p>
+		<p>
+			This is functionally equivalent to the following code:
+		</p>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
+		RequestHeaders h = req.getHeaders();
+		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	}
+		</p>
+		<p>
+			The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+			to POJOs and controls what POJO types are supported.
+			<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+		</p>
+		<h5 class='section'>See Also:</h5>
+		<ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+			<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
+			<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+		</ul>
+	</div>
+	
+	<!-- === 7.14 - @PathRemainer ======================================================================= -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PathRemainer' id='juneau-rest-server.PathRemainer'>7.14 - @PathRemainer</a></h3>
+	<div class='topic'>
+	</div>	
+
+	<!-- === 7.15 - Swagger Schema Part Parsing ========================================================= -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.SwaggerSchemaPartParsing' id='juneau-rest-server.SwaggerSchemaPartParsing'>7.15 - Swagger Schema Part Parsing</a></h3>
+	<div class='topic'>
+		<p>
+			Parameters annotated with any of the following also support parsing based on Swagger-schemas:
+		</p>
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+		</ul>
+		<p>
+			For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in an HTTP body can be converted to a 2-dimensional array of <code>Longs</code>:
+		</p>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> post2dLongArray(
+		<ja>@Body</ja>(
+			schema=<ja>@Schema</ja>(
+				items=<ja>@Items</ja>(
+					collectionFormat=<js>"pipes"</js>,
+					items=<ja>@SubItems</ja>(
+						collectionFormat=<js>"csv"</js>,
+						type=<js>"integer"</js>, 
+						format=<js>"int64"</js>,
+						minimum=<js>"0"</js>,
+						maximum=<js>"100"</js>
+						minLength=1,
+						maxLength=10
+					)
+				)
+				minLength=1,
+				maxLength=10
+			)
+		)
+		Long[][] body
+	) {...}
+		</p>
+		<p>
+			Input will be converted based on the types and formats defined in the schema definition.
+			<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+		</p>
+		<p>
+			The equivalent for a form-data post entry is shown below:
+		</p>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> post2dLongArray(
+		<ja>@FormData</ja>(
+			name=<js>"2dLongArrayEntry"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			)
+			minLength=1,
+			maxLength=10
+			)
+		)
+		Long[][] formEntry
+	) {...}
+		</p>
+		<p>
+			The annotations used for defining the schema for an HTTP part are:
+		</p>
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#parser() parser()} - Override the part parser.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required()} - Input validation.  Body must be present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The schema.
+			</ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default()}  - Default value if not present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum()} - Input validation.  Must match one of the values.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#collectionFormat() collectionFormat()} - How collections of items are formatted.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#format() format()} - The schema type format. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#items() items()} - The schema of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maximum() maximum()} - Input validation.  Maximum numeric value. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minimum() minimum()} - Input validation.  Minimum numeric value. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minItems() minItems()} - Input validation.  Minimum number of items in a collection. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minLength() minLength()} - Input validation.  Minimum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#name() name()} - Header name.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#parser() parser()} - Override the part parser.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#pattern() pattern()} - Input validation.  Must match regular expression.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#required() required()} - Input validation.  Header must be present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#type() type()} - The schema type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Header#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+			</ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default()} - Default value if not present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum()} - Input validation.  Must match one of the values.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat()} - How collections of items are formatted.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#format() format()} - The schema type format. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#items() items()} - The schema of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maximum() maximum()} - Input validation.  Maximum numeric value. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minimum() minimum()} - Input validation.  Minimum numeric value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minLength() minLength()} - Input validation.  Minimum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#name() name()} - Form data entry name.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#parser() parser()} - Override the part parser.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#pattern() pattern()} - Input validation.  Must match regular expression.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#required() required()} - Input validation.  Form data entry must be present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#type() type()} - The schema type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+			</ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default()} - Default value if not present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum()} - Input validation.  Must match one of the values.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#collectionFormat() collectionFormat()} - How collections of items are formatted.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#format() format()} - The schema type format. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#items() items()} - The schema of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maximum() maximum()} - Input validation.  Maximum numeric value. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minimum() minimum()} - Input validation.  Minimum numeric value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minLength() minLength()} - Input validation.  Minimum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#name() name()} - Query parameter name.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#parser() parser()} - Override the part parser.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#pattern() pattern()} - Input validation.  Must match regular expression.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#required() required()} - Input validation.  Query parameter must be present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#type() type()} - The schema type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Query#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+			</ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum()} - Input validation.  Must match one of the values.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#collectionFormat() collectionFormat()} - How collections of items are formatted.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#format() format()} - The schema type format. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#items() items()} - The schema of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maximum() maximum()} - Input validation.  Maximum numeric value. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minimum() minimum()} - Input validation.  Minimum numeric value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minLength() minLength()} - Input validation.  Minimum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#name() name()} - Path variable name.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#parser() parser()} - Override the part parser.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#pattern() pattern()} - Input validation.  Must match regular expression.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Path#type() type()} - The schema type.
+			</ul>
+		</ul>
+		<p>
+			The sub-annotations used in the annotation above are:
+		</p>
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Schema Schema}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#_default() _default()} - Default value if not present.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#_enum() _enum()} - Input validation.  Must match one of the values.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#format() format()} - The schema type format. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#items() items()} - The schema of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maximum() maximum()} - Input validation.  Maximum numeric value. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minimum() minimum()} - Input validation.  Minimum numeric value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minLength() minLength()} - Input validation.  Minimum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#pattern() pattern()} - Input validation.  Must match regular expression.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#pattern() properties()} - Schema of properties of this item.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#required() required()} - Whether this value is required.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#type() type()} - The schema type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+			</ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Items Items}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#_default() _default()} - Default value if not present. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#_enum() _enum()} - Input validation.  Must match one of the values.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#collectionFormat() collectionFormat()} - How collections of items are formatted.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#format() format()} - The schema type format. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#items() items()} - The schema of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maximum() maximum()} - Input validation.  Maximum numeric value. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minimum() minimum()} - Input validation.  Minimum numeric value.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minLength() minLength()} - Input validation.  Minimum length of a string.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#pattern() pattern()} - Input validation.  Must match regular expression.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#type() type()} - The schema type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+			</ul>
+		</ul>
+		<p>
+			Warning....here's where things get complex (in case you weren't already confused)...
+		</p>
+		<p>
+			When using Swagger schemas to define the body of a request, the list of valid POJO types expands significantly depending on the type and format
+			of the value or items/entries of the value.
+		</p>
+		<p>
+			For example, instead of <code>Longs</code> in the example above, we could also define a 2-dimensional array of POJOs convertible from <code>Longs</code>:
+		</p>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> post2dLongArray(<ja>@Body</ja>(...) MyPojo[][] body) {...}
+	
+	<jc>// POJO convertible from a Long.</jc>
+	<jk>public class</jk> MyPojo {
+		<jk>public</jk> MyPojo(Long input) {...}
+	}
+		</p>
+		<p>
+			Or even POJOs that take in arrays of <code>Longs[]</code>:
+		</p>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> post2dLongArray(<ja>@Body</ja>(...) MyPojo[] body) {...}
+	
+	<jc>// POJO convertible from a Long[].</jc>
+	<jk>public class</jk> MyPojo {
+		<jk>public</jk> MyPojo(Long[] input) {...}
+	}
+		</p>
+		<p>
+			Or even POJOs that take in the whole 2-dimensional array:
+		</p>
+		<p class='bcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> post2dLongArray(<ja>@Body</ja>(...) MyPojo body) {...}
+	
+	<jc>// POJO convertible from a Long[][].</jc>
+	<jk>public class</jk> MyPojo {
+		<jk>public</jk> MyPojo(Long[][] input) {...}
+	}
+		</p>
+		<p>
+			As you can see, the complexity of possible input types expands significantly.
+			<br>Here are the rules of POJO types allowed for various type/format combinations:
+		</p>
+		<table class='styled w800'>
+			<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
+			<tr class='dark bb'>
+				<td rowspan="4"><code>string</code></td>
+				<td>
+					<code>byte</code>
+					<br><code>binary</code>
+					<br><code>binary-spaced</br>
+				</td>
+				<td>
+					<ul>
+						<li><code><jk>byte</jk>[]</code> (default)
+						<li>{@link java.io.InputStream} - Returns a {@link java.io.ByteArrayInputStream}.
+						<li>{@link java.io.Reader} - Returns a {@link java.io.InputStreamReader} wrapped around a {@link java.io.ByteArrayInputStream}.
+						<li>{@link java.lang.String} - Constructed using {@link java.lang.String#String(byte[])}.
+						<li>{@link java.lang.Object} - Returns the default <code><jk>byte</jk>[]</code>.
+						<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors or static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td>
+					<code>date</code>
+					<br><code>date-time</code>
+				</td>
+				<td>
+					<ul>
+						<li>{@link java.util.Calendar} (default)
+						<li>{@link java.util.Date}
+						<li>{@link java.util.GregorianCalendar}
+						<li>{@link java.lang.String} - Converted using {@link java.util.Calendar#toString()}.
+						<li>{@link java.lang.Object} - Returns the default {@link java.util.Calendar}.
+						<li>Any POJO transformable from a {@link java.util.Calendar} (via constructors or static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td><code>uon</code></td>
+				<td>
+					<ul>
+						<li>Any <a href='#juneau-marshall.PojoCategories'>parsable POJO</a>.
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td>none specified</td>
+				<td>
+					<ul>
+						<li>{@link java.lang.String} (default)
+						<li>{@link java.lang.Object} - Returns the default {@link java.lang.String}.
+						<li>Any POJO transformable from a {@link java.lang.String} (via constructors or static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td ><code>boolean</code></td>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					<ul>
+						<li>{@link java.lang.Boolean} (default)
+						<li><jk>boolean</jk>
+						<li>{@link java.lang.String}
+						<li>{@link java.lang.Object} - Returns the default {@link java.lang.Boolean}.
+						<li>Any POJO transformable from a {@link java.lang.Boolean} (via constructors, static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td rowspan=2><code>integer</code></td>
+				<td>
+					<code>int32</code>
+				</td>
+				<td>
+					<ul>
+						<li>{@link java.lang.Integer} (default)
+						<li>Any subclass of {@link java.lang.Number} 
+						<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+						<li>{@link java.lang.String}
+						<li>{@link java.lang.Object} - Returns the default {@link java.lang.Integer}.
+						<li>Any POJO transformable from an {@link java.lang.Integer} (via constructors, static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td>
+					<code>int64</code>
+				</td>
+				<td>
+					<ul>
+						<li>{@link java.lang.Long} (default)
+						<li>Any subclass of {@link java.lang.Number} 
+						<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+						<li>{@link java.lang.String}
+						<li>{@link java.lang.Object} - Returns the default {@link java.lang.Long}.
+						<li>Any POJO transformable from an {@link java.lang.Long} (via constructors, static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td rowspan=2><code>number</code></td>
+				<td>
+					<code>float</code>
+				</td>
+				<td>
+					<ul>
+						<li>{@link java.lang.Float} (default)
+						<li>Any subclass of {@link java.lang.Number} 
+						<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+						<li>{@link java.lang.String}
+						<li>{@link java.lang.Object} - Returns the default {@link java.lang.Float}.
+						<li>Any POJO transformable from an {@link java.lang.Float} (via constructors, static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td>
+					<code>double</code>
+				</td>
+				<td>
+					<ul>
+						<li>{@link java.lang.Double} (default)
+						<li>Any subclass of {@link java.lang.Number} 
+						<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+						<li>{@link java.lang.String}
+						<li>{@link java.lang.Object} - Returns the default {@link java.lang.Double}.
+						<li>Any POJO transformable from an {@link java.lang.Double} (via constructors, static create methods).
+					</ul>
+				</td>
+			</tr>
+			<tr class='dark bb'>
+				<td ><code>array</code></td>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					<ul>
+						<li>Arrays or Collections of anything on this list.
+						<li>Any POJO transformable from arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
+					</ul>
+				</td>
+			</tr>
+			<tr class='light bb'>
+				<td ><code>object</code></td>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					<ul>
+						<li>Beans with properties of anything on this list.
+						<li>Maps with string keys.
+					</ul>
+				</td>
+			</tr>
+		</table>
+		<p>
+			Several of the attributes on the <ja>@Body</ja> annotation are used for specifying additional information for the auto-generated Swagger documentation.
+			<br>These do not have any affects on the running code except for the generated Swagger:
+		</p>
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api()} - Free-form JSON swagger.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()} - Description
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()} - Map of examples per language type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The swagger schema ({@link org.apache.juneau.http.annotation.Schema Schema}).
+			</ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Schema Schema}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#$ref() $ref()} - Reference to schema definition.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#description() description()} - Description
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#examples() examples()} - Map of examples per language type.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#externalDocs() externalDocs()} - External documentation.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#title() title()} - Title.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#value() value()} - Free-form JSON swagger.
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#xml() xml()} - XML schema.
+			</ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Items Items}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#$ref() $ref()} - Reference to schema definition. 
+				<li class='jf'>{@link org.apache.juneau.http.annotation.Items#value() value()} - Free-form JSON swagger.
+			</ul>
+		</ul>
+		
+		<h5 class='section'>Other Notes:</h5>
+		<ul class='spaced-list'>
+			<li>
+				Annotation parameter values will be aggregated when used on POJO parent and child classes. 
+				<br>Values on child classes override values on parent classes.
+			<li>
+				Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
+				<br>Values on methods override values on POJO classes.
+		</ul>
+	</div>
+	
+	<!-- === 7.16 - @Response =========================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Response' id='juneau-rest-server.Response'>7.16 - @Response</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- === 7.17 - @Responses ========================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Responses' id='juneau-rest-server.Responses'>7.17 - @Responses</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- === 7.18 - @ResponseHeader ===================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.ResponseHeader' id='juneau-rest-server.ResponseHeader'>7.18 - @ResponseHeader</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- === 7.19 - @ResponseStatus ===================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.ResponseStatus' id='juneau-rest-server.ResponseStatus'>7.19 - @ResponseStatus</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- === 7.20 - @ResponseStatuses =================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.ResponseStatuses' id='juneau-rest-server.ResponseStatuses'>7.20 - @ResponseStatuses</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- === 7.21 - Swagger Schema Part Serializing ===================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.SwaggerSchemaPartSerializing' id='juneau-rest-server.SwaggerSchemaPartSerializing'>7.21 - Swagger Schema Part Serializing</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+
+	<!-- === 7.22 - Serializers ========================================================================= -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Serializers' id='juneau-rest-server.Serializers'>7.22 - Serializers</a></h3>
 	<div class='topic'>
 		<p>
 			REST resources use the {@link org.apache.juneau.serializer.Serializer} API for defining serializers for 
@@ -12830,9 +13637,16 @@
 		</ul>
 	</div>
 
-	<!-- === 7.12 - Parsers ============================================================================= -->
+	<!-- === 7.23 - PartSerializers ========================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Parsers' id='juneau-rest-server.Parsers'>7.12 - Parsers</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PartSerializers' id='juneau-rest-server.PartSerializers'>7.23 - Part Serializers</a></h3>
+	<div class='topic'>
+		TODO
+	</div>
+	
+	<!-- === 7.24 - Parsers ============================================================================= -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Parsers' id='juneau-rest-server.Parsers'>7.24 - Parsers</a></h3>
 	<div class='topic'>
 		<p>
 			REST resources use the {@link org.apache.juneau.parser.Parser} API for defining parsers for parsing request
@@ -12896,9 +13710,15 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.13 - Properties ========================================================================== -->
+	<!-- === 7.25 - PartParsers ========================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Properties' id='juneau-rest-server.Properties'>7.13 - Properties</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PartParsers' id='juneau-rest-server.PartParsers'>7.25 - Part Parsers</a></h3>
+	<div class='topic'>
+	</div>
+	
+	<!-- === 7.26 - Properties ========================================================================== -->
+	
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Properties' id='juneau-rest-server.Properties'>7.26 - Properties</a></h3>
 	<div class='topic'>
 		<p>
 			As shown in previous sections, Juneau serializers and parsers are highly-configurable through properties.
@@ -13013,9 +13833,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.14 - Transforms ========================================================================== -->
+	<!-- === 7.27 - Transforms ========================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Transforms' id='juneau-rest-server.Transforms'>7.14 - Transforms</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Transforms' id='juneau-rest-server.Transforms'>7.27 - Transforms</a></h3>
 	<div class='topic'>
 		<p>
 			The Juneau serializers and parsers can be configured on how to handle POJOs through the use of Transforms.
@@ -13070,9 +13890,9 @@
 		</p>
 	</div>
 	
-	<!-- === 7.15 - Guards ============================================================================== -->
+	<!-- === 7.28 - Guards ============================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Guards' id='juneau-rest-server.Guards'>7.15 - Guards</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Guards' id='juneau-rest-server.Guards'>7.28 - Guards</a></h3>
 	<div class='topic'>
 		<p>
 			Guards are classes that control access to REST classes and methods.
@@ -13149,9 +13969,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.16 - Converters ========================================================================== -->
+	<!-- === 7.29 - Converters ========================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Converters' id='juneau-rest-server.Converters'>7.16 - Converters</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Converters' id='juneau-rest-server.Converters'>7.29 - Converters</a></h3>
 	<div class='topic'>
 		<p>
 			Converters can be thought of as "post-processors" for POJOs before they get passed to the serializers.
@@ -13254,9 +14074,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.17 - Messages ============================================================================ -->
+	<!-- === 7.30 - Messages ============================================================================ -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Messages' id='juneau-rest-server.Messages'>7.17 - Messages</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Messages' id='juneau-rest-server.Messages'>7.30 - Messages</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation is used to associate a resource bundle with a servlet class.
@@ -13304,9 +14124,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.18 - Encoders ============================================================================ -->
+	<!-- === 7.31 - Encoders ============================================================================ -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Encoders' id='juneau-rest-server.Encoders'>7.18 - Encoders</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Encoders' id='juneau-rest-server.Encoders'>7.31 - Encoders</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#encoders @RestResource.encoders()} annotation can 
@@ -13342,9 +14162,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.19 - SVL Variables ======================================================================= -->
+	<!-- === 7.32 - SVL Variables ======================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.SvlVariables' id='juneau-rest-server.SvlVariables'>7.19 - SVL Variables</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.SvlVariables' id='juneau-rest-server.SvlVariables'>7.32 - SVL Variables</a></h3>
 	<div class='topic'>
 		<p>	
 			In the previous examples, there were several cases where embedded variables were contained within
@@ -13591,9 +14411,9 @@
 		</table>
 	</div>
 	
-	<!-- === 7.20 - Configuration Files ================================================================= -->
+	<!-- === 7.33 - Configuration Files ================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.ConfigurationFiles' id='juneau-rest-server.ConfigurationFiles'>7.20 - Configuration Files</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.ConfigurationFiles' id='juneau-rest-server.ConfigurationFiles'>7.33 - Configuration Files</a></h3>
 	<div class='topic'>
 		<p>
 			The Server API provides methods for associating configuration files with REST servlets so that 
@@ -13761,9 +14581,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.21 - Static files ======================================================================== -->
+	<!-- === 7.34 - Static files ======================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.StaticFiles' id='juneau-rest-server.StaticFiles'>7.21 - Static files</a>/h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.StaticFiles' id='juneau-rest-server.StaticFiles'>7.34 - Static files</a>/h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.RestResource#staticFiles @RestResource.staticFiles()} 
@@ -13813,9 +14633,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.22 - Client Versioning =================================================================== -->
+	<!-- === 7.35 - Client Versioning =================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.ClientVersioning' id='juneau-rest-server.ClientVersioning'>7.22 - Client Versioning</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.ClientVersioning' id='juneau-rest-server.ClientVersioning'>7.35 - Client Versioning</a></h3>
 	<div class='topic'>
 		<p>
 			Client version headers are used to support backwards compatibility for breaking REST interface changes.
@@ -13860,9 +14680,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.23 - OPTIONS pages and Swagger =========================================================== -->
+	<!-- === 7.36 - OPTIONS pages and Swagger =========================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.OptionsPages' id='juneau-rest-server.OptionsPages'>7.23 - OPTIONS pages and Swagger</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.OptionsPages' id='juneau-rest-server.OptionsPages'>7.36 - OPTIONS pages and Swagger</a></h3>
 	<div class='topic'>
 		<p>
 			One of the most useful features of Juneau is the ability to generate Swagger-based OPTIONS pages for self-documenting designs 
@@ -13900,9 +14720,9 @@
 			This page is constructed using the Info Provider API described next.
 		</p>
 
-		<!-- === 7.23.1 - RestInfoProvider ============================================================== -->
+		<!-- === 7.36.1 - RestInfoProvider ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestInfoProvider' id='juneau-rest-server.RestInfoProvider'>7.23.1 - RestInfoProvider</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RestInfoProvider' id='juneau-rest-server.RestInfoProvider'>7.36.1 - RestInfoProvider</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.rest.RestInfoProvider} class is used to find the title
@@ -13949,9 +14769,9 @@
 			</p>
 		</div>
 		
-		<!-- === 7.23.2 - BasicRestInfoProvider ========================================================= -->
+		<!-- === 7.36.2 - BasicRestInfoProvider ========================================================= -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.BasicRestInfoProvider' id='juneau-rest-server.BasicRestInfoProvider'>7.23.2 - BasicRestInfoProvider</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.BasicRestInfoProvider' id='juneau-rest-server.BasicRestInfoProvider'>7.36.2 - BasicRestInfoProvider</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.rest.BasicRestInfoProvider} class is the default implementation of the
@@ -14030,9 +14850,9 @@
 		</div>			
 	</div>
 	
-	<!-- === 7.24 - @HtmlDoc ============================================================================ -->
+	<!-- === 7.37 - @HtmlDoc ============================================================================ -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation' id='juneau-rest-server.HtmlDocAnnotation'>7.24 - @HtmlDoc</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation' id='juneau-rest-server.HtmlDocAnnotation'>7.37 - @HtmlDoc</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc} annotation is used to customize the HTML 
@@ -14153,9 +14973,9 @@
 			<li class='jc'>{@link org.apache.juneau.rest.HtmlDocBuilder}
 		</ul>
 
-		<!-- === 7.24.1 - Widgets ======================================================================= -->
+		<!-- === 7.37.1 - Widgets ======================================================================= -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Widgets' id='juneau-rest-server.Widgets'>7.24.1 - Widgets</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Widgets' id='juneau-rest-server.Widgets'>7.37.1 - Widgets</a></h4>
 		<div class='topic'>
 			<p>
 				The {@link org.apache.juneau.rest.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
@@ -14273,16 +15093,16 @@
 			</ul>
 		</div>
 
-		<!-- === 7.24.2 - Predefined Widgets ============================================================ -->
+		<!-- === 7.37.2 - Predefined Widgets ============================================================ -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PredefinedWidgets' id='juneau-rest-server.PredefinedWidgets'>7.24.2 - Predefined Widgets</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PredefinedWidgets' id='juneau-rest-server.PredefinedWidgets'>7.37.2 - Predefined Widgets</a></h4>
 		<div class='topic'>
 			TODO
 		</div>
 		
-		<!-- === 7.24.3 - UI Customization ============================================================== -->
+		<!-- === 7.37.3 - UI Customization ============================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.UiCustomization' id='juneau-rest-server.UiCustomization'>7.24.3 - UI Customization</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.UiCustomization' id='juneau-rest-server.UiCustomization'>7.37.3 - UI Customization</a></h4>
 		<div class='topic'>
 			<p>
 				The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
@@ -14408,9 +15228,9 @@
 			</p>
 		</div>
 
-		<!-- === 7.24.4 - Stylesheets =================================================================== -->
+		<!-- === 7.37.4 - Stylesheets =================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Stylesheets' id='juneau-rest-server.Stylesheets'>7.24.4 - Stylesheets</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Stylesheets' id='juneau-rest-server.Stylesheets'>7.37.4 - Stylesheets</a></h4>
 		<div class='topic'>
 			<p>
 				The sample root page renders in the default "devops" look-and-feel:
@@ -14524,9 +15344,9 @@
 		</div>
 	</div>
 
-	<!-- === 7.25 - Default Headers ===================================================================== -->
+	<!-- === 7.38 - Default Headers ===================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.DefaultHeaders' id='juneau-rest-server.DefaultHeaders'>7.25 - Default Headers</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.DefaultHeaders' id='juneau-rest-server.DefaultHeaders'>7.38 - Default Headers</a></h3>
 	<div class='topic'>
 		<p>
 			The following annotations are provided for specifying default header values for requests and responses:
@@ -14571,9 +15391,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.26 - Logging and Error Handling ========================================================== -->
+	<!-- === 7.39 - Logging and Error Handling ========================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndErrorHandling' id='juneau-rest-server.LoggingAndErrorHandling'>7.26 - Logging and Error Handling</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndErrorHandling' id='juneau-rest-server.LoggingAndErrorHandling'>7.39 - Logging and Error Handling</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.RestContext#REST_logger} property allows you to configure 
@@ -14599,7 +15419,7 @@
 		</ul>
 		<p>
 			The {@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects()} method is particularly useful because it allows you to pass in POJOs as arguments
-			that serialized using {@link org.apache.juneau.json.JsonSerializer#DEFAULT_LAX_READABLE}, but only
+			that serialized using {@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE}, but only
 			if the message is actually logged.
 		</p>
 		
@@ -14634,9 +15454,9 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.27 - HTTP Status Codes =================================================================== -->
+	<!-- === 7.40 - HTTP Status Codes =================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpStatusCodes' id='juneau-rest-server.HttpStatusCodes'>7.27 - HTTP Status Codes</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HttpStatusCodes' id='juneau-rest-server.HttpStatusCodes'>7.40 - HTTP Status Codes</a></h3>
 	<div class='topic'>
 		<p>
 			By default, a 200 (OK) status is automatically set as the HTTP status when a Java method executes 
@@ -14702,9 +15522,9 @@
 		</table>
 	</div>
 	
-	<!-- === 7.28 - Overloading HTTP Methods ============================================================ -->
+	<!-- === 7.41 - Overloading HTTP Methods ============================================================ -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.OverloadingHttpMethods' id='juneau-rest-server.OverloadingHttpMethods'>7.28 - Overloading HTTP Methods</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.OverloadingHttpMethods' id='juneau-rest-server.OverloadingHttpMethods'>7.41 - Overloading HTTP Methods</a></h3>
 	<div class='topic'>
 		<p>
 			Through the use of the built-in <l>"method"</l> GET parameter, you can implement requests beyond the basic 
@@ -14731,9 +15551,9 @@
 		</p>
 	</div>
 	
-	<!-- === 7.29 - Built-in Parameters ================================================================= -->
+	<!-- === 7.42 - Built-in Parameters ================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.BuiltInParameters' id='juneau-rest-server.BuiltInParameters'>7.29 - Built-in Parameters</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.BuiltInParameters' id='juneau-rest-server.BuiltInParameters'>7.42 - Built-in Parameters</a></h3>
 	<div class='topic'>
 		<p>
 			The following URL parameters have special meaning and can be passed in through the URL of the request:
@@ -14796,9 +15616,9 @@
 		</table>
 	</div>
 	
-	<!-- === 7.30 - Custom Serializers and Parsers ====================================================== -->
+	<!-- === 7.43 - Custom Serializers and Parsers ====================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.CustomSerializersAndParsers' id='juneau-rest-server.CustomSerializersAndParsers'>7.30 - Custom Serializers and Parsers</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.CustomSerializersAndParsers' id='juneau-rest-server.CustomSerializersAndParsers'>7.43 - Custom Serializers and Parsers</a></h3>
 	<div class='topic'>
 		<p>
 			A very easy-to-use API is provided for defining your own serializers and parsers at both the servlet and 
@@ -14922,9 +15742,9 @@
 		</p>
 	</div>
 	
-	<!-- === 7.31 - Using with OSGi ===================================================================== -->
+	<!-- === 7.44 - Using with OSGi ===================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.UsingWithOsgi' id='juneau-rest-server.UsingWithOsgi'>7.31 - Using with OSGi</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.UsingWithOsgi' id='juneau-rest-server.UsingWithOsgi'>7.44 - Using with OSGi</a></h3>
 	<div class='topic'>
 		<p>
 			Since REST servlets are basically just <l>HttpServlets</l>, incorporating them into an OSGi environment
@@ -14989,9 +15809,9 @@
 		</p>
 	</div>
 
-	<!-- === 7.32 - Remoteable Proxies ================================================================== -->
+	<!-- === 7.45 - Remoteable Proxies ================================================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxies' id='juneau-rest-server.RemoteableProxies'>7.32 - Remoteable Proxies</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxies' id='juneau-rest-server.RemoteableProxies'>7.45 - Remoteable Proxies</a></h3>
 	<div class='topic'>
 		<p>
 			The Remoteable Service API allows for client side code to use interface proxies for calling methods on POJOs on 
@@ -15173,9 +15993,9 @@
 			<br>Most of the time you don't even need to modify your existing Java implementation code.
 		</p>
 		
-		<!-- === 7.32.1 - Client Side =================================================================== -->
+		<!-- === 7.45.1 - Client Side =================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxiesClientSide' id='juneau-rest-server.RemoteableProxiesClientSide'>7.32.1 - Client Side</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxiesClientSide' id='juneau-rest-server.RemoteableProxiesClientSide'>7.45.1 - Client Side</a></h4>
 		<div class='topic'>
 			<p>
 				Remoteable interface proxies are retrieved through the existing {@link org.apache.juneau.rest.client.RestClient} 
@@ -15213,9 +16033,9 @@
 			</p>
 		</div>
 
-		<!-- === 7.32.2 - Server Side =================================================================== -->
+		<!-- === 7.45.2 - Server Side =================================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxiesServerSide' id='juneau-rest-server.RemoteableProxiesServerSide'>7.32.2 - Server Side</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxiesServerSide' id='juneau-rest-server.RemoteableProxiesServerSide'>7.45.2 - Server Side</a></h4>
 		<div class='topic'>
 			<p>
 				The server side is only slightly more complex, but boasts useful debugging and discovery capabilities.  
@@ -15297,7 +16117,7 @@
 			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
 			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
 	};
-	String asJson = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.toString(args);
+	String asJson = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(args);
 	System.<jsf>err</jsf>.println(asJson);
 			</p>
 			<p>
@@ -15398,9 +16218,9 @@
 			<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteableProxiesServerSide.9.png'>
 		</div>
 
-		<!-- === 7.32.3 - @Remoteable Annotation ======================================================== -->
+		<!-- === 7.45.3 - @Remoteable Annotation ======================================================== -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxiesRemoteableAnnotation' id='juneau-rest-server.RemoteableProxiesRemoteableAnnotation'>7.32.3 - @Remoteable Annotation</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteableProxiesRemoteableAnnotation' id='juneau-rest-server.RemoteableProxiesRemoteableAnnotation'>7.45.3 - @Remoteable Annotation</a></h4>
 		<div class='topic'>
 			<p>
 				What if you want fine-tuned control over which methods are exposed in an interface instead of just all public 
@@ -15448,9 +16268,9 @@
 		</div>
 	</div>	
 
-	<!-- === 7.33 - Server-less Unit Testing of REST Interfaces ========================================= -->
+	<!-- === 7.46 - Server-less Unit Testing of REST Interfaces ========================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.UnitTesting' id='juneau-rest-server.UnitTesting'>7.33 - Server-less Unit Testing of REST Interfaces</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.UnitTesting' id='juneau-rest-server.UnitTesting'>7.46 - Server-less Unit Testing of REST Interfaces</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.mock.MockRest} class is a simple yet powerful interface for creating serverless
@@ -15636,9 +16456,9 @@
 		</p>
 	</div>
 	
-	<!-- === 7.34 - Using with Spring and Injection frameworks ========================================== -->
+	<!-- === 7.47 - Using with Spring and Injection frameworks ========================================== -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Injection' id='juneau-rest-server.Injection'>7.34 - Using with Spring and Injection frameworks</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.Injection' id='juneau-rest-server.Injection'>7.47 - Using with Spring and Injection frameworks</a></h3>
 	<div class='topic'>
 		<p>
 			The Juneau REST server API is compatible with dependency injection frameworks such as Spring.
@@ -15743,9 +16563,9 @@
 		</p>
 	</div>
 
-	<!-- === 7.35 - Using HTTP/2 feature ================================================================ -->
+	<!-- === 7.48 - Using HTTP/2 feature ================================================================ -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HTTP2' id='juneau-rest-server.HTTP2'>7.35 - Using HTTP/2 features</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.HTTP2' id='juneau-rest-server.HTTP2'>7.48 - Using HTTP/2 features</a></h3>
 	<div class='topic'>
 		<p>
 			Juneau is built as a veneer on top of the Servlet API, allowing you to use low-level Servlet APIs
@@ -15758,9 +16578,9 @@
 		</p>
 	</div>
 	
-	<!-- === 7.36 - Predefined Helper Beans ============================================================= -->
+	<!-- === 7.49 - Predefined Helper Beans ============================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PredefinedHelperBeans' id='juneau-rest-server.PredefinedHelperBeans'>7.36 - Predefined Helper Beans</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PredefinedHelperBeans' id='juneau-rest-server.PredefinedHelperBeans'>7.49 - Predefined Helper Beans</a></h3>
 	<div class='topic'>
 		<p>
 			The {@link org.apache.juneau.rest.helper} package contains some reusable beans that are useful for 
@@ -15856,9 +16676,9 @@
 		<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
 	</div>
 	
-	<!-- === 7.37 - Other Notes ========================================================================= -->
+	<!-- === 7.50 - Other Notes ========================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.OtherNotes' id='juneau-rest-server.OtherNotes'>7.37 - Other Notes</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.OtherNotes' id='juneau-rest-server.OtherNotes'>7.50 - Other Notes</a></h3>
 	<div class='topic'>
 		<ul class='spaced-list'>
 			<li>
@@ -21674,6 +22494,21 @@
 				the {@link org.apache.juneau.http.annotation} package.
 				<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
 				<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
+			<li>
+				The <code>JsonSerializer.Simple</code> class has been moved into the top-level {@link org.apache.juneau.json.SimpleJsonSerializer} class.
+			<li>
+				RDF serializer subclasses have been moved into top-level classes:
+				<ul>
+					<li><code>RdfSerializer.Xml</code> -&gt; {@link org.apache.juneau.jena.RdfXmlSerializer}
+					<li><code>RdfSerializer.XmlAbbrev</code> -&gt; {@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
+					<li><code>RdfSerializer.N3</code> -&gt; {@link org.apache.juneau.jena.N3Serializer}
+					<li><code>RdfSerializer.NTriple</code> -&gt; {@link org.apache.juneau.jena.NTripleSerializer}
+					<li><code>RdfSerializer.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleSerializer}
+					<li><code>RdfParser.Xml</code> -&gt; {@link org.apache.juneau.jena.RdfXmlParser}
+					<li><code>RdfParser.N3</code> -&gt; {@link org.apache.juneau.jena.N3Parser}
+					<li><code>RdfParser.NTriple</code> -&gt; {@link org.apache.juneau.jena.NTripleParser}
+					<li><code>RdfParser.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleParser}
+				</ul>
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>
@@ -22858,7 +23693,8 @@
 	}
 	
 	<jc>// Produces "{foo:'bar'}"</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.toString(<jk>new</jk> MyBean());
+	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+.toString(<jk>new</jk> MyBean());
 				</p>
 				<br>This feature helps with the implementation of language-agnostic template support such as for
 				using FreeMaker to serialize POJOs to HTML.
@@ -23728,10 +24564,12 @@
 	<jc>/* Cloning an existing serializer or parser */ </jc>
 	
 	<jc>// Old way</jc>
-	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.clone().setUseWhitespace(<jk>true</jk>).pojoSwaps(BSwap.<jk>class</jk>).lock();
+	WriterSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+.clone().setUseWhitespace(<jk>true</jk>).pojoSwaps(BSwap.<jk>class</jk>).lock();
 
 	<jc>// New way</jc>
-	WriterSerializer s = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.builder().ws().pojoSwaps(BSwap.<jk>class</jk>).build();
+	WriterSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
+.builder().ws().pojoSwaps(BSwap.<jk>class</jk>).build();
 				</p>	
 			<li>Also introduced the following builder classes and related architecture changes to make the built objects unmodifiable:
 				<ul>
@@ -26797,7 +27635,7 @@
 			<li>New <code>RestServletProperties.REST_useStackTraceHashes</code> property to prevent the same stack trace from being logged multiple times.</li>
 			<li>New <code>RestServletProperties.REST_renderResponseStackTraces</code> property for preventing stack traces in responses for security reasons.</li>
 			<li>New overridable <code>RestServlet.onError(HttpServletRequest,HttpServletResponse,RestException,boolean)</code> and <code><del>RestServlet.onSuccess(RestRequest,RestResponse,long)</del></code> methods for plugging in your own logging and peformance monitoring.</li>
-			<li>Eliminated <code>RestServlet.getInitParams()</code> method, since it's now redundant with {@link org.apache.juneau.rest.RestServlet#getProperties()}.</li>
+			<li>Eliminated <code>RestServlet.getInitParams()</code> method, since it's now redundant with <code><del>RestServlet.getProperties()</del></code>.</li>
 			<li>Header parameters passed as URL parameters are now case-insensitive.</li>			
 		</ul>
 	</div>

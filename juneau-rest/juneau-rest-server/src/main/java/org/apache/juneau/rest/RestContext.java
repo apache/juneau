@@ -2303,7 +2303,7 @@ public final class RestContext extends BeanContext {
 	 * 			<li class='jc'>{@link HtmlStrippedDocSerializer}
 	 * 			<li class='jc'>{@link HtmlSchemaDocSerializer}
 	 * 			<li class='jc'>{@link JsonSerializer}
-	 * 			<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.Simple}
+	 * 			<li class='jc'>{@link SimpleJsonSerializer}
 	 * 			<li class='jc'>{@link JsonSchemaSerializer}
 	 * 			<li class='jc'>{@link XmlDocSerializer}
 	 * 			<li class='jc'>{@link XmlSchemaDocSerializer}
@@ -3091,7 +3091,7 @@ public final class RestContext extends BeanContext {
 							addToRouter(routers, httpMethod, sm);
 						}
 					} catch (RestServletException e) {
-						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", resourceClass.getName(), JsonSerializer.DEFAULT_LAX.serialize(methodsFound)).initCause(e);
+						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", resourceClass.getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound)).initCause(e);
 					}
 				}
 			}

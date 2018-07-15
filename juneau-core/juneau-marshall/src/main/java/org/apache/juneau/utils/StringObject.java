@@ -52,12 +52,12 @@ public class StringObject implements CharSequence, Writable {
 	}
 
 	/**
-	 * Constructor with default serializer {@link JsonSerializer#DEFAULT_LAX}
+	 * Constructor with default serializer {@link SimpleJsonSerializer#DEFAULT}
 	 *
 	 * @param o The object to be serialized.
 	 */
 	public StringObject(Object o) {
-		this(JsonSerializer.DEFAULT_LAX, o);
+		this(SimpleJsonSerializer.DEFAULT, o);
 	}
 
 	@Override /* Object */

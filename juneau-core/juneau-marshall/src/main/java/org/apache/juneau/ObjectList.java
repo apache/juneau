@@ -756,7 +756,7 @@ public class ObjectList extends LinkedList<Object> {
 	@Override /* Object */
 	public String toString() {
 		try {
-			return this.toString(JsonSerializer.DEFAULT_LAX);
+			return this.toString(SimpleJsonSerializer.DEFAULT);
 		} catch (SerializeException e) {
 			return e.getLocalizedMessage();
 		}
@@ -785,7 +785,7 @@ public class ObjectList extends LinkedList<Object> {
 	 */
 	public Object cast(ClassMeta<?> cm) {
 		try {
-			return JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT_LAX.serialize(this), cm);
+			return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT.serialize(this), cm);
 		} catch (ParseException | SerializeException e) {
 			throw new RuntimeException(e);
 		}

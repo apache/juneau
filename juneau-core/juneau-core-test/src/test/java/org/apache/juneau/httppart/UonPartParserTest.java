@@ -276,7 +276,7 @@ public class UonPartParserTest {
 
 		ObjectMap r =  UonPartParser.DEFAULT.createSession().parse(HttpPartType.QUERY, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
 
-		assertEquals("{name:'foo bar'}", JsonSerializer.DEFAULT_LAX.toString(r));
+		assertEquals("{name:'foo bar'}", SimpleJsonSerializer.DEFAULT.toString(r));
 	}
 
 }

@@ -46,7 +46,7 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 				0
 			},
 			{ /* 1 */
-				"JsonSerializer.DEFAULT_LAX/JsonParser.DEFAULT",
+				"JsonSerializer.DEFAULT_SIMPLE/JsonParser.DEFAULT",
 				new JsonSerializerBuilder().ssq().addBeanTypes(true).addRootType(),
 				new JsonParserBuilder().useInterfaceProxies(false),
 				0

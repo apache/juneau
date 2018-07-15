@@ -122,7 +122,7 @@ public @interface Bean {
 	 * 	}
 	 *
 	 * 	<jc>// Produces "{f0:'f0'}"</jc>
-	 * 	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.serialize(<jk>new</jk> A1());
+	 * 	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> A1());
 	 * </p>
 	 *
 	 * <p>

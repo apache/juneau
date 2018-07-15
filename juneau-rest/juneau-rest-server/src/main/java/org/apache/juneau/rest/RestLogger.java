@@ -59,7 +59,7 @@ public interface RestLogger {
 	public void log(Level level, String msg, Object...args);
 
 	/**
-	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link JsonSerializer#DEFAULT_LAX_READABLE}.
+	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link SimpleJsonSerializer#DEFAULT_READABLE}.
 	 *
 	 * <p>
 	 * Serialization of arguments do not occur if message is not logged, so it's safe to use this method from within

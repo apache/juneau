@@ -118,7 +118,7 @@ public class ConfigBuilder extends ContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link JsonSerializer#DEFAULT_LAX}.
+	 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder serializer(WriterSerializer value) {
@@ -133,7 +133,7 @@ public class ConfigBuilder extends ContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is {@link JsonSerializer#DEFAULT_LAX}.
+	 * 	<br>The default is {@link SimpleJsonSerializer#DEFAULT}.
 	 * @return This object (for method chaining).
 	 */
 	public ConfigBuilder serializer(Class<? extends WriterSerializer> value) {

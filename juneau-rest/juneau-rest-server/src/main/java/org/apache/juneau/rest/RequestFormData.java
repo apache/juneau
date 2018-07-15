@@ -587,7 +587,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 			if (v != null)
 				m.put(e.getKey(), v.length == 1 ? v[0] : v);
 		}
-		return JsonSerializer.DEFAULT_LAX.toString(m);
+		return SimpleJsonSerializer.DEFAULT.toString(m);
 	}
 
 	@Override /* Object */

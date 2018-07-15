@@ -150,7 +150,7 @@ public class CalendarSwapTest {
 	//====================================================================================================
 	@Test
 	public void testBeanProperyFilterJson() throws Exception {
-		WriterSerializer s = JsonSerializer.DEFAULT_LAX;
+		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		ReaderParser p = JsonParser.DEFAULT;
 
 		Calendar c = testDate;

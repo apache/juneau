@@ -79,12 +79,12 @@ public class RdfParserTest {
 		String rdfXml = s.serialize(a);
 		assertXmlEquals(expected, rdfXml);
 
-		A a2 = RdfParser.DEFAULT_XML.parse(rdfXml, A.class);
+		A a2 = RdfXmlParser.DEFAULT.parse(rdfXml, A.class);
 
 		assertEqualObjects(a, a2);
 
-		ObjectMap m = RdfParser.DEFAULT_XML.parse(rdfXml, ObjectMap.class);
-		String json = JsonSerializer.DEFAULT_LAX_READABLE.serialize(m);
+		ObjectMap m = RdfXmlParser.DEFAULT.parse(rdfXml, ObjectMap.class);
+		String json = SimpleJsonSerializer.DEFAULT_READABLE.serialize(m);
 
 		String e = ""
 			+ "{\n"

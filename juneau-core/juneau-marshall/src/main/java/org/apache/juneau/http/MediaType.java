@@ -249,7 +249,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * 		comparing media type.
 	 * 		<ul>
 	 * 			<li>We want the {@link JsonSerializer} (<js>"text/json"</js>) class to be able to handle requests for <js>"text/json+foo"</js>.
-	 * 			<li>We want to make sure {@link org.apache.juneau.json.JsonSerializer.Simple} (<js>"text/json+simple"</js>) does not handle
+	 * 			<li>We want to make sure {@link org.apache.juneau.json.SimpleJsonSerializer} (<js>"text/json+simple"</js>) does not handle
 	 * 				requests for <js>"text/json"</js>.
 	 * 		</ul>
 	 * 		More token matches should result in a higher match number.

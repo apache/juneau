@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -28,13 +26,13 @@ import org.apache.juneau.xml.*;
  * The following direct subclasses are provided for language-specific parsers:
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link RdfParser.Xml} - RDF/XML and RDF/XML-ABBREV.
+ * 		{@link RdfXmlParser} - RDF/XML and RDF/XML-ABBREV.
  * 	<li>
- * 		{@link RdfParser.NTriple} - N-TRIPLE.
+ * 		{@link NTripleParser} - N-TRIPLE.
  * 	<li>
- * 		{@link RdfParser.Turtle} - TURTLE.
+ * 		{@link TurtleParser} - TURTLE.
  * 	<li>
- * 		{@link RdfParser.N3} - N3.
+ * 		{@link N3Parser} - N3.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>
@@ -92,100 +90,6 @@ public class RdfParser extends ReaderParser implements RdfCommon {
 	 * </p>
 	 */
 	public static final String RDF_trimWhitespace = PREFIX + "trimWhitespace.b";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default XML parser, all default settings.*/
-	public static final RdfParser DEFAULT_XML = new Xml(PropertyStore.DEFAULT);
-
-	/** Default Turtle parser, all default settings.*/
-	public static final RdfParser DEFAULT_TURTLE = new Turtle(PropertyStore.DEFAULT);
-
-	/** Default N-Triple parser, all default settings.*/
-	public static final RdfParser DEFAULT_NTRIPLE = new NTriple(PropertyStore.DEFAULT);
-
-	/** Default N3 parser, all default settings.*/
-	public static final RdfParser DEFAULT_N3 = new N3(PropertyStore.DEFAULT);
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Consumes RDF/XML input */
-	public static class Xml extends RdfParser {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Xml(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_RDF_XML)
-					.build(),
-				"text/xml+rdf"
-			);
-		}
-	}
-
-	/** Consumes N-Triple input */
-	public static class NTriple extends RdfParser {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public NTriple(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_NTRIPLE)
-					.build(),
-				"text/n-triple"
-			);
-		}
-	}
-
-	/** Consumes Turtle input */
-	public static class Turtle extends RdfParser {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Turtle(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_TURTLE)
-					.build(),
-				"text/turtle"
-			);
-		}
-	}
-
-	/** Consumes N3 input */
-	public static class N3 extends RdfParser {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public N3(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_N3)
-					.build(),
-				"text/n3"
-			);
-		}
-	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

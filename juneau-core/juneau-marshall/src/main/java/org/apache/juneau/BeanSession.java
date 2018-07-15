@@ -570,8 +570,8 @@ public class BeanSession extends Session {
 				if (from.isByteArray()) {
 					return (T) new String((byte[])value);
 				} else if (from.isMapOrBean() || from.isCollectionOrArray()) {
-					if (JsonSerializer.DEFAULT_LAX != null)
-						return (T)JsonSerializer.DEFAULT_LAX.serialize(value);
+					if (SimpleJsonSerializer.DEFAULT != null)
+						return (T)SimpleJsonSerializer.DEFAULT.serialize(value);
 				} else if (from.isClass()) {
 					return (T)((Class<?>)value).getName();
 				}

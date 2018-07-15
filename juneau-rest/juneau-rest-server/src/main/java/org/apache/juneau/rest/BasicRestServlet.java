@@ -49,7 +49,7 @@ import org.apache.juneau.xmlschema.*;
  * 	<tr>
  * 		<td class='code'>application/json+simple<br>text/json+simple</td>
  * 		<td class='code'>application/json</td>
- * 		<td>{@link org.apache.juneau.json.JsonSerializer.Simple}</td>
+ * 		<td>{@link org.apache.juneau.json.SimpleJsonSerializer}</td>
  * 	</tr>
  * 	<tr>
  * 		<td class='code'>application/json+schema<br>text/json+schema</td>
@@ -167,16 +167,26 @@ import org.apache.juneau.xmlschema.*;
  * </ul>
  */
 @RestResource(
+
+	// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.
 	allowedMethodParams="OPTIONS",
+
+	// HTML-page specific settings.
 	htmldoc=@HtmlDoc(
+		// Basic page navigation links.
 		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
 		}
 	),
+
+	// POJO swaps to apply to all serializers/parsers.
 	pojoSwaps={
+		// Use the SwaggerUI swap when rendering Swagger beans.
 		SwaggerUI.class
 	},
+
+	// Properties to apply to all serializers/parsers and REST-specific API objects.
 	properties={
 		// Add descriptions to the following types when not specified:
 		@Property(name=JSONSCHEMA_addDescriptionsTo, value="bean,collection,array,map,enum"),
@@ -184,10 +194,13 @@ import org.apache.juneau.xmlschema.*;
 		// Add x-example to the following types:
 		@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
 
-		// Don't generate schema information on the Swagger bean itself.
+		// Don't generate schema information on the Swagger bean itself or HTML beans.
 		@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger,org.apache.juneau.dto.html5.*")
 	},
+
+	// Shortcut for boolean properties.
 	flags={
+		// Use $ref references for bean definitions to reduce duplication in Swagger.
 		JSONSCHEMA_useBeanDefs
 	}
 )
@@ -204,14 +217,17 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource.",
 		htmldoc=@HtmlDoc(
+			// Override the nav links for the swagger page.
 			navlinks={
 				"back: servlet:/",
 				"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
 			},
+			// Never show aside contents of page inherited from class.
 			aside="NONE"
 		)
 	)
 	public Swagger getOptions(RestRequest req) {
+		// Localized Swagger for this resource is available through the RestRequest object.
 		return req.getSwagger();
 	}
 }

@@ -317,7 +317,7 @@
 			<h5 class='figure'>ATOM/JSON example</h5>
 			<p class='bcode'>
 	<jc>// Get JSON serializer with readable output.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
 	<jc>// Serialize to ATOM/JSON</jc>
 	String atomJson = s.serialize(feed);

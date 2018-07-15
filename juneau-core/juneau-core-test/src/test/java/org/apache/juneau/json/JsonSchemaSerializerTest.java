@@ -32,7 +32,7 @@ public class JsonSchemaSerializerTest {
 	//====================================================================================================
 	@Test
 	public void simpleObjects() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 
 		assertEquals("{type:'integer',format:'int16'}", s.serialize((short)1));
 		assertEquals("{type:'integer',format:'int32'}", s.serialize(1));
@@ -49,7 +49,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void simpleObjects_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 
 		assertObjectEquals("{type:'integer',format:'int16'}", s.getSchema(short.class));
 		assertObjectEquals("{type:'integer',format:'int16'}", s.getSchema(Short.class));
@@ -81,7 +81,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void arrays1d() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 
 		assertEquals("{type:'array',items:{type:'integer',format:'int16'}}", s.serialize(new short[]{(short)1}));
 		assertEquals("{type:'array',items:{type:'integer',format:'int16'}}", s.serialize(new Short[]{(short)1}));
@@ -105,7 +105,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void arrays1d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 
 		assertObjectEquals("{type:'array',items:{type:'integer',format:'int16'}}", s.getSchema(short[].class));
 		assertObjectEquals("{type:'array',items:{type:'integer',format:'int16'}}", s.getSchema(Short[].class));
@@ -129,7 +129,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void arrays2d() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 
 		assertEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16'}}}", s.serialize(new short[][]{{(short)1}}));
 		assertEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16'}}}", s.serialize(new Short[][]{{(short)1}}));
@@ -153,7 +153,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void arrays2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16'}}}", s.getSchema(short[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16'}}}", s.getSchema(Short[][].class));
@@ -181,13 +181,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void simpleList() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 		assertEquals("{type:'array',items:{type:'integer',format:'int32'}}", s.serialize(new SimpleList()));
 	}
 
 	@Test
 	public void simpleList_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 		assertObjectEquals("{type:'array',items:{type:'integer',format:'int32'}}", s.getSchema(SimpleList.class));
 	}
 
@@ -196,13 +196,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void simpleList2d() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 		assertEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int32'}}}", s.serialize(new Simple2dList()));
 	}
 
 	@Test
 	public void simpleList2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int32'}}}", s.getSchema(Simple2dList.class));
 	}
 
@@ -215,13 +215,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void beanList() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 		assertEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.serialize(new BeanList()));
 	}
 
 	@Test
 	public void beanList_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanList.class));
 	}
 
@@ -230,13 +230,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void beanList2d() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 		assertEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}}", s.serialize(new BeanList2d()));
 	}
 
 	@Test
 	public void beanList2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}}", s.getSchema(BeanList2d.class));
 	}
 
@@ -249,13 +249,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void beanMap() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 		assertEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}", s.serialize(new BeanMap()));
 	}
 
 	@Test
 	public void beanMap_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanMap.class));
 	}
 
@@ -264,13 +264,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void beanMap2d() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX;
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE;
 		assertEquals("{type:'object',additionalProperties:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}}", s.serialize(new BeanMap2d()));
 	}
 
 	@Test
 	public void beanMap2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}}", s.getSchema(BeanMap2d.class));
 	}
 
@@ -284,46 +284,46 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void useBeanDefs() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build();
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build();
 		assertEquals("{'$ref':'#/definitions/SimpleBean'}", s.serialize(new SimpleBean()));
 	}
 
 	@Test
 	public void useBeanDefs_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		assertObjectEquals("{'$ref':'#/definitions/SimpleBean'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{SimpleBean:{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
 
 	@Test
 	public void useBeanDefs_beanList() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build();
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build();
 		assertEquals("{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}", s.serialize(new BeanList()));
 	}
 
 	@Test
 	public void useBeanDefs_beanList_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}", s.getSchema(BeanList.class));
 		assertObjectEquals("{SimpleBean:{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
 
 	@Test
 	public void useBeanDefs_beanList2d() throws Exception {
-		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build();
+		JsonSchemaSerializer s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build();
 		assertEquals("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}", s.serialize(new BeanList2d()));
 	}
 
 	@Test
 	public void useBeanDefs_beanList2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}", s.getSchema(BeanList2d.class));
 		assertObjectEquals("{SimpleBean:{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
 
 	@Test
 	public void useBeanDefs_beanArray2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}", s.getSchema(SimpleBean[][].class));
 		assertObjectEquals("{SimpleBean:{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
@@ -334,7 +334,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void beanDefsPreloaded() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
 		assertObjectEquals("{'$ref':'#/definitions/SimpleBean'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
@@ -342,7 +342,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void useBeanDefsPreloaded_beanList_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
 		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}", s.getSchema(BeanList.class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
@@ -350,7 +350,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void useBeanDefsPreloaded_beanList2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}", s.getSchema(BeanList2d.class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
@@ -358,7 +358,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void useBeanDefsPreloaded_beanArray2d_getSchema() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().build().createSession();
 		s.addBeanDef("SimpleBean", new ObjectMap().append("test", 123));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}", s.getSchema(SimpleBean[][].class));
 		assertObjectEquals("{SimpleBean:{test:123}}", s.getBeanDefs());
@@ -370,14 +370,14 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void customBeanDefMapper() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().beanDefMapper(CustomBeanDefMapper.class).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().beanDefMapper(CustomBeanDefMapper.class).build().createSession();
 		assertObjectEquals("{'$ref':'#/definitions/org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
 
 	@Test
 	public void customBeanDefMapperInstance() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().beanDefMapper(new CustomBeanDefMapper()).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().beanDefMapper(new CustomBeanDefMapper()).build().createSession();
 		assertObjectEquals("{'$ref':'#/definitions/org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
@@ -391,7 +391,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void customBeanDefMapper_customURI() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useBeanDefs().beanDefMapper(CustomBeanDefMapper2.class).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().beanDefMapper(CustomBeanDefMapper2.class).build().createSession();
 		assertObjectEquals("{'$ref':'/foo/bar/org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
@@ -413,13 +413,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_BEAN_noBeanExample() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", s.getSchema(SimpleBean.class));
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethod() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}", s.getSchema(SimpleBeanWithExampleMethod.class));
 	}
 
@@ -427,13 +427,13 @@ public class JsonSchemaSerializerTest {
 	public void addExample_BEAN_exampleMethod_wDefault() throws Exception {
 		SimpleBeanWithExampleMethod b = new SimpleBeanWithExampleMethod();
 		b.f1 = "baz";
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").example(SimpleBeanWithExampleMethod.class, b).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").example(SimpleBeanWithExampleMethod.class, b).build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'baz'}}", s.getSchema(SimpleBeanWithExampleMethod.class));
 	}
 
 	@Test
 	public void addExample_BEAN_exampleMethod_array2d() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}", s.getSchema(SimpleBeanWithExampleMethod[][].class));
 	}
 
@@ -449,13 +449,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_BEAN_exampleField() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}", s.getSchema(SimpleBeanWithExampleField.class));
 	}
 
 	@Test
 	public void addExample_BEAN_exampleField_array2d() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}", s.getSchema(SimpleBeanWithExampleField[][].class));
 	}
 
@@ -473,13 +473,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}", s.getSchema(SimpleBeanWithExampleAnnotation.class));
 	}
 
 	@Test
 	public void addExample_BEAN_exampleBeanAnnotation_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}", s.getSchema(SimpleBeanWithExampleAnnotation[][].class));
 	}
 
@@ -490,7 +490,7 @@ public class JsonSchemaSerializerTest {
 	public void addExample_BEAN_exampleBeanProperty() throws Exception {
 		SimpleBean b = new SimpleBean();
 		b.f1 = "foobar";
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").example(SimpleBean.class, b).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").example(SimpleBean.class, b).build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}", s.getSchema(SimpleBean.class));
 	}
 
@@ -498,7 +498,7 @@ public class JsonSchemaSerializerTest {
 	public void addExample_BEAN_exampleBeanProperty_2darray() throws Exception {
 		SimpleBean b = new SimpleBean();
 		b.f1 = "foobar";
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("bean").example(SimpleBean.class, b).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("bean").example(SimpleBean.class, b).build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}", s.getSchema(SimpleBean[][].class));
 	}
 
@@ -508,13 +508,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_MAP_noExample() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").build().createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanMap.class));
 	}
 
 	@Test
 	public void addExample_MAP_exampleMethod() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").build().createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}", s.getSchema(BeanMapWithExampleMethod.class));
 	}
 
@@ -522,7 +522,7 @@ public class JsonSchemaSerializerTest {
 	public void addExample_MAP_exampleMethod_wDefault() throws Exception {
 		BeanMapWithExampleMethod b = new BeanMapWithExampleMethod();
 		b.put(456, SimpleBeanWithExampleMethod.example());
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").example(BeanMapWithExampleMethod.class, b).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").example(BeanMapWithExampleMethod.class, b).build().createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'456':{f1:'foobar'}}}", s.getSchema(BeanMapWithExampleMethod.class));
 	}
 
@@ -539,13 +539,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_MAP_exampleField() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").build().createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}", s.getSchema(BeanMapWithExampleField.class));
 	}
 
 	@Test
 	public void addExample_MAP_exampleField_array2d() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}}}", s.getSchema(BeanMapWithExampleField[][].class));
 	}
 
@@ -564,13 +564,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").build().createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'baz'}}}", s.getSchema(BeanMapWithExampleAnnotation.class));
 	}
 
 	@Test
 	public void addExample_MAP_exampleBeanAnnotation_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'baz'}}}}}", s.getSchema(BeanMapWithExampleAnnotation[][].class));
 	}
 
@@ -580,13 +580,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_MAP_exampleBeanProperty() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").example(BeanMap.class, BeanMapWithExampleMethod.example()).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").example(BeanMap.class, BeanMapWithExampleMethod.example()).build().createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}", s.getSchema(BeanMap.class));
 	}
 
 	@Test
 	public void addExample_MAP_exampleBeanProperty_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("map").example(BeanMap.class, BeanMapWithExampleMethod.example()).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("map").example(BeanMap.class, BeanMapWithExampleMethod.example()).build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}}}", s.getSchema(BeanMap[][].class));
 	}
 
@@ -596,13 +596,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_COLLECTION_noExample() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("collection").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("collection").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}", s.getSchema(BeanList.class));
 	}
 
 	@Test
 	public void addExample_COLLECTION_exampleMethod() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("collection").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("collection").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'foobar'}]}", s.getSchema(BeanListWithExampleMethod.class));
 	}
 
@@ -612,7 +612,7 @@ public class JsonSchemaSerializerTest {
 		SimpleBean sb = new SimpleBean();
 		sb.f1 = "baz";
 		b.add(sb);
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("collection").example(BeanListWithExampleMethod.class, b).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("collection").example(BeanListWithExampleMethod.class, b).build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'baz'}]}", s.getSchema(BeanListWithExampleMethod.class));
 	}
 
@@ -629,13 +629,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleField() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("collection").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("collection").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'foobar'}]}", s.getSchema(BeanListWithExampleField.class));
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleField_array2d() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("array").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("array").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},'x-example':[[[{f1:'foobar'}]]]}", s.getSchema(BeanListWithExampleField[][].class));
 	}
 
@@ -654,13 +654,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleBeanAnnotation() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("collection").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("collection").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'baz'}]}", s.getSchema(BeanListWithExampleAnnotation.class));
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleBeanAnnotation_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("array").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("array").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},'x-example':[[[{f1:'baz'}]]]}", s.getSchema(BeanListWithExampleAnnotation[][].class));
 	}
 
@@ -670,13 +670,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_COLLECTION_exampleBeanProperty() throws Exception {
-		JsonSchemaSerializerSession s =JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("collection").example(BeanList.class, BeanListWithExampleMethod.example()).build().createSession();
+		JsonSchemaSerializerSession s =JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("collection").example(BeanList.class, BeanListWithExampleMethod.example()).build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'foobar'}]}", s.getSchema(BeanList.class));
 	}
 
 	@Test
 	public void addExample_ARRAY_exampleBeanProperty_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("array").example(BeanList.class, BeanListWithExampleMethod.example()).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("array").example(BeanList.class, BeanListWithExampleMethod.example()).build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},'x-example':[[[{f1:'foobar'}]]]}", s.getSchema(BeanList[][].class));
 	}
 
@@ -685,14 +685,14 @@ public class JsonSchemaSerializerTest {
 	//====================================================================================================
 	@Test
 	public void addExample_BOOLEAN() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("boolean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("boolean").build().createSession();
 		assertObjectEquals("{type:'boolean','x-example':true}", s.getSchema(boolean.class));
 		assertObjectEquals("{type:'boolean','x-example':true}", s.getSchema(Boolean.class));
 	}
 
 	@Test
 	public void addExample_BOOLEAN_wDefault() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("boolean")
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("boolean")
 			.example(boolean.class, false)
 			.example(Boolean.class, false)
 			.build().createSession();
@@ -702,7 +702,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_BOOLEAN_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("boolean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("boolean").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'boolean','x-example':true}}}", s.getSchema(boolean[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'boolean','x-example':true}}}", s.getSchema(Boolean[][].class));
 	}
@@ -712,7 +712,7 @@ public class JsonSchemaSerializerTest {
 	//====================================================================================================
 	@Test
 	public void addExample_NUMBER() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("number").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("number").build().createSession();
 		assertObjectEquals("{type:'integer',format:'int16','x-example':1}", s.getSchema(short.class));
 		assertObjectEquals("{type:'integer',format:'int16','x-example':1}", s.getSchema(Short.class));
 		assertObjectEquals("{type:'integer',format:'int32','x-example':1}", s.getSchema(int.class));
@@ -727,7 +727,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_NUMBER_wDefault() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("number")
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("number")
 			.example(short.class, (short)2)
 			.example(Short.class, (short)3)
 			.example(int.class, 4)
@@ -753,7 +753,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_NUMBER_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("number").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("number").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16','x-example':1}}}", s.getSchema(short[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16','x-example':1}}}", s.getSchema(Short[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int32','x-example':1}}}", s.getSchema(int[][].class));
@@ -772,7 +772,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_STRING() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("string").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("string").build().createSession();
 		assertObjectEquals("{type:'string','x-example':'foo'}", s.getSchema(String.class));
 		assertObjectEquals("{type:'string','x-example':'foo'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'string','x-example':'a'}", s.getSchema(Character.class));
@@ -781,7 +781,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_STRING_wDefault() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("string")
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("string")
 			.example(String.class, "bar1")
 			.example(StringBuilder.class, new StringBuilder("bar2"))
 			.example(Character.class, 'b')
@@ -795,7 +795,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_STRING_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("string").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("string").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','x-example':'foo'}}}", s.getSchema(String[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','x-example':'foo'}}}", s.getSchema(StringBuilder[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','x-example':'a'}}}", s.getSchema(Character[][].class));
@@ -804,7 +804,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_STRING_2darray_wDefault() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("string")
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("string")
 			.example(String.class, "bar1")
 			.example(StringBuilder.class, new StringBuilder("bar2"))
 			.example(Character.class, 'b')
@@ -822,37 +822,37 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addExample_ENUM() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("enum").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("enum").build().createSession();
 		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'one'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_wDefault() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
 		assertObjectEquals("{type:'string','enum':['one','two','three'],'x-example':'two'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("enum").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("enum").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],'x-example':'one'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 
 	@Test
 	public void addExample_ENUM_useEnumNames() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useEnumNames().addExamplesTo("enum").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useEnumNames().addExamplesTo("enum").build().createSession();
 		assertObjectEquals("{type:'string','enum':['ONE','TWO','THREE'],'x-example':'ONE'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_wDefault_useEnumNames() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useEnumNames().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useEnumNames().addExamplesTo("enum").example(TestEnumToString.class, TestEnumToString.TWO).build().createSession();
 		assertObjectEquals("{type:'string','enum':['ONE','TWO','THREE'],'x-example':'TWO'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addExample_ENUM_2darray_useEnumNames() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().useEnumNames().addExamplesTo("enum").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useEnumNames().addExamplesTo("enum").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['ONE','TWO','THREE'],'x-example':'ONE'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 
@@ -861,7 +861,7 @@ public class JsonSchemaSerializerTest {
 	//====================================================================================================
 	@Test
 	public void addExample_ANY() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addExamplesTo("any").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addExamplesTo("any").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string','x-example':'foo'}}}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},'x-example':{'123':{f1:'foobar'}}}", s.getSchema(BeanMapWithExampleMethod.class));
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},'x-example':[{f1:'foobar'}]}", s.getSchema(BeanListWithExampleMethod.class));
@@ -890,13 +890,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addDescription_BEAN() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("bean").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
 	}
 
 	@Test
 	public void addDescription_BEAN_array2d() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("bean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("bean").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}}}", s.getSchema(SimpleBean[][].class));
 	}
 
@@ -906,13 +906,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addDescription_MAP() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("map").build().createSession();
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanMap.class));
 	}
 
 	@Test
 	public void addDescription_MAP_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("map").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("map").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}}}", s.getSchema(BeanMap[][].class));
 	}
 
@@ -922,19 +922,19 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addDescription_COLLECTION() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("collection").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("collection").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
 	}
 
 	@Test
 	public void addDescription_COLLECTION_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("collection").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("collection").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}}}", s.getSchema(BeanList[][].class));
 	}
 
 	@Test
 	public void addDescription_ARRAY() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("array").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("array").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>[][]'}", s.getSchema(BeanList[][].class));
 	}
 
@@ -943,14 +943,14 @@ public class JsonSchemaSerializerTest {
 	//====================================================================================================
 	@Test
 	public void addDescription_BOOLEAN() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("boolean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("boolean").build().createSession();
 		assertObjectEquals("{type:'boolean',description:'boolean'}", s.getSchema(boolean.class));
 		assertObjectEquals("{type:'boolean',description:'java.lang.Boolean'}", s.getSchema(Boolean.class));
 	}
 
 	@Test
 	public void addDescription_BOOLEAN_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("boolean").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("boolean").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'boolean',description:'boolean'}}}", s.getSchema(boolean[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'boolean',description:'java.lang.Boolean'}}}", s.getSchema(Boolean[][].class));
 	}
@@ -960,7 +960,7 @@ public class JsonSchemaSerializerTest {
 	//====================================================================================================
 	@Test
 	public void addDescription_NUMBER() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("number").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("number").build().createSession();
 		assertObjectEquals("{type:'integer',format:'int16',description:'short'}", s.getSchema(short.class));
 		assertObjectEquals("{type:'integer',format:'int16',description:'java.lang.Short'}", s.getSchema(Short.class));
 		assertObjectEquals("{type:'integer',format:'int32',description:'int'}", s.getSchema(int.class));
@@ -975,7 +975,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addDescription_NUMBER_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("number").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("number").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16',description:'short'}}}", s.getSchema(short[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int16',description:'java.lang.Short'}}}", s.getSchema(Short[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'integer',format:'int32',description:'int'}}}", s.getSchema(int[][].class));
@@ -994,7 +994,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addDescription_STRING() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("string").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("string").build().createSession();
 		assertObjectEquals("{type:'string',description:'java.lang.String'}", s.getSchema(String.class));
 		assertObjectEquals("{type:'string',description:'java.lang.StringBuilder'}", s.getSchema(StringBuilder.class));
 		assertObjectEquals("{type:'string',description:'java.lang.Character'}", s.getSchema(Character.class));
@@ -1003,7 +1003,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addDescription_STRING_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("string").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("string").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string',description:'java.lang.String'}}}", s.getSchema(String[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string',description:'java.lang.StringBuilder'}}}", s.getSchema(StringBuilder[][].class));
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string',description:'java.lang.Character'}}}", s.getSchema(Character[][].class));
@@ -1016,13 +1016,13 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void addDescription_ENUM() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("enum").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("enum").build().createSession();
 		assertObjectEquals("{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.pojos.TestEnumToString'}", s.getSchema(TestEnumToString.class));
 	}
 
 	@Test
 	public void addDescription_ENUM_2darray() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("enum").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("enum").build().createSession();
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'string','enum':['one','two','three'],description:'org.apache.juneau.testutils.pojos.TestEnumToString'}}}", s.getSchema(TestEnumToString[][].class));
 	}
 
@@ -1031,7 +1031,7 @@ public class JsonSchemaSerializerTest {
 	//====================================================================================================
 	@Test
 	public void addDescription_ANY() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().addDescriptionsTo("any").build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("any").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
 		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanMap.class));
 		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
@@ -1062,7 +1062,7 @@ public class JsonSchemaSerializerTest {
 	// If default schema contains 'type', it's considered complete.
 	@Test
 	public void defaultSchemas() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.defaultSchema(SimpleBean.class, new ObjectMap().append("type", "bar"))
 			.defaultSchema(BeanMap.class, new ObjectMap().append("type", "bar"))
 			.defaultSchema(BeanList.class, new ObjectMap().append("type", "bar"))
@@ -1111,7 +1111,7 @@ public class JsonSchemaSerializerTest {
 	// If default schema does not contain 'type', the value is augmented
 	@Test
 	public void defaultSchemasNoType() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.defaultSchema(SimpleBean.class, new ObjectMap().append("foo", "bar"))
 			.defaultSchema(BeanMap.class, new ObjectMap().append("foo", "bar"))
 			.defaultSchema(BeanList.class, new ObjectMap().append("foo", "bar"))
@@ -1163,7 +1163,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void allowNestedExamples_enabled() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.allowNestedExamples()
 			.example(BeanList.class, new BeanList())
 			.example(SimpleBean.class, new SimpleBean())
@@ -1175,7 +1175,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void allowNestedExamples_disabled() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.example(BeanList.class, new BeanList())
 			.example(SimpleBean.class, new SimpleBean())
 			.addExamplesTo("collection,bean")
@@ -1190,7 +1190,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void allowNestedDescriptions_enabled() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.allowNestedDescriptions()
 			.addDescriptionsTo("collection,bean")
 			.build().createSession();
@@ -1200,7 +1200,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void allowNestedDescriptions_disabled() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.addDescriptionsTo("collection,bean")
 			.build().createSession();
 
@@ -1213,7 +1213,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void swaps_int() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.pojoSwaps(IntSwap.class)
 			.build().createSession();
 		assertObjectEquals("{type:'integer',format:'int32'}", s.getSchema(SimpleBean.class));
@@ -1229,7 +1229,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void jsonSchema_onclass() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().build().createSession();
 		assertObjectEquals("{type:'foo',format:'bar',properties:{f1:{type:'integer',format:'int32'}},description:'baz','x-example':{f1:123}}", s.getSchema(A1.class));
 	}
 
@@ -1240,7 +1240,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void jsonSchema_onbeanfield() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(A2.class));
 	}
 
@@ -1251,7 +1251,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void jsonSchema_onbeangetter() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(A3.class));
 	}
 
@@ -1264,7 +1264,7 @@ public class JsonSchemaSerializerTest {
 	@Test
 
 	public void jsonSchema_onbeansetter() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder().build().createSession();
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(A4.class));
 	}
 
@@ -1283,7 +1283,7 @@ public class JsonSchemaSerializerTest {
 
 	@Test
 	public void jsonschema_onpojoswap() throws Exception {
-		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_LAX.builder()
+		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder()
 			.pojoSwaps(SwapWithAnnotation.class)
 			.build().createSession();
 		assertObjectEquals("{type:'foo',format:'bar',description:'baz','x-example':123}", s.getSchema(SimpleBean.class));

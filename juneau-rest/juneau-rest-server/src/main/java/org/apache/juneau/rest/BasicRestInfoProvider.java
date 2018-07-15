@@ -600,12 +600,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 //			if (! omSwagger.isEmpty())
 //				assertNoEmpties(omSwagger);
 //		} catch (SwaggerException e1) {
-//			System.err.println(omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE));
+//			System.err.println(omSwagger.toString(SimpleJsonSerializer.DEFAULT_LAX_READABLE));
 //			throw e1;
 //		}
 
 		try {
-			String swaggerJson = omSwagger.toString(JsonSerializer.DEFAULT_LAX_READABLE);
+			String swaggerJson = omSwagger.toString(SimpleJsonSerializer.DEFAULT_READABLE);
 			swagger = jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new RestServletException("Error detected in swagger.").initCause(e);

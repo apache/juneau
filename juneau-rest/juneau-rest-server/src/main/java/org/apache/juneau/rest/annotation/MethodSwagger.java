@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.json.*;
 
 /**
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.
@@ -87,7 +86,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
+	 * 		The format is either a comma-delimited list of simple strings or a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> array.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -133,7 +132,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
+	 * 		The format is either a comma-delimited list of simple strings or a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> array.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -152,7 +151,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is either a comma-delimited list of simple strings or a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} array.
+	 * 		The format is either a comma-delimited list of simple strings or a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> array.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -320,7 +319,7 @@ public @interface MethodSwagger {
 	 * Free-form value for the swagger of a resource method.
 	 *
 	 * <p>
-	 * This is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object that makes up the swagger information for this resource method.
+	 * This is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object that makes up the swagger information for this resource method.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource method:
@@ -379,7 +378,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
+	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:

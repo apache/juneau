@@ -283,7 +283,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Use serializer with readable output, simple mode.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>);
@@ -445,7 +445,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Use serializer with readable output, simple mode.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
@@ -545,7 +545,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Get the schema serializer for one of the default JSON serializers.</jc>
-	JsonSchemaSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.getSchemaSerializer();
+	JsonSchemaSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.getSchemaSerializer();
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
@@ -677,7 +677,7 @@
 		</p>
 		<p class='bcode'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
 
 	<jc>// Create a recursive loop.</jc>
 	A a = <jk>new</jk> A();
@@ -774,7 +774,7 @@
 	</p>
 	<p class='bcode'>
 	<jc>// Use serializer with readable output, simple mode.</jc>
-	JsonSerializer s = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>;
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
@@ -825,7 +825,7 @@
 	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json, Person.<jk>class</jk>);
 
 	<jc>// Render it back as JSON.</jc>
-	json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(p);
+	json = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(p);
 	</p>
 	<p>
 		We print it back out to JSON to show that all the data has been preserved:
@@ -908,7 +908,7 @@
 	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
 
 	<jc>// Convert it back to JSON.</jc>
-	String json = JsonSerializer.<jsf>DEFAULT_LAX_READABLE</jsf>.serialize(m);
+	String json = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(m);
 		</p>
 		<p>
 			What we end up with is the exact same output.

@@ -47,10 +47,10 @@ public class ContentComboTestBase extends RestTestcase {
 			case "text/uon": return getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
 			case "application/x-www-form-urlencoded": return getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);
 			case "text/xml": return getClient(mt, XmlSerializer.DEFAULT, XmlParser.DEFAULT);
-			case "text/xml+rdf": return getClient(mt, RdfSerializer.DEFAULT_XML, RdfParser.DEFAULT_XML);
-			case "text/n-triple": return getClient(mt, RdfSerializer.DEFAULT_NTRIPLE, RdfParser.DEFAULT_NTRIPLE);
-			case "text/turtle": return getClient(mt, RdfSerializer.DEFAULT_TURTLE, RdfParser.DEFAULT_TURTLE);
-			case "text/n3": return getClient(mt, RdfSerializer.DEFAULT_N3, RdfParser.DEFAULT_N3);
+			case "text/xml+rdf": return getClient(mt, RdfXmlSerializer.DEFAULT, RdfXmlParser.DEFAULT);
+			case "text/n-triple": return getClient(mt, NTripleSerializer.DEFAULT, NTripleParser.DEFAULT);
+			case "text/turtle": return getClient(mt, TurtleSerializer.DEFAULT, TurtleParser.DEFAULT);
+			case "text/n3": return getClient(mt, N3Serializer.DEFAULT, N3Parser.DEFAULT);
 			default: throw new FormattedRuntimeException("Client for mediaType ''{0}'' not found", mt);
 		}
 	}

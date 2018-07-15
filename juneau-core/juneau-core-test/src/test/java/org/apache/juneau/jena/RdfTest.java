@@ -196,7 +196,7 @@ public class RdfTest {
 			.set(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 
 		//--------------------------------------------------------------------------------
 		// Normal format - Sequence
@@ -429,7 +429,7 @@ public class RdfTest {
 			.set(RDF_rdfxml_tab, 3)
 			.sq()
 			.addRootProperty();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 
 		//--------------------------------------------------------------------------------
 		// Default on class is Bag - Should only affect DEFAULT properties.

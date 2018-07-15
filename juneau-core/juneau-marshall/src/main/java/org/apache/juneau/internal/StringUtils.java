@@ -2198,7 +2198,7 @@ public final class StringUtils {
 			return o.toString();
 		ClassMeta<?> cm = BeanContext.DEFAULT.getClassMetaForObject(o);
 		if (cm.isMapOrBean() || cm.isCollectionOrArray())
-			return JsonSerializer.DEFAULT_LAX.toString(o);
+			return SimpleJsonSerializer.DEFAULT.toString(o);
 		if (cm.isClass())
 			return ((Class<?>)o).getName();
 		if (cm.isMethod())

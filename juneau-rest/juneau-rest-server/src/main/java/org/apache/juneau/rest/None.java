@@ -19,16 +19,16 @@ package org.apache.juneau.rest;
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  *
- * 		// No serializers are defined method or inherited from the class.
+ * 		<jc>// No serializers are defined method or inherited from the class.</jc>
  * 		serializers=None.<jk>class</jk>,
  *
- * 		// No parsers are defined method or inherited from the class.
+ * 		<jc>// No parsers are defined method or inherited from the class.</jc>
  * 		parsers=None.<jk>class</jk>,
  *
- * 		// No bean filters are defined method or inherited from the class.
+ * 		<jc>// No bean filters are defined method or inherited from the class.</jc>
  * 		beanFilters=None.<jk>class</jk>,
  *
- * 		// No POJO swaps are defined method or inherited from the class.
+ * 		<jc>// No POJO swaps are defined method or inherited from the class.</jc>
  * 		pojoSwaps=None.<jk>class</jk>
  * 	)
  * </p>

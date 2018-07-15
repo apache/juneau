@@ -212,14 +212,4 @@ public abstract class RestServlet extends HttpServlet {
 			context.destroy();
 		super.destroy();
 	}
-
-	/**
-	 * Convenience method for calling <code>getContext().getProperties();</code>
-	 *
-	 * @return The resource properties as an {@link RestContextProperties}.
-	 * @see RestContext#getProperties()
-	 */
-	public RestContextProperties getProperties() {
-		return getContext().getProperties();
-	}
 }

@@ -150,7 +150,7 @@ public class QueryAnnotationTest {
 	// Multipart parameters (e.g. &key=val1,&key=val2).
 	//=================================================================================================================
 
-	@RestResource(serializers=JsonSerializer.Simple.class)
+	@RestResource(serializers=SimpleJsonSerializer.class)
 	public static class C {
 		public static class C01 {
 			public String a;

@@ -100,7 +100,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"Config.serializer.o"</js>
 	 * 	<li><b>Data type:</b>  {@link WriterSerializer}
-	 * 	<li><b>Default:</b>  {@link JsonSerializer#DEFAULT_LAX}
+	 * 	<li><b>Default:</b>  {@link SimpleJsonSerializer#DEFAULT}
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link ConfigBuilder#serializer(Class)}
@@ -328,7 +328,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		store = getInstanceProperty(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
 		configMap = store.getMap(name);
 		configMap.register(this);
-		serializer = getInstanceProperty(CONFIG_serializer, WriterSerializer.class, JsonSerializer.DEFAULT_LAX);
+		serializer = getInstanceProperty(CONFIG_serializer, WriterSerializer.class, SimpleJsonSerializer.DEFAULT);
 		parser = getInstanceProperty(CONFIG_parser, ReaderParser.class, JsonParser.DEFAULT);
 		beanSession = parser.createBeanSession();
 		encoder = getInstanceProperty(CONFIG_encoder, ConfigEncoder.class, ConfigXorEncoder.INSTANCE);

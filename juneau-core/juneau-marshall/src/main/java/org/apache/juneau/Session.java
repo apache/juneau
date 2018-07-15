@@ -304,7 +304,7 @@ public abstract class Session {
 	@Override /* Object */
 	public String toString() {
 		try {
-			return asMap().toString(JsonSerializer.DEFAULT_LAX_READABLE);
+			return asMap().toString(SimpleJsonSerializer.DEFAULT_READABLE);
 		} catch (SerializeException e) {
 			return e.getLocalizedMessage();
 		}

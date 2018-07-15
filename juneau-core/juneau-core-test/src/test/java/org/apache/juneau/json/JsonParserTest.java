@@ -184,7 +184,7 @@ public class JsonParserTest {
 	public void testPrimitivesAsStrings() throws Exception {
 		String json;
 		ReaderParser p = JsonParser.DEFAULT;
-		WriterSerializer s = JsonSerializer.DEFAULT_LAX;
+		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 
 		json = "{f1:'1',f2:'1',f3:'true',f4:'true',f5:'1',f6:'1',f7:'1',f8:'1',f9:'1',f10:'1'}";
 		B b = p.parse(json, B.class);

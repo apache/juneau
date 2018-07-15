@@ -54,7 +54,7 @@ public class BodyAnnotationTest {
 	// @Body on parameter
 	//=================================================================================================================
 
-	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
 	public static class A {
 		@RestMethod(name=PUT, path="/String")
 		public String a01(@Body String b) {
@@ -276,7 +276,7 @@ public class BodyAnnotationTest {
 	// @Body on POJO
 	//=================================================================================================================
 
-	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
 	public static class B {
 		@RestMethod(name=PUT, path="/StringTransform")
 		public B01 b01(B01 b) {
@@ -621,7 +621,7 @@ public class BodyAnnotationTest {
 	// Complex POJOs
 	//=================================================================================================================
 
-	@RestResource(serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
 	public static class E {
 		@RestMethod(name=PUT, path="/B")
 		public DTOs.B testPojo1(@Body DTOs.B b) {
@@ -637,7 +637,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void e01_complexPojos_B_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B", JsonSerializer.DEFAULT_LAX.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
+		e.put("/B", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
 	}
 	@Test
 	public void e02_complexPojos_B_bodyParam() throws Exception {
@@ -647,7 +647,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void e03_complexPojos_C_body() throws Exception {
 		String expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C", JsonSerializer.DEFAULT_LAX.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
+		e.put("/C", SimpleJsonSerializer.DEFAULT.toString(DTOs.B.INSTANCE)).json().execute().assertBody(expected);
 	}
 	@Test
 	public void e04_complexPojos_C_bodyParam() throws Exception {
@@ -666,7 +666,7 @@ public class BodyAnnotationTest {
 				@Body F01 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
 				@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
-			return new StringReader("bean=["+JsonSerializer.DEFAULT_LAX.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
+			return new StringReader("bean=["+SimpleJsonSerializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
 		}
 		public static class F01 {
 			public String p1;

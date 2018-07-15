@@ -43,7 +43,7 @@ public class CommonXmlTest {
 	@Test
 	public void testBeanUriAnnotation() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 		String r;
 
@@ -71,7 +71,7 @@ public class CommonXmlTest {
 	@Test
 	public void testBeanUriAnnotationOnlyUriProperty() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
 

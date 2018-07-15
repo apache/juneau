@@ -221,7 +221,7 @@ public class RestMethodInheritTest {
 	@RestResource(pojoSwaps={F2Swap.class,Inherit.class})
 	public static class D01 extends D {}
 
-	@RestResource(serializers=JsonSerializer.Simple.class)
+	@RestResource(serializers=SimpleJsonSerializer.class)
 	public static class D02 extends D01 {
 		@RestMethod(name=GET, path="/default")
 		public Object[] d01() {
@@ -233,13 +233,13 @@ public class RestMethodInheritTest {
 			// Should show ['F1','F2','F3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
-		@RestMethod(name=GET, path="/overrideSerializer", serializers=JsonSerializer.Simple.class, pojoSwaps=F3Swap.class)
+		@RestMethod(name=GET, path="/overrideSerializer", serializers=SimpleJsonSerializer.class, pojoSwaps=F3Swap.class)
 		public Object[] d03() {
 			// Should show ['Foo1','Foo2','F3']"
 			// Overriding serializer does not have parent filters applied.
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
-		@RestMethod(name=GET, path="/overrideSerializerInheritTransforms", serializers=JsonSerializer.Simple.class, pojoSwaps={F3Swap.class,Inherit.class})
+		@RestMethod(name=GET, path="/overrideSerializerInheritTransforms", serializers=SimpleJsonSerializer.class, pojoSwaps={F3Swap.class,Inherit.class})
 		public Object[] d04() {
 			// Should show ['F1','F2','F3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};

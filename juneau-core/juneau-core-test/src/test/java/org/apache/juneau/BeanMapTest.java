@@ -31,7 +31,7 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes","serial"})
 public class BeanMapTest {
 
-	JsonSerializer serializer = JsonSerializer.DEFAULT_LAX.builder().addBeanTypes().addRootType().build();
+	JsonSerializer serializer = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
 
 	BeanContext bc = BeanContext.create()
 			.beanDictionary(MyBeanDictionaryMap.class)
@@ -525,10 +525,10 @@ public class BeanMapTest {
 		m.put("s2", new ObjectList("[['foo']]"));
 		m.put("i", new ObjectList("[1,2,3]"));
 		m.put("i2", new ObjectList("[[1,2,3],[4,5,6]]"));
-		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", JsonSerializer.DEFAULT_LAX.serialize(t));
+		assertEquals("{s:['foo'],s2:[['foo']],i:[1,2,3],i2:[[1,2,3],[4,5,6]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
 		m.put("i", new ObjectList("[null,null,null]"));
 		m.put("i2", new ObjectList("[[null,null,null],[null,null,null]]"));
-		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", JsonSerializer.DEFAULT_LAX.serialize(t));
+		assertEquals("{s:['foo'],s2:[['foo']],i:[0,0,0],i2:[[0,0,0],[0,0,0]]}", SimpleJsonSerializer.DEFAULT.serialize(t));
 	}
 
 	public static class E {
@@ -1718,7 +1718,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testHiddenProperties() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		BeanMeta bm = s.getBeanMeta(U.class);
 		assertNotNull(bm.getPropertyMeta("a"));
 		assertNotNull(bm.getPropertyMeta("b"));
@@ -1821,7 +1821,7 @@ public class BeanMapTest {
 	//====================================================================================================
 	@Test
 	public void testOverriddenPropertyTypes() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 

@@ -103,7 +103,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 			Swagger swagger = req.getSwagger();
 			RestInfoProvider rip = req.getInfoProvider();
-			WriterSerializer s = JsonSerializer.DEFAULT_LAX;
+			WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 			char c = StringUtils.charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key)) {

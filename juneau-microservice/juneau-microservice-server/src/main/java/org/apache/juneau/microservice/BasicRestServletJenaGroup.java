@@ -23,18 +23,18 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	serializers={
 		Inherit.class,
-		RdfSerializer.Xml.class,
-		RdfSerializer.XmlAbbrev.class,
-		RdfSerializer.Turtle.class,
-		RdfSerializer.NTriple.class,
-		RdfSerializer.N3.class
+		RdfXmlSerializer.class,
+		RdfXmlAbbrevSerializer.class,
+		TurtleSerializer.class,
+		NTripleSerializer.class,
+		N3Serializer.class
 	},
 	parsers={
 		Inherit.class,
-		RdfParser.Xml.class,
-		RdfParser.Turtle.class,
-		RdfParser.NTriple.class,
-		RdfParser.N3.class
+		RdfXmlParser.class,
+		TurtleParser.class,
+		NTripleParser.class,
+		N3Parser.class
 	}
 )
 public abstract class BasicRestServletJenaGroup extends BasicRestServletGroup {}

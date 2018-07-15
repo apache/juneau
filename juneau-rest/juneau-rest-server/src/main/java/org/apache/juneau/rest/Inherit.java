@@ -19,22 +19,22 @@ package org.apache.juneau.rest;
  * <p class='bcode'>
  * 	<ja>@RestMethod</ja>(
  *
- * 		// Override the serializers for this method, but also inherit the serializers from the class.
- * 		// Class-level serializers will be inserted in the location in the array.
+ * 		<jc>// Override the serializers for this method, but also inherit the serializers from the class.
+ * 		// Class-level serializers will be inserted in the location in the array.</jc>
  * 		serializers={JsonSerializer.<jk>class</jk>, Inherit.<jk>class</jk>},
  *
- * 		// Override the parsers for this method, but also inherit the parsers from the class.
- * 		// Class-level parsers will be inserted in the location in the array.
+ * 		<jc>// Override the parsers for this method, but also inherit the parsers from the class.
+ * 		// Class-level parsers will be inserted in the location in the array.</jc>
  * 		parsers={JsonParser.<jk>class</jk>, Inherit.<jk>class</jk>},
  *
- * 		// Override the bean filters for this method, but also inherit the bean filters from the class.
+ * 		<jc>// Override the bean filters for this method, but also inherit the bean filters from the class.
  * 		// Overridden bean filters only apply to NEW serializers and parsers defined on the method
- * 		// (not those inherited from the class).
+ * 		// (not those inherited from the class).</jc>
  * 		beanFilters={MyFilter.<jk>class</jk>, Inherit.<jk>class</jk>},
  *
- * 		// Override the POJO swaps for this method, but also inherit the POJO swaps from the class.
+ * 		<jc>// Override the POJO swaps for this method, but also inherit the POJO swaps from the class.
  * 		// Overridden POJO swaps only apply to NEW serializers and parsers defined on the method
- * 		// (not those inherited from the class).
+ * 		// (not those inherited from the class).</jc>
  * 		pojoSwaps={MySwap.<jk>class</jk>, Inherit.<jk>class</jk>}
  * 	)
  * </p>

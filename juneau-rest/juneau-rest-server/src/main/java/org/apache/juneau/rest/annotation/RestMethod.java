@@ -18,7 +18,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.http.annotation.*;
@@ -760,7 +759,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is {@link JsonSerializer#DEFAULT_LAX Simple-JSON}.
+	 * 		The format is <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a>.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.

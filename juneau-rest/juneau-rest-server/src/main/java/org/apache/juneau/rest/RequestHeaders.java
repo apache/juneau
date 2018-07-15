@@ -941,7 +941,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 			String[] v = e.getValue();
 			m.put(e.getKey(), v.length == 1 ? v[0] : v);
 		}
-		return JsonSerializer.DEFAULT_LAX.toString(m);
+		return SimpleJsonSerializer.DEFAULT.toString(m);
 	}
 
 	@Override /* Object */

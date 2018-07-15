@@ -184,7 +184,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperies() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		E1 t = new E1();
 		String r;
 
@@ -213,7 +213,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		List<F> l = new LinkedList<>();
 		F t = new F();
 		t.x1.add(new F());
@@ -232,7 +232,7 @@ public class CommonTest {
 	//====================================================================================================
 	@Test
 	public void testURIAttr() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 
 		G t = new G();

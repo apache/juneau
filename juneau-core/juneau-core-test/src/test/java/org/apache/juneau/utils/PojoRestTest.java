@@ -82,7 +82,7 @@ public class PojoRestTest {
 		Address a3 = (Address)model.get("/person1/addresses/1");
 		assertEquals("city B", a3.city);
 
-		serializer = JsonSerializer.DEFAULT_LAX.builder().addBeanTypes().addRootType().build();
+		serializer = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
 		p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)
@@ -834,8 +834,8 @@ public class PojoRestTest {
 	@Test
 	public void testGetPublicMethods() throws Exception {
 		PojoRest model = new PojoRest(new AddressBook().init());
-		assertTrue(JsonSerializer.DEFAULT_LAX.toString(model.getPublicMethods("0")).contains("'toString'"));
-		assertTrue(JsonSerializer.DEFAULT_LAX.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
+		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
+		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
 		assertNull(model.getPublicMethods("1"));
 	}
 

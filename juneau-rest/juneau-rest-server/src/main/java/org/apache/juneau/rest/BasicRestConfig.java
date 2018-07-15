@@ -35,12 +35,14 @@ import org.apache.juneau.xmlschema.*;
  * be configured with the same serializers/parsers/etc... as {@link BasicRestServlet}.
  */
 @RestResource(
+
+	// Default serializers for all Java methods in the class.
 	serializers={
 		HtmlDocSerializer.class, // HTML must be listed first because Internet Explore does not include text/html in their Accept header.
 		HtmlStrippedDocSerializer.class,
 		HtmlSchemaDocSerializer.class,
 		JsonSerializer.class,
-		JsonSerializer.Simple.class,
+		SimpleJsonSerializer.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.class,
 		XmlSchemaDocSerializer.class,
@@ -50,6 +52,8 @@ import org.apache.juneau.xmlschema.*;
 		SoapXmlSerializer.class,
 		PlainTextSerializer.class
 	},
+
+	// Default parsers for all Java methods in the class.
 	parsers={
 		JsonParser.class,
 		JsonParser.Simple.class,
@@ -60,24 +64,44 @@ import org.apache.juneau.xmlschema.*;
 		MsgPackParser.class,
 		PlainTextParser.class
 	},
+
+	// Properties to apply to all serializers/parsers and REST-specific API objects.
 	properties={
-		// URI-resolution is disabled by default.  Need to enable it.
+		// Enable automatic resolution of URI objects to root-relative values.
 		@Property(name=SERIALIZER_uriResolution, value="ROOT_RELATIVE")
 	},
+
+	// HTML-page specific settings
 	htmldoc=@HtmlDoc(
+
+		// Default page header contents.
 		header={
-			"<h1>$R{resourceTitle}</h1>",
-			"<h2>$R{methodSummary,resourceDescription}</h2>",
-			"$C{REST/header}"
+			"<h1>$R{resourceTitle}</h1>",  // Use @RestResource(title)
+			"<h2>$R{methodSummary,resourceDescription}</h2>", // Use either @RestMethod(summary) or @RestResource(description)
+			"$C{REST/header}"  // Extra header HTML defined in external config file.
 		},
+
+		// Basic page navigation links.
 		navlinks={
 			"up: request:/.."
 		},
+
+		// Default stylesheet to use for the page.
+		// Can be overridden from external config file.
+		// Default is DevOps look-and-feel (aka Depression look-and-feel).
 		stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
+
+		// Default contents to add to the <head> section of the HTML page.
+		// Use it to add a favicon link to the page.
 		head={
 			"<link rel='icon' href='$U{$C{REST/favicon}}'/>"
 		},
+
+		// No default page footer contents.
+		// Can be overridden from external config file.
 		footer="$C{REST/footer}",
+
+		// By default, table cell contents should not wrap.
 		nowrap="true"
 	),
 
@@ -86,6 +110,7 @@ import org.apache.juneau.xmlschema.*;
 
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
-	staticFiles={"$C{REST/staticFiles}"}
+	// By default, we define static files through the external configuration file.
+	staticFiles="$C{REST/staticFiles}"
 )
 public interface BasicRestConfig {}

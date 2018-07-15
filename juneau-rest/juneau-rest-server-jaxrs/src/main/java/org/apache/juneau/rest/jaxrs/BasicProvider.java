@@ -56,7 +56,7 @@ import org.apache.juneau.xmlschema.*;
 @JuneauProvider(
 	serializers={
 		JsonSerializer.class,
-		JsonSerializer.Simple.class,
+		SimpleJsonSerializer.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.Ns.class,
 		XmlDocSerializer.class,

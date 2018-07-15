@@ -56,7 +56,7 @@ public class InterfaceProxyTest {
 			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT.builder().addBeanTypes().addRootType().build(), MsgPackParser.DEFAULT },
 			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT.builder().addBeanTypes().addRootType().build(), UrlEncodingParser.DEFAULT },
 			{ /* 6 */ "Uon", UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build(), UonParser.DEFAULT },
-			{ /* 7 */ "RdfXml", RdfSerializer.DEFAULT_XMLABBREV.builder().addBeanTypes().addRootType().build(), RdfParser.DEFAULT_XML },
+			{ /* 7 */ "RdfXml", RdfXmlAbbrevSerializer.DEFAULT.builder().addBeanTypes().addRootType().build(), RdfXmlParser.DEFAULT },
 		});
 	}
 

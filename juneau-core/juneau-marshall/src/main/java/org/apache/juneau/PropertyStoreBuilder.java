@@ -821,7 +821,7 @@ public class PropertyStoreBuilder {
 	}
 
 	static String string(Object value) {
-		return JsonSerializer.DEFAULT_LAX.toString(value);
+		return SimpleJsonSerializer.DEFAULT.toString(value);
 	}
 
 	static String className(Object value) {

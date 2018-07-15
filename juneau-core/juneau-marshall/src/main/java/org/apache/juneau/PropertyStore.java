@@ -926,6 +926,6 @@ public final class PropertyStore {
 
 	@Override /* Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT_LAX.toString(this);
+		return SimpleJsonSerializer.DEFAULT.toString(this);
 	}
 }

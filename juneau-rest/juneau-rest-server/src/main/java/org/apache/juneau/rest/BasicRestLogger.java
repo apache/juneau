@@ -86,7 +86,7 @@ public class BasicRestLogger implements RestLogger {
 	}
 
 	/**
-	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link JsonSerializer#DEFAULT_LAX_READABLE}.
+	 * Same as {@link #log(Level, String, Object...)} excepts runs the arguments through {@link JsonSerializer#DEFAULT_READABLE}.
 	 *
 	 * <p>
 	 * Serialization of arguments do not occur if message is not logged, so it's safe to use this method from within
@@ -104,7 +104,7 @@ public class BasicRestLogger implements RestLogger {
 	@Override /* RestLogger */
 	public void logObjects(Level level, String msg, Object...args) {
 		for (int i = 0; i < args.length; i++)
-			args[i] = JsonSerializer.DEFAULT_LAX_READABLE.toStringObject(args[i]);
+			args[i] = SimpleJsonSerializer.DEFAULT_READABLE.toStringObject(args[i]);
 		log(level, null, msg, args);
 	}
 

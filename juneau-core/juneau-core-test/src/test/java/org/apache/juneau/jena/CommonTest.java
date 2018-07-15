@@ -48,7 +48,7 @@ public class CommonTest {
 	@Test
 	public void testTrimNullsFromBeans() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		A t1 = A.create(), t2;
 
 		s.trimNullProperties(false);
@@ -80,7 +80,7 @@ public class CommonTest {
 	@Test
 	public void testTrimEmptyMaps() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		B t1 = B.create(), t2;
 		String r;
 
@@ -120,7 +120,7 @@ public class CommonTest {
 	@Test
 	public void testTrimEmptyLists() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		C t1 = C.create(), t2;
 		String r;
 
@@ -162,7 +162,7 @@ public class CommonTest {
 	@Test
 	public void testTrimEmptyArrays() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		D t1 = D.create(), t2;
 		String r;
 
@@ -202,7 +202,7 @@ public class CommonTest {
 	@Test
 	public void testBeanPropertyProperties() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		E1 t1 = E1.create(), t2;
 		String r;
 
@@ -243,7 +243,7 @@ public class CommonTest {
 	@Test
 	public void testBeanPropertyProperiesOnListOfBeans() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 		List<F> l1 = new LinkedList<>(), l2;
 		F t = F.create();
 		t.x1.add(F.create());
@@ -273,7 +273,7 @@ public class CommonTest {
 	@Test
 	public void testURIAttr() throws Exception {
 		RdfSerializerBuilder s = getBasicSerializer();
-		RdfParser p = RdfParser.DEFAULT_XML;
+		RdfParser p = RdfXmlParser.DEFAULT;
 
 		G t = new G();
 		t.uri = new URI("http://uri");

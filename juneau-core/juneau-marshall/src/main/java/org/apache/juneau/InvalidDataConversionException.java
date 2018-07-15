@@ -63,6 +63,6 @@ public final class InvalidDataConversionException extends FormattedRuntimeExcept
 	private static String getValue(Object o) {
 		if (o instanceof Class)
 			return "'" + getReadableClassName((Class<?>)o) + "'";
-		return JsonSerializer.DEFAULT_LAX == null ? "'" + o.toString() + "'" : JsonSerializer.DEFAULT_LAX.toString(o);
+		return SimpleJsonSerializer.DEFAULT == null ? "'" + o.toString() + "'" : SimpleJsonSerializer.DEFAULT.toString(o);
 	}
 }

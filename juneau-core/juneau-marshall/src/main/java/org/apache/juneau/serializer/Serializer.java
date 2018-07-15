@@ -360,7 +360,7 @@ public abstract class Serializer extends BeanContext {
 	 * 		MySerializerListener l = ss.getListener(MySerializerListener.<jk>class</jk>);
 	 *
 	 * 		<jc>// Dump the results to the console.</jc>
-	 * 		JsonSerializer.<jsf>DEFAULT_LAX</jsf>.println(l.<jf>events</jf>);
+	 * 		SimpleJsonSerializer.<jsf>DEFAULT</jsf>.println(l.<jf>events</jf>);
 	 * 	}
 	 * </p>
 	 */
@@ -657,7 +657,7 @@ public abstract class Serializer extends BeanContext {
 	 * 	m.put(<js>" foo "</js>, <js>" bar "</js>);
 	 *
 	 * 	<jc>// Produces "{foo:'bar'}"</jc>
-	 * 	String json = JsonSerializer.<jsf>DEFAULT_LAX</jsf>.toString(m);
+	 * 	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.toString(m);
 	 * </p>
 	 */
 	public static final String SERIALIZER_trimStrings = PREFIX + "trimStrings.b";
@@ -1110,7 +1110,7 @@ public abstract class Serializer extends BeanContext {
 	 *
 	 * <p>
 	 * This method is specified to override the content type for this serializer.
-	 * For example, the {@link org.apache.juneau.json.JsonSerializer.Simple} class returns that it handles media type
+	 * For example, the {@link org.apache.juneau.json.SimpleJsonSerializer} class returns that it handles media type
 	 * <js>"text/json+simple"</js>, but returns <js>"text/json"</js> as the actual content type.
 	 * This allows clients to request specific 'flavors' of content using specialized <code>Accept</code> header values.
 	 *

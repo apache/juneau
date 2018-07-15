@@ -168,7 +168,7 @@ public class Items extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new RuntimeException(
 				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
-				+ JsonSerializer.DEFAULT_LAX.toString(VALID_TYPES));
+				+ SimpleJsonSerializer.DEFAULT.toString(VALID_TYPES));
 		type = value;
 		return this;
 	}

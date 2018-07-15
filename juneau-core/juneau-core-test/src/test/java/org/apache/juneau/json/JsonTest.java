@@ -162,7 +162,7 @@ public class JsonTest {
 			+ "\n	},"
 			+ "\n	I: 'j'"
 			+ "\n}";
-		assertEquals(e, JsonSerializer.DEFAULT_LAX_READABLE.serialize(m));
+		assertEquals(e, SimpleJsonSerializer.DEFAULT_READABLE.serialize(m));
 	}
 
 	//====================================================================================================
@@ -182,7 +182,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testEscapingSingleQuotes() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		String r = s.serialize(new ObjectMap().append("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
 		JsonParser p = JsonParser.DEFAULT;
@@ -194,7 +194,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testWrapperAttrAnnotationOnBean() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 
@@ -229,7 +229,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testWrapperAttrAnnotationOnNonBean() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		String r;
 

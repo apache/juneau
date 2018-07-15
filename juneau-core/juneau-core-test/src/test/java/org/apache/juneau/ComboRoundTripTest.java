@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.jena.Constants.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -259,7 +258,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// JSON
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJson = JsonSerializer.DEFAULT_LAX.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sJson = SimpleJsonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
 	ReaderParser pJson = JsonParser.DEFAULT;
 
 	@Test
@@ -301,7 +300,7 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// JSON - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonR = JsonSerializer.DEFAULT_LAX_READABLE.builder().addBeanTypes().addRootType().build();
+	WriterSerializer sJsonR = SimpleJsonSerializer.DEFAULT_READABLE.builder().addBeanTypes().addRootType().build();
 	ReaderParser pJsonR = JsonParser.DEFAULT;
 
 	@Test
@@ -647,8 +646,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXml = RdfSerializer.DEFAULT_XMLABBREV.builder().addBeanTypes().addRootType().build();
-	ReaderParser pRdfXml = RdfParser.DEFAULT_XML;
+	WriterSerializer sRdfXml = RdfXmlAbbrevSerializer.DEFAULT.builder().addBeanTypes().addRootType().build();
+	ReaderParser pRdfXml = RdfXmlParser.DEFAULT;
 
 	@Test
 	public void g11_serializeRdfXml() throws Exception {
@@ -668,8 +667,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").addBeanTypes().addRootType().build();
-	ReaderParser pRdfXmlT = RdfParser.create().beanTypePropertyName("t").build();
+	WriterSerializer sRdfXmlT = RdfXmlAbbrevSerializer.create().beanTypePropertyName("t").addBeanTypes().addRootType().build();
+	ReaderParser pRdfXmlT = RdfXmlParser.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void g21_serializeRdfXmlT() throws Exception {
@@ -689,8 +688,8 @@ public abstract class ComboRoundTripTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlR = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).ws().addBeanTypes().addRootType().build();
-	ReaderParser pRdfXmlR = RdfParser.DEFAULT_XML;
+	WriterSerializer sRdfXmlR = RdfXmlAbbrevSerializer.create().ws().addBeanTypes().addRootType().build();
+	ReaderParser pRdfXmlR = RdfXmlParser.DEFAULT;
 
 	@Test
 	public void g31_serializeRdfXmlR() throws Exception {

@@ -13,7 +13,6 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.jena.Constants.*;
 
 import java.util.*;
 
@@ -30,11 +29,11 @@ import org.apache.juneau.xml.annotation.*;
  *
  * The following direct subclasses are provided for language-specific serializers:
  * <ul>
- * 	<li>{@link RdfSerializer.Xml} - RDF/XML.
- * 	<li>{@link RdfSerializer.XmlAbbrev} - RDF/XML-ABBREV.
- * 	<li>{@link RdfSerializer.NTriple} - N-TRIPLE.
- * 	<li>{@link RdfSerializer.Turtle} - TURTLE.
- * 	<li>{@link RdfSerializer.N3} - N3.
+ * 	<li>{@link RdfXmlSerializer} - RDF/XML.
+ * 	<li>{@link RdfXmlAbbrevSerializer} - RDF/XML-ABBREV.
+ * 	<li>{@link NTripleSerializer} - N-TRIPLE.
+ * 	<li>{@link TurtleSerializer} - TURTLE.
+ * 	<li>{@link N3Serializer} - N3.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>
@@ -175,122 +174,6 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * The default list of namespaces associated with this serializer.
 	 */
 	public static final String RDF_namespaces = PREFIX + "namespaces.ls";
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined instances
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore.DEFAULT);
-
-	/** Default Abbreviated RDF/XML serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_XMLABBREV = new XmlAbbrev(PropertyStore.DEFAULT);
-
-	/** Default Turtle serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_TURTLE = new Turtle(PropertyStore.DEFAULT);
-
-	/** Default N-Triple serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_NTRIPLE = new NTriple(PropertyStore.DEFAULT);
-
-	/** Default N3 serializer, all default settings.*/
-	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore.DEFAULT);
-
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Predefined subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Produces RDF/XML output */
-	public static class Xml extends RdfSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Xml(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_RDF_XML)
-					.build(),
-				"text/xml+rdf", "text/xml+rdf,text/xml+rdf+abbrev;q=0.9"
-			);
-		}
-	}
-
-	/** Produces Abbreviated RDF/XML output */
-	public static class XmlAbbrev extends RdfSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public XmlAbbrev(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_RDF_XML_ABBREV)
-					.build(),
-				"text/xml+rdf", "text/xml+rdf+abbrev,text/xml+rdf;q=0.9"
-			);
-		}
-	}
-
-	/** Produces N-Triple output */
-	public static class NTriple extends RdfSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public NTriple(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_NTRIPLE)
-					.build(),
-				"text/n-triple", null
-			);
-		}
-	}
-
-	/** Produces Turtle output */
-	public static class Turtle extends RdfSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Turtle(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_TURTLE)
-					.build(),
-				"text/turtle", null
-			);
-		}
-	}
-
-	/** Produces N3 output */
-	public static class N3 extends RdfSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public N3(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(RDF_language, LANG_N3)
-					.build(),
-				"text/n3", null
-			);
-		}
-	}
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

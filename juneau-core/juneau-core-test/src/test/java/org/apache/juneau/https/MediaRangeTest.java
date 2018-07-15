@@ -61,6 +61,6 @@ public class MediaRangeTest {
 	@Test
 	public void test() {
 		MediaTypeRange[] r = MediaTypeRange.parse(mediaRange);
-		assertEquals(label + " failed", expected, JsonSerializer.DEFAULT_LAX.toString(r));
+		assertEquals(label + " failed", expected, SimpleJsonSerializer.DEFAULT.toString(r));
 	}
 }

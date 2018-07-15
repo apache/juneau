@@ -270,7 +270,7 @@ public abstract class Parser extends BeanContext {
 	 * 		MyParserListener l = s.getListener(MyParserListener.<jk>class</jk>);
 	 *
 	 * 		<jc>// Dump the results to the console.</jc>
-	 * 		JsonSerializer.<jsf>DEFAULT_LAX</jsf>.println(l.<jf>events</jf>);
+	 * 		SimpleJsonSerializer.<jsf>DEFAULT</jsf>.println(l.<jf>events</jf>);
 	 * 	}
 	 * </p>
 	 */

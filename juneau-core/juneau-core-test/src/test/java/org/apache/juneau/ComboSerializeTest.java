@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.jena.Constants.*;
-
 import java.util.*;
 
 import org.apache.juneau.html.*;
@@ -159,7 +157,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// JSON
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJson = JsonSerializer.DEFAULT_LAX;
+	WriterSerializer sJson = SimpleJsonSerializer.DEFAULT;
 
 	@Test
 	public void a11_serializeJson() throws Exception {
@@ -179,7 +177,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// JSON - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sJsonR = JsonSerializer.DEFAULT_LAX_READABLE;
+	WriterSerializer sJsonR = SimpleJsonSerializer.DEFAULT_READABLE;
 
 	@Test
 	public void a31_serializeJsonR() throws Exception {
@@ -339,7 +337,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXml = RdfSerializer.DEFAULT_XMLABBREV;
+	WriterSerializer sRdfXml = RdfXmlAbbrevSerializer.DEFAULT;
 
 	@Test
 	public void g11_serializeRdfXml() throws Exception {
@@ -349,7 +347,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - 't' property
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).beanTypePropertyName("t").build();
+	WriterSerializer sRdfXmlT = RdfXmlAbbrevSerializer.create().beanTypePropertyName("t").build();
 
 	@Test
 	public void g21_serializeRdfXmlT() throws Exception {
@@ -359,7 +357,7 @@ public abstract class ComboSerializeTest {
 	//--------------------------------------------------------------------------------
 	// RdfXml - Readable
 	//--------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlR = RdfSerializer.create().language(LANG_RDF_XML_ABBREV).ws().build();
+	WriterSerializer sRdfXmlR = RdfXmlAbbrevSerializer.create().ws().build();
 
 	@Test
 	public void g31_serializeRdfXmlR() throws Exception {

@@ -581,7 +581,7 @@ public class UriResolutionTest {
 
 			TreeMap<String,String> m = p.parse(r, TreeMap.class, String.class, String.class);
 
-			String r2 = JsonSerializer.DEFAULT_LAX.toString(m);
+			String r2 = SimpleJsonSerializer.DEFAULT.toString(m);
 			TestUtils.assertEquals(results.json, r2, "{0}/{1} parse failed", label, s.getClass().getSimpleName());
 
 		} catch (AssertionError e) {

@@ -254,10 +254,10 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	public static final JsonSchemaSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode. */
-	public static final JsonSchemaSerializer DEFAULT_LAX = new Simple(PropertyStore.DEFAULT);
+	public static final JsonSchemaSerializer DEFAULT_SIMPLE = new Simple(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final JsonSchemaSerializer DEFAULT_LAX_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
+	public static final JsonSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------

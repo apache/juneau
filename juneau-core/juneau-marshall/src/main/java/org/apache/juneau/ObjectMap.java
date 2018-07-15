@@ -1569,7 +1569,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	@Override /* Object */
 	public String toString() {
 		try {
-			return this.toString(JsonSerializer.DEFAULT_LAX);
+			return this.toString(SimpleJsonSerializer.DEFAULT);
 		} catch (SerializeException e) {
 			return e.getLocalizedMessage();
 		}

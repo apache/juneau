@@ -136,32 +136,32 @@ public abstract class RoundTripTest {
 			},
 			{ /* 14 */
 				"Rdf.Xml",
-				RdfSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
-				RdfParser.create().xml(),
+				RdfXmlSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				RdfXmlParser.create(),
 				0
 			},
 			{ /* 15 */
 				"Rdf.XmlAbbrev",
-				RdfSerializer.create().xmlabbrev().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
-				RdfParser.create().xml(),
+				RdfXmlAbbrevSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				RdfXmlParser.create(),
 				0
 			},
 			{ /* 16 */
 				"Rdf.Turtle",
-				RdfSerializer.create().turtle().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
-				RdfParser.create().turtle(),
+				TurtleSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				TurtleParser.create(),
 				0
 			},
 			{ /* 17 */
 				"Rdf.NTriple",
-				RdfSerializer.create().ntriple().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
-				RdfParser.create().ntriple(),
+				NTripleSerializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				NTripleParser.create(),
 				0
 			},
 			{ /* 18 */
 				"Rdf.N3",
-				RdfSerializer.create().n3().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
-				RdfParser.create().n3(),
+				N3Serializer.create().trimNullProperties(false).addLiteralTypes().addBeanTypes().addRootType(),
+				N3Parser.create(),
 				0
 			},
 			{ /* 19 */

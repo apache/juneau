@@ -72,7 +72,7 @@ public class SerializeException extends FormattedException {
 		if (session != null) {
 			Map<String,Object> m = session.getLastLocation();
 			if (m != null && ! m.isEmpty())
-				msg = "Serialize exception occurred at " + JsonSerializer.DEFAULT_LAX.toString(m) + ".  " + msg;
+				msg = "Serialize exception occurred at " + SimpleJsonSerializer.DEFAULT.toString(m) + ".  " + msg;
 		}
 		return msg;
 	}

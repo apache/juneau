@@ -84,7 +84,7 @@ public class RestResourcePojoSwapsTest {
 		}
 	}
 
-	@RestResource(pojoSwaps={SwapA1.class}, serializers=JsonSerializer.Simple.class, parsers=JsonParser.class)
+	@RestResource(pojoSwaps={SwapA1.class}, serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
 	public static class A01_Parent {}
 
 	@RestResource(pojoSwaps={SwapA2.class})

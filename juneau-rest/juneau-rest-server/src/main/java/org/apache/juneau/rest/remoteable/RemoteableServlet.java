@@ -218,7 +218,7 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	//--------------------------------------------------------------------------------
 
 	private boolean useOnlyAnnotated() {
-		return getProperties().getBoolean(RemoteableServiceProperties.REMOTEABLE_includeOnlyRemotableMethods, false);
+		return getContext().getProperties().getBoolean(RemoteableServiceProperties.REMOTEABLE_includeOnlyRemotableMethods, false);
 	}
 
 	private Map<String,java.lang.reflect.Method> getMethods(String javaInterface) throws Exception {

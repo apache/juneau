@@ -1036,10 +1036,10 @@ public final class ClassMeta<T> implements Type {
 						return JsonParser.DEFAULT.parse(s, this);
 				}
 				if (example instanceof Map && isMapOrBean()) {
-					return JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT_LAX_READABLE.toString(example), this);
+					return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT_READABLE.toString(example), this);
 				}
 				if (example instanceof Collection && isCollectionOrArray()) {
-					return JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT_LAX_READABLE.serialize(example), this);
+					return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT_READABLE.serialize(example), this);
 				}
 			}
 			if (exampleMethod != null)

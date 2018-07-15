@@ -368,14 +368,14 @@ public class TestUtils {
 	}
 
 	/**
-	 * Assert that the object equals the specified string after running it through JsonSerializer.DEFAULT_LAX.toString().
+	 * Assert that the object equals the specified string after running it through SimpleJsonSerializer.DEFAULT_LAX.toString().
 	 */
 	public static final void assertObjectEquals(String s, Object o) {
 		assertObjectEquals(s, o, js2);
 	}
 
 	/**
-	 * Assert that the object equals the specified string after running it through JsonSerializer.DEFAULT_LAX.toString()
+	 * Assert that the object equals the specified string after running it through SimpleJsonSerializer.DEFAULT_LAX.toString()
 	 * with BEAN_sortProperties set to true.
 	 */
 	public static final void assertSortedObjectEquals(String s, Object o) {

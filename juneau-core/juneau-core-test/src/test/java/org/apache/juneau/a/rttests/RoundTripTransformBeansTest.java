@@ -373,7 +373,7 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 
 	@Test
 	public void testSurrogatesThroughAnnotation() throws Exception {
-		JsonSerializer s = JsonSerializer.DEFAULT_LAX;
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
 		JsonParser p = JsonParser.DEFAULT;
 		Object r;
 		E1 x = E1.create();

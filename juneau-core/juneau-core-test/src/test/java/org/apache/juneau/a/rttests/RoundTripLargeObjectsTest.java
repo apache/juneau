@@ -104,31 +104,31 @@ public class RoundTripLargeObjectsTest extends RoundTripTest {
 //			{ /* 9 */
 //				"Rdf.Xml",
 //				new RdfSerializer.Xml().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				RdfParser.DEFAULT_XML,
+//				RdfXmlParser.DEFAULT,
 //				0
 //			},
 //			{ /* 10 */
 //				"Rdf.XmlAbbrev",
 //				new RdfSerializer.XmlAbbrev().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				RdfParser.DEFAULT_XML,
+//				RdfXmlParser.DEFAULT,
 //				0
 //			},
 //			{ /* 11 */
 //				"Rdf.Turtle",
 //				new RdfSerializer.Turtle().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				RdfParser.DEFAULT_TURTLE,
+//				TurtleParser.DEFAULT,
 //				0
 //			},
 //			{ /* 12 */
 //				"Rdf.NTriple",
 //				new RdfSerializer.NTriple().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				RdfParser.DEFAULT_NTRIPLE,
+//				NTripleParser.DEFAULT,
 //				0
 //			},
 //			{ /* 13 */
 //				"Rdf.N3",
 //				new RdfSerializer.N3().setTrimNullProperties(false).setAddLiteralTypes(true),
-//				RdfParser.DEFAULT_N3,
+//				N3Parser.DEFAULT,
 //				0
 //			},
 		});

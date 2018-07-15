@@ -67,9 +67,9 @@ import org.apache.juneau.serializer.*;
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link Simple} - Default serializer, single quotes, simple mode.
+ * 		{@link SimpleJsonSerializer} - Default serializer, single quotes, simple mode.
  * 	<li>
- * 		{@link SimpleReadable} - Default serializer, single quotes, simple mode, with whitespace.
+ * 		{@link SimpleJsonSerializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
@@ -249,7 +249,6 @@ public class JsonSerializer extends WriterSerializer {
 	 */
 	public static final String JSON_simpleMode = PREFIX + "simpleMode.b";
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
@@ -259,19 +258,6 @@ public class JsonSerializer extends WriterSerializer {
 
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
-
-	/** Default serializer, single quotes, {@link #JSON_simpleMode simple mode}. */
-	public static final JsonSerializer DEFAULT_LAX = new Simple(PropertyStore.DEFAULT);
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final JsonSerializer DEFAULT_LAX_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
-
-	/**
-	 * Default serializer, single quotes, simple mode, with whitespace and recursion detection.
-	 * Note that recursion detection introduces a small performance penalty.
-	 */
-	public static final JsonSerializer DEFAULT_LAX_READABLE_SAFE = new SimpleReadableSafe(PropertyStore.DEFAULT);
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -292,56 +278,18 @@ public class JsonSerializer extends WriterSerializer {
 		}
 	}
 
-	/** Default serializer, single quotes, simple mode. */
-	public static class Simple extends JsonSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Simple(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.build(),
-				"application/json", "application/json+simple,text/json+simple,application/json;q=0.9,text/json;q=0.9"
-			);
-		}
-	}
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static class SimpleReadable extends JsonSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public SimpleReadable(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
-					.build()
-			);
-		}
-	}
-
 	/**
 	 * Default serializer, single quotes, simple mode, with whitespace and recursion detection.
 	 * Note that recursion detection introduces a small performance penalty.
 	 */
-	public static class SimpleReadableSafe extends JsonSerializer {
+	public static class ReadableSafe extends JsonSerializer {
 
 		/**
 		 * Constructor.
 		 *
 		 * @param ps The property store containing all the settings for this object.
 		 */
-		public SimpleReadableSafe(PropertyStore ps) {
+		public ReadableSafe(PropertyStore ps) {
 			super(
 				ps.builder()
 					.set(JSON_simpleMode, true)
