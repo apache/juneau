@@ -26,6 +26,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.logging.*;
 
 import javax.activation.*;
 import javax.servlet.*;
@@ -2925,6 +2926,8 @@ public final class RestContext extends BeanContext {
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
 			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, true, this);
+			if (debug)
+				logger.setLevel(Level.FINE);
 
 			varResolver = builder.varResolverBuilder
 				.vars(

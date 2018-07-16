@@ -1079,6 +1079,8 @@ public final class BeanPropertyMeta {
 			t = getMethodAnnotation(a, setter);
 		if (t == null && extraKeys != null)
 			t = getMethodAnnotation(a, extraKeys);
+		if (t == null)
+			t = ReflectionUtils.getAnnotation(a, typeMeta.getInnerClass());
 		return t;
 	}
 

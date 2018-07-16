@@ -94,7 +94,7 @@ public final class RestCallException extends IOException {
 	 * @throws IOException
 	 */
 	public RestCallException(String msg, HttpResponse response) throws ParseException, IOException {
-		super(format("{0}\n{1}\nstatus='{2}'\nResponse: \n{3}", msg, response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), UTF8)));
+		super(format("{0}\n{1}\nstatus=''{2}''\nResponse: \n{3}", msg, response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity(), UTF8)));
 	}
 
 	/**
@@ -107,7 +107,7 @@ public final class RestCallException extends IOException {
 	 * @param response The response from the server.
 	 */
 	public RestCallException(int responseCode, String responseMsg, String method, URI url, String response) {
-		super(format("HTTP method '{0}' call to '{1}' caused response code '{2},{3}'.\nResponse: \n{4}", method, url, responseCode, responseMsg, response));
+		super(format("HTTP method ''{0}'' call to ''{1}'' caused response code ''{2}, {3}''.\nResponse: \n{4}", method, url, responseCode, responseMsg, response));
 		this.responseCode = responseCode;
 		this.responseStatusMessage = responseMsg;
 		this.response = response;

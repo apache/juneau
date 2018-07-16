@@ -63,10 +63,18 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, Method m, int index) {
+		apply(c, m.getGenericParameterTypes()[index]);
 		for (Annotation a :  m.getParameterAnnotations()[index])
 			if (c.isInstance(a))
-				return apply(a);
-		apply(c, m.getGenericParameterTypes()[index]);
+				apply(a);
+		return this;
+	}
+
+	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, Method m) {
+		apply(c, m.getGenericReturnType());
+		Annotation a = m.getAnnotation(c);
+		if (a != null)
+			return apply(a);
 		return this;
 	}
 
@@ -77,7 +85,13 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
-	HttpPartSchemaBuilder apply(Annotation a) {
+	/**
+	 * Apply the specified annotation to this schema.
+	 *
+	 * @param a The annotation to apply.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder apply(Annotation a) {
 		if (a instanceof Body)
 			apply((Body)a);
 		else if (a instanceof Header)
@@ -105,6 +119,7 @@ public class HttpPartSchemaBuilder {
 		api = AnnotationUtils.merge(api, a);
 		required(HttpPartSchema.toBoolean(a.required()));
 		allowEmptyValue(HttpPartSchema.toBoolean(! a.required()));
+		serializer(a.serializer());
 		parser(a.parser());
 		apply(a.schema());
 		return this;
@@ -238,6 +253,7 @@ public class HttpPartSchemaBuilder {
 		type(a.type());
 		format(a.format());
 		items(a.items());
+		allowEmptyValue(HttpPartSchema.toBoolean(a.allowEmptyValue()));
 		collectionFormat(a.collectionFormat());
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
@@ -1332,7 +1348,7 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder serializer(Class<? extends HttpPartSerializer> value) {
-		if (serializer != null && serializer != HttpPartSerializer.Null.class)
+		if (value != null && value != HttpPartSerializer.Null.class)
 			serializer = value;
 		return this;
 	}
@@ -1346,7 +1362,7 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder parser(Class<? extends HttpPartParser> value) {
-		if (parser != null && parser != HttpPartParser.Null.class)
+		if (value != null && value != HttpPartParser.Null.class)
 			parser = value;
 		return this;
 	}

@@ -14,6 +14,8 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.remoteable.ReturnValue.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -29,7 +31,6 @@ import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -231,13 +232,34 @@ public class RestClient extends BeanContext implements Closeable {
 	public static final String RESTCLIENT_parser = PREFIX + "parser.o";
 
 	/**
+	 * Configuration property:  Part parser.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"RestClient.partParser.o"</js>
+	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartParser&gt;</code> or {@link HttpPartParser}.
+	 * 	<li><b>Default:</b>  {@link OpenApiPartParser};
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RestClientBuilder#partParser(Class)}
+	 * 			<li class='jm'>{@link RestClientBuilder#partParser(HttpPartParser)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+	 */
+	public static final String RESTCLIENT_partParser = PREFIX + "partParser.o";
+
+	/**
 	 * Configuration property:  Part serializer.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"RestClient.urlEncodingSerializer.o"</js>
+	 * 	<li><b>Name:</b>  <js>"RestClient.partSerializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
-	 * 	<li><b>Default:</b>  {@link SimpleUonPartSerializer};
+	 * 	<li><b>Default:</b>  {@link OpenApiPartSerializer};
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#partSerializer(Class)}
@@ -385,6 +407,7 @@ public class RestClient extends BeanContext implements Closeable {
 	private final boolean keepHttpClientOpen, debug;
 	private final UrlEncodingSerializer urlEncodingSerializer;  // Used for form posts only.
 	private final HttpPartSerializer partSerializer;
+	private final HttpPartParser partParser;
 	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
@@ -481,7 +504,8 @@ public class RestClient extends BeanContext implements Closeable {
 		}
 
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
-		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, SimpleUonPartSerializer.class, true, ps);
+		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, OpenApiPartSerializer.class, true, ps);
+		this.partParser = getInstanceProperty(RESTCLIENT_partParser, HttpPartParser.class, OpenApiPartParser.class, true, ps);
 		this.executorService = getInstanceProperty(RESTCLIENT_executorService, ExecutorService.class, null);
 
 		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
@@ -584,14 +608,14 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doPut(Object url, Object o) throws RestCallException {
-		return doCall("PUT", url, true).input(o);
+		return doCall("PUT", url, true).body(o);
 	}
 
 	/**
 	 * Same as {@link #doPut(Object, Object)} but don't specify the input yet.
 	 *
 	 * <p>
-	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)}
+	 * You must call either {@link RestCall#body(Object)} or {@link RestCall#formData(String, Object)}
 	 * to set the contents on the result object.
 	 *
 	 * @param url
@@ -636,14 +660,14 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestCall doPost(Object url, Object o) throws RestCallException {
-		return doCall("POST", url, true).input(o);
+		return doCall("POST", url, true).body(o);
 	}
 
 	/**
 	 * Same as {@link #doPost(Object, Object)} but don't specify the input yet.
 	 *
 	 * <p>
-	 * You must call either {@link RestCall#input(Object)} or {@link RestCall#formData(String, Object)} to set the
+	 * You must call either {@link RestCall#body(Object)} or {@link RestCall#formData(String, Object)} to set the
 	 * contents on the result object.
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -710,7 +734,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 */
 	public RestCall doFormPost(Object url, Object o) throws RestCallException {
 		return doCall("POST", url, true)
-			.input(o instanceof HttpEntity ? o : new RestRequestEntity(o, urlEncodingSerializer));
+			.body(o instanceof HttpEntity ? o : new RestRequestEntity(o, urlEncodingSerializer));
 	}
 
 	/**
@@ -774,7 +798,7 @@ public class RestClient extends BeanContext implements Closeable {
 			if (method != null && uri != null) {
 				rc = doCall(method, uri, content != null);
 				if (content != null)
-					rc.input(new StringEntity(content));
+					rc.body(new StringEntity(content));
 				if (h != null)
 					for (Map.Entry<String,Object> e : h.entrySet())
 						rc.header(e.getKey(), e.getValue());
@@ -818,7 +842,7 @@ public class RestClient extends BeanContext implements Closeable {
 	public RestCall doCall(HttpMethod method, Object url, Object content) throws RestCallException {
 		RestCall rc = doCall(method.name(), url, method.hasContent());
 		if (method.hasContent())
-			rc.input(content);
+			rc.body(content);
 		return rc;
 	}
 
@@ -1015,45 +1039,45 @@ public class RestClient extends BeanContext implements Closeable {
 							rc.serializer(serializer).parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
-								rc.path(a.name, args[a.index], a.serializer, null);
+								rc.path(a.getName(), args[a.getIndex()], a.getSerializer(), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getQueryArgs())
-								rc.query(a.name, args[a.index], a.skipIfNE, a.serializer, null);
+								rc.query(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getFormDataArgs())
-								rc.formData(a.name, args[a.index], a.skipIfNE, a.serializer, null);
+								rc.formData(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getHeaderArgs())
-								rc.header(a.name, args[a.index], a.skipIfNE, a.serializer, null);
+								rc.header(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(), a.getSchema());
 
-							if (rmm.getBodyArg() != null)
-								rc.input(args[rmm.getBodyArg()]);
+							RemoteMethodArg ba = rmm.getBodyArg();
+							if (ba != null)
+								rc.body(args[ba.getIndex()], ba.getSerializer(), ba.getSchema());
 
 							if (rmm.getRequestBeanArgs().length > 0) {
 								BeanSession bs = createBeanSession();
-								for (RemoteMethodArg rma : rmm.getRequestBeanArgs()) {
-									BeanMap<?> bm = bs.toBeanMap(args[rma.index]);
+								for (RemoteMethodBeanArg rmba : rmm.getRequestBeanArgs()) {
+									BeanMap<?> bm = bs.toBeanMap(args[rmba.getIndex()]);
 
 									for (BeanPropertyValue bpv : bm.getValues(false)) {
 										BeanPropertyMeta pMeta = bpv.getMeta();
 										Object val = bpv.getValue();
-
-										Path p = pMeta.getAnnotation(Path.class);
-										if (p != null)
-											rc.path(getName(p.name(), p.value(), pMeta), val, getPartSerializer(p.serializer(), rma.serializer), null);
-
-										if (val != null) {
-											Query q1 = pMeta.getAnnotation(Query.class);
-											if (q1 != null)
-												rc.query(getName(q1.name(), q1.value(), pMeta), val, q1.skipIfEmpty(), getPartSerializer(q1.serializer(), rma.serializer), null);
-
-											FormData f1 = pMeta.getAnnotation(FormData.class);
-											if (f1 != null)
-												rc.formData(getName(f1.name(), f1.value(), pMeta), val, f1.skipIfEmpty(), getPartSerializer(f1.serializer(), rma.serializer), null);
-
-											org.apache.juneau.http.annotation.Header h1 = pMeta.getAnnotation(org.apache.juneau.http.annotation.Header.class);
-											if (h1 != null)
-												rc.header(getName(h1.name(), h1.value(), pMeta), val, h1.skipIfEmpty(), getPartSerializer(h1.serializer(), rma.serializer), null);
+										RemoteMethodArg a = rmba.getProperty(pMeta.getName());
+										if (a != null) {
+											HttpPartType pt = a.getPartType();
+											if (pt == PATH)
+												rc.path(a.getName(), val, ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+											if (val != null) {
+												if (pt == QUERY) {
+													rc.query(a.getName(), val, a.isSkipIfEmpty(), ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+												} else if (pt == FORMDATA) {
+													rc.formData(a.getName(), val, a.isSkipIfEmpty(), ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+												} else if (pt == HEADER) {
+													rc.header(a.getName(), val, a.isSkipIfEmpty(), ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+												} else if (pt == HttpPartType.BODY) {
+													rc.body(val, ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+												}
+											}
 										}
 									}
 								}
@@ -1062,12 +1086,16 @@ public class RestClient extends BeanContext implements Closeable {
 							if (rmm.getOtherArgs().length > 0) {
 								Object[] otherArgs = new Object[rmm.getOtherArgs().length];
 								int i = 0;
-								for (Integer otherArg : rmm.getOtherArgs())
-									otherArgs[i++] = args[otherArg];
-								rc.input(otherArgs);
+								for (RemoteMethodArg a : rmm.getOtherArgs())
+									otherArgs[i++] = args[a.getIndex()];
+								rc.body(otherArgs);
 							}
 
-							if (rmm.getReturns() == ReturnValue.HTTP_STATUS) {
+							RemoteMethodReturn rmr = rmm.getReturns();
+							if (rmr.getReturnValue() == NONE) {
+								rc.run();
+								return null;
+							} else if (rmr.getReturnValue() == HTTP_STATUS) {
 								rc.ignoreErrors();
 								int returnCode = rc.run();
 								Class<?> rt = method.getReturnType();
@@ -1076,12 +1104,12 @@ public class RestClient extends BeanContext implements Closeable {
 								if (rt == Boolean.class || rt == boolean.class)
 									return returnCode < 400;
 								throw new RestCallException("Invalid return type on method annotated with @RemoteableMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
+							} else {
+								Object v = rc.getResponse(rmr.getParser(), rmr.getSchema(), method.getGenericReturnType());
+								if (v == null && method.getReturnType().isPrimitive())
+									v = ClassUtils.getPrimitiveDefault(method.getReturnType());
+								return v;
 							}
-
-							Object v = rc.getResponse(method.getGenericReturnType());
-							if (v == null && method.getReturnType().isPrimitive())
-								v = ClassUtils.getPrimitiveDefault(method.getReturnType());
-							return v;
 
 						} catch (RestCallException e) {
 							// Try to throw original exception if possible.
@@ -1124,6 +1152,10 @@ public class RestClient extends BeanContext implements Closeable {
 
 	HttpPartSerializer getPartSerializer() {
 		return partSerializer;
+	}
+
+	HttpPartParser getPartParser() {
+		return partParser;
 	}
 
 	URI toURI(Object url) throws URISyntaxException {

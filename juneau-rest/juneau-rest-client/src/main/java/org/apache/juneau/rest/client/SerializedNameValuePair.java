@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -64,8 +65,10 @@ public final class SerializedNameValuePair implements NameValuePair {
 	public String getValue() {
 		try {
 			return serializer.createSession(null).serialize(HttpPartType.FORMDATA, schema, value);
-		} catch (SerializeException | SchemaValidationException e) {
-			throw new RuntimeException(e);
+		} catch (SchemaValidationException e) {
+			throw new FormattedRuntimeException(e, "Validation error on request form-data parameter ''{0}''=''{1}''", name, value);
+		} catch (SerializeException e) {
+			throw new FormattedRuntimeException(e, "Serialization error on request form-data parameter ''{0}''", name);
 		}
 	}
 }

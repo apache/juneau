@@ -1113,6 +1113,46 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  Part parser.
+	 *
+	 * <p>
+	 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link OpenApiPartParser}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
+		return set(RESTCLIENT_partParser, value);
+	}
+
+	/**
+	 * Configuration property:  Part parser.
+	 *
+	 * <p>
+	 * Same as {@link #partParser(Class)} but takes in a parser instance.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestClient#RESTCLIENT_partParser}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this setting.
+	 * 	<br>The default value is {@link OpenApiPartParser}.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder partParser(HttpPartParser value) {
+		return set(RESTCLIENT_partParser, value);
+	}
+
+	/**
 	 * Configuration property:  Part serializer.
 	 *
 	 * <p>
@@ -1125,7 +1165,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link SimpleUonPartSerializer}.
+	 * 	<br>The default value is {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
@@ -1145,7 +1185,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link SimpleUonPartSerializer}.
+	 * 	<br>The default value is {@link OpenApiPartSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partSerializer(HttpPartSerializer value) {

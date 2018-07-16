@@ -28,7 +28,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <p>
  * Instances of this method can be passed directly to the {@link RestClient#doPost(Object, Object)} method or
- * {@link RestCall#input(Object)} methods to perform URL-encoded form posts.
+ * {@link RestCall#body(Object)} methods to perform URL-encoded form posts.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>

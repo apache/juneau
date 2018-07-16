@@ -399,6 +399,17 @@ public @interface Path {
 	String format() default "";
 
 	/**
+	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 *
+	 * <p>
+	 * Sets the ability to pass empty-valued heaver values.
+	 *
+	 * <p>
+	 * <b>Note:</b>  This is technically only valid for either query or formData parameters, but support is provided anyway for backwards compatability.
+	 */
+	boolean allowEmptyValue() default false;
+
+	/**
 	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 *
 	 * <p>

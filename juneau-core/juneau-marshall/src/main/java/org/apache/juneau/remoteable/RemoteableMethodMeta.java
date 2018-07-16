@@ -14,12 +14,13 @@ package org.apache.juneau.remoteable;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 
 /**
  * Contains the meta-data about a Java method on a remoteable interface.
@@ -36,10 +37,10 @@ public class RemoteableMethodMeta {
 
 	private final String httpMethod;
 	private final String url;
-	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, requestBeanArgs;
-	private final Integer[] otherArgs;
-	private final Integer bodyArg;
-	private final ReturnValue returnValue;
+	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, otherArgs;
+	private final RemoteMethodBeanArg[] requestBeanArgs;
+	private final RemoteMethodArg bodyArg;
+	private final RemoteMethodReturn methodReturn;
 
 	/**
 	 * Constructor.
@@ -55,10 +56,10 @@ public class RemoteableMethodMeta {
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);
 		this.headerArgs = b.headerArgs.toArray(new RemoteMethodArg[b.headerArgs.size()]);
-		this.requestBeanArgs = b.requestBeanArgs.toArray(new RemoteMethodArg[b.requestBeanArgs.size()]);
-		this.otherArgs = b.otherArgs.toArray(new Integer[b.otherArgs.size()]);
+		this.requestBeanArgs = b.requestBeanArgs.toArray(new RemoteMethodBeanArg[b.requestBeanArgs.size()]);
+		this.otherArgs = b.otherArgs.toArray(new RemoteMethodArg[b.otherArgs.size()]);
 		this.bodyArg = b.bodyArg;
-		this.returnValue = b.returnValue;
+		this.methodReturn = b.methodReturn;
 	}
 
 	private static final class Builder {
@@ -68,11 +69,11 @@ public class RemoteableMethodMeta {
 			queryArgs = new LinkedList<>(),
 			headerArgs = new LinkedList<>(),
 			formDataArgs = new LinkedList<>(),
-			requestBeanArgs = new LinkedList<>();
-		List<Integer>
 			otherArgs = new LinkedList<>();
-		Integer bodyArg;
-		ReturnValue returnValue;
+		List<RemoteMethodBeanArg>
+			requestBeanArgs = new LinkedList<>();
+		RemoteMethodArg bodyArg;
+		RemoteMethodReturn methodReturn;
 
 		Builder(String restUrl, Method m) {
 			Remoteable r = m.getDeclaringClass().getAnnotation(Remoteable.class);
@@ -90,50 +91,43 @@ public class RemoteableMethodMeta {
 				throw new RemoteableMetadataException(m,
 					"Invalid value specified for @Remoteable.methodPaths() annotation.  Valid values are [NAME,SIGNATURE].");
 
-			returnValue = rm == null ? ReturnValue.BODY : rm.returns();
+			ReturnValue rv = m.getReturnType() == void.class ? ReturnValue.NONE : rm == null ? ReturnValue.BODY : rm.returns();
+
+			methodReturn = new RemoteMethodReturn(m, rv);
 
 			url =
 				trimSlashes(restUrl)
 				+ '/'
 				+ (path != null ? trimSlashes(path) : urlEncode("NAME".equals(methodPaths) ? m.getName() : getMethodSignature(m)));
 
-			int index = 0;
-			for (Annotation[] aa : m.getParameterAnnotations()) {
+			for (int i = 0; i < m.getParameterTypes().length; i++) {
+				RemoteMethodArg rma = RemoteMethodArg.create(m, i);
 				boolean annotated = false;
-				for (Annotation a : aa) {
-					Class<?> ca = a.annotationType();
-					if (ca == Path.class) {
-						Path p = (Path)a;
-						annotated = pathArgs.add(new RemoteMethodArg(p.name(), p.value(), index, false, p.serializer()));
-					} else if (ca == Query.class) {
-						Query q = (Query)a;
-						annotated = queryArgs.add(new RemoteMethodArg(q.name(), q.value(), index, q.skipIfEmpty(), q.serializer()));
-					} else if (ca == FormData.class) {
-						FormData f = (FormData)a;
-						annotated = formDataArgs.add(new RemoteMethodArg(f.name(), f.value(), index, f.skipIfEmpty(), f.serializer()));
-					} else if (ca == Header.class) {
-						Header h = (Header)a;
-						annotated = headerArgs.add(new RemoteMethodArg(h.name(), h.value(), index, h.skipIfEmpty(), h.serializer()));
-					} else if (ca == RequestBean.class) {
-						RequestBean rb = (RequestBean)a;
-						annotated = requestBeanArgs.add(new RemoteMethodArg("", "", index, false, rb.serializer()));
-					} else if (ca == Body.class) {
-						annotated = true;
-						if (bodyArg == null)
-							bodyArg = index;
-						else
-							throw new RemoteableMetadataException(m,
-								"Multiple @Body parameters found.  Only one can be specified per Java method.");
-					}
+				if (rma != null) {
+					annotated = true;
+					HttpPartType pt = rma.getPartType();
+					if (pt == HEADER)
+						headerArgs.add(rma);
+					else if (pt == QUERY)
+						queryArgs.add(rma);
+					else if (pt == FORMDATA)
+						formDataArgs.add(rma);
+					else if (pt == PATH)
+						pathArgs.add(rma);
+					else if (pt == BODY)
+						bodyArg = rma;
+					else
+						annotated = false;
 				}
-				if (! annotated)
-					otherArgs.add(index);
-				index++;
+				RemoteMethodBeanArg rmba = RemoteMethodBeanArg.create(m, i);
+				if (rmba != null) {
+					annotated = true;
+					requestBeanArgs.add(rmba);
+				}
+				if (! annotated) {
+					otherArgs.add(new RemoteMethodArg(i, BODY, null));
+				}
 			}
-
-			if (bodyArg != null && otherArgs.size() > 0)
-				throw new RemoteableMetadataException(m,
-					"@Body and non-annotated parameters found together.  Non-annotated parameters cannot be used when @Body is used.");
 		}
 	}
 
@@ -196,7 +190,7 @@ public class RemoteableMethodMeta {
 	 *
 	 * @return A list of zero-indexed argument indices.
 	 */
-	public RemoteMethodArg[] getRequestBeanArgs() {
+	public RemoteMethodBeanArg[] getRequestBeanArgs() {
 		return requestBeanArgs;
 	}
 
@@ -205,7 +199,7 @@ public class RemoteableMethodMeta {
 	 *
 	 * @return A list of zero-indexed argument indices.
 	 */
-	public Integer[] getOtherArgs() {
+	public RemoteMethodArg[] getOtherArgs() {
 		return otherArgs;
 	}
 
@@ -214,7 +208,7 @@ public class RemoteableMethodMeta {
 	 *
 	 * @return A index of the argument with the {@link Body @Body} annotation, or <jk>null</jk> if no argument exists.
 	 */
-	public Integer getBodyArg() {
+	public RemoteMethodArg getBodyArg() {
 		return bodyArg;
 	}
 
@@ -223,7 +217,7 @@ public class RemoteableMethodMeta {
 	 *
 	 * @return Whether the method returns the HTTP response body or status code.
 	 */
-	public ReturnValue getReturns() {
-		return returnValue;
+	public RemoteMethodReturn getReturns() {
+		return methodReturn;
 	}
 }

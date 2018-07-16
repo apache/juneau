@@ -40,6 +40,13 @@ public interface RestLogger {
 	public interface Null extends RestLogger {}
 
 	/**
+	 * Sets the logging level for this logger.
+	 *
+	 * @param level The new level.
+	 */
+	public void setLevel(Level level);
+
+	/**
 	 * Log a message to the logger.
 	 *
 	 * @param level The log level.

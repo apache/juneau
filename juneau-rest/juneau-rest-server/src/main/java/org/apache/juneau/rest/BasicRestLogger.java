@@ -52,6 +52,11 @@ public class BasicRestLogger implements RestLogger {
 		return logger;
 	}
 
+	@Override /* RestLogger */
+	public void setLevel(Level level) {
+		getLogger().setLevel(level);
+	}
+	
 	/**
 	 * Log a message to the logger.
 	 *

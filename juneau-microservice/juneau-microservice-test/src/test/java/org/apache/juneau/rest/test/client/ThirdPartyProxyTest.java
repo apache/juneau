@@ -2151,7 +2151,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanPath6 {
-			@Path
+			@Path("*")
 			Map<String,Object> getX();
 		}
 
@@ -2161,7 +2161,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanPath7 {
-			@Path
+			@Path("*")
 			ABean getX();
 		}
 
@@ -2260,7 +2260,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanQuery6 {
-			@Query
+			@Query("*")
 			Map<String,Object> getX();
 		}
 
@@ -2270,7 +2270,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanQuery7 {
-			@Query
+			@Query("*")
 			ABean getX();
 		}
 
@@ -2369,7 +2369,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanFormData6 {
-			@FormData
+			@FormData("*")
 			Map<String,Object> getX();
 		}
 
@@ -2379,7 +2379,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanFormData7 {
-			@FormData
+			@FormData("*")
 			ABean getX();
 		}
 
@@ -2478,7 +2478,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanHeader6 {
-			@Header
+			@Header("*")
 			Map<String,Object> getX();
 		}
 
@@ -2488,7 +2488,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		public static interface ReqBeanHeader7 {
-			@Header
+			@Header("*")
 			ABean getX();
 		}
 

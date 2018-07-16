@@ -17,8 +17,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.io.*;
 import java.lang.annotation.*;
-import java.nio.charset.*;
-import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
@@ -45,6 +43,15 @@ import org.apache.juneau.serializer.*;
  * <p>
  * On server-side REST, this annotation can be applied to method parameters or parameter classes to identify them as the body of an HTTP request.
  *
+ * <p>
+ * This annotation can be applied to the following:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Parameters on a <ja>@RestMethod</ja>-annotated method.
+ * 	<li>
+ * 		POJO classes used as parameters on a <ja>@RestMethod</ja>-annotated method.
+ * </ul>
+ *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Used on parameter</jc>
@@ -70,90 +77,10 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  *
- * <p>
- * This annotation is also used for supplying swagger information about the body of the request.
- *
- * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Normal</jc>
- * 	<ja>@Body</ja>(
- * 		description=<js>"Pet object to add to the store"</js>,
- * 		required=<js>"true"</js>,
- * 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
- * 	)
- * </p>
- * <p class='bcode w800'>
- * 	<jc>// Free-form</jc>
- * 	<ja>@Body</ja>({
- * 		<js>"description: 'Pet object to add to the store',"</js>,
- * 		<js>"required: true,"</js>,
- * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']},"</js>
- * 		<js>"x-extra: 'extra field'"</js>
- * 	})
- * </p>
- *
- * <p>
- * This is used to populate the auto-generated Swagger documentation and UI.
- *
- * <p>
- * This annotation can be applied to the following:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Parameters on a <ja>@RestMethod</ja>-annotated method.
- * 	<li>
- * 		POJO classes used as parameters on a <ja>@RestMethod</ja>-annotated method.
- * </ul>
- *
- * <p>
- * Any of the following types can be used (matched in the specified order):
- * <ol class='spaced-list'>
- * 	<li>
- * 		{@link Reader}
- * 		<br><ja>@Body</ja> annotation is optional (it's inferred from the class type).
- * 		<br><code>Content-Type</code> is always ignored.
- * 	<li>
- * 		{@link InputStream}
- * 		<br><ja>@Body</ja> annotation is optional (it's inferred from the class type).
- * 		<br><code>Content-Type</code> is always ignored.
- * 	<li>
- * 		Any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.PojoCategories'>parsable</a> POJO type.
- * 		<br><code>Content-Type</code> is required to identify correct parser.
- * 	<li>
- * 		Objects convertible from {@link Reader} by having one of the following non-deprecated methods:
- * 		<ul>
- * 			<li><code><jk>public</jk> T(Reader in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
- * 		</ul>
- * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
- * 	<li>
- * 		Objects convertible from {@link InputStream} by having one of the following non-deprecated methods:
- * 		<ul>
- * 			<li><code><jk>public</jk> T(InputStream in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
- * 		</ul>
- * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
- * 	<li>
- * 		Objects convertible from {@link String} (including <code>String</code> itself) by having one of the following non-deprecated methods:
- * 		<ul>
- * 			<li><code><jk>public</jk> T(String in) {...}</code> (e.g. {@link Integer}, {@link Boolean})
- * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>fromValue</jsm>(String in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>valueOf</jsm>(String in) {...}</code> (e.g. enums)
- * 			<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code> (e.g. {@link Level})
- * 			<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code> (e.g. {@link Class}, {@link Charset})
- * 			<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
- * 		</ul>
- * 		<br><code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
- * </ol>
- *
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
- * 		Annotation values are coalesced from multiple sources in the following order of precedence:
+ * 		Swagger values are coalesced from multiple sources in the following order of precedence:
  * 		<ol>
  * 			<li><ja>@Body</ja> annotation on parameter.
  * 			<li><ja>@Body</ja> annotation on parameter class.
@@ -225,7 +152,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Body'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; Body</a>
  * </ul>
  */
 @Documented
@@ -233,6 +160,7 @@ import org.apache.juneau.serializer.*;
 @Retention(RUNTIME)
 @Inherited
 public @interface Body {
+
 	//=================================================================================================================
 	// Attributes common to all Swagger Parameter objects
 	//=================================================================================================================
@@ -560,6 +488,11 @@ public @interface Body {
 	 * Equivalent to {@link #value()}.
 	 */
 	String[] api() default {};
+
+	/**
+	 * TODO
+	 */
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.

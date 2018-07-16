@@ -109,7 +109,7 @@ public class VarResolverSession {
 				} catch (VarResolverException e) {
 					throw e;
 				} catch (Exception e) {
-					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", var);
+					throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", var, s);
 				}
 			}
 			return s;
@@ -353,7 +353,7 @@ public class VarResolverSession {
 							} catch (VarResolverException e) {
 								throw e;
 							} catch (Exception e) {
-								throw new VarResolverException(e, "Problem occurred resolving variable ''{0}''", varType);
+								throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", varType, s);
 							}
 							x = i+1;
 						}

@@ -21,5 +21,8 @@ public enum ReturnValue {
 	BODY,
 
 	/** HTTP status code */
-	HTTP_STATUS;
+	HTTP_STATUS,
+
+	/** Ignore (used for void methods) */
+	NONE;
 }

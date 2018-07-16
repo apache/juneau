@@ -115,6 +115,40 @@ public class HttpPartSchema {
 	}
 
 	/**
+	 * Finds the schema information for the specified method return.
+	 *
+	 * <p>
+	 * This method will gather all the schema information from the annotations at the following locations:
+	 * <ul>
+	 * 	<li>The method.
+	 * 	<li>The method return class.
+	 * 	<li>The method return parent classes and interfaces.
+	 * </ul>
+	 *
+	 * @param c
+	 * 	The annotation to look for.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li>{@link Body}
+	 * 		<li>{@link Header}
+	 * 		<li>{@link Query}
+	 * 		<li>{@link FormData}
+	 * 		<li>{@link Path}
+	 * 		<li>{@link Response}
+	 * 		<li>{@link ResponseHeader}
+	 * 		<li>{@link ResponseStatus}
+	 * 		<li>{@link HasQuery}
+	 * 		<li>{@link HasFormData}
+	 * 	</ul>
+	 * @param m
+	 * 	The Java method with the return type being checked.
+	 * @return The schema information about the parameter.
+	 */
+	public static HttpPartSchema create(Class<? extends Annotation> c, Method m) {
+		return create().apply(c, m).build();
+	}
+
+	/**
 	 * Finds the schema information for the specified class.
 	 *
 	 * <p>

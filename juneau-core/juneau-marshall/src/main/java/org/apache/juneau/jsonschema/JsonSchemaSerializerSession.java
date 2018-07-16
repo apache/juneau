@@ -109,12 +109,16 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			descriptionAdded = false;
 		}
 
-		if (useDef && defs.containsKey(getBeanDefId(sType)))
+		if (useDef && defs.containsKey(getBeanDefId(sType))) {
+			pop();
 			return new ObjectMap().append("$ref", getBeanDefUri(sType));
+		}
 
 		ObjectMap ds = getDefaultSchemas().get(sType.getInnerClass().getName());
-		if (ds != null && ds.containsKey("type"))
+		if (ds != null && ds.containsKey("type")) {
+			pop();
 			return out.appendAll(ds);
+		}
 
 		JsonSchemaClassMeta jscm = null;
 		if (pojoSwap != null && pojoSwap.getClass().getAnnotation(JsonSchema.class) != null)

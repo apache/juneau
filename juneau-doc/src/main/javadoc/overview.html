@@ -369,6 +369,12 @@
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-client'><i>juneau-rest-client</i></a></p>
 	<ol>
 		<li><p><a class='doclink' href='#juneau-rest-client.3rdPartyProxies'>Interface Proxies Against 3rd-party REST Interfaces</a></p>
+		<ul>
+			<li><p><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Body'>@Body</a></p>
+			<li><p><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.FormData'>@FormData</a></p>
+			<li><p><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Query'>@Query</a></p>
+			<li><p><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Header'>@Header</a></p>
+		</ul>
 		<li><p><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
 		<ol>
@@ -12791,9 +12797,9 @@
 		</p>
 		<ul class='spaced-list'>
 			<li>
-				Parameters on a  {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}.
+				Parameters on a <ja>@RestMethod</ja>-annotated method.
 			<li>
-				POJO classes.
+				POJO classes used as parameters on a <ja>@RestMethod</ja>-annotated method.
 		</ul>
 		<h5 class='figure'>Examples:</h5>
 		<p class='bcode w800'>
@@ -12926,6 +12932,36 @@
 			<jk>return</jk> <jf>val</jf>;
 		}
 	}
+		</p>
+		<p>
+			This annotation is also used for supplying swagger information about the body of the request.
+			<br>This information is used to populate the auto-generated Swagger documentation and UI.
+		</p>
+		<h5 class='section'>Examples:</h5>
+		<p class='bcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Body</ja>(
+		description=<js>"Pet object to add to the store"</js>,
+		required=<js>"true"</js>,
+		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	)
+		</p>
+		<p class='bcode w800'>
+	<jc>// Free-form</jc>
+	<ja>@Body</ja>({
+		<js>"description: 'Pet object to add to the store',"</js>,
+		<js>"required: true,"</js>,
+		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']},"</js>
+		<js>"x-extra: 'extra field'"</js>
+	})
+		</p>
+		<p class='bcode w800'>
+	<jc>// Localized</jc>
+	<ja>@Body</ja>(
+		description=<js>"$L{My.Localized.Description}"</js>,
+		required=<js>"true"</js>,
+		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	)
 		</p>
 		
 		<h5 class='section'>Other Notes:</h5>
@@ -17199,6 +17235,41 @@
 		<p>
 			The Java method arguments can be annotated with any of the following:
 		</p>
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
+			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
+		</ul>
+		<p>
+			The return type of the Java method can be any of the following:
+		</p>
+		<ul class='spaced-list'>
+			<li>
+				<jk>void</jk> 
+				- Don't parse any response.  
+				<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
+			<li>
+				Any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO 
+				- The body of the response will be converted to the POJO using the parser defined on the 
+				<code>RestClient</code> based on the <code>Content-Type</code> of the response.
+			<li>
+				<code>HttpResponse</code> 
+				- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+			<li>
+				{@link java.io.Reader} 
+				- Returns access to the raw reader of the response.
+				<br>Note that if you don't want your response parsed as a POJO, you'll want to get the response reader 
+				directly.
+			<li>
+				{@link java.io.InputStream} 
+				- Returns access to the raw input stream of the response.
+		</ul>
+		
+		<!-- === 9.1.1 - @Body ========================================================================== -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Body' id='juneau-rest-client.3rdPartyProxies.Body'>9.1.1 - @Body</a></h4>
+		<div class='topic'>
 		<ul class='spaced-list'>
 			<li class='ja'>
 				{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
@@ -17254,31 +17325,190 @@
 					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
 						- Converted to a URL-encoded FORM post.
 				</ul>
-		</ul>
-		<p>
-			The return type of the Java method can be any of the following:
-		</p>
+		</div>
+
+		<!-- === 9.1.2 - @FormData ====================================================================== -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.FormData' id='juneau-rest-client.3rdPartyProxies.FormData'>9.1.2 - @FormData</a></h4>
+		<div class='topic'>
 		<ul class='spaced-list'>
-			<li>
-				<jk>void</jk> 
-				- Don't parse any response.  
-				<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
-			<li>
-				Any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO 
-				- The body of the response will be converted to the POJO using the parser defined on the 
-				<code>RestClient</code>.
-			<li>
-				<code>HttpResponse</code> 
-				- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
-			<li>
-				{@link java.io.Reader} 
-				- Returns access to the raw reader of the response.
-				<br>Note that if you don't want your response parsed as a POJO, you'll want to get the response reader 
-				directly.
-			<li>
-				{@link java.io.InputStream} 
-				- Returns access to the raw input stream of the response.
-		</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>String</code> 
+						- Treated as a query string.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.FormData} 
+				- A form-data parameter.
+				<br>Note that this is only available if the HTTP method is <code>POST</code>.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
+						- Individual name-value pairs.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Header} 
+				- A request header.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Body} 
+				- The HTTP request body.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered 
+						with the <code>RestClient</code>.
+					<li class='normal'>{@link java.io.Reader} 
+						- Raw contents of reader will be serialized to remote resource.
+					<li class='normal'>{@link java.io.InputStream} 
+						- Raw contents of input stream will be serialized to remote resource.
+					<li class='normal'>{@link org.apache.http.HttpEntity} 
+						- Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
+						- Converted to a URL-encoded FORM post.
+				</ul>
+		</div>
+
+		<!-- === 9.1.3 - @Query ========================================================================= -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Query' id='juneau-rest-client.3rdPartyProxies.Query'>9.1.3 - @Query</a></h4>
+		<div class='topic'>
+		<ul class='spaced-list'>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>String</code> 
+						- Treated as a query string.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.FormData} 
+				- A form-data parameter.
+				<br>Note that this is only available if the HTTP method is <code>POST</code>.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
+						- Individual name-value pairs.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Header} 
+				- A request header.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Body} 
+				- The HTTP request body.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered 
+						with the <code>RestClient</code>.
+					<li class='normal'>{@link java.io.Reader} 
+						- Raw contents of reader will be serialized to remote resource.
+					<li class='normal'>{@link java.io.InputStream} 
+						- Raw contents of input stream will be serialized to remote resource.
+					<li class='normal'>{@link org.apache.http.HttpEntity} 
+						- Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
+						- Converted to a URL-encoded FORM post.
+				</ul>
+		</div>
+
+		<!-- === 9.1.4 - @Header ======================================================================== -->
+		
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Header' id='juneau-rest-client.3rdPartyProxies.Header'>9.1.4 - @Header</a></h4>
+		<div class='topic'>
+		<ul class='spaced-list'>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>String</code> 
+						- Treated as a query string.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.FormData} 
+				- A form-data parameter.
+				<br>Note that this is only available if the HTTP method is <code>POST</code>.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
+						- Individual name-value pairs.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Header} 
+				- A request header.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+					<li class='normal'><code>Map&lt;String,Object&gt;</code> 
+						- Individual name-value pairs.
+						<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+				</ul>
+			<li class='ja'>
+				{@link org.apache.juneau.http.annotation.Body} 
+				- The HTTP request body.
+				<br>The argument can be any of the following types:
+				<ul>
+					<li class='normal'>Any serializable POJO 
+						- Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered 
+						with the <code>RestClient</code>.
+					<li class='normal'>{@link java.io.Reader} 
+						- Raw contents of reader will be serialized to remote resource.
+					<li class='normal'>{@link java.io.InputStream} 
+						- Raw contents of input stream will be serialized to remote resource.
+					<li class='normal'>{@link org.apache.http.HttpEntity} 
+						- Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+					<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
+						- Converted to a URL-encoded FORM post.
+				</ul>
+		</div>
 	</div>
 	
 	<!-- === 9.2 - SSL Support ========================================================================== -->
@@ -22835,6 +23065,8 @@
 		<h5 class='topic w800'>juneau-rest-client</h5>
 		<ul class='spaced-list'>
 			<li>
+				Remoteable interfaces support OpenAPI annotations.
+			<li>
 				Made improvements to the builder API for defining SSL support.
 				<br>New methods added:
 				<ul class='doctree'>
@@ -22886,6 +23118,11 @@
 					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
 					<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
 				</ul>
+			<li>
+				Removed the deprecated <code>RestCall.execute()</code> method.
+				<br>Use {@link org.apache.juneau.rest.client.RestCall#run()}.
+			<li>
+				<code>RestCall.input(Object)</code> method renamed to {@link org.apache.juneau.rest.client.RestCall#body(Object)} to match OpenAPI terminology.
 		</ul>
 
 		<h5 class='topic w800'>juneau-rest-microservice</h5>

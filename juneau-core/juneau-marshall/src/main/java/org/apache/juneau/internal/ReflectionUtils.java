@@ -37,6 +37,17 @@ public final class ReflectionUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the {@link #getAnnotation(Class, Method)} returns a value.
+	 *
+	 * @param a The annotation to check for.
+	 * @param m The method to check.
+	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Method)} returns a value.
+	 */
+	public static boolean hasAnnotation(Class<? extends Annotation> a, Method m) {
+		return getAnnotation(a, m) != null;
+	}
+
+	/**
 	 * Returns the specified annotation if it exists on the specified parameter or parameter type class.
 	 *
 	 * @param a The annotation to check for.
@@ -50,6 +61,24 @@ public final class ReflectionUtils {
 			if (a.isInstance(a2))
 				return (T)a2;
 		Type t = m.getGenericParameterTypes()[index];
+		if (t instanceof Class)
+			return getAnnotation(a, (Class<?>)t);
+		return null;
+	}
+
+	/**
+	 * Returns the specified annotation if it exists on the specified method or return type class.
+	 *
+	 * @param a The annotation to check for.
+	 * @param m The method to check.
+	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m) {
+		for (Annotation a2 :  m.getAnnotations())
+			if (a.isInstance(a2))
+				return (T)a2;
+		Type t = m.getGenericReturnType();
 		if (t instanceof Class)
 			return getAnnotation(a, (Class<?>)t);
 		return null;
