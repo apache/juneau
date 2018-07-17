@@ -45,7 +45,7 @@ public final class RemoteMethodArg {
 		this.serializer = newInstance(HttpPartSerializer.class, schema == null ? null : schema.getSerializer());
 		this.schema = schema;
 		this.name = schema == null ? null : schema.getName();
-		this.skipIfEmpty = schema == null || schema.getSkipIfEmpty() == null ? false : schema.getSkipIfEmpty();
+		this.skipIfEmpty = schema == null ? false : schema.isSkipIfEmpty();
 	}
 
 	RemoteMethodArg(HttpPartType partType, HttpPartSchema schema, String defaultName) {
@@ -54,7 +54,7 @@ public final class RemoteMethodArg {
 		this.serializer = newInstance(HttpPartSerializer.class, schema == null ? null : schema.getSerializer());
 		this.schema = schema;
 		this.name = StringUtils.firstNonEmpty(schema == null ? null : schema.getName(), defaultName);
-		this.skipIfEmpty = schema == null || schema.getSkipIfEmpty() == null ? false : schema.getSkipIfEmpty();
+		this.skipIfEmpty = schema == null ? false : schema.isSkipIfEmpty();
 	}
 
 	/**

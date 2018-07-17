@@ -117,8 +117,8 @@ public class HttpPartSchemaBuilder {
 
 	HttpPartSchemaBuilder apply(Body a) {
 		api = AnnotationUtils.merge(api, a);
-		required(HttpPartSchema.toBoolean(a.required()));
-		allowEmptyValue(HttpPartSchema.toBoolean(! a.required()));
+		required(a.required());
+		allowEmptyValue(! a.required());
 		serializer(a.serializer());
 		parser(a.parser());
 		apply(a.schema());
@@ -129,26 +129,26 @@ public class HttpPartSchemaBuilder {
 		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
-		required(HttpPartSchema.toBoolean(a.required()));
+		required(a.required());
 		type(a.type());
 		format(a.format());
-		allowEmptyValue(HttpPartSchema.toBoolean(a.allowEmptyValue()));
+		allowEmptyValue(a.allowEmptyValue());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
-		maxItems(HttpPartSchema.toLong(a.maxItems()));
-		minItems(HttpPartSchema.toLong(a.minItems()));
-		uniqueItems(HttpPartSchema.toBoolean(a.uniqueItems()));
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		skipIfEmpty(HttpPartSchema.toBoolean(a.skipIfEmpty()));
+		skipIfEmpty(a.skipIfEmpty());
 		parser(a.parser());
 		serializer(a.serializer());
 		return this;
@@ -165,15 +165,15 @@ public class HttpPartSchemaBuilder {
 		collectionFormat(a.collectionFormat());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
-		maxItems(HttpPartSchema.toLong(a.maxItems()));
-		minItems(HttpPartSchema.toLong(a.minItems()));
-		uniqueItems(HttpPartSchema.toBoolean(a.uniqueItems()));
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		allowEmptyValue(false);
@@ -192,26 +192,26 @@ public class HttpPartSchemaBuilder {
 		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
-		required(HttpPartSchema.toBoolean(a.required()));
+		required(a.required());
 		type(a.type());
 		format(a.format());
-		allowEmptyValue(HttpPartSchema.toBoolean(a.allowEmptyValue()));
+		allowEmptyValue(a.allowEmptyValue());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
-		maxItems(HttpPartSchema.toLong(a.maxItems()));
-		minItems(HttpPartSchema.toLong(a.minItems()));
-		uniqueItems(HttpPartSchema.toBoolean(a.uniqueItems()));
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		skipIfEmpty(HttpPartSchema.toBoolean(a.skipIfEmpty()));
+		skipIfEmpty(a.skipIfEmpty());
 		parser(a.parser());
 		serializer(a.serializer());
 		return this;
@@ -221,26 +221,26 @@ public class HttpPartSchemaBuilder {
 		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
-		required(HttpPartSchema.toBoolean(a.required()));
+		required(a.required());
 		type(a.type());
 		format(a.format());
-		allowEmptyValue(HttpPartSchema.toBoolean(a.allowEmptyValue()));
+		allowEmptyValue(a.allowEmptyValue());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
-		maxItems(HttpPartSchema.toLong(a.maxItems()));
-		minItems(HttpPartSchema.toLong(a.minItems()));
-		uniqueItems(HttpPartSchema.toBoolean(a.uniqueItems()));
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		skipIfEmpty(HttpPartSchema.toBoolean(a.skipIfEmpty()));
+		skipIfEmpty(a.skipIfEmpty());
 		parser(a.parser());
 		serializer(a.serializer());
 		return this;
@@ -253,14 +253,14 @@ public class HttpPartSchemaBuilder {
 		type(a.type());
 		format(a.format());
 		items(a.items());
-		allowEmptyValue(HttpPartSchema.toBoolean(a.allowEmptyValue()));
+		allowEmptyValue(a.allowEmptyValue());
 		collectionFormat(a.collectionFormat());
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
@@ -288,15 +288,15 @@ public class HttpPartSchemaBuilder {
 		collectionFormat(a.collectionFormat());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
-		maxItems(HttpPartSchema.toLong(a.maxItems()));
-		minItems(HttpPartSchema.toLong(a.minItems()));
-		uniqueItems(HttpPartSchema.toBoolean(a.uniqueItems()));
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		return this;
@@ -310,15 +310,15 @@ public class HttpPartSchemaBuilder {
 		collectionFormat(a.collectionFormat());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
-		maxItems(HttpPartSchema.toLong(a.maxItems()));
-		minItems(HttpPartSchema.toLong(a.minItems()));
-		uniqueItems(HttpPartSchema.toBoolean(a.uniqueItems()));
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		return this;
@@ -330,19 +330,19 @@ public class HttpPartSchemaBuilder {
 		items(a.items());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
-		exclusiveMaximum(HttpPartSchema.toBoolean(a.exclusiveMaximum()));
+		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
-		exclusiveMinimum(HttpPartSchema.toBoolean(a.exclusiveMinimum()));
-		maxLength(HttpPartSchema.toLong(a.maxLength()));
-		minLength(HttpPartSchema.toLong(a.minLength()));
+		exclusiveMinimum(a.exclusiveMinimum());
+		maxLength(a.maxLength());
+		minLength(a.minLength());
 		pattern(a.pattern());
-		maxItems(HttpPartSchema.toLong(a.maxItems()));
-		minItems(HttpPartSchema.toLong(a.minItems()));
-		uniqueItems(HttpPartSchema.toBoolean(a.uniqueItems()));
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
-		maxProperties(HttpPartSchema.toLong(a.maxProperties()));
-		minProperties(HttpPartSchema.toLong(a.minProperties()));
+		maxProperties(a.maxProperties());
+		minProperties(a.minProperties());
 		properties(HttpPartSchema.toObjectMap(a.properties()));
 		additionalProperties(HttpPartSchema.toObjectMap(a.additionalProperties()));
 		return this;
@@ -475,8 +475,26 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder required(Boolean value) {
-		if (value != null)
-			required = value;
+		required = resolve(value, required);
+		return this;
+	}
+
+	/**
+	 * <mk>required</mk> field.
+	 *
+	 * <p>
+	 * Determines whether the parameter is mandatory.
+	 *
+	 * <p>
+	 * Same as {@Link #required(Boolean)} but takes in a boolean value as a string.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder required(String value) {
+		required = resolve(value, required);
 		return this;
 	}
 
@@ -659,8 +677,23 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder allowEmptyValue(Boolean value) {
-		if (value != null)
-			allowEmptyValue = value;
+		allowEmptyValue = resolve(value, allowEmptyValue);
+		return this;
+	}
+
+	/**
+	 * <mk>allowEmptyValue</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #allowEmptyValue(Boolean)} but takes in a string boolean value.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder allowEmptyValue(String value) {
+		allowEmptyValue = resolve(value, allowEmptyValue);
 		return this;
 	}
 
@@ -861,8 +894,23 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder exclusiveMaximum(Boolean value) {
-		if (value != null)
-			this.exclusiveMaximum = value;
+		exclusiveMaximum = resolve(value, exclusiveMaximum);
+		return this;
+	}
+
+	/**
+	 * <mk>exclusiveMaximum</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #exclusiveMaximum(Boolean)} but takes in a string boolean value.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder exclusiveMaximum(String value) {
+		exclusiveMaximum = resolve(value, exclusiveMaximum);
 		return this;
 	}
 
@@ -932,8 +980,23 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder exclusiveMinimum(Boolean value) {
-		if (value != null)
-			this.exclusiveMinimum = value;
+		exclusiveMinimum = resolve(value, exclusiveMinimum);
+		return this;
+	}
+
+	/**
+	 * <mk>exclusiveMinimum</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #exclusiveMinimum(Boolean)} but takes in a string boolean value.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder exclusiveMinimum(String value) {
+		exclusiveMinimum = resolve(value, exclusiveMinimum);
 		return this;
 	}
 
@@ -970,12 +1033,27 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * 	<br>Ignored if value is <jk>null</jk> or <code>-1</code>.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder maxLength(Long value) {
-		if (value != null)
-			this.maxLength = value;
+		maxLength = resolve(value, maxLength);
+		return this;
+	}
+
+	/**
+	 * <mk>maxLength</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #maxLength(Long)} but takes in a string number.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxLength(String value) {
+		maxLength = resolve(value, maxLength);
 		return this;
 	}
 
@@ -1000,12 +1078,27 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * 	<br>Ignored if value is <jk>null</jk> or <code>-1</code>.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder minLength(Long value) {
-		if (value != null)
-			this.minLength = value;
+		minLength = resolve(value, minLength);
+		return this;
+	}
+
+	/**
+	 * <mk>minLength</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #minLength(Long)} but takes in a string number.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder minLength(String value) {
+		minLength = resolve(value, minLength);
 		return this;
 	}
 
@@ -1062,12 +1155,27 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * 	<br>Ignored if value is <jk>null</jk> or <code>-1</code>.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder maxItems(Long value) {
-		if (value != null)
-			this.maxItems = value;
+		maxItems = resolve(value, maxItems);
+		return this;
+	}
+
+	/**
+	 * <mk>maxItems</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #maxItems(Long)} but takes in a string number.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxItems(String value) {
+		maxItems = resolve(value, maxItems);
 		return this;
 	}
 
@@ -1091,12 +1199,27 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * 	<br>Ignored if value is <jk>null</jk> or <code>-1<code>.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder minItems(Long value) {
-		if (value != null)
-			this.minItems = value;
+		minItems = resolve(value, minItems);
+		return this;
+	}
+
+	/**
+	 * <mk>minItems</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #minItems(Long)} but takes in a string number.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder minItems(String value) {
+		minItems = resolve(value, minItems);
 		return this;
 	}
 
@@ -1128,8 +1251,23 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder uniqueItems(Boolean value) {
-		if (value != null)
-			this.uniqueItems = value;
+		uniqueItems = resolve(value, uniqueItems);
+		return this;
+	}
+
+	/**
+	 * <mk>uniqueItems</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #uniqueItems(Boolean)} but takes in a string boolean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty..
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder uniqueItems(String value) {
+		uniqueItems = resolve(value, uniqueItems);
 		return this;
 	}
 
@@ -1146,7 +1284,10 @@ public class HttpPartSchemaBuilder {
 	}
 
 	/**
-	 * Identifies whether an item should be skipped if it's empty.
+	 * <mk>skipIfEmpty</mk> field.
+	 *
+	 * <p>
+	 * Identifies whether an item should be skipped during serialization if it's empty.
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -1154,8 +1295,23 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder skipIfEmpty(Boolean value) {
-		if (value != null)
-			this.skipIfEmpty = value;
+		skipIfEmpty = resolve(value, skipIfEmpty);
+		return this;
+	}
+
+	/**
+	 * <mk>skipIfEmpty</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #skipIfEmpty(Boolean)} but takes in a string boolean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder skipIfEmpty(String value) {
+		skipIfEmpty = resolve(value, skipIfEmpty);
 		return this;
 	}
 
@@ -1252,12 +1408,27 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk>.
+	 * 	<br>Ignored if value is <jk>null</jk> or <code>-1</code>.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder maxProperties(Long value) {
-		if (value != null && value != -1)
-			this.maxProperties = value;
+		maxProperties = resolve(value, maxProperties);
+		return this;
+	}
+
+	/**
+	 * <mk>mapProperties</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #maxProperties(Long)} but takes in a string number.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder maxProperties(String value) {
+		maxProperties = resolve(value, maxProperties);
 		return this;
 	}
 
@@ -1276,8 +1447,23 @@ public class HttpPartSchemaBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder minProperties(Long value) {
-		if (value != null && value != -1)
-			this.minProperties = value;
+		minProperties = resolve(value, minProperties);
+		return this;
+	}
+
+	/**
+	 * <mk>minProperties</mk> field.
+	 *
+	 * <p>
+	 * Same as {@link #minProperties(Long)} but takes in a string boolean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public HttpPartSchemaBuilder minProperties(String value) {
+		minProperties = resolve(value, minProperties);
 		return this;
 	}
 
@@ -1389,5 +1575,21 @@ public class HttpPartSchemaBuilder {
 	 */
 	public HttpPartSchemaBuilder noValidate() {
 		return noValidate(true);
+	}
+
+	private Boolean resolve(String newValue, Boolean oldValue) {
+		return isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
+	}
+
+	private Boolean resolve(Boolean newValue, Boolean oldValue) {
+		return newValue == null ? oldValue : newValue;
+	}
+
+	private Long resolve(String newValue, Long oldValue) {
+		return isEmpty(newValue) ? oldValue : Long.parseLong(newValue);
+	}
+
+	private Long resolve(Long newValue, Long oldValue) {
+		return (newValue == null || newValue == -1) ? oldValue : newValue;
 	}
 }

@@ -324,7 +324,7 @@ public @interface Schema {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	int maxProperties() default -1;
+	long maxProperties() default -1;
 
 
 	/**
@@ -340,7 +340,7 @@ public @interface Schema {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
-	int minProperties() default -1;
+	long minProperties() default -1;
 
 	/**
 	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.

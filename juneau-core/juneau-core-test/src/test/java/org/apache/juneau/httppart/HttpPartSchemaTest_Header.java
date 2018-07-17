@@ -90,11 +90,11 @@ public class HttpPartSchemaTest_Header {
 		assertEquals(2, s.getMinLength().longValue());
 		assertEquals(3, s.getMaxItems().longValue());
 		assertEquals(4, s.getMinItems().longValue());
-		assertTrue(s.getExclusiveMaximum());
-		assertTrue(s.getExclusiveMinimum());
-		assertTrue(s.getUniqueItems());
-		assertTrue(s.getRequired());
-		assertTrue(s.getSkipIfEmpty());
+		assertTrue(s.isExclusiveMaximum());
+		assertTrue(s.isExclusiveMinimum());
+		assertTrue(s.isUniqueItems());
+		assertTrue(s.isRequired());
+		assertTrue(s.isSkipIfEmpty());
 		assertObjectEquals("['e1','e2','e3']", s.getEnum());
 		assertEquals("c1\nc2", s.getDefault());
 		assertObjectEquals("{collectionFormat:'csv','default':'c1\\nc2',description:'b1\\nb2','enum':['e1','e2','e3'],example:'f1',exclusiveMaximum:true,exclusiveMinimum:true,format:'int32',items:{'$ref':'d1'},maximum:'1',maxItems:3,maxLength:1,minimum:'2',minItems:4,minLength:2,multipleOf:'3',pattern:'4',required:true,type:'number',uniqueItems:true,_value:'{g1:true}'}", s.getApi());
@@ -147,11 +147,11 @@ public class HttpPartSchemaTest_Header {
 		assertEquals(2, s.getMinLength().longValue());
 		assertEquals(3, s.getMaxItems().longValue());
 		assertEquals(4, s.getMinItems().longValue());
-		assertTrue(s.getExclusiveMaximum());
-		assertTrue(s.getExclusiveMinimum());
-		assertTrue(s.getUniqueItems());
-		assertTrue(s.getRequired());
-		assertTrue(s.getSkipIfEmpty());
+		assertTrue(s.isExclusiveMaximum());
+		assertTrue(s.isExclusiveMinimum());
+		assertTrue(s.isUniqueItems());
+		assertTrue(s.isRequired());
+		assertTrue(s.isSkipIfEmpty());
 		assertObjectEquals("['e1','e2','e3']", s.getEnum());
 		assertEquals("c1\nc2", s.getDefault());
 		assertObjectEquals("{collectionFormat:'csv','default':'c1\\nc2',description:'b1\\nb2','enum':['e1','e2','e3'],example:'f1',exclusiveMaximum:true,exclusiveMinimum:true,format:'int32',items:{'$ref':'d1'},maximum:'1',maxItems:3,maxLength:1,minimum:'2',minItems:4,minLength:2,multipleOf:'3',pattern:'4',required:true,type:'number',uniqueItems:true,_value:'{g1:true}'}", s.getApi());
@@ -204,11 +204,11 @@ public class HttpPartSchemaTest_Header {
 		assertEquals(6, s.getMinLength().longValue());
 		assertEquals(7, s.getMaxItems().longValue());
 		assertEquals(8, s.getMinItems().longValue());
-		assertNull(s.getExclusiveMaximum());
-		assertNull(s.getExclusiveMinimum());
-		assertNull(s.getUniqueItems());
-		assertNull(s.getRequired());
-		assertNull(s.getSkipIfEmpty());
+		assertFalse(s.isExclusiveMaximum());
+		assertFalse(s.isExclusiveMinimum());
+		assertFalse(s.isUniqueItems());
+		assertFalse(s.isRequired());
+		assertFalse(s.isSkipIfEmpty());
 		assertObjectEquals("['e4','e5','e6']", s.getEnum());
 		assertEquals("c3\nc4", s.getDefault());
 		assertObjectEquals("{collectionFormat:'ssv','default':'c3\\nc4',description:'b3\\nb3','enum':['e4','e5','e6'],example:'f2',format:'int64',items:{'$ref':'d2'},maximum:'5',maxItems:7,maxLength:5,minimum:'6',minItems:8,minLength:6,multipleOf:'7',pattern:'8',type:'integer',_value:'{g2:true}'}", s.getApi());
@@ -308,9 +308,9 @@ public class HttpPartSchemaTest_Header {
 		assertEquals(2, items.getMinLength().longValue());
 		assertEquals(3, items.getMaxItems().longValue());
 		assertEquals(4, items.getMinItems().longValue());
-		assertTrue(items.getExclusiveMaximum());
-		assertTrue(items.getExclusiveMinimum());
-		assertTrue(items.getUniqueItems());
+		assertTrue(items.isExclusiveMaximum());
+		assertTrue(items.isExclusiveMinimum());
+		assertTrue(items.isUniqueItems());
 		assertObjectEquals("['e1','e2']", items.getEnum());
 		assertEquals("c1\nc2", items.getDefault());
 
@@ -326,9 +326,9 @@ public class HttpPartSchemaTest_Header {
 		assertEquals(6, items.getMinLength().longValue());
 		assertEquals(7, items.getMaxItems().longValue());
 		assertEquals(8, items.getMinItems().longValue());
-		assertNull(items.getExclusiveMaximum());
-		assertNull(items.getExclusiveMinimum());
-		assertNull(items.getUniqueItems());
+		assertFalse(items.isExclusiveMaximum());
+		assertFalse(items.isExclusiveMinimum());
+		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e3','e4']", items.getEnum());
 		assertEquals("c3\nc4", items.getDefault());
 
@@ -344,9 +344,9 @@ public class HttpPartSchemaTest_Header {
 		assertEquals(10, items.getMinLength().longValue());
 		assertEquals(11, items.getMaxItems().longValue());
 		assertEquals(12, items.getMinItems().longValue());
-		assertTrue(items.getExclusiveMaximum());
-		assertTrue(items.getExclusiveMinimum());
-		assertTrue(items.getUniqueItems());
+		assertTrue(items.isExclusiveMaximum());
+		assertTrue(items.isExclusiveMinimum());
+		assertTrue(items.isUniqueItems());
 		assertObjectEquals("['e5','e6']", items.getEnum());
 		assertEquals("c5\nc6", items.getDefault());
 
@@ -362,9 +362,9 @@ public class HttpPartSchemaTest_Header {
 		assertEquals(14, items.getMinLength().longValue());
 		assertEquals(15, items.getMaxItems().longValue());
 		assertEquals(16, items.getMinItems().longValue());
-		assertFalse(items.getExclusiveMaximum());
-		assertFalse(items.getExclusiveMinimum());
-		assertFalse(items.getUniqueItems());
+		assertFalse(items.isExclusiveMaximum());
+		assertFalse(items.isExclusiveMinimum());
+		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e7','e8']", items.getEnum());
 		assertEquals("c7\nc8", items.getDefault());
 

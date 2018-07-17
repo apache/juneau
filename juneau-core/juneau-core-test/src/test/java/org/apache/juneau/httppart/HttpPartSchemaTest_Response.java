@@ -183,9 +183,9 @@ public class HttpPartSchemaTest_Response {
 		assertEquals(4, s.getMinItems().longValue());
 		assertEquals(5, s.getMaxProperties().longValue());
 		assertEquals(6, s.getMinProperties().longValue());
-		assertTrue(s.getExclusiveMaximum());
-		assertTrue(s.getExclusiveMinimum());
-		assertTrue(s.getUniqueItems());
+		assertTrue(s.isExclusiveMaximum());
+		assertTrue(s.isExclusiveMinimum());
+		assertTrue(s.isUniqueItems());
 		assertObjectEquals("['e1','e2']", s.getEnum());
 		assertEquals("c1\nc2", s.getDefault());
 
@@ -201,9 +201,9 @@ public class HttpPartSchemaTest_Response {
 		assertEquals(6, items.getMinLength().longValue());
 		assertEquals(7, items.getMaxItems().longValue());
 		assertEquals(8, items.getMinItems().longValue());
-		assertNull(items.getExclusiveMaximum());
-		assertNull(items.getExclusiveMinimum());
-		assertNull(items.getUniqueItems());
+		assertFalse(items.isExclusiveMaximum());
+		assertFalse(items.isExclusiveMinimum());
+		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e3','e4']", items.getEnum());
 		assertEquals("c3\nc4", items.getDefault());
 
@@ -219,9 +219,9 @@ public class HttpPartSchemaTest_Response {
 		assertEquals(10, items.getMinLength().longValue());
 		assertEquals(11, items.getMaxItems().longValue());
 		assertEquals(12, items.getMinItems().longValue());
-		assertTrue(items.getExclusiveMaximum());
-		assertTrue(items.getExclusiveMinimum());
-		assertTrue(items.getUniqueItems());
+		assertTrue(items.isExclusiveMaximum());
+		assertTrue(items.isExclusiveMinimum());
+		assertTrue(items.isUniqueItems());
 		assertObjectEquals("['e5','e6']", items.getEnum());
 		assertEquals("c5\nc6", items.getDefault());
 
@@ -237,9 +237,9 @@ public class HttpPartSchemaTest_Response {
 		assertEquals(14, items.getMinLength().longValue());
 		assertEquals(15, items.getMaxItems().longValue());
 		assertEquals(16, items.getMinItems().longValue());
-		assertFalse(items.getExclusiveMaximum());
-		assertFalse(items.getExclusiveMinimum());
-		assertFalse(items.getUniqueItems());
+		assertFalse(items.isExclusiveMaximum());
+		assertFalse(items.isExclusiveMinimum());
+		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e7','e8']", items.getEnum());
 		assertEquals("c7\nc8", items.getDefault());
 

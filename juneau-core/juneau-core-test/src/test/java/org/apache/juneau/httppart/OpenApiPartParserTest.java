@@ -174,14 +174,14 @@ public class OpenApiPartParserTest {
 		}
 
 		try {
-			s = schema().minLength(-1l).build();
+			s = schema().minLength(-2l).build();
 			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("minLength cannot be less than zero."));
 		}
 
 		try {
-			s = schema().maxLength(-1l).build();
+			s = schema().maxLength(-2l).build();
 			fail();
 		} catch (Exception e) {
 			assertTrue(e.getMessage().contains("maxLength cannot be less than zero."));

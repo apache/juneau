@@ -50,7 +50,7 @@ public class HttpPartSchemaTest_Body {
 	@Test
 	public void a02_basic_onClass() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A02.class).noValidate().build();
-		assertTrue(s.getRequired());
+		assertTrue(s.isRequired());
 		assertObjectEquals("{description:'b1\\nb2',example:'f1',required:true,schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
 	}
 
@@ -71,7 +71,7 @@ public class HttpPartSchemaTest_Body {
 	@Test
 	public void a03_basic_onParameter() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A03.class.getMethod("a", String.class), 0).noValidate().build();
-		assertTrue(s.getRequired());
+		assertTrue(s.isRequired());
 		assertObjectEquals("{description:'b1\\nb2',example:'f1',required:true,schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
 	}
 
@@ -79,6 +79,7 @@ public class HttpPartSchemaTest_Body {
 		public void a(
 				@Body(
 					description={"b3","b3"},
+					required=true,
 					schema=@Schema($ref="c3"),
 					example="f2",
 					api="{g2:true}"
@@ -91,7 +92,7 @@ public class HttpPartSchemaTest_Body {
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A04.class.getMethod("a", A02.class), 0).noValidate().build();
-		assertTrue(s.getRequired());
+		assertTrue(s.isRequired());
 		assertObjectEquals("{description:'b3\\nb3',example:'f2',required:true,schema:{'$ref':'c3'},_value:'{g2:true}'}", s.getApi());
 	}
 
@@ -188,9 +189,9 @@ public class HttpPartSchemaTest_Body {
 		assertEquals(4, s.getMinItems().longValue());
 		assertEquals(5, s.getMaxProperties().longValue());
 		assertEquals(6, s.getMinProperties().longValue());
-		assertTrue(s.getExclusiveMaximum());
-		assertTrue(s.getExclusiveMinimum());
-		assertTrue(s.getUniqueItems());
+		assertTrue(s.isExclusiveMaximum());
+		assertTrue(s.isExclusiveMinimum());
+		assertTrue(s.isUniqueItems());
 		assertObjectEquals("['e1','e2']", s.getEnum());
 		assertEquals("c1\nc2", s.getDefault());
 
@@ -206,9 +207,9 @@ public class HttpPartSchemaTest_Body {
 		assertEquals(6, items.getMinLength().longValue());
 		assertEquals(7, items.getMaxItems().longValue());
 		assertEquals(8, items.getMinItems().longValue());
-		assertNull(items.getExclusiveMaximum());
-		assertNull(items.getExclusiveMinimum());
-		assertNull(items.getUniqueItems());
+		assertFalse(items.isExclusiveMaximum());
+		assertFalse(items.isExclusiveMinimum());
+		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e3','e4']", items.getEnum());
 		assertEquals("c3\nc4", items.getDefault());
 
@@ -224,9 +225,9 @@ public class HttpPartSchemaTest_Body {
 		assertEquals(10, items.getMinLength().longValue());
 		assertEquals(11, items.getMaxItems().longValue());
 		assertEquals(12, items.getMinItems().longValue());
-		assertTrue(items.getExclusiveMaximum());
-		assertTrue(items.getExclusiveMinimum());
-		assertTrue(items.getUniqueItems());
+		assertTrue(items.isExclusiveMaximum());
+		assertTrue(items.isExclusiveMinimum());
+		assertTrue(items.isUniqueItems());
 		assertObjectEquals("['e5','e6']", items.getEnum());
 		assertEquals("c5\nc6", items.getDefault());
 
@@ -242,9 +243,9 @@ public class HttpPartSchemaTest_Body {
 		assertEquals(14, items.getMinLength().longValue());
 		assertEquals(15, items.getMaxItems().longValue());
 		assertEquals(16, items.getMinItems().longValue());
-		assertFalse(items.getExclusiveMaximum());
-		assertFalse(items.getExclusiveMinimum());
-		assertFalse(items.getUniqueItems());
+		assertFalse(items.isExclusiveMaximum());
+		assertFalse(items.isExclusiveMinimum());
+		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e7','e8']", items.getEnum());
 		assertEquals("c7\nc8", items.getDefault());
 
