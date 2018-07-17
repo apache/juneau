@@ -17,19 +17,65 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.json.*;
+import org.apache.juneau.httppart.*;
 
 /**
- * Swagger schema annotation.
+ * Swagger items annotation.
  *
  * <p>
- * The Schema Object allows the definition of input and output data types.
- * These types can be objects, but also primitives and arrays.
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
- * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * A limited subset of JSON-Schema's items object.
+ *
+ * <p>
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiPartSerializer} and parsed through {@link OpenApiPartParser}.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Items have a specific set of enumerated string values</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		type=<js>"array"</js>,
+ * 		collectionFormat=<js>"csv"</js>,
+ * 		items=<ja>@Items</ja>(
+ * 			type=<js>"string"</js>,
+ * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
+ * 			_default=<js>"AVAILABLE"</js>
+ *		)
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Same but defined free-form</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		type=<js>"array"</js>,
+ * 		collectionFormat=<js>"csv"</js>,
+ * 		items=<ja>@Items</ja>({
+ * 			<js>"type:'string',"</js>,
+ * 			<js>"enum:'AVAILABLE,PENDING,SOLD',"</js>,
+ * 			<js>"default:'AVAILABLE'"</js>
+ *		})
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// An array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		type=<js>"array"</js>,
+ * 		collectionFormat=<js>"csv"</js>,
+ * 		items=<ja>@Items</ja>(
+ * 			type=<js>"array"</js>,
+ * 			items=<ja>@SubItems</ja>(
+ * 				type=<js>"integer"</js>,
+ * 				minimum=<js>"0"</js>,
+ * 				maximum=<js>"63"</js>
+ * 			)
+ *		)
+ * 	)
+ * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Swagger Specification &gt; Items Object</a>
  * </ul>
  */

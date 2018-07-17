@@ -475,6 +475,13 @@ public class BeanSession extends Session {
 					return (T)Character.valueOf(s.charAt(0));
 			}
 
+			if (to.isByteArray()) {
+				if (from.isInputStream())
+					return (T)IOUtils.readBytes((InputStream)value, 1024);
+				if (from.isReader())
+					return (T)IOUtils.read((Reader)value).getBytes();
+			}
+
 			// Handle setting of array properties
 			if (to.isArray()) {
 				if (from.isCollection())

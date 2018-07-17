@@ -18,6 +18,18 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
+ * REST has-query-parameter annotation.
+ *
+ * <p>
+ * Identifies whether or not an HTTP request has the specified query parameter.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * </ul>
+ *
+ * <p>
  * Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
  * URL-encoded form posts.
  *
@@ -47,7 +59,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Query">Overview &gt; juneau-rest-server &gt; @Query</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HasQuery">Overview &gt; juneau-rest-server &gt; @HasQuery</a>
  * </ul>
  */
 @Documented

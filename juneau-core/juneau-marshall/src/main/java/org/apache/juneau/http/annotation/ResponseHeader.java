@@ -18,11 +18,19 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
 /**
+ * REST response header annotation.
+ *
+ * <p>
  * Annotation that can be applied to parameters and types to denote them as an HTTP response headers.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * </ul>
  *
  * <p>
  * This annotation can only be applied to subclasses of type {@link Value}.
@@ -62,6 +70,8 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.ResponseHeader">Overview &gt; juneau-rest-server &gt; @ResponseHeader</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Swagger Specification &gt; Header Object</a>
  * </ul>
 */

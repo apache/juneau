@@ -833,8 +833,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	}
 
 	private ObjectMap toMap(VarResolverSession vs, Tag a, String location, Object...locationArgs) throws ParseException {
-		ObjectMap om = newMap(vs, new ObjectMap(), a.api(), location, locationArgs);
-		om.appendSkipEmpty("name", vs.resolve(firstNonEmpty(a.name(), a.value())));
+		ObjectMap om = newMap(vs, new ObjectMap(), a.value(), location, locationArgs);
+		om.appendSkipEmpty("name", vs.resolve(a.name()));
 		om.appendSkipEmpty("description", vs.resolve(joinnl(a.description())));
 		om.appendSkipNull("externalDocs", merge(om.getObjectMap("externalDocs"), toMap(vs, a.externalDocs(), location, locationArgs)));
 		return om.isEmpty() ? null : om;

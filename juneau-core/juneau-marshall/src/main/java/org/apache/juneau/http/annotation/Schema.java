@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.json.*;
+import org.apache.juneau.httppart.*;
 
 /**
  * Swagger schema annotation.
@@ -28,8 +28,49 @@ import org.apache.juneau.json.*;
  * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
  * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
  *
+ * <p>
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiPartSerializer} and parsed through {@link OpenApiPartParser}.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// A response object thats a hex-encoded string</jc>
+ * 	<ja>@Response</ja>(
+ * 		schema=<ja>@Schema</ja>(
+ * 			type=<js>"string"</js>,
+ * 			format=<js>"binary"</js>
+ * 		)
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Free-form</jc>
+ * 	<ja>@Response</ja>(
+ * 		schema=<ja>@Schema</ja>({
+ * 			<js>"type:'string',"</js>,
+ * 			<js>"format:'binary'"</js>
+ * 		})
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// A request body consisting of an array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
+</jc>
+ * 	<ja>@Body</ja>(
+ * 		schema=<ja>@Schema</ja>(
+ * 			items=<ja>@Items</ja>(
+ * 				type=<js>"array"</js>,
+ * 				items=<ja>@SubItems</ja>(
+ * 					type=<js>"integer"</js>,
+ * 					minimum=<js>"0"</js>,
+ * 					maximum=<js>"63"</js>
+ * 				)
+ *			)
+ * 		)
+ * 	)
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Swagger Specification &gt; Schema Object</a>
  * </ul>
  */

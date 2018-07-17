@@ -17,19 +17,19 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.json.*;
-
 /**
- * Swagger schema annotation.
+ * Swagger items annotation.
  *
  * <p>
- * The Schema Object allows the definition of input and output data types.
- * These types can be objects, but also primitives and arrays.
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
- * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * This class is essentially identical to {@link Items} except it's used for defining items of items.
+ *
+ * <p>
+ * Since annotations cannot be nested, we're forced to create a separate annotation for it.
+ * <br>If you want to nest items further, you have to define them free-form using {@link #items()} as free-form JSON.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Swagger Specification &gt; Items Object</a>
  * </ul>
  */

@@ -17,13 +17,14 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.json.*;
-
 /**
  * Swagger contact annotation.
  *
  * <p>
  * The contact information for the exposed API.
+ *
+ * <p>
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
@@ -54,6 +55,7 @@ import org.apache.juneau.json.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Swagger Specification &gt; Contact Object</a>
  * </ul>
  */

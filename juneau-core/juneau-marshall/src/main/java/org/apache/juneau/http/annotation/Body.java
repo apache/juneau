@@ -34,8 +34,8 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Java method arguments of client-side REST interface proxies.
- * 	<li>Java method arguments of server-side REST Java methods and/or their class types.
+ * 	<li>Java method arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated REST interface proxies.
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
  * </ul>
  *
  * <h5 class='topic'>Server-side REST</h5>
@@ -43,24 +43,15 @@ import org.apache.juneau.serializer.*;
  * <p>
  * On server-side REST, this annotation can be applied to method parameters or parameter classes to identify them as the body of an HTTP request.
  *
- * <p>
- * This annotation can be applied to the following:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Parameters on a <ja>@RestMethod</ja>-annotated method.
- * 	<li>
- * 		POJO classes used as parameters on a <ja>@RestMethod</ja>-annotated method.
- * </ul>
- *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Used on parameter</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>,path=<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on class</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>,path=<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(Pet pet) {...}
  *
  * 	<ja>@Body</ja>
@@ -70,34 +61,84 @@ import org.apache.juneau.serializer.*;
  * <p>
  * This is functionally equivalent to the following code...
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>,path=<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(RestRequest req) {
  * 		Pet pet = req.getBody().asType(Pet.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
+ * <p>
+ * Any of the following types can be used for the parameter or POJO class (matched in the specified order):
+ * <ol class='spaced-list'>
  * 	<li>
- * 		Swagger values are coalesced from multiple sources in the following order of precedence:
- * 		<ol>
- * 			<li><ja>@Body</ja> annotation on parameter.
- * 			<li><ja>@Body</ja> annotation on parameter class.
- * 			<li><ja>@Body</ja> annotation on parent classes and interfaces.
- * 			<li><ja>@MethodSwagger(value)</ja> annotation.
- * 			<li>Localized resource bundle property <js>"[method-name].produces"</js>.
- * 			<li><ja>@ResourceSwagger(value)</ja> annotation.
- * 			<li>Localized classpath resource file <js>"[enclosing-class].[simple-class-name]_[locale].json"</js> (if it's an inner or member class).
- * 			<li>Default classpath resource file <js>"[enclosing-class].[simple-class-name].json"</js> (if it's an inner or member class).
- * 			<li>Localized classpath resource file <js>"[simple-class-name]_[locale].json"</js>.
- * 			<li>Default classpath resource file <js>"[simple-class-name].json"</js>.
- * 		</ol>
- * </ul>
+ * 		{@link Reader}
+ * 		<br><ja>@Body</ja> annotation is optional.
+ * 		<br><code>Content-Type</code> is ignored.
+ * 	<li>
+ * 		{@link InputStream}
+ * 		<br><ja>@Body</ja> annotation is optional.
+ * 		<br><code>Content-Type</code> is ignored.
+ * 	<li>
+ * 		Any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
+ * 		<br><code>Content-Type</code> is required to identify correct parser.
+ * 	<li>
+ * 		Objects convertible from {@link Reader} by having one of the following non-deprecated methods:
+ * 		<ul>
+ * 			<li><code><jk>public</jk> T(Reader in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
+ * 		</ul>
+ * 		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+ * 	<li>
+ * 		Objects convertible from {@link InputStream} by having one of the following non-deprecated methods:
+ * 		<ul>
+ * 			<li><code><jk>public</jk> T(InputStream in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
+ * 			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
+ * 		</ul>
+ * 		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+ * 	<li>
+ * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
+ * 		<br>
+ * 		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+ * </ol>
+ *
+ * <p>
+ * Also used to populate the auto-generated Swagger documentation.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>,path=<js>"/pets"</js>)
+ * 	<jk>public void</jk> addPet(Pet pet) {...}
+ *
+ * 	<ja>@Body</ja>(
+ * 		description=<js>"Pet object to add to the store"</js>,
+ * 		required=<jk>true</jk>,
+ * 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+ * 	)
+ * 	<jk>public class</jk> Pet {...}
+ * </p>
+ *
+ * <p>
+ * Swagger documentation values are coalesced from multiple sources in the following order of precedence:
+ * <ol>
+ * 	<li><ja>@Body</ja> annotation on parameter.
+ * 	<li><ja>@Body</ja> annotation on parameter class.
+ * 	<li><ja>@Body</ja> annotation on parent classes and interfaces.
+ * 	<li><ja>@MethodSwagger(value)</ja> annotation.
+ * 	<li>Localized resource bundle property <js>"[method-name].produces"</js>.
+ * 	<li><ja>@ResourceSwagger(value)</ja> annotation.
+ * 	<li>Localized classpath resource file <js>"[enclosing-class].[simple-class-name]_[locale].json"</js> (if it's an inner or member class).
+ * 	<li>Default classpath resource file <js>"[enclosing-class].[simple-class-name].json"</js> (if it's an inner or member class).
+ * 	<li>Localized classpath resource file <js>"[simple-class-name]_[locale].json"</js>.
+ * 	<li>Default classpath resource file <js>"[simple-class-name].json"</js>.
+ * </ol>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Body">Overview &gt; juneau-rest-server &gt; @Body</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  *
@@ -105,31 +146,28 @@ import org.apache.juneau.serializer.*;
  *
  * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
  *
- * <h5 class='section'>Example:</h5>
+ * <h5 class='section'>Examples:</h5>
  * <p class='bcode'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
- * 	<jk>public interface</jk> MyProxy {
+ * 	<jc>// Used on parameter</jc>
+ * 	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
+ * 	<jk>public interface</jk> PetStore {
  *
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
- * 		String myProxyMethod(<ja>@Body</ja> MyPojo pojo);
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+ * 		String addPet(<ja>@Body</ja> Pet pet);
  * 	}
  * </p>
+ * <p class='bcode'>
+ * 	<jc>// Used on class</jc>
+ * 	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
+ * 	<jk>public interface</jk> PetStore {
  *
- * <p>
- * The argument can be any of the following types:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Any serializable POJO - Converted to text using the {@link Serializer} registered with the
- * 		<code>RestClient</code>.
- * 	<li>
- * 		{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
- * 	<li>
- * 		{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
- * 	<li>
- * 		<code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
- * 	<li>
- * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
- * </ul>
+ * 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+ * 		String addPet(Pet pet);
+ * 	}
+ *
+ * 	<ja>@Body</ja>
+ * 	<jk>public class</jk> Pet {...}
+ * </p>
  *
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
@@ -150,9 +188,54 @@ import org.apache.juneau.serializer.*;
  * 	}
  * </p>
  *
+ * <p>
+ * The argument can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Any serializable POJO - Converted to text using the {@link Serializer} registered with the
+ * 		<code>RestClient</code>.
+ * 	<li>
+ * 		{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+ * 	<li>
+ * 		{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+ * 	<li>
+ * 		<code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+ * 	<li>
+ * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
+ * </ul>
+ *
+ * <p>
+ * OpenAPI schema based serialization can be used by specifying a value for the {@link #serializer()} annotation.
+ *
+ * <p class='bcode'>
+ * 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+ * 	String addCommaDelimitedPipeDelimitedInts(
+ * 		<ja>@Body</ja>(
+ * 			serializer=OpenApiPartSerializer.<jk>class</jk>,
+ * 			schema=<ja>@Schema</ja>(
+ * 				type=<js>"array"</js>,
+ * 				collectionFormat=<js>"pipes"</js>,
+ * 				items=<ja>@Items</ja>(
+ * 					type=<js>"array"</js>
+ * 					items=<ja>@SubItems</ja>(
+ * 						type=<js>"int32"</js>,
+ * 					 	<jc>// Auto-validates on client side!</jc>
+ * 						minimum=<js>"0"</js>,
+ * 						maximum=<js>"64"</js>
+ * 					)
+ * 				)
+ * 			)
+ * 		)
+ * 		<jk>int</jk>[][] input
+ * 	);
+ * </p>
+ *
+ * <p>
+ * When using OpenAPI serialization, the argument can be any data type specified in {@link OpenApiPartSerializer}.
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Body'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; Body</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Body'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; Body</a>
  * </ul>
  */
 @Documented

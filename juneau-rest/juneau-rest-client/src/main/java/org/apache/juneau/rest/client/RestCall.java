@@ -551,12 +551,12 @@ public final class RestCall extends BeanSession implements Closeable {
 	public RestCall body(Object input, HttpPartSerializer partSerializer, HttpPartSchema schema) throws RestCallException {
 		try {
 			if (partSerializer != null)
-				body(partSerializer.serialize(HttpPartType.BODY, schema, input));
+				body(new StringEntity(partSerializer.serialize(HttpPartType.BODY, schema, input)));
 			else
 				body(input);
 		} catch (SchemaValidationException e) {
 			throw new RestCallException(e, "Validation error on request body.");
-		} catch (SerializeException e) {
+		} catch (Exception e) {
 			throw new RestCallException(e, "Serialization error on request body.");
 		}
 		return this;

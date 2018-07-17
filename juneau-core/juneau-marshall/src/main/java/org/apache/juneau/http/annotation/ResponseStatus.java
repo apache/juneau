@@ -16,11 +16,19 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
 /**
+ * REST response status annotation.
+ *
+ * <p>
  * Annotation that can be applied to parameters and types to denote them as an HTTP response status on server-side REST method parameters.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * </ul>
  *
  * <p>
  * This can only be applied to parameters and subclasses of the {@link Value} class with an {@link Integer} type.
@@ -95,6 +103,8 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.ResponseStatus">Overview &gt; juneau-rest-server &gt; @ResponseStatus</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Swagger Specification &gt; Response Object</a>
  * </ul>
  */

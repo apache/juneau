@@ -13,13 +13,18 @@
 package org.apache.juneau.httppart;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.transform.*;
 
 /**
  * OpenAPI part parser.
+ *
+ * <p>
+ * TODO
  *
  * <table class='styled'>
  * 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
@@ -37,7 +42,14 @@ import org.apache.juneau.parser.*;
  * 				<li>{@link Reader} - Returns a {@link InputStreamReader} wrapped around a {@link ByteArrayInputStream}.
  * 				<li>{@link String} - Constructed using {@link String#String(byte[])}.
  * 				<li>{@link Object} - Returns the default <code><jk>byte</jk>[]</code>.
- * 				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors, static create methods, or toX() instance methods).
+ * 				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> via the following methods:
+ * 					<ul>
+ * 						<li><code><jk>public</jk> T(<jk>byte</jk>[] in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>create</jsm>(<jk>byte</jk>[] in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromBytes</jsm>(<jk>byte</jk>[] in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromFoo</jsm>(<jk>byte</jk>[] in) {...}</code> (any method name starting with "from")
+ * 					</ul>
+ * 				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> via a {@link PojoSwap}:
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -54,7 +66,14 @@ import org.apache.juneau.parser.*;
  * 				<li>{@link GregorianCalendar}
  * 				<li>{@link String} - Converted using {@link Calendar#toString()}.
  * 				<li>{@link Object} - Returns the default {@link Calendar}.
- * 				<li>Any POJO transformable from a {@link Calendar} (via constructors, static create methods, or toX() instance methods).
+ * 				<li>Any POJO transformable from a {@link Calendar} via the following methods.
+ * 					<ul>
+ * 						<li><code><jk>public</jk> T(Calendar in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>create</jsm>(Calendar in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromCalendar</jsm>(Calendar in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromFoo</jsm>(Calendar in) {...}</code> (any method name starting with "from")
+ * 					</ul>
+ * 				<li>Any POJO transformable from a {@link Calendar} via a {@link PojoSwap}:
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -63,7 +82,7 @@ import org.apache.juneau.parser.*;
  * 		<td><code>uon</code></td>
  * 		<td>
  * 			<ul>
- * 				<li>Any <a href='../../../../overview-summary#juneau-marshall.PojoCategories'>parsable POJO</a>.
+ * 				<li>Any <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -74,7 +93,19 @@ import org.apache.juneau.parser.*;
  * 			<ul>
  * 				<li>{@link String} (default)
  * 				<li>{@link Object} - Returns the default {@link String}.
- * 				<li>Any POJO transformable from a {@link String} (via constructors, static create methods, or toX() instance methods).
+ * 				<li>Any POJO transformable from a {@link String} via the following methods:
+ * 					<ul>
+ * 						<li><code><jk>public</jk> T(String in) {...}</code> (e.g. {@link java.lang.Integer}, {@link java.lang.Boolean})
+ * 						<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromValue</jsm>(String in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>valueOf</jsm>(String in) {...}</code> (e.g. enums)
+ * 						<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code> (e.g. {@link java.util.logging.Level})
+ * 						<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code> (e.g. {@link java.lang.Class}, {@link Charset})
+ * 						<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
+ * 					</ul>
+ * 				<li>Any POJO transformable from a {@link String} via a {@link PojoSwap}:
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -89,7 +120,14 @@ import org.apache.juneau.parser.*;
  * 				<li><jk>boolean</code>
  * 				<li>{@link String}
  * 				<li>{@link Object} - Returns the default {@link Boolean}.
- * 				<li>Any POJO transformable from a {@link Boolean} (via constructors, static create methods, or toX() instance methods).
+ * 				<li>Any POJO transformable from a {@link Boolean} via the following methods:
+ * 					<ul>
+ * 						<li><code><jk>public</jk> T(Boolean in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>create</jsm>(Boolean in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromBoolean</jsm>(Boolean in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromFoo</jsm>(Boolean in) {...}</code> (any method name starting with "from")
+ * 					</ul>
+ * 				<li>Any POJO transformable from a {@link Boolean} via a {@link PojoSwap}:
  * 			</ul>
  * 		</td>
  * 	</tr>
@@ -100,8 +138,15 @@ import org.apache.juneau.parser.*;
  * 		</td>
  * 		<td>
  * 			<ul>
- * 				<li>Arrays or Collections of anything on this list.
+ * 				<li>Arrays or Collections of any defaults on this list.
  * 				<li>Any POJO transformable from arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
+ * 					<br>For example:
+ * 					<ul>
+ * 						<li><code><jk>public</jk> T(Boolean[][] in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>create</jsm>(Boolean[][] in) {...}</code>
+ * 						<li><code><jk>public static</jk> T <jsm>fromFoo</jsm>(Boolean[][] in) {...}</code> (any method name starting with "from")
+ * 					</ul>
+ * 				<li>Any POJO transformable from arrays of the default types via a {@link PojoSwap}:
  * 			</ul>
  * 		</td>
  * 	</tr>

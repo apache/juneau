@@ -17,19 +17,42 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.json.*;
-
 /**
- * Swagger schema annotation.
+ * Swagger license annotation.
  *
  * <p>
- * The Schema Object allows the definition of input and output data types.
- * These types can be objects, but also primitives and arrays.
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
- * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * License information for the exposed API.
+ *
+ * <p>
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Normal</jc>
+ * 	<ja>@RestResource</ja>(
+ * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 			license=<ja>@License</ja>(
+ * 				name=<js>"Apache 2.0"</js>,
+ * 				url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
+ * 			)
+ * 		)
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Free-form</jc>
+ * 	<ja>@RestResource</ja>(
+ * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 			license=<ja>@License</ja>({
+ * 				<js>"name:'Apache 2.0',"</js>,
+ * 				<js>"url:'http://www.apache.org/licenses/LICENSE-2.0.html'"</js>
+ * 			})
+ * 		)
+ * 	)
+ * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#licenseObject">Swagger Specification &gt; License Object</a>
  * </ul>
  */

@@ -64,7 +64,7 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Swap Class Type {@code <S>}</h5>
  *
  * <p>
- * The swapped object representation of an object must be an object type that the serializers can natively convert to
+ * For normal serialization, the swapped object representation of an object must be an object type that the serializers can natively convert to
  * JSON (or language-specific equivalent).
  * <br>The list of valid transformed types are as follows...
  * <ul>
@@ -83,6 +83,9 @@ import org.apache.juneau.serializer.*;
  * 	<li>
  * 		An array of anything on this list.
  * </ul>
+ *
+ * <p>
+ * For OpenAPI serialization, the valid swapped types also include <code><jk>byte</jk>[]</code> and <code>Calendar</code>.
  *
  * <h5 class='topic'>Normal Class Type {@code <T>}</h5>
  *

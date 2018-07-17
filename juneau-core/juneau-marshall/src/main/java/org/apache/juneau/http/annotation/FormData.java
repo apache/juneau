@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.remoteable.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -33,8 +32,8 @@ import org.apache.juneau.urlencoding.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Java method arguments of client-side REST interface proxies.
- * 	<li>Java method arguments of server-side REST Java methods and/or their class types.
+ * 	<li>Java method arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated REST interface proxies.
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
  * </ul>
  *
  * <h5 class='topic'>Server-side REST</h5>
@@ -76,6 +75,7 @@ import org.apache.juneau.urlencoding.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.FormData">Overview &gt; juneau-rest-server &gt; @FormData</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  *

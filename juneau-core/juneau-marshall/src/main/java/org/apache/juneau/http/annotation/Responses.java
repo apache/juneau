@@ -18,11 +18,19 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
+ * REST responses annotation.
+ *
  * Used to associate multiple {@link Response @Response} annotations to the same parameter or class.
  *
  * <p>
  * Since Juneau currently prereq's Java 1.7, we cannot take advantage of annotation duplication support in Java 8.
  * <br>This annotation overcomes that limitation.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Responses">Overview &gt; juneau-rest-server &gt; @Responses</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
+ * </ul>
  */
 @Documented
 @Target({PARAMETER,TYPE})

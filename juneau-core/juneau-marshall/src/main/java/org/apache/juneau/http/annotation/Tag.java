@@ -17,19 +17,47 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.json.*;
-
 /**
- * Swagger schema annotation.
+ * Swagger tag annotation.
  *
  * <p>
- * The Schema Object allows the definition of input and output data types.
- * These types can be objects, but also primitives and arrays.
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
- * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * Allows adding meta data to a single tag that is used by the <a class='doclink' href='https://swagger.io/specification/v2/#operationObject'>Operation Object</a>.
+ * It is not mandatory to have a Tag Object per tag used there.
+ *
+ * <p>
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// A response object thats a hex-encoded string</jc>
+ * 	<ja>@RestResource</ja>(
+ * 		swagger={
+ * 			tags={
+ * 				<ja>@Tag</ja>(
+ * 					name=<js>"utility"</js>,
+ * 					description=<js>"Utility methods"</js>
+ * 				)
+ * 			}
+ * 		}
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Free-form</jc>
+ * 	<ja>@RestResource</ja>(
+ * 		swagger={
+ * 			tags={
+ * 				<ja>@Tag</ja>({
+ * 					<js>"name:'utility',"</js>,
+ * 					<js>"description:'Utility methods'"</js>
+ * 				})
+ * 			}
+ * 		}
+ * 	)
+ * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Swagger Specification &gt; Tag Object</a>
  * </ul>
  */
@@ -49,35 +77,6 @@ public @interface Tag {
 	 * </ul>
 	 */
 	String name() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining a simple tag:
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
-	 * 			tags={
-	 * 				<ja>@Tag</ja>(name=<js>"store"</js>)
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@RestResource</ja>(
-	 * 		swagger=<ja>@ResourceSwagger</ja>(
-	 * 			tags={
-	 * 				<ja>@Tag</ja>(<js>"store"</js>)
-	 * 			}
-	 * 		)
-	 * 	)
-	 * </p>
-	 */
-	String value() default "";
 
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
@@ -195,5 +194,5 @@ public @interface Tag {
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
 	 */
-	String[] api() default {};
+	String[] value() default {};
 }

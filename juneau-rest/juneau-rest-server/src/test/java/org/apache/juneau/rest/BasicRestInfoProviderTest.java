@@ -392,7 +392,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(
 		swagger=@ResourceSwagger(
 			value="{tags:[{name:'a-name',description:'a-description',externalDocs:{description:'a-description',url:'a-url'}}]}",
-			tags=@Tag(name="b-name",api=" { description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")
+			tags=@Tag(name="b-name",value=" { description:'b-description', externalDocs: { description:'b-description', url:'b-url' } } ")
 		)
 	)
 	public static class C04 {}
@@ -432,7 +432,7 @@ public class BasicRestInfoProviderTest {
 		swagger=@ResourceSwagger(
 			tags={
 				@Tag(name="s-name",description="b-description",externalDocs=@ExternalDocs(description="b-description",url="b-url")),
-				@Tag(name="s-name",api="{description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}")
+				@Tag(name="s-name",value="{description:'c-description',externalDocs:{description:'c-description',url:'c-url'}}")
 			}
 		)
 	)

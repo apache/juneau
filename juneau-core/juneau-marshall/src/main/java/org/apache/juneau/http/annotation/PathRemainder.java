@@ -18,8 +18,16 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as the URL
- * parameter remainder after a path pattern match.
+ * REST request path remainder annotation.
+ *
+ * <p>
+ * Identifies a parameter as the URL path remainder after a path pattern match.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -41,7 +49,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.MethodParameters">Overview &gt; juneau-rest-server &gt; Method Parameters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PathRemainder">Overview &gt; juneau-rest-server &gt; @PathRemainder</a>
  * </ul>
  */
 @Documented

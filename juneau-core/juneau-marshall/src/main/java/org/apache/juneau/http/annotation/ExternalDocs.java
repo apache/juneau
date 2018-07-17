@@ -12,13 +12,42 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import org.apache.juneau.json.*;
-
 /**
- * TODO
+ * Swagger external documentation annotation.
+ *
+ * <p>
+ * Allows referencing an external resource for extended documentation.
+ *
+ * <p>
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Normal</jc>
+ * 	<ja>@RestResource</ja>(
+ * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 			externalDocs=<ja>@ExternalDocs</ja>(
+ * 				description=<js>"Apache Juneau"</js>,
+ * 				url=<js>"http://juneau.apache.org"</js>
+ * 			)
+ * 		)
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Free-form</jc>
+ * 	<ja>@RestResource</ja>(
+ * 		swagger=<ja>@ResourceSwagger</ja>(
+ * 			contact=<ja>@ExternalDocs</ja>({
+ * 				<js>"description:'Apache Juneau',"</js>,
+ * 				<js>"url:'http://juneau.apache.org'"</js>,
+ * 			})
+ * 		)
+ * 	)
+ * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">Swagger Specification &gt; External Documentation Object</a>
  * </ul>
  */

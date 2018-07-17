@@ -18,8 +18,15 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja> annotated method to identify whether or not
- * the request has the specified multipart form POST parameter.
+ * REST has-form-data annotation.
+ *
+ * Identifies whether or not an HTTP request has the specified multipart form POST parameter.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * </ul>
  *
  * <p>
  * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
@@ -84,7 +91,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.FormData">Overview &gt; juneau-rest-server &gt; @FormData</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HasFormData">Overview &gt; juneau-rest-server &gt; @HasFormData</a>
  * </ul>
  */
 @Documented
