@@ -251,6 +251,16 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		try {
+			if ("*".equals(name) && cm.isMapOrBean()) {
+				ObjectMap m = new ObjectMap();
+				for (Map.Entry<String,String> e : this.entrySet()) {
+					String k = e.getKey();
+					HttpPartSchema pschema = schema == null ? null : schema.getProperty(k);
+					ClassMeta<?> cm2 = cm.getValueType();
+					m.put(k, getInner(parser, pschema, k, null, cm2));
+				}
+				return req.getBeanSession().convertToType(m, cm);
+			}
 			T t = parse(parser, schema, get(name), cm);
 			return (t == null ? def : t);
 		} catch (SchemaValidationException e) {

@@ -175,8 +175,39 @@ import org.apache.juneau.urlencoding.*;
 public @interface Header {
 
 	/**
-	 * The HTTP header name.
+	 * Skips this value if it's an empty string or empty collection/array.
 	 *
+	 * <p>
+	 * Note that <jk>null</jk> values are already ignored.
+	 */
+	boolean skipIfEmpty() default false;
+
+	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 *
+	 * <p>
+	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
+	 * then on the client which by default is {@link UrlEncodingSerializer}.
+	 *
+	 * <p>
+	 * This annotation is provided to allow values to be custom serialized.
+	 */
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 *
+	 * <p>
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OpenApiPartParser}.
+	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+
+	//=================================================================================================================
+	// Attributes common to all Swagger Parameter objects
+	//=================================================================================================================
+
+	/**
+	 * HTTP header name.
 	 * <p>
 	 * A blank value (the default) indicates to reuse the bean property name when used on a request bean property.
 	 *
@@ -226,51 +257,6 @@ public @interface Header {
 	 * 		</p>
 	 * 	</li>
 	 * </ul>
-	 */
-//	String name() default "";
-
-	/**
-	 * A synonym for {@link #name()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the name.
-	 */
-//	String value() default "";
-
-	/**
-	 * Skips this value if it's an empty string or empty collection/array.
-	 *
-	 * <p>
-	 * Note that <jk>null</jk> values are already ignored.
-	 */
-	boolean skipIfEmpty() default false;
-
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
-	 * <p>
-	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
-	 * then on the client which by default is {@link UrlEncodingSerializer}.
-	 *
-	 * <p>
-	 * This annotation is provided to allow values to be custom serialized.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
-	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
-	 *
-	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OpenApiPartParser}.
-	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
-	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
-
-	//=================================================================================================================
-	// Attributes common to all Swagger Parameter objects
-	//=================================================================================================================
-
-	/**
-	 * HTTP header name.
 	 */
 	String name() default "";
 
