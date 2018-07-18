@@ -820,18 +820,6 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class PathRemainderObject extends RestMethodParam {
-
-		protected PathRemainderObject(Method method, Type type) {
-			super(OTHER, method, null, type);
-		}
-
-		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return ClassUtils.fromString(getTypeClass(), req.getPathMatch().getRemainder());
-		}
-	}
-
 	static final class RestRequestPropertiesObject extends RestMethodParam {
 
 		protected RestRequestPropertiesObject() {

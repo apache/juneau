@@ -620,7 +620,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>
 	 * 		The {@link RequestPathMatch} object can also be passed as a parameter on the method.
 	 * 	<li>
-	 * 		The {@link Path @Path} and {@link PathRemainder @PathRemainder} annotations can be used to access individual values.
+	 * 		The {@link Path @Path} annotation can be used to access individual values.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

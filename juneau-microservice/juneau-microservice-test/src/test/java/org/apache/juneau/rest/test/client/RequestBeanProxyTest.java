@@ -1048,7 +1048,7 @@ public class RequestBeanProxyTest {
 		public NameValuePairs getA() {
 			return new NameValuePairs().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
 		}
-		@Path("*")
+		@Path("/*")
 		public NameValuePairs getB() {
 			return new NameValuePairs().append("b1","true").append("b2", "123").append("b3", "null");
 		}
@@ -1056,7 +1056,7 @@ public class RequestBeanProxyTest {
 		public NameValuePairs getC() {
 			return new NameValuePairs().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
 		}
-		@Path("*")
+		@Path("/*")
 		public NameValuePairs getD() {
 			return null;
 		}

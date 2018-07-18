@@ -52,7 +52,7 @@ public class PathsTest {
 	@RestResource
 	public static class A {
 		@RestMethod(name=GET)
-		public ObjectMap get(RestRequest req, @PathRemainder String r) {
+		public ObjectMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
 	}
@@ -200,7 +200,7 @@ public class PathsTest {
 
 	public static class B {
 		@RestMethod(name=GET, path="/subpath/*")
-		public ObjectMap get(RestRequest req, @PathRemainder String r) {
+		public ObjectMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
 	}
@@ -352,7 +352,7 @@ public class PathsTest {
 	@RestResource(path="/a")
 	public static class C01 {
 		@RestMethod(name=GET)
-		public ObjectMap get(RestRequest req, @PathRemainder String r) {
+		public ObjectMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
 	}
@@ -504,7 +504,7 @@ public class PathsTest {
 	@RestResource(path="/a")
 	public static class D01 {
 		@RestMethod(name=GET, path="/subpath/*")
-		public ObjectMap get(RestRequest req, @PathRemainder String r) {
+		public ObjectMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}
 	}

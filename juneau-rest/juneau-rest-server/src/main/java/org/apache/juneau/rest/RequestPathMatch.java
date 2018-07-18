@@ -38,7 +38,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 
 	private final RestRequest req;
 	private HttpPartParser parser;
-	private String remainder, pattern;
+	private String pattern;
 
 	RequestPathMatch(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
@@ -51,7 +51,8 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	}
 
 	RequestPathMatch remainder(String remainder) {
-		this.remainder = remainder;
+		put("/**", remainder);
+		put("/*", urlDecode(remainder));
 		return this;
 	}
 
@@ -317,19 +318,25 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * 	}
 	 * </p>
 	 *
+	 * <p>
+	 * The remainder can also be retrieved by calling <code>get(<js>"/*"</js>)</code>.
+	 *
 	 * @return The path remainder string.
 	 */
 	public String getRemainder() {
-		return urlDecode(remainder);
+		return get("/*");
 	}
 
 	/**
 	 * Same as {@link #getRemainder()} but doesn't decode characters.
 	 *
+	 * <p>
+	 * The undecoded remainder can also be retrieved by calling <code>get(<js>"/**"</js>)</code>.
+	 *
 	 * @return The un-decoded path remainder.
 	 */
 	public String getRemainderUndecoded() {
-		return remainder;
+		return get("/**");
 	}
 
 	/**

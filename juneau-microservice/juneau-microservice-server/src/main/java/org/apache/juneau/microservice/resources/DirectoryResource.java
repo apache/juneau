@@ -126,7 +126,7 @@ public class DirectoryResource extends BasicRestServlet {
 			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 		)
 	)
-	public FileResource getFile(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
+	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
 		File dir = getFile(path);
 		req.setAttribute("fullPath", dir.getAbsolutePath());
@@ -140,7 +140,7 @@ public class DirectoryResource extends BasicRestServlet {
 		summary="View contents of file",
 		description="View the contents of a file.\nContent-Type is set to 'text/plain'."
 	)
-	public FileContents viewFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
+	public FileContents viewFile(RestResponse res, @Path("/*") String path) throws NotFound, MethodNotAllowed {
 		if (! allowViews)
 			throw new MethodNotAllowed("VIEW not enabled");
 
@@ -158,7 +158,7 @@ public class DirectoryResource extends BasicRestServlet {
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
 	)
-	public FileContents downloadFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
+	public FileContents downloadFile(RestResponse res, @Path("/*") String path) throws NotFound, MethodNotAllowed {
 		if (! allowViews)
 			throw new MethodNotAllowed("DOWNLOAD not enabled");
 
@@ -176,7 +176,7 @@ public class DirectoryResource extends BasicRestServlet {
 		summary="Delete file",
 		description="Delete a file on the file system."
 	)
-	public RedirectToRoot deleteFile(@PathRemainder String path) throws MethodNotAllowed {
+	public RedirectToRoot deleteFile(@Path("/*") String path) throws MethodNotAllowed {
 		deleteFile(getFile(path));
 		return new RedirectToRoot();
 	}
@@ -189,7 +189,7 @@ public class DirectoryResource extends BasicRestServlet {
 	)
 	public RedirectToRoot updateFile(
 		@Body(schema=@Schema(type="string",format="binary")) InputStream is,
-		@PathRemainder String path
+		@Path("/*") String path
 	) throws InternalServerError {
 
 		if (! allowUploads)

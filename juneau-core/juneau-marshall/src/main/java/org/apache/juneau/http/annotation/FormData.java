@@ -62,6 +62,13 @@ import org.apache.juneau.urlencoding.*;
  * 	}
  * </p>
  *
+ * <p>
+ * Any of the following types can be used for the parameter or POJO class:
+ * <ol class='spaced-list'>
+ * 	<li>
+ * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
+ * </ol>
+ *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
  *
  * This annotation should not be combined with the {@link Body @Body} annotation or <code>RestRequest.getBody()</code> method

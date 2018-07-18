@@ -118,7 +118,7 @@ public class LogsResource extends BasicRestServlet {
 			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 		)
 	)
-	public FileResource getFile(RestRequest req, @PathRemainder String path) throws NotFound, Exception {
+	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
 		File dir = getFile(path);
 		req.setAttribute("fullPath", dir.getAbsolutePath());
@@ -134,7 +134,7 @@ public class LogsResource extends BasicRestServlet {
 	)
 	public void viewFile(
 			RestResponse res,
-			@PathRemainder String path,
+			@Path("/*") String path,
 			@Query(name="highlight", description="Add severity color highlighting.", example="true") boolean highlight,
 			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start,
 			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end,
@@ -203,7 +203,7 @@ public class LogsResource extends BasicRestServlet {
 	)
 	public LogParser viewParsedEntries(
 			RestRequest req,
-			@PathRemainder String path,
+			@Path("/*") String path,
 			@Query(name="start", description="Start timestamp (ISO8601, full or partial).\nDon't print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-23T11:25:47") String start,
 			@Query(name="end", description="End timestamp (ISO8601, full or partial).\nDon't print lines logged after the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS", example="2014-01-24") String end,
 			@Query(name="thread", description="Thread name filter.\nOnly show log entries with the specified thread name.", example="thread-pool-33-thread-1") String thread,
@@ -225,7 +225,7 @@ public class LogsResource extends BasicRestServlet {
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
 	)
-	public FileContents downloadFile(RestResponse res, @PathRemainder String path) throws NotFound, MethodNotAllowed {
+	public FileContents downloadFile(RestResponse res, @Path("/*") String path) throws NotFound, MethodNotAllowed {
 		res.setContentType("application/octet-stream");
 		try {
 			return new FileContents(getFile(path));
@@ -240,7 +240,7 @@ public class LogsResource extends BasicRestServlet {
 		summary="Delete log file",
 		description="Delete a log file on the file system."
 	)
-	public RedirectToRoot deleteFile(@PathRemainder String path) throws MethodNotAllowed {
+	public RedirectToRoot deleteFile(@Path("/*") String path) throws MethodNotAllowed {
 		deleteFile(getFile(path));
 		return new RedirectToRoot();
 	}

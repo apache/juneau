@@ -266,6 +266,11 @@ public class HttpPartSchemaBuilder {
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		parser(a.parser());
 		serializer(a.serializer());
+
+		// Path remainder always allows empty value.
+		if (startsWith(name, '/'))
+			allowEmptyValue();
+
 		return this;
 	}
 

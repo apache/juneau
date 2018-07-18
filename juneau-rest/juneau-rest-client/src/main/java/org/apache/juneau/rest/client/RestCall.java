@@ -449,10 +449,15 @@ public final class RestCall extends BeanSession implements Closeable {
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
 			String var = "{" + name + "}";
-			if (path.indexOf(var) == -1)
+			if (path.indexOf(var) == -1 && ! name.equals("/*"))
 				throw new RestCallException("Path variable {"+name+"} was not found in path.");
 			try {
-				uriBuilder.setPath(path.replace(var, serializer.createSession(null).serialize(HttpPartType.PATH, schema, value)));
+				String p = null;
+				if (name.equals("/*"))
+					p = path.replaceAll("\\/\\*$", serializer.createSession(null).serialize(HttpPartType.PATH, schema, value));
+				else
+					p = path.replace(var, serializer.createSession(null).serialize(HttpPartType.PATH, schema, value));
+				uriBuilder.setPath(p);
 			} catch (SchemaValidationException e) {
 				throw new RestCallException(e, "Validation error on request path parameter ''{0}''=''{1}''", name, value);
 			} catch (SerializeException e) {

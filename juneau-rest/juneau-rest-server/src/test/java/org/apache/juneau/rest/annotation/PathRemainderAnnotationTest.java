@@ -33,7 +33,7 @@ public class PathRemainderAnnotationTest {
 	@RestResource
 	public static class A  {
 		@RestMethod(name=GET, path="/*")
-		public String b(@PathRemainder String remainder) {
+		public String b(@Path("/*") String remainder) {
 			return remainder;
 		}
 	}

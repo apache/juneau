@@ -309,7 +309,6 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.HasQuery'>@HasQuery</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Header'>@Header</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Path'>@Path</a></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.PathRemainder'>@PathRemainder</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Response'>@Response</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Responses'>@Responses</a></p>
@@ -12053,7 +12052,7 @@
 		<ja>@Query</ja>(<js>"p2"</js>) String p2,
 		<ja>@Query</ja>(<js>"p3"</js>) UUID p3,
 		<ja>@HasQuery</ja>(<js>"p3"</js>) boolean hasP3,
-		<ja>@PathRemainder</ja> String remainder,
+		<ja>@Path</ja>(<js>"/*"</js>) String remainder,
 		<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang,
 		<ja>@Header</ja>(<js>"Accept"</js>) String accept,
 		<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack,
@@ -12400,7 +12399,7 @@
 				Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
 				<br>Any remainder after the match can be accessed through 
 				{@link org.apache.juneau.rest.RequestPathMatch#getRemainder()} or parameters with the 
-				{@link org.apache.juneau.http.annotation.PathRemainder @PathRemainder} annotation.
+				<code><ja>@Path</ja>(<js>"/*"</js>)</code> annotation.
 				<br>On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 				require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
 			</p>
@@ -12409,7 +12408,7 @@
 			</p>
 			<p class='bcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
-	<jk>public void</jk> doGet(<ja>@PathRemainder</ja> String remainder) {
+	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"/*"</js>) String remainder) {
 		<jc>// URL path pattern can have remainder accessible through req.getRemainder().</jc>
 	}
 
@@ -19477,7 +19476,7 @@
 				<ja>@Query</ja>(<js>"q1"</js>) <jk>int</jk> q1,                    <jc>// Query parameters.</jc>
 				<ja>@Query</ja>(<js>"q2"</js>) String q2,
 				<ja>@Query</ja>(<js>"q3"</js>) UUID q3,
-				<ja>@PathRemainder</ja> String remainder,        <jc>// Path remainder after pattern match.</jc>
+				<ja>@Path</ja>(<js>"/*"</js>) String remainder,        <jc>// Path remainder after pattern match.</jc>
 				<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, <jc>// Headers.</jc>
 				<ja>@Header</ja>(<js>"Accept"</js>) String accept,
 				<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack
@@ -19611,7 +19610,6 @@
 					<li class='ja'>{@link org.apache.juneau.http.annotation.Query @Query}
 					<li class='ja'>{@link org.apache.juneau.http.annotation.Header @Header}
 					<li class='ja'>{@link org.apache.juneau.rest.annotation.Method @Method}
-					<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder @PathRemainder}
 				</ul>
 				Method returns a POJO to be serialized as the output.
 			<li class='jm'>
@@ -20626,7 +20624,7 @@
 		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/people/{id}/*"</js>, 
 			guards=AdminGuard.<jk>class</jk> 
 		) 
-		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@PathRemainder</ja> 
+		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@Path</ja>(<js>"/*"</js>) 
 				String remainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Person p = findPerson(id); 
@@ -20648,7 +20646,7 @@
 			guards=AdminGuard.<jk>class</jk> 
 		) 
 		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, 
-				<ja>@PathRemainder</ja> String remainder) <jk>throws</jk> Exception { 
+				<ja>@Path</ja>(<js>"/*"</js>) String remainder) <jk>throws</jk> Exception { 
 			<jk>try</jk> { 
 				Address a = findAddress(id); 
 				PojoRest r = <jk>new</jk> PojoRest(a); 
@@ -22896,6 +22894,9 @@
 					<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 					<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 				</ul>
+			<li>
+				The <ja>@PathRemainder</ja> annotation has been removed entirely.  
+				<br>Use <code><ja>@Path</ja>(<js>"/*"</js>)</code> to access the path remainder which includes all the new OpenAPI parsing support.
 			<li>
 				"Helper" classes (i.e. reusable beans that can be returned by REST methods) have been moved to the following package with some new additions:
 				<ul class='doctree'>

@@ -66,7 +66,7 @@ public class PathAnnotationTest {
 			return "GET /a " + foo + "," + bar;
 		}
 		@RestMethod(name=GET, path="/a/{foo}/{bar}/*")
-		public String simplePathWithRemainder(@Path("foo") String foo, @Path("bar") int bar, @PathRemainder String remainder) {
+		public String simplePathWithRemainder(@Path("foo") String foo, @Path("bar") int bar, @Path("/*") String remainder) {
 			return "GET /a "+foo+","+bar+",r="+remainder;
 		}
 	}

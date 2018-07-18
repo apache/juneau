@@ -26,7 +26,7 @@ import org.apache.juneau.urlencoding.*;
   * REST request path annotation.
  *
  * <p>
- * Identifies a POJO to be used as a patn entry on an HTTP request.
+ * Identifies a POJO to be used as a path entry on an HTTP request.
  *
  * <p>
  * Can be used in the following locations:
@@ -48,6 +48,13 @@ import org.apache.juneau.urlencoding.*;
  * 		...
  * 	}
  * </p>
+ *
+ * <p>
+ * Any of the following types can be used for the parameter or POJO class:
+ * <ol class='spaced-list'>
+ * 	<li>
+ * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
+ * </ol>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -242,6 +249,10 @@ public @interface Path {
 
 	/**
 	 * URL path variable name.
+	 *
+	 * <p>
+	 * The path remainder after the path match can be referenced using the name <js>"/*"</js>.
+	 * <br>The non-URL-decoded path remainder after the path match can be referenced using the name <js>"/**"</js>.
 	 *
 	 * <p>
 	 * The name field MUST correspond to the associated <a href='https://swagger.io/specification/v2/#pathsPath'>path</a> segment from the path field in the <a href='https://swagger.io/specification/v2/#pathsObject'>Paths Object</a>.

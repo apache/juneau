@@ -68,6 +68,13 @@ import org.apache.juneau.urlencoding.*;
  * 	}
  * </p>
  *
+ * <p>
+ * Any of the following types can be used for the parameter or POJO class:
+ * <ol class='spaced-list'>
+ * 	<li>
+ * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
+ * </ol>
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Query">Overview &gt; juneau-rest-server &gt; @Query</a>

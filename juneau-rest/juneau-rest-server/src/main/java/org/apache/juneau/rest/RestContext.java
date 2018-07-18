@@ -4379,9 +4379,6 @@ public final class RestContext extends BeanContext {
 				s = HttpPartSchema.create(HasQuery.class, method, i);
 				rp[i] = new RestParamDefaults.HasQueryObject(method, s, t);
 
-			} else if (hasAnnotation(PathRemainder.class, method, i)) {
-				rp[i] = new RestParamDefaults.PathRemainderObject(method, t);
-
 			} else if (hasAnnotation(org.apache.juneau.rest.annotation.Method.class, method, i)) {
 				rp[i] = new RestParamDefaults.MethodObject(method, t);
 			}
