@@ -17,7 +17,7 @@ package org.apache.juneau.http;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Ranges: bytes
  * </p>
  *

@@ -78,7 +78,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * Swagger documentation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
 	 * 	<ja>@RestResource</ja>(
 	 * 			properties={
@@ -989,7 +989,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(summary=<js>"Summary of my method"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
@@ -1006,7 +1006,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#summary() @RestMethod.summary()} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.summary</ck> = <cv>Summary of my method.</cv>
 	 *
@@ -1045,7 +1045,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ja>@RestMethod</ja>(description=<js>"Description of my method"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
@@ -1062,7 +1062,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#description() @RestMethod.description()} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.myMethod.description</ck> = <cv>Description of my method.</cv>
 	 *
@@ -1101,7 +1101,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestResource#siteName() @RestResource.siteName()} annotation on this class, and then any parent classes.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(siteName=<js>"My Site"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
@@ -1118,7 +1118,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#siteName() @RestResource.siteName()} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.siteName</ck> = <cv>My Site</cv>
 	 *
@@ -1153,7 +1153,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestResource#title() @RestResource.siteName()} annotation on this class, and then any parent classes.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(title=<js>"My Resource"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
@@ -1170,7 +1170,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#title() @RestResource.title()} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.title</ck> = <cv>My Resource</cv>
 	 *
@@ -1209,7 +1209,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <ol class='spaced-list'>
 	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any parent classes.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
 	 * 	<ja>@RestResource</ja>(description=<js>"My Resource"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
@@ -1226,7 +1226,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 		</ol>
 	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#description() @RestResource.description()} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
 	 * 	<ck>MyClass.description</ck> = <cv>My Resource</cv>
 	 *

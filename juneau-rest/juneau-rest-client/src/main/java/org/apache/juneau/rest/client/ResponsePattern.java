@@ -25,7 +25,7 @@ import java.util.regex.*;
  *
  * This example shows how to use a response pattern finder to find and capture patterns for <js>"x=number"</js> and
  * <js>"y=string"</js> from a response body.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>final</jk> List&lt;Number&gt; xList = <jk>new</jk> ArrayList&lt;Number&gt;();
  * 	<jk>final</jk> List&lt;String&gt; yList = <jk>new</jk> ArrayList&lt;String&gt;();
  *

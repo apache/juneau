@@ -32,7 +32,7 @@ import org.apache.juneau.utils.*;
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	SchemaInfo x = <jsm>schemaInfo</jsm>()
  * 		.type("string")
@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"type"</js>: <js>"string"</js>,
@@ -841,12 +841,12 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li><code>Collection&lt;String&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -908,12 +908,12 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1007,7 +1007,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li>{@link Items}
 	 * 		<li><code>String</code> - JSON object representation of {@link Items}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1064,12 +1064,12 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	allOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	allOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1126,7 +1126,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li><code>Map&lt;String,Map&lt;String,Object&gt;&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Map&lt;String,Object&gt;&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	properties(<js>"{name:{foo:'bar'}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1275,7 +1275,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li>{@link Xml}
 	 * 		<li><code>String</code> - JSON object representation of {@link Xml}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	xml(<js>"{name:'name',namespace:'namespace',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1318,7 +1318,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 		<li>{@link ExternalDocumentation}
 	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * 			</p>
 	 * 	</ul>

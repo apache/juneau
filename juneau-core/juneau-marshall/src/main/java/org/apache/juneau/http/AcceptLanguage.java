@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
  * List of acceptable human languages for response.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Language: en-US
  * </p>
  *
@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  * preferred as a response to the request.
  * Language tags are defined in section 3.10.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Language = "Accept-Language" ":"
  * 	                  1#( language-range [ ";" "q" "=" qvalue ] )
  * 	language-range  = ( ( 1*8ALPHA *( "-" 1*8ALPHA ) ) | "*" )
@@ -44,7 +44,7 @@ import org.apache.juneau.internal.*;
  * for the languages specified by that range.
  * The quality value defaults to "q=1".
  * For example...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Language: da, en-gb;q=0.8, en;q=0.7
  * </p>
  * <p>

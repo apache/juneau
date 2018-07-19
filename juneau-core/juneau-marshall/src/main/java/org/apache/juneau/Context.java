@@ -29,7 +29,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Subclasses MUST implement the following constructor:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public</jk> T(PropertyStore);
  * </p>
  *

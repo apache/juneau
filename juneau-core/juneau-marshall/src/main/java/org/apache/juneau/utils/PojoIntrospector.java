@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
  * Used to invoke methods on {@code Objects} using arguments in serialized form.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	String s = <js>"foobar"</js>;
  * 	String s2 = (String)<jk>new</jk> PojoIntrospector(s)
  * 		.invoke(<js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>

@@ -22,7 +22,7 @@ import org.apache.http.message.*;
  *
  * <p>
  * Equivalent to the following code:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Header h = <jk>new</jk> Header(name, DateUtils.<jsm>formatDate</jsm>(value));
  * </p>
  */

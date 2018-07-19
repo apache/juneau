@@ -35,7 +35,7 @@ public @interface Html {
 	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> FileSpace {
 	 *
 	 * 		<ja>@Html</ja>(anchorText=<js>"drive/{drive}"</js>)
@@ -69,7 +69,7 @@ public @interface Html {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> FileSpace {
 	 *
 	 * 		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)

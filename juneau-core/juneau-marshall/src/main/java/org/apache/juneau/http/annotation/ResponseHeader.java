@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  * The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
  * on a response:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
  * 	<ja>@RestMethod</ja>(...)
  * 	<jk>public void</jk> login(RestResponse res) {

@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * A general warning about possible problems with the entity body.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Warning: 199 Miscellaneous warning
  * </p>
  *
@@ -32,7 +32,7 @@ package org.apache.juneau.http;
  *
  * <p>
  * Warning headers are sent with responses using:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Warning    = "Warning" ":" 1#warning-value
  * 	warning-value = warn-code SP warn-agent SP warn-text
  * 	                                      [SP warn-date]

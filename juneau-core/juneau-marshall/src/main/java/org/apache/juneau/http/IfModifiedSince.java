@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Allows a 304 Not Modified to be returned if content is unchanged.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *
@@ -29,13 +29,13 @@ package org.apache.juneau.http;
  * if the requested variant has not been modified since the time specified in this field, an entity will not be returned
  * from the server; instead, a 304 (not modified) response will be returned without any message-body.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	If-Modified-Since = "If-Modified-Since" ":" HTTP-date
  * </p>
  *
  * <p>
  * An example of the field is:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *

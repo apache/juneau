@@ -46,7 +46,7 @@ public @interface Json {
 	 * This annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@Json</ja>(wrapperAttr=<js>"myWrapper"</js>)
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public int</jk> f1 = 123;
@@ -55,7 +55,7 @@ public @interface Json {
 	 *
 	 * <p>
 	 * Without the <ja>@Json</ja> annotations, serializing this bean as JSON would have produced the following...
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	{
 	 * 		f1: 123
 	 * 	}
@@ -63,7 +63,7 @@ public @interface Json {
 	 *
 	 * <p>
 	 * With the annotations, serializing this bean as JSON produces the following...
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	{
 	 * 		myWrapper: {
 	 * 			f1: 123

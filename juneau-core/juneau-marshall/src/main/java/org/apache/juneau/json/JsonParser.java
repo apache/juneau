@@ -128,7 +128,7 @@ public class JsonParser extends ReaderParser {
 	 * the stream consists of only comments or whitespace.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()

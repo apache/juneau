@@ -92,7 +92,7 @@
 			<br>The following code shows a feed being created programmatically using the 
 			{@link org.apache.juneau.dto.atom.AtomBuilder} class.
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 		
 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
 	
@@ -132,7 +132,7 @@
 		</p>
 		
 		<h5 class='figure'>Example with no namespaces</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
 
@@ -141,7 +141,7 @@
 		</p>
 		
 		<h5 class='figure'>Results</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<xt>&lt;feed&gt;</xt>
 		<xt>&lt;id&gt;</xt>
 			tag:juneau.apache.org
@@ -189,7 +189,7 @@
 		</p>
 	
 		<h5 class='figure'>Example with namespaces</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Create a serializer with readable output with namespaces.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
 
@@ -198,7 +198,7 @@
 		</p>
 		
 		<h5 class='figure'>Results</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<xt>&lt;atom:feed</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>xmlns:atom</xa>=<xs>'http://www.w3.org/2005/Atom/'</xs> 
@@ -250,7 +250,7 @@
 		</p>
 
 		<h5 class='figure'>Example with namespaces with ATOM as the default namespace</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Create a serializer with readable output with namespaces.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().defaultNamespaceUri(<js>"atom"</js>).build();
 
@@ -259,7 +259,7 @@
 		</p>
 		
 		<h5 class='figure'>Results</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<xt>&lt;feed</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2005/Atom/'</xs> 
 			<xa>xmlns:xml</xa>=<xs>'http://www.w3.org/XML/1998/namespace'</xs> 
@@ -315,7 +315,7 @@
 			</p>
 
 			<h5 class='figure'>ATOM/JSON example</h5>
-			<p class='bcode'>
+			<p class='bcode w800'>
 	<jc>// Get JSON serializer with readable output.</jc>
 	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
@@ -324,7 +324,7 @@
 			</p>
 		
 			<h5 class='figure'>Results</h5>
-			<p class='bcode'>
+			<p class='bcode w800'>
 	{
 		id: {
 			text: <js>'tag:juneau.apache.org'</js>
@@ -414,7 +414,7 @@
 			</p>
 
 			<h5 class='figure'>ATOM/RDF/XML example</h5>
-			<p class='bcode'>
+			<p class='bcode w800'>
 	<jc>// Get RDF/XML serializer with readable output.</jc>
 	RdfSerializer s = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
@@ -428,7 +428,7 @@
 			</p>
 			
 			<h5 class='figure'>Results</h5>
-			<p class='bcode'>
+			<p class='bcode w800'>
 	<xt>&lt;rdf:RDF</xt>
 	    <xa>xmlns:rdf</xa>=<xs>'http://www.w3.org/1999/02/22-rdf-syntax-ns#'</xs>
 	    <xa>xmlns:j</xa>=<xs>'http://www.apache.org/juneau/'</xs>
@@ -549,7 +549,7 @@
 		<p>
 			Use the {@link org.apache.juneau.xml.XmlParser} to convert ATOM/XML feeds back into their original POJOs:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 			<jc>// Create a serializer with readable output with namespaces</jc>
 			XmlSerializer s = XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>;
 

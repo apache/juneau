@@ -21,7 +21,7 @@ package org.apache.juneau.http;
  * become standard usage and is considered correct terminology)
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Referer: http://en.wikipedia.org/wiki/Main_Page
  * </p>
  *
@@ -35,13 +35,13 @@ package org.apache.juneau.http;
  * The Referer field MUST NOT be sent if the Request-URI was obtained from a source that does not have its own URI,
  * such as input from the user keyboard.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Referer        = "Referer" ":" ( absoluteURI | relativeURI )
  * </p>
  *
  * <p>
  * Example:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Referer: http://www.w3.org/hypertext/DataSources/Overview.html
  * </p>
  *

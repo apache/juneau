@@ -99,7 +99,7 @@ import org.apache.juneau.xml.*;
  * objects.
  * When registered with this parser, you can construct {@code Calendar} objects from {@code Strings} using the
  * following syntax...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Calendar c = parser.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
  * </p>
  *
@@ -146,7 +146,7 @@ public abstract class Parser extends BeanContext {
 	 * after parsing is complete.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
@@ -188,7 +188,7 @@ public abstract class Parser extends BeanContext {
 	 * error location to be printed as part of the exception message.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
@@ -233,7 +233,7 @@ public abstract class Parser extends BeanContext {
 	 * Class used to listen for errors and warnings that occur during parsing.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our parser listener.</jc>
 	 * 	<jc>// Simply captures all unknown bean property events.</jc>
 	 * 	<jk>public class</jk> MyParserListener <jk>extends</jk> ParserListener {
@@ -325,7 +325,7 @@ public abstract class Parser extends BeanContext {
 	 * </table>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
@@ -371,7 +371,7 @@ public abstract class Parser extends BeanContext {
 	 * the POJO.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser with trim-strings enabled.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
@@ -418,7 +418,7 @@ public abstract class Parser extends BeanContext {
 	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
@@ -560,7 +560,7 @@ public abstract class Parser extends BeanContext {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
@@ -640,7 +640,7 @@ public abstract class Parser extends BeanContext {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>

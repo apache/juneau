@@ -327,7 +327,7 @@ public abstract class ParserSession extends BeanSession {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
@@ -409,7 +409,7 @@ public abstract class ParserSession extends BeanSession {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>

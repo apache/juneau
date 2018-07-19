@@ -730,7 +730,7 @@ public interface RdfCommon {
 	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	WriterSerializer s = RdfSerializer.<jsm>create</jsm>().xmlabbrev().looseCollections(<jk>true</jk>).build();
 	 * 	ReaderParser p = RdfParser.<jsm>create</jsm>().xml().looseCollections(<jk>true</jk>).build();
 	 *

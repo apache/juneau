@@ -90,7 +90,7 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Example:</h5>
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct a context from scratch.</jc>
  * 	BeanContext beanContext = BeanContext
  * 		.<jsm>create</jsm>()
@@ -115,7 +115,7 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>Example:</h5>
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// A sample bean class</jc>
  * 	<jk>public class</jk> Person {
  * 		<jk>public</jk> String getName();
@@ -174,7 +174,7 @@ public class BeanContext extends Context {
 	 * <br>Use this setting to reduce the visibility requirement.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that serializes protected classes.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -215,7 +215,7 @@ public class BeanContext extends Context {
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that looks for protected no-arg constructors.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -279,7 +279,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -347,7 +347,7 @@ public class BeanContext extends Context {
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that looks for protected fields.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -406,7 +406,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a bean filter for the MyBean class.</jc>
 	 * 	<jk>public class</jk> MyBeanFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 *
@@ -473,7 +473,7 @@ public class BeanContext extends Context {
 	 * Disabled by default because it introduces a slight performance penalty during serialization.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that creates BeanMaps with normal put() behavior.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -518,7 +518,7 @@ public class BeanContext extends Context {
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that looks for protected getters and setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -559,7 +559,7 @@ public class BeanContext extends Context {
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -600,7 +600,7 @@ public class BeanContext extends Context {
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -638,7 +638,7 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, they will be ignored.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -678,7 +678,7 @@ public class BeanContext extends Context {
 	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -718,7 +718,7 @@ public class BeanContext extends Context {
 	 * parser knows the data type to reconstruct.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses 'type' instead of '_type' for dictionary names.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -776,7 +776,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with debug enabled.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -822,7 +822,7 @@ public class BeanContext extends Context {
 	 * Setting applies to specified class and all subclasses.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -884,7 +884,7 @@ public class BeanContext extends Context {
 	 * Setting applies to specified class and all subclasses.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -942,7 +942,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that finds fluent setters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -980,7 +980,7 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1018,7 +1018,7 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1055,7 +1055,7 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1093,7 +1093,7 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that ignores missing bean properties.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1130,7 +1130,7 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1169,7 +1169,7 @@ public class BeanContext extends Context {
 	 * parse).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeanInterfaces.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1225,7 +1225,7 @@ public class BeanContext extends Context {
 	 * Setting applies to specified class and all subclasses.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that includes only the 'foo' and 'bar' properties on the MyBean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1268,7 +1268,7 @@ public class BeanContext extends Context {
 	 * Specifies the default locale for serializer and parser sessions.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses the specified locale if it's not passed in through session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1311,7 +1311,7 @@ public class BeanContext extends Context {
 	 * Specifies the default media type value for serializer and parser sessions.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses the specified media type if it's not passed in through session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1368,7 +1368,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that doesn't treat MyBean as a bean class.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1440,7 +1440,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that ignores beans in the specified packages.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1513,7 +1513,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
 	 * 	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
 	 * 		<jc>// ISO8601 formatter.</jc>
@@ -1615,7 +1615,7 @@ public class BeanContext extends Context {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names.</jc>
 	 * 	<jc>// (e.g. "foo-bar-url" instead of "fooBarURL")</jc>
 	 * 	WriterSerializer s = JsonSerializer
@@ -1667,7 +1667,7 @@ public class BeanContext extends Context {
 	 * in the Java file.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts bean properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1704,7 +1704,7 @@ public class BeanContext extends Context {
 	 * Specifies the default timezone for serializer and parser sessions.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses GMT if the timezone is not specified in the session args.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1746,7 +1746,7 @@ public class BeanContext extends Context {
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with debug enabled.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -1802,7 +1802,7 @@ public class BeanContext extends Context {
 	 * <br>Otherwise, throws a {@link BeanRuntimeException}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that doesn't try to make interface proxies.</jc>
 	 * 	ReaderParser p = JsonParser
 	 * 		.<jsm>create</jsm>()
@@ -1840,7 +1840,7 @@ public class BeanContext extends Context {
 	 * <br>Most {@link Bean @Bean} annotations will be ignored.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that only uses the built-in java bean introspector for finding properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()

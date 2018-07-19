@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// On a static method.</jc>
  * 	<jk>public class</jk> A {
  *

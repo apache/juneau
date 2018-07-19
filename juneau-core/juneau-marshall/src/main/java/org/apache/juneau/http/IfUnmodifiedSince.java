@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Only send the response if the entity has not been modified since a specific time.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *
@@ -33,13 +33,13 @@ package org.apache.juneau.http;
  * If the requested variant has been modified since the specified time, the server MUST NOT perform the requested
  * operation, and MUST return a 412 (Precondition Failed).
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	If-Unmodified-Since = "If-Unmodified-Since" ":" HTTP-date
  * </p>
  *
  * <p>
  * An example of the field is:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *

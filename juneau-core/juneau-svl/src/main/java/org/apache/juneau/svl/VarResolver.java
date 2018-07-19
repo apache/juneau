@@ -31,7 +31,7 @@ import org.apache.juneau.svl.vars.*;
  * The {@link Var} interface defines how variables are converted to values.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> SystemPropertiesVar <jk>extends</jk> SimpleVar {
  *
  * 		<jc>// Must have a no-arg constructor!</jc>

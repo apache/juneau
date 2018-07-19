@@ -45,7 +45,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  *
  * 	<jc>// Main method with arguments</jc>
  * 	<jk>public static void</jk> <jsm>main</jsm>(String[] args) {
@@ -91,7 +91,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Main arguments are available through numeric string keys (e.g. <js>"0"</js>, <js>"1"</js>, ...).
  * So you could use the {@link ObjectMap} API to convert main arguments directly to POJOs, such as an <code>Enum</code>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Get 1st main argument as an Enum</jc>
  * 	MyEnum e = a.get(MyEnum.<jk>class</jk>, <js>"0"</js>);
  *
@@ -154,7 +154,7 @@ public final class Args extends ObjectMap {
 	 *
 	 * <p>
 	 * Can be used in conjunction with {@link #hasArg(int)} to check for existence of arg.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Check for no arguments</jc>
 	 * 	<jk>if</jk> (! args.hasArg(0))
 	 * 		printUsageAndExit();
@@ -165,7 +165,7 @@ public final class Args extends ObjectMap {
 	 *
 	 * <p>
 	 * Since main arguments are stored as numeric keys, this method is essentially equivalent to...
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Check for no arguments</jc>
 	 * 	<jk>if</jk> (! args.containsKey(<js>"0"</js>))
 	 * 		printUsageAndExit();
@@ -216,7 +216,7 @@ public final class Args extends ObjectMap {
 	 * If the optional arg has multiple values, returns only the first converted value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Command:  java com.sample.MyClass -verbose true -debug 5</jc>
 	 * 	<jk>boolean</jk> b = args.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
 	 * 	<jk>int</jk> i = args.getArg(<jk>int</jk>.<jk>class</jk>, <js>"debug"</js>);
@@ -238,7 +238,7 @@ public final class Args extends ObjectMap {
 	 * Returns the optional argument values as a list of strings.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Command:  java com.sample.MyClass -extraArgs foo bar baz</jc>
 	 * 	List&lt;String&gt; l1 = args.getArgs(<js>"extraArgs"</js>); <jc>// ['foo','bar','baz']</jc>
 	 * 	List&lt;String&gt; l2 = args.getArgs(<js>"nonExistentArgs"</js>); <jc>// An empty list</jc>

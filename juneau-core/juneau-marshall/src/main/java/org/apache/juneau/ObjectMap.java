@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  * It also contains accessor methods for to avoid common typecasting when accessing elements in a list.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct an empty Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap();
  *
@@ -232,7 +232,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * In addition to providing the ability to chain maps, this method also provides the ability to wrap an existing map
 	 * inside another map so that you can add entries to the outer map without affecting the values on the inner map.
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m1 = <jk>new</jk> ObjectMap(<js>"{foo:1}"</js>);
 	 * 	ObjectMap m2 = <jk>new</jk> ObjectMap().setInner(m1);
 	 * 	m2.put(<js>"foo"</js>, 2);                      <jc>// Overwrite the entry</jc>
@@ -439,7 +439,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * This is the preferred get method for simple types.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
@@ -477,7 +477,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
@@ -634,7 +634,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
@@ -684,7 +684,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
@@ -713,7 +713,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
@@ -742,7 +742,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>

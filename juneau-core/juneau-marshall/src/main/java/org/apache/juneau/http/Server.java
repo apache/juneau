@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * A name for the server.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Server: Apache/2.4.1 (Unix)
  * </p>
  *
@@ -31,13 +31,13 @@ package org.apache.juneau.http;
  * sub-products.
  * The product tokens are listed in order of their significance for identifying the application.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Server         = "Server" ":" 1*( product | comment )
  * </p>
  *
  * <p>
  * Example:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Server: CERN/3.0 libwww/2.17
  * </p>
  *

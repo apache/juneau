@@ -40,7 +40,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Tabular POJO models can be thought of as tables of data.  For example, a list of the following beans...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public</jk> MyBean {
  * 		<jk>public int</jk> myInt;
  * 		<jk>public</jk> String myString;

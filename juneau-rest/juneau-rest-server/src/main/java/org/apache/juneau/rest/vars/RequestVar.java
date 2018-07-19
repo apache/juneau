@@ -43,7 +43,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	String resourceTitle = restRequest.resolveVars(<js>"$R{resourceTitle}"</js>);
  * 	String resourceTitleOrDescription = restRequest.resolveVars(<js>"$R{resourceTitle,resourceDescription}"</js>);
  * </p>

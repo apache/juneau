@@ -19,7 +19,7 @@ import java.util.*;
  *
  * <p>
  * Primarily used for testing purposes for quickly creating populated maps.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Example:</jc>
  * 	Map&lt;String,Integer&gt; m = <jk>new</jk> AMap&lt;String,Integer&gt;()
  * 		.append(<js>"foo"</js>,1).append(<js>"bar"</js>,2);

@@ -20,7 +20,7 @@ package org.apache.juneau.http;
  * than requesting a fresh one from the origin server.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Vary: *
  * 	Vary: Accept-Language
  * </p>
@@ -34,7 +34,7 @@ package org.apache.juneau.http;
  * A Vary field value of "*" implies that a cache cannot determine from the request headers of a subsequent request
  * whether this response is the appropriate representation.
  * See section 13.6 for use of the Vary header field by caches.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Vary  = "Vary" ":" ( "*" | 1#field-name )
  * </p>
  *

@@ -48,7 +48,7 @@ import org.apache.juneau.urlencoding.*;
  * <code>RestRequest.getBody()</code> method for <code>application/x-www-form-urlencoded POST</code> calls.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
  * 				<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, <ja>@Query</ja>(<js>"p2"</js>) String p2, <ja>@Query</ja>(<js>"p3"</js>) UUID p3) {
@@ -58,7 +58,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		<jk>int</jk> p1 = req.getQueryParameter(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
@@ -88,7 +88,7 @@ import org.apache.juneau.urlencoding.*;
  * request.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -130,7 +130,7 @@ import org.apache.juneau.urlencoding.*;
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -181,7 +181,7 @@ import org.apache.juneau.urlencoding.*;
  * The {@link #name()} and {@link #value()} elements are synonyms for specifying the parameter name.
  * Only one should be used.
  * <br>The following annotations are fully equivalent:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Query</ja>(name=<js>"foo"</js>)
  *
  * 	<ja>@Query</ja>(<js>"foo"</js>)
@@ -248,7 +248,7 @@ public @interface Query {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -271,7 +271,7 @@ public @interface Query {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jk>public interface</jk> MyRequestBean {
 	 *
 	 * 		<jc>// Equivalent to @Query("foo")</jc>

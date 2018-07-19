@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
  * used to add that information.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Xml x = <jsm>xml</jsm>()
  * 		.name(<js>"foo"</js>)
@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"foo"</js>,

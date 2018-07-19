@@ -26,7 +26,7 @@ import org.apache.juneau.utils.*;
  * in the Swagger-UI for convenience.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Info x = <jsm>info</jsm>(<js>"Swagger Sample App"</js>, <js>"1.0.1"</js>)
  * 		.description(<js>"This is a sample server Petstore server."</js>)
@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"title"</js>: <js>"Swagger Sample App"</js>,
@@ -272,7 +272,7 @@ public class Info extends SwaggerElement {
 	 * 		<li>{@link Contact}
 	 * 		<li><code>String</code> - JSON object representation of {@link Contact}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -321,7 +321,7 @@ public class Info extends SwaggerElement {
 	 * 		<li>{@link License}
 	 * 		<li><code>String</code> - JSON object representation of {@link License}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
 	 * 			</p>
 	 * 	</ul>

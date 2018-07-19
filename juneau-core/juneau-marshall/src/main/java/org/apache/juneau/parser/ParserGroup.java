@@ -50,7 +50,7 @@ import org.apache.juneau.http.*;
  * will result in the order <code>P3, P4, P1, P2</code>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct a new parser group builder</jc>
  * 	ParserGroupBuilder b = ParserGroup.<jsm>create</jsm>();
  *

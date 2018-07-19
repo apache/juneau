@@ -817,7 +817,7 @@ public class BeanMeta<T> {
 	 *
 	 * <p>
 	 * For example, given the following classes...
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	public static class BeanA&lt;T&gt; {
 	 * 		public T x;
 	 * 	}
@@ -826,13 +826,13 @@ public class BeanMeta<T> {
 	 * <p>
 	 * 	...calling this method on {@code BeanB.class} will load the following data into {@code m} indicating
 	 * 	that the {@code T} parameter on the BeanA class is implemented with an {@code Integer}:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	{BeanA.class:[Integer.class]}
 	 * </p>
 	 *
 	 * <p>
 	 * TODO:  This code doesn't currently properly handle the following situation:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	public static class BeanB&lt;T extends Number&gt; extends BeanA&lt;T&gt;;
 	 * 	public static class BeanC extends BeanB&lt;Integer&gt;;
 	 * </p>

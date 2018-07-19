@@ -23,7 +23,7 @@ import java.lang.reflect.*;
  * <p>
  * For example, given the following bean classes...
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public interface</jk> IA {
  * 		String getX();
  * 		<jk>void</jk> setX(String x);
@@ -49,7 +49,7 @@ import java.lang.reflect.*;
  * <p>
  * The getters will be called in order until the first non-null value is returned...
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	PojoMerge m;
  *
  * 	m = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));

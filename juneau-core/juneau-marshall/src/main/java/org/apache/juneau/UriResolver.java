@@ -122,7 +122,7 @@ public class UriResolver {
 	 *
 	 * <p>
 	 * For example, to relativize a URI to its servlet-relative form:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// relativeUri == "path/foo"</jc>
 	 * 	String relativeUri = resolver.relativize(<js>"servlet:/"</js>, <js>"/context/servlet/path/foo"</js>);
 	 * </p>

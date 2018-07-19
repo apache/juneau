@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Cache-Control: no-cache
  * </p>
  *
@@ -41,7 +41,7 @@ package org.apache.juneau.http;
  * application, since the directives might be applicable to all recipients along the request/response chain.
  * It is not possible to specify a cache- directive for a specific cache.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Cache-Control   = "Cache-Control" ":" 1#cache-directive
  * 	cache-directive = cache-request-directive
  * 	     | cache-response-directive

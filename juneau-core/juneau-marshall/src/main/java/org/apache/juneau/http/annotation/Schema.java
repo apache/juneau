@@ -101,7 +101,7 @@ public @interface Schema {
 	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
 	 * 	<jk>public void</jk> setAge(
@@ -146,14 +146,14 @@ public @interface Schema {
 	 * A brief description of the body. This could contain examples of use.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
@@ -291,7 +291,7 @@ public @interface Schema {
 	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>)
 	 * 	<jk>public void</jk> doPut(<ja>@Body</ja>(format=<js>"/\\w+\\.\\d+/"</js>) String input) {...}
 	 * </p>
@@ -391,14 +391,14 @@ public @interface Schema {
 	 *  <br>The property MAY be included and its default value is false.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(required=<js>"true"</js>) Pet input
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
@@ -437,14 +437,14 @@ public @interface Schema {
 	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(type=<js>"object"</js>) Pet input
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}

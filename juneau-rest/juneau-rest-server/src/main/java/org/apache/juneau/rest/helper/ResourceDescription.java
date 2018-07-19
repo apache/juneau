@@ -20,7 +20,7 @@ import org.apache.juneau.http.annotation.*;
  * Shortcut label for child resources.  Typically used in router resources.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>new</jk> ResourceLink(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
  *

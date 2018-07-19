@@ -753,7 +753,7 @@ public class BeanSession extends Session {
 	 * bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
 	 * </p>
@@ -796,7 +796,7 @@ public class BeanSession extends Session {
 	 * If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
 	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
 	 *
@@ -838,7 +838,7 @@ public class BeanSession extends Session {
 	 * bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
 	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
 	 * </p>
@@ -877,7 +877,7 @@ public class BeanSession extends Session {
 	 * be instantiated within another class instance.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a new instance of the specified bean class</jc>
 	 * 	Person p = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
 	 * </p>

@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * Character sets that are acceptable.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Charset: utf-8
  * </p>
  *
@@ -35,7 +35,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * This field allows clients capable of understanding more comprehensive or special- purpose character sets to signal
  * that capability to a server which is capable of representing documents in those character sets.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Charset = "Accept-Charset" ":"
  * 	                 1#( ( charset | "*" )[ ";" "q" "=" qvalue ] )
  * </p>
@@ -45,7 +45,7 @@ import org.apache.juneau.internal.*;
  * represents the user's preference for that charset.
  * The default value is q=1.
  * An example is...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Charset: iso-8859-5, unicode-1-1;q=0.8
  * </p>
  *

@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Authentication credentials for HTTP authentication.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
  * </p>
  *
@@ -32,7 +32,7 @@ package org.apache.juneau.http;
  * The Authorization field value consists of credentials containing the authentication information of the user agent for
  * the realm of the resource being requested.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Authorization  = "Authorization" ":" credentials
  * </p>
  *

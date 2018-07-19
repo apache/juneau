@@ -81,7 +81,7 @@ public class ProcBuilder {
 	 * Can be used for specifying OS-specific commands.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ProcBuilder pb = ProcBuilder
 	 * 		.create()
 	 * 		.commandIf(<jsf>WINDOWS</jsf>, <js>"cmd /c dir"</js>)

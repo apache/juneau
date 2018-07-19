@@ -224,7 +224,7 @@
 		<p>
 			Use the {@link org.apache.juneau.html.HtmlParser} to convert HTML5 documents back into their original POJOs:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Get an HTML parser to convert our generated HTML5 documents back into POJOs.</jc>
 	HtmlParser p = HtmlParser.<jsf>DEFAULT</jsf>;
 	
@@ -257,7 +257,7 @@
 			In this case, we are defining a template for a reusable HTML form with two simple fields.  
 			This gets serialized as an HTML form. 
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 	
 	<jd>/**
@@ -289,7 +289,7 @@
 		<p>
 			When serialized using the HTML or XML serializer, it produces the following:
 		</p>	
-		<p class='bcode'><xt>
+		<p class='bcode w800'><xt>
 	&lt;form <xa>action</xa>='myaction'&gt;
 		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v1'</xs> <xa>value</xa>=<xs>'123'</xs>/&gt;
 		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v2'</xs> <xa>value</xa>=<xs>'true'</xs>/&gt;
@@ -299,7 +299,7 @@
 			Support for parsing back into the template class can be accomplished by adding an unswap method or 
 			constructor.
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 	
 	<jd>/**

@@ -22,7 +22,7 @@ package org.apache.juneau.transform;
  * Property filters can be used to intercept calls to getters and setters and alter their values in transit.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Property filter that strips out sensitive information on Address beans.</jc>
  * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
  *
@@ -51,7 +51,7 @@ package org.apache.juneau.transform;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Register filter on bean class.</jc>
  * 	<ja>@Bean</ja>(propertyFilter=AddressPropertyFilter.<jk>class</jk>)
  * 	<jk>public class</jk> Address {
@@ -88,7 +88,7 @@ public class PropertyFilter {
 	 * Subclasses can override this property to convert property values to some other object just before serialization.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
 	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
 	 *
@@ -117,7 +117,7 @@ public class PropertyFilter {
 	 * bean setter.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
 	 * 	<jk>public class</jk> AddressPropertyFilter <jk>extends</jk> PropertyFilter {
 	 *

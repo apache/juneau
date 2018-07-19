@@ -87,7 +87,7 @@
 		It should be noted that since the {@code AddressBook} class is a subclass of {@code LinkedList}, it fulfills
 			the requirement of being a tabular data structure.  
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	<jc>// Create our POJO with some entries.</jc>
 	AddressBook addressBook = <jk>new</jk> AddressBook();
 	addressBook.add(
@@ -127,7 +127,7 @@
 	<p>
 		When run, this code produces the following XML...
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt>
 	<xt>&lt;c:dataset <xa>xmlns:c</xa>=<xs>'http://developer.cognos.com/schemas/xmldata/1/'</xs>&gt;</xt>
 		<xt>&lt;c:metadata&gt;</xt>
@@ -174,7 +174,7 @@
 	</p>
 	
 	<h5 class='topic'>Example:</h5>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	<jc>// Parse XML back into original DataSet</jc> 
 	DataSet ds = XmlParser.<jsf>DEFAULT</jsf>.parse(xml, DataSet.<jk>class</jk>);
 	</p>

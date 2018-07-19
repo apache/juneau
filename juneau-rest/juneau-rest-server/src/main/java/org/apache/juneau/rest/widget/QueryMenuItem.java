@@ -29,7 +29,7 @@ import org.apache.juneau.rest.converters.*;
  * <p>
  * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
  * search/view/sort capabilities against the collection of POJOs:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<jsf>GET</jsf>,
  * 		path=<js>"/"</js>,

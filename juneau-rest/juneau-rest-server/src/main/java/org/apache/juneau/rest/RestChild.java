@@ -16,7 +16,7 @@ package org.apache.juneau.rest;
  * Represents a simple child REST resource / path mapping.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Parent resource.</jc>
  * 	<jk>public class</jk> MyResource {
  * 		<jk>public</jk> MyResource(RestContextBuilder builder) <jk>throws</jk> Exception {

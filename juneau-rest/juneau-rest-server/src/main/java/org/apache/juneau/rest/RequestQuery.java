@@ -216,7 +216,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * Returns the specified query parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into an integer.</jc>
 	 * 	<jk>int</jk> myparam = query.get(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
 	 *
@@ -316,7 +316,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	 * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; myparam = query.get(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
@@ -589,7 +589,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		try {
-			if ("*".equals(name) && cm.isMapOrBean()) {
+			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				ObjectMap m = new ObjectMap();
 				for (Map.Entry<String,String[]> e : this.entrySet()) {
 					String k = e.getKey();

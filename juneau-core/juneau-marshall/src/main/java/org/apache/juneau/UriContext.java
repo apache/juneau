@@ -23,7 +23,7 @@ import org.apache.juneau.parser.*;
  *
  * <p>
  * A typical request against a URL takes the following form:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	http://host:port/context-root/servlet-path/path-info
  * 	|   authority   |  context   |  resource  |  path  |
  * 	+--------------------------------------------------+

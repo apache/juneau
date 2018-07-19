@@ -28,7 +28,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// A bean dictionary list consisting of classes with @Bean.typeName() annotations.</jc>
  * 	<jk>public class</jk> MyBeanDictionaryList <jk>extends</jk> BeanDictionaryList {
  *

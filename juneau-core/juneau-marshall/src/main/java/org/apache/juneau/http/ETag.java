@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * An identifier for a specific version of a resource, often a message digest.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	ETag: "737060cd8c284d8af7ad3082f209582d"
  * </p>
  *
@@ -29,13 +29,13 @@ package org.apache.juneau.http;
  * The headers used with entity tags are described in sections 14.24, 14.26 and 14.44.
  * The entity tag MAY be used for comparison with other entities from the same resource (see section 13.3.3).
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	ETag = "ETag" ":" entity-tag
  * </p>
  *
  * <p>
  * Examples:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	ETag: "xyzzy"
  * 	ETag: W/"xyzzy"
  * 	ETag: ""

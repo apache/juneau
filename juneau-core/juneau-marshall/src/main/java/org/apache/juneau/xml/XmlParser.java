@@ -80,7 +80,7 @@ public class XmlParser extends ReaderParser {
 	 * is the root element name.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parser with preserve-root-element.</jc>
 	 * 	ReaderParser p1 = XmlParser
 	 * 		.<jsm>create</jsm>()

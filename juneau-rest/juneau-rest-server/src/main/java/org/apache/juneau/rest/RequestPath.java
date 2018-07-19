@@ -33,30 +33,30 @@ import org.apache.juneau.rest.exception.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; juneau-rest-server &gt; RequestPathMatch</a>
  * </ul>
  */
-public class RequestPathMatch extends TreeMap<String,String> {
+public class RequestPath extends TreeMap<String,String> {
 	private static final long serialVersionUID = 1L;
 
 	private final RestRequest req;
 	private HttpPartParser parser;
 	private String pattern;
 
-	RequestPathMatch(RestRequest req) {
+	RequestPath(RestRequest req) {
 		super(String.CASE_INSENSITIVE_ORDER);
 		this.req = req;
 	}
 
-	RequestPathMatch parser(HttpPartParser parser) {
+	RequestPath parser(HttpPartParser parser) {
 		this.parser = parser;
 		return this;
 	}
 
-	RequestPathMatch remainder(String remainder) {
+	RequestPath remainder(String remainder) {
 		put("/**", remainder);
 		put("/*", urlDecode(remainder));
 		return this;
 	}
 
-	RequestPathMatch pattern(String pattern) {
+	RequestPath pattern(String pattern) {
 		this.pattern = pattern;
 		return this;
 	}
@@ -111,7 +111,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * Returns the specified path parameter value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into an integer.</jc>
 	 * 	<jk>int</jk> myparam = path.get(<js>"myparam"</js>, <jk>int</jk>.<jk>class</jk>);
 	 *
@@ -176,7 +176,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * Use this method if you want to parse into a parameterized <code>Map</code>/<code>Collection</code> object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; myparam = req.getPathParameter(<js>"myparam"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
@@ -251,7 +251,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		try {
-			if ("*".equals(name) && cm.isMapOrBean()) {
+			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				ObjectMap m = new ObjectMap();
 				for (Map.Entry<String,String> e : this.entrySet()) {
 					String k = e.getKey();
@@ -320,7 +320,7 @@ public class RequestPathMatch extends TreeMap<String,String> {
 	 * </table>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// REST method</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/foo/{bar}/*"</js>)
 	 * 	<jk>public</jk> String doGetById(RequestPathMatch path, <jk>int</jk> bar) {

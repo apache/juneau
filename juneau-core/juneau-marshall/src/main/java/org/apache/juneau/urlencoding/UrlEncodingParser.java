@@ -68,7 +68,7 @@ public class UrlEncodingParser extends UonParser {
 	 * <br>If <jk>true</jk>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> String[] f1;
 	 * 		<jk>public</jk> List&lt;String&gt; f2;

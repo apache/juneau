@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> RestServlet {
  *
  * 		<jc>// GET request handler</jc>

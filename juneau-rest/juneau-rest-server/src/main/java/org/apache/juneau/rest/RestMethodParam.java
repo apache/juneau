@@ -90,7 +90,7 @@ import org.apache.juneau.utils.*;
  * 		<li class='jc'>{@link RequestBody}
  * 		<li class='jc'>{@link RequestFormData}
  * 		<li class='jc'>{@link RequestHeaders}
- * 		<li class='jc'>{@link RequestPathMatch}
+ * 		<li class='jc'>{@link RequestPath}
  * 		<li class='jc'>{@link RequestQuery}
  * 		<li class='jc'>{@link ResourceBundle}
  * 		<li class='jc'>{@link RestContext}

@@ -58,7 +58,7 @@ public @interface BeanProperty {
 	 *
 	 * <p>
 	 * The following examples show how to define dynamic bean properties.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - A simple public Map field.
 	 * 	// The field name can be anything.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaField {
@@ -118,7 +118,7 @@ public @interface BeanProperty {
 	 *<p>
 	 * Similar rules apply for value types and swaps.
 	 * The property values optionally can be any serializable type or use swaps.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A serializable type other than Object.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
 	 *
@@ -153,7 +153,7 @@ public @interface BeanProperty {
 	 * <p>
 	 * The following annotations are equivalent:
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
 	 *
 	 * 	<ja>@BeanProperty</ja>(<js>"foo"</js>)
@@ -174,7 +174,7 @@ public @interface BeanProperty {
 	 * This property must denote a concrete bean class with a no-arg constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type.</jc>
@@ -190,7 +190,7 @@ public @interface BeanProperty {
 	 * contents of the bean property object when the generic parameter types are interfaces or abstract classes.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
@@ -214,7 +214,7 @@ public @interface BeanProperty {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
@@ -257,7 +257,7 @@ public @interface BeanProperty {
 	 * {@link BeanSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
 	 * 	<jk>public float</jk> <jf>price</jf>;
 	 * </p>

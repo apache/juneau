@@ -27,7 +27,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
  * a drop-down menu item for rendering all other supported content types in plain text:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(
  * 		name=<jsf>GET</jsf>,
  * 		path=<js>"/"</js>,

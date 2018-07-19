@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Ask the client to upgrade to another protocol.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
  * </p>
  *
@@ -30,13 +30,13 @@ package org.apache.juneau.http;
  * The server MUST use the Upgrade header field within a 101 (Switching Protocols) response to indicate which
  * protocol(s) are being switched.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Upgrade        = "Upgrade" ":" 1#product
  * </p>
  *
  * <p>
  * For example,
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11
  * </p>
  *

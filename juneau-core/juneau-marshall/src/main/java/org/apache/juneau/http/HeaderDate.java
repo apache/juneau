@@ -19,7 +19,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *

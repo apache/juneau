@@ -18,7 +18,7 @@ import org.apache.juneau.*;
  * Abstract subclass for POJO swaps that swap objects for strings.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// A swap that converts byte arrays to BASE64-encoded strings.</jc>
  * 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
  *

@@ -22,7 +22,7 @@ import org.apache.juneau.*;
  *
  * <p>
  * Typically, you'll want to do a static import on this class and then call the methods like so...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
  *
  * 	Feed feed =

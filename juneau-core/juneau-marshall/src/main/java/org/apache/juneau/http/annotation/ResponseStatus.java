@@ -34,7 +34,7 @@ import org.apache.juneau.utils.*;
  * This can only be applied to parameters and subclasses of the {@link Value} class with an {@link Integer} type.
  * <br>The {@link Value} object is mean to be a place-holder for the set value.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
  * 	<jk>public void</jk> login(String username, String password,
  * 			<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>) Value&lt;Integer&gt; status) {
@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * The {@link Responses @Responses} annotation can be used to represent multiple possible response types.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
  * 	<jk>public void</jk> login(String username, String password,
  * 			<ja>@ResponseStatuses</ja>{
@@ -66,7 +66,7 @@ import org.apache.juneau.utils.*;
  * The other option is to apply this annotation to a subclass of {@link Value} which often leads to a cleaner
  * REST method:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@ResponseStatuses</ja>{
  * 		<ja>@ResponseStatus</ja>(200)
  * 		<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
@@ -86,7 +86,7 @@ import org.apache.juneau.utils.*;
  * The attributes on this annotation are used to populate the generated Swagger for the method.
  * <br>In this case, the Swagger is populated with the following:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<js>'/user/login'</js>: {
  * 		get: {
  * 			responses: {

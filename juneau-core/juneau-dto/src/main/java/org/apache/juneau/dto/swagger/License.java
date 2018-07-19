@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
  * License information for the exposed API.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	License x = <jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>);
  *
@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"Apache 2.0"</js>,

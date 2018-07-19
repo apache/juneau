@@ -100,7 +100,7 @@ public @interface MethodSwagger {
 	 * Defines the swagger field <code>/paths/{path}/{method}/deprecated</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			deprecated=<jk>true</jk>
@@ -165,7 +165,7 @@ public @interface MethodSwagger {
 	 * Defines the swagger field <code>/paths/{path}/{method}/externalDocs</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
@@ -192,7 +192,7 @@ public @interface MethodSwagger {
 	 * column on the Swagger page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<jsf>POST</jsf>, path=<js>"/{a}"</js>,
 	 * 		description=<js>"This is my method."</js>,
@@ -225,7 +225,7 @@ public @interface MethodSwagger {
 	 * column on the Swagger page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<jsf>GET</jsf>, path=<js>"/"</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
@@ -263,7 +263,7 @@ public @interface MethodSwagger {
 	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			tags=<js>"foo,bar"</js>
@@ -289,7 +289,7 @@ public @interface MethodSwagger {
 	 * Used for free-form Swagger documentation of a REST Java method.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			<js>"tags:['pet'],"</js>,

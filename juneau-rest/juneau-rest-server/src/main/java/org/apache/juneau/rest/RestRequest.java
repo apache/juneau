@@ -87,7 +87,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private VarResolverSession varSession;
 	private final RequestQuery queryParams;
 	private RequestFormData formData;
-	private RequestPathMatch pathParams;
+	private RequestPath pathParams;
 	private boolean isPost;
 	private UriContext uriContext;
 	private String charset;
@@ -147,7 +147,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 			debug = "true".equals(getQuery().getString("debug", "false")) || "true".equals(getHeaders().getString("Debug", "false"));
 
-			this.pathParams = new RequestPathMatch(this);
+			this.pathParams = new RequestPath(this);
 
 		} catch (RestException e) {
 			throw e;
@@ -251,7 +251,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <br>However, properties are open-ended, and can be used for any purpose.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=<jsf>SERIALIZER_sortMaps</jsf>, value=<js>"false"</js>)
@@ -303,7 +303,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns a {@link RequestHeaders} object that encapsulates access to HTTP headers on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest req) {
 	 *
@@ -449,7 +449,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Similar to {@link #getParameterMap()} but only looks for query parameters in the URL and not form posts.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *
@@ -515,7 +515,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Similar to {@link #getParameterMap()}, but only looks for form data in the HTTP body.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest req) {
 	 *
@@ -592,10 +592,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Request path match.
 	 *
 	 * <p>
-	 * Returns a {@link RequestPathMatch} object that encapsulates access to everything related to the URL path.
+	 * Returns a {@link RequestPath} object that encapsulates access to everything related to the URL path.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *
@@ -618,7 +618,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li>
 	 * 		Values are converted from strings using the registered {@link RestContext#REST_partParser part-parser} on the resource class.
 	 * 	<li>
-	 * 		The {@link RequestPathMatch} object can also be passed as a parameter on the method.
+	 * 		The {@link RequestPath} object can also be passed as a parameter on the method.
 	 * 	<li>
 	 * 		The {@link Path @Path} annotation can be used to access individual values.
 	 * </ul>
@@ -632,7 +632,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	The path data from the URL.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestPathMatch getPathMatch() {
+	public RequestPath getPathMatch() {
 		return pathParams;
 	}
 
@@ -666,7 +666,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns a {@link RequestBody} object that encapsulates access to the HTTP request body.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doPost2(RestRequest req) {
 	 *
@@ -834,7 +834,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * descriptions, titles, and Swagger documentation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *
@@ -882,7 +882,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * A shortcut for calling <code>getInfoProvider().getSwagger(request);</code>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> List&lt;Tag&gt; getSwaggerTags(RestRequest req) {
 	 * 		<jk>return</jk> req.getSwagger().getTags();
@@ -930,7 +930,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	htmldoc=<ja>@HtmlDoc</ja>(
 	 * 		header={
 	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
@@ -1139,7 +1139,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the resource bundle for the request locale.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> String sayHello(RestRequest req, <ja>@Query</ja>(<js>"user"</js>) String user) {
 	 *
@@ -1243,7 +1243,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Used to resolve SVL variables in text.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public</jk> String sayHello(RestRequest req) {
 	 *
@@ -1281,7 +1281,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <p>
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
 	 *	<jc>// from the classpath and resolves any SVL variables embedded in it.</jc>
 	 * 	<ja>@RestMethod</ja>(...)
@@ -1356,7 +1356,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *
@@ -1450,7 +1450,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Shortcut for calling <code>getContext().getLogger()</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest req) {
 	 *

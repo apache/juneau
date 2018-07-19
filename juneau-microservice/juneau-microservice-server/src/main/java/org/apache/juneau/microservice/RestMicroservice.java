@@ -265,7 +265,7 @@ public class RestMicroservice extends Microservice {
 	 * <p>
 	 * The default implementation is configured by the following values in the config file
 	 * if a jetty.xml is not specified via a <code>REST/jettyXml</code> setting:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<cc>#================================================================================
 	 * 	# Jetty settings
 	 * 	#================================================================================</cc>
@@ -407,7 +407,7 @@ public class RestMicroservice extends Microservice {
 	 *
 	 * <p>
 	 * The default behavior is configured by the following value in the config file:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<cc># What to do when the config file is saved.
 	 * 	# Possible values:
 	 * 	# 	NOTHING - Don't do anything. (default)

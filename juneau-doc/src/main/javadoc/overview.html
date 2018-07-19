@@ -12009,7 +12009,7 @@
 								<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
 								<li class='jc'>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
 								<li class='jc'>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
-								<li class='jc'>{@link org.apache.juneau.rest.RequestPathMatch} - API for accessing path variables.
+								<li class='jc'>{@link org.apache.juneau.rest.RequestPath} - API for accessing path variables.
 								<li class='jc'>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
 							</ul>
 						<li><b>Other:</b>
@@ -12398,7 +12398,7 @@
 			<p>
 				Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
 				<br>Any remainder after the match can be accessed through 
-				{@link org.apache.juneau.rest.RequestPathMatch#getRemainder()} or parameters with the 
+				{@link org.apache.juneau.rest.RequestPath#getRemainder()} or parameters with the 
 				<code><ja>@Path</ja>(<js>"/*"</js>)</code> annotation.
 				<br>On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 				require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
@@ -12433,7 +12433,7 @@
 				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_path}
 				<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 				<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder}
-				<li class='jc'>{@link org.apache.juneau.rest.RequestPathMatch}
+				<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
 			</ul>
 		</div>	
 
@@ -12442,7 +12442,7 @@
 		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.RequestPathMatch' id='juneau-rest-server.RequestPathMatch'>7.6.9 - RequestPathMatch</a></h4>
 		<div class='topic'>
 			<p>
-				The {@link org.apache.juneau.rest.RequestPathMatch} object is the API for accessing the matched variables
+				The {@link org.apache.juneau.rest.RequestPath} object is the API for accessing the matched variables
 				and remainder on the URL path.
 			</p>
 			<p class='bcode w800'>
@@ -12465,14 +12465,14 @@
 				Some important methods on this class are:
 			</p>
 			<ul class='doctree'>
-				<li class='jc'><code>{@link org.apache.juneau.rest.RequestPathMatch} <jk>extends</jk> TreeMap&lt;String,String&gt;</code>
+				<li class='jc'><code>{@link org.apache.juneau.rest.RequestPath} <jk>extends</jk> TreeMap&lt;String,String&gt;</code>
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Class) get(String,Class)} - Get path match variable converted to a POJO.
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#get(String,Type,Type...) get(String,Type,Type)} - Get path match variable converted to a map or collection of POJOs.
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getString(String) getString(String)} - Get patch match variable as a simple string.
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getInt(String) getInt(String)} - Get path match variable as an integer.
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getBoolean(String) getBoolean(String)} - Get path match variable as a boolean.
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getRemainder() getRemainder()} - Get the path match remainder.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPath#get(String,Class) get(String,Class)} - Get path match variable converted to a POJO.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPath#get(String,Type,Type...) get(String,Type,Type)} - Get path match variable converted to a map or collection of POJOs.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getString(String) getString(String)} - Get patch match variable as a simple string.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getInt(String) getInt(String)} - Get path match variable as an integer.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getBoolean(String) getBoolean(String)} - Get path match variable as a boolean.
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getRemainder() getRemainder()} - Get the path match remainder.
 				</ul>
 			</ul>
 
@@ -19622,7 +19622,7 @@
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getFormData()}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders()}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethod()}
-					<li class='jm'>{@link org.apache.juneau.rest.RequestPathMatch#getRemainder()}
+					<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getRemainder()}
 				</ul>
 				Method sets the POJO to be serialized using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
 			<li class='jm'>
@@ -22968,7 +22968,7 @@
 			<li>
 				The <code>$F</code> variable can now be used as a initialization time variable.
 				<br>For example, the <code>AtomFeedResource</code> example pulls a bean example from a file on the classpath:
-				<p class='bcode'>
+				<p class='bcode w800'>
 	<ja>@RestResource</ja>(
 		path=<js>"/atom"</js>,
 		title=<js>"Sample ATOM feed resource"</js>,
@@ -24670,7 +24670,7 @@
 					<li>{@link org.apache.juneau.rest.RequestHeaders}
 					<li>{@link org.apache.juneau.rest.RequestQuery}
 					<li>{@link org.apache.juneau.rest.RequestFormData}
-					<li>{@link org.apache.juneau.rest.RequestPathMatch}
+					<li>{@link org.apache.juneau.rest.RequestPath}
 				</ul>						
 			<li>
 				The un-annotated parameter types that can be passed in through REST Java methods has been significantly expanded.
@@ -24724,7 +24724,7 @@
 					<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
 					<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
 					<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
-					<li>{@link org.apache.juneau.rest.RequestPathMatch} - API for accessing path variables.
+					<li>{@link org.apache.juneau.rest.RequestPath} - API for accessing path variables.
 					<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
 					<li>{@link org.apache.juneau.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
 					<li>{@link java.util.logging.Logger} - The logger to use for logging.

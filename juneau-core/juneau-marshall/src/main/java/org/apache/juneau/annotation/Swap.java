@@ -55,7 +55,7 @@ public @interface Swap {
 	 * <p>
 	 * In the following example, the swap is only invoked by the JSON serializer:
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
 	 * 	<jk>public class</jk> MyBean { ... }
 	 *
@@ -85,7 +85,7 @@ public @interface Swap {
 	 * <p>
 	 * The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our templated swap class.</jc>
 	 * 	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
 	 *
@@ -98,7 +98,7 @@ public @interface Swap {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
 	 * 	<jk>public class</jk> MyPojo {}
 	 * </p>

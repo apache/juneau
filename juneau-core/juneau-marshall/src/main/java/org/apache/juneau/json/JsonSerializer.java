@@ -73,7 +73,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
  *
@@ -145,7 +145,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * <xt>&lt;\/script&gt;</xt>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a JSON serializer that escapes solidus characters.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -194,7 +194,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<li>They start with an ASCII character or <js>'_'</js>.
 	 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
 	 * 	<li>They are not one of the following reserved words:
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	arguments, break, case, catch, class, const, continue, debugger, default,
 	 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function,
 	 * 	if, implements, import, in, instanceof, interface, let, new, null, package,
@@ -204,7 +204,7 @@ public class JsonSerializer extends WriterSerializer {
 	 * </ol>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a JSON serializer in normal mode.</jc>
 	 * 	WriterSerializer s1 = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -340,11 +340,11 @@ public class JsonSerializer extends WriterSerializer {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

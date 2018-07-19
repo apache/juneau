@@ -32,7 +32,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * Provides a base set of common config property setters that allow you to build up serializers and parsers.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	WriterSerializer s = JsonSerializer
  * 		.<jsm>create</jsm>()
  * 		.set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
@@ -44,7 +44,7 @@ import org.apache.juneau.transform.*;
  * <p>
  * Additional convenience methods are provided for setting properties using reduced syntax.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	WriterSerializer s = JsonSerializer
  * 		.<jsm>create</jsm>()  <jc>// Create a JsonSerializerBuilder</jc>
  * 		.simple()  <jc>// Simple mode</jc>

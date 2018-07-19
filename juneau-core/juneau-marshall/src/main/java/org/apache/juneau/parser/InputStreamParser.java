@@ -56,7 +56,7 @@ public abstract class InputStreamParser extends Parser {
 	 *
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that parses from BASE64.</jc>
 	 * 	InputStreamParser p = MsgPackParser
 	 * 		.<jsm>create</jsm>()

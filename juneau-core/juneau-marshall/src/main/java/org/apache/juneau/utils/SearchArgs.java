@@ -66,7 +66,7 @@ public class SearchArgs {
 		 *
 		 * <p>
 		 * For example:
-		 * <p class='bcode'>
+		 * <p class='bcode w800'>
 		 * 	builder.search(<js>"column1=foo*, column2=bar baz"</js>);
 		 * </p>
 		 *
@@ -117,7 +117,7 @@ public class SearchArgs {
 		 *
 		 * <p>
 		 * For example:
-		 * <p class='bcode'>
+		 * <p class='bcode w800'>
 		 * 	builder.view(<js>"column1, column2"</js>);
 		 * </p>
 		 *
@@ -162,7 +162,7 @@ public class SearchArgs {
 		 *
 		 * <p>
 		 * For example:
-		 * <p class='bcode'>
+		 * <p class='bcode w800'>
 		 * 	<jc>// Order by column1 ascending, then column2 descending.</jc>
 		 * 	builder.sort(<js>"column1, column2-"</js>);
 		 * </p>

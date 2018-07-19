@@ -34,7 +34,7 @@ import org.apache.juneau.svl.*;
  * respectively.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Create a variable resolver that resolves system properties and $SW vars.</jc>
  * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(SwitchVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
  *

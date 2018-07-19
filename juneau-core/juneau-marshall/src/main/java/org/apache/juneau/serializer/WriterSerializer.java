@@ -49,7 +49,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * This setting does not apply to the RDF serializers.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -89,7 +89,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * This setting does not apply to the RDF serializers.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that uses single quotes.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -136,11 +136,11 @@ public abstract class WriterSerializer extends Serializer {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

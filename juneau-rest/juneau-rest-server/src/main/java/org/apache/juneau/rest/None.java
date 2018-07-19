@@ -16,7 +16,7 @@ package org.apache.juneau.rest;
  * Dummy class that indicates that serializers, parsers, or transforms for a Java class or method should not be inherited.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(
  *
  * 		<jc>// No serializers are defined method or inherited from the class.</jc>

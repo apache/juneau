@@ -67,7 +67,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ParameterInfo x = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
  *
@@ -77,7 +77,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"in"</js>: <js>"query"</js>,
@@ -517,7 +517,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li>{@link SchemaInfo}
 	 * 		<li><code>String</code> - JSON object representation of {@link SchemaInfo}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -741,7 +741,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li>{@link Items}
 	 * 		<li><code>String</code> - JSON object representation of {@link Items}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1360,12 +1360,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -1516,7 +1516,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><code>Map&lt;String,String&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	examples(<js>"{'text/json':'{foo:\\'bar\\'}'}"</js>);
 	 * 			</p>
 	 * 	</ul>

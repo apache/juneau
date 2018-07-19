@@ -24,7 +24,7 @@ import org.apache.juneau.urlencoding.*;
  * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *

@@ -1067,7 +1067,7 @@ class RestParamDefaults {
 	static final class RequestPathMatchObject extends RestMethodParam {
 
 		protected RequestPathMatchObject() {
-			super(OTHER, RequestPathMatch.class);
+			super(OTHER, RequestPath.class);
 		}
 
 		@Override /* RestMethodParam */

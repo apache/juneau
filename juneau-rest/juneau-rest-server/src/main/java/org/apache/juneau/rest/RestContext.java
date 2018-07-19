@@ -104,12 +104,12 @@ public final class RestContext extends BeanContext {
 	 * URL parameter.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(allowBodyParam=<js>"$C{REST/allowBodyParam,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -167,12 +167,12 @@ public final class RestContext extends BeanContext {
 	 * GET request.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?method=OPTIONS
 	 * </p>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(allowMethodParams=<js>"$C{REST/allowMethodParams,HEAD\,OPTIONS\,PUT}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -237,12 +237,12 @@ public final class RestContext extends BeanContext {
 	 * parameters.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(allowMethodParams=<js>"$C{REST/allowHeaderParams,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -301,7 +301,7 @@ public final class RestContext extends BeanContext {
 	 * <br>Subclasses can be used to customize how these HTTP calls are handled.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our customized call handler.</jc>
 	 * 	<jk>public class</jk> MyRestCallHandler <jk>extends</jk> BasicRestCallHandler {
 	 *
@@ -430,7 +430,7 @@ public final class RestContext extends BeanContext {
 	 * </dl>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our child resource.</jc>
 	 * 	<ja>@RestResource</ja>(path=<js>"/child"</js>)
 	 * 	<jk>public class</jk> MyChildResource {...}
@@ -527,7 +527,7 @@ public final class RestContext extends BeanContext {
 	 * It also affects the behavior of the {@link #REST_staticFiles} property.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our customized classpath resource finder.</jc>
 	 * 	<jk>public class</jk> MyClasspathResourceFinder <jk>extends</jk> ClasspathResourceFinderBasic {
 	 * 		<ja>@Override</ja>
@@ -608,7 +608,7 @@ public final class RestContext extends BeanContext {
 	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod.clientVersion()} annotation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -630,7 +630,7 @@ public final class RestContext extends BeanContext {
 	 * 		}
 	 * 	}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
@@ -688,7 +688,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(path=<js>"/servlet"</js>, contextPath=<js>"$C{REST/contextPathOverride,/foo}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -750,7 +750,7 @@ public final class RestContext extends BeanContext {
 	 * 	(e.g. first the results will be traversed, then the resulting node will be searched/sorted).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our converter.</jc>
 	 * 	<jk>public class</jk> MyConverter <jk>implements</jk> RestConverter {
 	 * 		<ja>@Override</ja>
@@ -865,7 +865,7 @@ public final class RestContext extends BeanContext {
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -931,7 +931,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header: $C{REST/myHeaderValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -998,7 +998,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -1053,7 +1053,7 @@ public final class RestContext extends BeanContext {
 	 * These can be used to enable various kinds of compression (e.g. <js>"gzip"</js>) on requests and responses.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Registered via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(encoders={GzipEncoder.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
@@ -1130,7 +1130,7 @@ public final class RestContext extends BeanContext {
 	 * <br>Note that this is different than matchers were only ONE matcher needs to pass.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define a guard that only lets Billy make a request.</jc>
 	 * 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
 	 * 		<ja>@Override</ja>
@@ -1209,7 +1209,7 @@ public final class RestContext extends BeanContext {
 	 * Class used to retrieve title/description/swagger information about a resource.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our customized info provider.</jc>
 	 * 	<jc>// Extend from the default implementation and selectively override values.</jc>
 	 * 	<jk>public class</jk> MyRestInfoProvider <jk>extends</jk> BasicRestInfoProvider {
@@ -1312,7 +1312,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our customized logger.</jc>
 	 * 	<jk>public class</jk> MyRestLogger <jk>extends</jk> BasicRestLogger {
 	 *
@@ -1377,7 +1377,7 @@ public final class RestContext extends BeanContext {
 	 * in out-of-memory errors which could affect system stability.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -1465,7 +1465,7 @@ public final class RestContext extends BeanContext {
 	 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> org.apache.foo;
 	 *
 	 * 	<jc>// Resolve messages to org/apache/foo/nls/MyMessages.properties</jc>
@@ -1540,7 +1540,7 @@ public final class RestContext extends BeanContext {
 	 * This list appends to the existing list provided by {@link ExtendedMimetypesFileTypeMap}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(mimeTypes={<js>"text/plain txt text TXT"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -1601,7 +1601,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * For example, if you want to pass in instances of <code>MySpecialObject</code> to your Java method, define
 	 * the following resolver:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
 	 * 	<jk>public class</jk> MyRestParam <jk>extends</jk> RestMethodParam {
 	 *
@@ -1698,7 +1698,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(parsers={JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
@@ -1787,7 +1787,7 @@ public final class RestContext extends BeanContext {
 	 * {@link SimplePartParser} which treats everything as plain text.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(partParser=SimplePartParser.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
@@ -1861,7 +1861,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(partSerializer=SimplePartSerializer.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyResource {
@@ -1927,7 +1927,7 @@ public final class RestContext extends BeanContext {
 	 * This setting is critical for the routing of HTTP requests from ascendant to child resources.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(path=<js>"/myResource"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -1997,7 +1997,7 @@ public final class RestContext extends BeanContext {
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(renderResponseStackTraces=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyResource {
@@ -2063,7 +2063,7 @@ public final class RestContext extends BeanContext {
 	 * Can be used to provide customized resolution of REST resource class instances (e.g. resources retrieve from Spring).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our custom resource resolver. </jc>
 	 * 	<jk>public class</jk> MyResourceResolver <jk>extends</jk> RestResourceResolverSimple {
 	 *
@@ -2161,7 +2161,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our custom response handler for MySpecialObject objects. </jc>
 	 * 	<jk>public class</jk> MyResponseHandler <jk>implements</jk> ResponseHandler {
 	 *
@@ -2257,7 +2257,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation.</jc>
 	 * 	<ja>@RestResource</ja>(serializers={JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource {
@@ -2350,7 +2350,7 @@ public final class RestContext extends BeanContext {
 	 * Used to customize the headers on responses returned for statically-served files.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(
 	 * 		staticFileResponseHeaders={
@@ -2419,7 +2419,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> com.foo.mypackage;
 	 *
 	 * 	<ja>@RestResource</ja>(
@@ -2434,7 +2434,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * In the example above, given a GET request to the following URL...
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  	/myresource/htdocs/foobar.html
 	 * </p>
 	 * <br>...the servlet will attempt to find the <code>foobar.html</code> file in the following ordered locations:
@@ -2490,7 +2490,7 @@ public final class RestContext extends BeanContext {
 	 * don't want exposed in the Swagger documentation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -2551,7 +2551,7 @@ public final class RestContext extends BeanContext {
 	 * don't want exposed in the Swagger documentation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -2609,7 +2609,7 @@ public final class RestContext extends BeanContext {
 	 * methods) will be cached in memory to speed subsequent lookups.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(useClasspathResourceCaching=<js>"$C{REST/useClasspathResourceCaching,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -2671,7 +2671,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@RestResource</ja>(useStackTraceHashes=<js>"$C{REST/useStackTraceHashes,false}"</js>)
 	 * 	<jk>public class</jk> MyResource {
@@ -2737,7 +2737,7 @@ public final class RestContext extends BeanContext {
 	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
 	 * and aside section of the page:
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		widgets={
 	 * 			MyWidget.<jk>class</jk>
@@ -3278,7 +3278,7 @@ public final class RestContext extends BeanContext {
 	 * They can also return values that themselves contain other variables.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,
 	 * 		properties={
@@ -3295,7 +3295,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * A typical usage pattern involves using variables inside the {@link HtmlDoc @HtmlDoc} annotation:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>,
 	 * 		htmldoc=@HtmlDoc(
@@ -3408,7 +3408,7 @@ public final class RestContext extends BeanContext {
 	 * </ol>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
 	 *	<jc>// from the classpath.</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
@@ -3438,7 +3438,7 @@ public final class RestContext extends BeanContext {
 	 * up the classpath resource.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
 	 *	<jc>// from the classpath.</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
@@ -3470,7 +3470,7 @@ public final class RestContext extends BeanContext {
 	 * Reads the input stream from {@link #getClasspathResource(String, Locale)} into a String.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
 	 *	<jc>// from the classpath.</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
@@ -3500,7 +3500,7 @@ public final class RestContext extends BeanContext {
 	 * up the classpath resource.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
 	 *	<jc>// from the classpath.</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
@@ -3536,7 +3536,7 @@ public final class RestContext extends BeanContext {
 	 * Useful if you want to load predefined POJOs from JSON files in your classpath.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
 	 *	<jc>// from the classpath parsed as an array of beans.</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)
@@ -3574,7 +3574,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A rest method that (unsafely!) returns the contents of a localized file </jc>
 	 *	<jc>// from the classpath parsed as an array of beans.</jc>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/foo"</js>)

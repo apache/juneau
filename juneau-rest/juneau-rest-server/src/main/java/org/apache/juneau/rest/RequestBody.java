@@ -141,7 +141,7 @@ public class RequestBody {
 	 * a complete definition of supported POJOs.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into an integer.</jc>
 	 * 	<jk>int</jk> body = req.getBody().asType(<jk>int</jk>.<jk>class</jk>);
 	 *
@@ -182,7 +182,7 @@ public class RequestBody {
 	 * This is similar to {@link #asType(Class)} but allows for complex collections of POJOs to be created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; body = req.getBody().asType(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
@@ -272,7 +272,7 @@ public class RequestBody {
 	 * Returns the HTTP body content as a simple hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	0123456789ABCDEF
 	 * </p>
 	 *
@@ -289,7 +289,7 @@ public class RequestBody {
 	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	01 23 45 67 89 AB CD EF
 	 * </p>
 	 *

@@ -19,7 +19,7 @@ import java.util.*;
  *
  * <p>
  * Primarily used for testing purposes for quickly creating populated lists.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Example:</jc>
  * 	List&lt;String&gt; l = <jk>new</jk> AList&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
  * </p>

@@ -39,7 +39,7 @@ import org.apache.juneau.httppart.*;
  * The following example shows the <ja>@Response</ja> annotation used to define a subclass of <code>Unauthorized</code> for an invalid login attempt.
  * <br>Note that the annotation can be used on super and subclasses.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Our REST method that throws an annotated exception.</jc>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
  * 	<jk>public</jk> Ok login(String username, String password) <jk>throws</jk> InvalidLogin {...}
@@ -62,7 +62,7 @@ import org.apache.juneau.httppart.*;
  * The attributes on this annotation are used to populate the generated Swagger for the method.
  * <br>In this case, the Swagger is populated with the following:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<js>'/user/login'</js>: {
  * 		get: {
  * 			responses: {
@@ -80,7 +80,7 @@ import org.apache.juneau.httppart.*;
  * <p>
  * In the example above, we're using the <code>Ok</code> class which is defined like so:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
  * 	<jk>public class</jk> Ok { ... }
  * </p>
@@ -88,7 +88,7 @@ import org.apache.juneau.httppart.*;
  * <p>
  * Another example is <code>Redirect</code> which is defined like so:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Response<ja>(
  * 		code=302,
  * 		description=<js>"Redirect"</js>,

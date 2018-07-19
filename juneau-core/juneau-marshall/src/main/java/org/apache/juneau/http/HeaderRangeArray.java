@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * </p>
  *

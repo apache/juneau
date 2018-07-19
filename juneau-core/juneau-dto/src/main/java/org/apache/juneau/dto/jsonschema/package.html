@@ -88,7 +88,7 @@
 		<p>
 			The draft JSON-Schema specification that the JSON-Schema beans are modeled after is as follows:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 	    <js>"id"</js>: <js>"http://json-schema.org/draft-04/schema#"</js>,
 	    <js>"$schema"</js>: <js>"http://json-schema.org/draft-04/schema#"</js>,
@@ -277,7 +277,7 @@
 		<p>
 			The following is an example JSON-Schema document:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		<js>"title"</js>: <js>"Example Schema"</js>,
 		<js>"type"</js>: <js>"object"</js>,
@@ -300,7 +300,7 @@
 		<p>
 			This document can be constructing using the following code:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Create the document object model</jc>
 	JsonSchema s = <jk>new</jk> JsonSchema()
 		.setTitle(<js>"Example Schema"</js>)
@@ -320,7 +320,7 @@
 		<p>
 			The following is a more-complex example showing various kinds of constraints.
 		</p>		
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 	    <js>"id"</js>: <js>"http://some.site.somewhere/entry-schema#"</js>,
 	    <js>"$schema"</js>: <js>"http://json-schema.org/draft-04/schema#"</js>,
@@ -359,7 +359,7 @@
 		<p>
 			This document can be constructing using the following code:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	JsonSchema s = <jk>new</jk> JsonSchema()
 		.setId(<js>"http://some.site.somewhere/entry-schema#"</js>)
 		.setSchemaVersionId(<js>"http://json-schema.org/draft-04/schema#"</js>)
@@ -414,7 +414,7 @@
 				The sample web application includes a REST resource that generates a JSON-Schema document.  
 				We'll use this resource to show what the JSON-Schema document looks like in other languages.
 			</p>
-			<p class='bcode'>
+			<p class='bcode w800'>
 	<jd>/**
 	 * Sample resource that shows how to serialize JSON-Schema documents.
 	 */</jd>
@@ -524,7 +524,7 @@
 		<p>
 			Use the {@link org.apache.juneau.json.JsonParser} to parse JSON-Schema documents into DTOs:
 		</p>
-		<p class='bcode'>		
+		<p class='bcode w800'>		
 	<jc>// Use parser to load JSON-Schema document into JSON-Schema DTOs</jc>
 	Schema schema = JsonParser.<jsf>DEFAULT</jsf>.parse(json, JsonSchema.<jk>class</jk>);
 		</p>

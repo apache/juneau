@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
  * {@link Bean#typeName() @Bean.typeName()} annotation.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// A bean dictionary map consisting of classes without @Bean.typeName() annotations</jc>
  * 	<jc>// that require type names to be explicitly specified.</jc>
  * 	<jk>public class</jk> MyBeanDictionaryMap <jk>extends</jk> BeanDictionaryMap {

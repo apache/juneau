@@ -21,7 +21,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <p>
  * When serialized to XML, creates the following construct:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<xt>&lt;item</xt> <xa>name</xa>=<xs>'name'</xs> <xa>type</xa>=<xs>'xs:String'</xs> <xa>length</xa>=<xs>'255'</xs>/&gt;
  * </p>
  */
@@ -68,7 +68,7 @@ public class Column {
 	 * <p>
 	 * For example, the <code>AddressBookResource</code> sample defined the following POJO swap to define an additional
 	 * <js>"numAddresses"</js> column even though no such property exists on the serialized beans.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Column c = <jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>)
 	 * 		.addPojoSwaps(
 	 * 			<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() {

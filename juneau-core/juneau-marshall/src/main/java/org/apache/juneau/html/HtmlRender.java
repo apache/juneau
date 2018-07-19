@@ -31,7 +31,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * <img class='bordered' src='doc-files/HtmlRender_1.png'>
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Our bean class</jc>
  * 	<jk>public class</jk> FileSpace {
  *

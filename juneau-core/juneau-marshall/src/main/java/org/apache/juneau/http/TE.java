@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  * server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	TE: trailers, deflate
  * </p>
  *
@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
  * Its value may consist of the keyword "trailers" and/or a comma-separated list of extension transfer-coding names
  * with optional accept parameters (as described in section 3.6).
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	TE        = "TE" ":" #( t-codings )
  * 	t-codings = "trailers" | ( transfer-extension [ accept-params ] )
  * </p>
@@ -49,7 +49,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Examples of its use are:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	TE: deflate
  * 	TE:
  * 	TE: trailers, deflate;q=0.5

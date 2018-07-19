@@ -50,7 +50,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	String title = restRequest.resolveVars(<js>"$RI{title}"</js>);
  * 	String titleOrDescription = restRequest.resolveVars(<js>"$RI{title,description}"</js>);
  * </p>

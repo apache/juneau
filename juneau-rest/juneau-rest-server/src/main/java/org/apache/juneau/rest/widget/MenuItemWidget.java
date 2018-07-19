@@ -41,7 +41,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * For example, to render a link that brings up a simple dialog in a div tag:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Override</ja>
  * 	<jk>public</jk> String getLabel() {
  * 		<jk>return</jk> <js>"my-menu-item"</js>;
@@ -79,7 +79,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * For example, the following shows how the method could be used to make an AJAX call back to the REST
 	 * interface to populate a SELECT element in the contents of the popup dialog:
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@Override</ja>
 	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest req) {
 	 * 		<jk>return</jk> <js>""</js>
@@ -107,7 +107,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * Note that it's often easier (and cleaner) to use the {@link #loadScript(String)} method and read the Javascript from
 	 * your classpath:
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@Override</ja>
 	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest req) <jk>throws</jk> Exception {
 	 * 		<jk>return</jk> loadScript(<js>"AddOrderMenuItem_beforeShow.js"</js>);

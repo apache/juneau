@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * Content-Types that are acceptable for the response.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept: text/plain
  * </p>
  *
@@ -37,7 +37,7 @@ import org.apache.juneau.internal.*;
  * Accept headers can be used to indicate that the request is specifically limited to a small set of desired types, as
  * in the case of a request for an in-line image.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	 Accept         = "Accept" ":
  * 							#( media-range [ accept-params ] )
  *
@@ -72,7 +72,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * The example
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept: audio/*; q=0.2, audio/basic
  * </p>
  * <p>
@@ -88,7 +88,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * A more elaborate example is
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept: text/plain; q=0.5, text/html,
  * 	        text/x-dvi; q=0.8, text/x-c
  * </p>
@@ -102,7 +102,7 @@ import org.apache.juneau.internal.*;
  * Media ranges can be overridden by more specific media ranges or specific media types.
  * If more than one media range applies to a given type, the most specific reference has precedence.
  * For example,
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept: text/ *, text/html, text/html;level=1, * /*
  * </p>
  * <p>
@@ -118,13 +118,13 @@ import org.apache.juneau.internal.*;
  * The media type quality factor associated with a given type is determined by finding the media range with the highest
  * precedence which matches that type.
  * For example,
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Accept: text/*;q=0.3, text/html;q=0.7, text/html;level=1,
  * 	        text/html;level=2;q=0.4, * /*;q=0.5
  * </p>
  * <p>
  * would cause the following values to be associated:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	text/html;level=1         = 1
  * 	text/html                 = 0.7
  * 	text/plain                = 0.3

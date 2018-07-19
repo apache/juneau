@@ -42,19 +42,20 @@ import org.apache.juneau.urlencoding.*;
  * entry converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(RestRequest req, RestResponse res,
- * 				<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1, <ja>@FormData</ja>(<js>"p2"</js>) String p2, <ja>@FormData</ja>(<js>"p3"</js>) UUID p3) {
- * 		...
- * 	}
+ * 	<jk>public void</jk> doPost(
+ * 			<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1,
+ * 			<ja>@FormData</ja>(<js>"p2"</js>) String p2,
+ * 			<ja>@FormData</ja>(<js>"p3"</js>) UUID p3
+ * 		) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(RestRequest req, RestResponse res) {
+ * 	<jk>public void</jk> doPost(RestRequest req) {
  * 		<jk>int</jk> p1 = req.getFormData(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
  * 		String p2 = req.getFormData(String.<jk>class</jk>, <js>"p2"</js>);
  * 		UUID p3 = req.getFormData(UUID.<jk>class</jk>, <js>"p3"</js>);
@@ -68,6 +69,27 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>
  * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
  * </ol>
+ *
+ * <p>
+ * The special name <js>"*"</js> (or blank) can be used to represent all values.
+ * When used, the data type must be a <code>Map</code> or bean.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a map.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@FormData</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Same, but name "*" is inferred.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@FormData</ja> Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a bean.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@FormData</ja> MyBean bean) {...}
+ * </p>
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
  *
@@ -91,7 +113,7 @@ import org.apache.juneau.urlencoding.*;
  * request.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -102,30 +124,25 @@ import org.apache.juneau.urlencoding.*;
  * 			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
  *
  * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
- * 		<jc>// Same as @FormData("*").</jc>
+ * 		<jc>// Name "*" is inferred.</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
  * 		String myProxyMethod2(<ja>@FormData</ja> NameValuePairs nameValuePairs);
  *
  * 		<jc>// Multiple values pulled from a Map.</jc>
- * 		<jc>// Same as @FormData("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3"</js>)
  * 		String myProxyMethod3(<ja>@FormData</ja> Map&lt;String,Object&gt; map);
  *
  * 		<jc>// Multiple values pulled from a bean.</jc>
- * 		<jc>// Same as @FormData("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4"</js>)
- * 		String myProxyMethod4(<ja>@FormData</ja> MyBean myBean);
+ * 		String myProxyMethod4(<ja>@FormData</ja> MyBean bean);
  *
  * 		<jc>// An entire form-data HTTP body as a String.</jc>
- * 		<jc>// Same as @FormData("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod5"</js>)
  * 		String myProxyMethod5(<ja>@FormData</ja> String string);
  *
  * 		<jc>// An entire form-data HTTP body as a Reader.</jc>
- * 		<jc>// Same as @FormData("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod6"</js>)
  * 		String myProxyMethod6(<ja>@FormData</ja> Reader reader);
- *
  * 	}
  * </p>
  *
@@ -134,7 +151,7 @@ import org.apache.juneau.urlencoding.*;
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -179,16 +196,6 @@ import org.apache.juneau.urlencoding.*;
  * 		<ja>@FormData</ja>
  * 		Reader getReader();
  * 	}
- * </p>
- *
- * <p>
- * The {@link #name()} and {@link #value()} elements are synonyms for specifying the parameter name.
- * Only one should be used.
- * <br>The following annotations are fully equivalent:
- * <p class='bcode'>
- * 	<ja>@FormData</ja>(name=<js>"foo"</js>)
- *
- * 	<ja>@FormData</ja>(<js>"foo"</js>)
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
@@ -252,7 +259,7 @@ public @interface FormData {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -275,7 +282,7 @@ public @interface FormData {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jk>public interface</jk> MyRequestBean {
 	 *
 	 * 		<jc>// Equivalent to @FormData("foo")</jc>

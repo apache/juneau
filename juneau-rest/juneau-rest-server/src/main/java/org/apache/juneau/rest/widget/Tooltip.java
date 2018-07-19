@@ -29,7 +29,7 @@ import org.apache.juneau.dto.html5.*;
  * <p>
  * The following examples shows how tooltips can be added to a menu item widget.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * <jk>public class</jk> MyFormMenuItem <jk>extends</jk> MenuItemWidget {
  *
  * 	<ja>@Override</ja>

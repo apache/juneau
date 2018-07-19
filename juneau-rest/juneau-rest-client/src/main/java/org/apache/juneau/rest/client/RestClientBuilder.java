@@ -326,7 +326,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <p>
 	 * Same as calling the following:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	builder
 	 * 		.enableSSL()
 	 * 		.hostnameVerifier(<jk>new</jk> NoopHostnameVerifier())

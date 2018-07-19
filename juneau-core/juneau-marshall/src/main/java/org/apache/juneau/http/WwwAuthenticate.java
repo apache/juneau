@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Indicates the authentication scheme that should be used to access the requested entity.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	WWW-Authenticate: Basic
  * </p>
  *
@@ -29,7 +29,7 @@ package org.apache.juneau.http;
  * The field value consists of at least one challenge that indicates the authentication scheme(s) and parameters
  * applicable to the Request-URI.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	WWW-Authenticate  = "WWW-Authenticate" ":" 1#challenge
  * </p>
  *

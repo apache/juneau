@@ -22,7 +22,7 @@ import org.apache.juneau.*;
  * <p>
  * An instance of this object is equivalent to calling...
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	JsonSchema s = <jk>new</jk> JsonSchema().setRef(uri);
  * </p>
  *

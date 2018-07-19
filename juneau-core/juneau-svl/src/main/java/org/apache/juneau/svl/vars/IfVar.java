@@ -33,7 +33,7 @@ import org.apache.juneau.svl.*;
  * <br>All else are interpreted as <jk>false</jk>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Create a variable resolver that resolves system properties and $IF vars.</jc>
  * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(IfVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
  *

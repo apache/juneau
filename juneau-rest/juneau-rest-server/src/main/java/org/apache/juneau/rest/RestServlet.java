@@ -108,7 +108,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * Resource classes that don't extend from {@link RestServlet} can add the following method to their class to get
 	 * access to this context object:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public void</jk> init(RestServletContext context) <jk>throws</jk> Exception;
 	 * </p>
 	 *

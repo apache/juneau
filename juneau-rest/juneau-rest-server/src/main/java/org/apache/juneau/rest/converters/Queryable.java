@@ -30,14 +30,14 @@ import org.apache.juneau.utils.*;
  * 		<code>&amp;s=</code> Search arguments.
  * 		<br>Comma-delimited list of key/value pairs representing column names and search tokens.
  * 		<br>Example:
- * 		<p class='bcode'>
+ * 		<p class='bcode w800'>
  * 	&amp;s=name=Bill*,birthDate&gt;2000
  * 		</p>
  * 	<li>
  * 		<code>&amp;v=</code> Visible columns.
  * 		<br>Comma-delimited list of column names to display.
  * 		<br>Example:
- * 		<p class='bcode'>
+ * 		<p class='bcode w800'>
  * 	&amp;v=name,birthDate
  * 		</p>
  * 	<li>
@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
  * 		<br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
  * 		<br>The default is ascending order.
  * 		<br>Example:
- * 		<p class='bcode'>
+ * 		<p class='bcode w800'>
  * 	&amp;o=name,birthDate-
  * 		</p>
  * 	<li>

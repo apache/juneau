@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * The email address of the user making the request.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	From: user@example.com
  * </p>
  *
@@ -29,13 +29,13 @@ package org.apache.juneau.http;
  * the requesting user agent.
  * The address SHOULD be machine-usable, as defined by "mailbox" in RFC 822 [9] as updated by RFC 1123 [8]:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	From   = "From" ":" mailbox
  * </p>
  *
  * <p>
  * An example is:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	From: webmaster@w3.org
  * </p>
  *

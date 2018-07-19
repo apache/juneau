@@ -17,7 +17,7 @@ package org.apache.juneau.internal;
  *
  * <p>
  * General usage:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	int hashCode = new HashCode().add("foobar").add(myobject).add(123).get();
  * </p>
  */

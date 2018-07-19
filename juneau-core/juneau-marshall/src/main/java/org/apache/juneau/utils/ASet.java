@@ -19,7 +19,7 @@ import java.util.*;
  *
  * <p>
  * Primarily used for testing purposes for quickly creating populated sets.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Example:</jc>
  * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
  * </p>

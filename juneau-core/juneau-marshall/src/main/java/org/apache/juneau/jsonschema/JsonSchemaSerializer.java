@@ -228,7 +228,7 @@ public class JsonSchemaSerializer extends JsonSerializer {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * When enabled, schemas on beans will be serialized as the following:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	{
 	 * 		type: <js>'object'</js>,
 	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>

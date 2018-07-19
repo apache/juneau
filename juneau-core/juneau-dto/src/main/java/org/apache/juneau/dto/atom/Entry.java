@@ -23,7 +23,7 @@ import org.apache.juneau.transforms.*;
  * Represents an <code>atomEntry</code> construct in the RFC4287 specification.
  *
  * <h5 class='figure'>Schema</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	atomEntry =
  * 		element atom:entry {
  * 			atomCommonAttributes,

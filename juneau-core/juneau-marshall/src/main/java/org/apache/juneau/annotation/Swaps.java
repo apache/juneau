@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 /**
  * Used to associate multiple swaps with the same POJO class.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Swaps</ja>(
  * 		{
  * 			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),

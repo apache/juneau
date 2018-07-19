@@ -54,7 +54,7 @@ public @interface RestResource {
 	 * URL parameter.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
 	 *
@@ -80,7 +80,7 @@ public @interface RestResource {
 	 * GET request.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?method=OPTIONS
 	 * </p>
 	 *
@@ -106,7 +106,7 @@ public @interface RestResource {
 	 * parameters.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
@@ -383,7 +383,7 @@ public @interface RestResource {
 	 *
 	 * <p>
 	 * Used to customize the output from the HTML Doc serializer.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/addressBook"</js>,
 	 *
@@ -747,7 +747,7 @@ public @interface RestResource {
 	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	htmldoc=<ja>@HtmlDoc</ja>(
 	 * 		header={
 	 * 			<js>"&lt;h1&gt;$R{siteName}&lt;/h1&gt;"</js>,
@@ -857,7 +857,7 @@ public @interface RestResource {
 	 * Used to populate the auto-generated OPTIONS swagger documentation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		path=<js>"/addressBook"</js>,
 	 *

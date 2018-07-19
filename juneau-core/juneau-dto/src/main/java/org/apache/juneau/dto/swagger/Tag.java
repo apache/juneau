@@ -27,7 +27,7 @@ import org.apache.juneau.utils.*;
  * It is not mandatory to have a Tag Object per tag used there.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Tag x = <jsm>tag</jsm>()
  * 		.name(<js>"pet"</js>)
@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"pet"</js>,
@@ -208,7 +208,7 @@ public class Tag extends SwaggerElement {
 	 * 		<li>{@link ExternalDocumentation}
 	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * 			</p>
 	 * 	</ul>

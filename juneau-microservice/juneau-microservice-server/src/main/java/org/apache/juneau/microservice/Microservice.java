@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * The general command for invoking these services is...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	java -jar mymicroservice.jar [mymicroservice.cfg]
  * </p>
  *
@@ -68,7 +68,7 @@ import org.apache.juneau.utils.*;
  *
  * Subclasses must implement a static void main method as the entry point for the microservice.
  * Typically, this method will simply consist of the following...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
  * 		<jk>new</jk> MyMicroservice(args).start();
  * 	}
@@ -296,7 +296,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * Subclasses can override this method to provide their own variables.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jd>/**
 	 * 	 * Augment default var resolver with a custom $B{...} variable that simply wraps strings inside square brackets.
 	 * 	 * /</jd>
@@ -313,12 +313,12 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 			);
 	 * 	}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<cc># Example config file</cc>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>myEntry</ck> = $B{foo}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Example java code</jc>
 	 * 	String myentry = getConfig().getString(<js>"MySection/myEntry"</js>); <jc>// == "[foo]"</js>
 	 * </p>
@@ -389,7 +389,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * This method can be called from the class constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cc># My section</cc>
 	 * 	<cc>#--------------------------</cc>
@@ -435,7 +435,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * 	<ck>aBean2</ck> = {foo:'$A{0}',baz:$C{MySection/anInt}}
 	 * </p>
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Java code for accessing config entries above.</jc>
 	 * 	Config cf = getConfig();
 	 *
@@ -468,7 +468,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 * This method can be called from the class constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
 	 * 	String mainClass = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
 	 *
@@ -692,7 +692,7 @@ public abstract class Microservice implements ConfigEventListener {
 	 *
 	 * <p>
 	 * The default implementation uses the <cs>Logging</cs> section in the config file to set up logging:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<cc>#================================================================================
 	 * 	# Logger settings
 	 * 	# See FileHandler Java class for details.

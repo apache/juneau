@@ -29,7 +29,7 @@ import org.apache.juneau.rest.widget.*;
  *
  * <p>
  * For example, the following two methods for defining the HTML nav links are considered equivalent:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Defined via properties.</jc>
  * 	<ja>@RestResource</ja>(
  * 		properties={
@@ -51,7 +51,7 @@ import org.apache.juneau.rest.widget.*;
  * <p>
  * The purpose of these annotation is to populate the HTML document view which by default consists of the following
  * structure:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<xt>&lt;html&gt;
  * 		&lt;head&gt;
  * 			&lt;style <xa>type</xa>=<xs>'text/css'</xs>&gt;
@@ -92,7 +92,7 @@ public @interface HtmlDoc {
 	 * The aside section typically floats on the right side of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			aside={
@@ -137,7 +137,7 @@ public @interface HtmlDoc {
 	 * The footer section typically floats on the bottom of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			footer={
@@ -179,7 +179,7 @@ public @interface HtmlDoc {
 	 * Adds arbitrary content to the HTML <xt>&lt;head&gt;</xt> element on the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			head={
@@ -227,7 +227,7 @@ public @interface HtmlDoc {
 	 * to be whatever you want.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			header={
@@ -272,7 +272,7 @@ public @interface HtmlDoc {
 	 * The nav section of the page contains the links.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			nav={
@@ -327,7 +327,7 @@ public @interface HtmlDoc {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			navlinks={
@@ -402,7 +402,7 @@ public @interface HtmlDoc {
 	 * Sets the HTML script section contents.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			script={
@@ -444,7 +444,7 @@ public @interface HtmlDoc {
 	 * Sets the HTML CSS style section contents.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			style={
@@ -490,7 +490,7 @@ public @interface HtmlDoc {
 	 * Specifies the URL to the stylesheet to add as a link in the style tag in the header.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			stylesheet=<js>"http://someOtherHost/stealTheir.css"</js>
@@ -572,7 +572,7 @@ public @interface HtmlDoc {
 	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
 	 * and aside section of the page:
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		widgets={
 	 * 			MyWidget.<jk>class</jk>

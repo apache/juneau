@@ -26,7 +26,7 @@ import org.apache.juneau.utils.*;
  * the {@link #init(ManifestFile)} method.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Create a ManifestFile object that contains the manifest of the jar file containing this class.</jc>
  * 	ManifestFile mf = <jk>new</jk> ManifestFile(<jk>this</jk>.getClass());
  *

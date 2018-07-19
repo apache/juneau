@@ -67,7 +67,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * To interact with this object, simply pass it in as a constructor argument or in an INIT hook.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Option #1 - Pass in through constructor.</jc>
  * 	<jk>public</jk> MyResource(RestContextBuilder builder) {
  * 			builder
@@ -344,7 +344,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * {@link ConfigVar#SESSION_config} object that can be specified as either a session object (temporary) or
 	 * context object (permanent).
 	 * In this case, we call the following code to add it to the context map:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	config.addVarContextObject(<jsf>SESSION_config</jsf>, configFile);
 	 * </p>
 	 *
@@ -405,7 +405,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * The config file can be programmatically overridden by adding the following method to your resource:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Config createConfig(ServletConfig servletConfig) <jk>throws</jk> ServletException;
 	 * </p>
 	 *
@@ -426,7 +426,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * The configuration properties can be augmented programmatically by adding the following method to your resource:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> RestContextProperties createProperties(ServletConfig servletConfig) <jk>throws</jk> ServletException;
 	 * </p>
 	 *
@@ -476,7 +476,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * URL parameter.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
 	 *
@@ -502,7 +502,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * GET request.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?method=OPTIONS
 	 * </p>
 	 *
@@ -529,7 +529,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * parameters.
 	 * <br>
 	 * For example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *

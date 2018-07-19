@@ -36,7 +36,7 @@ import org.apache.juneau.json.*;
  * For example, two serializers of the same type created with the same configuration will always end up being
  * the same serializer:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	WriterSerializer s1 = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySwap.<jk>class</jk>).simple().build();
  * 	WriterSerializer s2 = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MySwap.<jk>class</jk>).build();
  * 	<jk>assert</jk>(s1 == s2);
@@ -55,7 +55,7 @@ import org.apache.juneau.json.*;
  * <p>
  * In the example above, the property store being built looks like the following:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	PropertyStore ps = PropertyStore
  * 		.<jsm>create</jsm>()
  * 		.set(<js>"BeanContext.pojoSwaps.lc"</js>, MySwap.<jk>class</jk>)
@@ -71,7 +71,7 @@ import org.apache.juneau.json.*;
  *
  * <p>
  * Property names must have the following format...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<js>"{class}.{name}.{type}"</js>
  * </p>
  * <p>
@@ -139,7 +139,7 @@ import org.apache.juneau.json.*;
  * <p>
  * For example, multiple calls to <code>pojoSwaps()</code> causes new entries to be added to the beginning of the list
  * so that previous values can be 'overridden':
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Swap order:  [MySwap2.class, MySwap1.class]</jc>
  * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>).pojoSwaps(MySwap2.<jk>class</jk>).build();
  * </p>
@@ -147,14 +147,14 @@ import org.apache.juneau.json.*;
  * <p>
  * Note that the order is different when passing multiple values into the <code>pojoSwaps()</code> method, in which
  * case the order should be first-match-wins:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Swap order:  [MySwap1.class, MySwap2.class]</jc>
  * 	JsonSerializer.create().pojoSwaps(MySwap1.<jk>class</jk>,MySwap2.<jk>class</jk>).build();
  * </p>
  *
  * <p>
  * Combined, the results look like this:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Swap order:  [MySwap4.class, MySwap3.class, MySwap1.class, MySwap2.class]</jc>
  * 	JsonSerializer
  * 		.create()
@@ -173,14 +173,14 @@ import org.apache.juneau.json.*;
  *
  * <p>
  * Set and list properties have the additional convenience 'command' names for adding and removing entries:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<js>"{class}.{name}.{type}/add"</js>  <jc>// Add a value to the set/list.</jc>
  * 	<js>"{class}.{name}.{type}/remove"</js>  <jc>// Remove a value from the set/list.</jc>
  * </p>
  *
  * <p>
  * Map properties have the additional convenience property name for adding and removing map entries:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<js>"{class}.{name}.{type}/add.{key}"</js>  <jc>// Add a map entry (or delete if the value is null).</jc>
  * </p>
  *

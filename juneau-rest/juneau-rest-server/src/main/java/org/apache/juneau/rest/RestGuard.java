@@ -44,7 +44,7 @@ import org.apache.juneau.rest.exception.*;
  * Guards must implement a no-args constructor.
  *
  * <h5 class='topic'>Example usage:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public</jk> MyResource <jk>extends</jk> RestServlet {
  *
  * 		<jc>// Delete method with guard that only allows Billy to call it.</jc>
@@ -54,7 +54,7 @@ import org.apache.juneau.rest.exception.*;
  * </p>
  *
  * <h5 class='topic'>Example implementation:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Define a guard that only lets Billy make a request</jc>
  * 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
  *

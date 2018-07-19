@@ -51,7 +51,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	 * <p>
 	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept-Encoding  = "Accept-Encoding" ":"
 	 * 	                   1#( codings [ ";" "q" "=" qvalue ] )
 	 * 	codings          = ( content-coding | "*" )
@@ -59,7 +59,7 @@ public final class StringRange implements Comparable<StringRange>  {
 	 *
 	 * <p>
 	 * Examples of its use are:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept-Encoding: compress, gzip
 	 * 	Accept-Encoding:
 	 * 	Accept-Encoding: *

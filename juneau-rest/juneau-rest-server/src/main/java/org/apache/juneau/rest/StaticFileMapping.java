@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * An example where this class is used is in the {@link RestResource#staticFiles} annotation:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * <jk>package</jk> com.foo.mypackage;
  *
  * <ja>@RestResource</ja>(

@@ -27,7 +27,7 @@ import org.apache.juneau.svl.*;
  * session object on the resolver session.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Create a config object.</jc>
  * 	Config config = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  *

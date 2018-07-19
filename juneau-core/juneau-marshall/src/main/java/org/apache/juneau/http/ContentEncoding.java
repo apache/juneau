@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * The type of encoding used on the data.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Content-Encoding: gzip
  * </p>
  *
@@ -31,13 +31,13 @@ package org.apache.juneau.http;
  * field.
  * Content-Encoding is primarily used to allow a document to be compressed without losing the identity of its
  * underlying media type.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Content-Encoding  = "Content-Encoding" ":" 1#content-coding
  * </p>
  *
  * <p>
  * Content codings are defined in section 3.5. An example of its use is...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Content-Encoding: gzip
  * </p>
  *

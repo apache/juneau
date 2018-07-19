@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * It also contains accessor methods for to avoid common typecasting when accessing elements in a list.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct an empty List</jc>
  * 	List l = <jk>new</jk> ObjectList();
  *
@@ -304,7 +304,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * This is the preferred get method for simple types.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectList l = <jk>new</jk> ObjectList(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
@@ -342,7 +342,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectList l = <jk>new</jk> ObjectList(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
@@ -502,7 +502,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
@@ -547,7 +547,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
@@ -575,7 +575,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
@@ -604,7 +604,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	ObjectMap m = getObjectMap();
 	 *
 	 * 	<jc>// Long way</jc>
@@ -639,7 +639,7 @@ public class ObjectList extends LinkedList<Object> {
 	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Iterate over a list of ObjectMaps.</jc>
 	 * 	ObjectList l = <jk>new</jk> ObjectList(<js>"[{foo:'bar'},{baz:123}]"</js>);
 	 * 	for (ObjectMap m : l.elements(ObjectMap.<jk>class</jk>)) {

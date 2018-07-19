@@ -98,7 +98,7 @@ public class BasicRestLogger implements RestLogger {
 	 * debug log statements.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
 	 * </p>
 	 *
@@ -124,7 +124,7 @@ public class BasicRestLogger implements RestLogger {
 	 *
 	 * <p>
 	 * Here's a typical implementation showing how stack trace hashing can be used to reduce log file sizes...
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>protected void</jk> onError(HttpServletRequest req, HttpServletResponse res, RestException e, <jk>boolean</jk> noTrace) {
 	 * 		String qs = req.getQueryString();
 	 * 		String msg = <js>"HTTP "</js> + req.getMethod() + <js>" "</js> + e.getStatus() + <js>" "</js> + req.getRequestURI() + (qs == <jk>null</jk> ? <js>""</js> : <js>"?"</js> + qs);

@@ -29,7 +29,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * The general approach to defining bean filters is to create subclasses from this class and call methods to
  * set various attributes
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
  *
  * 		<jc>// Must provide a no-arg constructor!</jc>
@@ -93,7 +93,7 @@ public class BeanFilterBuilder<T> {
 	 * Specifies the dictionary type name for this bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -131,7 +131,7 @@ public class BeanFilterBuilder<T> {
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -172,7 +172,7 @@ public class BeanFilterBuilder<T> {
 	 * Specifies properties to exclude from the bean class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -215,7 +215,7 @@ public class BeanFilterBuilder<T> {
 	 * When specified, only the list of properties defined on the interface class will be used during serialization.
 	 * <br>Additional properties on subclasses will be ignored.
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parent class</jc>
 	 * 	<jk>public abstract class</jk> A {
 	 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
@@ -278,7 +278,7 @@ public class BeanFilterBuilder<T> {
 	 * but not <code>p1</code> or <code>p2</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> C1 {
 	 * 		<jk>public int</jk> getP1();
 	 * 	}
@@ -329,7 +329,7 @@ public class BeanFilterBuilder<T> {
 	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -398,7 +398,7 @@ public class BeanFilterBuilder<T> {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -449,7 +449,7 @@ public class BeanFilterBuilder<T> {
 	 * The class to use for calculating bean property names.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -493,7 +493,7 @@ public class BeanFilterBuilder<T> {
 	 * Adds to the list of classes that make up the bean dictionary for this bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {
@@ -537,7 +537,7 @@ public class BeanFilterBuilder<T> {
 	 * The property filter to use for intercepting and altering getter and setter calls.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our filter.</jc>
 	 * 	<jk>public class</jk> MyFilter <jk>extends</jk> BeanFilterBuilder&lt;MyBean&gt; {
 	 * 		<jk>public</jk> MyFilter() {

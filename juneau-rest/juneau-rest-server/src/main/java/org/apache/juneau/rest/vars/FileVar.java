@@ -48,7 +48,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * Example:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(
  * 		htmldoc=<ja>@HtmlDoc</ja>(
  * 			aside=<js>"$F{resources/MyAsideMessage.html, Oops not found!}"</js>

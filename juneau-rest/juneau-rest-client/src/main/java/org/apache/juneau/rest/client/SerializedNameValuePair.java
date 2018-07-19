@@ -23,7 +23,7 @@ import org.apache.juneau.urlencoding.*;
  * {@link UrlEncodingSerializer class}.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
  * 		.append(<jk>new</jk> SerializedNameValuePair(<js>"myPojo"</js>, pojo, UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>))
  * 		.append(<jk>new</jk> BasicNameValuePair(<js>"someOtherParam"</js>, <js>"foobar"</js>));

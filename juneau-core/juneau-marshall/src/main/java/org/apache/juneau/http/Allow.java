@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Valid methods for a specified resource. To be used for a 405 Method not allowed.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Allow: GET, HEAD
  * </p>
  *
@@ -29,13 +29,13 @@ package org.apache.juneau.http;
  * The purpose of this field is strictly to inform the recipient of valid methods associated with the resource.
  * An Allow header field MUST be present in a 405 (Method Not Allowed) response.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Allow   = "Allow" ":" #Method
  * </p>
  *
  * <p>
  * Example of use:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Allow: GET, HEAD, PUT
  * </p>
  *

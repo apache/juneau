@@ -62,7 +62,7 @@ public abstract class ReaderParser extends Parser {
 	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()
@@ -105,7 +105,7 @@ public abstract class ReaderParser extends Parser {
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
 	 * 	ReaderParser p = JsonParser.
 	 * 		.<jsm>create</jsm>()

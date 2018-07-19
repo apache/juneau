@@ -33,7 +33,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <p>
  * The following shows a sample object defined in Javascript:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	{
  * 		id: 1,
  * 		name: <js>'John Smith'</js>,
@@ -58,7 +58,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <p>
  * Using the "strict" syntax defined in this document, the equivalent UON notation would be as follows:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	(
  * 		<ua>id</ua>=<un>1</un>,
  * 		<ua>name</ua>=<us>'John+Smith'</us>,
@@ -82,7 +82,7 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
@@ -173,7 +173,7 @@ public class UonSerializer extends WriterSerializer {
 	 * URL-encoding of non-valid URI characters.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a non-encoding UON serializer.</jc>
 	 * 	UonSerializer s1 = UonSerializer.
 	 * 		.<jsm>create</jsm>()
@@ -224,7 +224,7 @@ public class UonSerializer extends WriterSerializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a normal UON serializer.</jc>
 	 * 	UonSerializer s1 = UonSerializer.
 	 * 		.<jsm>create</jsm>()
@@ -337,11 +337,11 @@ public class UonSerializer extends WriterSerializer {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

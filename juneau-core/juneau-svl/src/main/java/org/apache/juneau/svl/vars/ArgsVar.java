@@ -32,7 +32,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Create an args object from the main(String[]) method.</jc>
  * 	Args args = new Args(argv);
  *

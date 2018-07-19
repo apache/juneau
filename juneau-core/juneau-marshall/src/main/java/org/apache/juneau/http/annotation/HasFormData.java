@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  * Note that this can be used to detect the existence of a parameter when it's not set to a particular value.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {
  * 		...
@@ -41,7 +41,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
  * 	<jk>public void</jk> doPost(RestRequest req) {
  * 		<jk>boolean</jk> p1 = req.hasFormData(<js>"p1"</js>);

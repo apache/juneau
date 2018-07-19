@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
  * annotations, although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
  * 		properties={
@@ -48,7 +48,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * Note that shortcut annotations are also provided for these particular settings:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
  * 		title=<js>"$L{title}"</js>,
@@ -97,7 +97,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * By default, the aside section is empty.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			aside={
@@ -132,7 +132,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * By default, the footer section is empty.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			footer={
@@ -160,7 +160,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Adds the specified HTML content to the head section of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_links</jsf>,
@@ -171,7 +171,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			head={
@@ -200,7 +200,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * The header section normally contains the title and description at the top of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			header={
@@ -229,7 +229,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * The nav section normally contains the page links at the top of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			nav={
@@ -281,7 +281,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * <h5 class='section'>Example:</h5>
 	 * <p>
 	 * The <code>AddressBookResource</code> sample class uses this property...
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_navlinks</jsf>,
@@ -297,7 +297,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			navlinks={
@@ -332,7 +332,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
@@ -378,7 +378,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Adds the specified Javascript code to the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_script</jsf>,
@@ -389,7 +389,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			script={
@@ -422,7 +422,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=HtmlDocSerializer.<jsf>HTMLDOC_style</jsf>,
@@ -433,7 +433,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			style={
@@ -496,7 +496,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * can be overridden with your own custom implementation class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		htmldoc=@HtmlDoc(
 	 * 			template=MySpecialDocTemplate.<jk>class</jk>
@@ -550,11 +550,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json",text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

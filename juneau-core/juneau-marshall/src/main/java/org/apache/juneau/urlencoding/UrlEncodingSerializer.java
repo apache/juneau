@@ -33,7 +33,7 @@ import org.apache.juneau.uon.*;
  *
  * <p>
  * The following shows a sample object defined in Javascript:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	{
  * 		id: 1,
  * 		name: <js>'John Smith'</js>,
@@ -58,7 +58,7 @@ import org.apache.juneau.uon.*;
  *
  * <p>
  * Using the "strict" syntax defined in this document, the equivalent URL-encoded notation would be as follows:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ua>id</ua>=<un>1</un>
  * 	&amp;<ua>name</ua>=<us>'John+Smith'</us>,
  * 	&amp;<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,
@@ -80,7 +80,7 @@ import org.apache.juneau.uon.*;
  * </p>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map m = <jk>new</jk> ObjectMap(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
@@ -151,7 +151,7 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// A sample bean.</jc>
 	 * 	<jk>public class</jk> A {
 	 * 		<jk>public</jk> String[] f1 = {<js>"a"</js>,<js>"b"</js>};
@@ -276,11 +276,11 @@ public class UrlEncodingSerializer extends UonSerializer {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

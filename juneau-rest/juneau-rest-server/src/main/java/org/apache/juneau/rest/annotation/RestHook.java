@@ -23,7 +23,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * For example, if you want to add an initialization method to your resource:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(...)
  * 	<jk>public class</jk> MyResource  {
  *
@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * Or if you want to intercept REST calls:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(...)
  * 	<jk>public class</jk> MyResource {
  *

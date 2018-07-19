@@ -16,7 +16,7 @@ package org.apache.juneau.rest;
  * Dummy class that indicates that serializers, parsers, or transforms should be inherited from parent-class-to-class or class-to-method.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(
  *
  * 		<jc>// Override the serializers for this method, but also inherit the serializers from the class.

@@ -32,7 +32,7 @@ import org.apache.juneau.xmlschema.*;
  *
  * <p>
  * For example, the following JSON...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	{
  * 		name:<js>'John Smith'</js>,
  * 		address: {
@@ -52,7 +52,7 @@ import org.apache.juneau.xmlschema.*;
  * 	}
  * <p>
  * 	...maps to the following XML using the default serializer...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<xt>&lt;object&gt;</xt>
  * 		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
  * 		<xt>&lt;address&gt;</xt>
@@ -73,7 +73,7 @@ import org.apache.juneau.xmlschema.*;
  *
  * <p>
  * An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 		<xt>&lt;name</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
  * 		<xt>&lt;address</xt> <xa>_type</xa>=<xs>'object'</xs><xt>&gt;</xt>
  * 			<xt>&lt;streetAddress</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>21 2nd Street<xt>&lt;/streetAddress&gt;</xt>
@@ -489,11 +489,11 @@ public class XmlSerializer extends WriterSerializer {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

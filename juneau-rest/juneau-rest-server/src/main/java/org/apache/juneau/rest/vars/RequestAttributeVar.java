@@ -30,7 +30,7 @@ import org.apache.juneau.svl.*;
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	String foo = restRequest.resolveVars(<js>"$RA{foo}"</js>);
  * 	String fooOrBar = restRequest.resolveVars(<js>"$RA{foo,bar}"</js>);
  * </p>

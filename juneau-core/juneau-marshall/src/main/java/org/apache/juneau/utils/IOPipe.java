@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * A typical usage is as follows...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	InputStream in = getInputStream();
  * 	Writer out = getWriter();
  * 	IOPipe.create(in, out).closeOut().run();

@@ -56,7 +56,7 @@ public enum HookEvent {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -173,7 +173,7 @@ public enum HookEvent {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -223,7 +223,7 @@ public enum HookEvent {
 	 * The list of valid parameter types are the same as {@link #PRE_CALL}.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -281,7 +281,7 @@ public enum HookEvent {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -336,7 +336,7 @@ public enum HookEvent {
 	 * of an internal data structure.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *
@@ -449,7 +449,7 @@ public enum HookEvent {
 	 * be specified.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *

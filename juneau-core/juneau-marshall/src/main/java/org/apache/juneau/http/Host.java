@@ -21,7 +21,7 @@ package org.apache.juneau.http;
  * Mandatory since HTTP/1.1.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Host: en.wikipedia.org:8080
  * 	Host: en.wikipedia.org
  * </p>
@@ -35,7 +35,7 @@ package org.apache.juneau.http;
  * This allows the origin server or gateway to differentiate between internally-ambiguous URLs, such as the root "/" URL
  * of a server for multiple host names on a single IP address.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Host = "Host" ":" host [ ":" port ] ; Section 3.2.2
  * </p>
  *
@@ -43,7 +43,7 @@ package org.apache.juneau.http;
  * A "host" without any trailing port information implies the default port for the service requested (e.g., "80" for an
  * HTTP URL).
  * For example, a request on the origin server for &lt;http://www.w3.org/pub/WWW/&gt; would properly include:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	GET /pub/WWW/ HTTP/1.1
  * 	Host: www.w3.org
  * </p>

@@ -54,7 +54,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 	 * <br>A value of <code>0</code> disables reference resolution altogether.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Resolve schema references up to 5 levels deep.
 	 * 	<ja>@RestResource</ja>(
 	 * 			properties={

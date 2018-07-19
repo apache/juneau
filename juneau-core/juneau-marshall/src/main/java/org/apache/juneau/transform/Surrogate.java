@@ -28,7 +28,7 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * The following is an example of a surrogate class change changes a property name:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> MySurrogate <jk>implements</jk> Surrogate {
  *
  * 		<jc>// Public constructor that wraps the normal object during serialization.</jc>
@@ -48,7 +48,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Surrogate classes are associated with serializers and parsers using the {@link BeanContextBuilder#pojoSwaps(Class...)}
  * method.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	JsonSerializer s = JsonSerializer
  * 		.<jsm>create</jsm>()
  * 		.pojoSwaps(MySurrogate.<jk>class</jk>)
@@ -61,7 +61,7 @@ import org.apache.juneau.annotation.*;
  * </p>
  *
  * Surrogates can also be associated using the {@link Swap @Swap} annotation.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Swap</ja>(MySurrogate.<jk>class</jk>)
  * 	<jk>public class</jk> NormalClass {...}
  * </p>
@@ -69,7 +69,7 @@ import org.apache.juneau.annotation.*;
  * <p>
  * On a side note, a surrogate class is functionally equivalent to the following {@link PojoSwap}
  * implementation:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> MySurrogate <jk>extends</jk> PojoSwap&lt;NormalClass,MySurrogate&gt; {
  * 		<jk>public</jk> MySurrogate swap(NormalClass o) <jk>throws</jk> SerializeException {
  * 			<jk>return new</jk> MySurrogate(o);

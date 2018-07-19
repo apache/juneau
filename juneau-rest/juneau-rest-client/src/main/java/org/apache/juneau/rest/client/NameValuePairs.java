@@ -31,7 +31,7 @@ import org.apache.juneau.urlencoding.*;
  * {@link RestCall#body(Object)} methods to perform URL-encoded form posts.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
  * 		.append(<js>"j_username"</js>, user)
  * 		.append(<js>"j_password"</js>, pw);

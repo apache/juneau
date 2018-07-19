@@ -41,7 +41,7 @@ import org.apache.juneau.urlencoding.*;
  * in a URL path pattern converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
  * 			<ja>@Path</ja>(<js>"foo"</js>) String foo, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Path</ja>(<js>"baz"</js>) UUID baz) {
@@ -68,7 +68,7 @@ import org.apache.juneau.urlencoding.*;
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -99,7 +99,7 @@ import org.apache.juneau.urlencoding.*;
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -145,7 +145,7 @@ import org.apache.juneau.urlencoding.*;
  * The {@link #name()} and {@link #value()} elements are synonyms for specifying the path variable name.
  * Only one should be used.
  * <br>The following annotations are fully equivalent:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Path</ja>(name=<js>"foo"</js>)
  *
  * 	<ja>@Path</ja>(<js>"foo"</js>)
@@ -206,7 +206,7 @@ public @interface Path {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be treated as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -229,7 +229,7 @@ public @interface Path {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jk>public interface</jk> MyRequestBean {
 	 *
 	 * 		<jc>// Equivalent to @Path("foo")</jc>

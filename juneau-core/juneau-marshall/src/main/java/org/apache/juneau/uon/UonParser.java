@@ -57,7 +57,7 @@ public class UonParser extends ReaderParser {
 	 * before being passed to this parser.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a decoding UON parser.</jc>
 	 * 	ReaderParser p = UonParser.
 	 * 		.<jsm>create</jsm>()
@@ -98,7 +98,7 @@ public class UonParser extends ReaderParser {
 	 * the stream consists of only comments or whitespace.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a parser using strict mode.</jc>
 	 * 	ReaderParser p = UonParser.
 	 * 		.<jsm>create</jsm>()

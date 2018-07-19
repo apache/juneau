@@ -28,7 +28,7 @@ import org.apache.juneau.svl.*;
  * Builder for creating instances of {@link Config Configs}.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  * 	String setting = cf.getString(<js>"MySection/mysetting"</js>);
  * </p>

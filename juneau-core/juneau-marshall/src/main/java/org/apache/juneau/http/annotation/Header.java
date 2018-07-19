@@ -42,7 +42,7 @@ import org.apache.juneau.urlencoding.*;
  * request header converted to a POJO.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {
  * 		...
@@ -51,7 +51,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
  * 		UUID etag = req.getHeader(UUID.<jk>class</jk>, "ETag");
@@ -79,7 +79,7 @@ import org.apache.juneau.urlencoding.*;
  * header value.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -111,7 +111,7 @@ import org.apache.juneau.urlencoding.*;
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -157,7 +157,7 @@ import org.apache.juneau.urlencoding.*;
  * The {@link #name()} and {@link #value()} elements are synonyms for specifying the header name.
  * Only one should be used.
  * <br>The following annotations are fully equivalent:
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Header</ja>(name=<js>"Foo"</js>)
  *
  * 	<ja>@Header</ja>(<js>"Foo"</js>)
@@ -223,7 +223,7 @@ public @interface Header {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -246,7 +246,7 @@ public @interface Header {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jk>public interface</jk> MyRequestBean {
 	 *
 	 * 		<jc>// Equivalent to @Header("Foo")</jc>

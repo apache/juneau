@@ -661,7 +661,7 @@ public final class StringUtils {
 	 *
 	 * <p>
 	 * Example:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	String in = <js>"foo=1;bar=2"</js>;
 	 * 	Map m = StringUtils.<jsm>splitMap</jsm>(in, <js>';'</js>, <js>'='</js>, <jk>true</jk>);
 	 * </p>
@@ -1404,7 +1404,7 @@ public final class StringUtils {
 	 * Returns <jk>true</jk> if the specified path string is prefixed with the specified prefix.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	pathStartsWith(<js>"foo"</js>, <js>"foo"</js>);  <jc>// true</jc>
 	 * 	pathStartsWith(<js>"foo/bar"</js>, <js>"foo"</js>);  <jc>// true</jc>
 	 * 	pathStartsWith(<js>"foo2"</js>, <js>"foo"</js>);  <jc>// false</jc>
@@ -1476,7 +1476,7 @@ public final class StringUtils {
 	 *
 	 * <p>
 	 * Equivalent to the following:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	String in = <js>"0,1,2"</js>;
 	 * 	String[] parts = in.split(<js>","</js>);
 	 * 	String p1 = (parts.<jk>length</jk> > 1 ? parts[1] : <js>""</js>);

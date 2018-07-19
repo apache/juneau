@@ -223,7 +223,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Returns the specified header value converted to a POJO using the {@link HttpPartParser} registered with the resource.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into an integer.</jc>
 	 * 	<jk>int</jk> myheader = req.getHeader(<js>"My-Header"</js>, <jk>int</jk>.<jk>class</jk>);
 	 *
@@ -320,7 +320,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Similar to {@link #get(String,Class)} but allows for complex collections of POJOs to be created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; myheader = req.getHeader(<js>"My-Header"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 * </p>
@@ -389,7 +389,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	/* Workhorse method */
 	private <T> T getInner(HttpPartParser parser, HttpPartSchema schema, String name, T def, ClassMeta<T> cm) throws BadRequest, InternalServerError {
 		try {
-			if ("*".equals(name) && cm.isMapOrBean()) {
+			if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 				ObjectMap m = new ObjectMap();
 				for (Map.Entry<String,String[]> e : this.entrySet()) {
 					String k = e.getKey();
@@ -448,7 +448,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Content-Types that are acceptable for the response.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept: text/plain
 	 * </p>
 	 *
@@ -465,7 +465,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Character sets that are acceptable.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept-Charset: utf-8
 	 * </p>
 	 *
@@ -482,7 +482,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * List of acceptable encodings.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept-Encoding: gzip, deflate
 	 * </p>
 	 *
@@ -499,7 +499,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * List of acceptable human languages for response.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept-Language: en-US
 	 * </p>
 	 *
@@ -516,7 +516,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Authentication credentials for HTTP authentication.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
@@ -533,7 +533,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Cache-Control: no-cache
 	 * </p>
 	 *
@@ -550,7 +550,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Control options for the current connection and list of hop-by-hop request fields.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Connection: keep-alive
 	 * 	Connection: Upgrade
 	 * </p>
@@ -568,7 +568,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * The length of the request body in octets (8-bit bytes).
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Content-Length: 348
 	 * </p>
 	 *
@@ -585,7 +585,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * The MIME type of the body of the request (used with POST and PUT requests).
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Content-Type: application/x-www-form-urlencoded
 	 * </p>
 	 *
@@ -602,7 +602,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * The date and time that the message was originated (in "HTTP-date" format as defined by RFC 7231 Date/Time Formats).
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
 	 * </p>
 	 *
@@ -619,7 +619,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Indicates that particular server behaviors are required by the client.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Expect: 100-continue
 	 * </p>
 	 *
@@ -636,7 +636,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * The email address of the user making the request.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	From: user@example.com
 	 * </p>
 	 *
@@ -654,7 +654,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * The port number may be omitted if the port is the standard port for the service requested.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Host: en.wikipedia.org:8080
 	 * 	Host: en.wikipedia.org
 	 * </p>
@@ -674,7 +674,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * updated it.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
@@ -691,7 +691,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Allows a 304 Not Modified to be returned if content is unchanged.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
@@ -708,7 +708,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Allows a 304 Not Modified to be returned if content is unchanged, see HTTP ETag.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
@@ -725,7 +725,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	If-Range: "737060cd8c284d8af7ad3082f209582d"
 	 * </p>
 	 *
@@ -742,7 +742,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Only send the response if the entity has not been modified since a specific time.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT
 	 * </p>
 	 *
@@ -759,7 +759,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Limit the number of times the message can be forwarded through proxies or gateways.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Max-Forwards: 10
 	 * </p>
 	 *
@@ -776,7 +776,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Implementation-specific fields that may have various effects anywhere along the request-response chain.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Pragma: no-cache
 	 * </p>
 	 *
@@ -793,7 +793,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Authorization credentials for connecting to a proxy.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
 	 * </p>
 	 *
@@ -810,7 +810,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Request only part of an entity. Bytes are numbered from 0.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Range: bytes=500-999
 	 * </p>
 	 *
@@ -827,7 +827,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * This is the address of the previous web page from which a link to the currently requested page was followed.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Referer: http://en.wikipedia.org/wiki/Main_Page
 	 * </p>
 	 *
@@ -846,7 +846,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	TE: trailers, deflate
 	 * </p>
 	 *
@@ -878,7 +878,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * The user agent string of the user agent.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
 	 * </p>
 	 *
@@ -895,7 +895,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Ask the server to upgrade to another protocol.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
 	 * </p>
 	 *
@@ -912,7 +912,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * Informs the server of proxies through which the request was sent.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
 	 * </p>
 	 *
@@ -929,7 +929,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * A general warning about possible problems with the entity body.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Warning: 199 Miscellaneous warning
 	 * </p>
 	 *

@@ -262,7 +262,7 @@
 	<p>
 		To start off simple, we'll begin with the following simplified bean and build upon it.
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	<jk>public class</jk> Person {
 		<jc>// Bean properties</jc>
 		<jk>public int</jk> <jf>id</jf>;
@@ -281,7 +281,7 @@
 	<p>
 		The following code shows how to convert this to simple JSON:
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	<jc>// Use serializer with readable output, simple mode.</jc>
 	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
@@ -294,14 +294,14 @@
 	<p>
 		We could have also created a new serializer with the same settings using the following code:
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	JsonSerializer s = JsonSerializer.<jsm>create</jsm>().simple().ws().sq().build();
 	</p>
 	
 	<p>
 		The code above produces the following output:
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>
@@ -338,7 +338,7 @@
 			want them serialized.
 			<br>Using swaps, we can convert them to standardized string forms.
 		</p>
-		<p class='bcode'>	
+		<p class='bcode w800'>	
 	<jk>public class</jk> Person {
 		<jc>// Bean properties</jc>
 		<jk>public int</jk> <jf>id</jf>;
@@ -366,7 +366,7 @@
 		<p>
 			Next, we alter our code to pass in the birthdate:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Create our bean.</jc>
 	Person p = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
 		<js>"http://sample/addressBook"</js>, <js>"Aug 12, 1946"</js>);
@@ -374,7 +374,7 @@
 		<p>
 			Now when we rerun the sample code, we'll get the following:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -391,14 +391,14 @@
 		</p>
 		
 		<h5 class='topic'>Example:</h5>
-		<p class='bcode'>	
+		<p class='bcode w800'>	
 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDLC.<jk>class</jk>)
 	<jk>public class</jk> Person {
 		...
 		</p>
 		
 		<h5 class='figure'>Results</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -417,7 +417,7 @@
 		<p>
 			In our example, let's add a list-of-beans property to our sample class:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jk>public class</jk> Person {
 		
 		<jc>// Bean properties</jc>
@@ -428,7 +428,7 @@
 		<p>
 			The <code>Address</code> class has the following properties defined:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jk>public class</jk> Address {
 
 		<jc>// Bean properties</jc>
@@ -443,7 +443,7 @@
 		<p>
 			Next, add some quick-and-dirty code to add an address to our person bean:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Use serializer with readable output, simple mode.</jc>
 	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
@@ -464,7 +464,7 @@
 		<p>
 			Now when we run the sample code, we get the following:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -506,7 +506,7 @@
 		<p>
 			Lets start with the classes from the previous examples:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jk>public class</jk> Person {
 		<jc>// Bean properties</jc>
 		<jk>public int</jk> <jf>id</jf>;
@@ -543,7 +543,7 @@
 		<p>
 			The code for creating our POJO model and generating JSON-Schema is shown below:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Get the schema serializer for one of the default JSON serializers.</jc>
 	JsonSchemaSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.getSchemaSerializer();
 
@@ -566,7 +566,7 @@
 		</p>
 		
 		<h5 class='figure'>Results</h5>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		type: <js>'object'</js>, 
 		description: <js>'org.apache.juneau.sample.Person'</js>, 
@@ -659,7 +659,7 @@
 		<p>
 			For example, let's make a POJO model out of the following classes:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jk>public class</jk> A {
 		<jk>public</jk> B b;
 	}
@@ -675,7 +675,7 @@
 		<p>
 			Now we create a model with a loop and serialize the results.
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
 	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
 
@@ -691,7 +691,7 @@
 		<p>
 			What we end up with is the following, which does not serialize the contents of the <code>c</code> field:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		b: {
 			c: {
@@ -772,7 +772,7 @@
 		Let's build upon the previous example and parse the generated JSON back into the original bean.
 		<br>We start with the JSON that was generated.
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	<jc>// Use serializer with readable output, simple mode.</jc>
 	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>;
 
@@ -796,7 +796,7 @@
 	<p>
 		This code produced the following:
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -820,7 +820,7 @@
 	<p>
 		The code to convert this back into a bean is:
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	<jc>// Parse it back into a bean using the reusable JSON parser.</jc>
 	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json, Person.<jk>class</jk>);
 
@@ -830,7 +830,7 @@
 	<p>
 		We print it back out to JSON to show that all the data has been preserved:
 	</p>
-	<p class='bcode'>
+	<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -879,7 +879,7 @@
 		<p>
 			Starting back with our original JSON:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -903,7 +903,7 @@
 		<p>
 			We can parse this into a generic <code>ObjectMap</code>:
 		</p>
-		<p class='bcode'>	
+		<p class='bcode w800'>	
 	<jc>// Parse JSON into a generic POJO model.</jc>
 	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
 
@@ -915,7 +915,7 @@
 			<br>Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
 			<code>Boolean</code> objects when parsing into generic models.
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -940,7 +940,7 @@
 			Once parsed into a generic model, various convenience methods are provided on the <code>ObjectMap</code>
 				and <code>ObjectList</code> classes to retrieve values:
 		</p>
-		<p class='bcode'>
+		<p class='bcode w800'>
 	<jc>// Parse JSON into a generic POJO model.</jc>
 	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
 

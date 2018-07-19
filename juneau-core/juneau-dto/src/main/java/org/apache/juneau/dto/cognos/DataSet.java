@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <p>
  * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>'1.0'</xs> <xa>encoding</xa>=<xs>'UTF-8'</xs><xt>?&gt;</xt>
  * 	<xt>&lt;c:dataset <xa>xmlns:c</xa>=<xs>'http://developer.cognos.com/schemas/xmldata/1/'</xs>&gt;</xt>
  * 		<xt>&lt;c:metadata&gt;</xt>
@@ -55,7 +55,7 @@ import org.apache.juneau.xml.annotation.*;
  * The construct shown above is a serialized <code>AddressBook</code> object which is a subclass of
  * <code>LinkedList&lt;Person&gt;</code>.
  * The code for generating the XML is as follows...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Column[] items = {
  * 		<jk>new</jk> Column(<js>"name"</js>, <js>"xs:String"</js>, 255),
  * 		<jk>new</jk> Column(<js>"age"</js>, <js>"xs:int"</js>),
@@ -129,7 +129,7 @@ public class DataSet {
 	 *
 	 * <p>
 	 * When serialized to XML, creates the following construct (example pulled from <code>AddressBookResource</code>):
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<xt>&lt;row&gt;</xt>
 	 * 		<xt>&lt;value&gt;</xt>Barack Obama<xt>&lt;/value&gt;</xt>
 	 * 		<xt>&lt;value&gt;</xt>52<xt>&lt;/value&gt;</xt>

@@ -188,7 +188,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * a String containing an ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
 	 *
@@ -268,7 +268,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person p = <jk>new</jk> Person();
 	 * 	p.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
@@ -322,7 +322,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Convenience method for setting multiple property values by passing in JSON text.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	aPersonBean.load(<js>"{name:'John Smith',age:21}"</js>)
 	 * </p>
 	 *

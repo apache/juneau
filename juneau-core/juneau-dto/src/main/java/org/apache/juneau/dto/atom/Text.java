@@ -21,7 +21,7 @@ import org.apache.juneau.xml.annotation.*;
  * Represents an <code>atomTextConstruct</code> construct in the RFC4287 specification.
  *
  * <h5 class='figure'>Schema</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	atomTextConstruct = atomPlainTextConstruct | atomXHTMLTextConstruct
  *
  * 	atomPlainTextConstruct =

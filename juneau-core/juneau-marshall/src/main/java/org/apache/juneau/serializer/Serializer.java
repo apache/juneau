@@ -81,7 +81,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -140,7 +140,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that adds _type to root node.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -195,7 +195,7 @@ public abstract class Serializer extends BeanContext {
 	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	{A:{B:{C:<jk>null</jk>}}}
 	 * </p>
 	 *
@@ -206,7 +206,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -282,7 +282,7 @@ public abstract class Serializer extends BeanContext {
 	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -323,7 +323,7 @@ public abstract class Serializer extends BeanContext {
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define our serializer listener.</jc>
 	 * 	<jc>// Simply captures all errors.</jc>
 	 * 	<jk>public class</jk> MySerializerListener <jk>extends</jk> SerializerListener {
@@ -387,7 +387,7 @@ public abstract class Serializer extends BeanContext {
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that throws an exception if the depth is greater than 20.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -428,7 +428,7 @@ public abstract class Serializer extends BeanContext {
 	 * Note that this introduces a performance penalty.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -469,7 +469,7 @@ public abstract class Serializer extends BeanContext {
 	 * Note that this introduces a performance penalty.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -516,7 +516,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -560,7 +560,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that skips empty maps.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -603,7 +603,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that serializes null properties.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -640,7 +640,7 @@ public abstract class Serializer extends BeanContext {
 	 * If <jk>true</jk>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -683,7 +683,7 @@ public abstract class Serializer extends BeanContext {
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our URI contextual information.</jc>
 	 * 	String authority = <js>"http://localhost:10000"</js>;
 	 * 	String contextRoot = <js>"/myContext"</js>;
@@ -760,7 +760,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -814,7 +814,7 @@ public abstract class Serializer extends BeanContext {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define a serializer that converts resource-relative URIs to absolute form.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -854,7 +854,7 @@ public abstract class Serializer extends BeanContext {
 	 * If <jk>true</jk>, whitespace is added to the output to improve readability.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Create a serializer with whitespace enabled.</jc>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
@@ -924,11 +924,11 @@ public abstract class Serializer extends BeanContext {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

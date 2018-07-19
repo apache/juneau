@@ -42,7 +42,7 @@ import org.apache.juneau.serializer.*;
  * revert to using lower level methods like any other servlet response.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
  * 		res.setOutput(<js>"Simple string response"</js>);
@@ -162,7 +162,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(..., path=<js>"/example2/{personId}"</js>)
 	 * 	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja> UUID personId) {
 	 * 		Person p = getPersonById(personId);
@@ -201,7 +201,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod.htmldoc()} annotation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Declarative approach.</jc>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -253,7 +253,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <br>However, properties are open-ended, and can be used for any purpose.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		properties={
 	 * 			<ja>@Property</ja>(name=<jsf>SERIALIZER_sortMaps</jsf>, value=<js>"false"</js>)
@@ -297,7 +297,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Shortcut method that allows you to use var-args to simplify setting array output.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Instead of...</jc>
 	 * 	response.setOutput(<jk>new</jk> Object[]{x,y,z});
 	 *

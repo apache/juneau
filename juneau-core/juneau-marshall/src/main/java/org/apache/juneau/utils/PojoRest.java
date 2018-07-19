@@ -53,7 +53,7 @@ import org.apache.juneau.parser.*;
  * So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct an unstructured POJO model</jc>
  * 	ObjectMap m = <jk>new</jk> ObjectMap(<js>""</js>
  * 		+ <js>"{"</js>
@@ -119,7 +119,7 @@ import org.apache.juneau.parser.*;
  * <br>The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
  * 	Map m = pojoRest.getMap(<js>"/items/@name=foo"</js>);
  * </p>
@@ -220,7 +220,7 @@ public final class PojoRest {
 	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	PojoRest r = <jk>new</jk> PojoRest(object);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
@@ -261,7 +261,7 @@ public final class PojoRest {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	PojoMap r = <jk>new</jk> PojoMap(object);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>

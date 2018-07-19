@@ -15,7 +15,7 @@
  * 
  * Allows you to embed paragraphs of highlighted code into HTML documents.
  * For example:
- * 	<p class='bcode'>
+ * 	<p class='bcode w800'>
  *		<jk>public static void</jk> myMethod(<jk>int</jk> foo, String bar) <jk>throws</jk> Exception {
  *			System.<jsm>err</jsm>.println(<js>"Hello world!"</js>);
  *		}

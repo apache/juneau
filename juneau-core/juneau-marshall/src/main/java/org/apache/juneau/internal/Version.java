@@ -57,7 +57,7 @@ public class Version {
 	 *
 	 * <p>
 	 * Note that the following is true:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	boolean b;
 	 * 	b = <jk>new</jk> Version(<js>"1.2"</js>).isAtLeast(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == true </jc>
 	 * 	b = <jk>new</jk> Version(<js>"1.2.0"</js>).isAtLeast(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == false</jc>
@@ -86,7 +86,7 @@ public class Version {
 	 *
 	 * <p>
 	 * Note that the following is true:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	boolean b;
 	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).isAtMost(<jk>new</jk> Version(<js>"1.2"</js>)); <jc>// == true </jc>
 	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).isAtMost(<jk>new</jk> Version(<js>"1.2.0"</js>)); <jc>// == false</jc>
@@ -115,7 +115,7 @@ public class Version {
 	 *
 	 * <p>
 	 * Note that the following is true:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	boolean b;
 	 * 	b = <jk>new</jk> Version(<js>"1.2.3"</js>).equals(<jk>new</jk> Version(<js>"1.2"</js>)); <jc>// == true </jc>
 	 * 	b = <jk>new</jk> Version(<js>"1.2"</js>).equals(<jk>new</jk> Version(<js>"1.2.3"</js>)); <jc>// == true</jc>

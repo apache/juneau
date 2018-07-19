@@ -62,7 +62,7 @@ import org.apache.juneau.rest.response.*;
  * <p>
  * The following example shows how to create a response handler to handle special <code>Foo</code> objects outside the
  * normal Juneau architecture.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(
  * 		path=<js>"/example"</js>,
  * 		responseHandlers=FooHandler.<jk>class</jk>

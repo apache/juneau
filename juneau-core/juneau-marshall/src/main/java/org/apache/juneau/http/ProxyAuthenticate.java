@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Request authentication to access the proxy.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Proxy-Authenticate: Basic
  * </p>
  *
@@ -30,7 +30,7 @@ package org.apache.juneau.http;
  * The field value consists of a challenge that indicates the authentication scheme and parameters applicable to the
  * proxy for this Request-URI.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Proxy-Authenticate  = "Proxy-Authenticate" ":" 1#challenge
  * </p>
  *

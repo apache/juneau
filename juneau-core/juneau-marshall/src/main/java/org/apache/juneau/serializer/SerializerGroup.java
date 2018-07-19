@@ -48,7 +48,7 @@ import org.apache.juneau.http.*;
  * will result in the order <code>S3, S4, S1, S2</code>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct a new serializer group</jc>
  * 	SerializerGroup g = SerializerGroup.<jsm>create</jsm>();
  * 		.append(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>); <jc>// Add some serializers to it</jc>
@@ -133,7 +133,7 @@ public final class SerializerGroup extends BeanContext {
 	 *
 	 * <p>
 	 * The <code>accept</code> value complies with the syntax described in RFC2616, Section 14.1, as described below:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept         = "Accept" ":"
 	 * 	                  #( media-range [ accept-params ] )
 	 *

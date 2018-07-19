@@ -55,7 +55,7 @@ public @interface Bean {
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
 	 * 	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {...}
@@ -78,7 +78,7 @@ public @interface Bean {
 	 * Fluent setters
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@Bean</ja>(fluentSetters=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public int</jk> getId() {...}
@@ -109,7 +109,7 @@ public @interface Bean {
 	 * When specified, only the list of properties defined on the interface class will be used during serialization.
 	 * Additional properties on subclasses will be ignored.
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parent class</jc>
 	 * 	<ja>@Bean</ja>(interfaceClass=A.<jk>class</jk>)
 	 * 	<jk>public abstract class</jk> A {
@@ -152,7 +152,7 @@ public @interface Bean {
 	 * whereas on Oracle JREs, the order is entirely random.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> Address {...}
@@ -185,7 +185,7 @@ public @interface Bean {
 	 * Property namers are used to transform bean property names from standard form to some other form.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Define a class with dashed-lowercase property names.</jc>
 	 * 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyBean {...}
@@ -206,7 +206,7 @@ public @interface Bean {
 	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Sort bean properties alphabetically during serialization.</jc>
 	 * 	<ja>@Bean</ja>(sort=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyBean {...}
@@ -229,7 +229,7 @@ public @interface Bean {
 	 * <p>
 	 * For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
 	 * but not <code>p1</code> or <code>p2</code>.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> C1 {
 	 * 		<jk>public int</jk> getP1();
 	 * 	}
@@ -258,7 +258,7 @@ public @interface Bean {
 	 * It is also used to specify element names in XML.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Use _type='mybean' to identify this bean.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
@@ -281,7 +281,7 @@ public @interface Bean {
 	 * The default value if not specified is <js>"_type"</js> .
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Use 'type' instead of '_type' for bean names.</jc>
 	 * 	<ja>@Bean</ja>(typePropertyName=<js>"type"</js>)
 	 * 	<jk>public class</jk> MyBean {...}

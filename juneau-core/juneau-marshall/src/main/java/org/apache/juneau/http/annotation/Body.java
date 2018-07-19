@@ -147,7 +147,7 @@ import org.apache.juneau.serializer.*;
  * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
  *
  * <h5 class='section'>Examples:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Used on parameter</jc>
  * 	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
@@ -156,7 +156,7 @@ import org.apache.juneau.serializer.*;
  * 		String addPet(<ja>@Body</ja> Pet pet);
  * 	}
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Used on class</jc>
  * 	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
@@ -174,7 +174,7 @@ import org.apache.juneau.serializer.*;
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
@@ -207,7 +207,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * OpenAPI schema based serialization can be used by specifying a value for the {@link #serializer()} annotation.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
  * 	String addCommaDelimitedPipeDelimitedInts(
  * 		<ja>@Body</ja>(
@@ -255,14 +255,14 @@ public @interface Body {
 	 * A brief description of the body. This could contain examples of use.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) Pet input
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
@@ -293,14 +293,14 @@ public @interface Body {
 	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(required=<js>"true"</js>) Pet input
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}

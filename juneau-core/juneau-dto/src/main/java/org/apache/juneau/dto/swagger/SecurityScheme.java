@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  * common flows (implicit, password, application and access code).
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Basic authentication sample</jc>
  * 	{
  * 		<js>"type"</js>: <js>"basic"</js>
@@ -500,7 +500,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	scopes(<js>"{name:'value'}"</js>);
 	 * 			</p>
 	 * 	</ul>

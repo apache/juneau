@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * For example, the {@link HelpCommand} is used to provide help on other commands.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Running class 'RestMicroservice' using config file 'examples.cfg'.
  * 	Server started on port 10000
  *
@@ -73,7 +73,7 @@ import org.apache.juneau.utils.*;
  * The arguments are available as an {@link Args} object which allows for easy accessed to parsed command lines.
  * Some simple examples of valid command lines:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// mycommand</jc>
  * 	args.get("0");  <jc>// "mycommand"</jc>
  *

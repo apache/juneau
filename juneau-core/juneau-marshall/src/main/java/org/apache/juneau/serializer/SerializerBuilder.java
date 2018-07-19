@@ -499,7 +499,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * Same as {@link #uriContext(UriContext)} but allows you to pass in a JSON string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
@@ -545,7 +545,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * Same as {@link #uriRelativity(UriRelativity)} but allows you to pass in a string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriRelativity(<js>"PATH_INFO"</js>)
@@ -593,7 +593,7 @@ public class SerializerBuilder extends BeanContextBuilder {
 	 * Same as {@link #uriResolution(UriResolution)} but allows you to pass in a string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	WriterSerializer s = JsonSerializer
 	 * 		.<jsm>create</jsm>()
 	 * 		.uriResolution(<js>"ROOT_RELATIVE"</js>)

@@ -29,7 +29,7 @@ public @interface ResourceSwagger {
 	 * Defines the swagger field <code>/info/title</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			title=<js>"Petstore application"</js>
@@ -62,7 +62,7 @@ public @interface ResourceSwagger {
 	 * Defines the swagger field <code>/info/description</code>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		swagger=<ja>@ResourceSwagger</ja>(
 	 * 			description={
@@ -99,7 +99,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <p>
 	 * A <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> string with the following fields:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
 	 * 		url: string,
@@ -113,7 +113,7 @@ public @interface ResourceSwagger {
 	 * <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>
@@ -162,7 +162,7 @@ public @interface ResourceSwagger {
 	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
@@ -180,7 +180,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <p>
 	 * A <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> string with the following fields:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	{
 	 * 		name: string,
 	 * 		url: string
@@ -193,7 +193,7 @@ public @interface ResourceSwagger {
 	 * <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>
@@ -224,7 +224,7 @@ public @interface ResourceSwagger {
 	 *
 	 * <p>
 	 * A <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> string with the following fields:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	[
 	 * 		{
 	 * 			name: string,
@@ -243,7 +243,7 @@ public @interface ResourceSwagger {
 	 * <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>

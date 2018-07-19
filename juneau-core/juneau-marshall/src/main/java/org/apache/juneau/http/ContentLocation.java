@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * An alternate location for the returned data.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Content-Location: /index.htm
  * </p>
  *
@@ -31,7 +31,7 @@ package org.apache.juneau.http;
  * case where a resource has multiple entities associated with it, and those entities actually have separate locations
  * by which they might be individually accessed, the server SHOULD provide a Content-Location for the particular variant
  * which is returned.
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Content-Location = "Content-Location" ":"
  * 	                   ( absoluteURI | relativeURI )
  * </p>

@@ -33,7 +33,7 @@ import org.apache.juneau.rest.annotation.*;
  * execute the method.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
  *
  * 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)

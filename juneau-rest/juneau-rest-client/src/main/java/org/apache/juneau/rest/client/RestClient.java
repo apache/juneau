@@ -931,7 +931,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * <p>
 	 * Examples:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> org.apache.foo;
 	 *
 	 * 	<ja>@Remoteable</ja>(path=<js>"http://hostname/resturl/myinterface1"</js>)

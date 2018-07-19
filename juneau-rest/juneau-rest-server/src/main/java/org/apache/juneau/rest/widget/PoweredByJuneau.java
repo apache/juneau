@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  * It produces a simple Apache Juneau icon floating on the right.
  * Typically it's used in the footer of the page, as shown below in the <code>AddressBookResource</code> from the examples:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestResource</ja>(
  * 		path=<js>"/addressBook"</js>,
  * 		widgets={

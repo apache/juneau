@@ -123,7 +123,7 @@ public class MethodExampleResource extends BasicRestServlet {
 		String method = req.getMethod();
 
 		// Path variables.
-		RequestPathMatch path = req.getPathMatch();
+		RequestPath path = req.getPathMatch();
 		String p1 = path.get("p1", String.class);
 		int p2 = path.get("p2", int.class);
 		UUID p3 = path.get("p3", UUID.class);
@@ -168,7 +168,7 @@ public class MethodExampleResource extends BasicRestServlet {
 	)
 	public Map<String,Object> example3(
 		HttpMethod method,           // HTTP method.
-		RequestPathMatch path,       // Path variables.
+		RequestPath path,       // Path variables.
 		RequestQuery query,          // Query parameters.
 		RequestHeaders headers,      // Headers.
 		AcceptLanguage lang,         // Specific header classes.

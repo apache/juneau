@@ -51,7 +51,7 @@ public final class MediaTypeRange implements Comparable<MediaTypeRange>  {
 	 * <p>
 	 * The syntax expected to be found in the referenced <code>value</code> complies with the syntax described in
 	 * RFC2616, Section 14.1, as described below:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Accept         = "Accept" ":"
 	 * 	                  #( media-range [ accept-params ] )
 	 *

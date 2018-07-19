@@ -23,7 +23,7 @@ import org.apache.juneau.utils.*;
  * Describes a single response from an API Operation.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ResponseInfo x = <jsm>responseInfo</jsm>(<js>"A complex object array response"</js>)
  * 		.schema(
@@ -41,7 +41,7 @@ import org.apache.juneau.utils.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"description"</js>: <js>"A complex object array response"</js>,
@@ -232,7 +232,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 		<li>{@link SchemaInfo}
 	 * 		<li><code>String</code> - JSON object representation of {@link SchemaInfo}
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -306,7 +306,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 		<li><code>Map&lt;String,{@link HeaderInfo}|String&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link HeaderInfo}&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -427,7 +427,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 		<li><code>Map&lt;String,Object&gt;</code>
 	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
 	 * 			</p>
 	 * 	</ul>

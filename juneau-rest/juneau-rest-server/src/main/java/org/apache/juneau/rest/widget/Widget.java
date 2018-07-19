@@ -43,7 +43,7 @@ import org.apache.juneau.utils.*;
  * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
  * and aside section of the page:
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(
  * 		widgets={
  * 			MyWidget.<jk>class</jk>
@@ -62,7 +62,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * The following shows an example of a widget that renders an image located in the <code>htdocs</code> static files
  * directory in your classpath (see {@link RestResource#staticFiles() @RestResource.staticFiles()}):
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
  *
  * 		<ja>@Override</ja>
@@ -95,7 +95,7 @@ import org.apache.juneau.utils.*;
  * These are useful if your script or styles are complex and you want them loaded from files.
  *
  * <p>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
  *
  * 		...

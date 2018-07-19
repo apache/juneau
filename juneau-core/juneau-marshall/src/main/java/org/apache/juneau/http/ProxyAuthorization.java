@@ -19,7 +19,7 @@ package org.apache.juneau.http;
  * Authorization credentials for connecting to a proxy.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
  * </p>
  *
@@ -30,7 +30,7 @@ package org.apache.juneau.http;
  * The Proxy-Authorization field value consists of credentials containing the authentication information of the user
  * agent for the proxy and/or realm of the resource being requested.
  *
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	Proxy-Authorization     = "Proxy-Authorization" ":" credentials
  * </p>
  *

@@ -64,7 +64,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
  *
@@ -181,7 +181,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * When enabled, <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our bean class.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"foo"</js>;
@@ -249,7 +249,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * and make it into a hyperlink based on the rules specified by {@link #HTML_uriAnchorText}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>f1</jf> = <js>"http://www.apache.org"</js>;
@@ -346,7 +346,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * The parameter name can be changed via the {@link #HTML_labelParameter} property.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?label=Apache%20Foundation"</js>);
@@ -429,7 +429,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#TO_STRING TO_STRING} (default) - Set to whatever is returned by {@link #toString()} on the object.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
@@ -444,7 +444,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#PROPERTY_NAME PROPERTY_NAME} - Set to the bean property name.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
@@ -459,7 +459,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#URI URI} - Set to the URI value.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
@@ -474,7 +474,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#LAST_TOKEN LAST_TOKEN} - Set to the last token of the URI value.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/foo/bar?baz=qux#myAnchor"</js>);
@@ -489,7 +489,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#URI_ANCHOR URI_ANCHOR} - Set to the anchor of the URL.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/foo/bar?baz=qux#myAnchor"</js>);
@@ -504,7 +504,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#CONTEXT_RELATIVE CONTEXT_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a context-relative path.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
@@ -525,7 +525,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#SERVLET_RELATIVE SERVLET_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a servlet-relative path.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
@@ -546,7 +546,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		<li class='jf'>{@link AnchorText#PATH_RELATIVE PATH_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a path-relative path.
 	 * 			<br>
 	 * 			<h5 class='section'>Example:</h5>
-	 * 			<p class='bcode'>
+	 * 			<p class='bcode w800'>
 	 * 	<jc>// Our bean class with a URI property.</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
@@ -665,11 +665,11 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 	<p>
 	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
 	 * 	</p>
 	 * 	<br>...or...
-	 * 	<p class='bcode'>
+	 * 	<p class='bcode w800'>
 	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
 	 * 	</p>
 	 * <p>

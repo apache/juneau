@@ -846,7 +846,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 *
 	 * <p>
 	 * This is equivalent to calling the following:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>byte</jk>[] b = config.getObject(key, <jk>byte</jk>[].<jk>class</jk>);
 	 * </p>
 	 *
@@ -898,7 +898,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
@@ -980,7 +980,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
 	 * 	<jc>// Parse into a string.</jc>
@@ -1189,7 +1189,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
 	 *
 	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<cs>[MyAddress]</cs>
 	 * 	<ck>name</ck> = <cv>John Smith</cv>
 	 * 	<ck>street</ck> = <cv>123 Main Street</cv>
@@ -1199,7 +1199,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example bean</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> Address {
 	 * 		public String name, street, city;
 	 * 		public StateEnum state;
@@ -1208,7 +1208,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 * 	Address myAddress = cf.getSectionAsBean(<js>"MySection"</js>, Address.<jk>class</jk>);
 	 * </p>
@@ -1277,7 +1277,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * write using getters and setters.
 	 *
 	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>string</ck> = <cv>foo</cv>
 	 * 	<ck>int</ck> = <cv>123</cv>
@@ -1288,7 +1288,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example interface</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public interface</jk> MyConfigInterface {
 	 *
 	 * 		String getString();
@@ -1312,7 +1312,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
 	 * 	MyConfigInterface ci = cf.getSectionAsInterface(<js>"MySection"</js>, MyConfigInterface.<jk>class</jk>);

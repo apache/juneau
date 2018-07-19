@@ -113,7 +113,7 @@ public class RestParamsTest {
 			return t != null;
 		}
 		@RestMethod(name=GET, path="/RequestPathMatch")
-		public boolean a18(RequestPathMatch t) {
+		public boolean a18(RequestPath t) {
 			return t != null;
 		}
 		@RestMethod(name=GET, path="/RequestBody")

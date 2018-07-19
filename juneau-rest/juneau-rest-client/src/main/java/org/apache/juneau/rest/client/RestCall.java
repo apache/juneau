@@ -52,7 +52,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * This class uses only Java standard APIs.  Requests can be built up using a fluent interface with method chaining,
  * like so...
- * <p class='bcode'>
+ * <p class='bcode w800'>
  * 	RestClient client = <jk>new</jk> RestClient();
  * 	RestCall c = client.doPost(<jsf>URL</jsf>).setInput(o).setHeader(x,y);
  * 	MyBean b = c.getResponse(MyBean.<jk>class</jk>);
@@ -1363,7 +1363,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * methods such as {@link #getResponseAsString()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Throw a RestCallException if FAILURE or ERROR is found in the output.</jc>
 	 * 	restClient.doGet(<jsf>URL</jsf>)
 	 * 		.failurePattern(<js>"FAILURE|ERROR"</js>)
@@ -1396,7 +1396,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * methods such as {@link #getResponseAsString()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Throw a RestCallException if SUCCESS is not found in the output.</jc>
 	 * 	restClient.doGet(<jsf>URL</jsf>)
 	 * 		.successPattern(<js>"SUCCESS"</js>)
@@ -1466,7 +1466,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * output stream or writer.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>try</jk> {
 	 * 		RestClient client = <jk>new</jk> RestClient();
 	 * 		<jk>int</jk> rc = client.doGet(url).execute();
@@ -1871,7 +1871,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String s = restClient.doGet(url).getResponse(String.<jk>class</jk>);
 	 *
@@ -1946,7 +1946,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List l = restClient.doGet(url).getResponse(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *

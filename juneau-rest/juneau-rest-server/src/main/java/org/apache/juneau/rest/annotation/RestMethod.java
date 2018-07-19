@@ -66,7 +66,7 @@ public @interface RestMethod {
 	 * <p>
 	 * In the example below, our 'summary' view is a list of beans where we only want to show the ID property,
 	 * and our detail view is a single bean where we want to expose different fields:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our bean</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 *
@@ -99,7 +99,7 @@ public @interface RestMethod {
 	 * 		Properties apply to specified class and all subclasses.
 	 * 	<li>
 	 * 		Semicolons can be used as an additional separator for multiple values:
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// Equivalent</jc>
 	 * 	bpi={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
 	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
@@ -122,7 +122,7 @@ public @interface RestMethod {
 	 *
 	 * <p>
 	 * In the example below, our 'summary' view is a list of beans where we want to exclude some properties:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Our bean</jc>
 	 * 	<jk>public class</jk> MyBean {
 	 *
@@ -155,7 +155,7 @@ public @interface RestMethod {
 	 * 		Properties apply to specified class and all subclasses.
 	 * 	<li>
 	 * 		Semicolons can be used as an additional separator for multiple values:
-	 * 		<p class='bcode'>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// Equivalent</jc>
 	 * 	bpx={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
 	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
@@ -185,7 +185,7 @@ public @interface RestMethod {
 	 *
 	 * <p>
 	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
@@ -203,7 +203,7 @@ public @interface RestMethod {
 	 * <p>
 	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
 	 * backwards compatibility.
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Call this method if X-Client-Version is at least 2.0.</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod()  {...}
@@ -276,7 +276,7 @@ public @interface RestMethod {
 	 * request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultFormData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
@@ -304,7 +304,7 @@ public @interface RestMethod {
 	 * Affects values returned by {@link RestRequest#getQuery(String)} when the parameter is not present on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultQuery={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
 	 * </p>
@@ -329,7 +329,7 @@ public @interface RestMethod {
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
@@ -461,7 +461,7 @@ public @interface RestMethod {
 	 * in out-of-memory errors which could affect system stability.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		maxInput=<js>"100M"</js>
 	 * 	)
@@ -540,7 +540,7 @@ public @interface RestMethod {
 	 * <p>
 	 * Use {@link None} to suppress inheriting parsers defined on the class.
 	 *
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
@@ -571,7 +571,7 @@ public @interface RestMethod {
 	 *
 	 * <p>
 	 * The path can contain variables that get resolved to {@link Path @Path} parameters:
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jc>// Example 1</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	 *
@@ -640,7 +640,7 @@ public @interface RestMethod {
 	 * Use {@link None} to suppress inheriting serializers defined on the class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
 	 *
 	 * 		<ja>@RestMethod</ja>(
@@ -737,7 +737,7 @@ public @interface RestMethod {
 	 * <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
 	 * 		name=<jsf>PUT</jsf>,
 	 * 		path=<js>"/{propertyName}"</js>,
