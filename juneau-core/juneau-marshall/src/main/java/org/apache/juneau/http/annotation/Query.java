@@ -15,6 +15,7 @@ package org.apache.juneau.http.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
+import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;
 
@@ -38,8 +39,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h5 class='topic'>Server-side REST</h5>
  *
- * Identical to {@link FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form
- * posts.
+ * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a URL query parameter.
  *
  * <p>
  * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
@@ -50,10 +50,11 @@ import org.apache.juneau.urlencoding.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 				<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, <ja>@Query</ja>(<js>"p2"</js>) String p2, <ja>@Query</ja>(<js>"p3"</js>) UUID p3) {
- * 		...
- * 	}
+ * 	<jk>public void</jk> doGet(
+ * 			<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1,
+ * 			<ja>@Query</ja>(<js>"p2"</js>) String p2,
+ * 			<ja>@Query</ja>(<js>"p3"</js>) UUID p3
+ * 		) {...}
  * </p>
  *
  * <p>
@@ -75,6 +76,27 @@ import org.apache.juneau.urlencoding.*;
  * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
  * </ol>
  *
+ * <p>
+ * The special name <js>"*"</js> (or blank) can be used to represent all values.
+ * When used, the data type must be a <code>Map</code> or bean.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a map.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Same, but name "*" is inferred.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Query</ja> Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a bean.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Query</ja> MyBean bean) {...}
+ * </p>
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Query">Overview &gt; juneau-rest-server &gt; @Query</a>
@@ -95,7 +117,8 @@ import org.apache.juneau.urlencoding.*;
  * 		<jc>// Explicit names specified for query parameters.</jc>
  * 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
- * 		String myProxyMethod1(<ja>@Query</ja>(<js>"foo"</js>)</ja> String foo,
+ * 		String myProxyMethod1(
+ * 			<ja>@Query</ja>(<js>"foo"</js>)</ja> String foo,
  * 			<ja>@Query</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
  *
  * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
@@ -114,7 +137,7 @@ import org.apache.juneau.urlencoding.*;
  * 		String myProxyMethod4(<ja>@Query</ja> MyBean myBean);
  *
  * 		<jc>// An entire query string as a String.</jc>
- * 		<jc>// Same as @FQuery("*").</jc>
+ * 		<jc>// Same as @Query("*").</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod5"</js>)
  * 		String myProxyMethod5(<ja>@Query</ja> String string);
  *
@@ -126,7 +149,32 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  *
  * <p>
- * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ * Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Any serializable POJO - Converted to a string using the {@link HttpPartSerializer} registered with the
+ * 		<code>RestClient</code> or associated via the {@link #serializer()} annotation.
+ * </ul>
+ *
+ * <p>
+ * Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		{@link Reader} - Raw contents of {@code Reader} will be serialized directly a query string.
+ * 	<li>
+ * 		<code>NameValuePairs</code> - Serialized as individual query parameters.
+ * 	<li>
+ * 		<code>Map</code> - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * 	<li>
+ * 		Bean - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * 	<li>
+ * 		<code>CharSequence</code> - Serialized directly a query string.
+ * </ul>
+ *
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
@@ -175,16 +223,6 @@ import org.apache.juneau.urlencoding.*;
  * 		<ja>@Query</ja>
  * 		Reader getReader();
  * 	}
- * </p>
- *
- * <p>
- * The {@link #name()} and {@link #value()} elements are synonyms for specifying the parameter name.
- * Only one should be used.
- * <br>The following annotations are fully equivalent:
- * <p class='bcode w800'>
- * 	<ja>@Query</ja>(name=<js>"foo"</js>)
- *
- * 	<ja>@Query</ja>(<js>"foo"</js>)
  * </p>
  *
  * <h5 class='section'>See Also:</h5>

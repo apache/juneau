@@ -28,7 +28,7 @@ import org.apache.juneau.transform.*;
  * <table class='styled'>
  * 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
  * 	<tr>
- * 		<td ><code>string</code></td>
+ * 		<td><code>string</code><br>(empty)</td>
  * 		<td>
  * 			<code>byte</code>
  * 			<br><code>binary</code>
@@ -50,7 +50,7 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 	</tr>
  * 	<tr>
- * 		<td ><code>string</code></td>
+ * 		<td><code>string</code><br>(empty)</td>
  * 		<td>
  * 			<code>date</code>
  * 			<code>date-time</code>
@@ -69,7 +69,7 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 	</tr>
  * 	<tr>
- * 		<td ><code>string</code></td>
+ * 		<td><code>string</code><br>(empty)</td>
  * 		<td><code>uon</code></td>
  * 		<td>
  * 			<ul>
@@ -78,8 +78,8 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 	</tr>
  * 	<tr>
- * 		<td ><code>string</code></td>
- * 		<td>none specified</td>
+ * 		<td><code>string</code><br>(empty)</td>
+ * 		<td>(empty)</td>
  * 		<td>
  * 			<ul>
  * 				<li>{@link String} (default)
@@ -92,7 +92,7 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 	</tr>
  * 	<tr>
- * 		<td ><code>boolean</code></td>
+ * 		<td><code>boolean</code></td>
  * 		<td>
  * 			&nbsp;
  * 		</td>
@@ -111,7 +111,7 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 	</tr>
  * 	<tr>
- * 		<td ><code>array</code></td>
+ * 		<td><code>array</code></td>
  * 		<td>
  * 			&nbsp;
  * 		</td>
@@ -128,7 +128,7 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 	</tr>
  * 	<tr>
- * 		<td ><code>object</code></td>
+ * 		<td><code>object</code></td>
  * 		<td>
  * 			&nbsp;
  * 		</td>

@@ -15,6 +15,7 @@ package org.apache.juneau.http.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
+import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;
 
@@ -38,8 +39,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h5 class='topic'>Server-side REST</h5>
  *
- * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a form post
- * entry converted to a POJO.
+ * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a form-data parameter.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -120,8 +120,10 @@ import org.apache.juneau.urlencoding.*;
  * 		<jc>// Explicit names specified for form data parameters.</jc>
  * 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
- * 		String myProxyMethod1(<ja>@FormData</ja>(<js>"foo"</js>)</ja> String foo,
- * 			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
+ * 		String myProxyMethod1(
+ * 			<ja>@FormData</ja>(<js>"foo"</js>)</ja> String foo,
+ * 			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo
+ *		);
  *
  * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
  * 		<jc>// Name "*" is inferred.</jc>
@@ -147,7 +149,34 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  *
  * <p>
- * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ * Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Any serializable POJO - Converted to a string using the {@link HttpPartSerializer} registered with the
+ * 		<code>RestClient</code> or associated via the {@link #serializer()} annotation.
+ * </ul>
+ *
+ * <p>
+ * Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+ * 	<li>
+ * 		{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+ * 	<li>
+ * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
+ * 	<li>
+ * 		<code>Map</code> - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * 	<li>
+ * 		Bean - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * 	<li>
+ * 		<code>CharSequence</code> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
+ * </ul>
+ *
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>

@@ -39,14 +39,12 @@ import org.apache.juneau.urlencoding.*;
  * <h5 class='topic'>Server-side REST</h5>
  *
  * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a HTTP
- * request header converted to a POJO.
+ * request header.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {
- * 		...
- * 	}
+ * 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
  * </p>
  *
  * <p>
@@ -54,7 +52,7 @@ import org.apache.juneau.urlencoding.*;
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
  * 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
- * 		UUID etag = req.getHeader(UUID.<jk>class</jk>, "ETag");
+ * 		UUID etag = req.getHeader(UUID.<jk>class</jk>, <js>"ETag"</js>);
  * 		...
  * 	}
  * </p>
@@ -65,6 +63,27 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>
  * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
  * </ol>
+ *
+ * <p>
+ * The special name <js>"*"</js> (or blank) can be used to represent all values.
+ * When used, the data type must be a <code>Map</code> or bean.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a map.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Same, but name "*" is inferred.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Header</ja> Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a bean.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Header</ja> MyBean bean) {...}
+ * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -107,7 +126,28 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  *
  * <p>
- * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ * Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Any serializable POJO - Converted to a string using the {@link HttpPartSerializer} registered with the
+ * 		<code>RestClient</code> or associated via the {@link #serializer()} annotation.
+ * </ul>
+ *
+ * <p>
+ * Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		<code>NameValuePairs</code> - Serialized as individual headers.
+ * 	<li>
+ * 		<code>Map</code> - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * 	<li>
+ * 		Bean - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * </ul>
+ *
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
@@ -151,16 +191,6 @@ import org.apache.juneau.urlencoding.*;
  * 		<ja>@Header</ja>
  * 	 	MyBean getBean();
  * 	}
- * </p>
- *
- * <p>
- * The {@link #name()} and {@link #value()} elements are synonyms for specifying the header name.
- * Only one should be used.
- * <br>The following annotations are fully equivalent:
- * <p class='bcode w800'>
- * 	<ja>@Header</ja>(name=<js>"Foo"</js>)
- *
- * 	<ja>@Header</ja>(<js>"Foo"</js>)
  * </p>
  *
  * <h5 class='section'>See Also:</h5>

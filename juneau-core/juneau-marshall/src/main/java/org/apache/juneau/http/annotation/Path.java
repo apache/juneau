@@ -38,15 +38,17 @@ import org.apache.juneau.urlencoding.*;
  * <h5 class='topic'>Server-side REST</h5>
  *
  * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a variable
- * in a URL path pattern converted to a POJO.
+ * in a URL path pattern.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
- * 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
- * 			<ja>@Path</ja>(<js>"foo"</js>) String foo, <ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Path</ja>(<js>"baz"</js>) UUID baz) {
- * 		...
- * 	}
+ * 	<jk>public void</jk> doGet(
+ * 			<ja>@Path</ja>(<js>"foo"</js>) String foo,
+ * 			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar,
+ * 			<ja>@Path</ja>(<js>"baz"</js>) UUID baz,
+ * 			<ja>@Path</ja>(<js>"/*"</js>) String remainder,
+ * 		) {...}
  * </p>
  *
  * <p>
@@ -55,6 +57,30 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>
  * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
  * </ol>
+ *
+ * <p>
+ * The special name <js>"*"</js> (or blank) can be used to represent all values.
+ * When used, the data type must be a <code>Map</code> or bean.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a map.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Path</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Same, but name "*" is inferred.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Path</ja> Map&lt;String,Object&gt; map) {...}
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Multiple values passed as a bean.</jc>
+ * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+ * 	<jk>public void</jk> doPost(<ja>@Path</ja> MyBean bean) {...}
+ * </p>
+ *
+ * <p>
+ * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -95,7 +121,28 @@ import org.apache.juneau.urlencoding.*;
  * </p>
  *
  * <p>
- * The annotation can also be applied to a bean property field or getter when the argument is annotated with
+ * Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Any serializable POJO - Converted to a string using the {@link HttpPartSerializer} registered with the
+ * 		<code>RestClient</code> or associated via the {@link #serializer()} annotation.
+ * </ul>
+ *
+ * <p>
+ * Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		<code>NameValuePairs</code> - Serialized as individual query parameters.
+ * 	<li>
+ * 		<code>Map</code> - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * 	<li>
+ * 		Bean - Converted to key-value pairs.
+ * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
+ * </ul>
+ *
+ * <p>
+ * The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
  * {@link RequestBean @RequestBean}:
  *
  * <h5 class='section'>Example:</h5>
@@ -139,16 +186,6 @@ import org.apache.juneau.urlencoding.*;
  * 		<ja>@Path</ja>
  * 	 	MyBean getMyBean();
  * 	}
- * </p>
- *
- * <p>
- * The {@link #name()} and {@link #value()} elements are synonyms for specifying the path variable name.
- * Only one should be used.
- * <br>The following annotations are fully equivalent:
- * <p class='bcode w800'>
- * 	<ja>@Path</ja>(name=<js>"foo"</js>)
- *
- * 	<ja>@Path</ja>(<js>"foo"</js>)
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
