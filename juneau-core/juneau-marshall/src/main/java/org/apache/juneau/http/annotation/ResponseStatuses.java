@@ -17,11 +17,50 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.utils.*;
+
 /**
  * REST response statuses annotation.
  *
  * <p>
  * Used to associate multiple {@link ResponseStatus @ResponseStatus} annotations to the same parameter or class.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+ * 	<jk>public void</jk> login(String username, String password,
+ * 			<ja>@ResponseStatuses</ja>{
+ * 				<ja>@ResponseStatus</ja>(200)
+ * 				<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
+ *			}
+ * 			Value&lt;Integer&gt; status) {
+ *
+ * 		<jk>if</jk> (! isValid(username, password))
+ * 			status.set(401);
+ * 		<jk>else</jk>
+ * 			status.set(200);
+ * 	}
+ * </p>
+ *
+ * <p>
+ * The other option is to apply this annotation to a subclass of {@link Value} which often leads to a cleaner
+ * REST method:
+ *
+ * <p class='bcode w800'>
+ * 	<ja>@ResponseStatuses</ja>{
+ * 		<ja>@ResponseStatus</ja>(200)
+ * 		<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
+ *	}
+ * 	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
+ *
+ * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+ * 	<jk>public void</jk> login(String username, String password, LoginStatus status) {
+ * 		<jk>if</jk> (! isValid(username, password))
+ * 			status.set(401);
+ * 		<jk>else</jk>
+ * 			status.set(200);
+ * 	}
+ * </p>
  *
  * <p>
  * Since Juneau currently prereq's Java 1.7, we cannot take advantage of annotation duplication support in Java 8.

@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * REST request header annotation.
@@ -208,6 +207,12 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Note that <jk>null</jk> values are already ignored.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
 	 */
 	boolean skipIfEmpty() default false;
 
@@ -215,19 +220,15 @@ public @interface Header {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * The default value defaults to the using the part serializer defined on the {@link RequestBean @RequestBean} annotation,
-	 * then on the client which by default is {@link UrlEncodingSerializer}.
-	 *
-	 * <p>
-	 * This annotation is provided to allow values to be custom serialized.
+	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+
 	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
 	 *
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OpenApiPartParser}.
-	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 
@@ -312,6 +313,12 @@ public @interface Header {
 	 * <p>
 	 * A brief description of the parameter. This could contain examples of use.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -332,6 +339,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * If validation is not met during parsing, the part parser will throw a {@link SchemaValidationException}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	boolean required() default false;
 
@@ -375,6 +392,16 @@ public @interface Header {
 	 * 	<li>
 	 * 		<js>"file"</js>
 	 * 		<br>This type is currently not supported.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -428,6 +455,16 @@ public @interface Header {
 	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 	 * </ul>
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
 	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
@@ -442,6 +479,16 @@ public @interface Header {
 	 * <p>
 	 * Sets the ability to pass empty-valued heaver values.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 *
 	 * <p>
 	 * <b>Note:</b>  This is technically only valid for either query or formData parameters, but support is provided anyway for backwards compatability.
 	 */
@@ -452,9 +499,20 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
+	 *
 	 * <p>
 	 * Required if <code>type</code> is <js>"array"</js>.
 	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing and parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing and serializing validation.
+	 * </ul>
 	 */
 	Items items() default @Items;
 
@@ -480,6 +538,16 @@ public @interface Header {
 	 * 	<li>
 	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
 	 * 	<li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
 	 * </ul>
 	 *
 	 * <p>
@@ -510,6 +578,16 @@ public @interface Header {
 	 * 		<jk>@Header</jk>(name=<js>"X-Flags"</jk>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
 	 * 	) {...}
 	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
 	 */
 	String[] _default() default {};
 
@@ -525,6 +603,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	String maximum() default "";
 
@@ -540,6 +628,16 @@ public @interface Header {
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 * <br>If <jk>true</jk>, must be accompanied with <code>maximum</code>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	boolean exclusiveMaximum() default false;
 
@@ -555,6 +653,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	String minimum() default "";
 
@@ -570,6 +678,16 @@ public @interface Header {
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 * <br>If <jk>true</jk>, must be accompanied with <code>minimum</code>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	boolean exclusiveMinimum() default false;
 
@@ -586,6 +704,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	long maxLength() default -1;
 
@@ -602,6 +730,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	long minLength() default -1;
 
@@ -616,6 +754,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	String pattern() default "";
 
@@ -630,6 +778,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	long maxItems() default -1;
 
@@ -644,6 +802,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	long minItems() default -1;
 
@@ -660,6 +828,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	boolean uniqueItems() default false;
 
@@ -693,6 +871,16 @@ public @interface Header {
 	 * 		) PetStatus status
 	 * 	) {...}
 	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	String[] _enum() default {};
 
@@ -708,6 +896,16 @@ public @interface Header {
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
 	 */
 	String multipleOf() default "";
 
@@ -721,6 +919,12 @@ public @interface Header {
 	 * <p>
 	 * This attribute defines a JSON representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
 	 * an example of the header entry.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -747,7 +951,7 @@ public @interface Header {
 	 * 	<ja>@Header</ja>(
 	 * 		name=<js>"api_key"</js>,
 	 * 		description=<js>"Security API key"</js>,
-	 * 		required=<js>"true"</js>,
+	 * 		required=<jk>true</jk>,
 	 * 		example=<js>"foobar"</js>
 	 * 	)
 	 * </p>
@@ -779,6 +983,12 @@ public @interface Header {
 	 * <ul>
 	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>

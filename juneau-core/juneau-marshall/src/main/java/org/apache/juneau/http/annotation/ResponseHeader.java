@@ -50,7 +50,13 @@ import org.apache.juneau.utils.*;
  *	<jc>// Example #2 - Use on parameter.</jc>
  * 	<ja>@RestMethod</ja>(...)
  * 	<jk>public void</jk> login(
- * 			<ja>@ResponseHeader</ja>(name=<js>"X-Rate-Limit"</js>, type=<js>"integer"</js>, format=<js>"int32"</js>, description=<js>"Calls per hour allowed by the user."</js>, example=<js>"123"</js>)
+ * 			<ja>@ResponseHeader</ja>(
+ * 				name=<js>"X-Rate-Limit"</js>,
+ * 				type=<js>"integer"</js>,
+ * 				format=<js>"int32"</js>,
+ * 				description=<js>"Calls per hour allowed by the user."</js>,
+ * 				example=<js>"123"</js>
+ * 			)
  * 			Value&lt;Integer&gt; rateLimit
  *		) {
  *		rateLimit.set(1000);
@@ -94,19 +100,6 @@ public @interface ResponseHeader {
 	 */
 	int[] code() default {};
 
-//	/**
-//	 * The HTTP status (or statuses) of the response.
-//	 *
-//	 * <h5 class='section'>Notes:</h5>
-//	 * <ul class='spaced-list'>
-//	 * 	<li>
-//	 * 		The format is a comma-delimited list of HTTP status codes that this header applies to.
-//	 * 	<li>
-//	 * 		The default value is <js>"200"</js>.
-//	 * </ul>
-//	 */
-//	int[] codes() default {};
-
 	/**
 	 * The HTTP header name.
 	 *
@@ -136,15 +129,21 @@ public @interface ResponseHeader {
 	String value() default "";
 
 	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values.
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OpenApiPartSerializer}.
+	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiPartSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -160,6 +159,14 @@ public @interface ResponseHeader {
 
 	/**
 	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -189,6 +196,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -207,6 +222,14 @@ public @interface ResponseHeader {
 
 	/**
 	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -234,6 +257,12 @@ public @interface ResponseHeader {
 	 * <p>
 	 * Denotes a reference to a definition object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -247,6 +276,14 @@ public @interface ResponseHeader {
 
 	/**
 	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -262,6 +299,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -275,6 +320,14 @@ public @interface ResponseHeader {
 
 	/**
 	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -290,6 +343,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -304,6 +365,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -316,7 +385,37 @@ public @interface ResponseHeader {
 	long minLength() default -1;
 
 	/**
+	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <p>
+	 * A string value is valid if it matches the specified regular expression pattern.
+	 *
+	 * <p>
+	 * If validation is not met during serialization, the part serializer will throw a {@link SchemaValidationException}.
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"string"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 */
+	String pattern() default "";
+
+	/**
 	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -332,6 +431,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -345,6 +452,14 @@ public @interface ResponseHeader {
 
 	/**
 	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -360,6 +475,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -374,6 +497,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -387,6 +518,14 @@ public @interface ResponseHeader {
 
 	/**
 	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing and serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -403,6 +542,14 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -417,6 +564,14 @@ public @interface ResponseHeader {
 
 	/**
 	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -436,6 +591,12 @@ public @interface ResponseHeader {
 	 * <p>
 	 * This attribute defines a JSON representation of the body value that is used by <code>BasicRestInfoProvider</code> to construct
 	 * media-type-based examples of the header value.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -496,6 +657,12 @@ public @interface ResponseHeader {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -519,9 +686,4 @@ public @interface ResponseHeader {
 	 * </ul>
 	 */
 	String[] api() default {};
-
-	/**
-	 * TODO
-	 */
-	String pattern() default "";
 }

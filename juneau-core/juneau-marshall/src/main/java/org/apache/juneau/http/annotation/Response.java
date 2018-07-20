@@ -89,7 +89,7 @@ import org.apache.juneau.httppart.*;
  * Another example is <code>Redirect</code> which is defined like so:
  *
  * <p class='bcode w800'>
- * 	<ja>@Response<ja>(
+ * 	<ja>@Response</ja>(
  * 		code=302,
  * 		description=<js>"Redirect"</js>,
  * 		headers={
@@ -145,7 +145,21 @@ public @interface Response {
 	int[] value() default {};
 
 	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 *
+	 * <p>
+	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiPartSerializer}.
+	 */
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+
+	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -161,11 +175,25 @@ public @interface Response {
 
 	/**
 	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based serializing and serializing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 */
 	Schema schema() default @Schema;
 
 	/**
 	 * <mk>headers</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -194,6 +222,12 @@ public @interface Response {
 	 * <br>This value is parsed from JSON into a POJO using the JSON parser, then serialized to the various supported
 	 * media types for the method using the registered serializers to produce examples for all supported types.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -218,6 +252,12 @@ public @interface Response {
 	 *
 	 * <p>
 	 * The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object with keys as media types and values as string representations of the body response.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -289,6 +329,12 @@ public @interface Response {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -314,9 +360,4 @@ public @interface Response {
 	 * </ul>
 	 */
 	String[] api() default {};
-
-	/**
-	 * TODO
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 }

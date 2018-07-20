@@ -18,10 +18,12 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
  * Request bean annotation.
+ *
+ * <p>
+ * Identifies an interface to use to interact with HTTP parts of an HTTP request through a bean.
  *
  * <p>
  * Can be used in the following locations:
@@ -31,9 +33,69 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  *
  * <h5 class='topic'>Server-side REST</h5>
- * TODO
+ *
+ * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+ * 	<jk>public void</jk> myMethod(<ja>@RequestBean</ja> MyRequestBean rb) {...}
+ *
+ * 	<jk>public interface</jk> MyRequestBean {
+ *
+ * 		<ja>@Path</ja> <jc>// Path variable name inferred from getter.</jc>
+ * 		String getP1();
+ *
+ * 		<ja>@Path</ja>(<js>"p2"</js>)
+ * 		String getX();
+ *
+ * 		<ja>@Path</ja>(<js>"/*"</js>)
+ * 		String getRemainder();
+ *
+ * 		<ja>@Query</ja>
+ * 		String getQ1();
+ *
+ * 		<ja>@Query</ja>
+ * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
+ * 		String getQuery2();
+ *
+ *		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
+ * 		<ja>@Query</ja>(
+ * 			collectionFormat=<js>"pipes"</js>
+ * 			items=<ja>@Items</ja>(
+ * 				items=<ja>@SubItems</ja>(
+ * 					collectionFormat=<js>"csv"</js>
+ * 					type=<js>"integer"</js>
+ * 				)
+ * 			)
+ * 		)
+ * 		<jk>int</jk>[][] getQ3();
+ *
+ * 		<ja>@Header</ja>(<js>"*"</js>)
+ * 		Map&lt;String,Object&gt; getHeaders();
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Same as above but annotation defined on interface.</jc>
+ * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+ * 	<jk>public void</jk> myMethod(MyRequestBean rb) {...}
+ *
+ *	<ja>@RequestBean</ja>
+ * 	<jk>public interface</jk> MyRequestBean {...}
+ *
+ * <p>
+ * The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
+ * <br>Schema-based serialization and parsing is allowed just as if used as individual parameter types.
+ *
+ * <p>
+ * TODO - Swagger-info in <ja>@RequestBean</ja>s is not currently reflected in generated Swagger documentation.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RequestBean">Overview &gt; juneau-rest-server &gt; @RequestBean</a>
+ * </ul>
  *
  * <h5 class='topic'>Client-side REST</h5>
+ *
  * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
 
  * <h5 class='section'>Example:</h5>
@@ -45,52 +107,38 @@ import org.apache.juneau.urlencoding.*;
  * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
  * 	}
  *
- * 	<jk>public interface</jk> MyRequestBean {
+ * 	<jk>public class</jk> MyRequestBean {
  *
- * 		<ja>@Path</ja>
- * 		String getP1();
+ * 		<ja>@Path</ja> <jc>// Path variable name inferred from getter.</jc>
+ * 		<jk>public</jk> String getP1() {...}
  *
  * 		<ja>@Path</ja>(<js>"p2"</js>)
- * 		String getX();
+ * 		<jk>public</jk> String getX() {...}
+ *
+ * 		<ja>@Path</ja>(<js>"/*"</js>)
+ * 		<jk>public</jk> String getRemainder() {...}
  *
  * 		<ja>@Query</ja>
- * 		String getQ1();
+ * 		<jk>public</jk> String getQ1() {...}
  *
  * 		<ja>@Query</ja>
  * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
- * 		String getQuery2();
+ * 		<jk>public</jk> String getQuery2() {...}
  *
- * 		<ja>@Query</ja>(name=<js>"q3"</js>, skipIfEmpty=<jk>true</jk>)
- * 		String getQuery3();
+ *		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
+ * 		<ja>@Query</ja>(
+ * 			collectionFormat=<js>"pipes"</js>
+ * 			items=<ja>@Items</ja>(
+ * 				items=<ja>@SubItems</ja>(
+ * 					collectionFormat=<js>"csv"</js>
+ * 					type=<js>"integer"</js>
+ * 				)
+ * 			)
+ * 		)
+ * 		<jk>public</jk> <jk>int</jk>[][] getQ3() {...}
  *
- * 		<ja>@Query</ja>(skipIfEmpty=<jk>true</jk>)
- * 		Map&lt;String,Object&gt; getExtraQueries();
- *
- * 		<ja>@FormData</ja>
- * 		String getF1();
- *
- * 		<ja>@FormData</ja>
- * 		<ja>@BeanProperty</ja>(name=<js>"f2"</js>)
- * 		String getFormData2();
- *
- * 		<ja>@FormData</ja>(name=<js>"f3"</js>,skipIfEmpty=<jk>true</jk>)
- * 		String getFormData3();
- *
- * 		<ja>@FormData</ja>(skipIfEmpty=<jk>true</jk>)
- * 		Map&lt;String,Object&gt; getExtraFormData();
- *
- * 		<ja>@Header</ja>
- * 		String getH1();
- *
- * 		<ja>@Header</ja>
- * 		<ja>@BeanProperty</ja>(name=<js>"H2"</js>)
- * 		String getHeader2();
- *
- * 		<ja>@Header</ja>(name=<js>"H3"</js>,skipIfEmpty=<jk>true</jk>)
- * 		String getHeader3();
- *
- * 		<ja>@Header</ja>(skipIfEmpty=<jk>true</jk>)
- * 		Map&lt;String,Object&gt; getExtraHeaders();
+ * 		<ja>@Header</ja>(<js>"*"</js>)
+ * 		<jk>public</jk> Map&lt;String,Object&gt; getHeaders() {...}
  * 	}
  * </p>
  *
@@ -109,16 +157,15 @@ public @interface RequestBean {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * The default value defaults to the using the part serializer defined on the client which by default is
-	 * {@link UrlEncodingSerializer}.
-	 *
-	 * <p>
-	 * This annotation is provided to allow values to be custom serialized.
+	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
-	 * TODO
+	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
+	 *
+	 * <p>
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 }

@@ -395,7 +395,7 @@ public @interface Schema {
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(required=<js>"true"</js>) Pet input
+	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -403,7 +403,7 @@ public @interface Schema {
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 *
-	 * 	<ja>@Body</ja>(required=<js>"true"</js>)
+	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *

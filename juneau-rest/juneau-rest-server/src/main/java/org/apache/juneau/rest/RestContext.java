@@ -4363,12 +4363,6 @@ public final class RestContext extends BeanContext {
 				s = HttpPartSchema.create(ResponseStatus.class, method, i);
 				rp[i] = new RestParamDefaults.ResponseStatusObject(method, s, t);
 
-			} else if (hasAnnotation(Responses.class, method, i)) {
-				Responses a = getAnnotation(Responses.class, method, i);
-				HttpPartSchema[] ss = new HttpPartSchema[a.value().length];
-				for (int j = 0; j < ss.length; j++)
-					ss[j] = HttpPartSchema.create(a.value()[j]);
-				rp[i] = new RestParamDefaults.ResponseObject(method, ss, t);
 			} else if (hasAnnotation(ResponseStatuses.class, method, i)) {
 				ResponseStatuses a = getAnnotation(ResponseStatuses.class, method, i);
 				HttpPartSchema[] ss = new HttpPartSchema[a.value().length];

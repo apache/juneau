@@ -270,6 +270,12 @@ public @interface Body {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -296,7 +302,7 @@ public @interface Body {
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja>(required=<js>"true"</js>) Pet input
+	 * 		<ja>@Body</ja>(required=<jk>true</jk>) Pet input
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
@@ -304,14 +310,22 @@ public @interface Body {
 	 * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	 * 	<jk>public void</jk> addPet(Pet input) {...}
 	 *
-	 * 	<ja>@Body</ja>(required=<js>"true"</js>)
+	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is boolean.
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -332,6 +346,16 @@ public @interface Body {
 	 * <p>
 	 * This is a required attribute per the swagger definition.
 	 * However, if not explicitly specified, the value will be auto-generated using {@link JsonSchemaSerializer}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing and parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing and serializing validation.
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -441,6 +465,12 @@ public @interface Body {
 	 * 	)
 	 * </p>
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -473,6 +503,13 @@ public @interface Body {
 	 * 		}
 	 * 	)
 	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -505,7 +542,7 @@ public @interface Body {
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja>(
 	 * 			description=<js>"Pet object to add to the store"</js>,
-	 * 			required=<js>"true"</js>,
+	 * 			required=<jk>true</jk>,
 	 * 			example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
 	 * 		) Pet input
 	 * 	) {...}
@@ -540,6 +577,12 @@ public @interface Body {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -568,20 +611,28 @@ public @interface Body {
 
 	/**
 	 * Equivalent to {@link #value()}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
 	 */
 	String[] api() default {};
 
 	/**
-	 * TODO
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 *
+	 * <p>
+	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
 	 *
 	 * <p>
-	 * The default value for this parser is inherited from the servlet/method which defaults to {@link OpenApiPartParser}.
-	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 }

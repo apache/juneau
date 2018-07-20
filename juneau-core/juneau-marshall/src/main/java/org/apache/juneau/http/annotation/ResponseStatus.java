@@ -34,7 +34,9 @@ import org.apache.juneau.utils.*;
  * This can only be applied to parameters and subclasses of the {@link Value} class with an {@link Integer} type.
  * <br>The {@link Value} object is mean to be a place-holder for the set value.
  *
+ * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
+ * 	<jc>// Defined on parameter.</jc>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
  * 	<jk>public void</jk> login(String username, String password,
  * 			<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>) Value&lt;Integer&gt; status) {
@@ -42,44 +44,16 @@ import org.apache.juneau.utils.*;
  * 			status.set(401);
  * 	}
  * </p>
- *
- * <p>
- * The {@link Responses @Responses} annotation can be used to represent multiple possible response types.
- *
  * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
- * 	<jk>public void</jk> login(String username, String password,
- * 			<ja>@ResponseStatuses</ja>{
- * 				<ja>@ResponseStatus</ja>(200)
- * 				<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
- *			}
- * 			Value&lt;Integer&gt; status) {
- *
- * 		<jk>if</jk> (! isValid(username, password))
- * 			status.set(401);
- * 		<jk>else</jk>
- * 			status.set(200);
- * 	}
- * </p>
- *
- * <p>
- * The other option is to apply this annotation to a subclass of {@link Value} which often leads to a cleaner
- * REST method:
- *
- * <p class='bcode w800'>
- * 	<ja>@ResponseStatuses</ja>{
- * 		<ja>@ResponseStatus</ja>(200)
- * 		<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
- *	}
- * 	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
- *
+ * 	<jc>// Defined on parameter class.</jc>
  * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
  * 	<jk>public void</jk> login(String username, String password, LoginStatus status) {
  * 		<jk>if</jk> (! isValid(username, password))
  * 			status.set(401);
- * 		<jk>else</jk>
- * 			status.set(200);
  * 	}
+ *
+ * 	<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
+ * 	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
  * </p>
  *
  * <p>
@@ -139,6 +113,12 @@ public @interface ResponseStatus {
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -192,6 +172,12 @@ public @interface ResponseStatus {
 	 * <ul>
 	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>
