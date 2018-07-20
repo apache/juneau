@@ -491,7 +491,7 @@ public class HttpPartSchemaBuilder {
 	 * Determines whether the parameter is mandatory.
 	 *
 	 * <p>
-	 * Same as {@Link #required(Boolean)} but takes in a boolean value as a string.
+	 * Same as {@link #required(Boolean)} but takes in a boolean value as a string.
 	 *
 	 * @param value
 	 * 	The new value for this property.

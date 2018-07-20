@@ -1409,7 +1409,46 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * TODO
+	 * Creates a proxy interface to retrieve HTTP parts of this request as a proxy bean.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+	 * 	<jk>public void</jk> myMethod(@RequestBean MyRequestBean rb) {...}
+	 *
+	 * 	<jk>public interface</jk> MyRequestBean {
+	 *
+	 * 		<ja>@Path</ja> <jc>// Path variable name inferred from getter.</jc>
+	 * 		String getP1();
+	 *
+	 * 		<ja>@Path</ja>(<js>"p2"</js>)
+	 * 		String getX();
+	 *
+	 * 		<ja>@Path</ja>(<js>"/*"</js>)
+	 * 		String getRemainder();
+	 *
+	 * 		<ja>@Query</ja>
+	 * 		String getQ1();
+	 *
+	 * 		<ja>@Query</ja>
+	 * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
+	 * 		String getQuery2();
+	 *
+	 *		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
+	 * 		<ja>@Query</ja>(
+	 * 			collectionFormat=<js>"pipes"</js>
+	 * 			items=<ja>@Items</ja>(
+	 * 				items=<ja>@SubItems</ja>(
+	 * 					collectionFormat=<js>"csv"</js>
+	 * 					type=<js>"integer"</js>
+	 * 				)
+	 * 			)
+	 * 		)
+	 * 		<jk>int</jk>[][] getQ3();
+	 *
+	 * 		<ja>@Header</ja>(<js>"*"</js>)
+	 * 		Map&lt;String,Object&gt; getHeaders();
+	 * </p>
 	 *
 	 * @param c The request bean interface to instantiate.
 	 * @return A new request bean proxy for this REST request.

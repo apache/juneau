@@ -12029,7 +12029,6 @@
 				<li><b>Annotated parameters:</b>
 					<ul>
 						<li class='ja'>{@link org.apache.juneau.http.annotation.Path} - Variables in matched URL path patterns.
-						<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder} - The remainder value after path pattern match.
 						<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - Multipart form post parameter values.
 						<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData} - Denotes whether the form data parameter exists.
 						<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
@@ -12037,6 +12036,7 @@
 						<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A header value.
 						<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP content parsed as a POJO.
 						<li class='ja'>{@link org.apache.juneau.rest.annotation.Method} - The HTTP method name. 
+						<li class='ja'>{@link org.apache.juneau.http.annotation.RequestBean} - HTTP parts available through a proxy bean interface.
 					</ul>
 			</ul>
 			<h5 class='figure'>Example:</h5>
@@ -12433,7 +12433,6 @@
 			<ul>
 				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_path}
 				<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
-				<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder}
 				<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
 			</ul>
 		</div>	
@@ -12480,7 +12479,6 @@
 			<h5 class='section'>See Also:</h5>
 			<ul>
 				<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
-				<li class='ja'>{@link org.apache.juneau.http.annotation.PathRemainder}
 			</ul>
 		</div>
 
@@ -24911,7 +24909,7 @@
 			<li>
 				New <code><del>org.apache.juneau.remoteable.Path</del></code> annotation for specifying path variables on remoteable interfaces.
 			<li>
-				New {@link org.apache.juneau.remoteable.RequestBean @RequestBean} annotation for specifying beans with remoteable annotations
+				New <code><del>@RequestBean</del></code> annotation for specifying beans with remoteable annotations
 				defined on properties.
 			<li>
 				The following annotations (and related methods on RestCall) can now take <code>NameValuePairs</code> and beans as input 
@@ -25196,7 +25194,7 @@
 					<li>{@link org.apache.juneau.rest.client.RestCall#getResponseAsStringFuture() getResponseAsStringFuture()}
 					<li>{@link org.apache.juneau.rest.client.RestCall#serializer(Serializer) serializer(Serializer)} - Override the serializer defined on the client for a single call.
 					<li>{@link org.apache.juneau.rest.client.RestCall#parser(Parser) parser(Parser)} - Override the parser defined on the client for a single call.
-					<li>{@link org.apache.juneau.rest.client.RestCall#input(Object) input(Object)} - Now accepts instances of {@link org.apache.juneau.rest.client.NameValuePairs}.
+					<li><code><del>input(Object)</del></code> - Now accepts instances of {@link org.apache.juneau.rest.client.NameValuePairs}.
 					<li>{@link org.apache.juneau.rest.client.RestCall#getResponse(Class) getResponse(Class)} - Can now pass in any of the following:
 						<ul>
 							<li>{@link org.apache.http.HttpResponse} - Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.

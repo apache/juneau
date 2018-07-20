@@ -60,10 +60,10 @@ import org.apache.juneau.urlencoding.*;
  * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
  * 		String getQuery2();
  *
- * 		<ja>@QueryIfNE</ja>(<js>"q3"</js>)
+ * 		<ja>@Query</ja>(name=<js>"q3"</js>, skipIfEmpty=<jk>true</jk>)
  * 		String getQuery3();
  *
- * 		<ja>@QueryIfNE</ja>
+ * 		<ja>@Query</ja>(skipIfEmpty=<jk>true</jk>)
  * 		Map&lt;String,Object&gt; getExtraQueries();
  *
  * 		<ja>@FormData</ja>
@@ -73,10 +73,10 @@ import org.apache.juneau.urlencoding.*;
  * 		<ja>@BeanProperty</ja>(name=<js>"f2"</js>)
  * 		String getFormData2();
  *
- * 		<ja>@FormDataIfNE</ja>(<js>"f3"</js>)
+ * 		<ja>@FormData</ja>(name=<js>"f3"</js>,skipIfEmpty=<jk>true</jk>)
  * 		String getFormData3();
  *
- * 		<ja>@FormDataIfNE</ja>
+ * 		<ja>@FormData</ja>(skipIfEmpty=<jk>true</jk>)
  * 		Map&lt;String,Object&gt; getExtraFormData();
  *
  * 		<ja>@Header</ja>
@@ -86,10 +86,10 @@ import org.apache.juneau.urlencoding.*;
  * 		<ja>@BeanProperty</ja>(name=<js>"H2"</js>)
  * 		String getHeader2();
  *
- * 		<ja>@HeaderIfNE</ja>(<js>"H3"</js>)
+ * 		<ja>@Header</ja>(name=<js>"H3"</js>,skipIfEmpty=<jk>true</jk>)
  * 		String getHeader3();
  *
- * 		<ja>@HeaderIfNE</ja>
+ * 		<ja>@Header</ja>(skipIfEmpty=<jk>true</jk>)
  * 		Map&lt;String,Object&gt; getExtraHeaders();
  * 	}
  * </p>
