@@ -601,6 +601,20 @@ class RestParamDefaults {
 		}
 	}
 
+	static final class RequestBeanObject extends RestMethodParam {
+		private final RequestBeanMeta requestBeanMeta;
+
+		protected RequestBeanObject(Method m, RequestBeanMeta rbm, Type t) {
+			super(OTHER, m, null, t, null);
+			this.requestBeanMeta = rbm;
+		}
+
+		@Override /* RestMethodParam */
+		public Object resolve(RestRequest req, RestResponse res) throws Exception {
+			return req.getRequestBean(requestBeanMeta);
+		}
+	}
+
 	static final class ResponseHeaderObject extends RestMethodParam {
 		final HttpPartSerializer partSerializer;
 		final HttpPartSchema schema;

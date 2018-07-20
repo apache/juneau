@@ -13,14 +13,7 @@
 package org.apache.juneau.remoteable;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import java.util.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 
@@ -35,13 +28,13 @@ import org.apache.juneau.httppart.*;
 public final class RemoteMethodBeanArg {
 
 	private final int index;
+	private final RequestBeanMeta meta;
 	private final HttpPartSerializer serializer;
-	private final Map<String,RemoteMethodArg> properties;
 
-	private RemoteMethodBeanArg(int index, Class<? extends HttpPartSerializer> serializer, Map<String,RemoteMethodArg> properties) {
+	RemoteMethodBeanArg(int index, Class<? extends HttpPartSerializer> serializer, RequestBeanMeta meta) {
 		this.index = index;
 		this.serializer = newInstance(HttpPartSerializer.class, serializer);
-		this.properties = properties;
+		this.meta = meta;
 	}
 
 	/**
@@ -68,45 +61,7 @@ public final class RemoteMethodBeanArg {
 	 * @param name The bean property name.
 	 * @return Metadata about the bean property, or <jk>null</jk> if not found.
 	 */
-	public RemoteMethodArg getProperty(String name) {
-		return properties.get(name);
-	}
-
-	static RemoteMethodBeanArg create(Method m, int i) {
-		Map<String,RemoteMethodArg> map = new LinkedHashMap<>();
-		if (hasAnnotation(RequestBean.class, m, i)) {
-			RequestBean rb = getAnnotation(RequestBean.class, m, i);
-			BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(m.getParameterTypes()[i]);
-			for (BeanPropertyMeta bp : bm.getPropertyMetas()) {
-				String n = bp.getName();
-				Annotation a = bp.getAnnotation(Path.class);
-				if (a != null) {
-					HttpPartSchema s = HttpPartSchema.create().apply(a).build();
-					map.put(n, new RemoteMethodArg(PATH, s, n));
-				}
-				a = bp.getAnnotation(Header.class);
-				if (a != null) {
-					HttpPartSchema s = HttpPartSchema.create().apply(a).build();
-					map.put(n, new RemoteMethodArg(HEADER, s, n));
-				}
-				a = bp.getAnnotation(Query.class);
-				if (a != null) {
-					HttpPartSchema s = HttpPartSchema.create().apply(a).build();
-					map.put(n, new RemoteMethodArg(QUERY, s, n));
-				}
-				a = bp.getAnnotation(FormData.class);
-				if (a != null) {
-					HttpPartSchema s = HttpPartSchema.create().apply(a).build();
-					map.put(n, new RemoteMethodArg(FORMDATA, s, n));
-				}
-				a = bp.getAnnotation(Body.class);
-				if (a != null) {
-					HttpPartSchema s = HttpPartSchema.create().apply(a).build();
-					map.put(n, new RemoteMethodArg(BODY, s, n));
-				}
-			}
-			return new RemoteMethodBeanArg(i, rb.serializer(), map);
-		}
-		return null;
+	public RequestBeanPropertyMeta getProperty(String name) {
+		return meta.getProperty(name);
 	}
 }

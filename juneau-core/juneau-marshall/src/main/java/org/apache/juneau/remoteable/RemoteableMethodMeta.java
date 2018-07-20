@@ -19,6 +19,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 
@@ -119,10 +120,10 @@ public class RemoteableMethodMeta {
 					else
 						annotated = false;
 				}
-				RemoteMethodBeanArg rmba = RemoteMethodBeanArg.create(m, i);
+				RequestBeanMeta rmba = RequestBeanMeta.create(m, i, PropertyStore.DEFAULT);
 				if (rmba != null) {
 					annotated = true;
-					requestBeanArgs.add(rmba);
+					requestBeanArgs.add(new RemoteMethodBeanArg(i, null, rmba));
 				}
 				if (! annotated) {
 					otherArgs.add(new RemoteMethodArg(i, BODY, null));

@@ -15,11 +15,15 @@ package org.apache.juneau.rest;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.remoteable.ReturnValue.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
 import java.text.*;
@@ -37,6 +41,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
@@ -1401,6 +1406,59 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Map<String,Widget> getWidgets() {
 		return restJavaMethod.widgets;
+	}
+
+	/**
+	 * TODO
+	 *
+	 * @param c The request bean interface to instantiate.
+	 * @return A new request bean proxy for this REST request.
+	 */
+	public <T> T getRequestBean(Class<T> c) {
+		return getRequestBean(RequestBeanMeta.create(c, getContext().getPropertyStore()));
+	}
+
+	/**
+	 * Same as {@link #getRequestBean(Class)} but used on pre-instantiated {@link RequestBeanMeta} objects.
+	 *
+	 * @param requestBeanMeta The metadata about the request bean interface to create.
+	 * @return A new request bean proxy for this REST request.
+	 */
+	public <T> T getRequestBean(final RequestBeanMeta requestBeanMeta) {
+		try {
+			Class<T> c = (Class<T>)requestBeanMeta.getClassMeta().getInnerClass();
+			final BeanMeta<T> bm = getBeanSession().getBeanMeta(c);
+			return (T)Proxy.newProxyInstance(
+				c.getClassLoader(),
+				new Class[] { c },
+				new InvocationHandler() {
+					@Override /* InvocationHandler */
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+						RequestBeanPropertyMeta pm = requestBeanMeta.getPropertyByGetter(method.getName());
+						if (pm != null) {
+							HttpPartParser pp = pm.getParser(getPartParser());
+							HttpPartSchema schema = pm.getSchema();
+							String name = pm.getPartName();
+							ClassMeta<?> type = getContext().getBeanContext().getClassMeta(method.getGenericReturnType());
+							HttpPartType pt = pm.getPartType();
+							if (pt == HttpPartType.BODY)
+								return getBody().asType(pm.getParser(null), schema, type);
+							if (pt == HttpPartType.QUERY)
+								return getQuery().get(pp, schema, name, type);
+							if (pt == HttpPartType.FORMDATA)
+								return getFormData().get(pp, schema, name, type);
+							if (pt == HttpPartType.HEADER)
+								return getHeaders().get(pp, schema, name, type);
+							if (pt == HttpPartType.PATH)
+								return getPathMatch().get(pp, schema, name, type);
+						}
+						return null;
+					}
+
+			});
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override /* Object */

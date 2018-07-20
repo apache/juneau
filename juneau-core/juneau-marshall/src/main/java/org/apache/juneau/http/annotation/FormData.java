@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.remoteable.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
@@ -109,7 +108,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  *
  * <h5 class='topic'>Client-side REST</h5>
-* Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
+ * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
  * request.
  *
  * <h5 class='section'>Example:</h5>

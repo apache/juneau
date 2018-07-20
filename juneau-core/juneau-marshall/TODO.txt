@@ -11,12 +11,7 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
-Document properties in config file.
-
-REST example showing how to use NLS.
-REST example showing how to customize look-and-feel.
-REST example showing static resources.
-Add doc link to @Example class.
-
-
-
+Test @Header("*") using maps/beans and related annotations.
+Simplify @Body annotation by merging @Schema into it.
+Test RestRequest.getRequestBean() and @RequestBean as an annotation.
+Document RestRequest.getRequestBean().

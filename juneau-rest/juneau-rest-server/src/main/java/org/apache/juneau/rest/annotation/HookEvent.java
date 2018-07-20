@@ -164,7 +164,7 @@ public enum HookEvent {
 	 * 			<li>{@link org.apache.juneau.parser.Parser}
 	 * 			<li>{@link Locale}
 	 * 			<li>{@link Swagger}
-	 * 			<li>{@link RequestPathMatch}
+	 * 			<li>{@link RequestPath}
 	 * 			<li>{@link RequestBody}
 	 * 			<li>{@link Config}
 	 * 			<li>{@link UriContext}

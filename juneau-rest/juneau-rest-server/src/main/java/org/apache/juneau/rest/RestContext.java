@@ -4349,6 +4349,10 @@ public final class RestContext extends BeanContext {
 				s = HttpPartSchema.create(Body.class, method, i);
 				rp[i] = new RestParamDefaults.BodyObject(method, s, t, ps);
 
+			} else if (hasAnnotation(RequestBean.class, method, i)) {
+				RequestBeanMeta rbm = RequestBeanMeta.create(method, i, ps);
+				rp[i] = new RestParamDefaults.RequestBeanObject(method, rbm, t);
+
 			} else if (hasAnnotation(Response.class, method, i)) {
 				s = HttpPartSchema.create(Response.class, method, i);
 				rp[i] = new RestParamDefaults.ResponseObject(method, s, t);

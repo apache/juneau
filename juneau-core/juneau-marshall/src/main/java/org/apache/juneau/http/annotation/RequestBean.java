@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remoteable;
+package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -21,8 +21,21 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.urlencoding.*;
 
 /**
- * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
+ * Request bean annotation.
  *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Java method arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated REST interface proxies.
+ * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * </ul>
+ *
+ * <h5 class='topic'>Server-side REST</h5>
+ * TODO
+ *
+ * <h5 class='topic'>Client-side REST</h5>
+ * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
+
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
@@ -103,4 +116,9 @@ public @interface RequestBean {
 	 * This annotation is provided to allow values to be custom serialized.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+
+	/**
+	 * TODO
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 }

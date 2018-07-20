@@ -1034,25 +1034,27 @@ public class RestClient extends BeanContext implements Closeable {
 
 						String url = rmm.getUrl();
 						String httpMethod = rmm.getHttpMethod();
+						HttpPartSerializer s = getPartSerializer();
+
 						try (RestCall rc = doCall(httpMethod, url, httpMethod.equals("POST") || httpMethod.equals("PUT"))) {
 
 							rc.serializer(serializer).parser(parser);
 
 							for (RemoteMethodArg a : rmm.getPathArgs())
-								rc.path(a.getName(), args[a.getIndex()], a.getSerializer(), a.getSchema());
+								rc.path(a.getName(), args[a.getIndex()], a.getSerializer(s), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getQueryArgs())
-								rc.query(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(), a.getSchema());
+								rc.query(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getFormDataArgs())
-								rc.formData(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(), a.getSchema());
+								rc.formData(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
 
 							for (RemoteMethodArg a : rmm.getHeaderArgs())
-								rc.header(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(), a.getSchema());
+								rc.header(a.getName(), args[a.getIndex()], a.isSkipIfEmpty(), a.getSerializer(s), a.getSchema());
 
 							RemoteMethodArg ba = rmm.getBodyArg();
 							if (ba != null)
-								rc.body(args[ba.getIndex()], ba.getSerializer(), ba.getSchema());
+								rc.body(args[ba.getIndex()], ba.getSerializer(null), ba.getSchema());
 
 							if (rmm.getRequestBeanArgs().length > 0) {
 								BeanSession bs = createBeanSession();
@@ -1062,20 +1064,21 @@ public class RestClient extends BeanContext implements Closeable {
 									for (BeanPropertyValue bpv : bm.getValues(false)) {
 										BeanPropertyMeta pMeta = bpv.getMeta();
 										Object val = bpv.getValue();
-										RemoteMethodArg a = rmba.getProperty(pMeta.getName());
+										RequestBeanPropertyMeta a = rmba.getProperty(pMeta.getName());
 										if (a != null) {
 											HttpPartType pt = a.getPartType();
+											HttpPartSchema schema = a.getSchema();
 											if (pt == PATH)
-												rc.path(a.getName(), val, ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+												rc.path(a.getPartName(), val, a.getSerializer(s), schema);
 											if (val != null) {
 												if (pt == QUERY) {
-													rc.query(a.getName(), val, a.isSkipIfEmpty(), ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+													rc.query(a.getPartName(), val, schema.isSkipIfEmpty(), a.getSerializer(s), schema);
 												} else if (pt == FORMDATA) {
-													rc.formData(a.getName(), val, a.isSkipIfEmpty(), ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+													rc.formData(a.getPartName(), val, schema.isSkipIfEmpty(), a.getSerializer(s), schema);
 												} else if (pt == HEADER) {
-													rc.header(a.getName(), val, a.isSkipIfEmpty(), ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+													rc.header(a.getPartName(), val, schema.isSkipIfEmpty(), a.getSerializer(s), schema);
 												} else if (pt == HttpPartType.BODY) {
-													rc.body(val, ObjectUtils.firstNonNull(a.getSerializer(), rmba.getSerializer()), a.getSchema());
+													rc.body(val, a.getSerializer(s), schema);
 												}
 											}
 										}

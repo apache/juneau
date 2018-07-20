@@ -309,6 +309,7 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.HasQuery'>@HasQuery</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Header'>@Header</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Path'>@Path</a></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.ResponseBean'>@ResponseBean</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Response'>@Response</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.Responses'>@Responses</a></p>
@@ -13218,10 +13219,11 @@
 		</ul>
 	</div>
 	
-	<!-- === 7.14 - @PathRemainer ======================================================================= -->
+	<!-- === 7.14 - @ResponseBean ======================================================================= -->
 	
-	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PathRemainer' id='juneau-rest-server.PathRemainer'>7.14 - @PathRemainer</a></h3>
+	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.PathRemainer' id='juneau-rest-server.ResponseBean'>7.14 - @ResponseBean</a></h3>
 	<div class='topic'>
+		TODO
 	</div>	
 
 	<!-- === 7.15 - Swagger Schema Part Parsing ========================================================= -->
@@ -22722,6 +22724,38 @@
 		<h5 class='topic w800'>juneau-marshall</h5>
 		<ul class='spaced-list'>
 			<li>
+				The REST client <ja>@Remoteable</ja> annotations and REST server <ja>@RemoteMethod</ja> annotations which used to be
+				in separate packages in the client and server projects have been combined into a single set of annotations in 
+				the {@link org.apache.juneau.http.annotation} package.
+				<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
+				<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
+				<ul class='doctree'>
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.RequestBean}
+				</ul>
+				<br>These are used with new Swagger schema/documentation annotations to produce schema-based serialization/parsing/validation 
+					and auto-generated Swagger documentation:
+				<ul class='doctree'>
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Contact}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.ExternalDocs}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Items}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.License}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Schema}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.SubItems}
+					<li class='ja'>{@link org.apache.juneau.http.annotation.Tag}
+				</ul>
+			<li>
+				Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
+				<code><ja>@Query</ja>(<js>"*"</js>)</code>, <code><ja>@FormData</ja>(<js>"*"</js>)</code>, <code><ja>@Header</ja>(<js>"*"</js>)</code>, <code><ja>@Path</ja>(<js>"*"</js>)</code>
+			<li>
+				Support for server-side use of <ja>@ResourceBean</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta)} method.
+			<li>
 				Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
 			<li>
 				Fixed bug where HTML-Schema was not being rendered correctly.
@@ -22839,12 +22873,6 @@
 						<li class='jm'>{@link org.apache.juneau.ObjectList#modifiable() modifiable()}
 					</ul>
 				</ul>
-			<li>
-				The REST client <ja>@Remoteable</ja> annotations and REST server <ja>@RemoteMethod</ja> annotations which used to be
-				in separate packages in the client and server projects have been combined into a single set of annotations in 
-				the {@link org.apache.juneau.http.annotation} package.
-				<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
-				<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
 			<li>
 				The <code>JsonSerializer.Simple</code> class has been moved into the top-level {@link org.apache.juneau.json.SimpleJsonSerializer} class.
 			<li>
@@ -23011,6 +23039,15 @@
 					<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps()}
 				</ul>
 				<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <code>Inherit</code> class. 
+			<li>
+				<code>RequestPathMatch</code> class has been renamed to {@link org.apache.juneau.rest.RequestPath}.
+			<li>
+				{@link org.apache.juneau.http.annotation.RequestBean @RequestBean} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
+				<br>Includes new methods on {@link org.apache.juneau.rest.RestRequest}:
+				<ul class='doctree'>
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(Class) getRequestBean(Class)}
+					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta) getRequestBean(RequestBeanMeta)}
+				</ul>
 		</ul>
 	
 		<h5 class='topic w800'>juneau-rest-client</h5>

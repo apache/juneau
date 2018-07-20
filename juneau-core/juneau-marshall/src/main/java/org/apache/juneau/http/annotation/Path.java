@@ -19,7 +19,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.remoteable.*;
 import org.apache.juneau.urlencoding.*;
 
 /**

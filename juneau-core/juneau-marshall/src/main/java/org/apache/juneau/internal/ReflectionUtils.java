@@ -48,6 +48,17 @@ public final class ReflectionUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the {@link #getAnnotation(Class, Class)} returns a value.
+	 *
+	 * @param a The annotation to check for.
+	 * @param c The class to check.
+	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Class)} returns a value.
+	 */
+	public static boolean hasAnnotation(Class<? extends Annotation> a, Class<?> c) {
+		return getAnnotation(a, c) != null;
+	}
+
+	/**
 	 * Returns the specified annotation if it exists on the specified parameter or parameter type class.
 	 *
 	 * @param a The annotation to check for.
