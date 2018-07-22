@@ -602,7 +602,10 @@ public @interface Schema {
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * TODO(7.2.0)
+	 * <mk>example</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 *
+	 * <p>
+	 * A free-form property to include an example of an instance for this schema.
 	 *
 	 * <p>
 	 * This attribute defines a JSON representation of the body value that is used by <code>BasicRestInfoProvider</code> to construct
@@ -621,7 +624,7 @@ public @interface Schema {
 	String[] example() default {};
 
 	/**
-	 * TODO(7.2.0)
+	 * <mk>x-examples</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 *
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
@@ -639,7 +642,7 @@ public @interface Schema {
 	String[] examples() default {};
 
 	/**
-	 * TODOTODO(7.2.0)
+	 * Specifies that schema information for this part should not be shown in the generated Swagger documentation.
 	 */
 	boolean ignore() default false;
 

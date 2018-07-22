@@ -15,7 +15,26 @@ package org.apache.juneau.json;
 import org.apache.juneau.*;
 
 /**
- * TODO(7.2.0)
+ * Serializes POJO models to Simplified JSON.
+ *
+ * <h5 class='topic'>Media types</h5>
+ *
+ * Handles <code>Accept</code> types:  <code><b>application/json, text/json</b></code>
+ * <p>
+ * Produces <code>Content-Type</code> types:  <code><b>application/json+simple</b></code>
+ *
+ * <h5 class='topic'>Description</h5>
+ * <p>
+ * 	This is a JSON serializer that uses simplified notation:
+ * <ul class='spaced-list'>
+ * 	<li>Lax quoting of JSON attribute names.
+ * 	<li>Single quotes.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Overview &gt; juneau-marshall &gt; Simplified JSON</a>
+ * </ul>
  */
 public class SimpleJsonSerializer extends JsonSerializer {
 

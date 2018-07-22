@@ -183,17 +183,6 @@ import org.apache.juneau.json.*;
  * <p class='bcode w800'>
  * 	<js>"{class}.{name}.{type}/add.{key}"</js>  <jc>// Add a map entry (or delete if the value is null).</jc>
  * </p>
- *
- * <h5 class='topic'>Setting properties</h5>
- *
- * <p>
- * TODO(7.2.0)
- *
- * <h5 class='topic'>Retrieving properties</h5>
- *
- * <p>
- * TODO(7.2.0)
- *
  */
 @SuppressWarnings("unchecked")
 public final class PropertyStore {

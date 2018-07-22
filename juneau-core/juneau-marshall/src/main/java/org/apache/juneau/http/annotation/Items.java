@@ -324,7 +324,10 @@ public @interface Items {
 	String $ref() default "";
 
 	/**
-	 * TODO(7.2.0)
+	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
 	 */
 	SubItems items() default @SubItems;
 
@@ -419,5 +422,4 @@ public @interface Items {
 	 * </ul>
 	 */
 	String[] value() default {};
-
 }

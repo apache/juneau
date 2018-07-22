@@ -278,6 +278,18 @@ public @interface SubItems {
 	String $ref() default "";
 
 	/**
+	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * <p>
+	 * This is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
+	 * <br>It must be declared free-form because it's not possible to nest annotations in Java.
+	 */
+	String[] items() default {};
+
+	/**
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
 	 *
 	 * <p>
@@ -368,9 +380,4 @@ public @interface SubItems {
 	 * </ul>
 	 */
 	String[] value() default {};
-
-	/**
-	 * TODO(7.2.0)
-	 */
-	String[] items() default {};
 }

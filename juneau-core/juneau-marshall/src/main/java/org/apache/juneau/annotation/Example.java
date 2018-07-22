@@ -54,11 +54,6 @@ import java.lang.annotation.*;
  * 	<ja>@Example</js>(<js>"{foo:'bar',baz:123}"</js>)
  * 	<jk>public class</jk> C {...}
  * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li>TODO(7.2.0)
- * </ul>
  */
 @Documented
 @Target({FIELD,METHOD,TYPE})

@@ -1972,8 +1972,6 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * TODO(7.2.0) - Describe allowed POJOs when parser is not defined.
-	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>

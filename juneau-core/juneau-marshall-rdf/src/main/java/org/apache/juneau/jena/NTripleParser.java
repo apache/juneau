@@ -17,7 +17,7 @@ import static org.apache.juneau.jena.Constants.*;
 import org.apache.juneau.*;
 
 /**
- * TODO(7.2.0)
+ * Subclass of {@link RdfParser} for parsing RDF in N-Triple notation.
  */
 public class NTripleParser extends RdfParser {
 

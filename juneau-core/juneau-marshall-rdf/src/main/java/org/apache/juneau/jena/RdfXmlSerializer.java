@@ -17,7 +17,7 @@ import static org.apache.juneau.jena.Constants.*;
 import org.apache.juneau.*;
 
 /**
- * TODO(7.2.0)
+ * Subclass of {@link RdfSerializer} for serializing RDF in standard XML notation.
  */
 public class RdfXmlSerializer extends RdfSerializer {
 

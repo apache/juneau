@@ -17,7 +17,7 @@ import static org.apache.juneau.jena.Constants.*;
 import org.apache.juneau.*;
 
 /**
- * TODO(7.2.0)
+ * Subclass of {@link RdfSerializer} for serializing RDF in N3 notation.
  */
 public class N3Serializer extends RdfSerializer {
 

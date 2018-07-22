@@ -17,7 +17,7 @@ import static org.apache.juneau.jena.Constants.*;
 import org.apache.juneau.*;
 
 /**
- * TODO(7.2.0)
+ * Subclass of {@link RdfParser} for parsing RDF in Abbreviated-XML notation.
  */
 public class RdfXmlAbbrevSerializer extends RdfSerializer {
 

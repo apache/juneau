@@ -17,6 +17,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 
@@ -24,7 +25,17 @@ import org.apache.juneau.transform.*;
  * OpenAPI part parser.
  *
  * <p>
- * TODO(7.2.0)
+ * Used in junction with the following annotations to provide schema-based parsing of POJOs:
+ * <ul>
+ * 	<li class='ja'>{@link Body}
+ * 	<li class='ja'>{@link FormData}
+ * 	<li class='ja'>{@link Query}
+ * 	<li class='ja'>{@link Header}
+ * 	<li class='ja'>{@link Path}
+ * </ul>
+ *
+ * <p>
+ * The list of valid POJO types per type/format are as follows:
  *
  * <table class='styled'>
  * 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
@@ -163,6 +174,11 @@ import org.apache.juneau.transform.*;
  * 		</td>
  * 	</tr>
  * </table>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.OpenApiDetails">Overview &gt; juneau-marshall &gt; OpenAPI Details</a>
+ * </ul>
  */
 public class OpenApiPartParser extends UonPartParser {
 
