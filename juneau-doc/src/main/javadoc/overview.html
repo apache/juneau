@@ -4377,7 +4377,62 @@
 		
 		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.SimplifiedJson' id='juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a></h4>
 		<div class='topic'>
-			TODO(7.2.0)
+			<p>
+				The {@link org.apache.juneau.json.SimpleJsonSerializer} class can be used to serialized POJOs into Simplified JSON notation.
+			</p>
+			<p>
+				Simplified JSON is identical to JSON except for the following:
+			</p>
+			<ul class='spaced-list'>
+				<li>JSON attributes are only quoted when necessary.
+				<li>Uses single-quotes for quoting.
+			</ul>
+			<h5 class='figure'>Examples:</h5>
+			<p class='bcode w800'>
+	<jc>// Some free-form JSON.</jc>
+	ObjectMap m = <jk>new</jk> ObjectMap()
+		.append(<js>"foo"</js>, <js>"x1"</js>)
+		.append(<js>"_bar"</js>, <js>"x2"</js>)
+		.append(<js>" baz "</js>, <js>"x3"</js>)
+	 	.append(<js>"123"</js>, <js>"x4"</js>)
+	 	.append(<js>"return"</js>, <js>"x5"</js>);
+	 	.append(<js>""</js>, <js>"x6"</js>);
+	 		</p>
+			<p class='bcode w800'>
+	<joc>// Serialized to standard JSON</joc>
+	{
+		<jok>"foo"</jok>: <jov>"x1"</jov>,
+	 	<jok>"_bar"</jok>: <jov>"x2"</jov>,
+	 	<jok>" baz "</jok>: <jov>"x3"</jov>,
+	 	<jok>"123"</jok>: <jov>"x4"</jov>,
+	 	<jok>"return"</jok>: <jov>"x5"</jov>,
+	 	<jok>""</jok>: <jov>"x6"</jov>
+	}
+			</p>	 		
+			<p class='bcode w800'>
+	<joc>// Serialized to simplified JSON</joc>
+	{
+		<jok>foo</jok>: <jov>'x1'</jov>,
+	 	<jok>_bar</jok>: <jov>'x2'</jov>,
+	 	<jok>' baz '</jok>: <jov>'x3'</jov>,  <joc>// Quoted due to embedded spaces.</joc>
+	 	<jok>'123'</jok>: <jov>'x4'</jov>,    <joc>// Quoted to prevent confusion with number.</joc>
+	 	<jok>'return'</jok>: <jov>'x5'</jov>, <joc>// Quoted because it's a keyword.</joc>
+	 	<jok>''</jok>: <jov>'x6'</jov>        <joc>// Quoted because it's an empty string.</joc>
+	}
+			</p>
+			<p>
+				The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
+				<br>This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
+			</p>
+			<p class='bcode w800'>
+	WriterSerializer ws = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
+	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, ws.toString(myPojo));
+			</p>			
+			
+			<h5 class='section'>See Also:</h5>
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.json.JsonSerializer#JSON_simpleMode}
+			</ul>
 		</div>
 		
 		<!-- === 2.15.4 - JSON Parsers ================================================================== -->
@@ -22920,6 +22975,11 @@
 					<li><code>RdfParser.NTriple</code> -&gt; {@link org.apache.juneau.jena.NTripleParser}
 					<li><code>RdfParser.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleParser}
 				</ul>
+			<li>
+				New/updated documentation:
+				<ul>
+					<li><a href='#juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a>
+				</ul>
 		</ul>
 		
 		<h5 class='topic w800'>juneau-dto</h5>
@@ -23051,9 +23111,6 @@
 					<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
 				</ul>
 			<li>
-				New documentation: 
-				<br>><a class="doclink" href="#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
-			<li>
 				<code><ja>@RestMethod</ja>(inherit)</code> annotation has been removed and replaced with the following classes:
 				<ul>
 					<li class='jc'>{@link org.apache.juneau.rest.Inherit}
@@ -23080,6 +23137,9 @@
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(Class) getRequestBean(Class)}
 					<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta) getRequestBean(RequestBeanMeta)}
 				</ul>
+			<li>
+				New/updated documentation: 
+				<br>><a class="doclink" href="#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
 		</ul>
 	
 		<h5 class='topic w800'>juneau-rest-client</h5>
