@@ -87,7 +87,7 @@ import org.apache.juneau.httppart.*;
  * <br>Schema-based serialization and parsing is allowed just as if used as individual parameter types.
  *
  * <p>
- * TODO - Swagger-info in <ja>@RequestBean</ja>s is not currently reflected in generated Swagger documentation.
+ * TODO(7.2.0) - Swagger-info in <ja>@RequestBean</ja>s is not currently reflected in generated Swagger documentation.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

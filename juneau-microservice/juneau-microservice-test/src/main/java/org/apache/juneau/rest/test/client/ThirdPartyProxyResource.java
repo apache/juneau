@@ -56,7 +56,6 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 			logFile.append("START["+new Date()+"]-").append(req.getQueryString()).append("\n");
 			logFile.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -67,7 +66,6 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 			logFile.append("PRE["+new Date()+"]-").append(req.getQueryString()).append("\n");
 			logFile.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -78,7 +76,6 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 			logFile.append("POST["+new Date()+"]-").append(req.getQueryString()).append("\n");
 			logFile.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -91,7 +88,6 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 			logFile.append("END["+new Date()+"]-").append(req.getQueryString()).append(", time=").append(""+execTime).append(", exception=").append(e == null ? null : e.toString()).append("\n");
 			logFile.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

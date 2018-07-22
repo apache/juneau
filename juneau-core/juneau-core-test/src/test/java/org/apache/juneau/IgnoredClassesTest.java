@@ -67,5 +67,4 @@ public class IgnoredClassesTest {
 			return "isNotBean";
 		}
 	}
-	// TODO - Ignored packages.
 }

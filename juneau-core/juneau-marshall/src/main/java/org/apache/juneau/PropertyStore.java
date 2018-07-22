@@ -187,12 +187,12 @@ import org.apache.juneau.json.*;
  * <h5 class='topic'>Setting properties</h5>
  *
  * <p>
- * TODO
+ * TODO(7.2.0)
  *
  * <h5 class='topic'>Retrieving properties</h5>
  *
  * <p>
- * TODO
+ * TODO(7.2.0)
  *
  */
 @SuppressWarnings("unchecked")

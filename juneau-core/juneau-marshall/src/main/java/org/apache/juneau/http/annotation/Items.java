@@ -324,7 +324,7 @@ public @interface Items {
 	String $ref() default "";
 
 	/**
-	 * TODO
+	 * TODO(7.2.0)
 	 */
 	SubItems items() default @SubItems;
 

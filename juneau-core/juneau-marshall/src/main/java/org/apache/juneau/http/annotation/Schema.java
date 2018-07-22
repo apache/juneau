@@ -602,7 +602,7 @@ public @interface Schema {
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * TODO
+	 * TODO(7.2.0)
 	 *
 	 * <p>
 	 * This attribute defines a JSON representation of the body value that is used by <code>BasicRestInfoProvider</code> to construct
@@ -621,7 +621,7 @@ public @interface Schema {
 	String[] example() default {};
 
 	/**
-	 * TODO
+	 * TODO(7.2.0)
 	 *
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
@@ -639,7 +639,7 @@ public @interface Schema {
 	String[] examples() default {};
 
 	/**
-	 * TODO
+	 * TODOTODO(7.2.0)
 	 */
 	boolean ignore() default false;
 

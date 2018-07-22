@@ -370,7 +370,7 @@ public @interface SubItems {
 	String[] value() default {};
 
 	/**
-	 * TODO
+	 * TODO(7.2.0)
 	 */
 	String[] items() default {};
 }

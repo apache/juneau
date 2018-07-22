@@ -14,8 +14,8 @@ package org.apache.juneau.json;
 
 import org.apache.juneau.*;
 
-/** 
- * TODO 
+/**
+ * TODO(7.2.0)
  */
 public class SimpleJsonSerializer extends JsonSerializer {
 

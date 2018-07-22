@@ -557,7 +557,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	/**
 	 * Sets a mock connection used to construct a connection manager for working against mocked REST interfaces.
 	 *
-	 * TODO - Describe how to use this.
+	 * TODO(7.2.0) - Describe how to use this.
 	 *
 	 * @param c The mock connection.
 	 * @return This object (for method chaining).

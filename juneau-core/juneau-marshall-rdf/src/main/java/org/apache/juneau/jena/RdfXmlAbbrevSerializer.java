@@ -16,8 +16,8 @@ import static org.apache.juneau.jena.Constants.*;
 
 import org.apache.juneau.*;
 
-/** 
- * TODO
+/**
+ * TODO(7.2.0)
  */
 public class RdfXmlAbbrevSerializer extends RdfSerializer {
 

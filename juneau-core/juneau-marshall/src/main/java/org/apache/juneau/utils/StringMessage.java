@@ -52,7 +52,6 @@ public class StringMessage implements CharSequence, Writable {
 
 	@Override /* Writable */
 	public MediaType getMediaType() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
