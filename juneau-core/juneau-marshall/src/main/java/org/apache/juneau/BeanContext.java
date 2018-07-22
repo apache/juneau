@@ -836,6 +836,7 @@ public class BeanContext extends Context {
 	 * 		.build();
 	 * </p>
 	 *
+	 * <p>
 	 * POJO examples can also be defined on classes via the following:
 	 * <ul class='spaced-list'>
 	 * 	<li>A static field annotated with {@link Example @Example}.

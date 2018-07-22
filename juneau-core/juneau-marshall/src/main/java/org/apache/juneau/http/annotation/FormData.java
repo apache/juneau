@@ -20,7 +20,9 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.jsonschema.*;
 
 /**
   * REST request form-data annotation.
@@ -237,7 +239,7 @@ import org.apache.juneau.httppart.*;
 public @interface FormData {
 
 	/**
-	 * Skips this value if it's an empty string or empty collection/array.
+	 * Skips this value during serialization if it's an empty string or empty collection/array.
 	 *
 	 * <p>
 	 * Note that <jk>null</jk> values are already ignored.
@@ -247,7 +249,6 @@ public @interface FormData {
 	 * 	<li>
 	 * 		Client-side schema-based serializing.
 	 * </ul>
-	 *
 	 */
 	boolean skipIfEmpty() default false;
 
@@ -274,11 +275,11 @@ public @interface FormData {
 	/**
 	 * FORM parameter name.
 	 *
-	 * Required. The name of the parameter.
+	 * <p>
+	 * The name of the parameter (required).
 	 *
 	 * <p>
-	 * The value should be either <js>"*"</js> to represent multiple name/value pairs, or a label that defines the
-	 * form data parameter name.
+	 * The value should be either a valid form parameter name, or <js>"*"</js> to represent multiple name/value pairs
 	 *
 	 * <p>
 	 * A blank value (the default) has the following behavior:
@@ -287,7 +288,12 @@ public @interface FormData {
 	 * 		If the data type is <code>NameValuePairs</code>, <code>Map</code>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
-	 * 		<h5 class='figure'>Example:</h5>
+	 * 		<h5 class='figure'>Examples:</h5>
+	 * 		<p class='bcode w800'>
+	 * 	<jc>// When used on a REST method</jc>
+	 * 	<ja>@RestMethod</ja>(path=<js>"/addPet"</js>)
+	 * 	<jk>public void</jk> addPet(<ja>@FormData</ja> ObjectMap allFormDataParameters) {...}
+	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
@@ -295,9 +301,10 @@ public @interface FormData {
 	 *
 	 * 		<jc>// Equivalent to @FormData("*")</jc>
 	 * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-	 * 		String myProxyMethod1(<ja>@FormData</ja> Map&lt;String,Object&gt; formData);
+	 * 		String myProxyMethod1(<ja>@FormData</ja> Map&lt;String,Object&gt; allFormDataParameters);
 	 * 	}
-	 *
+	 * 		</p>
+	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a request bean method</jc>
 	 * 	<jk>public interface</jk> MyRequestBean {
 	 *
@@ -339,10 +346,10 @@ public @interface FormData {
 	 * <p>
 	 * The following are completely equivalent ways of defining a form post entry:
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@FormData</jk>(name=<js>"petId"</jk>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(name=<js>"petId"</jk>) <jk>long</jk> petId) {...}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<jk>@FormData</jk>(<js>"petId"</js>) <jk>long</jk> petId) {...}
+	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(<js>"petId"</js>) <jk>long</jk> petId) {...}
 	 * </p>
 	 */
 	String value() default "";
@@ -378,7 +385,9 @@ public @interface FormData {
 	 * Determines whether the parameter is mandatory.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -436,6 +445,9 @@ public @interface FormData {
 	 *
 	 * <p>
 	 * If the type is not specified, it will be auto-detected based on the parameter class type.
+	 *
+	 * <p>
+	 * Static strings are defined in {@link ParameterType}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -497,6 +509,9 @@ public @interface FormData {
 	 * 		<br>Only valid with type <js>"object"</js>.
 	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link FormatType}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -581,6 +596,9 @@ public @interface FormData {
 	 * </ul>
 	 *
 	 * <p>
+	 * Static strings are defined in {@link CollectionFormatType}.
+	 *
+	 * <p>
 	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 	 *
 	 * <h5 class='section'>Used for:</h5>
@@ -613,9 +631,9 @@ public @interface FormData {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jk>public</jk> Order placeOrder(
-	 * 		<jk>@FormData</jk>(name=<js>"petId"</jk>, _default=<js>"100"</js>) <jk>long</jk> petId,
-	 * 		<jk>@FormData</jk>(name=<js>"additionalInfo"</jk>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
-	 * 		<jk>@FormData</jk>(name=<js>"flags"</jk>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
+	 * 		<ja>@FormData</ja>(name=<js>"petId"</js>, _default=<js>"100"</js>) <jk>long</jk> petId,
+	 * 		<ja>@FormData</ja>(name=<js>"additionalInfo"</js>, format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo additionalInfo,
+	 * 		<ja>@FormData</ja>(name=<js>"flags"</js>, collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] flags
 	 * 	) {...}
 	 * </p>
 	 *
@@ -639,7 +657,9 @@ public @interface FormData {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -663,7 +683,9 @@ public @interface FormData {
 	 * Defines whether the maximum is matched exclusively.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -689,7 +711,9 @@ public @interface FormData {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -713,7 +737,9 @@ public @interface FormData {
 	 * Defines whether the minimum is matched exclusively.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
@@ -740,7 +766,9 @@ public @interface FormData {
 	 * <br>The value <code>-1</code> is always ignored.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -766,7 +794,9 @@ public @interface FormData {
 	 * <br>The value <code>-1</code> is always ignored.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -790,7 +820,9 @@ public @interface FormData {
 	 * A string input is valid if it matches the specified regular expression pattern.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
@@ -814,7 +846,9 @@ public @interface FormData {
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -838,7 +872,9 @@ public @interface FormData {
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
@@ -862,8 +898,12 @@ public @interface FormData {
 	 * If <jk>true</jk>, the input validates successfully if all of its elements are unique.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
-	 * <br>If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 *
+	 * <p>
+	 * If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
 	 * <br>Otherwise, the collection or array is checked for duplicate items.
 	 *
 	 * <p>
@@ -888,7 +928,9 @@ public @interface FormData {
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
 	 * The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> array or comma-delimited list.
@@ -896,6 +938,7 @@ public @interface FormData {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
+	 * 	<jc>// Comma-delimited list</jc>
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@FormData</ja>(
 	 * 			name=<js>"status"</js>,
@@ -904,6 +947,7 @@ public @interface FormData {
 	 * 	) {...}
 	 * </p>
 	 * <p class='bcode w800'>
+	 * 	<jc>// JSON array</jc>
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@FormData</ja>(
 	 * 			name=<js>"status"</js>,
@@ -932,7 +976,9 @@ public @interface FormData {
 	 * <br>The value must be a valid JSON number.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 *
@@ -956,13 +1002,43 @@ public @interface FormData {
 	 * A serialized example of the parameter.
 	 *
 	 * <p>
-	 * This attribute defines a JSON representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
-	 * an example of the form data entry.
+	 * This attribute defines a representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
+	 * an example of parameter.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@FormData</ja>(
+	 * 		name=<js>"status"</js>,
+	 * 		type=<js>"array"</js>,
+	 * 		collectionFormat=<js>"csv"</js>,
+	 * 		example=<js>"AVALIABLE,PENDING"</js>
+	 * 	)
+	 * 	PetStatus[] status
+	 * </p>
+	 *
+	 * <p>
+	 * If not specified, Juneau will automatically create examples from sample POJOs serialized using the registered {@link HttpPartSerializer}.
+	 * <br>
+	 *
+	 * </p>
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See also:</h5>
+	 * <ul>
+	 * 	<li class='ja'>{@link Example}
+	 * 	<li class='jc'>{@link BeanContext}
+	 * 	<ul>
+	 * 		<li class='jf'>{@link BeanContext#BEAN_examples BEAN_examples}
+	 * 	</ul>
+	 * 	<li class='jc'>{@link JsonSchemaSerializer}
+	 * 	<ul>
+	 * 		<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
+	 * 		<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
+	 * 	</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>

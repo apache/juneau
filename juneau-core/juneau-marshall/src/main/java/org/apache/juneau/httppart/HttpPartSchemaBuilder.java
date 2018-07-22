@@ -119,8 +119,8 @@ public class HttpPartSchemaBuilder {
 		api = AnnotationUtils.merge(api, a);
 		required(a.required());
 		allowEmptyValue(! a.required());
-		serializer(a.serializer());
-		parser(a.parser());
+		serializer(a.partSerializer());
+		parser(a.partParser());
 		apply(a.schema());
 		return this;
 	}

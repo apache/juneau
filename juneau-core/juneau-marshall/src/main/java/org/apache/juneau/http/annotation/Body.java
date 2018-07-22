@@ -19,6 +19,7 @@ import java.io.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -204,7 +205,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <p>
- * OpenAPI schema based serialization can be used by specifying a value for the {@link #serializer()} annotation.
+ * OpenAPI schema based serialization can be used by specifying a value for the {@link #partSerializer()} annotation.
  *
  * <p class='bcode w800'>
  * 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
@@ -242,6 +243,22 @@ import org.apache.juneau.serializer.*;
 @Retention(RUNTIME)
 @Inherited
 public @interface Body {
+
+	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings when using schema-based HTTP part serializing.
+	 *
+	 * <p>
+	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
+	 */
+	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
+
+	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing strings to values when using when using schema-based HTTP part parsing.
+	 *
+	 * <p>
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
+	 */
+	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
 
 	//=================================================================================================================
 	// Attributes common to all Swagger Parameter objects
@@ -295,7 +312,9 @@ public @interface Body {
 	 * Determines whether the body is mandatory.
 	 *
 	 * <p>
-	 * If validation is not met during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -360,16 +379,6 @@ public @interface Body {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		The leading/trailing <code>{ }</code> characters are optional.
-	 * 		<br>The following two example are considered equivalent:
-	 * 		<ul>
-	 * 			<li><code>schema=<js>"{type:'string',format:'binary'}"</js></code>
-	 * 			<li><code>schema=<js>"type:'string',format:'binary'"</js></code>
-	 * 		</ul>
-	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -384,13 +393,14 @@ public @interface Body {
 	 * A serialized example of the body of a request.
 	 *
 	 * <p>
-	 * This is the <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> or String representation of an example of the body.
+	 * This is the <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> of an example of the body.
 	 *
 	 * <p>
 	 * This value is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
 	 * supported language types.
 	 * <br>These values are then used to automatically populate the {@link #examples} field.
 	 *
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
 	 * 	<ja>@Body</ja>(
@@ -407,6 +417,8 @@ public @interface Body {
 	 * 		Defining an <js>"x-example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
 	 * 	<li>
 	 * 		Defining an <js>"x-example"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
+	 * 	<li>
+	 * 		Allowing Juneau to auto-generate a code example.
 	 * </ul>
 	 *
 	 * <p>
@@ -471,12 +483,28 @@ public @interface Body {
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
+	 * <h5 class='section'>See also:</h5>
+	 * <ul>
+	 * 	<li class='ja'>{@link Example}
+	 * 	<li class='jc'>{@link BeanContext}
+	 * 	<ul>
+	 * 		<li class='jf'>{@link BeanContext#BEAN_examples BEAN_examples}
+	 * 	</ul>
+	 * 	<li class='jc'>{@link JsonSchemaSerializer}
+	 * 	<ul>
+	 * 		<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
+	 * 		<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
+	 * 	</ul>
+	 * </ul>
+	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
-	 * 		can be converted from a String.
+	 * 		has a schema associated with it meancan be converted from a String.
 	 * 		<br>Multiple lines are concatenated with newlines.
+	 * 	<li>
+	 * 		The format of this object can also be a simple String if the body has a schema associated with it, meaning it's meant to be treated as an HTTP part.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -588,7 +616,8 @@ public @interface Body {
 	 * 	<li>
 	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
 	 * 	<li>
-	 * 		Automatic validation is NOT performed on input based on attributes in this value.
+	 * 		Schema-based serialization is NOT affected by values defined in this annotation.
+	 * 		<br>It only affects the generated Swagger documentation.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -612,27 +641,35 @@ public @interface Body {
 	/**
 	 * Equivalent to {@link #value()}.
 	 *
+	 * <p>
+	 * The following are entirely equivalent:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<ja>@Body</ja>({
+	 * 		<js>"description: 'Pet object to add to the store',"</js>,
+	 * 		<js>"required: true,"</js>,
+	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	 * 	})
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<ja>@Body</ja>(api={
+	 * 		<js>"description: 'Pet object to add to the store',"</js>,
+	 * 		<js>"required: true,"</js>,
+	 * 		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	 * 	})
+	 * </p>
+	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If you specify both {@link #value()} and {@link #api()}, {@link #value()} will be ignored.
+	 * </ul>
 	 */
 	String[] api() default {};
-
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
-	 * <p>
-	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
-
-	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
-	 *
-	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
-	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 }

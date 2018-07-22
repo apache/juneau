@@ -160,30 +160,35 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * <p>
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"string"</js>
+	 * 	<li>
+	 * 		<js>"number"</js>
+	 * 	<li>
+	 * 		<js>"integer"</js>
+	 * 	<li>
+	 * 		<js>"boolean"</js>
+	 * 	<li>
+	 * 		<js>"array"</js>
+	 * 	<li>
+	 * 		<js>"object"</js>
+	 * 	<li>
+	 * 		<js>"file"</js>
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link ParameterType}.
+	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		The possible values are:
-	 * 		<ul>
-	 * 			<li><js>"string"</js>
-	 * 			<li><js>"number"</js>
-	 * 			<li><js>"integer"</js>
-	 * 			<li><js>"boolean"</js>
-	 * 			<li><js>"array"</js>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -196,26 +201,52 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <p>
+	 * The possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing.
+	 * 		<js>"int32"</js> - Signed 32 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
+	 * 	<li>
+	 * 		<js>"int64"</js> - Signed 64 bits.
+	 * 		<br>Only valid with type <js>"integer"</js>.
+	 * 	<li>
+	 * 		<js>"float"</js> - 32-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"double"</js> - 64-bit floating point number.
+	 * 		<br>Only valid with type <js>"number"</js>.
+	 * 	<li>
+	 * 		<js>"byte"</js> - BASE-64 encoded characters.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"binary"</js> - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"date"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"date-time"</js> - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 * 		<br>Only valid with type <js>"string"</js>.
+	 * 	<li>
+	 * 		<js>"password"</js> - Used to hint UIs the input needs to be obscured.
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"(foo=bar,baz=@(qux,123))"</js>).
+	 * 		<br>Only valid with type <js>"object"</js>.
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link FormatType}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain text:
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
 	 * </ul>
 	 */
 	String format() default "";
@@ -223,31 +254,37 @@ public @interface ResponseHeader {
 	/**
 	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <p>
+	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
+	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
+	 *
+	 * <br>Possible values are:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing.
+	 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 	<li>
+	 * 		<js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 	<li>
+	 * 		<js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 	<li>
+	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 	<li>
+	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link CollectionFormatType}.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain text:
-	 * 	<li>
-	 * 		The possible value are:
-	 * 		<ul>
-	 * 			<li><js>"csv"</js>
-	 * 			<li><js>"ssv"</js>
-	 * 			<li><js>"tsv"</js>
-	 * 			<li><js>"pipes"</js>
-	 * 			<li><js>"multi"</js>
-	 * 		</ul>
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
+	 * <p>
+	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 	 */
 	String collectionFormat() default "";
 
@@ -262,15 +299,6 @@ public @interface ResponseHeader {
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
 	 */
 	String $ref() default "";
 
@@ -280,18 +308,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String maximum() default "";
@@ -302,18 +319,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String minimum() default "";
@@ -324,18 +330,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String multipleOf() default "";
@@ -346,18 +341,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long maxLength() default -1;
@@ -368,18 +352,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long minLength() default -1;
@@ -391,15 +364,13 @@ public @interface ResponseHeader {
 	 * A string value is valid if it matches the specified regular expression pattern.
 	 *
 	 * <p>
-	 * If validation is not met during serialization, the part serializer will throw a {@link SchemaValidationException}.
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
 	 *
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
@@ -412,18 +383,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long maxItems() default -1;
@@ -434,18 +394,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	long minItems() default -1;
@@ -456,18 +405,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	boolean exclusiveMaximum() default false;
@@ -478,18 +416,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is numeric.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	boolean exclusiveMinimum() default false;
@@ -500,18 +427,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	boolean uniqueItems() default false;
@@ -522,19 +438,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing and serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	Items items() default @Items;
@@ -545,19 +449,7 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a>.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] _default() default {};
@@ -568,44 +460,32 @@ public @interface ResponseHeader {
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Server-side schema-based serializing validation.
-	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> array or comma-delimited list.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] _enum() default {};
 
 	/**
-	 * TODO
+	 * A serialized example of the parameter.
 	 *
 	 * <p>
-	 * This attribute defines a JSON representation of the body value that is used by <code>BasicRestInfoProvider</code> to construct
-	 * media-type-based examples of the header value.
+	 * This attribute defines a representation of the value that is used by <code>BasicRestInfoProvider</code> to construct
+	 * an example of parameter.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@ResponseHeader</ja>(
+	 * 		name=<js>"Status"</js>,
+	 * 		type=<js>"array"</js>,
+	 * 		collectionFormat=<js>"csv"</js>,
+	 * 		example=<js>"AVALIABLE,PENDING"</js>
+	 * 	)
+	 * </p>
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object or plain text string.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
 	String[] example() default {};
