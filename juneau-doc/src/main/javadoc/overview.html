@@ -152,7 +152,6 @@
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlChildNameAnnotation'>@Xml(childName) Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlFormatAnnotation'>@Xml(format) Annotation</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.Namespaces'>Namespaces</a></p>
-			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.UriProperties'>URI Properties</a></p>
 			<li><p><a class='doclink' href='#juneau-marshall.XmlDetails.XmlSchema'>XML-Schema Support</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.HtmlDetails'>HTML Details</a></p>
@@ -6645,16 +6644,9 @@
 			</p>
 		</div>
 
-		<!-- === 2.16.8 - URI Properties ================================================================ -->
+		<!-- === 2.16.8 - XML-Schema Support ============================================================ -->
 		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.UriProperties' id='juneau-marshall.XmlDetails.UriProperties'>2.16.8 - URI Properties</a></h4>
-		<div class='topic'>
-			TODO(7.2.0)
-		</div>
-		
-		<!-- === 2.16.9 - XML-Schema Support ============================================================ -->
-		
-		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlSchema' id='juneau-marshall.XmlDetails.XmlSchema'>2.16.9 - XML-Schema Support</a></h4>
+		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.XmlDetails.XmlSchema' id='juneau-marshall.XmlDetails.XmlSchema'>2.16.8 - XML-Schema Support</a></h4>
 		<div class='topic'>
 			<p>
 				Juneau provides the {@link org.apache.juneau.xmlschema.XmlSchemaSerializer} class for generating XML-Schema 
@@ -6915,7 +6907,13 @@
 	
 	<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails' id='juneau-marshall.HtmlDetails'>2.17 - HTML Details</a></h3>
 	<div class='topic'>
-		TODO(7.2.0)
+		<p>
+			Juneau supports converting arbitrary POJOs to and from HTML.
+			Built on top of the existing XML parser, it also uses a STaX parser and creates POJOs directly without intermediate DOM objects.
+		</p>
+		<p>
+			The primary use case for HTML serialization is rendering POJOs in easy-to-read format in REST interfaces.
+		</p>		
 		
 		<!-- === 2.17.1 - HTML Methodology ============================================================== -->
 		
@@ -7521,14 +7519,159 @@
 		
 		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlAnnotation' id='juneau-marshall.HtmlDetails.HtmlAnnotation'>2.17.4 - @Html Annotation</a></h4>
 		<div class='topic'>
-			TODO(7.2.0)
+			<p>
+				The {@link org.apache.juneau.html.annotation.Html @Html} annotation can be used to customize how POJOs are serialized to HTML on a per-class/field/method basis.
+			</p>
+			
+			<p>
+				The {@link org.apache.juneau.html.annotation.Html#link @Html(link)} annotation adds a hyperlink to a bean property when rendered as HTML.
+			</p>
+			<h5 class='figure'>Example:</h5>
+			<p class='bcode w800'>
+	<jk>public class</jk> FileSpace {
+		<jc>// Add a hyperlink to this bean property.</jc>
+		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)
+		public String getDrive() {...}
+	}			
+	   		</p>
+
+			<p>
+				The {@link org.apache.juneau.html.annotation.Html#anchorText @Html(anchorText)} annotation is used to specify the anchor text of a hyperlink.
+			</p>
+			<h5 class='figure'>Example:</h5>
+			<p class='bcode w800'>
+	<jc>// Produces &lt;a href='...'&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
+	<jk>public class</jk> FileSpace {
+		<jc>// Add a hyperlink to this bean property.</jc>
+		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>, anchorText=<js>"CLICK ME!"</js>)
+		public String getDrive() {...}
+	}			
+			</p>
+			
+			<p>
+				The {@link org.apache.juneau.html.annotation.Html#format @Html(format)} annotation is used to specify what format to use for HTML elements.
+				<br>For example, the HTML beans defined in the {@link org.apache.juneau.dto.html5} package use <code>format=<jsf>XML</jsf></code> so that
+				the beans get serialized as standard XML:
+			</p>
+			<h5 class='figure'>Example:</h5>
+			<p class='bcode w800'>
+	<jc>// Parent class of all HTML DTO beans.</jc>
+	<ja>@Html</ja>(format=<jsf>XML</jsf>)	
+	<jk>public abstract class</jk> HtmlElement {...}
+			</p>
+			
+			<p>
+				The {@link org.apache.juneau.html.annotation.Html#noTableHeaders @Html(noTableHeaders)} annotation is used to prevent beans from being serialized with table headers.
+			</p>
+			
+			<p>
+				The {@link org.apache.juneau.html.annotation.Html#noTables @Html(noTables)} annotation is used to force beans to be serialized as trees instead of tables
+			</p>
+			
 		</div>
 
 		<!-- === 2.17.5 - @Html(render) Annotation ====================================================== -->
 		
 		<h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlRenderAnnotation' id='juneau-marshall.HtmlDetails.HtmlRenderAnnotation'>2.17.5 - @Html(render) Annotation</a></h4>
 		<div class='topic'>
-			TODO(7.2.0)
+			<p>
+				The {@link org.apache.juneau.html.annotation.Html#render @Html(render)} annotation allows for custom rendering of bean property values when serialized as HTML. 
+				Using this class, you can alter the CSS style and HTML content of the bean property.
+			</p>
+			<p>
+				The following example shows two render classes that customize the appearance of the <code>pctFull</code> and
+				<code>status</code> columns in the code below:
+			</p>
+			<p class='bcode w800'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;	
+			
+	<jc>// Our bean class</jc>
+	<jk>public class</jk> FileSpace {
+
+		<jk>private final</jk> String <jf>drive</jf>;
+		<jk>private final long</jk> <jf>total</jf>, <jf>available</jf>;
+
+		<jk>public</jk> FileSpace(String drive, <jk>long</jk> total, <jk>long</jk> available) {
+			<jk>this</jk>.<jf>drive</jf> = drive;
+			<jk>this</jk>.<jf>total</jf> = total;
+			<jk>this</jk>.<jf>available</jf> = available;
+		}
+
+		<ja>@Html</ja>(link=<js>"drive/{drive}"</js>)
+		<jk>public</jk> String getDrive() {
+			<jk>return</jk> <jf>drive</jf>;
+		}
+
+		<jk>public long</jk> getTotal() {
+			<jk>return</jk> <jf>total</jf>;
+		}
+
+		<jk>public long</jk> getAvailable() {
+			<jk>return</jk> <jf>available</jf>;
+		}
+
+		<ja>@Html</ja>(render=FileSpacePctRender.<jk>class</jk>)
+		<jk>public float</jk> getPctFull() {
+			<jk>return</jk> ((100 * <jf>available</jf>) / <jf>total</jf>);
+		}
+
+		<ja>@Html</ja>(render=FileSpaceStatusRender.<jk>class</jk>)
+		<jk>public</jk> FileSpaceStatus getStatus() {
+			<jk>float</jk> pf = getPctFull();
+			<jk>if</jk> (pf &lt; 80)
+				<jk>return</jk> FileSpaceStatus.<jsf>OK</jsf>;
+			<jk>if</jk> (pf &lt; 90)
+				<jk>return</jk> FileSpaceStatus.<jsf>WARNING</jsf>;
+			<jk>return</jk> FileSpaceStatus.<jsf>SEVERE</jsf>;
+		}
+	}
+
+	<jc>// Possible values for the getStatus() method</jc>
+	<jk>public static enum</jk> FileSpaceStatus {
+		<jsf>OK</jsf>, <jsf>WARNING</jsf>, <jsf>SEVERE</jsf>;
+	}
+
+	<jc>// Custom render for getPctFull() method</jc>
+	<jk>public static class</jk> FileSpacePctRender <jk>extends</jk> HtmlRender&lt;Float&gt; {
+
+		<ja>@Override</ja>
+		<jk>public</jk> String getStyle(SerializerSession session, Float value) {
+			<jk>if</jk> (value &lt; 80)
+				<jk>return</jk> <js>"background-color:lightgreen;text-align:center"</js>;
+			<jk>if</jk> (value &lt; 90)
+				<jk>return</jk> <js>"background-color:yellow;text-align:center"</js>;
+			<jk>return</jk> <js>"background-color:red;text-align:center;border:;animation:color_change 0.5s infinite alternate"</js>;
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> Object getContent(SerializerSession session, Float value) {
+			<jk>if</jk> (value >= 90)
+				<jk>return</jk> <jsm>div</jsm>(
+					String.<jsm>format</jsm>(<js>"%.0f%%"</js>, value),
+					<jsm>style</jsm>(<js>"@keyframes color_change { from { background-color: red; } to { background-color: yellow; }"</js>)
+				);
+			<jk>return</jk> String.<jsm>format</jsm>(<js>"%.0f%%"</js>, value);
+		}
+	}
+
+	<jc>// Custom render for getStatus() method</jc>
+	<jk>public static class</jk> FileSpaceStatusRender <jk>extends</jk> HtmlRender&lt;FileSpaceStatus&gt; {
+
+		<ja>@Override</ja>
+		<jk>public</jk> String getStyle(SerializerSession session, FileSpaceStatus value) {
+			<jk>return</jk> <js>"text-align:center"</js>;
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> Object getContent(SerializerSession session, FileSpaceStatus value) {
+			<jk>switch</jk> (value) {
+				<jk>case</jk> <jsf>OK</jsf>:  <jk>return</jk> <jsm>img</jsm>().src(URI.<jsm>create</jsm>(<js>"servlet:/htdocs/ok.png"</js>));
+				<jk>case</jk> <jsf>WARNING</jsf>:  <jk>return</jk> <jsm>img</jsm>().src(URI.<jsm>create</jsm>(<js>"servlet:/htdocs/warning.png"</js>));
+				<jk>default</jk>: <jk>return</jk> <jsm>img</jsm>().src(URI.<jsm>create</jsm>(<js>"servlet:/htdocs/severe.png"</js>));
+			}
+		}
+	}
+			</p>
 		</div>
 
 		<!-- === 2.17.6 - HtmlDocSerializer ============================================================= -->

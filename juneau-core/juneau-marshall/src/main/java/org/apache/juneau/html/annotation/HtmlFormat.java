@@ -30,14 +30,12 @@ public enum HtmlFormat {
 	HTML,
 
 	/**
-	 * Object is serialized to HTML.
-	 * <br>When serializing lists, use comma-delimited format instead of list.
+	 * Object is serialized to HTML, use comma-delimited format instead of list.
 	 */
 	HTML_CDC,
 
 	/**
-	 * Object is serialized to HTML.
-	 * <br>When serializing lists, use space-delimited format instead of list.
+	 * Object is serialized to HTML, use space-delimited format instead of list.
 	 */
 	HTML_SDC,
 

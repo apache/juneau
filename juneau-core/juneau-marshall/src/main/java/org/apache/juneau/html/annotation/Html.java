@@ -21,6 +21,11 @@ import org.apache.juneau.html.*;
 
 /**
  * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by {@link HtmlSerializer}.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html##juneau-marshall.HtmlDetails.HtmlAnnotation">Overview &gt; juneau-marshall &gt; @Html Annotation</a>
+ * </ul>
  */
 @Documented
 @Target({TYPE,FIELD,METHOD})
@@ -36,14 +41,13 @@ public @interface Html {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> FileSpace {
-	 *
-	 * 		<ja>@Html</ja>(anchorText=<js>"drive/{drive}"</js>)
-	 * 		<jk>public</jk> String getDrive() {
-	 * 			...;
-	 * 		}
-	 * 	}
+	 * 	<jc>// Produces &lt;a href='...'&gt;drive&lt;/a&gt; when serialized to HTML.</jc>
+	 * 	<ja>@Html</ja>(anchorText=<js>"drive"</js>)
+	 * 	<ja>@URI</ja> <jc>// Treat property as a URL</jc>
+	 * 	<jk>public</jk> String getDrive() {...}
 	 * </p>
+	 *
+	 * This overrides the behavior specified by {@link HtmlSerializer#HTML_uriAnchorText}.
 	 */
 	String anchorText() default "";
 
