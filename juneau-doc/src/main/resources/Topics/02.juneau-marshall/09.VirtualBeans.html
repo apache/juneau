@@ -22,7 +22,7 @@ Virtual Beans
 <p>
 	For example, the following code creates an instance of the specified unimplemented interface:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Our unimplemented interface</jc> 
 	<jk>public interface</jk> Address {
 		
@@ -59,6 +59,6 @@ Virtual Beans
 <p>
 	Virtual beans can also be created programmatically using the <code>BeanContext</code> class:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Address address = BeanContext.<jsf>DEFAULT</jsf>.createSession().newBean(Address.<jk>class</jk>);
 </p>

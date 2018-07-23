@@ -19,12 +19,12 @@ RequestBody
 	The {@link org.apache.juneau.rest.RequestBody} object is the API for accessing the body of an HTTP request.
 	<br>It can be accessed by passing it as a parameter on your REST Java method:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
 	<jk>public</jk> Object myMethod(RequestBody body) {...}			
-			</p>
-			<h5 class='figure'>Example:</h5>
-			<p class='bcode w800'>
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
 	<jk>public void</jk> doPost(RequestBody body) {
 		<jc>// Convert body to a linked list of Person objects.</jc>

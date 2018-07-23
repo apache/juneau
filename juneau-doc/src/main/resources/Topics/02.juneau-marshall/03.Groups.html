@@ -21,7 +21,7 @@ SerializerGroups and ParserGroups
 	These classes allow serializers and parsers to be retrieved by W3C-compliant HTTP <code>Accept</code> 
 	and <code>Content-Type</code> values...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
 	SerializerGroup sg = SerializerGroup.<jsm>create</jsm>()
 		.append(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);

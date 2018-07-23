@@ -20,7 +20,7 @@ Bypass Serialization using Readers and InputStreams
 	simply serializing their contents directly to the output stream or writer.
 	<br>This allows you to embed fully customized serializer output.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
 		<jc>// A bean property that produces raw JSON.</jc>
 		<jk>public</jk> Reader f1 = <jk>new</jk> StringReader(<js>"{'foo':'bar'}"</js>);	
@@ -40,7 +40,7 @@ Bypass Serialization using Readers and InputStreams
 	<br>In the following example, we're customizing the JSON output for a particular bean type, but leaving
 	all other renditions as-is:
 </p>			
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Swap</ja>(MyBeanSwapSometimes.<jk>class</jk>)
 	<jk>public class</jk> MyBean {...}
 	

@@ -53,7 +53,7 @@ Collections
 		<br>Produces: <code>LinkedHashMap&lt;Integer,ArrayList&lt;MyBean[]&gt;&gt;</code> 
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ck>addresses</ck> = 
 		<cv>[
 			{
@@ -70,14 +70,14 @@ Collections
 			}
 		]</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	List&lt;Address&gt; addresses = c.getObject(<js>"addresses"</js>, ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
 </p>
 <p>
 	Oftentimes, it might be useful to parse into the {@link org.apache.juneau.ObjectList} and {@link org.apache.juneau.ObjectMap}
 	classes that provide the various convenience methods for working with JSON-like data structures:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	ObjectMap m = c.getObject(<js>"key1"</js>, ObjectMap.<jk>class</jk>);
 	ObjectList l = c.getObject(<js>"key2"</js>, ObjectList.<jk>class</jk>);
 </p>

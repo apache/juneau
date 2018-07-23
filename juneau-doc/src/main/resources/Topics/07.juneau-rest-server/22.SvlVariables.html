@@ -19,7 +19,7 @@ SVL Variables
 	In the previous examples, there were several cases where embedded variables were contained within
 	annotation values:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		title=<js>"$L{my.label}"</js>
     )
@@ -46,7 +46,7 @@ SVL Variables
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])}
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Defined a variable that simply wrapps all strings inside [] brackets.</jc>
 	<jc>// e.g. "$BRACKET{foobar}" -> "[foobar]"</jc>
 	<jk>public class</jk> BracketVar <jk>extends</jk> SimpleVar {

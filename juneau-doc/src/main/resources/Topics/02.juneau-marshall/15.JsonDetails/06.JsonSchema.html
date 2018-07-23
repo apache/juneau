@@ -27,7 +27,7 @@ JSON-Schema Support
 	schema serializer may be subject to future modifications.
 </p>
 <h5 class='figure'>Sample Beans</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> Person {
 		
 		<jc>// Bean properties</jc>
@@ -52,7 +52,7 @@ JSON-Schema Support
 <p>
 	The code for creating our POJO model and generating JSON-Schema is shown below:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Get the one of the default schema serializers.</jc>
 	JsonSchemaSerializer s = JsonSchemaSerializer.<jsf>DEFAULT_SIMPLE_READABLE</jsf>;
 	
@@ -61,7 +61,7 @@ JSON-Schema Support
 </p>
 
 <h5 class='figure'>JSON Schema</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	{
 		type: <js>'object'</js>, 
 		description: <js>'org.apache.juneau.sample.Person'</js>, 

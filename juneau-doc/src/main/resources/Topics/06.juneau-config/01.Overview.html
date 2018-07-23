@@ -19,7 +19,7 @@ Overview
 	The <code>juneau-config</code> library contains a powerful API for creating and using INI-style config files.
 </p>
 <h5 class='figure'>Example configuration file:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># A set of entries</cc>
 	<cs>[Section1]</cs>
 
@@ -40,7 +40,7 @@ Overview
 	are created through the {@link org.apache.juneau.config.ConfigBuilder} class.
 	<br>Builder creator methods are provided on the <code>Config</code> class:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a Config object</jc>
 	Config c = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	
@@ -50,7 +50,7 @@ Overview
 <p>
 	Once instantiated, reading values from the config are simple:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Read values from section #1</jc>
 	<jk>int</jk> key1 = c.getInt(<js>"Section1/key1"</js>);
 	<jk>boolean</jk> key2 = c.getBoolean(<js>"Section1/key2"</js>);

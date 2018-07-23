@@ -37,7 +37,7 @@ XML-Schema Support
 	<br>Since we have not defined a default namespace, everything is defined under the default Juneau namespace.
 </p>
 <h5 class='figure'>Sample Beans</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
 		
@@ -64,7 +64,7 @@ XML-Schema Support
 <p>
 	The code for creating our POJO model and generating XML Schema is shown below:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a new serializer with readable output.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
 		.ws()
@@ -81,7 +81,7 @@ XML-Schema Support
 	String xmlSchema = ss.serialize(<jk>new</jk> Person());
 </p>
 <h5 class='figure'>XML-Schema results</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
 			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
@@ -123,7 +123,7 @@ XML-Schema Support
 	Now if we add in some namespaces, we'll see how multiple namespaces are handled.
 </p>
 <h5 class='figure'>Sample Beans with multiple namespaces</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
 	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
@@ -153,7 +153,7 @@ XML-Schema Support
 	The schema consists of 4 documents separated by a <js>'\u0000'</js> character.
 </p>
 <h5 class='figure'>XML-Schema results</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;schema</xt> 
 			<xa>xmlns</xa>=<xs>'http://www.w3.org/2001/XMLSchema'</xs> 
 			<xa>targetNamespace</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 

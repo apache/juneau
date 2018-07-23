@@ -29,7 +29,7 @@
 	on the {@link org.apache.juneau.html.HtmlDocSerializer} class.
 	<br>For example, the following two pieces of code are equivalent:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Title defined via property.</jc>
 	<ja>@RestResource</ja>(
 		properties={
@@ -48,7 +48,7 @@
 	The purpose of these annotation is to populate the HTML document view which by default consists of the following
 	structure:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;html&gt;
 		&lt;head&gt;
 			&lt;style <xa>type</xa>=<xs>'text/css'</xs>&gt;
@@ -81,7 +81,7 @@
 <p>
 	The <l>HelloWorldResource</l> class was an example of the <l>@HtmlDoc</l> annotation in use:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	 * Sample REST resource that prints out a simple "Hello world!" message.
 	 */</jd>
@@ -105,7 +105,7 @@
 <p>
 	SVL variables can be used in any of these annotations:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		path=<js>"/helloWorld"</js>,
 		<jc>// Register a config file.</jc>

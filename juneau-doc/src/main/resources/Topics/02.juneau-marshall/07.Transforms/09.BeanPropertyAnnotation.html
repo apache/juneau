@@ -23,7 +23,7 @@
 	The {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()} annotation
 	is used to override the name of the bean property.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
 		<ja>@BeanProperty</ja>(name=<js>"Bar"</js>)
 		<jk>public</jk> String getFoo() {...}
@@ -34,7 +34,7 @@
 	(e.g. the visibility is set to the default of PUBLIC, but the field is PROTECTED), this annotation 
 	can be used to force the field to be identified as a property.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
 		<ja>@BeanProperty</ja>
 		<jk>protected</jk> String getFoo() {...}
@@ -51,7 +51,7 @@
 <p>
 	The following shows various ways of using dynamic bean properties.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Option #1 - A simple public Map field.</jc>
 	<jc>// The field name can be anything.</jc>
 	<jk>public class</jk> BeanWithDynaField {
@@ -91,7 +91,7 @@
 	Similar rules apply for value types and swaps.
 	<br>The property values optionally can be any serializable type or use swaps.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// A serializable type other than Object.</jc>
 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
 
@@ -124,7 +124,7 @@
 <p>
 	The following annotations are equivalent:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
 
 	<ja>@BeanProperty</ja>(<js>"foo"</js>)
@@ -140,7 +140,7 @@
 <p>
 	This property must denote a concrete class with a no-arg constructor.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
 
 		<jc>// Identify concrete type as a HashMap.</jc>
@@ -172,7 +172,7 @@
 	<li>Bean/Map arrays - Same, but applied to each element in the array.
 	<li>Bean/Map collections - Same, but applied to each element in the collection.
 </ul>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyClass {
 
 		<jc>// Only render 'f1' when serializing this bean property.</jc>

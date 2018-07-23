@@ -26,7 +26,7 @@
 	<br>Note how the variables are passed in as additional arguments on the method, and how those arguments are 
 	automatically converted to the specified class type...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Default method</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> doGetDefault() {
@@ -49,7 +49,7 @@
 	By default, path patterns are matched using a best-match heuristic. 
 	<br>When overlaps occur, URLs are matched from most-specific to most-general order:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Try first </jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/foo/bar"</js>)
 	<jk>public void</jk> method1() {
@@ -91,7 +91,7 @@
 <p>
 	The following example shows the distinction.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
 	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"/*"</js>) String remainder) {
 		<jc>// URL path pattern can have remainder accessible through req.getRemainder().</jc>
@@ -106,7 +106,7 @@
 	Annotations are provided for easy access to URL parameters with automatic conversion to any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> type.
 	<br>For example, the following example can process the URL <l>"/urlWithParams?foo=foo&amp;bar=[1,2,3]&amp;baz=067e6162-3b6f-4ae2-a171-2470b63dff00"</l>...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Example GET request with access to query parameters</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/urlWithParams"</js>)
 	<jk>public</jk> String doGetWithParams(<ja>@Query</ja>(<js>"foo"</js>) String foo, <ja>@Query</ja>(<js>"bar"</js>) <jk>int</jk> bar, <ja>@Query</ja>(<js>"baz"</js>) UUID baz) <jk>throws</jk> Exception {

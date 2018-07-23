@@ -38,18 +38,18 @@ POJOs
 	An example of an object convertible from a String was already shown in an example above.
 	<br>In that case, it was a URL which has a public constructor that takes in a String:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># A POJO</cc>
 	<ck>key4</ck> = <cv>http://bar</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Read values from section #1</jc>
 	URL key4 = c.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
 </p>
 <p>
 	Beans are represented as <a class='doclink' href='#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> by default:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Contact information</jc>
 	<cs>[ContactInfo]</cs>
 	<ck>address</ck> = 

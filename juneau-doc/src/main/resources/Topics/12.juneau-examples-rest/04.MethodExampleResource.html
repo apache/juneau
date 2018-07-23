@@ -35,7 +35,7 @@ MethodExampleResource
 </p>
 
 <h5 class='figure'>MethodExampleResource.java</h5>
-<p class='bcode w800'>				
+<p class='bpcode w800'>				
 	<jd>/** 
 	* Sample REST resource that shows how to define REST methods and OPTIONS pages 
 	*/</jd> 
@@ -264,14 +264,14 @@ MethodExampleResource
 <p>
 	When you visit this page through the router page, you can see the top level page:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/methodExample
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.1.png'>
 <p>
 	Clicking the first link on the page results in this page:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/methodExample/example1/foo/123/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/path-remainder?q1=456&amp;q2=bar		
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.2.png'>
@@ -311,7 +311,7 @@ MethodExampleResource
 </p>
 
 <h5 class='figure'>BasicRestServlet.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** OPTIONS request handler */</jd>
 	<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
 	<jk>public</jk> Swagger getOptions(RestRequest req) {
@@ -323,7 +323,7 @@ MethodExampleResource
 	through a property defined by the {@link org.apache.juneau.html.HtmlDocSerializer} class
 	and specified on the resource class annotation:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
 			navlinks={
@@ -340,7 +340,7 @@ MethodExampleResource
 <p>
 	Clicking the <l>options</l> link on the page presents you with information about how to use this resource:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/methodExample/?method=OPTIONS
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.3.png'>

@@ -31,14 +31,14 @@ BeanFilter Class
 <p>
 	In the previous examples, we defined this bean annotation:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
 	The programmatic equivalent would be:
 </p>				
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> AddressFilter <jk>extends</jk> BeanFilterBuilder&lt;Address&gt; {
 		
 		<jc>// Must provide a no-arg constructor!</jc>
@@ -57,7 +57,7 @@ BeanFilter Class
 <p>
 	For example:
 </p>
-<p class='bcode w800'>			
+<p class='bpcode w800'>			
 	<jc>// Create a new JSON serializer and associate a bean filter with it.</jc>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()
@@ -75,7 +75,7 @@ BeanFilter Class
 	<br>These cause bean implementations of those interfaces to only expose the properties defined on the 
 	interface.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// An interface with the 3 properties we want serialized.</jc>
 	<jk>public interface</jk> AddressInterface {
 		<jk>public</jk> String getStreet();

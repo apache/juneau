@@ -19,12 +19,12 @@ RequestPathMatch
 	The {@link org.apache.juneau.rest.RequestPath} object is the API for accessing the matched variables
 	and remainder on the URL path.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
 	<jk>public</jk> Object myMethod(RequestPathMatch path) {...}			
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
 	<jk>public void</jk> doGet(RequestPathMatch path) {
 		<jc>// Example URL:  /123/qux/true/quux</jc>

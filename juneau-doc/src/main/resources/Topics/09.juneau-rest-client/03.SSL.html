@@ -21,14 +21,14 @@ SSL Support
 </p>
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a client that ignores self-signed or otherwise invalid certificates.</jc>
 	RestClient rc = RestClient.<jsm>create</jsm>().enableLaxSSL().build();
 </p>
 <p>
 	A more typical scenario using default cert and hostname verification is shown here:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	RestClient rc = RestClient.create().enableSSL().sslProtocols(<js>"TLSv1.2"</js>).build();
 </p>
 <p>

@@ -22,7 +22,7 @@ Surrogate Classes
 <p>
 	For example, let's say we want to be able to serialize the following class, but it's not serializable for 
 	some reason (for example, there are no properties exposed):  
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Not serializable because it's not a bean because it has no public properties.</jc>
 	<jk>public class</jk> MyNonSerializableClass {
 		<jk>protected</jk> String <jf>foo</jf>;
@@ -31,7 +31,7 @@ Surrogate Classes
 <p>
 	This could be solved with the following <code>PojoSwap</code>.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// A serializable bean with 1 property.</jc>
 	<jk>public class</jk> MySerializableSurrogate {
 		<jk>public</jk> String <jf>foo</jf>;
@@ -53,7 +53,7 @@ Surrogate Classes
 	However, the same can be accomplished by using a surrogate class that simply contains a constructor with 
 	the non-serializable class as an argument:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MySerializableSurrogate {
 		<jk>public</jk> String <jf>foo</jf>;
 		
@@ -66,7 +66,7 @@ Surrogate Classes
 <p>
 	The surrogate class is registered in the same way as a <code>PojoSwap</code>:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySerializableSurrogate.<jk>class</jk>).build();
 </p>

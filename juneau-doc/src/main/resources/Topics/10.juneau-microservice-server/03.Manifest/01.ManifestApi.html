@@ -19,7 +19,7 @@ Manifest API
 	The {@link org.apache.juneau.microservice.Microservice#getManifest()} method is a static method that
 	can be used to retrieve the manifest file as a {@link org.apache.juneau.utils.ManifestFile}.  
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Get Main-Class from manifest file.</jc>
 	String mainClass = Microservice.<jsm>getInstance</jsm>().getManifest().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
 </p>

@@ -21,7 +21,7 @@
 	header value.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// GET method that gets invoked for administrators</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
 	<jk>public</jk> Object doGetForAdmin() {
@@ -37,7 +37,7 @@
 <p>
 	The interface for matchers is simple:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> IsAdminMatcher <jk>extends</jk> RestMatcher {
 
 		<ja>@Override</ja> <jc>/* RestMatcher */</jc>

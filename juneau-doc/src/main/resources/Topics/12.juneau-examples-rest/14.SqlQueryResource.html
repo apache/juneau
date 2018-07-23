@@ -33,21 +33,21 @@ SqlQueryResource
 <p>
 	Pointing a browser to the resource shows the following:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/sqlQuery
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.SqlQueryResource.1.png'>
 <p>
 	Running a query results in the following output:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	select count(*) from SYS.SYSTABLES;
 	select TABLEID,TABLENAME,TABLETYPE from SYS.SYSTABLES;
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.SqlQueryResource.2.png'>
 
 <h5 class='figure'>SqlQueryResource.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	* Sample resource that shows how Juneau can serialize ResultSets. 
 	*/</jd> 
@@ -209,7 +209,7 @@ SqlQueryResource
 	} 
 </p>
 <h5 class='figure'>samples.cfg</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#================================================================================
 	# SqlQueryResource properties
 	#================================================================================</cc>

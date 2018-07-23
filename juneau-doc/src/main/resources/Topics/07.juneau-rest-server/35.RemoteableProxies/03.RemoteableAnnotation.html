@@ -24,7 +24,7 @@
 <p>
 	For example, to expose only the first 2 methods in our <code>IAddressBook</code> interface...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public interface</jk> IAddressBook {
 		<ja>@Remoteable</ja> Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
 		<ja>@Remoteable</ja> Person findPerson(<jk>int</jk> id);
@@ -35,7 +35,7 @@
 <p>
 	On the server side, the option to restrict access to only annotated methods is defined through a property:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		path=<js>"/remoteable"</js>,
 		properties={
@@ -49,7 +49,7 @@
 	The <ja>@Remoteable</ja> annotation can also be applied to the interface class to expose all public methods 
 	defined on that interface.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Remoteable</ja>
 	<jk>public interface</jk> IAddressBook {
 		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;

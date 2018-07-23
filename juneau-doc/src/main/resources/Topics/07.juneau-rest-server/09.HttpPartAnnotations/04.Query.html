@@ -26,7 +26,7 @@
 	{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
 		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
@@ -36,7 +36,7 @@
 <p>
 	This is functionally equivalent to the following code:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
 		RequestQuery q = req.getQuery();

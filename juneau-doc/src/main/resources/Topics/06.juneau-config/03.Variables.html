@@ -19,7 +19,7 @@ Variables
 	Config files can contain variables that get resolved dynamically using the previously-described {@link org.apache.juneau.svl.VarResolver} API.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#--------------------------</cc>
 	<cc># My section</cc>
 	<cc>#--------------------------</cc>
@@ -40,7 +40,7 @@ Variables
 	<cc># A POJO with embedded variables</cc>
 	<ck>aBean</ck> = <cv>{foo:'$S{foo}',baz:$C{MySection/anInt}}</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Config c = Config.<jsf>create</jsf>().build();
 	
 	Locale locale = cf.getObject(<js>"MySection/locale"</js>, Locale.<jk>class</jk>); 

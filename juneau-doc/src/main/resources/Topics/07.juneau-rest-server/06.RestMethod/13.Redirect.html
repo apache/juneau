@@ -26,7 +26,7 @@ Redirect
 	The following example shows the difference between handling redirects via <l>RestResponse</l> and the simplified approach of using this class.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Redirect to "/contextPath/servletPath/foobar"</jc>
 
 	<jc>// Using RestRequest/RestResponse</jc>
@@ -45,7 +45,7 @@ Redirect
 	The constructor can use a <l>MessageFormat</l>-style pattern with multiple arguments.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
 	<jk>public</jk> Redirect redirectExample3() {
 		<jk>return new</jk> Redirect(<js>"foo/{0}/bar/{1}"</js>, id1, id2);
@@ -57,7 +57,7 @@ Redirect
 <p>
 	Redirecting to the servlet root can be accomplished by simply using the no-arg constructor.
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Simply redirect to the servlet root.
 	// Equivalent to res.sendRedirect(req.getServletURI()).</jc>
 	<ja>@RestMethod</ja>(...)

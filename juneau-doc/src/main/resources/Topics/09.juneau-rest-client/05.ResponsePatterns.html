@@ -35,7 +35,7 @@ Using Response Patterns
 </p>	
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Throw a RestCallException if SUCCESS is not found in the output.</jc>
 	restClient.doPost(<jsf>URL</jsf>)
 		.successPattern(<js>"SUCCESS"</js>)
@@ -47,7 +47,7 @@ Using Response Patterns
 </p>	
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Throw a RestCallException if FAILURE or ERROR is found in the output.</jc>
 	restClient.doPost(<jsf>URL</jsf>)
 		.failurePattern(<js>"FAILURE|ERROR"</js>)
@@ -65,7 +65,7 @@ Using Response Patterns
 </p>	
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>final</jk> List&lt;Number&gt; xList = <jk>new</jk> ArrayList&lt;Number&gt;();
 	<jk>final</jk> List&lt;String&gt; yList = <jk>new</jk> ArrayList&lt;String&gt;();
 	

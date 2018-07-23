@@ -24,7 +24,7 @@ Configuration Files
 </p>
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#--------------------------</cc>
 	<cc># Examples </cc>
 	<cc>#--------------------------</cc>
@@ -36,7 +36,7 @@ Configuration Files
 <p>
 	These properties are then accessible through the {@link org.apache.juneau.config.Config} class.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Config c = Config.<jsm>create</jsm>(<js>"myconfig.cfg"</js>).build();
 	String path = c.getString(<js>"MyProperties/path"</js>);
 	File javaHome = c.getObject(<js>"MyProperties/javaHome"</js>, File.<jk>class</jk>);
@@ -50,7 +50,7 @@ Configuration Files
 </ul>
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		<jc>// Config file is located at ./config_dir/myconfig.cfg</jc>
 		config=<js>"config_dir/myconfig.cfg"</js>,
@@ -63,7 +63,7 @@ Configuration Files
 	<br>For example, the Microservice API {@link org.apache.juneau.rest.BasicRestServlet} class defines the 
 	location of the config file as a system property <l>"juneau.configFile"</l>:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		<jc>// Config file location is defined as a system property</jc>
 		config=<js>"$S{juneau.configFile}"</js>,
@@ -78,7 +78,7 @@ Configuration Files
 <p>
 	A common usage is to use this method to initialize fields in your servlet.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		<jc>// Config file is located at ./config_dir/myconfig.cfg</jc>
 		config=<js>"config_dir/myconfig.cfg"</js>,
@@ -97,7 +97,7 @@ Configuration Files
 <p>
 	Another common usage is to refer to config properties through <ck>$C</ck> variables in your annotations:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		<jc>// Get stylesheet from myconfig.cfg, but default to devops.css if it's not specified</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -111,7 +111,7 @@ Configuration Files
 	It's even possible to reference request-level variables in your config file if you use 
 	{@link org.apache.juneau.rest.RestRequest#getConfig()} to access the config file:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#-------------------------------------</cc>
 	<cc># Contents of config_dir/myconfig.cfg </cc>
 	<cc>#-------------------------------------</cc>
@@ -141,20 +141,20 @@ Configuration Files
 <p>
 	You can even add resource bundles into the mix:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#-------------------------------------</cc>
 	<cc># Contents of config_dir/myconfig.cfg </cc>
 	<cc>#-------------------------------------</cc>
 	<cs>[HelloWorldResource]</cs>
 	<ck>message</ck> = <cv>$L{localizedMessage,$RQ{person}}</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#-------------------------------------------</cc>
 	<cc># Contents of HelloWorldResource.properties </cc>
 	<cc>#-------------------------------------------</cc>
 	<ck>localizedMessage</ck> = <cv>Hello {0}!</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	 * Sample REST resource that prints out a simple "Hello world!" message.
 	 */</jd>

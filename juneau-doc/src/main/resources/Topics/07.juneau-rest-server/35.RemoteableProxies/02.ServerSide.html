@@ -30,7 +30,7 @@ Server Side
 	<br>The method that must be implemented is {@link org.apache.juneau.rest.remoteable.RemoteableServlet#getServiceMap()}
 	that simply returns a mapping of Java interfaces (or classes) to POJO instances.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		path=<js>"/remoteable"</js>
 	)
@@ -60,7 +60,7 @@ Server Side
 <p>
 	If you point your browser to that URL, you get a list of available interfaces:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/remoteable
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.RemoteableProxiesServerSide.1.png'>
@@ -70,7 +70,7 @@ Server Side
 	interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
 </p>
 <h5 class='figure'>IAddressBook</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.RemoteableProxiesServerSide.2.png'>
@@ -79,7 +79,7 @@ Server Side
 	framework methods listed.
 </p>
 <h5 class='figure'>AddressBook</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.AddressBook
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.RemoteableProxiesServerSide.3.png'>
@@ -89,7 +89,7 @@ Server Side
 	<br>We'll use the same method call as in the introduction.
 	<br>First, we need to create the serialized form of the arguments:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Object[] args = <jk>new</jk> Object[] {
 		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
 			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
@@ -101,7 +101,7 @@ Server Side
 <p>
 	That produces the following JSON output:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	[
 		{
 			name: <js>'Test Person'</js>, 
@@ -128,7 +128,7 @@ Server Side
 	<br>Methods are invoked by POSTing the serialized object array to the URI of the interface method.
 	In this case, we want to POST our JSON to the following URL:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
 </p>
 <p>
@@ -145,7 +145,7 @@ Server Side
 <p>
 	From there, we could use the following code snippet to reconstruct the response object from JSON:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	String response = <js>"<i>output from above</i>"</js>;
 	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(response, Person.<jk>class</jk>);
 </p>
@@ -153,7 +153,7 @@ Server Side
 	If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a 
 	browser...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		path=<js>"/remoteable"</js>,
 		
@@ -165,7 +165,7 @@ Server Side
 <p>
 	For example, to invoke the <code>getPeople()</code> method on our bean:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
 </p>			
 <img class='bordered w800' src='doc-files/juneau-rest-server.RemoteableProxiesServerSide.6.png'>
@@ -174,7 +174,7 @@ Server Side
 	returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
 	browser):
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/remoteable/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
 </p>			
 <img class='bordered w800' src='doc-files/juneau-rest-server.RemoteableProxiesServerSide.7.png'>

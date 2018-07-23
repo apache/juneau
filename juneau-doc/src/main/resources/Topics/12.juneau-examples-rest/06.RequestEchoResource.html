@@ -40,7 +40,7 @@ RequestEchoResource
 </p>
 
 <h5 class='figure'>RequestEchoResource.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	 * Sample REST resource for echoing HttpServletRequests back to the browser
 	 */</jd>
@@ -113,7 +113,7 @@ RequestEchoResource
 </p>
 
 <h5 class='figure'>Hypothetical RequestEchoResource.createSerializers() method</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Override the default rest serializers to add some transforms through an INIT hook*/</jd>
 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 	<jk>public void</jk> init(RestContextBuilder builder) throws Exception {
@@ -137,7 +137,7 @@ RequestEchoResource
 	Pointing a browser to the resource shows the following:
 </p>
 
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/echo
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.RequestEchoResource.1.png'>

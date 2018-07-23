@@ -28,12 +28,12 @@
 		POJO classes used as parameters on a <ja>@RestMethod</ja>-annotated method.
 </ul>
 <h5 class='figure'>Examples:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Defined on parameter</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {...}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Defined on POJO class</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	<jk>public void</jk> addPerson(Person person) {...}
@@ -44,7 +44,7 @@
 <p>
 	This is functionally equivalent to the following code...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	<jk>public void</jk> addPerson(RestRequest req) {
 		Person person = req.getBody().asType(Person.<jk>class</jk>);
@@ -53,7 +53,7 @@
 </p>
 
 <h5 class='figure'>Examples:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// POJO convertible from string</jc>
 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
 	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
@@ -70,7 +70,7 @@
 		}
 	}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Parsable bean</jc>
 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBean"</js>)
 	<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean b) {
@@ -81,7 +81,7 @@
 		<jk>public</jk> String <jf>f1</jf>;
 	}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// List of parsable beans</jc>
 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBeanList"</js>)
 	<jk>public</jk> MyBeanList echo(<ja>@Body</ja> MyBeanList l) {
@@ -90,7 +90,7 @@
 	
 	<jk>public static class</jk> MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// POJO convertible from an input stream</jc>
 	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
 	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
@@ -112,7 +112,7 @@
 	<br>This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
 <h5 class='section'>Examples:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Normal</jc>
 	<ja>@Body</ja>(
 		description=<js>"Pet object to add to the store"</js>,
@@ -120,7 +120,7 @@
 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
 	)
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Free-form</jc>
 	<ja>@Body</ja>({
 		<js>"description: 'Pet object to add to the store',"</js>,
@@ -129,7 +129,7 @@
 		<js>"x-extra: 'extra field'"</js>
 	})
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Localized</jc>
 	<ja>@Body</ja>(
 		description=<js>"$L{My.Localized.Description}"</js>,

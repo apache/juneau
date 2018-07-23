@@ -18,7 +18,7 @@ Messages
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation is used to associate a resource bundle with a servlet class.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Servlet with associated resource bundle</jc>
 	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
@@ -33,7 +33,7 @@ Messages
 	The resource bundle can also be passed into the method by simply specifying a parameter
 	of type {@link java.util.ResourceBundle} or {@link org.apache.juneau.utils.MessageBundle}:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public</jk> String printLocalizedGreeting(MessageBundle messages) {
 		<jk>return</jk> messages.getString(<js>"greeting"</js>);
@@ -43,13 +43,13 @@ Messages
 	If a resource bundle is shared by multiple servlets, the label and description can be prefixed by the class 
 	name:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#--------------------------------------------------------------------------------
 	# Contents of MyMessages.properties
 	#--------------------------------------------------------------------------------</cc>
 	<ck>greeting</ck> = Hello!
 </p>	 	
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc>#--------------------------------------------------------------------------------
 	# Contents of shared MyMessages.properties
 	#--------------------------------------------------------------------------------</cc>

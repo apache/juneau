@@ -29,34 +29,34 @@ Arrays
 </ul>
 <p>
 	The <code>getStringArray()</code> methods allow you to retrieve comma-delimited lists of values:
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ck>key1</ck> = <cv>foo, bar, baz</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	String[] key1 = c.getStringArray(<js>"key1"</js>);
 </p>
 <p>
 	String arrays can also be represented in JSON when using the <code>getObject()</code> methods:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ck>key1</ck> = <cv>['foo','bar','baz']</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	String[] key1 = c.getObject(<js>"key1"</js>, String.<jk>class</jk>);
 </p>
 <p>
 	Primitive arrays can also be retrieved using the <code>getObject()</code> methods:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ck>key1</ck> = <cv>[1,2,3]</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>int</jk>[] key1 = c.getObject(<js>"key1"</js>, <jk>int</jk>[].<jk>class</jk>);
 </p>
 <p>
 	Arrays of POJOs can also be retrieved using the <code>getObject()</code> methods:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ck>addresses</ck> = 
 		<cv>[
 			{
@@ -73,6 +73,6 @@ Arrays
 			}
 		]</cv>
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Address[] addresses = c.getObject(<js>"addresses"</js>, Address[].<jk>class</jk>);
 </p>

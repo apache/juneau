@@ -37,7 +37,7 @@ Parsing into Generic Models
 <p>
 	For example, given the following JSON:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -61,7 +61,7 @@ Parsing into Generic Models
 <p>
 	We can parse this into a generic <code>ObjectMap</code>:
 </p>
-<p class='bcode w800'>	
+<p class='bpcode w800'>	
 	<jc>// Parse JSON into a generic POJO model.</jc>
 	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
 
@@ -73,7 +73,7 @@ Parsing into Generic Models
 	<br>Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
 	<code>Boolean</code> objects when parsing into generic models.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	{
 		id: <jk>1</jk>, 
 		name: <js>'John Smith'</js>, 
@@ -98,7 +98,7 @@ Parsing into Generic Models
 	Once parsed into a generic model, various convenience methods are provided on the <code>ObjectMap</code>
 		and <code>ObjectList</code> classes to retrieve values:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Parse JSON into a generic POJO model.</jc>
 	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
 

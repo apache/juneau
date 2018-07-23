@@ -31,7 +31,7 @@ URL-Encoding Details
 	The following example shows JSON for a typical bean:
 </p>
 <h5 class='figure'>Sample Beans</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> Person {
 		
 		<jc>// Bean properties</jc>
@@ -54,7 +54,7 @@ URL-Encoding Details
 	}	
 </p>
 <h5 class='figure'>Sample Code</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Person p = <jk>new</jk> Person()
 		.name(<js>"John Smith"</js>)
 		.birthDate(<js>"1946-08-12T00:00:00Z"</js>)
@@ -68,7 +68,7 @@ URL-Encoding Details
 		);
 </p>
 <h5 class='figure'>URL-Encoding</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ua>name</ua>=<us>'John+Smith'</us>
 	&amp;<ua>birthDate</ua>=<us>'1946-08-12T00:00:00Z'</us>
 	&amp;<ua>addresses</ua>=@(

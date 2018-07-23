@@ -28,7 +28,7 @@ Piping Response Output
 </p>
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Pipe output from REST call to System.out in real-time.</jc>
 	restClient.doPost(<jsf>URL</jsf>).byLines().pipeTo(<jk>new</jk> PrintWriter(System.<jk>out</jk>)).run();
 </p>

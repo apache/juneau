@@ -29,7 +29,7 @@ Remoteable Proxies
 	The following simplified example shows how a method on a POJO on a server can be called through an interface
 	on a client...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Remoteable</ja>
 	<jk>public interface</jk> IAddressBook {
 
@@ -73,7 +73,7 @@ Remoteable Proxies
 <p>
 	The client side code for invoking this method is shown below...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remoteable servlet.</jc>
 	RestClient client = RestClient.<jsm>create</jsm>()
 		.rootUrl(<js>"http://localhost:10000/remoteable"</js>)
@@ -94,7 +94,7 @@ Remoteable Proxies
 <p>
 	Under the covers, this method call gets converted to a REST POST.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	HTTP POST http://localhost:10000/remoteable/org.apache.juneau.examples.rest.IAddressBook/createPerson
 	Accept: application/json
 	Content-Type: application/json
@@ -124,7 +124,7 @@ Remoteable Proxies
 	To define a remoteable interface, simply add the {@link org.apache.juneau.remoteable.Remoteable @Remoteable} 
 	annotation to your interface class.  
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Remoteable</ja>
 	<jk>public interface</jk> MyInterface {...}
 </p>
@@ -146,7 +146,7 @@ Remoteable Proxies
 	The <code>RemoteableServlet</code> class is a simple specialized servlet with an abstract 
 	<code>getServiceMap()</code> method to define the server-side POJOs:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		path=<js>"/remoteable"</js>
 	)
@@ -174,7 +174,7 @@ Remoteable Proxies
 	<br>You simply define a Java method whose return type is an interface, and return the implementation of that 
 	interface:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Our exposed proxy object.</jc>
 	<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/addressbookproxy/*"</js>)
 	<jk>public</jk> IAddressBook getProxy() {

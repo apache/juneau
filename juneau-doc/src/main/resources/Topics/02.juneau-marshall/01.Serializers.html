@@ -29,7 +29,7 @@ Serializers
 <p>
 	In most cases, you can serialize objects in one line of code by using one of the default serializers:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// A simple bean</jc>
 	<jk>public class</jk> Person {
 		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
@@ -79,7 +79,7 @@ Serializers
 	In addition to the default serializers, customized serializers can be created using various built-in options:
 </p>
 
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Use one of the default serializers to serialize a POJO</jc>
 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
 

@@ -24,7 +24,7 @@
 <p>
 	The definition of a read-only bean is a bean with properties with only getters, like shown below:
 </p>	
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Our read-only bean.</jc>
 	<jk>public class</jk> Person {
 		<jk>private final</jk> String <jf>name</jf>;
@@ -48,7 +48,7 @@
 		}
 	}			
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Parsing into a read-only bean.</jc>
 	String json = <js>"{name:'John Smith',age:45}"</js>;
 	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json);

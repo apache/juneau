@@ -28,7 +28,7 @@ Hello World Example
 <p>
 	Like any servlet, we could define our resource in the <l>web.xml</l> file of the web application like so...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;?xml</xt> <xa>version</xa>=<xs>"1.0"</xs> <xa>encoding</xa>=<xs>"UTF-8"</xs><xt>?&gt;</xt>
 	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>"2.3"</xs><xt>&gt;</xt>
 		<xt>&lt;servlet&gt;</xt>
@@ -44,7 +44,7 @@ Hello World Example
 <p>
 	Our servlet code is shown below:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Sample REST resource that prints out a simple "Hello world!" message.</jc>
 	<ja>@RestResource</ja>(
 		path=<js>"/helloWorld"</js>,
@@ -74,7 +74,7 @@ Hello World Example
 <p>
 	This is what it looks like in a browser:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/helloWorld
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.HelloWorldExample.1.png'>

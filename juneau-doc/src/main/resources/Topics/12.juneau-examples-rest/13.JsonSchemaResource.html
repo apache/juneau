@@ -27,20 +27,20 @@ JsonSchemaResource
 	The resource consists of a pre-initialized {@link org.apache.juneau.dto.jsonschema.JsonSchema} object.
 	Pointing a browser to the resource shows the following:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/jsonSchema
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.JsonSchemaResource.1.png'>
 <p>
 	For true JSON-Schema, you need to specify the header <l>Accept: text/json</l>:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/jsonSchema?Accept=text/json&amp;plainText=true
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.JsonSchemaResource.2.png'>
 
 <h5 class='figure'>JsonSchemaResource.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	* Sample resource that shows how to serialize JSON-Schema documents. 
 	*/</jd> 

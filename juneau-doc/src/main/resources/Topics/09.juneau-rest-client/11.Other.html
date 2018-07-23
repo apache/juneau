@@ -19,7 +19,7 @@ Other Useful Methods
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#rootUrl(Object)} method can be used to specify a 
 	root URL on all requests so that you don't have to use absolute paths on individual calls.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a rest client with a root URL</jc>
 	RestClient rc = RestClient.<jsm>create</jsm>().rootUrl(<js>"http://localhost:9080/foobar"</js>).build();
 	String r = rc.doGet(<js>"/baz"</js>).getResponseAsString();  <jc>// Gets "http://localhost:9080/foobar/baz"</jc>
@@ -30,7 +30,7 @@ Other Useful Methods
 	<br>For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
 	POJOs, you can use the {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a rest client that ignores unknown fields in the response</jc>
 	RestClient rc = RestClient.<jsm>create</jsm>()
 		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
@@ -44,7 +44,7 @@ Other Useful Methods
 	<br>This can be particularly useful if you're attempting to connect to a REST resource that may be in the 
 	process of still initializing.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a rest call that retries every 10 seconds for up to 30 minutes as long as a connection fails
 	// or a 400+ is received.</jc>
 	restClient.doGet(<jsf>URL</jsf>)

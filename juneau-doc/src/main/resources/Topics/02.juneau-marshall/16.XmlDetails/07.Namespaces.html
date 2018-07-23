@@ -19,7 +19,7 @@ Namespaces
 	Let's go back to the example of our original <code>Person</code> bean class, but add some namespace annotations:
 </p>
 <h5 class='figure'>Sample Beans</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
 	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 	<jk>public class</jk> Person {
@@ -52,7 +52,7 @@ Namespaces
 	<br>Below shows it defined at the package level:
 </p>
 <h5 class='figure'>package-info.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@XmlSchema</ja>(
 		prefix=<js>"ab"</js>,  <jc>// Default namespace</jc>
 		xmlNs={
@@ -65,7 +65,7 @@ Namespaces
 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 </p>		
 <h5 class='figure'>Sample Code</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Person p = <jk>new</jk> Person()
 		.name(<js>"John Smith"</js>)
 		.birthDate(<js>"1946-08-12T00:00:00Z"</js>)
@@ -87,7 +87,7 @@ Namespaces
 <p>
 	Now when we run this code, we'll see namespaces added to our output:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;per:person&gt;</xt>
 		<xt>&lt;per:name&gt;</xt>John Smith<xt>&lt;/per:name&gt;</xt>
 		<xt>&lt;per:birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/per:birthDate&gt;</xt>
@@ -106,7 +106,7 @@ Namespaces
 	Enabling the {@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot} setting results
 	in the namespace URLs being added to the root node:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;per:person</xt>
 			<xa>xmlns</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>xmlns:per</xa>=<xs>'http://www.apache.org/person/'</xs>
@@ -129,7 +129,7 @@ Namespaces
 <p>
 	We can simplify the output by setting the default namespace on the serializer so that all the elements do 
 	not need to be prefixed:
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().ws().sq().ns()
 		.defaultNamespaceUri(<js>"http://www.apache.org/person/"</js>)
@@ -139,7 +139,7 @@ Namespaces
 	This produces the following equivalent where the elements don't need prefixes since they're already in the 
 	default document namespace:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;person</xt>
 			<xa>xmlns:juneau</xa>=<xs>'http://www.apache.org/2013/Juneau'</xs> 
 			<xa>xmlns</xa>=<xs>'http://www.apache.org/person/'</xs>
@@ -171,7 +171,7 @@ Namespaces
 	The following code will produce the same output as before, but will perform slightly better since it 
 	avoids this pre-scan step.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a new serializer with readable output, this time with namespaces enabled.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>()
 		.ws()

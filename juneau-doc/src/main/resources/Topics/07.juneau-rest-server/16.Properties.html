@@ -27,7 +27,7 @@ Properties
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextBuilder} - Various methods on the context builder.
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>import static</jk> org.apache.juneau.BeanContext.*;
 	<jk>import static</jk> org.apache.juneau.serializer.Serializer.*;
 	<jk>import static</jk> org.apache.juneau.json.JsonSerializer.*;
@@ -50,7 +50,7 @@ Properties
 <p>
 	The programmatic equivalent to this is:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Servlet with properties applied</jc>
 	<ja>@RestResource</ja>(...)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
@@ -71,7 +71,7 @@ Properties
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties()} 
 	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
 </ul>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// GET method with method-level properties</jc>
 	<ja>@RestMethod</ja>(
 		name=<jsf>GET</jsf>, path=<js>"/*"</js>,
@@ -92,7 +92,7 @@ Properties
 <p>
 	Using the {@link org.apache.juneau.rest.RequestProperties} object:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Access it from RestRequest.</jc>
 	<jk>public</jk> Object doGet(RestRequest req) {
 		RequestProperties properties = req.getProperties();

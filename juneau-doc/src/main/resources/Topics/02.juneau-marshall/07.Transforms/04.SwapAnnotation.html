@@ -21,7 +21,7 @@
 	<br>This is often cleaner than using the builder <code>pojoSwaps()</code> method since you can keep
 	your swap class near your POJO class. 
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Swap</ja>(MyPojoSwap.<jk>class</jk>)
 	<jk>public class</jk> MyPojo {
 		...
@@ -39,7 +39,7 @@
 <p>
 	Multiple swaps can be associated with a POJO by using the {@link org.apache.juneau.annotation.Swaps @Swaps} annotation:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Swaps</ja>(
 		{
 			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
@@ -53,7 +53,7 @@
 	<code>Readers</code> get serialized directly to the output of a serializer.
 	Therefore it's possible to implement a swap that provides fully-customized output.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyJsonSwap <jk>extends</jk> PojoSwap&lt;MyPojo,Reader&gt; {
 
 		<jk>public</jk> MediaType[] forMediaTypes() {
@@ -69,7 +69,7 @@
 	The <ja>@Swap</ja> annotation can also be used on getters and setters as well to apply a swap
 	to individual property values
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
 	<jk>public</jk> MyPojo getMyPojo();
 </p>

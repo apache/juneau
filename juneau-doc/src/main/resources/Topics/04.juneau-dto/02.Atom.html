@@ -20,7 +20,7 @@ Atom
 	<br>The following code shows a feed being created programmatically using the 
 	{@link org.apache.juneau.dto.atom.AtomBuilder} class.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
 	
 	Feed feed = 
@@ -60,7 +60,7 @@ Atom
 </p>
 
 <h5 class='figure'>Example with no namespaces</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
 	XmlSerializer s = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
 
@@ -69,7 +69,7 @@ Atom
 </p>
 
 <h5 class='figure'>Results</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;feed&gt;</xt>
 		<xt>&lt;id&gt;</xt>
 			tag:juneau.apache.org

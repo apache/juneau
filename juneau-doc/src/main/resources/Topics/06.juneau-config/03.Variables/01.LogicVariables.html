@@ -30,7 +30,7 @@ Logic Variables
 <p>
 	The <code>$IF</code> variable can be used for simple if/else logic:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># Value set to 'foo' if myBooleanProperty is true</cc>
 	<ck>key1</ck> = 
 		<cv>$IF{		
@@ -57,7 +57,7 @@ Logic Variables
 <p>
 	The <code>$SW</code> variable can be used for switch blocks based on pattern matching:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># Shell command depends on the OS</cc>
 	<ck>shellCommand</ck> = 
 		<cv>$SW{		
@@ -70,7 +70,7 @@ Logic Variables
 <p>
 	The <code>$CO</code> variable can be used for coalescing of values (finding the first non-null/empty match):
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># Debug flag can be enabled by system property or environment variable.</cc>
 	<ck>debug</ck> = 
 		<cv>$CO{		
@@ -82,7 +82,7 @@ Logic Variables
 <p>
 	The <code>$PM</code> variable can be used for calculating boolean values:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># Debug flag can be enabled by system property or environment variable.</cc>
 	<ck>isWindows</ck> = 
 		<cv>$PM{		

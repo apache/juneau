@@ -28,7 +28,7 @@ OpenAPI Schema Part Parsing
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in an HTTP body can be converted to a 2-dimensional array of <code>Longs</code>:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
 	<jk>public void</jk> post2dLongArray(
 		<ja>@Body</ja>(
@@ -59,7 +59,7 @@ OpenAPI Schema Part Parsing
 <p>
 	The equivalent for a form-data post entry is shown below:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
 	<jk>public void</jk> post2dLongArray(
 		<ja>@FormData</ja>(
@@ -239,7 +239,7 @@ OpenAPI Schema Part Parsing
 <p>
 	For example, instead of <code>Longs</code> in the example above, we could also define a 2-dimensional array of POJOs convertible from <code>Longs</code>:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
 	<jk>public void</jk> post2dLongArray(<ja>@Body</ja>(...) MyPojo[][] body) {...}
 	
@@ -251,7 +251,7 @@ OpenAPI Schema Part Parsing
 <p>
 	Or even POJOs that take in arrays of <code>Longs[]</code>:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
 	<jk>public void</jk> post2dLongArray(<ja>@Body</ja>(...) MyPojo[] body) {...}
 	
@@ -263,7 +263,7 @@ OpenAPI Schema Part Parsing
 <p>
 	Or even POJOs that take in the whole 2-dimensional array:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
 	<jk>public void</jk> post2dLongArray(<ja>@Body</ja>(...) MyPojo body) {...}
 	

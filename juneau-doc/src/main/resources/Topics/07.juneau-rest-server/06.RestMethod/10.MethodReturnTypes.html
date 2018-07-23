@@ -21,7 +21,7 @@ Method Return Types
 	setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public</jk> String doGet() {
 		<jk>return</jk> <js>"Hello World!"</js>;
@@ -80,7 +80,7 @@ Method Return Types
 		{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output yourself.
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Equivalent method 1</jc>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
 	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID personId) {

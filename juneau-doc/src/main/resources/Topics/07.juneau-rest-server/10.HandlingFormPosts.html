@@ -21,7 +21,7 @@ Handling Form Posts
 	form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
 	<br>The code is shown here:
 </p>
-<p class='bcode w800'>				
+<p class='bpcode w800'>				
 	<ja>@RestResource</ja>(
 		path=<js>"/urlEncodedForm"</js>
 	)
@@ -45,7 +45,7 @@ Handling Form Posts
 <p>
 	Another possibility is to access the form parameters individually:	
 </p>	
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** POST request handler */</jd>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
 	<jk>public</jk> Object doPost(<ja>@FormData</ja>(<js>"aString"</js>) String aString, <ja>@FormData</ja>(<js>"aNumber"</js>) <jk>int</jk> aNumber, <ja>@FormData</ja>(<js>"aDate"</js>) Calendar aDate) <jk>throws</jk> Exception {

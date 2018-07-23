@@ -32,7 +32,7 @@ PojoSwaps
 	In the following example, we introduce a <code>PojoSwap</code> that will swap in ISO8601 strings for 
 	<code>Date</code> objects:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
 	<jk>public class</jk> MyDateSwap <jk>extends</jk> PojoSwap&lt;Date,String&gt; {
 		
@@ -55,7 +55,7 @@ PojoSwaps
 <p>
 	The swap can then be associated with serializers and parsers like so:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Sample bean with a Date field.</jc>
 	<jk>public class</jk> MyBean {
 		<jk>public</jk> Date <jf>date</jf> = <jk>new</jk> Date(112, 2, 3, 4, 5, 6);
@@ -74,7 +74,7 @@ PojoSwaps
 	The {@link org.apache.juneau.BeanMap#get(Object)} and {@link org.apache.juneau.BeanMap#put(String,Object)} 
 	methods will automatically convert to swapped values as the following example shows:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a new bean context and add our swap.</jc>
 	BeanContext bc = BeanContext.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
 
@@ -97,7 +97,7 @@ PojoSwaps
 	Another example of a <code>PojoSwap</code> is one that converts <code><jk>byte</jk>[]</code> arrays to
 	BASE64-encoded strings:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
 	
 		<ja>@Override</ja> <jc>/* StringSwap */</jc>
@@ -125,7 +125,7 @@ PojoSwaps
 <p>
 	The following example shows the BASE64 swap in use:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
 	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();

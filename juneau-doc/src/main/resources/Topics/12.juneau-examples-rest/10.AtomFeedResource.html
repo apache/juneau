@@ -25,27 +25,27 @@ AtomFeedResource
 <p>
 	Pointing a browser to the resource shows the following:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/atom
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AtomFeedResource.1.png'>
 <p>
 	True ATOM feeds require using an <l>Accept:text/xml</l> header:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/atom?Accept=text/xml&amp;plainText=true
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AtomFeedResource.2.png'>
 <p>
 	Other languages, such as JSON are also supported:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/atom?Accept=text/json&amp;plainText=true
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AtomFeedResource.3.png'>
 
 <h5 class='figure'>AtomFeedResource.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	* Sample resource that shows how to generate ATOM feeds. 
 	*/</jd> 

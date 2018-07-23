@@ -576,4 +576,15 @@ public final class IOUtils {
 			return new ByteArrayInputStream(IOUtils.read((Reader)o).getBytes(UTF8));
 		throw new FormattedIllegalArgumentException("Invalid object of type {0} passed to IOUtils.toInputStream(Object)", o.getClass());
 	}
+
+	/**
+	 * Writes the specified string to the specified file.
+	 *
+	 * @param path The file path.
+	 * @param contents The new file contents.
+	 * @throws IOException
+	 */
+	public static void write(String path, String contents) throws IOException {
+		write(new File(path), new StringReader(contents));
+	}
 }

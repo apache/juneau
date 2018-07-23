@@ -31,7 +31,7 @@ One-way PojoSwaps
 	<br>It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
 	reconstruct an {@code Iterator} during parsing. 
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> IteratorSwap <jk>extends</jk> PojoSwap&lt;Iterator,List&gt; {
 		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
 		<jk>public</jk> List swap(Iterator o) {
@@ -47,7 +47,7 @@ One-way PojoSwaps
 	<br>Note that trying to parse the original object will cause a {@link org.apache.juneau.parser.ParseException} 
 	to be thrown.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(IteratorSwap.<jk>class</jk>).build();
 	

@@ -20,7 +20,7 @@ Children
 	{@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource.children()} annotation.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Parent Resource */</jd>
 	<ja>@RestResource</ja>(
 		path=<js>"/parent"</js>,
@@ -28,7 +28,7 @@ Children
 	)
 	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Child Resource */</jd>
  	<ja>@RestResource</ja>(
 		path=<js>"/foo"</js>  <jc>// Path relative to parent resource.</jc>

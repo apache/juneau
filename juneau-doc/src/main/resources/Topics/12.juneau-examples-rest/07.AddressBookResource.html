@@ -57,7 +57,7 @@ AddressBookResource
 <p>
 	Pointing a browser to the resource shows the following:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.1.png'>
@@ -96,7 +96,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>package-info.java</h5>
-<p class='bcode w800'>		
+<p class='bpcode w800'>		
 	<jc>// XML and RDF namespaces used in this package</jc>
 	<ja>@Xml</ja>(ns=<js>"ab"</js>,
 		namespaces={
@@ -127,7 +127,7 @@ AddressBookResource
 </p>	
 
 <h5 class='figure'>IAddressBook.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	* Interface used to help illustrate proxy interfaces. 
 	* See {<ja>@link</ja> SampleRemoteableServlet}. 
@@ -169,7 +169,7 @@ AddressBookResource
 </p>	
 
 <h5 class='figure'>AddressBook.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Address book bean */</jd>
 	<ja>@Bean</ja>(typeName=<js>"addressBook"</js>)
 	<jk>public class</jk> AddressBook <jk>extends</jk> LinkedList&lt;Person&gt; <jk>implements</jk> IAddressBook {
@@ -206,7 +206,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>Person.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Person bean */</jd>
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
 	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
@@ -272,7 +272,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>Address.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Address bean */</jd> 
 	<ja>@Xml</ja>(prefix=<js>"addr"</js>) 
 	<ja>@Rdf</ja>(prefix=<js>"addr"</js>) 
@@ -318,7 +318,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>CreatePerson.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Person creator bean */</jd>
 	<ja>@Xml</ja>(prefix=<js>"per"</js>)
 	<ja>@Rdf</ja>(prefix=<js>"addr"</js>)
@@ -347,7 +347,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>CreateAddress.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** Address creator bean */</jd>
 	<ja>@Xml</ja>(ns=<js>"addr"</js>)
 	<ja>@Rdf</ja>(ns=<js>"addr"</js>)
@@ -379,7 +379,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>AddressBookResource.java</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/** 
 	* Proof-of-concept resource that shows off the capabilities of working with POJO resources. 
 	* Consists of an in-memory address book repository. 
@@ -750,7 +750,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>AddressBookResource.properties</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ck>title</ck> = <cv>AddressBook sample resource</cv>
 	<ck>description</ck> = <cv>Proof-of-concept resource that shows off the capabilities of working with POJO resources</cv>
 	
@@ -832,14 +832,14 @@ AddressBookResource
 <p>
 	Pointing a browser to the resource shows the results of running the <l>getRoot()</l> method:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.01.png'>
 <p>
 	Clicking the <l>people</l> link shows you the result of running the <l>getAllPeople()</l> method:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.02.png'>
@@ -855,19 +855,19 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>JSON</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?Accept=text/json&amp;plainText=true
 </p>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.03.png'>
 
 <h5 class='figure'>Lax JSON</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?Accept=text/json+simple&amp;plainText=true
 </p>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.04.png'>
 
 <h5 class='figure'>XML</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?Accept=text/xml&amp;plainText=true
 </p>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.05.png'>
@@ -881,7 +881,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>RDF/XML</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?Accept=text/xml+rdf+abbrev&amp;plainText=true
 </p>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.06.png'>
@@ -898,19 +898,19 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>HTML Schema</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?Accept=text/html+schema
 </p>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.07.png'>
 
 <h5 class='figure'>JSON Schema</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?Accept=text/json+schema&amp;plainText=true
 </p>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.08.png'>
 
 <h5 class='figure'>XML Schema</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?Accept=text/xml+schema&amp;plainText=true
 </p>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.09.png'>
@@ -921,7 +921,7 @@ AddressBookResource
 	Clicking on the first <l>personUri</l> link executes the <l>getPerson()</l> method, which renders a 
 	serialized <l>Person</l> object:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people/1
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.10.png'>
@@ -929,7 +929,7 @@ AddressBookResource
 	Clicking on the OPTIONS link on the page shows you the Swagger doc generated from our annotations and 
 	resource bundle properties:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/?method=OPTIONS
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.11.png'>
@@ -938,12 +938,12 @@ AddressBookResource
 	Because you added the <l>Traversable</l> converter to the <l>getPerson</l> method, you can also address 
 	child nodes in the POJO model through path remainders:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people/1/addresses/0
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Traversable.1.png'>
 <br><br>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people/1/addresses/0/street
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Traversable.2.png'>
@@ -954,19 +954,19 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>Show only the name and addresses columns</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?v=name,addresses
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Queryable.1.png'>
 
 <h5 class='figure'>Show only names that start with 'B*'</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?s=name=B*
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Queryable.2.png'>
 
 <h5 class='figure'>Show only entries with age greater than 60</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people?s=age>=60
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Queryable.3.png'>
@@ -975,7 +975,7 @@ AddressBookResource
 	The <l>Introspectable</l> converter on the <l>getPerson</l> method allows us to invoke public methods 
 	on the addressed POJO (in this case, public methods on the <l>String</l> class):
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/addressBook/people/1/name?invokeMethod=substring(int,int)&amp;invokeArgs=[1,5]
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Introspectable.1.png'>
@@ -989,7 +989,7 @@ AddressBookResource
 </p>
 
 <h5 class='figure'>ClientTest.java</h5>
-<p class='bcode w800'>		
+<p class='bpcode w800'>		
 	<jd>/** 
 	* Sample client code for interacting with AddressBookResource 
 	*/</jd> 
@@ -1076,7 +1076,7 @@ AddressBookResource
 <p>
 	The output from running this code is the following:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Running client test...
 	Number of entries = 2
 	Deleted person Barack Obama, response = DELETE successful
@@ -1096,7 +1096,7 @@ AddressBookResource
 	<br>The same actions done programmatically in the last section can also be done using URLs.
 	<br>By default, you can override the HTTP Method and Content through GET parameters, as shown below:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Delete the existing entries</jc>
 	http://localhost:10000/addressBook/people/1?method=DELETE
 	http://localhost:10000/addressBook/people/2?method=DELETE

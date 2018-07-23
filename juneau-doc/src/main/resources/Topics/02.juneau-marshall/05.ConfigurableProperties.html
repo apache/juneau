@@ -21,7 +21,7 @@ Configurable Properties
 	new instances from scratch or build upon existing instances.
 	<br>For example, the following code shows how to configure a JSON serializer:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()  <jc>// Create a JsonSerializerBuilder</jc>
 		.simple()  <jc>// Simple mode</jc>
@@ -33,7 +33,7 @@ Configurable Properties
 	Configurable settings can also be set declaratively.
 	<br>The following produces the same serializer.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()
 		.set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>)
@@ -68,7 +68,7 @@ Configurable Properties
 <p>
 	These can be used directly, as follows:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Serialize a POJO to LAX JSON.</jc>
 	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(myPojo);
 </p>
@@ -76,7 +76,7 @@ Configurable Properties
 	For performance reasons, serializers and parsers are immutable.
 	However, they can be 'copied' and modified using the <code>builder()</code> method.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Clone and customize an existing serializer.</jc>
 	WriterSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
 

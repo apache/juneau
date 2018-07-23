@@ -23,7 +23,7 @@
 	Bean property inclusion and ordering on a bean class can be done using the 
 	{@link org.apache.juneau.annotation.Bean#properties() @Bean.properties()} annotation.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
@@ -33,7 +33,7 @@
 	Bean properties can be excluded using the {@link org.apache.juneau.annotation.Bean#excludeProperties() @Bean.excludeProperties()}
 	annotation.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
 	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
@@ -42,7 +42,7 @@
 <p>
 	Bean properties can be sorted alphabetically using {@link org.apache.juneau.annotation.Bean#sort() @Bean.sort()}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	<jc>// All other properties are ignored.</jc>
 	<ja>@Bean</ja>(sort=<jk>true</jk>)
@@ -57,7 +57,7 @@
 	<br>For example, the {@link org.apache.juneau.PropertyNamerDLC} will convert property names to 
 	dashed-lowercase, and these will be used as attribute names in JSON and element names in XML.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Define a class with dashed-lowercase property names.</jc>
 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
 	<jk>public class</jk> MyBean { ... }
@@ -101,7 +101,7 @@
 	For example, in the following class hierarchy, instances of <code>C3</code> will include property 
 	<code>p3</code>, but not <code>p1</code> or <code>p2</code>.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> C1 {
 		<jk>public int</jk> getP1();
 	}
@@ -120,7 +120,7 @@
 	and {@link org.apache.juneau.transform.PropertyFilter} class can be used to perform interception
 	and inline handling of bean getter and setter calls.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Register filter on bean class.</jc>
 	<ja>@Bean</ja>(propertyFilter=AddressPropertyFilter.<jk>class</jk>)
 	<jk>public class</jk> Address {

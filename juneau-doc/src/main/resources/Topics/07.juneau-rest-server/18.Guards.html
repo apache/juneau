@@ -26,7 +26,7 @@ Guards
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#guards()} 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(Class...)} 
 </ul>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Define a guard that only lets Billy make a request</jc>
 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
 
@@ -48,7 +48,7 @@ Guards
 <p>
 	A common use for guards is to only allow admin access to certain Java methods...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// DELETE method</jc>
 	<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, guards={AdminGuard.<jk>class</jk>})
 	<jk>public void</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
@@ -68,7 +68,7 @@ Guards
 	{@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
 	yourself.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
 
 		<ja>@Override</ja> <jc>/* RestGuard */</jc>

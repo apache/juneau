@@ -27,7 +27,7 @@ Widgets
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(
 		widgets={
 			MyWidget.<jk>class</jk>
@@ -71,7 +71,7 @@ Widgets
 	<br>It shows an example of a widget that renders an image located in the <code>htdocs</code> static files
 	directory in your classpath (see {@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()}):
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
 
 		<ja>@Override</ja> <jc>/* Widget */</jc>
@@ -109,7 +109,7 @@ Widgets
 	</ul>
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
 
 		...

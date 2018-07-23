@@ -40,7 +40,7 @@ Instantiation
 <p>
 	For example:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Top level resource is deployed like any other servlet and must subclass from RestServlet.</jc>
 	<ja>@RestResource</ja>(
 		path=<js>"/top"</js>,
@@ -50,7 +50,7 @@ Instantiation
 	)
 	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Child resources can inherit from RestServlet but it's not a requirement.</jc>
 	<ja>@RestResource</ja>(
 		path=<js>"/child"</js>

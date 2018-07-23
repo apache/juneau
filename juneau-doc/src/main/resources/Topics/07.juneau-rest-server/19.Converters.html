@@ -27,7 +27,7 @@ Converters
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(Class...)} 
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Associate the Traversable converter to all Java REST methods in this servlet</jc>
 	<ja>@RestResource</ja>(converters=Traversable.<jk>class</jk>)
 	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
@@ -37,7 +37,7 @@ Converters
 <p>
 	They can also be defined at the method level:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// GET person request handler.</jc>
 	<jc>// Traversable conversion enabled to allow nodes in returned POJO tree to be addressed.</jc>
 	<jc>// Queryable conversion enabled to allow returned POJO to be searched/viewed/sorted.</jc>
@@ -56,7 +56,7 @@ Converters
 	<br>The converter uses the {@link org.apache.juneau.utils.PojoRest} wrapper class to address nodes in the 
 	tree.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jd>/**
 	 * Converter for enablement of PojoRest support on response objects returned by a @RestMethod method.
 	 * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path information.

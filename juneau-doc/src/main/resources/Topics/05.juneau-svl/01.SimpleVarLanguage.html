@@ -46,14 +46,14 @@ Simple Variable Language
 		<li class='jc'>{@link org.apache.juneau.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
 </ul>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Use the default variable resolver to resolve a string that contains $S (system property) variables</jc>
 	String myProperty = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"The Java home directory is $S{java.home}"</js>);
 </p>
 <p>
 	The following shows how variables can be arbitrarily nested...
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Look up a property in the following order:
 	// 1) MYPROPERTY environment variable.
 	// 2) 'my.property' system property if environment variable not found.

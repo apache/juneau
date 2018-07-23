@@ -32,7 +32,7 @@ Setting Values
 		<li class='jm'>{@link org.apache.juneau.config.Config#removeSection(String) removeSection(String)}
 	</ul>
 </ul>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Construct the sample config file programmatically</jc>
 	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build()
 		.set(<js>"key1"</js>, 1)
@@ -49,7 +49,7 @@ Setting Values
 	The method {@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} can be used
 	for adding comments and pre-lines to entries, and specifying encoded values.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Set an encoded value with some comments.</jc>
 	c.set(<js>"key1"</js>, 1, <jk>null</jk>, ConfigMod.<jsf>ENCODED</jsf>, <js>"Same-line comment"</js>, 
 		Arrays.asList(
@@ -57,7 +57,7 @@ Setting Values
 		)
 	);
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># Comment 1</cc>
 	
 	<cc># Comment 2</cc>
@@ -72,7 +72,7 @@ Setting Values
 <p>
 	Sections can be added with optional pre-lines using the <code>setSection</code> methods:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Set an encoded value with some comments.</jc>
 	c.setSection(<js>"NewSection"</js>, 
 		Arrays.asList(
@@ -80,7 +80,7 @@ Setting Values
 		)
 	);
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<cc># Section comment 1</cc>
 	
 	<cc># Section comment 2</cc>

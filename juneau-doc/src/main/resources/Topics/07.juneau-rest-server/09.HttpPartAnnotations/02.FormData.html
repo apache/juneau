@@ -19,7 +19,7 @@
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>	
+<p class='bpcode w800'>	
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	<jk>public void</jk> doPost(RestRequest req, RestResponse res,
 		<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
@@ -29,7 +29,7 @@
 <p>
 	This is functionally equivalent to the following code:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
 	<jk>public void</jk> doPost(RestRequest req, RestResponse res) {
 		RequestFormData fd = req.getFormData();

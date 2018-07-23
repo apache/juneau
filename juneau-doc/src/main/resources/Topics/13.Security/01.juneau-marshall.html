@@ -32,7 +32,7 @@ juneau-marshall
 <p>
 	The following example shows a potential vector that circumvents the restriction above:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Don't do this!</jc>
 	Class c = Class.<jsf>forName</jsf>(someUserInputString);
 	JsonParser.<jsf>DEFAULT</jsf>.parse(input, c);  <jc>// Oops!  Security hole!</jc>
@@ -54,7 +54,7 @@ juneau-marshall
 	vulnerabilities.  However, it is possible to circumvent this through your swap implementation as shown
 	below: 	
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Don't do this!</jc>
 	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> PojoSwap&lt;ObjectMap,Object&gt; {
 		<jk>public</jk> Object swap(BeanSession session, ObjectMap input) <jk>throws</jk> Exception {

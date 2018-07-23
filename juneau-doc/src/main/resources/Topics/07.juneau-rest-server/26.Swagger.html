@@ -20,7 +20,7 @@ Swagger
 	(i.e. REST interfaces that document themselves).
 </p>
 <h5 class='figure'>OPTIONS page for HelloWorld sample resource</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	http://localhost:10000/helloWorld/?method=OPTIONS
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.OptionsPages.1.png'>
@@ -28,7 +28,7 @@ Swagger
 	The {@link org.apache.juneau.rest.BasicRestServlet} class implements the page by creating a method 
 	mapped to the <l>OPTIONS</l> HTTP method that simply returns a Swagger bean:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestResource</ja>(...)
 	<jk>public class</jk> BasicRestServlet <jk>extends</jk> RestServlet {
 

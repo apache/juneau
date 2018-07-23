@@ -39,7 +39,7 @@ Bean Names and Dictionaries
 	For example, if a bean property is of type <code>Object</code>, then the serializer will add 
 	<js>"_type"</js> attributes so that the class can be determined during parsing.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
  	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
  	<jk>public class</jk> Foo {
  		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
@@ -57,7 +57,7 @@ Bean Names and Dictionaries
 	When serialized as JSON, <js>"_type"</js> attributes would be added when needed to infer the type during 
 	parsing:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
  	{
 		x: [
 			{_type:<js>'bar'</js>},
@@ -74,7 +74,7 @@ Bean Names and Dictionaries
 <p>
 	When serialized as XML, the bean is rendered as:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<xt>&lt;foo&gt;</xt>
 	   <xt>&lt;x&gt;</xt>
 	      <xt>&lt;bar/&gt;</xt>
@@ -104,7 +104,7 @@ Bean Names and Dictionaries
 	<li>Any subclass of {@link org.apache.juneau.BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	<li>Any array or collection of the objects above.
 </ul>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
 	ReaderParser p = JsonParser
 		.<jsm>create</jsm>()
@@ -139,7 +139,7 @@ Bean Names and Dictionaries
 	When using the annotation, you'll typically want to define it on an interface class so that it can
 	be inherited by all subclasses.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Bean</ja>(typePropertyName=<js>"mytype"</js>, beanDictionary={MyClass1.<jk>class</jk>,MyClass2.<jk>class</jk>})
 	<jk>public interface</jk> MyInterface {...}
 

@@ -31,7 +31,7 @@ Non-Tree Models and Recursion Detection
 <p>
 	For example, let's make a POJO model out of the following classes:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>public class</jk> A {
 		<jk>public</jk> B b;
 	}
@@ -47,7 +47,7 @@ Non-Tree Models and Recursion Detection
 <p>
 	Now we create a model with a loop and serialize the results.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
 	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.builder().detectRecursions(<jk>true</jk>).build();
 
@@ -63,7 +63,7 @@ Non-Tree Models and Recursion Detection
 <p>
 	What we end up with is the following, which does not serialize the contents of the <code>c</code> field:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	{
 		b: {
 			c: {

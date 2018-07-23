@@ -19,11 +19,11 @@ Custom Entry Serialization
 	Setter methods that take in a <code>Serializer</code> can be used to provide custom serialization of entries
 	instead of using the predefined serializer.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Set an XML value instead of JSON.</jc>
 	c.set(<js>"key1"</js>, myAddress, XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>);
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ck>key1</ck> = 
 		<cv>&lt;address&gt;	
 			&lt;street&gt;123 Main Street&lt;/street&gt;
@@ -35,6 +35,6 @@ Custom Entry Serialization
 <p>
 	The value can then be retrieved using the equivalent parser:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	Address myAddress = c.getObject(<js>"key1"</js>, XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>);			
 </p>

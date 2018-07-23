@@ -30,7 +30,7 @@ Interface Filters
 <p>
 	For example, let's define the following interface and implementation:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Interface</jc>
 	<jk>public class</jk> MyInterface {
 		<jk>public</jk> String getFoo();
@@ -46,7 +46,7 @@ Interface Filters
 	Suppose we only want to render the properties defined on our interface, not the implementation. 
 	<br>To do so, we can define the following bean filter:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
 	<jk>public class</jk> MyInterfaceFilter <jk>extends</jk> BeanFilter&lt;MyInterface&gt; {
 		<jk>public</jk> MyInterfaceFilter() {
@@ -57,7 +57,7 @@ Interface Filters
 <p>
 	When serialized, the serialized bean will only include properties defined on the interface.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()
 		.simple()
@@ -76,7 +76,7 @@ Interface Filters
 	<br>So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
 	passing in <code>MyInterface.<jk>class</jk></code> to the serializer, like so:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	WriterSerializer s = JsonSerializer
 		.<jsm>create</jsm>()
 		.beanFilters(MyInterface.<jk>class</jk>)  <jc>Shortcut!</jc>
@@ -85,7 +85,7 @@ Interface Filters
 <p>
 	The annotation equivalent is {@link org.apache.juneau.annotation.Bean#interfaceClass() Bean#interfaceClass()}.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Bean</ja>(interfaceClass=MyInterface.<jk>class</jk>)
 	<jk>public class</jk> MyInterfaceImpl <jk>implements</jk> MyInterface {
 		<jk>public</jk> String getFoo() {...}
@@ -98,7 +98,7 @@ Interface Filters
 <p>
 	Using the annotation on an interface will be inherited by all children.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Bean</ja>(interfaceClass=MyInterface.<jk>class</jk>)
 	<jk>public class</jk> MyInterface {
 		<jk>public</jk> String getFoo();
@@ -107,7 +107,7 @@ Interface Filters
 <p>
 	The annotation can be used on parent classes as well.
 	<br>Child beans will only serialize properties defined on the parent class.
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@Bean</ja>(interfaceClass=MyAbstractClass.<jk>class</jk>)
 	<jk>public abstract class</jk> MyAbstractClass {
 		<jk>public</jk> String getFoo() {...};

@@ -19,14 +19,14 @@
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
 </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
 	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
 		RequestHeaders h = req.getHeaders();
