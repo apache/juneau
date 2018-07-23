@@ -1,0 +1,156 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Annotation Inheritance
+
+<p>
+	The {@link org.apache.juneau.rest.annotation.RestResource @RestResource} annotation can also be used on parents and interfaces of resource classes.
+	<br>When multiple annotations are defined at different levels, the annotation values are combined.
+</p>
+<p>
+	This is a particularly useful feature because it allows you to define your own configured parent
+	resource classes that can be extended by all your child resources so that they all share common
+	settings.
+</p>
+<h5 class='figure'>Inheritance rules</h5>
+<table class='styled w800'>
+	<tr>
+		<th><l>Annotation</l></th>
+		<th><l>Inheritence Rules</l></th>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#guards() guards()}</td>
+		<td>
+			Guards on child are combined with those on parent class.
+			<br>Guards are executed child-to-parent in the order they appear in the annotation.
+			<br>Guards on methods are executed before those on classes.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#converters() converters()}</td>
+		<td>
+			Converters on child are combined with those on parent class.
+			<br>Converters are executed child-to-parent in the order they appear in the annotation.
+			<br>Converters on methods are executed before those on classes.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() beanFilters()}</td>
+		<td>
+			Bean filters on child override those on parent class.
+			<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+			<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() pojoSwaps()}</td>
+		<td>
+			POJO swaps on child override those on parent class.
+			<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+			<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#properties() properties()}</td>
+		<td>
+			Properties on child are combined with those on parent class.
+			<br>Properties are applied parent-to-child in the order they appear in the annotation.
+			<br>Properties on methods take precedence over those on classes.				
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#serializers() serializers()}</td>
+		<td>
+			Serializers on child override those on parent class.
+			<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+			<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
+			<br>Serializers on methods take precedence over those on classes.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#parsers() parsers()}</td>
+		<td>
+			Parsers on child override those on parent class.
+			<br>{@link org.apache.juneau.rest.Inherit} class can be used to inherit and augment values from parent.
+			<br>{@link org.apache.juneau.rest.None} class can be used to suppress inheriting from parent.
+			<br>Parsers on methods take precedence over those on classes.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() responseHandlers()}</td>
+		<td>
+			Response handlers on child are combined with those on parent class.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#encoders() encoders()}</td>
+		<td>
+			Encoders on child are combined with those on parent class.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() defaultRequestHeaders()}</td>
+		<td>
+			Headers on child are combined with those on parent class.
+			<br>Headers are applied parent-to-child in the order they appear in the annotation.
+			<br>Headers on methods take precedence over those on classes.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() defaultResponseHeaders()}</td>
+		<td>
+			Headers on child are combined with those on parent class.
+			<br>Headers are applied parent-to-child in the order they appear in the annotation.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#children() children()}</td>
+		<td>
+			Children on child are combined with those on parent class.
+			<br>Children are list parent-to-child in the order they appear in the annotation.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#path() path()}</td>
+		<td>
+			Path is searched for in child-to-parent order.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#title() title()}</td>
+		<td>
+			Label is searched for in child-to-parent order.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#description() description()}</td>
+		<td>
+			Description is searched for in child-to-parent order.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#config() config()}</td>
+		<td>
+			Config file is searched for in child-to-parent order.
+		</td>
+	</tr>
+	<tr>
+		<td>{@link org.apache.juneau.rest.annotation.RestResource#staticFiles() staticFiles()}</td>
+		<td>
+			Static files on child are combined with those on parent class.
+			<br>Static files are are executed child-to-parent in the order they appear in the annotation.
+		</td>
+	</tr>
+</table>

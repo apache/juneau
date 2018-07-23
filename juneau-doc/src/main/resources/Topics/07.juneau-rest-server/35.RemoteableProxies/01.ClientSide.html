@@ -1,0 +1,51 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Client Side
+
+<p>
+	Remoteable interface proxies are retrieved through the existing {@link org.apache.juneau.rest.client.RestClient} 
+	class.
+</p>
+<p>
+	It may seem that the client-side code would need to be complex.
+	<br>In reality, it builds upon existing serializing, parsing, and REST capabilities in Juneau resulting in very 
+	little additional code.
+	<br>The entire code for the <code>RestClient.getRemoteableProxy(Class)</code> method is shown below:
+</p>
+<p class='bcode w800'>
+	<jk>public</jk> &lt;T&gt; T getRemoteableProxy(<jk>final</jk> Class&lt;T&gt; interfaceClass) {
+		<jk>return</jk> (T)Proxy.newProxyInstance(
+			interfaceClass.getClassLoader(),
+			<jk>new</jk> Class[] { interfaceClass },
+			<jk>new</jk> InvocationHandler() {
+				<ja>@Override</ja> <jc>/* InvocationHandler */</jc>
+				<jk>public</jk> Object invoke(Object proxy, Method method, Object[] args) {
+					<jk>try</jk> {
+						String uri = <jf>remoteableServletUri</jf> + <js>'/'</js> + interfaceClass.getName() + <js>'/'</js> + ClassUtils.<jsm>getMethodSignature</jsm>(method);
+						<jk>return</jk> doPost(uri, args).getResponse(method.getReturnType());
+					} <jk>catch</jk> (Exception e) {
+						<jk>throw new</jk> RuntimeException(e);
+					}
+				}
+		});
+	}
+</p>
+<p>
+	Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
+	<br>For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
+	serializers and parsers, and the ability to provide your own customized Apache <code>HttpClient</code> for 
+	handling various scenarios involving authentication and Internet proxies.
+</p>

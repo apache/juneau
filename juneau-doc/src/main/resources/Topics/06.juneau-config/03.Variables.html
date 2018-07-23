@@ -1,0 +1,71 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Variables
+
+<p>
+	Config files can contain variables that get resolved dynamically using the previously-described {@link org.apache.juneau.svl.VarResolver} API.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<cc>#--------------------------</cc>
+	<cc># My section</cc>
+	<cc>#--------------------------</cc>
+	<cs>[MySection]</cs>
+	
+	<cc># A system property</cc>
+	<ck>locale</ck> = <cv>$S{java.locale, en_US}</cv>
+	
+	<cc># An environment variable</cc>
+	<ck>path</ck> = <cv>$E{PATH, unknown}</cv>
+	
+	<cc># Another value in this config file</cc>
+	<ck>anotherLocale</ck> = <cv>$C{MySection/locale}</cv>
+	
+	<cc># Look for system property, or env var if that doesn't exist, or a default value if that doesn't exist.</cc>
+	<ck>nested</ck> = <cv>$S{mySystemProperty,$E{MY_ENV_VAR,$C{MySection/anotherLocale}}}</cv>
+
+	<cc># A POJO with embedded variables</cc>
+	<ck>aBean</ck> = <cv>{foo:'$S{foo}',baz:$C{MySection/anInt}}</cv>
+</p>
+<p class='bcode w800'>
+	Config c = Config.<jsf>create</jsf>().build();
+	
+	Locale locale = cf.getObject(<js>"MySection/locale"</js>, Locale.<jk>class</jk>); 
+	String path = cf.getString(<js>"MySection/path"</js>); 
+	<jk>int</jk> sameAsAnInt = cf.getInt(<js>"MySection/sameAsAnInt"</js>); 
+	ABean bean = cf.getObject(<js>"MySection/aBean"</js>, ABean.<jk>class</jk>); 
+</p>
+<p>
+	By default, <code>Configs</code> use the {@link org.apache.juneau.svl.VarResolver#DEFAULT} variable resolver
+	which provides support for the following variables and constructs:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - <code>$S{key[,default]}</code>
+		<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - <code>$E{key[,default]}</code>
+		<li class='jc'>{@link org.apache.juneau.config.vars.ConfigVar} - <code>$C{key[,default]}</code>
+</ul>
+<p>
+	The variable resolver is controlled via the following setting:
+</p>
+<ul class='doctree'>
+	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_varResolver}
+</ul>
+<p>
+	Additionally, the following method can be used to retrieve a <code>Config</code> with a different variable resolver:
+</p>
+<ul class='doctree'>
+	<li class='jm'>{@link org.apache.juneau.config.Config#resolving(VarResolverSession)}
+</ul>

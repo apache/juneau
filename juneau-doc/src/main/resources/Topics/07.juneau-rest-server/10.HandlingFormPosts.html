@@ -1,0 +1,68 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Handling Form Posts
+
+<p>
+	The best way to handle a form post is usually by using an input bean.
+	<br>The samples include a <l>UrlEncodedFormResource</l> class that takes in URL-Encoded form post of the 
+	form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
+	<br>The code is shown here:
+</p>
+<p class='bcode w800'>				
+	<ja>@RestResource</ja>(
+		path=<js>"/urlEncodedForm"</js>
+	)
+	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> BasicRestServlet {
+	
+		<jd>/** POST request handler */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception {
+			<jc>// Just mirror back the request</jc>
+			<jk>return</jk> input;
+		}
+	
+		<jk>public static class</jk> FormInputBean {
+			<jk>public</jk> String <jf>aString</jf>;
+			<jk>public int</jk> <jf>aNumber</jf>;
+			<ja>@BeanProperty</ja>(pojoSwaps=CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
+			<jk>public</jk> Calendar <jf>aDate</jf>;
+		}
+	}		
+</p>	
+<p>
+	Another possibility is to access the form parameters individually:	
+</p>	
+<p class='bcode w800'>
+	<jd>/** POST request handler */</jd>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
+	<jk>public</jk> Object doPost(<ja>@FormData</ja>(<js>"aString"</js>) String aString, <ja>@FormData</ja>(<js>"aNumber"</js>) <jk>int</jk> aNumber, <ja>@FormData</ja>(<js>"aDate"</js>) Calendar aDate) <jk>throws</jk> Exception {
+		...
+	}
+</p>
+<p>
+	The advantage to the form input bean is that it can handle any of the parsable types (e.g. JSON, XML...) 
+	in addition to URL-Encoding.  
+	<br>The latter approach only supports URL-Encoding.
+</p>
+<ul class='doctree'>
+	<li class='warn'>
+		If you're using form input beans, DO NOT use the <l>@FormData</l> attribute or 
+		{@link org.apache.juneau.rest.RestRequest#getParameter(String)} method since this will cause the 
+		underlying JEE servlet to parse the HTTP body as a form post.
+		<br>Your input bean will end up being null since there won't be any content left after the servlet 
+		has parsed the body of the request.
+		<br>This applies to WHENEVER you use <l>@Body</l> or {@link org.apache.juneau.rest.RestRequest#getBody()}
+</ul>

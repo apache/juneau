@@ -1,0 +1,73 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+VarResolvers and VarResolverSessions
+
+<p>
+	The main class for performing variable resolution is {@link org.apache.juneau.svl.VarResolver}.
+	<br>Two methods are provided for resolving variables:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.svl.VarResolver}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolve(String) resolve(String)} 
+			- Resolves variables and returns the results as a simple string.
+		<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolveTo(String,Writer) resolveTo(String,Writer)} 
+			- Resolves variables and sends results to a writer.
+	</ul>
+</ul>
+<p>
+	Var resolvers can rely on the existence of other objects.
+	<br>For example, {@link org.apache.juneau.config.vars.ConfigVar} relies on the existence of a {@link org.apache.juneau.config.Config}.
+	<br>This is accomplished through the following:
+</p>
+<ul class='spaced-list'>
+	<li>Context-objects - Objects set on the resolver.
+	<li>Session-objects - Objects set on the resolver session.
+</ul>
+<p>
+	The following two classes are identical in behavior except for which objects they can access:
+</p>
+<ul>
+	<li class='jc'>{@link org.apache.juneau.svl.VarResolver} - Has access to context objects only.
+	<li class='jc'>{@link org.apache.juneau.svl.VarResolverSession} - Has access to context and session objects.
+</ul>
+<p>
+	Context and session objects are set through the following methods:
+</p>
+<ul>
+	<li class='jm'>{@link org.apache.juneau.svl.VarResolverBuilder#contextObject(String,Object)} - Context objects.
+	<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#sessionObject(String,Object)} - Session objects.
+	<li class='jm'>{@link org.apache.juneau.svl.VarResolver#createSession(Map)} - Session objects.
+</ul>
+<p>
+	Both kinds of objects are accessible through the following method:
+</p>
+<ul>
+	<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
+</ul>
+<p>
+	Var resolvers can be cloned and extended by using the {@link org.apache.juneau.svl.VarResolver#builder()} method.
+	<br>Cloning a resolver will copy it's {@link org.apache.juneau.svl.Var} class names and context objects.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<jc>// Create a resolver that copies the default resolver and adds $C and $A vars.</jc>
+	VarResolver myVarResolver = VarResolver.<jsf>DEFAULT</jsf>
+		.builder()
+		.vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>)
+		.build();
+</p>

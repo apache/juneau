@@ -1,0 +1,1118 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+AddressBookResource
+
+<p>
+	The <l>AddressBookResource</l> class is a proof-of-concept class that shows a true RESTful API using the 
+	Juneau REST toolkit.  
+	It provides examples of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		How to create RESTful interfaces using only POJOs.
+	<li>
+		How to use the {@link org.apache.juneau.xml.annotation.Xml @Xml} and
+		{@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema} annotations to provide XML namespaces
+		and alter how beans are handled by the XML serializer. 
+	<li>
+		How to use the {@link org.apache.juneau.jena.annotation.Rdf @Rdf} and
+		{@link org.apache.juneau.xml.annotation.XmlSchema @RdfSchema} annotations to provide XML namespaces
+		and alter how beans are handled by the Jena serializers. 
+	<li>
+		How to use the {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation
+		to alter how bean properties are handled by the serializers.
+	<li>
+		How to use the {@link org.apache.juneau.rest.annotation.RestMethod#name() RestMethod.name()} annotation
+		to create overloaded methods beyond the standard GET/PUT/POST/DELETE.
+	<li>
+		How to augment data in the OPTIONS page.
+	<li>
+		How to use the {@link org.apache.juneau.rest.client.RestClient} API to interact with the REST resource 
+		using the same POJOs used to create the server-side API.
+	<li>
+		How to interact with the REST resource using only a browser.
+	<li>
+		Using the {@link org.apache.juneau.rest.converters.Traversable} converter to drill down into POJO models.
+	<li>
+		Using the {@link org.apache.juneau.rest.converters.Queryable} converter to provide search/view/sort 
+		functionality against POJOs.
+	<li>
+		Using the {@link org.apache.juneau.rest.converters.Introspectable} converter to invoke methods on POJOs.
+	<li>
+		Using proxy interfaces.
+</ul>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.1.png'>
+
+<p>
+	The code is straightforward, consisting of the following classes:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<l>package-info.java</l> - Used to define XML namespaces for POJOs in this package.
+	<li>
+		<l>IAddressBook</l> - An interface describing the address book.
+	<li>
+		<l>AddressBook</l> - A data structure consisting of a list of <code>Persons</code>.
+	<li>
+		<l>Person, Address</l> - In-memory representations of people and addresses.
+	<li>
+		<l>CreatePerson, CreateAddress</l> - POJOs for creating and updating people and address through the 
+		REST interface.
+	<li>
+		<l>AddressBookResource</l> - The REST resource class.
+</ul>  
+<ul class='doctree'>
+	<li class='info'>
+		For the sake of brevity, bean properties are defined as public fields instead of the normal 
+		getters/setters.
+		Also, the examples are not the most efficient design and are not thread safe.
+</ul>		
+<p>
+	The <l>package-info.java</l> file is used to define XML and RDF namespaces on beans and properties in 
+	this package.
+	<br>Here you define a default XML and RDF namespaces and URL mappings for namespace short-names used 
+	throughout this package.
+	<br>It should be noted that these features are entirely optional, and there are often several ways of 
+	defining these namespaces.
+</p>
+
+<h5 class='figure'>package-info.java</h5>
+<p class='bcode w800'>		
+	<jc>// XML and RDF namespaces used in this package</jc>
+	<ja>@Xml</ja>(ns=<js>"ab"</js>,
+		namespaces={
+			<ja>@XmlNs</ja>(name=<js>"ab"</js>, uri=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@XmlNs</ja>(name=<js>"per"</js>, uri=<js>"http://www.apache.org/person/"</js>),
+			<ja>@XmlNs</ja>(name=<js>"addr"</js>, uri=<js>"http://www.apache.org/address/"</js>),
+			<ja>@XmlNs</ja>(name=<js>"mail"</js>, uri=<js>"http://www.apache.org/mail/"</js>)
+		}
+	)
+	<ja>@Rdf</ja>(ns=<js>"ab"</js>,
+		namespaces={
+			<ja>@RdfNs</ja>(name=<js>"ab"</js>, uri=<js>"http://www.apache.org/addressBook/"</js>),
+			<ja>@RdfNs</ja>(name=<js>"per"</js>, uri=<js>"http://www.apache.org/person/"</js>),
+			<ja>@RdfNs</ja>(name=<js>"addr"</js>, uri=<js>"http://www.apache.org/address/"</js>),
+			<ja>@RdfNs</ja>(name=<js>"mail"</js>, uri=<js>"http://www.apache.org/mail/"</js>)
+		}
+	)
+	<jk>package</jk> org.apache.juneau.examples.addressBook;
+	<jk>import</jk> org.apache.juneau.xml.annotation.*;
+</p>
+<p>
+	Technically since the RDF and XML namespaces used are the same, we didn't need to define them separately
+	since the {@link org.apache.juneau.jena.RdfCommon#RDF_useXmlNamespaces} setting is enabled by default.
+	<br>We keep them separate here though to show that they can be defined separately.
+</p>
+<p> 
+	Our address book uses the following interface:
+</p>	
+
+<h5 class='figure'>IAddressBook.java</h5>
+<p class='bcode w800'>
+	<jd>/** 
+	* Interface used to help illustrate proxy interfaces. 
+	* See {<ja>@link</ja> SampleRemoteableServlet}. 
+	*/</jd> 
+	<jk>public interface</jk> IAddressBook { 
+	
+		<jd>/** Return all people in the address book */</jd> 
+		List&lt;Person&gt; getPeople(); 
+		
+		<jd>/** Return all addresses in the address book */</jd> 
+		List&lt;Address&gt; getAddresses(); 
+		
+		<jd>/** Create a person in this address book */</jd> 
+		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception; 
+		
+		<jd>/** Find a person by id */</jd> 
+		Person findPerson(<jk>int</jk> id); 
+		
+		<jd>/** Find an address by id */</jd> 
+		Address findAddress(<jk>int</jk> id); 
+		
+		<jd>/** Find a person by address id */</jd> 
+		Person findPersonWithAddress(<jk>int</jk> id); 
+		
+		<jd>/** Remove a person by id */</jd> 
+		Person removePerson(<jk>int</jk> id); 
+	} 
+</p>
+
+<h5 class='section'>Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		You interface an interface for our address book so that you can later
+		use it to demonstrate the proxy interface support.
+</ul>
+<p> 
+	The <l>AddressBook</l> class is our address book.  
+	It maintains a list of <l>Person</l> objects with some additional convenience methods:
+</p>	
+
+<h5 class='figure'>AddressBook.java</h5>
+<p class='bcode w800'>
+	<jd>/** Address book bean */</jd>
+	<ja>@Bean</ja>(typeName=<js>"addressBook"</js>)
+	<jk>public class</jk> AddressBook <jk>extends</jk> LinkedList&lt;Person&gt; <jk>implements</jk> IAddressBook {
+	
+		<jd>/** Bean constructor - Needed for instantiating on client side */</jd>
+		<jk>public</jk> AddressBook () {}
+
+		<jd>/** Normal constructor - Needed for instantiating on server side */</jd>
+		<jk>public</jk> AddressBook (URI uri) {...}
+		
+		<jc>// Fields and methods omitted.</jc>
+	} 
+</p>
+
+<h5 class='section'>Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		The <code><ja>@Bean</ja>(typeName=<js>"addressBook"</js>)</code> annotation tells the toolkit that 
+		when serialized as XML, the element name is <xt>&lt;addressBook&gt;</xt>. 
+		<br>Without this annotation, the element would revert to the generalized <xt>&lt;array&gt;</xt> tag.
+	<li>
+		The separate constructors are implementation specific and are needed because you're going to be 
+		using this class in two ways, since you'll be demonstrating the client code as well as the server 
+		code, and it eliminates having to define separate client-side and server-side POJOs:
+		<ol>
+			<li>The normal constructor is used to programmatically create this object in the REST servlet code.
+			<li>The no-arg constructor is used by the Juneau parsers to construct this object in our client 
+			side code.
+		</ol>
+	</li>
+</ul>
+<p>	
+	The <l>Person</l> bean is defined as follows:
+</p>
+
+<h5 class='figure'>Person.java</h5>
+<p class='bcode w800'>
+	<jd>/** Person bean */</jd>
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
+	<jk>public class</jk> Person {
+	
+		<jc>// Bean properties</jc>
+		
+		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) 
+		<jk>public</jk> URI <jf>uri</jf>;
+		
+		<jk>public</jk> URI <jf>addressBookUri</jf>;
+		
+		<jk>public</jk> String <jf>id</jf>;
+		
+		<jk>public</jk> String <jf>name</jf>;
+		
+		<ja>@BeanProperty</ja>(swap=CalendarSwap.Medium.<jk>class</jk>) 
+		<jk>public</jk> Calendar <jf>birthDate</jf>;
+		
+		<jk>public</jk> LinkedList&lt;Address&gt; <jf>addresses</jf> = <jk>new</jk> LinkedList&lt;&gt;();
+		
+		
+		<jd>/** Bean constructor - Needed for instantiating on server side */</jd> 
+		<jk>public</jk> Person() {} 
+		
+		<jd>/** Normal constructor - Needed for instantiating on client side */</jd> 
+		<jk>public</jk> Person(URI addressBookUri, CreatePerson cp) <jk>throws</jk> Exception {...} 
+		
+		<jd>/** Extra read-only bean property */</jd> 
+		<jk>public int</jk> getAge() { 
+			<jk>return new</jk> GregorianCalendar().get(Calendar.<jsf>YEAR</jsf>) - birthDate.get(Calendar.<jsf>YEAR</jsf>); 
+		} 
+		
+		<jd>/** Convenience method - Add an address for this person */</jd> 
+		<jk>public</jk> Address createAddress(CreateAddress ca) <jk>throws</jk> Exception {...} 
+		
+		<jd>/** Extra method (for method invocation example) */</jd> 
+		<jk>public</jk> String sayHello(String toPerson, <jk>int</jk> age) { 
+			<jk>return</jk> <jf>name</jf> + <js>" says hello to "</js> + toPerson + <js>" who is "</js> + age + <js>" years old"</js>; 
+		} 
+	}
+</p>
+
+<h5 class='section'>Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		The <l>prefix="per"</l> annotations override the default <l>"ab"</l> namespace defined on the package.
+		<br>It applies to this class and all properties of this class.
+	<li>
+		The <code><ja>@Rdf</ja>(beanUri=<jk>true</jk>)</code> annotation identifies the <l>uri</l> property 
+		as the resource URI for this resource.  
+		<br>This property has special meaning for the RDF serializer.  
+		<br>The RDF serializer uses this property for the value of the <l>rdf:resource</l> attribute.
+	<li>
+		The <code><ja>@BeanProperty</ja>(swap=CalendarSwap.Medium.<jk>class</jk>)</code> annotation causes 
+		the date field to be serialized in the format <l>"MM dd, yyyy"</l>.
+		<br>This could have also been specified globally on the resource level through the 
+		{@link org.apache.juneau.rest.annotation.RestResource#properties} annotation.
+</ul>
+<p>	
+	The <l>Address</l> bean is defined as follows:
+</p>
+
+<h5 class='figure'>Address.java</h5>
+<p class='bcode w800'>
+	<jd>/** Address bean */</jd> 
+	<ja>@Xml</ja>(prefix=<js>"addr"</js>) 
+	<ja>@Rdf</ja>(prefix=<js>"addr"</js>) 
+	<ja>@Bean</ja>(typeName=<js>"address"</js>) 
+	<jk>public class</jk> Address { 
+		
+		<jc>// Bean properties</jc> 
+		
+		<ja>@Rdf</ja>(beanUri=<jk>true</jk>) 
+		<jk>public</jk> URI <jf>uri</jf>; 
+		
+		<jk>public</jk> URI <jf>personUri</jf>; 
+		
+		<jk>public int</jk> <jf>id</jf>; 
+		
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>; 
+		
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+		<jk>public int</jk> <jf>zip</jf>; 
+		
+		<jk>public boolean</jk> <jf>isCurrent</jf>; 
+		
+		
+		<jd>/** Bean constructor - Needed for instantiating on client side */</jd> 
+		<jk>public</jk> Address() {} 
+		
+		<jd>/** Normal constructor - Needed for instantiating on server side */</jd> 
+		<jk>public</jk> Address(URI addressBookUri, URI personUri, CreateAddress ca) <jk>throws</jk> Exception {...}
+	}
+</p>
+
+<h5 class='section'>Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		This class shows how the namespace can be overridden at the property level through the 
+		<code><ja>@Xml</ja>(prefix=<js>"mail"</js>)</code> annotation.
+</ul>
+<p>	
+	The <l>CreatePerson</l> bean is used as the input data for creating a person.
+</p>
+
+<h5 class='figure'>CreatePerson.java</h5>
+<p class='bcode w800'>
+	<jd>/** Person creator bean */</jd>
+	<ja>@Xml</ja>(prefix=<js>"per"</js>)
+	<ja>@Rdf</ja>(prefix=<js>"addr"</js>)
+	<ja>@Bean</ja>(typeName=<js>"person"</js>)
+	<jk>public class</jk> CreatePerson {
+		
+		<jc>// Bean properties</jc>
+
+		<jk>public</jk> String <jf>name</jf>;
+		
+		<ja>@BeanProperty(</ja>swap=CalendarSwap.Medium.<jk>class</jk>) 
+		<jk>public</jk> Calendar <jf>birthDate</jf>;
+		
+		<jk>public</jk> LinkedList&lt;CreateAddress&gt; <jf>addresses</jf>;
+		
+		
+		<jd>/** Bean constructor - Needed for instantiating on server side */</jd>
+		<jk>public</jk> CreatePerson() {}
+		
+		<jd>/** Normal constructor - Needed for instantiating on client side */</jd>
+		<jk>public</jk> CreatePerson(String name, Calendar birthDate, CreateAddress...addresses) {...}
+	}
+</p>
+<p>	
+	The <l>CreateAddress</l> bean is used as the input data for creating an address.
+</p>
+
+<h5 class='figure'>CreateAddress.java</h5>
+<p class='bcode w800'>
+	<jd>/** Address creator bean */</jd>
+	<ja>@Xml</ja>(ns=<js>"addr"</js>)
+	<ja>@Rdf</ja>(ns=<js>"addr"</js>)
+	<ja>@Bean</ja>(typeName=<js>"address"</js>)
+	<jk>public class</jk> CreateAddress {
+	
+		<jc>// Bean properties</jc>
+
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
+
+		<ja>@Xml</ja>(prefix=<js>"mail"</js>) 
+		<ja>@Rdf</ja>(prefix=<js>"mail"</js>) 
+		<jk>public int</jk> <jf>zip</jf>;
+
+		<jk>public boolean</jk> <jf>isCurrent</jf>;
+
+		
+		<jd>/** Bean constructor - Needed for instantiating on server side */</jd>
+		<jk>public</jk> CreateAddress() {}
+		
+		<jd>/** Normal constructor - Needed for instantiating on client side */</jd>
+		<jk>public</jk> CreateAddress(String street, String city, String state, <jk>int</jk> zip, <jk>boolean</jk> isCurrent) {...}
+	}
+</p>
+<p>
+	The <l>AddressBookResource</l> class is our REST resource class. 
+</p>
+
+<h5 class='figure'>AddressBookResource.java</h5>
+<p class='bcode w800'>
+	<jd>/** 
+	* Proof-of-concept resource that shows off the capabilities of working with POJO resources. 
+	* Consists of an in-memory address book repository. 
+	*/</jd> 
+	<ja>@RestResource</ja>( 
+		path=<js>"/addressBook"</js>,
+		messages=<js>""nls/AddressBookResource"</js>,
+	
+		htmldoc=<ja>@HtmlDoc</ja>(
+			
+			<jc>// Widgets for $W variables.</jc>
+			widgets={
+				PoweredByJuneau.<jk>class</jk>,
+				ContentTypeMenuItem.<jk>class</jk>,
+				QueryMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+	
+			<jc>// Links on the HTML rendition page.</jc>
+			<jc>// "request:/..." URIs are relative to the request URI.</jc>
+			<jc>// "servlet:/..." URIs are relative to the servlet URI.</jc>
+			<jc>// "$C{...}" variables are pulled from the config file.</jc>
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/addressbook/$R{servletClassSimple}.java"</js>
+			},
+			
+			<jc>// Arbitrary HTML message on the left side of the page.</jc>
+			aside={
+				<js>"&lt;div style='max-width:400px;min-width:200px'&gt;"</js>,
+				<js>"	&lt;p&gt;Proof-of-concept resource that shows off the capabilities of working with POJO resources.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Provides examples of: &lt;/p&gt;"</js>,
+				<js>"	&lt;ul&gt;"</js>,
+				<js>"		&lt;li&gt;XML and RDF namespaces"</js>,
+				<js>"		&lt;li&gt;Swagger documentation"</js>,
+				<js>"		&lt;li&gt;Widgets"</js>,
+				<js>"	&lt;/ul&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+			
+			<jc>// Juneau icon added to footer.</jc>
+			footer=<js>"$W{PoweredByJuneau}"</js>
+		),
+	
+		<jc>// Allow INIT as a method parameter.</jc>
+		allowedMethodParams=<js>"*"</js>,
+		
+		<jc>// Properties that get applied to all serializers and parsers.</jc>
+		properties={
+	
+			<jc>// Use single quotes.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
+	
+			<jc>// Enable XML namespaces.</jc>
+			<ja>@Property</ja>(name=<jsf>XML_enableNamespaces</jsf>, value=<js>"true"</js>),
+
+			<jc>// Add namespace URIs to root node.</jc>
+			<ja>@Property</ja>(name=<jsf>XML_addNamespaceUrisToRoot</jsf>, value=<js>"true"</js>),
+
+			<jc>// Make RDF/XML readable.</jc>
+			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>),
+	
+			<jc>// Make RDF parsable by adding a root node.</jc>
+			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>),
+	
+			<jc>// Make URIs absolute so that we can easily reference them on the client side.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_uriResolution</jsf>, value=<js>"ABSOLUTE"</js>),
+	
+			<jc>// Make the anchor text on URLs be just the path relative to the servlet.</jc>
+			<ja>@Property</ja>(name=<jsf>HTML_uriAnchorText</jsf>, value=<js>"SERVLET_RELATIVE"</js>)
+		},
+	
+		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
+		encoders=GzipEncoder.<jk>class</jk>,
+	
+		<jc>// Swagger info.</jc>
+		swagger= {
+			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
+			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
+			<js>"version:'2.0',"</js>,
+			<js>"termsOfService:'You're on your own.',"</js>,
+			<js>"tags:[{name:'Java',description:'Java utility',externalDocs:{description:'Home page',url:'http://juneau.apache.org'}}],"</js>,
+			<js>"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		}
+	) 
+	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena { 
+		
+		<jc>// The in-memory address book</jc> 
+		<jk>private</jk> AddressBook <jf>addressBook</jf>; 
+		
+		<ja>@Override</ja> /* Servlet */ 
+		<jk>public void</jk> init() { 
+		
+			<jk>try</jk> { 
+				<jc>// Create the address book</jc> 
+				<jf>addressBook</jf> = <jk>new</jk> AddressBook(java.net.URI.create(<js>"servlet:/"</js>)); 
+				
+				<jc>// Initialize it with some contents.</jc>
+				addressBook.init();
+			
+			} <jk>catch</jk> (Exception e) { 
+				<jc>// Gets converted to 500</jc>
+				<jk>throw new</jk> RuntimeException(e); 
+			} 
+		} 
+		
+		<jd>/** 
+		* [GET /] 
+		* Get root page. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, 
+			converters=Queryable.<jk>class</jk> 
+		) 
+		<jk>public</jk> Link[] getRoot() <jk>throws</jk> Exception { 
+			<jk>return new</jk> Link[] { 
+				<jk>new</jk> Link(<js>"people"</js>, <js>"people"</js>), 
+				<jk>new</jk> Link(<js>"addresses"</js>, <js>"addresses"</js>) 
+			}; 
+		} 
+		
+		<jd>/** 
+		* [GET /people/*] 
+		* Get all people in the address book. 
+		* Traversable transforming enabled to allow nodes in returned POJO tree to be addressed. 
+		* Introspectable transforming enabled to allow public methods on the returned object to be invoked. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/people/*"</js>, 
+			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
+		) 
+		<jk>public</jk> AddressBook getAllPeople() <jk>throws</jk> Exception { 
+			<jk>return</jk> <jf>addressBook</jf>;
+		} 
+		
+		<jd>/** 
+		* [GET /people/{id}/*] 
+		* Get a single person by ID. 
+		* Traversable transforming enabled to allow nodes in returned POJO tree to be addressed. 
+		* Introspectable transforming enabled to allow public methods on the returned object to be invoked. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/people/{id}/*"</js>, 
+			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>,Introspectable.<jk>class</jk>} 
+		) 
+		<jk>public</jk> Person getPerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception { 
+			<jk>return</jk> findPerson(id); 
+		} 
+		
+		<jd>/** 
+		* [GET /addresses/*] 
+		* Get all addresses in the address book. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/addresses/*"</js>, 
+			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
+		) 
+		<jk>public</jk> List&lt;Address&gt; getAllAddresses() <jk>throws</jk> Exception { 
+			<jk>return</jk> <jf>addressBook</jf>.getAddresses(); 
+		} 
+		
+		<jd>/** 
+		* [GET /addresses/{id}/*] 
+		* Get a single address by ID. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/addresses/{id}/*"</js>, 
+			converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>} 
+		) 
+		<jk>public</jk> Address getAddress(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception { 
+			<jk>return</jk> findAddress(id); 
+		} 
+		
+		<jd>/** 
+		* [POST /people] 
+		* Create a new Person bean. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/people"</js>, 
+			guards=AdminGuard.<jk>class</jk> 
+		) 
+		<jk>public</jk> Redirect createPerson(<ja>@Body</ja> CreatePerson cp) <jk>throws</jk> Exception { 
+		Person p = <jf>addressBook</jf>.createPerson(cp); 
+			<jk>return new</jk> Redirect(<js>"people/{0}"</js>, p.id); 
+		} 
+		
+		<jd>/** 
+		* [POST /people/{id}/addresses] 
+		* Create a new Address bean. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/people/{id}/addresses"</js>, 
+			guards=AdminGuard.<jk>class</jk> 
+		) 
+		<jk>public</jk> Redirect createAddress(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@Body</ja> CreateAddress ca) <jk>throws</jk> Exception { 
+			Person p = findPerson(id); 
+			Address a = p.createAddress(ca); 
+			<jk>return new</jk> Redirect(<js>"addresses/{0}"</js>, a.id); 
+		} 
+		
+		<jd>/** 
+		* [DELETE /people/{id}] 
+		* Delete a Person bean. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/people/{id}"</js>, 
+			guards=AdminGuard.<jk>class</jk>, 
+		) 
+		<jk>public</jk> String deletePerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id) <jk>throws</jk> Exception { 
+			<jf>addressBook</jf>.removePerson(id); 
+			<jk>return</jk> <js>"DELETE successful"</js>; 
+		} 
+		
+		<jd>/** 
+		* [DELETE /addresses/{id}] 
+		* Delete an Address bean. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, path=<js>"/addresses/{id}"</js>, 
+			guards=AdminGuard.<jk>class</jk> 
+		) 
+		<jk>public</jk> String deleteAddress(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> addressId) <jk>throws</jk> Exception { 
+			Person p = <jf>addressBook</jf>.findPersonWithAddress(addressId); 
+			<jk>if</jk> (p == <jk>null</jk>) 
+				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Person not found"</js>); 
+			Address a = findAddress(addressId); 
+			p.addresses.remove(a); 
+			<jk>return</jk> <js>"DELETE successful"</js>; 
+		} 
+		
+		<jd>/** 
+		* [PUT /people/{id}/*] 
+		* Change property on Person bean. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/people/{id}/*"</js>, 
+			guards=AdminGuard.<jk>class</jk> 
+		) 
+		<jk>public</jk> String updatePerson(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, <ja>@Path</ja>(<js>"/*"</js>) 
+				String remainder) <jk>throws</jk> Exception { 
+			<jk>try</jk> { 
+				Person p = findPerson(id); 
+				PojoRest r = <jk>new</jk> PojoRest(p); 
+				ClassMeta&lt;?&gt; cm = r.getClassMeta(remainder); 
+				Object in = req.getBody().asType(cm); 
+				r.put(remainder, in); 
+				<jk>return</jk> <js>"PUT successful"</js>; 
+			} <jk>catch</jk> (Exception e) { 
+				<jk>throw new</jk> RestException(<jsf>SC_BAD_REQUEST</jsf>, <js>"PUT unsuccessful"</js>).initCause(e); 
+			} 
+		} 
+		
+		<jd>/** 
+		* [PUT /addresses/{id}/*] 
+		* Change property on Address bean. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/addresses/{id}/*"</js>, 
+			guards=AdminGuard.<jk>class</jk> 
+		) 
+		<jk>public</jk> String updateAddress(RestRequest req, <ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> id, 
+				<ja>@Path</ja>(<js>"/*"</js>) String remainder) <jk>throws</jk> Exception { 
+			<jk>try</jk> { 
+				Address a = findAddress(id); 
+				PojoRest r = <jk>new</jk> PojoRest(a); 
+				ClassMeta&lt;?&gt; cm = r.getClassMeta(remainder); 
+				Object in = req.getBody().asType(cm); 
+				r.put(remainder, in); 
+				<jk>return</jk> <js>"PUT successful"</js>; 
+			} <jk>catch</jk> (Exception e) { 
+				<jk>throw new</jk> RestException(<jsf>SC_BAD_REQUEST</jsf>, <js>"PUT unsuccessful"</js>).initCause(e); 
+			} 
+		} 
+		
+		<jd>/** 
+		* [INIT /] 
+		* Reinitialize this resource. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<js>"INIT"</js>, path=<js>"/"</js>, 
+			guards=AdminGuard.<jk>class</jk> 
+		) 
+		<jk>public</jk> String doInit() <jk>throws</jk> Exception { 
+			init(); 
+			<jk>return</jk> <js>"OK"</js>; 
+		} 
+		
+		<jd>/** 
+		* [GET /cognos] 
+		* Get data in Cognos/XML format 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/cognos"</js>) 
+		<jk>public</jk> DataSet getCognosData() <jk>throws</jk> Exception { 
+		
+			<jc>// The Cognos metadata</jc> 
+			Column[] items = { 
+				<jk>new</jk> Column(<js>"name"</js>, <js>"xs:String"</js>, 255), 
+				<jk>new</jk> Column(<js>"age"</js>, <js>"xs:int"</js>), 
+				<jk>new</jk> Column(<js>"numAddresses"</js>, <js>"xs:int"</js>) 
+				.addPojoSwap( 
+					<jk>new</jk> PojoSwap&lt;Person,Integer&gt;() { 
+						<ja>@Override</ja> /* PojoSwap */ 
+						<jk>public</jk> Integer swap(BeanSession session, Person p) { 
+							<jk>return</jk> p.addresses.size(); 
+						} 
+					} 
+				) 
+			}; 
+			
+			<jk>return new</jk> DataSet(items, <jf>addressBook</jf>, <jk>this</jk>.getBeanContext()); 
+		} 
+		
+		<jd>/**
+		 * [PROXY /*]
+		 * Return a proxy interface to IAddressBook.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/proxy/*"</js>)
+		<jk>public</jk> IAddressBook getProxy() {
+			<jk>return</jk> <jf>addressBook</jf>;
+		}
+		
+		<jd>/** Convenience method - Find a person by ID */</jd> 
+		<jk>private</jk> Person findPerson(<jk>int</jk> id) <jk>throws</jk> RestException { 
+			Person p = <jf>addressBook</jf>.findPerson(id); 
+			<jk>if</jk> (p == <jk>null</jk>) 
+				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Person not found"</js>); 
+			<jk>return</jk> p; 
+		} 
+		
+		<jd>/** Convenience method - Find an address by ID */</jd> 
+		<jk>private</jk> Address findAddress(<jk>int</jk> id) <jk>throws</jk> RestException { 
+			Address a = <jf>addressBook</jf>.findAddress(id); 
+			<jk>if</jk> (a == <jk>null</jk>) 
+				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Address not found"</js>); 
+			<jk>return</jk> a; 
+		} 
+	} 	
+</p>
+
+<h5 class='section'>Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		The <l>@RestResource.messages()</l> annotation identifies 
+		<l>org/apache/juneau/samples/addressbook/nls/AddressBookResource.properties</l> as the resource 
+		bundle for localized message for this class.
+	<li>
+		You are setting <l>XML_enableNamespaces</l> to <l>true</l> to enable XML namespaces. 
+		By default, XML namespace support is disabled per 
+		{@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces}, so you have to explicitly 
+		enable it on our serializers.
+	<li>
+		The <l>XML_autoDetectNamespaces</l> setting is needed to get the XML serializer to add <l>xmlns</l> 
+		attributes to the root elements.
+		This causes the XML serializer to scan the POJO objects for namespaces in order to populate the 
+		root element.  
+		There are other ways to do this, such as explicitly specifying the <l>XML_defaultNamespaceUris</l> 
+		setting at either the resource or method level, which might be preferred in high-performance 
+		environments.
+		However, <l>XML_autoDetectNamespaces</l> produces the simplest code for our example.
+	<li>
+		The <l>updatePerson()</l> and <l>updateAddress()</l> methods use a guard to only allow 
+		administrators access.
+		For the sample code, the guard does nothing.  It's up to the implementer to decide how to restrict 
+		access.  
+	<li>
+		The <l>updatePerson()</l> and <l>updateAddress()</l> methods use the 
+		{@link org.apache.juneau.utils.PojoRest} class
+		to locate and update individual nodes in a POJO tree using the path remainder on the request. 
+	<li>
+		The <l>doInit()</l> method shows an example of an overloaded method using the 
+		<l>@RestMethod(name=<jsf>INIT</jsf>)</l> annotation.
+	<li>
+		The <l>getProxy()</l> method shows how to access the AddressBook bean through a proxy interface.
+</ul>
+<p>
+	The OPTIONS page uses the servlet resource bundle to specify the labels so that they're globalizable.
+</p>
+
+<h5 class='figure'>AddressBookResource.properties</h5>
+<p class='bcode w800'>
+	<ck>title</ck> = <cv>AddressBook sample resource</cv>
+	<ck>description</ck> = <cv>Proof-of-concept resource that shows off the capabilities of working with POJO resources</cv>
+	
+	<ck>getRoot.summary</ck> = <cv>Get root page</cv>
+	<ck>getRoot.description</ck> = <cv>Jumping off page for top-level Person and Address beans.</cv>
+	
+	<ck>doInit.summary</ck> = <cv>Reinitialize this resource</cv>
+	<ck>doInit.description</ck> = <cv>Resets the address book to the original contents.</cv>
+	<ck>doInit.res.200.description</ck> = <cv>Returns the string "OK"</cv>
+	
+	<ck>getAllPeople.summary</ck> = <cv>Get all people in the address book</cv>
+	<ck>getAllPeople.res.200.description</ck> = <cv>Returns a serialized List&lt;Person&gt;</cv>
+	<ck>getAllPeople.res.200.examples</ck> = <cv>{'text/json':"[\n\t{\n\t\turi:'http://hostname/addressBook/person/1',\n\t\taddressBookUri:'http://localhost/addressBook',\n\t\tid:1,\n\t\tname:'John Smith',\n\t\tbirthDate:'Jan 1, 2000',\n\t\taddresses:[\n\t\t\t{\n\t\t\t\turi:'http://localhost/addressBook/addresses/1',\n\t\t\t\tpersonUri:'http://localhost/addressBook/people/1',\n\t\t\t\tid:1,\n\t\t\t\tstreet:'101 Main St',\n\t\t\t\tcity:'Anywhere',\n\t\t\t\tstate:'NY',\n\t\t\t\tzip:12345,\n\t\t\t\tisCurrent:true\n\t\t\t}\n\t\t]\n\t}\n]"}</cv>
+	
+	<ck>getPerson.summary</ck> = <cv>Get a single person by ID</cv>
+	<ck>getPerson.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>getPerson.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>getPerson.res.200.description</ck> = <cv>Returns a serialized Person bean</cv>
+	<ck>getPerson.res.200.examples</ck> = <cv>{'text/json':"{\n\turi:'http://hostname/addressBook/person/1',\n\taddressBookUri:'http://localhost/addressBook',\n\tid:1,\n\tname:'John Smith',\n\tbirthDate:'Jan 1, 2000',\n\taddresses:[\n\t\t{\n\t\t\turi:'http://localhost/addressBook/addresses/1',\n\t\t\tpersonUri:'http://localhost/addressBook/people/1',\n\t\t\tid:1,\n\t\t\tstreet:'101 Main St',\n\t\t\tcity:'Anywhere',\n\t\t\tstate:'NY',\n\t\t\tzip:12345,\n\t\t\tisCurrent:true\n\t\t}\n\t]\n\}"}</cv>
+	<ck>getPerson.res.404.description</ck> = <cv>Person ID not found</cv>
+	
+	<ck>getAllAddresses.summary</ck> = <cv>Get all addresses in the address book</cv>
+	<ck>getAllAddresses.res.200.description</ck> = <cv>Returns a serialized List&lt;Address&gt;</cv>
+	<ck>getAllAddresses.res.200.examples</ck> = <cv>{'text/json':"[\n\t{\n\t\turi:'http://localhost/addressBook/addresses/1',\n\t\tpersonUri:'http://localhost/addressBook/people/1',\n\t\tid:1,\n\t\tstreet:'101 Main St',\n\t\tcity:'Anywhere',\n\t\tstate:'NY',\n\t\tzip:12345,\n\t\tisCurrent:true\n\t}\n]"}</cv>
+	
+	<ck>getAddress.summary</ck> = <cv>Get a single address by ID</cv>
+	<ck>getAddress.req.path.id.description</ck> = <cv>Address ID</cv>
+	<ck>getAddress.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>getAddress.res.200.description</ck> = <cv>Returns a serialized Address bean</cv>
+	<ck>getAddress.res.200.examples</ck> = <cv>{'text/json':"{\n\turi:'http://localhost/addressBook/addresses/1',\n\tpersonUri:'http://localhost/addressBook/people/1',\n\tid:1,\n\tstreet:'101 Main St',\n\tcity:'Anywhere',\n\tstate:'NY',\n\tzip:12345,\n\tisCurrent:true\n}"}</cv>
+	<ck>getAddress.res.404.description</ck> = <cv>Address ID not found</cv>
+	
+	<ck>createPerson.summary</ck> = <cv>Create a new Person bean </cv>
+	<ck>createPerson.req.body.description</ck> = <cv>Serialized CreatePerson bean</cv>
+	<ck>createPerson.req.body.schema</ck> = <cv>{example:"{\n\tname:'John Smith',\n\tbirthDate:'Jan 1, 2000',\n\taddresses:[\n\t\t{\n\t\t\tstreet:'101 Main St',\n\t\t\tcity:'Anywhere',\n\t\t\tstate:'NY',\n\t\t\tzip:12345,\n\t\t\tisCurrent:true\n\t\t}\n\t]\n\}"}</cv>
+	<ck>createPerson.res.307.header.Location.description</ck> = <cv>URL of new person</cv>
+	
+	<ck>createAddress.summary</ck> = <cv>Create a new Address bean</cv>
+	<ck>createAddress.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>createAddress.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>createAddress.req.body.schema</ck> = <cv>{example:"{\n\tstreet:'101 Main St',\n\tcity:'Anywhere',\n\tstate:'NY',\n\tzip:12345,\n\tisCurrent:true\n}"}</cv>
+	<ck>createAddress.res.307.header.Location.description</ck> = <cv>URL of new address</cv>
+	
+	<ck>deletePerson.summary</ck> = <cv>Delete a Person bean</cv>
+	<ck>deletePerson.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>deletePerson.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>deletePerson.res.200.description</ck> = <cv>Returns the string "DELETE successful"</cv>
+	<ck>deletePerson.res.404.description</ck> = <cv>Person ID not found</cv>
+	
+	<ck>deleteAddress.summary</ck> = <cv>Delete an Address bean</cv>
+	<ck>deleteAddress.req.path.id.description</ck> = <cv>Address ID</cv>
+	<ck>deleteAddress.res.200.description</ck> = <cv>Returns the string "DELETE successful"</cv>
+	<ck>deleteAddress.res.404.description</ck> = <cv>Address ID not found</cv>
+	
+	<ck>updatePerson.summary</ck> = <cv>Change property on Person bean</cv>
+	<ck>updatePerson.req.path.id.description</ck> = <cv>Person ID</cv>
+	<ck>updatePerson.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>updatePerson.req.body.description</ck> = <cv>Any object matching the field</cv>
+	<ck>updatePerson.res.200.description</ck> = <cv>Returns the string "PUT successful"</cv>
+	<ck>updatePerson.res.400.description</ck> = <cv>Invalid object type used</cv>
+	<ck>updatePerson.res.404.description</ck> = <cv>Person ID not found</cv>
+	
+	<ck>updateAddress.summary</ck> = <cv>Change property on Address bean</cv>
+	<ck>updateAddress.req.path.id.description</ck> = <cv>Address ID</cv>
+	<ck>updateAddress.req.path.id.type</ck> = <cv>integer</cv>
+	<ck>updateAddress.req.body.description</ck> = <cv>Any object matching the field</cv>
+	<ck>updateAddress.res.200.description</ck> = <cv>Returns the string "PUT successful"</cv>
+	<ck>updateAddress.res.400.description</ck> = <cv>Invalid object type used</cv>
+	<ck>updateAddress.res.404.description</ck> = <cv>Address ID not foundv
+	
+	<ck>getOptions.summary</ck> = <cv>View resource options</cv>
+	
+	<ck>getCognosData.summary</ck> = <cv>Get data in Cognos/XML format</cv>
+	<ck>getCognosData.res.200.description</ck> = <cv>Returns a serialized DataSet</cv>
+	
+	<ck>otherNotes</ck> = <cv>GZip support enabled.  Public methods can be invoked by using the &amp;Method URL parameter.  'text/cognos+xml' support available under root resource only</cv>
+</p>
+
+<p>
+	Pointing a browser to the resource shows the results of running the <l>getRoot()</l> method:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.01.png'>
+<p>
+	Clicking the <l>people</l> link shows you the result of running the <l>getAllPeople()</l> method:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.02.png'>
+<p>
+	Notice how the <l>URI</l> properties automatically became hyperlinks.  
+</p>
+<p>
+	Also notice how the dates are formatted as readable strings.
+	This was from the transform you added to the <l>Calendar</l> property.
+</p>
+<p>
+	Let's see what the output looks like in other formats:
+</p>
+
+<h5 class='figure'>JSON</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?Accept=text/json&amp;plainText=true
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.03.png'>
+
+<h5 class='figure'>Lax JSON</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?Accept=text/json+simple&amp;plainText=true
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.04.png'>
+
+<h5 class='figure'>XML</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?Accept=text/xml&amp;plainText=true
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.05.png'>
+<p>
+	Notice how our <l>XML_enableNamespaces</l> and <l>XML_autoDetectNamespaces</l> settings result
+	in namespaces being used.
+</p>
+<p>
+	Also notice how the <code><ja>@BeanProperty</ja>(uri=<jk>true</jk>)</code> annotations caused the
+	<l>uri</l> properties to become XML attributes instead of elements.
+</p>
+
+<h5 class='figure'>RDF/XML</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?Accept=text/xml+rdf+abbrev&amp;plainText=true
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.06.png'>
+<p>
+	Notice how the <code><ja>@BeanProperty</ja>(uri=<jk>true</jk>)</code> annotations are used to identify 
+	values for <l>rdf:about</l> values.
+</p>
+<p>
+	Also notice how <l>URI</l> properties are serialized as <l>rdf:resource</l> attributes.
+</p>
+<p>
+	Now lets look at the schema outputs that can be rendered that show information about the POJO classes 
+	themselves.
+</p>
+
+<h5 class='figure'>HTML Schema</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?Accept=text/html+schema
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.07.png'>
+
+<h5 class='figure'>JSON Schema</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?Accept=text/json+schema&amp;plainText=true
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.08.png'>
+
+<h5 class='figure'>XML Schema</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?Accept=text/xml+schema&amp;plainText=true
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.09.png'>
+<p>
+	Now let's see what else you can do.
+</p>
+<p>
+	Clicking on the first <l>personUri</l> link executes the <l>getPerson()</l> method, which renders a 
+	serialized <l>Person</l> object:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people/1
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.10.png'>
+<p>
+	Clicking on the OPTIONS link on the page shows you the Swagger doc generated from our annotations and 
+	resource bundle properties:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/?method=OPTIONS
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Demo.11.png'>
+
+<p>
+	Because you added the <l>Traversable</l> converter to the <l>getPerson</l> method, you can also address 
+	child nodes in the POJO model through path remainders:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people/1/addresses/0
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Traversable.1.png'>
+<br><br>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people/1/addresses/0/street
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Traversable.2.png'>
+
+<p>
+	The <l>Queryable</l> converter on the <l>getAllPeople()</l> method allows us to perform search/view/sort 
+	functions against the data structure before serialization:
+</p>
+
+<h5 class='figure'>Show only the name and addresses columns</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?v=name,addresses
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Queryable.1.png'>
+
+<h5 class='figure'>Show only names that start with 'B*'</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?s=name=B*
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Queryable.2.png'>
+
+<h5 class='figure'>Show only entries with age greater than 60</h5>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people?s=age>=60
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Queryable.3.png'>
+
+<p>
+	The <l>Introspectable</l> converter on the <l>getPerson</l> method allows us to invoke public methods 
+	on the addressed POJO (in this case, public methods on the <l>String</l> class):
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/addressBook/people/1/name?invokeMethod=substring(int,int)&amp;invokeArgs=[1,5]
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AddressBookResource.Introspectable.1.png'>
+
+<p>
+	The <l>ClientTest</l> class is provided to demonstrate how POJOs can be serialized and parsed 
+		through the REST interface using the <l>RestClient</l> class.
+</p>
+<p>
+	You'll notice that the class is a stand-alone executable that can be invoked as a plain Java process.
+</p>
+
+<h5 class='figure'>ClientTest.java</h5>
+<p class='bcode w800'>		
+	<jd>/** 
+	* Sample client code for interacting with AddressBookResource 
+	*/</jd> 
+	<jk>public class</jk> ClientTest { 
+		
+		<jk>public static void</jk> main(String[] args) { 
+		
+			<jk>try</jk> { 
+				System.<jsf>out</jsf>.println(<js>"Running client test..."</js>); 
+				
+				<jc>// Create a client to handle XML requests and responses.</jc> 
+				RestClient client = RestClient.<jsm>create</jsm>().build(); 
+				RestClient xmlClient = RestClient.<jsm>create</jsm>().serializer(XmlSerializer.<jsf>DEFAULT</jsf>)
+					.parser(XmlParser.<jsf>DEFAULT</jsf>).build(); 
+				
+				String root = <js>"http://localhost:10000/addressBook"</js>; 
+				
+				<jc>// Get the current contents of the address book</jc> 
+				AddressBook ab = client.doGet(root + <js>"/people"</js>).getResponse(AddressBook.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Number of entries = "</js> + ab.getPeople().size()); 
+				
+				<jc>// Same, but use XML as the protocol both ways</jc> 
+				ab = xmlClient.doGet(root + <js>"/people"</js>).getResponse(AddressBook.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Number of entries = "</js> + ab.getPeople().size()); 
+				
+				
+				<jc>// Delete the existing entries</jc> 
+				<jk>for</jk> (Person p : ab.getPeople()) { 
+					String r = client.doDelete(p.<jf>uri</jf>).getResponse(String.<jk>class</jk>); 
+					System.<jsf>out</jsf>.println(<js>"Deleted person "</js> + p.<jf>name</jf> + <js>", response = "</js> + r); 
+				} 
+				
+				<jc>// Make sure they're gone</jc> 
+				ab = client.doGet(root + <js>"/people"</js>).getResponse(AddressBook.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Number of entries = "</js> + ab.getPeople().size()); 
+				
+				<jc>// Add 1st person again</jc> 
+				CreatePerson cp = <jk>new</jk> CreatePerson( 
+					<js>"Barack Obama"</js>, 
+					<jsm>toCalendar</jsm>(<js>"Aug 4, 1961"</js>), 
+					<jk>new</jk> CreateAddress(<js>"1600 Pennsylvania Ave"</js>, <js>"Washington"</js>, <js>"DC"</js>, 20500, <jk>true</jk>), 
+					<jk>new</jk> CreateAddress(<js>"5046 S Greenwood Ave"</js>, <js>"Chicago"</js>, <js>"IL"</js>, 60615, <jk>false</jk>) 
+				); 
+				Person p = client.doPost(root + <js>"/people"</js>, cp).getResponse(Person.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Created person "</js> + p.<jf>name</jf> + <js>", uri = "</js> + p.<jf>uri</jf>); 
+				
+				<jc>// Add 2nd person again, but add addresses separately</jc> 
+				cp = <jk>new</jk> CreatePerson( 
+					<js>"George Walker Bush"</js>, 
+					<jsm>toCalendar</jsm>(<js>"Jul 6, 1946"</js>) 
+				); 
+				p = client.doPost(root + <js>"/people"</js>, cp).getResponse(Person.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Created person "</js> + p.<jf>name</jf> + <js>", uri = "</js> + p.<jf>uri</jf>); 
+				
+				<jc>// Add addresses to 2nd person</jc> 
+				CreateAddress ca = <jk>new</jk> CreateAddress(<js>"43 Prairie Chapel Rd"</js>, <js>"Crawford"</js>, <js>"TX"</js>, 76638, <jk>true</jk>); 
+				Address a = client.doPost(p.uri + <js>"/addresses"</js>, ca).getResponse(Address.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Created address "</js> + a.<jf>uri</jf>); 
+				
+				ca = <jk>new</jk> CreateAddress(<js>"1600 Pennsylvania Ave"</js>, <js>"Washington"</js>, <js>"DC"</js>, 20500, <jk>false</jk>); 
+				a = client.doPost(p.uri + <js>"/addresses"</js>, ca).getResponse(Address.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Created address "</js> + a.<jf>uri</jf>); 
+				
+				<jc>// Find 1st person, and change name</jc> 
+				Person[] pp = client.doGet(root + <js>"/people?s=name=Barack+Obama"</js>).getResponse(Person[].<jk>class</jk>); 
+				String r = client.doPut(pp[0].uri + <js>"/name"</js>, <js>"Barack Hussein Obama"</js>).getResponse(String.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"Changed name, response = "</js> + r); 
+				p = client.doGet(pp[0].<jf>uri</jf>).getResponse(Person.<jk>class</jk>); 
+				System.<jsf>out</jsf>.println(<js>"New name = "</js> + p.<jf>name</jf>); 
+			
+			} <jk>catch</jk> (Exception e) { 
+				e.printStackTrace(); 
+			} 
+		} 
+		
+		<jc>// Utility method</jc> 
+		<jk>public static</jk> Calendar toCalendar(String birthDate) <jk>throws</jk> Exception { 
+			Calendar c = <jk>new</jk> GregorianCalendar(); 
+			c.setTime(DateFormat.getDateInstance(DateFormat.<jsf>MEDIUM</jsf>).parse(birthDate)); 
+			<jk>return</jk> c; 
+		} 
+	} 
+</p>
+<p>
+	The output from running this code is the following:
+</p>
+<p class='bcode w800'>
+	Running client test...
+	Number of entries = 2
+	Deleted person Barack Obama, response = DELETE successful
+	Deleted person George Walker Bush, response = DELETE successful
+	Number of entries = 0
+	Created person Barack Obama, uri = http://localhost:10000/addressBook/people/3
+	Created person George Walker Bush, uri = http://localhost:10000/addressBook/people/4
+	Created address http://localhost:10000/addressBook/addresses/7
+	Created address http://localhost:10000/addressBook/addresses/8
+	Changed name, response = PUT successful
+	New name = Barack Hussein Obama		
+</p>
+
+<p>
+	The Juneau architecture is designed to make it easy to debug REST resources using nothing more than a 
+	browser.
+	<br>The same actions done programmatically in the last section can also be done using URLs.
+	<br>By default, you can override the HTTP Method and Content through GET parameters, as shown below:
+</p>
+<p class='bcode w800'>
+	<jc>// Delete the existing entries</jc>
+	http://localhost:10000/addressBook/people/1?method=DELETE
+	http://localhost:10000/addressBook/people/2?method=DELETE
+
+	<jc>// Add 1st person again</jc>
+	http://localhost:10000/addressBook/people?method=POST&amp;content=(name=Barack+Obama,birthDate='Aug+4,+1961',addresses=@((street=1600+Pennsylvania+Ave,city=Washington,state=DC,zip=20500,isCurrent=true),(street=5046+S+Greenwood+Ave,city=Chicago,state=IL,zip=60615,isCurrent=false)))
+	
+	<jc>// Add 2nd person again</jc>
+	http://localhost:10000/addressBook/people?method=POST&amp;content=(name=George+Walker+Bush,birthDate='Jul+6,+1946')
+	http://localhost:10000/addressBook/people/4/addresses?method=POST&amp;content=(street=43+Prairie+Chapel+Rd,city=Crawford,state=TX,zip=76638,isCurrent=true)
+	http://localhost:10000/addressBook/people/4/addresses?method=POST&amp;content=(street=1600+Pennsylvania+Ave,city=Washington,state=DC,zip=20500,isCurrent=false)
+		
+	<jc>// Change name of 1st person</jc>
+	http://localhost:10000/addressBook/people/3/name?method=PUT&amp;content=Barack+Hussein+Obama	
+</p>
+<p>
+	The ability to overload methods is enabled through the 
+	<code><del>RestResource.allowMethodParam()</del></code> setting.
+</p>

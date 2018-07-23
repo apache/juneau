@@ -1,0 +1,36 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.1.0.5 (Sept 1, 2014)
+
+<p>
+	Juno 5.1.0.5 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>New <code><del>Redirect</del></code> class that simplifies performing redirections in REST methods.
+	<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} annotation
+		for defining customer response handlers for special kinds of POJOs.
+	<li>New method <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
+	<li>New method <code><del>RestRequest.getServletURIBuilder()</del></code> for construcing servlet-based URLs more efficiently.
+	<li>New method {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
+		and {@link org.apache.juneau.rest.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
+	<li>Fixed bug where some properties were not being propagated correctly when using <code><del>CoreObject.setProperties(ObjectMap)</del></code>
+		on serializer and parser subclasses.
+	<li>Fixed bug in {@link org.apache.juneau.html.HtmlSerializer} where URL keys in Maps were not being serialized as hyperlinks.
+	<li>Fixed bug in {@link org.apache.juneau.json.JsonSerializer} where <js>"_class"</js> and <js>"items"</js> attributes were not quoted in strict mode when using SERIALIZER_addClassAttrs feature.	
+	<li>Fixed bug where <code>Content-Encoding</code> and<code>Character-Encoding</code> headers were being set when calling {@link org.apache.juneau.rest.RestResponse#getOutputStream()}.
+		These should not be set if interacting with the output streams at a low level.
+	<li>Eliminated various convenience <code>RestResponse.sendRedirect(...)</code> methods due to the introduction of the <code><del>Redirect</del></code> class.
+</ul>

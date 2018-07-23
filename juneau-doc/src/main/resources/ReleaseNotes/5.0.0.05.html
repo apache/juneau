@@ -1,0 +1,41 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.5 (Oct 29, 2012)
+
+<p>
+	Juno 5.0.0.5 is a major update.
+</p>
+<ul class='spaced-list'>
+	<li>New <code><ja>@RestChild</ja></code> annotation for identifying child resources.</li>
+	<li>
+		New <code>traversable</code> and <code>filterable</code> attributes added to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation.<br>
+		Eliminates the need for <code>PojoResource</code> and <code>FilteredRestResource</code> classes.
+	</li>
+	<li>Simplified client API.  Easier to use when making multiple connections to the same server.</li>
+	<li>Support for pluggable authentication in the client API.</li>
+	<li>Support for authenticating against Jazz Team Servers.</li>
+	<li>Support for rendering package-level Javadocs in REST resources.</li>
+	<li>Support for parsing of header values into specific object types.</li>
+	<li>Changed default XML representation to not include JSON-type attributes.  Produces cleaner XML.</li>
+	<li>
+		New <code>resourceUri</code> attributed added to <ja>@Bean</ja> annotation to associate beans with resource URIs.
+		<ul>
+			<li>Used for automatically creating hyperlinks in {@link org.apache.juneau.html.HtmlSerializer}.</li>
+			<li>Used for automatically creating <xa>uri</xa> attributes in {@link org.apache.juneau.xml.XmlSerializer}.</li>
+			<li>Used for automatically creating <xa>rdf:about</xa> attributes in <code>RdfXmlSerializer</code>.</li>
+		</ul>
+	</li>	
+</ul>

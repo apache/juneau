@@ -1,0 +1,225 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+6.3.1 (Aug 1, 2017)
+
+<p>
+	Juneau 6.3.1 is a minor release.
+</p>
+
+<h5 class='topic w800'>org.apache.juneau</h5>
+<ul class='spaced-list'>
+	<li>
+		{@link org.apache.juneau.utils.PojoQuery} improvements.
+	<li>
+		New {@link org.apache.juneau.remoteable.RemoteMethod#returns()} annotation.
+		<br>Allows you to specify whether the remote method returns the HTTP body or status code.
+	<li>
+		Fixed bugs with {@link org.apache.juneau.BeanContext#BEAN_includeProperties} and {@link org.apache.juneau.BeanContext#BEAN_excludeProperties} settings.
+	<li>
+		New/modified settings in <code><del>HtmlDocSerializerContext</del></code>:
+		<ul>
+			<li><code><del>HTMLDOC_script</del></code>
+			<li><code><del>HTMLDOC_style</del></code> - Was <jsf>HTMLDOC_css</jsf>.
+			<li><code><del>HTMLDOC_stylesheet</del></code> - Was <jsf>HTMLDOC_cssUrl</jsf>.  Now an array.
+		</ul>
+	<li>
+		New <code><del>ResourceFinder</del></code> utility class.
+		Allows you to search for resources up the parent hierarchy chain.
+		Also allows you to search for localized resources.
+	<li>
+		Eliminated the following properties from <code><del>HtmlDocSerializerContext</del></code>:
+		<jsf>HTMLDOC_title</jsf>, <jsf>HTMLDOC_description</jsf>, <jsf>HTMLDOC_description</jsf>
+		<br>See below on changes to simplify HTML headers.
+	<li>
+		{@link org.apache.juneau.svl.Var} implementations can now throw exceptions and will be converted to
+		<js>""{exceptionMessage}"</js> values.
+</ul>
+
+<h5 class='topic w800'>org.apache.juneau.rest</h5>
+<ul class='spaced-list'>
+	<li>
+		New 'light' stylesheet:
+		<br><img src='doc-files/ReleaseNotes.631.LightStyle.png'>
+		<br>Compared with previous 'devops':
+		<br><img src='doc-files/ReleaseNotes.631.DevopsStyle.png'>
+		<br>For those nolstalgic for old times, there's also 'original':
+		<br><img src='doc-files/ReleaseNotes.631.OriginalStyle.png'>
+	<li>
+		Simplified the stylesheets and HTML code.
+		<br>For example, the nav links are now an ordered list of elements which makes rendering as as side-bar
+		(for example) easier to do in CSS.
+	<li>
+		Modifications to the following <ja>@HtmlDoc</ja> annotations:
+		<ul>
+			<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks()} - Now an array of strings instead of a JSON object.  Simplified syntax.
+				<br>For example:
+				<p class='bcode w800'>
+	<jc>// Old syntax</jc>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		links=<js>"{"</js>
+			+ <js>"up:'request:/..',"</js>
+			+ <js>"options:'servlet:/?method=OPTIONS',"</js>
+			+ <js>"contentTypes:'$W{ContentTypeMenuItem}',"</js>
+			+ <js>"styles:'$W{StyleMenuItem}',"</js>
+			+ <js>"source:'$C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java'"</js>
+		+ <js>"}"</js>
+	)
+	
+	<jc>// New syntax</jc>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		navlinks={
+			<js>"up: request:/.."</js>,
+			<js>"options: servlet:/?method=OPTIONS"</js>,
+			<js>"$W{ContentTypeMenuItem}"</js>,
+			<js>"$W{StyleMenuItem}"</js>,
+			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PetStoreResource.java"</js>
+		}
+	)
+				</p>
+				Previous syntax will still work, but you're encouraged to use the simplified syntax.
+			<li>Several annotations are now arrays of strings instead of simple strings.
+				Values are simply concatenated with newlines which makes multi-line values cleaner.
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#header() header()}
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#nav() nav()}
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#aside() aside()}
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#footer() footer()}
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#script() script()}
+					<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#style() style()}
+				</ul>
+				Additionally, the <js>"INHERIT"</js> string literal can be used to combine the value with
+				the value defined on the servlet or parent class.  Links can also be inserted at specific
+				index positions.
+		</ul>
+	<li>
+		Improvements made to the {@link org.apache.juneau.rest.widget.Widget} API.
+		<ul>
+			<li>
+				You can now add arbitrary CSS and Javascript along with your widgets through new methods:
+				<ul>
+					<li>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest)}
+					<li>{@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest)}
+					<li>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest)}
+				</ul>
+			</li>
+			<li>
+				Declaration of widgets moved to {@link org.apache.juneau.rest.annotation.HtmlDoc#widgets() @HtmlDoc.widgets()} 
+				instead of separately on <ja>@RestResource</ja> and <ja>@RestMethod</ja> annotations.
+			<li>
+				{@link org.apache.juneau.rest.widget.Widget#getName()} now defaults to the simple class name.
+				<br>So now you can just refer to the class name: <js>"$W{ContentTypeMenuItem}"</js>.
+			<li>
+				Renamed widgets:
+				<ul>
+					<li><code>PoweredByApacheWidget</code> -&gt; <code>PoweredByApache</code>  
+					<li><code>PoweredByJuneauWidget</code> -&gt; <code>PoweredByJuneau</code>  
+				</ul>
+			<li>
+				New {@link org.apache.juneau.rest.widget.MenuItemWidget} can be used as a starting point for creatint pull-down menu items.
+			<li>
+				New {@link org.apache.juneau.rest.widget.ContentTypeMenuItem} widget that provides a pull-down menu 
+				with hyperlinks for all supported languages for that page:
+				<br><img src='doc-files/ReleaseNotes.631.ContentTypeMenuItem.png'>
+			<li>
+				Improved {@link org.apache.juneau.rest.widget.QueryMenuItem} widget that provides a pull-down menu
+				of a search/view/order-by/page form:
+				<br><img src='doc-files/ReleaseNotes.631.QueryMenuItem.png'>
+				<br>Fields are now pre-filled with current query parameters.
+			<li>
+				New {@link org.apache.juneau.rest.widget.ThemeMenuItem} widget that provides a pull-down menu 
+				with hyperlinks to show the content in the default stylesheets:
+				<br><img src='doc-files/ReleaseNotes.631.StyleMenuItem.png'>
+		</ul>
+	<li>
+		New/modified annotations on {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc}:
+		<ul>
+			<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#style() style()} - Renamed from <code>css()</code>.
+			<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#stylesheet() stylesheet()} - Renamed from <code>cssUrl()</code>.
+				<br>Can now be a comma-delimited list of URLs.
+			<li>{@link org.apache.juneau.rest.annotation.HtmlDoc#script() script()} - Add arbitrary Javascript to page header.
+		</ul>
+
+	<li>
+		Bug fix with {@link org.apache.juneau.rest.annotation.HtmlDoc#nowrap() @HtmlDoc.nowrap()} so that the setting only applies
+		to the data contents, not the whole page.
+	<li>
+		Two convenience methods added to {@link org.apache.juneau.rest.RestRequest}:
+		<ul>
+			<li>{@link org.apache.juneau.rest.RestRequest#attr(String,Object) attr(String,Object)}
+			<li>{@link org.apache.juneau.rest.RestRequest#prop(String,Object) prop(String,Object)}
+		</ul>
+	</li>
+	<li>
+		Annotations added:
+		<ul>
+			<li>{@link org.apache.juneau.rest.annotation.RestResource#siteName() @RestResource.siteName()}
+			<li>{@link org.apache.juneau.rest.annotation.RestResource#flags() @RestResource.flags()}
+			<li>{@link org.apache.juneau.rest.annotation.RestMethod#flags() @RestMethod.flags()}
+		</ul>
+	</li>
+	<li>
+		Eliminated the <code>@RestResource.stylesheet()</code> annotation.  
+		It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
+	<li>
+		Eliminated the following annotations since they are now redundant with {@link org.apache.juneau.rest.annotation.HtmlDoc#header() @HtmlDoc.header()}:
+		<ul>
+			<li><code>title()</code>
+			<li><code>description()</code>
+			<li><code>branding()</code>
+		</ul>
+		Instead, the {@link org.apache.juneau.rest.BasicRestServlet} class defines the following default header
+		that can be easily overridden: 
+		<p class='bcode w800'>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		header={
+			<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+			<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
+			<js>"&lt;a href='http://juneau.apache.org'&gt;&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;"</js>
+		}
+	)
+		</p>
+		Note that the subtitle first tries using the method summary and then the servlet description.
+	<li>
+		New {@link org.apache.juneau.rest.vars.FileVar $F} variable resolver for resolving the contents of 
+		files in the classpath.
+		<br>The <code>DockerRegistryResource</code> examples shows how it can be used to pull in a localized
+		file from the classpath to populate the aside section of a page.
+		<p class='bcode w800'>
+	htmldoc=<ja>@HtmlDoc</ja>(
+		<jc>// Pull in aside contents from file.</jc>
+		aside=<js>"$F{resources/DockerRegistryResourceAside.html}"</js>
+	)
+		</p>
+	<li>
+		New <code><del>ReaderResource.toCommentStrippedString()</del></code> method.
+	<li>
+		The <code>bpIncludes()</code> and <code>bpExcludes()</code> annotations on <ja>@RestMethod</ja>
+		has been replaced with the following:
+		<ul>
+			<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpi() bpi()} - Now an array of simplified values instead of LAX JSON.
+			<li>{@link org.apache.juneau.rest.annotation.RestMethod#bpx() bpx()} - Now an array of simplified values instead of LAX JSON.
+		</ul>
+	<li>
+		Two new variables added to <code>$R</code> variable: <js>"$R{servletClass}"</js>, <js>"$R{servletClassSimple}"</js>
+</ul>
+
+<h5 class='topic w800'>org.apache.juneau.rest.examples</h5>
+<ul class='spaced-list'>
+	<li>
+		Added CONTENT-TYPE and STYLES menu items to most pages.
+	<li>
+		Added improved QUERY menu item to PetStore page.
+</ul>

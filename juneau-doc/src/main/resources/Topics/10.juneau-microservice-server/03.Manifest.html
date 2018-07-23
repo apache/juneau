@@ -1,0 +1,37 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Manifest File
+
+<p>
+	The generated <l>META-INF/MANIFEST.MF</l> file is used to describe the microservice. 
+	<br>If you open it, you'll see the following:
+</p>
+<p class='bcode w800'>
+	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.RestMicroservice</mv>
+	<mk>Main-ConfigFile</mk>: <mv>my-microservice.cfg</mv>
+<p>
+ 	The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
+ 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.RestMicroservice</l>.
+ 	<br>However, it is possible to extend this class or implement your own microservice, in which case you'll need
+ 	to modify this value to point to the new class.
+</p>
+<p>
+	The <mk>Main-ConfigFile</mk> entry points to the location of an external configuration file for our microservice.
+</p>		
+<p>
+	In addition to these predefined manifest entries, you can add your own particular entries to the manifest file
+	and access them through the Manifest API described next. 
+</p>

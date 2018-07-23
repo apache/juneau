@@ -1,0 +1,36 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.31 (Aug 9, 2013)
+
+<p>
+	Juno 5.0.0.31 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>
+		Simplified the {@link org.apache.juneau.serializer.Serializer} and {@link org.apache.juneau.parser.Parser} class hierarchies.<br> 
+		This reverses a previous change that added a bunch of interfaces in these APIs (and subsequently required compiling with Java 7 to get around a compiler bug).<br>
+		The new class hierarchy is much simpler to understand.
+	</li>
+	<li>
+		Added {@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
+	</li>
+	<li>
+		Added a strict mode to {@link org.apache.juneau.json.JsonParser}.
+	</li>
+	<li>
+		Added default {@link org.apache.juneau.json.JsonParser#DEFAULT_STRICT} parser.
+	</li>
+</ul>	

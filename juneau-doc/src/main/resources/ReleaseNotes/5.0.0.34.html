@@ -1,0 +1,98 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.34 (Nov 10, 2013)
+
+<p>
+	Juno 5.0.0.34 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>
+		New support for runtime-replaced variables in REST resource properties:
+		<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		messages=<js>"nls/Messages"</js>,
+		properties={
+			<ja>@Property</ja>(name=<js>"label"</js>,value=<js>"$L{servletTitle}"</js>),  <jc>// Localized variable in Messages.properties</jc>
+			<ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"$S{java.vendor}"</js>),  <jc>// System property</jc>
+			<ja>@Property</ja>(name=<js>"foo"</js>,value=<js>"bar"</js>),
+			<ja>@Property</ja>(name=<js>"bar"</js>,value=<js>"baz"</js>),
+			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo}"</js>),  <jc>// Request variable. value="bar"</jc>
+			<ja>@Property</ja>(name=<js>"v2"</js>,value=<js>"$R{$R{foo}}"</js>)  <jc>// Nested request variable. value="baz"</jc>
+		}
+	)
+		</p>
+		See <code>RestServlet.createRequestVarResolver(RestRequest)</code> for more information.
+	</li>
+	<li>
+		 Eliminated <ja>@Property.type</ja> annotation which was the old way of specifying NLS variables that got resolved at runtime.
+	</li> 
+	<li>
+		New methods on {@link org.apache.juneau.rest.RestRequest}:
+		<ul>
+			<li><del><code>RestRequest.getVarResolver()</code></del></li>
+			<li><code><del>RestRequest.getServletURI()</del></code></li>
+			<li><code><del>RestRequest.getRequestParentURI()</del></code></li>
+		</ul>
+	</li>
+	<li>
+		New methods on {@link org.apache.juneau.rest.RestResponse}:
+		<ul>
+			<li><code>RestResponse.sendRedirect(CharSequence)</code>
+		</ul>
+	</li>
+	<li>
+		New methods on {@link org.apache.juneau.rest.RestServlet} that allow easier customization by subclasses:
+		<ul>
+			<li><code><del>RestServlet.createConfigFactory()</del></code></li>
+			<li><code><del>RestServlet.createConverters()</del></code></li>
+			<li><code><del>RestServlet.createDefaultRequestHeaders()</del></code></li>
+			<li><code><del>RestServlet.createDefaultResponseHeaders()</del></code></li>
+			<li><code><del>RestServlet.createEncoders()</del></code></li>
+			<li><code><del>RestServlet.createFilters()</del></code></li>
+			<li><code><del>RestServlet.createGuards()</del></code></li>
+			<li><code><del>RestServlet.createMimetypesFileTypeMap()</del></code></li>
+			<li><code><del>RestServlet.createParsers()</del></code></li>
+			<li><code><del>RestServlet.createProperties()</del></code></li>
+			<li><code><del>RestServlet.createRequestProperties(ObjectMap,RestRequest)</del></code></li>
+			<li><code><del>RestServlet.createRequestVarResolver(RestRequest)</del></code></li>
+			<li><code><del>RestServlet.createSerializers()</del></code></li>
+			<li><code><del>RestServlet.createUrlEncodingParser()</del></code></li>
+		</ul>
+	</li>
+	<li>
+		Changed <code>RestServletNls</code> to use <code>ResourceDescription/MethodDescription</code>
+			instead of <code>RestResource/RestMethod</code>
+	</li>
+	<li>
+		New property <code>RestServletProperties.REST_htDocsFolder</code>.<br>
+		New support for serving up static documents from classpath through REST interface.
+	</li>
+	<li>
+		Exception APIs now use {@link java.text.MessageFormat} (e.g. <js>"{0}"</js>) for message variables instead of <js>"%s"</js>.
+	</li>
+	<li>
+		New {@link org.apache.juneau.annotation.Bean#stopClass @Bean.stopClass} annotation for specifying stop classes for bean properties.
+	</li>
+	<li>
+		New <del><code>BeanFilter.setStopClass(Class)</code></del> which is the program equivalent to the annotation above.
+	</li>
+	<li>
+		New methods on {@link org.apache.juneau.dto.ResultSetList}:
+		<ul>
+			<li><code>ResultSetList.handleBlob(Blob)</code></li>
+			<li><code>ResultSetList.handleClob(Clob)</code></li>
+		</ul>
+</ul>	

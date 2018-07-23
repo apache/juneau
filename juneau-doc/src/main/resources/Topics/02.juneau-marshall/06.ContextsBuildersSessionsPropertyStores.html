@@ -1,0 +1,151 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Contexts, Builders, Sessions, and PropertyStores
+
+<p>
+	All the serializers, parsers, and REST server/client classes use the following design pattern:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<l>Context</l> - A thread-safe read-only object.
+		<ul>
+			<li>Heavy to construct and designed to be cached and reused.
+			<li>Created by <l>ContextBuilder</l> classes.
+			<li>Examples:  <code>BeanContext</code>, <code>JsonSerializer</code>
+		</ul>
+	<li>
+		<l>Session</l> - A non-thread-safe single-use object with configuration combined from context and 
+		runtime args such as locale/timezone.
+		<ul>
+			<li>Lightweight objects that take a minimum amount of time to instantiate and are not typically reused.
+			<li>Created by <code>Context</code> objects.
+			<li>Examples:  <code>BeanSession</code>, <code>JsonSerializerSession</code>
+		</ul>
+	<li>
+		<l>PropertyStore</l> - A thread-safe read-only set of configuration properties.
+		<ul>
+			<li>Heavier to create than <code>Sessions</code> but lighter than <code>Contexts</code>.
+			<li>Each <code>Context</code> contains one <code>PropertyStore</code> that defines all the configuration about that object.
+			<li>Created by <l>PropertyStoreBuilder</l> classes.
+		</ul>
+</ul>	
+<p>
+	For example, the class hierarchy for <code>JsonSerializer</code> is:
+</p>
+<ul class='doctree'>
+	<li class='jc'><code>Object</code>
+	<ul>
+		<li class='jac'>{@link org.apache.juneau.Context}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.BeanContext}
+			<ul>
+				<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
+				<ul>
+					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
+					</ul>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+</ul>
+<p>
+	Each context object in the hierarchy define properties that can be stored in a <code>PropertyStore</code>
+	such as <jsf>SERIALIZER_useWhitespace</jsf> or <jsf>JSON_simpleMode</jsf>.
+</p>
+<p>
+	The class hierarchy for <code>JsonSerializerBuilder</code> is:
+</p>
+<ul class='doctree'>
+	<li class='jc'><code>Object</code>
+	<ul>
+		<li class='jac'>{@link org.apache.juneau.ContextBuilder}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
+			<ul>
+				<li class='jac'>{@link org.apache.juneau.serializer.SerializerBuilder}
+				<ul>
+					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializerBuilder}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.json.JsonSerializerBuilder}
+					</ul>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+</ul>
+<p>
+	The class hierarchy for <code>JsonSerializerSession</code> is:
+</p>
+<ul class='doctree'>
+	<li class='jc'><code>Object</code>
+	<ul>
+		<li class='jac'>{@link org.apache.juneau.Session}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.BeanSession}
+			<ul>
+				<li class='jac'>{@link org.apache.juneau.serializer.SerializerSession}
+				<ul>
+					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializerSession}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.json.JsonSerializerSession}
+					</ul>
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+</ul>
+<p>
+	The general idea behind a {@link org.apache.juneau.PropertyStore} is to serve as a reusable configuration of an artifact 
+	(such as a serializer) such that the artifact can be cached and reused if the property stores are 'equal'.
+</p>
+<p>
+	For example, two serializers of the same type created with the same configuration will always end up being
+	the same serializer: 
+</p>
+<p class='bcode w800'>
+	<jc>// Two serializers created with identical configurations will always be the same copy.</jc> 
+	WriterSerializer s1 = JsonSerializer.<jsm>create</jsm>().pojoSwaps(MySwap.<jk>class</jk>).simple().build();
+	WriterSerializer s2 = JsonSerializer.<jsm>create</jsm>().set(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>).pojoSwaps(MySwap.<jk>class</jk>).build();
+	<jk>assert</jk>(s1 == s2);
+</p>
+<p>
+	This has the effect of significantly improving performance especially if you're creating many 
+	serializers and parsers.
+</p>
+<p>
+	The {@link org.apache.juneau.PropertyStoreBuilder} class is used to build up and instantiate immutable 
+	<code>PropertyStore</code> objects.
+</p>
+<p>
+	In the example above, the property store being built looks like the following:
+</p>
+<p class='bcode w800'>
+	PropertyStore ps = PropertyStore
+		.<jsm>create</jsm>()
+		.set(<js>"BeanContext.pojoSwaps.lc"</js>, MySwap.<jk>class</jk>)
+		.set(<js>"JsonSerializer.simpleMode.b"</js>, <jk>true</jk>)
+		.build();
+</p>
+<p>
+	Property stores are immutable, comparable, and their hashcodes are calculated exactly one time.
+	That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
+</p>
+<p>
+	Refer to the {@link org.apache.juneau.PropertyStore} javadoc for a detailed explaination on how
+	property stores work.
+</p>

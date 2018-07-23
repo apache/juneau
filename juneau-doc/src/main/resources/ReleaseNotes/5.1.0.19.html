@@ -1,0 +1,49 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.1.0.19 (Aug 15, 2015)
+
+<p>
+	Juno 5.1.0.19 is a minor update in terms of core functionality.
+	But it introduces a <code><del>Microservices</del></code> project for building REST microservices and docker containers.
+</p>
+
+<h5 class='topic w800'>Core</h5>
+<ul class='spaced-list'>
+	<li>Beans can now be serialized to and parsed from {@link org.apache.juneau.ObjectMap ObjectMaps}.
+		See <del>Serializing to ObjectMaps</del> for details.
+	<li>New {@link org.apache.juneau.ObjectMap#include(String[])} and {@link org.apache.juneau.ObjectMap#exclude(String[])} methods.
+	<li>{@link org.apache.juneau.html.annotation.Html @Html} annotations can now be applied to bean properties.
+	<li>New {@link org.apache.juneau.utils.IOPipe} utility class.
+	<li>Behavior change on <del><code>StringVarResolver</code></del>.  <jk>null</jk> input now results in blank strings instead of <jk>null</jk>.
+</ul>
+
+<h5 class='topic w800'>Client</h5>
+<ul class='spaced-list'>
+	<li>New {@link org.apache.juneau.rest.client.RestClient#doCallback(String)} method.
+</ul>
+
+<h5 class='topic w800'>Server</h5>
+<ul class='spaced-list'>
+	<li>New {@link org.apache.juneau.rest.RestRequest#getHeaders()} method.
+	<li>New <code>RestResponse.getUnbufferedWriter()</code> method.
+	<li>Fixed bug that was preventing <code>x-response-headers</code> parameter from working correctly.
+	<li>Added {@link org.apache.juneau.annotation.Bean#properties() @Bean.properties} annotations to the various 
+		classes in <code>org.apache.juneau.rest.labels</code> so that the order of the bean properties are consistent
+		on all JVMs.  On IBM JVMs this is unnecessary because the order of the properties as defined in the class
+		are stored in the bytecode.  Other JVMs such as OpenJRE do not implement this feature causing the bean
+		properties to be in random order.
+	<li>New <code><del>ResourceDescription.ResourceDescription(RestRequest,String,String)</del></code> constructor.
+</ul>

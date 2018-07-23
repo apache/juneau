@@ -1,0 +1,46 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+@Header
+
+<p>
+	The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
+</p>
+<p>
+	This is functionally equivalent to the following code:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
+		RequestHeaders h = req.getHeaders();
+		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	}
+</p>
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	to POJOs and controls what POJO types are supported.
+	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+</p>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
+	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+</ul>

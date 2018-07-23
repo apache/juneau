@@ -1,0 +1,112 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Method Return Types
+
+<p>
+	The return type can be any serializable POJO as defined in <a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a>.
+	<br>It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
+	setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public</jk> String doGet() {
+		<jk>return</jk> <js>"Hello World!"</js>;
+	}
+</p>
+<p>
+	Out-of-the-box, besides POJOs, the following return types are handled as special cases:
+</p>
+<ul class='spaced-list'>
+	<li class='jc'>{@link java.io.InputStream}
+		<br>The contents are simply piped to the output stream returned by 
+		{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
+		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+		the <l>Content-Type</l> header if you use this object type.
+	<li class='jc'>{@link java.io.Reader}
+		<br>The contents are simply piped to the output stream returned by 
+		{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
+		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+		the <l>Content-Type</l> header if you use this object type.
+	<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
+		<br>Represents an HTTP redirect response.
+	<li class='jc'>{@link org.apache.juneau.Streamable}
+		<br>Interface that identifies that an object can be serialized directly to an output stream.
+	<li class='jc'>{@link org.apache.juneau.Writable}
+		<br>Interface that identifies that an object can be serialized directly to a writer.
+	<li class='jc'>{@link org.apache.juneau.utils.ZipFileList}
+		<br>Special interface for sending zip files as responses.
+</ul>
+<p>
+	This is controlled through the following extensible API:
+</p>
+<ul class='doctree'>
+	<li class='jic'>{@link org.apache.juneau.rest.ResponseHandler}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.rest.response.DefaultHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.response.InputStreamHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.response.ReaderHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.response.RedirectHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.response.StreamableHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.response.WritableHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.response.ZipFileListResponseHandler}
+	</ul>
+</ul>
+<p>
+	REST Java methods can generate output in any of the following ways:
+</p>
+<ul class='spaced-list'>
+	<li>
+		By returning a serializable POJO, or any of the following:
+		<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link org.apache.juneau.Streamable}, 
+		{@link org.apache.juneau.Writable} 
+	<li>
+		By calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} with any of the types above.
+	<li>
+		By accessing the {@link java.io.Writer} directly by calling 
+		{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output yourself.
+</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<jc>// Equivalent method 1</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{personId}"</js>)
+	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
+		Person p = getPersonById(personId);
+		<jk>return</jk> p;
+	}
+
+	<jc>// Equivalent method 2</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{personId}"</js>)
+	<jk>public void</jk> doGet2(RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
+		Person p = getPersonById(personId);
+		res.setOutput(p);
+	}
+
+	<jc>// (Sorta) Equivalent method 3</jc>
+	<jc>// (Ignores any converters or method-level properties)</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{personId}"</js>)
+	<jk>public void</jk> doGet3(RestRequest req, RestResponse res, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
+		Person p = getPersonById(personId);
+		String accept = req.getHeader(<js>"Accept"</js>, <js>"text/json"</js>);
+		WriterSerializer s = res.getSerializerGroup().getWriterSerializer(accept);
+		res.setContentType(s.getResponseContentType());
+		s.serialize(p, res.getNegotiatedWriter());
+	}
+</p>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers} - For configuring custom response handlers.
+</ul>

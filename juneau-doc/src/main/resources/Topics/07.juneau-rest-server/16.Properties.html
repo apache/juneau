@@ -1,0 +1,128 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Properties
+
+<p>
+	As shown in previous sections, Juneau serializers and parsers are highly-configurable through properties.
+	(See <a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a>)
+</p>
+<p>
+	These properties can be defined for serializers and parsers registered on a REST resource via the following:
+</p>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#properties()} 
+	<li class='jc'>{@link org.apache.juneau.rest.RestContextBuilder} - Various methods on the context builder.
+</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<jk>import static</jk> org.apache.juneau.BeanContext.*;
+	<jk>import static</jk> org.apache.juneau.serializer.Serializer.*;
+	<jk>import static</jk> org.apache.juneau.json.JsonSerializer.*;
+
+	<jc>// Servlet with properties applied</jc>
+	<ja>@RestResource</ja>(
+		properties={
+			<jc>// Bean properties should be sorted alphabetically.</jc>
+			<ja>@Property</ja>(name=<jsf>BEAN_sortProperties</jsf>, value=<js>"true"</js>),
+			
+			<jc>// Nulls should not be serialized</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_trimNulls</jsf>, value=<js>"true"</js>),
+
+			<jc>// Solidus characters should be escaped in JSON</jc>
+			<ja>@Property</ja>(name=<jsf>JSON_escapeSolidus</jsf>, value=<js>"true"</js>)
+		}
+	)
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {...}
+</p>
+<p>
+	The programmatic equivalent to this is:
+</p>
+<p class='bcode w800'>
+	<jc>// Servlet with properties applied</jc>
+	<ja>@RestResource</ja>(...)
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
+	
+		<jk>public</jk> MyRestServlet(RestContextBuilder builder) {
+			
+			builder
+				.sortProperties();  <jc>// Note: RestContextBuilder extends from BeanContextBuilder</jc>
+				.set(<jsf>SERIALIZER_trimNulls</jsf>, <jk>true</jk>);
+				.set(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>);
+		}
+	}
+</p>
+<p>
+	Properties can also be overridden at the Java method level:
+</p>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties()} 
+	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
+</ul>
+<p class='bcode w800'>
+	<jc>// GET method with method-level properties</jc>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>, path=<js>"/*"</js>,
+		properties={
+			<jc>// Bean properties should be sorted alphabetically.</jc>
+			<ja>@Property</ja>(name=<jsf>BEAN_sortProperties</jsf>, value=<js>"true"</js>),
+			
+			<jc>// Nulls should not be serialized</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_trimNulls</jsf>, value=<js>"true"</js>),
+
+			<jc>// Solidus characters should be escaped in JSON</jc>
+			<ja>@Property</ja>(name=<jsf>JSON_escapeSolidus</jsf>, value=<js>"true"</js>)
+		}
+	<jk>public</jk> Object doGet() {
+		...
+	}
+</p>
+<p>
+	Using the {@link org.apache.juneau.rest.RequestProperties} object:
+</p>
+<p class='bcode w800'>
+	<jc>// Access it from RestRequest.</jc>
+	<jk>public</jk> Object doGet(RestRequest req) {
+		RequestProperties properties = req.getProperties();
+		properties.put(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>);
+	}
+
+	<jc>// Or just pass in a RequestProperties object.</jc>
+	<jk>public</jk> Object doGet(RequestProperties properties) {
+		properties.put(<jsf>JSON_escapeSolidus</jsf>, <jk>true</jk>);
+	}
+</p>
+<p>
+	Properties set via {@link org.apache.juneau.rest.RequestProperties} are session-override
+	properties that are passed in through {@link org.apache.juneau.serializer.SerializerSessionArgs}
+	and {@link org.apache.juneau.parser.ParserSessionArgs} and can only be used on configuration settings
+	marked as <code>Session property: <jk>true</jk></code>.
+</p>			
+<p>
+	Properties are open-ended and can be used for other purposes.
+	<br>They're made available through the following methods:
+</p>
+<ul>
+	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getProperties()}
+	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties()}
+</ul>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#flags()} - Shorthand for boolean properties.
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags()} - Shorthand for boolean properties.
+	<li class='jc'>{@link org.apache.juneau.rest.RestContextProperties} 
+	<li class='jc'>{@link org.apache.juneau.rest.RestMethodProperties} 
+	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
+</ul>

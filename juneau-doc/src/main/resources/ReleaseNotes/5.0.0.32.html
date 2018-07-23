@@ -1,0 +1,66 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.32 (Oct 5, 2013)
+
+<p>
+	Juno 5.0.0.32 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>
+		New support for generating and consuming fully-compliant JSON-Schema documents.<br>
+		See <a class='doclink' href='org/apache/juneau/dto/jsonschema/package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a> for information.
+	</li>
+	<li>
+		New methods added to {@link org.apache.juneau.parser.Parser}:
+		<ul>
+			<li><code>org.apache.juneau.parser.Parser.parseMap(Object,int,Class,Class,Class)</code></li>
+			<li><code>org.apache.juneau.parser.Parser.parseCollection(Object,int,Class,Class)</code></li>
+		</ul>
+	</li>
+		<li>
+		{@link org.apache.juneau.annotation.Bean @Bean} annotation can now be defined on interfaces and inherited by subclasses.
+	</li>
+	<li>
+			Support for customizing serialized values for <code>Enums</code> through overriding <code>toString()</code> and <code>fromString()</code> on the enum class.<br>
+		Previously used <code>Enum.valueOf()</code> to convert strings back into <code>Enums</code>.<br>
+		Used for JSON-Schema support to allow {@link org.apache.juneau.dto.jsonschema.JsonType} enum to be serialized to lowercase per the specification (e.g. <js>"string"</js> instead of <js>"STRING"</js>).
+		</li>
+		<li>
+		{@link org.apache.juneau.dto.cognos Cognos} DTOs now have fluent-style bean setters.
+		</li>
+		<li>
+		Support for generic bean objects whose type was erased at compile time.<br> 
+		Previous behavior gave you an error message that the type could not be determined.<br>
+		New behavior assumes a type of <code>Object</code> when the type is erased.
+		</li>
+		<li>
+			Bug fixes:
+			<ul>
+				<li>
+				When duplicate fluent-style setters were defined with different parameter types (e.g. <code>setFoo(Foo f)</code>, <code>setFoo(Bar b)</code>), the {@link org.apache.juneau.BeanMap} API would sometime choose the wrong setter as the bean property setter. <br>
+				Now validates that the setter being chosen is the one whose return type matches the property getter.
+			</li>
+			<li>
+				Passing in <code>Accept</code> GET parameters with <js>'+'</js> (e.g. <code>&amp;Accept=text/json+simple</code>) wasn't working anymore.<br>
+				The <code>Accept</code> parameter is supposed to interpret spaces as <js>'+'</js> to allow you to not have to write <code>&amp;Accept=text/json%2Bsimple</code>.
+				</li>
+				<li>
+				Parsers would not set bean properties of abstract type {@link java.lang.Number}.<br> 
+				Now it detects the numeric type based on input and sets the value accordingly.		
+			</li>
+			</ul>
+	</li>
+</ul>	

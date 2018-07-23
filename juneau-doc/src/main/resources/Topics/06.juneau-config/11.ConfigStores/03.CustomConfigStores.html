@@ -1,0 +1,175 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Custom ConfigStores
+
+<p>
+	The <code>ConfigStore</code> API has been written to allow easy development of custom configuration storage classes.
+</p>
+<p>
+	The example below shows a starting point for an implementation based on polling a relational database.
+	<br>Completing it is left as an exercise:
+</p>
+<h5 class='figure'>Example Store Class:</h5>
+<p class='bcode w800'>
+	<jk>public class</jk> ConfigSqlStore <jk>extends</jk> ConfigStore {
+
+		<jc>// Configurable properties</jc>
+		<jk>static final</jk> String
+			<jsf>CONFIGSQLSTORE_jdbcUrl</jsf> = <js>"ConfigSqlStore.jdbcUrl.s"</js>,
+			<jsf>CONFIGSQLSTORE_tableName</jsf> = <js>"ConfigSqlStore.tableName.s"</js>,
+			<jsf>CONFIGSQLSTORE_nameColumn</jsf> = <js>"ConfigSqlStore.nameColumn.s"</js>,
+			<jsf>CONFIGSQLSTORE_valueColumn</jsf> = <js>"ConfigSqlStore.valueColumn.s"</js>,
+			<jsf>CONFIGSQLSTORE_pollInterval</jsf> = <js>"ConfigSqlStore.pollInterval.i"</js>;
+
+		<jc>// Instance fields</jc>
+		<jk>private final</jk> String <jf>jdbcUrl</jf>;
+		<jk>private final</jk> String <jf>tableName</jf>, <jf>nameColumn</jf>, <jf>valueColumn</jf>;
+		<jk>private final</jk> Timer <jf>watcher</jf>;
+		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
+
+	
+		<jc>// Constructor called from builder.</jc>
+		<jk>protected</jk> ConfigSqlStore(PropertyStore ps) {
+			<jk>super</jk>(ps);
+			
+			<jk>this</jk>.<jf>jdbcUrl</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, <js>"jdbc:derby:mydb"</js>);
+			<jk>this</jk>.<jf>tableName</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_tableName</jsf>);
+			<jk>this</jk>.<jf>nameColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_nameColumn</jsf>);
+			<jk>this</jk>.<jf>valueColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_valueColumn</jsf>);		
+
+			<jk>int</jk> pollInterval = getStringProperty(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, 600);
+			
+			TimerTask timerTask = <jk>new</jk> TimerTask() {
+				<ja>@Override</ja>
+				<jk>public void</jk> run() {
+					ConfigSqlStore.<jk>this</jk>.poll();
+				}
+			};
+
+			<jk>this</jk>.<jf>watcher</jf> = <jk>new</jk> Timer(<js>"MyTimer"</js>);
+			<jf>watcher</jf>.scheduleAtFixedRate(timerTask, 0, pollInterval * 10000);
+		}
+		
+		<jk>private synchronized void</jk> poll() {
+		
+			<jc>// Loop through all our entries and find the latest values.</jc>
+			<jk>for</jk> (Map.Entry&lt;String,String&gt; e : cache.entrySet()) {
+				String name = e.getKey();
+				String cacheContents = e.getValue();
+				String newContents = getDatabaseValue(name);
+				
+				<jc>// Change detected!</jc>
+				<jk>if</jk> (! cacheContents.equals(newContents)) 
+					update(name, newContents);
+			}
+			
+		}
+		
+		<jc>// Reads the value from the database.</jc>
+		<jk>protected</jk> String getDatabaseValue(String name) {
+			<jc>// Implement me!</jc>
+		}
+	
+		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		<jk>public synchronized</jk> String read(String name) {
+			String contents = <jf>cache</jf>.get(name);
+			<jk>if</jk> (contents == <jk>null</jk>) {
+				contents = getDatabaseValue(name);
+				update(name, contents);
+			}
+			<jk>return</jk> contents;
+		}
+	
+		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		<jk>public synchronized</jk> String write(String name, String expectedContents, String newContents) {
+	
+			<jc>// This is a no-op.</jc>
+			<jk>if</jk> (isEquals(expectedContents, newContents))
+				<jk>return null</jk>;
+			
+			String currentContents = read(name);
+			
+			<jk>if</jk> (expectedContents != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(currentContents, expectedContents)) 
+				<jk>return</jk> currentContents;
+			
+			update(name, newContents);
+			
+			<jc>// Success!</jc>
+			<jk>return null</jk>;
+		}
+	
+		
+		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		<jk>public synchronized</jk> ConfigSqlStore update(String name, String newContents) {
+			<jf>cache</jf>.put(name, newContents);
+			<jk>super</jk>.update(name, newContents);  <jc>// Trigger any listeners.</jc>
+			<jk>return this</jk>;
+		}
+		
+		<ja>@Override</ja> <jc>/* Closeable */</jc>
+		<jk>public synchronized void</jk> close() {
+			<jk>if</jk> (watcher != <jk>null</jk>)
+				watcher.cancel();
+		}
+	}
+</p>
+<p>
+	The purpose of the builder class is to simply set values in the {@link org.apache.juneau.PropertyStore}
+	that's passed to the <code>ConfigStore</code>:
+</p>
+<h5 class='figure'>Example Builder Class:</h5>
+<p class='bcode w800'>
+	<jk>public class</jk> ConfigSqlStoreBuilder <jk>extends</jk> ConfigStoreBuilder {
+
+		<jk>public</jk> ConfigSqlStoreBuilder() {
+			<jk>super</jk>();
+		}
+
+		<jk>public</jk> ConfigSqlStoreBuilder(PropertyStore ps) {
+			<jk>super</jk>(ps);
+		}
+
+		<jk>public</jk> ConfigSqlStoreBuilder jdbcUrl(String value) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_jdbcUrl</jsf>, value);
+			<jk>return this</jk>;
+		}
+
+		<jk>public</jk> ConfigSqlStoreBuilder tableName(String value) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_tableName</jsf>, value);
+			<jk>return this</jk>;
+		}
+
+		<jk>public</jk> ConfigSqlStoreBuilder nameColumn(String value) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_nameColumn</jsf>, value);
+			<jk>return this</jk>;
+		}
+
+		<jk>public</jk> ConfigSqlStoreBuilder valueColumn(String value) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_valueColumn</jsf>, value);
+			<jk>return this</jk>;
+		}
+
+		<jk>public</jk> ConfigSqlStoreBuilder pollInterval(<jk>int</jk> value) {
+			<jk>super</jk>.set(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, value);
+			<jk>return this</jk>;
+		}
+
+		<ja>@Override</ja> <jc>/* ContextBuilder */</jc>
+		<jk>public</jk> ConfigFileStore build() {
+			<jk>return new</jk> ConfigFileStore(getPropertyStore());
+		}
+	}
+</p>

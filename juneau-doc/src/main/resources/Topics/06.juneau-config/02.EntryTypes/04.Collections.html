@@ -1,0 +1,83 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Collections
+
+<p>
+	The following methods are provided for accessing maps and collections:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Type,Type...) getObject(String,Type,Type...)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Type,Type...) getObject(String,Parser,Type,Type...)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,T,Type,Type...)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Parser,Object,Type,Type...) getObjectWithDefault(String,T,Parser,Type,Type...)}
+	</ul>
+</ul>
+<p>
+	The <code>Type,Type...</code> arguments allow you to specify the component types for maps and collections.
+	<br><code>List</code> class arguments can be followed by zero or one arguments representing the entry types.
+	<br><code>Map</code> class arguments can be followed by zero or two arguments representing the key and value types.
+	<br>The arguments can be chained to produce any data structure consisting of maps, collections, or POJOs.
+</p>
+<p>
+	<br>Examples are shown below:
+</p>
+<ul class='spaced-list'>
+	<li><code>getObject(<js>"..."</js>, List.<jk>class</jk>)</code>
+		<br>Produces: <code>List&lt;?&gt;</code>
+	<li><code>getObject(<js>"..."</js>, LinkedList.<jk>class</jk>)</code>
+		<br>Produces: <code>LinkedList&lt;?&gt;</code>
+	<li><code>getObject(<js>"..."</js>, HashSet.<jk>class</jk>, Integer.<jk>class</jk>)</code>
+		<br>Produces: <code>HashSet&lt;Integer&gt;</code>
+	<li><code>getObject(<js>"..."</js>, Map.<jk>class</jk>)</code>
+		<br>Produces: <code>Map&lt;?,?&gt;</code>
+	<li><code>getObject(<js>"..."</js>, HashMap.<jk>class</jk>)</code>
+		<br>Produces: <code>HashMap&lt;?,?&gt;</code>
+	<li><code>getObject(<js>"..."</js>, LinkedHashMap.<jk>class</jk>, String.<jk>class</jk>, MyBean.<jk>class</jk>)</code>
+		<br>Produces: <code>LinkedHashMap&lt;String,MyBean&gt;</code> 
+	<li><code>getObject(<js>"..."</js>, HashMap.<jk>class</jk>, Integer.<jk>class</jk>, ArrayList.<jk>class</jk>, MyBean[].<jk>class</jk>)</code>
+		<br>Produces: <code>LinkedHashMap&lt;Integer,ArrayList&lt;MyBean[]&gt;&gt;</code> 
+</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ck>addresses</ck> = 
+		<cv>[
+			{
+				street: '123 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}</cv>,
+			<cv>{
+				street: '456 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}
+		]</cv>
+</p>
+<p class='bcode w800'>
+	List&lt;Address&gt; addresses = c.getObject(<js>"addresses"</js>, ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
+</p>
+<p>
+	Oftentimes, it might be useful to parse into the {@link org.apache.juneau.ObjectList} and {@link org.apache.juneau.ObjectMap}
+	classes that provide the various convenience methods for working with JSON-like data structures:
+</p>
+<p class='bcode w800'>
+	ObjectMap m = c.getObject(<js>"key1"</js>, ObjectMap.<jk>class</jk>);
+	ObjectList l = c.getObject(<js>"key2"</js>, ObjectList.<jk>class</jk>);
+</p>

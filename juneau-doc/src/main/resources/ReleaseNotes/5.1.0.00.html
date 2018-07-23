@@ -1,0 +1,67 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.1.0.0 (Jan 18, 2014)
+
+<p>
+	Juno 5.1.0.0 is a major update.
+</p>
+<h5 class='topic w800'>Major changes</h5>
+<ul class='spaced-list'>
+	<li>Brand new REST client API that uses Apache HttpClient for HTTP communication.<br>
+		The new client API is simply a thin layer on top of <code>HttpClient</code> that performs 
+		serialization and parsing using Juno parsers, but leaves all the details of the HTTP connection
+		to the Apache code. <br>
+		See the <del>org.apache.juneau.rest.client</del> package for details.
+	<li>New <code>org.apache.juneau.rest.client.jazz</code> package and <code>org.apache.juneau.rest.client.jazz.JazzRestClient</code> class
+		for performing REST operations against Jazz servers.<br>
+		Includes improved support for FORM authentication, and better SSL certificate validation.
+	<li>Completely redesigned URL-Encoding support.<br>
+		See <a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#TOC'>org.apache.juneau.urlencoding</a> package for details. 
+	<li>Changes to Parser API.
+	<ul>
+		<li>Removal of <code>ExtendedReaderParser</code> abstract class and moved methods into 
+			{@link org.apache.juneau.parser.ReaderParser} class.  
+		<li>Removal of <code>DataFormat</code> class from API since it was no longer necessary
+			due to API change above.
+		<li>Removal of <code>ParserStringReader</code> class.<br>
+			This was a reader optimized to work with <code>String</code> input.<br>
+			However, it could interfere with garbage collection of the original string object.<br>
+			Instead, the existing {@link org.apache.juneau.parser.ParserReader} was enhanced to work
+			well with <code>String</code> input, and tests show no significant performance differences.
+		<li>New <code>org.apache.juneau.parser.Parser.parse(Object,int,ClassMeta)</code> convenience method added.
+	</ul>
+</ul>	
+<h5 class='topic w800'>Other changes</h5>
+<ul class='spaced-list'>
+	<li>Various new methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
+	<li>Improved support on <code><del>BeanContext.getClassMetaFromString(String)</del></code>.<br>
+		Now supports resolving <code>"long[]"</code>, and so forth.
+	<li><code><del>ResourceDescription</del></code> name parameter is now automatically URL-encoded in links.
+	<li>{@link org.apache.juneau.rest.RestRequest} now correctly handles cases involving URL-encoded characters in the 
+		path info portion of URLs (e.g. <code>http://host/contextRoot/foo%2Fbar</code>).
+	<li>Removed lazy-initialization that required locking in {@link org.apache.juneau.ClassMeta}.  
+	<li>New <code>BeanContext.setDefaultParser(ReaderParser)</code> method added for specifying 
+		a default parser to use in a bean context (used when converting beans to <code>Strings</code> using 
+		<code><del>BeanContext.convertToType(Object,Class)</del></code>.
+		Old behavior simply used the default JSON serializer in these cases.
+	<li>More consistent handling of exceptions across all parsers.
+	<li>Minor changes to {@link org.apache.juneau.rest.RestRequest} class.
+	<ul>
+		<li>Changed the order of parameters on <del><code>RestRequest#getParameter(String,Class)</code></del>.
+		<li>Added <code>RestRequest.getMapParameter(String,Class,Class,Class)</code> and 
+			<code>RestRequest.getCollectionParameter(String,Class,Class)}</code> methods.
+	</ul>
+</ul>

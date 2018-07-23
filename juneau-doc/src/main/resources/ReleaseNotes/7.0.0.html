@@ -1,0 +1,54 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+7.0.0 (Oct 25, 2017)
+
+<p>
+	This release ups the Java prerequisite to Java 7.
+</p>
+
+<h5 class='topic w800'>juneau-marshall</h5>
+<ul class='spaced-list'>
+	<li>
+		New class {@link org.apache.juneau.http.HttpMethodName} with valid static string HTTP method names.
+</ul>
+
+<h5 class='topic w800'>juneau-dto</h5>
+<ul class='spaced-list'>
+	<li>
+		Class <code>org.apache.juneau.dto.Link</code> renamed to {@link org.apache.juneau.dto.LinkString}.
+		Helps avoid confusion since there are other Link classes in the library.
+</ul>
+
+<h5 class='topic w800'>juneau-rest-server</h5>
+<ul class='spaced-list'>
+	<li>
+		Annotation <code><ja>@HtmlDoc</ja>(links)</code> renamed to {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks}.
+	<li>
+		New annotation {@link org.apache.juneau.rest.annotation.HtmlDoc#head() @HtmlDoc.head()}.
+		<br>Allows you to specify arbitrary HTML content in the <xt>&lt;head&gt;</xt> section of the page.
+	<li>
+		Removed annotation <code><ja>@HtmlDoc</ja>(favIcon)</code>.
+		<br>This was a discouraged way of defining fav-icons anyway, and with the addition of 
+		<code><ja>@HtmlDoc</ja>(head)</code>, you can define them using:
+		<p class='bcode w800'>
+	head={
+		<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
+	}
+		</p>
+	<li>
+		Removed several of the HTMLDOC-related methods from the <code>RestResponse/RestConfig/RestContext</code>
+		classes and moved it into the new {@link org.apache.juneau.rest.HtmlDocBuilder} class.
+</ul>

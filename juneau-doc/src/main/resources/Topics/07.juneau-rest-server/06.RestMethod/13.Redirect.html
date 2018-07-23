@@ -1,0 +1,67 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Redirect
+
+<p>
+	The {@link org.apache.juneau.rest.helper.Redirect} object is a convenience shortcut for performing <code>HTTP 302</code> redirects.
+</p>
+<p>
+	<l>Redirect</l> objects are handled by the {@link org.apache.juneau.rest.response.RedirectHandler} class.
+	<br>This allows these objects to be returned as responses by REST methods.
+</p>
+<p>
+	The following example shows the difference between handling redirects via <l>RestResponse</l> and the simplified approach of using this class.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<jc>// Redirect to "/contextPath/servletPath/foobar"</jc>
+
+	<jc>// Using RestRequest/RestResponse</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> redirectExample1(RestRequest req, RestResponse res) <jk>throws</jk> IOException {
+		res.sendRedirect(req.getServletURI() + <js>"/foobar"</js>);
+	}
+	
+	<jc>// Using Redirect</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Redirect redirectExample2() {
+		<jk>return new</jk> Redirect(<js>"foobar"</js>);
+	}
+</p>
+<p>
+	The constructor can use a <l>MessageFormat</l>-style pattern with multiple arguments.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Redirect redirectExample3() {
+		<jk>return new</jk> Redirect(<js>"foo/{0}/bar/{1}"</js>, id1, id2);
+	}
+</p>
+<p>
+	The arguments are automatically URL-encoded.
+</p>
+<p>
+	Redirecting to the servlet root can be accomplished by simply using the no-arg constructor.
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<jc>// Simply redirect to the servlet root.
+	// Equivalent to res.sendRedirect(req.getServletURI()).</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Redirect redirectExample4() {
+		<jk>return new</jk> Redirect();
+	}
+</p>

@@ -1,0 +1,64 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Instantiation
+
+<p>
+	REST resources are deployed in one of two ways:
+</p>
+<ul class='spaced-list'>
+	<li>Deployed in a J2EE container as a servlet.
+	<li>Deployed as a child of another REST resource.
+</ul>
+<p>
+	When deployed in a J2EE container, you MUST extend from one of the servlet classes.
+</p>
+<p>
+	<b>When deployed as a child of another resource, you MAY extend from one of the servlet classes but it's 
+	not necessary.</b>
+	<br>The only requirement is that the class be annotated with <ja>@RestResource</ja> and have one of the following constructors:
+</p>
+<ul>
+	<li class='jm'><code><jk>public</jk> T()</code>
+	<li class='jm'><code><jk>public</jk> T(RestContextBuilder)</code>
+</ul>
+<p>
+	And even that requirement is relaxed if you implement your own REST resource resolver (described later).
+</p>
+<p>
+	For example:
+</p>
+<p class='bcode w800'>
+	<jc>// Top level resource is deployed like any other servlet and must subclass from RestServlet.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/top"</js>,
+		children={
+			ChildResource.<jk>class</jk>  <jc>// Accessed via URI "/top/child"</jc>
+		}
+	)
+	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
+</p>
+<p class='bcode w800'>
+	<jc>// Child resources can inherit from RestServlet but it's not a requirement.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/child"</js>
+	)
+	<jk>public class</jk> ChildResource <jk>extends</jk> WhateverYouWant {...}
+</p>		
+<p>
+	That's all there is to it!
+	There's no code scanning, module configuration/initialization classes, or anything complex like that.
+	It's just a servlet.
+</p>

@@ -1,0 +1,124 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+ObjectMap and ObjectList
+
+<p>
+	The {@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} classes are generic Java 
+	representations of JSON objects and arrays.  
+	These classes can be used to create "unstructured" models for serialization (as opposed to "structured" 
+	models consisting of beans).  
+	If you want to quickly generate JSON/XML/HTML from generic maps/collections, or parse JSON/XML/HTML into 
+	generic maps/collections, these classes work well.  
+</p>
+<p>
+	These classes extend directly from the following JCF classes:
+</p>
+<ul class='doctree'>
+	<li class='jc'> 
+		{@link java.util.LinkedHashMap java.util.LinkedHashMap}
+		<ul>
+			<li class='jc'> 
+			{@link org.apache.juneau.ObjectMap org.apache.juneau.ObjectMap}
+		</ul>
+	</li>
+	<li class='jc'> 
+		{@link java.util.LinkedList java.util.LinkedList}
+		<ul>
+			<li class='jc'> 
+				{@link org.apache.juneau.ObjectMap org.apache.juneau.ObjectList}
+		</ul>
+	</li>
+</ul>
+<p>
+	The <l>ObjectMap</l> and <l>ObjectList</l> classes are very similar to the <l>JSONObject</l> and 
+	<l>JSONArray</l> classes found in other libraries.  
+	However, the names were chosen because the concepts of <l>Maps</l> and <l>Lists</l> are already familiar to 
+	Java programmers, and these classes can be used with any of the serializers or parsers.
+</p>
+<p>
+	These object can be serialized in one of two ways:
+</p>
+<ol class='spaced-list'>
+	<li>
+		Using the provided {@link org.apache.juneau.ObjectMap#serializeTo(java.io.Writer)} or 
+		{@link org.apache.juneau.ObjectList#serializeTo(java.io.Writer)} methods.
+	<li>
+		Passing them to one of the {@link org.apache.juneau.serializer.Serializer} serialize methods.
+	<li>
+		Simply calling the {@link org.apache.juneau.ObjectMap#toString()} or {@link org.apache.juneau.ObjectList#toString()}
+		methods which will serialize it as Simplified JSON.
+</ol>
+<p>
+	Any valid JSON can be parsed into an unstructured model consisting of generic 
+	{@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} objects. 
+	<br>
+	(In theory, any valid XML can also be parsed into an unstructured model, although this has not been 
+	officially 'tested')
+</p>
+<p class='bcode w800'>
+	<jc>// Parse an arbitrary JSON document into an unstructered data model
+	// consisting of ObjectMaps, ObjectLists, and java primitive objects.</jc>
+	Parser parser = JsonParser.<jsf>DEFAULT</jsf>;
+	String json = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
+	ObjectMap m = parser.parse(json, ObjectMap.<jk>class</jk>);
+
+	<jc>// Use ObjectMap API to extract data from the unstructured model.</jc>
+	<jk>int</jk> johnSmithAge = m.getObjectMap(<js>"a"</js>).getInt(<js>"age"</js>);
+	
+	<jc>// Convert it back into JSON.</jc>
+	json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(m);
+	
+	<jc>// Or convert it to XML.</jc>
+	String xml = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
+
+	<jc>// Or just use toString().</jc>
+	json = m.toString();
+</p>
+<p>
+	The <code>ObjectMap</code> and <code>ObjectList</code> classes have many convenience features:
+</p>
+<p class='bcode w800'>	
+	<jc>// Convert the map to a bean.</jc>		
+	MyBean m = objectMap.cast(MyBean.<jk>class</jk>);
+			
+	<jc>// Find entries by multiple keys.</jc>
+	MyBean m = objectMap.find(MyBean.<jk>class</jk>, <js>"key1"</js>, <js>"key2"</js>);
+	
+	<jc>// Fluent-style appenders.</jc>
+	objectMap.append(<js>"key1"</js>, <js>"val1"</js>).append(<js>"key2"</js>, <js>"val2"</js>);
+			
+	<jc>// REST-like functions for manipulating nodes in the data structure using URL-like notation.</jc>
+	objectMap.getAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+	objectMap.putAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+	objectMap.postAt(<js>"foo/bar/myListOfBeans"</js>, MyBean.<jk>class</jk>);		
+	objectMap.deleteAt(<js>"foo/bar/myBean"</js>);		
+	
+	<jc>// Copy with inclusion or exclusion.</jc>
+	ObjectMap m2 = objectMap.include(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+	ObjectMap m3 = objectMap.exclude(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+	
+	<jc>// Serialize using another serializer.</jc>
+	String xml = objectMap.serializeTo(XmlSerializer.<jsf>DEFAULT</jsf>);
+	
+	<jc>// Nested maps.</jc>
+	objectMap.setInner(objectMapInner);
+</p>
+
+<ul class='doctree'>
+	<li class='info'>
+		As a general rule, if you do not specify a target type during parsing, or if the target type cannot be 
+		determined through reflection, the parsers automatically generate <l>ObjectMaps</l> and <l>ObjectLists</l>.
+</ul>

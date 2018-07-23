@@ -1,0 +1,64 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+RequestQuery
+
+<p>
+	The {@link org.apache.juneau.rest.RequestQuery} object is the API for accessing the GET query parameters of an HTTP request.
+	<br>It can be accessed by passing it as a parameter on your REST Java method:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestQuery query) {...}			
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestQuery query) {
+
+		<jc>// Get query parameters converted to various types.</jc>
+		<jk>int</jk> p1 = query.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String p2 = query.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID p3 = query.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	 }			
+</p>
+<p>
+	An important distinction between the behavior of this object and <l>HttpServletRequest.getParameter(String)</l> is
+	that the former will NOT load the body of the request on FORM POSTS and will only look at parameters
+	found in the query string.
+	<br>This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to 
+	inadvertently read the body of the request to get a query parameter.
+</p>
+<p>
+	Some important methods on this class are:
+</p>
+<ul class='doctree'>
+	<li class='jc'><code>{@link org.apache.juneau.rest.RequestQuery} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</code>
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Class) get(String,Class)} - Get query parameter value converted to a POJO.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#get(String,Type,Type...) get(String,Type,Type)} - Get query parameter value converted to a map or collection of POJOs.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getString(String,String) getString(String,String)} - Get query parameter value as a simple string.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getInt(String,int) getInt(String,int)} - Get query parameter value as an integer.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getBoolean(String,boolean) getBoolean(String,boolean)} - Get query parameter value as a boolean.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a query parameter.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestQuery#getSearchArgs() getSearchArgs()} - Returns query parameter search arguments.
+	</ul>
+</ul>
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
+</ul>

@@ -1,0 +1,174 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+6.0.0 (Oct 3, 2016)
+
+<p>
+	Juneau 6.0.0 is a major update.
+</p>
+<p>
+	The major change is rebranding from "Juno" to "Juneau" in preparation for donation to the Apache Foundation.
+</p>
+
+<h5 class='topic w800'>org.apache.juneau</h5>
+<ul class='spaced-list'>
+	<li>Major changes around how serializer and parser class properties are defined to improve performance
+		and concurrency.
+		<ul>
+			<li>New {@link org.apache.juneau.PropertyStore} class - Used for creating context objects.
+			<li>New {@link org.apache.juneau.Context} class - Read-only configurations for serializers and parsers.
+			<li>New {@link org.apache.juneau.Session} class - One-time use objects used by serializers and parsers.
+			<li>All context context properties can now also be specified via system properties.
+		</ul>
+	</li>
+	<li>Refactored serializer and parser APIs for more consistency between stream-based and character-based serializers
+		and parsers.
+		<ul>
+			<li>More consistent handling of exceptions.
+			<li>More consistent method declarations.
+		</ul>
+	<li>Refactored var resolver API and added them to a new package - <code>org.apache.juneau.svl</code>.
+		<ul>
+			<li>Support for stream-based variables - {@link org.apache.juneau.svl.StreamedVar}.
+			<li>Added support for context and session objects.
+		</ul>
+	<li>Eliminated <js>"_class"</js> properties and replaced them with <js>"_type"</js> properties.
+		The class properties were a little-used feature where we would serialize fully-qualified class names when the class type could not be inferred through reflection.  
+		It's been replaced with bean type names and bean dictionaries.
+		Instead of class names, we serialize <js>"_type"</js> properties whose name is the type name defined on the bean being serialized.  
+		The parsers use a 'dictionary' of bean classes to resolve those names to actual bean classes.
+		The following features were added to enable this support:
+		<ul>
+			<li>{@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()} - Annotation that defines an identifying name for a bean class.
+			<li>{@link org.apache.juneau.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
+			<li>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
+				during parsing. 
+			<li>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
+			<li>{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} - Define a type dictionary
+				for a particular bean property value.  This overrides the value specified using {@link org.apache.juneau.BeanContext#BEAN_beanDictionary}.
+			<li><code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> - Controls whether type properties are serialized.
+		</ul>
+		In addition, the {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()} value replaces the <code>@Xml.name()</code> annotation, and the 
+		<js>"type"</js> and <js>"_class"</js> attributes in the XML and HTML serializers have been standardized on a single <js>"_type"</js> attribute.
+	<li>Refactor bean filter support to use {@link org.apache.juneau.transform.BeanFilterBuilder} class.
+		Allows the <code>BeanFilter</code> class to use final fields.
+	<li>{@link org.apache.juneau.msgpack MessagePack} support.
+	<li>Serializers can now serialize directly to {@link java.io.File Files}.
+		See {@link org.apache.juneau.serializer.Serializer#serialize(Object,Object)}
+	<li>Parsers can now parse directly from {@link java.io.File Files} and other types.
+		See {@link org.apache.juneau.parser.Parser#parse(Object,ClassMeta)}
+	<li>Parsers will automatically covert numeric input to POJOs that have numeric constructors (e.g. <code>java.util.Date</code>).
+	<li>Renamed 'Filters' to 'BeanFilters' and 'PojoSwaps'.  Filters is just too overloaded a term.
+	<li>Internal utility classes moved to a new <code>org.apache.juneau.internal</code> package.
+		These internal utility classes are not meant for consumption outside the Juneau codebase.
+	<li>New methods on {@link org.apache.juneau.parser.Parser}:
+		<ul>
+			<li><code>org.apache.juneau.parser.Parser.createSession(ObjectMap,Method,Object)</code>
+			<li><code><del>Parser.getMediaRanges()</del></code>
+		</ul>
+	</li>
+	<li>New methods on {@link org.apache.juneau.serializer.Serializer}:
+		<ul>
+			<li><code>org.apache.juneau.serializer.Serializer.createSession(ObjectMap,Method)</code>
+			<li><code><del>Serializer.getMediaRanges()</del></code>
+		</ul>
+	</li>
+	<li>New {@link org.apache.juneau.annotation.Bean#sort() @Bean.sort()} annotation.
+	<li>Added <ja>@Bean.properties</ja> annotations on various DTO beans to make the ordering consistent
+		between IBM and Oracle JVMs.<br>
+		IBM JVMs maintain the order of methods in a class, whereas Oracle JVMs do not.
+	<li>Serializers and parsers now automatically convert {@link java.lang.Class} objects to readable names via {@link org.apache.juneau.internal.ClassUtils#getReadableClassName(Class)}.
+	<li>Eliminated the <code>ClassFilter</code> class since it's no longer needed.
+	<li>Code and concurrency improvements to {@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup}.
+	<li>Various enhancements to <code><del>BeanContext.convertToType(Object,Class)</del></code>.
+	<li>New properties on {@link org.apache.juneau.html.HtmlSerializer}:
+		<ul>
+			<li><code><del>HtmlSerializerContext.HTML_detectLinksInStrings</del></code> - Automatically detect hyperlinks in strings.
+			<li><code><del>HtmlSerializerContext.HTML_lookForLabelParameters</del></code> - Specify anchor text by appending <code>&amp;label=MyLabel</code> to URL.
+			<li><code><del>HtmlSerializerContext.HTML_labelParameter</del></code> - Specify what URL parameter to use as the anchor text label.
+			<li><code><del>HtmlSerializerContext.URI_ANCHOR</del></code> option for <code><del>HtmlSerializerContext.HTML_uriAnchorText</del></code>.				
+		</ul>
+	</li>
+	<li>Removed generics from {@link org.apache.juneau.BeanPropertyMeta}.
+	<li>Introduced new classes to eliminate the references to language-specific metadata in the core metadata classes:
+		<ul>
+			<li>{@link org.apache.juneau.ClassMetaExtended} / {@link org.apache.juneau.ClassMeta#getExtendedMeta(Class)} 
+			<li>{@link org.apache.juneau.BeanMetaExtended} / {@link org.apache.juneau.BeanMeta#getExtendedMeta(Class)} 
+			<li>{@link org.apache.juneau.BeanPropertyMetaExtended} / {@link org.apache.juneau.BeanPropertyMeta#getExtendedMeta(Class)} 
+		</ul>
+	</li>
+	<li>Renamed <code>@Transform</code> annotation to <code><del>@Pojo</del></code> so that it can be used for various POJO-related behavior, not just associating transforms.  
+	<li>Introduced {@link org.apache.juneau.dto.swagger Swagger DTOs}.
+</ul>		
+
+<h5 class='topic w800'>org.apache.juneau.rest</h5>
+<ul class='spaced-list'>
+	<li>OPTIONS pages replaced with Swagger documents.
+		Lots of changes related to supporting Swagger.
+		<ul>
+			<li>Annotation name changes to conform to Swagger specs:  <ja>@Attr</ja>-&gt;<ja>@Path</ja>, <ja>@QParam</ja>-&gt;<ja>@Query</ja>, <ja>@Param</ja>-&gt;<ja>@FormData</ja>, <ja>@Content</ja>-&gt;<ja>@Body</ja>
+			<li>Eliminated <code>ResourceOptions</code> and related code.
+			<li>New annotations and related methods:
+				<ul>
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#title() @RestResource.title()} / {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}
+					<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()} / {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
+					<li><code><del>@RestResource.termsOfService()</del></code> / <code><del>RestInfoProvider.getTermsOfService(RestRequest)</del></code>
+					<li><code><del>@RestResource.contact()</del></code> / <code><del>RestInfoProvider.getContact(RestRequest)</del></code>
+					<li><code><del>@RestResource.license()</del></code> / <code><del>RestInfoProvider.getLicense(RestRequest)</del></code>
+					<li><code><del>@RestResource.version()</del></code> / <code><del>RestInfoProvider.getVersion(RestRequest)</del></code>
+					<li><code><del>@RestResource.tags()</del></code> / <code><del>RestInfoProvider.getTags(RestRequest)</del></code>
+					<li><code><del>@RestResource.externalDocs()</del></code> / <code><del>RestInfoProvidergetExternalDocs(RestRequest)</del></code>
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#summary() @RestMethod.summary()} / <code><del>RestInfoProvider.getMethodSummary(String,RestRequest)</del></code>
+					<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()} /<code><del>RestInfoProvider.getMethodDescription(String,RestRequest)</del></code>
+					<li><code><del>@RestMethod.externalDocs()</del></code>
+					<li><code><del>@RestMethod.tags()</del></code>
+					<li><code><del>@RestMethod.deprecated()</del></code> 
+					<li><code><del>@RestMethod.parameters()</del></code> 
+					<li><code><del>@RestMethod.responses()</del></code>
+				</ul>
+			</li>					
+		</ul>
+	<li>New <code><del>RestServletContext.paramFormat</del></code> context property.
+	<li>New/updated methods on {@link org.apache.juneau.rest.RestServlet}:
+		<ul>
+			<li><code><del>RestServlet.createProperties()</del></code>
+			<li><code><del>RestServlet.createBeanContext(ObjectMap,Class[],Class[])</del></code>
+			<li><code><del>RestServlet.createBeanFilters()</del></code>
+			<li><code><del>RestServlet.createPojoSwaps()</del></code>
+			<li><code><del>RestServlet.createParsers(ObjectMap,Class[],Class[])</del></code>
+			<li><code><del>RestServlet.createUrlEncodingSerializer(ObjectMap,Class[],Class[])</del></code>
+			<li><code><del>RestServlet.createUrlEncodingParser(ObjectMap,Class[],Class[])</del></code>
+			<li><code><del>RestServlet.createConverters(ObjectMap)</del></code>
+			<li><code><del>RestServlet.createDefaultRequestHeaders(ObjectMap)</del></code>
+			<li><code><del>RestServlet.createDefaultResponseHeaders(ObjectMap)</del></code>
+			<li><code><del>RestServlet.createEncoders(ObjectMap)</del></code>
+			<li><code><del>RestServlet.createGuards(ObjectMap)</del></code>
+			<li><code><del>RestServlet.createMimetypesFileTypeMap(ObjectMap)</del></code>
+			<li><code><del>RestServlet.createResponseHandlers(ObjectMap)</del></code>
+		</ul>
+	</li>
+	<li>New client-version annotations:
+		<ul>
+			<li>{@link org.apache.juneau.rest.annotation.RestResource#clientVersionHeader}  - The name of the header used to identify the client version.
+			<li>{@link org.apache.juneau.rest.annotation.RestMethod#clientVersion}  - The client version range applied to a Java method.
+		</ul>
+	</li>
+</ul>
+
+<h5 class='topic w800'>org.apache.juneau.rest.client</h5>
+<ul class='spaced-list'>
+	<li>Removed the <code>JazzRestClient</code> class.
+	<li>New method <code><del>RestClient.setClientVersion(String)</del></code>.
+</ul>		

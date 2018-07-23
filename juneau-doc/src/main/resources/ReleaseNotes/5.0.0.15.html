@@ -1,0 +1,34 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.15 (Mar 24, 2013)
+
+<p>
+	Juno 5.0.0.15 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>		
+		Juno-Wink integration components that have been requested by many for a long time!<br>
+		Refer to <del>org.apache.juneau.rest.jaxrs</del> for information.
+	</li>
+	<li>
+		New <code><del>@Produces</del></code> annotation in place of <code>ISerializer.getMediaTypes()</code> for specifying what media types a serializer produces.<br>
+		Available when subclassing from {@link org.apache.juneau.serializer.Serializer}.
+	</li>
+	<li>
+		New <code><del>@Consumes</del></code> annotation in place of <code>IParser.getMediaTypes()</code> for specifying what media types a parser consumes.<br>
+		Available when subclassing from {@link org.apache.juneau.parser.Parser}.
+	</li>
+</ul>

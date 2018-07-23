@@ -1,0 +1,128 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Parsers
+
+<p>
+	Parsers work by parsing input directly into POJOs instead of having to create intermediate Document Object 
+	Models.
+	This allows them to parse input with minimal object creation.
+</p>
+<p>
+	Like the serializers, you can often parse objects in one line of code by using one of the default parsers:
+</p>
+<p class='bcode w800'>
+	<jc>// Use one of the predefined parsers.</jc>
+	Parser parser = JsonParser.<jsf>DEFAULT</jsf>;
+
+	<jc>// Parse a JSON object as a bean.</jc>
+	String json = <js>"{name:'John Smith',age:21}"</js>;
+	Person p = parser.parse(json, Person.<jk>class</jk>);
+
+	<jc>// Or parse it into a generic Map.</jc>
+	Map m1 = parser.parse(json, Map.<jk>class</jk>);
+
+	<jc>// Parse a JSON string.</jc>
+	json = <js>"'foobar'"</js>;
+	String s2 = parser.parse(json, String.<jk>class</jk>);
+
+	<jc>// Parse a JSON number as a Long or Float.</jc>
+	json = <js>"123"</js>;
+	Long l3 = parser.parse(json, Long.<jk>class</jk>);
+	Float f3 = parser.parse(json, Float.<jk>class</jk>);
+
+	<jc>// Parse a JSON object as a HashMap&lt;String,Person&gt;.</jc>
+	json = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
+	Map&lt;String,Person&gt; m4 = parser.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, Person.<jk>class</jk>)
+
+	<jc>// Parse a JSON object as a HashMap&lt;String,LinkedList&lt;Person&gt;&gt;.</jc>
+	json = <js>"{a:[{name:'John Smith',age:21},{name:'Joe Smith',age:42}]}"</js>;
+	Map&lt;String,List&lt;Person&gt;&gt; m5 = parser.parse(json, HashMap.<jk>class</jk>, String.<jk>class</jk>, 
+		LinkedList.<jk>class</jk>, Person.<jk>class</jk>)
+
+	<jc>// Parse a JSON array of integers as a Collection of Integers or int[] array.</jc>
+	json = <js>"[1,2,3]"</js>;
+	List&lt;Integer&gt; l6 = parser.parse(json, LinkedList.<jk>class</jk>, Integer.<jk>class</jk>);
+	<jk>int</jk>[] i7 = parser.parse(json, <jk>int</jk>[].<jk>class</jk>);
+</p>
+<p>
+	The parsers can also be used to populating existing bean and collection objects:
+</p>
+<p class='bcode w800'>
+	<jc>// Use one of the predefined parsers.</jc>
+	Parser parser = JsonParser.<jsf>DEFAULT</jsf>;
+
+	<jc>// Populate the properties on an existing bean from a JSON object.</jc>
+	String json = <js>"{name:'John Smith',age:21}"</js>;
+	Person p = <jk>new</jk> Person();
+	parser.parseIntoBean(json, p);
+
+	<jc>// Populate an existing list from a JSON array of numbers.</jc>
+	json = <js>"[1,2,3]"</js>;
+	List&lt;Integer&gt; l2 = <jk>new</jk> LinkedList&lt;Integer&gt;();
+	parser.parseIntoCollection(json, l2, Integer.<jk>class</jk>);
+
+	<jc>// Populate an existing map from a JSON object containing beans.</jc>
+	json = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
+	Map&lt;String,Person&gt; m3 = <jk>new</jk> TreeMap&lt;String,Person&gt;();
+	parser.parseIntoMap(json, m3, String.<jk>class</jk>, Person.<jk>class</jk>);
+</p>
+<ul class='doctree'>
+	<li class='info'>
+		In the example above, we're parsing "lax" JSON (single quotes, unquoted attributes).
+		The JSON parser can handle any valid JSON syntax (such as quoted or unquoted attributes, single or double 
+		quotes).
+		<br>It can also handle JSON fragments and embedded Javascript comments. 
+		Many of the JSON examples provided will use lax syntax which is easier to read since we don't have to deal 
+		with escapes.  
+</ul>
+
+<p>
+	The class hierarchy for the parsers (excluding specialized subclasses) are:
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.parser.Parser}
+	<ul>
+		<li class='jac'>{@link org.apache.juneau.parser.ReaderParser}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.json.JsonParser}
+			<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextParser}
+			<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}
+				<li class='jc'>{@link org.apache.juneau.jena.N3Parser}
+				<li class='jc'>{@link org.apache.juneau.jena.NTripleParser}
+				<li class='jc'>{@link org.apache.juneau.jena.TurtleParser}
+			</ul>
+			<li class='jc'>{@link org.apache.juneau.uon.UonParser}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser}
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
+			</ul>
+			<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.html.HtmlParser}
+			</ul>
+		</ul>
+		<li class='jac'>{@link org.apache.juneau.parser.InputStreamParser}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.jso.JsoParser}
+			<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}
+		</ul>
+	</ul>
+</ul>		

@@ -1,0 +1,78 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Arrays
+
+<p>
+	The following methods are provided for accessing arrays:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.Config#getStringArray(String) getStringArray(String)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getStringArray(String,String[]) getStringArray(String,String)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Class) getObject(String,Class)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
+	</ul>
+</ul>
+<p>
+	The <code>getStringArray()</code> methods allow you to retrieve comma-delimited lists of values:
+<p class='bcode w800'>
+	<ck>key1</ck> = <cv>foo, bar, baz</cv>
+</p>
+<p class='bcode w800'>
+	String[] key1 = c.getStringArray(<js>"key1"</js>);
+</p>
+<p>
+	String arrays can also be represented in JSON when using the <code>getObject()</code> methods:
+</p>
+<p class='bcode w800'>
+	<ck>key1</ck> = <cv>['foo','bar','baz']</cv>
+</p>
+<p class='bcode w800'>
+	String[] key1 = c.getObject(<js>"key1"</js>, String.<jk>class</jk>);
+</p>
+<p>
+	Primitive arrays can also be retrieved using the <code>getObject()</code> methods:
+</p>
+<p class='bcode w800'>
+	<ck>key1</ck> = <cv>[1,2,3]</cv>
+</p>
+<p class='bcode w800'>
+	<jk>int</jk>[] key1 = c.getObject(<js>"key1"</js>, <jk>int</jk>[].<jk>class</jk>);
+</p>
+<p>
+	Arrays of POJOs can also be retrieved using the <code>getObject()</code> methods:
+</p>
+<p class='bcode w800'>
+	<ck>addresses</ck> = 
+		<cv>[
+			{
+				street: '123 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}</cv>,
+			<cv>{
+				street: '456 Main Street',
+				city: 'Anywhere',
+				state: 'NY',
+				zip: 12345
+			}
+		]</cv>
+</p>
+<p class='bcode w800'>
+	Address[] addresses = c.getObject(<js>"addresses"</js>, Address[].<jk>class</jk>);
+</p>

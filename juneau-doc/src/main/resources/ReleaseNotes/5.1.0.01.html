@@ -1,0 +1,32 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.1.0.1 (Jan 25, 2014)
+
+<p>
+	Juno 5.1.0.1 is a minor update.
+</p>
+<ul class='spaced-list'>
+	<li>Addressed some behavioral differences between Tomcat and WAS.  
+	<ul>
+		<li>Query parameter lookup is now always case-insensitive (per WAS behavior).
+		<li>Consistent handling of redirect requests (Tomcat and WAS handle relative redirect paths differently).
+	</ul>
+	<li>Fixed bug involving incorrect resolution of overlapping URL match patterns.
+	<li>Overall improvements in HTTP request parameter and header value resolution.  
+	<li>Made workspace changes so as not to be dependent on the WAS test environment being loaded.
+	<li>Renamed <ja>@Remainder</ja> annotation to <code><del>@PathRemainder</del></code>.
+	<li>Fixed bug involving incorrect calculation of <code>pathInfo</code> on child resources.
+</ul>	

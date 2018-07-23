@@ -1,0 +1,75 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Logging and Error Handling
+
+<p>
+	The {@link org.apache.juneau.rest.RestContext#REST_logger} property allows you to configure 
+	logging for your resource.
+	<br>The interface is shown below:
+</p>
+<ul class='doctree'>
+	<li class='jac'>
+		{@link org.apache.juneau.rest.RestLogger}
+		<ul>
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestLogger#log(Level,String,Object[]) log(Level,String,Object[])}
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects(Level,String,Object[])}
+			<li class='jm'>
+				{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
+				<br>Gets called when an error occurs on a request call.
+				<br>Default implementation logs the error.
+		</ul>
+	</li>
+</ul>
+<p>
+	The {@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects()} method is particularly useful because it allows you to pass in POJOs as arguments
+	that serialized using {@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE}, but only
+	if the message is actually logged.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	logger.logObjects(<jsf>DEBUG</jsf>, <js>"Pojo contents:\n{0}"</js>, myPojo);
+</p>
+<p>
+	By default, the Juneau framework uses the built-in Java Logging API for logging.
+	<br>But you can define your own implementation to use any framework you wish.
+</p>
+<p>
+	The {@link org.apache.juneau.rest.RestLogger} instance is accessible via the following:
+</p>
+<ul>
+	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getLogger()}
+	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger()}
+</ul>
+<p>
+	In addition, the logger can be accessed by passing it as a parameter to your REST java method:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod()</ja>
+	<jk>public</jk> Object doSomething(RestLogger logger) {...}
+</p>
+<p>
+	If your resource extends from {@link org.apache.juneau.rest.RestServlet}, you can also
+	use and override the following methods:
+</p>
+<ul>
+	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...)}
+	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...)}
+</ul>

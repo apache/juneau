@@ -1,0 +1,156 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+@Body
+
+<p>
+	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
+</p>
+<p>
+	This annotation can be applied at the following locations:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Parameters on a <ja>@RestMethod</ja>-annotated method.
+	<li>
+		POJO classes used as parameters on a <ja>@RestMethod</ja>-annotated method.
+</ul>
+<h5 class='figure'>Examples:</h5>
+<p class='bcode w800'>
+	<jc>// Defined on parameter</jc>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {...}
+</p>
+<p class='bcode w800'>
+	<jc>// Defined on POJO class</jc>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> addPerson(Person person) {...}
+	
+	<ja>@Body</ja>
+	<jk>public class</jk> Person {...}
+</p>
+<p>
+	This is functionally equivalent to the following code...
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> addPerson(RestRequest req) {
+		Person person = req.getBody().asType(Person.<jk>class</jk>);
+		...
+	}
+</p>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bcode w800'>
+	<jc>// POJO convertible from string</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
+	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
+		<jk>return</jk> p;
+	}
+	
+	<jk>public static class</jk> MyPojo {
+		<jk>private</jk> String <jf>val</jf>;
+		<jk>public</jk> MyPojo(String val) {
+			<jk>this</jk>.<jf>val</jf> = val;
+		}
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <jf>val</jf>;
+		}
+	}
+</p>
+<p class='bcode w800'>
+	<jc>// Parsable bean</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBean"</js>)
+	<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean b) {
+		<jk>return</jk> b;
+	}
+	
+	<jk>public static class</jk> MyBean {
+		<jk>public</jk> String <jf>f1</jf>;
+	}
+</p>
+<p class='bcode w800'>
+	<jc>// List of parsable beans</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBeanList"</js>)
+	<jk>public</jk> MyBeanList echo(<ja>@Body</ja> MyBeanList l) {
+		<jk>return</jk> l;
+	}
+	
+	<jk>public static class</jk> MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
+</p>
+<p class='bcode w800'>
+	<jc>// POJO convertible from an input stream</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
+	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
+		<jk>return</jk> p;
+	}
+	
+	<jk>public static class</jk> MyPojo {
+		<jk>private</jk> String <jf>val</jf>;
+		<jk>public</jk> MyPojo(InputStream is) {
+			<jk>this</jk>.<jf>val</jf> = IOUtils.<jsm>read</jsm>(is);
+		}
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <jf>val</jf>;
+		}
+	}
+</p>
+<p>
+	This annotation is also used for supplying swagger information about the body of the request.
+	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='section'>Examples:</h5>
+<p class='bcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Body</ja>(
+		description=<js>"Pet object to add to the store"</js>,
+		required=<jk>true</jk>,
+		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	)
+</p>
+<p class='bcode w800'>
+	<jc>// Free-form</jc>
+	<ja>@Body</ja>({
+		<js>"description: 'Pet object to add to the store',"</js>,
+		<js>"required: true,"</js>,
+		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']},"</js>
+		<js>"x-extra: 'extra field'"</js>
+	})
+</p>
+<p class='bcode w800'>
+	<jc>// Localized</jc>
+	<ja>@Body</ja>(
+		description=<js>"$L{My.Localized.Description}"</js>,
+		required=<jk>true</jk>,
+		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	)
+</p>
+
+<h5 class='section'>Other Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
+		<br>Values on child classes override values on parent classes.
+	<li>
+		Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
+		<br>Values on methods override values on POJO classes.
+</ul>
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
+	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+</ul>

@@ -1,0 +1,60 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+@FormData
+
+<p>
+	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>	
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> doPost(RestRequest req, RestResponse res,
+		<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
+		<ja>@FormData</ja>(<js>"p2"</js>) String p2, 
+		<ja>@FormData</ja>(<js>"p3"</js>) UUID p3) {...}
+</p>
+<p>
+	This is functionally equivalent to the following code:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> doPost(RestRequest req, RestResponse res) {
+		RequestFormData fd = req.getFormData();
+		<jk>int</jk> p1 = fd.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String p2 = fd.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID p3 = fd.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	}
+</p>
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	to POJOs and controls what POJO types are supported.
+	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+</p>
+<ul class='doctree'>
+	<li class='warn'>
+			This annotation should not be combined with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or {@link org.apache.juneau.rest.RestRequest#getBody()} method
+			for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet
+		API to parse the body content as key-value pairs resulting in empty content.
+		<br>The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
+		servlet to drain the body content.
+</ul>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
+	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+</ul>

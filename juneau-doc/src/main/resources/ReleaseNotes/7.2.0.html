@@ -1,0 +1,494 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+7.2.0 (TBD)
+
+<p>
+	TBD
+</p>
+
+<h5 class='topic w800'>juneau-marshall</h5>
+<ul class='spaced-list'>
+	<li>
+		The REST client <ja>@Remoteable</ja> annotations and REST server <ja>@RemoteMethod</ja> annotations which used to be
+		in separate packages in the client and server projects have been combined into a single set of annotations in 
+		the {@link org.apache.juneau.http.annotation} package.
+		<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
+		<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.RequestBean}
+		</ul>
+		<br>These are used with new Swagger schema/documentation annotations to produce schema-based serialization/parsing/validation 
+			and auto-generated Swagger documentation:
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Contact}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.ExternalDocs}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Items}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.License}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Schema}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.SubItems}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Tag}
+		</ul>
+	<li>
+		Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
+		<code><ja>@Query</ja>(<js>"*"</js>)</code>, <code><ja>@FormData</ja>(<js>"*"</js>)</code>, <code><ja>@Header</ja>(<js>"*"</js>)</code>, <code><ja>@Path</ja>(<js>"*"</js>)</code>
+	<li>
+		Support for server-side use of <ja>@ResourceBean</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta)} method.
+	<li>
+		Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
+	<li>
+		Fixed bug where HTML-Schema was not being rendered correctly.
+	<li>
+		Support for POJO examples:
+		<ul class='doctree'>
+			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_examples}
+			<li class='ja'>{@link org.apache.juneau.annotation.Example}
+		</ul>
+	<li>
+		Fixed bug where parsers could report the wrong line number when an error occurred.
+	<li>
+		A runtime exception is now thrown if you define a <code><ja>@BeanProperty</ja>(name)</code> but forget to
+		add it to your <code><ja>@Bean</ja>(properties)</code> annotation.
+	<li>
+		<code><ja>@Html</ja>(asXml)</code> and <code><ja>@Html</ja>(asPlainText)</code> replaced with
+		{@link org.apache.juneau.html.annotation.Html#format() @Html(format)}.
+	<li>
+		HTML serializer will now serializers beans and maps as HTML even when those objects are embedded
+		within an object with <code><ja>@Html</ja>(format=<jsf>XML</jsf>)</code>.
+		<br>The previous behavior was to serialize it as XML.
+	<li>
+		New settings for binary-based serializers and parsers:
+		<ul class='doctree'>
+			<li class='jf'>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+			<li class='jf'>{@link org.apache.juneau.parser.InputStreamParser#ISPARSER_binaryFormat}
+		</ul>
+	<li>
+		Added support for auto-detection of fluent-style setters:
+		<ul class='doctree'>
+			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_fluentSetters}
+			<li class='ja'>{@link org.apache.juneau.annotation.Bean#fluentSetters()}
+		</ul>
+	<li>
+		The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
+	<li>
+		The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
+		and is disabled by default.
+	<li>
+		Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
+		<p class='bcode w800' style='color:red'>
+	org.apache.juneau.parser.ParseException: Expected '[' at beginning of JSON array.
+		At line 80, column 20.
+		While parsing into: 
+			currentClass: List&lt;String&gt;
+			currentProperty: required: java.util.List, field=[null], getter=[public java.util.List org.apache.juneau.dto.swagger.SchemaInfo.getRequired()], setter=[public org.apache.juneau.dto.swagger.SchemaInfo org.apache.juneau.dto.swagger.SchemaInfo.setRequired(java.util.Collection)]
+	---start--
+	0075: 						"name": "body",
+	0076: 						"description": "Pet object that needs to be added to the store",
+	0077: 						"required": true,
+	0078: 						"schema": {
+	0079: 							"required": true,
+	0080: 						}
+	0081: 					}
+	0082: 				],
+	0083: 				"responses": {
+	0084: 					"405": {
+	0085: 						"description": "Invalid input"
+	---end---
+		</p>
+	<li>
+		New property {@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
+	<li>
+		New property {@link org.apache.juneau.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
+		using their name or the <code>toString()</code> method.
+	<li>
+		New property {@link org.apache.juneau.BeanContext#BEAN_examples} for defining examples of POJOs.
+	<li>
+		New {@link org.apache.juneau.annotation.Example @Example} annotation for defining examples of POJOs.
+		<br>Used heavily in JSON-Schema support.
+	<li>
+		If a bean has both a <code>getX()</code> and <code>isX()</code> method, the <code>getX()</code> method takes precedence.
+		<br>The previous behavior was arbitrary.
+	<li>
+		The schema serializers have been moved into their own packages:
+		<ul class='doctree'>
+			<li class='jp'>{@link org.apache.juneau.jsonschema}
+			<li class='jp'>{@link org.apache.juneau.htmlschema}
+			<li class='jp'>{@link org.apache.juneau.xmlschema}
+		</ul>
+	<li>
+		Significant improvements to JSON-Schema serialization support.
+		<ul>
+			<li>New {@link org.apache.juneau.jsonschema.annotation.JsonSchema @JsonSchema} annotation.
+		</ul>
+	<li>
+		Fixed <code>NullPointerException</code> when serializing beans with a dyna-property (i.e. <code><ja>@Bean</ja>(<js>"*"</js>)</code>)
+		which returns a <jk>null</jk> value.
+	<li>
+		New option for dyna-property (i.e. <code><ja>@Bean</ja>(<js>"*"</js>)</code>) using a method that returns a collection of extra keys.
+		<br>See new options #4 on {@link org.apache.juneau.annotation.BeanProperty#name()}
+	<li>
+		New formats for the {@link org.apache.juneau.html.annotation.Html#format() @Html.format()} annotation:
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
+			<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
+		</ul> 
+	<li>
+		Serializers now allow for q-values on the media types they handle.
+		<br>For example, the accept media type on <code>JsonSerializer.Simple</code> is <js>"application/json+simple,application/json;q=0.9"</js>.
+		<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
+	<li>
+		New methods for creating unmodifiable {@link org.apache.juneau.ObjectMap ObjectMaps} and {@link org.apache.juneau.ObjectList ObjectLists}.
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.ObjectMap}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.ObjectMap#isUnmodifiable() isUnmodifable()}
+				<li class='jm'>{@link org.apache.juneau.ObjectMap#unmodifiable() unmodifiable()}
+				<li class='jm'>{@link org.apache.juneau.ObjectMap#modifiable() modifiable()}
+			</ul>
+			<li class='jp'>{@link org.apache.juneau.ObjectList}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.ObjectList#isUnmodifiable() isUnmodifable()}
+				<li class='jm'>{@link org.apache.juneau.ObjectList#unmodifiable() unmodifiable()}
+				<li class='jm'>{@link org.apache.juneau.ObjectList#modifiable() modifiable()}
+			</ul>
+		</ul>
+	<li>
+		The <code>JsonSerializer.Simple</code> class has been moved into the top-level {@link org.apache.juneau.json.SimpleJsonSerializer} class.
+	<li>
+		RDF serializer subclasses have been moved into top-level classes:
+		<ul>
+			<li><code>RdfSerializer.Xml</code> -&gt; {@link org.apache.juneau.jena.RdfXmlSerializer}
+			<li><code>RdfSerializer.XmlAbbrev</code> -&gt; {@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
+			<li><code>RdfSerializer.N3</code> -&gt; {@link org.apache.juneau.jena.N3Serializer}
+			<li><code>RdfSerializer.NTriple</code> -&gt; {@link org.apache.juneau.jena.NTripleSerializer}
+			<li><code>RdfSerializer.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleSerializer}
+			<li><code>RdfParser.Xml</code> -&gt; {@link org.apache.juneau.jena.RdfXmlParser}
+			<li><code>RdfParser.N3</code> -&gt; {@link org.apache.juneau.jena.N3Parser}
+			<li><code>RdfParser.NTriple</code> -&gt; {@link org.apache.juneau.jena.NTripleParser}
+			<li><code>RdfParser.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleParser}
+		</ul>
+	<li>
+		New/updated documentation:
+		<ul>
+			<li><a href='#juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a>
+		</ul>
+</ul>
+
+<h5 class='topic w800'>juneau-dto</h5>
+<ul class='spaced-list'>
+	<li>
+		Fixed bug where Swagger {@link org.apache.juneau.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
+		instead of a list of strings.
+</ul>
+
+<h5 class='topic w800'>juneau-rest-server</h5>
+<ul class='spaced-list'>
+	<li>
+		Simplified {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)}
+		and {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
+	<li>
+		Fixed bug in <code>UriResolver</code> when request path info had special characters.
+	<li>
+		Fixed bug where incorrect media type was being set on responses (e.g. <code>text/html+schema</code> instead of <code>text/html</code> for schema documents).
+	<li>
+		{@link org.apache.juneau.rest.remoteable.RemoteableServlet} now provides a form page for invoking remoteable methods in a browser.
+	<li>
+		Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
+	<li>
+		New {@link org.apache.juneau.http.annotation.Response @Response} annotation that can be applied to
+		throwables thrown from REST methods and POJOs returned by REST methods to specify non-200 status return codes and descriptions in Swagger documentation.
+	<li>
+		Swagger fields added to the following annotations:
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+		</ul>
+	<li>
+		The <ja>@PathRemainder</ja> annotation has been removed entirely.  
+		<br>Use <code><ja>@Path</ja>(<js>"/*"</js>)</code> to access the path remainder which includes all the new OpenAPI parsing support.
+	<li>
+		"Helper" classes (i.e. reusable beans that can be returned by REST methods) have been moved to the following package with some new additions:
+		<ul class='doctree'>
+			<li class='jp'>{@link org.apache.juneau.rest.helper}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.Ok}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.RedirectToServletRoot}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
+				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+			</ul>
+		</ul>
+	<li>
+		Predefined HTTP error throwables.
+		<br>When added to REST Java methods, reflected in generated Swagger documentation.
+		<ul class='doctree'>
+			<li class='jp'>{@link org.apache.juneau.rest.exception}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.rest.exception.BadRequest}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.Conflict}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.ExpectationFailed}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.FailedDependency}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.Forbidden}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.Gone}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.HttpVersionNotSupported}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.InsufficientStorage}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.InternalServerError}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.LengthRequired}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.Locked}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.LoopDetected}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.MethodNotAllowed}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.MisdirectedRequest}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.NetworkAuthenticationRequired}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.NotAcceptable}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.NotExtended}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.NotFound}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.NotImplemented}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.PayloadTooLarge}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionFailed}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionRequired}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.RangeNotSatisfiable}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.RequestHeaderFieldsTooLarge}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.ServiceUnavailable}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.TooManyRequests}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.Unauthorized}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.UnavailableForLegalReasons}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.UnprocessableEntity}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.UnsupportedMediaType}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.UpgradeRequired}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.UriTooLong}
+				<li class='jc'>{@link org.apache.juneau.rest.exception.VariantAlsoNegotiates}
+			</ul>
+		</ul>	
+	<li>
+		The {@link org.apache.juneau.rest.annotation.HtmlDoc#nav() @HtmlDoc.nav()} and {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() @HtmlDoc.navlinks()}
+		can now both be used on the same annotation.
+		<br>The contents of <code>nav()</code> are free-form HTML that gets rendered immediately after the navigation links.
+	<li>
+		The following new parameter types can be used on REST methods:
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.parser.ReaderParser} - The reader parser matching the request content type.
+			<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser} - The input stream parser matching the request content type.
+		</ul>
+	<li>
+		The <code>$F</code> variable can now be used as a initialization time variable.
+		<br>For example, the <code>AtomFeedResource</code> example pulls a bean example from a file on the classpath:
+		<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>,
+		properties={
+			<ja>@Property</ja>(name=<jsf>BEAN_examples</jsf>, value=<js>"{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}"</js>)
+		},
+		...
+	)
+		</p>
+		<br>It should be noted that you cannot use the <code>$F</code> variable to retrieve localized versions of files (since you're not within
+		the scope of a client request.
+	<li>
+		The <code><del>RestResource.nowrap()</del></code> annotation has been changed to a string with a default value of <js>"true"</js>.
+		<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
+	<li>
+		The {@link org.apache.juneau.http.annotation.Path#name()} annotation parameter is now required.
+	<li>
+		New class for mock unit testing of REST resources:
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+		</ul>
+	<li>
+		<code><ja>@RestMethod</ja>(inherit)</code> annotation has been removed and replaced with the following classes:
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.rest.Inherit}
+			<li class='jc'>{@link org.apache.juneau.rest.None}
+		</ul>
+		<br>These can be used in the following locations:
+		<ul>
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#serializers()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#parsers()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializers()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsers()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters()}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps()}
+		</ul>
+		<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <code>Inherit</code> class. 
+	<li>
+		<code>RequestPathMatch</code> class has been renamed to {@link org.apache.juneau.rest.RequestPath}.
+	<li>
+		{@link org.apache.juneau.http.annotation.RequestBean @RequestBean} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
+		<br>Includes new methods on {@link org.apache.juneau.rest.RestRequest}:
+		<ul class='doctree'>
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(Class) getRequestBean(Class)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta) getRequestBean(RequestBeanMeta)}
+		</ul>
+	<li>
+		New/updated documentation: 
+		<br>><a class="doclink" href="#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
+</ul>
+
+<h5 class='topic w800'>juneau-rest-client</h5>
+<ul class='spaced-list'>
+	<li>
+		Remoteable interfaces support OpenAPI annotations.
+	<li>
+		Made improvements to the builder API for defining SSL support.
+		<br>New methods added:
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#trustManagers(TrustManager...)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#secureRandom(SecureRandom)}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
+			</ul>
+		</ul>
+	<li>
+		Clients no longer have JSON defined as the default serializer and parser.
+		<br>Instead, the clients can now be used with no serializer/parser if you're working with InputStreams/Readers or
+		POJOs that can be converted to Strings and converted from Strings/InputStreams/Readers.
+	<li>
+		Methods added to client builder to make it easy to define the transport language:
+		<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#json() json()}
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#xml() xml()}
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#html() html()}
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#uon() uon()}
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#urlEnc() urlEnc()}
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#msgpack() msgpack()}
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#plainText() plainText()}
+		</ul>
+	<li>
+		New method added for allowing serverless client testing against REST interfaces.
+		<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+		<ul>
+			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection) mockHttpConnection(MockHttpConnection)}
+		</ul>
+	<li>
+		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
+		<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
+			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
+		</ul>
+	<li>
+		New methods added to {@link org.apache.juneau.rest.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
+		<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
+			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
+			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
+		</ul>
+	<li>
+		Removed the deprecated <code>RestCall.execute()</code> method.
+		<br>Use {@link org.apache.juneau.rest.client.RestCall#run()}.
+	<li>
+		<code>RestCall.input(Object)</code> method renamed to {@link org.apache.juneau.rest.client.RestCall#body(Object)} to match OpenAPI terminology.
+</ul>
+
+<h5 class='topic w800'>juneau-rest-microservice</h5>
+<ul class='spaced-list'>
+	<li>
+		The look-and-feel of an application is now controlled through the external configuration file and access to
+		CSS stylesheets in the working directory in a new folder called <code>files</code>:
+		<br><img class='bordered' style='width:170px' src='doc-files/ReleaseNotes.711.1.png'>
+		<br><br>
+		The default configuration is this: 
+		<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# REST settings
+	#=======================================================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
+	
+	<cc># Stylesheet to use for HTML views.</cc>
+	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+	
+	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+	
+	<ck>icon</ck> = <cv>$C{REST/headerIcon}</cv>
+	<ck>header</ck> = <cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;&lt;/a&gt;</cv>
+	<ck>footer</ck> = <cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='$U{$C{REST/footerIcon}}'&gt;</cv>	
+		</p>				
+		<br><br>
+		Note that static files can now be served up from the <code>files</code> directory in the working directory, 
+		and you have access to modify the CSS theme files.
+		<br>The <code>SwaggerUI.css</code> file controls the look-and-feel of the Swagger UI, so you can make
+		modification there as well.
+		<br><br>
+		The <code>BasicRestConfig</code> interface (which defines the default settings for the <code>BasicRestServlet</code> class)
+		now looks like this...
+		<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		...
+		htmldoc=<ja>@HtmlDoc</ja>(
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
+				<js>"$C{REST/header}"</js>
+			},
+			navlinks={
+				<js>"up: request:/.."</js>
+			},
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/icon}}'/&gt;"</js>
+			},
+			footer=<js>"$C{REST/footer}"</js>
+		),
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"</jc>
+		staticFiles={<js>"$C{REST/staticFiles}"</js>}
+	)
+	<jk>public interface</jk> BasicRestConfig {}			
+				</p>	
+				<br><br>
+				The <code>PoweredByApache</code> widget which used to serve as a page footer has been eliminated.
+				<br><br>
+				If you're testing out changes in the theme stylesheets, you may want to set the following system property
+				that prevents caching of those files so that you don't need to restart the microservice each time a change is made:
+				<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# System properties
+	#=======================================================================================================================</cc>
+	<cs>[SystemProperties]</cs>
+	
+	<cc># Disable classpath resource caching.
+	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
+	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
+</ul>

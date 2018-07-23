@@ -1,0 +1,64 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+ConfigMemoryStore
+
+<p>
+	The {@link org.apache.juneau.config.store.ConfigMemoryStore} class is simply an in-memory storage
+	location for configuration files.
+	<br>There is no hard persistence and is used primarily for testing purposes.
+</p>
+<p>
+	However, the implementation provides a good idea on how stores work (especially the write method):
+</p>
+<p class='bcode w800'>
+	<jk>public class</jk> ConfigMemoryStore <jk>extends</jk> ConfigStore {
+	
+		<jc>// Some methods ommitted.</jc>
+		
+		<jk>private final</jk> ConcurrentHashMap&lt;String,String&gt; <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap&lt;&gt;();
+		
+		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		<jk>public synchronized</jk> String read(String name) {
+			<jk>return</jk> <jsm>emptyIfNull</jsm>(<jf>cache</jf>.get(name));
+		}
+	
+		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		<jk>public synchronized</jk> String write(String name, String expectedContents, String newContents) {
+	
+			<jc>// This is a no-op.</jc>
+			<jk>if</jk> (isEquals(expectedContents, newContents))
+				<jk>return null</jk>;
+			
+			String currentContents = read(name);
+			
+			<jk>if</jk> (expectedContents != <jk>null</jk> &amp;&amp; ! <jsm>isEquals</jsm>(currentContents, expectedContents)) 
+				<jk>return</jk> currentContents;
+			
+			update(name, newContents);
+			
+			<jc>// Success!</jc>
+			<jk>return null</jk>;
+		}
+	
+		
+		<ja>@Override</ja> <jc>/* ConfigStore */</jc>
+		<jk>public synchronized</jk> ConfigMemoryStore update(String name, String newContents) {
+			<jf>cache</jf>.put(name, newContents);
+			<jk>super</jk>.update(name, newContents);  <jc>// Trigger any listeners.</jc>
+			<jk>return this</jk>;
+		}
+	}
+</p>

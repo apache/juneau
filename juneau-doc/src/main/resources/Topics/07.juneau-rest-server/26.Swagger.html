@@ -1,0 +1,51 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Swagger
+
+<p>
+	One of the most useful features of Juneau is the ability to generate Swagger-based OPTIONS pages for self-documenting designs 
+	(i.e. REST interfaces that document themselves).
+</p>
+<h5 class='figure'>OPTIONS page for HelloWorld sample resource</h5>
+<p class='bcode w800'>
+	http://localhost:10000/helloWorld/?method=OPTIONS
+</p>
+<img class='bordered w800' src='doc-files/juneau-rest-server.OptionsPages.1.png'>
+<p>
+	The {@link org.apache.juneau.rest.BasicRestServlet} class implements the page by creating a method 
+	mapped to the <l>OPTIONS</l> HTTP method that simply returns a Swagger bean:
+</p>
+<p class='bcode w800'>
+	<ja>@RestResource</ja>(...)
+	<jk>public class</jk> BasicRestServlet <jk>extends</jk> RestServlet {
+
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+			summary=<js>"Resource options"</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				navlinks={
+					<js>"back: servlet:/,"</js>,
+					<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
+				}
+			)
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jk>return</jk> req.getSwagger();
+		}
+	}
+</p>
+<p>
+	This page is constructed using the Info Provider API described next.
+</p>

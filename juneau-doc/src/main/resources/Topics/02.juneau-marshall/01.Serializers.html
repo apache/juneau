@@ -1,0 +1,159 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Serializers
+
+<p>
+	One of the goals of Juneau was to make serialization as simple as possible.  
+	In a single line of code, you should be able to serialize and parse most POJOs.
+	Despite this simplicity, Juneau provides lots of extensibility and configuration properties for tailoring how 
+	POJOs are serialized and parsed.
+</p>
+<p>
+	The built-in serializers in Juneau are fast, efficient, and highly configurable.
+	They work by serializing POJOs directly to streams instead of using intermediate Document Object Model 
+	objects.
+</p>
+<p>
+	In most cases, you can serialize objects in one line of code by using one of the default serializers:
+</p>
+<p class='bcode w800'>
+	<jc>// A simple bean</jc>
+	<jk>public class</jk> Person {
+		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
+		<jk>public int</jk> <jf>age</jf> = 21;
+	}
+
+	<jc>// Serialize to JSON, XML, or HTML</jc>
+	Person p = <jk>new</jk> Person();
+
+	<jc>// Produces:
+	//	"{\"name\":\"John Smith\",\"age\":21}"</jc>
+	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+
+	<jc>// Produces:
+	//	"{name:'John Smith',age:21}"</jc>
+	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+
+	<jc>// Produces:
+	//	&lt;object&gt;
+	//	  &lt;name&gt;John Smith&lt;/name&gt;
+	//	  &lt;age&gt;21&lt;/age&gt;
+	//	&lt;/object&gt;</jc>
+	String xml = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+
+	<jc>// Produces:
+	//	&lt;table&gt;
+	//	  &lt;tr&gt;&lt;th&gt;key&lt;/th&gt;&lt;th&gt;value&lt;/th&gt;&lt;/tr&gt;
+	//	  &lt;tr&gt;&lt;td&gt;name&lt;/td&gt;&lt;td&gt;John Smith&lt;/td&gt;&lt;/tr&gt;
+	//	  &lt;tr&gt;&lt;td&gt;age&lt;/td&gt;&lt;td&gt;21&lt;/td&gt;&lt;/tr&gt;
+	//	&lt;/table&gt;</jc>
+	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+	
+	<jc>// Produces:
+	//	"(name='John Smith',age=21)"</jc>
+	String uon = UonSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+
+	<jc>// Produces:
+	//	"name='John+Smith'&amp;age=21"</jc>
+	String urlencoding = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+
+	<jc>// Produces:
+	// 82 A4 6E 61 6D 65 AA 4A 6F 68 6E 20 53 6D 69 74 68 A3 61 67 65 15 </jc>
+	<jk>byte</jk>[] b = MsgPackSerializer.<jsf>DEFAULT</jsf>.serialize(p);
+</p>
+
+<p>
+	In addition to the default serializers, customized serializers can be created using various built-in options:
+</p>
+
+<p class='bcode w800'>
+	<jc>// Use one of the default serializers to serialize a POJO</jc>
+	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
+
+	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
+	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
+	
+	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
+	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.builder().sq().build();
+	
+	<jc>// Serialize a POJO to JSON</jc>
+	String json = serializer.serialize(someObject);
+</p>
+<p>
+	Default serialization support is provided for Java primitives, <code>Maps</code>, <code>Collections</code>, 
+	beans, and arrays. 
+	<br>Extensible support for other data types such as <code>Calendars</code>, <code>Dates</code>, 
+	<code>Iterators</code> is available through the use of POJO swaps (described later).
+</p>
+<p>
+	The class hierarchy for the serializers (excluding specialized subclasses) are:
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
+	<ul>
+		<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
+			<ul>
+			<li class='jc'>{@link org.apache.juneau.jsonschema.JsonSchemaSerializer}
+			<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
+			</ul>
+			<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextSerializer}
+			<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.jena.N3Serializer}
+				<li class='jc'>{@link org.apache.juneau.jena.NTripleSerializer}
+				<li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}
+				<li class='jc'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
+				<li class='jc'>{@link org.apache.juneau.jena.TurtleSerializer}
+			</ul>
+			<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer}
+					<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer}
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
+			</ul>
+			<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.html.HtmlStrippedDocSerializer}
+					<ul>
+						<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
+						<ul>
+							<li class='jc'>{@link org.apache.juneau.htmlschema.HtmlSchemaDocSerializer}
+						</ul>
+					</ul>
+				</ul>
+				<li class='jc'>{@link org.apache.juneau.soap.SoapXmlSerializer}
+				<li class='jc'>{@link org.apache.juneau.xml.XmlDocSerializer}
+				<li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaSerializer}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.xmlschema.XmlSchemaDocSerializer}
+				</ul>
+			</ul>
+		</ul>
+		<li class='jac'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.jso.JsoSerializer}
+			<li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}
+		</ul>
+	</ul>
+</ul>
+

@@ -1,0 +1,109 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Predefined Helper Beans
+
+<p>
+	The {@link org.apache.juneau.rest.helper} package contains some reusable beans that are useful for 
+	creating linked items in HTML views.
+</p>
+<p>
+	The {@link org.apache.juneau.rest.helper.ResourceDescription} class is a bean with name/description
+	properties for labeling and linking to child resources.
+	<br>The following examples is pulled from the REST examples:
+</p>
+<p class='bcode w800'>
+	<jk>public class</jk> PredefinedLabelsResource <jk>extends</jk> BasicRestServlet {
+	
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> ResourceDescription[] getChildMethods() {
+			<jk>return new</jk> ResourceDescription[] {
+				<jk>new</jk> ResourceDescription(<js>"beanDescription"</js>, <js>"BeanDescription"</js>),
+				<jk>new</jk> ResourceDescription(<js>"htmlLinks"</js>, <js>"HtmlLink"</js>)
+			};
+		}
+	}
+</p>
+<p>
+	It get rendered as a table of name/description columns with links to child methods:
+</p>
+<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.1.png' style='width:240px'/>
+<p>
+	The internals of the class show it simply has two bean properties with a link annotation
+	defined on the name property:
+</p>
+<p class='bcode w800'>
+	<jk>public class</jk> ResourceDescription {
+
+		<ja>@Html</ja>(link=<js>"servlet:/{name}"</js>)
+		<jk>public</jk> Object getName() {...}
+		
+		<jk>public</jk> Object getDescription() {...}
+	}
+</p>
+<p>
+	The {@link org.apache.juneau.rest.helper.BeanDescription} class provides a simple view
+	of a bean and it's properties.
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/beanDescription"</js>)
+	<jk>public</jk> BeanDescription getBeanDescription() {
+		<jk>return new</jk> BeanDescription(Person.<jk>class</jk>);
+	}	
+</p>
+<p>
+	This example renders the following:
+</p>
+<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.2.png' style='width:584px'/>
+<p>
+	The {@link org.apache.juneau.html.annotation.HtmlLink @HtmlLink} annotation can also be useful
+	for rendering custom hyperlinks:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
+	<jk>public</jk> ALink[] htmlLinks() {
+		<jk>return new</jk> ALink[] {
+			<jk>new</jk> ALink(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> ALink(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+		};
+	}
+	
+	<ja>@HtmlLink</ja>(nameProperty=<js>"n"</js>, hrefProperty=<js>"l"</js>)
+	<jk>public static class</jk> ALink {
+		<jk>public</jk> String <jf>n</jf>, <jf>l</jf>;
+		<jk>public</jk> ALink(String n, String l) {
+			<jk>this</jk>.<jf>n</jf> = n;
+			<jk>this</jk>.<jf>l</jf> = l;
+		}
+	}
+</p>			
+<p>
+	The {@link org.apache.juneau.dto.LinkString Action} bean is a predefined <ja>@HtmlLink</ja> bean provided
+	to simplify specifying actions.
+	<br>The following is equivalent to above.
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
+	<jk>public</jk> Action[] htmlLinks() {
+		<jk>return new</jk> Action[] {
+			<jk>new</jk> Action(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> Action(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+		};
+	}
+</p>			
+<p>
+	Both examples render the following consisting of a list of hyperlinks:
+</p>
+<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>

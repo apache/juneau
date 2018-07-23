@@ -1,0 +1,31 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.36 (Dec 18, 2013)
+
+<p>
+	Juno 5.0.0.36 is a minor update.
+</p>
+<ul class='spaced-list'>
+	<li>Implemented <code>org.apache.juneau.urlencoding.UrlEncodingParser.parseArgs(Reader,int,ClassMeta[])</code>.
+	<li><code>name</code> parameter of <code><del>ResourceDescription#ResourceDescription(String,String,String)</del></code>. 
+		is now automatically URL-encoded so that the name can contain special characters (e.g. <js>"foo/bar(baz)"</js>).
+	<li>Support for URL-matching and path info containing encoded characters (e.g. <js>'/'</js>) now supported.	
+	<li>Removed some lazy-initialization of bean information in {@link org.apache.juneau.ClassMeta} that allowed the removal of
+		some synchronized blocks.
+	<li>Improved support of <code><del>BeanContext.getClassMetaFromString(String)</del></code>.
+		Now supports primitive arrays such as <js>"long[]"</js> in addition to the previous support for the equivalent <js>"[J"</js>.
+	<li>Various new convenience methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
+</ul>	

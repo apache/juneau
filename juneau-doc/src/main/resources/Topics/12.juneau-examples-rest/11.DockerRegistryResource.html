@@ -1,0 +1,135 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+DockerRegistryResource
+
+<p>	
+	The <l>DockerRegistryResource</l> class shows examples of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Accessing a docker registry REST API as POJOs using {@link org.apache.juneau.rest.client.RestClient}.
+	<li>
+		Using the {@link org.apache.juneau.rest.helper.ResourceDescription} class to implement a top-level 
+		'router' page.
+	<li>
+		Using the {@link org.apache.juneau.rest.RestContext#getConfig()} method to access external 
+		configuration file values.
+</ul>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/docker
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.DockerRegistryResource.1.png'>
+<h5 class='figure'>DockerRegistryResource.java</h5>
+<p class='bcode w800'>
+	<jd>/** 
+	* Sample resource that shows how to mirror query results from a Docker registry. 
+	*/</jd> 
+	<ja>@RestResource</ja>( 
+		path=<js>"/docker"</js>,
+		title=<js>"Sample Docker resource"</js>,
+		description=<js>"Docker registry explorer"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			<jc>// Pull in aside contents from file.</jc>
+			aside=<js>"$F{resources/DockerRegistryResourceAside.html}"</js>
+		)
+	) 
+	<jk>public class</jk> DockerRegistryResource <jk>extends</jk> BasicRestServlet { 
+		<jc>// Get registry URL from examples.cfg file.</jc>
+		<jk>private</jk> String <jf>registryUrl</jf>;
+	
+		<jk>private</jk> RestClient <jf>rc</jf>;
+	
+		<jd>/**
+		 * Initializes the registry URL and rest client.
+		 * 
+		 * @param builder The resource config.
+		 * @throws Exception
+		 */</jd>
+		<ja>@RestHook</ja>(<jsf>INIT</jsf>) 
+		<jk>public void</jk> initRegistry(RestContextBuilder builder) <jk>throws</jk> Exception {
+			Config cf = builder.getConfig();
+			<jf>registryUrl</jf> = cf.getString(<js>"DockerRegistry/url"</js>);
+			<jf>rc</jf> = RestClient.<jsm>create</jsm>().build();
+		}
+	
+		<ja>@Override</ja> <jc>/* Servlet */</jc>
+		<jk>public synchronized void</jk> destroy() {
+			<jf>rc</jf>.closeQuietly();
+			<jk>super</jk>.destroy();
+		}
+	
+		<jd>/** [GET /] - Show child resources. */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> ResourceDescription[] getChildren(RestRequest req) {
+			<jk>return new</jk> ResourceDescription[] {
+				<jk>new</jk> ResourceDescription(<js>"search"</js>, <js>"Search Registry"</js>)
+			};
+		}
+	
+		<jd>/**
+		 * PUT request handler.
+		 * Replaces the feed with the specified content, and then mirrors it as the response.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/search"</js>)
+		<jk>public</jk> QueryResults query(<ja>@Query</ja>(<js>"q"</js>) String q) <jk>throws</jk> Exception {
+			String url = <jf>registryUrl</jf> + <js>"/search"</js> + (q == <jk>null</jk> ? <js>""</js> : <js>"?q="</js> + q);
+			<jk>synchronized</jk>(<jf>rc</jf>) {
+				<jk>return</jk> rc.doGet(url).getResponse(QueryResults.<jk>class</jk>);
+			}
+		}
+		
+		<jk>public static class</jk> QueryResults { 
+			<jk>public int</jk> <jf>num_results</jf>; 
+			<jk>public</jk> String <jf>query</jf>; 
+			<jk>public</jk> List&lt;DockerImage&gt; <jf>results</jf>; 
+		} 
+		
+		<jk>public static class</jk> DockerImage { 
+			<jk>public</jk> String <jf>name</jf>, <jf>description</jf>; 
+		} 
+	} 		
+</p>
+<p>
+	In this example, we're pulling the aside message from an external file:
+</p>
+<h5 class='figure'>resources/DockerRegistryResourceAside.html</h5>
+<p class='bcode w800'>
+	<xt>&lt;div</xt> <xa>style</xa>=<xs>'min-width:200px'</xs> <xa>class</xa>=<xs>'text'</xs><xt>&gt;</xt>
+		<xt>&lt;p&gt;</xt>REST API for searching Docker registries.<xt>&lt;/p&gt;</xt>
+		<xt>&lt;p&gt;</xt>To use, you must first specify the Docker registry URL in the <xt>&lt;code&gt;</xt>[Docker]<xt>&lt;/code&gt;</xt> section of the config file.<xt>&lt;/p&gt;</xt>
+	<xt>&lt;/div&gt;	</xt>	
+</p>	
+
+<p>
+	The Docker registry URL is specified in the <l>examples.cfg</l> file:
+</p>
+
+<h5 class='figure'>examples.cfg</h5>
+<p class='bcode w800'>
+	<cc>#================================================================================
+	# DockerRegistryResource properties
+	#================================================================================</cc>
+	<cs>[DockerRegistry]</cs>
+	<ck>url</ck> = <cv>http://clmdocker02.ratl.swg.usma.apache.org:5000/v1</cv>
+</p>

@@ -1,0 +1,349 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+MethodExampleResource
+
+<p>
+	The <l>MethodExampleResource</l> class provides examples of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Using the {@link org.apache.juneau.rest.helper.Redirect} object to perform redirections.
+	<li>
+		Using the various Java method parameter annotations to retrieve request attributes, parameters, etc.
+	<li>
+		Using the annotation programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} object.
+	<li>
+		Setting response POJOs by either returning them or using the 
+		{@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+</ul>
+<p>
+	The resource is provided to show how various HTTP entities (e.g. parameters, headers) can be accessed
+	as either annotated Java parameters, or through methods on the <l>RestRequest</l> object.
+</p>
+
+<h5 class='figure'>MethodExampleResource.java</h5>
+<p class='bcode w800'>				
+	<jd>/** 
+	* Sample REST resource that shows how to define REST methods and OPTIONS pages 
+	*/</jd> 
+	<ja>@RestResource</ja>( 
+		path=<js>"/methodExample"</js>, 
+		messages=<js>"nls/MethodExampleResource"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			navlinks={
+				<js>"up: servlet:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows the different methods for retrieving HTTP query/form-data parameters, headers, and path variables.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Each method is functionally equivalent but demonstrate different ways to accomplish the same tasks.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			}
+		)
+	) 
+	<jk>public class</jk> MethodExampleResource <jk>extends</jk> BasicRestServlet { 
+		
+		<jk>private static final</jk> UUID <jsf>SAMPLE_UUID</jsf> = UUID.<jsm>fromString</jsm>(<js>"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</js>);
+		<jk>private static final</jk> String <jsf>SAMPLE_UUID_STRING</jsf> = <js>"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</js>;
+	
+		<jd>/** Example GET request that redirects to our example method */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> ResourceDescription[] doExample() <jk>throws</jk> Exception {
+			<jk>return new</jk> ResourceDescription[] {
+				<jk>new</jk> ResourceDescription(
+					<js>"example1/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
+					<js>"Example 1 - Annotated method attributes."</js>
+				),
+				<jk>new</jk> ResourceDescription(
+					<js>"example2/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
+					<js>"Example 2 - Low-level RestRequest/RestResponse objects."</js>
+				),
+				<jk>new</jk> ResourceDescription(
+					<js>"example3/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
+					<js>"Example 3 - Intermediate-level APIs."</js>
+				)
+			};
+		}
+		
+		<jd>/** 
+		 * Methodology #1 - GET request using annotated attributes.
+		 * This approach uses annotated parameters for retrieving input.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{p1}/{p2}/{p3}/*"</js>)
+		<jk>public</jk> String example1(
+				<ja>@Method</ja> String method,                  <jc>// HTTP method.</jc>
+				<ja>@Path</ja>(<js>"p1"</js>) String p1,                        <jc>// Path variables.</jc>
+				<ja>@Path</ja>(<js>"p2"</js>) <jk>int</jk> p2,
+				<ja>@Path</ja>(<js>"p3"</js>) UUID p3,
+				<ja>@Query</ja>(<js>"q1"</js>) <jk>int</jk> q1,                    <jc>// Query parameters.</jc>
+				<ja>@Query</ja>(<js>"q2"</js>) String q2,
+				<ja>@Query</ja>(<js>"q3"</js>) UUID q3,
+				<ja>@Path</ja>(<js>"/*"</js>) String remainder,        <jc>// Path remainder after pattern match.</jc>
+				<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, <jc>// Headers.</jc>
+				<ja>@Header</ja>(<js>"Accept"</js>) String accept,
+				<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack
+			) {
+	
+			<jc>// Send back a simple Map response</jc>
+			<jk>return new</jk> AMap&lt;String,Object&gt;()
+				.append(<js>"method"</js>, method)
+				.append(<js>"path-p1"</js>, p1)
+				.append(<js>"path-p2"</js>, p2)
+				.append(<js>"path-p3"</js>, p3)
+				.append(<js>"remainder"</js>, remainder)
+				.append(<js>"query-q1"</js>, q1)
+				.append(<js>"query-q2"</js>, q2)
+				.append(<js>"query-q3"</js>, q3)
+				.append(<js>"header-lang"</js>, lang)
+				.append(<js>"header-accept"</js>, accept)
+				.append(<js>"header-doNotTrack"</js>, doNotTrack);
+		}
+
+		<jd>/** 
+		 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
+		 * This approach uses low-level request/response objects to perform the same as above.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{p1}/{p2}/{p3}/*"</js>)
+		<jk>public</jk> void example2(
+				RestRequest req,          <jc>// A direct subclass of HttpServletRequest.</jc>
+				RestResponse res          <jc>// A direct subclass of HttpServletResponse.</jc>
+			) {
+			
+			<jc>// HTTP method.</jc>
+			String method = req.getMethod();
+	
+			<jc>// Path variables.</jc>
+			RequestPathMatch path = req.getPathMatch();
+			String p1 = path.get(<js>"p1"</js>, String.<jk>class</jk>);
+			<jk>int</jk> p2 = path.get(<js>"p2"</js>, <jk>int</jk>.<jk>class</jk>);
+			UUID p3 = path.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Query parameters.</jc>
+			RequestQuery query = req.getQuery();
+			<jk>int</jk> q1 = query.get(<js>"q1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+			String q2 = query.get(<js>"q2"</js>, String.<jk>class</jk>);
+			UUID q3 = query.get(<js>"q3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Path remainder after pattern match.</jc>
+			String remainder = req.getPathMatch().getRemainder();
+	
+			<jc>// Headers.</jc>
+			String lang = req.getHeader(<js>"Accept-Language"</js>);
+			String accept = req.getHeader(<js>"Accept"</js>);
+			<jk>int</jk> doNotTrack = req.getHeaders().get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
+	
+			<jc>// Send back a simple Map response</jc>
+			Map&lt;String,Object&gt; m = <jk>new</jk> AMap&lt;String,Object&gt;()
+				.append(<js>"method"</js>, method)
+				.append(<js>"path-p1"</js>, p1)
+				.append(<js>"path-p2"</js>, p2)
+				.append(<js>"path-p3"</js>, p3)
+				.append(<js>"remainder"</js>, remainder)
+				.append(<js>"query-q1"</js>, q1)
+				.append(<js>"query-q2"</js>, q2)
+				.append(<js>"query-q3"</js>, q3)
+				.append(<js>"header-lang"</js>, lang)
+				.append(<js>"header-accept"</js>, accept)
+				.append(<js>"header-doNotTrack"</js>, doNotTrack);
+			res.setOutput(m);  <jc>// Use setOutput(Object) just to be different.</jc>
+		}
+
+		<jd>/** 
+		 * Methodology #3 - GET request using special objects.
+		 * This approach uses intermediate-level APIs.
+		 * The framework recognizes the parameter types and knows how to resolve them.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{p1}/{p2}/{p3}/*"</js>)
+		<jk>public</jk> String example3(
+				HttpMethod method,           <jc>// HTTP method.</jc>
+				RequestPathMatch path,       <jc>// Path variables.</jc>
+				RequestQuery query,          <jc>// Query parameters.</jc>
+				RequestHeaders headers,      <jc>// Headers.</jc>
+				AcceptLanguage lang,         <jc>// Specific header classes.</jc>
+				Accept accept
+			) {
+			
+			<jc>// Path variables.</jc>
+			String p1 = path.get(<js>"p1"</js>, String.<jk>class</jk>);
+			<jk>int</jk> p2 = path.get(<js>"p2"</js>, <jk>int</jk>.<jk>class</jk>);
+			UUID p3 = path.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Query parameters.</jc>
+			<jk>int</jk> q1 = query.get(<js>"q1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+			String q2 = query.get(<js>"q2"</js>, String.<jk>class</jk>);
+			UUID q3 = query.get(<js>"q3"</js>, UUID.<jk>class</jk>);
+	
+			<jc>// Path remainder after pattern match.</jc>
+			String remainder = path.getRemainder();
+	
+			<jc>// Headers.</jc>
+			int doNotTrack = headers.get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
+	
+			<jc>// Send back a simple Map response</jc>
+			<jk>return new</jk> AMap&lt;String,Object&gt;()
+				.append(<js>"method"</js>, method)
+				.append(<js>"path-p1"</js>, p1)
+				.append(<js>"path-p2"</js>, p2)
+				.append(<js>"path-p3"</js>, p3)
+				.append(<js>"remainder"</js>, remainder)
+				.append(<js>"query-q1"</js>, q1)
+				.append(<js>"query-q2"</js>, q2)
+				.append(<js>"query-q3"</js>, q3)
+				.append(<js>"header-lang"</js>, lang)
+				.append(<js>"header-accept"</js>, accept)
+				.append(<js>"header-doNotTrack"</js>, doNotTrack);
+		}
+	}
+</p>
+<p>
+	The class consists of 4 methods:
+</p>	
+<ul class='doctree'>
+	<li class='jm'>
+		<l>doExample()</l>
+		<br>The root page. 
+		<br>Performs a simple redirection to the <l>doGetExample1()</l> method using a 
+		{@link org.apache.juneau.rest.helper.Redirect} object.
+	<li class='jm'>
+		<l>example1()</l>
+		<br>Shows how to use the following annotations:
+		<ul>
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Path @Path}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Query @Query}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Header @Header}
+			<li class='ja'>{@link org.apache.juneau.rest.annotation.Method @Method}
+		</ul>
+		Method returns a POJO to be serialized as the output.
+	<li class='jm'>
+		<l>example2()</l>
+		<br>Identical to <l>doGetExample1()</l> but shows how to use the 
+		{@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} objects:
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getPathMatch()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getQuery()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getFormData()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders()}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethod()}
+			<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getRemainder()}
+		</ul>
+		Method sets the POJO to be serialized using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+	<li class='jm'>
+		<l>example3()</l>
+		<br>Identical to <l>doGetExample1()</l> but uses automatically resolved parameters based on class type.
+		<br>Juneau automatically recognizes specific class types such as common header types and automatically
+		resolves them to objects for you.  
+		<br>See <a class='doclink' href='#juneau-rest-server.RestMethod'>@RestMethod</a> for the list of all automatically support parameter types, and 
+		{@link org.apache.juneau.rest.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
+		for defining your own custom parameter type resolvers. 
+</ul>
+<p>
+	There's a lot going on in this method.  
+	<br>Notice how you're able to access URL attributes, parameters, headers, and content as parsed POJOs.  
+	<br>All the input parsing is already done by the toolkit.  
+	<br>You simply work with the resulting POJOs.
+</p>
+<p>
+	As you might notice, using annotations typically results in fewer lines of code and are therefore usually 
+	preferred over the API approach, but both are equally valid.
+</p>	
+<p>
+	When you visit this page through the router page, you can see the top level page:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/methodExample
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.1.png'>
+<p>
+	Clicking the first link on the page results in this page:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/methodExample/example1/foo/123/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/path-remainder?q1=456&amp;q2=bar		
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.2.png'>
+<p>
+	Notice how the conversion to POJOs is automatically done for us, even for non-standard POJOs such as UUID.
+</p>
+
+<h5 class='topic w800'>Self-documenting design through Swagger OPTIONS pages</h5>
+<p>
+	One of the main features of Juneau is that it produces OPTIONS pages for self-documenting design (i.e. REST 
+	interfaces that document themselves).
+</p>
+<p>
+	Much of the information populated on the OPTIONS page is determined through reflection.
+	<br>This basic information can be augmented with information defined through:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Annotations - An example of this was shown in the <code>SystemPropertiesResource</code> example above.
+		<br>Localized strings can be pulled from resource bundles using the <code>$L</code> localization variable.
+	<li>
+		Resource bundle properties - See <code>MethodExampleResource.properties</code> in the source.
+	<li>
+		Swagger JSON files with the same name and location as the resource class (e.g. 
+		<code>MethodExampleResource.json</code>).
+		<br>Localized versions are defined by appending the locale to the file name (e.g. 
+		<code>MethodExampleResource_ja_JP.json</code>);
+</ul>
+<p>
+	OPTIONS pages are simply serialized {@link org.apache.juneau.dto.swagger.Swagger} DTO beans.
+	<br>Localized versions of these beans are retrieved using the 
+	{@link org.apache.juneau.rest.RestRequest#getSwagger()} method.
+</p>
+<p>
+	To define an OPTIONS request handler, the {@link org.apache.juneau.rest.BasicRestServlet} class defines 
+	the following Java method:
+</p>
+
+<h5 class='figure'>BasicRestServlet.java</h5>
+<p class='bcode w800'>
+	<jd>/** OPTIONS request handler */</jd>
+	<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
+	<jk>public</jk> Swagger getOptions(RestRequest req) {
+		<jk>return</jk> req.getSwagger();
+	}			
+</p>
+<p>
+	The <l>OPTIONS</l> link that you see on the HTML version of the page is created 
+	through a property defined by the {@link org.apache.juneau.html.HtmlDocSerializer} class
+	and specified on the resource class annotation:
+</p>
+<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		htmldoc=<ja>@HtmlDoc</ja>(
+			navlinks={
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
+		)
+	)
+</p>
+<p>
+	This simply creates a link that's the same URL as the resource URL appended with <l>"?method=OPTIONS"</l>, 
+	which is a shorthand way that the framework provides of defining overloaded GET requests.
+	<br>Links using relative or absolute URLs can be defined this way.
+</p>
+<p>
+	Clicking the <l>options</l> link on the page presents you with information about how to use this resource:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/methodExample/?method=OPTIONS
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.3.png'>
+<p>
+	This page (like any other) can also be rendered in JSON or XML by using the <l>&amp;Accept</l> URL parameter.
+</p>

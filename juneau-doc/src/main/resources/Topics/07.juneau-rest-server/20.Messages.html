@@ -1,0 +1,61 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Messages
+
+<p>
+	The {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation is used to associate a resource bundle with a servlet class.
+</p>
+<p class='bcode w800'>
+	<jc>// Servlet with associated resource bundle</jc>
+	<ja>@RestResource</ja>(messages=<js>"nls/MyMessages"</js>)
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
+
+		<jc>// Returns the localized greeting from the "greeting" key in MyMessages.properties</jc>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> String printLocalizedGreeting(RestRequest req) {
+			<jk>return</jk> req.getMessage(<js>"greeting"</js>);
+		}
+</p>
+<p>	
+	The resource bundle can also be passed into the method by simply specifying a parameter
+	of type {@link java.util.ResourceBundle} or {@link org.apache.juneau.utils.MessageBundle}:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public</jk> String printLocalizedGreeting(MessageBundle messages) {
+		<jk>return</jk> messages.getString(<js>"greeting"</js>);
+	}
+</p>
+<p>
+	If a resource bundle is shared by multiple servlets, the label and description can be prefixed by the class 
+	name:
+</p>
+<p class='bcode w800'>
+	<cc>#--------------------------------------------------------------------------------
+	# Contents of MyMessages.properties
+	#--------------------------------------------------------------------------------</cc>
+	<ck>greeting</ck> = Hello!
+</p>	 	
+<p class='bcode w800'>
+	<cc>#--------------------------------------------------------------------------------
+	# Contents of shared MyMessages.properties
+	#--------------------------------------------------------------------------------</cc>
+	<ck>MyRestServlet.greeting</ck> = Hello!
+</p>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
+</ul>

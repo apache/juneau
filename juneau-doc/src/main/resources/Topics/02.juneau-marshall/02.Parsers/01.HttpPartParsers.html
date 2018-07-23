@@ -1,0 +1,57 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+HTTP Part Parsers
+
+<p>
+	There is a separate set of parsers for parsing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
+	<br>The distinction is that these are designed to parse directly from strings based on Open-API schema information.
+</p>
+<p class='bcode w800'>
+	<jc>// Schema information about our part.</jc>
+	HttpPartSchema schema = HttpPartSchema
+		.<jsm>create</jsm>(<js>"array"</js>)
+		.collectionFormat(<js>"pipes"</js>)
+		.items(
+			HttpPartSchema
+				.<jsm>create</jsm>(<js>"array"</js>)
+				.collectionFormat(<js>"csv"</js>)
+				.items(
+					HttpPartSchema.<jsm>create</jsm>(<js>"integer"</js>,<js>"int64"</js>)
+				)
+		)
+		.build();
+
+	<jc>// Our input to parse.</jc>
+	String input = <js>"1,2,3|4,5,6|7,8,9"</js>;
+
+	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
+	<jk>long</jk>[][] value = OpenApiPartParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, schema, input, <jk>long</jk>[][].<jk>class</jk>);
+</p>
+<p>
+	The class hierarchy for the part serializers are:
+</p>
+
+<ul class='doctree'>
+	<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parses directly from strings.
+		<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parses from UON notation.
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parses using Open-API schema rules.
+		</ul>
+	</ul>
+</ul>
+

@@ -1,0 +1,126 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Parsing into Generic Models
+
+<p>
+	The Juneau parsers are not limited to parsing back into the original bean classes.
+	<br>If the bean classes are not available on the parsing side, the parser can also be used to 
+	parse into a generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive
+	objects.
+</p>
+<p>
+	You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
+	using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
+	for converting values to various types.
+	<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
+	<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
+	<code>String[][]</code>), but using {@link org.apache.juneau.ObjectList} is recommended.
+</p>
+<p>
+	When the map or list type is not specified, or is the abstract <code>Map</code>, <code>Collection</code>, 
+	or <code>List</code> types, the parser will use <code>ObjectMap</code> and <code>ObjectList</code> by 
+	default.
+</p>
+<p>
+	For example, given the following JSON:
+</p>
+<p class='bcode w800'>
+	{
+		id: <jk>1</jk>, 
+		name: <js>'John Smith'</js>, 
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: <jk>1</jk>, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: <jk>12345</jk>, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}
+</p>
+<p>
+	We can parse this into a generic <code>ObjectMap</code>:
+</p>
+<p class='bcode w800'>	
+	<jc>// Parse JSON into a generic POJO model.</jc>
+	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
+
+	<jc>// Convert it back to JSON.</jc>
+	String json = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(m);
+</p>
+<p>
+	What we end up with is the exact same output.
+	<br>Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
+	<code>Boolean</code> objects when parsing into generic models.
+</p>
+<p class='bcode w800'>
+	{
+		id: <jk>1</jk>, 
+		name: <js>'John Smith'</js>, 
+		uri: <js>'http://sample/addressBook/person/1'</js>, 
+		addressBookUri: <js>'http://sample/addressBook'</js>, 
+		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 
+		addresses: [
+			{
+				uri: <js>'http://sample/addressBook/address/1'</js>, 
+				personUri: <js>'http://sample/addressBook/person/1'</js>, 
+				id: <jk>1</jk>, 
+				street: <js>'100 Main Street'</js>, 
+				city: <js>'Anywhereville'</js>, 
+				state: <js>'NY'</js>, 
+				zip: <jk>12345</jk>, 
+				isCurrent: <jk>true</jk>
+			}
+		]
+	}
+</p>
+<p>
+	Once parsed into a generic model, various convenience methods are provided on the <code>ObjectMap</code>
+		and <code>ObjectList</code> classes to retrieve values:
+</p>
+<p class='bcode w800'>
+	<jc>// Parse JSON into a generic POJO model.</jc>
+	ObjectMap m = JsonParser.<jsf>DEFAULT</jsf>.parse(json, ObjectMap.<jk>class</jk>);
+
+	<jc>// Get some simple values.</jc>
+	String name = m.getString(<js>"name"</js>);
+	<jk>int</jk> id = m.getInt(<js>"id"</js>);
+
+	<jc>// Get a value convertable from a String.</jc>
+	URI uri = m.get(URI.<jk>class</jk>, <js>"uri"</js>);
+
+	<jc>// Get a value using a swap.</jc>
+	CalendarSwap swap = <jk>new</jk> CalendarSwap.ISO8601DTZ();
+	Calendar birthDate = m.get(swap, <js>"birthDate"</js>);
+
+	<jc>// Get the addresses.</jc>
+	ObjectList addresses = m.getObjectList(<js>"addresses"</js>);
+
+	<jc>// Get the first address and convert it to a bean.</jc>
+	Address address = addresses.get(Address.<jk>class</jk>, 0);
+</p>
+
+<p>
+	As a general rule, parsing into beans is often more efficient than parsing into generic models.
+	<br>And working with beans is often less error prone than working with generic models.
+</p>		

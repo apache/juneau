@@ -1,0 +1,85 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Config Stores
+
+<p>
+	Configuration files are stored in entities called Stores.
+</p>
+<p>
+	The methods that need to be implemented on a store are:
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.config.store.ConfigStore}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#read(String) read(String)} - Read a config file.
+		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#write(String,String,String) write(String,String,String)} - Write a config file.
+		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#update(String,String) update(String,String)} - Update the contents of a config file.
+	</ul>
+</ul>
+<p>
+	Read is self-explanatory:
+</p>
+<p class='bcode w800'>
+	<jk>public</jk> String read(String name) {
+		<jc>// Return the contents of the specified configuration.</jc>
+	}
+</p>
+<p>
+	Write is slightly trickier:
+</p>
+<p class='bcode w800'>
+	<jk>public</jk> String write(String name, String oldContents, String newContents) {
+	
+		<jc>// If the old contents match the current stored contents, the new contents will get stored, 
+		//	and the method returns null indicating success.
+	
+		// If the old contents DO NOT match the current stored contents (i.e. it was modified in some way), 
+		//	the new contents are NOT stored, and the method returns the current stored contents.
+	
+		// If the old contents are null, then just always write the new contents.</jc>
+	}
+</p>
+<p>
+	The update method is called whenever the stored file gets modified externally:
+</p>		
+<p class='bcode w800'>
+	<jk>public</jk> String update(String name, String newContents) {
+		<jc>// Do something with the updated contents.</jc>
+	}
+</p>
+<p>
+	Two configuration stores are provided by default:
+</p>
+<ul>
+	<li class='jc'>{@link org.apache.juneau.config.store.ConfigFileStore} - File-system storage.
+	<li class='jc'>{@link org.apache.juneau.config.store.ConfigMemoryStore} - In-memory storage.
+</ul>
+<p>
+	The store is defined on the <code>Config</code> object via the following setting:
+</p>
+<ul>
+	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_store}
+</ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<jc>// Create a config with in-memory storage.</jc>
+	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
+</p>
+<p>
+	The default store used is {@link org.apache.juneau.config.store.ConfigFileStore#DEFAULT} which defines
+	the execution directory as the file system directory to store and retrieve files. 
+</p>

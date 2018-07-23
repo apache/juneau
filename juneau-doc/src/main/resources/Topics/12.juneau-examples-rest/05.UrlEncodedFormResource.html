@@ -1,0 +1,163 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+UrlEncodedFormResource
+
+<p>
+	The <l>UrlEncodedFormResource</l> class provides examples of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		How to use form entry beans to process form POSTs.
+	<li>
+		How to use the {@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)} method to 
+		serve up static files with embedded string variables.
+</ul>
+<p>
+	The class is shown below:
+</p>
+
+<h5 class='figure'>UrlEncodedFormResource.java</h5>
+<p class='bcode w800'>
+	<jd>/** 
+	* Sample REST resource for loading URL-Encoded form posts into POJOs. 
+	*/</jd> 
+	<ja>@RestResource</ja>( 
+		path=<js>"/urlEncodedForm"</js>, 
+		messages=<js>"nls/UrlEncodedFormResource"</js>
+		title=<js>"URL-Encoded form example"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={ 
+				StyleMenuItem.<jk>class</jk> 
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows how to process a FORM POST body into a bean using the &lt;code&gt;@Body&lt;/code&gt; annotation.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Submitting the form post will simply echo the bean back on the response.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			}
+		)
+	) 
+	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> BasicRestServlet { 
+		
+		<jd>/** GET request handler */</jd>
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, 
+			path=<js>"/"</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				script={
+					<js>"// Load results from IFrame into this document."</js>,
+					<js>"function loadResults(buff) {"</js>,
+					<js>"	var doc = buff.contentDocument || buff.contentWindow.document;"</js>,
+					<js>"	var buffBody = doc.getElementById('data');"</js>,
+					<js>"	document.getElementById('results').innerHTML = buffBody.innerHTML;"</js>,
+					<js>"}"</js>
+				}
+			)
+		)
+		<jk>public</jk> Div doGet(RestRequest req) {
+			<jk>return</jk> <jsm>div</jsm>(
+				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<jsf>POST</jsf>).target(<js>"buff"</js>).children(
+					<jsm>table</jsm>(
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(req.getMessage(<js>"aString"</js>)),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aString"</js>).type(<js>"text"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(req.getMessage(<js>"aNumber"</js>)),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aNumber"</js>).type(<js>"number"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(req.getMessage(<js>"aDate"</js>)),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aDate"</js>).type(<js>"datetime"</js>), <js>" (ISO8601, e.g. "</js>, <jsm>code</jsm>(<js>"2001-07-04T15:30:45Z"</js>), <js>" )"</js>)
+						),
+						<jsm>tr</jsm>(
+							<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
+								<jsm>button</jsm>(<js>"submit"</js>, req.getMessage(<js>"submit"</js>))
+							)
+						)
+					)
+				),
+				<jsm>br</jsm>(),
+				<jsm>div</jsm>().id(<js>"results"</js>),
+				<jsm>iframe</jsm>().name(<js>"buff"</js>).style(<js>"display:none"</js>).onload(<js>"parent.loadResults(this)"</js>)
+			);
+		}
+	
+		<jd>/** POST request handler */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path="/")
+		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception {
+			<jc>// Just mirror back the request</jc>
+			<jk>return</jk> input;
+		}
+	
+		<jk>public static class</jk> FormInputBean {
+			<jk>public</jk> String <jf>aString</jf>;
+			<jk>public int</jk> <jf>aNumber</jf>;
+			<ja>@Swap</ja>(CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
+			<jk>public</jk> Calendar <jf>aDate</jf>;
+		}
+	}
+</p>
+<p>
+	The localized messages are pulled from the resource bundle:
+</p>
+
+<h5 class='figure'>UrlEncodedFormResource.properties</h5>
+<p class='bcode w800'>
+	<cc>#--------------------------------------------------------------------------------
+	# UrlEncodedFormResource labels
+	#--------------------------------------------------------------------------------</cc>
+	<ck>aString</ck> = <cv>A String:</cv>
+	<ck>aNumber</ck> = <cv>A Number:</cv>
+	<ck>aDate</ck> = <cv>A Date:</cv>
+	<ck>submit</ck> = <cv>submit</cv>		
+</p>
+<p>
+	The <l>$R</l> variables are request string variables.  
+	<br>In this case, <l>$R{resourceTitle}</l> and <l>$R{resourceDescription}</l> resolve to the values returned by 
+	{@link org.apache.juneau.rest.RestRequest#getResourceTitle()} and 
+	{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}.
+</p>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/urlEncodedForm
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.UrlEncodedFormResource.1.png'>
+<p>
+	Entering some values and clicking <l>submit</l> causes the form bean to be populated
+	and returned back as a POJO response:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/urlEncodedForm
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.UrlEncodedFormResource.2.png'>
+
+<h5 class='toc'>Additional Information</h5>
+<ul class='toc'>
+	<li class='jm'>
+		{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])} 
+		- Servlet and request variables.
+	<li class='jm'>
+		{@link org.apache.juneau.rest.RestCallHandler#getSessionObjects(RestRequest)} 
+		- Var resolver session objects.
+</ul>

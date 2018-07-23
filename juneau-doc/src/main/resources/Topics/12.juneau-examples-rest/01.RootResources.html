@@ -1,0 +1,162 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+RootResources
+
+<p>
+	The <l>RootResources</l> class is the main page for the REST microservice.
+	It serves as the jumping-off point for the other resources.
+</p>
+<p>
+	The class hierarchy for this class is:
+</p>
+<ul class='doctree'>
+	<li class='jac'>
+		{@link org.apache.juneau.rest.RestServlet} - Contains all the REST servlet logic.
+		<ul>
+			<li class='jac'>
+				{@link org.apache.juneau.rest.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
+				<ul>
+					<li class='jac'>
+						{@link org.apache.juneau.rest.BasicRestServletGroup} - Specialized subclass for grouping other resources.
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.RootResources.1.png'>
+<p>
+	The <l>RootResources</l> class can also be defined as a servlet in a <l>web.xml</l> file:
+</p>
+<p class='bcode w800'>
+	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>'2.3'</xs><xt>&gt;</xt>
+		<xt>&lt;servlet&gt;</xt>
+			<xt>&lt;servlet-name&gt;</xt>RootResources<xt>&lt;/servlet-name&gt;</xt>
+			<xt>&lt;servlet-class&gt;</xt>org.apache.juneau.rest.samples.RootResources<xt>&lt;/servlet-class&gt;</xt>
+		<xt>&lt;/servlet&gt;</xt>
+		<xt>&lt;servlet-mapping&gt;</xt>
+			<xt>&lt;servlet-name&gt;</xt>RootResources<xt>&lt;/servlet-name&gt;</xt>
+			<xt>&lt;url-pattern&gt;</xt>/*<xt>&lt;/url-pattern&gt;</xt>
+		<xt>&lt;/servlet-mapping&gt;</xt>
+	<xt>&lt;/web-app&gt;</xt>
+</p>
+<p>
+	The <l>RootResources</l> class consists entirely of annotations:
+</p>
+
+<h5 class='figure'>RootResources.java</h5>
+<p class='bcode w800'>
+	<jd>/**
+	 * Sample REST resource showing how to implement a "router" resource page.
+	 */</jd>
+	<ja>@RestResource</ja>(
+		path=<js>"/"</js>,
+		title=<js>"Root resources"</js>,
+		description=<js>"Example of a router resource page."</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				PoweredByApache.<jk>class</jk>,
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"options: ?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;options&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+				<js><js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;sources&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
+				"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+			footer=<js>"$W{PoweredByApache}"</js>
+		),
+		properties={
+			<jc>// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+			// String comparisons.
+			// You can apply any of the Serializer/Parser/BeanContext settings this way.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+		},
+		children={
+			HelloWorldResource.<jk>class</jk>,
+			PetStoreResource.<jk>class</jk>,
+			SystemPropertiesResource.<jk>class</jk>,
+			MethodExampleResource.<jk>class</jk>,
+			RequestEchoResource.<jk>class</jk>,
+			TempDirResource.<jk>class</jk>,
+			AddressBookResource.<jk>class</jk>,
+			SampleRemoteableServlet.<jk>class</jk>,
+			PhotosResource.<jk>class</jk>,
+			AtomFeedResource.<jk>class</jk>,
+			JsonSchemaResource.<jk>class</jk>,
+			SqlQueryResource.<jk>class</jk>,
+			CodeFormatterResource.<jk>class</jk>,
+			UrlEncodedFormResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			LogsResource.<jk>class</jk>,
+			DockerRegistryResource.<jk>class</jk>,
+			PredefinedLabelsResource.<jk>class</jk>,
+			DebugResource.<jk>class</jk>,
+			ShutdownResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
+		<jc>// No code!</jc>
+	}
+</p>
+<p>
+	The <l>children</l> annotation defines the child resources of this router resource.
+	<br>These are resources whose paths are direct decendents to the parent resource.			
+</p>
+<p>
+	Child resources must be annotated with the {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource.path()} annotation to 
+	identify the subpath of the child.
+	<br>Children CAN extend from {@link org.apache.juneau.rest.BasicRestServlet}, but it is not a requirement.
+</p>
+<p>
+	Child resources can also be defined programmatically by using the 
+	{@link org.apache.juneau.rest.RestContextBuilder#children(Class[])} method.
+</p>
+<p>
+	Note that these router pages can be arbitrarily nested deep.  
+	You can define many levels of router pages for arbitrarily hierarchical REST interfaces. 
+</p>
+<p>
+	Let's step back and describe what's going on here:
+	<br>During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the 
+	<l>@RestResource.children()</l> annotation.  
+	<br>If it finds it, it instantiates instances of each class and recursively performs servlet initialization 
+	on them.  
+	<br>It then associates the child resource with the parent by the name specified by the 
+	<l>@RestResource.path()</l> annotation on the child class.  
+	<br>When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet 
+	gets the request and sees that the URL remainder matches one of its child resources.  
+	<br>It then forwards the request to the child resource for processing.  
+	<br>The request passed to the child resource is the same as if the child resource had been deployed 
+	independently (e.g. path-info, resource-URI, and so forth).
+</p>

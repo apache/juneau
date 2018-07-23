@@ -1,0 +1,151 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+TempDirResource
+
+<p>	
+	The <l>TempDirResource</l> class shows examples of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Extending the {@link org.apache.juneau.microservice.resources.DirectoryResource} class.
+	<li>
+		Using the Apache <l>ServletFileUpload</l> class to handle multi-part form posts.
+	<li>
+		Using a system property string variable.
+	<li>
+		Using {@link org.apache.juneau.rest.RestMatcher RestMatchers}.
+</ul>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/tempDir
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.TempDirResource.1.png'>
+<p>
+	Pointing a browser to the <l>upload</l> link shows a form entry page:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/tempDir/upload
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.TempDirResource.2.png'>
+<p>
+	Submitting a file redirects to the top-level page:
+</p>	
+<p class='bcode w800'>
+	http://localhost:10000/tempDir
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.TempDirResource.3.png'>
+
+<h5 class='figure'>TempDirResource.java</h5>
+<p class='bcode w800'>
+	<jd>/** 
+	* Sample resource that extends DirectoryResource to open up the temp directory as a REST resource. 
+	*/</jd> 
+	<ja>@RestResource</ja>( 
+		path=<js>"/tempDir"</js>,
+		title=<js>"Temp Directory View Service"</js>,
+		description=<js>"View and download files in the '$R{rootDir}' directory."</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"upload: servlet:/upload"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows how to use the predefined DirectoryResource class.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Also shows how to use HTML5 beans to create a form entry page.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			}
+		),
+		properties={
+			<ja>@Property</ja>(name=<js>"rootDir"</js>, value=<js>"$C{TempDirResource/dir,$S{java.io.tmpdir}}"</js>),
+			<ja>@Property</ja>(name=<js>"allowViews"</js>, value=<js>"true"</js>),
+			<ja>@Property</ja>(name=<js>"allowDeletes"</js>, value=<js>"true"</js>),
+			<ja>@Property</ja>(name=<js>"allowPuts"</js>, value=<js>"false"</js>)
+		}
+	) 
+	<jk>public class</jk> TempDirResource <jk>extends</jk> DirectoryResource { 
+	
+		<ja>@Override</ja> <jc>/* DirectoryResource */</jc>
+		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		<jk>public void</jk> init(RestContextBuilder b) <jk>throws</jk> Exception { 
+			<jk>super</jk>.<jk>init</jk>(b);
+			File rootDir = getRootDir();
+			<jk>if</jk> (! rootDir.exists()) {
+				rootDir.mkdirs();
+				
+				<jc>// Make some dummy files.</jc>
+				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"A.txt"</js>));
+				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"B.txt"</js>));
+				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"C.txt"</js>));
+			}
+		}
+		
+		<jd>/**
+		 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/upload"</js>)
+		<jk>public</jk> Form getUploadForm() {
+			<jk>return</jk>
+				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/upload"</js>).method(<jsf>POST</jsf>).enctype(<js>"multipart/form-data"</js>)
+				.children(
+					<jsm>input</jsm>().name(<js>"contents"</js>).type(<js>"file"</js>),
+					<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>)
+				)
+			;
+		}
+		
+		<jd>/** 
+		* [POST /upload] - Upload a file as a multipart form post. 
+		* Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>, 
+			path=<js>"/upload"</js>, 
+			matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>
+		) 
+		<jk>public</jk> Redirect uploadFile(RestRequest req) <jk>throws</jk> Exception { 
+			ServletFileUpload upload = <jk>new</jk> ServletFileUpload(); 
+			FileItemIterator iter = upload.getItemIterator(req); 
+			<jk>while</jk> (iter.hasNext()) { 
+				FileItemStream item = iter.next(); 
+				<jk>if</jk> (item.getFieldName().equals(<js>"contents"</js>)) {
+					File f = <jk>new</jk> File(getRootDir(), item.getName()); 
+					IOPipe.<jsm>create</jsm>(item.openStream(), <jk>new</jk> FileOutputStream(f)).closeOut().run(); 
+				} 
+			} 
+			<jk>return new</jk> Redirect(); <jc>// Redirect to the servlet root.</jc> 
+		} 
+		
+		<jd>/** Causes a 404 if POST isn't multipart/form-data */</jd> 
+		<jk>public static class</jk> MultipartFormDataMatcher <jk>extends</jk> RestMatcher { 
+			<ja>@Override</ja> <jc>/* RestMatcher */</jc> 
+			<jk>public boolean</jk> matches(RestRequest req) { 
+				String contentType = req.getContentType(); 
+				<jk>return</jk> contentType != <jk>null</jk> &amp;&amp; contentType.startsWith(<js>"multipart/form-data"</js>); 
+			} 
+		} 
+	}		
+</p>

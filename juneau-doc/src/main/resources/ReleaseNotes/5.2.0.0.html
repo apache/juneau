@@ -1,0 +1,436 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.2.0.0 (Dec 30, 2015)
+
+<p>
+	Juno 5.2.0.0 is a major update.
+	Major changes have been made to the microservice architecture and config INI file APIs.
+</p>
+
+<h5 class='topic w800'>Core</h5>
+<ul class='spaced-list'>
+	<li>Significant changes and enhancements to the <code>org.apache.juneau.config</code> API.
+		<ul>
+			<li>More consistent handling of comma-delimited lists of objects.
+			<li>New methods in <code><del>ConfigFile</del></code>:
+				<ul>
+					<li><code><del>ConfigFile.getStringArray(String)</del></code>,<code><del>ConfigFile.getStringArray(String,String[])</del></code>
+					<li><code><del>ConfigFile.getSectionAsBean(String,Class)</del></code> - Instantiate a new bean with property values in the specified section..
+					<li><code><del>ConfigFile.writeProperties(String,Object,boolean,Class[])</del></code> - Copy the properties in a config file section into properties on an existing bean or POJO.
+					<li><code><del>ConfigFile.getSectionMap(String)</del></code> - Get all the resolved values in a section.
+					<li><code><del>ConfigFile.containsNonEmptyValue(String)</del></code> 
+					<li><code><del>ConfigFile.isEncoded(String)</del></code> 
+					<li><code><del>ConfigFile.addListener(ConfigFileListener)</del></code> - Listen for modification events on the config file.
+					<li><code><del>ConfigFile.merge(ConfigFile)</del></code> - Merge the contents of another config file into this config file.
+					<li><code><del>ConfigFile.getResolving()</del></code>, <del><code>ConfigFile.getResolving(StringVarResolver)</code></del> - Return an instance of the config file that resolves string variables.
+						Much more efficient than the previous design since the same underlying config file object is shared.
+					<li><code><del>ConfigFile.toWritable()</del></code> - Wraps the config file in a {@link org.apache.juneau.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
+					<li><code><del>ConfigFile.getInt(String)</del></code> - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
+				</ul>
+			<li>New methods in <code><del>ConfigMgr</del></code>:
+				<ul>
+					<li><code><del>ConfigMgr.create()</del></code>, <code><del>ConfigMgr.create(Reader)</del></code>, <code><del>ConfigMgr.create(File)</del></code>
+					<li><code><del>ConfigMgr.deleteAll()</del></code>	
+				</ul>
+			<li>New methods in <code><del>Section</del></code>:
+				<ul>
+					<li><code><del>Section.setParent(ConfigFileImpl)</del></code> - Used by parsers to set the config file for this section.
+					<li><code><del>Section.setName(String)</del></code> - Used by parsers to set the name for this section.
+				</ul>
+			<li>New interfaces:
+				<ul>
+					<li><code><del>org.apache.juneau.config.ConfigFileListener</del></code>
+					<li><code><del>org.apache.juneau.config.SectionListener</del></code>
+					<li><code><del>org.apache.juneau.config.EntryListener</del></code> 
+				</ul>
+			<li><code><del>org.apache.juneau.config.Encoder</del></code> methods have access to field names to use them as salt values.
+			<li>The name of the default section is now <js>"default"</js>.  Before it was just <jk>null</jk>.
+			<li><code><del>org.apache.juneau.config.XorEncoder</del></code> XOR key can be overridden through the <js>"org.apache.juneau.config.XorEncoder.key"</js> system property.
+		</ul> 
+	<li>Support for converting Strings to POJOs if the POJO class has any of the following static methods: 
+		<ul>
+			<li><code>fromString(String)</code>
+			<li><code>valueOf(String)</code> (e.g. enums)
+			<li><code>parse(String)</code> (e.g. logging <code>Level</code> class)
+			<li><code>parseString(String)</code>
+			<li><code>forName(String)</code> (e.g. <code>Class</code> and <code>Charset</code> classes)
+		</ul>
+	<li>Support for parsing into objects with unbound type variables.
+		For example, if you have a class <code>Pair&lt;S,T&gt;</code> and you try to parse into this
+		class (e.g. <code>parser.parse(in, Pair.<jk>class</jk>)</code>), the unbound type variables
+		is interpreted as <code>Object</code> instead of throwing an exception.
+	<li>Support for serializing/parsing the following new types:
+		<ul>
+			<li><code>AtomicInteger</code>
+			<li><code>AtomicLong</code>
+			<li><code>BigInteger</code>
+			<li><code>BigDecimal</code>
+		</ul>
+	<li>Parsers have been enhanced to allow parent POJOs and field names to be passed into child POJOs.
+		New {@link org.apache.juneau.annotation.NameProperty @NameProperty} and {@link org.apache.juneau.annotation.ParentProperty @ParentProperty}
+			annotations are provided for identifying methods for setting names and parent POJOs on child POJOs.
+		For example, the config file <code><del>Section</del></code> class represents a section
+		in a config file.  It needs to know it's own name and have a link to the <code><del>ConfigFile</del></code> 
+		that it belongs to.  With these new annotations, config files can be reconstructed using any of the parsers.
+	<li>New classes and interfaces:
+		<ul>
+			<li>{@link org.apache.juneau.Streamable} interface for identifying objects that can be serialized directly to an output stream.
+			<li>{@link org.apache.juneau.Writable} interface for identifying objects that can be serialized directly to a writer.
+			<li><code><del>StringObject</del></code> class that can be used for delayed object serialization.
+			<li>{@link org.apache.juneau.internal.ByteArrayCache}
+			<li>{@link org.apache.juneau.internal.ByteArrayInOutStream} 
+			<li>{@link org.apache.juneau.internal.FileUtils}
+			<li>{@link org.apache.juneau.internal.ThrowableUtils}
+			<li><del><code>StringVarMultipart</code></del>
+			<li><del><code>StringVarWithDefault</code></del>
+		</ul> 
+	<li>New fields on {@link org.apache.juneau.ObjectList}:
+		<ul>
+			<li>{@link org.apache.juneau.ObjectList#EMPTY_LIST}
+		</ul>
+	<li>New fields and methods on {@link org.apache.juneau.ObjectMap}:
+		<ul>
+			<li>{@link org.apache.juneau.ObjectMap#EMPTY_MAP}
+			<li>{@link org.apache.juneau.ObjectMap#getStringArray(String)}
+			<li>{@link org.apache.juneau.ObjectMap#getStringArray(String,String[])}
+			<li>{@link org.apache.juneau.ObjectMap#putIfNull(String,Object)}
+			<li>{@link org.apache.juneau.ObjectMap#putIfEmpty(String,Object)}
+		</ul>
+	<li>New methods in {@link org.apache.juneau.internal.ArrayUtils}:
+		<ul>
+			<li>{@link org.apache.juneau.internal.ArrayUtils#contains(Object,Object[])}
+			<li>{@link org.apache.juneau.internal.ArrayUtils#indexOf(Object,Object[])}
+			<li>{@link org.apache.juneau.internal.ArrayUtils#toPrimitiveArray(Object)}
+		</ul>	
+	<li>New methods in {@link org.apache.juneau.internal.IOUtils}:
+		<ul>
+			<li>{@link org.apache.juneau.internal.IOUtils#pipe(Reader,Writer)}
+			<li>{@link org.apache.juneau.internal.IOUtils#read(File)}
+			<li>{@link org.apache.juneau.internal.IOUtils#readFile(String)}
+			<li>{@link org.apache.juneau.internal.IOUtils#write(File,Reader)}
+		</ul>
+	<li>New methods on {@link org.apache.juneau.utils.PojoRest}:
+		<ul>
+			<li><code><del>PojoRest.get(Class,String,Object)</del></code>
+			<li>{@link org.apache.juneau.utils.PojoRest#getString(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getString(String,String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getInt(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getInt(String,Integer)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getLong(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getLong(String,Long)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getBoolean(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getBoolean(String,Boolean)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getMap(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getMap(String,Map)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getList(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getList(String,List)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getObjectMap(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getObjectMap(String,ObjectMap)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getObjectList(String)}
+			<li>{@link org.apache.juneau.utils.PojoRest#getObjectList(String,ObjectList)}
+		</ul>
+	<li>New methods on {@link org.apache.juneau.utils.ProcBuilder}:
+		<ul>
+			<li>{@link org.apache.juneau.utils.ProcBuilder#pipeTo(Writer,boolean)}
+			<li>{@link org.apache.juneau.utils.ProcBuilder#pipeTo(Writer)}
+			<li>{@link org.apache.juneau.utils.ProcBuilder#logTo(Writer,boolean)}
+			<li>{@link org.apache.juneau.utils.ProcBuilder#logTo(Writer)}
+			<li>{@link org.apache.juneau.utils.ProcBuilder#logTo(Level,Logger)}
+			<li>{@link org.apache.juneau.utils.ProcBuilder#maxExitStatus(int)}
+		</ul>
+	<li>New methods on {@link org.apache.juneau.internal.StringUtils}:
+		<ul>
+			<li>{@link org.apache.juneau.internal.StringUtils#isEmpty(Object)}
+			<li>{@link org.apache.juneau.internal.StringUtils#nullIfEmpty(String)}
+			<li>{@link org.apache.juneau.internal.StringUtils#base64EncodeToString(String)}
+			<li>{@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])}
+			<li>{@link org.apache.juneau.internal.StringUtils#base64DecodeToString(String)}
+			<li>{@link org.apache.juneau.internal.StringUtils#base64Decode(String)}
+			<li>{@link org.apache.juneau.internal.StringUtils#generateUUID(int)}
+			<li>{@link org.apache.juneau.internal.StringUtils#trim(String)}
+			<li><code><del>StringUtils.parseISO8601Date(String)</del></code>
+			<li>{@link org.apache.juneau.internal.StringUtils#replaceVars(String,Map)}
+			<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String)}
+			<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String[])}
+		</ul>
+	<li>New <del><code>StringVar.doResolve(String)</code></del> method.
+	<li>New <del><code>StringVarResolver.DEFAULT</code></del> field.
+	<li>Eliminated dependency on <code>javax.mail.internet.MimeUtility</code> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
+	<li>{@link org.apache.juneau.transforms.CalendarSwap} and {@link org.apache.juneau.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
+	<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <code>/servletPath/style.css</code> instead of <code>/servletPath/htdocs/juneau.css</code>.  
+		This coincides with enhancements made in the server code for specifying styles.
+	<li>{@link org.apache.juneau.html.HtmlDocSerializer} wraps output in two div tags instead of one (e.g. <code>&lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;</code>).
+		Needed for supporting the new devops look-and-feel.
+	<li>Fixed indentation inconsistencies in {@link org.apache.juneau.html.HtmlDocSerializer}.
+	<li>Renamed <del>HtmlSchemaSerializer</del> to <del>HtmlSchemaDocSerializer</del>.
+	<li>RDF serializers and parsers now support <code>RdfProperties.RDF_looseCollection</code> loose collections.
+	<li>RDF parser handles case where resources point to themselves (an unfortunate behavior in JFS RDF documents).
+	<li>JSON parser with throw an exception in strict mode if it encounters numbers that are valid in Java but invalid in JSON (e.g. octal, hexadecimal numbers).
+	<li>{@link org.apache.juneau.parser.Parser} methods now check for <jk>null</jk> input.
+	<li>{@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup} ignores serializers and parsers if they throw <code>NoClassDefFoundErrors</code>.
+	<li>{@link org.apache.juneau.urlencoding.UrlEncodingParser} creates lists if the same attribute name is encountered more than once.  Before it would just replace the previous value with the new value.
+	<li>New <code><del>UrlEncodingSerializer.DEFAULT_SIMPLE_EXPANDED</del></code> serializer.
+	<li>Changes to {@link org.apache.juneau.utils.Args}:
+		<ul>
+			<li><code>getMainArg(int)</code> changed to {@link org.apache.juneau.utils.Args#getArg(int)}.  
+				Non-existent arguments are returned as <jk>null</jk> instead of blank strings.  
+				This is more inline with the behavior of the rest of the library.
+			<li>New {@link org.apache.juneau.utils.Args#hasArg(int)} method.
+		</ul> 
+	<li>Removed <code>org.apache.juneau.utils.CharsetUtils</code> class.
+	<li>Removed <code>org.apache.juneau.utils.ConcurrentIdentityList</code> class.
+	<li>Fixed bug in {@link org.apache.juneau.internal.MultiIterable} class.
+	<li>{@link org.apache.juneau.utils.PojoIntrospector} must now be instantiated with a <code>ReaderParser</code>.
+		Simplifies the API on the class.
+	<li>{@link org.apache.juneau.utils.PojoRest} must now be instantiated with a <code>ReaderParser</code>.
+		Simplifies the API on the class.
+	<li>{@link org.apache.juneau.utils.MessageBundle} and <code>SafeResourceMultiBundle</code> moved from server component.
+	<li>Several bug fixes and performance improvements in <del><code>StringVarResolver</code></del>.
+	<li>Various enhancements to {@link org.apache.juneau.internal.TeeWriter} and {@link org.apache.juneau.internal.TeeOutputStream}.
+	<li>Renamed <del>CharSet</del> to {@link org.apache.juneau.internal.AsciiSet}.
+	<li>{@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup} now ignores <code>NoClassDefFoundErrors</code>
+		so that resources that include Jena support can continue to operate even if the Jena libraries are not present.
+	<li>New {@link org.apache.juneau.internal.FileUtils#createTempFile(String)} method.
+	<li>New {@link org.apache.juneau.utils.PojoQuery} modified to handle bean getters that throw exceptions.
+</ul>
+
+<h5 class='topic w800'>Client</h5>
+<ul class='spaced-list'>
+	<li>Upgraded to use Apache HttpClient 4.5.
+	<li>New classes:
+		<ul>
+			<li>{@link org.apache.juneau.rest.client.AllowAllRedirects}
+			<li>{@link org.apache.juneau.rest.client.HttpMethod}
+			<li>{@link org.apache.juneau.rest.client.ResponsePattern}
+			<li>{@link org.apache.juneau.rest.client.SimpleX509TrustManager}
+			<li><code><del>SSLOpts</del></code>
+		</ul>
+	<li>Removed <code>org.apache.juneau.rest.client.LaxRedirectStrategy</code>.  Use HTTP Client equivalent.
+	<li>New methods on {@link org.apache.juneau.rest.client.RestCall}:
+		<ul>
+			<li><code><del>RestCall#addInterceptor(RestCallInterceptor)</del></code>
+			<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(Writer)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(Writer,boolean)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(String,Writer,boolean)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#getWriter(String)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(OutputStream)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(OutputStream,boolean)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#pipeTo(String,OutputStream,boolean)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#getOutputStream(String)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#byLines()}
+			<li>{@link org.apache.juneau.rest.client.RestCall#captureResponse()}
+			<li>{@link org.apache.juneau.rest.client.RestCall#successPattern(String)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#failurePattern(String)}
+			<li><code><del>RestCall#addResponsePattern(ResponsePattern)</del></code>
+			<li>{@link org.apache.juneau.rest.client.RestCall#run()} - Renamed from <code>execute()</code>.
+			<li>{@link org.apache.juneau.rest.client.RestCall#getCapturedResponse()}
+			<li>{@link org.apache.juneau.rest.client.RestCall#getResponsePojoRest(Class)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#getResponsePojoRest()}
+			<li>{@link org.apache.juneau.rest.client.RestCall#logTo(Level,Logger)}
+			<li>{@link org.apache.juneau.rest.client.RestCall#setConfig(RequestConfig)}
+		</ul>
+	<li>New lifecycle listener methods on {@link org.apache.juneau.rest.client.RestCallInterceptor}:
+		<ul>
+			<li>{@link org.apache.juneau.rest.client.RestCallInterceptor#onInit(RestCall)}
+			<li>{@link org.apache.juneau.rest.client.RestCallInterceptor#onClose(RestCall)}
+		</ul>
+	<li>New methods on {@link org.apache.juneau.rest.client.RestClient}:
+		<ul>
+			<li><code><del>RestClient.setBasicAuth(String,int,String,String)</del></code>
+			<li><code><del>RestClient.logTo(Level,Logger)</del></code>
+			<li><code><del>RestClient.setRootUrl(String)</del></code>
+			<li><code><del>RestClient.enableSSL(SSLOpts)</del></code>
+			<li><code><del>RestClient.enableLaxSSL()</del></code>
+			<li>{@link org.apache.juneau.rest.client.RestClient#doCall(HttpMethod,Object,Object)}
+			<li><code><del>RestClient.createHttpClientBuilder()</del></code>
+		</ul>
+	<li>New passthrough methods on {@link org.apache.juneau.rest.client.RestClient} defined on <code>HttpClientBuilder</code>:
+		<ul>
+			<li><code><del>RestClient.setRedirectStrategy(RedirectStrategy)</del></code>
+			<li><code><del>RestClient.setDefaultCookieSpecRegistry(Lookup)</del></code>
+			<li><code><del>RestClient.setRequestExecutor(HttpRequestExecutor)</del></code>
+			<li><code><del>RestClient.setSSLHostnameVerifier(HostnameVerifier)</del></code>
+			<li><code><del>RestClient.setPublicSuffixMatcher(PublicSuffixMatcher)</del></code>
+			<li><code><del>RestClient.setSSLContext(SSLContext)</del></code>
+			<li><code><del>RestClient.setSSLSocketFactory(LayeredConnectionSocketFactory)</del></code>
+			<li><code><del>RestClient.setMaxConnTotal(int)</del></code>
+			<li><code><del>RestClient.setMaxConnPerRoute(int)</del></code>
+			<li><code><del>RestClient.setDefaultSocketConfig(SocketConfig)</del></code>
+			<li><code><del>RestClient.setDefaultConnectionConfig(ConnectionConfig)</del></code>
+			<li><code><del>RestClient.setConnectionTimeToLive(long,TimeUnit)</del></code>
+			<li><code><del>RestClient.setConnectionManager(HttpClientConnectionManager)</del></code>
+			<li><code><del>RestClient.setConnectionManagerShared(boolean)</del></code>
+			<li><code><del>RestClient.setConnectionReuseStrategy(ConnectionReuseStrategy)</del></code>
+			<li><code><del>RestClient.setKeepAliveStrategy(ConnectionKeepAliveStrategy)</del></code>
+			<li><code><del>RestClient.setTargetAuthenticationStrategy(AuthenticationStrategy)</del></code>
+			<li><code><del>RestClient.setProxyAuthenticationStrategy(AuthenticationStrategy)</del></code>
+			<li><code><del>RestClient.setUserTokenHandler(UserTokenHandler)</del></code>
+			<li><code><del>RestClient.disableConnectionState()</del></code>
+			<li><code><del>RestClient.setSchemePortResolver(SchemePortResolver)</del></code>
+			<li><code><del>RestClient.setUserAgent(String userAgent)</del></code>
+			<li><code><del>RestClient.setDefaultHeaders(Collection)</del></code>
+			<li><code><del>RestClient.addInterceptorFirst(HttpResponseInterceptor)</del></code>
+			<li><code><del>RestClient.addInterceptorLast(HttpResponseInterceptor)</del></code>
+			<li><code><del>RestClient.addInterceptorFirst(HttpRequestInterceptor)</del></code>
+			<li><code><del>RestClient.addInterceptorLast(HttpRequestInterceptor)</del></code>
+			<li><code><del>RestClient.disableCookieManagement()</del></code>
+			<li><code><del>RestClient.disableContentCompression()</del></code>
+			<li><code><del>RestClient.disableAuthCaching()</del></code>
+			<li><code><del>RestClient.setHttpProcessor(HttpProcessor)</del></code>
+			<li><code><del>RestClient.setRetryHandler(HttpRequestRetryHandler)</del></code>
+			<li><code><del>RestClient.disableAutomaticRetries()</del></code>
+			<li><code><del>RestClient.setProxy(HttpHost)</del></code>
+			<li><code><del>RestClient.setRoutePlanner(HttpRoutePlanner)</del></code>
+			<li><code><del>RestClient.disableRedirectHandling()</del></code>
+			<li><code><del>RestClient.setConnectionBackoffStrategy(ConnectionBackoffStrategy)</del></code>
+			<li><code><del>RestClient.setBackoffManager(BackoffManager)</del></code>
+			<li><code><del>RestClient.setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)</del></code>
+			<li><code><del>RestClient.setDefaultCookieStore(CookieStore)</del></code>
+			<li><code><del>RestClient.setDefaultCredentialsProvider(CredentialsProvider)</del></code>
+			<li><code><del>RestClient.setDefaultAuthSchemeRegistry(Lookup)</del></code>
+			<li><code><del>RestClient.setContentDecoderRegistry(Map)</del></code>
+			<li><code><del>RestClient.setDefaultRequestConfig(RequestConfig)</del></code>
+			<li><code><del>RestClient.useSystemProperties()</del></code>
+			<li><code><del>RestClient.evictExpiredConnections()</del></code>
+			<li><code><del>RestClient.evictIdleConnections(long,TimeUnit)</del></code>
+		</ul>
+	<li><code>JazzRestClient</code> now supports OIDC authentication.
+	<li>These classes are now deprecated and will be removed in a future release:
+		<ul>
+			<li><code>org.apache.juneau.rest.client.jazz.CertificateStore</code>
+			<li><code>org.apache.juneau.rest.client.jazz.ICertificateValidator</code>
+			<li><code>org.apache.juneau.rest.client.jazz.ITrustStoreProvider</code>
+			<li><code>org.apache.juneau.rest.client.jazz.LenientCertificateValidator</code>
+			<li><code>org.apache.juneau.rest.client.jazz.SharedTrustStoreProvider</code>
+			<li><code>org.apache.juneau.rest.client.jazz.ValidatingX509TrustManager</code>
+		</ul>
+</ul>
+
+<h5 class='topic w800'>Server</h5>
+<ul class='spaced-list'>
+	<li>New <code><del>ReaderResource</del></code> class.   
+		Represents the contents of a text file with convenience methods for resolving
+		<del><code>StringVar</code></del> variables and adding HTTP response headers.	
+		REST Java methods can return instances of these to serialize <code>Readers</code>
+			containing text with <del><code>StringVarResolver</code></del> variables in them.
+	<li>New <code><del>StreamResource</del></code> class.   
+		REST Java methods can return instances of these to serialize <code>OutputStreams</code>.
+	<li>Fixed a bug in the stack trace hash algorithm in {@link org.apache.juneau.rest.RestException}.
+	<li>New methods in {@link org.apache.juneau.rest.RestRequest}:
+		<ul>
+			<li><code><del>RestRequest.getReaderResource(String)</del></code> - Replaces <code>getVarResource(String)</code>.
+			<li><code><del>RestRequest.getReaderResource(String,boolean)</del></code> 
+			<li><code><del>RestRequest.getReaderResource(String,boolean,String)</del></code>
+		</ul>
+	<li>Changes in {@link org.apache.juneau.rest.RestResponse}:
+		<ul>
+			<li>Don't set <code>Content-Encoding: identity</code> when no encoding is used.  Some clients don't interpret it correctly.
+		</ul>
+	<li>New methods in {@link org.apache.juneau.rest.RestServlet}:
+		<ul>
+			<li><code><del>RestServlet.getChildClasses()</del></code>  - Programmatic equivalent to {@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource.children()} annotation.
+			<li><code><del>RestServlet.shouldLog(HttpServletRequest,HttpServletResponse,RestException)</del></code> 
+			<li><code><del>RestServlet.shouldLogStackTrace(HttpServletRequest,HttpServletResponse,RestException)</del></code> 
+			<li><code><del>RestServlet.logObjects(Level,String,Object[])</del></code> 
+			<li><code><del>RestServlet.resolveStaticFile(String)</del></code> 
+			<li><code><del>RestServlet.createStyleSheet()</del></code> 
+			<li><code><del>RestServlet.createFavIcon()</del></code> 
+			<li><code><del>RestServlet.createStaticFilesMap()</del></code> 
+			<li><code><del>RestServlet.getConfigMgr()</del></code>
+		</ul>
+	<li>Removed {@link org.apache.juneau.jso.JsoParser}
+		from {@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.  
+		These may represent a security risk if not handled correctly, so removed
+		them as a precaution.
+	<li>Removed <code>RestServletProperties.REST_htDocsFolder</code>.  Replaced with {@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()}.
+	<li>New annotations on {@link org.apache.juneau.rest.annotation.RestResource @RestResource}.
+		<ul>
+			<li><code><del>RestResource.stylesheet()</del></code>
+			<li><code><del>RestResource.favicon()</del></code>
+			<li>{@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()}
+		</ul>
+	<li>Eliminated <code>org.apache.juneau.rest.jaxrs.JsonProvider</code> class.  
+		Some JAX-RS implementations use code scanning to find providers, so if you were using <code>DefaultJenaProvider</code>, it would
+		pick up <code>JsonProvider</code> as well.  It's easy enough to create your own implementation if needed.
+	<li>OPTIONS pages now specify <code>consumes</code> and <code>produces</code> fields instead of <code>accept</code> and <code>contentType</code> which was confusing.  
+	<li>Eliminated <code>properties</code> from OPTIONS pages. 
+	<li>New <code><del>ResourceLink.ResourceLink(String,RestRequest,String,Object[])</del></code> constructor.
+	<li>New response handlers:
+		<ul>
+			<li>{@link org.apache.juneau.rest.response.StreamableHandler} - Allows REST Java methods to return instances of {@link org.apache.juneau.Streamable}.
+			<li>{@link org.apache.juneau.rest.response.WritableHandler} - Allows REST Java methods to return instances of {@link org.apache.juneau.Writable}.
+		</ul>
+	<li>New DevOps stylesheet.
+	<li>Servlet initialization and HTTP requests are now logged at <JSF>FINE</JSF> level.
+	<li>Added <jk>abstract</jk> modifier on various <l>RestServlet</l> subclasses to indicate that they're meant to be subclassed.
+	<li>New <code><del>RestUtils.trimPathInfo(StringBuffer,String,String)</del></code> method.
+</ul>
+
+<h5 class='topic w800'>Microservice</h5>
+<ul class='spaced-list'>
+	<li>Completely revamped API.
+	<li>New {@link org.apache.juneau.microservice.Microservice} class that serves as a generic
+		interface for microservices and their lifecycles.
+	<li>New {@link org.apache.juneau.microservice.RestMicroservice} class that implements a microservice
+		consisting of a REST interface.
+		<ul>
+			<li>REST resources and configuration settings can be defined through either manifest files
+				or config files.
+			<li>Enhanced logging support.
+			<li>Easy-to-configure SSL support.
+			<li>BASIC auth support.
+			<li>Automatic restartability if the config file changes.
+		</ul>
+	<li>Eliminated <code>org.apache.juneau.microservice.Main</code> class.  This is replaced by
+		the microservice classes defined above.
+	<li><code><del>Resource</del></code> and <code><del>ResourceGroup</del></code>
+		classes now support the following new string variables:
+		<ul>
+			<li><js>"$A{key,default}""</js> - Command line arguments.
+			<li><js>"$MF{key,default}""</js> - Manifest file entries.
+		</ul> 
+	<li>CSS stylesheet now configurable through config file entry <js>"REST/stylesheet"</js>.
+	<li>New {@link org.apache.juneau.microservice.BasicRestServletJena} class if you want your REST interface to support RDF.
+	<li>Eliminated the following classes:
+		<ul>
+			<li><code>org.apache.juneau.microservice.RootResource</code>
+			<li><code>org.apache.juneau.microservice.SampleResource</code>
+		</ul> 
+	<li>New predefined reusable resources:
+		<ul>
+			<li>{@link org.apache.juneau.microservice.resources.ConfigResource} - REST resource for viewing and editing microservice config file.
+			<li>{@link org.apache.juneau.microservice.resources.LogsResource} - REST resource for viewing log files.
+			<li>{@link org.apache.juneau.microservice.resources.SampleRootResource} - Sample REST resource that contains the config and logs resource as children.
+			<li>{@link org.apache.juneau.microservice.resources.ShutdownResource} - REST resource for stopping the microservice JVM.  Useful for testing purposes.
+		</ul>
+</ul>
+
+<h5 class='topic w800'>Samples</h5>
+<ul class='spaced-list'>
+	<li>Converted to a REST microservice.
+	<li>Look-and-feel changed to IBM DevOps.
+</ul>
+
+<h5 class='topic w800'>Documentation Updates</h5>
+<ul class='spaced-list'>
+	<li><del>org.apache.juneau.microservice</del> - New package-level javadoc.
+	<li><del>org.apache.juneau.config</del> - New package-level javadoc.
+	<li><del><code>StringVarResolver</code></del> - New documentation.
+	<li><del>org.apache.juneau.rest.client</del> - New package-level javadoc.
+	<li><code><del>Overview / Samples</del></code> - New section.
+	<li><del>org.apache.juneau.transform / Stop Classes</del> - New section.
+	<li><del>org.apache.juneau.rest</del> - Extensive updates.
+</ul>

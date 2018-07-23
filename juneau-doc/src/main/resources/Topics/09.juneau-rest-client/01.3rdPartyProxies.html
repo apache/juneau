@@ -1,0 +1,87 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Interface Proxies Against 3rd-party REST Interfaces
+
+<p>
+	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
+	<br>This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
+	virtually any REST interface.
+</p>
+<p>
+	Similar in concept to remoteable services defined above, but in this case we simply define our interface with
+	special annotations that tell us how to convert input and output to HTTP headers, query parameters, form 
+	post parameters, or request/response bodies.
+</p>
+<p class='bcode w800'>	
+	<jc>// Our interface.</jc>
+	<ja>@Remoteable</ja>
+	<jk>public interface</jk> MyProxyInterface {
+		
+		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/method"</js>)
+		String callMyMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
+	}
+	
+	<jc>// Use a RestClient with default JSON support.</jc>
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().build()) {
+		MyProxyInterface p = client.getRemoteableProxy(MyProxyInterface.<jk>class</jk>, <js>"http://hostname/some/rest/interface"</js>);
+		String response = p.callMyMethod(UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>, <jk>new</jk> MyPojo());
+	}
+</p>
+<p>
+	The call above translates to the following REST call:
+</p>
+<p class='bcode w800'>
+	POST http://hostname/some/rest/interface/method?debug=true HTTP/1.1
+	Accept: application/json
+	Content-Type: application/json
+	E-Tag: 475588d4-0b27-4f56-9296-cc683251d314
+	
+	{ "foo": "bar", "baz": 123, "qux": true}
+</p>
+
+<p>
+	The Java method arguments can be annotated with any of the following:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
+</ul>
+<p>
+	The return type of the Java method can be any of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<jk>void</jk> 
+		- Don't parse any response.  
+		<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
+	<li>
+		Any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO 
+		- The body of the response will be converted to the POJO using the parser defined on the 
+		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
+	<li>
+		<code>HttpResponse</code> 
+		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+	<li>
+		{@link java.io.Reader} 
+		- Returns access to the raw reader of the response.
+		<br>Note that if you don't want your response parsed as a POJO, you'll want to get the response reader 
+		directly.
+	<li>
+		{@link java.io.InputStream} 
+		- Returns access to the raw input stream of the response.
+</ul>

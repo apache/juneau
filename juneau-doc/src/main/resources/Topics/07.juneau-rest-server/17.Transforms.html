@@ -1,0 +1,68 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Transforms
+
+<p>
+	The Juneau serializers and parsers can be configured on how to handle POJOs through the use of Transforms.
+	(See <a class='doclink' href='#juneau-marshall.Transforms'>Transforms</a>)
+</p>
+<p>
+	Transforms are associated serializers and parsers registered on a REST resource via the following:
+</p>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters()} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps()} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters()} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps()}
+	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#beanFilters(Object...)} 
+	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#pojoSwaps(Object...)} 
+</ul>
+<p class='bcode w800'>
+	<jc>// Servlet with transforms applied</jc>
+	<ja>@RestResource</ja>(
+		pojoSwaps={
+			<jc>// Calendars should be serialized/parsed as ISO8601 date-time strings</jc>
+			CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
+
+			<jc>// Byte arrays should be serialized/parsed as BASE64-encoded strings</jc>
+			ByteArrayBase64Swap.<jk>class</jk>
+		},
+		beanFilters={
+			<jc>// Subclasses of MyInterface will be treated as MyInterface objects.</jc>
+			<jc>// Bean properties not defined on that interface will be ignored.</jc>
+		}
+	)
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {...}
+</p>
+<p>
+	The programmatic equivalent to this is:
+</p>
+<p class='bcode w800'>
+	<jc>// Servlet with properties applied</jc>
+	<ja>@RestResource</ja>(...)
+	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
+	
+		<jk>public</jk> MyRestServlet(RestContextBuilder builder) {
+			
+			builder
+				.pojoSwaps(
+					CalendarSwap.<jsf>DEFAULT_ISO8601DT</jsf>.<jk>class</jk>,
+					ByteArrayBase64Swap.<jk>class</jk>
+				) 
+				.beanFilters(MyInterface.<jk>class</jk>);
+		}
+	}
+</p>

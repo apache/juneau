@@ -1,0 +1,89 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Listeners
+
+<p>
+	Configuration change events can be listened for using the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.Config#addListener(ConfigEventListener) addListener(ConfigEventListener)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#removeListener(ConfigEventListener) removeListener(ConfigEventListener)}
+	</ul>
+</ul>
+<p>
+	The {@link org.apache.juneau.config.event.ConfigEventListener} interface consists of the following method:
+</p>		
+<ul class='doctree'>
+	<li class='jic'>{@link org.apache.juneau.config.event.ConfigEventListener}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEventListener#onConfigChange(List) onConfigChange(List&lt;ConfigEvent&gt;)}
+	</ul>
+</ul>
+<p>
+	The {@link org.apache.juneau.config.event.ConfigEvent} class provides access to all the information about the updated entry:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.event.ConfigEvent}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getType() getType()}
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getSection() getSection()}
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getKey() getKey()}
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getValue() getValue()}
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getModifiers() getModifiers()}
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getComment() getComment()}
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getPreLines() getPreLines}
+	</ul>
+</ul>
+<p>
+	The listener method is triggered:
+</p>
+<ul class='spaced-list'>
+	<li>After {@link org.apache.juneau.config.Config#commit()} is called.
+	<li>When the file changes on the file system. 
+</ul>
+<p>
+	In both cases, the listener is triggered after the changes have been committed.
+</p>
+		<p class='bcode w800'>
+	<jk>final</jk> Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
+	
+	<jc>// Add a listener for changes to MySection/key1</jc>
+	c.addListener(
+		<jk>new</jk> ConfigEventListener() {
+			<ja>@Override</ja>
+			<jk>public void</jk> onConfigChange(List&lt;ConfigEvent&gt; events) {
+				<jk>for</jk> (ConfigEvent event : events) {
+					<jk>if</jk> (event.getType() == <jsf>SET_ENTRY</jsf>) {
+						
+						String section = event.getSection();
+						String key = event.getKey();
+					
+						<jk>if</jk> (section.equals(<js>"MySection"</js>) &amp;&amp; key.equals(<js>"key1"</js>)) {
+		
+							<jc>// Get the new value from the event.</jc>
+							String newVal = event.getValue();
+							
+							<jc>// Or get the new value from the config (since the change has already been committed).</jc>
+							newVal = c.getString(<js>"MySection/key1"</js>);
+						}
+					}
+				}
+			}
+		}
+	)
+</p>

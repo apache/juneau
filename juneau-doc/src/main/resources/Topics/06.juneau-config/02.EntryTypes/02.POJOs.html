@@ -1,0 +1,97 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+POJOs
+
+<p>
+	The following methods are provided for accessing POJO values:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Class) getObject(String,Class)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Object,Class) getObjectWithDefault(String,T,Class)}
+	</ul>
+</ul>
+<p>
+	In theory, any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO type can be represented
+	as a config value. 
+	<br>However in practice, we're typically talking about the following:
+</p>
+<ul>
+	<li>Objects convertible from Strings.
+	<li>Beans.
+</ul>
+<p>
+	An example of an object convertible from a String was already shown in an example above.
+	<br>In that case, it was a URL which has a public constructor that takes in a String:
+</p>
+<p class='bcode w800'>
+	<cc># A POJO</cc>
+	<ck>key4</ck> = <cv>http://bar</cv>
+</p>
+<p class='bcode w800'>
+	<jc>// Read values from section #1</jc>
+	URL key4 = c.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+</p>
+<p>
+	Beans are represented as <a class='doclink' href='#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> by default:
+</p>
+<p class='bcode w800'>
+	<jc>// Contact information</jc>
+	<cs>[ContactInfo]</cs>
+	<ck>address</ck> = 
+		<cv>{
+			street: '123 Main Street',
+			city: 'Anywhere',
+			state: 'NY',
+			zip: 12345
+		}</cv>
+			</p>
+			<p class='bcode w800'>
+	<jc>// Example bean</jc>
+	<jk>public class</jk> Address {
+		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
+		<jk>public</jk> StateEnum <jf>state</jf>;
+		<jk>public int</jk> <jf>zip</jf>;
+	}
+
+	<jc>// Example usage</jc>
+	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
+	Address myAddress = c.getObject(<js>"ContactInfo/address"</js>, Address.<jk>class</jk>);
+</p>
+<p>
+	The format for beans depends on the serializer and parser registered on the Config which 
+	is defined in the builder via the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.ConfigBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(Class) serializer(Class)}
+		<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#serializer(WriterSerializer) serializer(WriterSerializer)}
+		<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(Class) parser(Class)}
+		<li class='jm'>{@link org.apache.juneau.config.ConfigBuilder#parser(ReaderParser) parser(ReaderParser)}
+	</ul>
+</ul>
+<p>
+	The default parser can also be overridden on the following getters:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Class) getObject(String,Parser,Class)}
+		<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Parser,Object,Class) getObjectWithDefault(String,T,Parser,Class)}
+	</ul>
+</ul>

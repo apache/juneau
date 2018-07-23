@@ -1,0 +1,53 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Other Useful Methods
+
+<p>
+	The {@link org.apache.juneau.rest.client.RestClientBuilder#rootUrl(Object)} method can be used to specify a 
+	root URL on all requests so that you don't have to use absolute paths on individual calls.
+</p>
+<p class='bcode w800'>
+	<jc>// Create a rest client with a root URL</jc>
+	RestClient rc = RestClient.<jsm>create</jsm>().rootUrl(<js>"http://localhost:9080/foobar"</js>).build();
+	String r = rc.doGet(<js>"/baz"</js>).getResponseAsString();  <jc>// Gets "http://localhost:9080/foobar/baz"</jc>
+</p>
+<p>
+	The {@link org.apache.juneau.rest.client.RestClientBuilder#set(String,Object)} method can be used to 
+	set serializer and parser properties.
+	<br>For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
+	POJOs, you can use the {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
+</p>
+<p class='bcode w800'>
+	<jc>// Create a rest client that ignores unknown fields in the response</jc>
+	RestClient rc = RestClient.<jsm>create</jsm>()
+		.set(<jsf>BEAN_ignoreUnknownBeanProperties</jsf>, <jk>true</jk>)
+		<jc>// or .ignoreUnknownBeanProperties(true)</jc>
+		.build();
+	MyPojo myPojo = rc.doGet(<jsf>URL</jsf>).getResponse(MyPojo.<jk>class</jk>);
+</p>
+<p>
+	The {@link org.apache.juneau.rest.client.RestCall#retryable(int,long,RetryOn)} method can be used to 
+	automatically retry requests on failures.
+	<br>This can be particularly useful if you're attempting to connect to a REST resource that may be in the 
+	process of still initializing.
+</p>
+<p class='bcode w800'>
+	<jc>// Create a rest call that retries every 10 seconds for up to 30 minutes as long as a connection fails
+	// or a 400+ is received.</jc>
+	restClient.doGet(<jsf>URL</jsf>)
+		.retryable(180, 10000, RetryOn.<jsf>DEFAULT</jsf>)
+		.run();
+</p>

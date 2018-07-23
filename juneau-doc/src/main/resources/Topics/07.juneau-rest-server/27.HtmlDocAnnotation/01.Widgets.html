@@ -1,0 +1,131 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Widgets
+
+<p>
+	The {@link org.apache.juneau.rest.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
+	to HTML pages.
+<br>They are registered in the following locations:
+</p>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.HtmlDoc#widgets() @HtmlDoc.widgets}
+	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#widgets(Class...)}
+	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#widgets(Widget...)}
+	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
+</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(
+		widgets={
+			MyWidget.<jk>class</jk>
+		}
+		htmldoc=<ja>@HtmlDoc</ja>(
+			navlinks={
+				<js>"$W{MyWidget}"</js>
+			},
+			aside={
+				<js>"Check out this widget:  $W{MyWidget}"</js>
+			}
+		)
+	)
+</p>
+<p>
+	The <l>Widget</l> class is composed of the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest) getStyle(RestRequest)}
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+	</ul>
+</ul>
+<p>
+	The HTML content returned by the {@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
+	method is added wherever the <js>"$W{...}"</js> variable is used.
+</p>
+<p>
+	The CSS returned by {@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+	is added to the style section in the page header.
+</p>
+<p>	
+	The Javascript returned by {@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+	is added to the script section in the page header.
+</p>
+<p>
+	The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+	and aside section of the page.
+	<br>It shows an example of a widget that renders an image located in the <code>htdocs</code> static files
+	directory in your classpath (see {@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()}):
+</p>
+<p class='bcode w800'>
+	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
+
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getHtml(RestRequest req) <jk>throws</jk> Exception {
+			UriResolver r = req.getUriResolver(); <jc>// API used for resolving URIs.</jc>
+			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+r.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
+		}
+
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <js>""</js>
+				+ <js>"\n function myalert(imageElement) {"</js>
+				+ <js>"\n 	alert('cool!');"</js>
+				+ <js>"\n }"</js>;
+		}
+
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <js>""</js>
+				+ <js>"\n .myimage {"</js>
+				+ <js>"\n 	border: 10px solid red;"</js>
+				+ <js>"\n }"</js>;
+		}
+	}
+</p>
+<p>
+	The <l>Widget</l> class also defines the following two convenience methods for loading Javascript and CSS
+	files from the classpath or file system.
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getClasspathResourceAsString(String) getClasspathResourceAsString(String)}
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
+	</ul>
+</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
+
+		...
+
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> getClasspathResourceAsString(<js>"MyWidget.js"</js>);
+		}
+
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> getClasspathResourceAsString(<js>"MyWidget.css"</js>);
+		}
+	}
+</p>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
+</ul>

@@ -1,0 +1,136 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+AtomFeedResource
+
+<p>	
+	The <l>AtomFeedResource</l> class shows examples of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Using the <a class='doclink' href='org/apache/juneau/dto/atom/package-summary.html#TOC'>ATOM Feed DTO</a> API.
+</ul>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/atom
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AtomFeedResource.1.png'>
+<p>
+	True ATOM feeds require using an <l>Accept:text/xml</l> header:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/atom?Accept=text/xml&amp;plainText=true
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AtomFeedResource.2.png'>
+<p>
+	Other languages, such as JSON are also supported:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/atom?Accept=text/json&amp;plainText=true
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.AtomFeedResource.3.png'>
+
+<h5 class='figure'>AtomFeedResource.java</h5>
+<p class='bcode w800'>
+	<jd>/** 
+	* Sample resource that shows how to generate ATOM feeds. 
+	*/</jd> 
+	<ja>@RestResource</ja>( 
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>,
+		description=<js>"Sample resource that shows how to render ATOM feeds"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			}
+		),
+		properties={ 
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
+			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
+			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>)
+		}, 
+		encoders=GzipEncoder.<jk>class</jk> 
+	) 
+	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena { 
+	
+		<jk>private</jk> Feed <jf>feed</jf>; <jc>// The root resource object</jc> 
+		
+		<ja>@Override</ja> <jc>/* Servlet */</jc> 
+		<jk>public void</jk> init() { 
+			<jk>try</jk> {
+				<jf>feed</jf> =
+					<jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>, <js>"2013-05-08T12:29:29Z"</js>)
+					.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless"</js>))
+					.links(
+						<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/"</js>).hreflang(<js>"en"</js>),
+						<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://www.sample.com/feed.atom"</js>)
+					)
+					.generator(
+						<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+					)
+					.entries(
+						<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2013-05-08T12:29:29Z"</js>)
+						.links(
+							<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://www.sample.com/2012/05/08/juneau.atom"</js>),
+							<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://www.sample.com/audio/juneau_podcast.mp3"</js>).length(1337)
+						)
+						.published(<js>"2013-05-08T12:29:29Z"</js>)
+						.authors(
+							<jsm>person</jsm>(<js>"James Bognar"</js>).uri(<jk>new</jk> URI(<js>"http://www.sample.com/"</js>)).email(<js>"jamesbognar@apache.org"</js>)
+						)
+						.contributors(
+							<jsm>person</jsm>(<js>"Barry M. Caceres"</js>)
+						)
+						.content(
+							<jsm>content</jsm>(<js>"xhtml"</js>)
+							.lang(<js>"en"</js>)
+							.base(<js>"http://www.apache.org/"</js>)
+							.text(<js>"&lt;div&gt;&lt;p&gt;[Update: Juneau supports ATOM.]&lt;/p&gt;&lt;/div&gt;"</js>)
+						)
+					);
+			} <jk>catch</jk> (Exception e) {
+				<jk>throw new</jk> RuntimeException(e);
+			}
+		} 
+		
+		<jd>/** 
+		* GET request handler 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>) 
+		<jk>public</jk> Feed getFeed() <jk>throws</jk> Exception { 
+			<jk>return</jk> <jf>feed</jf>; 
+		} 
+		
+		<jd>/** 
+		* PUT request handler. 
+		* Replaces the feed with the specified content, and then mirrors it as the response. 
+		*/</jd> 
+		<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/"</js>) 
+		<jk>public</jk> Feed setFeed(<ja>@Body</ja> Feed feed) <jk>throws</jk> Exception { 
+			<jk>this</jk>.<jf>feed</jf> = feed; 
+			<jk>return</jk> feed; 
+		} 
+	} 		
+</p>

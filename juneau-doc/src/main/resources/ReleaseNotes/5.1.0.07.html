@@ -1,0 +1,40 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.1.0.7 (Oct 5, 2014)
+
+<p>
+	Juno 5.1.0.7 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>Improved error handling.  
+	<li>New <code><del>ParserContext.PARSER_debug</del></code> and <code><del>SerializerContext.SERIALIZER_debug</del></code>.
+		settings for logging additional information for debugging problems.
+	<li>New {@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions} setting for explicitely ignoring recursions when 
+		serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
+		and throws exceptions when they occur.
+	<li>Improved handling of <code>StackOverflowErrors</code>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
+		is displayed showing the exact chain of objects that resulted in the stack overflow.
+	<li>Bug fixes in {@link org.apache.juneau.dto.ResultSetList} for Oracle and SQL Server.
+	<li>Serializers and parsers can now access HTTP request attributes, parameters, and headers through <code>SerializerContext.getProperties()</code> and
+		<code>ParserContext.getProperties()</code>.		
+	<li>Removed media-type and encoding attributes from <code><del>SerializerContext</del></code> and <code><del>ParserContext</del></code>	
+		since these are now available through context properties, and are typically not used.
+	<li>{@link org.apache.juneau.xml.XmlParser} now accepts <code>application/xml</code>.		
+	<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
+	<li>Improved concurrency on BeanContext class.
+	<li>Fixed bug in {@link org.apache.juneau.rest.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.
+	<li>Fixed bug in {@link org.apache.juneau.rest.converters.Traversable} where it was not picking up filters and properties defined on REST Java methods. 
+</ul>

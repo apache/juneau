@@ -1,0 +1,139 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+OIDC Authentication
+
+<p>
+	The following example shows how the <code>JazzRestClient</code> class provides OIDC authentication 
+	support.
+</p>
+<p class='bcode w800'>
+	<jd>/**
+	 * Constructor.
+	 */</jd>
+	<jk>public</jk> JazzRestClientBuilder(URI jazzUri, String user, String pw) <jk>throws</jk> IOException {
+		...
+	}
+
+	<jd>/**
+	 * Override the createHttpClient() method to return an authenticated client.
+	 */</jd>
+	<ja>@Override</ja> <jc>/* RestClientBuilder */</jc>
+	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
+		CloseableHttpClient client = <jk>super</jk>.createHttpClient();
+		oidcAuthenticate(client);
+			<jk>return</jk> client;
+		}
+
+	<jk>private void</jk> oidcAuthenticate(HttpClient client) <jk>throws</jk> IOException {
+
+		HttpGet request = <jk>new</jk> HttpGet(<jf>jazzUri</jf>);
+		request.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
+		
+		<jc>// Charset must explicitly be set to UTF-8 to handle user/pw with non-ascii characters.</jc>
+		request.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
+
+		HttpResponse response = client.execute(request);
+		<jk>try</jk> {
+			<jk>int</jk> code = response.getStatusLine().getStatusCode();
+
+			<jc>// Already authenticated</jc>
+			<jk>if</jk> (code == <jsf>SC_OK</jsf>)
+				<jk>return</jk>;
+
+			<jk>if</jk> (code != <jsf>SC_UNAUTHORIZED</jsf>)
+				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication: "</js> 
+					+ response.getStatusLine());
+
+			<jc>// x-jsa-authorization-redirect</jc>
+			String redirectUri = getHeader(response, <js>"X-JSA-AUTHORIZATION-REDIRECT"</js>);
+
+			<jk>if</jk> (redirectUri == <jk>null</jk>)
+				<jk>throw new</jk> RestCallException(<js>"Expected a redirect URI during OIDC authentication: "</js> 
+					+ response.getStatusLine());
+
+			<jc>// Handle Bearer Challenge</jc>
+			HttpGet method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
+			addDefaultOidcHeaders(method);
+
+			response = client.execute(method);
+
+			code = response.getStatusLine().getStatusCode();
+
+			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 2: "</js> 
+					+ response.getStatusLine());
+
+			String loginRequired = getHeader(response, <js>"X-JSA-LOGIN-REQUIRED"</js>);
+
+			<jk>if</jk> (! <js>"true"</js>.equals(loginRequired))
+				<jk>throw new</jk> RestCallException(<js>"X-JSA-LOGIN-REQUIRED header not found on response during OIDC authentication phase 2: "</js> 
+					+ response.getStatusLine());
+
+			method = <jk>new</jk> HttpGet(redirectUri + <js>"&amp;prompt=none"</js>);
+
+			addDefaultOidcHeaders(method);
+			response = client.execute(method);
+
+			code = response.getStatusLine().getStatusCode();
+
+			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 3: "</js> 
+					+ response.getStatusLine());
+
+			<jc>// Handle JAS Challenge</jc>
+			method = <jk>new</jk> HttpGet(redirectUri);
+			addDefaultOidcHeaders(method);
+
+			response = client.execute(method);
+
+			code = response.getStatusLine().getStatusCode();
+
+			<jk>if</jk> (code != <jsf>SC_OK</jsf>)
+				<jk>throw new</jk> RestCallException(<js>"Unexpected response during OIDC authentication phase 4: "</js> 
+					+ response.getStatusLine());
+
+			<jf>cookie</jf> = getHeader(response, <js>"Set-Cookie"</js>);
+
+			Header[] defaultHeaders = <jk>new</jk> Header[] {
+				<jk>new</jk> BasicHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>),
+				<jk>new</jk> BasicHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
+					<js>"com.ibm.team.rtc=6.0.0,com.ibm.team.jazz.foundation=6.0"</js>),
+				<jk>new</jk> BasicHeader(<js>"Accept"</js>, <js>"text/json"</js>),
+				<jk>new</jk> BasicHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
+					+ StringUtils.<jsm>base64EncodeToString</jsm>(<jf>user</jf> + <js>":"</js> + <jf>pw</jf>)),
+				<jk>new</jk> BasicHeader(<js>"Cookie"</js>, cookie)
+			};
+
+			setDefaultHeaders(Arrays.<jsm>asList</jsm>(defaultHeaders));
+
+		} <jk>finally</jk> {
+			EntityUtils.<jsm>consume</jsm>(response.getEntity());
+		}
+	}
+
+	<jk>private void</jk> addDefaultOidcHeaders(HttpRequestBase method) {
+		method.addHeader(<js>"User-Agent"</js>, <js>"Jazz Native Client"</js>);
+		method.addHeader(<js>"X-com-ibm-team-configuration-versions"</js>, 
+			<js>"com.ibm.team.rtc=6.0.0,com.ibm.team.jazz.foundation=6.0"</js>);
+		method.addHeader(<js>"Accept"</js>, <js>"text/json"</js>);
+
+		<jk>if</jk> (<jf>cookie</jf> != <jk>null</jk>) {
+			method.addHeader(<js>"Authorization"</js>, <js>"Basic "</js> 
+				+ StringUtils.<jsm>base64EncodeToString</jsm>(<jf>user</jf> + <js>":"</js> + <jf>pw</jf>));
+			method.addHeader(<js>"Cookie"</js>, cookie);
+		}
+	}
+</p>	

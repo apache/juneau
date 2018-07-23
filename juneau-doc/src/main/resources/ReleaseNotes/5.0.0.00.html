@@ -1,0 +1,144 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.0 (Jun 11, 2012)
+
+<p>
+	Version 5.0 marks a major release milestone for the Juno/JJSON library.  
+	It is now available for download from iRAM under the name "Juno (previously JJSON)".  
+	The Juno Starters Guide has been updated to reflect new functionality in this release.  
+</p>
+<ul class='spaced-list'>
+	<li>
+		New name.<br>
+		Unfortunately, "JJSON" was already trademarked by another similar library.  
+		Therefore, it's been renamed "Juno" (after the Roman goddess and wife of Jupiter) which does not appear to have any similar trademark issues (crosses fingers).  
+		The name is also a play on the word "Uno", indicating that this is a single simple unifying interface of several kinds of technology.
+	</li>
+	<li>
+		Simplified APIs for working with beans.<br>
+		Significant improvements have been made to the parsers to make it easier to convert serialized POJOs back into their original forms.
+	</li>
+	<li>
+		Serializer/Parser classes now directly subclass from {@link org.apache.juneau.BeanContext}.<br>
+		In previous releases, if you wanted to change the way beans were handled by the serializers and parsers, you had to construct a separate bean map factory and pass it to the serializer or parser.  
+		Now, you can call the bean map factory methods directly on the serializer or parser class.
+	</li>
+	<li>
+		Simplified Filter API for handling non-standard POJOs.<br>
+		The API for handling non-standard POJOs has been simplified by introducing the concept of a <del><code>Transform</code></del> class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
+		Two new subclasses of <del><code>Transform</code></del>:
+		<ul>
+			<li>{@link org.apache.juneau.transform.BeanFilter} - Filter POJO beans.</li>
+			<li>{@link org.apache.juneau.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
+		</ul>
+		This new API replaces the previous separate <code>Cast</code> and <code>BeanFilter</code> APIs which were considerably more complicated and puts them under a common API. 
+	</li>
+	<li>
+		Elimination of <code>_class</code> attributes in parsable output.<br>
+		One of the complaints about the previous version of JJSON was that if you wanted to have the resulting JSON or XML be parsable back into beans, you had to enable the <js>"addClassAttrs"</js> property on the bean map factory class so that <js>"_class"</js> attributes could be added to the output.<br>
+		This requirement is virtually eliminated in v5.  In many cases, the parsers are able to determine through reflection what the correct target type is based on the top-level class passed in on the parse method. 
+	</li>
+	<li>
+		Performance improvements.<br>
+		Several significant performance improvements have been made in this release.
+		<ul>
+			<li>
+				New Reader-based JSON parser.<br>
+				Previously, the JSON parser required that the entire JSON text be loaded into memory as a String before being parsed.  
+				The new JSON parser is Reader-based which significantly reduces memory consumption.
+			</li>
+			<li>     
+				New StAX-based XML parser.<br>
+				The old XML parser was based on DOM.  The new XML parser uses a StAX parser which significantly reduces memory consumption.
+			</li>
+			<li>
+				Caching of reflection data in the <code>BeanMap</code> API.<br>
+				The number of reflection calls have been significantly reduced in the <code>BeanMap</code> API code.  
+				Reflection is used to determine the class types of property values on beans.  
+				This information is now cached and persisted so that the reflection API calls to determine class types are only performed the first time a bean type is encountered.
+   				</li>
+   				<li>
+				Automatic support for GZIP compression/decompression in <code>RestServlets</code>.<br>
+				This is completely transparent to the developer.  
+				The output writer is negotiated by the framework to automatically handle compression and charset requests without the developer needing to know anything about it.
+			</li>
+		</ul>
+	</li>
+	<li>
+		Cognos/XML support.
+	</li>
+	<li>
+		JSON-schema support.
+	</li>
+	<li>
+		New {@link org.apache.juneau.utils.PojoIntrospector} class.
+	</li>
+	<li>
+		Significant REST servlet API improvements.
+		<ul>
+			<li>
+				Defining child resources is considerably simpler now.  
+				In addition to the standard doX() methods for handling the requests for the current resource, you can also define getX() methods for returning child resources which automatically become available under the child URL specified by the getter name.
+			</li>
+			<li>
+				Initialization of the child resources occurs automatically when the parent resource initialization occurs.
+			</li>
+			<li>
+				Other improvments have been made in the area of automatic negotiation of input and output type streams.  
+				For example, automatic support is provided for GZIP (<code>Accept-Encoding: gzip</code>) and charsets (e.g <code>Accept-Charset: SJIS</code>) on both incoming and outgoing data.  
+				It's all transparent from a developers perspective.  
+				The developer simply working with POJOs, and all details about content types, encoding, charsets, and so forth are handled by the framework.
+			</li>
+			<li>
+				Support for generating complex <code>OPTIONS</code> pages for resources.
+			</li>
+		</ul>
+	</li>
+	<li>
+		Automatic support for SOAP XML output on <js>"text/soap+xml"</js> requests against <code>RestServlet</code>.
+	</li>
+	<li>
+		Support for XML namespaces. 
+	</li>
+	<li>
+		Support for setting the XML root element name by either passing in a parameter on the serializer, or by specifying it via a <ja>@Bean</ja> annotation.
+	</li>
+		<li>
+		Support for loading beans directly from Readers and Strings. 
+	</li>
+	<li>
+		Parsing support for POJOs of type <code>Enum</code>.
+	</li>
+		<li>
+		Significant improved support for various flavors of parameterized types, such as subclasses of parameterized types (e.g. <code>MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt;</code>).
+		</li>
+		<li>
+		Improved ordering of bean properties (should now be ordered as they are defined in the class).
+	</li>
+	<li>
+		Various default filters provided:
+		<ul>
+			<li>byte[]&lt;--&gt;Base64 encoded strings</li>
+			<li>Date/Calendar&lt;--&gt;ISO8601/RFC822/Long</li>
+		</ul>
+	</li>
+	<li>
+		New {@link org.apache.juneau.html.HtmlParser} and {@link org.apache.juneau.urlencoding.UrlEncodingParser} classes.
+	</li>
+	<li>
+		HtmlSerializer now produces XHTML.
+	</li>
+</ul>

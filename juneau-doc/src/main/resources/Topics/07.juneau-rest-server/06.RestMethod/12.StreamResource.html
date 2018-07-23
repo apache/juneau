@@ -1,0 +1,50 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+StreamResource
+
+<p>
+	The {@link org.apache.juneau.rest.helper.StreamResource} class is the binary equivalent to the {@link org.apache.juneau.rest.helper.ReaderResource} object.
+	<br>In essence, it's a container for binary data with optional response headers.
+</p>
+<p>
+	The {@link org.apache.juneau.rest.helper.StreamResource} class implements the {@link org.apache.juneau.Streamable}
+	interface which is handled by the {@link org.apache.juneau.rest.response.StreamableHandler} class.
+	<br>This allows these objects to be returned as responses by REST methods.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object showPicture(RestRequest req) {
+	
+		<jc>// Return a stream resource loaded from a file.</jc>
+		<jk>return</jk> StreamResource.<jsm>create</jsm>()
+			.contents(<jk>new</jk> File(<js>"mypicture.png"</js>))
+			.header(<js>"Cache-Control"</js>, <js>"no-cache"</js>)
+			.mediaType(<jsf>IMAGE_PNG</jsf>)
+			.build();
+	}
+</p>
+<p>
+	The important methods on this class are:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#contents(Object...) contents(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+	</ul>
+</ul>

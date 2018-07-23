@@ -1,0 +1,118 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Using with Spring and Injection frameworks
+
+<p>
+	The Juneau REST server API is compatible with dependency injection frameworks such as Spring.
+</p>
+<p>
+	The important class is the {@link org.apache.juneau.rest.RestResourceResolver} class which is used
+	to resolve child servlet/resource implementation classes inside parent contexts.
+	In other words, it's used for resolving {@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource.children()} instances.
+</p>
+<p>
+	The general approach starts with defining a resolver that uses the Spring application context for resolution:
+</p>
+<p class='bcode w800'>
+	<jk>public class</jk> SpringRestResourceResolver <jk>extends</jk> RestResourceResolverSimple {
+
+		<jk>private final</jk> ApplicationContext <jf>appContext</jf>;
+		
+		<jk>public</jk> SpringRestResourceResolver(ApplicationContext appContext) {
+			<jk>this</jk>.<jf>appContext</jf> = appContext;
+		}
+		
+		<jk>@Override</jk> <jc>/* RestResourceResolverSimple */</jc>
+		<jk>public</jk> Object resolve(Class&lt;?&gt; resourceType, RestContextBuilder builder) <jk>throws</jk> Exception {
+			Object resource = <jf>appContext.</jf>getBean(type);
+			
+			<jc>// If Spring can't resolve it, use default resolution (just look for no-arg constructor).</jc>
+			<jk>if</jk> (resource == <jk>null</jk>) {
+				resource = <jk>super</jk>.resolve(resourceType, builder);
+			}
+			<jk>return</jk> resource;
+		}
+	}
+</p>
+<p>
+	Next, define the Spring configuration to return our resolver:
+</p>
+<p class='bcode w800'>
+	<ja>@Configuration</ja>
+	<jk>public abstract class</jk> MySpringConfiguration {
+		
+		<ja>@Autowired</ja>
+		<jk>private static</jk> ApplicationContext <jsf>appContext</jsf>;
+		
+		<jk>public static</jk> ApplicationContext getAppContext(){
+			<jk>return</jk> <jsf>appContext</jsf>;
+		}
+		
+		<jk>public static void</jk> setAppContext(ApplicationContext appContext){
+			MySpringConfiguration.<jsf>appContext</jsf> = appContext;
+		}
+		
+		<ja>@Bean</ja>
+		<jk>public</jk> RestResourceResolver restResourceResolver(ApplicationContext appContext) {
+			<jk>return new</jk> SpringRestResourceResolver(appContext);
+		}
+	}
+</p>
+<p>
+	Finally, define your <code>Root</code> resource with a constructor that takes in our rest resource resolver and
+	sets it on the config object during initialization.
+</p>
+<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		children={
+			...
+		}
+	)
+	<jk>public class</jk> Root <jk>extends</jk> BasicRestServletGroup {
+		
+		<jk>private final</jk> RestResourceResolver <jf>resolver</jf>;
+		
+		<ja>@Inject</ja>
+		<jk>public</jk> Root(RestResourceResolver resolver) {
+			<jk>this</jk>.<jf>resolver</jf> = resolver;
+		}
+		
+		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		<jk>public void</jk> initSpring(RestContextBuilder builder) <jk>throws</jk> Exception {
+			builder.setResourceResolver(<jf>resolver</jf>);
+		}
+	}
+</p>
+<p>
+	After that, just define constructors on your child resources to take in Spring beans:
+</p>
+<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/child"</js>
+	)
+	<jk>public class</jk> MyChildResource <jk>extends</jk> BasicRestServlet {
+	
+		<jk>private final</jk> Bean1 <jf>bean1</jf>;
+		<jk>private final</jk> Bean2 <jf>bean2</jf>;
+		<jk>private final</jk> Bean3 <jf>bean3</jf>;
+		
+		<ja>@Inject</ja>
+		<jk>public</jk> MyChildResource(Bean1 bean1, Bean2 bean2, Bean3 bean3) {
+			<jk>this</jk>.<jf>bean1</jf> = bean1;
+			<jk>this</jk>.<jf>bean2</jf> = bean2;
+			<jk>this</jk>.<jf>bean3</jf> = bean3;
+		}
+</p>

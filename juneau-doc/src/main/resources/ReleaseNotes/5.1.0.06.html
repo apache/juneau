@@ -1,0 +1,34 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.1.0.6 (Sept 21, 2014)
+
+<p>
+	Juno 5.1.0.6 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>Simplified API for {@link org.apache.juneau.transform.PojoSwap}.  
+		Since it's rarely used, the <code>beanContext</code> parameter was replaced with a <del><code>PojoSwap#getBeanContext()</code></del> method on
+		the class.
+	<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.transform.PojoSwap}.
+		See {@link org.apache.juneau.transform.SurrogateSwap} for details.
+	<li>New {@link org.apache.juneau.html.annotation.Html @Html} annotation.
+		Will allow the definition of standard XHTML DTOs in future releases.  
+		For now, <del><code>Img</code></del> is an example of defining an XHTML element using Juno DTOs.
+	<li>{@link org.apache.juneau.json.JsonParser} now ignores trailing <code>';'</code> characters in input so that it can 
+		parse strings of the form <js>"var x = {'foo':'bar'};"</js>.
+	<li>New <code>TumblrParserResource</code> in the samples war file showing how to combine the REST client and server APIs into a single
+		resource in order to download Tumblr blogs and convert the response into any supported response content type.
+</ul>

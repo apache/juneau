@@ -1,0 +1,59 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+@Query
+
+<p>
+	The {@link org.apache.juneau.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
+	<br>It's identical to {@link org.apache.juneau.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
+</p>
+<p>
+	Unlike {@link org.apache.juneau.http.annotation.FormData @FormData}, using this annotation does not result in the servlet reading the contents of
+	URL-encoded form posts.
+	<br>Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
+	{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
+		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
+		<ja>@Query</ja>(<js>"p2"</js>) String p2, 
+		<ja>@Query</ja>(<js>"p3"</js>) UUID p3) {...}
+</p>
+<p>
+	This is functionally equivalent to the following code:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
+		RequestQuery q = req.getQuery();
+		<jk>int</jk> p1 = q.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
+		String p2 = q.get(<js>"p2"</js>, String.<jk>class</jk>);
+		UUID p3 = q.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	}
+</p>
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	to POJOs and controls what POJO types are supported.
+	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+</p>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
+	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+</ul>

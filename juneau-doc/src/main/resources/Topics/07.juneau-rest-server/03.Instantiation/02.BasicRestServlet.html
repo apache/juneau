@@ -1,0 +1,204 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+BasicRestServlet
+
+<p>
+	The {@link org.apache.juneau.rest.BasicRestServlet} class is a subclass of {@link org.apache.juneau.rest.RestServlet}
+	preconfigured with the following:
+</p>
+<ul class='spaced-list'>
+	<li>A default set of serializers and parsers (pretty much all of them except for the RDF ones).
+	<li>Some basic HTML boilerplate for the HTML representation of your POJOs.
+	<li>Support for auto-generated Swagger documentation through OPTIONS page requests.
+	<li>Configuration of default CSS stylesheets.
+	<li>Default contents for HTML views.
+</ul>
+<p>
+	The contents of the class is shown below.
+	<br>You should notice that very little code is being used and everything is configurable through
+	annotations:
+</p>
+<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+	
+		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter. </jc>
+		allowedMethodParams=<js>"OPTIONS"</js>,
+		
+		<jc>// HTML-page specific settings.</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+			<jc>// Basic page navigation links.</jc>
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
+		),
+		
+		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
+		pojoSwaps={
+			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+			SwaggerUI.<jk>class</jk>
+		},
+		
+		<jc>// Properties to apply to all serializers/parsers and REST-specific API objects.</jc>
+		properties={
+			<jc>// Add descriptions to the following types when not specified:</jc>
+			<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addDescriptionsTo</jsf>, value=<js>"bean,collection,array,map,enum"</js>),
+	
+			<jc>// Automatically add examples to the following types:</jc>
+			<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addExamplesTo</jsf>, value=<js>"bean,collection,array,map"</js>),
+	
+			<jc>// Don't generate schema information on the Swagger bean itself or HTML beans.</jc>
+			<ja>@Property</ja>(name=<jsf>INFOPROVIDER_ignoreTypes</jsf>, value="<js>Swagger,org.apache.juneau.dto.html5.*"</js>)
+		},
+		
+		<jc>// Shortcut for boolean properties.</jc>
+		flags={
+			<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
+			<jsf>JSONSCHEMA_useBeanDefs</jsf>
+		}
+	)
+	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+	
+		<jd>/**
+		 * [OPTIONS /*] - Show resource options.
+		 *
+		 * @param req The HTTP request.
+		 * @return A bean containing the contents for the OPTIONS page.
+		 */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+			summary=<js>"Swagger documentation"</js>,
+			description=<js>"Swagger documentation for this resource."</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				<jc>// Override the nav links for the swagger page.</jc>
+				navlinks={
+					<js>"back: servlet:/"</js>,
+					<js>"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"</js>
+				},
+				<jc>// Never show aside contents of page inherited from class.</jc>
+				aside=<js>"NONE"</js>
+			)
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
+			<jk>return</jk> req.getSwagger();
+		}
+	}
+</p>
+<p>
+	Additional annotations are pulled in from the {@link org.apache.juneau.rest.BasicRestConfig} interface which simply
+	exists to define a common set of annotations.  
+	Notice that it has no code at all.
+</p>
+<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+	
+		<jc>// Default serializers for all Java methods in the class.</jc>
+		serializers={
+			HtmlDocSerializer.<jk>class</jk>, 
+			HtmlStrippedDocSerializer.<jk>class</jk>,
+			HtmlSchemaDocSerializer.<jk>class</jk>,
+			JsonSerializer.<jk>class</jk>,
+			JsonSerializer.Simple.<jk>class</jk>,
+			JsonSchemaSerializer.<jk>class</jk>,
+			XmlDocSerializer.<jk>class</jk>,
+			XmlSchemaDocSerializer.<jk>class</jk>,
+			UonSerializer.<jk>class</jk>,
+			UrlEncodingSerializer.<jk>class</jk>,
+			MsgPackSerializer.<jk>class</jk>,
+			SoapXmlSerializer.<jk>class</jk>,
+			PlainTextSerializer.<jk>class</jk>
+		},
+		
+		<jc>// Default parsers for all Java methods in the class.</jc>
+		parsers={
+			JsonParser.<jk>class</jk>,
+			JsonParser.Simple.<jk>class</jk>,
+			XmlParser.<jk>class</jk>,
+			HtmlParser.<jk>class</jk>,
+			UonParser.<jk>class</jk>,
+			UrlEncodingParser.<jk>class</jk>,
+			MsgPackParser.<jk>class</jk>,
+			PlainTextParser.<jk>class</jk>
+		},
+		
+		<jc>// Properties to apply to all serializers/parsers and REST-specific API objects.</jc>
+		properties={
+			<jc>// Enable automatic resolution of URI objects to root-relative values.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_uriResolution</jsf>, value=<js>"ROOT_RELATIVE"</js>)
+		},
+		
+		<jc>// HTML-page specific settings</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+		
+			<jc>// Default page header contents.</jc>
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>, <jc>// Use @RestResource(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"$C{REST/header}"</js> <jc>// Extra header HTML defined in external config file.</jc>
+			},
+			
+			<jc>// Basic page navigation links.</jc>
+			navlinks={
+				<js>"up: request:/.."</js>
+			},
+			
+			<jc>// Default stylesheet to use for the page.
+			// Can be overridden from external config file.
+			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+			
+			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+			// Use it to add a favicon link to the page.</jc>
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+			},
+			
+			<jc>// No default page footer contents.
+			// Can be overridden from external config file.</jc>
+			footer=<js>"$C{REST/footer}"</js>,
+			
+			<jc>// By default, table cell contents should not wrap.</jc>
+			nowrap=<js>"true"</js>
+		),
+	
+		<jc>// Optional external configuration file.</jc>
+		config=<js>"$S{juneau.configFile}"</js>,
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+		// By default, we define static files through the external configuration file.</jc>
+		staticFiles={<js>"$C{REST/staticFiles}"</js>}
+	)
+	<jk>public interface</jk> BasicRestConfig {}
+</p>
+<p>
+	Your top-level resource will simply extend from this class, as shown in the Hello World example
+	from a couple sections back.
+</p>
+<p>
+	It's important to notice that the <ja>@RestResource</ja> annotation is inheritable and overridable from parent
+	class and interfaces.  
+	They'll all get merged into a single set of annotation values for the resource class.
+</p>
+<p>
+	Not shown but equally important is that all of the annotations shown have programmatic equivalents via the {@link org.apache.juneau.rest.RestContextBuilder} class
+	which can be manipulated during servlet initialization.
+	<br>(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
+</p>
+<p>
+	There's a lot going on in this class.
+	<br>But not to worry, the details will be described later.
+</p>

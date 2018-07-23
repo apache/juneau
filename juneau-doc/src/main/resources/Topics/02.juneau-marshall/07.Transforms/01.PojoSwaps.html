@@ -1,0 +1,183 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+PojoSwaps
+
+<p>
+	{@link org.apache.juneau.transform.PojoSwap PojoSwaps} are a critical component of Juneau.
+	They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
+</p>
+<p>
+	Swaps are, simply put, 'object swappers' that swap in serializable objects for 
+	non-serializable ones during serialization, and vis-versa during parsing.
+</p>
+<p>
+	Some examples of non-serializable POJOs are <code>File</code>, <code>Reader</code>, 
+	<code>Iterable</code>, etc...
+	These are classes that aren't beans and cannot be represented as simple maps, collections, or primitives.
+</p>
+<p>
+	In the following example, we introduce a <code>PojoSwap</code> that will swap in ISO8601 strings for 
+	<code>Date</code> objects:
+</p>
+<p class='bcode w800'>
+	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
+	<jk>public class</jk> MyDateSwap <jk>extends</jk> PojoSwap&lt;Date,String&gt; {
+		
+		<jc>// ISO8601 formatter.</jc>
+		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
+		
+		<jc>// Converts a Date object to an ISO8601 string.</jc>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<jk>public</jk> String swap(BeanSession session, Date o) {
+			<jk>return</jk> <jf>format</jf>.format(o);
+		}
+		
+		<jc>// Converts an ISO8601 string to a Date object.</jc>
+		<ja>@Override</ja> <jc>/* PojoSwap */</jc>
+		<jk>public</jk> Date unswap(BeanSession session, String o, ClassMeta hint) <jk>throws</jk> Exception {
+			<jk>return</jk> <jf>format</jf>.parse(o);
+		}
+	}
+</p>
+<p>
+	The swap can then be associated with serializers and parsers like so:
+</p>
+<p class='bcode w800'>
+	<jc>// Sample bean with a Date field.</jc>
+	<jk>public class</jk> MyBean {
+		<jk>public</jk> Date <jf>date</jf> = <jk>new</jk> Date(112, 2, 3, 4, 5, 6);
+	}
+
+	<jc>// Create a new JSON serializer, associate our date swap with it, and serialize a sample bean.</jc>
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	String json = s.serialize(<jk>new</jk> MyBean());	<jc>// == "{date:'2012-03-03T04:05:06-0500'}"</jc>
+	
+	<jc>// Create a JSON parser, associate our date swap with it, and reconstruct our bean (including the date).</jc>
+	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+	MyBean bean = p.parse(json, MyBean.<jk>class</jk>);
+	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
+</p>
+<p>
+	The {@link org.apache.juneau.BeanMap#get(Object)} and {@link org.apache.juneau.BeanMap#put(String,Object)} 
+	methods will automatically convert to swapped values as the following example shows:
+</p>
+<p class='bcode w800'>
+	<jc>// Create a new bean context and add our swap.</jc>
+	BeanContext bc = BeanContext.<jsm>create</jsm>().pojoSwaps(MyDateSwap.<jk>class</jk>).build();
+
+	<jc>// Create a new bean.</jc>
+	MyBean myBean = <jk>new</jk> MyBean();
+
+	<jc>// Wrap it in a bean map.</jc>
+	BeanMap&lt;Bean&gt; beanMap = bc.forBean(myBean);
+
+	<jc>// Use the get() method to get the date field as an ISO8601 string.</jc>
+	String date = (String)beanMap.get(<js>"date"</js>);				<jc>// == "2012-03-03T04:05:06-0500"</jc> 
+	
+	<jc>// Use the put() method to set the date field to an ISO8601 string.</jc>
+	beanMap.put(<js>"date"</js>, <js>"2013-01-01T12:30:00-0500"</js>);	<jc>// Set it to a new value.</jc> 
+	
+	<jc>// Verify that the date changed on the original bean.</jc>
+	<jk>int</jk> year = myBean.<jf>date</jf>.getYear(); 								<jc>// == 113</jc>
+</p>
+<p>
+	Another example of a <code>PojoSwap</code> is one that converts <code><jk>byte</jk>[]</code> arrays to
+	BASE64-encoded strings:
+</p>
+<p class='bcode w800'>
+	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
+	
+		<ja>@Override</ja> <jc>/* StringSwap */</jc>
+		<jk>public</jk> String swap(<jk>byte</jk>[] b) <jk>throws</jk> Exception {
+			ByteArrayOutputStream baos = <jk>new</jk> ByteArrayOutputStream();
+			OutputStream b64os = MimeUtility.encode(baos, <js>"base64"</js>);
+			b64os.write(b);
+			b64os.close();
+			<jk>return new</jk> String(baos.toByteArray());
+		}
+		
+		<ja>@Override</ja> <jc>/* StringSwap */</jc>
+		<jk>public byte</jk>[] unswap(String s, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
+			<jk>byte</jk>[] b = s.getBytes();
+			ByteArrayInputStream bais = <jk>new</jk> ByteArrayInputStream(b);
+			InputStream b64is = MimeUtility.decode(bais, <js>"base64"</js>);
+			<jk>byte</jk>[] tmp = <jk>new byte</jk>[b.length];
+			<jk>int</jk> n = b64is.read(tmp);
+			<jk>byte</jk>[] res = <jk>new byte</jk>[n];
+			System.<jsm>arraycopy</jsm>(tmp, 0, res, 0, n);
+			<jk>return</jk> res;
+		}
+	}
+</p>
+<p>
+	The following example shows the BASE64 swap in use:
+</p>
+<p class='bcode w800'>
+	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
+	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	ReaderParser p = JsonParser.<jsm>create</jsm>().pojoSwaps(ByteArrayBase64Swap.<jk>class</jk>).build();
+	
+	<jk>byte</jk>[] bytes = {1,2,3};
+	String json = s.serialize(bytes);		<jc>// Produces "'AQID'"</jc>
+	bytes = p.parse(json, <jk>byte</jk>[].<jk>class</jk>);		<jc>// Reproduces {1,2,3}</jc>
+	
+	<jk>byte</jk>[][] bytes2d = {{1,2,3},{4,5,6},<jk>null</jk>};
+	json = s.serialize(bytes2d);		<jc>// Produces "['AQID','BAUG',null]"</jc>
+	bytes2d = p.parse(json, <jk>byte</jk>[][].<jk>class</jk>);		<jc>// Reproduces {{1,2,3},{4,5,6},null}</jc>
+</p>
+<p>
+	Several <code>PojoSwaps</code> are already provided for common Java objects:
+</p>
+<ul class='doctree'>
+	<li class='jp'><jk>org.apache.juneau.transforms</jk>
+		<ul>
+			<li class='jc'>
+				{@link org.apache.juneau.transforms.ByteArrayBase64Swap}
+			<li class='jac'>
+				{@link org.apache.juneau.transforms.CalendarSwap}
+			<li class='jac'>
+				{@link org.apache.juneau.transforms.DateSwap}
+			<li class='jc'>
+				{@link org.apache.juneau.transforms.EnumerationSwap}
+			<li class='jc'>
+				{@link org.apache.juneau.transforms.IteratorSwap}
+			<li class='jc'>
+				{@link org.apache.juneau.transforms.ReaderSwap}
+			<li class='jc'>
+				{@link org.apache.juneau.transforms.XMLGregorianCalendarSwap}
+		</ul>
+	</li>
+</ul>
+<p>
+	In particular, the {@link org.apache.juneau.transforms.CalendarSwap} and 
+	{@link org.apache.juneau.transforms.DateSwap} transforms provide a large number of customized swaps to 
+	ISO, RFC, or localized strings.
+</p>
+<p>
+	Swaps have access to the session locale and timezone through the {@link org.apache.juneau.BeanSession#getLocale()} and
+	{@link org.apache.juneau.BeanSession#getTimeZone()} methods.
+	<br>This allows you to specify localized swap values when needed.
+</p>
+<p>
+	If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and
+	<code>Time-Zone</code> headers on the request.
+</p>
+
+<ul class='doctree'>
+	<li class='info'>
+		The 'swapped' class type must be a serializable type.
+		<br>See the definition for Category 4 objects in <a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a>.  
+</ul>

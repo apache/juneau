@@ -1,0 +1,71 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.2.0.1 (Mar 23, 2016)
+
+<p>
+	Juno 5.2.0.1 is a moderate update.
+</p>
+
+<h5 class='topic w800'>com.ibm.team.juno</h5>
+<ul class='spaced-list'>
+	<li>Improved support for multi-line values in config files.
+		Any line that begins with whitespace is interpreted as a continuation of the previous line.
+	<li>Support for <js>'\uXXXX'</js> character sequences in config files.
+	<li>Fixed issue in {@link org.apache.juneau.xml.XmlSerializer} where <js>'\r'</js> and <js>'\n'</js> characters were not being handled per XML specs.
+	<li>New methods on {@link org.apache.juneau.ObjectList}:  
+		<ul>
+			<li><code><del>ObjectList.getAt(Class,String)</del></code>
+			<li>{@link org.apache.juneau.ObjectList#putAt(String,Object)}
+			<li>{@link org.apache.juneau.ObjectList#postAt(String,Object)}
+			<li>{@link org.apache.juneau.ObjectList#deleteAt(String)}
+		</ul>
+	<li>New methods on {@link org.apache.juneau.ObjectMap}:  
+		<ul>
+			<li><code><del>ObjectMap.getAt(Class,String)</del></code>
+			<li>{@link org.apache.juneau.ObjectMap#putAt(String,Object)}
+			<li>{@link org.apache.juneau.ObjectMap#postAt(String,Object)}
+			<li>{@link org.apache.juneau.ObjectMap#deleteAt(String)}
+		</ul>
+	<li><code><del>@ThreadSafe</del></code> annotation.
+	<li>New <code>ClassFilter</code> class.
+	<li><del><code>ConfigFile.getResolving(StringVarResolver,boolean)</code></del> method.
+	<li><del><code>ConfigFile.getStringVar()</code></del> method.
+	<li>New <code><del>ParserContext.PARSER_trimStrings</del></code> property.
+	<li>New <code><del>SerializerContext.SERIALIZER_trimStrings</del></code> property.
+	<li><del><code>Args.getStringVar()}</code></del> method.
+	<li>New {@link org.apache.juneau.utils.ManifestFile} class
+	<li>New {@link org.apache.juneau.utils.MessageBundle} class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
+	<li>New <del><code>StringMapVar</code></del> class.
+	<li>New <del><code>StringVars</code></del> class with reusable common <del><code>StringVar</code></del> instances.
+	<li>New {@link org.apache.juneau.internal.JuneauLogger} class.
+	<li>Default value for <code><del>XmlParserContext.XML_trimWhitespace</del></code> changed to <jk>true</jk>.			
+</ul>
+
+<h5 class='topic w800'>Server</h5>
+<ul class='spaced-list'>
+	<li>New methods on {@link org.apache.juneau.rest.RestContext}:
+		<ul>
+			<li>{@link org.apache.juneau.rest.RestContext#getMessages()}
+		</ul>
+</ul>
+
+<h5 class='topic w800'>Client</h5>
+<ul class='spaced-list'>
+	<li>Fixed potential issue in {@link org.apache.juneau.rest.client.RestClient} where the HTTP connection pool could end up exhausted if an error occurred.
+	<li>Improved thread safety on {@link org.apache.juneau.rest.client.RestClient}.
+	<li>New warning message is logged if a {@link org.apache.juneau.rest.client.RestClient} is garbage collected without being closed:  
+		<js>"WARNING:  RestClient garbage collected before it was finalized."</js>
+</ul>

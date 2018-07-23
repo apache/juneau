@@ -1,0 +1,258 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+SystemPropertiesResource
+
+<p>
+	The <l>SystemProperties</l> class is a resource that shows off a typical REST design pattern
+	of GET/PUT/POST/DELETE commands for modifying the JVM system properties.
+	<br>It demonstrates several capabilities including:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Using the {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc} annotation to customize the HTML view.
+	<li>
+		Defining Swagger documentation through annotations.
+	<li>
+		Using Guards to limit access to certain methods.
+	<li>
+		Creating form entry pages using HTML5 beans.
+</ul>
+
+<h5 class='figure'>SystemPropertiesResource.java</h5>
+<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/systemProperties"</js>,
+	
+		<jc>// Title and description that show up on HTML rendition page.</jc>
+		<jc>// Also used in Swagger doc.</jc>
+		title=<js>"System properties resource"</js>,
+		description=<js>"REST interface for performing CRUD operations on system properties."</js>,
+	
+		htmldoc=<ja>@HtmlDoc</ja>(
+			
+			<jc>// Widget used for content-type and styles pull-down menus.	</jc>	
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+	
+			<jc>// Links on the HTML rendition page.</jc>
+			<jc>// "request:/..." URIs are relative to the request URI.</jc>
+			<jc>// "servlet:/..." URIs are relative to the servlet URI.</jc>
+			<jc>// "$C{...}" variables are pulled from the config file.</jc>
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"form: servlet:/formPage"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{StyleMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+	
+			<jc>// Custom page text in aside section.</jc>
+			aside={
+				<js>"&lt;div style='max-width:800px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+				
+			<jc>// Custom CSS styles applied to HTML view.</jc>
+			style={
+				<js>"aside {display:table-caption} "</js>,
+				<js>"aside p {margin: 0px 20px;}"</js>
+			}
+		),
+			
+		<jc>// Properties that get applied to all serializers and parsers.</jc>
+		properties={
+			<jc>// Use single quotes.</jc>
+			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+		},
+	
+		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
+		encoders=GzipEncoder.<jk>class</jk>,
+	
+		swagger={
+			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
+			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
+			<js>"version:'2.0',"</js>,
+			<js>"termsOfService:'You are on your own.',"</js>,
+			<js>"tags:[{name:'Java',description:'Java utility'}],"</js>,
+			<js>"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"</js>
+		}
+	)
+	<jk>public class</jk> SystemPropertiesResource <jk>extends</jk> BasicRestServlet {
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, path=<js>"/"</js>,
+			summary=<js>"Show all system properties"</js>,
+			description=<js>"Returns all system properties defined in the JVM."</js>,
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'sort',in:'query',description:'Sort results alphabetically',default:'false'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"200: {description:'Returns a map of key/value pairs.'}"</js>,
+				<js>"}"</js>
+			}
+		)
+		<jk>public</jk> Map getSystemProperties(<ja>@Query</ja>(<js>"sort"</js>) <jk>boolean</jk> sort) <jk>throws</jk> Throwable {
+			<jk>if</jk> (sort)
+				<jk>return new</jk> TreeMap(System.<jsm>getProperties</jsm>());
+			<jk>return</jk> System.<jsm>getProperties</jsm>();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, path=<js>"/{propertyName}"</js>,
+			summary=<js>"Get system property"</js>,
+			description=<js>"Returns the value of the specified system property."</js>,
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"200: {description:'The system property value, or null if not found.'}"</js>,
+				<js>"}"</js>
+			}
+		)
+		<jk>public</jk> String getSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName) <jk>throws</jk> Throwable {
+			<jk>return</jk> System.<jsm>getProperty</jsm>(propertyName);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>,
+			summary=<js>"Replace system property"</js>,
+			description=<js>"Sets a new value for the specified system property."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'},"</js>,
+					<js>"{in:'body',description:'The new system property value.'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
+					<js>"403: {description:'User is not an admin.'}"</js>,
+				<js>"}"</js>
+			}
+		)
+		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName, <ja>@Body</ja> String value) {
+			System.<jsm>setProperty</jsm>(propertyName, value);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>, path=<js>"/"</js>,
+			summary=<js>"Add an entire set of system properties"</js>,
+			description=<js>"Takes in a map of key/value pairs and creates a set of new system properties."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'},"</js>,
+					<js>"{in:'body',description:'The new system property values.',schema:{example:{key1:'val1',key2:123}}}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
+					<js>"403: {description:'User is not an admin.'}"</js>,
+				<js>"}"</js>
+			}
+		)
+		<jk>public</jk> Redirect setSystemProperties(<ja>@Body</ja> java.util.Properties newProperties) {
+			System.<jsm>setProperties</jsm>(newProperties);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>DELETE</jsf>, path=<js>"/{propertyName}"</js>,
+			summary=<js>"Delete system property"</js>,
+			description=<js>"Deletes the specified system property."</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			swagger={
+				<js>"parameters:["</js>,
+					<js>"{name:'propertyName',in:'path',description:'The system property name.'}"</js>,
+				<js>"],"</js>,
+				<js>"responses:{"</js>,
+					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
+					<js>"403: {description:'User is not an admin.'}"</js>,
+				<js>"}"</js>
+			}
+		)
+		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName) {
+			System.<jsm>clearProperty</jsm>(propertyName);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>, path=<js>"/formPage"</js>,
+			summary=<js>"Form entry page"</js>,
+			description=<js>"A form post page for setting a single system property value"</js>,
+			guards=AdminGuard.<jk>class</jk>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				aside={
+					<js>"&lt;div class='text'&gt;"</js>,
+					<js>"	&lt;p&gt;Shows how HTML5 beans can be used to quickly create arbitrary HTML.&lt;/p&gt;"</js>,
+					<js>"&lt;/div&gt;"</js>
+				}
+			)
+		)
+		<jk>public</jk> Form getFormPage() {
+			<jk>return</jk> <jsm>form</jsm>().method(<jsf>POST</jsf>).action(<js>"servlet:/formPagePost"</js>).children(
+				<jsm>table</jsm>(
+					<jsm>tr</jsm>(
+						<jsm>th</jsm>(<js>"Set system property"</js>).colspan(2)
+					),
+					<jsm>tr</jsm>(
+						<jsm>td</jsm>(<js>"Name: "</js>), <jsm>td</jsm>(<jsm>input</jsm>(<js>"text"</js>).name(<js>"name"</js>))
+					),
+					<jsm>tr</jsm>(
+						<jsm>td</jsm>(<js>"Value: "</js>), <jsm>td</jsm>(<jsm>input</jsm>(<js>"text"</js>).name(<js>"value"</js>))
+					)
+				),
+				<jsm>button</jsm>(<js>"submit"</js>,<js>"Click me!"</js>).style(<js>"float:right"</js>)
+			);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>, path=<js>"/formPagePost"</js>,
+			description=<js>"Accepts a simple form post of a system property name/value pair."</js>,
+			guards=AdminGuard.<jk>class</jk>
+		)
+		<jk>public</jk> Redirect formPagePost(<ja>@FormData</ja>(<js>"name"</js>) String name, <ja>@FormData</ja>(<js>"value"</js>) String value) {
+			System.<jsm>setProperty</jsm>(name, value);
+			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
+		}
+	}
+</p>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/systemProperties
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.1.png'>
+<p>
+	Clicking the <code>OPTIONS</code> link shows you the generated Swagger:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/systemProperties?method=OPTIONS
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.2.png'>
+<p>
+	Clicking the <code>FORM</code> link shows you the generated form entry page:
+</p>
+<p class='bcode w800'>
+	http://localhost:10000/systemProperties/formPage
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.3.png'>

@@ -1,0 +1,74 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.33 (Oct 20, 2013)
+
+<p>
+	Juno 5.0.0.33 is a moderate update.
+</p>
+<ul class='spaced-list'>
+	<li>
+		Removed generic parameter from {@link org.apache.juneau.serializer.WriterSerializer} class. 
+		<ul>
+			<li>
+				Many of the examples in the documentation were written as follows, which resulted in "unchecked" compile warnings:<br>
+				<code>WriterSerializer s = <jk>new</jk> JsonSerializer();</code><br>
+				These compile warnings will now go away.
+			</li>
+		</ul>
+	</li>	
+	<li>
+		New settings in BeanContext.  These can be applied to all serializers/parsers.
+		<ul>
+			<li>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
+			<li>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
+			<li>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_add}
+			<li>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_remove}
+		</ul>
+	</li>
+	<li>
+		Eliminated <code>addNotBeanClassPatterns(String...)</code> methods throughout API since these are now controlled by {@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_add} / {@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_remove} properties.
+	</li>
+	<li>
+		New settings in <code>RestServletProperties</code>.
+		<ul>
+			<li><code>RestServletProperties.REST_trimTrailingUriSlashes</code><br>
+				Also removed <code>RestRequest.getRequestURI(boolean trimTrailingSlashes)</code> method which is now redundant with this property.
+			<li><code>RestServletProperties.REST_pathInfoBlankForNull</code><br>
+				Also removed <code>RestRequest.getPathInfo(boolean returnBlankForNull)</code> method which is now redundant with this property.
+		</ul>
+	</li>
+	<li>
+		New JSON-Schema {@link org.apache.juneau.dto.jsonschema.JsonSchemaMap} class for supporting linked schemas.
+	</li>
+	<li>
+		Serializers will no longer throw an exception when <code>maxDepth</code> setting is reached, and will instead simply ignore content below the specified depth.<br>
+		While the old behavior was as-designed, the new behavior is more in-line with expected behavior.
+	</li>
+	<li>
+		Added support for HTTP header <js>"X-Response-Headers"</js> to {@link org.apache.juneau.rest.RestServlet}. <br>
+		Allows you to specify one or more headers that should be returned on the response from the servlet.<br>
+		For example, to get a page to automatically refresh every 1 second, you can append the following to a URL:  <code>?x-response-headers={Refresh=1}</code>
+	</li>
+	<li>
+		Removed <code>HtmlDocSerializerContext.<jsf>HTML_REFRESH</jsf></code> setting that added a Refresh meta tag to HTML documents, since this can now be controlled through <code>X-Response-Headers</code>.
+	</li>
+	<li>
+		Small improvements to samples.
+		<ul>
+			<li><code>PhotosResource</code> now includes a default entry.
+		</ul>
+	</li>
+</ul>

@@ -1,0 +1,46 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Resource Resolvers
+
+<p>
+	By default, you can add the {@link org.apache.juneau.rest.annotation.RestResource @RestResource}
+	to any class as long as it has one of the following constructors:
+</p>
+<ul>
+	<li class='jm'><code><jk>public</jk> T()</code>
+	<li class='jm'><code><jk>public</jk> T(RestContextBuilder)</code>
+</ul>
+	<p>
+	The latter constructor can be used to get access to the {@link org.apache.juneau.rest.RestContextBuilder} object to make
+	any configurations to the resource before it's initialized.
+</p>
+<p>
+	Resource object resolution is controlled through the following API:
+</p>
+<ul class='doctree'>
+	<li class='jic'>{@link org.apache.juneau.rest.RestResourceResolver}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.rest.BasicRestResourceResolver}
+	</ul>
+</ul>
+<p>
+	This API can be extended to provide your own custom resource resolution.
+	<br>Later topics discuss how to use this API to instantiate resources using Spring.
+</p>
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver}
+</ul>

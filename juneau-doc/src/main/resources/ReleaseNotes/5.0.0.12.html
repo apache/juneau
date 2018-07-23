@@ -1,0 +1,47 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+5.0.0.12 (Mar 10, 2013)
+
+<p>
+	Juno 5.0.0.12 is a minor update.
+</p>
+<h5 class='topic w800'>Core API changes</h5>
+<ul class='spaced-list'>
+	<li>
+		Relaxed method naming conventions when using {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation.<br>
+		Methods with zero parameters are interpreted as getters, and methods with one parameter are interpreted as setters.<br>
+		Eliminated the <code>BeanProperty.method</code> annotation, since it's now unnecessary.
+			</li>
+</ul>		
+<h5 class='topic w800'>REST server API changes</h5>
+<ul class='spaced-list'>
+	<li>		
+		Significantly improved response error messages.<br> 
+		Older messages were rather cryptic.   Error conditions should be much easier to debug now.
+	</li>
+	<li>
+		New <code>PlainTextRestSerializer</code> class for serializing <js>"plain/text"</js> requests.<br>
+		Useful for debugging purposes.
+	</li>
+   		<li>
+		<code>Readers</code> and <code>InputStreams</code> can now be passed in as <del><code>@Content</code></del> parameters if you need direct access to the HTTP body content without involving the parsers.<br> 
+		Equivalent to previously calling {@link org.apache.juneau.rest.RestRequest#getInputStream()} and {@link org.apache.juneau.rest.RestRequest#getReader()}.
+   		</li>
+   		<li>
+		Improved support for the <code>?debug</code> parameter.<br>
+		Dumps better information to the log file, such as all header parameters.
+	</li>
+</ul>		

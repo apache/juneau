@@ -1,0 +1,59 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+RequestHeaders
+
+<p>
+	The {@link org.apache.juneau.rest.RequestHeaders} object is the API for accessing the headers of an HTTP request.
+	<br>It can be accessed by passing it as a parameter on your REST Java method:
+</p>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestHeaders headers) {...}			
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public</jk> Object myMethod(RequestHeaders headers) {
+
+		<jc>// Add a default value.</jc>
+		headers.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+	
+		<jc>// Get a header value as a POJO.</jc>
+		UUID etag = headers.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	
+		<jc>// Get a standard header.</jc>
+		CacheControl = headers.getCacheControl();
+	 }			
+</p>
+<p>
+	Some important methods on this class are:
+</p>
+<ul class='doctree'>
+	<li class='jc'><code>{@link org.apache.juneau.rest.RequestHeaders} <jk>extends</jk> TreeMap&lt;String,String[]&gt;</code>
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Class) get(String,Class)} - Get header value converted to a POJO.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Type,Type...) get(String,Type,Type)} - Get header value converted to a map or collection of POJOs.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getString(String,String) getString(String,String)} - Get header value as a simple string.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getInt(String,int) getInt(String,int)} - Get header value as an integer.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getBoolean(String,boolean) getBoolean(String,boolean)} - Get header value as a boolean.
+		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a header.
+	</ul>
+</ul>
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+</ul>
