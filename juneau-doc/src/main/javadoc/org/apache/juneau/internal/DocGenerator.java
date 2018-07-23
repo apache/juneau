@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 /**
@@ -109,6 +110,16 @@ public class DocGenerator {
 			IOUtils.write("src/main/javadoc/overview.html", template);
 
 			System.err.println("Generated target/overview.html in "+(System.currentTimeMillis()-startTime)+"ms");
+
+			startTime = System.currentTimeMillis();
+			for (File f : new File("src/main/javadoc/doc-files").listFiles())
+				Files.delete(f.toPath());
+			for (File f : topics.docFiles)
+				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
+			for (File f : releaseNotes.docFiles)
+				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
+			System.err.println("Copied doc-files in "+(System.currentTimeMillis()-startTime)+"ms");
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -122,7 +133,7 @@ public class DocGenerator {
 			for (File f : topicsDir.listFiles()) {
 				if (f.isFile())
 					pageFiles.add(new PageFile(null, f, docFiles));
-				else if (f.getName().equals("doc-files"))
+				else if (f.isDirectory() && f.getName().contains("doc-files"))
 					docFiles.addAll(Arrays.asList(f.listFiles()));
 			}
 		}
@@ -133,12 +144,12 @@ public class DocGenerator {
 		List<File> docFiles = new ArrayList<>();
 
 		public ReleaseNotes(File releaseNotesDir) throws IOException {
-			for (File f : releaseNotesDir.listFiles())
-				if (f.isFile()) {
+			for (File f : releaseNotesDir.listFiles()) {
+				if (f.isFile())
 					releaseFiles.add(new ReleaseFile(f));
-				} else if (f.getName().equals("doc-files")) {
+				else if (f.isDirectory() && f.getName().contains("doc-files"))
 					docFiles.addAll(Arrays.asList(f.listFiles()));
-				}
+			}
 		}
 	}
 
@@ -171,7 +182,7 @@ public class DocGenerator {
 				for (File f2 : d.listFiles()) {
 					if (f2.isFile())
 						pageFiles.add(new PageFile(this, f2, docFiles));
-					else if (f2.getName().equals("doc-files"))
+					else if (f2.isDirectory() && f2.getName().contains("doc-files"))
 						docFiles.addAll(Arrays.asList(f2.listFiles()));
 				}
 		}
@@ -202,5 +213,4 @@ public class DocGenerator {
 			return this.name.compareTo(o.name);
 		}
 	}
-
 }

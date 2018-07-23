@@ -61,15 +61,15 @@
 	<jc>// Define a class with dashed-lowercase property names.</jc>
 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
 	<jk>public class</jk> MyBean { ... }
-			</p>
-			<p>
-				The {@link org.apache.juneau.annotation.Bean#interfaceClass @Bean.interfaceClass()} annotation is used
-				to limit properties on beans to specific interface classes.
-				<br>When specified, only the list of properties defined on the interface class will be used during 
-				serialization.
-				<br>Additional properties on subclasses will be ignored.
-			</p>
-			<p class='bcode w800'>
+</p>
+<p>
+	The {@link org.apache.juneau.annotation.Bean#interfaceClass @Bean.interfaceClass()} annotation is used
+	to limit properties on beans to specific interface classes.
+	<br>When specified, only the list of properties defined on the interface class will be used during 
+	serialization.
+	<br>Additional properties on subclasses will be ignored.
+</p>
+<p class='bcode w800'>
 	<jc>// Parent class</jc>
 	<ja>@Bean</ja>(interfaceClass=A.<jk>class</jk>)
 	<jk>public abstract class</jk> A {
@@ -81,11 +81,11 @@
 		<jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
 	}
 
-	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
-;
+	JsonSerializer s = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
+	
 	A1 a1 = <jk>new</jk> A1();
 	String r = s.serialize(a1);
-	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized.</jc>
+	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized.</jc> 
 </p>
 <p>
 	Note that this annotation can be used on the parent class so that it filters to all child classes.
