@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; juneau-rest-server &gt; Resource Resolvers</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Instantiation.ResourceResolvers">Overview &gt; juneau-rest-server &gt; Resource Resolvers</a>
  * </ul>
  */
 public class BasicRestResourceResolver implements RestResourceResolver {

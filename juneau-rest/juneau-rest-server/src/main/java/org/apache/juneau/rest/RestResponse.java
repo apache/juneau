@@ -51,7 +51,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestResponse">Overview &gt; juneau-rest-server &gt; RestResponse</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RestResponse">Overview &gt; juneau-rest-server &gt; RestResponse</a>
  * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {
@@ -182,7 +182,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.

@@ -74,7 +74,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestRequest">Overview &gt; juneau-rest-server &gt; RestRequest</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RestRequest">Overview &gt; juneau-rest-server &gt; RestRequest</a>
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
@@ -340,7 +340,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestHeaders">Overview &gt; juneau-rest-server &gt; RequestHeaders</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestHeaders">Overview &gt; juneau-rest-server &gt; RequestHeaders</a>
 	 * </ul>
 	 *
 	 * @return
@@ -484,7 +484,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestQuery">Overview &gt; juneau-rest-server &gt; RequestQuery</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestQuery">Overview &gt; juneau-rest-server &gt; RequestQuery</a>
 	 * </ul>
 	 *
 	 * @return
@@ -548,7 +548,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestFormData">Overview &gt; juneau-rest-server &gt; RequestFormData</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestFormData">Overview &gt; juneau-rest-server &gt; RequestFormData</a>
 	 * </ul>
 	 *
 	 * @return
@@ -630,7 +630,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestPathMatch">Overview &gt; juneau-rest-server &gt; RequestPathMatch</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestPathMatch">Overview &gt; juneau-rest-server &gt; RequestPathMatch</a>
 	 * </ul>
 	 *
 	 * @return
@@ -691,7 +691,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; juneau-rest-server &gt; RequestBody</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestBody">Overview &gt; juneau-rest-server &gt; RequestBody</a>
 	 * </ul>
 	 *
 	 * @return
@@ -869,7 +869,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodSummary()}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
 	 * </ul>
 	 *
 	 * @return
@@ -905,7 +905,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
 	 * 	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider()}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.OptionsPages">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
 	 * </ul>
 	 *
 	 * @return

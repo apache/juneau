@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
  * </ul>
  */
 public class ThemeMenuItem extends MenuItemWidget {

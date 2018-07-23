@@ -473,7 +473,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Children">Overview &gt; juneau-rest-server &gt; Children</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Instantiation.Children">Overview &gt; juneau-rest-server &gt; Children</a>
 	 * </ul>
 	 */
 	public static final String REST_children = PREFIX + "children.lo";
@@ -2117,7 +2117,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.ResourceResolvers">Overview &gt; juneau-rest-server &gt; Resource Resolvers</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Instantiation.ResourceResolvers">Overview &gt; juneau-rest-server &gt; Resource Resolvers</a>
 	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Injection">Overview &gt; juneau-rest-server &gt; Using with Spring and Injection frameworks</a>
 	 * </ul>
 	 */
@@ -2761,7 +2761,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
 	 * </ul>
 	 */
 	public static final String REST_widgets = PREFIX + "widgets.lo";

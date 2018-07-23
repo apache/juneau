@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau.doc.internal;
 
 import java.io.*;
 import java.nio.file.*;
@@ -107,7 +107,7 @@ public class DocGenerator {
 
 			template = template.replace("{TOC-CONTENTS}", toc.toString()).replace("{CONTENTS}", contents.toString()).replace("{TOC-RELEASE-NOTES}", tocRn).replace("{RELEASE-NOTES}", rn);
 
-			IOUtils.write("src/main/javadoc/overview.html", template);
+			IOUtils.writeFile("src/main/javadoc/overview.html", template);
 
 			System.err.println("Generated target/overview.html in "+(System.currentTimeMillis()-startTime)+"ms");
 

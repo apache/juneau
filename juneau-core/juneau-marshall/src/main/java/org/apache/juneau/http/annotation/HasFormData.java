@@ -91,7 +91,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HasFormData">Overview &gt; juneau-rest-server &gt; @HasFormData</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.HasFormData">Overview &gt; juneau-rest-server &gt; @HasFormData</a>
  * </ul>
  */
 @Documented

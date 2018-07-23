@@ -21,7 +21,7 @@ package org.apache.juneau.transform;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoBuilders">Overview &gt; juneau-marshall &gt; POJO Builders</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.PojoBuilders">Overview &gt; juneau-marshall &gt; POJO Builders</a>
  * </ul>
  *
  * @param <T> The type of objects that this builder creates.

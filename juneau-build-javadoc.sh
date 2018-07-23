@@ -13,7 +13,16 @@
 
 . ~/.profile
 set -e
+
+cd juneau-doc
+java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocGenerator
+cd .. 
+
 mvn javadoc:aggregate
+
+cd juneau-doc
+java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocLinkTester
+cd .. 
 
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'

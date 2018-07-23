@@ -168,7 +168,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.XmlDetails.Namespaces">Overview &gt; juneau-marshall &gt; XML Details &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_addNamespaceUrisToRoot = PREFIX + "addNamespaceUrisToRoot.b";
@@ -213,7 +213,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.XmlDetails.Namespaces">Overview &gt; juneau-marshall &gt; XML Details &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_autoDetectNamespaces = PREFIX + "autoDetectNamespaces.b";
@@ -239,7 +239,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.XmlDetails.Namespaces">Overview &gt; juneau-marshall &gt; XML Details &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_defaultNamespace = PREFIX + "defaultNamespace.s";
@@ -265,7 +265,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.XmlDetails.Namespaces">Overview &gt; juneau-marshall &gt; XML Details &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_enableNamespaces = PREFIX + "enableNamespaces.b";
@@ -291,7 +291,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.XmlDetails.Namespaces">Overview &gt; juneau-marshall &gt; XML Details &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_namespaces = PREFIX + "namespaces.ls";
@@ -318,7 +318,7 @@ public class XmlSerializer extends WriterSerializer {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="package-summary.html#Namespaces">org.apache.juneau.xml &gt; Namespaces</a>
+	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.XmlDetails.Namespaces">Overview &gt; juneau-marshall &gt; XML Details &gt; Namespaces</a>
 	 * </ul>
 	 */
 	public static final String XML_xsNamespace = PREFIX + "xsNamespace.s";
@@ -442,7 +442,8 @@ public class XmlSerializer extends WriterSerializer {
 		}
 	}
 
-	private static final Namespace
+	@SuppressWarnings("javadoc")
+	protected static final Namespace
 		DEFAULT_JUNEAU_NAMESPACE = Namespace.create("juneau", "http://www.apache.org/2013/Juneau"),
 		DEFAULT_XS_NAMESPACE = Namespace.create("xs", "http://www.w3.org/2001/XMLSchema");
 

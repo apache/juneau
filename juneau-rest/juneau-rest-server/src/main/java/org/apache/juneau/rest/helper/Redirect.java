@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Redirect">Overview &gt; juneau-rest-server &gt; Redirect</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod.Redirect">Overview &gt; juneau-rest-server &gt; Redirect</a>
  * </ul>
  */
 @Response(code=302, description="Redirect", headers=@ResponseHeader(name="Location",description="Redirect URI",type="string",format="uri"), schema=@Schema(ignore=true))

@@ -10,13 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.doc.internal;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Javadoc link checker.
@@ -24,17 +22,22 @@ import org.apache.juneau.internal.*;
  * <p>
  * Runs against the generated javadocs folder looking for any broken internal links (missing files, invalid anchor tags, etc...).
  */
-public class JavadocLinkTester {
+public class DocLinkTester {
 
 	private static Map<String,Set<String>> ANCHORS = new LinkedHashMap<>();
 	private static Pattern p = Pattern.compile("(href|src)\\=['\\\"]([^'\\\"]+)['\\\"]");
 	private static Pattern p2 = Pattern.compile("(name|id)\\=['\\\"]([^'\\\"]+)['\\\"]");
 	private static int errors, files, directories, links;
 
+	/**
+	 * Entry point.
+	 *
+	 * @param args Not used
+	 */
 	public static void main(String[] args) {
 		try {
 			long startTime = System.currentTimeMillis();
-			File root = new File("../../target/site/apidocs").getCanonicalFile();
+			File root = new File("../target/site/apidocs").getCanonicalFile();
 			System.out.println("Checking " + root);
 			process(root);
 			System.out.println("Checked "+links+" links in " + files + " files in " + directories + " directories in "+(System.currentTimeMillis()-startTime)+"ms");

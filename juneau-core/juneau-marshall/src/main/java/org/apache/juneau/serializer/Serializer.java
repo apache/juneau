@@ -717,11 +717,6 @@ public abstract class Serializer extends BeanContext {
 	 * 		...
 	 * 	}
 	 * </p>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; juneau-marshall &gt; URIs</a>
-	 * </ul>
 	 */
 	public static final String SERIALIZER_uriContext = PREFIX + "uriContext.s";
 

@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.BeanFilters">Overview &gt; juneau-marshall &gt; BeanFilters</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.BeanFilters">Overview &gt; juneau-marshall &gt; BeanFilters</a>
  * </ul>
  */
 public final class BeanFilter {

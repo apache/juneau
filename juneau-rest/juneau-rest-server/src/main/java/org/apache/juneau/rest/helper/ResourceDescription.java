@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedLabelBeans">Overview &gt; juneau-rest-server &gt; Predefined Label Beans</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.PredefinedHelperBeans">Overview &gt; juneau-rest-server &gt; Predefined Helper Beans</a>
  * </ul>
  */
 @Bean(properties="name,description", fluentSetters=true)

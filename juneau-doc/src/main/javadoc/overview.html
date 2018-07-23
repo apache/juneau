@@ -194,6 +194,7 @@
 		<li><p><a class='doclink' href='#juneau-marshall.CsvDetails'>CSV Details</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.JsoDetails'>Java Serialized Object Details</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.BestPractices'>Best Practices</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.URIs'>URIs</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></p>
 	<ol>
@@ -8228,6 +8229,13 @@ TODO(7.2.0)
 		hash lookups to resolve to {@link org.apache.juneau.ClassMeta} parameters.
 </ol>
 </div><!-- END: 2.25 - juneau-marshall.BestPractices -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.URIs' id='juneau-marshall.URIs'>2.26 - URIs</a></h3>
+<div class='topic'><!-- START: 2.26 - juneau-marshall.URIs -->
+TODO(7.2.0)
+</div><!-- END: 2.26 - juneau-marshall.URIs -->
 </div><!-- END: 2 - juneau-marshall -->
 
 <!-- ==================================================================================================== -->
@@ -13576,7 +13584,7 @@ TODO(7.2.0)
 <ul>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
-	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
 </div><!-- END: 7.9.1 - juneau-rest-server.HttpPartAnnotations.Body -->
 
@@ -13625,7 +13633,7 @@ TODO(7.2.0)
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
-	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
 </div><!-- END: 7.9.2 - juneau-rest-server.HttpPartAnnotations.FormData -->
 
@@ -13680,7 +13688,7 @@ TODO(7.2.0)
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
-	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
 </div><!-- END: 7.9.4 - juneau-rest-server.HttpPartAnnotations.Query -->
 
@@ -13722,7 +13730,7 @@ TODO(7.2.0)
 <ul>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
-	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
 </div><!-- END: 7.9.6 - juneau-rest-server.HttpPartAnnotations.Header -->
 
@@ -13757,7 +13765,7 @@ TODO(7.2.0)
 <ul>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
-	<li class='link'><a class='doclink' href='#juneau-rest-server.SwaggerSchemaPartParsing'>Swagger Schema Part Parsing</a>
+	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
 </div><!-- END: 7.9.7 - juneau-rest-server.HttpPartAnnotations.Path -->
 
@@ -21198,7 +21206,7 @@ TODO(7.2.0)
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='link'><a class='doclink' href='#juneau-rest-server.RemoteableProxiesServerSide'>Remoteable Proxies - Server Side</a>
+	<li class='link'><a class='doclink' href='#juneau-rest-server.RemoteableProxies.ServerSide'>Remoteable Proxies - Server Side</a>
 </ul>
 </div><!-- END: 12.8 - juneau-examples-rest.SampleRemoteableServlet -->
 
@@ -24176,7 +24184,7 @@ TODO(7.2.0)
 		for performing REST operations against Jazz servers.<br>
 		Includes improved support for FORM authentication, and better SSL certificate validation.
 	<li>Completely redesigned URL-Encoding support.<br>
-		See <a class='doclink' href='org/apache/juneau/urlencoding/package-summary.html#TOC'>org.apache.juneau.urlencoding</a> package for details. 
+		See <code><del>org.apache.juneau.urlencoding</del></code> package for details. 
 	<li>Changes to Parser API.
 	<ul>
 		<li>Removal of <code>ExtendedReaderParser</code> abstract class and moved methods into 
@@ -25810,7 +25818,7 @@ TODO(7.2.0)
 				<li>New {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format that's identical to {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except 
 					XML content is not escaped and serialized directly as the child content.  The parser will reconvert this to the original XML text during parsing.
 			</ul>
-			<li>New support methodology and other improvements to <a class='doclink' href='org/apache/juneau/xml/package-summary.html#TOC'>org.apache.juneau.xml</a> documentation.
+			<li>New support methodology and other improvements to <code><del>org.apache.juneau.xml</del></code> documentation.
 			<li>Eliminated unnecessary <xt>&lt;string&gt;</xt> elements.
 			<li>Eliminated <code><del>XmlContentHandler</del></code> class.
 			<li>Parser efficiency improvements through reuse of string builders.
@@ -25824,7 +25832,7 @@ TODO(7.2.0)
 			<li>Parser converted from <code>XMLEventReader</code>-based to <code>XMLStreamReader</code>.
 			<li>Eliminated many unnecessary type tags and <xt>&lt;string&gt;</xt> elements and improved the readable layout.  
 				The new format is much leaner.
-			<li>New exhaustive support methodology section added to <a class='doclink' href='org/apache/juneau/html/package-summary.html#TOC'>org.apache.juneau.html</a> documentation.
+			<li>New exhaustive support methodology section added to <code><del>org.apache.juneau.html</del></code> documentation.
 		</ul>
 	<li>New HTML5 DTO support:  <a class='doclink' href='org/apache/juneau/dto/html5/package-summary.html#TOC'>org.apache.juneau.dto.html5</a>.
 	<li>{@link org.apache.juneau.BeanContext} class split into separate {@link org.apache.juneau.BeanContext} and {@link org.apache.juneau.BeanSession} classes.
@@ -27744,7 +27752,7 @@ TODO(7.2.0)
 		{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
 		{@link org.apache.juneau.transform.Surrogate} classes.
 	<li>
-		New support for <a class='doclink' href='#juneau-marshall.PojoBuilders'>POJO Builders</a>.	
+		New support for <a class='doclink' href='#juneau-marshall.Transforms.PojoBuilders'>POJO Builders</a>.	
 </ul>
 
 <h5 class='topic w800'>juneau-svl</h5>

@@ -70,6 +70,9 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 	private static final Set<String> STANDARD_METHODS = new ASet<String>().appendAll("get", "put", "post", "delete", "options");
 
+	/**
+	 * This UI applies to HTML requests only.
+	 */
 	@Override
 	public MediaType[] forMediaTypes() {
 		return new MediaType[] {MediaType.HTML};

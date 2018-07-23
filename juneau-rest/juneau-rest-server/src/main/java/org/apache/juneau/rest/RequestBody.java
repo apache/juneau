@@ -35,7 +35,7 @@ import org.apache.juneau.rest.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RequestBody">Overview &gt; juneau-rest-server &gt; RequestBody</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestBody">Overview &gt; juneau-rest-server &gt; RequestBody</a>
  * </ul>
  */
 @SuppressWarnings("unchecked")

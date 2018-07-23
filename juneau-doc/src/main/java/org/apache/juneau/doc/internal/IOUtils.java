@@ -10,40 +10,27 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.annotation;
+package org.apache.juneau.doc.internal;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
+import java.io.*;
+import java.nio.file.*;
 
 /**
- * Used to associate multiple swaps with the same POJO class.
- *
- * <p class='bcode w800'>
- * 	<ja>@Swaps</ja>(
- * 		{
- * 			<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
- * 			<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>),
- * 			<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
- * 		}
- * 	)
- * 	<jk>public class</jk> MyPojo {}
- * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.SwapAnnotation">Overview &gt; juneau-marshall &gt; @Swap Annotation</a>
- * </ul>
+ * Various I/O related utility methods.
  */
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-@Inherited
-public @interface Swaps {
+@SuppressWarnings("javadoc")
+public final class IOUtils {
 
-	/**
-	 * The swaps to apply to this POJO class.
-	 */
-	Swap[] value() default {};
+	public static String readFile(String path) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, "UTF-8");
+	}
+
+	public static String read(File f) throws IOException {
+		return readFile(f.getAbsolutePath());
+	}
+
+	public static void writeFile(String path, String contents) throws IOException {
+		Files.write(Paths.get(path), contents.getBytes("UTF-8"));
+	}
 }
