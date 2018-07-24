@@ -15,4 +15,151 @@
 
 OpenAPI Methodology
 
-TODO(7.2.0)
+<p>
+	Unlike the other Juneau serializers and parsers that convert input and output directly to-and-from POJOs,
+	the OpenAPI serializers and parsers use intermediate objects based on the <code>type</code> and <code>format</code>
+	of the schema.
+</p>
+<p>
+	The following table shows the "natural" intermediate type of the object based on the <code>type/format</code>:
+</p>
+<table class='styled w800'>
+	<tr><th>Type</th><th>Format</th><th>Intermediate Java Type</th></tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>byte<br>binary<br>binary-spaced</code></td>
+		<td><code><jk>byte</jk>[]</code></td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>date<br>date-time</code></td>
+		<td>{@link java.util.Calendar}</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>uon</code></td>
+		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td>empty</td>
+		<td>{@link java.lang.String}</td>
+	</tr>
+	<tr>
+		<td><code>boolean</code></td>
+		<td>empty</td>
+		<td>{@link java.lang.Boolean}</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int32</code></td>
+		<td>{@link java.lang.Integer}</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int64</code></td>
+		<td>{@link java.lang.Long}</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>float</code></td>
+		<td>{@link java.lang.Float}</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>double</code></td>
+		<td>{@link java.lang.Double}</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td>empty</td>
+		<td>Arrays of intermediate types on this list.</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td><code>uon</code></td>
+		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td>empty</td>
+		<td><code>Map&lt;String,String&gt;</code></td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td><code>uon</code></td>
+		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+	</tr>
+</table>
+<p>
+	The valid POJO types for serializing/parsing are based on the intermediate types above.
+	<br>As a general rule, any POJOs that are the intermediate type or transformable to or from
+	the intermediate type are valid POJO types.
+</p>
+<p>
+	For example, the following POJO type can be transformed to and from a byte array.
+</p>
+<p class='bpcode w800'>
+	<jc>// Sample POJO class convertable to and from a byte[].</jc>
+	<jk>public class</jk> MyPojo {
+		
+		<jc>// Constructor used by parser.</jc>
+		<jk>public</jk> MyPojo(<jk>byte</jk>[] fromBytes) {...}
+	
+		<jc>// toX method used by serializer.</jc>
+		<jk>public byte</jk>[] toBytes() {...}
+	}
+</p>
+<p>
+	This example shows how that POJO can be converted to a BASE64-encoded string.
+</p>
+<p class='bpcode w800'>
+	<jc>// Construct a POJO.</jc>
+	MyPojo myPojo = ...;
+	
+	<jc>// Define a schema.</jc>
+	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).build();
+
+	<jc>// Convert POJO to BASE64-encoded string.</jc>
+	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	String httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+	
+	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+</p>
+<p>
+	In addition to defining format, the schema also allows for validations of the serialized form.
+</p>
+<p class='bpcode w800'>
+	<jc>// Construct a POJO.</jc>
+	MyPojo myPojo = ...;
+	
+	<jc>// Define a schema.</jc>
+	<jc>// Serialized string must be no smaller than 100 characters.</jc>
+	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).minLength(100).build();
+
+	<jc>// Convert POJO to BASE64-encoded string.</jc>
+	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	String httpPart;
+	<jk>try</jk> {
+		httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, output too small.</jc>
+	}
+	
+	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	<jk>try</jk> {
+		myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, input too small.</jc>
+	}
+</p>
+<p>
+	It looks simple, but the implementation is highly sophisticated being able to serialize and parse and validate using complex schemas.
+</p>
+<p>
+	The next sections go more into depth on serializing and parsing various POJO types.
+</p>
+

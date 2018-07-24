@@ -176,7 +176,7 @@
 						<use>false</use>
 						<additionalparam>-sourcetab 3 -notimestamp -Xdoclint:none --allow-script-in-comments</additionalparam>
 						<verbose>false</verbose>
-						<excludePackageNames>*proto*:*samples*:*examples*:*test*</excludePackageNames>
+						<excludePackageNames>*proto*:*samples*:*examples*:*test*:org.apache.juneau.doc.internal</excludePackageNames>
 						<linksource>true</linksource>
 						<links>
 							<link>http://docs.oracle.com/javase/7/docs/api/</link>

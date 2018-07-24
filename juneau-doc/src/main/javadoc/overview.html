@@ -7660,21 +7660,21 @@
 
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlDocSerializer' id='juneau-marshall.HtmlDetails.HtmlDocSerializer'>2.17.6 - HtmlDocSerializer</a></h4>
 <div class='topic'><!-- START: 2.17.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
-TODO(7.2.0)
+TODO
 </div><!-- END: 2.17.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
 
 <!-- ==================================================================================================== -->
 
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.CustomTemplates' id='juneau-marshall.HtmlDetails.CustomTemplates'>2.17.7 - Custom Templates</a></h4>
 <div class='topic'><!-- START: 2.17.7 - juneau-marshall.HtmlDetails.CustomTemplates -->
-TODO(7.2.0)
+TODO
 </div><!-- END: 2.17.7 - juneau-marshall.HtmlDetails.CustomTemplates -->
 
 <!-- ==================================================================================================== -->
 
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSchema' id='juneau-marshall.HtmlDetails.HtmlSchema'>2.17.8 - HTML-Schema Support</a></h4>
 <div class='topic'><!-- START: 2.17.8 - juneau-marshall.HtmlDetails.HtmlSchema -->
-TODO(7.2.0)
+TODO
 </div><!-- END: 2.17.8 - juneau-marshall.HtmlDetails.HtmlSchema -->
 </div><!-- END: 2.17 - juneau-marshall.HtmlDetails -->
 
@@ -8156,27 +8156,670 @@ TODO(7.2.0)
 
 <h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails' id='juneau-marshall.OpenApiDetails'>2.21 - OpenAPI Details</a></h3>
 <div class='topic'><!-- START: 2.21 - juneau-marshall.OpenApiDetails -->
-TODO(7.2.0)
+<p>
+	Juneau supports converting arbitrary POJOs to and from strings using OpenAPI-based schema rules. 
+</p>
+<p>
+	The relevant classes for using OpenAPI-based serialization are:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Converts POJOs to strings.
+	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Converts strings to POJOs.
+	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartSchema} - Defines the schema for your POJO.
+</ul>
+<p>
+	The {@link org.apache.juneau.httppart.HttpPartSchema} class is used to define the formatting and 
+	validations for a POJO.
+	It's used in conjunction with the serializer and parser to produce and consume HTTP parts based on 
+	OpenAPI rules.
+</p>
+<p>
+	Later in the rest-server and rest-client sections, we also describe how the following annotations
+	can be applied to method parameters and class types to define the schema for various HTTP parts:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+</ul>
 
 <!-- ==================================================================================================== -->
 
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Methodology' id='juneau-marshall.OpenApiDetails.Methodology'>2.21.1 - OpenAPI Methodology</a></h4>
 <div class='topic'><!-- START: 2.21.1 - juneau-marshall.OpenApiDetails.Methodology -->
-TODO(7.2.0)
+<p>
+	Unlike the other Juneau serializers and parsers that convert input and output directly to-and-from POJOs,
+	the OpenAPI serializers and parsers use intermediate objects based on the <code>type</code> and <code>format</code>
+	of the schema.
+</p>
+<p>
+	The following table shows the "natural" intermediate type of the object based on the <code>type/format</code>:
+</p>
+<table class='styled w800'>
+	<tr><th>Type</th><th>Format</th><th>Intermediate Java Type</th></tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>byte<br>binary<br>binary-spaced</code></td>
+		<td><code><jk>byte</jk>[]</code></td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>date<br>date-time</code></td>
+		<td>{@link java.util.Calendar}</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>uon</code></td>
+		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td>empty</td>
+		<td>{@link java.lang.String}</td>
+	</tr>
+	<tr>
+		<td><code>boolean</code></td>
+		<td>empty</td>
+		<td>{@link java.lang.Boolean}</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int32</code></td>
+		<td>{@link java.lang.Integer}</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int64</code></td>
+		<td>{@link java.lang.Long}</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>float</code></td>
+		<td>{@link java.lang.Float}</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>double</code></td>
+		<td>{@link java.lang.Double}</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td>empty</td>
+		<td>Arrays of intermediate types on this list.</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td><code>uon</code></td>
+		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td>empty</td>
+		<td><code>Map&lt;String,String&gt;</code></td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td><code>uon</code></td>
+		<td>No intermediate type.<br>(serialized directly to/from POJO)</td>
+	</tr>
+</table>
+<p>
+	The valid POJO types for serializing/parsing are based on the intermediate types above.
+	<br>As a general rule, any POJOs that are the intermediate type or transformable to or from
+	the intermediate type are valid POJO types.
+</p>
+<p>
+	For example, the following POJO type can be transformed to and from a byte array.
+</p>
+<p class='bpcode w800'>
+	<jc>// Sample POJO class convertable to and from a byte[].</jc>
+	<jk>public class</jk> MyPojo {
+		
+		<jc>// Constructor used by parser.</jc>
+		<jk>public</jk> MyPojo(<jk>byte</jk>[] fromBytes) {...}
+	
+		<jc>// toX method used by serializer.</jc>
+		<jk>public byte</jk>[] toBytes() {...}
+	}
+</p>
+<p>
+	This example shows how that POJO can be converted to a BASE64-encoded string.
+</p>
+<p class='bpcode w800'>
+	<jc>// Construct a POJO.</jc>
+	MyPojo myPojo = ...;
+	
+	<jc>// Define a schema.</jc>
+	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).build();
+
+	<jc>// Convert POJO to BASE64-encoded string.</jc>
+	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	String httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+	
+	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+</p>
+<p>
+	In addition to defining format, the schema also allows for validations of the serialized form.
+</p>
+<p class='bpcode w800'>
+	<jc>// Construct a POJO.</jc>
+	MyPojo myPojo = ...;
+	
+	<jc>// Define a schema.</jc>
+	<jc>// Serialized string must be no smaller than 100 characters.</jc>
+	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).minLength(100).build();
+
+	<jc>// Convert POJO to BASE64-encoded string.</jc>
+	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	String httpPart;
+	<jk>try</jk> {
+		httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, output too small.</jc>
+	}
+	
+	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	<jk>try</jk> {
+		myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, input too small.</jc>
+	}
+</p>
+<p>
+	It looks simple, but the implementation is highly sophisticated being able to serialize and parse and validate using complex schemas.
+</p>
+<p>
+	The next sections go more into depth on serializing and parsing various POJO types.
+</p>
 </div><!-- END: 2.21.1 - juneau-marshall.OpenApiDetails.Methodology -->
 
 <!-- ==================================================================================================== -->
 
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Serializers' id='juneau-marshall.OpenApiDetails.Serializers'>2.21.2 - OpenAPI Serializers</a></h4>
 <div class='topic'><!-- START: 2.21.2 - juneau-marshall.OpenApiDetails.Serializers -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.httppart.OpenApiPartSerializer} class is used to convert POJOs to HTTP parts.
+</p>
+<p>
+	Later we'll describe how to use HTTP-Part annotations to define OpenAPI schemas for serialization and parsing
+	of HTTP parts.  
+	<br>The following example is a preview showing an HTTP body defined as pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
+	<jk>public void</jk> post2dLongArray(
+		<ja>@Body</ja>(
+			schema=<ja>@Schema</ja>(
+				items=<ja>@Items</ja>(
+					collectionFormat=<js>"pipes"</js>,
+					items=<ja>@SubItems</ja>(
+						collectionFormat=<js>"csv"</js>,
+						type=<js>"integer"</js>, 
+						format=<js>"int64"</js>,
+						minimum=<js>"0"</js>,
+						maximum=<js>"100"</js>
+						minLength=1,
+						maxLength=10
+					)
+				)
+				minLength=1,
+				maxLength=10
+			)
+		)
+		Long[][] body
+	) {...}
+</p>
+<p>
+	Under-the-covers, this gets converted to the following schema object:
+</p>
+<p class='bpcode w800'>
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+
+	HttpPartSchema schema = <jsm>create</jsm>()
+		.items(
+			<jsm>create</jsm>()
+				.collectionFormat(<js>"pipes"</js>)
+				.items(
+					<jsm>create</jsm>()
+						.collectionFormat(<js>"csv"</js>)
+						.type(<js>"integer"</js>) 
+						.format(<js>"int64"</js>)
+						.minimum(<js>"0"</js>)
+						.maximum(<js>"100"</js>)
+						.minLength(1)
+						.maxLength=(10)
+				)
+		)
+		.build();
+</p>
+<p>
+	The following code shows how the schema above can be used to create our pipe-and-csv list of numbers:
+</p>
+<p class='bpcode w800'>
+	<jc>// Our POJO being serialized.</jc>
+	Long[][] input = ....
+	
+	<jc>// The serializer to use.</jc>
+	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Convert POJO to a string.</jc>
+	<jk>try</jk> {
+		String httpPart = s.serialize(HttpPartType.<jsf>BODY</jsf>, schema, input);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, one of the restrictions were not met.</jc>
+	}
+</p>
+<p>
+	As a general rule, any POJO convertible to the intermediate type for the <code>type/format</code> of the schema can
+	be serialized using the OpenAPI serializer.
+	<br>Here are the rules of POJO types allowed for various type/format combinations:
+</p>
+<table class='styled w800'>
+	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>byte<br>binary<br>binary-spaced</code></td>
+		<td>
+			<ul>
+				<li><code><jk>byte</jk>[]</code>
+				<li>{@link java.io.InputStream}
+				<li>{@link java.io.Reader} - Read into String and then converted using {@link java.lang.String#getBytes()}.
+				<li>{@link java.lang.Object} - Converted to String and then converted using {@link java.lang.String#getBytes()}.
+				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via the following methods:
+					<ul>
+						<li><code><jk>public byte</jk>[] toBytes() {...}</code>
+						<li><code><jk>public byte</jk>[]</jk> toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>date<br>date-time</code></td>
+		<td>
+			<ul>
+				<li>{@link java.util.Calendar}
+				<li>{@link java.util.Date}
+				<li>Any POJO transformable to a {@link java.util.Calendar} via the following methods:
+					<ul>
+						<li><code><jk>public</jk> Calendar toCalendar() {...}</code>
+						<li><code><jk>public</jk> Calendar toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to a {@link java.util.Calendar} via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>uon</code></td>
+		<td>
+			<ul>
+				<li>Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Serializable POJO</a> type.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>{@link java.lang.String}
+				<li>Any POJO transformable to a {@link java.lang.String} via the following methods:
+					<ul>
+						<li><code><jk>public</jk> String toString() {...}</code>
+					</ul>
+				<li>Any POJO transformable to a {@link java.lang.String} via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>boolean</code></td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Boolean}
+				<li><jk>boolean</jk>
+				<li>{@link java.lang.String} - Converted to a {@link java.lang.Boolean}.
+				<li>Any POJO transformable to a {@link java.lang.Boolean} via the following methods:
+					<ul>
+						<li><code><jk>public</jk> Boolean toBoolean() {...}</code>
+						<li><code><jk>public</jk> Boolean toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to a {@link java.lang.Boolean} via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int32</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Integer}
+				<li><jk>int</jk>
+				<li>{@link java.lang.String} - Converted to an {@link java.lang.String}.
+				<li>Any POJO transformable to an {@link java.lang.Integer} via the following methods:
+					<ul>
+						<li><code><jk>public</jk> Integer toInteger() {...}</code>
+						<li><code><jk>public</jk> Integer toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to an {@link java.lang.Integer} via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int64</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Long}
+				<li><jk>long</jk>
+				<li>{@link java.lang.String} - Converted to a {@link java.lang.Long}.
+				<li>Any POJO transformable to a {@link java.lang.Long} via the following methods:
+					<ul>
+						<li><code><jk>public</jk> Long toLong() {...}</code>
+						<li><code><jk>public</jk> Long toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to a {@link java.lang.Long} via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>float</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Float}
+				<li><jk>float</jk>
+				<li>{@link java.lang.String} - Converted to a {@link java.lang.Float}.
+				<li>Any POJO transformable to a {@link java.lang.Float} via the following methods:
+					<ul>
+						<li><code><jk>public</jk> Float toFloat() {...}</code>
+						<li><code><jk>public</jk> Float toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to a {@link java.lang.Float} via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>double</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Double}
+				<li><jk>double</jk>
+				<li>{@link java.lang.String} - Converted to a {@link java.lang.Double}.
+				<li>Any POJO transformable to a {@link java.lang.Double} via the following methods:
+					<ul>
+						<li><code><jk>public</jk> Double toDouble() {...}</code>
+						<li><code><jk>public</jk> Double toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to a {@link java.lang.Double} via a {@link org.apache.juneau.transform.PojoSwap}.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>Arrays or Collections of any defaults on this list.
+				<li>Any POJO transformable to arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
+					<br>For example:
+					<ul>
+						<li><code><jk>public</jk> Boolean[][] toFoo() {...}</code> (any method name starting with "to")
+					</ul>
+				<li>Any POJO transformable to arrays of the default types via a {@link org.apache.juneau.transform.PojoSwap}
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td><code>uon</code></td>
+		<td>
+			<ul>
+				<li>Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Serializable POJO</a> type.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>Beans with properties of anything on this list.
+				<li>Maps with string keys.
+				<li>Any POJO transformable to a map via a {@link org.apache.juneau.transform.PojoSwap}
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td><code>uon</code></td>
+		<td>
+			<ul>
+				<li>Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Serializable POJO</a> type.
+			</ul>
+		</td>
+	</tr>
+</table>
 </div><!-- END: 2.21.2 - juneau-marshall.OpenApiDetails.Serializers -->
 
 <!-- ==================================================================================================== -->
 
 <h4 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Parsers' id='juneau-marshall.OpenApiDetails.Parsers'>2.21.3 - OpenAPI Parsers</a></h4>
 <div class='topic'><!-- START: 2.21.3 - juneau-marshall.OpenApiDetails.Parsers -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.httppart.OpenApiPartParser} class is used to convert HTTP parts back into POJOs.
+</p>
+<p>
+	The following is the previous example of a schema that defines the format of a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
+</p>
+<p class='bpcode w800'>
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+
+	HttpPartSchema schema = <jsm>create</jsm>()
+		.items(
+			<jsm>create</jsm>()
+				.collectionFormat(<js>"pipes"</js>)
+				.items(
+					<jsm>create</jsm>()
+						.collectionFormat(<js>"csv"</js>)
+						.type(<js>"integer"</js>) 
+						.format(<js>"int64"</js>)
+						.minimum(<js>"0"</js>)
+						.maximum(<js>"100"</js>)
+						.minLength(1)
+						.maxLength=(10)
+				)
+		)
+		.build();
+</p>
+<p>
+	The following code shows how the schema above can be used to parse our input into a POJO:
+</p>
+<p class='bpcode w800'>
+	<jc>// Our input being parsed.</jc>
+	String input = <js>"1,2,3|4,5,6|7,8,9"</js>
+	
+	<jc>// The parser to use.</jc>
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Convert string to a POJO.</jc>
+	<jk>try</jk> {
+		Long[][] pojo = p.parse(HttpPartType.<jsf>BODY</jsf>, schema, input, Long[][].<jk>class</jk>);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, one of the restrictions were not met.</jc>
+	}
+</p>
+<p>
+	As a general rule, any POJO convertible from the intermediate type for the <code>type/format</code> of the schema can
+	be parsed using the OpenAPI parser.
+	<br>Here are the rules of POJO types allowed for various type/format combinations:
+</p>
+<table class='styled w800'>
+	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>byte<br>binary<br>binary-spaced</code></td>
+		<td>
+			<ul>
+				<li><code><jk>byte</jk>[]</code> (default)
+				<li>{@link java.io.InputStream} - Returns a {@link java.io.ByteArrayInputStream}.
+				<li>{@link java.io.Reader} - Returns a {@link java.io.InputStreamReader} wrapped around a {@link java.io.ByteArrayInputStream}.
+				<li>{@link java.lang.String} - Constructed using {@link java.lang.String#String(byte[])}.
+				<li>{@link java.lang.Object} - Returns the default <code><jk>byte</jk>[]</code>.
+				<li>Any POJO transformable from a <code><jk>byte</jk>[]</code> (via constructors or static create methods).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>date<br>date-time</code></td>
+		<td>
+			<ul>
+				<li>{@link java.util.Calendar} (default)
+				<li>{@link java.util.Date}
+				<li>{@link java.util.GregorianCalendar}
+				<li>{@link java.lang.String} - Converted using {@link java.util.Calendar#toString()}.
+				<li>{@link java.lang.Object} - Returns the default {@link java.util.Calendar}.
+				<li>Any POJO transformable from a {@link java.util.Calendar} (via constructors or static create methods).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td><code>uon</code></td>
+		<td>
+			<ul>
+				<li>Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>string</code> or empty</td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>{@link java.lang.String} (default)
+				<li>{@link java.lang.Object} - Returns the default {@link java.lang.String}.
+				<li>Any POJO transformable from a {@link java.lang.String} (via constructors, static create methods, or swaps).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>boolean</code></td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Boolean} (default)
+				<li><jk>boolean</jk>
+				<li>{@link java.lang.String}
+				<li>{@link java.lang.Object} - Returns the default {@link java.lang.Boolean}.
+				<li>Any POJO transformable from a {@link java.lang.Boolean} (via constructors, static create methods, or swaps).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int32</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Integer} (default)
+				<li>Any subclass of {@link java.lang.Number} 
+				<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+				<li>{@link java.lang.String}
+				<li>{@link java.lang.Object} - Returns the default {@link java.lang.Integer}.
+				<li>Any POJO transformable from an {@link java.lang.Integer} (via constructors, static create methods, or swaps).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>integer</code></td>
+		<td><code>int64</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Long} (default)
+				<li>Any subclass of {@link java.lang.Number} 
+				<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+				<li>{@link java.lang.String}
+				<li>{@link java.lang.Object} - Returns the default {@link java.lang.Long}.
+				<li>Any POJO transformable from an {@link java.lang.Long} (via constructors, static create methods, or swaps).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>float</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Float} (default)
+				<li>Any subclass of {@link java.lang.Number} 
+				<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+				<li>{@link java.lang.String}
+				<li>{@link java.lang.Object} - Returns the default {@link java.lang.Float}.
+				<li>Any POJO transformable from an {@link java.lang.Float} (via constructors, static create methods, or swaps).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>number</code></td>
+		<td><code>double</code></td>
+		<td>
+			<ul>
+				<li>{@link java.lang.Double} (default)
+				<li>Any subclass of {@link java.lang.Number} 
+				<li>Any primitive number:  (e.g <jk>int</jk>, <jk>float</jk>...)
+				<li>{@link java.lang.String}
+				<li>{@link java.lang.Object} - Returns the default {@link java.lang.Double}.
+				<li>Any POJO transformable from an {@link java.lang.Double} (via constructors, static create methods, or swaps).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>Arrays or Collections of anything on this list.
+				<li>Any POJO transformable from arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>array</code></td>
+		<td><code>uon</code></td>
+		<td>
+			<ul>
+				<li>Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td>empty</td>
+		<td>
+			<ul>
+				<li>Beans with properties of anything on this list.
+				<li>Maps with string keys.
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td><code>object</code></td>
+		<td><code>uon</code></td>
+		<td>
+			<ul>
+				<li>Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
+			</ul>
+		</td>
+	</tr>
+</table>
 </div><!-- END: 2.21.3 - juneau-marshall.OpenApiDetails.Parsers -->
 </div><!-- END: 2.21 - juneau-marshall.OpenApiDetails -->
 
@@ -13434,7 +14077,27 @@ TODO(7.2.0)
 
 <h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.OpenApiSchemaPartSerializing' id='juneau-rest-server.OpenApiSchemaPartSerializing'>7.8 - OpenAPI Schema Part Serializing</a></h3>
 <div class='topic'><!-- START: 7.8 - juneau-rest-server.OpenApiSchemaPartSerializing -->
-TODO(7.2.0)
+<p class='bpcode w800'>
+	<jc>// Schema information about our part.</jc>
+	HttpPartSchema schema = HttpPartSchema
+		.<jsm>create</jsm>(<js>"array"</js>)
+		.collectionFormat(<js>"pipes"</js>)
+		.items(
+			HttpPartSchema
+				.<jsm>create</jsm>(<js>"array"</js>)
+				.collectionFormat(<js>"csv"</js>)
+				.items(
+					HttpPartSchema.<jsm>create</jsm>(<js>"integer"</js>,<js>"int64"</js>)
+				)
+		)
+		.build();
+
+	<jc>// Our value to serialize</jc>
+	Object value = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
+
+	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
+	String output = OpenApiPartSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, value);
+</p>
 </div><!-- END: 7.8 - juneau-rest-server.OpenApiSchemaPartSerializing -->
 
 <!-- ==================================================================================================== -->

@@ -15,4 +15,31 @@
 
 OpenAPI Details
 
-TODO(7.2.0)
+<p>
+	Juneau supports converting arbitrary POJOs to and from strings using OpenAPI-based schema rules. 
+</p>
+<p>
+	The relevant classes for using OpenAPI-based serialization are:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Converts POJOs to strings.
+	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Converts strings to POJOs.
+	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartSchema} - Defines the schema for your POJO.
+</ul>
+<p>
+	The {@link org.apache.juneau.httppart.HttpPartSchema} class is used to define the formatting and 
+	validations for a POJO.
+	It's used in conjunction with the serializer and parser to produce and consume HTTP parts based on 
+	OpenAPI rules.
+</p>
+<p>
+	Later in the rest-server and rest-client sections, we also describe how the following annotations
+	can be applied to method parameters and class types to define the schema for various HTTP parts:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+</ul>

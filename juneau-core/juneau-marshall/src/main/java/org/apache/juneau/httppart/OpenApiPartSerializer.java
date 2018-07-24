@@ -12,150 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import java.io.*;
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.transform.*;
 
 /**
  * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
  *
- * <p>
- * Used in junction with the following annotations to provide schema-based serialization of POJOs:
- * <ul>
- * 	<li class='ja'>{@link Body}
- * 	<li class='ja'>{@link FormData}
- * 	<li class='ja'>{@link Query}
- * 	<li class='ja'>{@link Header}
- * 	<li class='ja'>{@link Path}
- * </ul>
- *
- * <p>
- * The list of valid POJO types per type/format are as follows:
- *
- * <table class='styled'>
- * 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
- * 	<tr>
- * 		<td><code>string</code><br>(empty)</td>
- * 		<td>
- * 			<code>byte</code>
- * 			<br><code>binary</code>
- * 			<br><code>binary-spaced</br>
- * 		</td>
- * 		<td>
- * 			<ul>
- * 				<li><code><jk>byte</jk>[]</code> (default)
- * 				<li>{@link InputStream}
- * 				<li>{@link Reader} - Read into String and then converted using {@link String#getBytes()}.
- * 				<li>{@link Object} - Converted to String and then converted using {@link String#getBytes()}.
- * 				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via the following methods:
- * 					<ul>
- * 						<li><code><jk>public byte</jk>[] toBytes() {...}</code>
- * 						<li><code><jk>public byte</jk>[]</jk> toFoo() {...}</code> (any method name starting with "to")
- * 					</ul>
- * 				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via a {@link PojoSwap}.
- * 			</ul>
- * 		</td>
- * 	</tr>
- * 	<tr>
- * 		<td><code>string</code><br>(empty)</td>
- * 		<td>
- * 			<code>date</code>
- * 			<code>date-time</code>
- * 		</td>
- * 		<td>
- * 			<ul>
- * 				<li>{@link Calendar} (default)
- * 				<li>{@link Date}
- * 				<li>Any POJO transformable to a {@link Calendar} via the following methods:
- * 					<ul>
- * 						<li><code><jk>public</jk> Calendar toCalendar() {...}</code>
- * 						<li><code><jk>public</jk> Calendar toFoo() {...}</code> (any method name starting with "to")
- * 					</ul>
- * 				<li>Any POJO transformable to a {@link Calendar} via a {@link PojoSwap}.
- * 			</ul>
- * 		</td>
- * 	</tr>
- * 	<tr>
- * 		<td><code>string</code><br>(empty)</td>
- * 		<td><code>uon</code></td>
- * 		<td>
- * 			<ul>
- * 				<li>Any <a class='doclink' href='../../../../overview-summary.html#juneau-marshall.PojoCategories'>Serializable POJO</a> type.
- * 			</ul>
- * 		</td>
- * 	</tr>
- * 	<tr>
- * 		<td><code>string</code><br>(empty)</td>
- * 		<td>(empty)</td>
- * 		<td>
- * 			<ul>
- * 				<li>{@link String} (default)
- * 				<li>Any POJO transformable to a {@link String} via the following methods:
- * 					<ul>
- * 						<li><code><jk>public</jk> String toString() {...}</code>
- * 					</ul>
- * 				<li>Any POJO transformable to a {@link String} via a {@link PojoSwap}.
- * 			</ul>
- * 		</td>
- * 	</tr>
- * 	<tr>
- * 		<td><code>boolean</code></td>
- * 		<td>
- * 			&nbsp;
- * 		</td>
- * 		<td>
- * 			<ul>
- * 				<li>{@link Boolean} (default)
- * 				<li><jk>boolean</jk>
- * 				<li>{@link String} - Converted to a {@link Boolean}.
- * 				<li>Any POJO transformable to a {@link Boolean} via the following methods:
- * 					<ul>
- * 						<li><code><jk>public</jk> Boolean toBoolean() {...}</code>
- * 						<li><code><jk>public</jk> Boolean toFoo() {...}</code> (any method name starting with "to")
- * 					</ul>
- * 				<li>Any POJO transformable to a {@link Boolean} via a {@link PojoSwap}.
- * 			</ul>
- * 		</td>
- * 	</tr>
- * 	<tr>
- * 		<td><code>array</code></td>
- * 		<td>
- * 			&nbsp;
- * 		</td>
- * 		<td>
- * 			<ul>
- * 				<li>Arrays or Collections of any defaults on this list.
- * 				<li>Any POJO transformable to arrays of the default types (e.g. <code>Integer[]</code>, <code>Boolean[][]</code>, etc...).
- * 					<br>For example:
- * 					<ul>
- * 						<li><code><jk>public</jk> Boolean[][] toFoo() {...}</code> (any method name starting with "to")
- * 					</ul>
- * 				<li>Any POJO transformable to arrays of the default types via a {@link PojoSwap}
- * 			</ul>
- * 		</td>
- * 	</tr>
- * 	<tr>
- * 		<td><code>object</code></td>
- * 		<td>
- * 			&nbsp;
- * 		</td>
- * 		<td>
- * 			<ul>
- * 				<li>Beans with properties of anything on this list.
- * 				<li>Maps with string keys.
- * 				<li>Any POJO transformable to a map via a {@link PojoSwap}
- * 			</ul>
- * 		</td>
- * 	</tr>
- * </table>
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.OpenApiDetails">Overview &gt; juneau-marshall &gt; OpenAPI Details</a>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.OpenApiDetails.Serializers">Overview &gt; juneau-marshall &gt; OpenAPI Details &gt; OpenAPI Serializers</a>
  * </ul>
  */
 public class OpenApiPartSerializer extends UonPartSerializer {

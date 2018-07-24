@@ -40,6 +40,11 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * This class is thread safe and reusable.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.OpenApiDetails">Overview &gt; juneau-marshall &gt; OpenAPI Details</a>
+ * </ul>
  */
 public class HttpPartSchema {
 
