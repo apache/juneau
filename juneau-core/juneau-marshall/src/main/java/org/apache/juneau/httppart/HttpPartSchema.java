@@ -796,10 +796,11 @@ public class HttpPartSchema {
 			return Type.OBJECT;
 		if (cm.isCollectionOrArray())
 			return Type.ARRAY;
-		if (cm.isInteger())
+		if (cm.isNumber()) {
+			if (cm.isDecimal())
+				return Type.NUMBER;
 			return Type.INTEGER;
-		if (cm.isNumber())
-			return Type.NUMBER;
+		}
 		if (cm.isBoolean())
 			return Type.BOOLEAN;
 		return Type.STRING;
