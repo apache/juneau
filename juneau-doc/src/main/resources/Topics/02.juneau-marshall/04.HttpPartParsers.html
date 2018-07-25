@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-HTTP Part Serializers
+{new} HTTP Part Parsers
 
 <p>
-	There is a separate set of serializers for serializing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
-	<br>The distinction is that these are designed to serialize directly to strings based on Open-API schema information.
+	There is a separate set of parsers for parsing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
+	<br>The distinction is that these are designed to parse directly from strings based on Open-API schema information.
 </p>
 <p class='bpcode w800'>
 	<jc>// Schema information about our part.</jc>
@@ -34,24 +34,24 @@ HTTP Part Serializers
 		)
 		.build();
 
-	<jc>// Our value to serialize</jc>
-	Object value = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
+	<jc>// Our input to parse.</jc>
+	String input = <js>"1,2,3|4,5,6|7,8,9"</js>;
 
-	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
-	String output = OpenApiPartSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, value);
+	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
+	<jk>long</jk>[][] value = OpenApiPartParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, schema, input, <jk>long</jk>[][].<jk>class</jk>);
 </p>
 <p>
 	The class hierarchy for the part serializers are:
 </p>
 
 <ul class='doctree'>
-	<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
+	<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Serializes directly to strings.
-		<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer} - Serializes to UON notation.
+		<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parses directly from strings.
+		<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parses from UON notation.
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Serializes using Open-API schema rules.
-			<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer} - Serializes to UON notation for beans and maps only.
+			<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parses using Open-API schema rules.
 		</ul>
 	</ul>
 </ul>
+

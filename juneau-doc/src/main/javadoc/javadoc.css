@@ -678,3 +678,10 @@ h5.section {
 	margin: 10px 0 5px 0;
 }
 
+.new {
+	background-color:lightgreen;
+}
+.todo {
+	background-color:yellow;
+}
+

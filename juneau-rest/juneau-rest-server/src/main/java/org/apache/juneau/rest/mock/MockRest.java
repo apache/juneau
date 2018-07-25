@@ -40,13 +40,19 @@ import org.apache.juneau.utils.*;
  *
  *  <ja>@Test</ja>
  *  <jk>public void</jk> testEcho() <jk>throws</jk> Exception {
- *  	MockRest.<jsf>create</jsf>(MyRest.<jk>class</jk>).put(<js>"/String"</js>, <js>"'foo'"</js>).execute().assertStatus(200).assertBody(<js>"'foo'"</js>));
+ *  	MockRest
+ *  		.<jsf>create</jsf>(MyRest.<jk>class</jk>)
+ *  		.put(<js>"/String"</js>, <js>"'foo'"</js>)
+ *  		.execute()
+ *  		.assertStatus(200)
+ *  		.assertBody(<js>"'foo'"</js>);
  *  }
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.UnitTesting">Overview &gt; juneau-rest-client &gt; Server-less Unit Testing</a>
  * </ul>
  */
 public class MockRest implements MockHttpConnection {

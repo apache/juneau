@@ -349,8 +349,23 @@
 			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta) getRequestBean(RequestBeanMeta)}
 		</ul>
 	<li>
+		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
+		<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
+			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
+		</ul>
+	<li>
+		New methods added to {@link org.apache.juneau.rest.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
+		<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
+			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
+			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
+		</ul>
+	<li>
 		New/updated documentation: 
-		<br>><a class="doclink" href="#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
+		<br>><a class="doclink" href="#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Serverless Unit Testing</a>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>
@@ -393,21 +408,6 @@
 		<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
 		<ul>
 			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection) mockHttpConnection(MockHttpConnection)}
-		</ul>
-	<li>
-		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
-		<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
-			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
-		</ul>
-	<li>
-		New methods added to {@link org.apache.juneau.rest.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
-		<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
-			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
-			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
 		</ul>
 	<li>
 		Removed the deprecated <code>RestCall.execute()</code> method.
@@ -476,13 +476,13 @@
 		staticFiles={<js>"$C{REST/staticFiles}"</js>}
 	)
 	<jk>public interface</jk> BasicRestConfig {}			
-				</p>	
-				<br><br>
-				The <code>PoweredByApache</code> widget which used to serve as a page footer has been eliminated.
-				<br><br>
-				If you're testing out changes in the theme stylesheets, you may want to set the following system property
-				that prevents caching of those files so that you don't need to restart the microservice each time a change is made:
-				<p class='bcode w800'>
+			</p>	
+			<br><br>
+			The <code>PoweredByApache</code> widget which used to serve as a page footer has been eliminated.
+			<br><br>
+			If you're testing out changes in the theme stylesheets, you may want to set the following system property
+			that prevents caching of those files so that you don't need to restart the microservice each time a change is made:
+			<p class='bcode w800'>
 	<cc>#=======================================================================================================================
 	# System properties
 	#=======================================================================================================================</cc>
@@ -491,4 +491,5 @@
 	<cc># Disable classpath resource caching.
 	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
 	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
+			</p>
 </ul>

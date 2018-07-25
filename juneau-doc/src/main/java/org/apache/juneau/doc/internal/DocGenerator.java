@@ -36,28 +36,28 @@ public class DocGenerator {
 			ReleaseNotes releaseNotes = new ReleaseNotes(new File("src/main/resources/ReleaseNotes"));
 
 			StringBuilder toc = new StringBuilder(), contents = new StringBuilder();
-			for (PageFile pf : topics.pageFiles) {
+			for (PageFile pf1 : topics.pageFiles) {
 				toc
-					.append("\t<li><p class='toc2'><a class='doclink' href='#").append(pf.fullId).append("'>").append(pf.title).append("</a></p>\n");
+					.append("\t<li><p class='toc2 ").append(pf1.tags).append("'><a class='doclink' href='#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
 				contents
 					.append("\n")
 					.append("<!-- ==================================================================================================== -->\n\n")
-					.append("<h2 class='topic' onclick='toggle(this)'><a href='#").append(pf.fullId).append("' id='").append(pf.fullId).append("'>").append(pf.fullNumber).append(" - ").append(pf.title).append("</a></h2>\n")
-					.append("<div class='topic'>").append("<!-- START: ").append(pf.fullNumber).append(" - " ).append(pf.fullId).append(" -->\n")
-					.append(pf.contents).append("\n");
+					.append("<h2 class='topic ").append(pf1.tags).append("' onclick='toggle(this)'><a href='#").append(pf1.fullId).append("' id='").append(pf1.fullId).append("'>").append(pf1.fullNumber).append(" - ").append(pf1.title).append("</a></h2>\n")
+					.append("<div class='topic'>").append("<!-- START: ").append(pf1.fullNumber).append(" - " ).append(pf1.fullId).append(" -->\n")
+					.append(pf1.contents).append("\n");
 
-				if (! pf.pageFiles.isEmpty()) {
+				if (! pf1.pageFiles.isEmpty()) {
 
 					toc.append("\t<ol>\n");
 
-					for (PageFile pf2 : pf.pageFiles) {
+					for (PageFile pf2 : pf1.pageFiles) {
 
 						toc
-							.append("\t\t<li><p><a class='doclink' href='#").append(pf2.fullId).append("'>").append(pf2.title).append("</a></p>\n");
+							.append("\t\t<li><p class='").append(pf2.tags).append("'><a class='doclink' href='#").append(pf2.fullId).append("'>").append(pf2.title).append("</a></p>\n");
 						contents
 							.append("\n")
 							.append("<!-- ==================================================================================================== -->\n\n")
-							.append("<h3 class='topic' onclick='toggle(this)'><a href='#").append(pf2.fullId).append("' id='").append(pf2.fullId).append("'>").append(pf2.fullNumber).append(" - ").append(pf2.title).append("</a></h3>\n")
+							.append("<h3 class='topic ").append(pf2.tags).append("' onclick='toggle(this)'><a href='#").append(pf2.fullId).append("' id='").append(pf2.fullId).append("'>").append(pf2.fullNumber).append(" - ").append(pf2.title).append("</a></h3>\n")
 							.append("<div class='topic'>").append("<!-- START: ").append(pf2.fullNumber).append(" - " ).append(pf2.fullId).append(" -->\n")
 							.append(pf2.contents).append("\n");
 
@@ -67,11 +67,11 @@ public class DocGenerator {
 							for (PageFile pf3 : pf2.pageFiles) {
 
 								toc
-									.append("\t\t\t<li><p><a class='doclink' href='#").append(pf3.fullId).append("'>").append(pf3.title).append("</a></p>\n");
+									.append("\t\t\t<li><p class='").append(pf3.tags).append("'><a class='doclink' href='#").append(pf3.fullId).append("'>").append(pf3.title).append("</a></p>\n");
 								contents
 									.append("\n")
 									.append("<!-- ==================================================================================================== -->\n\n")
-									.append("<h4 class='topic' onclick='toggle(this)'><a href='#").append(pf3.fullId).append("' id='").append(pf3.fullId).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a></h4>\n")
+									.append("<h4 class='topic ").append(pf3.tags).append("' onclick='toggle(this)'><a href='#").append(pf3.fullId).append("' id='").append(pf3.fullId).append("'>").append(pf3.fullNumber).append(" - ").append(pf3.title).append("</a></h4>\n")
 									.append("<div class='topic'>").append("<!-- START: ").append(pf3.fullNumber).append(" - " ).append(pf3.fullId).append(" -->\n")
 									.append(pf3.contents).append("\n")
 									.append("</div>").append("<!-- END: ").append(pf3.fullNumber).append(" - ").append(pf3.fullId).append(" -->\n");
@@ -88,7 +88,7 @@ public class DocGenerator {
 				}
 
 				contents
-					.append("</div>").append("<!-- END: ").append(pf.fullNumber).append(" - ").append(pf.fullId).append(" -->\n");
+					.append("</div>").append("<!-- END: ").append(pf1.fullNumber).append(" - ").append(pf1.fullId).append(" -->\n");
 			}
 
 			StringBuilder tocRn = new StringBuilder(), rn = new StringBuilder();
@@ -156,6 +156,7 @@ public class DocGenerator {
 	static class PageFile implements Comparable<PageFile> {
 		String idWithNum, id, fullId, title, contents;
 		String number, fullNumber;
+		String tags = "";
 
 		Set<PageFile> pageFiles = new TreeSet<>();
 
@@ -172,6 +173,10 @@ public class DocGenerator {
 				s = s.substring(i+4).trim();
 				i = s.indexOf("\n");
 				title = s.substring(0, i);
+				if (title.startsWith("{")) {
+					tags = title.substring(1, title.indexOf('}'));
+					title = title.substring(tags.length()+2).trim();
+				}
 				contents = s.substring(i).trim();
 			} catch (Exception e) {
 				throw new RuntimeException("Problem with file " + f.getAbsolutePath());

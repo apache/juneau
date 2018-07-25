@@ -13,37 +13,83 @@
  ***************************************************************************************************************************/
  -->
 
-Server-less Unit Testing
+{new} Serverless Unit Testing
 
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.rest.mock.MockRest} class is used for performing serverless unit testing of REST interfaces.
+</p>
 
-
-Interface proxy testing....
-
-	public class X {
-		<ja>@BeanProperty</ja>("id")
-		public Long getId() {
-			return 123l;
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> MockTest {
+	
+		<jc>// Our REST resource to test.</jc>
+		<ja>@RestResource</ja>(serializers=SimpleJsonSerializer.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
+		<jk>public static class</jk> MyRest {
+	
+			<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
+			<jk>public</jk> String echo(<ja>@Body</ja> String body) {
+				<jk>return</jk> body;
+			}
+		}
+	
+		<ja>@Test</ja>
+		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+			MockRest
+				.<jsm>create</jsm>(MyRest.<jk>class</jk>)
+				.put(<js>"/String"</js>, <js>"'foo'"</js>)
+				.execute()
+				.assertStatus(200)
+				.assertBody(<js>"'foo'"</js>);
 		}
 	}
+</p>
+<p>
+	The {@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method is used to associate a <code>MockRest</code> with
+	a <code>RestClient</code> to allow for serverless testing of clients.
+</p>
 
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Test</ja>
+	<jk>public void</jk> testClient() <jk>throws</jk> Exception {
+		MockRest mr = MockRest.<jsm>create</jsm>(MyRest.<jk>class</jk>);
+		RestClient rc = RestClient.<jsm>create</jsm>().mockHttpConnection(mr).build();
+		<jsm>assertEquals</jsm>(<js>"'foo'"</js>, rc.doPut(<js>"/String"</js>, <js>"'foo'"</js>).getResponseAsString());
+	}
+</p>
+<p>
+	Mocked connections can also be used for serverless testing of remoteable proxies.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Our remoteable interface to test.</jc>
 	<ja>@Remoteable</ja>
-	public static interface MyRemoteable {
-		<ja>@RemoteMethod</ja>(httpMethod = "GET", path = "/ids.json")
-		public String ids( <ja>@Query</ja>(name="*", skipIfEmpty=true) X parameters);
+	<jk>public interface</jk> MyRemoteableInterface {
+	
+		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
 	}
 
+	<jc>// Our mocked-up REST interface to test against.</jc>
 	<ja>@RestResource</ja>
-	public static class MyRest {
-		<ja>@RestMethod</ja>(name=GET, path="/ids.json")
-		public String a01(<ja>@Query</ja>("id") String id) {
-			return id;
+	<jk>public class</jk> MyRest {
+	
+		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
+			<jk>return</jk> id;
 		}
 	}
 
 	<ja>@Test</ja>
-	public void test() {
-		MockRest a = MockRest.create(MyRest.class);
-		MyRemoteable r = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(MyRemoteable.class);
-		System.err.println(r.ids(new X()));
+	<jk>public void</jk> testProxy() {
+		MockRest mr = MockRest.create(MyRest.<jk>class</jk>);
+		MyRemoteableInterface r = RestClient
+			.<jsm>create</jsm>()
+			.mockHttpConnection(mr)
+			.build()
+			.getRemoteableProxy(MyRemoteable.<jk>class</jk>);
+		<jsm>assertEquals</jsm>(123, r.echoQuery(123));
 	}
+</p>
