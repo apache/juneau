@@ -13,26 +13,71 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} OpenAPI Schema Part Serializing
+{new} OpenAPI Schema Part Serializing
 
+<p>
+	Parameters annotated with any of the following are serialized using the registered {@link org.apache.juneau.httppart.OpenApiPartSerializer} and
+	therefore support OpenAPI syntax and validation:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response} ({@link org.apache.juneau.http.annotation.Response#usePartSerializer usePartSerializer} flag must be set)
+</ul>
+<p>
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a response header can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
 <p class='bpcode w800'>
-	<jc>// Schema information about our part.</jc>
-	HttpPartSchema schema = HttpPartSchema
-		.<jsm>create</jsm>(<js>"array"</js>)
-		.collectionFormat(<js>"pipes"</js>)
-		.items(
-			HttpPartSchema
-				.<jsm>create</jsm>(<js>"array"</js>)
-				.collectionFormat(<js>"csv"</js>)
-				.items(
-					HttpPartSchema.<jsm>create</jsm>(<js>"integer"</js>,<js>"int64"</js>)
-				)
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testResponseHeader"</js>)	
+	<jk>public void</jk> testResponseHeader(
+		<ja>@ResponseHeader</ja>(
+			name=<js>"My-Header"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			)
+			minLength=1,
+			maxLength=10
+			)
 		)
-		.build();
-
-	<jc>// Our value to serialize</jc>
-	Object value = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
-
-	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
-	String output = OpenApiPartSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, value);
+		Value&lt;Long[][]&gt; header
+	) {
+		header.set(<jk>new</jk> Long[][]{...});
+	}
+</p>
+<p>
+	The following shows the same for a response body:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testResponseBody"</js>)	
+	<jk>public void</jk> testResponseBody(
+		<ja>@Response</ja>(
+			usePartSerializer=<jk>true</jk>,
+			schema=<ja>@Schema</ja>(
+				items=<ja>@Items</ja>(
+					collectionFormat=<js>"pipes"</js>,
+					items=<ja>@SubItems</ja>(
+						collectionFormat=<js>"csv"</js>,
+						type=<js>"integer"</js>, 
+						format=<js>"int64"</js>,
+						minimum=<js>"0"</js>,
+						maximum=<js>"100"</js>
+						minLength=1,
+						maxLength=10
+					)
+				)
+				minLength=1,
+				maxLength=10
+			)
+		)
+		Value&lt;Long[][]&gt; responseBody
+	) {...}
+</p>
+<p>
+	For more information about the valid parameter types, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a>
 </p>

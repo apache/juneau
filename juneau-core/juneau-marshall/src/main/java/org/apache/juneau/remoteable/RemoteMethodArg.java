@@ -42,7 +42,7 @@ public final class RemoteMethodArg {
 	RemoteMethodArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = newInstance(HttpPartSerializer.class, schema == null ? null : schema.getSerializer());
+		this.serializer = createSerializer(partType, schema);
 		this.schema = schema;
 		this.name = schema == null ? null : schema.getName();
 		this.skipIfEmpty = schema == null ? false : schema.isSkipIfEmpty();
@@ -51,10 +51,18 @@ public final class RemoteMethodArg {
 	RemoteMethodArg(HttpPartType partType, HttpPartSchema schema, String defaultName) {
 		this.index = -1;
 		this.partType = partType;
-		this.serializer = newInstance(HttpPartSerializer.class, schema == null ? null : schema.getSerializer());
+		this.serializer = createSerializer(partType, schema);
 		this.schema = schema;
 		this.name = StringUtils.firstNonEmpty(schema == null ? null : schema.getName(), defaultName);
 		this.skipIfEmpty = schema == null ? false : schema.isSkipIfEmpty();
+	}
+
+	private static HttpPartSerializer createSerializer(HttpPartType partType, HttpPartSchema schema) {
+		if (schema == null)
+			return null;
+		if (partType == BODY && ! schema.isUsePartSerializer())
+			return null;
+		return newInstance(HttpPartSerializer.class, schema.getSerializer());
 	}
 
 	/**

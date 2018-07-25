@@ -4355,7 +4355,7 @@ public final class RestContext extends BeanContext {
 
 			} else if (hasAnnotation(Response.class, method, i)) {
 				s = HttpPartSchema.create(Response.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseObject(method, s, t);
+				rp[i] = new RestParamDefaults.ResponseObject(method, s, t, ps);
 			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
 				s = HttpPartSchema.create(ResponseHeader.class, method, i);
 				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, s, t, ps);

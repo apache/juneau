@@ -548,6 +548,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The input to be sent to the REST resource (only valid for PUT and POST) requests. <br>
 	 * @param partSerializer
 	 * 	The part serializer to use to serialize the body of the request.
+	 * 	<br>If <jk>null</jk>, will use normal serializer.
 	 * @param schema
 	 * 	The schema information about the part being serialized.
 	 * @return This object (for method chaining).

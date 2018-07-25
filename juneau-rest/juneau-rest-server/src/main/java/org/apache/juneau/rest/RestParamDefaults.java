@@ -572,7 +572,7 @@ class RestParamDefaults {
 
 		protected BodyObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(BODY, m, null, t, s.getApi());
-			this.partParser = ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps);
+			this.partParser = s.isUsePartParser() ? ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps) : null;
 			this.schema = s;
 		}
 
@@ -661,20 +661,15 @@ class RestParamDefaults {
 	}
 
 	static final class ResponseObject extends RestMethodParam {
-
+		final HttpPartSerializer partSerializer;
+		final HttpPartSchema schema;
 		private String _default;
 
-		protected ResponseObject(Method m, HttpPartSchema s, Type t) {
-			this(m, t, HttpPartSchema.getApiCodeMap(s, 200));
+		protected ResponseObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
+			super(RESPONSE, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
+			this.partSerializer = s.isUsePartSerializer() ? ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps) : null;
+			this.schema = s;
 			this._default = s.getDefault();
-		}
-
-		protected ResponseObject(Method m, HttpPartSchema[] ss, Type t) {
-			this(m, t, HttpPartSchema.getApiCodeMap(ss, 200));
-		}
-
-		protected ResponseObject(Method m, Type t, ObjectMap api) {
-			super(RESPONSE, m, "body", t, api);
 
 			if (getTypeClass() == null)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be a subclass of Value.", type);
@@ -689,7 +684,13 @@ class RestParamDefaults {
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object newValue) {
-					res.setOutput(newValue);
+					try {
+						if (partSerializer != null)
+							newValue = new StringReader(partSerializer.serialize(HttpPartType.BODY, schema, newValue));
+						res.setOutput(newValue);
+					} catch (SchemaValidationException | SerializeException e) {
+						throw new RuntimeException(e);
+					}
 				}
 			});
 			if (_default != null) {

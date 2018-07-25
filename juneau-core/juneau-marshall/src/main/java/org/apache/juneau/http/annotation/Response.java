@@ -121,6 +121,22 @@ import org.apache.juneau.jsonschema.*;
 public @interface Response {
 
 	/**
+	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
+	 *
+	 * <p>
+	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiPartSerializer}.
+	 */
+	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
+
+	/**
+	 * Specifies whether a part serializer should be used for serializing this value.
+	 *
+	 * <p>
+	 * If <jk>false</jk>, then it indicates that normal Juneau serializers (e.g. {@link JsonSerializer}) should be used for this part.
+	 */
+	public boolean usePartSerializer() default false;
+
+	/**
 	 * The HTTP response code.
 	 *
 	 * The default value is <code>500</code> for exceptions and <code>200</code> for return types.
@@ -145,14 +161,6 @@ public @interface Response {
 	 * </p>
 	 */
 	int[] value() default {};
-
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
-	 *
-	 * <p>
-	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiPartSerializer}.
-	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
 	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.

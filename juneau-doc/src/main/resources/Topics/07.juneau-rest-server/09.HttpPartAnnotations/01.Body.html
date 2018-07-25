@@ -13,11 +13,20 @@
  ***************************************************************************************************************************/
  -->
 
-{new} @Body
+{todo} @Body
 
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 </p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partSerializer() partSerializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partParser() partParser()} - Override the part parser.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required()} - Input validation.  Body must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The schema.
+	</ul>
+</ul>
 <p>
 	This annotation can be applied at the following locations:
 </p>
@@ -138,6 +147,86 @@
 	)
 </p>
 
+
+
+
+<p>
+	Several of the attributes on the <ja>@Body</ja> annotation are used for specifying additional information for the auto-generated Swagger documentation.
+	<br>These do not have any affects on the running code except for the generated Swagger:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api()} - Free-form JSON swagger.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()} - Description
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()} - Map of examples per language type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The swagger schema ({@link org.apache.juneau.http.annotation.Schema Schema}).
+	</ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Schema Schema}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#$ref() $ref()} - Reference to schema definition.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#description() description()} - Description
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#examples() examples()} - Map of examples per language type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#externalDocs() externalDocs()} - External documentation.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#title() title()} - Title.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#value() value()} - Free-form JSON swagger.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#xml() xml()} - XML schema.
+	</ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Items Items}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#$ref() $ref()} - Reference to schema definition. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#value() value()} - Free-form JSON swagger.
+	</ul>
+</ul>
+
+
+
+
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
+
+		if (pm != null) {
+			Parser p = pm.getParser();
+			MediaType mediaType = pm.getMediaType();
+			req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
+			ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.isDebug() ? true : null, req.getContext().getResource()));
+			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
+				T o = session.parse(in, cm);
+				if (schema != null)
+					schema.validateOutput(o, cm.getBeanContext());
+				return o;
+			}
+		}
+
+		if (cm.hasReaderTransform())
+			return cm.getReaderTransform().transform(getReader());
+
+		if (cm.hasInputStreamTransform())
+			return cm.getInputStreamTransform().transform(getInputStream());
+
+		MediaType mt = getMediaType();
+		if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
+			if (partParser != null) {
+				String in = asString();
+				return partParser.createSession(req.getParserSessionArgs()).parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
+			} else if (cm.hasStringTransform()) {
+				return cm.getStringTransform().transform(asString());
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
 <h5 class='section'>Other Notes:</h5>
 <ul class='spaced-list'>
 	<li>
@@ -147,6 +236,10 @@
 		Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
 		<br>Values on methods override values on POJO classes.
 </ul>
+
+
+
+
 
 <h5 class='section'>See Also:</h5>
 <ul>

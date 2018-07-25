@@ -15,4 +15,69 @@
 
 {todo} HTTP-Part Annotations
 
-TODO(7.2.0)
+<p>
+	The annotations used for defining the schema for an HTTP part are:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+</ul>
+<p>
+	The sub-annotations used in the annotation above are:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Schema Schema}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#_default() _default()} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#_enum() _enum()} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#format() format()} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#items() items()} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maximum() maximum()} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minimum() minimum()} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minLength() minLength()} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#pattern() pattern()} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#pattern() properties()} - Schema of properties of this item.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#required() required()} - Whether this value is required.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#type() type()} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+	</ul>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Items Items}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#_default() _default()} - Default value if not present. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#_enum() _enum()} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#format() format()} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#items() items()} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maximum() maximum()} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maxLength() maxLength()} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minimum() minimum()} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minLength() minLength()} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#pattern() pattern()} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#type() type()} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+	</ul>
+</ul>
+
+<h5 class='section'>Other Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		Annotation parameter values will be aggregated when used on POJO parent and child classes. 
+		<br>Values on child classes override values on parent classes.
+	<li>
+		Annotation parameter values will be aggregated when used on both POJOs and REST methods. 
+		<br>Values on methods override values on POJO classes.
+</ul>

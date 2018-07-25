@@ -260,6 +260,22 @@ public @interface Body {
 	 */
 	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
 
+	/**
+	 * Specifies whether a part serializer should be used for serializing this value.
+	 *
+	 * <p>
+	 * If <jk>false</jk>, then it indicates that normal Juneau serializers (e.g. {@link JsonSerializer}) should be used for this part.
+	 */
+	public boolean usePartSerializer() default false;
+
+	/**
+	 * Specifies whether a part parser should be used for parsing this value.
+	 *
+	 * <p>
+	 * If <jk>false</jk>, then it indicates that normal Juneau parsers (e.g. {@link JsonParser}) should be used for this part.
+	 */
+	public boolean usePartParser() default false;
+
 	//=================================================================================================================
 	// Attributes common to all Swagger Parameter objects
 	//=================================================================================================================
