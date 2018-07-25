@@ -86,4 +86,9 @@ public class UonPartSerializer extends UonSerializer implements HttpPartSerializ
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 		return createSession().serialize(partType, schema, value);
 	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createSession().serialize(null, schema, value);
+	}
 }

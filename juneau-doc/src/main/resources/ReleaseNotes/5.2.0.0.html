@@ -35,7 +35,7 @@
 					<li><code><del>ConfigFile.isEncoded(String)</del></code> 
 					<li><code><del>ConfigFile.addListener(ConfigFileListener)</del></code> - Listen for modification events on the config file.
 					<li><code><del>ConfigFile.merge(ConfigFile)</del></code> - Merge the contents of another config file into this config file.
-					<li><code><del>ConfigFile.getResolving()</del></code>, <del><code>ConfigFile.getResolving(StringVarResolver)</code></del> - Return an instance of the config file that resolves string variables.
+					<li><code><del>ConfigFile.getResolving()</del></code>, <code><del>ConfigFile.getResolving(StringVarResolver)</del></code> - Return an instance of the config file that resolves string variables.
 						Much more efficient than the previous design since the same underlying config file object is shared.
 					<li><code><del>ConfigFile.toWritable()</del></code> - Wraps the config file in a {@link org.apache.juneau.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
 					<li><code><del>ConfigFile.getInt(String)</del></code> - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
@@ -94,8 +94,8 @@
 			<li>{@link org.apache.juneau.internal.ByteArrayInOutStream} 
 			<li>{@link org.apache.juneau.internal.FileUtils}
 			<li>{@link org.apache.juneau.internal.ThrowableUtils}
-			<li><del><code>StringVarMultipart</code></del>
-			<li><del><code>StringVarWithDefault</code></del>
+			<li><code><del>StringVarMultipart</del></code>
+			<li><code><del>StringVarWithDefault</del></code>
 		</ul> 
 	<li>New fields on {@link org.apache.juneau.ObjectList}:
 		<ul>
@@ -166,8 +166,8 @@
 			<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String)}
 			<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String[])}
 		</ul>
-	<li>New <del><code>StringVar.doResolve(String)</code></del> method.
-	<li>New <del><code>StringVarResolver.DEFAULT</code></del> field.
+	<li>New <code><del>StringVar.doResolve(String)</del></code> method.
+	<li>New <code><del>StringVarResolver.DEFAULT</del></code> field.
 	<li>Eliminated dependency on <code>javax.mail.internet.MimeUtility</code> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
 	<li>{@link org.apache.juneau.transforms.CalendarSwap} and {@link org.apache.juneau.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 	<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <code>/servletPath/style.css</code> instead of <code>/servletPath/htdocs/juneau.css</code>.  
@@ -198,7 +198,7 @@
 	<li>{@link org.apache.juneau.utils.PojoRest} must now be instantiated with a <code>ReaderParser</code>.
 		Simplifies the API on the class.
 	<li>{@link org.apache.juneau.utils.MessageBundle} and <code>SafeResourceMultiBundle</code> moved from server component.
-	<li>Several bug fixes and performance improvements in <del><code>StringVarResolver</code></del>.
+	<li>Several bug fixes and performance improvements in <code><del>StringVarResolver</del></code>.
 	<li>Various enhancements to {@link org.apache.juneau.internal.TeeWriter} and {@link org.apache.juneau.internal.TeeOutputStream}.
 	<li>Renamed <del>CharSet</del> to {@link org.apache.juneau.internal.AsciiSet}.
 	<li>{@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup} now ignores <code>NoClassDefFoundErrors</code>
@@ -323,9 +323,9 @@
 <ul class='spaced-list'>
 	<li>New <code><del>ReaderResource</del></code> class.   
 		Represents the contents of a text file with convenience methods for resolving
-		<del><code>StringVar</code></del> variables and adding HTTP response headers.	
+		<code><del>StringVar</del></code> variables and adding HTTP response headers.	
 		REST Java methods can return instances of these to serialize <code>Readers</code>
-			containing text with <del><code>StringVarResolver</code></del> variables in them.
+			containing text with <code><del>StringVarResolver</del></code> variables in them.
 	<li>New <code><del>StreamResource</del></code> class.   
 		REST Java methods can return instances of these to serialize <code>OutputStreams</code>.
 	<li>Fixed a bug in the stack trace hash algorithm in {@link org.apache.juneau.rest.RestException}.
@@ -428,7 +428,7 @@
 <ul class='spaced-list'>
 	<li><del>org.apache.juneau.microservice</del> - New package-level javadoc.
 	<li><del>org.apache.juneau.config</del> - New package-level javadoc.
-	<li><del><code>StringVarResolver</code></del> - New documentation.
+	<li><code><del>StringVarResolver</del></code> - New documentation.
 	<li><del>org.apache.juneau.rest.client</del> - New package-level javadoc.
 	<li><code><del>Overview / Samples</del></code> - New section.
 	<li><del>org.apache.juneau.transform / Stop Classes</del> - New section.

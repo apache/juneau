@@ -43,7 +43,7 @@
 	</script>
 </head>
 <body>
-<p>Apache Juneau Overview</p>
+<h1 style='background-color: yellow;color:red;text-align:center;padding:20px;border-radius:15px;'>Apache Juneau 7.2.0 Documentation Preview</h1>
 <script type='text/javascript'>
 	function toggle(x) {
 		var div = x.nextSibling;
@@ -8257,7 +8257,7 @@ TODO(7.2.0)
 	<tr>
 		<td><code>object</code></td>
 		<td>empty</td>
-		<td><code>Map&lt;String,String&gt;</code></td>
+		<td><code>Map&lt;String,Object&gt;</code></td>
 	</tr>
 	<tr>
 		<td><code>object</code></td>
@@ -8296,11 +8296,11 @@ TODO(7.2.0)
 
 	<jc>// Convert POJO to BASE64-encoded string.</jc>
 	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
-	String httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+	String httpPart = s.serialize(schema, myPojo);
 	
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
 	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
-	myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+	myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 </p>
 <p>
 	In addition to defining format, the schema also allows for validations of the serialized form.
@@ -8317,7 +8317,7 @@ TODO(7.2.0)
 	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart;
 	<jk>try</jk> {
-		httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+		httpPart = s.serialize(schema, myPojo);
 	} <jk>catch</jk> (SchemaValidationException e) {
 		<jc>// Oops, output too small.</jc>
 	}
@@ -8325,7 +8325,7 @@ TODO(7.2.0)
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
 	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
 	<jk>try</jk> {
-		myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+		myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException e) {
 		<jc>// Oops, input too small.</jc>
 	}
@@ -8398,7 +8398,7 @@ TODO(7.2.0)
 		.build();
 </p>
 <p>
-	The following code shows how the schema above can be used to create our pipe-and-csv list of numbers:
+	The following code shows how the schema above can be used to create our pipe+csv list of numbers:
 </p>
 <p class='bpcode w800'>
 	<jc>// Our POJO being serialized.</jc>
@@ -8409,7 +8409,7 @@ TODO(7.2.0)
 	
 	<jc>// Convert POJO to a string.</jc>
 	<jk>try</jk> {
-		String httpPart = s.serialize(HttpPartType.<jsf>BODY</jsf>, schema, input);
+		String httpPart = s.serialize(schema, input);
 	} <jk>catch</jk> (SchemaValidationException e) {
 		<jc>// Oops, one of the restrictions were not met.</jc>
 	}
@@ -8426,7 +8426,7 @@ TODO(7.2.0)
 		<td><code>byte<br>binary<br>binary-spaced</code></td>
 		<td>
 			<ul>
-				<li><code><jk>byte</jk>[]</code>
+				<li><code><jk>byte</jk>[]</code> (default)
 				<li>{@link java.io.InputStream}
 				<li>{@link java.io.Reader} - Read into String and then converted using {@link java.lang.String#getBytes()}.
 				<li>{@link java.lang.Object} - Converted to String and then converted using {@link java.lang.String#getBytes()}.
@@ -8444,7 +8444,7 @@ TODO(7.2.0)
 		<td><code>date<br>date-time</code></td>
 		<td>
 			<ul>
-				<li>{@link java.util.Calendar}
+				<li>{@link java.util.Calendar} (default)
 				<li>{@link java.util.Date}
 				<li>Any POJO transformable to a {@link java.util.Calendar} via the following methods:
 					<ul>
@@ -8469,7 +8469,7 @@ TODO(7.2.0)
 		<td>empty</td>
 		<td>
 			<ul>
-				<li>{@link java.lang.String}
+				<li>{@link java.lang.String} (default)
 				<li>Any POJO transformable to a {@link java.lang.String} via the following methods:
 					<ul>
 						<li><code><jk>public</jk> String toString() {...}</code>
@@ -8483,7 +8483,7 @@ TODO(7.2.0)
 		<td>empty</td>
 		<td>
 			<ul>
-				<li>{@link java.lang.Boolean}
+				<li>{@link java.lang.Boolean} (default)
 				<li><jk>boolean</jk>
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Boolean}.
 				<li>Any POJO transformable to a {@link java.lang.Boolean} via the following methods:
@@ -8500,7 +8500,7 @@ TODO(7.2.0)
 		<td><code>int32</code></td>
 		<td>
 			<ul>
-				<li>{@link java.lang.Integer}
+				<li>{@link java.lang.Integer} (default)
 				<li><jk>int</jk>
 				<li>{@link java.lang.String} - Converted to an {@link java.lang.String}.
 				<li>Any POJO transformable to an {@link java.lang.Integer} via the following methods:
@@ -8517,7 +8517,7 @@ TODO(7.2.0)
 		<td><code>int64</code></td>
 		<td>
 			<ul>
-				<li>{@link java.lang.Long}
+				<li>{@link java.lang.Long} (default)
 				<li><jk>long</jk>
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Long}.
 				<li>Any POJO transformable to a {@link java.lang.Long} via the following methods:
@@ -8534,7 +8534,7 @@ TODO(7.2.0)
 		<td><code>float</code></td>
 		<td>
 			<ul>
-				<li>{@link java.lang.Float}
+				<li>{@link java.lang.Float} (default)
 				<li><jk>float</jk>
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Float}.
 				<li>Any POJO transformable to a {@link java.lang.Float} via the following methods:
@@ -8551,7 +8551,7 @@ TODO(7.2.0)
 		<td><code>double</code></td>
 		<td>
 			<ul>
-				<li>{@link java.lang.Double}
+				<li>{@link java.lang.Double} (default)
 				<li><jk>double</jk>
 				<li>{@link java.lang.String} - Converted to a {@link java.lang.Double}.
 				<li>Any POJO transformable to a {@link java.lang.Double} via the following methods:
@@ -8592,8 +8592,8 @@ TODO(7.2.0)
 		<td>empty</td>
 		<td>
 			<ul>
+				<li><code>Map&lt;String,Object&gt;</code> (default)
 				<li>Beans with properties of anything on this list.
-				<li>Maps with string keys.
 				<li>Any POJO transformable to a map via a {@link org.apache.juneau.transform.PojoSwap}
 			</ul>
 		</td>
@@ -8608,6 +8608,180 @@ TODO(7.2.0)
 		</td>
 	</tr>
 </table>
+<p>
+	For arrays, an example of "Any POJO transformable to arrays of the default types" is:
+</p>
+<p class='bpcode w800'>
+	<jc>// Sample POJO class convertable to a Long[][].</jc>
+	<jk>public class</jk> MyPojo {
+		
+		<jc>// toX method used by serializer.</jc>
+		<jk>public</jk> Long[][] to2dLongs() {...}
+	}
+</p>
+<p>
+	In the example above, our POJO class can be used to create our pipe-delimited list of comma-delimited numbers: 
+</p>
+<p class='bpcode w800'>
+	<jc>// Our POJO being serialized.</jc>
+	MyPojo input = ....
+	
+	<jc>// The serializer to use.</jc>
+	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Convert POJO to a string.</jc>
+	<jk>try</jk> {
+		String httpPart = s.serialize(schema, input);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, one of the restrictions were not met.</jc>
+	}
+</p>
+<p>
+	The <code>object</code> type is not officially part of the OpenAPI standard.  
+	However, Juneau supports serializing Maps and beans to HTTP parts using UON notation.
+</p>
+<p>
+	The following shows an example of a bean with several properties of various types.
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+		<jk>private static byte</jk>[] <jsf>FOOB</jsf> = <js>"foo"</js>.getBytes();
+
+		<jk>public</jk> String <jf>f1</jf> = <js>"foo"</js>;
+		<jk>public byte</jk>[] <jf>f2</jf> = <jsf>FOOB</jsf>;
+		<jk>public byte</jk>[] <jf>f3</jf> = <jsf>FOOB</jsf>;
+		<jk>public byte</jk>[] <jf>f4</jf> = <jsf>FOOB</jsf>;
+		<jk>public</jk> Calendar <jf>f5</jf> = <jsm>parseIsoCalendar</jsm>(<js>"2012-12-21T12:34:56Z"</js>);
+		<jk>public</jk> String <jf>f6</jf> = <js>"foo"</js>;
+		<jk>public int</jk> <jf>f7</jf> = 1;
+		<jk>public</jk> Long <jf>f8</jf> = 2l;
+		<jk>public float</jk> <jf>f9</jf> = 1.0;
+		<jk>public</jk> Double <jf>f10</jf> = 1.0;
+		<jk>public</jk> Boolean <jf>f11</jf> = <jk>true</jk>;
+		<jk>public</jk> Object <jf>fExtra</jf> = "1";
+	}
+</p>
+<p>
+	We define the following schema:
+</p>
+<p class='bpcode w800'>
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+	
+	HttpPartSchema ps = <jsm>schema</jsm>(<js>"object"</js>)
+		.property(<js>"f1"</js>, <jsm>schema</jsm>(<js>"string"</js>))
+		.property(<js>"f2"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"byte"</js>))
+		.property(<js>"f3"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"binary"</js>))
+		.property(<js>"f4"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"binary-spaced"</js>))
+		.property(<js>"f5"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"date-time"</js>))
+		.property(<js>"f6"</js>, <jsm>schema</jsm>(<js>"string"</js>, "<js>uon"</js>))
+		.property(<js>"f7"</js>, <jsm>schema</jsm>(<js>"integer"</js>))
+		.property(<js>"f8"</js>, <jsm>schema</jsm>(<js>"integer"</js>, <js>"int64"</js>))
+		.property(<js>"f9"</js>, <jsm>schema</jsm>(<js>"number"</js>))
+		.property(<js>"f10"</js>, <jsm>schema</jsm>(<js>"number"</js>, <js>"double"</js>))
+		.property(<js>"f11"</js>, <jsm>schema</jsm>(<js>"boolean"</js>))
+		.additionalProperties(<jsm>schema</jsm>(<js>"integer"</js>))
+		.build();
+</p>
+<p>
+	Then we serialize our bean:
+</p>
+<p class='bpcode w800'>
+	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	String httpPart = s.serialize(schema, <jk>new</jk> MyBean());
+</p>
+<p>
+	The results of this serialization is shown below:
+</p>
+<p class='bpcode w800'>
+	(
+		f1=foo,
+		f2=Zm9v,
+		f3=666F6F,
+		f4='66 6F 6F',
+		f5=2012-12-21T12:34:56Z,
+		f6=foo,
+		f7=1,
+		f8=2,
+		f9=1.0,
+		f10=1.0,
+		f11=true,
+		fExtra=1
+	)
+</p>
+<p>
+	The following is an example of a bean with various array property types:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+		<jk>private static byte</jk>[] <jsf>FOOB</jsf> = <js>"foo"</js>.getBytes();
+	
+		<jk>public</jk> String[] <jf>f1</jf> = <jk>new</jk> String[]{<js>"a,b"</js>,<jk>null</jk>}, 
+		<jk>public byte</jk>[][] <jf>f2</jf> = <jk>new byte</jk>[][]{<jsf>FOOB</jsf>,<jk>null</jk>}, 
+		<jk>public byte</jk>[][] <jf>f3</jf> = <jk>new byte</jk>[][]{<jsf>FOOB</jsf>,<jk>null</jk>},
+		<jk>public byte</jk>[][] <jf>f4</jf> = <jk>new byte</jk>[][]{<jsf>FOOB</jsf>,<jk>null</jk>},
+		<jk>public</jk> Calendar[] <jf>f5</jf> = <jk>new</jk> Calendar[]{<jsm>parseIsoCalendar</jsm>(<js>"2012-12-21T12:34:56Z"</js>),<jk>null</jk>},
+		<jk>public</jk> String[] <jf>f6</jf> = <jk>new</jk> String[]{<js>"a"</js>,<js>"b"</js>,<jk>null</jk>},
+		<jk>public int</jk>[] <jf>f7</jf> = <jk>new int</jk>[]{1,2,<jk>null</jk>}, 
+		<jk>public</jk> Integer[] <jf>f8</jf> = <jk>new</jk> Integer[]{3,4,<jk>null</jk>}, 
+		<jk>public float</jk>[] <jf>f9</jf> = <jk>new float</jk>[]{1f,2f,<jk>null</jk>}, 
+		<jk>public</jk> Float[] <jf>f10</jf> = <jk>new</jk> Float[]{3f,4f,<jk>null</jk>}, 
+		<jk>public</jk> Boolean[] <jf>f11</jf> = <jk>new</jk> Boolean[]{<jk>true</jk>,<jk>false</jk>,<jk>null</jk>}, 
+		<jk>public</jk> Object[] <jf>fExtra</jf> = <jk>new</jk> Object[]{1,<js>"2"</js>,<jk>null</jk>};
+	}
+</p>
+<p>
+	For this bean, we define the following schema:
+</p>
+<p class='bpcode w800'>
+	HttpPartSchema ps = <jsm>schema</jsm>("object")
+		.property(<js>"f1"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"string"</js>)))
+		.property(<js>"f2"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"byte"</js>)))
+		.property(<js>"f3"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"binary"</js>)))
+		.property(<js>"f4"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"binary-spaced"</js>)))
+		.property(<js>"f5"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"date-time"</js>)))
+		.property(<js>"f6"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"string"</js>, <js>"uon"</js>)))
+		.property(<js>"f7"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"integer"</js>)))
+		.property(<js>"f8"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"integer"</js>, <js>"int64"</js>)))
+		.property(<js>"f9"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"number"</js>)))
+		.property(<js>"f10"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"number"</js>, <js>"double"</js>)))
+		.property(<js>"f11"</js>, <jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"boolean"</js>)))
+		.additionalProperties(<jsm>schema</jsm>(<js>"array"</js>).items(<jsm>schema</jsm>(<js>"integer"</js>)))
+		.build();
+</p>
+<p>
+	Serializing this bean produces the following output:
+</p>
+<p class='bpcode w800'>
+	(
+		f1=@('a,b',null),
+		f2=@(Zm9v,null),
+		f4=@(2012-12-21T12:34:56Z,null),
+		f5=@(666F6F,null),
+		f6=@('66 6F 6F',null),
+		f7=@(a,b,null),
+		f8=@(1,2,null),
+		f9=@(3,4,null),
+		f10=@(1.0,2.0,null),
+		f11=@(3.0,4.0,null),
+		f12=@(true,false,null),
+		fExtra=@(1,2,null)
+	)
+</p>
+<h5 class='topic'>Other Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		Array properties can also use CSV/SSV/PIPES for array notation.
+		<br>Various notations can be mixed throughout.
+	<li>
+		Schemas and POJOs can be defined arbitrarily deep.
+	<li>
+		Schemas are optional.
+		They can be skipped or partially defined.
+	<li>
+		We make our best attempt to convert the input to the matching type.  
+		However, you will get <code>SerializeExceptions</code> if you attempt an impossible conversion.
+		(e.g. trying to serialize the string "foo" as a boolean). 
+</ul>
 </div><!-- END: 2.21.2 - juneau-marshall.OpenApiDetails.Serializers -->
 
 <!-- ==================================================================================================== -->
@@ -8652,7 +8826,7 @@ TODO(7.2.0)
 	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
-		Long[][] pojo = p.parse(HttpPartType.<jsf>BODY</jsf>, schema, input, Long[][].<jk>class</jk>);
+		Long[][] pojo = p.parse(schema, input, Long[][].<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException e) {
 		<jc>// Oops, one of the restrictions were not met.</jc>
 	}
@@ -8805,6 +8979,7 @@ TODO(7.2.0)
 		<td>empty</td>
 		<td>
 			<ul>
+				<li><code>Map&lt;String,Object&gt;</code> (default)
 				<li>Beans with properties of anything on this list.
 				<li>Maps with string keys.
 			</ul>
@@ -8820,6 +8995,134 @@ TODO(7.2.0)
 		</td>
 	</tr>
 </table>
+<p>
+	For arrays, an example of "Any POJO transformable from arrays of the default types" is:
+</p>
+<p class='bpcode w800'>
+	<jc>// Sample POJO class convertable from a Long[][].</jc>
+	<jk>public class</jk> MyPojo {
+		
+		<jc>// Constructor used by parser.</jc>
+		<jk>public</jk> MyPojo(Long[][] from2dLongs) {...}
+	}
+</p>
+<p>
+	In the example above, our POJO class can be constructed from our pipe-delimited list of comma-delimited numbers: 
+</p>
+<p class='bpcode w800'>
+	<jc>// Our input being parsed.</jc>
+	String input = <js>"1,2,3|4,5,6|7,8,9"</js>
+	
+	<jc>// The parser to use.</jc>
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Convert string to a POJO.</jc>
+	<jk>try</jk> {
+		MyPojo pojo = p.parse(schema, input, MyPojo.<jk>class</jk>);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, one of the restrictions were not met.</jc>
+	}
+</p>
+<p>
+	Just like serialization, the <code>object</code> type is not officially part of the OpenAPI standard, but
+	Juneau supports parsing HTTP parts in UON notation to Maps and beans.
+</p>
+<p>
+	The following shows an example of a bean with several properties of various types.
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+		<jk>public</jk> String <jf>f1</jf>;
+		<jk>public byte</jk>[] <jf>f2</jf>;
+		<jk>public byte</jk>[] <jf>f3</jf>;
+		<jk>public byte</jk>[] <jf>f4</jf>;
+		<jk>public</jk> Calendar <jf>f5</jf>;
+		<jk>public</jk> String <jf>f6</jf>;
+		<jk>public int</jk> <jf>f7</jf>;
+		<jk>public</jk> Long <jf>f8</jf>;
+		<jk>public float</jk> <jf>f9</jf>;
+		<jk>public</jk> Double <jf>f10</jf>;
+		<jk>public</jk> Boolean <jf>f11</jf>;
+		<jk>public</jk> Object <jf>fExtra</jf>;
+	}
+</p>
+<p>
+	We define the following schema again:
+</p>
+<p class='bpcode w800'>
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+	
+	HttpPartSchema ps = <jsm>schema</jsm>(<js>"object"</js>)
+		.property(<js>"f1"</js>, <jsm>schema</jsm>(<js>"string"</js>))
+		.property(<js>"f2"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"byte"</js>))
+		.property(<js>"f3"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"binary"</js>))
+		.property(<js>"f4"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"binary-spaced"</js>))
+		.property(<js>"f5"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"date-time"</js>))
+		.property(<js>"f6"</js>, <jsm>schema</jsm>(<js>"string"</js>, "<js>uon"</js>))
+		.property(<js>"f7"</js>, <jsm>schema</jsm>(<js>"integer"</js>))
+		.property(<js>"f8"</js>, <jsm>schema</jsm>(<js>"integer"</js>, <js>"int64"</js>))
+		.property(<js>"f9"</js>, <jsm>schema</jsm>(<js>"number"</js>))
+		.property(<js>"f10"</js>, <jsm>schema</jsm>(<js>"number"</js>, <js>"double"</js>))
+		.property(<js>"f11"</js>, <jsm>schema</jsm>(<js>"boolean"</js>))
+		.additionalProperties(<jsm>schema</jsm>(<js>"integer"</js>))
+		.build();
+</p>
+<p>
+	Then we parse our input into our POJO:
+</p>
+<p class='bpcode w800'>
+	String input = 
+		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
+		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
+	
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	MyBean b = p.parse(schema, input, MyBean.<jk>class</jk>);
+</p>
+<p>
+	Note that serializing into generic <code>Object</code> properties would have produced similar results:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+		<jk>public</jk> Object <jf>f1</jf>;
+		<jk>public</jk> Object <jf>f2</jf>;
+		<jk>public</jk> Object <jf>f3</jf>;
+		<jk>public</jk> Object <jf>f4</jf>;
+		<jk>public</jk> Object <jf>f5</jf>;
+		<jk>public</jk> Object <jf>f6</jf>;
+		<jk>public</jk> Object <jf>f7</jf>;
+		<jk>public</jk> Object <jf>f8</jf>;
+		<jk>public</jk> Object <jf>f9</jf>;
+		<jk>public</jk> Object <jf>f10</jf>;
+		<jk>public</jk> Object <jf>f11</jf>;
+		<jk>public</jk> Object <jf>fExtra</jf>;
+	}
+</p>
+<p>
+	We can also parse into Maps as well:
+</p>
+<p class='bpcode w800'>
+	String input = 
+		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
+		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
+	
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	ObjectMap m = p.parse(schema, input, ObjectMap.<jk>class</jk>);
+</p>
+<h5 class='topic'>Other Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		Array properties can also use CSV/SSV/PIPES for array notation.
+		<br>Various notations can be mixed throughout.
+	<li>
+		Schemas and POJOs can be defined arbitrarily deep.
+	<li>
+		Schemas are optional.
+		They can be skipped or partially defined.
+	<li>
+		We make our best attempt to convert the output to the matching type.  
+		However, you will get <code>ParseExceptions</code> if you attempt an impossible conversion.
+		(e.g. trying to parse the string "foo" into a boolean). 
+</ul>
 </div><!-- END: 2.21.3 - juneau-marshall.OpenApiDetails.Parsers -->
 </div><!-- END: 2.21 - juneau-marshall.OpenApiDetails -->
 
@@ -12209,7 +12512,7 @@ TODO(7.2.0)
 				<jc>// Override the nav links for the swagger page.</jc>
 				navlinks={
 					<js>"back: servlet:/"</js>,
-					<js>"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"</js>
+					<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
 				},
 				<jc>// Never show aside contents of page inherited from class.</jc>
 				aside=<js>"NONE"</js>
@@ -13880,9 +14183,7 @@ TODO(7.2.0)
 	<tr class='dark bb'>
 		<td rowspan="4"><code>string</code></td>
 		<td>
-			<code>byte</code>
-			<br><code>binary</code>
-			<br><code>binary-spaced</br>
+			<code>byte<br>binary<br>binary-spaced</code>
 		</td>
 		<td>
 			<ul>
@@ -18839,6 +19140,37 @@ TODO(7.2.0)
 <h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-client.UnitTesting' id='juneau-rest-client.UnitTesting'>9.10 - Server-less Unit Testing</a></h3>
 <div class='topic'><!-- START: 9.10 - juneau-rest-client.UnitTesting -->
 TODO(7.2.0)
+
+
+Interface proxy testing....
+
+	public class X {
+		<ja>@BeanProperty</ja>("id")
+		public Long getId() {
+			return 123l;
+		}
+	}
+
+	<ja>@Remoteable</ja>
+	public static interface MyRemoteable {
+		<ja>@RemoteMethod</ja>(httpMethod = "GET", path = "/ids.json")
+		public String ids( <ja>@Query</ja>(name="*", skipIfEmpty=true) X parameters);
+	}
+
+	<ja>@RestResource</ja>
+	public static class MyRest {
+		<ja>@RestMethod</ja>(name=GET, path="/ids.json")
+		public String a01(<ja>@Query</ja>("id") String id) {
+			return id;
+		}
+	}
+
+	<ja>@Test</ja>
+	public void test() {
+		MockRest a = MockRest.create(MyRest.class);
+		MyRemoteable r = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(MyRemoteable.class);
+		System.err.println(r.ids(new X()));
+	}
 </div><!-- END: 9.10 - juneau-rest-client.UnitTesting -->
 
 <!-- ==================================================================================================== -->
@@ -23060,7 +23392,7 @@ TODO(7.2.0)
 			<jsf>CAT</jsf>, <jsf>DOG</jsf>, <jsf>BIRD</jsf>, <jsf>FISH</jsf>, <jsf>MOUSE</jsf>, <jsf>RABBIT</jsf>, <jsf>SNAKE</jsf>
 		}
 	
-		<jk>public static class</jk> KindRender <jk>extends</jk> HtmlRender<Kind> {
+		<jk>public static class</jk> KindRender <jk>extends</jk> HtmlRender&lt;Kind&gt; {
 			<ja>@Override</ja>
 			<jk>public</jk> Object getContent(SerializerSession session, Kind value) {
 				<jk>return new</jk> Img().src(<js>"servlet:/htdocs/"</js>+value.toString().toLowerCase()+"<js>.png"</js>);
@@ -23429,8 +23761,8 @@ TODO(7.2.0)
 	</li>
 	<li>
 		Simplified Filter API for handling non-standard POJOs.<br>
-		The API for handling non-standard POJOs has been simplified by introducing the concept of a <del><code>Transform</code></del> class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
-		Two new subclasses of <del><code>Transform</code></del>:
+		The API for handling non-standard POJOs has been simplified by introducing the concept of a <code><del>Transform</del></code> class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
+		Two new subclasses of <code><del>Transform</del></code>:
 		<ul>
 			<li>{@link org.apache.juneau.transform.BeanFilter} - Filter POJO beans.</li>
 			<li>{@link org.apache.juneau.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
@@ -23738,7 +24070,7 @@ TODO(7.2.0)
 				Combined 4 classes into a single class.
 			</li>
 			<li>
-				New <del><code>@Bean.filter</code></del> and <del><code>@BeanProperty.filter</code></del> annotations.<br>
+				New <code><del>@Bean.filter</del></code> and <code><del>@BeanProperty.filter</del></code> annotations.<br>
 				Used for defining filters on bean classes and bean properties instead of just globally through <code>BeanContext.addTransforms(Class[])</code>.
 			</li>
 			<li>
@@ -23746,7 +24078,7 @@ TODO(7.2.0)
 				Used for customizing bean property names.
 			</li>
 			<li>
-				New <del><code>@BeanProperty.beanUri</code></del> and <del><code>@BeanProperty.id</code></del> annotations.<br>
+				New <code><del>@BeanProperty.beanUri</del></code> and <code><del>@BeanProperty.id</del></code> annotations.<br>
 				Used for associating beans with URLs and IDs.<br>
 				Used by XML serializer to add a url attribute on a bean element.<br>
 				Used by RDF/XML serializer to construct <code>rdf:resource</code> attributes.
@@ -23802,11 +24134,11 @@ TODO(7.2.0)
 	<li>				
 		New annotations on REST method parameters with automatic conversion:
 		<ul>
-			<li><del><code>@Attr</code></del> - A parameter or URL variable value as a parsed POJO.</li>
-			<li><del><code>@Param</code></del> - A query parameter value as a parsed POJO.</li>
-			<li><del><code>@PathRemainder</code></del>- The remainder after a URL pattern match as a String.</li>
-			<li><del><code>@Header</code></del> - An HTTP header value as a parsed POJO.</li>
-			<li><del><code>@Content</code></del> - The HTTP content as a parsed POJO.</li>
+			<li><code><del>@Attr</del></code> - A parameter or URL variable value as a parsed POJO.</li>
+			<li><code><del>@Param</del></code> - A query parameter value as a parsed POJO.</li>
+			<li><code><del>@PathRemainder</del></code>- The remainder after a URL pattern match as a String.</li>
+			<li><code><del>@Header</del></code> - An HTTP header value as a parsed POJO.</li>
+			<li><code><del>@Content</del></code> - The HTTP content as a parsed POJO.</li>
 			<li>{@link org.apache.juneau.rest.annotation.Method @Method} - The HTTP method name as a String.</li>
 		</ul>
 	</li>
@@ -23865,8 +24197,8 @@ TODO(7.2.0)
 	<li>New {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties()} annotation.</li>
 	<li>New {@link org.apache.juneau.rest.annotation.RestMethod#defaultRequestHeaders() @RestMethod.defaultRequestHeaders()} annotation.</li>
 	<li>New {@link org.apache.juneau.rest.annotation.RestMethod#matchers() @RestMethod.matchers()} annotation and {@link org.apache.juneau.rest.RestMatcher} class.</li>
-	<li><code>Readers</code> and <code>InputStreams</code> can be specified on <del><code>@Content</code></del> annotated parameters.</li>
-	<li>New <del><code>@HasParam</code></del> annotation.</li>
+	<li><code>Readers</code> and <code>InputStreams</code> can be specified on <code><del>@Content</del></code> annotated parameters.</li>
+	<li>New <code><del>@HasParam</del></code> annotation.</li>
 	<li>Full RFC2616 support for matching <code>Accept</code> headers to serializers.</li>		
 </ul>
 <h5 class='topic w800'>Other notes</h5>
@@ -23948,7 +24280,7 @@ TODO(7.2.0)
 		Useful for debugging purposes.
 	</li>
    		<li>
-		<code>Readers</code> and <code>InputStreams</code> can now be passed in as <del><code>@Content</code></del> parameters if you need direct access to the HTTP body content without involving the parsers.<br> 
+		<code>Readers</code> and <code>InputStreams</code> can now be passed in as <code><del>@Content</del></code> parameters if you need direct access to the HTTP body content without involving the parsers.<br> 
 		Equivalent to previously calling {@link org.apache.juneau.rest.RestRequest#getInputStream()} and {@link org.apache.juneau.rest.RestRequest#getReader()}.
    		</li>
    		<li>
@@ -24313,7 +24645,7 @@ TODO(7.2.0)
 		</ul>
 	</li>
 	<li>
-		Path variables annotated with <del><code>@Attr</code></del> are now automatically URL-decoded.
+		Path variables annotated with <code><del>@Attr</del></code> are now automatically URL-decoded.
 	</li>
 </ul>
 </div><!-- END: 5.0.0.21 -->
@@ -24481,7 +24813,7 @@ TODO(7.2.0)
   			{@link org.apache.juneau.rest.BasicRestServlet} now includes {@link org.apache.juneau.plaintext.PlainTextSerializer} and {@link org.apache.juneau.plaintext.PlainTextParser} for plain-text support.
   		</li>
   		<li>
-		Child resources now render on default <code>OPTIONS</code> pages through new method <del><code>ResourceOptions.getChildren()</code></del>.
+		Child resources now render on default <code>OPTIONS</code> pages through new method <code><del>ResourceOptions.getChildren()</del></code>.
 	</li>
 	<li>
 		Changes to {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}/{@link org.apache.juneau.urlencoding.UrlEncodingParser} to reduce the need for quoted string values.<br>
@@ -24524,7 +24856,7 @@ TODO(7.2.0)
 		<ul>
 			<li>Updated {@link org.apache.juneau.transform.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
 			<li>Introduced support for bean <code><del>Bean.subTypeProperty() subtypes</del></code>. </li>
-			<li>Replaced <code><ja>@Bean</ja>(filter=xxx)</code> with new <del><code>@Transform</code></del> annotation.</li>
+			<li>Replaced <code><ja>@Bean</ja>(filter=xxx)</code> with new <code><del>@Transform</del></code> annotation.</li>
 		</ul>
 	</li>
 	<li>
@@ -24740,7 +25072,7 @@ TODO(7.2.0)
 	<li>
 		New methods on {@link org.apache.juneau.rest.RestRequest}:
 		<ul>
-			<li><del><code>RestRequest.getVarResolver()</code></del></li>
+			<li><code><del>RestRequest.getVarResolver()</del></code></li>
 			<li><code><del>RestRequest.getServletURI()</del></code></li>
 			<li><code><del>RestRequest.getRequestParentURI()</del></code></li>
 		</ul>
@@ -24785,7 +25117,7 @@ TODO(7.2.0)
 		New {@link org.apache.juneau.annotation.Bean#stopClass @Bean.stopClass} annotation for specifying stop classes for bean properties.
 	</li>
 	<li>
-		New <del><code>BeanFilter.setStopClass(Class)</code></del> which is the program equivalent to the annotation above.
+		New <code><del>BeanFilter.setStopClass(Class)</del></code> which is the program equivalent to the annotation above.
 	</li>
 	<li>
 		New methods on {@link org.apache.juneau.dto.ResultSetList}:
@@ -24878,7 +25210,7 @@ TODO(7.2.0)
 	<li>More consistent handling of exceptions across all parsers.
 	<li>Minor changes to {@link org.apache.juneau.rest.RestRequest} class.
 	<ul>
-		<li>Changed the order of parameters on <del><code>RestRequest#getParameter(String,Class)</code></del>.
+		<li>Changed the order of parameters on <code><del>RestRequest#getParameter(String,Class)</del></code>.
 		<li>Added <code>RestRequest.getMapParameter(String,Class,Class,Class)</code> and 
 			<code>RestRequest.getCollectionParameter(String,Class,Class)}</code> methods.
 	</ul>
@@ -24968,7 +25300,7 @@ TODO(7.2.0)
 	<li>New {@link org.apache.juneau.rest.RestRequest#getJavaMethod()} method for getting access to the method used to handle a request.
 		Useful for accessing the method name or annotations during requests, such as in calls to {@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)}.
 	<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
-	<li>Added new string variables <del><code>$A{...}</code></del> (request attributes) and <del><code>$P{...}</code></del> (request parameters) to <code>RestServlet.createRequestVarResolver(RestRequest)</code>.
+	<li>Added new string variables <code><del>$A{...}</del></code> (request attributes) and <code><del>$P{...}</del></code> (request parameters) to <code>RestServlet.createRequestVarResolver(RestRequest)</code>.
 </ul>
 </div><!-- END: 5.1.0.3 -->
 
@@ -25006,7 +25338,7 @@ TODO(7.2.0)
 	<li>New <code><del>Redirect</del></code> class that simplifies performing redirections in REST methods.
 	<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} annotation
 		for defining customer response handlers for special kinds of POJOs.
-	<li>New method <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
+	<li>New method <code><del>UrlEncodingSerializer.serializeUrlPart(Object)</del></code> method.
 	<li>New method <code><del>RestRequest.getServletURIBuilder()</del></code> for construcing servlet-based URLs more efficiently.
 	<li>New method {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
 		and {@link org.apache.juneau.rest.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
@@ -25029,13 +25361,13 @@ TODO(7.2.0)
 </p>
 <ul class='spaced-list'>
 	<li>Simplified API for {@link org.apache.juneau.transform.PojoSwap}.  
-		Since it's rarely used, the <code>beanContext</code> parameter was replaced with a <del><code>PojoSwap#getBeanContext()</code></del> method on
+		Since it's rarely used, the <code>beanContext</code> parameter was replaced with a <code><del>PojoSwap#getBeanContext()</del></code> method on
 		the class.
 	<li>New simplified way of defining POJO filters without needing to extend {@link org.apache.juneau.transform.PojoSwap}.
 		See {@link org.apache.juneau.transform.SurrogateSwap} for details.
 	<li>New {@link org.apache.juneau.html.annotation.Html @Html} annotation.
 		Will allow the definition of standard XHTML DTOs in future releases.  
-		For now, <del><code>Img</code></del> is an example of defining an XHTML element using Juno DTOs.
+		For now, <code><del>Img</del></code> is an example of defining an XHTML element using Juno DTOs.
 	<li>{@link org.apache.juneau.json.JsonParser} now ignores trailing <code>';'</code> characters in input so that it can 
 		parse strings of the form <js>"var x = {'foo':'bar'};"</js>.
 	<li>New <code>TumblrParserResource</code> in the samples war file showing how to combine the REST client and server APIs into a single
@@ -25157,7 +25489,7 @@ TODO(7.2.0)
 	</li>
 	<li>Fix bug where <code>BeanRuntimeExceptions</code> weren't being thrown on subsequent calls to {@link org.apache.juneau.BeanContext#getClassMeta(Class)}.
 	<li>Moved logic for <code>BeanContext.getPrimitiveDefault(Class)</code> to new {@link org.apache.juneau.ClassMeta#getPrimitiveDefault()} method for performance reasons.
-	<li>Fixed bug in <del><code>BeanContext.addTransforms(Class[])</code></del> that would cause filter order to get messed up.
+	<li>Fixed bug in <code><del>BeanContext.addTransforms(Class[])</del></code> that would cause filter order to get messed up.
 	<li>{@link org.apache.juneau.ClassMeta#newInstance()} can now create array instances.
 	<li>Fixed indentation bugs in {@link org.apache.juneau.html.HtmlSerializer}.
 	<li>Fixed issue in {@link org.apache.juneau.html.HtmlSerializer} where newlines were not being converted into line breaks.
@@ -25167,11 +25499,11 @@ TODO(7.2.0)
 <h5 class='topic w800'>Server</h5>		
 <ul class='spaced-list'>
 	<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
-		Calling <del><code>HttpServlet.getParameter(String)</code></del> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
+		Calling <code><del>HttpServlet.getParameter(String)</del></code> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
 		class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
 	<li>New <code><del>RestRequest.getQueryParameter(String)</del></code>, <code><del>RestRequest.hasQueryParameter(String)</del></code>, and <code><del>RestRequest.hasAnyQueryParameters(String[])</del></code>
 		methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
-	<li>New <del><code>@QParam</code></del> and <del><code>@HasQParam</code></del> annotations for accessing query parameters from the URL query string.
+	<li>New <code><del>@QParam</del></code> and <code><del>@HasQParam</del></code> annotations for accessing query parameters from the URL query string.
 	<li><code>&amp;plainText</code> parameter can now specify a false value.
 	<li>Removed properties parameters from <code><del>RestServlet.onPreCall(RestRequest)</del></code> and <code><del>RestServlet#onPostCall(RestRequest,RestResponse)</del></code> methods
 		since the properties are already accessible through <code>RestRequest.getProperties()</code>.
@@ -25189,7 +25521,7 @@ TODO(7.2.0)
 			<li><code><del>RestClient#setProperty(String,Object)</del></code>			
 			<li><code><del>RestClient#setProperties(ObjectMap)</del></code>	
 			<li><code><del>RestClient#addNotBeanClasses(Class[])</del></code>		
-			<li><del><code>RestClient.addTransforms(Class[])</code></del>		
+			<li><code><del>RestClient.addTransforms(Class[])</del></code>		
 			<li><code><del>RestClient#addImplClass(Class,Class)</del></code>	
 		</ul>
 	<li>Renamed <code>RestClient.shutdown()</code> to {@link org.apache.juneau.rest.client.RestClient#close()} to mirror change in Apache API.		
@@ -25243,8 +25575,8 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</del>).
 		This applies to headers, attributes, and parameters.
-	<li>New <del><code>@Param.multipart()</code></del>
-		and <del><code>@Query.multipart()</code></del> annotations
+	<li>New <code><del>@Param.multipart()</del></code>
+		and <code><del>@Query.multipart()</del></code> annotations
 		for handling multi-part GET and POST parameters.	
 	<li>GET parameters are now CASE-SENSITIVE per W3C standards.
 		<ul>
@@ -25259,7 +25591,7 @@ TODO(7.2.0)
 	<li>Performance improvements around query parameters.
 	<li>New methods on {@link org.apache.juneau.rest.RestRequest} for handling multi-part parameters:
 		<ul>
-			<li><del><code>RestRequest.getParameters(String,Class)</code></del>
+			<li><code><del>RestRequest.getParameters(String,Class)</del></code>
 			<li><code><del>RestRequest#getQueryParameters(String,Class)</del></code>
 		</ul>
 	</li>
@@ -25331,7 +25663,7 @@ TODO(7.2.0)
 		Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
 	<li>Fixed bug in {@link org.apache.juneau.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <code>ClassCastException</code>.  
 		New behavior creates an empty array or <code>Collection</code>.
-	<li>Improved implementation of <del><code>UrlEncodingSerializer.serializeUrlPart(Object)</code></del> method.
+	<li>Improved implementation of <code><del>UrlEncodingSerializer.serializeUrlPart(Object)</del></code> method.
 </ul>
 
 <h5 class='topic w800'>Server</h5>		
@@ -25462,11 +25794,11 @@ TODO(7.2.0)
 	<li>New methods on {@link org.apache.juneau.ClassMeta} that eliminates language-specific code in 
 		the general class metadata.
 		<ul>
-			<li><del><code>ClassMeta.getXmlMeta()</code></del>
-			<li><del><code>ClassMeta.getJsonMeta()</code></del>
-			<li><del><code>ClassMeta.getHtmlMeta()</code></del>
-			<li><del><code>ClassMeta.getUrlEncodingMeta()</code></del>
-			<li><del><code>ClassMeta.getRdfMeta()</code></del>
+			<li><code><del>ClassMeta.getXmlMeta()</del></code>
+			<li><code><del>ClassMeta.getJsonMeta()</del></code>
+			<li><code><del>ClassMeta.getHtmlMeta()</del></code>
+			<li><code><del>ClassMeta.getUrlEncodingMeta()</del></code>
+			<li><code><del>ClassMeta.getRdfMeta()</del></code>
 		</ul>
 	<li>New {@link org.apache.juneau.dto.jsonschema.JsonType#ANY} enum.
 	<li>New <code><del>@Html.asPlainText()</del></code> annotation.
@@ -25523,8 +25855,8 @@ TODO(7.2.0)
 				</ul>
 			<li>{@link org.apache.juneau.BeanPropertyMeta#getClassMeta()} now returns the filtered type of the property.
 		</ul> 
-	<li><del><code>StringVarResolver</code></del> now has support for chained resolvers.
-	<li><del><code>StringVarResolver</code></del>  now resolves variables inside resolved values.
+	<li><code><del>StringVarResolver</del></code> now has support for chained resolvers.
+	<li><code><del>StringVarResolver</del></code>  now resolves variables inside resolved values.
 		i.e. if a resolved variable value itself contains a variable, it now resolves that variable too.
 	<li>Fixed bug where inner interface classes being used in <code>RestResource.filters()</code> were being
 		interpreted as surrogate classes because they have hidden 1-arg constructors due to being inner classes.
@@ -25574,7 +25906,7 @@ TODO(7.2.0)
 			<li><code>$R{trimmedRequestURI}</code> - Returns value from <code><del>RestRequest.getTrimmedRequestURI()</del></code>
 			<li><code>$E{var}</code> - Environment variables.
 		</ul>
-	<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <del><code>RestServlet.getLabel(RestRequest)</code></del>.
+	<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <code><del>RestServlet.getLabel(RestRequest)</del></code>.
 	<li>{@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code> now provide default HTML titles
 		and descriptions:
 		<p class='bcode w800'>
@@ -25592,17 +25924,17 @@ TODO(7.2.0)
 	<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 		want to provide labels in resource bundles.
 		<ul>
-			<li><del><code>RestResource.label()</code></del>
+			<li><code><del>RestResource.label()</del></code>
 			<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()}
 			<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}
-			<li><del><code>RestMethod#responses()</code></del>
-			<li><del><code>Attr.description()</code></del>
-			<li><del><code>Content.description()</code></del>
-			<li><del><code>HasParam.description()</code></del>
-			<li><del><code>HasQParam.description()</code></del>
-			<li><del><code>Header.description()</code></del>
-			<li><del><code>Param.description()</code></del>
-			<li><del><code>QParam.description()</code></del>
+			<li><code><del>RestMethod#responses()</del></code>
+			<li><code><del>Attr.description()</del></code>
+			<li><code><del>Content.description()</del></code>
+			<li><code><del>HasParam.description()</del></code>
+			<li><code><del>HasQParam.description()</del></code>
+			<li><code><del>Header.description()</del></code>
+			<li><code><del>Param.description()</del></code>
+			<li><code><del>QParam.description()</del></code>
 		</ul>
 	<li>Support for sorting resources by name in <code><del>ChildResourceDescriptions</del></code>.
 </ul>
@@ -25625,19 +25957,19 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 	<li>Servlet and method labels and descriptions can now contain embedded string variables.
-	<li>New <del><code>RestMethod.input()</code></del> and <code><del>RestMethod.responses()</del></code>
+	<li>New <code><del>RestMethod.input()</del></code> and <code><del>RestMethod.responses()</del></code>
 		annotations.
 		These replace the various <code>description</code> annotations added 2 days ago with a simpler design.
 	<li>New methods on {@link org.apache.juneau.rest.RestServlet}:
 		<ul>
 			<li><code><del>RestServlet.getMethodDescription(String,RestRequest)</del></code> so that subclasses
 				can override the method description in the OPTIONS page.
-			<li><del><code>RestServlet.createRequestVarResolver(RestRequest)</code></del> so that subclasses
+			<li><code><del>RestServlet.createRequestVarResolver(RestRequest)</del></code> so that subclasses
 				can override and augment the variable resolver.
 			<li><code><del>RestServlet.resolveChild(Class)</del></code> and <code><del>RestServlet.replaceChild(RestServlet)</del></code>
 				classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
 		</ul> 
-	<li>Reverted the <del><code>MethodDescription</code></del> back to 5.1.0.16 since it was being used by someone.
+	<li>Reverted the <code><del>MethodDescription</del></code> back to 5.1.0.16 since it was being used by someone.
 </ul>
 </div><!-- END: 5.1.0.18 -->
 
@@ -25657,7 +25989,7 @@ TODO(7.2.0)
 	<li>New {@link org.apache.juneau.ObjectMap#include(String[])} and {@link org.apache.juneau.ObjectMap#exclude(String[])} methods.
 	<li>{@link org.apache.juneau.html.annotation.Html @Html} annotations can now be applied to bean properties.
 	<li>New {@link org.apache.juneau.utils.IOPipe} utility class.
-	<li>Behavior change on <del><code>StringVarResolver</code></del>.  <jk>null</jk> input now results in blank strings instead of <jk>null</jk>.
+	<li>Behavior change on <code><del>StringVarResolver</del></code>.  <jk>null</jk> input now results in blank strings instead of <jk>null</jk>.
 </ul>
 
 <h5 class='topic w800'>Client</h5>
@@ -25729,9 +26061,9 @@ TODO(7.2.0)
 			<li>New <js>"$C{...}"</js> variable that resolve to INI config file values.
 			<li>New <js>"$UE{...}"</js> variable that  URL-encodes the value inside the variable.
 			<li>New convenience methods for retrieving classpath resource files:<br>  
-				<del><code>RestServlet.getResource(String)</code></del><br>
-				<del><code>RestServlet.getResourceAsString(String)</code></del><br>
-				<del><code>RestServlet.getResource(Class,String,String)</code></del>.
+				<code><del>RestServlet.getResource(String)</del></code><br>
+				<code><del>RestServlet.getResourceAsString(String)</del></code><br>
+				<code><del>RestServlet.getResource(Class,String,String)</del></code>.
 					Useful if you want to load predefined POJOs from JSON files in your classpath.
 			<li>New <code><del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del></code> method for customized handling
 				of when a resource or method was not found.  
@@ -25800,7 +26132,7 @@ TODO(7.2.0)
 					<li><code><del>ConfigFile.isEncoded(String)</del></code> 
 					<li><code><del>ConfigFile.addListener(ConfigFileListener)</del></code> - Listen for modification events on the config file.
 					<li><code><del>ConfigFile.merge(ConfigFile)</del></code> - Merge the contents of another config file into this config file.
-					<li><code><del>ConfigFile.getResolving()</del></code>, <del><code>ConfigFile.getResolving(StringVarResolver)</code></del> - Return an instance of the config file that resolves string variables.
+					<li><code><del>ConfigFile.getResolving()</del></code>, <code><del>ConfigFile.getResolving(StringVarResolver)</del></code> - Return an instance of the config file that resolves string variables.
 						Much more efficient than the previous design since the same underlying config file object is shared.
 					<li><code><del>ConfigFile.toWritable()</del></code> - Wraps the config file in a {@link org.apache.juneau.Writable} interface so that it can be serialized by the REST interface as a plain-text INI file instead of as a serialized POJO.
 					<li><code><del>ConfigFile.getInt(String)</del></code> - Now supports <js>"M"</js> and <js>"K"</js> to identify millions and thousands.
@@ -25859,8 +26191,8 @@ TODO(7.2.0)
 			<li>{@link org.apache.juneau.internal.ByteArrayInOutStream} 
 			<li>{@link org.apache.juneau.internal.FileUtils}
 			<li>{@link org.apache.juneau.internal.ThrowableUtils}
-			<li><del><code>StringVarMultipart</code></del>
-			<li><del><code>StringVarWithDefault</code></del>
+			<li><code><del>StringVarMultipart</del></code>
+			<li><code><del>StringVarWithDefault</del></code>
 		</ul> 
 	<li>New fields on {@link org.apache.juneau.ObjectList}:
 		<ul>
@@ -25931,8 +26263,8 @@ TODO(7.2.0)
 			<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String)}
 			<li>{@link org.apache.juneau.internal.StringUtils#pathStartsWith(String,String[])}
 		</ul>
-	<li>New <del><code>StringVar.doResolve(String)</code></del> method.
-	<li>New <del><code>StringVarResolver.DEFAULT</code></del> field.
+	<li>New <code><del>StringVar.doResolve(String)</del></code> method.
+	<li>New <code><del>StringVarResolver.DEFAULT</del></code> field.
 	<li>Eliminated dependency on <code>javax.mail.internet.MimeUtility</code> by implementing our own {@link org.apache.juneau.internal.StringUtils#base64Encode(byte[])} method.
 	<li>{@link org.apache.juneau.transforms.CalendarSwap} and {@link org.apache.juneau.transforms.DateSwap} classes now handle blank input better.  Returns <jk>null</jk> instead of throwing an exception.
 	<li>{@link org.apache.juneau.html.HtmlDocSerializer} specifies the default CSS location as <code>/servletPath/style.css</code> instead of <code>/servletPath/htdocs/juneau.css</code>.  
@@ -25963,7 +26295,7 @@ TODO(7.2.0)
 	<li>{@link org.apache.juneau.utils.PojoRest} must now be instantiated with a <code>ReaderParser</code>.
 		Simplifies the API on the class.
 	<li>{@link org.apache.juneau.utils.MessageBundle} and <code>SafeResourceMultiBundle</code> moved from server component.
-	<li>Several bug fixes and performance improvements in <del><code>StringVarResolver</code></del>.
+	<li>Several bug fixes and performance improvements in <code><del>StringVarResolver</del></code>.
 	<li>Various enhancements to {@link org.apache.juneau.internal.TeeWriter} and {@link org.apache.juneau.internal.TeeOutputStream}.
 	<li>Renamed <del>CharSet</del> to {@link org.apache.juneau.internal.AsciiSet}.
 	<li>{@link org.apache.juneau.serializer.SerializerGroup} and {@link org.apache.juneau.parser.ParserGroup} now ignores <code>NoClassDefFoundErrors</code>
@@ -26088,9 +26420,9 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>New <code><del>ReaderResource</del></code> class.   
 		Represents the contents of a text file with convenience methods for resolving
-		<del><code>StringVar</code></del> variables and adding HTTP response headers.	
+		<code><del>StringVar</del></code> variables and adding HTTP response headers.	
 		REST Java methods can return instances of these to serialize <code>Readers</code>
-			containing text with <del><code>StringVarResolver</code></del> variables in them.
+			containing text with <code><del>StringVarResolver</del></code> variables in them.
 	<li>New <code><del>StreamResource</del></code> class.   
 		REST Java methods can return instances of these to serialize <code>OutputStreams</code>.
 	<li>Fixed a bug in the stack trace hash algorithm in {@link org.apache.juneau.rest.RestException}.
@@ -26193,7 +26525,7 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li><del>org.apache.juneau.microservice</del> - New package-level javadoc.
 	<li><del>org.apache.juneau.config</del> - New package-level javadoc.
-	<li><del><code>StringVarResolver</code></del> - New documentation.
+	<li><code><del>StringVarResolver</del></code> - New documentation.
 	<li><del>org.apache.juneau.rest.client</del> - New package-level javadoc.
 	<li><code><del>Overview / Samples</del></code> - New section.
 	<li><del>org.apache.juneau.transform / Stop Classes</del> - New section.
@@ -26231,15 +26563,15 @@ TODO(7.2.0)
 		</ul>
 	<li><code><del>@ThreadSafe</del></code> annotation.
 	<li>New <code>ClassFilter</code> class.
-	<li><del><code>ConfigFile.getResolving(StringVarResolver,boolean)</code></del> method.
-	<li><del><code>ConfigFile.getStringVar()</code></del> method.
+	<li><code><del>ConfigFile.getResolving(StringVarResolver,boolean)</del></code> method.
+	<li><code><del>ConfigFile.getStringVar()</del></code> method.
 	<li>New <code><del>ParserContext.PARSER_trimStrings</del></code> property.
 	<li>New <code><del>SerializerContext.SERIALIZER_trimStrings</del></code> property.
-	<li><del><code>Args.getStringVar()}</code></del> method.
+	<li><code><del>Args.getStringVar()}</del></code> method.
 	<li>New {@link org.apache.juneau.utils.ManifestFile} class
 	<li>New {@link org.apache.juneau.utils.MessageBundle} class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
-	<li>New <del><code>StringMapVar</code></del> class.
-	<li>New <del><code>StringVars</code></del> class with reusable common <del><code>StringVar</code></del> instances.
+	<li>New <code><del>StringMapVar</del></code> class.
+	<li>New <code><del>StringVars</del></code> class with reusable common <code><del>StringVar</del></code> instances.
 	<li>New {@link org.apache.juneau.internal.JuneauLogger} class.
 	<li>Default value for <code><del>XmlParserContext.XML_trimWhitespace</del></code> changed to <jk>true</jk>.			
 </ul>

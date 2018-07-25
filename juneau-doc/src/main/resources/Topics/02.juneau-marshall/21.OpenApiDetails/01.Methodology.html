@@ -83,7 +83,7 @@ OpenAPI Methodology
 	<tr>
 		<td><code>object</code></td>
 		<td>empty</td>
-		<td><code>Map&lt;String,String&gt;</code></td>
+		<td><code>Map&lt;String,Object&gt;</code></td>
 	</tr>
 	<tr>
 		<td><code>object</code></td>
@@ -122,11 +122,11 @@ OpenAPI Methodology
 
 	<jc>// Convert POJO to BASE64-encoded string.</jc>
 	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
-	String httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+	String httpPart = s.serialize(schema, myPojo);
 	
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
 	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
-	myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+	myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 </p>
 <p>
 	In addition to defining format, the schema also allows for validations of the serialized form.
@@ -143,7 +143,7 @@ OpenAPI Methodology
 	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart;
 	<jk>try</jk> {
-		httpPart = s.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, myPojo);
+		httpPart = s.serialize(schema, myPojo);
 	} <jk>catch</jk> (SchemaValidationException e) {
 		<jc>// Oops, output too small.</jc>
 	}
@@ -151,7 +151,7 @@ OpenAPI Methodology
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
 	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
 	<jk>try</jk> {
-		myPojo = p.parse(HttpPartType.<jsf>HEADER</jsf>, schema, httpPart, MyPojo.<jk>class</jk>);
+		myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException e) {
 		<jc>// Oops, input too small.</jc>
 	}

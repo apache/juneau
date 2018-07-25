@@ -29,7 +29,7 @@
 	</li>
 	<li>Fix bug where <code>BeanRuntimeExceptions</code> weren't being thrown on subsequent calls to {@link org.apache.juneau.BeanContext#getClassMeta(Class)}.
 	<li>Moved logic for <code>BeanContext.getPrimitiveDefault(Class)</code> to new {@link org.apache.juneau.ClassMeta#getPrimitiveDefault()} method for performance reasons.
-	<li>Fixed bug in <del><code>BeanContext.addTransforms(Class[])</code></del> that would cause filter order to get messed up.
+	<li>Fixed bug in <code><del>BeanContext.addTransforms(Class[])</del></code> that would cause filter order to get messed up.
 	<li>{@link org.apache.juneau.ClassMeta#newInstance()} can now create array instances.
 	<li>Fixed indentation bugs in {@link org.apache.juneau.html.HtmlSerializer}.
 	<li>Fixed issue in {@link org.apache.juneau.html.HtmlSerializer} where newlines were not being converted into line breaks.
@@ -39,11 +39,11 @@
 <h5 class='topic w800'>Server</h5>		
 <ul class='spaced-list'>
 	<li>Fixed major issue that prevented parsing URL-Encoded form posts into POJOs.
-		Calling <del><code>HttpServlet.getParameter(String)</code></del> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
+		Calling <code><del>HttpServlet.getParameter(String)</del></code> was forcing the underlying servlet code to process the HTTP body itself, preventing the <code>UrlEncodingSerializer</code>
 		class from being able to parse the content.  Updated code no longer inadvertantly calls this method.
 	<li>New <code><del>RestRequest.getQueryParameter(String)</del></code>, <code><del>RestRequest.hasQueryParameter(String)</del></code>, and <code><del>RestRequest.hasAnyQueryParameters(String[])</del></code>
 		methods that only look for parameters in the URL query string to prevent loading and parsing of URL-Encoded form posts.
-	<li>New <del><code>@QParam</code></del> and <del><code>@HasQParam</code></del> annotations for accessing query parameters from the URL query string.
+	<li>New <code><del>@QParam</del></code> and <code><del>@HasQParam</del></code> annotations for accessing query parameters from the URL query string.
 	<li><code>&amp;plainText</code> parameter can now specify a false value.
 	<li>Removed properties parameters from <code><del>RestServlet.onPreCall(RestRequest)</del></code> and <code><del>RestServlet#onPostCall(RestRequest,RestResponse)</del></code> methods
 		since the properties are already accessible through <code>RestRequest.getProperties()</code>.
@@ -61,7 +61,7 @@
 			<li><code><del>RestClient#setProperty(String,Object)</del></code>			
 			<li><code><del>RestClient#setProperties(ObjectMap)</del></code>	
 			<li><code><del>RestClient#addNotBeanClasses(Class[])</del></code>		
-			<li><del><code>RestClient.addTransforms(Class[])</code></del>		
+			<li><code><del>RestClient.addTransforms(Class[])</del></code>		
 			<li><code><del>RestClient#addImplClass(Class,Class)</del></code>	
 		</ul>
 	<li>Renamed <code>RestClient.shutdown()</code> to {@link org.apache.juneau.rest.client.RestClient#close()} to mirror change in Apache API.		

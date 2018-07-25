@@ -57,5 +57,5 @@
 	<li>New {@link org.apache.juneau.rest.RestRequest#getJavaMethod()} method for getting access to the method used to handle a request.
 		Useful for accessing the method name or annotations during requests, such as in calls to {@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)}.
 	<li>Fixed bug when using Jetty where you tried to read text input after a header was written.
-	<li>Added new string variables <del><code>$A{...}</code></del> (request attributes) and <del><code>$P{...}</code></del> (request parameters) to <code>RestServlet.createRequestVarResolver(RestRequest)</code>.
+	<li>Added new string variables <code><del>$A{...}</del></code> (request attributes) and <code><del>$P{...}</del></code> (request parameters) to <code>RestServlet.createRequestVarResolver(RestRequest)</code>.
 </ul>

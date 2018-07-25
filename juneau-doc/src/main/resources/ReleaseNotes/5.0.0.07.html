@@ -80,7 +80,7 @@
 				Combined 4 classes into a single class.
 			</li>
 			<li>
-				New <del><code>@Bean.filter</code></del> and <del><code>@BeanProperty.filter</code></del> annotations.<br>
+				New <code><del>@Bean.filter</del></code> and <code><del>@BeanProperty.filter</del></code> annotations.<br>
 				Used for defining filters on bean classes and bean properties instead of just globally through <code>BeanContext.addTransforms(Class[])</code>.
 			</li>
 			<li>
@@ -88,7 +88,7 @@
 				Used for customizing bean property names.
 			</li>
 			<li>
-				New <del><code>@BeanProperty.beanUri</code></del> and <del><code>@BeanProperty.id</code></del> annotations.<br>
+				New <code><del>@BeanProperty.beanUri</del></code> and <code><del>@BeanProperty.id</del></code> annotations.<br>
 				Used for associating beans with URLs and IDs.<br>
 				Used by XML serializer to add a url attribute on a bean element.<br>
 				Used by RDF/XML serializer to construct <code>rdf:resource</code> attributes.
@@ -144,11 +144,11 @@
 	<li>				
 		New annotations on REST method parameters with automatic conversion:
 		<ul>
-			<li><del><code>@Attr</code></del> - A parameter or URL variable value as a parsed POJO.</li>
-			<li><del><code>@Param</code></del> - A query parameter value as a parsed POJO.</li>
-			<li><del><code>@PathRemainder</code></del>- The remainder after a URL pattern match as a String.</li>
-			<li><del><code>@Header</code></del> - An HTTP header value as a parsed POJO.</li>
-			<li><del><code>@Content</code></del> - The HTTP content as a parsed POJO.</li>
+			<li><code><del>@Attr</del></code> - A parameter or URL variable value as a parsed POJO.</li>
+			<li><code><del>@Param</del></code> - A query parameter value as a parsed POJO.</li>
+			<li><code><del>@PathRemainder</del></code>- The remainder after a URL pattern match as a String.</li>
+			<li><code><del>@Header</del></code> - An HTTP header value as a parsed POJO.</li>
+			<li><code><del>@Content</del></code> - The HTTP content as a parsed POJO.</li>
 			<li>{@link org.apache.juneau.rest.annotation.Method @Method} - The HTTP method name as a String.</li>
 		</ul>
 	</li>

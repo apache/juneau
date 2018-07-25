@@ -61,9 +61,9 @@
 			<li>New <js>"$C{...}"</js> variable that resolve to INI config file values.
 			<li>New <js>"$UE{...}"</js> variable that  URL-encodes the value inside the variable.
 			<li>New convenience methods for retrieving classpath resource files:<br>  
-				<del><code>RestServlet.getResource(String)</code></del><br>
-				<del><code>RestServlet.getResourceAsString(String)</code></del><br>
-				<del><code>RestServlet.getResource(Class,String,String)</code></del>.
+				<code><del>RestServlet.getResource(String)</del></code><br>
+				<code><del>RestServlet.getResourceAsString(String)</del></code><br>
+				<code><del>RestServlet.getResource(Class,String,String)</del></code>.
 					Useful if you want to load predefined POJOs from JSON files in your classpath.
 			<li>New <code><del>RestServlet.handleNotFound(int,RestRequest,RestResponse)</del></code> method for customized handling
 				of when a resource or method was not found.  

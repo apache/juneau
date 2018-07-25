@@ -14,7 +14,6 @@ package org.apache.juneau.httppart;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -73,11 +72,6 @@ public class SimplePartParser implements HttpPartParser {
 	}
 
 	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return createSession().parse(partType, schema, in, toType);
-	}
-
-	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
 		return createSession().parse(partType, schema, in, toType);
 	}
@@ -85,5 +79,15 @@ public class SimplePartParser implements HttpPartParser {
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
 		return createSession().parse(partType, schema, in, toType, toTypeArgs);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return createSession().parse(null, schema, in, toType);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return createSession().parse(null, schema, in, toType, toTypeArgs);
 	}
 }

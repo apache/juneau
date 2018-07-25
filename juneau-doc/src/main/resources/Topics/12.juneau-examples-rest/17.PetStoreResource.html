@@ -147,7 +147,7 @@ PetStoreResource
 			<jsf>CAT</jsf>, <jsf>DOG</jsf>, <jsf>BIRD</jsf>, <jsf>FISH</jsf>, <jsf>MOUSE</jsf>, <jsf>RABBIT</jsf>, <jsf>SNAKE</jsf>
 		}
 	
-		<jk>public static class</jk> KindRender <jk>extends</jk> HtmlRender<Kind> {
+		<jk>public static class</jk> KindRender <jk>extends</jk> HtmlRender&lt;Kind&gt; {
 			<ja>@Override</ja>
 			<jk>public</jk> Object getContent(SerializerSession session, Kind value) {
 				<jk>return new</jk> Img().src(<js>"servlet:/htdocs/"</js>+value.toString().toLowerCase()+"<js>.png"</js>);

@@ -53,7 +53,7 @@ OpenAPI Parsers
 	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
-		Long[][] pojo = p.parse(HttpPartType.<jsf>BODY</jsf>, schema, input, Long[][].<jk>class</jk>);
+		Long[][] pojo = p.parse(schema, input, Long[][].<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException e) {
 		<jc>// Oops, one of the restrictions were not met.</jc>
 	}
@@ -206,6 +206,7 @@ OpenAPI Parsers
 		<td>empty</td>
 		<td>
 			<ul>
+				<li><code>Map&lt;String,Object&gt;</code> (default)
 				<li>Beans with properties of anything on this list.
 				<li>Maps with string keys.
 			</ul>
@@ -221,5 +222,131 @@ OpenAPI Parsers
 		</td>
 	</tr>
 </table>
-
-
+<p>
+	For arrays, an example of "Any POJO transformable from arrays of the default types" is:
+</p>
+<p class='bpcode w800'>
+	<jc>// Sample POJO class convertable from a Long[][].</jc>
+	<jk>public class</jk> MyPojo {
+		
+		<jc>// Constructor used by parser.</jc>
+		<jk>public</jk> MyPojo(Long[][] from2dLongs) {...}
+	}
+</p>
+<p>
+	In the example above, our POJO class can be constructed from our pipe-delimited list of comma-delimited numbers: 
+</p>
+<p class='bpcode w800'>
+	<jc>// Our input being parsed.</jc>
+	String input = <js>"1,2,3|4,5,6|7,8,9"</js>
+	
+	<jc>// The parser to use.</jc>
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	
+	<jc>// Convert string to a POJO.</jc>
+	<jk>try</jk> {
+		MyPojo pojo = p.parse(schema, input, MyPojo.<jk>class</jk>);
+	} <jk>catch</jk> (SchemaValidationException e) {
+		<jc>// Oops, one of the restrictions were not met.</jc>
+	}
+</p>
+<p>
+	Just like serialization, the <code>object</code> type is not officially part of the OpenAPI standard, but
+	Juneau supports parsing HTTP parts in UON notation to Maps and beans.
+</p>
+<p>
+	The following shows an example of a bean with several properties of various types.
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+		<jk>public</jk> String <jf>f1</jf>;
+		<jk>public byte</jk>[] <jf>f2</jf>;
+		<jk>public byte</jk>[] <jf>f3</jf>;
+		<jk>public byte</jk>[] <jf>f4</jf>;
+		<jk>public</jk> Calendar <jf>f5</jf>;
+		<jk>public</jk> String <jf>f6</jf>;
+		<jk>public int</jk> <jf>f7</jf>;
+		<jk>public</jk> Long <jf>f8</jf>;
+		<jk>public float</jk> <jf>f9</jf>;
+		<jk>public</jk> Double <jf>f10</jf>;
+		<jk>public</jk> Boolean <jf>f11</jf>;
+		<jk>public</jk> Object <jf>fExtra</jf>;
+	}
+</p>
+<p>
+	We define the following schema again:
+</p>
+<p class='bpcode w800'>
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
+	
+	HttpPartSchema ps = <jsm>schema</jsm>(<js>"object"</js>)
+		.property(<js>"f1"</js>, <jsm>schema</jsm>(<js>"string"</js>))
+		.property(<js>"f2"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"byte"</js>))
+		.property(<js>"f3"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"binary"</js>))
+		.property(<js>"f4"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"binary-spaced"</js>))
+		.property(<js>"f5"</js>, <jsm>schema</jsm>(<js>"string"</js>, <js>"date-time"</js>))
+		.property(<js>"f6"</js>, <jsm>schema</jsm>(<js>"string"</js>, "<js>uon"</js>))
+		.property(<js>"f7"</js>, <jsm>schema</jsm>(<js>"integer"</js>))
+		.property(<js>"f8"</js>, <jsm>schema</jsm>(<js>"integer"</js>, <js>"int64"</js>))
+		.property(<js>"f9"</js>, <jsm>schema</jsm>(<js>"number"</js>))
+		.property(<js>"f10"</js>, <jsm>schema</jsm>(<js>"number"</js>, <js>"double"</js>))
+		.property(<js>"f11"</js>, <jsm>schema</jsm>(<js>"boolean"</js>))
+		.additionalProperties(<jsm>schema</jsm>(<js>"integer"</js>))
+		.build();
+</p>
+<p>
+	Then we parse our input into our POJO:
+</p>
+<p class='bpcode w800'>
+	String input = 
+		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
+		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
+	
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	MyBean b = p.parse(schema, input, MyBean.<jk>class</jk>);
+</p>
+<p>
+	Note that serializing into generic <code>Object</code> properties would have produced similar results:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+		<jk>public</jk> Object <jf>f1</jf>;
+		<jk>public</jk> Object <jf>f2</jf>;
+		<jk>public</jk> Object <jf>f3</jf>;
+		<jk>public</jk> Object <jf>f4</jf>;
+		<jk>public</jk> Object <jf>f5</jf>;
+		<jk>public</jk> Object <jf>f6</jf>;
+		<jk>public</jk> Object <jf>f7</jf>;
+		<jk>public</jk> Object <jf>f8</jf>;
+		<jk>public</jk> Object <jf>f9</jf>;
+		<jk>public</jk> Object <jf>f10</jf>;
+		<jk>public</jk> Object <jf>f11</jf>;
+		<jk>public</jk> Object <jf>fExtra</jf>;
+	}
+</p>
+<p>
+	We can also parse into Maps as well:
+</p>
+<p class='bpcode w800'>
+	String input = 
+		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
+		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
+	
+	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	ObjectMap m = p.parse(schema, input, ObjectMap.<jk>class</jk>);
+</p>
+<h5 class='topic'>Other Notes:</h5>
+<ul class='spaced-list'>
+	<li>
+		Array properties can also use CSV/SSV/PIPES for array notation.
+		<br>Various notations can be mixed throughout.
+	<li>
+		Schemas and POJOs can be defined arbitrarily deep.
+	<li>
+		Schemas are optional.
+		They can be skipped or partially defined.
+	<li>
+		We make our best attempt to convert the output to the matching type.  
+		However, you will get <code>ParseExceptions</code> if you attempt an impossible conversion.
+		(e.g. trying to parse the string "foo" into a boolean). 
+</ul>

@@ -52,8 +52,8 @@
 <ul class='spaced-list'>
 	<li>REST method parameters can now be generic types (e.g. <del><ja>@Param</ja>(<js>"foo"</js>) Map&lt;String,Integer&gt; foo</del>).
 		This applies to headers, attributes, and parameters.
-	<li>New <del><code>@Param.multipart()</code></del>
-		and <del><code>@Query.multipart()</code></del> annotations
+	<li>New <code><del>@Param.multipart()</del></code>
+		and <code><del>@Query.multipart()</del></code> annotations
 		for handling multi-part GET and POST parameters.	
 	<li>GET parameters are now CASE-SENSITIVE per W3C standards.
 		<ul>
@@ -68,7 +68,7 @@
 	<li>Performance improvements around query parameters.
 	<li>New methods on {@link org.apache.juneau.rest.RestRequest} for handling multi-part parameters:
 		<ul>
-			<li><del><code>RestRequest.getParameters(String,Class)</code></del>
+			<li><code><del>RestRequest.getParameters(String,Class)</del></code>
 			<li><code><del>RestRequest#getQueryParameters(String,Class)</del></code>
 		</ul>
 	</li>

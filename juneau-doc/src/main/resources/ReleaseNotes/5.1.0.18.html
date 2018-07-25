@@ -23,17 +23,17 @@
 <ul class='spaced-list'>
 	<li>Fixed bug where localized strings weren't resolving when using chained resource bundles.
 	<li>Servlet and method labels and descriptions can now contain embedded string variables.
-	<li>New <del><code>RestMethod.input()</code></del> and <code><del>RestMethod.responses()</del></code>
+	<li>New <code><del>RestMethod.input()</del></code> and <code><del>RestMethod.responses()</del></code>
 		annotations.
 		These replace the various <code>description</code> annotations added 2 days ago with a simpler design.
 	<li>New methods on {@link org.apache.juneau.rest.RestServlet}:
 		<ul>
 			<li><code><del>RestServlet.getMethodDescription(String,RestRequest)</del></code> so that subclasses
 				can override the method description in the OPTIONS page.
-			<li><del><code>RestServlet.createRequestVarResolver(RestRequest)</code></del> so that subclasses
+			<li><code><del>RestServlet.createRequestVarResolver(RestRequest)</del></code> so that subclasses
 				can override and augment the variable resolver.
 			<li><code><del>RestServlet.resolveChild(Class)</del></code> and <code><del>RestServlet.replaceChild(RestServlet)</del></code>
 				classes that allows customized resolution of servlet instances (e.g. if services are defined in OSGi).
 		</ul> 
-	<li>Reverted the <del><code>MethodDescription</code></del> back to 5.1.0.16 since it was being used by someone.
+	<li>Reverted the <code><del>MethodDescription</del></code> back to 5.1.0.16 since it was being used by someone.
 </ul>

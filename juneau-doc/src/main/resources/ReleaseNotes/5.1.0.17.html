@@ -37,8 +37,8 @@
 				</ul>
 			<li>{@link org.apache.juneau.BeanPropertyMeta#getClassMeta()} now returns the filtered type of the property.
 		</ul> 
-	<li><del><code>StringVarResolver</code></del> now has support for chained resolvers.
-	<li><del><code>StringVarResolver</code></del>  now resolves variables inside resolved values.
+	<li><code><del>StringVarResolver</del></code> now has support for chained resolvers.
+	<li><code><del>StringVarResolver</del></code>  now resolves variables inside resolved values.
 		i.e. if a resolved variable value itself contains a variable, it now resolves that variable too.
 	<li>Fixed bug where inner interface classes being used in <code>RestResource.filters()</code> were being
 		interpreted as surrogate classes because they have hidden 1-arg constructors due to being inner classes.
@@ -88,7 +88,7 @@
 			<li><code>$R{trimmedRequestURI}</code> - Returns value from <code><del>RestRequest.getTrimmedRequestURI()</del></code>
 			<li><code>$E{var}</code> - Environment variables.
 		</ul>
-	<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <del><code>RestServlet.getLabel(RestRequest)</code></del>.
+	<li>Added methods <code><del>RestServlet.getDescription(RestRequest)</del></code> and <code><del>RestServlet.getLabel(RestRequest)</del></code>.
 	<li>{@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code> now provide default HTML titles
 		and descriptions:
 		<p class='bcode w800'>
@@ -106,17 +106,17 @@
 	<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 		want to provide labels in resource bundles.
 		<ul>
-			<li><del><code>RestResource.label()</code></del>
+			<li><code><del>RestResource.label()</del></code>
 			<li>{@link org.apache.juneau.rest.annotation.RestResource#description() @RestResource.description()}
 			<li>{@link org.apache.juneau.rest.annotation.RestMethod#description() @RestMethod.description()}
-			<li><del><code>RestMethod#responses()</code></del>
-			<li><del><code>Attr.description()</code></del>
-			<li><del><code>Content.description()</code></del>
-			<li><del><code>HasParam.description()</code></del>
-			<li><del><code>HasQParam.description()</code></del>
-			<li><del><code>Header.description()</code></del>
-			<li><del><code>Param.description()</code></del>
-			<li><del><code>QParam.description()</code></del>
+			<li><code><del>RestMethod#responses()</del></code>
+			<li><code><del>Attr.description()</del></code>
+			<li><code><del>Content.description()</del></code>
+			<li><code><del>HasParam.description()</del></code>
+			<li><code><del>HasQParam.description()</del></code>
+			<li><code><del>Header.description()</del></code>
+			<li><code><del>Param.description()</del></code>
+			<li><code><del>QParam.description()</del></code>
 		</ul>
 	<li>Support for sorting resources by name in <code><del>ChildResourceDescriptions</del></code>.
 </ul>

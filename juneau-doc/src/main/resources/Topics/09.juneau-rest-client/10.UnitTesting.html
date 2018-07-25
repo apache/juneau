@@ -16,3 +16,34 @@
 Server-less Unit Testing
 
 TODO(7.2.0)
+
+
+Interface proxy testing....
+
+	public class X {
+		<ja>@BeanProperty</ja>("id")
+		public Long getId() {
+			return 123l;
+		}
+	}
+
+	<ja>@Remoteable</ja>
+	public static interface MyRemoteable {
+		<ja>@RemoteMethod</ja>(httpMethod = "GET", path = "/ids.json")
+		public String ids( <ja>@Query</ja>(name="*", skipIfEmpty=true) X parameters);
+	}
+
+	<ja>@RestResource</ja>
+	public static class MyRest {
+		<ja>@RestMethod</ja>(name=GET, path="/ids.json")
+		public String a01(<ja>@Query</ja>("id") String id) {
+			return id;
+		}
+	}
+
+	<ja>@Test</ja>
+	public void test() {
+		MockRest a = MockRest.create(MyRest.class);
+		MyRemoteable r = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(MyRemoteable.class);
+		System.err.println(r.ids(new X()));
+	}
