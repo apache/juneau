@@ -36,6 +36,8 @@ public abstract class ContextBuilder {
 	 * @param ps The initial configuration settings for this builder.
 	 */
 	public ContextBuilder(PropertyStore ps) {
+		if (ps == null)
+			ps = PropertyStore.DEFAULT;
 		this.psb = ps.builder();
 	}
 

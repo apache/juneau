@@ -467,12 +467,27 @@ public class RestClient extends BeanContext implements Closeable {
 		return new RestClientBuilder(getPropertyStore(), httpClientBuilder);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param ps
+	 * 	Configuration properties for this client.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param httpClientBuilder
+	 * 	The HTTP client builder to use to create the HTTP client.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param httpClient
+	 * 	The HTTP client.
+	 * 	<br>Must not be <jk>null</jk>.
+	 */
 	@SuppressWarnings("unchecked")
-	RestClient(
+	protected RestClient(
 			PropertyStore ps,
 			HttpClientBuilder httpClientBuilder,
 			CloseableHttpClient httpClient) {
 		super(ps);
+		if (ps == null)
+			ps = PropertyStore.DEFAULT;
 		this.httpClientBuilder = httpClientBuilder;
 		this.httpClient = httpClient;
 		this.keepHttpClientOpen = getBooleanProperty(RESTCLIENT_keepHttpClientOpen, false);

@@ -94,8 +94,14 @@ public class RestClientBuilder extends BeanContextBuilder {
 
 	/**
 	 * Constructor.
+	 * @param ps
+	 * 	Initial configuration properties for this builder.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param httpClientBuilder
+	 * 	The HTTP client builder to use for this REST client builder.
+	 * 	<br>Can be <jk>null</jk> to just call {@link #createHttpClientBuilder()} to instantiate it again.
 	 */
-	RestClientBuilder(PropertyStore ps, HttpClientBuilder httpClientBuilder) {
+	protected RestClientBuilder(PropertyStore ps, HttpClientBuilder httpClientBuilder) {
 		super(ps);
 		this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : createHttpClientBuilder();
 	}

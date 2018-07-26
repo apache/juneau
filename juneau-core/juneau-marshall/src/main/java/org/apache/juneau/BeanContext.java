@@ -1958,6 +1958,9 @@ public class BeanContext extends Context {
 	public BeanContext(PropertyStore ps) {
 		super(ps);
 
+		if (ps == null)
+			ps = PropertyStore.DEFAULT;
+
 		beanHashCode = ps.hashCode("BeanContext");
 
 		beansRequireDefaultConstructor = getBooleanProperty(BEAN_beansRequireDefaultConstructor, false);
