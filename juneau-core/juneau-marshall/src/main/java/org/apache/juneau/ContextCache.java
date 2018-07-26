@@ -41,7 +41,7 @@ public class ContextCache {
 	private final ConcurrentHashMap<Class<?>,String[]> prefixCache = new ConcurrentHashMap<>();
 
 	// When enabled, this will spit out cache-hit metrics to the console on shutdown.
-	private static final boolean TRACK_CACHE_HITS = true;
+	private static final boolean TRACK_CACHE_HITS = Boolean.getBoolean("juneau.trackCacheHits");
 	static final Map<String,CacheHit> CACHE_HITS = new ConcurrentHashMap<>();
 	static {
 		if (TRACK_CACHE_HITS) {
@@ -50,6 +50,7 @@ public class ContextCache {
 					@Override
 					public void run() {
 						int creates=0, cached=0;
+						System.out.println("Cache Hits:  [CacheObject] = [numCreated,numCached,cacheHitPercentage]");
 						for (Map.Entry<String,CacheHit> e : CACHE_HITS.entrySet()) {
 							CacheHit ch = e.getValue();
 							System.out.println("["+e.getKey()+"] = ["+ch.creates+","+ch.cached+","+((ch.cached*100)/(ch.creates+ch.cached))+"%]");
