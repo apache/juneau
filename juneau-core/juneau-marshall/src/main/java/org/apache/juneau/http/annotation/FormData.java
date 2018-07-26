@@ -63,33 +63,12 @@ import org.apache.juneau.jsonschema.*;
  * 	}
  * </p>
  *
- * <p>
- * Any of the following types can be used for the parameter or POJO class:
- * <ol class='spaced-list'>
- * 	<li>
- * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
- * </ol>
- *
- * <p>
- * The special name <js>"*"</js> (or blank) can be used to represent all values.
- * When used, the data type must be a <code>Map</code> or bean.
- *
- * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Multiple values passed as a map.</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(<ja>@FormData</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
- * </p>
- * <p class='bcode w800'>
- * 	<jc>// Same, but name "*" is inferred.</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(<ja>@FormData</ja> Map&lt;String,Object&gt; map) {...}
- * </p>
- * <p class='bcode w800'>
- * 	<jc>// Multiple values passed as a bean.</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(<ja>@FormData</ja> MyBean bean) {...}
- * </p>
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.FormData">Overview &gt; juneau-rest-server &gt; @FormData</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
+ * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
+ * </ul>
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
  *
@@ -100,13 +79,6 @@ import org.apache.juneau.jsonschema.*;
  * <p>
  * The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
  * servlet to drain the body content.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.FormData">Overview &gt; juneau-rest-server &gt; @FormData</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
- * </ul>
  *
  * <h5 class='topic'>Client-side REST</h5>
  * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the

@@ -302,13 +302,13 @@
 		</ol>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations'>HTTP-Part Annotations</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations'>HTTP-Part Annotations</a></p>
 		<ol>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Body'>@Body</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Body'>@Body</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.FormData'>@FormData</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.HasFormData'>@HasFormData</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.HasFormData'>@HasFormData</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Query'>@Query</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.HasQuery'>@HasQuery</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.HasQuery'>@HasQuery</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Header'>@Header</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Path'>@Path</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.RequestBean'>RequestBean</a></p>
@@ -14083,12 +14083,11 @@ VariantAlsoNegotiates
 				maximum=<js>"100"</js>
 				minLength=1,
 				maxLength=10
-			)
+			),
 			minLength=1,
 			maxLength=10
-			)
 		)
-		Long[][] formEntry
+		Long[][] queryParameter
 	) {...}
 </p>
 <p>
@@ -14115,7 +14114,7 @@ VariantAlsoNegotiates
 						minLength=1,
 						maxLength=10
 					)
-				)
+				),
 				minLength=1,
 				maxLength=10
 			)
@@ -14195,10 +14194,9 @@ VariantAlsoNegotiates
 				maximum=<js>"100"</js>
 				minLength=1,
 				maxLength=10
-			)
+			),
 			minLength=1,
 			maxLength=10
-			)
 		)
 		Value&lt;Long[][]&gt; header
 	) {
@@ -14225,7 +14223,7 @@ VariantAlsoNegotiates
 						minLength=1,
 						maxLength=10
 					)
-				)
+				),
 				minLength=1,
 				maxLength=10
 			)
@@ -14240,10 +14238,10 @@ VariantAlsoNegotiates
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations' id='juneau-rest-server.HttpPartAnnotations'>7.9 - HTTP-Part Annotations</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations' id='juneau-rest-server.HttpPartAnnotations'>7.9 - HTTP-Part Annotations</a></h3>
 <div class='topic'><!-- START: 7.9 - juneau-rest-server.HttpPartAnnotations -->
 <p>
-	The annotations used for defining the schema for an HTTP part are:
+	The annotations used for defining the schema for request HTTP parts are:
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
@@ -14251,52 +14249,24 @@ VariantAlsoNegotiates
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+</ul>
+<p>
+	The annotations used for defining the schema for response HTTP parts are:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatuses ResponseStatues}
 </ul>
 <p>
 	The sub-annotations used in the annotation above are:
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Schema Schema}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#_default() _default()} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#_enum() _enum()} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#format() format()} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maximum() maximum()} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#maxLength() maxLength()} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minimum() minimum()} - Input validation.  Minimum numeric value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#minLength() minLength()} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#pattern() pattern()} - Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#pattern() properties()} - Schema of properties of this item.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#required() required()} - Whether this value is required.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
-	</ul>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Items Items}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#_default() _default()} - Default value if not present. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#_enum() _enum()} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#collectionFormat() collectionFormat()} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#format() format()} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maximum() maximum()} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#maxLength() maxLength()} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minimum() minimum()} - Input validation.  Minimum numeric value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#minLength() minLength()} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#pattern() pattern()} - Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
-	</ul>
 </ul>
 
 <h5 class='section'>Other Notes:</h5>
@@ -14311,7 +14281,7 @@ VariantAlsoNegotiates
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Body' id='juneau-rest-server.HttpPartAnnotations.Body'>7.9.1 - @Body</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Body' id='juneau-rest-server.HttpPartAnnotations.Body'>7.9.1 - @Body</a></h4>
 <div class='topic'><!-- START: 7.9.1 - juneau-rest-server.HttpPartAnnotations.Body -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
@@ -14319,10 +14289,15 @@ VariantAlsoNegotiates
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partSerializer() partSerializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()} - Serialized examples per media type.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partParser() partParser()} - Override the part parser.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required()} - Input validation.  Body must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartParser() usePartParser()} - Use the HTTP-Part parser for parsing body.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#value() value()} - Free-form Swagger JSON.
 	</ul>
 </ul>
 <p>
@@ -14338,87 +14313,117 @@ VariantAlsoNegotiates
 <p class='bpcode w800'>
 	<jc>// Defined on parameter</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {...}
+	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Defined on POJO class</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(Person person) {...}
+	<jk>public void</jk> addPet(Pet pet) {...}
 	
 	<ja>@Body</ja>
-	<jk>public class</jk> Person {...}
+	<jk>public class</jk> Pet {...}
 </p>
 <p>
-	This is functionally equivalent to the following code...
+	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(RestRequest req) {
-		Person person = req.getBody().asType(Person.<jk>class</jk>);
+	<jk>public void</jk> addPet(RestRequest req) {
+		Person person = req.getBody().asType(Pet.<jk>class</jk>);
 		...
 	}
 </p>
-
-<h5 class='figure'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// POJO convertible from string</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
-	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
-		<jk>return</jk> p;
-	}
-	
-	<jk>public static class</jk> MyPojo {
-		<jk>private</jk> String <jf>val</jf>;
-		<jk>public</jk> MyPojo(String val) {
-			<jk>this</jk>.<jf>val</jf> = val;
-		}
-		<jk>public</jk> String toString() {
-			<jk>return</jk> <jf>val</jf>;
-		}
-	}
+<p>
+	Any of the following types can be used for the parameter or POJO class (matched in the specified order):
 </p>
-<p class='bpcode w800'>
-	<jc>// Parsable bean</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBean"</js>)
-	<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean b) {
-		<jk>return</jk> b;
-	}
-	
-	<jk>public static class</jk> MyBean {
-		<jk>public</jk> String <jf>f1</jf>;
-	}
-</p>
-<p class='bpcode w800'>
-	<jc>// List of parsable beans</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBeanList"</js>)
-	<jk>public</jk> MyBeanList echo(<ja>@Body</ja> MyBeanList l) {
-		<jk>return</jk> l;
-	}
-	
-	<jk>public static class</jk> MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
-</p>
-<p class='bpcode w800'>
-	<jc>// POJO convertible from an input stream</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
-	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
-		<jk>return</jk> p;
-	}
-	
-	<jk>public static class</jk> MyPojo {
-		<jk>private</jk> String <jf>val</jf>;
-		<jk>public</jk> MyPojo(InputStream is) {
-			<jk>this</jk>.<jf>val</jf> = IOUtils.<jsm>read</jsm>(is);
-		}
-		<jk>public</jk> String toString() {
-			<jk>return</jk> <jf>val</jf>;
-		}
-	}
+<ol class='spaced-list'>
+	<li>
+		{@link java.io.Reader}
+		<br><ja>@Body</ja> annotation is optional.
+		<br><code>Content-Type</code> is ignored.
+	<li>
+		{@link java.io.InputStream}
+		<br><ja>@Body</ja> annotation is optional.
+		<br><code>Content-Type</code> is ignored.
+	<li>
+		Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
+		<br><code>Content-Type</code> is required to identify correct parser.
+	<li>
+		Objects convertible from {@link java.io.Reader} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(Reader in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
+		</ul>
+		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+	<li>
+		Objects convertible from {@link java.io.InputStream} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(InputStream in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
+		</ul>
+		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+	<li>
+		Objects convertible from {@link java.lang.String} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
+		</ul>
+		Note that this also includes all enums.
+</ol>
+<p>
+	If the {@link org.apache.juneau.http.annotation.Body#usePartParser usePartParser} flag is set on the annotation,
+	then the body can be parsed using the registered {@link org.apache.juneau.httppart.HttpPartParser} which by default
+	is {@link org.apache.juneau.httppart.OpenApiPartParser}.
 </p>
 <p>
-	This annotation is also used for supplying swagger information about the body of the request.
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<jc>// Body is a pipe-delimited list of comma-delimited lists of longs.</jc>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testBody"</js>)	
+	<jk>public void</jk> testBody(
+		<ja>@Body</ja>(
+			usePartParser=<jk>true</jk>,
+			schema=<ja>@Schema</ja>(
+				items=<ja>@Items</ja>(
+					collectionFormat=<js>"pipes"</js>,
+					items=<ja>@SubItems</ja>(
+						collectionFormat=<js>"csv"</js>,
+						type=<js>"integer"</js>, 
+						format=<js>"int64"</js>,
+						minimum=<js>"0"</js>,
+						maximum=<js>"100"</js>
+						minLength=1,
+						maxLength=10
+					)
+				),
+				minLength=1,
+				maxLength=10
+			)
+		)
+		Long[][] body
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types when using OpenAPI parsing, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@Body</ja> annotation is also used for supplying swagger information about the body of the request.
 	<br>This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
-<h5 class='section'>Examples:</h5>
+<h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Normal</jc>
 	<ja>@Body</ja>(
@@ -14429,6 +14434,7 @@ VariantAlsoNegotiates
 </p>
 <p class='bpcode w800'>
 	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
 	<ja>@Body</ja>({
 		<js>"description: 'Pet object to add to the store',"</js>,
 		<js>"required: true,"</js>,
@@ -14436,94 +14442,17 @@ VariantAlsoNegotiates
 		<js>"x-extra: 'extra field'"</js>
 	})
 </p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Localized</jc>
 	<ja>@Body</ja>(
-		description=<js>"$L{My.Localized.Description}"</js>,
-		required=<jk>true</jk>,
-		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+		description=<js>"$L{PetObjectDescription}"</js>
 	)
 </p>
-
-
-
-
-<p>
-	Several of the attributes on the <ja>@Body</ja> annotation are used for specifying additional information for the auto-generated Swagger documentation.
-	<br>These do not have any affects on the running code except for the generated Swagger:
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api()} - Free-form JSON swagger.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()} - Description
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()} - Map of examples per language type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The swagger schema ({@link org.apache.juneau.http.annotation.Schema Schema}).
-	</ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Schema Schema}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#$ref() $ref()} - Reference to schema definition.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#description() description()} - Description
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#examples() examples()} - Map of examples per language type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#externalDocs() externalDocs()} - External documentation.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#title() title()} - Title.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#value() value()} - Free-form JSON swagger.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#xml() xml()} - XML schema.
-	</ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Items Items}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#$ref() $ref()} - Reference to schema definition. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#value() value()} - Free-form JSON swagger.
-	</ul>
-</ul>
-
-
-
-
-		if (schema == null)
-			schema = HttpPartSchema.DEFAULT;
-
-		if (pm != null) {
-			Parser p = pm.getParser();
-			MediaType mediaType = pm.getMediaType();
-			req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
-			ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.isDebug() ? true : null, req.getContext().getResource()));
-			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
-				T o = session.parse(in, cm);
-				if (schema != null)
-					schema.validateOutput(o, cm.getBeanContext());
-				return o;
-			}
-		}
-
-		if (cm.hasReaderTransform())
-			return cm.getReaderTransform().transform(getReader());
-
-		if (cm.hasInputStreamTransform())
-			return cm.getInputStreamTransform().transform(getInputStream());
-
-		MediaType mt = getMediaType();
-		if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
-			if (partParser != null) {
-				String in = asString();
-				return partParser.createSession(req.getParserSessionArgs()).parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
-			} else if (cm.hasStringTransform()) {
-				return cm.getStringTransform().transform(asString());
-			}
-		}
-
-
-
-
-
-
-
-
-
-
-
 
 <h5 class='section'>Other Notes:</h5>
 <ul class='spaced-list'>
@@ -14535,13 +14464,8 @@ VariantAlsoNegotiates
 		<br>Values on methods override values on POJO classes.
 </ul>
 
-
-
-
-
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
@@ -14560,7 +14484,10 @@ VariantAlsoNegotiates
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default()} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum()} - Input validation.  Must match one of the values.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#api() api()} - Free-form Swagger JSON.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#example() example()} - Serialized example.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#format() format()} - The schema type format. 
@@ -14578,13 +14505,16 @@ VariantAlsoNegotiates
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#required() required()} - Input validation.  Form data entry must be present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#type() type()} - The schema type.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#value() value()} - Free-form Swagger JSON.
 	</ul>
 </ul>
-
+<p>
+	The most typical scenario is to simply use the <code>value</code> field to define form data parameter names:
+</p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> doPost(RestRequest req, RestResponse res,
+	<jk>public void</jk> doPost(
 		<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
 		<ja>@FormData</ja>(<js>"p2"</js>) String p2, 
 		<ja>@FormData</ja>(<js>"p3"</js>) UUID p3) {...}
@@ -14594,18 +14524,111 @@ VariantAlsoNegotiates
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> doPost(RestRequest req, RestResponse res) {
+	<jk>public void</jk> doPost(RestRequest req) {
 		RequestFormData fd = req.getFormData();
 		<jk>int</jk> p1 = fd.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
 		String p2 = fd.get(<js>"p2"</js>, String.<jk>class</jk>);
 		UUID p3 = fd.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	}
 </p>
+
 <p>
-	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	The special name <js>"*"</js> (or blank) can be used to represent all values.
+	When used, the data type must be a <code>Map</code> or bean.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a map.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> doPost(<ja>@FormData</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Same, but name "*" is inferred.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> doPost(<ja>@FormData</ja> Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a bean.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> doPost(<ja>@FormData</ja> MyBean bean) {...}
+</p>
+
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
 	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 </p>
+<p>
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testFormData"</js>)	
+	<jk>public void</jk> testFormData(
+		<ja>@FormData</ja>(
+			name=<js>"formDataParamName"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			),
+			minLength=1,
+			maxLength=10
+		)
+		Long[][] formDataParameter
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@FormData</ja> annotation is also used for supplying swagger information about the HTTP part.
+	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Normal</jc>
+	<ja>@FormData</ja>(
+		name=<js>"name"</js>,
+		description=<js>"Pet name"</js>,
+		required=<jk>true</jk>,
+		example=<js>"Doggie"</js>
+	)
+</p>
+<p class='bpcode w800'>
+	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
+	<ja>@FormData</ja>(
+		name=<js>"name"</js>,
+		api={
+			<js>"description: 'Pet name',"</js>,
+			<js>"required: true,"</js>,
+			<js>"example: 'Doggie',"</js>
+			<js>"x-extra: 'extra field'"</js>
+		}
+	)
+</p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@FormData</ja>(
+		description=<js>"$L{PetNameDescription}"</js>
+	)
+</p>
+
+<h5 class='section'>Notes:</h5>
 <ul class='doctree'>
 	<li class='warn'>
 			This annotation should not be combined with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or {@link org.apache.juneau.rest.RestRequest#getBody()} method
@@ -14616,8 +14639,6 @@ VariantAlsoNegotiates
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
@@ -14625,9 +14646,74 @@ VariantAlsoNegotiates
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasFormData' id='juneau-rest-server.HttpPartAnnotations.HasFormData'>7.9.3 - @HasFormData</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasFormData' id='juneau-rest-server.HttpPartAnnotations.HasFormData'>7.9.3 - @HasFormData</a></h4>
 <div class='topic'><!-- START: 7.9.3 - juneau-rest-server.HttpPartAnnotations.HasFormData -->
-TODO(7.2.0)
+<p>
+	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
+</ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {...}
+</p>
+<p>
+	This is functionally equivalent to the following code:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
+	<jk>public void</jk> doPost(RestRequest req) {
+		<jk>boolean</jk> p1 = req.hasFormData(<js>"p1"</js>);
+		...
+	}
+</p>
+<p>
+	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
+</p>
+<p>
+	The following table shows the behavioral differences between <ja>@HasFormData</ja> and <ja>@FormData</ja>:
+</p>
+<table class='styled w400'>
+	<tr>
+		<th><code>Body content</code></th>
+		<th><code><ja>@HasFormData</ja>(<js>"a"</js>)</code></th>
+		<th><code><ja>@FormData</ja>(<js>"a"</js>)</code></th>
+	</tr>
+	<tr>
+		<td><code>a=foo</code></td>
+		<td><jk>true</jk></td>
+		<td><js>"foo"</js></td>
+	</tr>
+	<tr>
+		<td><code>a=</code></td>
+		<td><jk>true</jk></td>
+		<td><js>""</js></td>
+	</tr>
+	<tr>
+		<td><code>a</code></td>
+		<td><jk>true</jk></td>
+		<td><jk>null</jk></td>
+	</tr>
+	<tr>
+		<td><code>b=foo</code></td>
+		<td><jk>false</jk></td>
+		<td><jk>null</jk></td>
+	</tr>
+</table>
+ 
+<h5 class='topic'>Important note concerning FORM posts</h5>
+<p>
+	This annotation should not be combined with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or {@link org.apache.juneau.rest.RestRequest#getBody()} method
+	for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet API to
+	parse the body content as key-value pairs, resulting in empty content.
+</p>
+<p>
+	The {@link org.apache.juneau.http.annotation.HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
+	without triggering the servlet to drain the body content.
+</p>
 </div><!-- END: 7.9.3 - juneau-rest-server.HttpPartAnnotations.HasFormData -->
 
 <!-- ==================================================================================================== -->
@@ -14644,7 +14730,10 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default()} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum()} - Input validation.  Must match one of the values.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#api() api()} - Free-form Swagger JSON.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#example() example()} - Serialized example.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#format() format()} - The schema type format. 
@@ -14662,6 +14751,7 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#required() required()} - Input validation.  Query parameter must be present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#type() type()} - The schema type.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#value() value()} - Free-form Swagger JSON.
 	</ul>
 </ul>
 
@@ -14671,10 +14761,13 @@ TODO(7.2.0)
 	<br>Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
 	{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
 </p>
+<p>
+	The most typical scenario is to simply use the <code>value</code> field to define query parameter names:
+</p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(RestRequest req, RestResponse res,
+	<jk>public void</jk> doGet(
 		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> p1, 
 		<ja>@Query</ja>(<js>"p2"</js>) String p2, 
 		<ja>@Query</ja>(<js>"p3"</js>) UUID p3) {...}
@@ -14684,22 +14777,114 @@ TODO(7.2.0)
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(RestRequest req, RestResponse res) {
+	<jk>public void</jk> doGet(RestRequest req) {
 		RequestQuery q = req.getQuery();
 		<jk>int</jk> p1 = q.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
 		String p2 = q.get(<js>"p2"</js>, String.<jk>class</jk>);
 		UUID p3 = q.get(<js>"p3"</js>, UUID.<jk>class</jk>);
 	}
 </p>
+
+
 <p>
-	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	The special name <js>"*"</js> (or blank) can be used to represent all values.
+	When used, the data type must be a <code>Map</code> or bean.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a map.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Same, but name "*" is inferred.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a bean.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Query</ja> MyBean bean) {...}
+</p>
+
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
 	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 </p>
+<p>
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testQuery"</js>)	
+	<jk>public void</jk> testQuery(
+		<ja>@Query</ja>(
+			name=<js>"queryParamName"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			),
+			minLength=1,
+			maxLength=10
+		)
+		Long[][] queryParameter
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@Query</ja> annotation is also used for supplying swagger information about the HTTP part.
+	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Query</ja>(
+		name=<js>"name"</js>,
+		description=<js>"Pet name"</js>,
+		required=<jk>true</jk>,
+		example=<js>"Doggie"</js>
+	)
+</p>
+<p class='bpcode w800'>
+	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
+	<ja>@Query</ja>(
+		name=<js>"name"</js>,
+		api={
+			<js>"description: 'Pet name',"</js>,
+			<js>"required: true,"</js>,
+			<js>"example: 'Doggie',"</js>
+			<js>"x-extra: 'extra field'"</js>
+		}
+	)
+</p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Query</ja>(
+		description=<js>"$L{PetNameDescription}"</js>
+	)
+</p>
+
+
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
@@ -14707,9 +14892,69 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasQuery' id='juneau-rest-server.HttpPartAnnotations.HasQuery'>7.9.5 - @HasQuery</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasQuery' id='juneau-rest-server.HttpPartAnnotations.HasQuery'>7.9.5 - @HasQuery</a></h4>
 <div class='topic'><!-- START: 7.9.5 - juneau-rest-server.HttpPartAnnotations.HasQuery -->
-TODO(7.2.0)
+<p>
+	Identical to {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
+	URL-encoded form posts.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+</ul>
+<p>
+	Unlike {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
+	of URL-encoded form posts.
+	Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
+	{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
+ </p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {...}
+</p>
+<p>
+	This is functionally equivalent to the following code:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(RestRequest req) {
+		<jk>boolean</jk> p1 = req.hasQuery(<js>"p1"</js>);
+		...
+	}
+</p>
+<p>
+	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
+</p>
+<p>
+	The following table shows the behavioral differences between <ja>@HasQuery</ja> and <ja>@Query</ja>:
+</p>
+<table class='styled w400'>
+	<tr>
+		<th><code>Query content</code></th>
+		<th><code><ja>@HasQuery</ja>(<js>"a"</js>)</code></th>
+		<th><code><ja>@Query</ja>(<js>"a"</js>)</code></th>
+	</tr>
+	<tr>
+		<td><code>?a=foo</code></td>
+		<td><jk>true</jk></td>
+		<td><js>"foo"</js></td>
+	</tr>
+	<tr>
+		<td><code>?a=</code></td>
+		<td><jk>true</jk></td>
+		<td><js>""</js></td>
+	</tr>
+	<tr>
+		<td><code>?a</code></td>
+		<td><jk>true</jk></td>
+		<td><jk>null</jk></td>
+	</tr>
+	<tr>
+		<td><code>?b=foo</code></td>
+		<td><jk>false</jk></td>
+		<td><jk>null</jk></td>
+	</tr>
+</table>
 </div><!-- END: 7.9.5 - juneau-rest-server.HttpPartAnnotations.HasQuery -->
 
 <!-- ==================================================================================================== -->
@@ -14725,7 +14970,10 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default()}  - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum()} - Input validation.  Must match one of the values.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#api() api()} - Free-form Swagger JSON.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#example() example()} - Serialized example.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#format() format()} - The schema type format. 
@@ -14743,31 +14991,126 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#required() required()} - Input validation.  Header must be present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#type() type()} - The schema type.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#value() value()} - Free-form Swagger JSON.
 	</ul>
 </ul>
+<p>
+	The most typical scenario is to simply use the <code>value</code> field to define header parameter names:
+</p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
+	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
+	<jk>public void</jk> doGet(RestRequest req) {
 		RequestHeaders h = req.getHeaders();
 		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
 	}
 </p>
+
 <p>
-	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	The special name <js>"*"</js> (or blank) can be used to represent all values.
+	When used, the data type must be a <code>Map</code> or bean.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a map.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Same, but name "*" is inferred.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Header</ja> Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a bean.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Header</ja> MyBean bean) {...}
+</p>
+
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
 	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 </p>
+<p>
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testHeader"</js>)	
+	<jk>public void</jk> testHeader(
+		<ja>@Header</ja>(
+			name=<js>"My-Header"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			),
+			minLength=1,
+			maxLength=10
+		)
+		Long[][] myHeader
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@Header</ja> annotation is also used for supplying swagger information about the HTTP part.
+	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Header</ja>(
+		name=<js>"Pet-Name"</js>,
+		description=<js>"Pet name"</js>,
+		required=<jk>true</jk>,
+		example=<js>"Doggie"</js>
+	)
+</p>
+<p class='bpcode w800'>
+	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
+	<ja>@Header</ja>(
+		name=<js>"Pet-Name"</js>,
+		api={
+			<js>"description: 'Pet name',"</js>,
+			<js>"required: true,"</js>,
+			<js>"example: 'Doggie',"</js>
+			<js>"x-extra: 'extra field'"</js>
+		}
+	)
+</p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Header</ja>(
+		description=<js>"$L{PetNameDescription}"</js>
+	)
+</p>
+
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
@@ -14778,13 +15121,17 @@ TODO(7.2.0)
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Path' id='juneau-rest-server.HttpPartAnnotations.Path'>7.9.7 - @Path</a></h4>
 <div class='topic'><!-- START: 7.9.7 - juneau-rest-server.HttpPartAnnotations.Path -->
 <p>
-	The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
+	The {@link org.apache.juneau.http.annotation.Path @Path} annotation is used to retrieve request path parameters.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum()} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#api() api()} - Free-form Swagger JSON.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#example() example()} - Serialized example.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#format() format()} - The schema type format. 
@@ -14798,33 +15145,139 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#parser() parser()} - Override the part parser.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#pattern() pattern()} - Input validation.  Must match regular expression.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#type() type()} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#value() value()} - Free-form Swagger JSON.
 	</ul>
 </ul>
-
+<p>
+	The most typical scenario is to simply use the <code>value</code> field to define path parameter names:
+</p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	<jk>public void</jk> doGet(
+			<ja>@Path</ja>(<js>"foo"</js>) String foo,
+			<ja>@Path</ja>(<js>"bar"</js>) <jk>int</jk> bar,
+			<ja>@Path</ja>(<js>"baz"</js>) UUID baz,
+			<ja>@Path</ja>(<js>"/*"</js>) String remainder 
+		) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
-		RequestHeaders h = req.getHeaders();
-		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	<jk>public void</jk> doGet(RestRequest req) {
+		RequestPath p = req.getPathMatch();
+		String foo = p.getString(<js>"foo"</js>);
+		<jk>int</jk> bar = p.get(<js>"bar"</js>, <jk>int</jk>.<jk>class</jk>);
+		UUID baz = p.get(<js>"baz"</js>, UUID.<jk>class</jk>);
+		String remainder = p.getRemainder();
 	}
 </p>
 <p>
-	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	Note that the path variable name <js>"/*"</js> can be used to represent the remainder of the path match.
+</p>
+
+<p>
+	The special name <js>"*"</js> (or blank) can be used to represent all values.
+	When used, the data type must be a <code>Map</code> or bean.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a map.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
+	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Same, but name "*" is inferred.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
+	<jk>public void</jk> doGet(<ja>@Path</ja> Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a bean.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{a}/{b}/{c}/*"</js>)
+	<jk>public void</jk> doGet(<ja>@Path</ja> MyBean bean) {...}
+</p>
+
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
 	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 </p>
+
+<p>
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testPath/{pathParam}"</js>)	
+	<jk>public void</jk> testPath(
+		<ja>@Path</ja>(
+			name=<js>"pathParam"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			),
+			minLength=1,
+			maxLength=10
+		)
+		Long[][] pathParameter
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@Path</ja> annotation is also used for supplying swagger information about the HTTP part.
+	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Path</ja>(
+		name=<js>"name"</js>,
+		description=<js>"Pet name"</js>,
+		required=<jk>true</jk>,
+		example=<js>"Doggie"</js>
+	)
+</p>
+<p class='bpcode w800'>
+	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
+	<ja>@Path</ja>(
+		name=<js>"name"</js>,
+		api={
+			<js>"description: 'Pet name',"</js>,
+			<js>"required: true,"</js>,
+			<js>"example: 'Doggie',"</js>
+			<js>"x-extra: 'extra field'"</js>
+		}
+	)
+</p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Path</ja>(
+		description=<js>"$L{PetNameDescription}"</js>
+	)
+</p>
+
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
+	<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
 </div><!-- END: 7.9.7 - juneau-rest-server.HttpPartAnnotations.Path -->
@@ -29504,6 +29957,8 @@ TODO(7.2.0)
 		<br>Use {@link org.apache.juneau.rest.client.RestCall#run()}.
 	<li>
 		<code>RestCall.input(Object)</code> method renamed to {@link org.apache.juneau.rest.client.RestCall#body(Object)} to match OpenAPI terminology.
+	<li>
+		Made constructors on <code>RestClient</code> and <code>RestClientBuilder</code> protected so that they can be subclassed.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-microservice</h5>
@@ -29582,6 +30037,8 @@ TODO(7.2.0)
 	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
 	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
 			</p>
+		<li>
+			Upgraded to Jetty 9.4.11.
 </ul>
 </div><!-- END: 7.2.0 -->
 

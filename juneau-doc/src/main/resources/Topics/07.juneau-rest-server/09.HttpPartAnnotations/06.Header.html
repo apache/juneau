@@ -24,7 +24,10 @@
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default()}  - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum()} - Input validation.  Must match one of the values.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#api() api()} - Free-form Swagger JSON.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#example() example()} - Serialized example.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#format() format()} - The schema type format. 
@@ -42,31 +45,126 @@
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#required() required()} - Input validation.  Header must be present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#type() type()} - The schema type.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#value() value()} - Free-form Swagger JSON.
 	</ul>
 </ul>
+<p>
+	The most typical scenario is to simply use the <code>value</code> field to define header parameter names:
+</p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doGet(RestRequest req, RestResponse res, <ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
+	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID etag) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
-	<jk>public void</jk> doPostPerson(RestRequest req, RestResponse res) {
+	<jk>public void</jk> doGet(RestRequest req) {
 		RequestHeaders h = req.getHeaders();
 		UUID etag = h.get(<js>"ETag"</js>, UUID.<jk>class</jk>);
 	}
 </p>
+
 <p>
-	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser} is used to convert strings
+	The special name <js>"*"</js> (or blank) can be used to represent all values.
+	When used, the data type must be a <code>Map</code> or bean.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a map.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Same, but name "*" is inferred.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Header</ja> Map&lt;String,Object&gt; map) {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Multiple values passed as a bean.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@Header</ja> MyBean bean) {...}
+</p>
+
+<p>
+	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
 	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 </p>
+<p>
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testHeader"</js>)	
+	<jk>public void</jk> testHeader(
+		<ja>@Header</ja>(
+			name=<js>"My-Header"</js>,
+			collectionFormat=<js>"pipes"</js>,
+			items=<ja>@SubItems</ja>(
+				collectionFormat=<js>"csv"</js>,
+				type=<js>"integer"</js>, 
+				format=<js>"int64"</js>,
+				minimum=<js>"0"</js>,
+				maximum=<js>"100"</js>
+				minLength=1,
+				maxLength=10
+			),
+			minLength=1,
+			maxLength=10
+		)
+		Long[][] myHeader
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@Header</ja> annotation is also used for supplying swagger information about the HTTP part.
+	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Header</ja>(
+		name=<js>"Pet-Name"</js>,
+		description=<js>"Pet name"</js>,
+		required=<jk>true</jk>,
+		example=<js>"Doggie"</js>
+	)
+</p>
+<p class='bpcode w800'>
+	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
+	<ja>@Header</ja>(
+		name=<js>"Pet-Name"</js>,
+		api={
+			<js>"description: 'Pet name',"</js>,
+			<js>"required: true,"</js>,
+			<js>"example: 'Doggie',"</js>
+			<js>"x-extra: 'extra field'"</js>
+		}
+	)
+</p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Header</ja>(
+		description=<js>"$L{PetNameDescription}"</js>
+	)
+</p>
+
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>

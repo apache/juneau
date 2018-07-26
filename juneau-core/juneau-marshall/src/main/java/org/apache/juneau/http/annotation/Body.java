@@ -69,42 +69,6 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <p>
- * Any of the following types can be used for the parameter or POJO class (matched in the specified order):
- * <ol class='spaced-list'>
- * 	<li>
- * 		{@link Reader}
- * 		<br><ja>@Body</ja> annotation is optional.
- * 		<br><code>Content-Type</code> is ignored.
- * 	<li>
- * 		{@link InputStream}
- * 		<br><ja>@Body</ja> annotation is optional.
- * 		<br><code>Content-Type</code> is ignored.
- * 	<li>
- * 		Any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
- * 		<br><code>Content-Type</code> is required to identify correct parser.
- * 	<li>
- * 		Objects convertible from {@link Reader} by having one of the following non-deprecated methods:
- * 		<ul>
- * 			<li><code><jk>public</jk> T(Reader in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
- * 		</ul>
- * 		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
- * 	<li>
- * 		Objects convertible from {@link InputStream} by having one of the following non-deprecated methods:
- * 		<ul>
- * 			<li><code><jk>public</jk> T(InputStream in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
- * 			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
- * 		</ul>
- * 		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
- * 	<li>
- * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
- * 		<br>
- * 		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
- * </ol>
- *
- * <p>
  * Also used to populate the auto-generated Swagger documentation.
  *
  * <h5 class='section'>Examples:</h5>

@@ -13,6 +13,66 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @HasQuery
+{new} @HasQuery
 
-TODO(7.2.0)
+<p>
+	Identical to {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
+	URL-encoded form posts.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+</ul>
+<p>
+	Unlike {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
+	of URL-encoded form posts.
+	Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
+	{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
+ </p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> p1) {...}
+</p>
+<p>
+	This is functionally equivalent to the following code:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public void</jk> doGet(RestRequest req) {
+		<jk>boolean</jk> p1 = req.hasQuery(<js>"p1"</js>);
+		...
+	}
+</p>
+<p>
+	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
+</p>
+<p>
+	The following table shows the behavioral differences between <ja>@HasQuery</ja> and <ja>@Query</ja>:
+</p>
+<table class='styled w400'>
+	<tr>
+		<th><code>Query content</code></th>
+		<th><code><ja>@HasQuery</ja>(<js>"a"</js>)</code></th>
+		<th><code><ja>@Query</ja>(<js>"a"</js>)</code></th>
+	</tr>
+	<tr>
+		<td><code>?a=foo</code></td>
+		<td><jk>true</jk></td>
+		<td><js>"foo"</js></td>
+	</tr>
+	<tr>
+		<td><code>?a=</code></td>
+		<td><jk>true</jk></td>
+		<td><js>""</js></td>
+	</tr>
+	<tr>
+		<td><code>?a</code></td>
+		<td><jk>true</jk></td>
+		<td><jk>null</jk></td>
+	</tr>
+	<tr>
+		<td><code>?b=foo</code></td>
+		<td><jk>false</jk></td>
+		<td><jk>null</jk></td>
+	</tr>
+</table>

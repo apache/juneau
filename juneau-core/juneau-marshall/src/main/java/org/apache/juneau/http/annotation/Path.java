@@ -52,34 +52,6 @@ import org.apache.juneau.jsonschema.*;
  * </p>
  *
  * <p>
- * Any of the following types can be used for the parameter or POJO class:
- * <ol class='spaced-list'>
- * 	<li>
- * 		Objects convertible from data types inferred from Swagger schema annotations using the registered {@link OpenApiPartParser}.
- * </ol>
- *
- * <p>
- * The special name <js>"*"</js> (or blank) can be used to represent all values.
- * When used, the data type must be a <code>Map</code> or bean.
- *
- * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Multiple values passed as a map.</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(<ja>@Path</ja>(<js>"*"</js>) Map&lt;String,Object&gt; map) {...}
- * </p>
- * <p class='bcode w800'>
- * 	<jc>// Same, but name "*" is inferred.</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(<ja>@Path</ja> Map&lt;String,Object&gt; map) {...}
- * </p>
- * <p class='bcode w800'>
- * 	<jc>// Multiple values passed as a bean.</jc>
- * 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
- * 	<jk>public void</jk> doPost(<ja>@Path</ja> MyBean bean) {...}
- * </p>
- *
- * <p>
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
  * <h5 class='section'>See Also:</h5>

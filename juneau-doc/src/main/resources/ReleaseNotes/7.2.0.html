@@ -414,6 +414,8 @@
 		<br>Use {@link org.apache.juneau.rest.client.RestCall#run()}.
 	<li>
 		<code>RestCall.input(Object)</code> method renamed to {@link org.apache.juneau.rest.client.RestCall#body(Object)} to match OpenAPI terminology.
+	<li>
+		Made constructors on <code>RestClient</code> and <code>RestClientBuilder</code> protected so that they can be subclassed.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-microservice</h5>
@@ -492,4 +494,6 @@
 	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
 	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
 			</p>
+		<li>
+			Upgraded to Jetty 9.4.11.
 </ul>

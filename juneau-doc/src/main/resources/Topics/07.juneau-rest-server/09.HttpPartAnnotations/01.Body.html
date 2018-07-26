@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Body
+{new} @Body
 
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
@@ -21,10 +21,15 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partSerializer() partSerializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()} - Serialized examples per media type.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partParser() partParser()} - Override the part parser.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required()} - Input validation.  Body must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartParser() usePartParser()} - Use the HTTP-Part parser for parsing body.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#value() value()} - Free-form Swagger JSON.
 	</ul>
 </ul>
 <p>
@@ -40,87 +45,117 @@
 <p class='bpcode w800'>
 	<jc>// Defined on parameter</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(<ja>@Body</ja> Person person) {...}
+	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
 </p>
 <p class='bpcode w800'>
 	<jc>// Defined on POJO class</jc>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(Person person) {...}
+	<jk>public void</jk> addPet(Pet pet) {...}
 	
 	<ja>@Body</ja>
-	<jk>public class</jk> Person {...}
+	<jk>public class</jk> Pet {...}
 </p>
 <p>
-	This is functionally equivalent to the following code...
+	This is functionally equivalent to the following code:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>POST</jsf>)
-	<jk>public void</jk> addPerson(RestRequest req) {
-		Person person = req.getBody().asType(Person.<jk>class</jk>);
+	<jk>public void</jk> addPet(RestRequest req) {
+		Person person = req.getBody().asType(Pet.<jk>class</jk>);
 		...
 	}
 </p>
-
-<h5 class='figure'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// POJO convertible from string</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
-	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
-		<jk>return</jk> p;
-	}
-	
-	<jk>public static class</jk> MyPojo {
-		<jk>private</jk> String <jf>val</jf>;
-		<jk>public</jk> MyPojo(String val) {
-			<jk>this</jk>.<jf>val</jf> = val;
-		}
-		<jk>public</jk> String toString() {
-			<jk>return</jk> <jf>val</jf>;
-		}
-	}
+<p>
+	Any of the following types can be used for the parameter or POJO class (matched in the specified order):
 </p>
-<p class='bpcode w800'>
-	<jc>// Parsable bean</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBean"</js>)
-	<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean b) {
-		<jk>return</jk> b;
-	}
-	
-	<jk>public static class</jk> MyBean {
-		<jk>public</jk> String <jf>f1</jf>;
-	}
-</p>
-<p class='bpcode w800'>
-	<jc>// List of parsable beans</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoBeanList"</js>)
-	<jk>public</jk> MyBeanList echo(<ja>@Body</ja> MyBeanList l) {
-		<jk>return</jk> l;
-	}
-	
-	<jk>public static class</jk> MyBeanList <jk>extends</jk> LinkedList&lt;MyBean&gt; {}
-</p>
-<p class='bpcode w800'>
-	<jc>// POJO convertible from an input stream</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/echoPojo"</js>)
-	<jk>public</jk> MyPojo echo(<ja>@Body</ja> MyPojo p) {
-		<jk>return</jk> p;
-	}
-	
-	<jk>public static class</jk> MyPojo {
-		<jk>private</jk> String <jf>val</jf>;
-		<jk>public</jk> MyPojo(InputStream is) {
-			<jk>this</jk>.<jf>val</jf> = IOUtils.<jsm>read</jsm>(is);
-		}
-		<jk>public</jk> String toString() {
-			<jk>return</jk> <jf>val</jf>;
-		}
-	}
+<ol class='spaced-list'>
+	<li>
+		{@link java.io.Reader}
+		<br><ja>@Body</ja> annotation is optional.
+		<br><code>Content-Type</code> is ignored.
+	<li>
+		{@link java.io.InputStream}
+		<br><ja>@Body</ja> annotation is optional.
+		<br><code>Content-Type</code> is ignored.
+	<li>
+		Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
+		<br><code>Content-Type</code> is required to identify correct parser.
+	<li>
+		Objects convertible from {@link java.io.Reader} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(Reader in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
+		</ul>
+		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+	<li>
+		Objects convertible from {@link java.io.InputStream} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(InputStream in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
+		</ul>
+		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+	<li>
+		Objects convertible from {@link java.lang.String} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
+		</ul>
+		Note that this also includes all enums.
+</ol>
+<p>
+	If the {@link org.apache.juneau.http.annotation.Body#usePartParser usePartParser} flag is set on the annotation,
+	then the body can be parsed using the registered {@link org.apache.juneau.httppart.HttpPartParser} which by default
+	is {@link org.apache.juneau.httppart.OpenApiPartParser}.
 </p>
 <p>
-	This annotation is also used for supplying swagger information about the body of the request.
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<jc>// Body is a pipe-delimited list of comma-delimited lists of longs.</jc>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testBody"</js>)	
+	<jk>public void</jk> testBody(
+		<ja>@Body</ja>(
+			usePartParser=<jk>true</jk>,
+			schema=<ja>@Schema</ja>(
+				items=<ja>@Items</ja>(
+					collectionFormat=<js>"pipes"</js>,
+					items=<ja>@SubItems</ja>(
+						collectionFormat=<js>"csv"</js>,
+						type=<js>"integer"</js>, 
+						format=<js>"int64"</js>,
+						minimum=<js>"0"</js>,
+						maximum=<js>"100"</js>
+						minLength=1,
+						maxLength=10
+					)
+				),
+				minLength=1,
+				maxLength=10
+			)
+		)
+		Long[][] body
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types when using OpenAPI parsing, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@Body</ja> annotation is also used for supplying swagger information about the body of the request.
 	<br>This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
-<h5 class='section'>Examples:</h5>
+<h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Normal</jc>
 	<ja>@Body</ja>(
@@ -131,6 +166,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
 	<ja>@Body</ja>({
 		<js>"description: 'Pet object to add to the store',"</js>,
 		<js>"required: true,"</js>,
@@ -138,94 +174,17 @@
 		<js>"x-extra: 'extra field'"</js>
 	})
 </p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Localized</jc>
 	<ja>@Body</ja>(
-		description=<js>"$L{My.Localized.Description}"</js>,
-		required=<jk>true</jk>,
-		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+		description=<js>"$L{PetObjectDescription}"</js>
 	)
 </p>
-
-
-
-
-<p>
-	Several of the attributes on the <ja>@Body</ja> annotation are used for specifying additional information for the auto-generated Swagger documentation.
-	<br>These do not have any affects on the running code except for the generated Swagger:
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api()} - Free-form JSON swagger.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()} - Description
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()} - Map of examples per language type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - The swagger schema ({@link org.apache.juneau.http.annotation.Schema Schema}).
-	</ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Schema Schema}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#$ref() $ref()} - Reference to schema definition.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#description() description()} - Description
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#example() example()} - Defines a serialized POJO example (in JSON format) used to populate examples per language type. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#examples() examples()} - Map of examples per language type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#externalDocs() externalDocs()} - External documentation.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#title() title()} - Title.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#value() value()} - Free-form JSON swagger.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Schema#xml() xml()} - XML schema.
-	</ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Items Items}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#$ref() $ref()} - Reference to schema definition. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Items#value() value()} - Free-form JSON swagger.
-	</ul>
-</ul>
-
-
-
-
-		if (schema == null)
-			schema = HttpPartSchema.DEFAULT;
-
-		if (pm != null) {
-			Parser p = pm.getParser();
-			MediaType mediaType = pm.getMediaType();
-			req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
-			ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.isDebug() ? true : null, req.getContext().getResource()));
-			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
-				T o = session.parse(in, cm);
-				if (schema != null)
-					schema.validateOutput(o, cm.getBeanContext());
-				return o;
-			}
-		}
-
-		if (cm.hasReaderTransform())
-			return cm.getReaderTransform().transform(getReader());
-
-		if (cm.hasInputStreamTransform())
-			return cm.getInputStreamTransform().transform(getInputStream());
-
-		MediaType mt = getMediaType();
-		if ((isEmpty(mt) || mt.toString().startsWith("text/plain"))) {
-			if (partParser != null) {
-				String in = asString();
-				return partParser.createSession(req.getParserSessionArgs()).parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
-			} else if (cm.hasStringTransform()) {
-				return cm.getStringTransform().transform(asString());
-			}
-		}
-
-
-
-
-
-
-
-
-
-
-
 
 <h5 class='section'>Other Notes:</h5>
 <ul class='spaced-list'>
@@ -237,13 +196,8 @@
 		<br>Values on methods override values on POJO classes.
 </ul>
 
-
-
-
-
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a>
 </ul>
