@@ -764,26 +764,6 @@ public class HttpPartSchema {
 	}
 
 	/**
-	 * Returns the <code>default</code> field of this schema.
-	 *
-	 * @return The default value for this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#_default(String)
-	 */
-	public String getDefault() {
-		return _default;
-	}
-
-	/**
-	 * Returns the <code>collectionFormat</code> field of this schema.
-	 *
-	 * @return The <code>collectionFormat</code> field of this schema, or <jk>null</jk> if not specified.
-	 * @see HttpPartSchemaBuilder#collectionFormat(String)
-	 */
-	public CollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
-
-	/**
 	 * Returns the <code>type</code> field of this schema.
 	 *
 	 * @param cm
@@ -810,12 +790,57 @@ public class HttpPartSchema {
 	}
 
 	/**
+	 * Returns the <code>default</code> field of this schema.
+	 *
+	 * @return The default value for this schema, or <jk>null</jk> if not specified.
+	 * @see HttpPartSchemaBuilder#_default(String)
+	 */
+	public String getDefault() {
+		return _default;
+	}
+
+	/**
+	 * Returns the <code>collectionFormat</code> field of this schema.
+	 *
+	 * @return The <code>collectionFormat</code> field of this schema, or <jk>null</jk> if not specified.
+	 * @see HttpPartSchemaBuilder#collectionFormat(String)
+	 */
+	public CollectionFormat getCollectionFormat() {
+		return collectionFormat;
+	}
+
+	/**
 	 * Returns the <code>format</code> field of this schema.
 	 *
+	 * @see HttpPartSchemaBuilder#format(String)
+	 * @return The <code>format</code> field of this schema, or <jk>null</jk> if not specified.
+	 */
+	public Format getFormat() {
+		return format;
+	}
+
+	/**
+	 * Returns the <code>format</code> field of this schema.
+	 *
+	 * @param cm
+	 * 	The class meta of the object.
+	 * 	<br>Used to auto-detect the format if the format was not specified.
 	 * @return The <code>format</code> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchemaBuilder#format(String)
 	 */
-	public Format getFormat() {
+	public Format getFormat(ClassMeta<?> cm) {
+		if (format != Format.NO_FORMAT)
+			return format;
+		if (cm.isNumber()) {
+			if (cm.isDecimal()) {
+				if (cm.isDouble())
+					return Format.DOUBLE;
+				return Format.FLOAT;
+			}
+			if (cm.isLong())
+				return Format.INT64;
+			return Format.INT32;
+		}
 		return format;
 	}
 

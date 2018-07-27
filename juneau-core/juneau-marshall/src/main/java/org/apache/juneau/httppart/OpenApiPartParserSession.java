@@ -84,7 +84,7 @@ public class OpenApiPartParserSession extends UonPartParserSession {
 			in = schema.getDefault();
 		} else {
 			HttpPartSchema.Type t = schema.getType(type);
-			HttpPartSchema.Format f = schema.getFormat();
+			HttpPartSchema.Format f = schema.getFormat(type);
 
 			if (t == STRING) {
 				if (type.isObject()) {

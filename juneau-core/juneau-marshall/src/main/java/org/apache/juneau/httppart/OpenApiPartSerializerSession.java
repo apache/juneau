@@ -125,7 +125,7 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 		if (type == null)
 			type = object();
 		HttpPartSchema.Type t = schema.getType(type);
-		HttpPartSchema.Format f = schema.getFormat();
+		HttpPartSchema.Format f = schema.getFormat(type);
 		HttpPartSchema.CollectionFormat cf = schema.getCollectionFormat();
 
 		String out = null;
@@ -286,8 +286,9 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 			return null;
 		if (s == null)
 			s = DEFAULT_SCHEMA;
-		HttpPartSchema.Type t = s.getType();
-		HttpPartSchema.Format f = s.getFormat();
+		ClassMeta cm = getClassMetaForObject(o);
+		HttpPartSchema.Type t = s.getType(cm);
+		HttpPartSchema.Format f = s.getFormat(cm);
 		HttpPartSchema.CollectionFormat cf = s.getCollectionFormat();
 
 		if (t == STRING) {
