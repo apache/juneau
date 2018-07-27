@@ -1,0 +1,78 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Marshalls
+
+<p>
+	{@link org.apache.juneau.marshall.Marshall Marshalls} are simple pairings of a {@link org.apache.juneau.serializer.Serializer}
+	and {@link org.apache.juneau.parser.Parser} with convenience methods for serializing and parsing POJOs.
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.marshall.Marshall#read(Object,Class) read(Object,Class)}
+		<li class='jm'>{@link org.apache.juneau.marshall.Marshall#read(Object,Type,Type...) read(Object,Type,Type...)}
+		<li class='jm'>{@link org.apache.juneau.marshall.Marshall#write(Object) write(Object)} 
+		<li class='jm'>{@link org.apache.juneau.marshall.Marshall#write(Object,Object) write(Object,Object)}
+		<li class='jm'>{@link org.apache.juneau.marshall.Marshall#toString(Object) toString(Object)}
+		<li class='jm'>{@link org.apache.juneau.marshall.Marshall#println(Object) println(Object)}
+	</ul>
+</ul>
+<p>
+	Marshalls are often cleaner to use on-the-fly since they have simplified names.
+	<br>The following shows the {@link org.apache.juneau.marshall.Json} marshall in action:
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Using instance.</jc>
+	Json json = <jk>new</jk> Json();
+	MyPojo myPojo = json.read(string, MyPojo.<jk>class</jk>);
+	String string = json.write(myPojo);
+</p>
+<p class='bpcode w800'>
+	<jc>// Using DEFAULT instance.</jc>
+	MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
+	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
+</p>
+<p>
+	Marshalls exist for all supported languages.
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
+	<ul>
+		<li class='jac'>{@link org.apache.juneau.marshall.CharMarshall}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.marshall.Html}
+			<li class='jc'>{@link org.apache.juneau.marshall.Json}
+			<li class='jc'>{@link org.apache.juneau.marshall.PlainText}
+			<li class='jc'>{@link org.apache.juneau.marshall.SimpleJson}
+			<li class='jc'>{@link org.apache.juneau.marshall.Uon}
+			<li class='jc'>{@link org.apache.juneau.marshall.UrlEncoding}
+			<li class='jc'>{@link org.apache.juneau.marshall.Xml}
+			<li class='jc'>{@link org.apache.juneau.marshall.N3}
+			<li class='jc'>{@link org.apache.juneau.marshall.NTriple}
+			<li class='jc'>{@link org.apache.juneau.marshall.RdfXml}
+			<li class='jc'>{@link org.apache.juneau.marshall.RdfXmlAbbrev}
+			<li class='jc'>{@link org.apache.juneau.marshall.Turtle}	
+		</ul>
+		<li class='jac'>{@link org.apache.juneau.marshall.StreamMarshall}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.marshall.Jso}
+			<li class='jc'>{@link org.apache.juneau.marshall.MsgPack}
+		</ul>
+	</ul>
+</ul>
+
+

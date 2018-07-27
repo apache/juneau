@@ -187,6 +187,45 @@
 			<li><code>RdfParser.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleParser}
 		</ul>
 	<li>
+		New API for pairing serializers and parsers for simplified syntax:
+		<h5 class='figure'>Examples:</h5>
+		<p class='bpcode w800'>
+	<jc>// Using instance.</jc>
+	Json json = <jk>new</jk> Json();
+	MyPojo myPojo = json.read(string, MyPojo.<jk>class</jk>);
+	String string = json.write(myPojo);
+		</p>
+		<p class='bpcode w800'>
+	<jc>// Using DEFAULT instance.</jc>
+	MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
+	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
+		</p>
+		<ul class='doctree'>
+			<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
+			<ul>
+				<li class='jac'>{@link org.apache.juneau.marshall.CharMarshall}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.marshall.Html}
+					<li class='jc'>{@link org.apache.juneau.marshall.Json}
+					<li class='jc'>{@link org.apache.juneau.marshall.PlainText}
+					<li class='jc'>{@link org.apache.juneau.marshall.SimpleJson}
+					<li class='jc'>{@link org.apache.juneau.marshall.Uon}
+					<li class='jc'>{@link org.apache.juneau.marshall.UrlEncoding}
+					<li class='jc'>{@link org.apache.juneau.marshall.Xml}
+					<li class='jc'>{@link org.apache.juneau.marshall.N3}
+					<li class='jc'>{@link org.apache.juneau.marshall.NTriple}
+					<li class='jc'>{@link org.apache.juneau.marshall.RdfXml}
+					<li class='jc'>{@link org.apache.juneau.marshall.RdfXmlAbbrev}
+					<li class='jc'>{@link org.apache.juneau.marshall.Turtle}	
+				</ul>
+				<li class='jac'>{@link org.apache.juneau.marshall.StreamMarshall}
+				<ul>
+					<li class='jc'>{@link org.apache.juneau.marshall.Jso}
+					<li class='jc'>{@link org.apache.juneau.marshall.MsgPack}
+				</ul>
+			</ul>
+		</ul>
+	<li>
 		New/updated documentation:
 		<ul>
 			<li><a href='#juneau-marshall.JsonDetails.SimplifiedJson'>2.15.3 - Simplified JSON</a>

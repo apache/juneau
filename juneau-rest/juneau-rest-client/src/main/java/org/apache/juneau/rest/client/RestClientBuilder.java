@@ -60,7 +60,6 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.yaml.proto.*;
 
 /**
  * Builder class for the {@link RestClient} class.
@@ -201,18 +200,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder urlEnc() {
 		return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
-	}
-
-	/**
-	 * Convenience method for specifying YAML as the transmission media type.
-	 *
-	 * <p>
-	 * Identical to calling <code>serializer(YamlSerializer.<jk>class</jk>).parser(YamlParser.<jk>class</jk>)</code>.
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public RestClientBuilder yaml() {
-		return serializer(YamlSerializer.class).parser(YamlParser.class);
 	}
 
 

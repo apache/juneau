@@ -154,7 +154,7 @@ public class DocGenerator {
 	}
 
 	static class PageFile implements Comparable<PageFile> {
-		String idWithNum, id, fullId, title, contents;
+		String idWithNum, id, num, fullId, title, contents;
 		String number, fullNumber;
 		String tags = "";
 
@@ -164,6 +164,7 @@ public class DocGenerator {
 			try {
 				String n = f.getName();
 				idWithNum = n.substring(0, n.lastIndexOf('.'));
+				num = n.substring(0, n.indexOf('.'));
 				id = idWithNum.substring(n.indexOf('.') + 1);
 				fullId = (parent == null ? "" : parent.fullId + ".") + id;
 				number = n.substring(0, n.indexOf('.')).replaceAll("^[0]+", "");
@@ -182,14 +183,18 @@ public class DocGenerator {
 				throw new RuntimeException("Problem with file " + f.getAbsolutePath());
 			}
 
-			File d = new File(f.getParentFile(), idWithNum);
-			if (d.exists())
-				for (File f2 : d.listFiles()) {
-					if (f2.isFile())
-						pageFiles.add(new PageFile(this, f2, docFiles));
-					else if (f2.isDirectory() && f2.getName().contains("doc-files"))
-						docFiles.addAll(Arrays.asList(f2.listFiles()));
+			for (File d : f.getParentFile().listFiles()) {
+				if (d.isDirectory() && d.getName().startsWith(num + '.')) {
+					if (! d.getName().matches(idWithNum))
+						throw new RuntimeException("Unmatched file/directory: file=["+f.getName()+"], directory=["+d.getName()+"]");
+					for (File f2 : d.listFiles()) {
+						if (f2.isFile())
+							pageFiles.add(new PageFile(this, f2, docFiles));
+						else if (f2.isDirectory() && f2.getName().contains("doc-files"))
+							docFiles.addAll(Arrays.asList(f2.listFiles()));
+					}
 				}
+			}
 		}
 
 		@Override
