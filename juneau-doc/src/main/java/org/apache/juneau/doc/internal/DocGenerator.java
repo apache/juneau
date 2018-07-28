@@ -105,7 +105,7 @@ public class DocGenerator {
 					.append("</div>").append("<!-- END: ").append(rf.version).append(" -->\n");
 			}
 
-			template = template.replace("{TOC-CONTENTS}", toc.toString()).replace("{CONTENTS}", contents.toString()).replace("{TOC-RELEASE-NOTES}", tocRn).replace("{RELEASE-NOTES}", rn);
+			template = template.replace("<!--{TOC-CONTENTS}-->", toc.toString()).replace("<!--{CONTENTS}-->", contents.toString()).replace("<!--{TOC-RELEASE-NOTES}-->", tocRn).replace("<!--{RELEASE-NOTES}-->", rn);
 
 			IOUtils.writeFile("src/main/javadoc/overview.html", template);
 

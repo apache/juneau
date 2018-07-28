@@ -30,82 +30,15 @@ import org.apache.juneau.jsonschema.*;
  *
  * <p>
  * Can be used in the following locations:
- * <ul>
- * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
- * 	<li>Java methods of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ *  <ul>
  * 	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated REST Java methods.
+ * 	<li>Return type classes of <ja>@RestMethod</ja>-annotated REST Java methods.
+ * 	<li><ja>@RestMethod</ja>-annotated REST Java methods themselves.
+ * 	<li>Java method arguments and argument-types of <ja>@RestMethod</ja>-annotated REST Java methods.
  * </ul>
  *
  * <p>
  * When applied to exception classes, this annotation defines Swagger information on non-200 return types.
- *
- * <p>
- * The following example shows the <ja>@Response</ja> annotation used to define a subclass of <code>Unauthorized</code> for an invalid login attempt.
- * <br>Note that the annotation can be used on super and subclasses.
- *
- * <p class='bcode w800'>
- * 	<jc>// Our REST method that throws an annotated exception.</jc>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
- * 	<jk>public</jk> Ok login(String username, String password) <jk>throws</jk> InvalidLogin {...}
- *
- * 	<jc>// Our annotated exception.</jc>
- * 	<ja>@Response</ja>(description=<js>"Invalid username or password provided"</js>)
- * 	<jk>public class</jk> InvalidLogin <jk>extends</jk> Unauthorized {
- * 		<jk>public</jk> InvalidLogin() {
- * 			<jk>super</jk>(<js>"Invalid username or password."</js>);  <jc>// Message sent in response</jc>
- * 		}
- * 	}
- *
- * 	<jc>// Parent exception class.</jc>
- * 	<jc>// Note that the default description is overridden above.</jc>
- * 	<ja>@Response</ja>(code=401, description=<js>"Unauthorized"</js>)
- * 	<jk>public class</jk> Unauthorized <jk>extends</jk> RestException { ... }
- * </p>
- *
- * <p>
- * The attributes on this annotation are used to populate the generated Swagger for the method.
- * <br>In this case, the Swagger is populated with the following:
- *
- * <p class='bcode w800'>
- * 	<js>'/user/login'</js>: {
- * 		get: {
- * 			responses: {
- * 				401: {
- * 					description: <js>'Invalid username or password provided'</js>
- * 				}
- * 			}
- * 		}
- * 	}
- * </p>
- *
- * <p>
- * When applied to return type classes, this annotation defines Swagger information on the body of responses.
- *
- * <p>
- * In the example above, we're using the <code>Ok</code> class which is defined like so:
- *
- * <p class='bcode w800'>
- * 	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
- * 	<jk>public class</jk> Ok { ... }
- * </p>
- *
- * <p>
- * Another example is <code>Redirect</code> which is defined like so:
- *
- * <p class='bcode w800'>
- * 	<ja>@Response</ja>(
- * 		code=302,
- * 		description=<js>"Redirect"</js>,
- * 		headers={
- * 			<ja>@ResponseHeader</ja>(
- * 				name=<js>"Location"</js>,
- * 				type=<js>"string"</js>,
- * 				format=<js>"uri"</js>
- * 			)
- * 		}
- * 	)
- * 	<jk>public class</jk> Redirect { ... }
- * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
