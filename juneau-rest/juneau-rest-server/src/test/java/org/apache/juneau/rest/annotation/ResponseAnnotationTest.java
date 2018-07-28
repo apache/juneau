@@ -20,10 +20,13 @@ import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.serializer.*;
 import org.junit.*;
 import org.junit.runners.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Tests the @Response annotation.
@@ -42,6 +45,461 @@ public class ResponseAnnotationTest {
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
 	}
+
+
+	//=================================================================================================================
+	// Status codes
+	//=================================================================================================================
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// HTTP status code
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class A {
+
+		@Response(code=201)
+		@RestMethod(name=GET,path="/codeOnMethod")
+		public String a01() {
+			return "foo";
+		}
+
+		@RestMethod(name=GET,path="/codeOnClass")
+		public A02 a02() {
+			return new A02();
+		}
+
+		@RestMethod(name=GET,path="/codeOnThrown")
+		public String a03() throws A03 {
+			throw new A03();
+		}
+
+		@Response(code=201)
+		@RestMethod(name=GET,path="/codeOnParameter")
+		public void a04(@Response(code=201) Value<String> value) {
+			value.set("foo");
+		}
+	}
+
+	@Response(code=201)
+	public static class A02 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response(code=501)
+	public static class A03 extends Exception {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	static MockRest a = MockRest.create(A.class);
+
+	@Test
+	public void a01_codeOnMethod() throws Exception {
+		a.get("/codeOnMethod").execute().assertStatus(201).assertBody("foo");
+	}
+
+	@Test
+	public void a02_codeOnClass() throws Exception {
+		a.get("/codeOnClass").execute().assertStatus(201).assertBody("foo");
+	}
+
+	@Test
+	public void a03_codeOnThrown() throws Exception {
+		a.get("/codeOnThrown").execute().assertStatus(501);
+	}
+
+	@Test
+	public void a04_codeOnParameter() throws Exception {
+		a.get("/codeOnParameter").execute().assertStatus(201).assertBody("foo");
+	}
+
+	//=================================================================================================================
+	// PartSerializers
+	//=================================================================================================================
+
+	public static class XPartSerializer implements HttpPartSerializer {
+		@Override
+		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
+			return new HttpPartSerializerSession() {
+				@Override
+				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+					return "x" + value + "x";
+				}
+			};
+		}
+
+		@Override
+		public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+			return createSession(null).serialize(partType, schema, value);
+		}
+
+		@Override
+		public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+			return createSession(null).serialize(null, schema, value);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Response(usePartSerializer)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource(partSerializer=XPartSerializer.class)
+	public static class B {
+
+		@Response(usePartSerializer=true)
+		@RestMethod(name=GET,path="/useOnMethod")
+		public String b01() {
+			return "foo";
+		}
+
+		@Response(usePartSerializer=false)
+		@RestMethod(name=GET,path="/dontUseOnMethod")
+		public String b02() {
+			return "foo";
+		}
+
+		@RestMethod(name=GET,path="/useOnClass")
+		public B03 b03() {
+			return new B03();
+		}
+
+		@RestMethod(name=GET,path="/dontUseOnClass")
+		public B04 b04() {
+			return new B04();
+		}
+
+		@RestMethod(name=GET,path="/useOnThrown")
+		public String b05() throws B05 {
+			throw new B05();
+		}
+
+		@RestMethod(name=GET,path="/dontUseOnThrown")
+		public String b06() throws B06 {
+			throw new B06();
+		}
+
+		@RestMethod(name=GET,path="/useOnParameter")
+		public void b07(@Response(usePartSerializer=true) Value<String> value) {
+			value.set("foo");
+		}
+
+		@RestMethod(name=GET,path="/dontUseOnParameter")
+		public void b08(@Response(usePartSerializer=false) Value<String> value) {
+			value.set("foo");
+		}
+
+	}
+
+	@Response(usePartSerializer=true)
+	public static class B03 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response(usePartSerializer=false)
+	public static class B04 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response(usePartSerializer=true)
+	public static class B05 extends Exception {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response(usePartSerializer=false)
+	public static class B06 extends Exception {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	static MockRest b = MockRest.create(B.class);
+
+
+	@Test
+	public void b01_useOnMethod() throws Exception {
+		b.get("/useOnMethod").execute().assertStatus(200).assertBody("xfoox");
+	}
+
+	@Test
+	public void b02_dontUseOnMethod() throws Exception {
+		b.get("/dontUseOnMethod").execute().assertStatus(200).assertBody("foo");
+	}
+
+	@Test
+	public void b03_useOnClass() throws Exception {
+		b.get("/useOnClass").execute().assertStatus(200).assertBody("xfoox");
+	}
+
+	@Test
+	public void b04_dontUseOnClass() throws Exception {
+		b.get("/dontUseOnClass").execute().assertStatus(200).assertBody("foo");
+	}
+
+	@Test
+	public void b05_useOnThrown() throws Exception {
+		b.get("/useOnThrown").execute().assertStatus(500).assertBody("xfoox");
+	}
+
+	@Test
+	public void b06_dontUseOnThrown() throws Exception {
+		b.get("/dontUseOnThrown").execute().assertStatus(500).assertBodyContains("HTTP 500: Internal Server Error");
+	}
+
+	@Test
+	public void b07_useOnParameter() throws Exception {
+		b.get("/useOnParameter").execute().assertStatus(200).assertBody("xfoox");
+	}
+
+	@Test
+	public void b08_dontUseOnParameter() throws Exception {
+		b.get("/dontUseOnParameter").execute().assertStatus(200).assertBody("foo");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Response(partSerializer)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class C {
+
+		@Response(partSerializer=XPartSerializer.class)
+		@RestMethod(name=GET,path="/useOnMethod")
+		public String c01() {
+			return "foo";
+		}
+
+		@Response
+		@RestMethod(name=GET,path="/dontUseOnMethod")
+		public String c02() {
+			return "foo";
+		}
+
+		@RestMethod(name=GET,path="/useOnClass")
+		public C03 c03() {
+			return new C03();
+		}
+
+		@RestMethod(name=GET,path="/dontUseOnClass")
+		public C04 c04() {
+			return new C04();
+		}
+
+		@RestMethod(name=GET,path="/useOnThrown")
+		public String c05() throws C05 {
+			throw new C05();
+		}
+
+		@RestMethod(name=GET,path="/dontUseOnThrown")
+		public String c06() throws C06 {
+			throw new C06();
+		}
+
+		@RestMethod(name=GET,path="/useOnParameter")
+		public void c07(@Response(partSerializer=XPartSerializer.class) Value<String> value) {
+			value.set("foo");
+		}
+
+		@RestMethod(name=GET,path="/dontUseOnParameter")
+		public void c08(@Response Value<String> value) {
+			value.set("foo");
+		}
+
+	}
+
+	@Response(partSerializer=XPartSerializer.class)
+	public static class C03 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response
+	public static class C04 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response(partSerializer=XPartSerializer.class)
+	public static class C05 extends Exception {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response
+	public static class C06 extends Exception {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	static MockRest c = MockRest.create(C.class);
+
+
+	@Test
+	public void c01_useOnMethod() throws Exception {
+		c.get("/useOnMethod").execute().assertStatus(200).assertBody("xfoox");
+	}
+
+	@Test
+	public void c02_dontUseOnMethod() throws Exception {
+		c.get("/dontUseOnMethod").execute().assertStatus(200).assertBody("foo");
+	}
+
+	@Test
+	public void c03_useOnClass() throws Exception {
+		c.get("/useOnClass").execute().assertStatus(200).assertBody("xfoox");
+	}
+
+	@Test
+	public void c04_dontUseOnClass() throws Exception {
+		c.get("/dontUseOnClass").execute().assertStatus(200).assertBody("foo");
+	}
+
+	@Test
+	public void c05_useOnThrown() throws Exception {
+		c.get("/useOnThrown").execute().assertStatus(500).assertBody("xfoox");
+	}
+
+	@Test
+	public void c06_dontUseOnThrown() throws Exception {
+		c.get("/dontUseOnThrown").execute().assertStatus(500).assertBodyContains("HTTP 500: Internal Server Error");
+	}
+
+	@Test
+	public void c07_useOnParameter() throws Exception {
+		c.get("/useOnParameter").execute().assertStatus(200).assertBody("xfoox");
+	}
+
+	@Test
+	public void c08_dontUseOnParameter() throws Exception {
+		c.get("/dontUseOnParameter").execute().assertStatus(200).assertBody("foo");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @Response(partSerializer) with schemas
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class D {
+
+		@Response(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true)
+		@RestMethod(name=GET,path="/useOnMethod")
+		public String[] d01() {
+			return new String[]{"foo","bar"};
+		}
+
+		@RestMethod(name=GET,path="/useOnClass")
+		public D02 d02() {
+			return new D02();
+		}
+
+		@RestMethod(name=GET,path="/useOnThrown")
+		public String d03() throws D03 {
+			throw new D03();
+		}
+
+		@RestMethod(name=GET,path="/useOnParameter")
+		public void d04(@Response(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true) Value<String[]> value) {
+			value.set(new String[]{"foo","bar"});
+		}
+
+		@Response(schema=@Schema(type="string",format="byte"),usePartSerializer=true)
+		@RestMethod(name=GET,path="/useOnMethodBytes")
+		public byte[] d05() {
+			return "foo".getBytes();
+		}
+
+		@RestMethod(name=GET,path="/useOnClassBytes")
+		public D06 d06() {
+			return new D06();
+		}
+
+		@RestMethod(name=GET,path="/useOnThrownBytes")
+		public String d07() throws D07 {
+			throw new D07();
+		}
+
+
+		@RestMethod(name=GET,path="/useOnParameterBytes")
+		public void d08(@Response(schema=@Schema(type="string",format="byte"),usePartSerializer=true) Value<byte[]> value) {
+			value.set("foo".getBytes());
+		}
+
+	}
+
+	@Response(schema=@Schema(type="array",collectionFormat="pipes"),usePartSerializer=true)
+	public static class D02 {
+		public String[] toStringArray() {
+			return new String[]{"foo","bar"};
+		}
+	}
+
+	@Response(schema=@Schema(type="array",collectionFormat="pipes"),usePartSerializer=true)
+	public static class D03 extends Exception {
+		public String[] toStringArray() {
+			return new String[]{"foo","bar"};
+		}
+	}
+
+	@Response(schema=@Schema(format="byte"),usePartSerializer=true)
+	public static class D06 {
+		public byte[] toBytes() {
+			return "foo".getBytes();
+		}
+	}
+
+	@Response(schema=@Schema(format="byte"),usePartSerializer=true)
+	public static class D07 extends Exception {
+		public byte[] toBytes() {
+			return "foo".getBytes();
+		}
+	}
+
+	static MockRest d = MockRest.create(D.class);
+
+
+	@Test
+	public void d01_useOnMethod() throws Exception {
+		d.get("/useOnMethod").execute().assertStatus(200).assertBody("foo|bar");
+	}
+
+	@Test
+	public void d02_useOnClass() throws Exception {
+		d.get("/useOnClass").execute().assertStatus(200).assertBody("foo|bar");
+	}
+
+	@Test
+	public void d03_useOnThrown() throws Exception {
+		d.get("/useOnThrown").execute().assertStatus(500).assertBody("foo|bar");
+	}
+
+	@Test
+	public void d04_useOnParameter() throws Exception {
+		d.get("/useOnParameter").execute().assertStatus(200).assertBody("foo|bar");
+	}
+
+	@Test
+	public void d05_useOnMethodBytes() throws Exception {
+		d.get("/useOnMethodBytes").execute().assertStatus(200).assertBody("Zm9v");
+	}
+
+	@Test
+	public void d06_useOnClassBytes() throws Exception {
+		d.get("/useOnClassBytes").execute().assertStatus(200).assertBody("Zm9v");
+	}
+
+	@Test
+	public void d07_useOnThrownBytes() throws Exception {
+		d.get("/useOnThrownBytes").execute().assertStatus(500).assertBody("Zm9v");
+	}
+
+	@Test
+	public void d08_useOnParameterBytes() throws Exception {
+		d.get("/useOnParameterBytes").execute().assertStatus(200).assertBody("Zm9v");
+	}
+
 
 	//=================================================================================================================
 	// @Response on POJO

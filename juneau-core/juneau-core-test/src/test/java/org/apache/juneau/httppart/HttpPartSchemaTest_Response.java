@@ -52,44 +52,6 @@ public class HttpPartSchemaTest_Response {
 		assertObjectEquals("{description:'b1\\nb2',example:'f1',schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
 	}
 
-	public static class A03 {
-		public void a(
-				@Response(
-					description={"b1","b2"},
-					schema=@Schema($ref="c1"),
-					example="f1",
-					api="{g1:true}"
-				) String x
-			) {
-
-		}
-	}
-
-	@Test
-	public void a03_basic_onParameter() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, A03.class.getMethod("a", String.class), 0).noValidate().build();
-		assertObjectEquals("{description:'b1\\nb2',example:'f1',schema:{'$ref':'c1'},_value:'{g1:true}'}", s.getApi());
-	}
-
-	public static class A04 {
-		public void a(
-				@Response(
-					description={"b3","b3"},
-					schema=@Schema($ref="c3"),
-					example="f2",
-					api="{g2:true}"
-				) A02 x
-			) {
-
-		}
-	}
-
-	@Test
-	public void a04_basic_onParameterAndClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, A04.class.getMethod("a", A02.class), 0).noValidate().build();
-		assertObjectEquals("{description:'b3\\nb3',example:'f2',schema:{'$ref':'c3'},_value:'{g2:true}'}", s.getApi());
-	}
-
 	@Response(
 		schema=@Schema(
 			type="number",

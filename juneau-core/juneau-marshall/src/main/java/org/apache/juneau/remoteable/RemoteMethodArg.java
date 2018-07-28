@@ -20,7 +20,6 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a remote proxy interface.
@@ -45,15 +44,6 @@ public final class RemoteMethodArg {
 		this.serializer = createSerializer(partType, schema);
 		this.schema = schema;
 		this.name = schema == null ? null : schema.getName();
-		this.skipIfEmpty = schema == null ? false : schema.isSkipIfEmpty();
-	}
-
-	RemoteMethodArg(HttpPartType partType, HttpPartSchema schema, String defaultName) {
-		this.index = -1;
-		this.partType = partType;
-		this.serializer = createSerializer(partType, schema);
-		this.schema = schema;
-		this.name = StringUtils.firstNonEmpty(schema == null ? null : schema.getName(), defaultName);
 		this.skipIfEmpty = schema == null ? false : schema.isSkipIfEmpty();
 	}
 

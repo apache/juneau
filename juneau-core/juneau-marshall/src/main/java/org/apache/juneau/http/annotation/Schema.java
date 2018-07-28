@@ -497,6 +497,51 @@ public @interface Schema {
 	Items items() default @Items;
 
 	/**
+	 * <mk>collectionFormat</mk> field.
+	 *
+	 * <p>
+	 * Note that this field isn't part of the Swagger 2.0 specification, but the specification does not specify how
+	 * items are supposed to be represented.
+	 *
+	 * <p>
+	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
+	 * <br>Can only be used if <code>type</code> is <js>"array"</js>.
+	 *
+	 * <br>Possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 	<li>
+	 * 		<js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 	<li>
+	 * 		<js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 	<li>
+	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 	<li>
+	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 	<li>
+	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
+	 * </ul>
+	 *
+	 * <p>
+	 * Static strings are defined in {@link CollectionFormatType}.
+	 *
+	 * <p>
+	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
+	 */
+	String collectionFormat() default "";
+
+	/**
 	 * <mk>allOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
 	 *
 	 * <h5 class='section'>Notes:</h5>

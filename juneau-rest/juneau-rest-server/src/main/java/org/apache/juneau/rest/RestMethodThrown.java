@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import java.lang.reflect.*;
+import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Contains metadata about a throwable on a REST Java method.
@@ -26,12 +27,21 @@ public class RestMethodThrown {
 	final Class<?> type;
 	final int code;
 	final ObjectMap api;
+	private final HttpPartSchema schema;
+	final HttpPartSerializer partSerializer;
 
-	RestMethodThrown(Class<?> type) {
-		HttpPartSchema s = HttpPartSchema.create(Response.class, type);
+	RestMethodThrown(Class<?> type, HttpPartSerializer partSerializer, PropertyStore ps) {
+		HttpPartSchema s = HttpPartSchema.DEFAULT;
+		if (hasAnnotation(Response.class, type))
+			s = HttpPartSchema.create(Response.class, type);
+
+		this.schema = s;
 		this.type = type;
 		this.api = HttpPartSchema.getApiCodeMap(s, 500).unmodifiable();
 		this.code = s.getCode(500);
+
+		boolean usePS = (s.isUsePartSerializer() || s.getSerializer() != null);
+		this.partSerializer = usePS ? ObjectUtils.firstNonNull(ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps), partSerializer) : null;
 	}
 
 	/**
@@ -39,7 +49,7 @@ public class RestMethodThrown {
 	 *
 	 * @return The return type of the Java method.
 	 */
-	public Type getType() {
+	public Class<?> getType() {
 		return type;
 	}
 
@@ -59,5 +69,25 @@ public class RestMethodThrown {
 	 */
 	public ObjectMap getApi() {
 		return api;
+	}
+
+	/**
+	 * Returns the schema for the method return type.
+	 *
+	 * @return The schema for the method return type.  Never <jk>null</jk>.
+	 */
+	public HttpPartSchema getSchema() {
+		return schema;
+	}
+
+	/**
+	 * Returns the part serializer for the method return type.
+	 *
+	 * @return
+	 * 	The part serializer for the method return type.
+	 * 	<br><jk>null</jk> if {@link Response#usePartSerializer()} is <jk>false</jk>.
+	 */
+	public HttpPartSerializer getPartSerializer() {
+		return partSerializer;
 	}
 }

@@ -13,6 +13,56 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} RequestBean
+{new} @RequestBean
 
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.RequestBean @RequestBean} annotation can be applied to a parameter or parameter type of a <ja>@RestMethod</ja>-annotated method 
+	to identify it as an interface for retrieving HTTP parts through a bean interface.
+</p>
+
+<h5 class='section'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+	<jk>public void</jk> myMethod(<ja>@RequestBean</ja> MyRequestBean rb) {...}
+
+	<jk>public interface</jk> MyRequestBean {
+
+		<ja>@Path</ja> <jc>// Path variable name inferred from getter.</jc>
+		String getP1();
+
+		<ja>@Path</ja>(<js>"p2"</js>)
+		String getX();
+
+		<ja>@Path</ja>(<js>"/*"</js>)
+		String getRemainder();
+
+		<ja>@Query</ja>
+		String getQ1();
+
+		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
+		<ja>@Query</ja>(
+			collectionFormat=<js>"pipes"</js>
+			items=<ja>@Items</ja>(
+				items=<ja>@SubItems</ja>(
+					collectionFormat=<js>"csv"</js>
+					type=<js>"integer"</js>
+				)
+			)
+		)
+		<jk>int</jk>[][] getQ3();
+
+		<ja>@Header</ja>(<js>"*"</js>)
+		Map&lt;String,Object&gt; getHeaders();
+</p>
+<p class='bpcode w800'>
+	<jc>// Same as above but annotation defined on interface.</jc>
+	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
+	<jk>public void</jk> myMethod(MyRequestBean rb) {...}
+
+	<ja>@RequestBean</ja>
+	<jk>public interface</jk> MyRequestBean {...}
+</p>
+<p>
+	The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
+	<br>Schema-based serialization and parsing is used just as if used as individual parameter types.
+</p>

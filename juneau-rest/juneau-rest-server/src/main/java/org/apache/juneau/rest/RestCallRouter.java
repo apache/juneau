@@ -75,7 +75,7 @@ public class RestCallRouter {
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
-	int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException {
+	int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
 		if (restJavaMethods.length == 1)
 			return restJavaMethods[0].invoke(pathInfo, req, res);
 

@@ -95,20 +95,13 @@ public interface RestCallHandler {
 	 *
 	 * @param req The servlet request.
 	 * @param res The servlet response.
+	 * @param rreq
+	 * 	The REST request.
+	 * 	<br>This may be <jk>null</jk> if an error occurred before this was initialized.
 	 * @param e The exception that occurred.
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
-	public void handleError(HttpServletRequest req, HttpServletResponse res, RestException e) throws IOException;
-
-	/**
-	 * Method for rendering response errors.
-	 *
-	 * @param req The servlet request.
-	 * @param res The servlet response.
-	 * @param e The exception that occurred.
-	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
-	 */
-	public void renderError(HttpServletRequest req, HttpServletResponse res, RestException e) throws IOException;
+	public void handleError(HttpServletRequest req, HttpServletResponse res, RestRequest rreq, Throwable e) throws IOException;
 
 	/**
 	 * Returns the session objects for the specified request.

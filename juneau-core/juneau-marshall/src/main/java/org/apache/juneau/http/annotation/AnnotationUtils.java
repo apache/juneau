@@ -90,6 +90,7 @@ public class AnnotationUtils {
 		return om
 			.appendSkipEmpty("additionalProperties", toObjectMap(a.additionalProperties()))
 			.appendSkipEmpty("allOf", joinnl(a.allOf()))
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("discriminator", a.discriminator())
 			.appendSkipEmpty("description", joinnl(a.description()))

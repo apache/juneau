@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.exception.*;
@@ -49,6 +50,9 @@ public class DefaultHandler implements ResponseHandler {
 		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
+
+		RestMethodReturn rmr = req.getRestMethodReturn();
+		res.setStatus(rmr.getCode());
 
 		if (sm != null) {
 			Serializer s = sm.getSerializer();
@@ -97,22 +101,37 @@ public class DefaultHandler implements ResponseHandler {
 			} catch (SerializeException e) {
 				throw new InternalServerError(e);
 			}
+			return true;
+
+		}
+
+		HttpPartSerializer ps = rmr.getPartSerializer();
+		if (ps != null) {
+			try {
+				FinishablePrintWriter w = res.getNegotiatedWriter();
+				w.append(ps.serialize(rmr.getSchema(), output));
+				w.flush();
+				w.finish();
+			} catch (SchemaValidationException | SerializeException e) {
+				throw new InternalServerError(e);
+			}
+			return true;
+		}
 
 		// Non-existent Accept or plain/text can just be serialized as-is.
-		} else if ("".equals(accept) || "plain/text".equals(accept)) {
+		if ("".equals(accept) || "plain/text".equals(accept)) {
 			FinishablePrintWriter w = res.getNegotiatedWriter();
 			ClassMeta<?> cm = req.getBeanSession().getClassMetaForObject(output);
 			if (cm != null)
 				w.append(cm.toString(output));
 			w.flush();
 			w.finish();
-
-		} else {
-			throw new NotAcceptable(
-				"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
-				req.getHeaders().getString("Accept", ""), g.getSupportedMediaTypes()
-			);
+			return true;
 		}
-		return true;
+
+		throw new NotAcceptable(
+			"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
+			req.getHeaders().getString("Accept", ""), g.getSupportedMediaTypes()
+		);
 	}
 }

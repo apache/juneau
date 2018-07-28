@@ -12,11 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.ReflectionUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Contains metadata about the return type on a REST Java method.
@@ -26,12 +29,21 @@ public class RestMethodReturn {
 	private final Type type;
 	private final int code;
 	private final ObjectMap api;
+	private final HttpPartSchema schema;
+	private final HttpPartSerializer partSerializer;
 
-	RestMethodReturn(Type type) {
-		HttpPartSchema s = HttpPartSchema.create(Response.class, type);
-		this.type = type;
+	RestMethodReturn(Method m, HttpPartSerializer partSerializer, PropertyStore ps) {
+		HttpPartSchema s = HttpPartSchema.DEFAULT;
+		if (hasAnnotation(Response.class, m))
+			s = HttpPartSchema.create(Response.class, m);
+
+		this.schema = s;
+		this.type = m.getGenericReturnType();
 		this.api = HttpPartSchema.getApiCodeMap(s, 200).unmodifiable();
 		this.code = s.getCode(200);
+
+		boolean usePS = (s.isUsePartSerializer() || s.getSerializer() != null);
+		this.partSerializer = usePS ? ObjectUtils.firstNonNull(ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps), partSerializer) : null;
 	}
 
 	/**
@@ -59,5 +71,25 @@ public class RestMethodReturn {
 	 */
 	public ObjectMap getApi() {
 		return api;
+	}
+
+	/**
+	 * Returns the schema for the method return type.
+	 *
+	 * @return The schema for the method return type.  Never <jk>null</jk>.
+	 */
+	public HttpPartSchema getSchema() {
+		return schema;
+	}
+
+	/**
+	 * Returns the part serializer for the method return type.
+	 *
+	 * @return
+	 * 	The part serializer for the method return type.
+	 * 	<br><jk>null</jk> if {@link Response#usePartSerializer()} is <jk>false</jk>.
+	 */
+	public HttpPartSerializer getPartSerializer() {
+		return partSerializer;
 	}
 }

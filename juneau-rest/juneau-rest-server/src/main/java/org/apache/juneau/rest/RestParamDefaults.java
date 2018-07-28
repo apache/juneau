@@ -662,12 +662,14 @@ class RestParamDefaults {
 
 	static final class ResponseObject extends RestMethodParam {
 		final HttpPartSerializer partSerializer;
+		final boolean usePartSerializer;
 		final HttpPartSchema schema;
 		private String _default;
 
 		protected ResponseObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(RESPONSE, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
-			this.partSerializer = s.isUsePartSerializer() ? ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps) : null;
+			this.usePartSerializer = s.isUsePartSerializer() || s.getSerializer() != null;
+			this.partSerializer = usePartSerializer ? ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps) : null;
 			this.schema = s;
 			this._default = s.getDefault();
 
@@ -679,14 +681,17 @@ class RestParamDefaults {
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override /* RestMethodParam */
-		public Object resolve(RestRequest req, final RestResponse res) throws Exception {
+		public Object resolve(final RestRequest req, final RestResponse res) throws Exception {
 			Value<Object> v = (Value<Object>)c.newInstance();
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object newValue) {
 					try {
-						if (partSerializer != null)
-							newValue = new StringReader(partSerializer.serialize(HttpPartType.BODY, schema, newValue));
+						if (usePartSerializer) {
+							HttpPartSerializer ps = partSerializer == null ? req.getPartSerializer() : partSerializer;
+							if (ps != null)
+								newValue = new StringReader(ps.serialize(HttpPartType.BODY, schema, newValue));
+						}
 						res.setOutput(newValue);
 					} catch (SchemaValidationException | SerializeException e) {
 						throw new RuntimeException(e);

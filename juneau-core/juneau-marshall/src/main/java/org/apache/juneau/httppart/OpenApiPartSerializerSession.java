@@ -68,6 +68,7 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 	// Cache these for faster lookup
 	private static final BeanContext BC = BeanContext.DEFAULT;
 	private static final ClassMeta<byte[]> CM_ByteArray = BC.getClassMeta(byte[].class);
+	private static final ClassMeta<String[]> CM_StringArray = BC.getClassMeta(String[].class);
 	private static final ClassMeta<Calendar> CM_Calendar = BC.getClassMeta(Calendar.class);
 	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
 	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
@@ -173,7 +174,9 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 						for (Object o : (Collection<?>)value)
 							l.add(serialize(partType, items, o));
 					} else if (vt.hasTransformTo(String[].class)) {
-						l.add(serialize(partType, items, value));
+						String[] ss = toType(value, CM_StringArray);
+						for (int i = 0; i < ss.length; i++)
+							l.add(serialize(partType, items, ss[i]));
 					}
 
 					if (cf == PIPES)

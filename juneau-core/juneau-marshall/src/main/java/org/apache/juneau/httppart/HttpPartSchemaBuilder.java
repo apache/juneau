@@ -337,6 +337,7 @@ public class HttpPartSchemaBuilder {
 		type(a.type());
 		format(a.format());
 		items(a.items());
+		collectionFormat(a.collectionFormat());
 		_default(joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());

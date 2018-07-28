@@ -384,11 +384,11 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				methodParams = context.findParams(method, pathPattern, false);
 
-				methodReturn = new RestMethodReturn(method.getGenericReturnType());
+				methodReturn = new RestMethodReturn(method, partSerializer, ps);
 
 				methodThrowns = new RestMethodThrown[method.getExceptionTypes().length];
 				for (int i = 0; i < methodThrowns.length; i++)
-					methodThrowns[i] = new RestMethodThrown(method.getExceptionTypes()[i]);
+					methodThrowns[i] = new RestMethodThrown(method.getExceptionTypes()[i], partSerializer, ps);
 
 				// Need this to access methods in anonymous inner classes.
 				setAccessible(method, true);
@@ -439,7 +439,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	 * @param pathInfo The value of {@link HttpServletRequest#getPathInfo()} (sorta)
 	 * @return The HTTP response code.
 	 */
-	int invoke(String pathInfo, RestRequest req, RestResponse res) throws RestException, BadRequest, InternalServerError {
+	int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
 
 		String[] patternVals = pathPattern.match(pathInfo);
 		if (patternVals == null)
@@ -522,11 +522,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				throw new BadRequest(e2);
 			if (e2 instanceof InvalidDataConversionException)
 				throw new BadRequest(e2);
-			throw new InternalServerError(e2);
-		} catch (RestException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new InternalServerError(e);
+			throw e2;
 		}
 		return SC_OK;
 	}
@@ -620,5 +616,13 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		for (int i = 0; i < in.length; i++)
 			out[i] = vr.resolve(in[i]);
 		return out;
+	}
+
+	RestMethodReturn getRestMethodReturn() {
+		return this.methodReturn;
+	}
+
+	List<RestMethodThrown> getRestMethodThrown() {
+		return Collections.unmodifiableList(Arrays.asList(this.methodThrowns));
 	}
 }

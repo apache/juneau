@@ -834,7 +834,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Enables the following:
 	 * <ul>
-	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestException)} is called.
+	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)} is called.
 	 * </ul>
 	 */
 	public static final String REST_debug = PREFIX + "debug.b";
@@ -2030,7 +2030,7 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContext#isRenderResponseStackTraces() RestContext.isRenderResponseStackTraces()}
 	 * 		</ul>
-	 * 		That method is used by {@link BasicRestCallHandler#renderError(HttpServletRequest, HttpServletResponse, RestException)}.
+	 * 		That method is used by {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)}.
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
@@ -2666,7 +2666,7 @@ public final class RestContext extends BeanContext {
 	 * Affects the following methods:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestContext#getStackTraceOccurrence(Throwable) RestContext.getStackTraceOccurrance(Throwable)}
-	 * 	<li class='jm'>{@link RestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestException)}
+	 * 	<li class='jm'>{@link RestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)}
 	 * 	<li class='jm'>{@link RestException#getOccurrence()} - Returns the number of times this exception occurred.
 	 * </ul>
 	 *
@@ -2955,7 +2955,7 @@ public final class RestContext extends BeanContext {
 			serializers = SerializerGroup.create().append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], true, resource, ps)).build();
 			parsers = ParserGroup.create().append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], true, resource, ps)).build();
 			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiPartSerializer.class, true, resource, ps);
-			partParser = getInstanceProperty(REST_partSerializer, HttpPartParser.class, OpenApiPartParser.class, true, resource, ps);
+			partParser = getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiPartParser.class, true, resource, ps);
 			jsonSchemaSerializer = new JsonSchemaSerializer(ps);
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
@@ -3044,7 +3044,7 @@ public final class RestContext extends BeanContext {
 							sm = new RestJavaMethod(resource, method, this) {
 
 								@Override
-								int invoke(String pathInfo, RestRequest req, RestResponse res) throws InternalServerError {
+								int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
 
 									int rc = super.invoke(pathInfo, req, res);
 									if (rc != SC_OK)
@@ -3093,7 +3093,7 @@ public final class RestContext extends BeanContext {
 							_javaRestMethods.put(method.getName(), sm);
 							addToRouter(routers, httpMethod, sm);
 						}
-					} catch (RestServletException e) {
+					} catch (Throwable e) {
 						throw new RestServletException("Problem occurred trying to serialize methods on class {0}, methods={1}", resourceClass.getName(), SimpleJsonSerializer.DEFAULT.serialize(methodsFound)).initCause(e);
 					}
 				}

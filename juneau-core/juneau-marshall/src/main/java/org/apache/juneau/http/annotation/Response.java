@@ -115,7 +115,7 @@ import org.apache.juneau.jsonschema.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
+@Target({PARAMETER,TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
 public @interface Response {

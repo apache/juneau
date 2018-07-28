@@ -31,7 +31,7 @@ public class RestException extends FormattedRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private final int status;
+	private int status;
 	private int occurrence;
 
 	/**
@@ -134,8 +134,13 @@ public class RestException extends FormattedRuntimeException {
 		return i;
 	}
 
-	void setOccurrence(int occurrence) {
+	RestException setOccurrence(int occurrence) {
 		this.occurrence = occurrence;
+		return this;
+	}
+
+	void setStatus(int status) {
+		this.status = status;
 	}
 
 	/**

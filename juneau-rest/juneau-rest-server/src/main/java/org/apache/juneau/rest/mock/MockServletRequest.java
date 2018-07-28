@@ -73,6 +73,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	private HttpSession httpSession = MockHttpSession.create();
 	private RestContext restContext;
 	private String uri = "";
+	private boolean debug = false;
 
 	/**
 	 * Creates a new servlet request.
@@ -221,7 +222,29 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		if (res.getStatus() == 0)
 			throw new RuntimeException("Response status was 0.");
 
+		if (debug)
+			log(this, res);
+
 		return res;
+	}
+
+	private void log(MockServletRequest req, MockServletResponse res) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n=== HTTP Call =================================================================");
+
+		sb.append("\n=== REQUEST ===");
+		sb.append("\nTODO");
+		sb.append("\n=== RESPONSE ===");
+		sb.append("\nStatus: ").append(res.getStatus());
+		sb.append("\n---response headers---");
+		for (Map.Entry<String,String[]> h : res.getHeaders().entrySet())
+			for (String h2 : h.getValue())
+				sb.append("\n").append(h.getKey()).append(": ").append(h2);
+		sb.append("\n---response content---\n");
+		sb.append(res.getBodyAsString());
+		sb.append("\n=== END ========================================================================");
+
+		System.err.println(sb);
 	}
 
 	/**
@@ -1325,5 +1348,18 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	public MockServletRequest warning(Object value) {
 		return header("Warning", value);
+	}
+
+	/**
+	 * Enabled debug mode on this request.
+	 *
+	 * <p>
+	 * Causes information about the request execution to be sent to STDERR.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest debug() {
+		this.debug = true;
+		return this;
 	}
 }

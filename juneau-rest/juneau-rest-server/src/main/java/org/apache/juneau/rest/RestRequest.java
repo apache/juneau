@@ -1609,4 +1609,27 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	void setJavaMethod(Method method) {
 		this.javaMethod = method;
 	}
+
+	/**
+	 * Returns metadata about the method return type.
+	 *
+	 * @return Metadata about the method return type.
+	 */
+	public RestMethodReturn getRestMethodReturn() {
+		return restJavaMethod.getRestMethodReturn();
+	}
+
+	/**
+	 * Returns metadata about the specified exception.
+	 *
+	 * @param e
+	 * @return Metadata about the specified exception.
+	 */
+	public RestMethodThrown getRestMethodThrown(Throwable e) {
+		if (restJavaMethod != null)
+			for (RestMethodThrown rmt : restJavaMethod.getRestMethodThrown())
+				if (rmt.getType().isAssignableFrom(e.getClass()))
+					return rmt;
+		return null;
+	}
 }

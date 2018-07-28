@@ -116,7 +116,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.parentContext = parentContext;
 
 		properties = new RestContextProperties();
+
+		// Default values.
 		logger(BasicRestLogger.class);
+		partSerializer(OpenApiPartSerializer.class);
+		partParser(OpenApiPartParser.class);
 		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
 		encoders(IdentityEncoder.INSTANCE);
 
@@ -169,6 +173,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					set(p, true);
 				serializers(false, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), r.serializers()));
 				parsers(false, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), r.parsers()));
+				if (r.partSerializer() != HttpPartSerializer.Null.class)
+					partSerializer(r.partSerializer());
+				if (r.partParser() != HttpPartParser.Null.class)
+					partParser(r.partParser());
 				encoders(r.encoders());
 				if (r.produces().length > 0)
 					produces(false, resolveVars(vr, r.produces()));

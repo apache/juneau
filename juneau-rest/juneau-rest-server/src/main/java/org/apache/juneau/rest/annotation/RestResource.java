@@ -572,7 +572,7 @@ public @interface RestResource {
 	 * 	<li class='jf'>{@link RestContext#REST_partParser}
 	 * </ul>
 	 */
-	Class<? extends HttpPartParser> partParser() default UonPartParser.class;
+	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
 
 	/**
 	 * HTTP part serializer.
@@ -585,7 +585,7 @@ public @interface RestResource {
 	 * 	<li class='jf'>{@link RestContext#REST_partSerializer}
 	 * </ul>
 	 */
-	Class<? extends HttpPartSerializer> partSerializer() default SimpleUonPartSerializer.class;
+	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
 
 	/**
 	 * Resource path.
@@ -952,7 +952,7 @@ public @interface RestResource {
 	 * <p>
 	 * Enables the following:
 	 * <ul>
-	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestException)} is called.
+	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)} is called.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>

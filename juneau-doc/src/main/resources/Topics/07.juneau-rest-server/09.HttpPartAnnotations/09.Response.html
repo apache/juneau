@@ -13,6 +13,298 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Response
+{new} @Response
 
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#code() code()} - HTTP status code.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#example() example()} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#examples() examples()} - Serialized examples per media type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#headers() headers()} - Swagger about headers added to response.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partSerializer() partSerializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema()} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer()} - Use the HTTP-Part serializer for serializing the body.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#value() value()} - Free-form Swagger JSON.
+	</ul>
+</ul>
+<p>
+	<br>It can be used in the following locations:
+<ul>
+	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated REST Java methods.
+	<li>Type classes returned by <ja>@RestMethod</ja>-annotated REST Java methods.
+	<li><ja>@RestMethod</ja>-annotated REST Java methods themselves.
+	<li>Java method arguments and argument-types of <ja>@RestMethod</ja>-annotated REST Java methods.
+</ul>
+
+<p>
+	When applied to exception classes, this annotation defines Swagger information on non-200 return types.
+</p>
+<p>
+	The following example shows the <ja>@Response</ja> annotation used to define a subclass of <code>Unauthorized</code> for an invalid login attempt.
+</p>
+<p class='bpcode w800'>
+	<jc>// Our REST method that throws an annotated exception.</jc>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public</jk> Ok login(String username, String password) <jk>throws</jk> InvalidLogin {
+		checkCredentials(username, password);
+		<jk>return new</jk> Ok();
+	}
+
+	<jc>// Our annotated exception.</jc>
+	<ja>@Response</ja>(description=<js>"Invalid username or password provided"</js>)
+	<jk>public class</jk> InvalidLogin <jk>extends</jk> Unauthorized {
+		<jk>public</jk> InvalidLogin() {
+			<jk>super</jk>(<js>"Invalid username or password."</js>);  <jc>// Message sent in response</jc>
+		}
+	}
+
+	<jc>// Parent exception class.</jc>
+	<jc>// Note that the default description is overridden above.</jc>
+	<ja>@Response</ja>(code=401, description=<js>"Unauthorized"</js>)
+	<jk>public class</jk> Unauthorized <jk>extends</jk> RestException { ... }
+</p>
+<p>
+	The attributes on this annotation are used to populate the generated Swagger for the method.
+	<br>In this case, the Swagger is populated with the following:
+</p>
+<p class='bpcode w800'>
+	<js>'/user/login'</js>: {
+		get: {
+			responses: {
+				401: {
+					description: <js>'Invalid username or password provided'</js>
+				}
+			}
+		}
+	}
+</p>
+<p>
+	When applied type classes returned by a Java method, this annotation defines Swagger information on the body of responses.
+</p>
+<p>
+	In the example above, we're using the <code>Ok</code> class which is defined like so:
+</p>
+<p class='bpcode w800'>
+	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
+	<jk>public class</jk> Ok { ... }
+</p>
+<p>
+	Another example is <code>Redirect</code> which is defined like so:
+</p>
+<p class='bpcode w800'>
+	<ja>@Response</ja>(
+		code=302,
+		description=<js>"Redirect"</js>,
+		headers={
+			<ja>@ResponseHeader</ja>(
+				name=<js>"Location"</js>,
+				type=<js>"string"</js>,
+				format=<js>"uri"</js>
+			)
+		}
+	)
+	<jk>public class</jk> Redirect { ... }
+</p>
+<p>
+	The <ja>@Response</ja> annotation can also be applied to the Java method itself which is effectively
+	the same as applying it to the return type, albeit for this method only.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
+	<jk>public</jk> Ok login(String username, String password) <jk>throws</jk> InvalidLogin {...}
+</p>
+<p>
+	The <ja>@Response</ja> annotation can also be applied to the Java method parameters when the parameter type 
+	is {@link org.apache.juneau.utils.Value} (a placeholder for objects).
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
+	<jk>public void</jk> login(
+			String username, 
+			String password, 
+			<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>) Value&lt;Object&gt;
+		) <jk>throws</jk> InvalidLogin {...}
+</p>
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+<p>
+	The return type can be any serializable POJO as defined in <a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a>.
+	<br>It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
+	setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	<jk>public</jk> String doGet() {
+		<jk>return</jk> <js>"Hello World!"</js>;
+	}
+</p>
+<p>
+	Out-of-the-box, besides POJOs, the following return types are handled as special cases:
+</p>
+<ul class='spaced-list'>
+	<li class='jc'>{@link java.io.InputStream}
+		<br>The contents are simply piped to the output stream returned by 
+		{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
+		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+		the <l>Content-Type</l> header if you use this object type.
+	<li class='jc'>{@link java.io.InputStream}
+		<br>The contents are simply piped to the output stream returned by 
+		{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
+		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+		the <l>Content-Type</l> header if you use this object type.
+	<li class='jc'>{@link java.io.Reader}
+		<br>The contents are simply piped to the output stream returned by 
+		{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
+		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+		the <l>Content-Type</l> header if you use this object type.
+	<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
+		<br>Represents an HTTP redirect response.
+	<li class='jc'>{@link org.apache.juneau.Streamable}
+		<br>Interface that identifies that an object can be serialized directly to an output stream.
+	<li class='jc'>{@link org.apache.juneau.Writable}
+		<br>Interface that identifies that an object can be serialized directly to a writer.
+	<li class='jc'>{@link org.apache.juneau.utils.ZipFileList}
+		<br>Special interface for sending zip files as responses.
+</ul>
+<p>
+	Any of the following types can be used for the parameter or POJO class (matched in the specified order):
+</p>
+<ol class='spaced-list'>
+	<li>
+		{@link java.io.Reader}
+		<br><ja>@Body</ja> annotation is optional.
+		<br><code>Content-Type</code> is ignored.
+	<li>
+		{@link java.io.InputStream}
+		<br><ja>@Body</ja> annotation is optional.
+		<br><code>Content-Type</code> is ignored.
+	<li>
+		Any <a class='doclink' href='#juneau-marshall.PojoCategories'>Parsable POJO</a> type.
+		<br><code>Content-Type</code> is required to identify correct parser.
+	<li>
+		Objects convertible from {@link java.io.Reader} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(Reader in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(Reader in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromReader</jsm>(Reader in) {...}</code>
+		</ul>
+		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+	<li>
+		Objects convertible from {@link java.io.InputStream} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(InputStream in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(InputStream in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromInputStream</jsm>(InputStream in) {...}</code>
+		</ul>
+		<code>Content-Type</code> must not be present or match an existing parser so that it's not parsed as a POJO.
+	<li>
+		Objects convertible from {@link java.lang.String} by having one of the following non-deprecated methods:
+		<ul>
+			<li><code><jk>public</jk> T(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>create</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>fromString</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>parse</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>parseString</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>forName</jsm>(String in) {...}</code>
+			<li><code><jk>public static</jk> T <jsm>forString</jsm>(String in) {...}</code>
+		</ul>
+		Note that this also includes all enums.
+</ol>
+<p>
+	If the {@link org.apache.juneau.http.annotation.Body#usePartParser usePartParser} flag is set on the annotation,
+	then the body can be parsed using the registered {@link org.apache.juneau.httppart.HttpPartParser} which by default
+	is {@link org.apache.juneau.httppart.OpenApiPartParser}.
+</p>
+<p>
+	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
+</p>
+<p class='bpcode w800'>
+	<jc>// Body is a pipe-delimited list of comma-delimited lists of longs.</jc>
+	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testBody"</js>)	
+	<jk>public void</jk> testBody(
+		<ja>@Body</ja>(
+			usePartParser=<jk>true</jk>,
+			schema=<ja>@Schema</ja>(
+				items=<ja>@Items</ja>(
+					collectionFormat=<js>"pipes"</js>,
+					items=<ja>@SubItems</ja>(
+						collectionFormat=<js>"csv"</js>,
+						type=<js>"integer"</js>, 
+						format=<js>"int64"</js>,
+						minimum=<js>"0"</js>,
+						maximum=<js>"100"</js>
+						minLength=1,
+						maxLength=10
+					)
+				),
+				minLength=1,
+				maxLength=10
+			)
+		)
+		Long[][] body
+	) {...}
+</p>
+<p>
+	Input will be converted based on the types and formats defined in the schema definition.
+	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+</p>
+<p>
+	For more information about valid parameter types when using OpenAPI parsing, see <a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a>
+</p>
+
+<p>
+	The <ja>@Body</ja> annotation is also used for supplying swagger information about the body of the request.
+	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Normal</jc>
+	<ja>@Body</ja>(
+		description=<js>"Pet object to add to the store"</js>,
+		required=<jk>true</jk>,
+		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	)
+</p>
+<p class='bpcode w800'>
+	<jc>// Free-form</jc>
+	<jc>// Note the extra field</jc>
+	<ja>@Body</ja>({
+		<js>"description: 'Pet object to add to the store',"</js>,
+		<js>"required: true,"</js>,
+		<js>"example: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']},"</js>
+		<js>"x-extra: 'extra field'"</js>
+	})
+</p>
+<p>
+	<a class='doclink' href='#DefaultRestSvlVariables'>Initialization and request-time variables</a> (e.g. "$L{my.localized.variable}")
+	are supported on annotation fields.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Localized</jc>
+	<ja>@Body</ja>(
+		description=<js>"$L{PetObjectDescription}"</js>
+	)
+</p>
+
+
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
+	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a>
+</ul>
+

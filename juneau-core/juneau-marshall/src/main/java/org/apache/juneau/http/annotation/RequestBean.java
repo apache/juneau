@@ -55,10 +55,6 @@ import org.apache.juneau.httppart.*;
  * 		<ja>@Query</ja>
  * 		String getQ1();
  *
- * 		<ja>@Query</ja>
- * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
- * 		String getQuery2();
- *
  *		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
  * 		<ja>@Query</ja>(
  * 			collectionFormat=<js>"pipes"</js>
@@ -120,10 +116,6 @@ import org.apache.juneau.httppart.*;
  *
  * 		<ja>@Query</ja>
  * 		<jk>public</jk> String getQ1() {...}
- *
- * 		<ja>@Query</ja>
- * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
- * 		<jk>public</jk> String getQuery2() {...}
  *
  *		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
  * 		<ja>@Query</ja>(
