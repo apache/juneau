@@ -315,8 +315,8 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.RequestBean'>@RequestBean</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Response'>@Response</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader'>@ResponseHeader</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus'>@ResponseStatus</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>@ResponseStatuses</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus'>@ResponseStatus</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>@ResponseStatuses</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingFormPosts'>Handling Form Posts</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a></p>
@@ -15585,7 +15585,7 @@ VariantAlsoNegotiates
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
 	matching the requesting <code>Accept</code> header.
 	<br>It is also possible to use OpenAPI part serialization for the body of the response using 
-	the {@link org.apache.juneau.http.Response#usePartSerializer() usePartSerializer} flag.
+	the {@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer} flag.
 	<br>The flag is needed to identify that we should use the part serializer instead of normal serializers for the POJO.
 </p>
 <p>
@@ -15717,7 +15717,7 @@ VariantAlsoNegotiates
 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
 </ul>
 <p>
-	This annotation can only be applied to subclasses or parameters of type {@link Value}.
+	This annotation can only be applied to subclasses or parameters of type {@link org.apache.juneau.Value}.
 </p>
 <p>
 	The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
@@ -15792,16 +15792,158 @@ VariantAlsoNegotiates
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.9.11 - @ResponseStatus</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.9.11 - @ResponseStatus</a></h4>
 <div class='topic'><!-- START: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation is applied to parameters and parameter 
+	types to denote them as an HTTP response status on server-side REST method parameters.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#code() code()} - The HTTP status of the response.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#value() value()} - A synonym for <code>code</code>.
+	</ul>
+</ul>
+<p>
+	It can be used in the following locations:
+</p>
+<ul>
+	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+</ul>
+<p>
+	This can only be applied to parameters and subclasses of the {@link org.apache.juneau.Value} class with an {@link java.lang.Integer} type.
+	<br>The {@link org.apache.juneau.Value} object is mean to be a place-holder for the set value.
+</p>
+
+<h5 class='section'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Defined on parameter.</jc>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		<ja>@ResponseStatus</ja>(
+			code=401, 
+			description=<js>"Invalid user/pw"</js>
+		) 
+		Value&lt;Integer&gt; status
+	) 
+	{
+		<jk>if</jk> (! isValid(username, password))
+			status.set(401);
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Defined on parameter class.</jc>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		LoginStatus status
+	) 
+	{
+		<jk>if</jk> (! isValid(username, password))
+			status.set(401);
+	}
+
+	<ja>@ResponseStatus</ja>(
+		code=401, 
+		description=<js>"Invalid user/pw"</js>
+	)
+	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
+</p>
+
+<p>
+	The attributes on this annotation are used to populate the generated Swagger for the method.
+	<br>In this case, the Swagger is populated with the following:
+</p>
+<p class='bpcode w800'>
+	<jok>'/user/login'</jok>: {
+		<jok>get: {
+			<jok>responses: {
+				<jok>401</jok>: {
+					<jok>description</jok>: <jov>'Invalid user/pw'</jov>
+				}
+			}
+		}
+	}
+</p>
 </div><!-- END: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses' id='juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>7.9.12 - @ResponseStatuses</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses' id='juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>7.9.12 - @ResponseStatuses</a></h4>
 <div class='topic'><!-- START: 7.9.12 - juneau-rest-server.HttpPartAnnotations.ResponseStatuses -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseStatuses @ResponseStatuses} annotation is used to 
+	associate multiple {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotations to the same parameter or class.
+</p>
+
+<h5 class='section'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		<ja>@ResponseStatuses=</ja>{
+			<ja>@ResponseStatus</ja>(200)
+			<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
+		}
+		Value&lt;Integer&gt; status
+	) 
+	{
+		<jk>if</jk> (! isValid(username, password))
+			status.set(401);
+		<jk>else</jk>
+			status.set(200);
+	}
+</p>
+
+<p>
+The other option is to apply this annotation to a subclass of {@link org.apache.juneau.Value} which often leads to a cleaner
+REST method:
+</p>
+<p class='bpcode w800'>
+	<ja>@ResponseStatuses=</ja>{
+		<ja>@ResponseStatus</ja>(200)
+		<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
+	}
+	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
+
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		LoginStatus status
+	) 
+	{
+		<jk>if</jk> (! isValid(username, password))
+			status.set(401);
+		<jk>else</jk>
+			status.set(200);
+	}
+</p>
+<p>
+	The attributes on this annotation are used to populate the generated Swagger for the method.
+	<br>In this case, the Swagger is populated with the following:
+</p>
+<p class='bpcode w800'>
+	<jok>'/user/login'</jok>: {
+		<jok>get: {
+			<jok>responses: {
+				<jok>200</jok>: {
+					<jok>description</jok>: <jov>'OK'</jov>
+				},
+				<jok>401</jok>: {
+					<jok>description</jok>: <jov>'Invalid user/pw'</jov>
+				}
+			}
+		}
+	}
+</p>
 </div><!-- END: 7.9.12 - juneau-rest-server.HttpPartAnnotations.ResponseStatuses -->
 </div><!-- END: 7.9 - juneau-rest-server.HttpPartAnnotations -->
 

@@ -191,7 +191,7 @@
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
 	matching the requesting <code>Accept</code> header.
 	<br>It is also possible to use OpenAPI part serialization for the body of the response using 
-	the {@link org.apache.juneau.http.Response#usePartSerializer() usePartSerializer} flag.
+	the {@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer} flag.
 	<br>The flag is needed to identify that we should use the part serializer instead of normal serializers for the POJO.
 </p>
 <p>

@@ -13,6 +13,82 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @ResponseStatus
+{new} @ResponseStatus
 
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation is applied to parameters and parameter 
+	types to denote them as an HTTP response status on server-side REST method parameters.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#code() code()} - The HTTP status of the response.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#value() value()} - A synonym for <code>code</code>.
+	</ul>
+</ul>
+<p>
+	It can be used in the following locations:
+</p>
+<ul>
+	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+</ul>
+<p>
+	This can only be applied to parameters and subclasses of the {@link org.apache.juneau.Value} class with an {@link java.lang.Integer} type.
+	<br>The {@link org.apache.juneau.Value} object is mean to be a place-holder for the set value.
+</p>
+
+<h5 class='section'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Defined on parameter.</jc>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		<ja>@ResponseStatus</ja>(
+			code=401, 
+			description=<js>"Invalid user/pw"</js>
+		) 
+		Value&lt;Integer&gt; status
+	) 
+	{
+		<jk>if</jk> (! isValid(username, password))
+			status.set(401);
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Defined on parameter class.</jc>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		LoginStatus status
+	) 
+	{
+		<jk>if</jk> (! isValid(username, password))
+			status.set(401);
+	}
+
+	<ja>@ResponseStatus</ja>(
+		code=401, 
+		description=<js>"Invalid user/pw"</js>
+	)
+	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
+</p>
+
+<p>
+	The attributes on this annotation are used to populate the generated Swagger for the method.
+	<br>In this case, the Swagger is populated with the following:
+</p>
+<p class='bpcode w800'>
+	<jok>'/user/login'</jok>: {
+		<jok>get: {
+			<jok>responses: {
+				<jok>401</jok>: {
+					<jok>description</jok>: <jov>'Invalid user/pw'</jov>
+				}
+			}
+		}
+	}
+</p>

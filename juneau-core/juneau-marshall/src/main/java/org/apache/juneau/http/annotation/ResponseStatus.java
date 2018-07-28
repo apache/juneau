@@ -16,8 +16,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
-
 /**
  * REST response status annotation.
  *
@@ -29,51 +27,6 @@ import org.apache.juneau.*;
  * <ul>
  * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
  * </ul>
- *
- * <p>
- * This can only be applied to parameters and subclasses of the {@link Value} class with an {@link Integer} type.
- * <br>The {@link Value} object is mean to be a place-holder for the set value.
- *
- * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Defined on parameter.</jc>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
- * 	<jk>public void</jk> login(String username, String password,
- * 			<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>) Value&lt;Integer&gt; status) {
- * 		<jk>if</jk> (! isValid(username, password))
- * 			status.set(401);
- * 	}
- * </p>
- * <p class='bcode w800'>
- * 	<jc>// Defined on parameter class.</jc>
- * 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
- * 	<jk>public void</jk> login(String username, String password, LoginStatus status) {
- * 		<jk>if</jk> (! isValid(username, password))
- * 			status.set(401);
- * 	}
- *
- * 	<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
- * 	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
- * </p>
- *
- * <p>
- * The attributes on this annotation are used to populate the generated Swagger for the method.
- * <br>In this case, the Swagger is populated with the following:
- *
- * <p class='bcode w800'>
- * 	<js>'/user/login'</js>: {
- * 		get: {
- * 			responses: {
- * 				200: {
- * 					description: <js>'OK'</js>
- * 				},
- * 				401: {
- * 					description: <js>'Invalid user/pw'</js>
- * 				}
- * 			}
- * 		}
- * 	}
- * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
