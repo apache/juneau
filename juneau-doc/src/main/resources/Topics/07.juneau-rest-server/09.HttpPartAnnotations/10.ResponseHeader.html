@@ -13,6 +13,117 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @ResponseHeader
+{new} @ResponseHeader
 
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation is applied to parameters and parameter types to denote them as an HTTP response headers.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default()} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_enum() _enum()} - Output validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#$ref() $ref()} - Schema reference.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#code() code()} - HTTP status codes that this header applies to.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#example() example()} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum()} - Output validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum()} - Output validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#format() format()} - The schema type format.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#items() items()} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maximum() maximum()} - Output validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxItems() maxItems()} - Output validation.  Maximum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxLength() maxLength()} - Output validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minimum() minimum()} - Output validation.  Minimum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minItems() minItems()} - Output validation.  Minimum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minLength() minLength()} - Output validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#multipleOf() multipleOf()} - Output validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#name() name()} - Header name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#pattern() pattern()} - Output validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#type() type()} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#uniqueItems() uniqueItems()} - Output validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()} - Free-form Swagger JSON.
+	</ul>
+</ul>
+<p>
+	It can be used in the following locations:
+</p>
+<ul>
+	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+</ul>
+<p>
+	This annotation can only be applied to subclasses or parameters of type {@link Value}.
+</p>
+<p>
+	The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
+	on a response:
+</p>
+<p class='bpcode w800'>
+	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(RestResponse res) {
+		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
+		...
+	}
+ 
+	<jc>// Example #2 - Use on parameter.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(
+			<ja>@ResponseHeader</ja>(
+				name=<js>"X-Rate-Limit"</js>,
+				type=<js>"integer"</js>,
+				format=<js>"int32"</js>,
+				description=<js>"Calls per hour allowed by the user."</js>,
+				example=<js>"123"</js>
+			)
+			Value&lt;Integer&gt; rateLimit
+ 	) 
+ 	{
+		rateLimit.set(1000);
+		...
+	}
+
+	<jc>// Example #3 - Use on type.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(RateLimit rateLimit) {
+		rateLimit.set(1000);
+		...
+	}
+
+	<ja>@ResponseHeader</ja>(
+		name=<js>"X-Rate-Limit"</js>, 
+		type=<js>"integer"</js>, 
+		format=<js>"int32"</js>, 
+		description=<js>"Calls per hour allowed by the user."</js>, 
+		example=<js>"123"</js>
+	)
+	<jk>public class</jk> RateLimit <jk>extends</jk> Value&lt;Integer&gt; {}
+</p>
+
+<h5 class='topic'>Swagger documentation</h5>
+<p>
+	The attributes on this annotation are also used to populate the generated Swagger for the method.
+	<br>For example, in the case of the <code>X-Rate-Limit</code> example above, the following Swagger is generated:
+</p>
+<p class='bpcode w800'>
+	<jok>'/user/login'</jok>: {
+		<jok>get</jok>: {
+			<jok>responses</jok>: {
+				<jok>200</jok>: {
+					<jok>headers</jok>: {
+						<jok>'X-Rate-Limit'</jok>: {
+							<jok>type</jok>: <jov>'integer'</jov>,
+							<jok>format</jok>: <jov>'int32'</jov>,
+							<jok>description</jok>: <jov>'Calls per hour allowed by the user.'</jov>,
+							<jok>example</jok>: <jov>'123'</jov>
+						}
+					}
+				}
+			}
+		}
+	}
+</p>
+

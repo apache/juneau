@@ -314,7 +314,7 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Path'>@Path</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.RequestBean'>@RequestBean</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Response'>@Response</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader'>@ResponseHeader</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader'>@ResponseHeader</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus'>@ResponseStatus</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>@ResponseStatuses</a></p>
 		</ol>
@@ -2768,8 +2768,8 @@
 <p class='bpcode w800'>
 	<jc>// JSON</jc> 
 	{
-		id1: {name: <js>'John Smith'</js>, sex:<js>'M'</js>},
-		id2: {name: <js>'Jane Doe'</js>, sex:<js>'F'</js>}
+		<jok>id1</jok>: {<jok>name</jok>: <jov>'John Smith'</jov>, <jok>sex</jok>: <jov>'M'</jov>},
+		<jok>id2</jok>: {<jok>name</jok>: <jov>'Jane Doe'</jov>, <jok>sex</jok>: <jov>'F'</jov>}
 	}
 				</p>
 				<p class='bcode w800'>
@@ -3674,8 +3674,8 @@
 </p>
 <p class='bpcode w800'>
 	{
-		b: {
-			c: {
+		<jok>b</jok>: {
+			<jok>c</jok>: {
 			}
 		}
 	}
@@ -4574,13 +4574,13 @@ TODO(7.2.0)
 	<tr>
 		<td class='code'>
 	{
-		name: <js>'John Smith'</js>
+		<jok>name</jok>: <jov>'John Smith'</jov>
 	}
 		</td>
 		<td class='code'>
 	{
-		personBean: {
-			name: <js>'John Smith'</js>
+		<jok>personBean</jok>: {
+			<jok>name</jok>: <jov>'John Smith'</jov>
 		}
 	}
 		</td>
@@ -4640,43 +4640,43 @@ TODO(7.2.0)
 <h5 class='figure'>JSON Schema</h5>
 <p class='bpcode w800'>
 	{
-		type: <js>'object'</js>, 
-		description: <js>'org.apache.juneau.sample.Person'</js>, 
-		properties: {
-			name: {
-				type: <js>'string'</js>, 
-				description: <js>'java.lang.String'</js>
+		<jok>type: <jov>'object'</jov>, 
+		<jok>description</jok>: <jov>'org.apache.juneau.sample.Person'</jov>, 
+		<jok>properties</jok>: {
+			<jok>name</jok>: {
+				<jok>type</jok>: <jov>'string'</jov>, 
+				<jok>description</jok>: <jov>'java.lang.String'</jov>
 			}, 
-			birthDate: {
-				type: <js>'string'</js>, 
-				description: <js>'java.util.Calendar'</js>
+			<jok>birthDate</jok>: {
+				<jok>type</jok>: <jov>'string'</jov>, 
+				<jok>description</jok>: <jov>'java.util.Calendar'</jov>
 			}, 
-			addresses: {
-				type: <js>'array'</js>, 
-				description: <js>'java.util.LinkedList&lt;org.apache.juneau.sample.Address&gt;'</js>, 
-				items: {
-					type: <js>'object'</js>, 
-					description: <js>'org.apache.juneau.sample.Address'</js>, 
-					properties: {
-						street: {
-							type: <js>'string'</js>, 
-							description: <js>'java.lang.String'</js>
+			<jok>addresses</jok>: {
+				<jok>type</jok>: <jov>'array'</jov>, 
+				<jok>description</jok>: <jov>'java.util.LinkedList&lt;org.apache.juneau.sample.Address&gt;'</jov>, 
+				<jok>items</jok>: {
+					<jok>type</jok>: <jov>'object'</jov>, 
+					<jok>description</jok>: <jov>'org.apache.juneau.sample.Address'</jov>, 
+					<jok>properties</jok>: {
+						<jok>street</jok>: {
+							<jok>type</jok>: <jov>'string'</jov>, 
+							<jok>description</jok>: <jov>'java.lang.String'</jov>
 						}, 
-						city: {
-							type: <js>'string'</js>, 
-							description: <js>'java.lang.String'</js>
+						<jok>city</jok>: {
+							<jok>type</jok>: <jov>'string'</jov>, 
+							<jok>description</jok>: <jov>'java.lang.String'</jov>
 						}, 
-						state: {
-							type: <js>'string'</js>, 
-							description: <js>'java.lang.String'</js>
+						<jok>state</jok>: {
+							<jok>type</jok>: <jov>'string'</jov>, 
+							<jok>description</jok>: <jov>'java.lang.String'</jov>
 						}, 
-						zip: {
-							type: <js>'number'</js>, 
-							description: <js>'int'</js>
+						<jok>zip</jok>: {
+							<jok>type</jok>: <jov>'number'</jov>, 
+							<jok>description</jok>: <jov>'int'</jov>
 						}, 
-						isCurrent: {
-							type: <js>'boolean'</js>, 
-							description: <js>'boolean'</js>
+						<jok>isCurrent</jok>: {
+							<jok>type</jok>: <jov>'boolean'</jov>, 
+							<jok>description</jok>: <jov>'boolean'</jov>
 						}
 					}
 				}
@@ -5090,15 +5090,15 @@ TODO(7.2.0)
 		</td>
 		<td class='code'>
 	{
-		a: <js>'foo'</js>,
-		b: 123,
-		c: <js>'bar'</js>,
-		d: 456,
-		e: {
-			h: <js>'baz'</js>
+		<jok>a</jok>: <jov>'foo'</jov>,
+		<jok>b</jok>: <jov>123</jov>,
+		<jok>c</jok>: <jov>'bar'</jov>,
+		<jok>d</jok>: <jov>456</jov>,
+		<jok>e</jok>: {
+			<jok>h</jok>: <jov>'baz'</jov>
 		}
-		f: [<js>'qux'</js>]
-		g: [789]
+		<jok>f</jok>: [<jov>'qux'</jov>]
+		<jok>g</jok>: [<jov>789</jov>]
 	}
 		</td>
 		<td class='code'><xt>
@@ -5138,17 +5138,17 @@ TODO(7.2.0)
 		</td>
 		<td class='code'>
 	{
-		a: {
-			k1: <js>'foo'</js>
+		<jok>a</jok>: {
+			<jok>k1</jok>: <jov>'foo'</jov>
 		},
-		b: {
-			k2: 123
+		<jok>b</jok>: {
+			<jok>k2</jok>: <jov>123</jov>
 		},
-		c: {
-			k3: <js>'bar'</js>,
-			k4: 456,
-			k5: <jk>true</jk>,
-			k6: <jk>null</jk>
+		<jok>c</jok>: {
+			<jok>k3</jok>: <jov>'bar'</jov>,
+			<jok>k4</jok>: <jov>456</jov>,
+			<jok>k5</jok>: <jov>true</jov>,
+			<jok>k6</jok>: <jov>null</jov>
 		}
 	}
 		</td>
@@ -5978,11 +5978,11 @@ TODO(7.2.0)
 		</td>
 		<td class='code'>
 	{
-		a: {
-			k1: <js>'foo'</js>, 
-			k2: 123, 
+		<jok>a</jok>: {
+			<jok>k1</jok>: <jov>'foo'</jov>, 
+			<jok>k2</jok>: <jov>123</jov>, 
 		},
-		b: 456
+		<jok>b</jok>: <jov>456</jov>
 	}
 		</td>
 		<td class='code'><xt>
@@ -7348,15 +7348,15 @@ TODO(7.2.0)
 		</td>
 		<td class='code'>
 	{
-		a: <js>'foo'</js>,
-		b: 123,
-		c: <js>'bar'</js>,
-		d: 456,
-		e: {
-			h: <js>'baz'</js>
+		<jok>a</jok>: <jov>'foo'</jov>,
+		<jok>b</jok>: <jov>123</jov>,
+		<jok>c</jok>: <jov>'bar'</jov>,
+		<jok>d</jok>: <jov>456</jov>,
+		<jok>e</jok>: {
+			<jok>h</jok>: <jov>'baz'</jov>
 		}
-		f: [<js>'qux'</js>]
-		g: [789]
+		<jok>f</jok>: [<jov>'qux'</jov>]
+		<jok>g</jok>: [<jov>789</jov>]
 	}
 		</td>
 		<td class='code'><xt>
@@ -7426,17 +7426,17 @@ TODO(7.2.0)
 		</td>
 		<td class='code'>
 	{
-		a: {
-			k1: <js>'foo'</js>
+		<jok>a</jok>: {
+			<jok>k1</jok>: <jov>'foo'</jov>
 		},
-		b: {
-			k2: 123
+		<jok>b</jok>: {
+			<jok>k2</jok>: <jov>123</jov>
 		},
-		c: {
-			k3: <js>'bar'</js>,
-			k4: 456,
-			k5: <jk>true</jk>,
-			k6: <jk>null</jk>
+		<jok>c</jok>: {
+			<jok>k3</jok>: <jov>'bar'</jov>,
+			<jok>k4</jok>: <jov>456</jov>,
+			<jok>k5</jok>: <jov>true</jov>,
+			<jok>k6</jok>: <jov>null</jov>
 		}
 	}
 		</td>
@@ -10139,68 +10139,68 @@ TODO(7.2.0)
 </p>
 <p class='bpcode w800'>
 	{
-		<jf>"swagger"</jf>: <js>"2.0"</js>,
-		<jf>"info"</jf>: {
-			<jf>"title"</jf>: <js>"Swagger Petstore"</js>,
-			<jf>"description"</jf>: <js>"This is a sample server Petstore server."</js>,
-			<jf>"version"</jf>: <js>"1.0.0"</js>,
-			<jf>"termsOfService"</jf>: <js>"http://swagger.io/terms/"</js>,
-			<jf>"contact"</jf>: {
-				<jf>"email"</jf>: <js>"apiteam@swagger.io"</js>
+		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
+		<jok>"info"</jok>: {
+			<jok>"title"</jok>: <jov>"Swagger Petstore"</jov>,
+			<jok>"description"</jok>: <jov>"This is a sample server Petstore server."</jov>,
+			<jok>"version"</jok>: <jov>"1.0.0"</jov>,
+			<jok>"termsOfService"</jok>: <jov>"http://swagger.io/terms/"</jov>,
+			<jok>"contact"</jok>: {
+				<jok>"email"</jok>: <jov>"apiteam@swagger.io"</jov>
 			},
-			<jf>"license"</jf>: {
-				<jf>"name"</jf>: <js>"Apache 2.0"</js>,
-				<jf>"url"</jf>: <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
+			<jok>"license"</jok>: {
+				<jok>"name"</jok>: <jov>"Apache 2.0"</jov>,
+				<jok>"url"</jok>: <jov>"http://www.apache.org/licenses/LICENSE-2.0.html"</jov>
 			}
 		},
-		<jf>"host"</jf>: <js>"petstore.swagger.io"</js>,
-		<jf>"basePath"</jf>: <js>"/v2"</js>,
-		<jf>"tags"</jf>: [
+		<jok>"host"</jok>: <jov>"petstore.swagger.io"</jov>,
+		<jok>"basePath"</jok>: <jov>"/v2"</jov>,
+		<jok>"tags"</jok>: [
 			{
-				<jf>"name"</jf>: <js>"pet"</js>,
-				<jf>"description"</jf>: <js>"Everything about your Pets"</js>,
-				<jf>"externalDocs"</jf>: {
-					<jf>"description"</jf>: <js>"Find out more"</js>,
-					<jf>"url"</jf>: <js>"http://swagger.io"</js>
+				<jok>"name"</jok>: <jov>"pet"</jov>,
+				<jok>"description"</jok>: <jov>"Everything about your Pets"</jov>,
+				<jok>"externalDocs"</jok>: {
+					<jok>"description"</jok>: <jov>"Find out more"</jov>,
+					<jok>"url"</jok>: <jov>"http://swagger.io"</jov>
 				}
 			}
 		],
-		<jf>"schemes"</jf>: [
-			<js>"http"</js>
+		<jok>"schemes"</jok>: [
+			<jov>"http"</jov>
 		],
-		<jf>"paths"</jf>: {
-			<jf>"/pet"</jf>: {
-				<jf>"post"</jf>: {
-					<jf>"tags"</jf>: [
-						<js>"pet"</js>
+		<jok>"paths"</jok>: {
+			<jok>"/pet"</jok>: {
+				<jok>"post"</jok>: {
+					<jok>"tags"</jok>: [
+						<jov>"pet"</jov>
 					],
-					<jf>"summary"</jf>: <js>"Add a new pet to the store"</js>,
-					<jf>"description"</jf>: <js>""</js>,
-					<jf>"operationId"</jf>: <js>"addPet"</js>,
-					<jf>"consumes"</jf>: [
-						<js>"application/json"</js>,
-						<js>"text/xml"</js>
+					<jok>"summary"</jok>: <jov>"Add a new pet to the store"</jov>,
+					<jok>"description"</jok>: <jov>""</jov>,
+					<jok>"operationId"</jok>: <jov>"addPet"</jov>,
+					<jok>"consumes"</jok>: [
+						<jov>"application/json"</jov>,
+						<jov>"text/xml"</jov>
 					],
-					<jf>"produces"</jf>: [
-						<js>"application/json"</js>,
-						<js>"text/xml"</js>
+					<jok>"produces"</jok>: [
+						<jov>"application/json"</jov>,
+						<jov>"text/xml"</jov>
 					],
-					<jf>"parameters"</jf>: [
+					<jok>"parameters"</jok>: [
 						{
-							<jf>"in"</jf>: <js>"body"</js>,
-							<jf>"name"</jf>: <js>"body"</js>,
-							<jf>"description"</jf>: <js>"Pet object that needs to be added to the store"</js>,
-							<jf>"required"</jf>: <jk>true</jk>
+							<jok>"in"</jok>: <jov>"body"</jov>,
+							<jok>"name"</jok>: <jov>"body"</jov>,
+							<jok>"description"</jok>: <jov>"Pet object that needs to be added to the store"</jov>,
+							<jok>"required"</jok>: <jov>true</jov>
 						}
 					],
-					<jf>"responses"</jf>: {
-						<jf>"405"</jf>: {
-							<jf>"description"</jf>: <js>"Invalid input"</js>
+					<jok>"responses"</jok>: {
+						<jok>"405"</jok>: {
+							<jok>"description"</jok>: <jov>"Invalid input"</jov>
 						}
 					}
 				}
 			}
-		},
+		}
 	}		
 </p>
 <p>
@@ -15033,7 +15033,7 @@ VariantAlsoNegotiates
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default()}  - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default()} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum()} - Input validation.  Must match one of the values.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#api() api()} - Free-form Swagger JSON.
@@ -15656,11 +15656,11 @@ VariantAlsoNegotiates
 	<br>For example, in the case of the <code>InvalidLogin</code> example above, the following Swagger is generated:
 </p>
 <p class='bpcode w800'>
-	<js>'/user/login'</js>: {
-		get: {
-			responses: {
-				401: {
-					description: <js>'Invalid username or password provided'</js>
+	<jok>'/user/login'</jok>: {
+		<jok>get</jok>: {
+			<jok>responses</jok>: {
+				<jok>401</jok>: {
+					<jok>description</jok>: <jov>'Invalid username or password provided'</jov>
 				}
 			}
 		}
@@ -15675,9 +15675,119 @@ VariantAlsoNegotiates
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader' id='juneau-rest-server.HttpPartAnnotations.ResponseHeader'>7.9.10 - @ResponseHeader</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader' id='juneau-rest-server.HttpPartAnnotations.ResponseHeader'>7.9.10 - @ResponseHeader</a></h4>
 <div class='topic'><!-- START: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation is applied to parameters and parameter types to denote them as an HTTP response headers.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default()} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_enum() _enum()} - Output validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#$ref() $ref()} - Schema reference.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#code() code()} - HTTP status codes that this header applies to.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#example() example()} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum()} - Output validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum()} - Output validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#format() format()} - The schema type format.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#items() items()} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maximum() maximum()} - Output validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxItems() maxItems()} - Output validation.  Maximum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxLength() maxLength()} - Output validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minimum() minimum()} - Output validation.  Minimum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minItems() minItems()} - Output validation.  Minimum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minLength() minLength()} - Output validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#multipleOf() multipleOf()} - Output validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#name() name()} - Header name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#pattern() pattern()} - Output validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#type() type()} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#uniqueItems() uniqueItems()} - Output validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()} - Free-form Swagger JSON.
+	</ul>
+</ul>
+<p>
+	It can be used in the following locations:
+</p>
+<ul>
+	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+</ul>
+<p>
+	This annotation can only be applied to subclasses or parameters of type {@link Value}.
+</p>
+<p>
+	The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
+	on a response:
+</p>
+<p class='bpcode w800'>
+	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(RestResponse res) {
+		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
+		...
+	}
+ 
+	<jc>// Example #2 - Use on parameter.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(
+			<ja>@ResponseHeader</ja>(
+				name=<js>"X-Rate-Limit"</js>,
+				type=<js>"integer"</js>,
+				format=<js>"int32"</js>,
+				description=<js>"Calls per hour allowed by the user."</js>,
+				example=<js>"123"</js>
+			)
+			Value&lt;Integer&gt; rateLimit
+ 	) 
+ 	{
+		rateLimit.set(1000);
+		...
+	}
+
+	<jc>// Example #3 - Use on type.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(RateLimit rateLimit) {
+		rateLimit.set(1000);
+		...
+	}
+
+	<ja>@ResponseHeader</ja>(
+		name=<js>"X-Rate-Limit"</js>, 
+		type=<js>"integer"</js>, 
+		format=<js>"int32"</js>, 
+		description=<js>"Calls per hour allowed by the user."</js>, 
+		example=<js>"123"</js>
+	)
+	<jk>public class</jk> RateLimit <jk>extends</jk> Value&lt;Integer&gt; {}
+</p>
+
+<h5 class='topic'>Swagger documentation</h5>
+<p>
+	The attributes on this annotation are also used to populate the generated Swagger for the method.
+	<br>For example, in the case of the <code>X-Rate-Limit</code> example above, the following Swagger is generated:
+</p>
+<p class='bpcode w800'>
+	<jok>'/user/login'</jok>: {
+		<jok>get</jok>: {
+			<jok>responses</jok>: {
+				<jok>200</jok>: {
+					<jok>headers</jok>: {
+						<jok>'X-Rate-Limit'</jok>: {
+							<jok>type</jok>: <jov>'integer'</jov>,
+							<jok>format</jok>: <jov>'int32'</jov>,
+							<jok>description</jok>: <jov>'Calls per hour allowed by the user.'</jov>,
+							<jok>example</jok>: <jov>'123'</jov>
+						}
+					}
+				}
+			}
+		}
+	}
+</p>
 </div><!-- END: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
 
 <!-- ==================================================================================================== -->

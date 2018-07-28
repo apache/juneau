@@ -31,68 +31,68 @@ Swagger
 </p>
 <p class='bpcode w800'>
 	{
-		<jf>"swagger"</jf>: <js>"2.0"</js>,
-		<jf>"info"</jf>: {
-			<jf>"title"</jf>: <js>"Swagger Petstore"</js>,
-			<jf>"description"</jf>: <js>"This is a sample server Petstore server."</js>,
-			<jf>"version"</jf>: <js>"1.0.0"</js>,
-			<jf>"termsOfService"</jf>: <js>"http://swagger.io/terms/"</js>,
-			<jf>"contact"</jf>: {
-				<jf>"email"</jf>: <js>"apiteam@swagger.io"</js>
+		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
+		<jok>"info"</jok>: {
+			<jok>"title"</jok>: <jov>"Swagger Petstore"</jov>,
+			<jok>"description"</jok>: <jov>"This is a sample server Petstore server."</jov>,
+			<jok>"version"</jok>: <jov>"1.0.0"</jov>,
+			<jok>"termsOfService"</jok>: <jov>"http://swagger.io/terms/"</jov>,
+			<jok>"contact"</jok>: {
+				<jok>"email"</jok>: <jov>"apiteam@swagger.io"</jov>
 			},
-			<jf>"license"</jf>: {
-				<jf>"name"</jf>: <js>"Apache 2.0"</js>,
-				<jf>"url"</jf>: <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
+			<jok>"license"</jok>: {
+				<jok>"name"</jok>: <jov>"Apache 2.0"</jov>,
+				<jok>"url"</jok>: <jov>"http://www.apache.org/licenses/LICENSE-2.0.html"</jov>
 			}
 		},
-		<jf>"host"</jf>: <js>"petstore.swagger.io"</js>,
-		<jf>"basePath"</jf>: <js>"/v2"</js>,
-		<jf>"tags"</jf>: [
+		<jok>"host"</jok>: <jov>"petstore.swagger.io"</jov>,
+		<jok>"basePath"</jok>: <jov>"/v2"</jov>,
+		<jok>"tags"</jok>: [
 			{
-				<jf>"name"</jf>: <js>"pet"</js>,
-				<jf>"description"</jf>: <js>"Everything about your Pets"</js>,
-				<jf>"externalDocs"</jf>: {
-					<jf>"description"</jf>: <js>"Find out more"</js>,
-					<jf>"url"</jf>: <js>"http://swagger.io"</js>
+				<jok>"name"</jok>: <jov>"pet"</jov>,
+				<jok>"description"</jok>: <jov>"Everything about your Pets"</jov>,
+				<jok>"externalDocs"</jok>: {
+					<jok>"description"</jok>: <jov>"Find out more"</jov>,
+					<jok>"url"</jok>: <jov>"http://swagger.io"</jov>
 				}
 			}
 		],
-		<jf>"schemes"</jf>: [
-			<js>"http"</js>
+		<jok>"schemes"</jok>: [
+			<jov>"http"</jov>
 		],
-		<jf>"paths"</jf>: {
-			<jf>"/pet"</jf>: {
-				<jf>"post"</jf>: {
-					<jf>"tags"</jf>: [
-						<js>"pet"</js>
+		<jok>"paths"</jok>: {
+			<jok>"/pet"</jok>: {
+				<jok>"post"</jok>: {
+					<jok>"tags"</jok>: [
+						<jov>"pet"</jov>
 					],
-					<jf>"summary"</jf>: <js>"Add a new pet to the store"</js>,
-					<jf>"description"</jf>: <js>""</js>,
-					<jf>"operationId"</jf>: <js>"addPet"</js>,
-					<jf>"consumes"</jf>: [
-						<js>"application/json"</js>,
-						<js>"text/xml"</js>
+					<jok>"summary"</jok>: <jov>"Add a new pet to the store"</jov>,
+					<jok>"description"</jok>: <jov>""</jov>,
+					<jok>"operationId"</jok>: <jov>"addPet"</jov>,
+					<jok>"consumes"</jok>: [
+						<jov>"application/json"</jov>,
+						<jov>"text/xml"</jov>
 					],
-					<jf>"produces"</jf>: [
-						<js>"application/json"</js>,
-						<js>"text/xml"</js>
+					<jok>"produces"</jok>: [
+						<jov>"application/json"</jov>,
+						<jov>"text/xml"</jov>
 					],
-					<jf>"parameters"</jf>: [
+					<jok>"parameters"</jok>: [
 						{
-							<jf>"in"</jf>: <js>"body"</js>,
-							<jf>"name"</jf>: <js>"body"</js>,
-							<jf>"description"</jf>: <js>"Pet object that needs to be added to the store"</js>,
-							<jf>"required"</jf>: <jk>true</jk>
+							<jok>"in"</jok>: <jov>"body"</jov>,
+							<jok>"name"</jok>: <jov>"body"</jov>,
+							<jok>"description"</jok>: <jov>"Pet object that needs to be added to the store"</jov>,
+							<jok>"required"</jok>: <jov>true</jov>
 						}
 					],
-					<jf>"responses"</jf>: {
-						<jf>"405"</jf>: {
-							<jf>"description"</jf>: <js>"Invalid input"</js>
+					<jok>"responses"</jok>: {
+						<jok>"405"</jok>: {
+							<jok>"description"</jok>: <jov>"Invalid input"</jov>
 						}
 					}
 				}
 			}
-		},
+		}
 	}		
 </p>
 <p>

@@ -63,43 +63,43 @@ JSON-Schema Support
 <h5 class='figure'>JSON Schema</h5>
 <p class='bpcode w800'>
 	{
-		type: <js>'object'</js>, 
-		description: <js>'org.apache.juneau.sample.Person'</js>, 
-		properties: {
-			name: {
-				type: <js>'string'</js>, 
-				description: <js>'java.lang.String'</js>
+		<jok>type: <jov>'object'</jov>, 
+		<jok>description</jok>: <jov>'org.apache.juneau.sample.Person'</jov>, 
+		<jok>properties</jok>: {
+			<jok>name</jok>: {
+				<jok>type</jok>: <jov>'string'</jov>, 
+				<jok>description</jok>: <jov>'java.lang.String'</jov>
 			}, 
-			birthDate: {
-				type: <js>'string'</js>, 
-				description: <js>'java.util.Calendar'</js>
+			<jok>birthDate</jok>: {
+				<jok>type</jok>: <jov>'string'</jov>, 
+				<jok>description</jok>: <jov>'java.util.Calendar'</jov>
 			}, 
-			addresses: {
-				type: <js>'array'</js>, 
-				description: <js>'java.util.LinkedList&lt;org.apache.juneau.sample.Address&gt;'</js>, 
-				items: {
-					type: <js>'object'</js>, 
-					description: <js>'org.apache.juneau.sample.Address'</js>, 
-					properties: {
-						street: {
-							type: <js>'string'</js>, 
-							description: <js>'java.lang.String'</js>
+			<jok>addresses</jok>: {
+				<jok>type</jok>: <jov>'array'</jov>, 
+				<jok>description</jok>: <jov>'java.util.LinkedList&lt;org.apache.juneau.sample.Address&gt;'</jov>, 
+				<jok>items</jok>: {
+					<jok>type</jok>: <jov>'object'</jov>, 
+					<jok>description</jok>: <jov>'org.apache.juneau.sample.Address'</jov>, 
+					<jok>properties</jok>: {
+						<jok>street</jok>: {
+							<jok>type</jok>: <jov>'string'</jov>, 
+							<jok>description</jok>: <jov>'java.lang.String'</jov>
 						}, 
-						city: {
-							type: <js>'string'</js>, 
-							description: <js>'java.lang.String'</js>
+						<jok>city</jok>: {
+							<jok>type</jok>: <jov>'string'</jov>, 
+							<jok>description</jok>: <jov>'java.lang.String'</jov>
 						}, 
-						state: {
-							type: <js>'string'</js>, 
-							description: <js>'java.lang.String'</js>
+						<jok>state</jok>: {
+							<jok>type</jok>: <jov>'string'</jov>, 
+							<jok>description</jok>: <jov>'java.lang.String'</jov>
 						}, 
-						zip: {
-							type: <js>'number'</js>, 
-							description: <js>'int'</js>
+						<jok>zip</jok>: {
+							<jok>type</jok>: <jov>'number'</jov>, 
+							<jok>description</jok>: <jov>'int'</jov>
 						}, 
-						isCurrent: {
-							type: <js>'boolean'</js>, 
-							description: <js>'boolean'</js>
+						<jok>isCurrent</jok>: {
+							<jok>type</jok>: <jov>'boolean'</jov>, 
+							<jok>description</jok>: <jov>'boolean'</jov>
 						}
 					}
 				}
