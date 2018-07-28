@@ -17,8 +17,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.utils.*;
 
 /**
  * REST response header annotation.

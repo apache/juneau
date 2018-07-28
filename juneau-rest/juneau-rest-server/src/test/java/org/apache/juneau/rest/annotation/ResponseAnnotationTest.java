@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -26,7 +27,6 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 import org.junit.runners.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Tests the @Response annotation.
