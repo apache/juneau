@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.response.*;
+import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.svl.*;
 
 /**

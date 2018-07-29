@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
+package org.apache.juneau.rest.reshandlers;
 
 import java.io.*;
 
@@ -19,30 +19,27 @@ import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Response handler for {@link InputStream} objects.
+ * Response handler for {@link Reader} objects.
  *
  * <p>
- * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
- *
- * <p>
- * Sets the <code>Content-Type</code> response header to whatever was set via {@link RestResponse#setContentType(String)}.
+ * Simply pipes the contents of the {@link Reader} to {@link RestResponse#getNegotiatedWriter()}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
  * </ul>
  */
-public final class InputStreamHandler implements ResponseHandler {
+public final class ReaderHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, NotAcceptable, RestException {
-		if (output instanceof InputStream) {
-			res.setHeader("Content-Type", res.getContentType());
-			try (OutputStream os = res.getNegotiatedOutputStream()) {
-				IOPipe.create(output, os).run();
+		if (output instanceof Reader) {
+			try (Writer w = res.getNegotiatedWriter()) {
+				IOPipe.create(output, w).run();
 			}
 			return true;
 		}
 		return false;
 	}
 }
+

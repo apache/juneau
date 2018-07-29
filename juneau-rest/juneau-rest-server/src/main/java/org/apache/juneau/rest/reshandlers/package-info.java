@@ -15,4 +15,4 @@
 /**
  * HTTP Response Handlers
  */
-package org.apache.juneau.rest.response;
+package org.apache.juneau.rest.reshandlers;

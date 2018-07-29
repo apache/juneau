@@ -10,53 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
+package org.apache.juneau.rest.reshandlers;
 
 import java.io.*;
-import java.util.zip.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.utils.*;
-import org.apache.juneau.utils.ZipFileList.*;
+import org.apache.juneau.rest.helper.*;
 
 /**
- * Response handler for ZipFileList objects.
- *
- * <p>
- * Can be associated with a REST resource using the {@link RestResource#responseHandlers} annotation.
- *
- * <p>
- * Sets the following headers:
- * <ul class='spaced-list'>
- * 	<li>
- * 		<code>Content-Type</code> - <code>application/zip</code>
- * 	<li>
- * 		<code>Content-Disposition=attachment;filename=X</code> - Sets X to the file name passed in through the
- * 		constructor {@link ZipFileList#ZipFileList(String)}.
- * </ul>
+ * Response handler for {@link Redirect} objects.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
+ * 	<li class='link'><a class="juneau-rest-server &gt; " href="../../../../../overview-summary.html#juneau-rest-server.RestMethod.MethodReturnTypes">Overview &gt; Method Return Types</a>
  * </ul>
  */
-public class ZipFileListResponseHandler implements ResponseHandler {
+public final class RedirectHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
 	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
-		if (output.getClass() == ZipFileList.class) {
-			ZipFileList m = (ZipFileList)output;
-			res.setContentType("application/zip");
-			res.setHeader("Content-Disposition", "attachment;filename=" + m.fileName); //$NON-NLS-2$
-			try (OutputStream os = res.getOutputStream()) {
-				try (ZipOutputStream zos = new ZipOutputStream(os)) {
-					for (ZipFileEntry e : m)
-						e.write(zos);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+		if (output instanceof Redirect) {
+			Redirect r = (Redirect)output;
+			String uri = req.getUriResolver().resolve(r.getURI());
+			int rc = r.getHttpResponseCode();
+			if (rc != 0)
+				res.setStatus(rc);   // TODO - This may get ignored by the call below.
+			res.sendRedirect(uri);
 			return true;
 		}
 		return false;

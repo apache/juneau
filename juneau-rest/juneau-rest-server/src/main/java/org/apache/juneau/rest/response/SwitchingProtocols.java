@@ -10,36 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.rest.response;
 
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a simple OK REST response.
+ * Represents an <code>HTTP 101 Switching Protocols</code> response.
  *
  * <p>
- * The response consist of the serialized string <js>"OK"</js>.
+ * The requester has asked the server to switch protocols and the server has agreed to do so.
  */
-@Response(code=200, example="'OK'")
-public class Ok {
+@Response(code=101, example="'Switching Protocols'")
+public class SwitchingProtocols {
 
-	/**
-	 * Reusable instance.
-	 */
-	public static final Ok OK = new Ok();
+	/** Reusable instance. */
+	public static final SwitchingProtocols INSTANCE = new SwitchingProtocols();
 
 	@Override /* Object */
 	public String toString() {
-		return "OK";
-	}
-
-	/**
-	 * Used to convert example into an OK object.
-	 *
-	 * @param s Ignored.
-	 * @return The static {@link #OK} object.
-	 */
-	public static Ok fromString(String s) {
-		return OK;
+		return "Switching Protocols";
 	}
 }

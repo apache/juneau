@@ -13,24 +13,28 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Helper Beans
-
-org.apache.juneau.rest.helper
-BeanDescription
-ChildResourceDescriptions
-Ok
-ReaderResource
-ReaderResourceBuilder
-Redirect
-RedirectToServletRoot
-ResourceDescription
-StreamResource
-StreamResourceBuilder
+{new} Helper Beans
 
 <p>
-	The {@link org.apache.juneau.rest.helper} package contains some reusable beans that are useful for 
-	creating linked items in HTML views.
+	The {@link org.apache.juneau.rest.helper} package contains several predefined beans to help when constructing
+	REST interfaces.
 </p>
+<ul class='doctree'>
+	<li class='jp'>{@link org.apache.juneau.rest.helper}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.RedirectToServletRoot}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+	</ul>
+</ul>
+
+<h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
 <p>
 	The {@link org.apache.juneau.rest.helper.ResourceDescription} class is a bean with name/description
 	properties for labeling and linking to child resources.
@@ -102,16 +106,16 @@ StreamResourceBuilder
 	}
 </p>			
 <p>
-	The {@link org.apache.juneau.dto.LinkString Action} bean is a predefined <ja>@HtmlLink</ja> bean provided
+	The {@link org.apache.juneau.dto.LinkString LinkString} bean is a predefined <ja>@HtmlLink</ja> bean provided
 	to simplify specifying actions.
 	<br>The following is equivalent to above.
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
-	<jk>public</jk> Action[] htmlLinks() {
-		<jk>return new</jk> Action[] {
-			<jk>new</jk> Action(<js>"apache"</js>, <js>"http://apache.org"</js>),
-			<jk>new</jk> Action(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+	<jk>public</jk> LinkString[] htmlLinks() {
+		<jk>return new</jk> LinkString[] {
+			<jk>new</jk> LinkString(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> LinkString(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
 		};
 	}
 </p>			
@@ -119,3 +123,6 @@ StreamResourceBuilder
 	Both examples render the following consisting of a list of hyperlinks:
 </p>
 <img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
+
+<h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
+

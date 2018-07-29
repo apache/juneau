@@ -10,49 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
-
-import static org.apache.juneau.internal.StringUtils.*;
+package org.apache.juneau.rest.reshandlers;
 
 import java.io.*;
-import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.utils.*;
 
 /**
- * Response handler for {@link Writable} and {@link ReaderResource} objects.
+ * Response handler for {@link InputStream} objects.
  *
  * <p>
- * Uses the {@link Writable#writeTo(Writer)} method to send the contents to the
- * {@link RestResponse#getNegotiatedWriter()} writer.
+ * Simply pipes the contents of the {@link InputStream} to {@link RestResponse#getNegotiatedOutputStream()}.
+ *
+ * <p>
+ * Sets the <code>Content-Type</code> response header to whatever was set via {@link RestResponse#setContentType(String)}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
  * </ul>
  */
-public final class StreamableHandler implements ResponseHandler {
+public final class InputStreamHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
-		if (output instanceof Streamable) {
-			if (output instanceof StreamResource) {
-				StreamResource r = (StreamResource)output;
-				MediaType mediaType = r.getMediaType();
-				if (mediaType != null)
-					res.setContentType(mediaType.toString());
-				for (Map.Entry<String,Object> h : r.getHeaders().entrySet())
-					res.setHeader(h.getKey(), asString(h.getValue()));
-			}
-			try (OutputStream os = res.getOutputStream()) {
-				((Streamable)output).streamTo(os);
+	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, NotAcceptable, RestException {
+		if (output instanceof InputStream) {
+			res.setHeader("Content-Type", res.getContentType());
+			try (OutputStream os = res.getNegotiatedOutputStream()) {
+				IOPipe.create(output, os).run();
 			}
 			return true;
 		}
 		return false;
 	}
 }
-

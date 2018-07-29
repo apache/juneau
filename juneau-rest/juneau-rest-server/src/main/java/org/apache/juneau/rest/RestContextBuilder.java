@@ -37,7 +37,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.response.*;
+import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;

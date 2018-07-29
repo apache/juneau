@@ -405,7 +405,7 @@
 		<code><del>FinishableServletOutputStream</del></code> and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
 		now returns a <code><del>FinishablePrintWriter</del></code> that allows you to finish the output
 		without closing the stream.
-		<br>The {@link org.apache.juneau.rest.response.DefaultHandler} class now calls <code>finish()</code>
+		<br>The {@link org.apache.juneau.rest.reshandlers.DefaultHandler} class now calls <code>finish()</code>
 		instead of <code>close()</code> on the stream.
 	<li>
 		Added the following annotations to the {@link org.apache.juneau.rest.BasicRestServlet} class

@@ -16,7 +16,7 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.dto.swagger.ui.SwaggerUI.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
-import static org.apache.juneau.rest.helper.Ok.*;
+import static org.apache.juneau.rest.response.Ok.*;
 
 import java.util.*;
 import java.util.Map;
@@ -32,6 +32,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.transforms.*;
 import org.apache.juneau.rest.converters.*;

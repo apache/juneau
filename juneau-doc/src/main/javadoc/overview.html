@@ -298,7 +298,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.StreamResource'>StreamResource</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.Redirect'>Redirect</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RestMethodMatchers'>@RestMethod.matchers()</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedHelperBeans'>Helper Beans</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedHelperBeans'>Helper Beans</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedThrowables'>Predefined Throwables</a></p>
 		</ol>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a></p>
@@ -13711,13 +13711,13 @@ TODO(7.2.0)
 <ul class='doctree'>
 	<li class='jic'>{@link org.apache.juneau.rest.ResponseHandler}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.rest.response.DefaultHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.response.InputStreamHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.response.ReaderHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.response.RedirectHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.response.StreamableHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.response.WritableHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.response.ZipFileListResponseHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.DefaultHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.InputStreamHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.ReaderHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.RedirectHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.StreamableHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.WritableHandler}
+		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.ZipFileListResponseHandler}
 	</ul>
 </ul>
 <p>
@@ -13779,7 +13779,7 @@ TODO(7.2.0)
 </p>
 <p>
 	The {@link org.apache.juneau.rest.helper.ReaderResource} class implements the {@link org.apache.juneau.Writable}
-	interface which is handled by the {@link org.apache.juneau.rest.response.WritableHandler} class.
+	interface which is handled by the {@link org.apache.juneau.rest.reshandlers.WritableHandler} class.
 	<br>This allows these objects to be returned as responses by REST methods.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -13820,7 +13820,7 @@ TODO(7.2.0)
 </p>
 <p>
 	The {@link org.apache.juneau.rest.helper.StreamResource} class implements the {@link org.apache.juneau.Streamable}
-	interface which is handled by the {@link org.apache.juneau.rest.response.StreamableHandler} class.
+	interface which is handled by the {@link org.apache.juneau.rest.reshandlers.StreamableHandler} class.
 	<br>This allows these objects to be returned as responses by REST methods.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -13857,7 +13857,7 @@ TODO(7.2.0)
 	The {@link org.apache.juneau.rest.helper.Redirect} object is a convenience shortcut for performing <code>HTTP 302</code> redirects.
 </p>
 <p>
-	<l>Redirect</l> objects are handled by the {@link org.apache.juneau.rest.response.RedirectHandler} class.
+	<l>Redirect</l> objects are handled by the {@link org.apache.juneau.rest.reshandlers.RedirectHandler} class.
 	<br>This allows these objects to be returned as responses by REST methods.
 </p>
 <p>
@@ -13968,24 +13968,29 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedHelperBeans' id='juneau-rest-server.RestMethod.PredefinedHelperBeans'>7.6.15 - Helper Beans</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedHelperBeans' id='juneau-rest-server.RestMethod.PredefinedHelperBeans'>7.6.15 - Helper Beans</a></h4>
 <div class='topic'><!-- START: 7.6.15 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
-org.apache.juneau.rest.helper
-BeanDescription
-ChildResourceDescriptions
-Ok
-ReaderResource
-ReaderResourceBuilder
-Redirect
-RedirectToServletRoot
-ResourceDescription
-StreamResource
-StreamResourceBuilder
-
 <p>
-	The {@link org.apache.juneau.rest.helper} package contains some reusable beans that are useful for 
-	creating linked items in HTML views.
+	The {@link org.apache.juneau.rest.help} package contains several predefined beans to help when constructing
+	REST interfaces.
 </p>
+<ul class='doctree'>
+	<li class='jp'>{@link org.apache.juneau.rest.help}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.rest.help.BeanDescription}
+		<li class='jc'>{@link org.apache.juneau.rest.help.ChildResourceDescriptions}
+		<li class='jc'>{@link org.apache.juneau.rest.help.Ok}
+		<li class='jc'>{@link org.apache.juneau.rest.help.ReaderResource}
+		<li class='jc'>{@link org.apache.juneau.rest.help.ReaderResourceBuilder}
+		<li class='jc'>{@link org.apache.juneau.rest.help.Redirect}
+		<li class='jc'>{@link org.apache.juneau.rest.help.RedirectToServletRoot}
+		<li class='jc'>{@link org.apache.juneau.rest.help.ResourceDescription}
+		<li class='jc'>{@link org.apache.juneau.rest.help.StreamResource}
+		<li class='jc'>{@link org.apache.juneau.rest.help.StreamResourceBuilder}
+	</ul>
+</ul>
+
+<h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
 <p>
 	The {@link org.apache.juneau.rest.helper.ResourceDescription} class is a bean with name/description
 	properties for labeling and linking to child resources.
@@ -14057,16 +14062,16 @@ StreamResourceBuilder
 	}
 </p>			
 <p>
-	The {@link org.apache.juneau.dto.LinkString Action} bean is a predefined <ja>@HtmlLink</ja> bean provided
+	The {@link org.apache.juneau.dto.LinkString LinkString} bean is a predefined <ja>@HtmlLink</ja> bean provided
 	to simplify specifying actions.
 	<br>The following is equivalent to above.
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
-	<jk>public</jk> Action[] htmlLinks() {
-		<jk>return new</jk> Action[] {
-			<jk>new</jk> Action(<js>"apache"</js>, <js>"http://apache.org"</js>),
-			<jk>new</jk> Action(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+	<jk>public</jk> LinkString[] htmlLinks() {
+		<jk>return new</jk> LinkString[] {
+			<jk>new</jk> LinkString(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> LinkString(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
 		};
 	}
 </p>			
@@ -14074,6 +14079,8 @@ StreamResourceBuilder
 	Both examples render the following consisting of a list of hyperlinks:
 </p>
 <img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
+
+<h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
 </div><!-- END: 7.6.15 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
 
 <!-- ==================================================================================================== -->
@@ -27025,7 +27032,7 @@ TODO(7.2.0)
 
 <h5 class='topic w800'>Server</h5>
 <ul class='spaced-list'>
-	<li>New {@link org.apache.juneau.rest.response.ZipFileListResponseHandler} class.
+	<li>New {@link org.apache.juneau.rest.reshandlers.ZipFileListResponseHandler} class.
 	<li>Simplified labels in servlet resource bundles:
 		<ul>
 			<li><code>"[ClassName].ResourceDescription"</code> is now <code>"[ClassName].label"</code>.
@@ -27622,8 +27629,8 @@ TODO(7.2.0)
 	<li>New <code><del>ResourceLink.ResourceLink(String,RestRequest,String,Object[])</del></code> constructor.
 	<li>New response handlers:
 		<ul>
-			<li>{@link org.apache.juneau.rest.response.StreamableHandler} - Allows REST Java methods to return instances of {@link org.apache.juneau.Streamable}.
-			<li>{@link org.apache.juneau.rest.response.WritableHandler} - Allows REST Java methods to return instances of {@link org.apache.juneau.Writable}.
+			<li>{@link org.apache.juneau.rest.reshandlers.StreamableHandler} - Allows REST Java methods to return instances of {@link org.apache.juneau.Streamable}.
+			<li>{@link org.apache.juneau.rest.reshandlers.WritableHandler} - Allows REST Java methods to return instances of {@link org.apache.juneau.Writable}.
 		</ul>
 	<li>New DevOps stylesheet.
 	<li>Servlet initialization and HTTP requests are now logged at <JSF>FINE</JSF> level.
@@ -30152,7 +30159,7 @@ TODO(7.2.0)
 		<code><del>FinishableServletOutputStream</del></code> and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
 		now returns a <code><del>FinishablePrintWriter</del></code> that allows you to finish the output
 		without closing the stream.
-		<br>The {@link org.apache.juneau.rest.response.DefaultHandler} class now calls <code>finish()</code>
+		<br>The {@link org.apache.juneau.rest.reshandlers.DefaultHandler} class now calls <code>finish()</code>
 		instead of <code>close()</code> on the stream.
 	<li>
 		Added the following annotations to the {@link org.apache.juneau.rest.BasicRestServlet} class
