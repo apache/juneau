@@ -93,11 +93,9 @@ public class SqlQueryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET,
-		path="/",
 		summary="Display the query entry page"
 	)
-	public Div doGet(
+	public Div get(
 			@Query(name="sql", description="Text to prepopulate the SQL query field with.", example="select * from sys.systables") String sql
 		) {
 
@@ -142,8 +140,6 @@ public class SqlQueryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=POST,
-		path="/",
 		summary="Execute one or more queries",
 		swagger=@MethodSwagger(
 			responses={
@@ -151,7 +147,7 @@ public class SqlQueryResource extends BasicRestServlet {
 			}
 		)
 	)
-	public List<Object> doPost(
+	public List<Object> post(
 			@Body(description="Query input", example="{sql:'select * from sys.systables',pos:1,limit:100}") PostInput in
 		) throws BadRequest {
 

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import java.util.*;
 
 import org.apache.juneau.http.*;
@@ -57,8 +55,8 @@ public class MethodExampleResource extends BasicRestServlet {
 	private static final String SAMPLE_UUID_STRING = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
 
 	/** Example GET request that redirects to our example method */
-	@RestMethod(name=GET, path="/", summary="Top-level page")
-	public ResourceDescriptions doExample() throws Exception {
+	@RestMethod(summary="Top-level page")
+	public ResourceDescriptions get() throws Exception {
 		return new ResourceDescriptions()
 			.append(
 				"example1/foo/123/"+SAMPLE_UUID+"/path-remainder?q1=456&q2=bar",
@@ -76,7 +74,7 @@ public class MethodExampleResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, path="/example1/{p1}/{p2}/{p3}/*",
+		path="/example1/{p1}/{p2}/{p3}/*",
 		summary="GET request using annotated attributes",
 		description="This approach uses annotated parameters for retrieving input."
 	)
@@ -110,7 +108,7 @@ public class MethodExampleResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, path="/example2/{p1}/{p2}/{p3}/*",
+		path="/example2/{p1}/{p2}/{p3}/*",
 		summary="GET request using methods on RestRequest and RestResponse",
 		description="This approach uses low-level request/response objects to perform the same as above."
 	)
@@ -159,7 +157,7 @@ public class MethodExampleResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, path="/example3/{p1}/{p2}/{p3}/*",
+		path="/example3/{p1}/{p2}/{p3}/*",
 		summary="GET request using special objects",
 		description={
 			"This approach uses intermediate-level APIs.\n",

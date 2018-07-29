@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-@RestMethod
+{new} @RestMethod
 
 <p>
 	REST Java methods are identified on REST servlets using the 
@@ -29,5 +29,59 @@
 </p>
 
 <p>
-	There are no restrictions on the name of the Java method.  
+	When the <code>name</code> and/or <code>path</code> values are not specified, their values are inferred
+	from the Java method name. 
+</p>
+<p>
+	The HTTP method can be inferred from the Java method by starting the method name with any of the following:
+</p>
+<ul>
+	<li><code>get</code>
+	<li><code>put</code>
+	<li><code>post</code>
+	<li><code>delete</code>
+	<li><code>options</code>
+	<li><code>head</code>
+	<li><code>trace</code>
+	<li><code>patch</code>
+</ul>
+<p>
+	If <code>path</code> is not defined, it's inferred from the Java method name (minus the prefix above).
+</p>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/foo"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String getFoo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="DELETE", path="/foo"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String deleteFoo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/foo"</jc>
+	<jc>// "GET" is default</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String foo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/"</jc>
+	<ja>@RestMethod</ja>(path=<js>"/"</js>)
+	<jk>public</jk> String foo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String get() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="POST", path="/"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String post() {...}
+</p>
+
+<p>
+	If <code>name</code> and <code>path</code> are both specified, the Java method name can be anything.
 </p>

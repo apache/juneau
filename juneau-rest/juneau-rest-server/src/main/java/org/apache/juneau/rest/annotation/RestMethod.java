@@ -570,21 +570,59 @@ public @interface RestMethod {
 	 * pattern is not found.
 	 *
 	 * <p>
-	 * The path can contain variables that get resolved to {@link Path @Path} parameters:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Example 1</jc>
-	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	 * The path can contain variables that get resolved to {@link Path @Path} parameters.
 	 *
-	 * 	<jc>// Example 2</jc>
+	 * <h5 class='figure'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
+	 * </p>
+	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
 	 * </p>
+	 *
+	 * <p>
+	 * If you do not specify a path name, then the path name is inferred from the Java method name.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Path is assumed to be "/foo".</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
+	 * 	<jk>public void</jk> foo() {...}
+	 * </p>
+	 *
+	 * <p>
+	 * If you also do not specify the {@link #name()} and the Java method name starts with <js>"get"</js>, <js>"put"</js>, <js>"post"</js>, or <js>"deleted"</js>,
+	 * then the HTTP method name is stripped from the inferred path.
+	 *
+	 * <h5 class='figure'>Examples:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Method is GET, path is "/foo".</jc>
+	 * 	<ja>@RestMethod</ja>
+	 * 	<jk>public void</jk> getFoo() {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Method is DELETE, path is "/bar".</jc>
+	 * 	<ja>@RestMethod</ja>
+	 * 	<jk>public void</jk> deleteBar() {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Method is GET, path is "/foobar".</jc>
+	 * 	<ja>@RestMethod</ja>
+	 * 	<jk>public void</jk> foobar() {...}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Method is GET, path is "/".</jc>
+	 * 	<ja>@RestMethod</ja>
+	 * 	<jk>public void</jk> get() {...}
+	 * </p>
+	 *
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='ja'>{@link Path}
 	 * </ul>
 	 */
-	String path() default "/*";
+	String path() default "";
 
 	/**
 	 * Sets the POJO swaps for the serializers and parsers defined on this method.

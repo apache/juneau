@@ -901,7 +901,7 @@ public class RequestBeanProxyTest {
 
 	@RestResource
 	public static class G  {
-		@RestMethod(name=GET)
+		@RestMethod(name=GET,path="/*")
 		public String echoPath(RestRequest req) throws Exception {
 			return req.getPathMatch().getRemainder();
 		}

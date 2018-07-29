@@ -94,7 +94,6 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestMethod(
-		name=GET, path="/",
 		summary="Show all system properties",
 		description="Returns all system properties defined in the JVM.",
 		swagger=@MethodSwagger(
@@ -104,7 +103,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		)
 	)
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public Map getSystemProperties(
+	public Map get(
 			@Query(name="sort", description="Sort results alphabetically", _default="false", example="true") boolean sort
 		) throws NotAcceptable {
 
@@ -146,12 +145,11 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=POST, path="/",
 		summary="Add an entire set of system properties",
 		description="Takes in a map of key/value pairs and creates a set of new system properties.",
 		guards=AdminGuard.class
 	)
-	public RedirectToServletRoot setSystemProperties(
+	public RedirectToServletRoot post(
 			@Body(description="The new system property values", example="{key1:'val1',key2:123}") java.util.Properties newProperties
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 
@@ -174,7 +172,6 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=GET, path="/formPage",
 		summary="Form entry page",
 		description="A form post page for setting a single system property value",
 		guards=AdminGuard.class,
@@ -204,12 +201,11 @@ public class SystemPropertiesResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		name=POST, path="/formPagePost",
 		summary="Form page post",
 		description="Accepts a simple form post of a system property name/value pair.",
 		guards=AdminGuard.class
 	)
-	public RedirectToServletRoot formPagePost(
+	public RedirectToServletRoot postFormPagePost(
 			@FormData("name") String name,
 			@FormData("value") String value
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {

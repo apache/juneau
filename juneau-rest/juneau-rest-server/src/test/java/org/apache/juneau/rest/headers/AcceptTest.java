@@ -64,8 +64,8 @@ public class AcceptTest {
 		serializers={S1.class,S2.class}
 	)
 	public static class A {
-		@RestMethod(name=PUT)
-		public String a01(@Body String in) {
+		@RestMethod
+		public String putA01(@Body String in) {
 			return in;
 		}
 	}
@@ -73,14 +73,14 @@ public class AcceptTest {
 
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
-		a.put("/", null).execute().assertBody("s2");
-		a.put("/", null).accept("text/s1").execute().assertBody("s1");
-		a.put("/", null).accept("text/s2").execute().assertBody("s2");
+		a.put("/a01", null).execute().assertBody("s2");
+		a.put("/a01", null).accept("text/s1").execute().assertBody("s1");
+		a.put("/a01", null).accept("text/s2").execute().assertBody("s2");
 	}
 
 	@Test
 	public void a02_defaultHeadersOnServletAnnotation_invalid() throws Exception {
-		a.put("?noTrace=true", null).accept("text/s3").execute().assertStatus(406).assertBodyContains("Unsupported media-type in request header 'Accept': 'text/s3'");
+		a.put("/a01?noTrace=true", null).accept("text/s3").execute().assertStatus(406).assertBodyContains("Unsupported media-type in request header 'Accept': 'text/s3'");
 	}
 
 	//=================================================================================================================
@@ -102,12 +102,12 @@ public class AcceptTest {
 
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
-		b.put("/", null).accept("text/s3").execute().assertBody("s3");
+		b.put("/b", null).accept("text/s3").execute().assertBody("s3");
 	}
 
 	@Test
 	public void b02_restMethodWithParsersSerializers_invalid() throws Exception {
-		b.put("?noTrace=true", null).accept("text/s4").execute()
+		b.put("/b?noTrace=true", null).accept("text/s4").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
@@ -134,15 +134,15 @@ public class AcceptTest {
 
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
-		c.put("/", null).execute().assertBody("s2");
-		c.put("/", null).accept("text/s1").execute().assertBody("s1");
-		c.put("/", null).accept("text/s2").execute().assertBody("s2");
-		c.put("/", null).accept("text/s3").execute().assertBody("s3");
+		c.put("/c", null).execute().assertBody("s2");
+		c.put("/c", null).accept("text/s1").execute().assertBody("s1");
+		c.put("/c", null).accept("text/s2").execute().assertBody("s2");
+		c.put("/c", null).accept("text/s3").execute().assertBody("s3");
 	}
 
 	@Test
 	public void c02_restMethodAddParsersSerializersInherit_invalid() throws Exception {
-		c.put("?noTrace=true", null).accept("text/s4").execute()
+		c.put("/c?noTrace=true", null).accept("text/s4").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
@@ -169,17 +169,17 @@ public class AcceptTest {
 	@Test
 	public void d01_accept_valid() throws Exception {
 		// "*/*" should match the first serializer, not the default serializer.
-		d.put("/", null).accept("*/*").execute().assertBody("s1");
+		d.put("/d", null).accept("*/*").execute().assertBody("s1");
 		// "text/*" should match the first serializer, not the default serializer.
-		d.put("/", null).accept("text/*").execute().assertBody("s1");
-		d.put("/", null).accept("bad/*,text/*").execute().assertBody("s1");
-		d.put("/", null).accept("text/*,bad/*").execute().assertBody("s1");
-		d.put("/", null).accept("text/s1;q=0.5,text/s2").execute().assertBody("s2");
-		d.put("/", null).accept("text/s1,text/s2;q=0.5").execute().assertBody("s1");
+		d.put("/d", null).accept("text/*").execute().assertBody("s1");
+		d.put("/d", null).accept("bad/*,text/*").execute().assertBody("s1");
+		d.put("/d", null).accept("text/*,bad/*").execute().assertBody("s1");
+		d.put("/d", null).accept("text/s1;q=0.5,text/s2").execute().assertBody("s2");
+		d.put("/d", null).accept("text/s1,text/s2;q=0.5").execute().assertBody("s1");
 	}
 	@Test
 	public void d02_accept_invalid() throws Exception {
-		d.put("?noTrace=true", null).accept("bad/*").execute()
+		d.put("/d?noTrace=true", null).accept("bad/*").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'bad/*'",
@@ -198,7 +198,7 @@ public class AcceptTest {
 	)
 	public static class E {
 		@RestMethod(name=PUT, defaultRequestHeaders={"Accept: text/s3"}, serializers=S3.class)
-		public String e(@Body String in) {
+		public String d(@Body String in) {
 			return in;
 		}
 	}
@@ -206,18 +206,18 @@ public class AcceptTest {
 
 	@Test
 	public void e01_restMethodParserSerializerAnnotations_valid() throws Exception {
-		e.put("/", null).execute().assertBody("s3");
-		e.put("/", null).accept("text/s3").execute().assertBody("s3");
+		e.put("/d", null).execute().assertBody("s3");
+		e.put("/d", null).accept("text/s3").execute().assertBody("s3");
 	}
 	@Test
 	public void e02_restMethodParserSerializerAnnotations_invalid() throws Exception {
-		e.put("?noTrace=true", null).accept("text/s1").execute()
+		e.put("/d?noTrace=true", null).accept("text/s1").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s1'",
 				"Supported media-types: ['text/s3']"
 			);
-		e.put("?noTrace=true", null).accept("text/s2").execute()
+		e.put("/d?noTrace=true", null).accept("text/s2").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/s2'",
@@ -244,9 +244,9 @@ public class AcceptTest {
 
 	@Test
 	public void f01_restMethodAddParsersSerializersAnnotations_valid() throws Exception {
-		f.put("/", null).execute().assertBody("s3");
-		f.put("/", null).accept("text/s1").execute().assertBody("s1");
-		f.put("/", null).accept("text/s2").execute().assertBody("s2");
-		f.put("/", null).accept("text/s3").execute().assertBody("s3");
+		f.put("/f", null).execute().assertBody("s3");
+		f.put("/f", null).accept("text/s1").execute().assertBody("s1");
+		f.put("/f", null).accept("text/s2").execute().assertBody("s2");
+		f.put("/f", null).accept("text/s3").execute().assertBody("s3");
 	}
 }

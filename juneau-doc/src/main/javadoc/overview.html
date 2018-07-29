@@ -282,7 +282,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestResource.AnnotationInheritance'>Annotation Inheritance</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestContext'>RestContext</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod'>@RestMethod</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod'>@RestMethod</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.MethodParameters'>Java Method Parameters</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RestRequest'>RestRequest</a></p>
@@ -298,8 +298,9 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.StreamResource'>StreamResource</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.Redirect'>Redirect</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RestMethodMatchers'>@RestMethod.matchers()</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedHelperBeans'>Helper Beans</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedThrowables'>Predefined Throwables</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedResponses'>Predefined Responses</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedExceptions'>Predefined Exceptions</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedHelperBeans'>Predefined Helper Beans</a></p>
 		</ol>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a></p>
@@ -13105,7 +13106,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod' id='juneau-rest-server.RestMethod'>7.6 - @RestMethod</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod' id='juneau-rest-server.RestMethod'>7.6 - @RestMethod</a></h3>
 <div class='topic'><!-- START: 7.6 - juneau-rest-server.RestMethod -->
 <p>
 	REST Java methods are identified on REST servlets using the 
@@ -13121,7 +13122,61 @@ TODO(7.2.0)
 </p>
 
 <p>
-	There are no restrictions on the name of the Java method.  
+	When the <code>name</code> and/or <code>path</code> values are not specified, their values are inferred
+	from the Java method name. 
+</p>
+<p>
+	The HTTP method can be inferred from the Java method by starting the method name with any of the following:
+</p>
+<ul>
+	<li><code>get</code>
+	<li><code>put</code>
+	<li><code>post</code>
+	<li><code>delete</code>
+	<li><code>options</code>
+	<li><code>head</code>
+	<li><code>trace</code>
+	<li><code>patch</code>
+</ul>
+<p>
+	If <code>path</code> is not defined, it's inferred from the Java method name (minus the prefix above).
+</p>
+
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/foo"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String getFoo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="DELETE", path="/foo"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String deleteFoo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/foo"</jc>
+	<jc>// "GET" is default</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String foo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/"</jc>
+	<ja>@RestMethod</ja>(path=<js>"/"</js>)
+	<jk>public</jk> String foo() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="GET", path="/"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String get() {...}
+</p>
+<p class='bpcode w800'>
+	<jc>// Method="POST", path="/"</jc>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> String post() {...}
+</p>
+
+<p>
+	If <code>name</code> and <code>path</code> are both specified, the Java method name can be anything.
 </p>
 
 <!-- ==================================================================================================== -->
@@ -13968,25 +14023,94 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedHelperBeans' id='juneau-rest-server.RestMethod.PredefinedHelperBeans'>7.6.15 - Helper Beans</a></h4>
-<div class='topic'><!-- START: 7.6.15 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedResponses' id='juneau-rest-server.RestMethod.PredefinedResponses'>7.6.15 - Predefined Responses</a></h4>
+<div class='topic'><!-- START: 7.6.15 - juneau-rest-server.RestMethod.PredefinedResponses -->
 <p>
-	The {@link org.apache.juneau.rest.help} package contains several predefined beans to help when constructing
+</p>
+</div><!-- END: 7.6.15 - juneau-rest-server.RestMethod.PredefinedResponses -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedExceptions' id='juneau-rest-server.RestMethod.PredefinedExceptions'>7.6.16 - Predefined Exceptions</a></h4>
+<div class='topic'><!-- START: 7.6.16 - juneau-rest-server.RestMethod.PredefinedExceptions -->
+<p>
+	Exceptions are defined for all standardized HTTP responses.
+	These can be used to trigger HTTP errors simply by throwing an exception.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public</jk> String login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+	) <jk>throws</jk> Unauthorized 
+	{
+		<jk>if</jk> (! isOK(username, password))
+			<jk>throw new</jk> Unauthorized();
+			
+		<jk>return</jk> <js>"OK"</js>;
+	}
+</p>
+<ul class='doctree'>
+	<li class='jp'>{@link org.apache.juneau.rest.exception}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.rest.exception.BadRequest}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.Conflict}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.ExpectationFailed}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.FailedDependency}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.Forbidden}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.Gone}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.HttpVersionNotSupported}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.InsufficientStorage}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.InternalServerError}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.LengthRequired}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.Locked}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.LoopDetected}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.MethodNotAllowed}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.MisdirectedRequest}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.NetworkAuthenticationRequired}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.NotAcceptable}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.NotExtended}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.NotFound}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.NotImplemented}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.PayloadTooLarge}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionFailed}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionRequired}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.RangeNotSatisfiable}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.RequestHeaderFieldsTooLarge}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.ServiceUnavailable}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.TooManyRequests}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.Unauthorized}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.UnavailableForLegalReasons}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.UnprocessableEntity}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.UnsupportedMediaType}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.UpgradeRequired}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.UriTooLong}
+		<li class='jc'>{@link org.apache.juneau.rest.exception.VariantAlsoNegotiates}
+	</ul>
+</ul>
+</div><!-- END: 7.6.16 - juneau-rest-server.RestMethod.PredefinedExceptions -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedHelperBeans' id='juneau-rest-server.RestMethod.PredefinedHelperBeans'>7.6.17 - Predefined Helper Beans</a></h4>
+<div class='topic'><!-- START: 7.6.17 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
+<p>
+	The {@link org.apache.juneau.rest.helper} package contains several predefined beans to help when constructing
 	REST interfaces.
 </p>
 <ul class='doctree'>
-	<li class='jp'>{@link org.apache.juneau.rest.help}
+	<li class='jp'>{@link org.apache.juneau.rest.helper}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.rest.help.BeanDescription}
-		<li class='jc'>{@link org.apache.juneau.rest.help.ChildResourceDescriptions}
-		<li class='jc'>{@link org.apache.juneau.rest.help.Ok}
-		<li class='jc'>{@link org.apache.juneau.rest.help.ReaderResource}
-		<li class='jc'>{@link org.apache.juneau.rest.help.ReaderResourceBuilder}
-		<li class='jc'>{@link org.apache.juneau.rest.help.Redirect}
-		<li class='jc'>{@link org.apache.juneau.rest.help.RedirectToServletRoot}
-		<li class='jc'>{@link org.apache.juneau.rest.help.ResourceDescription}
-		<li class='jc'>{@link org.apache.juneau.rest.help.StreamResource}
-		<li class='jc'>{@link org.apache.juneau.rest.help.StreamResourceBuilder}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.RedirectToServletRoot}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
 	</ul>
 </ul>
 
@@ -14081,69 +14205,7 @@ TODO(7.2.0)
 <img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
 
 <h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
-</div><!-- END: 7.6.15 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedThrowables' id='juneau-rest-server.RestMethod.PredefinedThrowables'>7.6.16 - Predefined Throwables</a></h4>
-<div class='topic'><!-- START: 7.6.16 - juneau-rest-server.RestMethod.PredefinedThrowables -->
-<p>
-	Exceptions are defined for all standardized HTTP responses.
-	These can be used to trigger HTTP errors simply by throwing an exception.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
-	<jk>public</jk> String login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
-	) <jk>throws</jk> Unauthorized 
-	{
-		<jk>if</jk> (! isOK(username, password))
-			<jk>throw new</jk> Unauthorized();
-			
-		<jk>return</jk> <js>"OK"</js>;
-	}
-</p>
-<ul class='doctree'>
-	<li class='jp'>{@link org.apache.juneau.rest.exception}
-	<ul>
-		<li class='jc'>{@link org.apache.juneau.rest.exception.BadRequest}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.Conflict}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.ExpectationFailed}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.FailedDependency}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.Forbidden}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.Gone}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.HttpVersionNotSupported}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.InsufficientStorage}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.InternalServerError}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.LengthRequired}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.Locked}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.LoopDetected}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.MethodNotAllowed}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.MisdirectedRequest}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.NetworkAuthenticationRequired}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.NotAcceptable}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.NotExtended}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.NotFound}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.NotImplemented}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.PayloadTooLarge}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionFailed}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionRequired}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.RangeNotSatisfiable}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.RequestHeaderFieldsTooLarge}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.ServiceUnavailable}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.TooManyRequests}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.Unauthorized}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.UnavailableForLegalReasons}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.UnprocessableEntity}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.UnsupportedMediaType}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.UpgradeRequired}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.UriTooLong}
-		<li class='jc'>{@link org.apache.juneau.rest.exception.VariantAlsoNegotiates}
-	</ul>
-</ul>
-</div><!-- END: 7.6.16 - juneau-rest-server.RestMethod.PredefinedThrowables -->
+</div><!-- END: 7.6.17 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
 </div><!-- END: 7.6 - juneau-rest-server.RestMethod -->
 
 <!-- ==================================================================================================== -->
@@ -30475,7 +30537,6 @@ TODO(7.2.0)
 			<ul>
 				<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.Ok}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
@@ -30483,6 +30544,35 @@ TODO(7.2.0)
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+			</ul>
+		</ul>
+	<li>
+		Predefined HTTP responses.
+		<ul class='doctree'>
+			<li class='jp'>{@link org.apache.juneau.rest.response}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.rest.response.Accepted}
+				<li class='jc'>{@link org.apache.juneau.rest.response.AlreadyReported}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Continue}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Created}
+				<li class='jc'>{@link org.apache.juneau.rest.response.EarlyHints}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Found}
+				<li class='jc'>{@link org.apache.juneau.rest.response.IMUsed}
+				<li class='jc'>{@link org.apache.juneau.rest.response.MovedPermanently}
+				<li class='jc'>{@link org.apache.juneau.rest.response.MultipleChoices}
+				<li class='jc'>{@link org.apache.juneau.rest.response.MultiStatus}
+				<li class='jc'>{@link org.apache.juneau.rest.response.NoContent}
+				<li class='jc'>{@link org.apache.juneau.rest.response.NonAuthoritiveInformation}
+				<li class='jc'>{@link org.apache.juneau.rest.response.NotModified}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Ok}
+				<li class='jc'>{@link org.apache.juneau.rest.response.PartialContent}
+				<li class='jc'>{@link org.apache.juneau.rest.response.PermanentRedirect}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Processing}
+				<li class='jc'>{@link org.apache.juneau.rest.response.ResetContent}
+				<li class='jc'>{@link org.apache.juneau.rest.response.SeeOther}
+				<li class='jc'>{@link org.apache.juneau.rest.response.SwitchingProtocols}
+				<li class='jc'>{@link org.apache.juneau.rest.response.TemporaryRedirect}
+				<li class='jc'>{@link org.apache.juneau.rest.response.UseProxy}			
 			</ul>
 		</ul>
 	<li>
@@ -30606,6 +30696,11 @@ TODO(7.2.0)
 	<li>
 		New/updated documentation: 
 		<br>><a class="doclink" href="#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Serverless Unit Testing</a>
+	<li>
+		The behavior of the default values for {@link org.apache.juneau.rest.annotation.RestMethod#name()} and {@link org.apache.juneau.rest.annotation.RestMethod#path()}
+		have changed.
+		<br>If not specified, the values are inferred from the Java method name.
+		<br>See also:<a class="doclink" href="#juneau-rest-server.RestMethod">Overview &gt; juneau-rest-server &gt; @RestMethod</a>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

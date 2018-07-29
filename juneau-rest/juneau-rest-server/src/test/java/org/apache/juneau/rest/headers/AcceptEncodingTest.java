@@ -49,7 +49,7 @@ public class AcceptEncodingTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=GET)
+		@RestMethod
 		public String get() {
 			return "foo";
 		}
@@ -120,7 +120,7 @@ public class AcceptEncodingTest {
 
 	@RestResource(encoders=MyEncoder.class)
 	public static class B {
-		@RestMethod(name=GET)
+		@RestMethod(name=GET,path="/")
 		public String test1() {
 			return "foo";
 		}

@@ -33,12 +33,12 @@ public class HasQueryAnnotationTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=GET)
+		@RestMethod(name=GET,path="/")
 		public String get(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";
 		}
-		@RestMethod(name=POST)
+		@RestMethod(name=POST,path="/")
 		public String post(RestRequest req, @HasQuery("p1") boolean p1, @HasQuery("p2") Boolean p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+q.containsKey("p1")+"],p2=["+p2+","+q.containsKey("p2")+"]";

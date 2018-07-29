@@ -411,7 +411,7 @@ public class HeadersTest {
 
 	@RestResource(paramResolvers=CustomHeaderParam.class)
 	public static class B {
-		@RestMethod(name=GET)
+		@RestMethod
 		public String customHeader(CustomHeader customHeader) {
 			return customHeader.toString();
 		}
@@ -441,11 +441,11 @@ public class HeadersTest {
 
 	@Test
 	public void b01a_customHeader() throws Exception {
-		b.get("/").header("Custom", "foo").execute().assertBody("foo");
+		b.get("/customHeader").header("Custom", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void b01b_customHeader_query() throws Exception {
-		b.get("?Custom=foo").execute().assertBody("foo");
+		b.get("/customHeader?Custom=foo").execute().assertBody("foo");
 	}
 
 	//====================================================================================================
@@ -454,7 +454,7 @@ public class HeadersTest {
 
 	@RestResource
 	public static class C {
-		@RestMethod(name=GET, defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap c(RequestHeaders headers) {
 			return new ObjectMap()
 				.append("h1", headers.getString("H1"))
@@ -466,15 +466,15 @@ public class HeadersTest {
 
 	@Test
 	public void c01_defaultRequestHeaders_default() throws Exception {
-		c.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		c.get("/c").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void c02_defaultRequestHeaders_override() throws Exception {
-		c.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		c.get("/c").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void c03_defaultRequestHeaders_override_caseInsensitive() throws Exception {
-		c.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		c.get("/c").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -483,7 +483,7 @@ public class HeadersTest {
 
 	@RestResource
 	public static class D {
-		@RestMethod(name=GET, defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap d(RequestHeaders headers) {
 			return new ObjectMap()
 				.append("h1", headers.getString("h1"))
@@ -495,15 +495,15 @@ public class HeadersTest {
 
 	@Test
 	public void d01_defaultRequestHeadersCaseInsensitive_default() throws Exception {
-		d.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		d.get("/d").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void d02_defaultRequestHeadersCaseInsensitive_override() throws Exception {
-		d.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		d.get("/d").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void d03_defaultRequestHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
-		d.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		d.get("/d").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -512,7 +512,7 @@ public class HeadersTest {
 
 	@RestResource
 	public static class E {
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectMap e(@Header(name="H1") String h1, @Header("H2") String h2, @Header("H3") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)
@@ -524,15 +524,15 @@ public class HeadersTest {
 
 	@Test
 	public void e01_annotatedHeaders_default() throws Exception {
-		e.get("/").execute().assertBody("{h1:null,h2:null,h3:null}");
+		e.get("/e").execute().assertBody("{h1:null,h2:null,h3:null}");
 	}
 	@Test
 	public void e02_annotatedHeaders_override() throws Exception {
-		e.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		e.get("/e").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void e03_annotatedHeaders_override_caseInsensitive() throws Exception {
-		e.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		e.get("/e").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -541,7 +541,7 @@ public class HeadersTest {
 
 	@RestResource
 	public static class F {
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectMap f(@Header("h1") String h1, @Header("h2") String h2, @Header("h3") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)
@@ -553,15 +553,15 @@ public class HeadersTest {
 
 	@Test
 	public void f01_annotatedHeadersCaseInsensitive_default() throws Exception {
-		f.get("/").execute().assertBody("{h1:null,h2:null,h3:null}");
+		f.get("/f").execute().assertBody("{h1:null,h2:null,h3:null}");
 	}
 	@Test
 	public void f02_annotatedHeadersCaseInsensitive_override() throws Exception {
-		f.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		f.get("/f").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void f03_annotatedHeadersCaseInsensitive_override_caseInsensitive() throws Exception {
-		f.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		f.get("/f").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -570,7 +570,7 @@ public class HeadersTest {
 
 	@RestResource
 	public static class G {
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectMap g(@Header(name="h1",_default="1") String h1, @Header(name="h2",_default="2") String h2, @Header(name="h3",_default="3") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)
@@ -582,20 +582,20 @@ public class HeadersTest {
 
 	@Test
 	public void g01_annotatedHeadersDefault_default() throws Exception {
-		g.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		g.get("/g").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void g02_annotatedHeadersDefault_override() throws Exception {
-		g.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		g.get("/g").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void g03_annotatedHeadersDefault_override_caseInsensitive() throws Exception {
-		g.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		g.get("/g").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	@RestResource
 	public static class GB {
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectMap g(@Header(value="h1",_default="1") String h1, @Header(value="h2",_default="2") String h2, @Header(value="h3",_default="3") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)
@@ -607,15 +607,15 @@ public class HeadersTest {
 
 	@Test
 	public void gb01_annotatedHeadersDefault_default() throws Exception {
-		gb.get("/").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
+		gb.get("/g").execute().assertBody("{h1:'1',h2:'2',h3:'3'}");
 	}
 	@Test
 	public void gb02_annotatedHeadersDefault_override() throws Exception {
-		gb.get("/").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		gb.get("/g").header("H1",4).header("H2",5).header("H3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void gb03_annotatedHeadersDefault_override_caseInsensitive() throws Exception {
-		gb.get("/").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		gb.get("/g").header("h1",4).header("h2",5).header("h3",6).execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//====================================================================================================
@@ -624,7 +624,7 @@ public class HeadersTest {
 
 	@RestResource
 	public static class H {
-		@RestMethod(name=GET, defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
+		@RestMethod(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public ObjectMap h(@Header(value="h1",_default="4") String h1, @Header(value="h2",_default="5") String h2, @Header(value="h3",_default="6") String h3) {
 			return new ObjectMap()
 				.append("h1", h1)
@@ -636,14 +636,14 @@ public class HeadersTest {
 
 	@Test
 	public void h01_annotatedAndDefaultHeaders_default() throws Exception {
-		h.get("/").execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
+		h.get("/h").execute().assertBody("{h1:'4',h2:'5',h3:'6'}");
 	}
 	@Test
 	public void h02_annotatedAndDefaultHeaders_override() throws Exception {
-		h.get("/").header("H1",7).header("H2",8).header("H3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
+		h.get("/h").header("H1",7).header("H2",8).header("H3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
 	}
 	@Test
 	public void h03_annotatedAndDefaultHeaders_override_caseInsensitive() throws Exception {
-		h.get("/").header("h1",7).header("h2",8).header("h3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
+		h.get("/h").header("h1",7).header("h2",8).header("h3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
 	}
 }

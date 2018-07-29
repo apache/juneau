@@ -44,7 +44,7 @@ public class StatusCodesTest {
 
 	@Test
 	public void a01a_OK() throws Exception {
-		a.put("/", "foo").execute().assertStatus(200);
+		a.put("/a01", "foo").execute().assertStatus(200);
 	}
 
 	//=================================================================================================================
@@ -238,10 +238,10 @@ public class StatusCodesTest {
 
 	@Test
 	public void d01() throws Exception {
-		d.get("/?noTrace=true").execute()
+		d.get("/d?noTrace=true").execute()
 			.assertStatus(412)
 			.assertBodyContains(
-				"Method 'GET' not found on resource on path '/' with matching matcher."
+				"Method 'GET' not found on resource on path '/d' with matching matcher."
 			);
 	}
 }

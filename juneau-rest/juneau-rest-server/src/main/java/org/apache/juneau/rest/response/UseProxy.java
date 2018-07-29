@@ -29,6 +29,6 @@ public class UseProxy {
 
 	@Override /* Object */
 	public String toString() {
-		return "OK";
+		return "Use Proxy";
 	}
 }

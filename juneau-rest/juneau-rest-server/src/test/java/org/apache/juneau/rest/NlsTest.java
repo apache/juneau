@@ -83,8 +83,8 @@ public class NlsTest {
 
 	@RestResource(title="test")
 	public static class B {
-		@RestMethod(name=OPTIONS, description="foo")
-		public Swagger testOptions(RestRequest req) {
+		@RestMethod(description="foo")
+		public Swagger options(RestRequest req) {
 			// Should get to the options page without errors
 			return req.getSwagger();
 		}
@@ -102,7 +102,7 @@ public class NlsTest {
 
 	@RestResource
 	public static class C {
-		@RestMethod(name=GET)
+		@RestMethod
 		public String test(RestRequest req) {
 			// Missing resource bundle should cause {!!x} string.
 			return req.getMessage("bad", 1, 2, 3);
@@ -112,6 +112,6 @@ public class NlsTest {
 
 	@Test
 	public void c01_missingResourceBundle() throws Exception {
-		c.get("/").execute().assertBody("{!!bad}");
+		c.get("/test").execute().assertBody("{!!bad}");
 	}
 }

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
-import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
@@ -35,7 +34,7 @@ public class ClientFuturesTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectMap get(RestRequest req) throws Exception {
 			return new ObjectMap().append("foo","bar");
 		}

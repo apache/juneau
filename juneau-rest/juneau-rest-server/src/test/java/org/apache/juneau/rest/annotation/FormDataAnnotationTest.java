@@ -51,7 +51,7 @@ public class FormDataAnnotationTest {
 
 	@RestResource(parsers=UrlEncodingParser.class)
 	public static class A {
-		@RestMethod(name=POST)
+		@RestMethod
 		public String post(RestRequest req, @FormData(name="p1",allowEmptyValue=true) String p1, @FormData(name="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestFormData f = req.getFormData();
 			return "p1=["+p1+","+req.getFormData().getString("p1")+","+f.get("p1", String.class)+"],p2=["+p2+","+req.getFormData().getString("p2")+","+f.get("p2", int.class)+"]";

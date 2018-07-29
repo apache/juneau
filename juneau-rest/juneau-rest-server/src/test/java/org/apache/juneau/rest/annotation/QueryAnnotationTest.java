@@ -52,12 +52,12 @@ public class QueryAnnotationTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=GET)
+		@RestMethod
 		public String get(RestRequest req, @Query(name="p1",allowEmptyValue=true) String p1, @Query(name="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";
 		}
-		@RestMethod(name=POST)
+		@RestMethod
 		public String post(RestRequest req, @Query(name="p1",allowEmptyValue=true) String p1, @Query(name="p2",allowEmptyValue=true) int p2) throws Exception {
 			RequestQuery q = req.getQuery();
 			return "p1=["+p1+","+req.getQuery().getString("p1")+","+q.get("p1", String.class)+"],p2=["+p2+","+q.getString("p2")+","+q.get("p2", int.class)+"]";

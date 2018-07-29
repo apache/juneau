@@ -62,8 +62,6 @@ public class UrlEncodedFormResource extends BasicRestServlet {
 
 	/** GET request handler */
 	@RestMethod(
-		name=GET,
-		path="/",
 		htmldoc=@HtmlDoc(
 			script={
 				"INHERIT",
@@ -76,7 +74,7 @@ public class UrlEncodedFormResource extends BasicRestServlet {
 			}
 		)
 	)
-	public Div doGet(RestRequest req) {
+	public Div get(RestRequest req) {
 		return div(
 			form().id("form").action("servlet:/").method(POST).target("buff").children(
 				table(
@@ -106,8 +104,8 @@ public class UrlEncodedFormResource extends BasicRestServlet {
 	}
 
 	/** POST request handler */
-	@RestMethod(name=POST, path="/")
-	public Object doPost(@Body FormInputBean input) throws Exception {
+	@RestMethod
+	public Object post(@Body FormInputBean input) throws Exception {
 		// Just mirror back the request
 		return input;
 	}

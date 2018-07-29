@@ -46,7 +46,7 @@ public class ContentEncodingTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=PUT)
+		@RestMethod
 		public String put(@Body String in) {
 			return in;
 		}

@@ -51,7 +51,7 @@ public class PathsTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=GET)
+		@RestMethod(name=GET,path="/*")
 		public ObjectMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
@@ -351,7 +351,7 @@ public class PathsTest {
 
 	@RestResource(path="/a")
 	public static class C01 {
-		@RestMethod(name=GET)
+		@RestMethod(name=GET,path="/*")
 		public ObjectMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import org.apache.juneau.dto.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.http.annotation.*;
@@ -53,21 +51,21 @@ import org.apache.juneau.rest.widget.*;
 public class PredefinedLabelsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	@RestMethod(name=GET, path="/")
-	public ResourceDescriptions getChildMethods() throws Exception {
+	@RestMethod
+	public ResourceDescriptions get() throws Exception {
 		return new ResourceDescriptions()
 			.append("beanDescription", "BeanDescription")
 			.append("htmlLinks", "HtmlLink")
 		;
 	}
 
-	@RestMethod(name=GET, path="/beanDescription")
+	@RestMethod
 	public BeanDescription getBeanDescription() throws Exception {
 		return new BeanDescription(Person.class);
 	}
 
-	@RestMethod(name=GET, path="/htmlLinks")
-	public LinkString[] htmlLinks() throws Exception {
+	@RestMethod
+	public LinkString[] getHtmlLinks() throws Exception {
 		return new LinkString[] {
 			new LinkString("apache", "http://apache.org"),
 			new LinkString("juneau", "http://juneau.apache.org")

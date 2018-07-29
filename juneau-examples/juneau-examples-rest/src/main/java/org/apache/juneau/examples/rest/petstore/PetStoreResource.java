@@ -158,8 +158,6 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="POST",
-		path="/pet",
 		summary="Add a new pet to the store",
 		swagger=@MethodSwagger(
 			tags="pet",
@@ -168,7 +166,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			}
 		)
 	)
-	public Ok addPet(
+	public Ok postPet(
 			@Body(description="Pet object to add to the store") PetCreate pet
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 
@@ -368,14 +366,12 @@ public class PetStoreResource extends BasicRestServletJena {
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@RestMethod(
-		name="GET",
-		path="/store",
 		summary="Store navigation page",
 		swagger=@MethodSwagger(
 			tags="store"
 		)
 	)
-	public ResourceDescriptions getTopStorePage() {
+	public ResourceDescriptions getStore() {
 		return new ResourceDescriptions()
 			.append("store/order", "Petstore orders")
 			.append("store/inventory", "Petstore inventory")
@@ -517,15 +513,13 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="POST",
-		path="/user",
 		summary="Create user",
 		description="This can only be done by the logged in user.",
 		swagger=@MethodSwagger(
 			tags="user"
 		)
 	)
-	public Ok createUser(
+	public Ok postUser(
 			@Body(description="Created user object") User user
 		) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
 

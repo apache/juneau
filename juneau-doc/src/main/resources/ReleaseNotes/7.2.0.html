@@ -274,7 +274,6 @@
 			<ul>
 				<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.Ok}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
@@ -282,6 +281,35 @@
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+			</ul>
+		</ul>
+	<li>
+		Predefined HTTP responses.
+		<ul class='doctree'>
+			<li class='jp'>{@link org.apache.juneau.rest.response}
+			<ul>
+				<li class='jc'>{@link org.apache.juneau.rest.response.Accepted}
+				<li class='jc'>{@link org.apache.juneau.rest.response.AlreadyReported}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Continue}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Created}
+				<li class='jc'>{@link org.apache.juneau.rest.response.EarlyHints}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Found}
+				<li class='jc'>{@link org.apache.juneau.rest.response.IMUsed}
+				<li class='jc'>{@link org.apache.juneau.rest.response.MovedPermanently}
+				<li class='jc'>{@link org.apache.juneau.rest.response.MultipleChoices}
+				<li class='jc'>{@link org.apache.juneau.rest.response.MultiStatus}
+				<li class='jc'>{@link org.apache.juneau.rest.response.NoContent}
+				<li class='jc'>{@link org.apache.juneau.rest.response.NonAuthoritiveInformation}
+				<li class='jc'>{@link org.apache.juneau.rest.response.NotModified}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Ok}
+				<li class='jc'>{@link org.apache.juneau.rest.response.PartialContent}
+				<li class='jc'>{@link org.apache.juneau.rest.response.PermanentRedirect}
+				<li class='jc'>{@link org.apache.juneau.rest.response.Processing}
+				<li class='jc'>{@link org.apache.juneau.rest.response.ResetContent}
+				<li class='jc'>{@link org.apache.juneau.rest.response.SeeOther}
+				<li class='jc'>{@link org.apache.juneau.rest.response.SwitchingProtocols}
+				<li class='jc'>{@link org.apache.juneau.rest.response.TemporaryRedirect}
+				<li class='jc'>{@link org.apache.juneau.rest.response.UseProxy}			
 			</ul>
 		</ul>
 	<li>
@@ -405,6 +433,11 @@
 	<li>
 		New/updated documentation: 
 		<br>><a class="doclink" href="#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Serverless Unit Testing</a>
+	<li>
+		The behavior of the default values for {@link org.apache.juneau.rest.annotation.RestMethod#name()} and {@link org.apache.juneau.rest.annotation.RestMethod#path()}
+		have changed.
+		<br>If not specified, the values are inferred from the Java method name.
+		<br>See also:<a class="doclink" href="#juneau-rest-server.RestMethod">Overview &gt; juneau-rest-server &gt; @RestMethod</a>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

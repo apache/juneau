@@ -55,8 +55,8 @@ import org.apache.juneau.rest.annotation.*;
 public class CodeFormatterResource extends BasicRestServlet {
 
 	/** [GET /] - Display query entry page. */
-	@RestMethod(name=GET, path="/")
-	public Div getQueryEntryPage(RestRequest req) {
+	@RestMethod
+	public Div get(RestRequest req) {
 		return div(
 			script("text/javascript",
 				"\n	// Quick and dirty function to allow tabs in textarea."
@@ -101,8 +101,8 @@ public class CodeFormatterResource extends BasicRestServlet {
 	}
 
 	/** [POST /] - Add syntax highlighting to input. */
-	@RestMethod(name=POST, path="/")
-	public String executeQuery(@FormData("code") String code, @FormData("lang") String lang) throws Exception {
+	@RestMethod
+	public String post(@FormData("code") String code, @FormData("lang") String lang) throws Exception {
 		return highlight(code, lang);
 	}
 

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
-import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
 
@@ -37,8 +36,8 @@ public class FormDataTest extends RestTestcase {
 	//=================================================================================================================
 
 	public static class A {
-		@RestMethod(name=POST)
-		public Reader test(RestRequest req) throws IOException {
+		@RestMethod
+		public Reader post(RestRequest req) throws IOException {
 			return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
 		}
 	}

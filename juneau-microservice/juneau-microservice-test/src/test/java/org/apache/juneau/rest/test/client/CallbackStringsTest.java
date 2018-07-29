@@ -34,11 +34,11 @@ public class CallbackStringsTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=GET)
+		@RestMethod(name=GET,path="/*")
 		public ObjectMap get(RestRequest req) throws Exception {
 			return new ObjectMap().append("method","GET").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
 		}
-		@RestMethod(name=PUT)
+		@RestMethod(name=PUT,path="/*")
 		public ObjectMap put(RestRequest req) throws Exception {
 			return new ObjectMap().append("method","PUT").append("headers", getFooHeaders(req)).append("content", req.getBody().asString());
 		}

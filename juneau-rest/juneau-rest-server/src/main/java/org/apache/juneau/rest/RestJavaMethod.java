@@ -21,6 +21,7 @@ import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
+import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -189,17 +190,39 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					pgb.append(mParsers);
 				}
 
+				String p = m.path();
+				if (isEmpty(p)) {
+					p = method.getName();
+					if (m.name().equals("")) {
+						for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"}) {
+							if (p.startsWith(t)) {
+								p = Introspector.decapitalize(p.substring(t.length()));
+								break;
+							}
+						}
+						if (p.equals(""))
+							p = "/";
+					}
+				}
+
 				httpMethod = m.name().toUpperCase(Locale.ENGLISH);
 				if (httpMethod.equals("") && method.getName().startsWith("do"))
 					httpMethod = method.getName().substring(2).toUpperCase(Locale.ENGLISH);
-				if (httpMethod.equals(""))
+				if (httpMethod.equals("")) {
+					String mn = method.getName();
 					httpMethod = "GET";
+					for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"}) {
+						if (mn.startsWith(t)) {
+							httpMethod = t.toUpperCase();
+							break;
+						}
+					}
+				}
 				if (httpMethod.equals("METHOD"))
 					httpMethod = "*";
 
 				priority = m.priority();
 
-				String p = m.path();
 				converters = new RestConverter[m.converters().length];
 				for (int i = 0; i < converters.length; i++)
 					converters[i] = beanContext.newInstance(RestConverter.class, m.converters()[i]);

@@ -13,7 +13,6 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
-import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.jena.RdfCommon.*;
 import static org.apache.juneau.jena.RdfSerializer.*;
 
@@ -105,21 +104,17 @@ public class AtomFeedResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name=GET,
-		path="/",
 		summary="Get the sample ATOM feed"
 	)
-	public Feed getFeed() throws Exception {
+	public Feed get() throws Exception {
 		return feed;
 	}
 
 	@RestMethod(
-		name=PUT,
-		path="/",
 		summary="Overwrite the sample ATOM feed",
 		description="Replaces the feed with the specified content, and then mirrors it as the response."
 	)
-	public Feed setFeed(@Body Feed feed) throws Exception {
+	public Feed put(@Body Feed feed) throws Exception {
 		this.feed = feed;
 		return feed;
 	}

@@ -691,7 +691,7 @@ public class BodyAnnotationTest {
 
 	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class G {
-		@RestMethod(name=POST)
+		@RestMethod(name=POST,path="/")
 		public DTOs.C g(@Body DTOs.C content) throws Exception {
 			return content;
 		}
@@ -732,7 +732,7 @@ public class BodyAnnotationTest {
 
 	@RestResource(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class H {
-		@RestMethod(name=POST,
+		@RestMethod(name=POST,path="/",
 			properties={
 				@Property(name=UrlEncodingSerializer.URLENC_expandedParams, value="true"),
 				@Property(name=UrlEncodingParser.URLENC_expandedParams, value="true")
@@ -776,7 +776,7 @@ public class BodyAnnotationTest {
 
 	@RestResource(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
-		@RestMethod(name=POST)
+		@RestMethod(name=POST,path="/")
 		public DTOs.B g(@Body(required=true) DTOs.B content) throws Exception {
 			return content;
 		}

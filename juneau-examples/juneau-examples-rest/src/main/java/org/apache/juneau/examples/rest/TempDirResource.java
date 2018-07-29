@@ -91,12 +91,10 @@ public class TempDirResource extends DirectoryResource {
 	}
 
 	@RestMethod(
-		name=GET,
-		path="/upload",
 		summary="Upload file form entry page",
 		description="Renders an example form page for uploading a file in multipart/form-data format to the temp directory."
 	)
-	public Form getUploadForm() {
+	public Form getUpload() {
 		return
 			form().id("form").action("servlet:/upload").method(POST).enctype("multipart/form-data")
 			.children(
@@ -107,8 +105,6 @@ public class TempDirResource extends DirectoryResource {
 	}
 
 	@RestMethod(
-		name=POST,
-		path="/upload",
 		summary="Upload a file as a multipart form post",
 		description= {
 			"Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts.\n",
@@ -116,7 +112,7 @@ public class TempDirResource extends DirectoryResource {
 		},
 		matchers=TempDirResource.MultipartFormDataMatcher.class
 	)
-	public RedirectToServletRoot uploadFile(RestRequest req) throws Exception {
+	public RedirectToServletRoot postUpload(RestRequest req) throws Exception {
 		ServletFileUpload upload = new ServletFileUpload();
 		FileItemIterator iter = upload.getItemIterator(req);
 		while (iter.hasNext()) {

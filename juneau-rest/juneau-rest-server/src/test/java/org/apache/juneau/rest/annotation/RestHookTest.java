@@ -238,7 +238,7 @@ public class RestHookTest {
 		public void init2a() {
 			events.add("super-2a");
 		}
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectList getEvents() {
 			return events;
 		}
@@ -282,9 +282,9 @@ public class RestHookTest {
 
 	@Test
 	public void c01_init() throws Exception {
-		c.get("/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		c.get("/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		c.get("/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		c.get("/super/events").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
+		c.get("/sub/events").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		c.get("/sub/child/events").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 
 	//====================================================================================================
@@ -313,7 +313,7 @@ public class RestHookTest {
 		public void postInit2a() {
 			events.add("super-2a");
 		}
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectList getEvents() {
 			return events;
 		}
@@ -345,7 +345,7 @@ public class RestHookTest {
 		public void postInitOrderTestSub() {
 			LAST_CALLED = "PARENT";
 		}
-		@RestMethod(name=GET, path="/lastCalled")
+		@RestMethod
 		public String getLastCalled() {
 			return LAST_CALLED;
 		}
@@ -370,9 +370,9 @@ public class RestHookTest {
 
 	@Test
 	public void d01_postInit() throws Exception {
-		d.get("/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		d.get("/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		d.get("/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		d.get("/super/events").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
+		d.get("/sub/events").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		d.get("/sub/child/events").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 	@Test
 	public void d02_postInit_order() throws Exception {
@@ -411,7 +411,7 @@ public class RestHookTest {
 		public void postInitChildFirst2a() {
 			events.add("super-2a");
 		}
-		@RestMethod(name=GET)
+		@RestMethod
 		public ObjectList getPostInitChildFirstEvents() {
 			return events;
 		}
@@ -443,7 +443,7 @@ public class RestHookTest {
 		public void postInitChildFirstOrderTestSub() {
 			LAST_CALLED = "PARENT";
 		}
-		@RestMethod(name=GET, path="/lastCalled")
+		@RestMethod
 		public String getLastCalled() {
 			return LAST_CALLED;
 		}
@@ -468,9 +468,9 @@ public class RestHookTest {
 
 	@Test
 	public void e01_postInitChildFirst() throws Exception {
-		e.get("/super").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
-		e.get("/sub").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		e.get("/sub/child").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		e.get("/super/postInitChildFirstEvents").execute().assertBody("['super-1a','super-1b','super-1c','super-2a']");
+		e.get("/sub/postInitChildFirstEvents").execute().assertBody("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		e.get("/sub/child/postInitChildFirstEvents").execute().assertBody("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 	@Test
 	public void e02_postInitChildFirst_order() throws Exception {
