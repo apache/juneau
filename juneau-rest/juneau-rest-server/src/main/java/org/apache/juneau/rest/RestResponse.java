@@ -507,8 +507,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @throws SchemaValidationException
 	 * @throws SerializeException
 	 */
-	public void setHeader(ResponsePart h) throws SchemaValidationException, SerializeException {
-		setHeader(h.getName(), h.getValue());
+	public void setHeader(HttpPart h) throws SchemaValidationException, SerializeException {
+		setHeader(h.getName(), h.asString());
 	}
 
 	/**

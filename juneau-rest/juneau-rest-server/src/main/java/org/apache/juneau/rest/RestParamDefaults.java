@@ -640,9 +640,9 @@ class RestParamDefaults {
 			Value<Object> v = (Value<Object>)getTypeClass().newInstance();
 			v.listener(new ValueListener() {
 				@Override
-				public void onSet(Object newValue) {
+				public void onSet(Object o) {
 					try {
-						res.setHeader(new ResponsePart(name, HttpPartType.HEADER, schema, partSerializer, newValue, req.getSerializerSessionArgs()));
+						res.setHeader(new HttpPart(name, HttpPartType.HEADER, schema, partSerializer, req.getSerializerSessionArgs(), o));
 					} catch (SerializeException | SchemaValidationException e) {
 						throw new RuntimeException(e);
 					}

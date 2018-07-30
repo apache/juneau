@@ -61,10 +61,10 @@ public class DefaultHandler implements ResponseHandler {
 
 			for (ResponsePropertyMeta hm : rm.getHeaderMetas()) {
 				try {
-					Object headerValue = hm.getGetter().invoke(o);
-					if (headerValue instanceof URI)
-						headerValue = req.getUriResolver().resolve(headerValue);
-					res.setHeader(new ResponsePart(hm.getPartName(), HttpPartType.HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), headerValue, req.getSerializerSessionArgs()));
+					Object ho = hm.getGetter().invoke(o);
+					if (ho instanceof URI)
+						ho = req.getUriResolver().resolve(ho);
+					res.setHeader(new HttpPart(hm.getPartName(), HttpPartType.HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());
 				}
