@@ -1528,13 +1528,23 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return sb.toString();
 	}
 
-	SerializerSessionArgs getSerializerSessionArgs() {
+	/**
+	 * Returns the session arguments to pass to serializers.
+	 *
+	 * @return The session arguments to pass to serializers.
+	 */
+	public SerializerSessionArgs getSerializerSessionArgs() {
 		if (serializerSessionArgs == null)
 			serializerSessionArgs = new SerializerSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, isDebug() ? true : null, getUriContext(), isPlainText() ? true : null);
 		return serializerSessionArgs;
 	}
 
-	ParserSessionArgs getParserSessionArgs() {
+	/**
+	 * Returns the session arguments to pass to parsers.
+	 *
+	 * @return The session arguments to pass to parsers.
+	 */
+	public ParserSessionArgs getParserSessionArgs() {
 		if (parserSessionArgs == null)
 			parserSessionArgs = new ParserSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, isDebug() ? true : null, getUriContext());
 		return parserSessionArgs;

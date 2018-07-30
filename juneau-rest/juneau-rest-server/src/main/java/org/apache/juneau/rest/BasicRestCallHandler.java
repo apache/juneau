@@ -23,7 +23,6 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
@@ -173,13 +172,11 @@ public class BasicRestCallHandler implements RestCallHandler {
 			}
 
 			if (res.hasOutput()) {
-				Object output = res.getOutput();
+				ResponseObject output = res.getOutput();
 
 				// Do any class-level transforming.
 				for (RestConverter converter : context.getConverters())
-					output = converter.convert(req, output);
-
-				res.setOutput(output);
+					output.setValue(converter.convert(req, output.getValue()));
 
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
@@ -195,7 +192,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 		} catch (Throwable e) {
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
-			handleError(r1, r2, req, e);
+			handleError(r1, r2, e);
 		}
 
 		context.finishCall(r1, r2);
@@ -213,7 +210,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 *
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
-	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse, Object)} method returns
+	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse, ResponseObject)} method returns
 	 * <jk>true</jk>.
 	 *
 	 * @param req The HTTP request.
@@ -223,7 +220,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @throws RestException
 	 */
 	@Override /* RestCallHandler */
-	public void handleResponse(RestRequest req, RestResponse res, Object output) throws IOException, RestException, NotImplemented {
+	public void handleResponse(RestRequest req, RestResponse res, ResponseObject output) throws IOException, RestException, NotImplemented {
 		// Loop until we find the correct handler for the POJO.
 		for (ResponseHandler h : context.getResponseHandlers())
 			if (h.handle(req, res, output))
@@ -269,13 +266,10 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @throws IOException Can be thrown if a problem occurred trying to write to the output stream.
 	 */
 	@Override /* RestCallHandler */
-	public synchronized void handleError(HttpServletRequest req, HttpServletResponse res, RestRequest rreq, Throwable e) throws IOException {
+	public synchronized void handleError(HttpServletRequest req, HttpServletResponse res, Throwable e) throws IOException {
 
-		RestMethodThrown rmt = rreq == null ? null : rreq.getRestMethodThrown(e);
 		int occurrence = context == null ? 0 : context.getStackTraceOccurrence(e);
-		RestException e2 = (e instanceof RestException ? (RestException)e : new RestException(e, rmt == null ? 500 : rmt.getCode())).setOccurrence(occurrence);
-
-		HttpPartSerializer ps = rmt == null ? null : rmt.getPartSerializer();
+		RestException e2 = (e instanceof RestException ? (RestException)e : new RestException(e, 500)).setOccurrence(occurrence);
 
 		Throwable t = e2.getRootCause();
 		if (t != null) {
@@ -296,21 +290,13 @@ public class BasicRestCallHandler implements RestCallHandler {
 			}
 
 			try (PrintWriter w2 = w) {
-
-				// Throwable can be handled as an HTTP part.
-				if (rmt != null && ps != null) {
-					w2.append(ps.serialize(rmt.getSchema(), e));
-
-				// It's some other exception.
-				} else {
-					String httpMessage = RestUtils.getHttpResponseText(e2.getStatus());
-					if (httpMessage != null)
-						w2.append("HTTP ").append(String.valueOf(e2.getStatus())).append(": ").append(httpMessage).append("\n\n");
-					if (context != null && context.isRenderResponseStackTraces())
-						e.printStackTrace(w2);
-					else
-						w2.append(e2.getFullStackMessage(true));
-				}
+				String httpMessage = RestUtils.getHttpResponseText(e2.getStatus());
+				if (httpMessage != null)
+					w2.append("HTTP ").append(String.valueOf(e2.getStatus())).append(": ").append(httpMessage).append("\n\n");
+				if (context != null && context.isRenderResponseStackTraces())
+					e.printStackTrace(w2);
+				else
+					w2.append(e2.getFullStackMessage(true));
 			}
 
 		} catch (Exception e1) {

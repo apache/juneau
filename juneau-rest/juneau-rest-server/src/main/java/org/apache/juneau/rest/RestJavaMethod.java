@@ -519,18 +519,40 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				if (! guard.guard(req, res))
 					return SC_OK;
 
-			Object output = method.invoke(context.getResource(), args);
-			if (! method.getReturnType().equals(Void.TYPE))
-				if (output != null || ! res.getOutputStreamCalled())
-					res.setOutput(output);
+			Object output;
+			try {
+				output = method.invoke(context.getResource(), args);
+				if (res.getStatus() == 0)
+					res.setStatus(200);
+				RestMethodReturn rmr = req.getRestMethodReturn();
+				if (! method.getReturnType().equals(Void.TYPE)) {
+					if (output != null || ! res.getOutputStreamCalled()) {
+						ResponseMeta rm = rmr.getResponseMeta();
+						if (rm == null)
+							rm = context.getResponseMetaForObject(output);
+						res.setOutput(new ResponseObject(rm, output));
+					}
+				}
+			} catch (InvocationTargetException e) {
+				Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
+				if (res.getStatus() == 0)
+					res.setStatus(500);
+				RestMethodThrown rmt = req.getRestMethodThrown(e2);
+				ResponseMeta rm = rmt == null ? null : rmt.getResponseMeta();
+				if (rm == null)
+					rm = context.getResponseMetaForObject(e2);
+				if (rm != null)
+					res.setOutput(new ResponseObject(rm, e2));
+				else
+					throw e;
+			}
 
 			context.postCall(req, res);
 
 			if (res.hasOutput()) {
-				output = res.getOutput();
+				ResponseObject ro = res.getOutput();
 				for (RestConverter converter : converters)
-					output = converter.convert(req, output);
-				res.setOutput(output);
+					ro.setValue(converter.convert(req, ro.getValue()));
 			}
 		} catch (IllegalArgumentException e) {
 			throw new BadRequest(e,

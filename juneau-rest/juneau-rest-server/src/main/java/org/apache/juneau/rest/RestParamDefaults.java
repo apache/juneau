@@ -642,7 +642,7 @@ class RestParamDefaults {
 				@Override
 				public void onSet(Object newValue) {
 					try {
-						res.setHeader(name, partSerializer.createSession(req.getSerializerSessionArgs()).serialize(HttpPartType.HEADER, schema, newValue));
+						res.setHeader(new ResponsePart(name, HttpPartType.HEADER, schema, partSerializer, newValue, req.getSerializerSessionArgs()));
 					} catch (SerializeException | SchemaValidationException e) {
 						throw new RuntimeException(e);
 					}
@@ -660,17 +660,13 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ResponseObject extends RestMethodParam {
-		final HttpPartSerializer partSerializer;
-		final boolean usePartSerializer;
-		final HttpPartSchema schema;
+	static final class ResponseParamObject extends RestMethodParam {
 		private String _default;
+		final ResponseMeta meta;
 
-		protected ResponseObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
+		protected ResponseParamObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(RESPONSE, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
-			this.usePartSerializer = s.isUsePartSerializer() || s.getSerializer() != null;
-			this.partSerializer = usePartSerializer ? ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps) : null;
-			this.schema = s;
+			this.meta = ResponseMeta.create(m, i, ps);
 			this._default = s.getDefault();
 
 			if (getTypeClass() == null)
@@ -686,16 +682,7 @@ class RestParamDefaults {
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object newValue) {
-					try {
-						if (usePartSerializer) {
-							HttpPartSerializer ps = partSerializer == null ? req.getPartSerializer() : partSerializer;
-							if (ps != null)
-								newValue = new StringReader(ps.serialize(HttpPartType.BODY, schema, newValue));
-						}
-						res.setOutput(newValue);
-					} catch (SchemaValidationException | SerializeException e) {
-						throw new RuntimeException(e);
-					}
+					res.setOutput(new ResponseObject(meta, newValue));
 				}
 			});
 			if (_default != null) {

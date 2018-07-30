@@ -834,7 +834,7 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * Enables the following:
 	 * <ul>
-	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)} is called.
+	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)} is called.
 	 * </ul>
 	 */
 	public static final String REST_debug = PREFIX + "debug.b";
@@ -2030,7 +2030,7 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContext#isRenderResponseStackTraces() RestContext.isRenderResponseStackTraces()}
 	 * 		</ul>
-	 * 		That method is used by {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)}.
+	 * 		That method is used by {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)}.
 	 * </ul>
 	 */
 	public static final String REST_renderResponseStackTraces = PREFIX + "renderResponseStackTraces.b";
@@ -2666,7 +2666,7 @@ public final class RestContext extends BeanContext {
 	 * Affects the following methods:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestContext#getStackTraceOccurrence(Throwable) RestContext.getStackTraceOccurrance(Throwable)}
-	 * 	<li class='jm'>{@link RestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)}
+	 * 	<li class='jm'>{@link RestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)}
 	 * 	<li class='jm'>{@link RestException#getOccurrence()} - Returns the number of times this exception occurred.
 	 * </ul>
 	 *
@@ -2852,6 +2852,8 @@ public final class RestContext extends BeanContext {
 
 	private final ClasspathResourceManager staticResourceManager;
 	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
+
+	private final Map<Class<?>,ResponseMeta> responseMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -3050,7 +3052,7 @@ public final class RestContext extends BeanContext {
 									if (rc != SC_OK)
 										return rc;
 
-									final Object o = res.getOutput();
+									final ResponseObject ro = res.getOutput();
 
 									if ("GET".equals(req.getMethod())) {
 										res.setOutput(getMethodInfo(remoteableMethods.values()));
@@ -3073,7 +3075,7 @@ public final class RestContext extends BeanContext {
 														args = p.parseArgs(in, m.getGenericParameterTypes());
 													}
 												}
-												Object output = m.invoke(o, args);
+												Object output = m.invoke(ro.getValue(), args);
 												res.setOutput(output);
 												return SC_OK;
 											} catch (Exception e) {
@@ -4355,7 +4357,7 @@ public final class RestContext extends BeanContext {
 
 			} else if (hasAnnotation(Response.class, method, i)) {
 				s = HttpPartSchema.create(Response.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseObject(method, s, t, ps);
+				rp[i] = new RestParamDefaults.ResponseParamObject(method, i, s, t, ps);
 			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
 				s = HttpPartSchema.create(ResponseHeader.class, method, i);
 				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, s, t, ps);
@@ -4546,5 +4548,22 @@ public final class RestContext extends BeanContext {
 	@Override /* BeanContextBuilder */
 	public BeanSessionArgs createDefaultSessionArgs() {
 		throw new NoSuchMethodError();
+	}
+
+	ResponseMeta getResponseMetaForObject(Object o) {
+		if (o == null)
+			return null;
+		return getResponseMeta(o.getClass());
+	}
+
+	ResponseMeta getResponseMeta(Class<?> c) {
+		ResponseMeta rm = responseMetas.get(c);
+		if (rm == ResponseMeta.NULL)
+			return null;
+		if (rm != null)
+			return rm;
+		rm = ResponseMeta.create(c, getPropertyStore());
+		responseMetas.put(c, rm == null ? ResponseMeta.NULL : rm);
+		return rm;
 	}
 }

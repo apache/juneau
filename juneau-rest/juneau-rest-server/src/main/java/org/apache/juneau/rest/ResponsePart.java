@@ -10,61 +10,58 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
+package org.apache.juneau.rest;
 
-import java.net.*;
-
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
 
 /**
- * Represents an <code>HTTP 301 Moved Permanently</code> response.
- *
- * <p>
- * This and all future requests should be directed to the given URI.
+ * Represents part of an HTTP response such as an HTTP response header.
  */
-@Response(code=301, example="'Moved Permanently'")
-public class MovedPermanently {
-
-	/** Reusable instance. */
-	public static final MovedPermanently INSTANCE = new MovedPermanently();
-
-	private final URI location;
-
-	/**
-	 * Constructor.
-	 */
-	public MovedPermanently() {
-		this((URI)null);
-	}
+public class ResponsePart {
+	private final String name;
+	private final Object part;
+	private final HttpPartType partType;
+	private final HttpPartSchema schema;
+	private final HttpPartSerializer serializer;
+	private final SerializerSessionArgs args;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param location <code>Location</code> header value.
+	 * @param name The HTTP part name (e.g. the response header name).
+	 * @param partType The HTTP part type.
+	 * @param schema Schema information about the part.
+	 * @param serializer The part serializer to use to serialize the part.
+	 * @param part The part POJO being serialized.
+	 * @param args Session arguments to pass to the serializer.
 	 */
-	public MovedPermanently(URI location) {
-		this.location = location;
+	public ResponsePart(String name, HttpPartType partType, HttpPartSchema schema, HttpPartSerializer serializer, Object part, SerializerSessionArgs args) {
+		this.name = name;
+		this.partType = partType;
+		this.schema = schema;
+		this.serializer = serializer;
+		this.part = part;
+		this.args = args;
 	}
 
 	/**
-	 * Constructor.
+	 * Returns the name of the part.
 	 *
-	 * @param location <code>Location</code> header value.
+	 * @return The name of the part.
 	 */
-	public MovedPermanently(String location) {
-		this.location = URI.create(location);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return "Moved Permanently";
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @return <code>Location</code> header value.
+	 * Returns the value of the part converted to a string.
+	 *
+	 * @return The value of the part converted to a string.
+	 * @throws SchemaValidationException
+	 * @throws SerializeException
 	 */
-	@Header(name="Location")
-	public URI getLocation() {
-		return location;
+	public String getValue() throws SchemaValidationException, SerializeException {
+		return serializer.createSession(args).serialize(partType, schema, part);
 	}
 }

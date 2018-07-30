@@ -35,7 +35,16 @@ public class SeeOther {
 	 * Constructor.
 	 */
 	public SeeOther() {
-		this(null);
+		this((URI)null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param location <code>Location</code> header value.
+	 */
+	public SeeOther(String location) {
+		this.location = URI.create(location);
 	}
 
 	/**
@@ -55,7 +64,7 @@ public class SeeOther {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@Header(name="Location", description="")
+	@Header(name="Location")
 	public URI getLocation() {
 		return location;
 	}

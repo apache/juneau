@@ -10,61 +10,78 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
+package org.apache.juneau.rest;
 
-import java.net.*;
-
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 
 /**
- * Represents an <code>HTTP 301 Moved Permanently</code> response.
- *
- * <p>
- * This and all future requests should be directed to the given URI.
+ * A simple pairing of a response object and metadata on how to serialize that response object.
  */
-@Response(code=301, example="'Moved Permanently'")
-public class MovedPermanently {
+public class ResponseObject {
 
-	/** Reusable instance. */
-	public static final MovedPermanently INSTANCE = new MovedPermanently();
-
-	private final URI location;
-
-	/**
-	 * Constructor.
-	 */
-	public MovedPermanently() {
-		this((URI)null);
-	}
+	private ResponseMeta meta;
+	private Object value;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param location <code>Location</code> header value.
+	 * @param meta Metadata about the specified value.
+	 * @param value The POJO that makes up the response.
 	 */
-	public MovedPermanently(URI location) {
-		this.location = location;
+	public ResponseObject(ResponseMeta meta, Object value) {
+		this.meta = meta;
+		this.value = value;
 	}
 
 	/**
-	 * Constructor.
+	 * Returns the metadata about this response.
 	 *
-	 * @param location <code>Location</code> header value.
+	 * @return
+	 * 	The metadata about this response.
+	 * 	<jk>Never <jk>null</jk>.
 	 */
-	public MovedPermanently(String location) {
-		this.location = URI.create(location);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return "Moved Permanently";
+	public ResponseMeta getMeta() {
+		return meta;
 	}
 
 	/**
-	 * @return <code>Location</code> header value.
+	 * Returns the POJO that makes up this response.
+	 *
+	 * @return
+	 * 	The POJO that makes up this response.
+	 * 	<jk>Never <jk>null</jk>.
 	 */
-	@Header(name="Location")
-	public URI getLocation() {
-		return location;
+	public Object getValue() {
+		return value;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this response object is of the specified type.
+	 *
+	 * @param c The type to check against.
+	 * @return <jk>true</jk> if this response object is of the specified type.
+	 */
+	public boolean isType(Class<?> c) {
+		return c.isInstance(value);
+	}
+
+	/**
+	 * Returns this value cast to the specified class.
+	 *
+	 * @param c The class to cast to.
+	 * @return This value cast to the specified class.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getValue(Class<T> c) {
+		return (T)value;
+	}
+
+	/**
+	 * Sets the POJO value for this response.
+	 *
+	 * @param value The POJO value to set.
+	 */
+	public void setValue(Object value) {
+		this.value = value;
 	}
 }

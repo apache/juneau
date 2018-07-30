@@ -112,5 +112,5 @@ public interface ResponseHandler {
 	 * 	If some other exception occurred.
 	 * 	Can be used to provide an appropriate HTTP response code and message.
 	 */
-	boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException;
+	boolean handle(RestRequest req, RestResponse res, ResponseObject output) throws IOException, RestException;
 }

@@ -58,7 +58,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	private final RestRequest request;
 	private RestJavaMethod restJavaMethod;
-	private Object output;                       // The POJO being sent to the output.
+	private ResponseObject output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private RequestProperties properties;                // Response properties
 	private ServletOutputStream sos;
@@ -189,8 +189,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setOutput(Object output) {
-		this.output = output;
+		this.output = new ResponseObject(null, output);
 		this.isNullOutput = output == null;
+		return this;
+	}
+
+	RestResponse setOutput(ResponseObject output) {
+		this.output = output;
+		this.isNullOutput = output.getValue() == null;
 		return this;
 	}
 
@@ -309,7 +315,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setOutputs(Object...output) {
-		this.output = output;
+		this.output = new ResponseObject(null, output);
 		return this;
 	}
 
@@ -318,7 +324,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The output object.
 	 */
-	public Object getOutput() {
+	public ResponseObject getOutput() {
 		return output;
 	}
 
@@ -489,15 +495,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		super.sendRedirect(uri);
 	}
 
-	/**
-	 * Returns the HTTP-part serializer associated with this response.
-	 *
-	 * @return The HTTP-part serializer associated with this response.
-	 */
-	public HttpPartSerializer getPartSerializer() {
-		return restJavaMethod.partSerializer;
-	}
-
 	@Override /* ServletResponse */
 	public void setHeader(String name, String value) {
 		// Jetty doesn't set the content type correctly if set through this method.
@@ -508,6 +505,16 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			super.setHeader(name, value);
 	}
 
+	/**
+	 * Same as {@link #setHeader(String, String)} but header is defined as a response part
+	 *
+	 * @param h Header to set.
+	 * @throws SchemaValidationException
+	 * @throws SerializeException
+	 */
+	public void setHeader(ResponsePart h) throws SchemaValidationException, SerializeException {
+		setHeader(h.getName(), h.getValue());
+	}
 
 	@Override /* ServletResponse */
 	public void flushBuffer() throws IOException {

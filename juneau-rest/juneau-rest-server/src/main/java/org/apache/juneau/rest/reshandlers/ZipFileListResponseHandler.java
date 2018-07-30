@@ -44,9 +44,9 @@ import org.apache.juneau.utils.ZipFileList.*;
 public class ZipFileListResponseHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
-		if (output.getClass() == ZipFileList.class) {
-			ZipFileList m = (ZipFileList)output;
+	public boolean handle(RestRequest req, RestResponse res, ResponseObject ro) throws IOException, RestException {
+		if (ro.isType(ZipFileList.class)) {
+			ZipFileList m = ro.getValue(ZipFileList.class);
 			res.setContentType("application/zip");
 			res.setHeader("Content-Disposition", "attachment;filename=" + m.fileName); //$NON-NLS-2$
 			try (OutputStream os = res.getOutputStream()) {

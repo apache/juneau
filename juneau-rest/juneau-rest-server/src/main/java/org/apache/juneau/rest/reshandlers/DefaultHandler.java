@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.reshandlers;
 
 import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -46,13 +47,45 @@ public class DefaultHandler implements ResponseHandler {
 
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, InternalServerError, NotAcceptable {
+	public boolean handle(RestRequest req, RestResponse res, ResponseObject ro) throws IOException, InternalServerError, NotAcceptable {
 		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 
-		RestMethodReturn rmr = req.getRestMethodReturn();
-		res.setStatus(rmr.getCode());
+		Object o = ro.getValue();
+
+		ResponseMeta rm = ro.getMeta();
+
+		if (rm != null) {
+			if (rm.getCode() != 0)
+				res.setStatus(rm.getCode());
+
+			for (ResponsePropertyMeta hm : rm.getHeaderMetas()) {
+				try {
+					Object headerValue = hm.getGetter().invoke(o);
+					if (headerValue instanceof URI)
+						headerValue = req.getUriResolver().resolve(headerValue);
+					res.setHeader(new ResponsePart(hm.getPartName(), HttpPartType.HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), headerValue, req.getSerializerSessionArgs()));
+				} catch (Exception e) {
+					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());
+				}
+			}
+
+			if (rm.isUsePartSerializer()) {
+				res.setContentType("text/plain");
+				HttpPartSerializer ps = rm.getPartSerializer(req.getPartSerializer());
+				if (ps != null) {
+					try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
+						w.append(ps.serialize(HttpPartType.BODY, rm.getSchema(), o));
+						w.flush();
+						w.finish();
+					} catch (SchemaValidationException | SerializeException e) {
+						throw new InternalServerError(e);
+					}
+					return true;
+				}
+			}
+		}
 
 		if (sm != null) {
 			Serializer s = sm.getSerializer();
@@ -82,19 +115,19 @@ public class DefaultHandler implements ResponseHandler {
 					if (req.isPlainText()) {
 						FinishablePrintWriter w = res.getNegotiatedWriter();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						session.serialize(output, baos);
+						session.serialize(o, baos);
 						w.write(StringUtils.toSpacedHex(baos.toByteArray()));
 						w.flush();
 						w.finish();
 					} else {
 						FinishableServletOutputStream os = res.getNegotiatedOutputStream();
-						session.serialize(output, os);
+						session.serialize(o, os);
 						os.flush();
 						os.finish();
 					}
 				} else {
 					FinishablePrintWriter w = res.getNegotiatedWriter();
-					session.serialize(output, w);
+					session.serialize(o, w);
 					w.flush();
 					w.finish();
 				}
@@ -105,25 +138,12 @@ public class DefaultHandler implements ResponseHandler {
 
 		}
 
-		HttpPartSerializer ps = rmr.getPartSerializer();
-		if (ps != null) {
-			try {
-				FinishablePrintWriter w = res.getNegotiatedWriter();
-				w.append(ps.serialize(rmr.getSchema(), output));
-				w.flush();
-				w.finish();
-			} catch (SchemaValidationException | SerializeException e) {
-				throw new InternalServerError(e);
-			}
-			return true;
-		}
-
 		// Non-existent Accept or plain/text can just be serialized as-is.
 		if ("".equals(accept) || "plain/text".equals(accept)) {
 			FinishablePrintWriter w = res.getNegotiatedWriter();
-			ClassMeta<?> cm = req.getBeanSession().getClassMetaForObject(output);
+			ClassMeta<?> cm = req.getBeanSession().getClassMetaForObject(o);
 			if (cm != null)
-				w.append(cm.toString(output));
+				w.append(cm.toString(o));
 			w.flush();
 			w.finish();
 			return true;

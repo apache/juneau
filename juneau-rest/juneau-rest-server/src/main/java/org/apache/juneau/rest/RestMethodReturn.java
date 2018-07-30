@@ -19,7 +19,6 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Contains metadata about the return type on a REST Java method.
@@ -29,21 +28,18 @@ public class RestMethodReturn {
 	private final Type type;
 	private final int code;
 	private final ObjectMap api;
-	private final HttpPartSchema schema;
-	private final HttpPartSerializer partSerializer;
+	private final ResponseMeta responseMeta;
 
 	RestMethodReturn(Method m, HttpPartSerializer partSerializer, PropertyStore ps) {
+		this.responseMeta = ResponseMeta.create(m, ps);
+
 		HttpPartSchema s = HttpPartSchema.DEFAULT;
 		if (hasAnnotation(Response.class, m))
 			s = HttpPartSchema.create(Response.class, m);
 
-		this.schema = s;
 		this.type = m.getGenericReturnType();
 		this.api = HttpPartSchema.getApiCodeMap(s, 200).unmodifiable();
 		this.code = s.getCode(200);
-
-		boolean usePS = (s.isUsePartSerializer() || s.getSerializer() != null);
-		this.partSerializer = usePS ? ObjectUtils.firstNonNull(ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps), partSerializer) : null;
 	}
 
 	/**
@@ -74,22 +70,13 @@ public class RestMethodReturn {
 	}
 
 	/**
-	 * Returns the schema for the method return type.
-	 *
-	 * @return The schema for the method return type.  Never <jk>null</jk>.
-	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
-
-	/**
-	 * Returns the part serializer for the method return type.
+	 * Returns metadata about the response object.
 	 *
 	 * @return
-	 * 	The part serializer for the method return type.
-	 * 	<br><jk>null</jk> if {@link Response#usePartSerializer()} is <jk>false</jk>.
+	 * 	Metadata about the response object.
+	 * 	<br>Can be <jk>null</jk> if no {@link Response} annotation is associated with the return.
 	 */
-	public HttpPartSerializer getPartSerializer() {
-		return partSerializer;
+	public ResponseMeta getResponseMeta() {
+		return responseMeta;
 	}
 }

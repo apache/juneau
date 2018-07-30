@@ -37,10 +37,10 @@ import org.apache.juneau.rest.helper.*;
 public final class WritableHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, Object output) throws IOException, NotAcceptable, RestException {
-		if (output instanceof Writable) {
-			if (output instanceof ReaderResource) {
-				ReaderResource r = (ReaderResource)output;
+	public boolean handle(RestRequest req, RestResponse res, ResponseObject ro) throws IOException, NotAcceptable, RestException {
+		if (ro.isType(Writable.class)) {
+			if (ro.isType(ReaderResource.class)) {
+				ReaderResource r = ro.getValue(ReaderResource.class);
 				MediaType mediaType = r.getMediaType();
 				if (mediaType != null)
 					res.setContentType(mediaType.toString());
@@ -48,7 +48,7 @@ public final class WritableHandler implements ResponseHandler {
 					res.setHeader(h.getKey(), asString(h.getValue()));
 			}
 			try (Writer w = res.getNegotiatedWriter()) {
-				((Writable)output).writeTo(w);
+				ro.getValue(Writable.class).writeTo(w);
 			}
 			return true;
 		}

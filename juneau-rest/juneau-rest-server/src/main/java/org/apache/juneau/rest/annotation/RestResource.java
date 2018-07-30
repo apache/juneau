@@ -952,7 +952,7 @@ public @interface RestResource {
 	 * <p>
 	 * Enables the following:
 	 * <ul>
-	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, RestRequest, Throwable)} is called.
+	 * 	<li>A message and stack trace is printed to STDERR when {@link BasicRestCallHandler#handleError(HttpServletRequest, HttpServletResponse, Throwable)} is called.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5>

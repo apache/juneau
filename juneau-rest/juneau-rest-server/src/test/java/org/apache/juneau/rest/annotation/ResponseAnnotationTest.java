@@ -246,7 +246,7 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void b06_dontUseOnThrown() throws Exception {
-		b.get("/dontUseOnThrown").execute().assertStatus(500).assertBodyContains("HTTP 500: Internal Server Error");
+		b.get("/dontUseOnThrown").execute().assertStatus(500).assertBodyContains("foo");
 	}
 
 	@Test
@@ -364,7 +364,7 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void c06_dontUseOnThrown() throws Exception {
-		c.get("/dontUseOnThrown").execute().assertStatus(500).assertBodyContains("HTTP 500: Internal Server Error");
+		c.get("/dontUseOnThrown").execute().assertStatus(500).assertBodyContains("foo");
 	}
 
 	@Test

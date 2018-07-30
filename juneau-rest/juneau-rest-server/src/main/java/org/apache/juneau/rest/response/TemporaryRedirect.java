@@ -36,7 +36,16 @@ public class TemporaryRedirect {
 	 * Constructor.
 	 */
 	public TemporaryRedirect() {
-		this(null);
+		this((URI)null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param location <code>Location</code> header value.
+	 */
+	public TemporaryRedirect(String location) {
+		this.location = URI.create(location);
 	}
 
 	/**
@@ -57,7 +66,7 @@ public class TemporaryRedirect {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@Header(name="Location", description="")
+	@Header(name="Location")
 	public URI getLocation() {
 		return location;
 	}

@@ -21,6 +21,10 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicTest {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic sanity tests
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@RestResource
 	public static class A {
 		@RestMethod public Accepted accepted() { return new Accepted(); }
@@ -136,5 +140,36 @@ public class BasicTest {
 	@Test
 	public void a22_useProxy() throws Exception {
 		a.get("/useProxy").execute().assertStatus(305).assertBody("Use Proxy");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Statuses with URIs.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class B {
+		@RestMethod public MovedPermanently movedPermanently() { return new MovedPermanently("servlet:/foo"); }
+		@RestMethod public PermanentRedirect permanentRedirect() { return new PermanentRedirect("servlet:/foo"); }
+		@RestMethod public SeeOther seeOther() { return new SeeOther("servlet:/foo"); }
+		@RestMethod public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect("servlet:/foo"); }
+	}
+
+	static MockRest b = MockRest.create(B.class);
+
+	@Test
+	public void b01_movedPermanently() throws Exception {
+		b.get("/movedPermanently").execute().assertStatus(301).assertBody("Moved Permanently").assertHeader("Location", "/foo");
+	}
+	@Test
+	public void b02_permanentRedirect() throws Exception {
+		b.get("/permanentRedirect").execute().assertStatus(308).assertBody("Permanent Redirect").assertHeader("Location", "/foo");
+	}
+	@Test
+	public void b03_seeOther() throws Exception {
+		b.get("/seeOther").execute().assertStatus(303).assertBody("See Other").assertHeader("Location", "/foo");
+	}
+	@Test
+	public void b04_temporaryRedirect() throws Exception {
+		b.get("/temporaryRedirect").execute().assertStatus(307).assertBody("Temporary Redirect").assertHeader("Location", "/foo");
 	}
 }
