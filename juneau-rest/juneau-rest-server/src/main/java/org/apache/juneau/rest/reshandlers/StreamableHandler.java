@@ -37,10 +37,10 @@ import org.apache.juneau.rest.helper.*;
 public final class StreamableHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, ResponseObject ro) throws IOException, RestException {
-		if (ro.isType(Streamable.class)) {
-			if (ro.isType(StreamResource.class)) {
-				StreamResource r = ro.getValue(StreamResource.class);
+	public boolean handle(RestRequest req, RestResponse res) throws IOException, RestException {
+		if (res.isOutputType(Streamable.class)) {
+			if (res.isOutputType(StreamResource.class)) {
+				StreamResource r = res.getOutput(StreamResource.class);
 				MediaType mediaType = r.getMediaType();
 				if (mediaType != null)
 					res.setContentType(mediaType.toString());
@@ -48,7 +48,7 @@ public final class StreamableHandler implements ResponseHandler {
 					res.setHeader(h.getKey(), asString(h.getValue()));
 			}
 			try (OutputStream os = res.getOutputStream()) {
-				ro.getValue(Streamable.class).streamTo(os);
+				res.getOutput(Streamable.class).streamTo(os);
 			}
 			return true;
 		}

@@ -681,8 +681,9 @@ class RestParamDefaults {
 			Value<Object> v = (Value<Object>)c.newInstance();
 			v.listener(new ValueListener() {
 				@Override
-				public void onSet(Object newValue) {
-					res.setOutput(new ResponseObject(meta, newValue));
+				public void onSet(Object output) {
+					res.setMeta(meta);
+					res.setOutput(output);
 				}
 			});
 			if (_default != null) {

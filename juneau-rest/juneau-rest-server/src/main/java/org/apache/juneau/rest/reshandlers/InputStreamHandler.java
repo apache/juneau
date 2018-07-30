@@ -35,11 +35,11 @@ import org.apache.juneau.utils.*;
 public final class InputStreamHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, ResponseObject ro) throws IOException, NotAcceptable, RestException {
-		if (ro.isType(InputStream.class)) {
+	public boolean handle(RestRequest req, RestResponse res) throws IOException, NotAcceptable, RestException {
+		if (res.isOutputType(InputStream.class)) {
 			res.setHeader("Content-Type", res.getContentType());
 			try (OutputStream os = res.getNegotiatedOutputStream()) {
-				IOPipe.create(ro.getValue(InputStream.class), os).run();
+				IOPipe.create(res.getOutput(InputStream.class), os).run();
 			}
 			return true;
 		}

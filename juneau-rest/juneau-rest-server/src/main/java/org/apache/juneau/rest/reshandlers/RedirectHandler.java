@@ -28,9 +28,9 @@ import org.apache.juneau.rest.helper.*;
 public final class RedirectHandler implements ResponseHandler {
 
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, ResponseObject ro) throws IOException, RestException {
-		if (ro.isType(Redirect.class)) {
-			Redirect r = ro.getValue(Redirect.class);
+	public boolean handle(RestRequest req, RestResponse res) throws IOException, RestException {
+		if (res.isOutputType(Redirect.class)) {
+			Redirect r = res.getOutput(Redirect.class);
 			String uri = req.getUriResolver().resolve(r.getURI());
 			int rc = r.getHttpResponseCode();
 			if (rc != 0)

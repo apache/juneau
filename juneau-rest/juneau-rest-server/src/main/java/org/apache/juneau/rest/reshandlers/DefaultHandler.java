@@ -47,14 +47,13 @@ public class DefaultHandler implements ResponseHandler {
 
 	@SuppressWarnings("resource")
 	@Override /* ResponseHandler */
-	public boolean handle(RestRequest req, RestResponse res, ResponseObject ro) throws IOException, InternalServerError, NotAcceptable {
+	public boolean handle(RestRequest req, RestResponse res) throws IOException, InternalServerError, NotAcceptable {
 		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
 
-		Object o = ro.getValue();
-
-		ResponseMeta rm = ro.getMeta();
+		Object o = res.getOutput();
+		ResponseMeta rm = res.getMeta();
 
 		if (rm != null) {
 			if (rm.getCode() != 0)

@@ -172,15 +172,14 @@ public class BasicRestCallHandler implements RestCallHandler {
 			}
 
 			if (res.hasOutput()) {
-				ResponseObject output = res.getOutput();
 
 				// Do any class-level transforming.
 				for (RestConverter converter : context.getConverters())
-					output.setValue(converter.convert(req, output.getValue()));
+					res.setOutput(converter.convert(req, res.getOutput()));
 
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
-				handleResponse(req, res, output);
+				handleResponse(req, res);
 			}
 
 			// Make sure our writer in RestResponse gets written.
@@ -210,21 +209,21 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 *
 	 * <p>
 	 * The default implementation simply iterates through the response handlers on this resource
-	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse, ResponseObject)} method returns
+	 * looking for the first one whose {@link ResponseHandler#handle(RestRequest, RestResponse)} method returns
 	 * <jk>true</jk>.
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @param output The output to serialize in the response.
 	 * @throws IOException
 	 * @throws RestException
 	 */
 	@Override /* RestCallHandler */
-	public void handleResponse(RestRequest req, RestResponse res, ResponseObject output) throws IOException, RestException, NotImplemented {
+	public void handleResponse(RestRequest req, RestResponse res) throws IOException, RestException, NotImplemented {
 		// Loop until we find the correct handler for the POJO.
 		for (ResponseHandler h : context.getResponseHandlers())
-			if (h.handle(req, res, output))
+			if (h.handle(req, res))
 				return;
+		Object output = res.getOutput();
 		throw new NotImplemented("No response handlers found to process output of type '"+(output == null ? null : output.getClass().getName())+"'");
 	}
 

@@ -74,11 +74,10 @@ public interface RestCallHandler {
 	 *
 	 * @param req The HTTP request.
 	 * @param res The HTTP response.
-	 * @param output The output to serialize in the response.
 	 * @throws IOException
 	 * @throws RestException
 	 */
-	public void handleResponse(RestRequest req, RestResponse res, ResponseObject output) throws IOException, RestException ;
+	public void handleResponse(RestRequest req, RestResponse res) throws IOException, RestException ;
 
 	/**
 	 * Handle the case where a matching method was not found.

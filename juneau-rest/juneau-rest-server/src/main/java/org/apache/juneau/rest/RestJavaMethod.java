@@ -527,10 +527,12 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				RestMethodReturn rmr = req.getRestMethodReturn();
 				if (! method.getReturnType().equals(Void.TYPE)) {
 					if (output != null || ! res.getOutputStreamCalled()) {
+						res.setOutput(output);
 						ResponseMeta rm = rmr.getResponseMeta();
 						if (rm == null)
 							rm = context.getResponseMetaForObject(output);
-						res.setOutput(new ResponseObject(rm, output));
+						if (rm != null)
+							res.setMeta(rm);
 					}
 				}
 			} catch (InvocationTargetException e) {
@@ -541,19 +543,20 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				ResponseMeta rm = rmt == null ? null : rmt.getResponseMeta();
 				if (rm == null)
 					rm = context.getResponseMetaForObject(e2);
-				if (rm != null)
-					res.setOutput(new ResponseObject(rm, e2));
-				else
+				if (rm != null) {
+					res.setMeta(rm);
+					res.setOutput(e2);
+				} else {
 					throw e;
+				}
 			}
 
 			context.postCall(req, res);
 
-			if (res.hasOutput()) {
-				ResponseObject ro = res.getOutput();
+			if (res.hasOutput())
 				for (RestConverter converter : converters)
-					ro.setValue(converter.convert(req, ro.getValue()));
-			}
+					res.setOutput(converter.convert(req, res.getOutput()));
+
 		} catch (IllegalArgumentException e) {
 			throw new BadRequest(e,
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",

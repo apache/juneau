@@ -3052,7 +3052,7 @@ public final class RestContext extends BeanContext {
 									if (rc != SC_OK)
 										return rc;
 
-									final ResponseObject ro = res.getOutput();
+									final Object o = res.getOutput();
 
 									if ("GET".equals(req.getMethod())) {
 										res.setOutput(getMethodInfo(remoteableMethods.values()));
@@ -3075,7 +3075,7 @@ public final class RestContext extends BeanContext {
 														args = p.parseArgs(in, m.getGenericParameterTypes());
 													}
 												}
-												Object output = m.invoke(ro.getValue(), args);
+												Object output = m.invoke(o, args);
 												res.setOutput(output);
 												return SC_OK;
 											} catch (Exception e) {

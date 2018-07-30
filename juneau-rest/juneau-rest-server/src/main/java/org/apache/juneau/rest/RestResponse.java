@@ -58,7 +58,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	private final RestRequest request;
 	private RestJavaMethod restJavaMethod;
-	private ResponseObject output;                       // The POJO being sent to the output.
+	private ResponseMeta meta;
+	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private RequestProperties properties;                // Response properties
 	private ServletOutputStream sos;
@@ -189,14 +190,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setOutput(Object output) {
-		this.output = new ResponseObject(null, output);
-		this.isNullOutput = output == null;
-		return this;
-	}
-
-	RestResponse setOutput(ResponseObject output) {
 		this.output = output;
-		this.isNullOutput = output.getValue() == null;
+		this.isNullOutput = output == null;
 		return this;
 	}
 
@@ -315,7 +310,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object (for method chaining).
 	 */
 	public RestResponse setOutputs(Object...output) {
-		this.output = new ResponseObject(null, output);
+		this.output = output;
 		return this;
 	}
 
@@ -324,7 +319,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The output object.
 	 */
-	public ResponseObject getOutput() {
+	public Object getOutput() {
 		return output;
 	}
 
@@ -514,6 +509,49 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public void setHeader(ResponsePart h) throws SchemaValidationException, SerializeException {
 		setHeader(h.getName(), h.getValue());
+	}
+
+	/**
+	 * Returns the metadata about this response.
+	 *
+	 * @return
+	 * 	The metadata about this response.
+	 * 	<jk>Never <jk>null</jk>.
+	 */
+	public ResponseMeta getMeta() {
+		return meta;
+	}
+
+	/**
+	 * Sets metadata about this response.
+	 *
+	 * @param meta The metadata about this response.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setMeta(ResponseMeta meta) {
+		this.meta = meta;
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this response object is of the specified type.
+	 *
+	 * @param c The type to check against.
+	 * @return <jk>true</jk> if this response object is of the specified type.
+	 */
+	public boolean isOutputType(Class<?> c) {
+		return c.isInstance(output);
+	}
+
+	/**
+	 * Returns this value cast to the specified class.
+	 *
+	 * @param c The class to cast to.
+	 * @return This value cast to the specified class.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getOutput(Class<T> c) {
+		return (T)output;
 	}
 
 	@Override /* ServletResponse */
