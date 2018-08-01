@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * The server has fulfilled a request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
  */
 @Response(code=226, example="'IM Used'")
-public class IMUsed {
+public class IMUsed extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final IMUsed INSTANCE = new IMUsed();
 
-	@Override /* Object */
-	public String toString() {
-		return "IM Used";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public IMUsed() {
+		this("IM Used");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public IMUsed(String message) {
+		super(message);
 	}
 }

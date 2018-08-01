@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  */
 @Response(code=101, example="'Switching Protocols'")
-public class SwitchingProtocols {
+public class SwitchingProtocols extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final SwitchingProtocols INSTANCE = new SwitchingProtocols();
 
-	@Override /* Object */
-	public String toString() {
-		return "Switching Protocols";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public SwitchingProtocols() {
+		this("Switching Protocols");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public SwitchingProtocols(String message) {
+		super(message);
 	}
 }

@@ -23,15 +23,25 @@ import org.apache.juneau.http.annotation.*;
  * In a POST request, the response will contain an entity describing or containing the result of the action.
  */
 @Response(code=200, example="'OK'")
-public class Ok {
+public class Ok extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final Ok INSTANCE = new Ok();
 	/** Reusable instance. */
 	public static final Ok OK = new Ok();
 
-	@Override /* Object */
-	public String toString() {
-		return "OK";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public Ok() {
+		this("OK");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public Ok(String message) {
+		super(message);
 	}
 }

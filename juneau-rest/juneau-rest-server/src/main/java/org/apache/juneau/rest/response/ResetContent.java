@@ -22,13 +22,23 @@ import org.apache.juneau.http.annotation.*;
  * Unlike a 204 response, this response requires that the requester reset the document view.
  */
 @Response(code=205, example="'Reset Content'")
-public class ResetContent {
+public class ResetContent extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final ResetContent INSTANCE = new ResetContent();
 
-	@Override /* Object */
-	public String toString() {
-		return "Reset Content";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public ResetContent() {
+		this("Reset Content");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public ResetContent(String message) {
+		super(message);
 	}
 }

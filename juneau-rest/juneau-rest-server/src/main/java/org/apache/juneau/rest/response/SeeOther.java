@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  */
 @Response(code=303, example="'See Other'")
-public class SeeOther {
+public class SeeOther extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final SeeOther INSTANCE = new SeeOther();
@@ -32,33 +32,28 @@ public class SeeOther {
 	private final URI location;
 
 	/**
-	 * Constructor.
+	 * Constructor using HTTP-standard message.
 	 */
 	public SeeOther() {
-		this((URI)null);
+		this("See Other", null);
 	}
 
 	/**
-	 * Constructor.
-	 *
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
 	 * @param location <code>Location</code> header value.
 	 */
-	public SeeOther(String location) {
-		this.location = URI.create(location);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param location <code>Location</code> header value.
-	 */
-	public SeeOther(URI location) {
+	public SeeOther(String message, URI location) {
+		super(message);
 		this.location = location;
 	}
 
-	@Override /* Object */
-	public String toString() {
-		return "See Other";
+	/**
+	 * Constructor.
+	 * @param location <code>Location</code> header value.
+	 */
+	public SeeOther(URI location) {
+		this("See Other", location);
 	}
 
 	/**

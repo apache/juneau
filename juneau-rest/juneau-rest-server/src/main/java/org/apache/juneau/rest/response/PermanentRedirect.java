@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
 @Response(code=308, example="'Permanent Redirect'")
-public class PermanentRedirect {
+public class PermanentRedirect extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final PermanentRedirect INSTANCE = new PermanentRedirect();
@@ -32,33 +32,28 @@ public class PermanentRedirect {
 	private final URI location;
 
 	/**
-	 * Constructor.
+	 * Constructor using HTTP-standard message.
 	 */
 	public PermanentRedirect() {
-		this((URI)null);
+		this("Permanent Redirect", null);
 	}
 
 	/**
-	 * Constructor.
-	 *
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
 	 * @param location <code>Location</code> header value.
 	 */
-	public PermanentRedirect(String location) {
-		this.location = URI.create(location);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param location <code>Location</code> header value.
-	 */
-	public PermanentRedirect(URI location) {
+	public PermanentRedirect(String message, URI location) {
+		super(message);
 		this.location = location;
 	}
 
-	@Override /* Object */
-	public String toString() {
-		return "Permanent Redirect";
+	/**
+	 * Constructor.
+	 * @param location <code>Location</code> header value.
+	 */
+	public PermanentRedirect(URI location) {
+		this("Permanent Redirect", location);
 	}
 
 	/**

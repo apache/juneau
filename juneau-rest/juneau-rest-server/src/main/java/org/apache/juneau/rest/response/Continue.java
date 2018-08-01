@@ -25,13 +25,23 @@ import org.apache.juneau.http.annotation.*;
  * The response 417 Expectation Failed indicates that the request should be repeated without the Expect header as it indicates that the server doesn't support expectations (this is the case, for example, of HTTP/1.0 servers).
  */
 @Response(code=100, example="'Continue'")
-public class Continue {
+public class Continue extends HttpResponse {
 
 	/** Reusable instance.*/
 	public static final Continue INSTANCE = new Continue();
 
-	@Override /* Object */
-	public String toString() {
-		return "Continue";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public Continue() {
+		this("Continue");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public Continue(String message) {
+		super(message);
 	}
 }

@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.
  */
 @Response(code=208, example="'Already Reported'")
-public class AlreadyReported {
+public class AlreadyReported extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final AlreadyReported INSTANCE = new AlreadyReported();
 
-	@Override /* Object */
-	public String toString() {
-		return "Already Reported";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public AlreadyReported() {
+		this("Already Reported");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public AlreadyReported(String message) {
+		super(message);
 	}
 }

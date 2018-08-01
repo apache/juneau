@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import java.net.*;
+
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -148,10 +150,10 @@ public class BasicTest {
 
 	@RestResource
 	public static class B {
-		@RestMethod public MovedPermanently movedPermanently() { return new MovedPermanently("servlet:/foo"); }
-		@RestMethod public PermanentRedirect permanentRedirect() { return new PermanentRedirect("servlet:/foo"); }
-		@RestMethod public SeeOther seeOther() { return new SeeOther("servlet:/foo"); }
-		@RestMethod public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect("servlet:/foo"); }
+		@RestMethod public MovedPermanently movedPermanently() { return new MovedPermanently(URI.create("servlet:/foo")); }
+		@RestMethod public PermanentRedirect permanentRedirect() { return new PermanentRedirect(URI.create("servlet:/foo")); }
+		@RestMethod public SeeOther seeOther() { return new SeeOther(URI.create("servlet:/foo")); }
+		@RestMethod public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect(URI.create("servlet:/foo")); }
 	}
 
 	static MockRest b = MockRest.create(B.class);

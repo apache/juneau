@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * This and all future requests should be directed to the given URI.
  */
 @Response(code=301, example="'Moved Permanently'")
-public class MovedPermanently {
+public class MovedPermanently extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final MovedPermanently INSTANCE = new MovedPermanently();
@@ -31,33 +31,28 @@ public class MovedPermanently {
 	private final URI location;
 
 	/**
-	 * Constructor.
+	 * Constructor using HTTP-standard message.
 	 */
 	public MovedPermanently() {
-		this((URI)null);
+		this("Moved Permanently", null);
 	}
 
 	/**
-	 * Constructor.
-	 *
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
 	 * @param location <code>Location</code> header value.
 	 */
-	public MovedPermanently(URI location) {
+	public MovedPermanently(String message, URI location) {
+		super(message);
 		this.location = location;
 	}
 
 	/**
 	 * Constructor.
-	 *
 	 * @param location <code>Location</code> header value.
 	 */
-	public MovedPermanently(String location) {
-		this.location = URI.create(location);
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return "Moved Permanently";
+	public MovedPermanently(URI location) {
+		this("Moved Permanently", location);
 	}
 
 	/**

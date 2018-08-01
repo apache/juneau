@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * The server successfully processed the request and is not returning any content.
  */
 @Response(code=204, example="'No Content'")
-public class NoContent {
+public class NoContent extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final NoContent INSTANCE = new NoContent();
 
-	@Override /* Object */
-	public String toString() {
-		return "No Content";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public NoContent() {
+		this("No Content");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public NoContent(String message) {
+		super(message);
 	}
 }

@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * For example, a POST request should be repeated using another POST request.
  */
 @Response(code=307, example="'Temporary Redirect'")
-public class TemporaryRedirect {
+public class TemporaryRedirect extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final TemporaryRedirect INSTANCE = new TemporaryRedirect();
@@ -33,35 +33,29 @@ public class TemporaryRedirect {
 	private final URI location;
 
 	/**
-	 * Constructor.
+	 * Constructor using HTTP-standard message.
 	 */
 	public TemporaryRedirect() {
-		this((URI)null);
+		this("Temporary Redirect", null);
 	}
 
 	/**
-	 * Constructor.
-	 *
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
 	 * @param location <code>Location</code> header value.
 	 */
-	public TemporaryRedirect(String location) {
-		this.location = URI.create(location);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param location <code>Location</code> header value.
-	 */
-	public TemporaryRedirect(URI location) {
+	public TemporaryRedirect(String message, URI location) {
+		super(message);
 		this.location = location;
 	}
 
-	@Override /* Object */
-	public String toString() {
-		return "Temporary Redirect";
+	/**
+	 * Constructor.
+	 * @param location <code>Location</code> header value.
+	 */
+	public TemporaryRedirect(URI location) {
+		this("Temporary Redirect", location);
 	}
-
 
 	/**
 	 * @return <code>Location</code> header value.

@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * The message body that follows is by default an XML message and can contain a number of separate response codes, depending on how many sub-requests were made.
  */
 @Response(code=207, example="'Multi-Status'")
-public class MultiStatus {
+public class MultiStatus extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final MultiStatus INSTANCE = new MultiStatus();
 
-	@Override /* Object */
-	public String toString() {
-		return "Multi-Status";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public MultiStatus() {
+		this("Multi-Status");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public MultiStatus(String message) {
+		super(message);
 	}
 }

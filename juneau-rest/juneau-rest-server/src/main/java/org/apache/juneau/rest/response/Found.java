@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  */
 @Response(code=302, example="'Found'")
-public class Found {
+public class Found extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final Found INSTANCE = new Found();
@@ -35,24 +35,28 @@ public class Found {
 	private final URI location;
 
 	/**
-	 * Constructor.
+	 * Constructor using HTTP-standard message.
 	 */
 	public Found() {
-		this(null);
+		this("Found", null);
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 * @param location <code>Location</code> header value.
+	 */
+	public Found(String message, URI location) {
+		super(message);
+		this.location = location;
 	}
 
 	/**
 	 * Constructor.
-	 *
 	 * @param location <code>Location</code> header value.
 	 */
 	public Found(URI location) {
-		this.location = location;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return "Found";
+		this("Found", location);
 	}
 
 	/**

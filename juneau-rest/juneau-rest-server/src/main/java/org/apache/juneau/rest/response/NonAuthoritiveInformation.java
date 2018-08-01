@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is returning a modified version of the origin's response.
  */
 @Response(code=203, example="'Non-Authoritative Information'")
-public class NonAuthoritiveInformation {
+public class NonAuthoritiveInformation extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final NonAuthoritiveInformation INSTANCE = new NonAuthoritiveInformation();
 
-	@Override /* Object */
-	public String toString() {
-		return "Non-Authoritative Information";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public NonAuthoritiveInformation() {
+		this("Non-Authoritative Information");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public NonAuthoritiveInformation(String message) {
+		super(message);
 	}
 }

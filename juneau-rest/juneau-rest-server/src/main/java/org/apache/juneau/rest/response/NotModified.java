@@ -22,13 +22,23 @@ import org.apache.juneau.http.annotation.*;
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  */
 @Response(code=304, example="'Not Modified'")
-public class NotModified {
+public class NotModified extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final NotModified INSTANCE = new NotModified();
 
-	@Override /* Object */
-	public String toString() {
-		return "Not Modified";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public NotModified() {
+		this("Not Modified");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public NotModified(String message) {
+		super(message);
 	}
 }

@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * Used to return some response headers before final HTTP message.
  */
 @Response(code=103, example="'Early Hints'")
-public class EarlyHints {
+public class EarlyHints extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final EarlyHints INSTANCE = new EarlyHints();
 
-	@Override /* Object */
-	public String toString() {
-		return "Early Hints";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public EarlyHints() {
+		this("Early Hints");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public EarlyHints(String message) {
+		super(message);
 	}
 }

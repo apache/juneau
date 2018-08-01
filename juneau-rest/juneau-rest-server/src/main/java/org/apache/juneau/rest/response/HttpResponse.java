@@ -12,33 +12,27 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
-import org.apache.juneau.http.annotation.*;
-
 /**
- * Represents an <code>HTTP 300 Multiple Choices</code> response.
+ * Superclass of all predefined responses in this package.
  *
  * <p>
- * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
- * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
+ * Consists simply of a simple string message.
  */
-@Response(code=300, example="'Multiple Choices'")
-public class MultipleChoices extends HttpResponse {
+public abstract class HttpResponse {
 
-	/** Reusable instance. */
-	public static final MultipleChoices INSTANCE = new MultipleChoices();
+	private final String message;
 
 	/**
-	 * Constructor using HTTP-standard message.
-	 */
-	public MultipleChoices() {
-		this("Multiple Choices");
-	}
-
-	/**
-	 * Constructor using custom message.
+	 * Constructor.
+	 *
 	 * @param message Message to send as the response.
 	 */
-	public MultipleChoices(String message) {
-		super(message);
+	protected HttpResponse(String message) {
+		this.message = message;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return message;
 	}
 }

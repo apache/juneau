@@ -22,13 +22,23 @@ import org.apache.juneau.http.annotation.*;
  * The range header is used by HTTP clients to enable resuming of interrupted downloads, or split a download into multiple simultaneous streams.
  */
 @Response(code=206, example="'Partial Content'")
-public class PartialContent {
+public class PartialContent extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final PartialContent INSTANCE = new PartialContent();
 
-	@Override /* Object */
-	public String toString() {
-		return "Partial Content";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public PartialContent() {
+		this("Partial Content");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public PartialContent(String message) {
+		super(message);
 	}
 }

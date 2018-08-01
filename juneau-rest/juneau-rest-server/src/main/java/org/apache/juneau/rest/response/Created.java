@@ -21,13 +21,23 @@ import org.apache.juneau.http.annotation.*;
  * The request has been fulfilled, resulting in the creation of a new resource.
  */
 @Response(code=201, example="'Created'")
-public class Created {
+public class Created extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final Created INSTANCE = new Created();
 
-	@Override /* Object */
-	public String toString() {
-		return "Created";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public Created() {
+		this("Created");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public Created(String message) {
+		super(message);
 	}
 }

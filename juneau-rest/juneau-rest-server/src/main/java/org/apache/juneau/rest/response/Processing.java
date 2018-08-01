@@ -23,13 +23,23 @@ import org.apache.juneau.http.annotation.*;
  * This prevents the client from timing out and assuming the request was lost.
  */
 @Response(code=102, example="'Processing'")
-public class Processing {
+public class Processing extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final Processing INSTANCE = new Processing();
 
-	@Override /* Object */
-	public String toString() {
-		return "Processing";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public Processing() {
+		this("Processing");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public Processing(String message) {
+		super(message);
 	}
 }

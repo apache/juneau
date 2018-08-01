@@ -22,13 +22,23 @@ import org.apache.juneau.http.annotation.*;
  * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
  */
 @Response(code=305, example="'Use Proxy'")
-public class UseProxy {
+public class UseProxy extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final UseProxy INSTANCE = new UseProxy();
 
-	@Override /* Object */
-	public String toString() {
-		return "Use Proxy";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public UseProxy() {
+		this("Use Proxy");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public UseProxy(String message) {
+		super(message);
 	}
 }

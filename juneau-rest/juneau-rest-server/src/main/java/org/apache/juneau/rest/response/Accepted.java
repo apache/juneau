@@ -22,13 +22,23 @@ import org.apache.juneau.http.annotation.*;
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  */
 @Response(code=202, example="'Accepted'")
-public class Accepted {
+public class Accepted extends HttpResponse {
 
 	/** Reusable instance. */
 	public static final Accepted INSTANCE = new Accepted();
 
-	@Override /* Object */
-	public String toString() {
-		return "Accepted";
+	/**
+	 * Constructor using HTTP-standard message.
+	 */
+	public Accepted() {
+		this("Accepted");
+	}
+
+	/**
+	 * Constructor using custom message.
+	 * @param message Message to send as the response.
+	 */
+	public Accepted(String message) {
+		super(message);
 	}
 }
