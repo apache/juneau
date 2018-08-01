@@ -12,13 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.reshandlers;
 
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.exception.*;
@@ -53,29 +57,56 @@ public class DefaultHandler implements ResponseHandler {
 		SerializerMatch sm = g.getSerializerMatch(accept);
 
 		Object o = res.getOutput();
-		ResponseMeta rm = res.getMeta();
 
-		if (rm != null) {
-			if (rm.getCode() != 0)
-				res.setStatus(rm.getCode());
+		ResponseBeanMeta rbm = res.getResponseBeanMeta();
+		if (rbm == null)
+			rbm = req.getResponseBeanMeta(o);
 
-			for (ResponsePropertyMeta hm : rm.getHeaderMetas()) {
+		if (rbm != null) {
+
+			Method stm = rbm.getStatusMethod();
+			if (stm != null) {
+				try {
+					res.setStatus((int)stm.invoke(o));
+				} catch (Exception e) {
+					throw new InternalServerError(e, "Could not get status.");
+				}
+			} else if (rbm.getCode() != 0) {
+				res.setStatus(rbm.getCode());
+			}
+
+			for (ResponseBeanPropertyMeta hm : rbm.getHeaderMethods()) {
 				try {
 					Object ho = hm.getGetter().invoke(o);
 					if (ho instanceof URI)
 						ho = req.getUriResolver().resolve(ho);
-					res.setHeader(new HttpPart(hm.getPartName(), HttpPartType.HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
+					res.setHeader(new HttpPart(hm.getPartName(), HttpPartType.HEADER, hm.getSchema(), firstNonNull(hm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());
 				}
 			}
 
-			if (rm.isUsePartSerializer()) {
-				res.setContentType("text/plain");
-				HttpPartSerializer ps = rm.getPartSerializer(req.getPartSerializer());
+			ResponseBeanPropertyMeta m = rbm.getBodyMethod();
+			boolean usePartSerializer = rbm.isUsePartSerializer();
+			HttpPartSchema schema = rbm.getSchema();
+
+			if (m != null) {
+				try {
+					o = m.getGetter().invoke(o);
+					schema = m.getSchema();
+					usePartSerializer |= schema.isUsePartSerializer();
+				} catch (Exception e) {
+					throw new InternalServerError(e, "Could not get body.");
+				}
+			}
+
+			if (usePartSerializer) {
+				if (res.getContentType() == null)
+					res.setContentType("text/plain");
+				HttpPartSerializer ps = firstNonNull(rbm.getPartSerializer(), req.getPartSerializer());
 				if (ps != null) {
 					try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
-						w.append(ps.serialize(HttpPartType.BODY, rm.getSchema(), o));
+						w.append(ps.serialize(HttpPartType.BODY, schema, o));
 						w.flush();
 						w.finish();
 					} catch (SchemaValidationException | SerializeException e) {
@@ -85,6 +116,29 @@ public class DefaultHandler implements ResponseHandler {
 				}
 			}
 		}
+
+		ResponsePartMeta rpm = res.getResponseBodyMeta();
+		if (rpm == null)
+			rpm = req.getResponseBodyMeta(o);
+
+		if (rpm != null && rpm.getSchema().isUsePartSerializer()) {
+			if (res.getContentType() == null)
+				res.setContentType("text/plain");
+			HttpPartSerializer ps = rpm.getSerializer();
+			if (ps == null)
+				ps = req.getPartSerializer();
+			if (ps != null) {
+				try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
+					w.append(ps.serialize(HttpPartType.BODY, rpm.getSchema(), o));
+					w.flush();
+					w.finish();
+				} catch (SchemaValidationException | SerializeException e) {
+					throw new InternalServerError(e);
+				}
+				return true;
+			}
+		}
+
 
 		if (sm != null) {
 			Serializer s = sm.getSerializer();

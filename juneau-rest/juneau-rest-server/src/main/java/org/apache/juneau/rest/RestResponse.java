@@ -25,6 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.util.*;
@@ -58,7 +59,6 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 	private final RestRequest request;
 	private RestJavaMethod restJavaMethod;
-	private ResponseMeta meta;
 	private Object output;                       // The POJO being sent to the output.
 	private boolean isNullOutput;                // The output is null (as opposed to not being set at all)
 	private RequestProperties properties;                // Response properties
@@ -66,6 +66,9 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
 	private HtmlDocBuilder htmlDocBuilder;
+
+	private ResponseBeanMeta resBeanMeta;
+	private ResponsePartMeta resBodyMeta;
 
 	/**
 	 * Constructor.
@@ -117,6 +120,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
 		super.setCharacterEncoding(charset);
+
+		this.resBodyMeta = rjm.returnBodyMeta;
 	}
 
 	/**
@@ -518,18 +523,40 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	The metadata about this response.
 	 * 	<jk>Never <jk>null</jk>.
 	 */
-	public ResponseMeta getMeta() {
-		return meta;
+	public ResponseBeanMeta getResponseBeanMeta() {
+		return resBeanMeta;
 	}
 
 	/**
 	 * Sets metadata about this response.
 	 *
-	 * @param meta The metadata about this response.
+	 * @param rbm The metadata about this response.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setMeta(ResponseMeta meta) {
-		this.meta = meta;
+	public RestResponse setResponseBeanMeta(ResponseBeanMeta rbm) {
+		this.resBeanMeta = rbm;
+		return this;
+	}
+
+	/**
+	 * Returns the metadata about this response body.
+	 *
+	 * @return
+	 * 	The metadata about this response.
+	 * 	<jk>Never <jk>null</jk>.
+	 */
+	public ResponsePartMeta getResponseBodyMeta() {
+		return resBodyMeta;
+	}
+
+	/**
+	 * Sets metadata about this response body.
+	 *
+	 * @param rpm The metadata about this response body.
+	 * @return This object (for method chaining).
+	 */
+	public RestResponse setResponseBodyMeta(ResponsePartMeta rpm) {
+		this.resBodyMeta = rpm;
 		return this;
 	}
 

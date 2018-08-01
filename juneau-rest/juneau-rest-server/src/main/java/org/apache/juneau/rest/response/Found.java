@@ -58,7 +58,7 @@ public class Found {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@Header(name="Location", description="")
+	@ResponseHeader(name="Location")
 	public URI getLocation() {
 		return location;
 	}

@@ -10,64 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
+package org.apache.juneau;
 
-import java.net.*;
+import static org.junit.Assert.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.junit.*;
 
 /**
- * Represents an <code>HTTP 307 Temporary Redirect</code> response.
- *
- * <p>
- * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
- * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
- * For example, a POST request should be repeated using another POST request.
+ * Validates the {@link Value} class.
  */
-@Response(code=307, example="'Temporary Redirect'")
-public class TemporaryRedirect {
+public class ValueTest {
 
-	/** Reusable instance. */
-	public static final TemporaryRedirect INSTANCE = new TemporaryRedirect();
+	public static class A extends Value<A1>{}
+	public static class A1 {}
 
-	private final URI location;
-
-	/**
-	 * Constructor.
-	 */
-	public TemporaryRedirect() {
-		this((URI)null);
+	@Test
+	public void testSubclass() {
+		assertEquals(A1.class, Value.getValueType(A.class));
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param location <code>Location</code> header value.
-	 */
-	public TemporaryRedirect(String location) {
-		this.location = URI.create(location);
+	public static class B {
+		public void b(Value<B1> b1) {};
+
 	}
+	public static class B1 {}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param location <code>Location</code> header value.
-	 */
-	public TemporaryRedirect(URI location) {
-		this.location = location;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return "Temporary Redirect";
-	}
-
-
-	/**
-	 * @return <code>Location</code> header value.
-	 */
-	@ResponseHeader(name="Location")
-	public URI getLocation() {
-		return location;
+	@Test
+	public void testParameter() throws Exception {
+		assertEquals(B1.class, Value.getValueType(B.class.getMethod("b", Value.class), 0));
 	}
 }

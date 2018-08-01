@@ -58,12 +58,6 @@ public class ResponseAnnotationTest {
 	@RestResource
 	public static class A {
 
-		@Response(code=201)
-		@RestMethod(name=GET,path="/codeOnMethod")
-		public String a01() {
-			return "foo";
-		}
-
 		@RestMethod(name=GET,path="/codeOnClass")
 		public A02 a02() {
 			return new A02();
@@ -72,12 +66,6 @@ public class ResponseAnnotationTest {
 		@RestMethod(name=GET,path="/codeOnThrown")
 		public String a03() throws A03 {
 			throw new A03();
-		}
-
-		@Response(code=201)
-		@RestMethod(name=GET,path="/codeOnParameter")
-		public void a04(@Response(code=201) Value<String> value) {
-			value.set("foo");
 		}
 	}
 
@@ -96,11 +84,6 @@ public class ResponseAnnotationTest {
 	static MockRest a = MockRest.create(A.class);
 
 	@Test
-	public void a01_codeOnMethod() throws Exception {
-		a.get("/codeOnMethod").execute().assertStatus(201).assertBody("foo");
-	}
-
-	@Test
 	public void a02_codeOnClass() throws Exception {
 		a.get("/codeOnClass").execute().assertStatus(201).assertBody("foo");
 	}
@@ -108,11 +91,6 @@ public class ResponseAnnotationTest {
 	@Test
 	public void a03_codeOnThrown() throws Exception {
 		a.get("/codeOnThrown").execute().assertStatus(501);
-	}
-
-	@Test
-	public void a04_codeOnParameter() throws Exception {
-		a.get("/codeOnParameter").execute().assertStatus(201).assertBody("foo");
 	}
 
 	//=================================================================================================================
@@ -148,13 +126,13 @@ public class ResponseAnnotationTest {
 	@RestResource(partSerializer=XPartSerializer.class)
 	public static class B {
 
-		@Response(usePartSerializer=true)
+		@ResponseBody(usePartSerializer=true)
 		@RestMethod(name=GET,path="/useOnMethod")
 		public String b01() {
 			return "foo";
 		}
 
-		@Response(usePartSerializer=false)
+		@ResponseBody(usePartSerializer=false)
 		@RestMethod(name=GET,path="/dontUseOnMethod")
 		public String b02() {
 			return "foo";
@@ -181,12 +159,12 @@ public class ResponseAnnotationTest {
 		}
 
 		@RestMethod(name=GET,path="/useOnParameter")
-		public void b07(@Response(usePartSerializer=true) Value<String> value) {
+		public void b07(@ResponseBody(usePartSerializer=true) Value<String> value) {
 			value.set("foo");
 		}
 
 		@RestMethod(name=GET,path="/dontUseOnParameter")
-		public void b08(@Response(usePartSerializer=false) Value<String> value) {
+		public void b08(@ResponseBody(usePartSerializer=false) Value<String> value) {
 			value.set("foo");
 		}
 
@@ -266,13 +244,13 @@ public class ResponseAnnotationTest {
 	@RestResource
 	public static class C {
 
-		@Response(partSerializer=XPartSerializer.class)
+		@ResponseBody(partSerializer=XPartSerializer.class)
 		@RestMethod(name=GET,path="/useOnMethod")
 		public String c01() {
 			return "foo";
 		}
 
-		@Response
+		@ResponseBody
 		@RestMethod(name=GET,path="/dontUseOnMethod")
 		public String c02() {
 			return "foo";
@@ -299,12 +277,12 @@ public class ResponseAnnotationTest {
 		}
 
 		@RestMethod(name=GET,path="/useOnParameter")
-		public void c07(@Response(partSerializer=XPartSerializer.class) Value<String> value) {
+		public void c07(@ResponseBody(partSerializer=XPartSerializer.class) Value<String> value) {
 			value.set("foo");
 		}
 
 		@RestMethod(name=GET,path="/dontUseOnParameter")
-		public void c08(@Response Value<String> value) {
+		public void c08(@ResponseBody Value<String> value) {
 			value.set("foo");
 		}
 
@@ -384,7 +362,7 @@ public class ResponseAnnotationTest {
 	@RestResource
 	public static class D {
 
-		@Response(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true)
+		@ResponseBody(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true)
 		@RestMethod(name=GET,path="/useOnMethod")
 		public String[] d01() {
 			return new String[]{"foo","bar"};
@@ -401,11 +379,11 @@ public class ResponseAnnotationTest {
 		}
 
 		@RestMethod(name=GET,path="/useOnParameter")
-		public void d04(@Response(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true) Value<String[]> value) {
+		public void d04(@ResponseBody(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true) Value<String[]> value) {
 			value.set(new String[]{"foo","bar"});
 		}
 
-		@Response(schema=@Schema(type="string",format="byte"),usePartSerializer=true)
+		@ResponseBody(schema=@Schema(type="string",format="byte"),usePartSerializer=true)
 		@RestMethod(name=GET,path="/useOnMethodBytes")
 		public byte[] d05() {
 			return "foo".getBytes();
@@ -423,7 +401,7 @@ public class ResponseAnnotationTest {
 
 
 		@RestMethod(name=GET,path="/useOnParameterBytes")
-		public void d08(@Response(schema=@Schema(type="string",format="byte"),usePartSerializer=true) Value<byte[]> value) {
+		public void d08(@ResponseBody(schema=@Schema(type="string",format="byte"),usePartSerializer=true) Value<byte[]> value) {
 			value.set("foo".getBytes());
 		}
 
@@ -520,8 +498,10 @@ public class ResponseAnnotationTest {
 			examples=" {foo:'a'} "
 		)
 		public static class SA01 {}
-		@RestMethod(name=GET,path="/basic")
-		public void sa01(SA01 r) {}
+		@RestMethod
+		public void sa01a(Value<SA01> r) {}
+		@RestMethod
+		public SA01 sa01b() {return null;}
 
 		@Response(
 			api={
@@ -532,10 +512,11 @@ public class ResponseAnnotationTest {
 				"examples:{foo:'a'}"
 			}
 		)
-
 		public static class SA02 {}
-		@RestMethod(name=GET,path="/api")
-		public void sa02(SA02 r) {}
+		@RestMethod
+		public void sa02a(Value<SA02> r) {}
+		@RestMethod
+		public SA02 sa02b() {return null;}
 
 		@Response(
 			api={
@@ -552,28 +533,37 @@ public class ResponseAnnotationTest {
 			examples=" {foo:'a'} "
 		)
 		public static class SA03 {}
-		@RestMethod(name=GET,path="/mixed")
-		public void sa03(SA03 r) {}
+		@RestMethod
+		public void sa03a(Value<SA03> r) {}
+		@RestMethod
+		public SA03 sa03b() {return null;}
 
 		@Response(code=100)
 		public static class SA04 {}
-		@RestMethod(name=GET,path="/code")
-		public void sa04(SA04 r) {}
+		@RestMethod
+		public void sa04a(Value<SA04> r) {}
+		@RestMethod
+		public SA04 sa04b() {return null;}
 
 		@Response(100)
 		public static class SA05 {}
-		@RestMethod(name=GET,path="/value")
-		public void sa05(SA05 r) {}
+		@RestMethod
+		public void sa05a(Value<SA05> r) {}
+		@RestMethod
+		public SA05 sa05b() {return null;}
 
 		@Response(headers=@ResponseHeader(name="foo",api=" type:'b' "))
 		public static class SA06 {}
-		@RestMethod(name=GET,path="/headers")
-		public void sa06(SA06 r) {}
+		@RestMethod
+		public void sa06a(Value<SA06> r) {}
+		@RestMethod
+		public SA06 sa06b() {return null;}
 	}
 
 	@Test
-	public void sa01_Response_onPojo_basic() throws Exception {
-		ResponseInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getResponse(200);
+	public void sa01a_Response_onPojo_basic() throws Exception {
+		System.err.println(getSwagger(new SA()).getPaths().get("/sa01a"));
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa01a").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
@@ -581,8 +571,8 @@ public class ResponseAnnotationTest {
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
-	public void sa02_Response_onPojo_api() throws Exception {
-		ResponseInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getResponse(200);
+	public void sa01b_Response_onPojo_basic() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa01b").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
@@ -590,8 +580,8 @@ public class ResponseAnnotationTest {
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
-	public void sa03_Response_onPojo_mixed() throws Exception {
-		ResponseInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getResponse(200);
+	public void sa02a_Response_onPojo_api() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa02a").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
@@ -599,18 +589,60 @@ public class ResponseAnnotationTest {
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
-	public void sa04_Response_onPojo_code() throws Exception {
-		ResponseInfo x = getSwagger(new SA()).getPaths().get("/code").get("get").getResponse(100);
+	public void sa02b_Response_onPojo_api() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa02b").get("get").getResponse(200);
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObjectEquals("'a'", x.getExample());
+		assertObjectEquals("{foo:'a'}", x.getExamples());
+	}
+	@Test
+	public void sa03a_Response_onPojo_mixed() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa03a").get("get").getResponse(200);
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObjectEquals("'a'", x.getExample());
+		assertObjectEquals("{foo:'a'}", x.getExamples());
+	}
+	@Test
+	public void sa03b_Response_onPojo_mixed() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa03b").get("get").getResponse(200);
+		assertEquals("a\nb", x.getDescription());
+		assertObjectEquals("{type:'string'}", x.getSchema());
+		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
+		assertObjectEquals("'a'", x.getExample());
+		assertObjectEquals("{foo:'a'}", x.getExamples());
+	}
+	@Test
+	public void sa04a_Response_onPojo_code() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa04a").get("get").getResponse(100);
 		assertEquals("Continue", x.getDescription());
 	}
 	@Test
-	public void sa05_Response_onPojo_value() throws Exception {
-		ResponseInfo x = getSwagger(new SA()).getPaths().get("/value").get("get").getResponse(100);
+	public void sa04b_Response_onPojo_code() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa04b").get("get").getResponse(100);
 		assertEquals("Continue", x.getDescription());
 	}
 	@Test
-	public void sa06_Response_onPojo_headers() throws Exception {
-		ResponseInfo x = getSwagger(new SA()).getPaths().get("/headers").get("get").getResponse(200);
+	public void sa05a_Response_onPojo_value() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa05a").get("get").getResponse(100);
+		assertEquals("Continue", x.getDescription());
+	}
+	@Test
+	public void sa05b_Response_onPojo_value() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa05b").get("get").getResponse(100);
+		assertEquals("Continue", x.getDescription());
+	}
+	@Test
+	public void sa06a_Response_onPojo_headers() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa06a").get("get").getResponse(200);
+		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
+	}
+	@Test
+	public void sa06b_Response_onPojo_headers() throws Exception {
+		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa06b").get("get").getResponse(200);
 		assertObjectEquals("{foo:{type:'b'}}", x.getHeaders());
 	}
 
@@ -623,47 +655,75 @@ public class ResponseAnnotationTest {
 
 		@Response(schema=@Schema(" type:'number' "))
 		public static class SB01 {}
-		@RestMethod(name=GET,path="/schemaValue")
-		public void sb01(SB01 r) {}
+		@RestMethod
+		public void sb01a(Value<SB01> r) {}
+		@RestMethod
+		public SB01 sb01b() {return null;}
 
 		@Response
 		public static class SB02 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/autoDetectBean")
-		public void sb02(SB02 b) {}
+		@RestMethod
+		public void sb02a(Value<SB02> b) {}
+		@RestMethod
+		public SB02 sb02b() {return null;}
 
 		@Response
 		public static class SB03 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(name=GET,path="/autoDetectList")
-		public void sb03(SB03 b) {}
+		@RestMethod
+		public void sb03a(Value<SB03> b) {}
+		@RestMethod
+		public SB03 sb03b() {return null;}
 
 		@Response
 		public static class SB04 {}
-		@RestMethod(name=GET,path="/autoDetectStringObject")
-		public void sb04(SB04 b) {}
+		@RestMethod
+		public void sb04a(Value<SB04> b) {}
+		@RestMethod
+		public SB04 sb04b() {return null;}
 	}
 
 	@Test
-	public void sb01_Response_onPojo_schemaValue() throws Exception {
-		ResponseInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getResponse(200);
+	public void sb01a_Response_onPojo_schemaValue() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb01a").get("get").getResponse(200);
 		assertObjectEquals("{type:'number'}", x.getSchema());
 	}
 	@Test
-	public void sb02_Response_onPojo_autoDetectBean() throws Exception {
-		ResponseInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean").get("get").getResponse(200);
+	public void sb01b_Response_onPojo_schemaValue() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb01b").get("get").getResponse(200);
+		assertObjectEquals("{type:'number'}", x.getSchema());
+	}
+	@Test
+	public void sb02a_Response_onPojo_autoDetectBean() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb02a").get("get").getResponse(200);
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
 	}
 	@Test
-	public void sb03_Response_onPojo_autoDetectList() throws Exception {
-		ResponseInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList").get("get").getResponse(200);
+	public void sb02b_Response_onPojo_autoDetectBean() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb02b").get("get").getResponse(200);
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+	}
+	@Test
+	public void sb03a_Response_onPojo_autoDetectList() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb03a").get("get").getResponse(200);
 		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
 	}
 	@Test
-	public void sb04_Response_onPojo_autoDetectStringObject() throws Exception {
-		ResponseInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getResponse(200);
+	public void sb03b_Response_onPojo_autoDetectList() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb03b").get("get").getResponse(200);
+		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+	}
+	@Test
+	public void sb04a_Response_onPojo_autoDetectStringObject() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb04a").get("get").getResponse(200);
+		assertObjectEquals("{type:'string'}", x.getSchema());
+	}
+	@Test
+	public void sb04b_Response_onPojo_autoDetectStringObject() throws Exception {
+		ResponseInfo x = getSwagger(new SB()).getPaths().get("/sb04b").get("get").getResponse(200);
 		assertObjectEquals("{type:'string'}", x.getSchema());
 	}
 
@@ -676,211 +736,37 @@ public class ResponseAnnotationTest {
 
 		@Response(example="{f1:'a'}")
 		public static class SC01 {}
-		@RestMethod(name=GET,path="/example")
-		public void sc01(SC01 r) {}
+		@RestMethod
+		public void sc01a(Value<SC01> r) {}
+		@RestMethod
+		public SC01 sc01b() {return null;}
 
 		@Response(examples={" foo:'b' "})
 		public static class SC02 {}
-		@RestMethod(name=GET,path="/examples")
-		public void sc02(SC02 r) {}
+		@RestMethod
+		public void sc02a(Value<SC02> r) {}
+		@RestMethod
+		public SC02 sc02b() {return null;}
 	}
 
 	@Test
-	public void sc01_Response_onPojo_example() throws Exception {
-		ResponseInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getResponse(200);
+	public void sc01a_Response_onPojo_example() throws Exception {
+		ResponseInfo x = getSwagger(new SC()).getPaths().get("/sc01a").get("get").getResponse(200);
 		assertObjectEquals("{f1:'a'}", x.getExample());
 	}
 	@Test
-	public void sc02_Response_onPojo_examples() throws Exception {
-		ResponseInfo x = getSwagger(new SC()).getPaths().get("/examples").get("get").getResponse(200);
+	public void sc01b_Response_onPojo_example() throws Exception {
+		ResponseInfo x = getSwagger(new SC()).getPaths().get("/sc01b").get("get").getResponse(200);
+		assertObjectEquals("{f1:'a'}", x.getExample());
+	}
+	@Test
+	public void sc02a_Response_onPojo_examples() throws Exception {
+		ResponseInfo x = getSwagger(new SC()).getPaths().get("/sc02a").get("get").getResponse(200);
 		assertObjectEquals("{foo:'b'}", x.getExamples());
 	}
-
-	//=================================================================================================================
-	// @Response on parameter
-	//=================================================================================================================
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Basic tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@RestResource
-	public static class TA {
-
-		public static class TA01 {}
-		@RestMethod(name=GET,path="/basic")
-		public void ta01(
-			@Response(
-				description={"a","b"},
-				schema=@Schema(type="string"),
-				headers=@ResponseHeader(name="foo",type="string"),
-				example=" 'a' ",
-				examples=" {foo:'a'} "
-			) TA01 r
-		) {}
-
-		public static class TA02 {}
-		@RestMethod(name=GET,path="/api")
-		public void ta02(
-			@Response(
-				api={
-					"description:'a\nb',",
-					"schema:{type:'string'},",
-					"headers:{foo:{type:'string'}},",
-					"example:'a',",
-					"examples:{foo:'a'}"
-				}
-			) TA02 r
-		) {}
-
-		public static class TA03 {}
-		@RestMethod(name=GET,path="/mixed")
-		public void ta03(
-			@Response(
-				api={
-					"description:'b',",
-					"schema:{type:'number'},",
-					"headers:{bar:{type:'number'}},",
-					"example:'b',",
-					"examples:{bar:'b'}"
-				},
-				description={"a","b"},
-				schema=@Schema(type="string"),
-				headers=@ResponseHeader(name="foo",type="string"),
-				example=" 'a' ",
-				examples=" {foo:'a'} "
-			) TA03 r
-		) {}
-
-		public static class TA04 {}
-		@RestMethod(name=GET,path="/code")
-		public void ta04(@Response(code=100) TA04 r) {}
-
-		public static class TA05 {}
-		@RestMethod(name=GET,path="/value")
-		public void ta05(@Response(code=100) TA05 r) {}
-
-		public static class TA06 {}
-		@RestMethod(name=GET,path="/headers")
-		public void ta06(@Response(headers=@ResponseHeader(name="foo",api=" type:'number' ")) TA06 r) {}
-	}
-
 	@Test
-	public void ta01_Response_onParameter_basic() throws Exception {
-		ResponseInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getResponse(200);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
-	}
-	@Test
-	public void ta02_Response_onParameter_api() throws Exception {
-		ResponseInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getResponse(200);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
-	}
-	@Test
-	public void ta03_Response_onParameter_mixed() throws Exception {
-		ResponseInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getResponse(200);
-		assertEquals("a\nb", x.getDescription());
-		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
-		assertObjectEquals("{foo:'a'}", x.getExamples());
-	}
-	@Test
-	public void ta04_Response_onParameter_code() throws Exception {
-		ResponseInfo x = getSwagger(new TA()).getPaths().get("/code").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void ta05_Response_onParameter_value() throws Exception {
-		ResponseInfo x = getSwagger(new TA()).getPaths().get("/value").get("get").getResponse(100);
-		assertEquals("Continue", x.getDescription());
-	}
-	@Test
-	public void ta06_Response_onParameter_headers() throws Exception {
-		ResponseInfo x = getSwagger(new TA()).getPaths().get("/headers").get("get").getResponse(200);
-		assertObjectEquals("{foo:{type:'number'}}", x.getHeaders());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Schema
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@RestResource
-	public static class TB {
-
-		public static class TB01 {}
-		@RestMethod(name=GET,path="/schemaValue")
-		public void tb01(@Response(schema=@Schema(" type:'number' ")) TB01 r) {}
-
-		public static class TB02 {
-			public String f1;
-		}
-		@RestMethod(name=GET,path="/autoDetectBean")
-		public void tb02(@Response TB02 b) {}
-
-		public static class TB03 extends LinkedList<String> {
-			private static final long serialVersionUID = 1L;
-		}
-		@RestMethod(name=GET,path="/autoDetectList")
-		public void tb03(@Response TB03 b) {}
-
-		public static class TB04 {}
-		@RestMethod(name=GET,path="/autoDetectStringObject")
-		public void tb04(@Response TB04 b) {}
-	}
-
-	@Test
-	public void tb01_Response_onParameter_schemaValue() throws Exception {
-		ResponseInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getResponse(200);
-		assertObjectEquals("{type:'number'}", x.getSchema());
-	}
-	@Test
-	public void tb02_Response_onParameter_autoDetectBean() throws Exception {
-		ResponseInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBean").get("get").getResponse(200);
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
-	}
-	@Test
-	public void tb03_Response_onParameter_autoDetectList() throws Exception {
-		ResponseInfo x = getSwagger(new TB()).getPaths().get("/autoDetectList").get("get").getResponse(200);
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
-	}
-	@Test
-	public void tb04_Response_onParameter_autoDetectStringObject() throws Exception {
-		ResponseInfo x = getSwagger(new TB()).getPaths().get("/autoDetectStringObject").get("get").getResponse(200);
-		assertObjectEquals("{type:'string'}", x.getSchema());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Examples
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@RestResource
-	public static class TC {
-
-		public static class TC01 {}
-		@RestMethod(name=GET,path="/example")
-		public void tc01(@Response(example=" {f1:'b'} ") TC01 r) {}
-
-		public static class TC02 {}
-		@RestMethod(name=GET,path="/examples")
-		public void tc02(@Response(examples={" foo:'b' "}) TC02 r) {}
-	}
-
-	@Test
-	public void tc01_Response_onParameter_example() throws Exception {
-		ResponseInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getResponse(200);
-		assertObjectEquals("{f1:'b'}", x.getExample());
-	}
-	@Test
-	public void tc02_Response_onParameter_examples() throws Exception {
-		ResponseInfo x = getSwagger(new TC()).getPaths().get("/examples").get("get").getResponse(200);
+	public void sc02b_Response_onPojo_examples() throws Exception {
+		ResponseInfo x = getSwagger(new SC()).getPaths().get("/sc02b").get("get").getResponse(200);
 		assertObjectEquals("{foo:'b'}", x.getExamples());
 	}
 
@@ -977,7 +863,7 @@ public class ResponseAnnotationTest {
 		ResponseInfo x = getSwagger(new UA()).getPaths().get("/mixed").get("get").getResponse(500);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
 		assertObjectEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}

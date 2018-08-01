@@ -39,6 +39,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remoteable.*;
@@ -1598,6 +1599,36 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		}
 	}
 
+	/**
+	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
+	 *
+ 	 * @param o The response POJO.
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}. 
+	 */
+	public ResponseBeanMeta getResponseBeanMeta(Object o) {
+		return restJavaMethod.getResponseBeanMeta(o);
+	}
+
+	/**
+	 * Returns metadata about the specified response object if it's annotated with {@link ResponseHeader @ResponseHeader}.
+	 *
+ 	 * @param o The response POJO.
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}. 
+	 */
+	public ResponsePartMeta getResponseHeaderMeta(Object o) {
+		return restJavaMethod.getResponseHeaderMeta(o);
+	}
+
+	/**
+	 * Returns metadata about the specified response object if it's annotated with {@link ResponseBody @ResponseBody}.
+	 *
+ 	 * @param o The response POJO.
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}. 
+	 */
+	public ResponsePartMeta getResponseBodyMeta(Object o) {
+		return restJavaMethod.getResponseBodyMeta(o);
+	}
+
 	//--------------------------------------------------------------------------------
 	// Utility methods
 	//--------------------------------------------------------------------------------
@@ -1618,28 +1649,5 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	void setJavaMethod(Method method) {
 		this.javaMethod = method;
-	}
-
-	/**
-	 * Returns metadata about the method return type.
-	 *
-	 * @return Metadata about the method return type.
-	 */
-	public RestMethodReturn getRestMethodReturn() {
-		return restJavaMethod.getRestMethodReturn();
-	}
-
-	/**
-	 * Returns metadata about the specified exception.
-	 *
-	 * @param e
-	 * @return Metadata about the specified exception.
-	 */
-	public RestMethodThrown getRestMethodThrown(Throwable e) {
-		if (restJavaMethod != null)
-			for (RestMethodThrown rmt : restJavaMethod.getRestMethodThrown())
-				if (rmt.getType().isAssignableFrom(e.getClass()))
-					return rmt;
-		return null;
 	}
 }

@@ -10,20 +10,21 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.httppart.bean;
 
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Response}.
  */
-public class ResponsePropertyMeta {
+public class ResponseBeanPropertyMeta {
 
-	static ResponsePropertyMeta.Builder create() {
+	static ResponseBeanPropertyMeta.Builder create() {
 		return new Builder();
 	}
 
@@ -37,7 +38,7 @@ public class ResponsePropertyMeta {
 	private final HttpPartSerializer serializer;
 	private final HttpPartSchema schema;
 
-	ResponsePropertyMeta(Builder b, HttpPartSerializer serializer) {
+	ResponseBeanPropertyMeta(Builder b, HttpPartSerializer serializer) {
 		this.partType = b.partType;
 		this.schema = b.schema.build();
 		this.partName = StringUtils.firstNonEmpty(schema.getName(), b.name);
@@ -77,8 +78,8 @@ public class ResponsePropertyMeta {
 			return this;
 		}
 
-		ResponsePropertyMeta build(HttpPartSerializer serializer) {
-			return new ResponsePropertyMeta(this, serializer);
+		ResponseBeanPropertyMeta build(HttpPartSerializer serializer) {
+			return new ResponseBeanPropertyMeta(this, serializer);
 		}
 	}
 
@@ -116,11 +117,10 @@ public class ResponsePropertyMeta {
 	/**
 	 * Returns the serializer to use for serializing the bean property value.
 	 *
-	 * @param _default The default serializer to use if not defined on the annotation.
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	public HttpPartSerializer getSerializer(HttpPartSerializer _default) {
-		return serializer == null ? _default : serializer;
+	public HttpPartSerializer getSerializer() {
+		return serializer;
 	}
 
 	/**

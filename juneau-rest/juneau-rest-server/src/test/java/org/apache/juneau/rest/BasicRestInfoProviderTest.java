@@ -1783,25 +1783,33 @@ public class BasicRestInfoProviderTest {
 	//=================================================================================================================
 
 	@RestResource
-	public static class OA01 {
+	public static class OA01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(100) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OA01x> foo) {}
 	}
+	@RestResource
+	public static class OA01b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OA01x doFoo() { return null;}
+	}
+	@Response(code=100)
+	public static class OA01x {}
 
 	@Test
-	public void oa01_responses_100_description_default() throws Exception {
-		assertEquals("Continue", getSwagger(new OA01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("s-100-description", getSwaggerWithFile(new OA01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+	public void oa01a_responses_100_description_default() throws Exception {
+		assertEquals("Continue", getSwagger(new OA01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertEquals("s-100-description", getSwaggerWithFile(new OA01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void oa01b_responses_100_description_default() throws Exception {
+		assertEquals("Continue", getSwagger(new OA01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertEquals("s-100-description", getSwaggerWithFile(new OA01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1813,9 +1821,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
 	public static class OA03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{description:'b-100-description'}}"))
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1825,31 +1831,51 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
-	public static class OA04 {
+	public static class OA04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,description="c-100-description") Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OA04x> foo) {}
 	}
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	public static class OA04b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OA04x doFoo() {return null;}
+	}
+	@Response(code=100,description="c-100-description")
+	public static class OA04x {}
 
 	@Test
-	public void oa04_response_100_description_swaggerOnAnnotation() throws Exception {
-		assertEquals("c-100-description", getSwagger(new OA04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("c-100-description", getSwaggerWithFile(new OA04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+	public void oa04a_response_100_description_swaggerOnAnnotation() throws Exception {
+		assertEquals("c-100-description", getSwagger(new OA04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertEquals("c-100-description", getSwaggerWithFile(new OA04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void oa04b_response_100_description_swaggerOnAnnotation() throws Exception {
+		assertEquals("c-100-description", getSwagger(new OA04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertEquals("c-100-description", getSwaggerWithFile(new OA04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
 	}
 
 	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
-	public static class OA05 {
+	public static class OA05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,description="$L{foo}") Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OA05x> foo) {}
 	}
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{description:'a-100-description'}}}}}"))
+	public static class OA05b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OA05x doFoo() {return null;}
+	}
+	@Response(code=100,description="$L{foo}")
+	public static class OA05x {}
 
 	@Test
-	public void oa05_response_100_description_swaggerOnAnnotation_localized() throws Exception {
-		assertEquals("l-foo", getSwagger(new OA05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
-		assertEquals("l-foo", getSwaggerWithFile(new OA05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+	public void oa05a_response_100_description_swaggerOnAnnotation_localized() throws Exception {
+		assertEquals("l-foo", getSwagger(new OA05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertEquals("l-foo", getSwaggerWithFile(new OA05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+	}
+	@Test
+	public void oa05b_response_100_description_swaggerOnAnnotation_localized() throws Exception {
+		assertEquals("l-foo", getSwagger(new OA05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
+		assertEquals("l-foo", getSwaggerWithFile(new OA05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getDescription());
 	}
 
 	//=================================================================================================================
@@ -1857,23 +1883,33 @@ public class BasicRestInfoProviderTest {
 	//=================================================================================================================
 
 	@RestResource
-	public static class OB01 {
+	public static class OB01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OB01x> foo) {}
 	}
+	@RestResource
+	public static class OB01b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OB01x doFoo() {return null;}
+	}
+	@Response(code=100)
+	public static class OB01x {}
 
 	@Test
-	public void ob01_responses_100_headers_default() throws Exception {
-		assertEquals(null, getSwagger(new OB01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
-		assertObjectEquals("{'X-Foo':{description:'s-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+	public void ob01a_responses_100_headers_default() throws Exception {
+		assertEquals(null, getSwagger(new OB01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{'X-Foo':{description:'s-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+	}
+	@Test
+	public void ob01b_responses_100_headers_default() throws Exception {
+		assertEquals(null, getSwagger(new OB01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{'X-Foo':{description:'s-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -1887,7 +1923,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
 	public static class OB03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{headers:{'X-Foo':{description:'c-description',type:'integer',format:'int32'}}}}"))
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
+		public Foo doFoo(@ResponseStatus Value<Integer> foo) {
 			return null;
 		}
 	}
@@ -1899,31 +1935,51 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
-	public static class OB04 {
+	public static class OB04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="d-description",type="integer",format="int32")) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OB04x> foo) {}
 	}
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	public static class OB04b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OB04x doFoo() {return null;}
+	}
+	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="d-description",type="integer",format="int32"))
+	public static class OB04x {}
 
 	@Test
-	public void ob04_response_100_headers_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}", getSwagger(new OB04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
-		assertObjectEquals("{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+	public void ob04a_response_100_headers_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}", getSwagger(new OB04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+	}
+	@Test
+	public void ob04b_response_100_headers_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}", getSwagger(new OB04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{'X-Foo':{description:'d-description',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
 	}
 
 	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
-	public static class OB05 {
+	public static class OB05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="$L{foo}",type="integer",format="int32")) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OB05x> foo) {}
 	}
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
+	public static class OB05b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OB05x doFoo() {return null;}
+	}
+	@Response(code=100,headers=@ResponseHeader(name="X-Foo",description="$L{foo}",type="integer",format="int32"))
+	public static class OB05x {}
 
 	@Test
-	public void ob05_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}", getSwagger(new OB05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
-		assertObjectEquals("{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+	public void ob05a_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
+		assertObjectEquals("{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}", getSwagger(new OB05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+	}
+	@Test
+	public void ob05b_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
+		assertObjectEquals("{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}", getSwagger(new OB05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
+		assertObjectEquals("{'X-Foo':{description:'l-foo',type:'integer',format:'int32'}}", getSwaggerWithFile(new OB05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
 	}
 
 	//=================================================================================================================
@@ -1931,25 +1987,33 @@ public class BasicRestInfoProviderTest {
 	//=================================================================================================================
 
 	@RestResource
-	public static class OC01 {
+	public static class OC01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OC01x> foo) {}
 	}
+	@RestResource
+	public static class OC01b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OC01x doFoo() {return null;}
+	}
+	@Response(code=100)
+	public static class OC01x {}
 
 	@Test
-	public void oc01_responses_100_example_default() throws Exception {
-		assertEquals(null, getSwagger(new OC01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
-		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new OC01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+	public void oc01a_responses_100_example_default() throws Exception {
+		assertEquals(null, getSwagger(new OC01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new OC01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+	}
+	@Test
+	public void oc01b_responses_100_example_default() throws Exception {
+		assertEquals(null, getSwagger(new OC01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new OC01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1961,9 +2025,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
 	public static class OC03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{example:{foo:'c'}}}"))
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -1973,31 +2035,51 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
-	public static class OC04 {
+	public static class OC04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,example="{foo:'d'}") Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OC04x> foo) {}
 	}
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	public static class OC04b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OC04x doFoo() {return null;}
+	}
+	@Response(code=100,example="{foo:'d'}")
+	public static class OC04x {}
 
 	@Test
-	public void oc04_response_100_example_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("{foo:'d'}", getSwagger(new OC04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
-		assertObjectEquals("{foo:'d'}", getSwaggerWithFile(new OC04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+	public void oc04a_response_100_example_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{foo:'d'}", getSwagger(new OC04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+		assertObjectEquals("{foo:'d'}", getSwaggerWithFile(new OC04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+	}
+	@Test
+	public void oc04b_response_100_example_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{foo:'d'}", getSwagger(new OC04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+		assertObjectEquals("{foo:'d'}", getSwaggerWithFile(new OC04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
 	}
 
 	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
-	public static class OC05 {
+	public static class OC05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,example="{foo:'$L{foo}'}") Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OC05x> foo) {}
 	}
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{example:{foo:'b'}}}}}}"))
+	public static class OC05b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OC05x doFoo() {return null;}
+	}
+	@Response(code=100,example="{foo:'$L{foo}'}")
+	public static class OC05x {}
 
 	@Test
-	public void oc05_response_100_example_swaggerOnAnnotation_localized() throws Exception {
-		assertObjectEquals("{foo:'l-foo'}", getSwagger(new OC05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
-		assertObjectEquals("{foo:'l-foo'}", getSwaggerWithFile(new OC05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+	public void oc05a_response_100_example_swaggerOnAnnotation_localized() throws Exception {
+		assertObjectEquals("{foo:'l-foo'}", getSwagger(new OC05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+		assertObjectEquals("{foo:'l-foo'}", getSwaggerWithFile(new OC05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+	}
+	@Test
+	public void oc05b_response_100_example_swaggerOnAnnotation_localized() throws Exception {
+		assertObjectEquals("{foo:'l-foo'}", getSwagger(new OC05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
+		assertObjectEquals("{foo:'l-foo'}", getSwaggerWithFile(new OC05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExample());
 	}
 
 	//=================================================================================================================
@@ -2005,25 +2087,33 @@ public class BasicRestInfoProviderTest {
 	//=================================================================================================================
 
 	@RestResource
-	public static class OD01 {
+	public static class OD01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OD01x> foo) {}
 	}
+	@RestResource
+	public static class OD01b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OD01x doFoo() {return null;}
+	}
+	@Response(code=100)
+	public static class OD01x {}
 
 	@Test
-	public void od01_responses_100_examples_default() throws Exception {
-		assertEquals(null, getSwagger(new OD01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
-		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new OD01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+	public void od01a_responses_100_examples_default() throws Exception {
+		assertEquals(null, getSwagger(new OD01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new OD01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+	}
+	@Test
+	public void od01b_responses_100_examples_default() throws Exception {
+		assertEquals(null, getSwagger(new OD01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:'a'}", getSwaggerWithFile(new OD01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -2035,9 +2125,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
 	public static class OD03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{examples:{foo:{bar:'c'}}}}"))
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -2047,31 +2135,51 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
-	public static class OD04 {
+	public static class OD04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,examples="{foo:{bar:'d'}}") Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OD04x> foo) {}
 	}
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	public static class OD04b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OD04x doFoo() {return null;}
+	}
+	@Response(code=100,examples="{foo:{bar:'d'}}")
+	public static class OD04x {}
 
 	@Test
-	public void od04_response_100_examples_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("{foo:{bar:'d'}}", getSwagger(new OD04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
-		assertObjectEquals("{foo:{bar:'d'}}", getSwaggerWithFile(new OD04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+	public void od04a_response_100_examples_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{foo:{bar:'d'}}", getSwagger(new OD04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:{bar:'d'}}", getSwaggerWithFile(new OD04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+	}
+	@Test
+	public void od04b_response_100_examples_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{foo:{bar:'d'}}", getSwagger(new OD04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:{bar:'d'}}", getSwaggerWithFile(new OD04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
 	}
 
 	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
-	public static class OD05 {
+	public static class OD05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,examples="{foo:{bar:'$L{foo}'}}") Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OD05x> foo) {}
 	}
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
+	public static class OD05b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OD05x doFoo() {return null;}
+	}
+	@Response(code=100,examples="{foo:{bar:'$L{foo}'}}")
+	public static class OD05x {}
 
 	@Test
-	public void od05_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {
-		assertObjectEquals("{foo:{bar:'l-foo'}}", getSwagger(new OD05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
-		assertObjectEquals("{foo:{bar:'l-foo'}}", getSwaggerWithFile(new OD05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+	public void od05a_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {
+		assertObjectEquals("{foo:{bar:'l-foo'}}", getSwagger(new OD05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:{bar:'l-foo'}}", getSwaggerWithFile(new OD05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+	}
+	@Test
+	public void od05b_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {
+		assertObjectEquals("{foo:{bar:'l-foo'}}", getSwagger(new OD05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
+		assertObjectEquals("{foo:{bar:'l-foo'}}", getSwaggerWithFile(new OD05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
 	}
 
 	//=================================================================================================================
@@ -2079,25 +2187,33 @@ public class BasicRestInfoProviderTest {
 	//=================================================================================================================
 
 	@RestResource
-	public static class OE01 {
+	public static class OE01a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OE01x> foo) {}
 	}
+	@RestResource
+	public static class OE01b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OE01x doFoo() {return null;}
+	}
+	@Response(code=100)
+	public static class OE01x extends Foo {}
 
 	@Test
-	public void oe01_responses_100_schema_default() throws Exception {
-		assertObjectEquals("{type:'object',properties:{id:{format:'int32',type:'integer'}}}", getSwagger(new OE01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
-		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/Foo'}}", getSwaggerWithFile(new OE01()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	public void oe01a_responses_100_schema_default() throws Exception {
+		assertObjectEquals("{type:'object',properties:{id:{format:'int32',type:'integer'}}}", getSwagger(new OE01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/Foo'}}", getSwaggerWithFile(new OE01a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
+	@Test
+	public void oe01b_responses_100_schema_default() throws Exception {
+		assertObjectEquals("{type:'object',properties:{id:{format:'int32',type:'integer'}}}", getSwagger(new OE01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{type:'array',items:{'$ref':'#/definitions/Foo'}}", getSwaggerWithFile(new OE01b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE02 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -2109,9 +2225,7 @@ public class BasicRestInfoProviderTest {
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
 	public static class OE03 {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100",swagger=@MethodSwagger("responses:{100:{schema:{$ref:'c'}}}}"))
-		public Foo doFoo(@ResponseStatuses Value<Integer> foo) {
-			return null;
-		}
+		public void doFoo(@ResponseStatus Value<Integer> foo) {}
 	}
 
 	@Test
@@ -2121,33 +2235,52 @@ public class BasicRestInfoProviderTest {
 	}
 
 	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
-	public static class OE04 {
+	public static class OE04a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,schema=@Schema($ref="d")) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OE04x> foo) {}
 	}
+	@RestResource(swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	public static class OE04b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OE04x doFoo() {return null;}
+	}
+	@Response(code=100,schema=@Schema($ref="d"))
+	public static class OE04x extends Foo {}
 
 	@Test
-	public void oe04_response_100_schema_swaggerOnAnnotation() throws Exception {
-		assertObjectEquals("{'$ref':'d'}", getSwagger(new OE04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
-		assertObjectEquals("{'$ref':'d'}", getSwaggerWithFile(new OE04()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	public void oe04a_response_100_schema_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{'$ref':'d'}", getSwagger(new OE04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'d'}", getSwaggerWithFile(new OE04a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
+	@Test
+	public void oe04b_response_100_schema_swaggerOnAnnotation() throws Exception {
+		assertObjectEquals("{'$ref':'d'}", getSwagger(new OE04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'d'}", getSwaggerWithFile(new OE04b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 	}
 
 	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
-	public static class OE05 {
+	public static class OE05a {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
-		public Foo doFoo(@Response(code=100,schema=@Schema("{$ref:'$L{foo}'}")) Value<Foo> foo) {
-			return null;
-		}
+		public void doFoo(Value<OE05x> foo) {}
 	}
+	@RestResource(messages="BasicRestInfoProviderTest", swagger=@ResourceSwagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{schema:{$ref:'b'}}}}}}"))
+	public static class OE05b {
+		@RestMethod(name=GET,path="/path/{foo}/responses/100")
+		public OE05x doFoo() {return null;}
+	}
+	@Response(code=100,schema=@Schema("{$ref:'$L{foo}'}"))
+	public static class OE05x extends Foo {}
 
 	@Test
-	public void oe05_response_100_schema_swaggerOnAnnotation_loealized() throws Exception {
-		assertObjectEquals("{'$ref':'l-foo'}", getSwagger(new OE05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
-		assertObjectEquals("{'$ref':'l-foo'}", getSwaggerWithFile(new OE05()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	public void oe05a_response_100_schema_swaggerOnAnnotation_loealized() throws Exception {
+		assertObjectEquals("{'$ref':'l-foo'}", getSwagger(new OE05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'l-foo'}", getSwaggerWithFile(new OE05a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
 	}
-
+	@Test
+	public void oe05b_response_100_schema_swaggerOnAnnotation_loealized() throws Exception {
+		assertObjectEquals("{'$ref':'l-foo'}", getSwagger(new OE05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+		assertObjectEquals("{'$ref':'l-foo'}", getSwaggerWithFile(new OE05b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getSchema());
+	}
 
 	@Bean(typeName="Foo")
 	public static class Foo {

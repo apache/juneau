@@ -32,6 +32,7 @@ import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;

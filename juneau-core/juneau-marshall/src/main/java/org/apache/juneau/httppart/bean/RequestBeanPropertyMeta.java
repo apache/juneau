@@ -10,10 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.httppart.bean;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 
 /**

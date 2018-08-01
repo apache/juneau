@@ -80,9 +80,13 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
-		if (t instanceof Class<?>)
-			for (Annotation a : ReflectionUtils.findAnnotationsParentFirst(c, (Class<?>)t))
+		if (t instanceof Class<?>) {
+			Class<?> tc = (Class<?>)t;
+			for (Annotation a : ReflectionUtils.findAnnotationsParentFirst(c, tc))
 				apply(a);
+		} else if (t instanceof ParameterizedType) {
+			apply(c, Value.getValueType(t));
+		}
 		return this;
 	}
 
@@ -105,14 +109,18 @@ public class HttpPartSchemaBuilder {
 			apply((Path)a);
 		else if (a instanceof Response)
 			apply((Response)a);
+		else if (a instanceof ResponseBody)
+			apply((ResponseBody)a);
 		else if (a instanceof ResponseHeader)
 			apply((ResponseHeader)a);
-		else if (a instanceof ResponseStatus)
-			apply((ResponseStatus)a);
 		else if (a instanceof HasQuery)
 			apply((HasQuery)a);
 		else if (a instanceof HasFormData)
 			apply((HasFormData)a);
+		else if (a instanceof Schema)
+			apply((Schema)a);
+		else
+			throw new RuntimeException("HttpPartSchemaBuilder.apply(@"+a.getClass().getSimpleName()+") not defined");
 		return this;
 	}
 
@@ -122,8 +130,16 @@ public class HttpPartSchemaBuilder {
 		allowEmptyValue(! a.required());
 		serializer(a.partSerializer());
 		parser(a.partParser());
-		usePartSerializer(a.usePartSerializer());
-		usePartParser(a.usePartParser());
+		usePartSerializer(a.usePartSerializer() || a.partSerializer() != HttpPartSerializer.Null.class);
+		usePartParser(a.usePartParser() || a.partParser() != HttpPartParser.Null.class);
+		apply(a.schema());
+		return this;
+	}
+
+	HttpPartSchemaBuilder apply(ResponseBody a) {
+		api = AnnotationUtils.merge(api, a);
+		serializer(a.partSerializer());
+		usePartSerializer(a.usePartSerializer() || a.partSerializer() != HttpPartSerializer.Null.class);
 		apply(a.schema());
 		return this;
 	}
@@ -181,13 +197,6 @@ public class HttpPartSchemaBuilder {
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		allowEmptyValue(false);
 		serializer(a.serializer());
-		return this;
-	}
-
-	HttpPartSchemaBuilder apply(ResponseStatus a) {
-		api = AnnotationUtils.merge(api, a);
-		code(a.value());
-		code(a.code());
 		return this;
 	}
 
@@ -284,7 +293,7 @@ public class HttpPartSchemaBuilder {
 		required(false);
 		allowEmptyValue(true);
 		serializer(a.partSerializer());
-		usePartSerializer(a.usePartSerializer());
+		usePartSerializer(a.usePartSerializer() || a.partSerializer() != HttpPartSerializer.Null.class);
 		apply(a.schema());
 		return this;
 	}
@@ -334,6 +343,7 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Schema a) {
+		api = AnnotationUtils.merge(api, a);
 		type(a.type());
 		format(a.format());
 		items(a.items());

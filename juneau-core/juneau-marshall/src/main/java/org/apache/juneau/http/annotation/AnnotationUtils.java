@@ -65,6 +65,25 @@ public class AnnotationUtils {
 	 * @param a The annotation.
 	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
 	 */
+	public static ObjectMap merge(ObjectMap om, ResponseBody a) {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		return om
+			.appendSkipEmpty("example", joinnl(a.example()))
+			.appendSkipEmpty("examples", joinnl(a.examples()))
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
+			.appendSkipEmpty("_value", joinnl(a.api()))
+		;
+	}
+
+	/**
+	 * Merges the contents of the specified annotation into the specified map.
+	 *
+	 * @param om The map to add the annotation values to.
+	 * @param a The annotation.
+	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
+	 */
 	public static ObjectMap merge(ObjectMap om, ExternalDocs a) {
 		if (empty(a))
 			return om;
@@ -269,22 +288,6 @@ public class AnnotationUtils {
 			.appendSkipEmpty("$ref", a.$ref())
 			.appendSkipEmpty("_value", joinnl(a.api()))
 		;
-	}
-
-	/**
-	 * Merges the contents of the specified annotation into the specified map.
-	 *
-	 * @param om The map to add the annotation values to.
-	 * @param a The annotation.
-	 * @return The same map with merged results, or a new map if the map was <jk>null</jk>.
-	 */
-	public static ObjectMap merge(ObjectMap om, ResponseStatus a) {
-		if (empty(a))
-			return om;
-		om = newMap(om);
-		return om
-			.appendSkipEmpty("_value", joinnl(a.api()))
-			.appendSkipEmpty("description", joinnl(a.description()));
 	}
 
 	/**
@@ -522,19 +525,6 @@ public class AnnotationUtils {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(ResponseStatus a) {
-		if (a == null)
-			return true;
-		return
-			allEmpty(a.description(), a.api());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
 	public static boolean empty(Schema a) {
 		if (a == null)
 			return true;
@@ -574,6 +564,21 @@ public class AnnotationUtils {
 		return
 			allEmpty(a.description(), a.example(), a.examples(), a.api(), a.value())
 			&& allFalse(a.required())
+			&& empty(a.schema());
+	}
+
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(ResponseBody a) {
+		if (a == null)
+			return true;
+		return
+			allEmpty(a.example(), a.examples(), a.api())
 			&& empty(a.schema());
 	}
 

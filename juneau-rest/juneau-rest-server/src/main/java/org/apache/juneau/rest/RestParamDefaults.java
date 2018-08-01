@@ -29,9 +29,10 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
@@ -551,18 +552,18 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected PathObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
+		protected PathObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(PATH, m, s.getName(), t, s.getApi());
-			this.partParser = ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps);
-			this.schema = s;
+			this.schema = HttpPartSchema.create(Path.class, m, i);
+			this.partParser = createPartParser(schema.getParser(), ps);
 
-			if (isEmpty(name))
+			if (isEmpty(schema.getName()))
 				throw new InternalServerError("@Path used without name or value on method ''{0}''.", method);
 		}
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getPathMatch().get(partParser, schema, name, type);
+			return req.getPathMatch().get(partParser, schema, schema.getName(), type);
 		}
 	}
 
@@ -572,7 +573,7 @@ class RestParamDefaults {
 
 		protected BodyObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(BODY, m, null, t, s.getApi());
-			this.partParser = s.isUsePartParser() ? ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps) : null;
+			this.partParser = s.isUsePartParser() ? createPartParser(s.getParser(), ps) : null;
 			this.schema = s;
 		}
 
@@ -588,7 +589,7 @@ class RestParamDefaults {
 
 		protected HeaderObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(HEADER, m, s.getName(), t, s.getApi());
-			this.partParser = ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps);
+			this.partParser = createPartParser(s.getParser(), ps);
 			this.schema = s;
 
 			if (isEmpty(name))
@@ -605,7 +606,7 @@ class RestParamDefaults {
 		private final RequestBeanMeta requestBeanMeta;
 
 		protected RequestBeanObject(Method m, RequestBeanMeta rbm, Type t) {
-			super(OTHER, m, null, t, null);
+			super(RESPONSE_BODY, m, null, t, null);
 			this.requestBeanMeta = rbm;
 		}
 
@@ -616,22 +617,16 @@ class RestParamDefaults {
 	}
 
 	static final class ResponseHeaderObject extends RestMethodParam {
-		final HttpPartSerializer partSerializer;
-		final HttpPartSchema schema;
-		final String _default;
+		final ResponsePartMeta rpm;
 
-		protected ResponseHeaderObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
+		protected ResponseHeaderObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(RESPONSE_HEADER, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
-			this.partSerializer = ClassUtils.newInstance(HttpPartSerializer.class, s.getSerializer(), true, ps);
-			this.schema = s;
-			this._default = s.getDefault();
+			this.rpm = new ResponsePartMeta(HttpPartType.HEADER, s, createPartSerializer(s.getSerializer(), ps));
 
-			if (isEmpty(name))
+			if (isEmpty(rpm.getSchema().getName()))
 				throw new InternalServerError("@ResponseHeader used without name or value on method ''{0}''.", method);
-			if (getTypeClass() == null)
-				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must be a subclass of Value.", type);
-			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
-				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must have a public no-arg constructor.", type);
+			if (getTypeClass() != Value.class)
+				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must be Value.", type);
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -642,37 +637,56 @@ class RestParamDefaults {
 				@Override
 				public void onSet(Object o) {
 					try {
-						res.setHeader(new HttpPart(name, HttpPartType.HEADER, schema, partSerializer, req.getSerializerSessionArgs(), o));
+						ResponsePartMeta rpm = req.getResponseHeaderMeta(o);
+						if (rpm == null)
+							rpm = ResponseHeaderObject.this.rpm;
+						res.setHeader(new HttpPart(name, HttpPartType.HEADER, rpm.getSchema(), firstNonNull(rpm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), o));
 					} catch (SerializeException | SchemaValidationException e) {
 						throw new RuntimeException(e);
 					}
 				}
 			});
-			if (_default != null) {
-				Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
-				v.set(JsonParser.DEFAULT.parse(_default, req.getBeanSession().getClassMeta(pc)));
-			}
 			return v;
-		}
-
-		public HttpPartSerializer getPartSerializer() {
-			return partSerializer;
 		}
 	}
 
-	static final class ResponseParamObject extends RestMethodParam {
-		private String _default;
-		final ResponseMeta meta;
+	static final class ResponseBodyObject extends RestMethodParam {
+		final ResponsePartMeta rpm;
 
-		protected ResponseParamObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(RESPONSE, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
-			this.meta = ResponseMeta.create(m, i, ps);
-			this._default = s.getDefault();
+		protected ResponseBodyObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
+			super(RESPONSE_BODY, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
+			this.rpm = new ResponsePartMeta(HttpPartType.BODY, s, createPartSerializer(s.getSerializer(), ps));
 
-			if (getTypeClass() == null)
-				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be a subclass of Value.", type);
-			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
-				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must have a public no-arg constructor.", type);
+			if (getTypeClass() != Value.class)
+				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must be Value.", type);
+		}
+
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override /* RestMethodParam */
+		public Object resolve(final RestRequest req, final RestResponse res) throws Exception {
+			Value<Object> v = (Value<Object>)getTypeClass().newInstance();
+			v.listener(new ValueListener() {
+				@Override
+				public void onSet(Object o) {
+					ResponsePartMeta rpm = req.getResponseBodyMeta(o);
+					if (rpm == null)
+						rpm = ResponseBodyObject.this.rpm;
+					res.setResponseBodyMeta(rpm);
+					res.setOutput(o);
+				}
+			});
+			return v;
+		}
+	}
+
+	static final class ResponseBeanObject extends RestMethodParam {
+		final ResponseBeanMeta rbm;
+
+		protected ResponseBeanObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
+			super(RESPONSE_BODY, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
+			this.rbm = ResponseBeanMeta.create(m.getParameterTypes()[i], ps);
+			if (getTypeClass() != Value.class)
+				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be Value.", type);
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -681,39 +695,24 @@ class RestParamDefaults {
 			Value<Object> v = (Value<Object>)c.newInstance();
 			v.listener(new ValueListener() {
 				@Override
-				public void onSet(Object output) {
-					res.setMeta(meta);
-					res.setOutput(output);
+				public void onSet(Object o) {
+					ResponseBeanMeta rbm = req.getResponseBeanMeta(o);
+					if (rbm == null)
+						rbm = ResponseBeanObject.this.rbm;
+					res.setResponseBeanMeta(rbm);
+					res.setOutput(o);
 				}
 			});
-			if (_default != null) {
-				Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
-				v.set(JsonParser.DEFAULT.parse(_default, req.getBeanSession().getClassMeta(pc)));
-			}
 			return v;
 		}
 	}
 
 	static class ResponseStatusObject extends RestMethodParam {
 
-		private String _default;
-
-		protected ResponseStatusObject(Method m, HttpPartSchema s, Type t) {
-			this(m, t, HttpPartSchema.getApiCodeMap(s, 200));
-			this._default = s.getDefault();
-		}
-
-		protected ResponseStatusObject(Method m, HttpPartSchema[] ss, Type t) {
-			this(m, t, HttpPartSchema.getApiCodeMap(ss, 200));
-		}
-
-		protected ResponseStatusObject(Method m, Type t, ObjectMap api) {
-			super(RESPONSE_STATUS, m, null, t, api);
-
-			if (getTypeClass() == null)
-				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must be a subclass of Value.", type);
-			if (ClassUtils.findNoArgConstructor(getTypeClass(), Visibility.PUBLIC) == null)
-				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must have a public no-arg constructor.", type);
+		protected ResponseStatusObject(Method m, Type t) {
+			super(RESPONSE_STATUS, t);
+			if (getTypeClass() != Value.class || Value.getValueType(t) != Integer.class)
+				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must Value<Integer>.", type);
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -722,14 +721,10 @@ class RestParamDefaults {
 			Value<Object> v = (Value<Object>)c.newInstance();
 			v.listener(new ValueListener() {
 				@Override
-				public void onSet(Object newValue) {
-					res.setStatus(Integer.parseInt(newValue.toString()));
+				public void onSet(Object o) {
+					res.setStatus(Integer.parseInt(o.toString()));
 				}
 			});
-			if (_default != null) {
-				Class<?> pc = ClassUtils.resolveParameterType(Value.class, 0, c);
-				v.set(JsonParser.DEFAULT.parse(_default, req.getBeanSession().getClassMeta(pc)));
-			}
 			return v;
 		}
 	}
@@ -755,7 +750,7 @@ class RestParamDefaults {
 
 		protected FormDataObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(FORM_DATA, m, s.getName(), t, s.getApi());
-			this.partParser = ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps);
+			this.partParser = createPartParser(s.getParser(), ps);
 			this.schema = s;
 			this.multiPart = s.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
 
@@ -780,7 +775,7 @@ class RestParamDefaults {
 
 		protected QueryObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
 			super(QUERY, m, s.getName(), t, s.getApi());
-			this.partParser = ClassUtils.newInstance(HttpPartParser.class, s.getParser(), true, ps);
+			this.partParser = createPartParser(s.getParser(), ps);
 			this.schema = s;
 			this.multiPart = s.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
 
@@ -1138,5 +1133,13 @@ class RestParamDefaults {
 
 	static final boolean isCollection(Type t) {
 		return BeanContext.DEFAULT.getClassMeta(t).isCollectionOrArray();
+	}
+
+	static final HttpPartParser createPartParser(Class<? extends HttpPartParser> p, PropertyStore ps) {
+		return ClassUtils.newInstance(HttpPartParser.class, p, true, ps);
+	}
+
+	static final HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> s, PropertyStore ps) {
+		return ClassUtils.newInstance(HttpPartSerializer.class, s, true, ps);
 	}
 }

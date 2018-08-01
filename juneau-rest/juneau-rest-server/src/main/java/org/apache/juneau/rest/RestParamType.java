@@ -37,8 +37,12 @@ public enum RestParamType {
 	/** Request body */
 	BODY("body"),
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// The following are additional parameter types not defined in Swagger
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** Response value */
-	RESPONSE("response"),
+	RESPONSE_BODY("responseBody"),
 
 	/** Response header value */
 	RESPONSE_HEADER("responseHeader"),

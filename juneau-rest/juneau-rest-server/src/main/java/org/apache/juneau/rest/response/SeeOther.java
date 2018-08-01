@@ -64,7 +64,7 @@ public class SeeOther {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@Header(name="Location")
+	@ResponseHeader(name="Location")
 	public URI getLocation() {
 		return location;
 	}

@@ -24,34 +24,13 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 
 /**
- * REST response annotation.
- *
- * Identifies the HTTP status code and description about an HTTP response.
- *
- * <p>
- * Can be used in the following locations:
- *  <ul>
- * 	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated REST Java methods.
- * 	<li>Return type classes of <ja>@RestMethod</ja>-annotated REST Java methods.
- * 	<li><ja>@RestMethod</ja>-annotated REST Java methods themselves.
- * 	<li>Java method arguments and argument-types of <ja>@RestMethod</ja>-annotated REST Java methods.
- * </ul>
- *
- * <p>
- * When applied to exception classes, this annotation defines Swagger information on non-200 return types.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response">Overview &gt; juneau-rest-server &gt; @Response</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Swagger Specification &gt; Response Object</a>
- * </ul>
+ * TODO
  */
 @Documented
-@Target({TYPE})
+@Target({PARAMETER,TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
-public @interface Response {
+public @interface ResponseBody {
 
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
@@ -70,53 +49,6 @@ public @interface Response {
 	public boolean usePartSerializer() default false;
 
 	/**
-	 * The HTTP response code.
-	 *
-	 * The default value is <code>500</code> for exceptions and <code>200</code> for return types.
-	 */
-	int[] code() default {};
-
-	/**
-	 * A synonym for {@link #code()}.
-	 *
-	 * <p>
-	 * Allows you to use shortened notation if you're only specifying the code.
-	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining the response code:
-	 * <p class='bcode w800'>
-	 * 	<ja>@Response</ja>(code=404)
-	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<ja>@Response</ja>(404)
-	 * 	<jk>public class</jk> NotFound <jk>extends</jk> RestException {...}
-	 * </p>
-	 */
-	int[] value() default {};
-
-	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The format is plain text.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 */
-	String[] description() default {};
-
-	/**
 	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
 	 *
 	 * <h5 class='section'>Used for:</h5>
@@ -128,17 +60,6 @@ public @interface Response {
 	 * </ul>
 	 */
 	Schema schema() default @Schema;
-
-	/**
-	 * <mk>headers</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 */
-	ResponseHeader[] headers() default {};
 
 	/**
 	 * A serialized example of the body of a response.
@@ -154,7 +75,7 @@ public @interface Response {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
-	 * 	<ja>@Response</ja>(
+	 * 	<ja>@ResponseBody</ja>(
 	 * 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
 	 * 	)
 	 * </p>
@@ -250,7 +171,7 @@ public @interface Response {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		The format is any <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
-	 * 		has a schema associated with it meancan be converted from a String.
+	 * 		has a schema associated with it can be converted from a String.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The format of this object can also be a simple String if the body has a schema associated with it, meaning it's meant to be treated as an HTTP part.
@@ -273,7 +194,7 @@ public @interface Response {
 	 *
 	 * <p class='bcode w800'>
 	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
-	 * 	<ja>@Response</ja>(
+	 * 	<ja>@ResponseBody</ja>(
 	 * 		examples={
 	 * 			<js>"'application/json':'{name:\\'Doggie\\',species:\\'Dog\\'}',"</js>,
 	 * 			<js>"'text/uon':'(name:Doggie,species=Dog)'"</js>
@@ -311,62 +232,6 @@ public @interface Response {
 	 * <p>
 	 * This is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object that makes up the swagger information for this field.
 	 *
-	 * <p>
-	 * The following are completely equivalent ways of defining the swagger description of the Response object:
-	 * <p class='bcode w800'>
-	 * 	<jc>// Normal</jc>
-	 * 	<ja>@Response</ja>(
-	 * 		code=302,
-	 * 		description=<js>"Redirect"</js>,
-	 * 		headers={
-	 * 			<ja>@ResponseHeader</ja>(
-	 * 				name=<js>"Location"</js>,
-	 * 				type=<js>"string"</js>,
-	 * 				format=<js>"uri"</js>
-	 * 			)
-	 * 		}
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Free-form</jc>
-	 * 	<ja>@Response</ja>(
-	 * 		code=302,
-	 * 		api={
-	 * 			<js>"description: 'Redirect',"</js>,
-	 * 			<js>"headers: {"</js>,
-	 * 				<js>"Location: {"</js>,
-	 * 					<js>"type: 'string',"</js>,
-	 * 					<js>"format: 'uri'"</js>,
-	 * 				<js>"}"</js>,
-	 * 			<js>"}"</js>
-	 * 		}
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Free-form using variables</jc>
-	 * 	<ja>@Response</ja>(
-	 * 		code=302,
-	 * 		api=<js>"$L{redirectSwagger}"</js>
-	 * 	)
-	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<mc>// Contents of MyResource.properties</mc>
-	 * 	<mk>redirectSwagger</mk> = <mv>{ description: "Redirect", headers: { Location: { type: "string", format: "uri" } } }</mv>
-	 * </p>
-	 *
-	 * <p>
-	 * 	The reasons why you may want to use this field include:
-	 * <ul>
-	 * 	<li>You want to pull in the entire Swagger JSON definition for this field from an external source such as a properties file.
-	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * </ul>
-	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -377,10 +242,10 @@ public @interface Response {
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bcode w800'>
-	 * 	<ja>@Response</ja>(api=<js>"{description: 'Redirect'}"</js>)
+	 * 	<ja>@ResponseBody</ja>(api=<js>"{schema:{type:'string'}}}"</js>)
 	 * 		</p>
 	 * 		<p class='bcode w800'>
-	 * 	<ja>@Response</ja>(api=<js>"description: 'Redirect''"</js>)
+	 * 	<ja>@ResponseBody</ja>(api=<js>"schema: {type:'string'}"</js>)
 	 * 		</p>
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.

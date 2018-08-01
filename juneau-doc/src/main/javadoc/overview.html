@@ -14414,9 +14414,9 @@ TODO(7.2.0)
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody ResponseBody}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatuses ResponseStatues}
 </ul>
 <p>
 	The sub-annotations used in the annotation above are:
@@ -15890,12 +15890,12 @@ TODO(7.2.0)
 	types to denote them as an HTTP response status on server-side REST method parameters.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Status ResponseStatus}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#code() code()} - The HTTP status of the response.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseStatus#value() value()} - A synonym for <code>code</code>.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#code() code()} - The HTTP status of the response.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#value() value()} - A synonym for <code>code</code>.
 	</ul>
 </ul>
 <p>
@@ -15969,8 +15969,8 @@ TODO(7.2.0)
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses' id='juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>7.9.12 - @ResponseStatuses</a></h4>
 <div class='topic'><!-- START: 7.9.12 - juneau-rest-server.HttpPartAnnotations.ResponseStatuses -->
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatuses @ResponseStatuses} annotation is used to 
-	associate multiple {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotations to the same parameter or class.
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatuses} annotation is used to 
+	associate multiple {@link org.apache.juneau.http.annotation.Status @ResponseStatus} annotations to the same parameter or class.
 </p>
 
 <h5 class='section'>Example:</h5>

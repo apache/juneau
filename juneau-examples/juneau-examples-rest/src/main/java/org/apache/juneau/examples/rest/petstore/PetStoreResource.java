@@ -26,7 +26,6 @@ import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -591,7 +590,7 @@ public class PetStoreResource extends BasicRestServletJena {
 			@Query(name="username", description="The username for login", required=true, example="myuser") String username,
 			@Query(name="password", description="The password for login in clear text", required=true, example="abc123") String password,
 			@ResponseHeader(name="X-Rate-Limit", type="integer", format="int32", description="Calls per hour allowed by the user.", example="123") Value<Integer> rateLimit,
-			ExpiresAfter expiresAfter,
+			Value<ExpiresAfter> expiresAfter,
 			RestRequest req,
 			RestResponse res
 		) throws InvalidLogin, NotAcceptable {
@@ -602,12 +601,21 @@ public class PetStoreResource extends BasicRestServletJena {
 		Date d = new Date(System.currentTimeMillis() + 30 * 60 * 1000);
 		req.getSession().setAttribute("login-expires", d);
 		rateLimit.set(1000);
-		expiresAfter.set(DateUtils.formatDate(d));
+		expiresAfter.set(new ExpiresAfter(d));
 		return OK;
 	}
 
-	@ResponseHeader(name="X-Expires-After", type="string", format="date-time", description="Date in UTC when token expires", example="20120-10-21")
-	public static class ExpiresAfter extends Value<String> {}
+	@ResponseHeader(name="X-Expires-After", type="string", format="date-time", description="Date in UTC when token expires", example="2012-10-21")
+	public static class ExpiresAfter {
+		private final Calendar c;
+		public ExpiresAfter(Date d) {
+			this.c = new GregorianCalendar();
+			c.setTime(d);
+		}
+		public Calendar toCalendar() {
+			return c;
+		}
+	}
 
 	@RestMethod(
 		name="GET",

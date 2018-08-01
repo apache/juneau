@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 
 /**
  * Represents the metadata about an {@link RequestBean}-annotated argument of a method on a remote proxy interface.

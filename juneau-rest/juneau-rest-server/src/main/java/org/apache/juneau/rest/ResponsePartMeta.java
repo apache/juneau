@@ -12,71 +12,59 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ReflectionUtils.*;
-
-import java.lang.reflect.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 
 /**
- * Contains metadata about the return type on a REST Java method.
+ * Represents the information needed to serialize a response part such as a response header or body.
  */
-public class RestMethodReturn {
+public class ResponsePartMeta {
 
-	private final Type type;
-	private final int code;
-	private final ObjectMap api;
-	private final ResponseMeta responseMeta;
+	/**
+	 * Represents a non-existent meta.
+	 */
+	public static final ResponsePartMeta NULL = new ResponsePartMeta(null, null, null);
 
-	RestMethodReturn(Method m, HttpPartSerializer partSerializer, PropertyStore ps) {
-		this.responseMeta = ResponseMeta.create(m, ps);
+	private final HttpPartType partType;
+	private final HttpPartSchema schema;
+	private final HttpPartSerializer serializer;
 
-		HttpPartSchema s = HttpPartSchema.DEFAULT;
-		if (hasAnnotation(Response.class, m))
-			s = HttpPartSchema.create(Response.class, m);
-
-		this.type = m.getGenericReturnType();
-		this.api = HttpPartSchema.getApiCodeMap(s, 200).unmodifiable();
-		this.code = s.getCode(200);
+	/**
+	 * Constructor.
+	 *
+	 * @param partType The part type.
+	 * @param schema The part schema.
+	 * @param serializer The serializer to use to serialize the part.
+	 */
+	public ResponsePartMeta(HttpPartType partType, HttpPartSchema schema, HttpPartSerializer serializer) {
+		this.partType = partType;
+		this.schema = schema;
+		this.serializer = serializer;
 	}
 
 	/**
-	 * Returns the return type of the Java method.
+	 * Returns the part type.
 	 *
-	 * @return The return type of the Java method.
+	 * @return The part type.
 	 */
-	public Type getType() {
-		return type;
+	public HttpPartType getPartType() {
+		return partType;
 	}
 
 	/**
-	 * Returns the HTTP code code of the response.
+	 * Returns the part schema.
 	 *
-	 * @return The HTTP code code of the response.
+	 * @return The part schema.
 	 */
-	public int getCode() {
-		return code;
+	public HttpPartSchema getSchema() {
+		return schema;
 	}
 
 	/**
-	 * Returns the Swagger metadata associated with this return.
+	 * Returns the part serializer.
 	 *
-	 * @return A map of return metadata, never <jk>null</jk>.
+	 * @return The part serializer.
 	 */
-	public ObjectMap getApi() {
-		return api;
-	}
-
-	/**
-	 * Returns metadata about the response object.
-	 *
-	 * @return
-	 * 	Metadata about the response object.
-	 * 	<br>Can be <jk>null</jk> if no {@link Response} annotation is associated with the return.
-	 */
-	public ResponseMeta getResponseMeta() {
-		return responseMeta;
+	public HttpPartSerializer getSerializer() {
+		return serializer;
 	}
 }

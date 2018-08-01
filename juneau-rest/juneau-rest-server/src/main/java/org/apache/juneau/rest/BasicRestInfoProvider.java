@@ -396,7 +396,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 				RestParamType in = mp.getParamType();
 
-				if (in == OTHER || in == RESPONSE || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
+				if (in == RestParamType.OTHER || in == RESPONSE_BODY || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
 					continue;
 
 				String key = in.toString() + '.' + (in == BODY ? "body" : mp.getName());
@@ -457,34 +457,114 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 			ObjectMap responses = op.getObjectMap("responses", true);
 
-			// Gather responses from @Response-annotated exceptions.
-			for (RestMethodThrown rt : context.getRestMethodThrowns(m)) {
-				ObjectMap md = resolve(vr, rt.getApi(), "RestMethodThrown on class {0} method {1}", c, m);
-				for (String code : md.keySet()) {
-					ObjectMap response = md.getObjectMap(code);
-					ObjectMap om = responses.getObjectMap(code, true);
-					om.appendSkipEmpty("description", resolve(vr, response.getString("description")));
-					om.appendSkipEmpty("x-example", parseAnything(vr, response.getString("example"), "RestMethodThrown/example on class {0} method {1}", c, m));
-					om.appendSkipEmpty("examples", parseMap(vr, response.get("examples"), "RestMethodThrown/examples on class {0} method {1}", c, m));
-					om.appendSkipEmpty("schema", parseMap(vr, response.get("schema"), "RestMethodThrown/schema on class {0} method {1}", c, m));
-					om.appendSkipEmpty("headers", parseMap(vr, response.get("headers"), "RestMethodThrown/headers on class {0} method {1}", c, m));
+			for (Class<?> ec : m.getExceptionTypes()) {
+				if (hasAnnotation(Response.class, ec)) {
+					Response r = getAnnotation(Response.class, ec);
+					Set<Integer> codes = new LinkedHashSet<>();
+					for (int i : r.value())
+						codes.add(i);
+					for (int i : r.code())
+						codes.add(i);
+					if (codes.isEmpty())
+						codes.add(500);
+					for (int code : codes) {
+						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
+						ObjectMap api = parseMap(vr, r.api(), "RestMethodThrown/api on class {0} method {1}", c, m);
+						ObjectMap headers = new ObjectMap();
+
+						if (api != null) {
+							om.appendSkipEmpty("description", resolve(vr, api.getString("description")));
+							om.appendSkipEmpty("x-example", parseAnything(vr, api.getString("example"), "RestMethodThrown/example on class {0} method {1}", c, m));
+							om.appendSkipEmpty("examples", api.getObjectMap("examples"));
+							om.appendSkipEmpty("schema", api.getObjectMap("schema"));
+							if (api.containsKey("headers"))
+								for (Map.Entry<String,Object> e : api.getObjectMap("headers").entrySet())
+									headers.put(e.getKey(), e.getValue());
+						}
+						om.appendSkipEmpty("description", resolve(vr, r.description()));
+						om.appendSkipEmpty("x-example", parseAnything(vr, r.example(), "RestMethodThrown/example on class {0} method {1}", c, m));
+						om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodThrown/examples on class {0} method {1}", c, m));
+						om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
+						for (ResponseHeader h : r.headers()) {
+							headers.put(h.name(), resolve(vr, HttpPartSchema.create(h).getApi()));
+						}
+						om.appendSkipEmpty("headers", headers);
+					}
 				}
 			}
 
-			RestMethodReturn r = context.getRestMethodReturn(m);
-			String rStatus = r.getCode() == 0 ? "200" : String.valueOf(r.getCode());
+			if (hasAnnotation(Response.class, m)) {
+				Response r = getAnnotation(Response.class, m);
+				Set<Integer> codes = new LinkedHashSet<>();
+				for (int i : r.value())
+					codes.add(i);
+				for (int i : r.code())
+					codes.add(i);
+				if (codes.isEmpty())
+					codes.add(200);
+				for (int code : codes) {
+					ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
+					ObjectMap api = parseMap(vr, r.api(), "RestMethodReturn/api on class {0} method {1}", c, m);
+					ObjectMap headers = new ObjectMap();
 
-			ObjectMap rom = responses.getObjectMap(rStatus, true);
+					if (api != null) {
+						om.appendSkipEmpty("description", api.getString("description"));
+						om.appendSkipEmpty("x-example", parseAnything(vr, api.getString("example"), "RestMethodReturn/example on class {0} method {1}", c, m));
+						om.appendSkipEmpty("examples", api.getObjectMap("examples"));
+						om.appendSkipEmpty("schema", api.getObjectMap("schema"));
+						if (api.containsKey("headers"))
+							for (Map.Entry<String,Object> e : api.getObjectMap("headers").entrySet())
+								headers.put(e.getKey(), e.getValue());
+					}
+					om.appendSkipEmpty("description", resolve(vr, r.description()));
+					om.appendSkipEmpty("x-example", parseAnything(vr, r.example(), "RestMethodReturn/example on class {0} method {1}", c, m));
+					om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodReturn/examples on class {0} method {1}", c, m));
+					om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
+					for (ResponseHeader h : r.headers()) {
+						headers.put(h.name(), resolve(vr, HttpPartSchema.create(h).getApi()));
+					}
+					om.appendSkipEmpty("headers", headers);
 
-			if (r.getType() != void.class) {
-				ObjectMap rmd = resolve(vr, r.getApi(), "RestMethodReturn on class {0} method {1}", c, m);
-				rom.appendSkipEmpty("description", resolve(vr, rmd.getString("description")));
-				rom.appendSkipEmpty("x-example", parseAnything(vr, rmd.getString("example"), "RestMethodReturn/example on class {0} method {1}", c, m));
-				rom.appendSkipEmpty("examples", parseMap(vr, rmd.get("examples"), "RestMethodReturn/examples on class {0} method {1}", c, m));
-				rom.appendSkipEmpty("schema", parseMap(vr, rmd.get("schema"), "RestMethodReturn/schema on class {0} method {1}", c, m));
-				rom.appendSkipEmpty("headers", parseMap(vr, rmd.get("headers"), "RestMethodReturn/headers on class {0} method {1}", c, m));
-				rom.appendSkipEmpty("schema", getSchema(req, rom.getObjectMap("schema", true), js, m.getGenericReturnType()));
-				addXExamples(req, sm, rom, "ok", js, m.getGenericReturnType());
+					Type type = m.getGenericReturnType();
+					if (type instanceof ParameterizedType) {
+						ParameterizedType pt = (ParameterizedType)type;
+						if (pt.getRawType().equals(Value.class))
+							type = pt.getActualTypeArguments()[0];
+					}
+
+					om.appendSkipEmpty("schema", getSchema(req, om.getObjectMap("schema", true), js, type));
+				}
+			}
+
+			if (hasAnnotation(ResponseBody.class, m)) {
+				ResponseBody r = getAnnotation(ResponseBody.class, m);
+				ObjectMap om = responses.getObjectMap("200", true);
+				ObjectMap api = parseMap(vr, r.api(), "RestMethodReturn/api on class {0} method {1}", c, m);
+				ObjectMap headers = new ObjectMap();
+
+				if (api != null) {
+					om.appendSkipEmpty("description", api.getString("description"));
+					om.appendSkipEmpty("x-example", parseAnything(vr, api.getString("example"), "RestMethodReturn/example on class {0} method {1}", c, m));
+					om.appendSkipEmpty("examples", api.getObjectMap("examples"));
+					om.appendSkipEmpty("schema", api.getObjectMap("schema"));
+					if (api.containsKey("headers"))
+						for (Map.Entry<String,Object> e : api.getObjectMap("headers").entrySet())
+							headers.put(e.getKey(), e.getValue());
+				}
+				om.appendSkipEmpty("x-example", parseAnything(vr, r.example(), "RestMethodReturn/example on class {0} method {1}", c, m));
+				om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodReturn/examples on class {0} method {1}", c, m));
+				om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
+
+				Type type = m.getGenericReturnType();
+				if (type instanceof ParameterizedType) {
+					ParameterizedType pt = (ParameterizedType)type;
+					if (pt.getRawType().equals(Value.class))
+						type = pt.getActualTypeArguments()[0];
+				}
+
+				om.appendSkipEmpty("schema", getSchema(req, om.getObjectMap("schema", true), js, type));
+
+				addXExamples(req, sm, om, "ok", js, m.getGenericReturnType());
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
@@ -521,7 +601,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						header.appendSkipEmpty("items", parseMap(vr, pi2.get("items"), "@ResponseHeader/items on class {0} method {1}", c, m));
 					}
 
-				} else if (in == RESPONSE) {
+				} else if (in == RESPONSE_BODY) {
 					ObjectMap pi = resolve(vr, mp.getApi(), "@Response on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
@@ -654,7 +734,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	}
 
 	private ObjectMap resolve(VarResolverSession vs, ObjectMap om) throws ParseException {
-		ObjectMap om2 = om.containsKey("_value") ? parseMap(vs, om.remove("_value")) : new ObjectMap();
+		ObjectMap om2 = null;
+		if (om.containsKey("_value")) {
+			om = om.modifiable();
+			om2 = parseMap(vs, om.remove("_value"));
+		} else {
+			om2 = new ObjectMap();
+		}
 		for (Map.Entry<String,Object> e : om.entrySet()) {
 			Object val = e.getValue();
 			if (val instanceof ObjectMap) {
@@ -746,6 +832,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			String s = o.toString();
 			if (s.isEmpty())
 				return null;
+			s = vs.resolve(s);
 			return RestUtils.parseAnything(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON encountered in "+location+".", locationArgs);

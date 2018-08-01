@@ -14,8 +14,8 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
+import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
@@ -26,8 +26,8 @@ import org.junit.runners.*;
 /**
  * Tests related to @ResponseHeader annotation.
  */
-@SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@SuppressWarnings("javadoc")
 public class ResponseHeaderAnnotationTest {
 
 	//=================================================================================================================
@@ -39,6 +39,47 @@ public class ResponseHeaderAnnotationTest {
 		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
 		RestInfoProvider ip = rc.getInfoProvider();
 		return ip.getSwagger(req);
+	}
+
+	//=================================================================================================================
+	// Basic tests
+	//=================================================================================================================
+
+	@RestResource
+	public static class A {
+		@RestMethod
+		public void a01(Value<A01> h) {
+			h.set(new A01());
+		}
+		@RestMethod
+		public void a02(@ResponseHeader(name="Foo") Value<String> h) {
+			h.set("foo");
+		}
+		@RestMethod
+		public void a03(@ResponseHeader(name="Bar") Value<A01> h) {
+			h.set(new A01());
+		}
+	}
+
+	@ResponseHeader(name="Foo")
+	public static class A01 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	static MockRest a = MockRest.create(A.class,true);
+
+	@Test
+	public void a01_valueOnParameterPojo() throws Exception {
+		a.get("/a01").execute().assertStatus(200).assertHeader("Foo", "foo");
+	}
+	@Test
+	public void a02_valueOnParameterString() throws Exception {
+		a.get("/a02").execute().assertStatus(200).assertHeader("Foo", "foo");
+	}
+	@Test
+	public void a03_valueOnParameterOverrideName() throws Exception {
+		a.get("/a03").execute().assertStatus(200).assertHeader("Bar", "foo");
 	}
 
 	//=================================================================================================================
@@ -55,7 +96,7 @@ public class ResponseHeaderAnnotationTest {
 		)
 		public static class SA01 {}
 		@RestMethod(name=GET,path="/basic")
-		public void sa01(SA01 h) {}
+		public void sa01(Value<SA01> h) {}
 
 		@ResponseHeader(
 			name="H",
@@ -66,7 +107,7 @@ public class ResponseHeaderAnnotationTest {
 		)
 		public static class SA02 {}
 		@RestMethod(name=GET,path="/api")
-		public void sa02(SA02 h) {}
+		public void sa02(Value<SA02> h) {}
 
 		@ResponseHeader(
 			name="H",
@@ -79,27 +120,27 @@ public class ResponseHeaderAnnotationTest {
 		)
 		public static class SA03 {}
 		@RestMethod(name=GET,path="/mixed")
-		public void sa03(SA03 h) {}
+		public void sa03(Value<SA03> h) {}
 
 		@ResponseHeader(name="H", code=100)
 		public static class SA04 {}
 		@RestMethod(name=GET,path="/code")
-		public void sa04(SA04 h) {}
+		public void sa04(Value<SA04> h) {}
 
 		@ResponseHeader(name="H", code={100,101})
 		public static class SA05 {}
 		@RestMethod(name=GET,path="/codes")
-		public void sa05(SA05 h) {}
+		public void sa05(Value<SA05> h) {}
 
 		@ResponseHeader(name="H", description="a")
 		public static class SA07 {}
 		@RestMethod(name=GET,path="/nocode")
-		public void sa07(SA07 h) {}
+		public void sa07(Value<SA07> h) {}
 
 		@ResponseHeader("H")
 		public static class SA08 {}
 		@RestMethod(name=GET,path="/value")
-		public void sa08(SA08 h) {}
+		public void sa08(Value<SA08> h) {}
 	}
 
 	@Test
@@ -156,7 +197,7 @@ public class ResponseHeaderAnnotationTest {
 				name="H",
 				description="a",
 				type="string"
-			) SB01 h) {}
+			) Value<SB01> h) {}
 
 		public static class SB02 {}
 		@RestMethod(name=GET,path="/api")
@@ -167,7 +208,7 @@ public class ResponseHeaderAnnotationTest {
 					"description:'a',",
 					"type:'string'"
 				}
-			) SB02 h) {}
+			) Value<SB02> h) {}
 
 		public static class SB03 {}
 		@RestMethod(name=GET,path="/mixed")
@@ -180,23 +221,23 @@ public class ResponseHeaderAnnotationTest {
 				},
 				description="a",
 				type="string"
-			) SB03 h) {}
+			) Value<SB03> h) {}
 
 		public static class SB04 {}
 		@RestMethod(name=GET,path="/code")
-		public void sb04(@ResponseHeader(name="H", code=100) SB04 h) {}
+		public void sb04(@ResponseHeader(name="H", code=100) Value<SB04> h) {}
 
 		public static class SB05 {}
 		@RestMethod(name=GET,path="/codes")
-		public void sb05(@ResponseHeader(name="H", code={100,101}) SB05 h) {}
+		public void sb05(@ResponseHeader(name="H", code={100,101}) Value<SB05> h) {}
 
 		public static class SB07 {}
 		@RestMethod(name=GET,path="/nocode")
-		public void sb07(@ResponseHeader(name="H", description="a") SB07 h) {}
+		public void sb07(@ResponseHeader(name="H", description="a") Value<SB07> h) {}
 
 		public static class SB08 {}
 		@RestMethod(name=GET,path="/value")
-		public void sb08(@ResponseHeader("H") SB08 h) {}
+		public void sb08(@ResponseHeader("H") Value<SB08> h) {}
 	}
 
 	@Test

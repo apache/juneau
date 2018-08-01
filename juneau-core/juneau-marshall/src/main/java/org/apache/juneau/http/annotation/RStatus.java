@@ -10,64 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.response;
-
-import java.net.*;
-
-import org.apache.juneau.http.annotation.*;
+package org.apache.juneau.http.annotation;
 
 /**
- * Represents an <code>HTTP 307 Temporary Redirect</code> response.
+ * TODO
  *
- * <p>
- * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
- * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
- * For example, a POST request should be repeated using another POST request.
  */
-@Response(code=307, example="'Temporary Redirect'")
-public class TemporaryRedirect {
-
-	/** Reusable instance. */
-	public static final TemporaryRedirect INSTANCE = new TemporaryRedirect();
-
-	private final URI location;
-
-	/**
-	 * Constructor.
-	 */
-	public TemporaryRedirect() {
-		this((URI)null);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param location <code>Location</code> header value.
-	 */
-	public TemporaryRedirect(String location) {
-		this.location = URI.create(location);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param location <code>Location</code> header value.
-	 */
-	public TemporaryRedirect(URI location) {
-		this.location = location;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return "Temporary Redirect";
-	}
-
-
-	/**
-	 * @return <code>Location</code> header value.
-	 */
-	@ResponseHeader(name="Location")
-	public URI getLocation() {
-		return location;
-	}
+public class RStatus {
 }

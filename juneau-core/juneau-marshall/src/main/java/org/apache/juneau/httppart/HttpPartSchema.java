@@ -106,7 +106,7 @@ public class HttpPartSchema {
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseStatus}
+	 * 		<li>{@link ResponseBody}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
@@ -142,7 +142,7 @@ public class HttpPartSchema {
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseStatus}
+	 * 		<li>{@link ResponseBody}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
@@ -171,7 +171,7 @@ public class HttpPartSchema {
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseStatus}
+	 * 		<li>{@link ResponseBody}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
@@ -218,7 +218,6 @@ public class HttpPartSchema {
 	 * <ul>
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseStatus}
 	 * </ul>
 	 * For
 	 *
@@ -228,7 +227,6 @@ public class HttpPartSchema {
 	 * 	<ul>
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseStatus}
 	 * 	</ul>
 	 * @param def
 	 * 	The default response code if no codes were specified in the schema.
@@ -253,7 +251,6 @@ public class HttpPartSchema {
 	 * 	<ul>
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseStatus}
 	 * 	</ul>
 	 * @param def
 	 * 	The default response code if no codes were specified in the schema.

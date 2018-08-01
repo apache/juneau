@@ -40,6 +40,7 @@ import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -2853,8 +2854,6 @@ public final class RestContext extends BeanContext {
 	private final ClasspathResourceManager staticResourceManager;
 	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
 
-	private final Map<Class<?>,ResponseMeta> responseMetas = new ConcurrentHashMap<>();
-
 	/**
 	 * Constructor.
 	 *
@@ -4244,26 +4243,6 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the parameters defined on the specified Java method.
-	 *
-	 * @param method The Java method to check.
-	 * @return The parameters defined on the Java method.
-	 */
-	public RestMethodReturn getRestMethodReturn(Method method) {
-		return callMethods.get(method.getName()).methodReturn;
-	}
-
-	/**
-	 * Returns the parameters defined on the specified Java method.
-	 *
-	 * @param method The Java method to check.
-	 * @return The parameters defined on the Java method.
-	 */
-	public RestMethodThrown[] getRestMethodThrowns(Method method) {
-		return callMethods.get(method.getName()).methodThrowns;
-	}
-
-	/**
 	 * Returns the media type for the specified file name.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -4346,7 +4325,7 @@ public final class RestContext extends BeanContext {
 				rp[i] = new RestParamDefaults.FormDataObject(method, s, t, ps);
 			} else if (hasAnnotation(Path.class, method, i)) {
 				s = HttpPartSchema.create(Path.class, method, i);
-				rp[i] = new RestParamDefaults.PathObject(method, s, t, ps);
+				rp[i] = new RestParamDefaults.PathObject(method, i, s, t, ps);
 			} else if (hasAnnotation(Body.class, method, i)) {
 				s = HttpPartSchema.create(Body.class, method, i);
 				rp[i] = new RestParamDefaults.BodyObject(method, s, t, ps);
@@ -4355,22 +4334,18 @@ public final class RestContext extends BeanContext {
 				RequestBeanMeta rbm = RequestBeanMeta.create(method, i, ps);
 				rp[i] = new RestParamDefaults.RequestBeanObject(method, rbm, t);
 
-			} else if (hasAnnotation(Response.class, method, i)) {
+			} else if (hasAnnotation(Response.class, method, i) || hasAnnotation(Response.class, Value.getValueType(method, i))) {
 				s = HttpPartSchema.create(Response.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseParamObject(method, i, s, t, ps);
-			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
+				rp[i] = new RestParamDefaults.ResponseBeanObject(method, i, s, t, ps);
+			} else if (hasAnnotation(ResponseHeader.class, method, i) || hasAnnotation(ResponseHeader.class, Value.getValueType(method, i))) {
 				s = HttpPartSchema.create(ResponseHeader.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, s, t, ps);
-			} else if (hasAnnotation(ResponseStatus.class, method, i)) {
-				s = HttpPartSchema.create(ResponseStatus.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseStatusObject(method, s, t);
+				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, i, s, t, ps);
+			} else if (hasAnnotation(ResponseBody.class, method, i) || hasAnnotation(ResponseBody.class, Value.getValueType(method, i))) {
+				s = HttpPartSchema.create(ResponseBody.class, method, i);
+				rp[i] = new RestParamDefaults.ResponseBodyObject(method, i, s, t, ps);
 
-			} else if (hasAnnotation(ResponseStatuses.class, method, i)) {
-				ResponseStatuses a = getAnnotation(ResponseStatuses.class, method, i);
-				HttpPartSchema[] ss = new HttpPartSchema[a.value().length];
-				for (int j = 0; j < ss.length; j++)
-					ss[j] = HttpPartSchema.create(a.value()[j]);
-				rp[i] = new RestParamDefaults.ResponseStatusObject(method, ss, t);
+			} else if (hasAnnotation(ResponseStatus.class, method, i)) {
+				rp[i] = new RestParamDefaults.ResponseStatusObject(method, t);
 
 			} else if (hasAnnotation(HasFormData.class, method, i)) {
 				s = HttpPartSchema.create(HasFormData.class, method, i);
@@ -4548,22 +4523,5 @@ public final class RestContext extends BeanContext {
 	@Override /* BeanContextBuilder */
 	public BeanSessionArgs createDefaultSessionArgs() {
 		throw new NoSuchMethodError();
-	}
-
-	ResponseMeta getResponseMetaForObject(Object o) {
-		if (o == null)
-			return null;
-		return getResponseMeta(o.getClass());
-	}
-
-	ResponseMeta getResponseMeta(Class<?> c) {
-		ResponseMeta rm = responseMetas.get(c);
-		if (rm == ResponseMeta.NULL)
-			return null;
-		if (rm != null)
-			return rm;
-		rm = ResponseMeta.create(c, getPropertyStore());
-		responseMetas.put(c, rm == null ? ResponseMeta.NULL : rm);
-		return rm;
 	}
 }

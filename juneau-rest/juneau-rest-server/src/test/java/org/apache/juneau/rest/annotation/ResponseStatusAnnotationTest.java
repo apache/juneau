@@ -12,143 +12,35 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-import static org.junit.Assert.assertEquals;
-
-import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests related to @ResponseStatuses annotation.
+ * Tests related to @ResponseStatus annotation.
  */
-@SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@SuppressWarnings("javadoc")
 public class ResponseStatusAnnotationTest {
 
 	//=================================================================================================================
-	// Setup
-	//=================================================================================================================
-
-	private static Swagger getSwagger(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
-		RestInfoProvider ip = rc.getInfoProvider();
-		return ip.getSwagger(req);
-	}
-
-	//=================================================================================================================
-	// @ResponseStatuses on POJO
+	// Basic tests
 	//=================================================================================================================
 
 	@RestResource
-	public static class SA {
-		@ResponseStatuses({
-			@ResponseStatus(code=100),
-			@ResponseStatus(code=101)
-		})
-		public static class SA01 {}
-
-		@RestMethod(name=GET,path="/code")
-		public void sa01(SA01 r) {}
-
-		@ResponseStatuses({
-			@ResponseStatus(100),
-			@ResponseStatus(101)
-		})
-		public static class SA02 {}
-
-		@RestMethod(name=GET,path="/salue")
-		public void sa02(SA02 r) {}
-
-		@ResponseStatuses({
-			@ResponseStatus(code=100, description="a"),
-			@ResponseStatus(code=101, description="a\nb")
-		})
-		public static class SA03 {}
-
-		@RestMethod(name=GET,path="/description")
-		public void sa03(SA03 r) {}
+	public static class A {
+		@RestMethod
+		public void a01(@ResponseStatus Value<Integer> status) {
+			status.set(100);
+		}
 	}
+
+	static MockRest a = MockRest.create(A.class);
 
 	@Test
-	public void sa01_ResponseStatus_onPojo_code() throws Exception {
-		Operation x = getSwagger(new SA()).getPaths().get("/code").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void sa02_ResponseStatus_onPojo_salue() throws Exception {
-		Operation x = getSwagger(new SA()).getPaths().get("/salue").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void sa03_ResponseStatus_onPojo_description() throws Exception {
-		Operation x = getSwagger(new SA()).getPaths().get("/description").get("get");
-		assertEquals("a", x.getResponse(100).getDescription());
-		assertEquals("a\nb", x.getResponse(101).getDescription());
-	}
-
-	//=================================================================================================================
-	// @ResponseStatuses on parameter
-	//=================================================================================================================
-
-	@RestResource
-	public static class SB {
-		public static class SB01 {}
-
-		@RestMethod(name=GET,path="/code")
-		public void sb01(
-				@ResponseStatuses({
-					@ResponseStatus(code=100),
-					@ResponseStatus(code=101)
-				})
-				SB01 r
-			) {}
-
-		public static class SB02 {}
-
-		@RestMethod(name=GET,path="/salue")
-		public void sb02(
-				@ResponseStatuses({
-					@ResponseStatus(100),
-					@ResponseStatus(101)
-				})
-				SB02 r
-			) {}
-
-		public static class SB03 {}
-
-		@RestMethod(name=GET,path="/description")
-		public void sb03(
-				@ResponseStatuses({
-					@ResponseStatus(code=100, description="a"),
-					@ResponseStatus(code=101, description="a\nb")
-				})
-				SB03 r
-			) {}
-	}
-
-	@Test
-	public void sb01_ResponseStatus_onParameter_code() throws Exception {
-		Operation x = getSwagger(new SB()).getPaths().get("/code").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void sb02_ResponseStatus_onParameter_sblue() throws Exception {
-		Operation x = getSwagger(new SB()).getPaths().get("/salue").get("get");
-		assertEquals("Continue", x.getResponse(100).getDescription());
-		assertEquals("Switching Protocols", x.getResponse(101).getDescription());
-	}
-	@Test
-	public void sb03_ResponseStatus_onParameter_description() throws Exception {
-		Operation x = getSwagger(new SB()).getPaths().get("/description").get("get");
-		assertEquals("a", x.getResponse(100).getDescription());
-		assertEquals("a\nb", x.getResponse(101).getDescription());
+	public void a01() throws Exception {
+		a.get("/a01").execute().assertStatus(100);
 	}
 }

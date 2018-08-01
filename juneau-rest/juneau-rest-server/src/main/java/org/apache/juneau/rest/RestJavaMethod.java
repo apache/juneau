@@ -25,6 +25,7 @@ import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import javax.servlet.http.*;
 
@@ -33,6 +34,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -49,8 +51,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final String httpMethod;
 	private final UrlPathPattern pathPattern;
 	final RestMethodParam[] methodParams;
-	final RestMethodReturn methodReturn;
-	final RestMethodThrown[] methodThrowns;
 	private final RestGuard[] guards;
 	private final RestMatcher[] optionalMatchers;
 	private final RestMatcher[] requiredMatchers;
@@ -76,6 +76,11 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		supportedAcceptTypes,
 		supportedContentTypes;
 
+	final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
+	final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
+	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
+	final ResponsePartMeta returnBodyMeta;
+
 	RestJavaMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
 		this.context = context;
@@ -83,8 +88,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.httpMethod = b.httpMethod;
 		this.pathPattern = b.pathPattern;
 		this.methodParams = b.methodParams;
-		this.methodReturn = b.methodReturn;
-		this.methodThrowns = b.methodThrowns;
 		this.guards = b.guards;
 		this.optionalMatchers = b.optionalMatchers;
 		this.requiredMatchers = b.requiredMatchers;
@@ -104,6 +107,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.priority = b.priority;
 		this.supportedAcceptTypes = b.supportedAcceptTypes;
 		this.supportedContentTypes = b.supportedContentTypes;
+		this.returnBodyMeta = b.returnBodyMeta;
 		this.widgets = unmodifiableMap(b.widgets);
 	}
 
@@ -111,8 +115,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		String httpMethod, defaultCharset;
 		UrlPathPattern pathPattern;
 		RestMethodParam[] methodParams;
-		RestMethodReturn methodReturn;
-		RestMethodThrown[] methodThrowns;
 		RestGuard[] guards;
 		RestMatcher[] optionalMatchers, requiredMatchers;
 		RestConverter[] converters;
@@ -128,6 +130,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		Integer priority;
 		Map<String,Widget> widgets;
 		List<MediaType> supportedAcceptTypes, supportedContentTypes;
+		ResponsePartMeta returnBodyMeta;
 
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
@@ -200,8 +203,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 								break;
 							}
 						}
-						if (p.equals(""))
-							p = "/";
+						if (! p.startsWith("/"))
+							p = "/" + p;
 					}
 				}
 
@@ -407,11 +410,10 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				methodParams = context.findParams(method, pathPattern, false);
 
-				methodReturn = new RestMethodReturn(method, partSerializer, ps);
-
-				methodThrowns = new RestMethodThrown[method.getExceptionTypes().length];
-				for (int i = 0; i < methodThrowns.length; i++)
-					methodThrowns[i] = new RestMethodThrown(method.getExceptionTypes()[i], partSerializer, ps);
+				if (ReflectionUtils.hasAnnotation(ResponseBody.class, method)) {
+					HttpPartSchema s = HttpPartSchema.create(ResponseBody.class, method);
+					returnBodyMeta = new ResponsePartMeta(HttpPartType.BODY, s, createPartSerializer(s.getSerializer(), serializers.getPropertyStore(), partSerializer));
+				}
 
 				// Need this to access methods in anonymous inner classes.
 				setAccessible(method, true);
@@ -421,6 +423,64 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				throw new RestServletException("Exception occurred while initializing method ''{0}''", sig).initCause(e);
 			}
 		}
+	}
+
+	ResponseBeanMeta getResponseBeanMeta(Object o) {
+		if (o == null)
+			return null;
+		Class<?> c = o.getClass();
+		ResponseBeanMeta rbm = responseBeanMetas.get(c);
+		if (rbm == null) {
+			rbm = ResponseBeanMeta.create(c, serializers.getPropertyStore());
+			if (rbm == null)
+				rbm = ResponseBeanMeta.NULL;
+			responseBeanMetas.put(c, rbm);
+		}
+		if (rbm == ResponseBeanMeta.NULL)
+			return null;
+		return rbm;
+	}
+
+	ResponsePartMeta getResponseHeaderMeta(Object o) {
+		if (o == null)
+			return null;
+		Class<?> c = o.getClass();
+		ResponsePartMeta pm = headerPartMetas.get(c);
+		if (pm == null) {
+			ResponseHeader a = c.getAnnotation(ResponseHeader.class);
+			if (a != null) {
+				HttpPartSchema schema = HttpPartSchema.create(a);
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer);
+				pm = new ResponsePartMeta(HttpPartType.HEADER, schema, serializer);
+			}
+			if (pm == null)
+				pm = ResponsePartMeta.NULL;
+			headerPartMetas.put(c, pm);
+		}
+		if (pm == ResponsePartMeta.NULL)
+			return null;
+		return pm;
+	}
+
+	ResponsePartMeta getResponseBodyMeta(Object o) {
+		if (o == null)
+			return null;
+		Class<?> c = o.getClass();
+		ResponsePartMeta pm = bodyPartMetas.get(c);
+		if (pm == null) {
+			ResponseBody a = c.getAnnotation(ResponseBody.class);
+			if (a != null) {
+				HttpPartSchema schema = HttpPartSchema.create(a);
+				HttpPartSerializer serializer = schema.isUsePartSerializer() ? createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer) : null;
+				pm = new ResponsePartMeta(HttpPartType.BODY, schema, serializer);
+			}
+			if (pm == null)
+				pm = ResponsePartMeta.NULL;
+			bodyPartMetas.put(c, pm);
+		}
+		if (pm == ResponsePartMeta.NULL)
+			return null;
+		return pm;
 	}
 
 	/**
@@ -524,27 +584,14 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				output = method.invoke(context.getResource(), args);
 				if (res.getStatus() == 0)
 					res.setStatus(200);
-				RestMethodReturn rmr = req.getRestMethodReturn();
 				if (! method.getReturnType().equals(Void.TYPE)) {
-					if (output != null || ! res.getOutputStreamCalled()) {
+					if (output != null || ! res.getOutputStreamCalled())
 						res.setOutput(output);
-						ResponseMeta rm = rmr.getResponseMeta();
-						if (rm == null)
-							rm = context.getResponseMetaForObject(output);
-						if (rm != null)
-							res.setMeta(rm);
-					}
 				}
 			} catch (InvocationTargetException e) {
 				Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.
-				if (res.getStatus() == 0)
-					res.setStatus(500);
-				RestMethodThrown rmt = req.getRestMethodThrown(e2);
-				ResponseMeta rm = rmt == null ? null : rmt.getResponseMeta();
-				if (rm == null)
-					rm = context.getResponseMetaForObject(e2);
-				if (rm != null) {
-					res.setMeta(rm);
+				res.setStatus(500);
+				if (getResponseBodyMeta(e2) != null || getResponseBeanMeta(e2) != null) {
 					res.setOutput(e2);
 				} else {
 					throw e;
@@ -659,6 +706,9 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		return method.hashCode();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods.
+	//-----------------------------------------------------------------------------------------------------------------
 	static String[] resolveVars(VarResolver vr, String[] in) {
 		String[] out = new String[in.length];
 		for (int i = 0; i < in.length; i++)
@@ -666,11 +716,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		return out;
 	}
 
-	RestMethodReturn getRestMethodReturn() {
-		return this.methodReturn;
-	}
-
-	List<RestMethodThrown> getRestMethodThrown() {
-		return Collections.unmodifiableList(Arrays.asList(this.methodThrowns));
+	static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, PropertyStore ps, HttpPartSerializer _default) {
+		HttpPartSerializer hps = ClassUtils.newInstance(HttpPartSerializer.class, c, true, ps);
+		return hps == null ? _default : hps;
 	}
 }

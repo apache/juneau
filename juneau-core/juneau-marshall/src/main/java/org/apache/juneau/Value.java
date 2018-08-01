@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
+import java.lang.reflect.*;
+
 /**
  * Represents a simple settable value.
  *
@@ -21,6 +25,56 @@ package org.apache.juneau;
  * @param <T> The value type.
  */
 public class Value<T> {
+
+	/**
+	 * Returns the generic parameter type of the Value parameter at the specified position.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> A {
+	 * 		<jk>public void</jk> doX(Value&lt;Foo&gt; foo) {...}
+	 * 	}
+	 * </p>
+	 * <p class='bcode w800'>
+	 * 	Class<?> t = Value.<jsm>getValueType</jsm>(A.<jk>class</jk>.getMethod(<js>"doX"</js>, Value.<jk>class</jk>));
+	 * 	<jsm>assertTrue</jsm>(t == Foo.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param m The method containing the parameter.
+	 * @param i The index of the parameter.
+	 * @return The parameter type of the value, or <jk>null</jk> if the method parameter is not of type <code>Value</code>.
+	 */
+	public static Class<?> getValueType(Method m, int i) {
+		return getValueType(m.getGenericParameterTypes()[i]);
+	}
+
+	/**
+	 * Returns the generic parameter type of the Value type.
+	 *
+	 * @param t The type to find the parameter type of.
+	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <code>Value</code>.
+	 */
+	public static Class<?> getValueType(Type t) {
+		if (t instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)t;
+			if (pt.getRawType() == Value.class) {
+				Type[] ta = pt.getActualTypeArguments();
+				if (ta.length > 0) {
+					Type t2 = ta[0];
+					if (t2 instanceof Class) {
+						return (Class<?>)t2;
+					}
+				}
+			}
+		} else if (t instanceof Class) {
+			Class<?> c = (Class<?>)t;
+			if (Value.class.isAssignableFrom(c)) {
+				return resolveParameterType(Value.class, 0, c);
+			}
+		}
+
+		return null;
+	}
 
 	private T t;
 	private ValueListener<T> listener;
