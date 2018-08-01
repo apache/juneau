@@ -553,7 +553,7 @@ class RestParamDefaults {
 		private final HttpPartSchema schema;
 
 		protected PathObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(PATH, m, s.getName(), t, s.getApi());
+			super(PATH, m, i, s.getName(), t, s.getApi());
 			this.schema = HttpPartSchema.create(Path.class, m, i);
 			this.partParser = createPartParser(schema.getParser(), ps);
 
@@ -571,8 +571,8 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected BodyObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(BODY, m, null, t, s.getApi());
+		protected BodyObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
+			super(BODY, m, i, null, t, s.getApi());
 			this.partParser = s.isUsePartParser() ? createPartParser(s.getParser(), ps) : null;
 			this.schema = s;
 		}
@@ -587,8 +587,8 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected HeaderObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(HEADER, m, s.getName(), t, s.getApi());
+		protected HeaderObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
+			super(HEADER, m, i, s.getName(), t, s.getApi());
 			this.partParser = createPartParser(s.getParser(), ps);
 			this.schema = s;
 
@@ -605,8 +605,8 @@ class RestParamDefaults {
 	static final class RequestBeanObject extends RestMethodParam {
 		private final RequestBeanMeta requestBeanMeta;
 
-		protected RequestBeanObject(Method m, RequestBeanMeta rbm, Type t) {
-			super(RESPONSE_BODY, m, null, t, null);
+		protected RequestBeanObject(Method m, int i, RequestBeanMeta rbm, Type t) {
+			super(RESPONSE_BODY, m, i, null, t, null);
 			this.requestBeanMeta = rbm;
 		}
 
@@ -620,7 +620,7 @@ class RestParamDefaults {
 		final ResponsePartMeta rpm;
 
 		protected ResponseHeaderObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(RESPONSE_HEADER, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
+			super(RESPONSE_HEADER, m, i, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
 			this.rpm = new ResponsePartMeta(HttpPartType.HEADER, s, createPartSerializer(s.getSerializer(), ps));
 
 			if (isEmpty(rpm.getSchema().getName()))
@@ -654,7 +654,7 @@ class RestParamDefaults {
 		final ResponsePartMeta rpm;
 
 		protected ResponseBodyObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(RESPONSE_BODY, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
+			super(RESPONSE_BODY, m, i, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
 			this.rpm = new ResponsePartMeta(HttpPartType.BODY, s, createPartSerializer(s.getSerializer(), ps));
 
 			if (getTypeClass() != Value.class)
@@ -683,7 +683,7 @@ class RestParamDefaults {
 		final ResponseBeanMeta rbm;
 
 		protected ResponseBeanObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(RESPONSE, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
+			super(RESPONSE, m, i, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
 			this.rbm = ResponseBeanMeta.create(m.getParameterTypes()[i], ps);
 			if (getTypeClass() != Value.class)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be Value.", type);
@@ -748,8 +748,8 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected FormDataObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(FORM_DATA, m, s.getName(), t, s.getApi());
+		protected FormDataObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
+			super(FORM_DATA, m, i, s.getName(), t, s.getApi());
 			this.partParser = createPartParser(s.getParser(), ps);
 			this.schema = s;
 			this.multiPart = s.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
@@ -773,8 +773,8 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected QueryObject(Method m, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(QUERY, m, s.getName(), t, s.getApi());
+		protected QueryObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
+			super(QUERY, m, i, s.getName(), t, s.getApi());
 			this.partParser = createPartParser(s.getParser(), ps);
 			this.schema = s;
 			this.multiPart = s.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
@@ -795,8 +795,8 @@ class RestParamDefaults {
 
 	static final class HasFormDataObject extends RestMethodParam {
 
-		protected HasFormDataObject(Method m, HttpPartSchema s, Type t) throws ServletException {
-			super(FORM_DATA, m, s.getName(), t);
+		protected HasFormDataObject(Method m, int i, HttpPartSchema s, Type t) throws ServletException {
+			super(FORM_DATA, m, i, s.getName(), t);
 			if (t != Boolean.class && t != boolean.class)
 				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", m);
 		}
@@ -810,8 +810,8 @@ class RestParamDefaults {
 
 	static final class HasQueryObject extends RestMethodParam {
 
-		protected HasQueryObject(Method m, HttpPartSchema s, Type t) throws ServletException {
-			super(QUERY, m, s.getName(), t);
+		protected HasQueryObject(Method m, int i, HttpPartSchema s, Type t) throws ServletException {
+			super(QUERY, m, i, s.getName(), t);
 			if (t != Boolean.class && t != boolean.class)
 				throw new RestServletException("Use of @HasQuery annotation on parameter that is not a boolean on method ''{0}''", m);
 		}

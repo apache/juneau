@@ -4316,23 +4316,23 @@ public final class RestContext extends BeanContext {
 
 			if (hasAnnotation(Header.class, method, i)) {
 				s = HttpPartSchema.create(Header.class, method, i);
-				rp[i] = new RestParamDefaults.HeaderObject(method, s, t, ps);
+				rp[i] = new RestParamDefaults.HeaderObject(method, i, s, t, ps);
 			} else if (hasAnnotation(Query.class, method, i)) {
 				s = HttpPartSchema.create(Query.class, method, i);
-				rp[i] = new RestParamDefaults.QueryObject(method, s, t, ps);
+				rp[i] = new RestParamDefaults.QueryObject(method, i, s, t, ps);
 			} else if (hasAnnotation(FormData.class, method, i)) {
 				s = HttpPartSchema.create(FormData.class, method, i);
-				rp[i] = new RestParamDefaults.FormDataObject(method, s, t, ps);
+				rp[i] = new RestParamDefaults.FormDataObject(method, i, s, t, ps);
 			} else if (hasAnnotation(Path.class, method, i)) {
 				s = HttpPartSchema.create(Path.class, method, i);
 				rp[i] = new RestParamDefaults.PathObject(method, i, s, t, ps);
 			} else if (hasAnnotation(Body.class, method, i)) {
 				s = HttpPartSchema.create(Body.class, method, i);
-				rp[i] = new RestParamDefaults.BodyObject(method, s, t, ps);
+				rp[i] = new RestParamDefaults.BodyObject(method, i, s, t, ps);
 
 			} else if (hasAnnotation(RequestBean.class, method, i)) {
 				RequestBeanMeta rbm = RequestBeanMeta.create(method, i, ps);
-				rp[i] = new RestParamDefaults.RequestBeanObject(method, rbm, t);
+				rp[i] = new RestParamDefaults.RequestBeanObject(method, i, rbm, t);
 
 			} else if (hasAnnotation(Response.class, method, i) || hasAnnotation(Response.class, Value.getValueType(method, i))) {
 				s = HttpPartSchema.create(Response.class, method, i);
@@ -4349,10 +4349,10 @@ public final class RestContext extends BeanContext {
 
 			} else if (hasAnnotation(HasFormData.class, method, i)) {
 				s = HttpPartSchema.create(HasFormData.class, method, i);
-				rp[i] = new RestParamDefaults.HasFormDataObject(method, s, t);
+				rp[i] = new RestParamDefaults.HasFormDataObject(method, i, s, t);
 			} else if (hasAnnotation(HasQuery.class, method, i)) {
 				s = HttpPartSchema.create(HasQuery.class, method, i);
-				rp[i] = new RestParamDefaults.HasQueryObject(method, s, t);
+				rp[i] = new RestParamDefaults.HasQueryObject(method, i, s, t);
 
 			} else if (hasAnnotation(org.apache.juneau.rest.annotation.Method.class, method, i)) {
 				rp[i] = new RestParamDefaults.MethodObject(method, t);

@@ -115,6 +115,7 @@ public abstract class RestMethodParam {
 
 	final RestParamType paramType;
 	final Method method;
+	final int index;
 	final String name;
 	final Type type;
 	final Class<?> c;
@@ -125,15 +126,17 @@ public abstract class RestMethodParam {
 	 *
 	 * @param paramType The Swagger parameter type.
 	 * @param method The method on which the parameter resides.
+	 * @param index The method parameter index.
 	 * @param name
 	 * 	The parameter name.
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
 	 * @param api Swagger metadata.
 	 */
-	protected RestMethodParam(RestParamType paramType, Method method, String name, Type type, ObjectMap api) {
+	protected RestMethodParam(RestParamType paramType, Method method, int index, String name, Type type, ObjectMap api) {
 		this.paramType = paramType;
 		this.method = method;
+		this.index = index;
 		this.name = name;
 		this.type = type;
 		this.c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
@@ -147,7 +150,7 @@ public abstract class RestMethodParam {
 	 * @param type The object type to convert the parameter to.
 	 */
 	protected RestMethodParam(RestParamType paramType, Type type) {
-		this(paramType, null, null, type, ObjectMap.EMPTY_MAP);
+		this(paramType, null, -1, null, type, ObjectMap.EMPTY_MAP);
 	}
 
 	/**
@@ -160,7 +163,7 @@ public abstract class RestMethodParam {
 	 * @param type The object type to convert the parameter to.
 	 */
 	protected RestMethodParam(RestParamType paramType, String name, Type type) {
-		this(paramType, null, name, type, ObjectMap.EMPTY_MAP);
+		this(paramType, null, -1, name, type, ObjectMap.EMPTY_MAP);
 	}
 
 	/**
@@ -168,13 +171,14 @@ public abstract class RestMethodParam {
 	 *
 	 * @param paramType The Swagger parameter type.
 	 * @param method The method on which the parameter resides.
+	 * @param index The method parameter index.
 	 * @param name
 	 * 	The parameter name.
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
 	 */
-	protected RestMethodParam(RestParamType paramType, Method method, String name, Type type) {
-		this(paramType, method, name, type, ObjectMap.EMPTY_MAP);
+	protected RestMethodParam(RestParamType paramType, Method method, int index, String name, Type type) {
+		this(paramType, method, index, name, type, ObjectMap.EMPTY_MAP);
 	}
 
 	/**
