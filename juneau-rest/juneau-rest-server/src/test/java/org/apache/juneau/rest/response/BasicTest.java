@@ -174,4 +174,125 @@ public class BasicTest {
 	public void b04_temporaryRedirect() throws Exception {
 		b.get("/temporaryRedirect").execute().assertStatus(307).assertBody("Temporary Redirect").assertHeader("Location", "/foo");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Overridden messages
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class C {
+		@RestMethod public Accepted accepted() { return new Accepted("foo"); }
+		@RestMethod public AlreadyReported alreadyReported() { return new AlreadyReported("foo"); }
+		@RestMethod(path="/continue") public Continue _continue() { return new Continue("foo"); }
+		@RestMethod public Created created() { return new Created("foo"); }
+		@RestMethod public EarlyHints earlyHints() { return new EarlyHints("foo"); }
+		@RestMethod public Found found() { return new Found("foo", null); }
+		@RestMethod public IMUsed imUsed() { return new IMUsed("foo"); }
+		@RestMethod public MovedPermanently movedPermanently() { return new MovedPermanently("foo", null); }
+		@RestMethod public MultipleChoices multipleChoices() { return new MultipleChoices("foo"); }
+		@RestMethod public MultiStatus multiStatus() { return new MultiStatus("foo"); }
+		@RestMethod public NoContent noContent() { return new NoContent("foo"); }
+		@RestMethod public NonAuthoritiveInformation nonAuthoritiveInformation() { return new NonAuthoritiveInformation("foo"); }
+		@RestMethod public NotModified notModified() { return new NotModified("foo"); }
+		@RestMethod public Ok ok() { return new Ok("foo"); }
+		@RestMethod public PartialContent partialContent() { return new PartialContent("foo"); }
+		@RestMethod public PermanentRedirect permanentRedirect() { return new PermanentRedirect("foo", null); }
+		@RestMethod public Processing processing() { return new Processing("foo"); }
+		@RestMethod public ResetContent resetContent() { return new ResetContent("foo"); }
+		@RestMethod public SeeOther seeOther() { return new SeeOther("foo", null); }
+		@RestMethod public SwitchingProtocols switchingProtocols() { return new SwitchingProtocols("foo"); }
+		@RestMethod public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect("foo", null); }
+		@RestMethod public UseProxy useProxy() { return new UseProxy("foo"); }
+	}
+
+	static MockRest c = MockRest.create(C.class);
+
+	@Test
+	public void c01_accepted() throws Exception {
+		c.get("/accepted").execute().assertStatus(202).assertBody("foo");
+	}
+	@Test
+	public void c02_alreadyReported() throws Exception {
+		c.get("/alreadyReported").execute().assertStatus(208).assertBody("foo");
+	}
+	@Test
+	public void c03_continue() throws Exception {
+		c.get("/continue").execute().assertStatus(100).assertBody("foo");
+	}
+	@Test
+	public void c04_created() throws Exception {
+		c.get("/created").execute().assertStatus(201).assertBody("foo");
+	}
+	@Test
+	public void c05_earlyHints() throws Exception {
+		c.get("/earlyHints").execute().assertStatus(103).assertBody("foo");
+	}
+	@Test
+	public void c06_found() throws Exception {
+		c.get("/found").execute().assertStatus(302).assertBody("foo");
+	}
+	@Test
+	public void c07_imUsed() throws Exception {
+		c.get("/imUsed").execute().assertStatus(226).assertBody("foo");
+	}
+	@Test
+	public void c08_movedPermanently() throws Exception {
+		c.get("/movedPermanently").execute().assertStatus(301).assertBody("foo");
+	}
+	@Test
+	public void c09_multipleChoices() throws Exception {
+		c.get("/multipleChoices").execute().assertStatus(300).assertBody("foo");
+	}
+	@Test
+	public void c10_multiStatus() throws Exception {
+		c.get("/multiStatus").execute().assertStatus(207).assertBody("foo");
+	}
+	@Test
+	public void c11_noContent() throws Exception {
+		c.get("/noContent").execute().assertStatus(204).assertBody("foo");
+	}
+	@Test
+	public void c12_nonAuthoritiveInformation() throws Exception {
+		c.get("/nonAuthoritiveInformation").execute().assertStatus(203).assertBody("foo");
+	}
+	@Test
+	public void c13_notModified() throws Exception {
+		c.get("/notModified").execute().assertStatus(304).assertBody("foo");
+	}
+	@Test
+	public void c14_ok() throws Exception {
+		c.get("/ok").execute().assertStatus(200).assertBody("foo");
+	}
+	@Test
+	public void c15_partialContent() throws Exception {
+		c.get("/partialContent").execute().assertStatus(206).assertBody("foo");
+	}
+	@Test
+	public void c16_permanentRedirect() throws Exception {
+		c.get("/permanentRedirect").execute().assertStatus(308).assertBody("foo");
+	}
+	@Test
+	public void c17_processing() throws Exception {
+		c.get("/processing").execute().assertStatus(102).assertBody("foo");
+	}
+	@Test
+	public void c18_resetContent() throws Exception {
+		c.get("/resetContent").execute().assertStatus(205).assertBody("foo");
+	}
+	@Test
+	public void c19_seeOther() throws Exception {
+		c.get("/seeOther").execute().assertStatus(303).assertBody("foo");
+	}
+	@Test
+	public void c20_switchingProtocols() throws Exception {
+		c.get("/switchingProtocols").execute().assertStatus(101).assertBody("foo");
+	}
+	@Test
+	public void c21_temporaryRedirect() throws Exception {
+		c.get("/temporaryRedirect").execute().assertStatus(307).assertBody("foo");
+	}
+	@Test
+	public void c22_useProxy() throws Exception {
+		c.get("/useProxy").execute().assertStatus(305).assertBody("foo");
+	}
 }
