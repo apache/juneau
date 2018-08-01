@@ -150,7 +150,7 @@ public abstract class ComboRoundTripTest {
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
-				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
+				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");  // NOT DEBUG
 				return;
 			}
 
@@ -190,7 +190,7 @@ public abstract class ComboRoundTripTest {
 			boolean isRdf = s instanceof RdfSerializer;
 
 			if ((isRdf && SKIP_RDF_TESTS) || expected.isEmpty() || ! runTestsSet.contains(testName) ) {
-				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");
+				System.err.println(comboInput.label + "/" + testName + " for "+s.getClass().getSimpleName()+" skipped.");  // NOT DEBUG
 				return;
 			}
 

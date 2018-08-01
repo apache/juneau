@@ -119,52 +119,6 @@ public abstract class RestMethodParam {
 	final String name;
 	final Type type;
 	final Class<?> c;
-	final ObjectMap api;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param paramType The Swagger parameter type.
-	 * @param method The method on which the parameter resides.
-	 * @param index The method parameter index.
-	 * @param name
-	 * 	The parameter name.
-	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
-	 * @param type The object type to convert the parameter to.
-	 * @param api Swagger metadata.
-	 */
-	protected RestMethodParam(RestParamType paramType, Method method, int index, String name, Type type, ObjectMap api) {
-		this.paramType = paramType;
-		this.method = method;
-		this.index = index;
-		this.name = name;
-		this.type = type;
-		this.c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
-		this.api = api.unmodifiable();
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param paramType The Swagger parameter type.
-	 * @param type The object type to convert the parameter to.
-	 */
-	protected RestMethodParam(RestParamType paramType, Type type) {
-		this(paramType, null, -1, null, type, ObjectMap.EMPTY_MAP);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param paramType The Swagger parameter type.
-	 * @param name
-	 * 	The parameter name.
-	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
-	 * @param type The object type to convert the parameter to.
-	 */
-	protected RestMethodParam(RestParamType paramType, String name, Type type) {
-		this(paramType, null, -1, name, type, ObjectMap.EMPTY_MAP);
-	}
 
 	/**
 	 * Constructor.
@@ -178,7 +132,60 @@ public abstract class RestMethodParam {
 	 * @param type The object type to convert the parameter to.
 	 */
 	protected RestMethodParam(RestParamType paramType, Method method, int index, String name, Type type) {
-		this(paramType, method, index, name, type, ObjectMap.EMPTY_MAP);
+		this.paramType = paramType;
+		this.method = method;
+		this.index = index;
+		this.name = name;
+		this.type = type;
+		this.c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param paramType The Swagger parameter type.
+	 * @param method The method on which the parameter resides.
+	 * @param index The method parameter index.
+	 * @param name
+	 * 	The parameter name.
+	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
+	 */
+	protected RestMethodParam(RestParamType paramType, Method method, int index, String name) {
+		this(paramType, method, index, name, method.getGenericParameterTypes()[index]);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param paramType The Swagger parameter type.
+	 * @param method The method on which the parameter resides.
+	 * @param index The method parameter index.
+	 */
+	protected RestMethodParam(RestParamType paramType, Method method, int index) {
+		this(paramType, method, index, null, method.getGenericParameterTypes()[index]);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param paramType The Swagger parameter type.
+	 * @param type The object type to convert the parameter to.
+	 */
+	protected RestMethodParam(RestParamType paramType, Type type) {
+		this(paramType, null, -1, null, type);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param paramType The Swagger parameter type.
+	 * @param name
+	 * 	The parameter name.
+	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
+	 * @param type The object type to convert the parameter to.
+	 */
+	protected RestMethodParam(RestParamType paramType, String name, Type type) {
+		this(paramType, null, -1, name, type);
 	}
 
 	/**
@@ -197,7 +204,7 @@ public abstract class RestMethodParam {
 	 * @return A map of parameter metadata, never <jk>null</jk>.
 	 */
 	protected ObjectMap getApi() {
-		return api;
+		return null;
 	};
 
 	/**

@@ -40,7 +40,6 @@ import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -4306,7 +4305,6 @@ public final class RestContext extends BeanContext {
 		for (int i = 0; i < pt.length; i++) {
 
 			Type t = pt[i];
-			HttpPartSchema s = null;
 			if (t instanceof Class) {
 				Class<?> c = (Class<?>)t;
 				rp[i] = paramResolvers.get(c);
@@ -4315,45 +4313,29 @@ public final class RestContext extends BeanContext {
 			}
 
 			if (hasAnnotation(Header.class, method, i)) {
-				s = HttpPartSchema.create(Header.class, method, i);
-				rp[i] = new RestParamDefaults.HeaderObject(method, i, s, t, ps);
+				rp[i] = new RestParamDefaults.HeaderObject(method, i, ps);
 			} else if (hasAnnotation(Query.class, method, i)) {
-				s = HttpPartSchema.create(Query.class, method, i);
-				rp[i] = new RestParamDefaults.QueryObject(method, i, s, t, ps);
+				rp[i] = new RestParamDefaults.QueryObject(method, i, ps);
 			} else if (hasAnnotation(FormData.class, method, i)) {
-				s = HttpPartSchema.create(FormData.class, method, i);
-				rp[i] = new RestParamDefaults.FormDataObject(method, i, s, t, ps);
+				rp[i] = new RestParamDefaults.FormDataObject(method, i, ps);
 			} else if (hasAnnotation(Path.class, method, i)) {
-				s = HttpPartSchema.create(Path.class, method, i);
-				rp[i] = new RestParamDefaults.PathObject(method, i, s, t, ps);
+				rp[i] = new RestParamDefaults.PathObject(method, i, ps);
 			} else if (hasAnnotation(Body.class, method, i)) {
-				s = HttpPartSchema.create(Body.class, method, i);
-				rp[i] = new RestParamDefaults.BodyObject(method, i, s, t, ps);
-
+				rp[i] = new RestParamDefaults.BodyObject(method, i, ps);
 			} else if (hasAnnotation(RequestBean.class, method, i)) {
-				RequestBeanMeta rbm = RequestBeanMeta.create(method, i, ps);
-				rp[i] = new RestParamDefaults.RequestBeanObject(method, i, rbm, t);
-
-			} else if (hasAnnotation(Response.class, method, i) || hasAnnotation(Response.class, Value.getValueType(method, i))) {
-				s = HttpPartSchema.create(Response.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseBeanObject(method, i, s, t, ps);
-			} else if (hasAnnotation(ResponseHeader.class, method, i) || hasAnnotation(ResponseHeader.class, Value.getValueType(method, i))) {
-				s = HttpPartSchema.create(ResponseHeader.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, i, s, t, ps);
-			} else if (hasAnnotation(ResponseBody.class, method, i) || hasAnnotation(ResponseBody.class, Value.getValueType(method, i))) {
-				s = HttpPartSchema.create(ResponseBody.class, method, i);
-				rp[i] = new RestParamDefaults.ResponseBodyObject(method, i, s, t, ps);
-
+				rp[i] = new RestParamDefaults.RequestBeanObject(method, i, ps);
+			} else if (hasAnnotation(Response.class, method, i)) {
+				rp[i] = new RestParamDefaults.ResponseBeanObject(method, i, ps);
+			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
+				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, i, ps);
+			} else if (hasAnnotation(ResponseBody.class, method, i)) {
+				rp[i] = new RestParamDefaults.ResponseBodyObject(method, i, ps);
 			} else if (hasAnnotation(ResponseStatus.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseStatusObject(method, t);
-
 			} else if (hasAnnotation(HasFormData.class, method, i)) {
-				s = HttpPartSchema.create(HasFormData.class, method, i);
-				rp[i] = new RestParamDefaults.HasFormDataObject(method, i, s, t);
+				rp[i] = new RestParamDefaults.HasFormDataObject(method, i);
 			} else if (hasAnnotation(HasQuery.class, method, i)) {
-				s = HttpPartSchema.create(HasQuery.class, method, i);
-				rp[i] = new RestParamDefaults.HasQueryObject(method, i, s, t);
-
+				rp[i] = new RestParamDefaults.HasQueryObject(method, i);
 			} else if (hasAnnotation(org.apache.juneau.rest.annotation.Method.class, method, i)) {
 				rp[i] = new RestParamDefaults.MethodObject(method, t);
 			}

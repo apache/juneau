@@ -387,7 +387,7 @@ public class TestUtils {
 	 */
 	public static final void assertObjectEquals(String s, Object o, WriterSerializer ws) {
 		if ("xxx".equals(s))
-			System.err.println(ws.toString(o).replaceAll("\\\\", "\\\\\\\\"));
+			System.err.println(ws.toString(o).replaceAll("\\\\", "\\\\\\\\")); // NOT DEBUG
 		Assert.assertEquals(s, ws.toString(o));
 	}
 
@@ -476,7 +476,7 @@ public class TestUtils {
 	 */
 	public static final void assertEquals(Object expected, Object actual, String msg, Object...args) {
 		if ("xxx".equals(expected))
-			System.err.println("actual=["+actual+"]");
+			System.err.println("actual=["+actual+"]");  // NOT DEBUG
 		if (! isEquals(expected, actual))
 			throw new ComparisonFailure(format(msg, args), toString(expected), toString(actual));
 	}

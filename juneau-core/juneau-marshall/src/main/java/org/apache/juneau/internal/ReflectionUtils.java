@@ -19,6 +19,8 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
+
 /**
  * Reflection utilities.
  */
@@ -72,9 +74,36 @@ public final class ReflectionUtils {
 			if (a.isInstance(a2))
 				return (T)a2;
 		Type t = m.getGenericParameterTypes()[index];
+		if (Value.isType(t))
+			return getAnnotation(a, Value.getParameterType(t));
 		if (t instanceof Class)
 			return getAnnotation(a, (Class<?>)t);
 		return null;
+	}
+
+	/**
+	 * Returns all annotations defined on the specified parameter and parameter type.
+	 *
+	 * <p>
+	 * Annotations are ordered parameter first, then class, then superclasses.
+	 *
+	 * @param a The annotation to look for.
+	 * @param m The method containing the parameter.
+	 * @param index The parameter index.
+	 * @return All instances of the annotation with the
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m, int index) {
+		List<T> l = new ArrayList<>();
+		for (Annotation a2 :  m.getParameterAnnotations()[index])
+			if (a.isInstance(a2))
+				l.add((T)a2);
+		Type t = m.getGenericParameterTypes()[index];
+		if (t instanceof Class)
+			appendAnnotations(a, (Class<?>)t, l);
+		else if (Value.isType(t))
+			appendAnnotations(a, Value.getParameterType(t), l);
+		return l;
 	}
 
 	/**
@@ -110,6 +139,8 @@ public final class ReflectionUtils {
 		T t = getDeclaredAnnotation(a, c);
 		if (t != null)
 			return t;
+
+
 
 		t = getAnnotation(a, c.getSuperclass());
 		if (t != null)

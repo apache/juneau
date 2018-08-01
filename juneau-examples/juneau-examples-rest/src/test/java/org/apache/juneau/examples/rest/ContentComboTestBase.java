@@ -100,7 +100,6 @@ public class ContentComboTestBase extends RestTestcase {
 		String s = rc.doGet(comboInput.url).getResponseAsString();
 		for (String s2 : comboInput.expectedResults) {
 			if (! s.contains(s2)) {
-				System.err.println(s);
 				throw new FormattedRuntimeException("String ''{0}'' not found at URL ''{1}'' for media type ''{2}''", s2, comboInput.url, comboInput.mediaType);
 			}
 		}

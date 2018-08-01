@@ -562,7 +562,6 @@ public class ResponseAnnotationTest {
 
 	@Test
 	public void sa01a_Response_onPojo_basic() throws Exception {
-		System.err.println(getSwagger(new SA()).getPaths().get("/sa01a"));
 		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa01a").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());

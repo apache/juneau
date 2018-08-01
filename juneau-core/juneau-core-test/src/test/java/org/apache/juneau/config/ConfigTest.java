@@ -1715,11 +1715,6 @@ public class ConfigTest {
 		assertEquals("a,#b,=c", cf.getString("a"));
 	}
 
-	public static void main(String[] args) {
-		System.err.println(Integer.parseInt("1_000"));
-	}
-
-
 	public static class ABean {
 		public String foo;
 

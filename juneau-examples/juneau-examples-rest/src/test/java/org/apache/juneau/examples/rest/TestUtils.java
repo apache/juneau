@@ -156,7 +156,7 @@ public class TestUtils {
 
 	private static void printLines(String[] lines) {
 		for (int i = 0; i < lines.length; i++)
-			System.err.println(String.format("%4s:" + lines[i], i+1));
+			System.err.println(String.format("%4s:" + lines[i], i+1));  // NOT DEBUG
 	}
 
 	/**
@@ -240,10 +240,10 @@ public class TestUtils {
 			TestUtils.checkXmlWhitespace(xmlSchema);
 			TestUtils.validateXml(xml, xmlSchema);
 		} catch (Exception e) {
-			System.err.println("---XML---");
-			System.err.println(xml);
-			System.err.println("---XMLSchema---");
-			System.err.println(xmlSchema);
+			System.err.println("---XML---");  // NOT DEBUG
+			System.err.println(xml);  // NOT DEBUG
+			System.err.println("---XMLSchema---");  // NOT DEBUG
+			System.err.println(xmlSchema);  // NOT DEBUG
 			throw e;
 		}
 	}
@@ -271,7 +271,7 @@ public class TestUtils {
 
 	public static void debugOut(Object o) {
 		try {
-			System.err.println(decodeHex(SimpleJsonSerializer.DEFAULT.serialize(o)));
+			System.err.println(decodeHex(SimpleJsonSerializer.DEFAULT.serialize(o)));  // NOT DEBUG
 		} catch (SerializeException e) {
 			e.printStackTrace();
 		}

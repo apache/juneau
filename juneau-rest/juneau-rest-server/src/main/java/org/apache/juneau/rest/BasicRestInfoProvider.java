@@ -396,60 +396,62 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 				RestParamType in = mp.getParamType();
 
-				if (in == RestParamType.OTHER || in == RESPONSE || in == RESPONSE_BODY || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
-					continue;
+				if (in.isAny(BODY, QUERY, FORM_DATA, HEADER, PATH)) {
 
-				String key = in.toString() + '.' + (in == BODY ? "body" : mp.getName());
+					String key = in.toString() + '.' + (in == BODY ? "body" : mp.getName());
 
-				ObjectMap param = paramMap.getObjectMap(key, true);
+					ObjectMap param = paramMap.getObjectMap(key, true);
 
-				param.append("in", in);
+					param.append("in", in);
 
-				if (in != BODY)
-					param.append("name", mp.name);
+					if (in != BODY)
+						param.append("name", mp.name);
 
-				ObjectMap pi = resolve(vr, mp.getApi(), "ParameterInfo on class {0} method {1}", c, m);
+					ObjectMap pi = resolve(vr, mp.getApi(), "ParameterInfo on class {0} method {1}", c, m);
 
-				// Common to all
-				param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
-				param.appendSkipEmpty("required", resolve(vr, pi.getString("required")));
+					// Common to all
+					param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
+					param.appendSkipEmpty("required", resolve(vr, pi.getString("required")));
 
-				if (in == BODY) {
-					param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
-					param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
-					param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
-					param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
-				} else {
-					param.appendSkipEmpty("type", resolve(vr, pi.getString("type")));
-					param.appendSkipEmpty("format", resolve(vr, pi.getString("format")));
-					param.appendSkipEmpty("pattern", resolve(vr, pi.getString("pattern")));
-					param.appendSkipEmpty("collectionFormat", resolve(vr, pi.getString("collectionFormat")));
-					param.appendSkipEmpty("maximum", resolve(vr, pi.getString("maximum")));
-					param.appendSkipEmpty("minimum", resolve(vr, pi.getString("minimum")));
-					param.appendSkipEmpty("multipleOf", resolve(vr, pi.getString("multipleOf")));
-					param.appendSkipEmpty("maxLength", resolve(vr, pi.getString("maxLength")));
-					param.appendSkipEmpty("minLength", resolve(vr, pi.getString("minLength")));
-					param.appendSkipEmpty("maxItems", resolve(vr, pi.getString("maxItems")));
-					param.appendSkipEmpty("minItems", resolve(vr, pi.getString("minItems")));
-					param.appendSkipEmpty("allowEmptyValue", resolve(vr, pi.getString("allowEmptyValue")));
-					param.appendSkipEmpty("exclusiveMaximum", resolve(vr, pi.getString("exclusiveMaximum")));
-					param.appendSkipEmpty("exclusiveMinimum", resolve(vr, pi.getString("exclusiveMinimum")));
-					param.appendSkipEmpty("uniqueItems", resolve(vr, pi.getString("uniqueItems")));
-					param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
-					param.appendSkipEmpty("default", parseAnything(vr, pi.getString("default"), "ParameterInfo/default on class {0} method {1}", c, m));
-					param.appendSkipEmpty("enum", parseListOrCdl(vr, pi.getString("enum"), "ParameterInfo/enum on class {0} method {1}", c, m));
-					param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
-					param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
-					param.appendSkipEmpty("items", parseMap(vr, pi.get("items"), "ParameterInfo/items on class {0} method {1}", c, m));
+					if (in == BODY) {
+						param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+						param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
+						param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
+						param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
+					} else {
+						param.appendSkipEmpty("type", resolve(vr, pi.getString("type")));
+						param.appendSkipEmpty("format", resolve(vr, pi.getString("format")));
+						param.appendSkipEmpty("pattern", resolve(vr, pi.getString("pattern")));
+						param.appendSkipEmpty("collectionFormat", resolve(vr, pi.getString("collectionFormat")));
+						param.appendSkipEmpty("maximum", resolve(vr, pi.getString("maximum")));
+						param.appendSkipEmpty("minimum", resolve(vr, pi.getString("minimum")));
+						param.appendSkipEmpty("multipleOf", resolve(vr, pi.getString("multipleOf")));
+						param.appendSkipEmpty("maxLength", resolve(vr, pi.getString("maxLength")));
+						param.appendSkipEmpty("minLength", resolve(vr, pi.getString("minLength")));
+						param.appendSkipEmpty("maxItems", resolve(vr, pi.getString("maxItems")));
+						param.appendSkipEmpty("minItems", resolve(vr, pi.getString("minItems")));
+						param.appendSkipEmpty("allowEmptyValue", resolve(vr, pi.getString("allowEmptyValue")));
+						param.appendSkipEmpty("exclusiveMaximum", resolve(vr, pi.getString("exclusiveMaximum")));
+						param.appendSkipEmpty("exclusiveMinimum", resolve(vr, pi.getString("exclusiveMinimum")));
+						param.appendSkipEmpty("uniqueItems", resolve(vr, pi.getString("uniqueItems")));
+						param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
+						param.appendSkipEmpty("default", parseAnything(vr, pi.getString("default"), "ParameterInfo/default on class {0} method {1}", c, m));
+						param.appendSkipEmpty("enum", parseListOrCdl(vr, pi.getString("enum"), "ParameterInfo/enum on class {0} method {1}", c, m));
+						param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
+						param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
+						param.appendSkipEmpty("items", parseMap(vr, pi.get("items"), "ParameterInfo/items on class {0} method {1}", c, m));
 
-					// Technically Swagger doesn't support schema on non-body parameters, but we do.
-					param.appendSkipEmpty("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+						// Technically Swagger doesn't support schema on non-body parameters, but we do.
+						param.appendSkipEmpty("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+					}
+
+					if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
+						param.put("required", true);
+
+					addXExamples(req, sm, param, in.toString(), js, mp.getType());
+
 				}
 
-				if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
-					param.put("required", true);
-
-				addXExamples(req, sm, param, in.toString(), js, mp.getType());
 			}
 
 			if (! paramMap.isEmpty())
@@ -643,16 +645,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						}
 
 						response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
-					}
-
-				} else if (in == RESPONSE_STATUS) {
-					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseStatus on class {0} method {1}", c, m);
-					for (String code : pi.keySet()) {
-						ObjectMap pi2 = pi.getObjectMap(code, true);
-
-						ObjectMap response = responses.getObjectMap(code, true);
-
-						response.appendSkipEmpty("description", resolve(vr, pi2.getString("description")));
 					}
 				}
 			}
@@ -1032,7 +1024,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 							String eVal = s2.createSession(args).serializeToString(example);
 							examples.put(s2.getPrimaryMediaType().toString(), eVal);
 						} catch (Exception e) {
-							System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());
+							System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());  // NOT DEBUG
 						}
 					}
 				}

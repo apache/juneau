@@ -84,7 +84,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			public void run() {
 				if (System.currentTimeMillis() - time.get() > 10000) {
 					try {
-						System.err.println("Failed at iteration " + iteration.get());
+						System.err.println("Failed at iteration " + iteration.get());  // NOT DEBUG
 						TestMicroservice.jettyDump(null, null);
 						System.exit(2);
 					} catch (Exception e) {

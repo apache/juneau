@@ -45,7 +45,7 @@ public class DocLinkTester {
 				System.out.println("No errors");
 			else {
 				System.out.flush();
-				System.err.println(errors + " errors");
+				System.err.println(errors + " errors");  // NOT DEBUG
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,6 +117,6 @@ public class DocLinkTester {
 	private static void error(File f, String msg) {
 		errors++;
 		System.out.flush();
-		System.err.println("ERROR: " + f.getAbsolutePath() + ", " + msg);
+		System.err.println("ERROR: " + f.getAbsolutePath() + ", " + msg);  // NOT DEBUG
 	}
 }

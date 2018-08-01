@@ -84,8 +84,8 @@ public class HttpPartSchemaBuilder {
 			Class<?> tc = (Class<?>)t;
 			for (Annotation a : ReflectionUtils.findAnnotationsParentFirst(c, tc))
 				apply(a);
-		} else if (t instanceof ParameterizedType) {
-			apply(c, Value.getValueType(t));
+		} else if (Value.isType(t)) {
+			apply(c, Value.getParameterType(t));
 		}
 		return this;
 	}

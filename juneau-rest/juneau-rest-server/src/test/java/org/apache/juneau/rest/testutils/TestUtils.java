@@ -50,7 +50,7 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 
 	public static final void dumpResponse(String r, String msg, Object...args) {
 		System.err.println("*** Failure ****************************************************************************************"); // NOT DEBUG
-		System.err.println(format(msg, args));
+		System.err.println(format(msg, args));  // NOT DEBUG
 		System.err.println("*** Response-Start *********************************************************************************"); // NOT DEBUG
 		System.err.println(r); // NOT DEBUG
 		System.err.println("*** Response-End ***********************************************************************************"); // NOT DEBUG

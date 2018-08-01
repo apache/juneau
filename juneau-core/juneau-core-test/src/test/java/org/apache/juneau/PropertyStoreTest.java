@@ -1765,7 +1765,7 @@ public class PropertyStoreTest {
 			fail("Exception expected.");
 		} catch (ConfigException e) {
 			if ("xxx".equals(msg))
-				System.err.println(e.getLocalizedMessage());
+				System.err.println(e.getLocalizedMessage());  // NOT DEBUG
 			assertEquals(msg, e.getMessage());
 		}
 	}

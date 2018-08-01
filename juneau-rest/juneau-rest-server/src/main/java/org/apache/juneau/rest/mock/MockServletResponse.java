@@ -411,7 +411,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 
 		MockAssertionError(String msg, Object...args) {
 			super(MessageFormat.format(msg, args));
-			System.err.println(getMessage());
+			System.err.println(getMessage());  // NOT DEBUG
 		}
 	}
 }

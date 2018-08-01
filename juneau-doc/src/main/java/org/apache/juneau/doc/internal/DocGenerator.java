@@ -109,7 +109,7 @@ public class DocGenerator {
 
 			IOUtils.writeFile("src/main/javadoc/overview.html", template);
 
-			System.err.println("Generated target/overview.html in "+(System.currentTimeMillis()-startTime)+"ms");
+			System.err.println("Generated target/overview.html in "+(System.currentTimeMillis()-startTime)+"ms");  // NOT DEBUG
 
 			startTime = System.currentTimeMillis();
 			for (File f : new File("src/main/javadoc/doc-files").listFiles())
@@ -118,7 +118,7 @@ public class DocGenerator {
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
 			for (File f : releaseNotes.docFiles)
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
-			System.err.println("Copied doc-files in "+(System.currentTimeMillis()-startTime)+"ms");
+			System.err.println("Copied doc-files in "+(System.currentTimeMillis()-startTime)+"ms");  // NOT DEBUG
 
 		} catch (IOException e) {
 			e.printStackTrace();

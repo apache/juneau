@@ -1214,13 +1214,13 @@ public class RestClient extends BeanContext implements Closeable {
 	@Override
 	protected void finalize() throws Throwable {
 		if (! isClosed && ! keepHttpClientOpen) {
-			System.err.println("WARNING:  RestClient garbage collected before it was finalized.");
+			System.err.println("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
 			if (creationStack != null) {
-				System.err.println("Creation Stack:");
+				System.err.println("Creation Stack:");  // NOT DEBUG
 				for (StackTraceElement e : creationStack)
-					System.err.println(e);
+					System.err.println(e);  // NOT DEBUG
 			} else {
-				System.err.println("Creation stack traces can be displayed by setting the system property 'org.apache.juneau.rest.client.RestClient.trackLifecycle' to true.");
+				System.err.println("Creation stack traces can be displayed by setting the system property 'org.apache.juneau.rest.client.RestClient.trackLifecycle' to true.");  // NOT DEBUG
 			}
 		}
 	}

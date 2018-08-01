@@ -305,7 +305,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 		if (context.isDebug()) {
 			String qs = req.getQueryString();
 			String msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e2.getStatus() + '.' + e2.getOccurrence() + "] HTTP " + req.getMethod() + " " + e2.getStatus() + " " + req.getRequestURI() + (qs == null ? "" : "?" + qs);
-			System.err.println(msg);
+			System.err.println(msg);  // NOT DEBUG
 			e.printStackTrace(System.err);
 		}
 

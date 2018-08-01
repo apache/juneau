@@ -62,6 +62,19 @@ public enum RestParamType {
 		this.value = value;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this type is any in the specified list.
+	 *
+	 * @param t The list to check against.
+	 * @return <jk>true</jk> if this type is any in the specified list.
+	 */
+	public boolean isAny(RestParamType...t) {
+		for (RestParamType tt : t)
+			if (this == tt)
+				return true;
+		return false;
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return value;
