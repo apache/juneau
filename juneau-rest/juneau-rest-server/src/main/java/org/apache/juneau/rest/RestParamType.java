@@ -42,6 +42,9 @@ public enum RestParamType {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Response value */
+	RESPONSE("response"),
+
+	/** Response value */
 	RESPONSE_BODY("responseBody"),
 
 	/** Response header value */

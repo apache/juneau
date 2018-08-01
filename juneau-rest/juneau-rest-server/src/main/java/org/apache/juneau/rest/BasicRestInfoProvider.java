@@ -396,7 +396,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 				RestParamType in = mp.getParamType();
 
-				if (in == RestParamType.OTHER || in == RESPONSE_BODY || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
+				if (in == RestParamType.OTHER || in == RESPONSE || in == RESPONSE_BODY || in == RESPONSE_HEADER || in == RESPONSE_STATUS)
 					continue;
 
 				String key = in.toString() + '.' + (in == BODY ? "body" : mp.getName());
@@ -601,7 +601,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						header.appendSkipEmpty("items", parseMap(vr, pi2.get("items"), "@ResponseHeader/items on class {0} method {1}", c, m));
 					}
 
-				} else if (in == RESPONSE_BODY) {
+				} else if (in == RESPONSE) {
 					ObjectMap pi = resolve(vr, mp.getApi(), "@Response on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
@@ -613,6 +613,27 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						response.appendSkipEmpty("headers", parseMap(vr, pi2.get("headers"), "@Response/headers on class {0} method {1}", c, m));
 						response.appendSkipEmpty("x-example", parseAnything(vr, pi2.getString("example"), "@Response/example on class {0} method {1}", c, m));
 						response.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@Response/examples on class {0} method {1}", c, m));
+
+						Type type = mp.getType();
+						if (type instanceof ParameterizedType) {
+							ParameterizedType pt = (ParameterizedType)type;
+							if (pt.getRawType().equals(Value.class))
+								type = pt.getActualTypeArguments()[0];
+						}
+
+						response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
+					}
+
+				} else if (in == RESPONSE_BODY) {
+					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseBody on class {0} method {1}", c, m);
+					for (String code : pi.keySet()) {
+						ObjectMap pi2 = pi.getObjectMap(code, true);
+
+						ObjectMap response = responses.getObjectMap(code, true);
+
+						response.appendSkipEmpty("schema", parseMap(vr, pi2.get("schema"), "@ResponseBody/schema on class {0} method {1}", c, m));
+						response.appendSkipEmpty("x-example", parseAnything(vr, pi2.getString("example"), "@ResponseBody/example on class {0} method {1}", c, m));
+						response.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@ResponseBody/examples on class {0} method {1}", c, m));
 
 						Type type = mp.getType();
 						if (type instanceof ParameterizedType) {

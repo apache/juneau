@@ -683,7 +683,7 @@ class RestParamDefaults {
 		final ResponseBeanMeta rbm;
 
 		protected ResponseBeanObject(Method m, int i, HttpPartSchema s, Type t, PropertyStore ps) {
-			super(RESPONSE_BODY, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
+			super(RESPONSE, m, s.getName(), t, HttpPartSchema.getApiCodeMap(s, 200));
 			this.rbm = ResponseBeanMeta.create(m.getParameterTypes()[i], ps);
 			if (getTypeClass() != Value.class)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be Value.", type);
