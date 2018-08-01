@@ -199,15 +199,6 @@ public abstract class RestMethodParam {
 	public abstract Object resolve(RestRequest req, RestResponse res) throws Exception;
 
 	/**
-	 * Returns the Swagger metadata associated with this parameter.
-	 *
-	 * @return A map of parameter metadata, never <jk>null</jk>.
-	 */
-	protected ObjectMap getApi() {
-		return null;
-	};
-
-	/**
 	 * Returns the parameter class type that this parameter resolver is meant for.
 	 *
 	 * @return The parameter class type, or <jk>null</jk> if the type passed in isn't an instance of {@link Class}.

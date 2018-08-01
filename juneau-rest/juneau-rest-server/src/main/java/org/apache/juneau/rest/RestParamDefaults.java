@@ -570,12 +570,7 @@ class RestParamDefaults {
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getPathMatch().get(partParser, schema, schema.getName(), type);
-		}
-
-		@Override /* RestMethodParam */
-		public ObjectMap getApi() {
-			return schema.getApi();
+			return req.getPathMatch().get(partParser, schema, name, type);
 		}
 	}
 
@@ -592,11 +587,6 @@ class RestParamDefaults {
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getBody().asType(partParser, schema, type);
-		}
-
-		@Override /* RestMethodParam */
-		public ObjectMap getApi() {
-			return schema.getApi();
 		}
 	}
 
@@ -624,11 +614,6 @@ class RestParamDefaults {
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
 			return req.getHeaders().get(partParser, schema, name, type);
 		}
-
-		@Override /* RestMethodParam */
-		public ObjectMap getApi() {
-			return schema.getApi();
-		}
 	}
 
 	static final class RequestBeanObject extends RestMethodParam {
@@ -647,11 +632,10 @@ class RestParamDefaults {
 
 	static final class ResponseHeaderObject extends RestMethodParam {
 		final ResponsePartMeta meta;
-		final HttpPartSchema schema;
 
 		protected ResponseHeaderObject(Method m, int i, PropertyStore ps) {
 			super(RESPONSE_HEADER, m, i, getName(m, i));
-			this.schema = HttpPartSchema.create(ResponseHeader.class, method, i);
+			HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, method, i);
 			this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, createPartSerializer(schema.getSerializer(), ps));
 
 			if (getTypeClass() != Value.class)
@@ -687,20 +671,14 @@ class RestParamDefaults {
 			});
 			return v;
 		}
-
-		@Override
-		public ObjectMap getApi() {
-			return HttpPartSchema.getApiCodeMap(schema, 200);
-		}
 	}
 
 	static final class ResponseBodyObject extends RestMethodParam {
 		final ResponsePartMeta rpm;
-		final HttpPartSchema schema;
 
 		protected ResponseBodyObject(Method m, int i, PropertyStore ps) {
 			super(RESPONSE_BODY, m, i);
-			this.schema = HttpPartSchema.create(ResponseBody.class, method, i);
+			HttpPartSchema schema = HttpPartSchema.create(ResponseBody.class, method, i);
 			this.rpm = new ResponsePartMeta(HttpPartType.BODY, schema, createPartSerializer(schema.getSerializer(), ps));
 
 			if (getTypeClass() != Value.class)
@@ -723,21 +701,14 @@ class RestParamDefaults {
 			});
 			return v;
 		}
-
-		@Override
-		public ObjectMap getApi() {
-			return HttpPartSchema.getApiCodeMap(schema, 200);
-		}
 	}
 
 	static final class ResponseBeanObject extends RestMethodParam {
-		final ResponseBeanMeta responseBeanMeta;
-		final HttpPartSchema schema;
+		final ResponseBeanMeta rbm;
 
 		protected ResponseBeanObject(Method m, int i, PropertyStore ps) {
 			super(RESPONSE, m, i);
-			this.schema = HttpPartSchema.create(Response.class, method, i);
-			this.responseBeanMeta = ResponseBeanMeta.create(m.getParameterTypes()[i], ps);
+			this.rbm = ResponseBeanMeta.create(m.getParameterTypes()[i], ps);
 			if (getTypeClass() != Value.class)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be Value.", type);
 		}
@@ -751,17 +722,12 @@ class RestParamDefaults {
 				public void onSet(Object o) {
 					ResponseBeanMeta rbm = req.getResponseBeanMeta(o);
 					if (rbm == null)
-						rbm = ResponseBeanObject.this.responseBeanMeta;
+						rbm = ResponseBeanObject.this.rbm;
 					res.setResponseBeanMeta(rbm);
 					res.setOutput(o);
 				}
 			});
 			return v;
-		}
-
-		@Override
-		public ObjectMap getApi() {
-			return HttpPartSchema.getApiCodeMap(schema, 200);
 		}
 	}
 
@@ -832,11 +798,6 @@ class RestParamDefaults {
 				return req.getFormData().getAll(partParser, schema, name, type);
 			return req.getFormData().get(partParser, schema, name, type);
 		}
-
-		@Override /* RestMethodParam */
-		public ObjectMap getApi() {
-			return schema.getApi();
-		}
 	}
 
 	static final class QueryObject extends RestMethodParam {
@@ -869,11 +830,6 @@ class RestParamDefaults {
 			if (multiPart)
 				return req.getQuery().getAll(partParser, schema, name, type);
 			return req.getQuery().get(partParser, schema, name, type);
-		}
-
-		@Override /* RestMethodParam */
-		public ObjectMap getApi() {
-			return schema.getApi();
 		}
 	}
 

@@ -407,7 +407,21 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					if (in != BODY)
 						param.append("name", mp.name);
 
-					ObjectMap pi = resolve(vr, mp.getApi(), "ParameterInfo on class {0} method {1}", c, m);
+					ObjectMap pi = null;
+					if (in == BODY)
+						pi = HttpPartSchema.create(Body.class, mp.method, mp.index).getApi();
+					else if (in == QUERY)
+						pi = HttpPartSchema.create(Query.class, mp.method, mp.index).getApi();
+					else if (in == FORM_DATA)
+						pi = HttpPartSchema.create(FormData.class, mp.method, mp.index).getApi();
+					else if (in == HEADER)
+						pi = HttpPartSchema.create(Header.class, mp.method, mp.index).getApi();
+					else if (in == PATH)
+						pi = HttpPartSchema.create(Path.class, mp.method, mp.index).getApi();
+					else
+						throw new RuntimeException();
+
+					pi = resolve(vr, pi, "ParameterInfo on class {0} method {1}", c, m);
 
 					// Common to all
 					param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
@@ -575,7 +589,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				RestParamType in = mp.getParamType();
 
 				if (in == RESPONSE_HEADER) {
-					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseHeader on class {0} method {1}", c, m);
+					HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, mp.method, mp.index);
+					ObjectMap pi = HttpPartSchema.getApiCodeMap(schema, 200);
+					pi = resolve(vr, pi, "@ResponseHeader on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						String name = mp.getName();
 						ObjectMap pi2 = pi.getObjectMap(code, true);
@@ -604,7 +620,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					}
 
 				} else if (in == RESPONSE) {
-					ObjectMap pi = resolve(vr, mp.getApi(), "@Response on class {0} method {1}", c, m);
+					HttpPartSchema schema = HttpPartSchema.create(Response.class, mp.method, mp.index);
+					ObjectMap pi = HttpPartSchema.getApiCodeMap(schema, 200);
+					pi = resolve(vr, pi, "@Response on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
 
@@ -627,7 +645,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					}
 
 				} else if (in == RESPONSE_BODY) {
-					ObjectMap pi = resolve(vr, mp.getApi(), "@ResponseBody on class {0} method {1}", c, m);
+					HttpPartSchema schema = HttpPartSchema.create(ResponseBody.class, mp.method, mp.index);
+					ObjectMap pi = HttpPartSchema.getApiCodeMap(schema, 200);
+					pi = resolve(vr, pi, "@ResponseBody on class {0} method {1}", c, m);
 					for (String code : pi.keySet()) {
 						ObjectMap pi2 = pi.getObjectMap(code, true);
 
@@ -708,29 +728,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 		return swagger;
 	}
-
-//	private static void assertNoEmpties(ObjectMap om) throws SwaggerException {
-//		if (om.isEmpty())
-//			throw new SwaggerException(null, "Empty map detected.");
-//		for (Map.Entry<String,Object> e : om.entrySet()) {
-//			Object val = e.getValue();
-//			if (val instanceof ObjectMap)
-//				assertNoEmpties((ObjectMap)val);
-//			if (val instanceof ObjectList)
-//				assertNoEmpties((ObjectList)val);
-//		}
-//	}
-//
-//	private static void assertNoEmpties(ObjectList ol) throws SwaggerException {
-//		if (ol.isEmpty())
-//			throw new SwaggerException(null, "Empty list detected.");
-//		for (Object val : ol) {
-//			if (val instanceof ObjectMap)
-//				assertNoEmpties((ObjectMap)val);
-//			if (val instanceof ObjectList)
-//				assertNoEmpties((ObjectList)val);
-//		}
-//	}
 
 	//=================================================================================================================
 	// Utility methods
