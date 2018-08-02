@@ -457,45 +457,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 
 			if (hasAnnotation(Response.class, m)) {
-				Response r = getAnnotation(Response.class, m);
-				Set<Integer> codes = new LinkedHashSet<>();
-				for (int i : r.value())
-					codes.add(i);
-				for (int i : r.code())
-					codes.add(i);
-				if (codes.isEmpty())
-					codes.add(200);
-				for (int code : codes) {
-					ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
-					ObjectMap api = parseMap(vr, r.api(), "RestMethodReturn/api on class {0} method {1}", c, m);
-					ObjectMap headers = new ObjectMap();
-
-					if (api != null) {
-						om.appendSkipEmpty("description", api.getString("description"));
-						om.appendSkipEmpty("x-example", resolve(vr, api.getString("example")));
-						om.appendSkipEmpty("examples", api.getObjectMap("examples"));
-						om.appendSkipEmpty("schema", api.getObjectMap("schema"));
-						if (api.containsKey("headers"))
-							for (Map.Entry<String,Object> e : api.getObjectMap("headers").entrySet())
-								headers.put(e.getKey(), e.getValue());
+				for (Response a : getAnnotationsParentFirst(Response.class, m)) {
+					for (Integer code : getCodes(a, 200)) {
+						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
+						merge(om, a, vr);
+						if (! om.containsKey("schema"))
+							om.appendSkipEmpty("schema", getSchema(req, om.getObjectMap("schema", true), js, m.getGenericReturnType()));
 					}
-					om.appendSkipEmpty("description", resolve(vr, r.description()));
-					om.appendSkipEmpty("x-example", resolve(vr, r.example()));
-					om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodReturn/examples on class {0} method {1}", c, m));
-					om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
-					for (ResponseHeader h : r.headers()) {
-						headers.put(h.name(), resolve(vr, HttpPartSchema.create(h).getApi()));
-					}
-					om.appendSkipEmpty("headers", headers);
-
-					Type type = m.getGenericReturnType();
-					if (type instanceof ParameterizedType) {
-						ParameterizedType pt = (ParameterizedType)type;
-						if (pt.getRawType().equals(Value.class))
-							type = pt.getActualTypeArguments()[0];
-					}
-
-					om.appendSkipEmpty("schema", getSchema(req, om.getObjectMap("schema", true), js, type));
 				}
 			}
 

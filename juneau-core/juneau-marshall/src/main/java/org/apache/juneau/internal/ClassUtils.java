@@ -2254,6 +2254,46 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns all annotations defined on the specified method and return type.
+	 *
+	 * <p>
+	 * Annotations are ordered method first, then return class, then return superclasses.
+	 *
+	 * @param a The annotation to look for.
+	 * @param m The method being inspected.
+	 * @return All instances of the annotation with the
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m) {
+		List<T> l = new ArrayList<>();
+		for (Annotation a2 :  m.getAnnotations())
+			if (a.isInstance(a2))
+				l.add((T)a2);
+		Type t = m.getGenericReturnType();
+		if (t instanceof Class)
+			appendAnnotations(a, (Class<?>)t, l);
+		else if (Value.isType(t))
+			appendAnnotations(a, Value.getParameterType(t), l);
+		return l;
+	}
+
+	/**
+	 * Returns all annotations defined on the specified method and return type.
+	 *
+	 * <p>
+	 * Annotations are ordered return superclass first, then return class, then method.
+	 *
+	 * @param a The annotation to look for.
+	 * @param m The method being inspected.
+	 * @return All instances of the annotation with the
+	 */
+	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Method m) {
+		List<T> l = getAnnotations(a, m);
+		Collections.reverse(l);
+		return l;
+	}
+
+	/**
 	 * Returns the specified annotation if it exists on the specified method or return type class.
 	 *
 	 * @param a The annotation to check for.
@@ -2286,8 +2326,6 @@ public final class ClassUtils {
 		T t = getDeclaredAnnotation(a, c);
 		if (t != null)
 			return t;
-
-
 
 		t = getAnnotation(a, c.getSuperclass());
 		if (t != null)
