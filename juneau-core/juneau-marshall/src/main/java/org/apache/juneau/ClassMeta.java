@@ -576,7 +576,7 @@ public final class ClassMeta<T> implements Type {
 				if (isAll(m, PUBLIC, NOT_DEPRECATED))
 					publicMethods.put(getMethodSignature(m), m);
 
-			Map<Class<?>,Remoteable> remoteableMap = findAnnotationsMap(Remoteable.class, c);
+			Map<Class<?>,Remoteable> remoteableMap = getAnnotationsMap(Remoteable.class, c);
 			if (! remoteableMap.isEmpty()) {
 				Map.Entry<Class<?>,Remoteable> e = remoteableMap.entrySet().iterator().next();  // Grab the first one.
 				Class<?> ic = e.getKey();
@@ -774,7 +774,7 @@ public final class ClassMeta<T> implements Type {
 
 		private BeanFilter findBeanFilter() {
 			try {
-				Map<Class<?>,Bean> ba = findAnnotationsMap(Bean.class, innerClass);
+				Map<Class<?>,Bean> ba = getAnnotationsMap(Bean.class, innerClass);
 				if (! ba.isEmpty())
 					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			} catch (Exception e) {

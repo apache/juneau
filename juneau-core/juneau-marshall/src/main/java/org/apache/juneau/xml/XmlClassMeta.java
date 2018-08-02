@@ -104,8 +104,8 @@ public class XmlClassMeta extends ClassMetaExtended {
 		if (c == null)
 			return null;
 
-		List<Xml> xmls = findAnnotations(Xml.class, c);
-		List<XmlSchema> schemas = findAnnotations(XmlSchema.class, c);
+		List<Xml> xmls = getAnnotations(Xml.class, c);
+		List<XmlSchema> schemas = getAnnotations(XmlSchema.class, c);
 		return XmlUtils.findNamespace(xmls, schemas);
 	}
 }

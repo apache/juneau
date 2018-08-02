@@ -135,7 +135,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			VarResolver vr = varResolverBuilder.build();
 
-			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = findAnnotationsMapParentFirst(RestResource.class, resourceClass);
+			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = getAnnotationsMapParentFirst(RestResource.class, resourceClass);
 
 			// Find our config file.  It's the last non-empty @RestResource.config().
 			String configPath = "";

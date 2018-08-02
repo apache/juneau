@@ -203,27 +203,27 @@ public final class ReflectionUtils {
 	 * @param c The class being searched.
 	 * @return The found matches, or an empty array if annotation was not found.
 	 */
-	public static <T extends Annotation> List<T> findAnnotations(Class<T> a, Class<?> c) {
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Class<?> c) {
 		List<T> l = new LinkedList<>();
 		appendAnnotations(a, c, l);
 		return l;
 	}
 
 	/**
-	 * Same as {@link #findAnnotations(Class, Class)} but returns the list in parent-to-child order.
+	 * Same as {@link #getAnnotations(Class, Class)} but returns the list in parent-to-child order.
 	 *
 	 * @param a The annotation class type.
 	 * @param c The class being searched.
 	 * @return The found matches, or an empty array if annotation was not found.
 	 */
-	public static <T extends Annotation> List<T> findAnnotationsParentFirst(Class<T> a, Class<?> c) {
-		List<T> l = findAnnotations(a, c);
+	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Class<?> c) {
+		List<T> l = getAnnotations(a, c);
 		Collections.reverse(l);
 		return l;
 	}
 
 	/**
-	 * Same as {@link #findAnnotations(Class, Class)} except returns the annotations as a map with the keys being the
+	 * Same as {@link #getAnnotations(Class, Class)} except returns the annotations as a map with the keys being the
 	 * class on which the annotation was found.
 	 *
 	 * <p>
@@ -234,22 +234,22 @@ public final class ReflectionUtils {
 	 * @param c The class being searched.
 	 * @return The found matches, or an empty map if annotation was not found.
 	 */
-	public static <T extends Annotation> LinkedHashMap<Class<?>,T> findAnnotationsMap(Class<T> a, Class<?> c) {
+	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMap(Class<T> a, Class<?> c) {
 		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<>();
 		findAnnotationsMap(a, c, m);
 		return m;
 	}
 
 	/**
-	 * Same as {@link #findAnnotationsMap(Class, Class)} except returns results in parent-to-child order.
+	 * Same as {@link #getAnnotationsMap(Class, Class)} except returns results in parent-to-child order.
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
 	 * @param c The class being searched.
 	 * @return The found matches, or an empty map if annotation was not found.
 	 */
-	public static <T extends Annotation> LinkedHashMap<Class<?>,T> findAnnotationsMapParentFirst(Class<T> a, Class<?> c) {
-		return CollectionUtils.reverse(findAnnotationsMap(a, c));
+	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMapParentFirst(Class<T> a, Class<?> c) {
+		return CollectionUtils.reverse(getAnnotationsMap(a, c));
 	}
 
 	private static <T extends Annotation> void findAnnotationsMap(Class<T> a, Class<?> c, Map<Class<?>,T> m) {

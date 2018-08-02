@@ -183,7 +183,7 @@ public class BeanMeta<T> {
 				}
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : findAnnotationsParentFirst(Bean.class, classMeta.innerClass))
+				for (Bean b : getAnnotationsParentFirst(Bean.class, classMeta.innerClass))
 					if (! b.typePropertyName().isEmpty())
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)

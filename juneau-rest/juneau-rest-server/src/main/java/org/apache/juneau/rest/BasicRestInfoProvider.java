@@ -126,7 +126,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 		Builder(RestContext context) {
 
-			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = findAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
+			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = getAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
 
 			for (RestResource r : restResourceAnnotationsParentFirst.values()) {
 				if (! r.siteName().isEmpty())
@@ -188,7 +188,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			omSwagger = new ObjectMap();
 
 		// Combine it with @RestResource(swagger)
-		for (Map.Entry<Class<?>,RestResource> e : findAnnotationsMapParentFirst(RestResource.class, resource.getClass()).entrySet()) {
+		for (Map.Entry<Class<?>,RestResource> e : getAnnotationsMapParentFirst(RestResource.class, resource.getClass()).entrySet()) {
 			RestResource rr = e.getValue();
 
 			ObjectMap sInfo = omSwagger.getObjectMap("info", true);
@@ -447,36 +447,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 			for (Class<?> ec : m.getExceptionTypes()) {
 				if (hasAnnotation(Response.class, ec)) {
-					Response r = getAnnotation(Response.class, ec);
-					Set<Integer> codes = new LinkedHashSet<>();
-					for (int i : r.value())
-						codes.add(i);
-					for (int i : r.code())
-						codes.add(i);
-					if (codes.isEmpty())
-						codes.add(500);
-					for (int code : codes) {
-						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
-						ObjectMap api = parseMap(vr, r.api(), "RestMethodThrown/api on class {0} method {1}", c, m);
-						ObjectMap headers = new ObjectMap();
-
-						if (api != null) {
-							om.appendSkipEmpty("description", resolve(vr, api.getString("description")));
-							om.appendSkipEmpty("x-example", resolve(vr, api.getString("example")));
-							om.appendSkipEmpty("examples", api.getObjectMap("examples"));
-							om.appendSkipEmpty("schema", api.getObjectMap("schema"));
-							if (api.containsKey("headers"))
-								for (Map.Entry<String,Object> e : api.getObjectMap("headers").entrySet())
-									headers.put(e.getKey(), e.getValue());
+					for (Response a : getAnnotationsParentFirst(Response.class, ec)) {
+						for (Integer code : getCodes(a, 500)) {
+							ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
+							merge(om, a, vr);
 						}
-						om.appendSkipEmpty("description", resolve(vr, r.description()));
-						om.appendSkipEmpty("x-example", resolve(vr, r.example()));
-						om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodThrown/examples on class {0} method {1}", c, m));
-						om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
-						for (ResponseHeader h : r.headers()) {
-							headers.put(h.name(), resolve(vr, HttpPartSchema.create(h).getApi()));
-						}
-						om.appendSkipEmpty("headers", headers);
 					}
 				}
 			}
@@ -1625,7 +1600,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		return om
 			.appendSkipEmpty("description", resolve(vr, a.description()))
 			.appendSkipEmpty("x-example", resolve(vr, a.example()))
-			.appendSkipEmpty("examples", joinnl(a.examples()))
+			.appendSkipEmpty("examples", parseMap(vr, a.examples()))
 			.appendSkipEmpty("headers", merge(om.getObjectMap("headers"), a.headers(), vr))
 			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr))
 		;
@@ -1704,5 +1679,16 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (ss.length == 0)
 			return "";
 		return StringUtils.joinnl(ss).trim();
+	}
+
+	private static Set<Integer> getCodes(Response r, Integer def) {
+		Set<Integer> codes = new LinkedHashSet<>();
+		for (int i : r.value())
+			codes.add(i);
+		for (int i : r.code())
+			codes.add(i);
+		if (codes.isEmpty())
+			codes.add(def);
+		return codes;
 	}
 }
