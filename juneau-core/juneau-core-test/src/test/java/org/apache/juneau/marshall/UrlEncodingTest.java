@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.junit.*;
 
 public class UrlEncodingTest {
@@ -50,8 +49,6 @@ public class UrlEncodingTest {
 
 	@Test
 	public void read2() throws Exception {
-		ObjectMap om = new ObjectMap("{foo:'bar'}");
-		m.println(om);
 		Map<?,?> o = m.read("foo=bar", Map.class, String.class, String.class);
 		assertObjectEquals("{foo:'bar'}", o);
 	}
