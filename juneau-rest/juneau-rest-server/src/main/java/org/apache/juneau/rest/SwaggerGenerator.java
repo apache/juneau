@@ -141,13 +141,13 @@ public class SwaggerGenerator {
 				info.appendSkipEmpty("contact",
 					merge(
 						info.getObjectMap("contact"),
-						toMap(vr, r.contact(), "@ResourceSwagger(contact) on class {0}", c)
+						toMap(r.contact(), "@ResourceSwagger(contact) on class {0}", c)
 					)
 				);
 				info.appendSkipEmpty("license",
 					merge(
 						info.getObjectMap("license"),
-						toMap(vr, r.license(), "@ResourceSwagger(license) on class {0}", c)
+						toMap(r.license(), "@ResourceSwagger(license) on class {0}", c)
 					)
 				);
 			}
@@ -155,13 +155,13 @@ public class SwaggerGenerator {
 			omSwagger.appendSkipEmpty("externalDocs",
 				merge(
 					omSwagger.getObjectMap("externalDocs"),
-					toMap(vr, r.externalDocs(), "@ResourceSwagger(externalDocs) on class {0}", c)
+					toMap(r.externalDocs(), "@ResourceSwagger(externalDocs) on class {0}", c)
 				)
 			);
 			omSwagger.appendSkipEmpty("tags",
 				merge(
 					omSwagger.getObjectList("tags"),
-					toList(vr, r.tags(), "@ResourceSwagger(tags) on class {0}", c)
+					toList(r.tags(), "@ResourceSwagger(tags) on class {0}", c)
 				)
 			);
 		}
@@ -263,32 +263,32 @@ public class SwaggerGenerator {
 			);
 			op.appendSkipEmpty("tags",
 				merge(
-					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
-					parseListOrCdl(vr, ms.tags(), "@MethodSwagger(tags) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(locale, mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
+					parseListOrCdl(ms.tags(), "@MethodSwagger(tags) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("schemes",
 				merge(
-					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
-					parseListOrCdl(vr, ms.schemes(), "@MethodSwagger(schemes) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(locale, mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
+					parseListOrCdl(ms.schemes(), "@MethodSwagger(schemes) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("consumes",
 				firstNonEmpty(
-					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
-					parseListOrCdl(vr, ms.consumes(), "@MethodSwagger(consumes) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(locale, mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
+					parseListOrCdl(ms.consumes(), "@MethodSwagger(consumes) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("produces",
 				firstNonEmpty(
-					parseListOrCdl(vr, mb.findFirstString(locale, mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
-					parseListOrCdl(vr, ms.produces(), "@MethodSwagger(produces) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(locale, mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
+					parseListOrCdl(ms.produces(), "@MethodSwagger(produces) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("parameters",
 				merge(
-					parseList(vr, mb.findFirstString(locale, mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
-					parseList(vr, ms.parameters(), "@MethodSwagger(parameters) on class {0} method {1}", c, m)
+					parseList(mb.findFirstString(locale, mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
+					parseList(ms.parameters(), "@MethodSwagger(parameters) on class {0} method {1}", c, m)
 				)
 			);
 			op.appendSkipEmpty("responses",
@@ -301,7 +301,7 @@ public class SwaggerGenerator {
 				merge(
 					op.getObjectMap("externalDocs"),
 					parseMap(mb.findFirstString(locale, mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
-					toMap(vr, ms.externalDocs(), "@MethodSwagger(externalDocs) on class {0} method {1}", c, m)
+					toMap(ms.externalDocs(), "@MethodSwagger(externalDocs) on class {0} method {1}", c, m)
 				)
 			);
 
@@ -354,12 +354,12 @@ public class SwaggerGenerator {
 					}
 
 					if (! param.containsKey("schema"))
-						param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+						param.put("schema", getSchema(param.getObjectMap("schema", true), mp.getType()));
 
 					if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 						param.put("required", true);
 
-					addXExamples(req, sm, param, in.toString(), js, mp.getType());
+					addXExamples(sm, param, in.toString(), mp.getType());
 				}
 			}
 
@@ -385,7 +385,7 @@ public class SwaggerGenerator {
 						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 						merge(om, a);
 						if (! om.containsKey("schema"))
-							om.appendSkipEmpty("schema", getSchema(req, om.getObjectMap("schema", true), js, m.getGenericReturnType()));
+							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
 					}
 				}
 			}
@@ -395,9 +395,9 @@ public class SwaggerGenerator {
 				for (ResponseBody a : getAnnotationsParentFirst(ResponseBody.class, m)) {
 					merge(om, a);
 					if (! om.containsKey("schema"))
-						om.appendSkipEmpty("schema", getSchema(req, om.getObjectMap("schema", true), js, m.getGenericReturnType()));
+						om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
 				}
-				addXExamples(req, sm, om, "ok", js, m.getGenericReturnType());
+				addXExamples(sm, om, "ok", m.getGenericReturnType());
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
@@ -421,7 +421,7 @@ public class SwaggerGenerator {
 							if (! response.containsKey("schema")) {
 								Type type = Value.getParameterType(mp.type);
 								if (type != null)
-									response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
+									response.appendSkipEmpty("schema", getSchema(response.getObjectMap("schema", true), type));
 							}
 						}
 					}
@@ -434,7 +434,7 @@ public class SwaggerGenerator {
 					if (! response.containsKey("schema")) {
 						Type type = Value.getParameterType(mp.type);
 						if (type != null)
-							response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
+							response.appendSkipEmpty("schema", getSchema(response.getObjectMap("schema", true), type));
 					}
 				}
 			}
@@ -588,14 +588,14 @@ public class SwaggerGenerator {
 		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected ObjectMap or String.", o.getClass().getName());
 	}
 
-	private ObjectList parseList(VarResolverSession vs, Object o, String location, Object...locationArgs) throws ParseException {
+	private ObjectList parseList(Object o, String location, Object...locationArgs) throws ParseException {
 		try {
 			if (o == null)
 				return null;
 			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
 			if (s.isEmpty())
 				return null;
-			s = vs.resolve(s.trim());
+			s = resolve(s);
 			if (! isObjectList(s, true))
 				s = "[" + s + "]";
 			return new ObjectList(s);
@@ -604,21 +604,21 @@ public class SwaggerGenerator {
 		}
 	}
 
-	private ObjectList parseListOrCdl(VarResolverSession vs, Object o, String location, Object...locationArgs) throws ParseException {
+	private ObjectList parseListOrCdl(Object o, String location, Object...locationArgs) throws ParseException {
 		try {
 			if (o == null)
 				return null;
 			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
 			if (s.isEmpty())
 				return null;
-			s = vs.resolve(s.trim());
+			s = resolve(s);
 			return StringUtils.parseListOrCdl(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
 		}
 	}
 
-	private ObjectMap newMap(VarResolverSession vs, ObjectMap om, String[] value, String location, Object...locationArgs) throws ParseException {
+	private ObjectMap newMap(ObjectMap om, String[] value, String location, Object...locationArgs) throws ParseException {
 		if (value.length == 0)
 			return om == null ? new ObjectMap() : om;
 		ObjectMap om2 = parseMap(joinnl(value), location, locationArgs);
@@ -656,52 +656,52 @@ public class SwaggerGenerator {
 		return ObjectUtils.firstNonEmpty(t);
 	}
 
-	private ObjectMap toMap(VarResolverSession vs, ExternalDocs a, String location, Object...locationArgs) throws ParseException {
+	private ObjectMap toMap(ExternalDocs a, String location, Object...locationArgs) throws ParseException {
 		if (empty(a))
 			return null;
-		ObjectMap om = newMap(vs, new ObjectMap(), a.value(), location, locationArgs);
-		om.appendSkipEmpty("description", vs.resolve(joinnl(a.description())));
-		om.appendSkipEmpty("url", vs.resolve(a.url()));
+		ObjectMap om = newMap(new ObjectMap(), a.value(), location, locationArgs);
+		om.appendSkipEmpty("description", resolve(joinnl(a.description())));
+		om.appendSkipEmpty("url", resolve(a.url()));
 		return om.isEmpty() ? null : om;
 	}
 
-	private ObjectMap toMap(VarResolverSession vs, Contact a, String location, Object...locationArgs) throws ParseException {
+	private ObjectMap toMap(Contact a, String location, Object...locationArgs) throws ParseException {
 		if (empty(a))
 			return null;
-		ObjectMap om = newMap(vs, new ObjectMap(), a.value(), location, locationArgs);
-		om.appendSkipEmpty("name", vs.resolve(a.name()));
-		om.appendSkipEmpty("url", vs.resolve(a.url()));
-		om.appendSkipEmpty("email", vs.resolve(a.email()));
+		ObjectMap om = newMap(new ObjectMap(), a.value(), location, locationArgs);
+		om.appendSkipEmpty("name", resolve(a.name()));
+		om.appendSkipEmpty("url", resolve(a.url()));
+		om.appendSkipEmpty("email", resolve(a.email()));
 		return om.isEmpty() ? null : om;
 	}
 
-	private ObjectMap toMap(VarResolverSession vs, License a, String location, Object...locationArgs) throws ParseException {
+	private ObjectMap toMap(License a, String location, Object...locationArgs) throws ParseException {
 		if (empty(a))
 			return null;
-		ObjectMap om = newMap(vs, new ObjectMap(), a.value(), location, locationArgs);
-		om.appendSkipEmpty("name", vs.resolve(a.name()));
-		om.appendSkipEmpty("url", vs.resolve(a.url()));
+		ObjectMap om = newMap(new ObjectMap(), a.value(), location, locationArgs);
+		om.appendSkipEmpty("name", resolve(a.name()));
+		om.appendSkipEmpty("url", resolve(a.url()));
 		return om.isEmpty() ? null : om;
 	}
 
-	private ObjectMap toMap(VarResolverSession vs, Tag a, String location, Object...locationArgs) throws ParseException {
-		ObjectMap om = newMap(vs, new ObjectMap(), a.value(), location, locationArgs);
-		om.appendSkipEmpty("name", vs.resolve(a.name()));
-		om.appendSkipEmpty("description", vs.resolve(joinnl(a.description())));
-		om.appendSkipNull("externalDocs", merge(om.getObjectMap("externalDocs"), toMap(vs, a.externalDocs(), location, locationArgs)));
+	private ObjectMap toMap(Tag a, String location, Object...locationArgs) throws ParseException {
+		ObjectMap om = newMap(new ObjectMap(), a.value(), location, locationArgs);
+		om.appendSkipEmpty("name", resolve(a.name()));
+		om.appendSkipEmpty("description", resolve(joinnl(a.description())));
+		om.appendSkipNull("externalDocs", merge(om.getObjectMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
 		return om.isEmpty() ? null : om;
 	}
 
-	private ObjectList toList(VarResolverSession vs, Tag[] aa, String location, Object...locationArgs) throws ParseException {
+	private ObjectList toList(Tag[] aa, String location, Object...locationArgs) throws ParseException {
 		if (aa.length == 0)
 			return null;
 		ObjectList ol = new ObjectList();
 		for (Tag a : aa)
-			ol.add(toMap(vs, a, location, locationArgs));
+			ol.add(toMap(a, location, locationArgs));
 		return ol.isEmpty() ? null : ol;
 	}
 
-	private ObjectMap getSchema(RestRequest req, ObjectMap schema, JsonSchemaSerializerSession js, Type type) throws Exception {
+	private ObjectMap getSchema(ObjectMap schema, Type type) throws Exception {
 
 		ClassMeta<?> cm = bs.getClassMeta(type);
 
@@ -730,12 +730,12 @@ public class SwaggerGenerator {
 		return om;
 	}
 
-	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap piri, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
+	private void addXExamples(RestJavaMethod sm, ObjectMap piri, String in, Type type) throws Exception {
 
 		String sex = piri.getString("x-example");
 
 		if (sex == null) {
-			ObjectMap schema = resolve(js, piri.getObjectMap("schema"));
+			ObjectMap schema = resolveRef(piri.getObjectMap("schema"));
 			if (schema != null)
 				sex = schema.getString("example", schema.getString("x-example"));
 		}
@@ -796,7 +796,7 @@ public class SwaggerGenerator {
 			piri.put(examplesKey, examples);
 	}
 
-	private ObjectMap resolve(JsonSchemaSerializerSession js, ObjectMap m) {
+	private ObjectMap resolveRef(ObjectMap m) {
 		if (m == null)
 			return null;
 		if (m.containsKey("$ref") && js.getBeanDefs() != null) {
@@ -1192,5 +1192,4 @@ public class SwaggerGenerator {
 			codes.add(def);
 		return codes;
 	}
-
 }
