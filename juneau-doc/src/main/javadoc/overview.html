@@ -296,7 +296,6 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.MethodReturnTypes'>Method Return Types</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.ReaderResource'>ReaderResource</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.StreamResource'>StreamResource</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.Redirect'>Redirect</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.RestMethod.RestMethodMatchers'>@RestMethod.matchers()</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedResponses'>Predefined Responses</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedExceptions'>Predefined Exceptions</a></p>
@@ -314,10 +313,10 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Header'>@Header</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Path'>@Path</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.RequestBean'>@RequestBean</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Response'>@Response</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader'>@ResponseHeader</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus'>@ResponseStatus</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>@ResponseStatuses</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseBody'>@ResponseBody</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader'>@ResponseHeader</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus'>@ResponseStatus</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Response'>@Response</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingFormPosts'>Handling Form Posts</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a></p>
@@ -13751,8 +13750,6 @@ TODO(7.2.0)
 		{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
 		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
 		the <l>Content-Type</l> header if you use this object type.
-	<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
-		<br>Represents an HTTP redirect response.
 	<li class='jc'>{@link org.apache.juneau.Streamable}
 		<br>Interface that identifies that an object can be serialized directly to an output stream.
 	<li class='jc'>{@link org.apache.juneau.Writable}
@@ -13769,7 +13766,6 @@ TODO(7.2.0)
 		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.DefaultHandler}
 		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.InputStreamHandler}
 		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.ReaderHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.RedirectHandler}
 		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.StreamableHandler}
 		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.WritableHandler}
 		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.ZipFileListResponseHandler}
@@ -13906,64 +13902,8 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.Redirect' id='juneau-rest-server.RestMethod.Redirect'>7.6.13 - Redirect</a></h4>
-<div class='topic'><!-- START: 7.6.13 - juneau-rest-server.RestMethod.Redirect -->
-<p>
-	The {@link org.apache.juneau.rest.helper.Redirect} object is a convenience shortcut for performing <code>HTTP 302</code> redirects.
-</p>
-<p>
-	<l>Redirect</l> objects are handled by the {@link org.apache.juneau.rest.reshandlers.RedirectHandler} class.
-	<br>This allows these objects to be returned as responses by REST methods.
-</p>
-<p>
-	The following example shows the difference between handling redirects via <l>RestResponse</l> and the simplified approach of using this class.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Redirect to "/contextPath/servletPath/foobar"</jc>
-
-	<jc>// Using RestRequest/RestResponse</jc>
-	<ja>@RestMethod</ja>(...)
-	<jk>public void</jk> redirectExample1(RestRequest req, RestResponse res) <jk>throws</jk> IOException {
-		res.sendRedirect(req.getServletURI() + <js>"/foobar"</js>);
-	}
-	
-	<jc>// Using Redirect</jc>
-	<ja>@RestMethod</ja>(...)
-	<jk>public</jk> Redirect redirectExample2() {
-		<jk>return new</jk> Redirect(<js>"foobar"</js>);
-	}
-</p>
-<p>
-	The constructor can use a <l>MessageFormat</l>-style pattern with multiple arguments.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(...)
-	<jk>public</jk> Redirect redirectExample3() {
-		<jk>return new</jk> Redirect(<js>"foo/{0}/bar/{1}"</js>, id1, id2);
-	}
-</p>
-<p>
-	The arguments are automatically URL-encoded.
-</p>
-<p>
-	Redirecting to the servlet root can be accomplished by simply using the no-arg constructor.
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Simply redirect to the servlet root.
-	// Equivalent to res.sendRedirect(req.getServletURI()).</jc>
-	<ja>@RestMethod</ja>(...)
-	<jk>public</jk> Redirect redirectExample4() {
-		<jk>return new</jk> Redirect();
-	}
-</p>
-</div><!-- END: 7.6.13 - juneau-rest-server.RestMethod.Redirect -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.RestMethodMatchers' id='juneau-rest-server.RestMethod.RestMethodMatchers'>7.6.14 - @RestMethod.matchers()</a></h4>
-<div class='topic'><!-- START: 7.6.14 - juneau-rest-server.RestMethod.RestMethodMatchers -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.RestMethodMatchers' id='juneau-rest-server.RestMethod.RestMethodMatchers'>7.6.13 - @RestMethod.matchers()</a></h4>
+<div class='topic'><!-- START: 7.6.13 - juneau-rest-server.RestMethod.RestMethodMatchers -->
 <p>
 	{@link org.apache.juneau.rest.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
 	tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
@@ -14019,20 +13959,20 @@ TODO(7.2.0)
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.MultipartFormDataMatcher}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.UrlEncodedFormMatcher}
 </ul>
-</div><!-- END: 7.6.14 - juneau-rest-server.RestMethod.RestMethodMatchers -->
+</div><!-- END: 7.6.13 - juneau-rest-server.RestMethod.RestMethodMatchers -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedResponses' id='juneau-rest-server.RestMethod.PredefinedResponses'>7.6.15 - Predefined Responses</a></h4>
-<div class='topic'><!-- START: 7.6.15 - juneau-rest-server.RestMethod.PredefinedResponses -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedResponses' id='juneau-rest-server.RestMethod.PredefinedResponses'>7.6.14 - Predefined Responses</a></h4>
+<div class='topic'><!-- START: 7.6.14 - juneau-rest-server.RestMethod.PredefinedResponses -->
 <p>
 </p>
-</div><!-- END: 7.6.15 - juneau-rest-server.RestMethod.PredefinedResponses -->
+</div><!-- END: 7.6.14 - juneau-rest-server.RestMethod.PredefinedResponses -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedExceptions' id='juneau-rest-server.RestMethod.PredefinedExceptions'>7.6.16 - Predefined Exceptions</a></h4>
-<div class='topic'><!-- START: 7.6.16 - juneau-rest-server.RestMethod.PredefinedExceptions -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedExceptions' id='juneau-rest-server.RestMethod.PredefinedExceptions'>7.6.15 - Predefined Exceptions</a></h4>
+<div class='topic'><!-- START: 7.6.15 - juneau-rest-server.RestMethod.PredefinedExceptions -->
 <p>
 	Exceptions are defined for all standardized HTTP responses.
 	These can be used to trigger HTTP errors simply by throwing an exception.
@@ -14089,12 +14029,12 @@ TODO(7.2.0)
 		<li class='jc'>{@link org.apache.juneau.rest.exception.VariantAlsoNegotiates}
 	</ul>
 </ul>
-</div><!-- END: 7.6.16 - juneau-rest-server.RestMethod.PredefinedExceptions -->
+</div><!-- END: 7.6.15 - juneau-rest-server.RestMethod.PredefinedExceptions -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedHelperBeans' id='juneau-rest-server.RestMethod.PredefinedHelperBeans'>7.6.17 - Predefined Helper Beans</a></h4>
-<div class='topic'><!-- START: 7.6.17 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RestMethod.PredefinedHelperBeans' id='juneau-rest-server.RestMethod.PredefinedHelperBeans'>7.6.16 - Predefined Helper Beans</a></h4>
+<div class='topic'><!-- START: 7.6.16 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
 <p>
 	The {@link org.apache.juneau.rest.helper} package contains several predefined beans to help when constructing
 	REST interfaces.
@@ -14106,7 +14046,6 @@ TODO(7.2.0)
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
-		<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.SeeOtherServletRoot}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
@@ -14205,7 +14144,7 @@ TODO(7.2.0)
 <img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
 
 <h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
-</div><!-- END: 7.6.17 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
+</div><!-- END: 7.6.16 - juneau-rest-server.RestMethod.PredefinedHelperBeans -->
 </div><!-- END: 7.6 - juneau-rest-server.RestMethod -->
 
 <!-- ==================================================================================================== -->
@@ -14413,10 +14352,10 @@ TODO(7.2.0)
 	The annotations used for defining the schema for response HTTP parts are:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody ResponseBody}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
 </ul>
 <p>
 	The sub-annotations used in the annotation above are:
@@ -15498,8 +15437,172 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Response' id='juneau-rest-server.HttpPartAnnotations.Response'>7.9.9 - @Response</a></h4>
-<div class='topic'><!-- START: 7.9.9 - juneau-rest-server.HttpPartAnnotations.Response -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseBody' id='juneau-rest-server.HttpPartAnnotations.ResponseBody'>7.9.9 - @ResponseBody</a></h4>
+<div class='topic'><!-- START: 7.9.9 - juneau-rest-server.HttpPartAnnotations.ResponseBody -->
+<p>
+</p>
+</div><!-- END: 7.9.9 - juneau-rest-server.HttpPartAnnotations.ResponseBody -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader' id='juneau-rest-server.HttpPartAnnotations.ResponseHeader'>7.9.10 - @ResponseHeader</a></h4>
+<div class='topic'><!-- START: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation is applied to parameters and parameter types to denote them as an HTTP response headers.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default()} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_enum() _enum()} - Output validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#$ref() $ref()} - Schema reference.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#code() code()} - HTTP status codes that this header applies to.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#collectionFormat() collectionFormat()} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#example() example()} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum()} - Output validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum()} - Output validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#format() format()} - The schema type format.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#items() items()} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maximum() maximum()} - Output validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxItems() maxItems()} - Output validation.  Maximum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxLength() maxLength()} - Output validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minimum() minimum()} - Output validation.  Minimum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minItems() minItems()} - Output validation.  Minimum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minLength() minLength()} - Output validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#multipleOf() multipleOf()} - Output validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#name() name()} - Header name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#pattern() pattern()} - Output validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#type() type()} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#uniqueItems() uniqueItems()} - Output validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()} - Free-form Swagger JSON.
+	</ul>
+</ul>
+<p>
+	It can be used in the following locations:
+</p>
+<ul>
+	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+</ul>
+<p>
+	This annotation can only be applied to subclasses or parameters of type {@link org.apache.juneau.Value}.
+</p>
+<p>
+	The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
+	on a response:
+</p>
+<p class='bpcode w800'>
+	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(RestResponse res) {
+		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
+		...
+	}
+ 
+	<jc>// Example #2 - Use on parameter.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(
+			<ja>@ResponseHeader</ja>(
+				name=<js>"X-Rate-Limit"</js>,
+				type=<js>"integer"</js>,
+				format=<js>"int32"</js>,
+				description=<js>"Calls per hour allowed by the user."</js>,
+				example=<js>"123"</js>
+			)
+			Value&lt;Integer&gt; rateLimit
+ 	) 
+ 	{
+		rateLimit.set(1000);
+		...
+	}
+
+	<jc>// Example #3 - Use on type.</jc>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(RateLimit rateLimit) {
+		rateLimit.set(1000);
+		...
+	}
+
+	<ja>@ResponseHeader</ja>(
+		name=<js>"X-Rate-Limit"</js>, 
+		type=<js>"integer"</js>, 
+		format=<js>"int32"</js>, 
+		description=<js>"Calls per hour allowed by the user."</js>, 
+		example=<js>"123"</js>
+	)
+	<jk>public class</jk> RateLimit <jk>extends</jk> Value&lt;Integer&gt; {}
+</p>
+
+<h5 class='topic'>Swagger documentation</h5>
+<p>
+	The attributes on this annotation are also used to populate the generated Swagger for the method.
+	<br>For example, in the case of the <code>X-Rate-Limit</code> example above, the following Swagger is generated:
+</p>
+<p class='bpcode w800'>
+	<jok>'/user/login'</jok>: {
+		<jok>get</jok>: {
+			<jok>responses</jok>: {
+				<jok>200</jok>: {
+					<jok>headers</jok>: {
+						<jok>'X-Rate-Limit'</jok>: {
+							<jok>type</jok>: <jov>'integer'</jov>,
+							<jok>format</jok>: <jov>'int32'</jov>,
+							<jok>description</jok>: <jov>'Calls per hour allowed by the user.'</jov>,
+							<jok>example</jok>: <jov>'123'</jov>
+						}
+					}
+				}
+			}
+		}
+	}
+</p>
+</div><!-- END: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.9.11 - @ResponseStatus</a></h4>
+<div class='topic'><!-- START: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation is applied to parameters and parameter 
+	types to denote them as an HTTP response status on server-side REST method parameters.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+</ul>
+<p>
+	It can be used in the following locations:
+</p>
+<ul>
+	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+</ul>
+<p>
+	This can only be applied to parameters of the {@link org.apache.juneau.Value} class with an {@link java.lang.Integer} type.
+	<br>The {@link org.apache.juneau.Value} object is mean to be a place-holder for the set value.
+</p>
+
+<h5 class='section'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Defined on parameter.</jc>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		<ja>@FormData</ja>(<js>"username"</js>) String username, 
+		<ja>@FormData</ja>(<js>"password"</js>) String password,
+		<ja>@ResponseStatus</ja> 
+		Value&lt;Integer&gt; status
+	) 
+	{
+		<jk>if</jk> (! isValid(username, password))
+			status.set(401);
+	}
+</p>
+</div><!-- END: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Response' id='juneau-rest-server.HttpPartAnnotations.Response'>7.9.12 - @Response</a></h4>
+<div class='topic'><!-- START: 7.9.12 - juneau-rest-server.HttpPartAnnotations.Response -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
 </p>
@@ -15762,280 +15865,7 @@ TODO(7.2.0)
 <ul>
 	<li class='link'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a>
 </ul>
-</div><!-- END: 7.9.9 - juneau-rest-server.HttpPartAnnotations.Response -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader' id='juneau-rest-server.HttpPartAnnotations.ResponseHeader'>7.9.10 - @ResponseHeader</a></h4>
-<div class='topic'><!-- START: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
-<p>
-	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation is applied to parameters and parameter types to denote them as an HTTP response headers.
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default()} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_enum() _enum()} - Output validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#$ref() $ref()} - Schema reference.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#code() code()} - HTTP status codes that this header applies to.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#collectionFormat() collectionFormat()} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum()} - Output validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum()} - Output validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#format() format()} - The schema type format.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maximum() maximum()} - Output validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxItems() maxItems()} - Output validation.  Maximum number of items in a collection. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxLength() maxLength()} - Output validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minimum() minimum()} - Output validation.  Minimum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minItems() minItems()} - Output validation.  Minimum number of items in a collection. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minLength() minLength()} - Output validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#multipleOf() multipleOf()} - Output validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#name() name()} - Header name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#pattern() pattern()} - Output validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()} - Override the part serializer.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#uniqueItems() uniqueItems()} - Output validation. Collections must contain unique items only.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()} - Free-form Swagger JSON.
-	</ul>
-</ul>
-<p>
-	It can be used in the following locations:
-</p>
-<ul>
-	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
-</ul>
-<p>
-	This annotation can only be applied to subclasses or parameters of type {@link org.apache.juneau.Value}.
-</p>
-<p>
-	The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
-	on a response:
-</p>
-<p class='bpcode w800'>
-	<jc>// Example #1 - Setting header directly on RestResponse object.</jc>
-	<ja>@RestMethod</ja>(...)
-	<jk>public void</jk> login(RestResponse res) {
-		res.setHeader(<js>"X-Rate-Limit"</js>, 1000);
-		...
-	}
- 
-	<jc>// Example #2 - Use on parameter.</jc>
-	<ja>@RestMethod</ja>(...)
-	<jk>public void</jk> login(
-			<ja>@ResponseHeader</ja>(
-				name=<js>"X-Rate-Limit"</js>,
-				type=<js>"integer"</js>,
-				format=<js>"int32"</js>,
-				description=<js>"Calls per hour allowed by the user."</js>,
-				example=<js>"123"</js>
-			)
-			Value&lt;Integer&gt; rateLimit
- 	) 
- 	{
-		rateLimit.set(1000);
-		...
-	}
-
-	<jc>// Example #3 - Use on type.</jc>
-	<ja>@RestMethod</ja>(...)
-	<jk>public void</jk> login(RateLimit rateLimit) {
-		rateLimit.set(1000);
-		...
-	}
-
-	<ja>@ResponseHeader</ja>(
-		name=<js>"X-Rate-Limit"</js>, 
-		type=<js>"integer"</js>, 
-		format=<js>"int32"</js>, 
-		description=<js>"Calls per hour allowed by the user."</js>, 
-		example=<js>"123"</js>
-	)
-	<jk>public class</jk> RateLimit <jk>extends</jk> Value&lt;Integer&gt; {}
-</p>
-
-<h5 class='topic'>Swagger documentation</h5>
-<p>
-	The attributes on this annotation are also used to populate the generated Swagger for the method.
-	<br>For example, in the case of the <code>X-Rate-Limit</code> example above, the following Swagger is generated:
-</p>
-<p class='bpcode w800'>
-	<jok>'/user/login'</jok>: {
-		<jok>get</jok>: {
-			<jok>responses</jok>: {
-				<jok>200</jok>: {
-					<jok>headers</jok>: {
-						<jok>'X-Rate-Limit'</jok>: {
-							<jok>type</jok>: <jov>'integer'</jov>,
-							<jok>format</jok>: <jov>'int32'</jov>,
-							<jok>description</jok>: <jov>'Calls per hour allowed by the user.'</jov>,
-							<jok>example</jok>: <jov>'123'</jov>
-						}
-					}
-				}
-			}
-		}
-	}
-</p>
-</div><!-- END: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.9.11 - @ResponseStatus</a></h4>
-<div class='topic'><!-- START: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
-<p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation is applied to parameters and parameter 
-	types to denote them as an HTTP response status on server-side REST method parameters.
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Status ResponseStatus}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#code() code()} - The HTTP status of the response.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Status#value() value()} - A synonym for <code>code</code>.
-	</ul>
-</ul>
-<p>
-	It can be used in the following locations:
-</p>
-<ul>
-	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
-</ul>
-<p>
-	This can only be applied to parameters and subclasses of the {@link org.apache.juneau.Value} class with an {@link java.lang.Integer} type.
-	<br>The {@link org.apache.juneau.Value} object is mean to be a place-holder for the set value.
-</p>
-
-<h5 class='section'>Examples:</h5>
-<p class='bpcode w800'>
-	<jc>// Defined on parameter.</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
-	<jk>public void</jk> login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		<ja>@ResponseStatus</ja>(
-			code=401, 
-			description=<js>"Invalid user/pw"</js>
-		) 
-		Value&lt;Integer&gt; status
-	) 
-	{
-		<jk>if</jk> (! isValid(username, password))
-			status.set(401);
-	}
-</p>
-<p class='bpcode w800'>
-	<jc>// Defined on parameter class.</jc>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
-	<jk>public void</jk> login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		LoginStatus status
-	) 
-	{
-		<jk>if</jk> (! isValid(username, password))
-			status.set(401);
-	}
-
-	<ja>@ResponseStatus</ja>(
-		code=401, 
-		description=<js>"Invalid user/pw"</js>
-	)
-	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
-</p>
-
-<p>
-	The attributes on this annotation are used to populate the generated Swagger for the method.
-	<br>In this case, the Swagger is populated with the following:
-</p>
-<p class='bpcode w800'>
-	<jok>'/user/login'</jok>: {
-		<jok>get: {
-			<jok>responses: {
-				<jok>401</jok>: {
-					<jok>description</jok>: <jov>'Invalid user/pw'</jov>
-				}
-			}
-		}
-	}
-</p>
-</div><!-- END: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatuses' id='juneau-rest-server.HttpPartAnnotations.ResponseStatuses'>7.9.12 - @ResponseStatuses</a></h4>
-<div class='topic'><!-- START: 7.9.12 - juneau-rest-server.HttpPartAnnotations.ResponseStatuses -->
-<p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatuses} annotation is used to 
-	associate multiple {@link org.apache.juneau.http.annotation.Status @ResponseStatus} annotations to the same parameter or class.
-</p>
-
-<h5 class='section'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
-	<jk>public void</jk> login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		<ja>@ResponseStatuses=</ja>{
-			<ja>@ResponseStatus</ja>(200)
-			<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
-		}
-		Value&lt;Integer&gt; status
-	) 
-	{
-		<jk>if</jk> (! isValid(username, password))
-			status.set(401);
-		<jk>else</jk>
-			status.set(200);
-	}
-</p>
-
-<p>
-The other option is to apply this annotation to a subclass of {@link org.apache.juneau.Value} which often leads to a cleaner
-REST method:
-</p>
-<p class='bpcode w800'>
-	<ja>@ResponseStatuses=</ja>{
-		<ja>@ResponseStatus</ja>(200)
-		<ja>@ResponseStatus</ja>(code=401, description=<js>"Invalid user/pw"</js>)
-	}
-	<jk>public class</jk> LoginStatus <jk>extends</jk> Value&lt;Integer&gt; {}
-
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
-	<jk>public void</jk> login(
-		<ja>@FormData</ja>(<js>"username"</js>) String username, 
-		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		LoginStatus status
-	) 
-	{
-		<jk>if</jk> (! isValid(username, password))
-			status.set(401);
-		<jk>else</jk>
-			status.set(200);
-	}
-</p>
-<p>
-	The attributes on this annotation are used to populate the generated Swagger for the method.
-	<br>In this case, the Swagger is populated with the following:
-</p>
-<p class='bpcode w800'>
-	<jok>'/user/login'</jok>: {
-		<jok>get: {
-			<jok>responses: {
-				<jok>200</jok>: {
-					<jok>description</jok>: <jov>'OK'</jov>
-				},
-				<jok>401</jok>: {
-					<jok>description</jok>: <jov>'Invalid user/pw'</jov>
-				}
-			}
-		}
-	}
-</p>
-</div><!-- END: 7.9.12 - juneau-rest-server.HttpPartAnnotations.ResponseStatuses -->
+</div><!-- END: 7.9.12 - juneau-rest-server.HttpPartAnnotations.Response -->
 </div><!-- END: 7.9 - juneau-rest-server.HttpPartAnnotations -->
 
 <!-- ==================================================================================================== -->
@@ -21685,8 +21515,6 @@ TODO(7.2.0)
 </p>
 <ul class='spaced-list'>
 	<li>
-		Using the {@link org.apache.juneau.rest.helper.Redirect} object to perform redirections.
-	<li>
 		Using the various Java method parameter annotations to retrieve request attributes, parameters, etc.
 	<li>
 		Using the annotation programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} object.
@@ -21882,8 +21710,6 @@ TODO(7.2.0)
 	<li class='jm'>
 		<l>doExample()</l>
 		<br>The root page. 
-		<br>Performs a simple redirection to the <l>doGetExample1()</l> method using a 
-		{@link org.apache.juneau.rest.helper.Redirect} object.
 	<li class='jm'>
 		<l>example1()</l>
 		<br>Shows how to use the following annotations:
@@ -27268,7 +27094,7 @@ TODO(7.2.0)
 	<li>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer} and {@link org.apache.juneau.urlencoding.UrlEncodingParser} now 
 		represent arrays and collections as key-value pairs where the keys are numbers (e.g. <js>"?0=foo&amp;1=bar"</js>).
 	<li>Various internal improvements to {@link org.apache.juneau.utils.IOPipe}.
-	<li>New {@link org.apache.juneau.internal.ReflectionUtils#getResource(Class,String)} method.
+	<li>New <code><del>ReflectionUtils.getResource(Class,String)</del></code> method.
 	<li>{@link org.apache.juneau.internal.StringUtils#parseNumber(String,Class)} now returns zero for empty strings. 
 		This affects the way most parsers handle blank values.
 </ul>
@@ -30539,7 +30365,6 @@ TODO(7.2.0)
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.Redirect}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.SeeOtherServletRoot}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
 				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
@@ -30701,6 +30526,8 @@ TODO(7.2.0)
 		have changed.
 		<br>If not specified, the values are inferred from the Java method name.
 		<br>See also:<a class="doclink" href="#juneau-rest-server.RestMethod">Overview &gt; juneau-rest-server &gt; @RestMethod</a>
+	<li>
+		<code>RedirectToServletRoot</code> class has been renamed to {@link org.apache.juneau.rest.helper.SeeOtherServletRoot}.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

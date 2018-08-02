@@ -100,7 +100,6 @@ public interface ResponseHandler {
 	 *
 	 * @param req The HTTP servlet request.
 	 * @param res The HTTP servlet response;
-	 * @param output The POJO returned by the REST method that now needs to be sent to the response.
 	 * @return true If this handler handled the response.
 	 * @throws IOException
 	 * 	If low-level exception occurred on output stream.

@@ -19,12 +19,12 @@ import java.lang.annotation.*;
 
 /**
  * REST response status annotation.
- * 
+ *
  * <p>
  * TODO
  *
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.ResponseStatuses">Overview &gt; juneau-rest-server &gt; @ResponseStatuses</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.ResponseStatus">Overview &gt; juneau-rest-server &gt; @ResponseStatus</a>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * </ul>
  */
