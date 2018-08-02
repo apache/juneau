@@ -13,7 +13,6 @@
 package org.apache.juneau.remoteable;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;

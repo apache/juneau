@@ -17,11 +17,13 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
@@ -383,6 +385,7 @@ public class ClassUtilsTest {
 	//====================================================================================================
 	// getSimpleName()
 	//====================================================================================================
+
 	@Test
 	public void getSimpleName() throws Exception {
 		assertEquals("ClassUtilsTest.G1", ClassUtils.getSimpleName(G1.class));
@@ -391,4 +394,58 @@ public class ClassUtilsTest {
 
 	public class G1 {}
 	public static class G2 {}
+
+	//====================================================================================================
+	// getAnnotations()
+	//====================================================================================================
+
+	@Target({PARAMETER,TYPE})
+	@Retention(RUNTIME)
+	public static @interface HI1 {
+		public String value();
+	}
+
+	public static interface HA {
+		public void doX(@HI1("0") HA01 x);
+	}
+
+	@HI1("1") public static class HA01 extends HA02 {}
+	@HI1("2") public static class HA02 implements HA03, HA04 {}
+	@HI1("3") public static interface HA03 {}
+	@HI1("4") public static interface HA04 {}
+
+	@Test
+	public void getAnnotationsOnParameter() throws Exception {
+		ObjectList l = new ObjectList();
+		for (HI1 ia : getAnnotations(HI1.class, HA.class.getMethod("doX", HA01.class), 0)) {
+			l.add(ia.value());
+		}
+		assertEquals("['0','1','2','3','4']", l.toString());
+	}
+
+	@Target({PARAMETER,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface HI2 {
+		public String value();
+	}
+
+	public static interface HB {
+		public void doX(@HI2("0") HB01 x);
+	}
+
+	@HI2("1") public static class HB01 extends HB02 {}
+	@HI2("2") public static class HB02 implements HB03, HB04 {}
+	@HI2("3") public static interface HB03 {}
+	@HI2("4") public static interface HB04 {}
+
+	@Test
+	public void getAnnotationsOnParameterInherited() throws Exception {
+		ObjectList l = new ObjectList();
+		for (HI2 ib : getAnnotations(HI2.class, HB.class.getMethod("doX", HB01.class), 0)) {
+			l.add(ib.value());
+		}
+		assertEquals("['0','1','2','3','4']", l.toString());
+	}
+
 }

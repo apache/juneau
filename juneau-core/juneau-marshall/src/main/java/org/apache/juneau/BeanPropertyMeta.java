@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
@@ -1080,7 +1079,7 @@ public final class BeanPropertyMeta {
 		if (t == null && extraKeys != null)
 			t = getMethodAnnotation(a, extraKeys);
 		if (t == null)
-			t = ReflectionUtils.getAnnotation(a, typeMeta.getInnerClass());
+			t = ClassUtils.getAnnotation(a, typeMeta.getInnerClass());
 		return t;
 	}
 

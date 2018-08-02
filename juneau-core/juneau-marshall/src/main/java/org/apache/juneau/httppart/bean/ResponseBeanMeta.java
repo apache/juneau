@@ -14,7 +14,6 @@ package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

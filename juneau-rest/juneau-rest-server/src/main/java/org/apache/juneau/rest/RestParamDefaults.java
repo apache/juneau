@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ReflectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.rest.RestParamType.*;
 

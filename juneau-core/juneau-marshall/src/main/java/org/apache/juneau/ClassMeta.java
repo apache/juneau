@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

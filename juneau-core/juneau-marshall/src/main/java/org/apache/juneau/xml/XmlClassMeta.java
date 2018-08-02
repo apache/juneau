@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.ReflectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -41,7 +41,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 		super(cm);
 		Class<?> c = getInnerClass();
 		this.namespace = findNamespace(c);
-		this.xml = ReflectionUtils.getAnnotation(Xml.class, c);
+		this.xml = ClassUtils.getAnnotation(Xml.class, c);
 		if (xml != null) {
 			this.format = xml.format();
 			this.childName = nullIfEmpty(xml.childName());

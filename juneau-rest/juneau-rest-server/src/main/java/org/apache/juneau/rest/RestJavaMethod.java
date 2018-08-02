@@ -410,7 +410,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				methodParams = context.findParams(method, pathPattern, false);
 
-				if (ReflectionUtils.hasAnnotation(ResponseBody.class, method)) {
+				if (hasAnnotation(ResponseBody.class, method)) {
 					HttpPartSchema s = HttpPartSchema.create(ResponseBody.class, method);
 					returnBodyMeta = new ResponsePartMeta(HttpPartType.BODY, s, createPartSerializer(s.getSerializer(), serializers.getPropertyStore(), partSerializer));
 				}

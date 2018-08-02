@@ -37,14 +37,14 @@ public class RdfClassMeta extends ClassMetaExtended {
 	public RdfClassMeta(ClassMeta<?> cm) {
 		super(cm);
 		Class<?> c = getInnerClass();
-		this.rdf = ReflectionUtils.getAnnotation(Rdf.class, c);
+		this.rdf = ClassUtils.getAnnotation(Rdf.class, c);
 		if (rdf != null) {
 			collectionFormat = rdf.collectionFormat();
 		} else {
 			collectionFormat = RdfCollectionFormat.DEFAULT;
 		}
-		List<Rdf> rdfs = ReflectionUtils.getAnnotations(Rdf.class, c);
-		List<RdfSchema> schemas = ReflectionUtils.getAnnotations(RdfSchema.class, c);
+		List<Rdf> rdfs = ClassUtils.getAnnotations(Rdf.class, c);
+		List<RdfSchema> schemas = ClassUtils.getAnnotations(RdfSchema.class, c);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
 

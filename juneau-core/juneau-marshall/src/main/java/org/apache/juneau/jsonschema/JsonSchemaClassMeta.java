@@ -37,7 +37,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	 */
 	public JsonSchemaClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.jsonSchema = ReflectionUtils.getAnnotation(JsonSchema.class, getInnerClass());
+		this.jsonSchema = ClassUtils.getAnnotation(JsonSchema.class, getInnerClass());
 		if (jsonSchema != null) {
 			type = nullIfEmpty(jsonSchema.type());
 			format = nullIfEmpty(jsonSchema.format());

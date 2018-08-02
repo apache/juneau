@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ReflectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.remoteable.ReturnValue.*;

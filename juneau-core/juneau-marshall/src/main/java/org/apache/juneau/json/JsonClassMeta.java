@@ -34,7 +34,7 @@ public class JsonClassMeta extends ClassMetaExtended {
 	 */
 	public JsonClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.json = ReflectionUtils.getAnnotation(Json.class, getInnerClass());
+		this.json = ClassUtils.getAnnotation(Json.class, getInnerClass());
 		if (json != null) {
 			wrapperAttr = nullIfEmpty(json.wrapperAttr());
 		} else {

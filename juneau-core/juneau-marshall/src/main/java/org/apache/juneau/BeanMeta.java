@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ReflectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 

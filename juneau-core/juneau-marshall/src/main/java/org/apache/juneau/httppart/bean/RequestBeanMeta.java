@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.internal.ReflectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
