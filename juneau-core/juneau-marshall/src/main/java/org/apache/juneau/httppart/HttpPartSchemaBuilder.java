@@ -45,7 +45,6 @@ public class HttpPartSchemaBuilder {
 	Map<String,HttpPartSchemaBuilder> properties;
 	HttpPartSchemaBuilder items, additionalProperties;
 	boolean noValidate;
-	ObjectMap api = new ObjectMap();
 	Class<? extends HttpPartParser> parser;
 	Class<? extends HttpPartSerializer> serializer;
 
@@ -125,7 +124,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Body a) {
-		api = AnnotationUtils.merge(api, a);
 		required(a.required());
 		allowEmptyValue(! a.required());
 		serializer(a.partSerializer());
@@ -137,7 +135,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(ResponseBody a) {
-		api = AnnotationUtils.merge(api, a);
 		serializer(a.partSerializer());
 		usePartSerializer(a.usePartSerializer() || a.partSerializer() != HttpPartSerializer.Null.class);
 		apply(a.schema());
@@ -145,7 +142,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Header a) {
-		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
 		required(a.required());
@@ -174,7 +170,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(ResponseHeader a) {
-		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
 		codes(a.code());
@@ -201,7 +196,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(FormData a) {
-		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
 		required(a.required());
@@ -230,7 +224,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Query a) {
-		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
 		required(a.required());
@@ -259,7 +252,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Path a) {
-		api = AnnotationUtils.merge(api, a);
 		name(a.value());
 		name(a.name());
 		type(a.type());
@@ -287,7 +279,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Response a) {
-		api = AnnotationUtils.merge(api, a);
 		codes(a.value());
 		codes(a.code());
 		required(false);
@@ -299,7 +290,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Items a) {
-		api = AnnotationUtils.merge(api, a);
 		type(a.type());
 		format(a.format());
 		items(a.items());
@@ -321,7 +311,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(SubItems a) {
-		api = AnnotationUtils.merge(api, a);
 		type(a.type());
 		format(a.format());
 		items(HttpPartSchema.toObjectMap(a.items()));
@@ -343,7 +332,6 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder apply(Schema a) {
-		api = AnnotationUtils.merge(api, a);
 		type(a.type());
 		format(a.format());
 		items(a.items());
@@ -759,26 +747,20 @@ public class HttpPartSchemaBuilder {
 	}
 
 	HttpPartSchemaBuilder items(ObjectMap value) {
-		if (value != null && ! value.isEmpty()) {
+		if (value != null && ! value.isEmpty())
 			items = HttpPartSchema.create().apply(value);
-			api.put("items", value);
-		}
 		return this;
 	}
 
 	HttpPartSchemaBuilder items(Items value) {
-		if (! AnnotationUtils.empty(value)) {
+		if (! AnnotationUtils.empty(value))
 			items = HttpPartSchema.create().apply(value);
-			api.put("items", items.api);
-		}
 		return this;
 	}
 
 	HttpPartSchemaBuilder items(SubItems value) {
-		if (! AnnotationUtils.empty(value)) {
+		if (! AnnotationUtils.empty(value))
 			items = HttpPartSchema.create().apply(value);
-			api.put("items", items.api);
-		}
 		return this;
 	}
 

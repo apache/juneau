@@ -51,7 +51,6 @@ public class HttpPartSchemaTest_Body {
 	public void a02_basic_onClass() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A02.class).noValidate().build();
 		assertTrue(s.isRequired());
-		assertObjectEquals("{description:'b1\\nb2',example:'f1',required:true,schema:{'$ref':'c1'},_value:'{g1:true}','$ref':'c1'}", s.getApi());
 	}
 
 	public static class A03 {
@@ -72,7 +71,6 @@ public class HttpPartSchemaTest_Body {
 	public void a03_basic_onParameter() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A03.class.getMethod("a", String.class), 0).noValidate().build();
 		assertTrue(s.isRequired());
-		assertObjectEquals("{description:'b1\\nb2',example:'f1',required:true,schema:{'$ref':'c1'},_value:'{g1:true}','$ref':'c1'}", s.getApi());
 	}
 
 	public static class A04 {
@@ -93,7 +91,6 @@ public class HttpPartSchemaTest_Body {
 	public void a04_basic_onParameterAndClass() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, A04.class.getMethod("a", A02.class), 0).noValidate().build();
 		assertTrue(s.isRequired());
-		assertObjectEquals("{description:'b3\\nb3',example:'f2',required:true,schema:{'$ref':'c3'},_value:'{g2:true}','$ref':'c3'}", s.getApi());
 	}
 
 	@Body(
@@ -248,11 +245,6 @@ public class HttpPartSchemaTest_Body {
 		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e7','e8']", items.getEnum());
 		assertEquals("c7\nc8", items.getDefault());
-
-		assertObjectEquals(
-			"{schema:{'default':'c1\\nc2','enum':['e1','e2'],exclusiveMaximum:true,exclusiveMinimum:true,format:'int32',items:{collectionFormat:'ssv','default':'c3\\nc4','enum':['e3','e4'],format:'int64',items:{collectionFormat:'tsv','default':'c5\\nc6','enum':['e5','e6'],exclusiveMaximum:true,exclusiveMinimum:true,format:'float',items:{type:'array',format:'double',collectionFormat:'pipes',maximum:'13',minimum:'14',multipleOf:'15',pattern:'16',maxLength:13,minLength:14,maxItems:15,minItems:16,exclusiveMaximum:false,exclusiveMinimum:false,uniqueItems:false,'default':'c7\\nc8','enum':['e7','e8']},maximum:'9',maxItems:11,maxLength:9,minimum:'10',minItems:12,minLength:10,multipleOf:'11',pattern:'12',type:'string',uniqueItems:true},maximum:'5',maxItems:7,maxLength:5,minimum:'6',minItems:8,minLength:6,multipleOf:'7',pattern:'8',type:'integer'},maximum:'1',maxItems:3,maxLength:1,maxProperties:5,minimum:'2',minItems:4,minLength:2,minProperties:6,multipleOf:'3',pattern:'4',type:'number',uniqueItems:true},'default':'c1\\nc2','enum':['e1','e2'],exclusiveMaximum:true,exclusiveMinimum:true,format:'int32',items:{collectionFormat:'ssv','default':'c3\\nc4','enum':['e3','e4'],format:'int64',items:{collectionFormat:'tsv','default':'c5\\nc6','enum':['e5','e6'],exclusiveMaximum:true,exclusiveMinimum:true,format:'float',items:{type:'array',format:'double',collectionFormat:'pipes',maximum:'13',minimum:'14',multipleOf:'15',pattern:'16',maxLength:13,minLength:14,maxItems:15,minItems:16,exclusiveMaximum:false,exclusiveMinimum:false,uniqueItems:false,'default':'c7\\nc8','enum':['e7','e8']},maximum:'9',maxItems:11,maxLength:9,minimum:'10',minItems:12,minLength:10,multipleOf:'11',pattern:'12',type:'string',uniqueItems:true},maximum:'5',maxItems:7,maxLength:5,minimum:'6',minItems:8,minLength:6,multipleOf:'7',pattern:'8',type:'integer'},maximum:'1',maxItems:3,maxLength:1,maxProperties:5,minimum:'2',minItems:4,minLength:2,minProperties:6,multipleOf:'3',pattern:'4',type:'number',uniqueItems:true}",
-			s.getApi()
-		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

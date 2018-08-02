@@ -45,7 +45,6 @@ public class HttpPartSchemaTest_Query {
 	public void a01_value() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Query.class, A01.class).build();
 		assertEquals("x", s.getName());
-		assertObjectEquals("{}", s.getApi());
 	}
 
 	@Query(
@@ -97,7 +96,6 @@ public class HttpPartSchemaTest_Query {
 		assertTrue(s.isSkipIfEmpty());
 		assertObjectEquals("['e1','e2','e3']", s.getEnum());
 		assertEquals("c1\nc2", s.getDefault());
-		assertObjectEquals("{collectionFormat:'csv','default':'c1\\nc2',description:'b1\\nb2','enum':['e1','e2','e3'],example:'f1',exclusiveMaximum:true,exclusiveMinimum:true,format:'int32',items:{'$ref':'d1'},maximum:'1',maxItems:3,maxLength:1,minimum:'2',minItems:4,minLength:2,multipleOf:'3',pattern:'4',required:true,type:'number',uniqueItems:true,_value:'{g1:true}'}", s.getApi());
 	}
 
 	public static class A03 {
@@ -154,7 +152,6 @@ public class HttpPartSchemaTest_Query {
 		assertTrue(s.isSkipIfEmpty());
 		assertObjectEquals("['e1','e2','e3']", s.getEnum());
 		assertEquals("c1\nc2", s.getDefault());
-		assertObjectEquals("{collectionFormat:'csv','default':'c1\\nc2',description:'b1\\nb2','enum':['e1','e2','e3'],example:'f1',exclusiveMaximum:true,exclusiveMinimum:true,format:'int32',items:{'$ref':'d1'},maximum:'1',maxItems:3,maxLength:1,minimum:'2',minItems:4,minLength:2,multipleOf:'3',pattern:'4',required:true,type:'number',uniqueItems:true,_value:'{g1:true}'}", s.getApi());
 	}
 
 	public static class A04 {
@@ -211,7 +208,6 @@ public class HttpPartSchemaTest_Query {
 		assertFalse(s.isSkipIfEmpty());
 		assertObjectEquals("['e4','e5','e6']", s.getEnum());
 		assertEquals("c3\nc4", s.getDefault());
-		assertObjectEquals("{collectionFormat:'ssv','default':'c3\\nc4',description:'b3\\nb3','enum':['e4','e5','e6'],example:'f2',format:'int64',items:{'$ref':'d2'},maximum:'5',maxItems:7,maxLength:5,minimum:'6',minItems:8,minLength:6,multipleOf:'7',pattern:'8',type:'integer',_value:'{g2:true}'}", s.getApi());
 	}
 
 	@Query(
@@ -367,11 +363,6 @@ public class HttpPartSchemaTest_Query {
 		assertFalse(items.isUniqueItems());
 		assertObjectEquals("['e7','e8']", items.getEnum());
 		assertEquals("c7\nc8", items.getDefault());
-
-		assertObjectEquals(
-			"{items:{collectionFormat:'csv','default':'c1\\nc2','enum':['e1','e2'],format:'int32',exclusiveMaximum:true,exclusiveMinimum:true,items:{collectionFormat:'ssv','default':'c3\\nc4','enum':['e3','e4'],format:'int64',items:{type:'string',format:'float',collectionFormat:'tsv',maximum:'9',minimum:'10',multipleOf:'11',pattern:'12',maxLength:9,minLength:10,maxItems:11,minItems:12,exclusiveMaximum:true,exclusiveMinimum:true,uniqueItems:true,'default':'c5\\nc6','enum':['e5','e6'],items:{type:'array',format:'double',collectionFormat:'pipes',maximum:'13',minimum:'14',multipleOf:'15',pattern:'16',maxLength:13,minLength:14,maxItems:15,minItems:16,exclusiveMaximum:false,exclusiveMinimum:false,uniqueItems:false,'default':'c7\\nc8','enum':['e7','e8']}},maximum:'5',maxItems:7,maxLength:5,minimum:'6',minItems:8,minLength:6,multipleOf:'7',pattern:'8',type:'integer'},maximum:'1',maxItems:3,maxLength:1,minimum:'2',minItems:4,minLength:2,multipleOf:'3',pattern:'4',uniqueItems:true,type:'number'}}",
-			s.getApi()
-		);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

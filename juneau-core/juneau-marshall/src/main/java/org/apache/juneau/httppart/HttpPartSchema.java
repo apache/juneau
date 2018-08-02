@@ -73,8 +73,6 @@ public class HttpPartSchema {
 	final Class<? extends HttpPartSerializer> serializer;
 	final ClassMeta<?> parsedType;
 
-	final ObjectMap api;
-
 	/**
 	 * Instantiates a new builder for this object.
 	 *
@@ -205,67 +203,6 @@ public class HttpPartSchema {
 	}
 
 	/**
-	 * Utility method for creating response maps from a schema.
-	 *
-	 * <p>
-	 * Given the valid response codes for this particular schema (from the {@link #getCodes()} method, this will
-	 * return a map with response-code keys and values that are the api of the passed-in schema.
-	 * <br>
-	 * The purpose of this method is to easily construct response sections in generated Swagger JSON documents.
-	 *
-	 * <p>
-	 * Only valid for the following types of
-	 * <ul>
-	 * 		<li>{@link Response}
-	 * 		<li>{@link ResponseHeader}
-	 * </ul>
-	 * For
-	 *
-	 * @param s
-	 * 	The schema to create a map from.
-	 * 	<br>Only valid for the following types of schemas:
-	 * 	<ul>
-	 * 		<li>{@link Response}
-	 * 		<li>{@link ResponseHeader}
-	 * 	</ul>
-	 * @param def
-	 * 	The default response code if no codes were specified in the schema.
-	 * @return The schema response map.
-	 */
-	public static ObjectMap getApiCodeMap(HttpPartSchema s, Integer def) {
-		ObjectMap om = new ObjectMap();
-		for (Integer c : s.getCodes(def))
-			om.getObjectMap(String.valueOf(c), true).appendAll(s.getApi());
-		return om;
-	}
-
-	/**
-	 * Utility method for creating response maps from multiple schemas.
-	 *
-	 * <p>
-	 * Same as {@link #getApiCodeMap(HttpPartSchema, Integer)} except combines the maps from multiple schemas.
-	 *
-	 * @param ss
-	 * 	The schemas to create a map from.
-	 * 	<br>Only valid for the following types of schemas:
-	 * 	<ul>
-	 * 		<li>{@link Response}
-	 * 		<li>{@link ResponseHeader}
-	 * 	</ul>
-	 * @param def
-	 * 	The default response code if no codes were specified in the schema.
-	 * @return The schema response map.
-	 */
-	public static ObjectMap getApiCodeMap(HttpPartSchema[] ss, Integer def) {
-		ObjectMap om = new ObjectMap();
-		for (HttpPartSchema s : ss)
-			for (Integer c : s.getCodes(def))
-				om.getObjectMap(String.valueOf(c), true).appendAll(s.getApi());
-		return om;
-	}
-
-
-	/**
 	 * Finds the schema information on the specified annotation.
 	 *
 	 * @param a
@@ -305,7 +242,6 @@ public class HttpPartSchema {
 		this.minItems = b.minItems;
 		this.minLength = b.minLength;
 		this.minProperties = b.minProperties;
-		this.api = b.api.unmodifiable();
 		this.parser = b.parser;
 		this.serializer = b.serializer;
 
@@ -1067,16 +1003,6 @@ public class HttpPartSchema {
 	 */
 	public Class<? extends HttpPartSerializer> getSerializer() {
 		return serializer;
-	}
-
-
-	/**
-	 * Returns the Swagger documentation for this schema.
-	 *
-	 * @return The Swagger documentation for this schema as an unmodifiable {@link ObjectMap}.
-	 */
-	public ObjectMap getApi() {
-		return api;
 	}
 
 	/**
