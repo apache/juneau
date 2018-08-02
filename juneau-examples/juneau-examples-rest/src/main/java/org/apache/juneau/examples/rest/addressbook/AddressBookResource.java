@@ -31,7 +31,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.response.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -225,9 +225,9 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/people",
 		guards=AdminGuard.class
 	)
-	public Redirect createPerson(@Body CreatePerson cp) throws Exception {
+	public SeeOther createPerson(@Body CreatePerson cp) throws Exception {
 		Person p = addressBook.createPerson(cp);
-		return new Redirect("people/{0}", p.id);
+		return new SeeOther("people/{0}", p.id);
 	}
 
 	/**
@@ -237,10 +237,10 @@ public class AddressBookResource extends BasicRestServletJena {
 	@RestMethod(name=POST, path="/people/{id}/addresses",
 		guards=AdminGuard.class
 	)
-	public Redirect createAddress(@Path("id") int id, @Body CreateAddress ca) throws Exception {
+	public SeeOther createAddress(@Path("id") int id, @Body CreateAddress ca) throws Exception {
 		Person p = findPerson(id);
 		Address a = p.createAddress(ca);
-		return new Redirect("addresses/{0}", a.id);
+		return new SeeOther("addresses/{0}", a.id);
 	}
 
 	/**

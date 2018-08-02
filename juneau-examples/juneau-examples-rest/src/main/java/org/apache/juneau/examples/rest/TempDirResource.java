@@ -112,7 +112,7 @@ public class TempDirResource extends DirectoryResource {
 		},
 		matchers=TempDirResource.MultipartFormDataMatcher.class
 	)
-	public RedirectToServletRoot postUpload(RestRequest req) throws Exception {
+	public SeeOtherServletRoot postUpload(RestRequest req) throws Exception {
 		ServletFileUpload upload = new ServletFileUpload();
 		FileItemIterator iter = upload.getItemIterator(req);
 		while (iter.hasNext()) {
@@ -124,7 +124,7 @@ public class TempDirResource extends DirectoryResource {
 				}
 			}
 		}
-		return RedirectToServletRoot.INSTANCE;
+		return SeeOtherServletRoot.INSTANCE;
 	}
 
 	/** Causes a 404 if POST isn't multipart/form-data */

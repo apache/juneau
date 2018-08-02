@@ -2154,7 +2154,6 @@ public final class RestContext extends BeanContext {
 	 * 	<li class='jc'>{@link WritableHandler} - {@link Writable} objects.
 	 * 	<li class='jc'>{@link ReaderHandler} - {@link Reader} objects.
 	 * 	<li class='jc'>{@link InputStreamHandler} - {@link InputStream} objects.
-	 * 	<li class='jc'>{@link RedirectHandler} - {@link Redirect} objects.
 	 * 	<li class='jc'>{@link ZipFileListResponseHandler} - {@link ZipFileList} objects.
 	 * 	<li class='jc'>{@link DefaultHandler} - All other POJOs.
 	 * </ul>

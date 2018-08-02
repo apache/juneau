@@ -12,23 +12,26 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.helper;
 
+import java.net.*;
+
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.rest.response.*;
 
 /**
- * Convenience subclass of {@link Redirect} for redirecting a response to the servlet root.
+ * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
  */
 @Response(description="Redirect to servlet root")
-public class RedirectToServletRoot extends Redirect {
+public class SeeOtherServletRoot extends SeeOther {
 
 	/**
 	 * Reusable instance.
 	 */
-	public static final RedirectToServletRoot INSTANCE = new RedirectToServletRoot();
+	public static final SeeOtherServletRoot INSTANCE = new SeeOtherServletRoot();
 
 	/**
 	 * Constructor.
 	 */
-	public RedirectToServletRoot() {
-		super("servlet:/");
+	public SeeOtherServletRoot() {
+		super(URI.create("servlet:/"));
 	}
 }

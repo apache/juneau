@@ -18,7 +18,6 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.reshandlers.*;
 
 /**
@@ -47,8 +46,6 @@ import org.apache.juneau.rest.reshandlers.*;
  * 	<li class='jc'>
  * 		{@link InputStreamHandler} - Pipes the output of {@link InputStream InputStreams} to the response output
  * 		stream ({@link RestResponse#getOutputStream()}).
- * 	<li class='jc'>
- * 		{@link RedirectHandler} - Handles {@link Redirect} objects.
  * 	<li class='jc'>
  * 		{@link WritableHandler} - Handles {@link Writable} objects.
  * 	<li class='jc'>

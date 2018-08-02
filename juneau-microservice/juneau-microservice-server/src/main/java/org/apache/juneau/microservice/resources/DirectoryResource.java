@@ -218,7 +218,7 @@ public class DirectoryResource extends BasicRestServlet {
 	}
 
 	@Response(description="Redirect to root page on success")
-	static class RedirectToRoot extends RedirectToServletRoot {}
+	static class RedirectToRoot extends SeeOtherServletRoot {}
 
 	@Response(description="File action")
 	public static class Action extends LinkString {

@@ -244,7 +244,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				WritableHandler.class,
 				ReaderHandler.class,
 				InputStreamHandler.class,
-				RedirectHandler.class,
 				DefaultHandler.class
 			);
 

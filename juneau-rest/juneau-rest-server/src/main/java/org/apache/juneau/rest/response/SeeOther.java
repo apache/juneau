@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.net.*;
+import java.text.*;
 
 import org.apache.juneau.http.annotation.*;
 
@@ -40,6 +43,7 @@ public class SeeOther extends HttpResponse {
 
 	/**
 	 * Constructor using custom message.
+	 *
 	 * @param message Message to send as the response.
 	 * @param location <code>Location</code> header value.
 	 */
@@ -50,10 +54,32 @@ public class SeeOther extends HttpResponse {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param message Message to send as the response.
+	 * @param uri URI containing {@link MessageFormat}-style arguments.
+	 * @param uriArgs {@link MessageFormat}-style arguments.
+	 */
+	public SeeOther(String message, String uri, Object uriArgs) {
+		this(message, toURI(format(uri.toString(), uriArgs)));
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param location <code>Location</code> header value.
 	 */
 	public SeeOther(URI location) {
 		this("See Other", location);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param uri URI containing {@link MessageFormat}-style arguments.
+	 * @param uriArgs {@link MessageFormat}-style arguments.
+	 */
+	public SeeOther(String uri, Object uriArgs) {
+		this(toURI(format(uri.toString(), uriArgs)));
 	}
 
 	/**
