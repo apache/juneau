@@ -118,13 +118,13 @@ public class SwaggerGenerator {
 			sInfo.appendSkipEmpty("title",
 				firstNonEmpty(
 					sInfo.getString("title"),
-					resolve(vr, rr.title())
+					resolve(rr.title())
 				)
 			);
 			sInfo.appendSkipEmpty("description",
 				firstNonEmpty(
 					sInfo.getString("description"),
-					resolve(vr, rr.description())
+					resolve(rr.description())
 				)
 			);
 
@@ -134,10 +134,10 @@ public class SwaggerGenerator {
 
 			if (! empty(r)) {
 				ObjectMap info = omSwagger.getObjectMap("info", true);
-				info.appendSkipEmpty("title", resolve(vr, r.title()));
-				info.appendSkipEmpty("description", resolve(vr, r.description()));
-				info.appendSkipEmpty("version", resolve(vr, r.version()));
-				info.appendSkipEmpty("termsOfService", resolve(vr, r.termsOfService()));
+				info.appendSkipEmpty("title", resolve(r.title()));
+				info.appendSkipEmpty("description", resolve(r.description()));
+				info.appendSkipEmpty("version", resolve(r.version()));
+				info.appendSkipEmpty("termsOfService", resolve(r.termsOfService()));
 				info.appendSkipEmpty("contact",
 					merge(
 						info.getObjectMap("contact"),
@@ -169,10 +169,10 @@ public class SwaggerGenerator {
 		omSwagger.appendSkipEmpty("externalDocs", parseMap(vr, mb.findFirstString(locale, "externalDocs"), "Messages/externalDocs on class {0}", c));
 
 		ObjectMap info = omSwagger.getObjectMap("info", true);
-		info.appendSkipEmpty("title", resolve(vr, mb.findFirstString(locale, "title")));
-		info.appendSkipEmpty("description", resolve(vr, mb.findFirstString(locale, "description")));
-		info.appendSkipEmpty("version", resolve(vr, mb.findFirstString(locale, "version")));
-		info.appendSkipEmpty("termsOfService", resolve(vr, mb.findFirstString(locale, "termsOfService")));
+		info.appendSkipEmpty("title", resolve(mb.findFirstString(locale, "title")));
+		info.appendSkipEmpty("description", resolve(mb.findFirstString(locale, "description")));
+		info.appendSkipEmpty("version", resolve(mb.findFirstString(locale, "version")));
+		info.appendSkipEmpty("termsOfService", resolve(mb.findFirstString(locale, "termsOfService")));
 		info.appendSkipEmpty("contact", parseMap(vr, mb.findFirstString(locale, "contact"), "Messages/contact on class {0}", c));
 		info.appendSkipEmpty("license", parseMap(vr, mb.findFirstString(locale, "license"), "Messages/license on class {0}", c));
 		if (info.isEmpty())
@@ -234,30 +234,30 @@ public class SwaggerGenerator {
 			op.appendAll(parseMap(vr, ms.value(), "@MethodSwagger(value) on class {0} method {1}", c, m));
 			op.appendSkipEmpty("operationId",
 				firstNonEmpty(
-					resolve(vr, ms.operationId()),
+					resolve(ms.operationId()),
 					op.getString("operationId"),
 					mn
 				)
 			);
 			op.appendSkipEmpty("summary",
 				firstNonEmpty(
-					resolve(vr, ms.summary()),
-					resolve(vr, mb.findFirstString(locale, mn + ".summary")),
+					resolve(ms.summary()),
+					resolve(mb.findFirstString(locale, mn + ".summary")),
 					op.getString("summary"),
-					resolve(vr, rm.summary())
+					resolve(rm.summary())
 				)
 			);
 			op.appendSkipEmpty("description",
 				firstNonEmpty(
-					resolve(vr, ms.description()),
-					resolve(vr, mb.findFirstString(locale, mn + ".description")),
+					resolve(ms.description()),
+					resolve(mb.findFirstString(locale, mn + ".description")),
 					op.getString("description"),
-					resolve(vr, rm.description())
+					resolve(rm.description())
 				)
 			);
 			op.appendSkipEmpty("deprecated",
 				firstNonEmpty(
-					resolve(vr, ms.deprecated()),
+					resolve(ms.deprecated()),
 					(m.getAnnotation(Deprecated.class) != null || m.getDeclaringClass().getAnnotation(Deprecated.class) != null) ? "true" : null
 				)
 			);
@@ -537,16 +537,16 @@ public class SwaggerGenerator {
 		return ol2;
 	}
 
-	private static String resolve(VarResolverSession vs, String[] ss) {
+	private String resolve(String[] ss) {
 		if (ss.length == 0)
 			return null;
-		return resolve(vs, joinnl(ss));
+		return resolve(joinnl(ss));
 	}
 
-	private static String resolve(VarResolverSession vs, String s) {
+	private String resolve(String s) {
 		if (s == null)
 			return null;
-		return vs.resolve(s.trim());
+		return vr.resolve(s.trim());
 	}
 
 	private ObjectMap parseMap(VarResolverSession vs, String[] o, String location, Object...args) throws ParseException {
@@ -825,7 +825,7 @@ public class SwaggerGenerator {
 		return om.modifiable();
 	}
 
-	private static ObjectMap merge(ObjectMap om, Body a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, Body a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
@@ -834,15 +834,15 @@ public class SwaggerGenerator {
 		if (a.api().length > 0)
 			om.putAll(parseMap(vr, a.api()));
 		return om
-			.appendSkipEmpty("description", resolve(vr, a.description()))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("description", resolve(a.description()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipEmpty("x-examples", parseMap(vr, a.examples()))
 			.appendSkipFalse("required", a.required())
 			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr))
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Query a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, Query a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
@@ -852,9 +852,9 @@ public class SwaggerGenerator {
 			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("default", joinnl(a._default()))
-			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("enum", toSet(a._enum(), vr))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("format", a.format())
@@ -873,7 +873,7 @@ public class SwaggerGenerator {
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, FormData a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, FormData a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
@@ -883,9 +883,9 @@ public class SwaggerGenerator {
 			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("default", joinnl(a._default()))
-			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("enum", toSet(a._enum(), vr))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("format", a.format())
@@ -904,7 +904,7 @@ public class SwaggerGenerator {
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Header a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, Header a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
@@ -913,9 +913,9 @@ public class SwaggerGenerator {
 		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("default", joinnl(a._default()))
-			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("enum", toSet(a._enum(), vr))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("format", a.format())
@@ -934,7 +934,7 @@ public class SwaggerGenerator {
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Path a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, Path a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
@@ -942,9 +942,9 @@ public class SwaggerGenerator {
 			om.putAll(parseMap(vr, a.api()));
 		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
-			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("enum", toSet(a._enum(), vr))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("format", a.format())
@@ -959,7 +959,7 @@ public class SwaggerGenerator {
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Schema a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, Schema a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
@@ -971,9 +971,9 @@ public class SwaggerGenerator {
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("default", joinnl(a._default()))
 			.appendSkipEmpty("discriminator", a.discriminator())
-			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("enum", toSet(a._enum(), vr))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipEmpty("examples", parseMap(vr, a.examples()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
@@ -1002,14 +1002,14 @@ public class SwaggerGenerator {
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, ExternalDocs a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, ExternalDocs a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
 		if (a.value().length > 0)
 			om.putAll(parseMap(vr, a.value()));
 		return om
-			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("url", a.url())
 		;
 	}
@@ -1070,35 +1070,35 @@ public class SwaggerGenerator {
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, ResponseBody a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, ResponseBody a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(vr, a.api()));
 		return om
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipEmpty("examples", joinnl(a.examples()))
 			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr))
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Response a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, Response a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
 		if (a.api().length > 0)
 			om.putAll(parseMap(vr, a.api()));
 		return om
-			.appendSkipEmpty("description", resolve(vr, a.description()))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("description", resolve(a.description()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipEmpty("examples", parseMap(vr, a.examples()))
 			.appendSkipEmpty("headers", merge(om.getObjectMap("headers"), a.headers(), vr))
 			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr))
 		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, ResponseHeader[] a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, ResponseHeader[] a, VarResolverSession vr) throws ParseException {
 		if (a.length == 0)
 			return om;
 		om = newMap(om);
@@ -1111,7 +1111,7 @@ public class SwaggerGenerator {
 		return om;
 	}
 
-	private static ObjectMap merge(ObjectMap om, ResponseHeader a, VarResolverSession vr) throws ParseException {
+	private ObjectMap merge(ObjectMap om, ResponseHeader a, VarResolverSession vr) throws ParseException {
 		if (empty(a))
 			return om;
 		om = newMap(om);
@@ -1120,9 +1120,9 @@ public class SwaggerGenerator {
 		return om
 			.appendSkipEmpty("collectionFormat", a.collectionFormat())
 			.appendSkipEmpty("default", joinnl(a._default()))
-			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("description", resolve(a.description()))
 			.appendSkipEmpty("enum", toSet(a._enum(), vr))
-			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-example", resolve(a.example()))
 			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
 			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
 			.appendSkipEmpty("format", a.format())
