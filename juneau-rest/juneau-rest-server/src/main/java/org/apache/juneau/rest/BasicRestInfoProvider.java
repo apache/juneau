@@ -491,28 +491,16 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					}
 
 				} else if (in == RESPONSE) {
-					HttpPartSchema schema = HttpPartSchema.create(Response.class, mp.method, mp.index);
-					ObjectMap pi = HttpPartSchema.getApiCodeMap(schema, 200);
-					pi = resolve(vr, pi, "@Response on class {0} method {1}", c, m);
-					for (String code : pi.keySet()) {
-						ObjectMap pi2 = pi.getObjectMap(code, true);
-
-						ObjectMap response = responses.getObjectMap(code, true);
-
-						response.appendSkipEmpty("description", resolve(vr, pi2.getString("description")));
-						response.appendSkipEmpty("schema", parseMap(vr, pi2.get("schema"), "@Response/schema on class {0} method {1}", c, m));
-						response.appendSkipEmpty("headers", parseMap(vr, pi2.get("headers"), "@Response/headers on class {0} method {1}", c, m));
-						response.appendSkipEmpty("x-example", resolve(vr, pi2.getString("example")));
-						response.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@Response/examples on class {0} method {1}", c, m));
-
-						Type type = mp.getType();
-						if (type instanceof ParameterizedType) {
-							ParameterizedType pt = (ParameterizedType)type;
-							if (pt.getRawType().equals(Value.class))
-								type = pt.getActualTypeArguments()[0];
+					for (Response a : getAnnotationsParentFirst(Response.class, mp.method, mp.index)) {
+						for (Integer code : getCodes(a, 200)) {
+							ObjectMap response = responses.getObjectMap(String.valueOf(code), true);
+							merge(response, a, vr);
+							if (! response.containsKey("schema")) {
+								Type type = Value.getParameterType(mp.type);
+								if (type != null)
+									response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
+							}
 						}
-
-						response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
 					}
 
 				} else if (in == RESPONSE_BODY) {

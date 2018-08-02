@@ -601,7 +601,7 @@ public class ResponseAnnotationTest {
 		ResponseInfo x = getSwagger(new SA()).getPaths().get("/sa03a").get("get").getResponse(200);
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
+		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
 		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
