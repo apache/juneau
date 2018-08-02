@@ -396,6 +396,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
 
 				RestParamType in = mp.getParamType();
+				int index = mp.index;
 
 				if (in.isAny(BODY, QUERY, FORM_DATA, HEADER, PATH)) {
 
@@ -408,28 +409,25 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					if (in != BODY)
 						param.append("name", mp.name);
 
-					if (in == BODY) {
-						for (Body a : getAnnotationsParentFirst(Body.class, mp.method, mp.index))
-							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
-
-					} else if (in == QUERY) {
-						for (Query a : getAnnotationsParentFirst(Query.class, mp.method, mp.index))
-							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
-
-					} else if (in == FORM_DATA) {
-						for (FormData a : getAnnotationsParentFirst(FormData.class, mp.method, mp.index))
-							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
-
-					} else if (in == HEADER) {
-						for (Header a : getAnnotationsParentFirst(Header.class, mp.method, mp.index))
-							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
-
-					} else if (in == PATH) {
-						for (Path a : getAnnotationsParentFirst(Path.class, mp.method, mp.index))
-							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
-
-					} else {
-						throw new RuntimeException();
+					try {
+						if (in == BODY) {
+							for (Body a : getAnnotationsParentFirst(Body.class, mp.method, mp.index))
+								merge(param, a, vr);
+						} else if (in == QUERY) {
+							for (Query a : getAnnotationsParentFirst(Query.class, mp.method, mp.index))
+								merge(param, a, vr);
+						} else if (in == FORM_DATA) {
+							for (FormData a : getAnnotationsParentFirst(FormData.class, mp.method, mp.index))
+								merge(param, a, vr);
+						} else if (in == HEADER) {
+							for (Header a : getAnnotationsParentFirst(Header.class, mp.method, mp.index))
+								merge(param, a, vr);
+						} else if (in == PATH) {
+							for (Path a : getAnnotationsParentFirst(Path.class, mp.method, mp.index))
+								merge(param, a, vr);
+						}
+					} catch (ParseException e) {
+						throw new SwaggerException(e, "Malformed swagger JSON object encountered in {0} class {1} method {2} parameter {3}", in, c, m, index);
 					}
 
 					if (! param.containsKey("schema"))
@@ -439,9 +437,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						param.put("required", true);
 
 					addXExamples(req, sm, param, in.toString(), js, mp.getType());
-
 				}
-
 			}
 
 			if (! paramMap.isEmpty())
@@ -1362,205 +1358,181 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		return om.modifiable();
 	}
 
-	private static ObjectMap merge(ObjectMap om, Body a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
-		try {
-			if (empty(a))
-				return om;
-			om = newMap(om);
-			if (a.value().length > 0)
-				om.putAll(parseMap(vr, a.value()));
-			if (a.api().length > 0)
-				om.putAll(parseMap(vr, a.api()));
-			return om
-				.appendSkipEmpty("description", resolve(vr, a.description()))
-				.appendSkipEmpty("x-example", resolve(vr, a.example()))
-				.appendSkipEmpty("x-examples", parseMap(vr, a.examples()))
-				.appendSkipFalse("required", a.required())
-				.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr, location, args))
-			;
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
+	private static ObjectMap merge(ObjectMap om, Body a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.value().length > 0)
+			om.putAll(parseMap(vr, a.value()));
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("x-examples", parseMap(vr, a.examples()))
+			.appendSkipFalse("required", a.required())
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr))
+		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Query a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
-		try {
-			if (empty(a))
-				return om;
-			om = newMap(om);
-			if (a.api().length > 0)
-				om.putAll(parseMap(vr, a.api()));
-			return om
-				.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("description", resolve(vr, a.description()))
-				.appendSkipEmpty("enum", toSet(a._enum(), vr))
-				.appendSkipEmpty("x-example", resolve(vr, a.example()))
-				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipMinusOne("maxItems", a.maxItems())
-				.appendSkipMinusOne("maxLength", a.maxLength())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipMinusOne("minItems", a.minItems())
-				.appendSkipMinusOne("minLength", a.minLength())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipFalse("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipFalse("uniqueItems", a.uniqueItems())
-			;
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
+	private static ObjectMap merge(ObjectMap om, Query a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipFalse("required", a.required())
+			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, FormData a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
-		try {
-			if (empty(a))
-				return om;
-			om = newMap(om);
-			if (a.api().length > 0)
-				om.putAll(parseMap(vr, a.api()));
-			return om
-				.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("description", resolve(vr, a.description()))
-				.appendSkipEmpty("enum", toSet(a._enum(), vr))
-				.appendSkipEmpty("x-example", resolve(vr, a.example()))
-				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipMinusOne("maxItems", a.maxItems())
-				.appendSkipMinusOne("maxLength", a.maxLength())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipMinusOne("minItems", a.minItems())
-				.appendSkipMinusOne("minLength", a.minLength())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipFalse("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipFalse("uniqueItems", a.uniqueItems())
-			;
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
+	private static ObjectMap merge(ObjectMap om, FormData a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipFalse("required", a.required())
+			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Header a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
-		try {
-			if (empty(a))
-				return om;
-			om = newMap(om);
-			if (a.api().length > 0)
-				om.putAll(parseMap(vr, a.api()));
-			return om
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("description", resolve(vr, a.description()))
-				.appendSkipEmpty("enum", toSet(a._enum(), vr))
-				.appendSkipEmpty("x-example", resolve(vr, a.example()))
-				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipMinusOne("maxItems", a.maxItems())
-				.appendSkipMinusOne("maxLength", a.maxLength())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipMinusOne("minItems", a.minItems())
-				.appendSkipMinusOne("minLength", a.minLength())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipFalse("required", a.required())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipFalse("uniqueItems", a.uniqueItems())
-			;
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
+	private static ObjectMap merge(ObjectMap om, Header a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipFalse("required", a.required())
+			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Path a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
-		try {
-			if (empty(a))
-				return om;
-			om = newMap(om);
-			if (a.api().length > 0)
-				om.putAll(parseMap(vr, a.api()));
-			return om
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("description", resolve(vr, a.description()))
-				.appendSkipEmpty("enum", toSet(a._enum(), vr))
-				.appendSkipEmpty("x-example", resolve(vr, a.example()))
-				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipMinusOne("maxLength", a.maxLength())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipMinusOne("minLength", a.minLength())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("type", a.type())
-			;
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
+	private static ObjectMap merge(ObjectMap om, Path a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipEmpty("type", a.type())
+		;
 	}
 
-	private static ObjectMap merge(ObjectMap om, Schema a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
-		try {
-			if (empty(a))
-				return om;
-			om = newMap(om);
-			if (a.value().length > 0)
-				om.putAll(parseMap(vr, a.value()));
-			return om
-				.appendSkipEmpty("additionalProperties", toObjectMap(a.additionalProperties(), vr))
-				.appendSkipEmpty("allOf", joinnl(a.allOf()))
-				.appendSkipEmpty("collectionFormat", a.collectionFormat())
-				.appendSkipEmpty("default", joinnl(a._default()))
-				.appendSkipEmpty("discriminator", a.discriminator())
-				.appendSkipEmpty("description", resolve(vr, a.description()))
-				.appendSkipEmpty("enum", toSet(a._enum(), vr))
-				.appendSkipEmpty("x-example", resolve(vr, a.example()))
-				.appendSkipEmpty("examples", parseMap(vr, a.examples()))
-				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
-				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
-				.appendSkipEmpty("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs(), vr))
-				.appendSkipEmpty("format", a.format())
-				.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
-				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
-				.appendSkipEmpty("maximum", a.maximum())
-				.appendSkipMinusOne("maxItems", a.maxItems())
-				.appendSkipMinusOne("maxLength", a.maxLength())
-				.appendSkipMinusOne("maxProperties", a.maxProperties())
-				.appendSkipEmpty("minimum", a.minimum())
-				.appendSkipMinusOne("minItems", a.minItems())
-				.appendSkipMinusOne("minLength", a.minLength())
-				.appendSkipMinusOne("minProperties", a.minProperties())
-				.appendSkipEmpty("multipleOf", a.multipleOf())
-				.appendSkipEmpty("pattern", a.pattern())
-				.appendSkipEmpty("properties", toObjectMap(a.properties(), vr))
-				.appendSkipFalse("readOnly", a.readOnly())
-				.appendSkipFalse("required", a.required())
-				.appendSkipEmpty("title", a.title())
-				.appendSkipEmpty("type", a.type())
-				.appendSkipFalse("uniqueItems", a.uniqueItems())
-				.appendSkipEmpty("xml", joinnl(a.xml()))
-				.appendSkipEmpty("$ref", a.$ref())
-			;
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
+	private static ObjectMap merge(ObjectMap om, Schema a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.value().length > 0)
+			om.putAll(parseMap(vr, a.value()));
+		return om
+			.appendSkipEmpty("additionalProperties", toObjectMap(a.additionalProperties(), vr))
+			.appendSkipEmpty("allOf", joinnl(a.allOf()))
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("discriminator", a.discriminator())
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("examples", parseMap(vr, a.examples()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs(), vr))
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("maxProperties", a.maxProperties())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipMinusOne("minProperties", a.minProperties())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipEmpty("properties", toObjectMap(a.properties(), vr))
+			.appendSkipFalse("readOnly", a.readOnly())
+			.appendSkipFalse("required", a.required())
+			.appendSkipEmpty("title", a.title())
+			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+			.appendSkipEmpty("xml", joinnl(a.xml()))
+			.appendSkipEmpty("$ref", a.$ref())
+		;
 	}
 
 	private static ObjectMap merge(ObjectMap om, ExternalDocs a, VarResolverSession vr) throws ParseException {
@@ -1620,6 +1592,78 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			.appendSkipEmpty("maximum", a.maximum())
 			.appendSkipMinusOne("maxItems", a.maxItems())
 			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+			.appendSkipEmpty("$ref", a.$ref())
+		;
+	}
+
+	private static ObjectMap merge(ObjectMap om, ResponseBody a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("examples", joinnl(a.examples()))
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr))
+		;
+	}
+
+	private static ObjectMap merge(ObjectMap om, Response a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipEmpty("examples", joinnl(a.examples()))
+			.appendSkipEmpty("headers", merge(om.getObjectMap("headers"), a.headers(), vr))
+			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr))
+		;
+	}
+
+	private static ObjectMap merge(ObjectMap om, ResponseHeader[] a, VarResolverSession vr) throws ParseException {
+		if (a.length == 0)
+			return om;
+		om = newMap(om);
+		for (ResponseHeader aa : a) {
+			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
+			if (isEmpty(name))
+				throw new RuntimeException("@ResponseHeader used without name or value.");
+			om.getObjectMap(name, true).putAll(merge(null, aa, vr));
+		}
+		return om;
+	}
+
+	private static ObjectMap merge(ObjectMap om, ResponseHeader a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.api().length > 0)
+			om.putAll(parseMap(vr, a.api()));
+		return om
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipEmpty("x-example", resolve(vr, a.example()))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipMinusOne("maxItems", a.maxItems())
 			.appendSkipEmpty("minimum", a.minimum())
 			.appendSkipMinusOne("minItems", a.minItems())
 			.appendSkipMinusOne("minLength", a.minLength())
