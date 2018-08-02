@@ -504,26 +504,14 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					}
 
 				} else if (in == RESPONSE_BODY) {
-					HttpPartSchema schema = HttpPartSchema.create(ResponseBody.class, mp.method, mp.index);
-					ObjectMap pi = HttpPartSchema.getApiCodeMap(schema, 200);
-					pi = resolve(vr, pi, "@ResponseBody on class {0} method {1}", c, m);
-					for (String code : pi.keySet()) {
-						ObjectMap pi2 = pi.getObjectMap(code, true);
-
-						ObjectMap response = responses.getObjectMap(code, true);
-
-						response.appendSkipEmpty("schema", parseMap(vr, pi2.get("schema"), "@ResponseBody/schema on class {0} method {1}", c, m));
-						response.appendSkipEmpty("x-example", resolve(vr, pi2.getString("example")));
-						response.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@ResponseBody/examples on class {0} method {1}", c, m));
-
-						Type type = mp.getType();
-						if (type instanceof ParameterizedType) {
-							ParameterizedType pt = (ParameterizedType)type;
-							if (pt.getRawType().equals(Value.class))
-								type = pt.getActualTypeArguments()[0];
-						}
-
-						response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
+					ObjectMap response = responses.getObjectMap("200", true);
+					for (ResponseBody a : getAnnotationsParentFirst(ResponseBody.class, mp.method, mp.index)) {
+						merge(response, a, vr);
+					}
+					if (! response.containsKey("schema")) {
+						Type type = Value.getParameterType(mp.type);
+						if (type != null)
+							response.appendSkipEmpty("schema", getSchema(req, response.getObjectMap("schema", true), js, type));
 					}
 				}
 			}
@@ -592,16 +580,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	//=================================================================================================================
 	// Utility methods
 	//=================================================================================================================
-
-	private ObjectMap resolve(VarResolverSession vs, ObjectMap om, String location, Object...args) throws ParseException {
-		if (om == null)
-			return om;
-		try {
-			return resolve(vs, om.modifiable());
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
-	}
 
 	private ObjectMap resolve(VarResolverSession vs, ObjectMap om) throws ParseException {
 		ObjectMap om2 = null;
@@ -704,22 +682,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			return new ObjectList(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
-		}
-	}
-
-	private Object parseAnything(VarResolverSession vs, Object o, String location, Object...locationArgs) throws ParseException {
-		try {
-			if (o == null)
-				return null;
-			if (o instanceof String[])
-				o = joinnl((String[])o);
-			String s = o.toString();
-			if (s.isEmpty())
-				return null;
-			s = vs.resolve(s);
-			return RestUtils.parseAnything(s);
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON encountered in "+location+".", locationArgs);
 		}
 	}
 
