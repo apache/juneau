@@ -408,7 +408,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					if (in != BODY)
 						param.append("name", mp.name);
 
-					ObjectMap pi = null;
 					if (in == BODY) {
 						for (Body a : getAnnotationsParentFirst(Body.class, mp.method, mp.index))
 							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
@@ -426,39 +425,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
 
 					} else if (in == PATH) {
-						pi = HttpPartSchema.create(Path.class, mp.method, mp.index).getApi();
+						for (Path a : getAnnotationsParentFirst(Path.class, mp.method, mp.index))
+							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
+
 					} else {
 						throw new RuntimeException();
-					}
-
-					pi = resolve(vr, pi, "ParameterInfo on class {0} method {1}", c, m);
-
-					// Common to all
-
-					if (in != BODY && in != QUERY && in != FORM_DATA && in != HEADER) {
-						param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
-						param.appendSkipEmpty("required", resolve(vr, pi.getString("required")));
-						param.appendSkipEmpty("type", resolve(vr, pi.getString("type")));
-						param.appendSkipEmpty("format", resolve(vr, pi.getString("format")));
-						param.appendSkipEmpty("pattern", resolve(vr, pi.getString("pattern")));
-						param.appendSkipEmpty("collectionFormat", resolve(vr, pi.getString("collectionFormat")));
-						param.appendSkipEmpty("maximum", resolve(vr, pi.getString("maximum")));
-						param.appendSkipEmpty("minimum", resolve(vr, pi.getString("minimum")));
-						param.appendSkipEmpty("multipleOf", resolve(vr, pi.getString("multipleOf")));
-						param.appendSkipEmpty("maxLength", resolve(vr, pi.getString("maxLength")));
-						param.appendSkipEmpty("minLength", resolve(vr, pi.getString("minLength")));
-						param.appendSkipEmpty("maxItems", resolve(vr, pi.getString("maxItems")));
-						param.appendSkipEmpty("minItems", resolve(vr, pi.getString("minItems")));
-						param.appendSkipEmpty("allowEmptyValue", resolve(vr, pi.getString("allowEmptyValue")));
-						param.appendSkipEmpty("exclusiveMaximum", resolve(vr, pi.getString("exclusiveMaximum")));
-						param.appendSkipEmpty("exclusiveMinimum", resolve(vr, pi.getString("exclusiveMinimum")));
-						param.appendSkipEmpty("uniqueItems", resolve(vr, pi.getString("uniqueItems")));
-						param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
-						param.appendSkipEmpty("default", parseAnything(vr, pi.getString("default"), "ParameterInfo/default on class {0} method {1}", c, m));
-						param.appendSkipEmpty("enum", parseListOrCdl(vr, pi.getString("enum"), "ParameterInfo/enum on class {0} method {1}", c, m));
-						param.appendSkipEmpty("x-example", resolve(vr, pi.getString("example")));
-						param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
-						param.appendSkipEmpty("items", parseMap(vr, pi.get("items"), "ParameterInfo/items on class {0} method {1}", c, m));
 					}
 
 					if (! param.containsKey("schema"))
@@ -1510,6 +1481,35 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				.appendSkipFalse("required", a.required())
 				.appendSkipEmpty("type", a.type())
 				.appendSkipFalse("uniqueItems", a.uniqueItems())
+			;
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
+		}
+	}
+
+	private static ObjectMap merge(ObjectMap om, Path a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
+		try {
+			if (empty(a))
+				return om;
+			om = newMap(om);
+			if (a.api().length > 0)
+				om.putAll(parseMap(vr, a.api()));
+			return om
+				.appendSkipEmpty("collectionFormat", a.collectionFormat())
+				.appendSkipEmpty("description", resolve(vr, a.description()))
+				.appendSkipEmpty("enum", toSet(a._enum(), vr))
+				.appendSkipEmpty("x-example", resolve(vr, a.example()))
+				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+				.appendSkipEmpty("format", a.format())
+				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+				.appendSkipEmpty("maximum", a.maximum())
+				.appendSkipMinusOne("maxLength", a.maxLength())
+				.appendSkipEmpty("minimum", a.minimum())
+				.appendSkipMinusOne("minLength", a.minLength())
+				.appendSkipEmpty("multipleOf", a.multipleOf())
+				.appendSkipEmpty("pattern", a.pattern())
+				.appendSkipEmpty("type", a.type())
 			;
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);

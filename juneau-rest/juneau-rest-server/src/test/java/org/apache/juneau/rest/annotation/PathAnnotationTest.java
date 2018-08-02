@@ -320,8 +320,8 @@ public class PathAnnotationTest {
 			api={
 				"description:'a\nb',",
 				"type:'string',",
-				"enum:'a,b',",
-				"example:'a'"
+				"enum:['a','b'],",
+				"x-example:'a'"
 			}
 		)
 		public static class SA02 {
@@ -335,8 +335,8 @@ public class PathAnnotationTest {
 			api={
 				"description:'b\nc',",
 				"type:'string',",
-				"enum:'b,c',",
-				"example:'b'"
+				"enum:['b','c'],",
+				"x-example:'b'"
 			},
 			description={"a","b"},
 			type="string",
