@@ -53,7 +53,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
  * </ul>
  */
-public class SwaggerGenerator {
+final class SwaggerGenerator {
 
 	private final RestRequest req;
 	private final VarResolverSession vr;
@@ -198,7 +198,7 @@ public class SwaggerGenerator {
 
 		String s = mb.findFirstString(locale, "tags");
 		if (s != null) {
-			for (ObjectMap m : parseListOrCdl(vr, s, "Messages/tags on class {0}", c).elements(ObjectMap.class)) {
+			for (ObjectMap m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(ObjectMap.class)) {
 				String name = m.getString("name");
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c) ;
