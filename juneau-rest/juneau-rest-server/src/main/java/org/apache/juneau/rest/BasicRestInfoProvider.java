@@ -109,10 +109,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			description;
 
 		Builder(RestContext context) {
-
-			LinkedHashMap<Class<?>,RestResource> restResourceAnnotationsParentFirst = getAnnotationsMapParentFirst(RestResource.class, context.getResource().getClass());
-
-			for (RestResource r : restResourceAnnotationsParentFirst.values()) {
+			for (RestResource r : getAnnotationsParentFirst(RestResource.class, context.getResource().getClass())) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
 				if (r.title().length > 0)
