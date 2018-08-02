@@ -124,7 +124,7 @@ public class ParameterInfo extends SwaggerElement {
 	private Items items;
 	private Object _default;
 	private List<Object> _enum;
-	private Object example;
+	private String example;
 	private Map<String,String> examples;
 
 	/**
@@ -242,7 +242,7 @@ public class ParameterInfo extends SwaggerElement {
 			if (p._enum != null)
 				_enum = p._enum;
 			if (p.example != null)
-				example = p.examples;
+				example = p.example;
 			if (p.examples != null)
 				examples = p.examples;
 		}
@@ -1428,7 +1428,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@BeanProperty("x-example")
-	public Object getExample() {
+	public String getExample() {
 		return example;
 	}
 
@@ -1441,7 +1441,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	@BeanProperty("x-example")
-	public ParameterInfo setExample(Object value) {
+	public ParameterInfo setExample(String value) {
 		example = value;
 		return this;
 	}
@@ -1453,7 +1453,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo example(Object value) {
-		example = value;
+		example = StringUtils.asString(value);
 		return this;
 	}
 

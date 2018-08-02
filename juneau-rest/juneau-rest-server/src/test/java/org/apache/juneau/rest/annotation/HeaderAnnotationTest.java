@@ -183,7 +183,7 @@ public class HeaderAnnotationTest {
 	@Test
 	public void sc01_Header_onPojo_example() throws Exception {
 		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("header", "H");
-		assertObjectEquals("{f1:'a'}", x.getExample());
+		assertEquals("{f1:'a'}", x.getExample());
 	}
 
 	//=================================================================================================================

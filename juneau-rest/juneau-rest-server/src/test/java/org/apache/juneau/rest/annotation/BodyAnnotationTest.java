@@ -818,8 +818,8 @@ public class BodyAnnotationTest {
 			"description:'a\nb',",
 			"required:true,",
 			"schema:{type:'string'},",
-			"example:'a',",
-			"examples:{foo:'bar'}"
+			"x-example:'\\'a\\'',",
+			"x-examples:{foo:'bar'}"
 		})
 		public static class SA02 {
 			public SA02(String x) {}
@@ -832,12 +832,12 @@ public class BodyAnnotationTest {
 				"description:'a\nb',",
 				"required:true,",
 				"schema:{type:'string'},",
-				"example:'a',",
-				"examples:{foo:'bar'}"
+				"x-example:'\\'a\\'',",
+				"x-examples:{foo:'bar'}"
 			},
 			description={"b","c"},
 			schema=@Schema(type="string"),
-			example="b",
+			example="'b'",
 			examples="{foo:'baz'}"
 		)
 		public static class SA03 {
@@ -853,7 +853,7 @@ public class BodyAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
 	@Test
@@ -862,7 +862,7 @@ public class BodyAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
 	@Test
@@ -871,7 +871,7 @@ public class BodyAnnotationTest {
 		assertEquals("b\nc", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("'b'", x.getExample());
+		assertEquals("'b'", x.getExample());
 		assertObjectEquals("{foo:'baz'}", x.getExamples());
 	}
 
@@ -952,7 +952,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void sc01_Body_onPojo_example() throws Exception {
 		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("body", null);
-		assertObjectEquals("{f1:'b'}", x.getExample());
+		assertEquals("{f1:'b'}", x.getExample());
 	}
 	@Test
 	public void sc02_Body_onPojo_examples() throws Exception {
@@ -981,7 +981,7 @@ public class BodyAnnotationTest {
 				description= {"a","b"},
 				required=true,
 				schema=@Schema(type="string"),
-				example="'a'",
+				example="a",
 				examples=" {foo:'bar'} "
 			) TA01 b) {}
 
@@ -995,8 +995,8 @@ public class BodyAnnotationTest {
 				"description:'a\nb',",
 				"required:true,",
 				"schema:{type:'string'},",
-				"example:'a',",
-				"examples:{foo:'bar'}"
+				"x-example:'a',",
+				"x-examples:{foo:'bar'}"
 			}) TA02 b) {}
 
 		public static class TA03 {
@@ -1010,8 +1010,8 @@ public class BodyAnnotationTest {
 					"description:'a\nb',",
 					"required:true,",
 					"schema:{type:'string'},",
-					"example:'a',",
-					"examples:{foo:'bar'}"
+					"x-example:'a',",
+					"x-examples:{foo:'bar'}"
 				},
 				description= {"b","c"},
 				schema=@Schema(type="string"),
@@ -1026,7 +1026,7 @@ public class BodyAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("a", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
 	@Test
@@ -1035,7 +1035,7 @@ public class BodyAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("a", x.getExample());
 		assertObjectEquals("{foo:'bar'}", x.getExamples());
 	}
 	@Test
@@ -1044,7 +1044,7 @@ public class BodyAnnotationTest {
 		assertEquals("b\nc", x.getDescription());
 		assertObjectEquals("true", x.getRequired());
 		assertObjectEquals("{type:'string'}", x.getSchema());
-		assertObjectEquals("'b'", x.getExample());
+		assertEquals("b", x.getExample());
 		assertObjectEquals("{foo:'baz'}", x.getExamples());
 	}
 
@@ -1134,7 +1134,7 @@ public class BodyAnnotationTest {
 	@Test
 	public void tc01_Body_onParameter_example() throws Exception {
 		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("body", null);
-		assertObjectEquals("{f1:'b'}", x.getExample());
+		assertEquals("{f1:'b'}", x.getExample());
 	}
 	@Test
 	public void tc02_Body_onParameter_examples() throws Exception {

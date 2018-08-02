@@ -369,7 +369,7 @@ public class PathAnnotationTest {
 		assertEquals("string", x.getType());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 	}
 	@Test
 	public void sa02_Path_onPojo_api() throws Exception {
@@ -379,7 +379,7 @@ public class PathAnnotationTest {
 		assertEquals("string", x.getType());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("a", x.getExample());
 	}
 	@Test
 	public void sa03_Path_onPojo_mixed() throws Exception {
@@ -389,7 +389,7 @@ public class PathAnnotationTest {
 		assertEquals("string", x.getType());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 	}
 	@Test
 	public void sa04_Path_onPojo_value() throws Exception {
@@ -474,7 +474,7 @@ public class PathAnnotationTest {
 	@Test
 	public void sc01_Path_onPojo_example() throws Exception {
 		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{f1:'a'}", x.getExample());
+		assertEquals("{f1:'a'}", x.getExample());
 	}
 
 	//=================================================================================================================
@@ -629,6 +629,6 @@ public class PathAnnotationTest {
 	@Test
 	public void tc01_Path_onParameter_example2() throws Exception {
 		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{f1:'b'}", x.getExample());
+		assertEquals("{f1:'b'}", x.getExample());
 	}
 }

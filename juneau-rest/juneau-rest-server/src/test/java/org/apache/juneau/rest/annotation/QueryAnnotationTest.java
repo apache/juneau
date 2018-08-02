@@ -431,7 +431,7 @@ public class QueryAnnotationTest {
 	@Test
 	public void sc01_Query_onPojo_example() throws Exception {
 		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("query", "Q");
-		assertObjectEquals("{f1:'a'}", x.getExample());
+		assertEquals("{f1:'a'}", x.getExample());
 	}
 
 	//=================================================================================================================

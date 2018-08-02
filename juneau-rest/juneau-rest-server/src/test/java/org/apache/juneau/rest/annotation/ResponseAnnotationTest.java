@@ -566,7 +566,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -575,7 +575,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -584,7 +584,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("a", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -593,7 +593,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("a", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -602,7 +602,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -611,7 +611,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -751,12 +751,12 @@ public class ResponseAnnotationTest {
 	@Test
 	public void sc01a_Response_onPojo_example() throws Exception {
 		ResponseInfo x = getSwagger(new SC()).getPaths().get("/sc01a").get("get").getResponse(200);
-		assertObjectEquals("{f1:'a'}", x.getExample());
+		assertEquals("{f1:'a'}", x.getExample());
 	}
 	@Test
 	public void sc01b_Response_onPojo_example() throws Exception {
 		ResponseInfo x = getSwagger(new SC()).getPaths().get("/sc01b").get("get").getResponse(200);
-		assertObjectEquals("{f1:'a'}", x.getExample());
+		assertEquals("{f1:'a'}", x.getExample());
 	}
 	@Test
 	public void sc02a_Response_onPojo_examples() throws Exception {
@@ -845,7 +845,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -863,7 +863,7 @@ public class ResponseAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("{bar:{type:'number'},foo:{type:'string'}}", x.getHeaders());
-		assertObjectEquals("'a'", x.getExample());
+		assertEquals("'a'", x.getExample());
 		assertObjectEquals("{foo:'a'}", x.getExamples());
 	}
 	@Test
@@ -924,7 +924,7 @@ public class ResponseAnnotationTest {
 	@Test
 	public void uc01_Response_onThrowable_example() throws Exception {
 		ResponseInfo x = getSwagger(new UC()).getPaths().get("/example").get("get").getResponse(500);
-		assertObjectEquals("{f1:'b'}", x.getExample());
+		assertEquals("{f1:'b'}", x.getExample());
 	}
 	@Test
 	public void uc02_Response_onThrowable_examples() throws Exception {

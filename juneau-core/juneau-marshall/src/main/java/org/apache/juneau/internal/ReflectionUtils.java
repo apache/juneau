@@ -107,6 +107,23 @@ public final class ReflectionUtils {
 	}
 
 	/**
+	 * Returns all annotations defined on the specified parameter and parameter type.
+	 *
+	 * <p>
+	 * Annotations are ordered parameter superclasses first, then class, then parameter.
+	 *
+	 * @param a The annotation to look for.
+	 * @param m The method containing the parameter.
+	 * @param index The parameter index.
+	 * @return All instances of the annotation with the
+	 */
+	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Method m, int index) {
+		List<T> l = getAnnotations(a, m, index);
+		Collections.reverse(l);
+		return l;
+	}
+
+	/**
 	 * Returns the specified annotation if it exists on the specified method or return type class.
 	 *
 	 * @param a The annotation to check for.

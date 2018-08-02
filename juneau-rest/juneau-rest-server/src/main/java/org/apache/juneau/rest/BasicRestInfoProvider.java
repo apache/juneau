@@ -28,6 +28,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Contact;
+import org.apache.juneau.http.annotation.Items;
 import org.apache.juneau.http.annotation.License;
 import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.httppart.*;
@@ -408,8 +409,12 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						param.append("name", mp.name);
 
 					ObjectMap pi = null;
-					if (in == BODY)
-						pi = HttpPartSchema.create(Body.class, mp.method, mp.index).getApi();
+					if (in == BODY) {
+						for (Body b : getAnnotationsParentFirst(Body.class, mp.method, mp.index))
+							merge(param, b, vr, "ParameterInfo on class {0} method {1}", c, m);
+						if (! param.containsKey("schema"))
+							param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+					}
 					else if (in == QUERY)
 						pi = HttpPartSchema.create(Query.class, mp.method, mp.index).getApi();
 					else if (in == FORM_DATA)
@@ -424,15 +429,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 					pi = resolve(vr, pi, "ParameterInfo on class {0} method {1}", c, m);
 
 					// Common to all
-					param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
-					param.appendSkipEmpty("required", resolve(vr, pi.getString("required")));
 
 					if (in == BODY) {
-						param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
-						param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
-						param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
-						param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
+//						param.put("schema", getSchema(req, param.getObjectMap("schema", true), js, mp.getType()));
+//						param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
+//						param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
+//						param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
 					} else {
+						param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
+						param.appendSkipEmpty("required", resolve(vr, pi.getString("required")));
 						param.appendSkipEmpty("type", resolve(vr, pi.getString("type")));
 						param.appendSkipEmpty("format", resolve(vr, pi.getString("format")));
 						param.appendSkipEmpty("pattern", resolve(vr, pi.getString("pattern")));
@@ -451,7 +456,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						param.appendSkipEmpty("schema", parseMap(vr, pi.get("schema"), "ParameterInfo/schema on class {0} method {1}", c, m));
 						param.appendSkipEmpty("default", parseAnything(vr, pi.getString("default"), "ParameterInfo/default on class {0} method {1}", c, m));
 						param.appendSkipEmpty("enum", parseListOrCdl(vr, pi.getString("enum"), "ParameterInfo/enum on class {0} method {1}", c, m));
-						param.appendSkipEmpty("x-example", parseAnything(vr, pi.getString("example"), "ParameterInfo/example on class {0} method {1}", c, m));
+						param.appendSkipEmpty("x-example", resolve(vr, pi.getString("example")));
 						param.appendSkipEmpty("x-examples", parseMap(vr, pi.get("examples"), "ParameterInfo/examples on class {0} method {1}", c, m));
 						param.appendSkipEmpty("items", parseMap(vr, pi.get("items"), "ParameterInfo/items on class {0} method {1}", c, m));
 
@@ -490,7 +495,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 						if (api != null) {
 							om.appendSkipEmpty("description", resolve(vr, api.getString("description")));
-							om.appendSkipEmpty("x-example", parseAnything(vr, api.getString("example"), "RestMethodThrown/example on class {0} method {1}", c, m));
+							om.appendSkipEmpty("x-example", resolve(vr, api.getString("example")));
 							om.appendSkipEmpty("examples", api.getObjectMap("examples"));
 							om.appendSkipEmpty("schema", api.getObjectMap("schema"));
 							if (api.containsKey("headers"))
@@ -498,7 +503,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 									headers.put(e.getKey(), e.getValue());
 						}
 						om.appendSkipEmpty("description", resolve(vr, r.description()));
-						om.appendSkipEmpty("x-example", parseAnything(vr, r.example(), "RestMethodThrown/example on class {0} method {1}", c, m));
+						om.appendSkipEmpty("x-example", resolve(vr, r.example()));
 						om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodThrown/examples on class {0} method {1}", c, m));
 						om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
 						for (ResponseHeader h : r.headers()) {
@@ -525,7 +530,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 					if (api != null) {
 						om.appendSkipEmpty("description", api.getString("description"));
-						om.appendSkipEmpty("x-example", parseAnything(vr, api.getString("example"), "RestMethodReturn/example on class {0} method {1}", c, m));
+						om.appendSkipEmpty("x-example", resolve(vr, api.getString("example")));
 						om.appendSkipEmpty("examples", api.getObjectMap("examples"));
 						om.appendSkipEmpty("schema", api.getObjectMap("schema"));
 						if (api.containsKey("headers"))
@@ -533,7 +538,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 								headers.put(e.getKey(), e.getValue());
 					}
 					om.appendSkipEmpty("description", resolve(vr, r.description()));
-					om.appendSkipEmpty("x-example", parseAnything(vr, r.example(), "RestMethodReturn/example on class {0} method {1}", c, m));
+					om.appendSkipEmpty("x-example", resolve(vr, r.example()));
 					om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodReturn/examples on class {0} method {1}", c, m));
 					om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
 					for (ResponseHeader h : r.headers()) {
@@ -560,14 +565,14 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 				if (api != null) {
 					om.appendSkipEmpty("description", api.getString("description"));
-					om.appendSkipEmpty("x-example", parseAnything(vr, api.getString("example"), "RestMethodReturn/example on class {0} method {1}", c, m));
+					om.appendSkipEmpty("x-example", resolve(vr, api.getString("example")));
 					om.appendSkipEmpty("examples", api.getObjectMap("examples"));
 					om.appendSkipEmpty("schema", api.getObjectMap("schema"));
 					if (api.containsKey("headers"))
 						for (Map.Entry<String,Object> e : api.getObjectMap("headers").entrySet())
 							headers.put(e.getKey(), e.getValue());
 				}
-				om.appendSkipEmpty("x-example", parseAnything(vr, r.example(), "RestMethodReturn/example on class {0} method {1}", c, m));
+				om.appendSkipEmpty("x-example", resolve(vr, r.example()));
 				om.appendSkipEmpty("examples", parseMap(vr, r.examples(), "RestMethodReturn/examples on class {0} method {1}", c, m));
 				om.appendSkipEmpty("schema", resolve(vr, HttpPartSchema.create(r.schema()).getApi()));
 
@@ -614,7 +619,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						header.appendSkipEmpty("uniqueItems", resolve(vr, pi2.getString("uniqueItems")));
 						header.appendSkipEmpty("default", parseAnything(vr, pi2.getString("default"), "@ResponseHeader/default on class {0} method {1}", c, m));
 						header.appendSkipEmpty("enum", parseListOrCdl(vr, pi2.getString("enum"), "@ResponseHeader/enum on class {0} method {1}", c, m));
-						header.appendSkipEmpty("x-example", parseAnything(vr, pi2.getString("example"), "@ResponseHeader/example on class {0} method {1}", c, m));
+						header.appendSkipEmpty("x-example", resolve(vr, pi2.getString("example")));
 						header.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@ResponseHeader/examples on class {0} method {1}", c, m));
 						header.appendSkipEmpty("items", parseMap(vr, pi2.get("items"), "@ResponseHeader/items on class {0} method {1}", c, m));
 					}
@@ -631,7 +636,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						response.appendSkipEmpty("description", resolve(vr, pi2.getString("description")));
 						response.appendSkipEmpty("schema", parseMap(vr, pi2.get("schema"), "@Response/schema on class {0} method {1}", c, m));
 						response.appendSkipEmpty("headers", parseMap(vr, pi2.get("headers"), "@Response/headers on class {0} method {1}", c, m));
-						response.appendSkipEmpty("x-example", parseAnything(vr, pi2.getString("example"), "@Response/example on class {0} method {1}", c, m));
+						response.appendSkipEmpty("x-example", resolve(vr, pi2.getString("example")));
 						response.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@Response/examples on class {0} method {1}", c, m));
 
 						Type type = mp.getType();
@@ -654,7 +659,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 						ObjectMap response = responses.getObjectMap(code, true);
 
 						response.appendSkipEmpty("schema", parseMap(vr, pi2.get("schema"), "@ResponseBody/schema on class {0} method {1}", c, m));
-						response.appendSkipEmpty("x-example", parseAnything(vr, pi2.getString("example"), "@ResponseBody/example on class {0} method {1}", c, m));
+						response.appendSkipEmpty("x-example", resolve(vr, pi2.getString("example")));
 						response.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@ResponseBody/examples on class {0} method {1}", c, m));
 
 						Type type = mp.getType();
@@ -719,6 +724,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 		try {
 			String swaggerJson = omSwagger.toString(SimpleJsonSerializer.DEFAULT_READABLE);
+//			System.err.println(swaggerJson);
 			swagger = jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new RestServletException("Error detected in swagger.").initCause(e);
@@ -780,12 +786,26 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		return ol2;
 	}
 
-	private String resolve(VarResolverSession vs, String[] s) {
-		return resolve(vs, joinnl(s));
+	private static String resolve(VarResolverSession vs, String[] ss) {
+		if (ss.length == 0)
+			return null;
+		return resolve(vs, joinnl(ss));
 	}
 
-	private String resolve(VarResolverSession vs, String s) {
-		return vs.resolve(s);
+	private static String resolve(VarResolverSession vs, String s) {
+		if (s == null)
+			return null;
+		return vs.resolve(s.trim());
+	}
+
+	private ObjectMap parseMap(VarResolverSession vs, String[] o, String location, Object...args) throws ParseException {
+		if (o.length == 0)
+			return ObjectMap.EMPTY_MAP;
+		try {
+			return parseMap(vs, o);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
+		}
 	}
 
 	private ObjectMap parseMap(VarResolverSession vs, Object o, String location, Object...args) throws ParseException {
@@ -796,7 +816,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		}
 	}
 
-	private ObjectMap parseMap(VarResolverSession vs, Object o) throws ParseException {
+	private static ObjectMap parseMap(VarResolverSession vs, Object o) throws ParseException {
 		if (o == null)
 			return null;
 		if (o instanceof String[])
@@ -980,22 +1000,22 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 	private void addXExamples(RestRequest req, RestJavaMethod sm, ObjectMap piri, String in, JsonSchemaSerializerSession js, Type type) throws Exception {
 
-		Object example = piri.get("x-example");
+		String sex = piri.getString("x-example");
 
-		if (example == null) {
+		if (sex == null) {
 			ObjectMap schema = resolve(js, piri.getObjectMap("schema"));
 			if (schema != null)
-				example = schema.getWithDefault("example", schema.get("x-example"));
+				sex = schema.getString("example", schema.getString("x-example"));
 		}
 
-		if (example == null)
+		if (isEmpty(sex))
 			return;
 
 		boolean isOk = "ok".equals(in), isBody = "body".equals(in);
 
-		String sex = example.toString();
+		Object example = null;
 		if (isJson(sex)) {
-			example = JsonParser.DEFAULT.parse(JsonSerializer.DEFAULT.serialize(example), type);
+			example = JsonParser.DEFAULT.parse(sex, type);
 		} else {
 			ClassMeta<?> cm = js.getClassMeta(type);
 			if (cm.hasStringTransform()) {
@@ -1363,5 +1383,172 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			}
 		}
 		return null;
+	}
+
+	private static ObjectMap newMap(ObjectMap om) {
+		if (om == null)
+			return new ObjectMap();
+		return om.modifiable();
+	}
+
+	private static ObjectMap merge(ObjectMap om, Body a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
+		try {
+			if (empty(a))
+				return om;
+			om = newMap(om);
+			if (a.value().length > 0)
+				om.putAll(parseMap(vr, a.value()));
+			if (a.api().length > 0)
+				om.putAll(parseMap(vr, a.api()));
+			return om
+				.appendSkipEmpty("description", resolve(vr, a.description()))
+				.appendSkipEmpty("x-example", resolve(vr, a.example()))
+				.appendSkipEmpty("x-examples", parseMap(vr, a.examples()))
+				.appendSkipFalse("required", a.required())
+				.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema(), vr, location, args))
+			;
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
+		}
+	}
+
+	private static ObjectMap merge(ObjectMap om, Schema a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
+		try {
+			if (empty(a))
+				return om;
+			om = newMap(om);
+			if (a.value().length > 0)
+				om.putAll(parseMap(vr, a.value()));
+			return om
+				.appendSkipEmpty("additionalProperties", toObjectMap(a.additionalProperties(), vr))
+				.appendSkipEmpty("allOf", joinnl(a.allOf()))
+				.appendSkipEmpty("collectionFormat", a.collectionFormat())
+				.appendSkipEmpty("default", joinnl(a._default()))
+				.appendSkipEmpty("discriminator", a.discriminator())
+				.appendSkipEmpty("description", joinnl(a.description()))
+				.appendSkipEmpty("enum", toSet(a._enum(), vr))
+				.appendSkipEmpty("example", joinnl(a.example()))
+				.appendSkipEmpty("examples", joinnl(a.examples()))
+				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+				.appendSkipEmpty("externalDocs", merge(om.getObjectMap("externalDocs"), a.externalDocs(), vr))
+				.appendSkipEmpty("format", a.format())
+				.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
+				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+				.appendSkipEmpty("maximum", a.maximum())
+				.appendSkipMinusOne("maxItems", a.maxItems())
+				.appendSkipMinusOne("maxLength", a.maxLength())
+				.appendSkipMinusOne("maxProperties", a.maxProperties())
+				.appendSkipEmpty("minimum", a.minimum())
+				.appendSkipMinusOne("minItems", a.minItems())
+				.appendSkipMinusOne("minLength", a.minLength())
+				.appendSkipMinusOne("minProperties", a.minProperties())
+				.appendSkipEmpty("multipleOf", a.multipleOf())
+				.appendSkipEmpty("pattern", a.pattern())
+				.appendSkipEmpty("properties", toObjectMap(a.properties(), vr))
+				.appendSkipFalse("readOnly", a.readOnly())
+				.appendSkipFalse("required", a.required())
+				.appendSkipEmpty("title", a.title())
+				.appendSkipEmpty("type", a.type())
+				.appendSkipFalse("uniqueItems", a.uniqueItems())
+				.appendSkipEmpty("xml", joinnl(a.xml()))
+				.appendSkipEmpty("$ref", a.$ref())
+			;
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
+		}
+	}
+
+	private static ObjectMap merge(ObjectMap om, ExternalDocs a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.value().length > 0)
+			om.putAll(parseMap(vr, a.value()));
+		return om
+			.appendSkipEmpty("description", resolve(vr, a.description()))
+			.appendSkipEmpty("url", a.url())
+		;
+	}
+
+	private static ObjectMap merge(ObjectMap om, Items a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.value().length > 0)
+			om.putAll(parseMap(vr, a.value()));
+		return om
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipEmpty("format", a.format())
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+			.appendSkipEmpty("type", a.type())
+			.appendSkipEmpty("$ref", a.$ref())
+		;
+	}
+
+	private static ObjectMap merge(ObjectMap om, SubItems a, VarResolverSession vr) throws ParseException {
+		if (empty(a))
+			return om;
+		om = newMap(om);
+		if (a.value().length > 0)
+			om.putAll(parseMap(vr, a.value()));
+		return om
+			.appendSkipEmpty("collectionFormat", a.collectionFormat())
+			.appendSkipEmpty("default", joinnl(a._default()))
+			.appendSkipEmpty("enum", toSet(a._enum(), vr))
+			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+			.appendSkipEmpty("format", a.format())
+			.appendSkipEmpty("items", toObjectMap(a.items(), vr))
+			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
+			.appendSkipMinusOne("maxLength", a.maxLength())
+			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
+			.appendSkipMinusOne("minLength", a.minLength())
+			.appendSkipEmpty("multipleOf", a.multipleOf())
+			.appendSkipEmpty("pattern", a.pattern())
+			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
+			.appendSkipEmpty("$ref", a.$ref())
+		;
+	}
+
+	private static ObjectMap toObjectMap(String[] ss, VarResolverSession vr) throws ParseException {
+		if (ss.length == 0)
+			return null;
+		String s = joinnl(ss);
+		if (s.isEmpty())
+			return null;
+		if (! isObjectMap(s, true))
+			s = "{" + s + "}";
+		s = vr.resolve(s);
+		return new ObjectMap(s);
+	}
+
+	private static Set<String> toSet(String[] ss, VarResolverSession vr) throws ParseException {
+		if (ss.length == 0)
+			return null;
+		String s = joinnl(ss);
+		if (s.isEmpty())
+			return null;
+		s = vr.resolve(s);
+		Set<String> set = new ASet<>();
+		for (Object o : StringUtils.parseListOrCdl(s))
+			set.add(o.toString());
+		return set;
 	}
 }

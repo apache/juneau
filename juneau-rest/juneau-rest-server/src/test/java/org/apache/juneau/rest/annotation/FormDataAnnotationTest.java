@@ -320,7 +320,7 @@ public class FormDataAnnotationTest {
 	@Test
 	public void sc01_FormData_onPojo_example() throws Exception {
 		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("formData", "F");
-		assertObjectEquals("{f1:'a'}", x.getExample());
+		assertEquals("{f1:'a'}", x.getExample());
 	}
 
 	//=================================================================================================================
@@ -473,6 +473,6 @@ public class FormDataAnnotationTest {
 	@Test
 	public void tc01_FormData_onParameter_example() throws Exception {
 		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("formData", "F");
-		assertObjectEquals("{f1:'a'}", x.getExample());
+		assertEquals("{f1:'a'}", x.getExample());
 	}
 }
