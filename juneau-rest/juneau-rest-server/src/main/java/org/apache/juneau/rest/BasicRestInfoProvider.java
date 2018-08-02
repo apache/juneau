@@ -483,34 +483,11 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				RestParamType in = mp.getParamType();
 
 				if (in == RESPONSE_HEADER) {
-					HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, mp.method, mp.index);
-					ObjectMap pi = HttpPartSchema.getApiCodeMap(schema, 200);
-					pi = resolve(vr, pi, "@ResponseHeader on class {0} method {1}", c, m);
-					for (String code : pi.keySet()) {
-						String name = mp.getName();
-						ObjectMap pi2 = pi.getObjectMap(code, true);
-
-						ObjectMap header = responses.getObjectMap(code, true).getObjectMap("headers", true).getObjectMap(name, true);
-
-						header.appendSkipEmpty("description", resolve(vr, pi2.getString("description")));
-						header.appendSkipEmpty("type", resolve(vr, pi2.getString("type")));
-						header.appendSkipEmpty("format", resolve(vr, pi2.getString("format")));
-						header.appendSkipEmpty("collectionFormat", resolve(vr, pi2.getString("collectionFormat")));
-						header.appendSkipEmpty("maximum", resolve(vr, pi2.getString("maximum")));
-						header.appendSkipEmpty("minimum", resolve(vr, pi2.getString("minimum")));
-						header.appendSkipEmpty("multipleOf", resolve(vr, pi2.getString("multipleOf")));
-						header.appendSkipEmpty("maxLength", resolve(vr, pi2.getString("maxLength")));
-						header.appendSkipEmpty("minLength", resolve(vr, pi2.getString("minLength")));
-						header.appendSkipEmpty("maxItems", resolve(vr, pi2.getString("maxItems")));
-						header.appendSkipEmpty("minItems", resolve(vr, pi2.getString("minItems")));
-						header.appendSkipEmpty("exclusiveMaximum", resolve(vr, pi2.getString("exclusiveMaximum")));
-						header.appendSkipEmpty("exclusiveMinimum", resolve(vr, pi2.getString("exclusiveMinimum")));
-						header.appendSkipEmpty("uniqueItems", resolve(vr, pi2.getString("uniqueItems")));
-						header.appendSkipEmpty("default", parseAnything(vr, pi2.getString("default"), "@ResponseHeader/default on class {0} method {1}", c, m));
-						header.appendSkipEmpty("enum", parseListOrCdl(vr, pi2.getString("enum"), "@ResponseHeader/enum on class {0} method {1}", c, m));
-						header.appendSkipEmpty("x-example", resolve(vr, pi2.getString("example")));
-						header.appendSkipEmpty("examples", parseMap(vr, pi2.get("examples"), "@ResponseHeader/examples on class {0} method {1}", c, m));
-						header.appendSkipEmpty("items", parseMap(vr, pi2.get("items"), "@ResponseHeader/items on class {0} method {1}", c, m));
+					for (ResponseHeader a : getAnnotationsParentFirst(ResponseHeader.class, mp.method, mp.index)) {
+						for (Integer code : getCodes(a, 200)) {
+							ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(mp.name, true);
+							merge(header, a, vr);
+						}
 					}
 
 				} else if (in == RESPONSE) {
@@ -1632,6 +1609,15 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		Set<Integer> codes = new LinkedHashSet<>();
 		for (int i : r.value())
 			codes.add(i);
+		for (int i : r.code())
+			codes.add(i);
+		if (codes.isEmpty())
+			codes.add(def);
+		return codes;
+	}
+
+	private static Set<Integer> getCodes(ResponseHeader r, Integer def) {
+		Set<Integer> codes = new LinkedHashSet<>();
 		for (int i : r.code())
 			codes.add(i);
 		if (codes.isEmpty())
