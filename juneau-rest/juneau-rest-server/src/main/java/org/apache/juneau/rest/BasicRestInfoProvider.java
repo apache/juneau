@@ -422,7 +422,9 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
 
 					} else if (in == HEADER) {
-						pi = HttpPartSchema.create(Header.class, mp.method, mp.index).getApi();
+						for (Header a : getAnnotationsParentFirst(Header.class, mp.method, mp.index))
+							merge(param, a, vr, "ParameterInfo on class {0} method {1}", c, m);
+
 					} else if (in == PATH) {
 						pi = HttpPartSchema.create(Path.class, mp.method, mp.index).getApi();
 					} else {
@@ -433,7 +435,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 					// Common to all
 
-					if (in != BODY && in != QUERY && in != FORM_DATA) {
+					if (in != BODY && in != QUERY && in != FORM_DATA && in != HEADER) {
 						param.appendSkipEmpty("description", resolve(vr, pi.getString("description")));
 						param.appendSkipEmpty("required", resolve(vr, pi.getString("required")));
 						param.appendSkipEmpty("type", resolve(vr, pi.getString("type")));
@@ -1454,6 +1456,40 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 				om.putAll(parseMap(vr, a.api()));
 			return om
 				.appendSkipFalse("allowEmptyValue", a.allowEmptyValue())
+				.appendSkipEmpty("collectionFormat", a.collectionFormat())
+				.appendSkipEmpty("default", joinnl(a._default()))
+				.appendSkipEmpty("description", resolve(vr, a.description()))
+				.appendSkipEmpty("enum", toSet(a._enum(), vr))
+				.appendSkipEmpty("x-example", resolve(vr, a.example()))
+				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum())
+				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum())
+				.appendSkipEmpty("format", a.format())
+				.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items(), vr))
+				.appendSkipEmpty("maximum", a.maximum())
+				.appendSkipMinusOne("maxItems", a.maxItems())
+				.appendSkipMinusOne("maxLength", a.maxLength())
+				.appendSkipEmpty("minimum", a.minimum())
+				.appendSkipMinusOne("minItems", a.minItems())
+				.appendSkipMinusOne("minLength", a.minLength())
+				.appendSkipEmpty("multipleOf", a.multipleOf())
+				.appendSkipEmpty("pattern", a.pattern())
+				.appendSkipFalse("required", a.required())
+				.appendSkipEmpty("type", a.type())
+				.appendSkipFalse("uniqueItems", a.uniqueItems())
+			;
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
+		}
+	}
+
+	private static ObjectMap merge(ObjectMap om, Header a, VarResolverSession vr, String location, Object...args) throws SwaggerException {
+		try {
+			if (empty(a))
+				return om;
+			om = newMap(om);
+			if (a.api().length > 0)
+				om.putAll(parseMap(vr, a.api()));
+			return om
 				.appendSkipEmpty("collectionFormat", a.collectionFormat())
 				.appendSkipEmpty("default", joinnl(a._default()))
 				.appendSkipEmpty("description", resolve(vr, a.description()))
