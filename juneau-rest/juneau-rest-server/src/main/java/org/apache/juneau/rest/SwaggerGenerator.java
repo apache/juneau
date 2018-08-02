@@ -500,37 +500,37 @@ public class SwaggerGenerator {
 	// Utility methods
 	//=================================================================================================================
 
-	private ObjectMap resolve(VarResolverSession vs, ObjectMap om) throws ParseException {
+	private ObjectMap resolve(ObjectMap om) throws ParseException {
 		ObjectMap om2 = null;
 		if (om.containsKey("_value")) {
 			om = om.modifiable();
-			om2 = parseMap(vs, om.remove("_value"));
+			om2 = parseMap(vr, om.remove("_value"));
 		} else {
 			om2 = new ObjectMap();
 		}
 		for (Map.Entry<String,Object> e : om.entrySet()) {
 			Object val = e.getValue();
 			if (val instanceof ObjectMap) {
-				val = resolve(vs, (ObjectMap)val);
+				val = resolve((ObjectMap)val);
 			} else if (val instanceof ObjectList) {
-				val = resolve(vs, (ObjectList) val);
+				val = resolve((ObjectList) val);
 			} else if (val instanceof String) {
-				val = vs.resolve(val.toString().trim());
+				val = resolve(val.toString());
 			}
 			om2.put(e.getKey(), val);
 		}
 		return om2;
 	}
 
-	private ObjectList resolve(VarResolverSession vs, ObjectList om) throws ParseException {
+	private ObjectList resolve(ObjectList om) throws ParseException {
 		ObjectList ol2 = new ObjectList();
 		for (Object val : om) {
 			if (val instanceof ObjectMap) {
-				val = resolve(vs, (ObjectMap)val);
+				val = resolve((ObjectMap)val);
 			} else if (val instanceof ObjectList) {
-				val = resolve(vs, (ObjectList) val);
+				val = resolve((ObjectList) val);
 			} else if (val instanceof String) {
-				val = vs.resolve(val.toString().trim());
+				val = resolve(val.toString());
 			}
 			ol2.add(val);
 		}
