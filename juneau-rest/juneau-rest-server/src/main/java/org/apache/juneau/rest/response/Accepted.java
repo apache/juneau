@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.Accepted.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -21,8 +23,14 @@ import org.apache.juneau.http.annotation.*;
  * The request has been accepted for processing, but the processing has not been completed.
  * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
  */
-@Response(code=202, example="'Accepted'")
+@Response(code=CODE, description=MESSAGE)
 public class Accepted extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 202;
+
+	/** Default message */
+	public static final String MESSAGE = "Accepted";
 
 	/** Reusable instance. */
 	public static final Accepted INSTANCE = new Accepted();
@@ -31,7 +39,7 @@ public class Accepted extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public Accepted() {
-		this("Accepted");
+		this(MESSAGE);
 	}
 
 	/**

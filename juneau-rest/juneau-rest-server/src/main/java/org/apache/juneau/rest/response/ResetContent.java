@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.ResetContent.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -21,8 +23,14 @@ import org.apache.juneau.http.annotation.*;
  * The server successfully processed the request, but is not returning any content.
  * Unlike a 204 response, this response requires that the requester reset the document view.
  */
-@Response(code=205, example="'Reset Content'")
+@Response(code=CODE, description=MESSAGE)
 public class ResetContent extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 205;
+
+	/** Default message */
+	public static final String MESSAGE = "Reset Content";
 
 	/** Reusable instance. */
 	public static final ResetContent INSTANCE = new ResetContent();
@@ -31,7 +39,7 @@ public class ResetContent extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public ResetContent() {
-		this("Reset Content");
+		this(MESSAGE);
 	}
 
 	/**

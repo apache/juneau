@@ -21,17 +21,17 @@ import org.apache.juneau.rest.response.*;
  * Convenience subclass of {@link SeeOther} for redirecting a response to the servlet root.
  */
 @Response(description="Redirect to servlet root")
-public class SeeOtherServletRoot extends SeeOther {
+public class SeeOtherRoot extends SeeOther {
 
 	/**
 	 * Reusable instance.
 	 */
-	public static final SeeOtherServletRoot INSTANCE = new SeeOtherServletRoot();
+	public static final SeeOtherRoot INSTANCE = new SeeOtherRoot();
 
 	/**
 	 * Constructor.
 	 */
-	public SeeOtherServletRoot() {
+	public SeeOtherRoot() {
 		super(URI.create("servlet:/"));
 	}
 }

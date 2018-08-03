@@ -34,6 +34,16 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	/**
 	 * Constructor.
 	 *
+	 * @param req The HTTP servlet request.
+	 * @throws Exception
+	 */
+	public ChildResourceDescriptions(RestRequest req) throws Exception {
+		this(req.getContext(), req, false);
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param context The servlet context that this bean describes.
 	 * @param req The HTTP servlet request.
 	 * @throws Exception

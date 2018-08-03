@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.Ok.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -22,8 +24,14 @@ import org.apache.juneau.http.annotation.*;
  * In a GET request, the response will contain an entity corresponding to the requested resource.
  * In a POST request, the response will contain an entity describing or containing the result of the action.
  */
-@Response(code=200, example="'OK'")
+@Response(code=CODE, description=MESSAGE)
 public class Ok extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 200;
+
+	/** Default message */
+	public static final String MESSAGE = "OK";
 
 	/** Reusable instance. */
 	public static final Ok INSTANCE = new Ok();
@@ -34,7 +42,7 @@ public class Ok extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public Ok() {
-		this("OK");
+		this(MESSAGE);
 	}
 
 	/**

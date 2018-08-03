@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The request did not specify the length of its content, which is required by the requested resource.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class LengthRequired extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Length Required";
-
 	/** HTTP status code */
 	public static final int CODE = 411;
+
+	/** Default message */
+	public static final String MESSAGE = "Length Required";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class LengthRequired extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public LengthRequired(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

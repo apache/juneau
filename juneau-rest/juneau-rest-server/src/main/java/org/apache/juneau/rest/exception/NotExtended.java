@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * Further extensions to the request are required for the server to fulfill it.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class NotExtended extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Extended";
-
 	/** HTTP status code */
 	public static final int CODE = 510;
+
+	/** Default message */
+	public static final String MESSAGE = "Not Extended";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class NotExtended extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotExtended(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

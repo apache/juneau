@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server is unable to store the representation needed to complete the request.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class InsufficientStorage extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Insufficient Storage";
-
 	/** HTTP status code */
 	public static final int CODE = 507;
+
+	/** Default message */
+	public static final String MESSAGE = "Insufficient Storage";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class InsufficientStorage extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public InsufficientStorage(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

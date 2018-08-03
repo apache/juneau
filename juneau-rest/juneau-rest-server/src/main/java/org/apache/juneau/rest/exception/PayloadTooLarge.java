@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The request is larger than the server is willing or able to process.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class PayloadTooLarge extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Payload Too Large";
-
 	/** HTTP status code */
 	public static final int CODE = 413;
+
+	/** Default message */
+	public static final String MESSAGE = "Payload Too Large";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class PayloadTooLarge extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PayloadTooLarge(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

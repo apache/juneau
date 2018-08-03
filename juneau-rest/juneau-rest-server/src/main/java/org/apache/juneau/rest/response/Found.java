@@ -14,6 +14,8 @@ package org.apache.juneau.rest.response;
 
 import java.net.*;
 
+import static org.apache.juneau.rest.response.Found.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -26,8 +28,14 @@ import org.apache.juneau.http.annotation.*;
  * Therefore, HTTP/1.1 added status codes 303 and 307 to distinguish between the two behaviours.
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  */
-@Response(code=302, example="'Found'")
+@Response(code=CODE, description=MESSAGE)
 public class Found extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 302;
+
+	/** Default message */
+	public static final String MESSAGE = "Found";
 
 	/** Reusable instance. */
 	public static final Found INSTANCE = new Found();
@@ -38,7 +46,7 @@ public class Found extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public Found() {
-		this("Found", null);
+		this(MESSAGE, null);
 	}
 
 	/**
@@ -56,7 +64,7 @@ public class Found extends HttpResponse {
 	 * @param location <code>Location</code> header value.
 	 */
 	public Found(URI location) {
-		this("Found", location);
+		this(MESSAGE, location);
 	}
 
 	/**

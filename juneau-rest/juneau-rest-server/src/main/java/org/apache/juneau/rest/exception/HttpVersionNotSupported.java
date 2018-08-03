@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server does not support the HTTP protocol version used in the request.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class HttpVersionNotSupported extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "HTTP Version Not Supported";
-
 	/** HTTP status code */
 	public static final int CODE = 505;
+
+	/** Default message */
+	public static final String MESSAGE = "HTTP Version Not Supported";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class HttpVersionNotSupported extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public HttpVersionNotSupported(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

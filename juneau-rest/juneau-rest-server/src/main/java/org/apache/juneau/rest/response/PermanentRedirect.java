@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.PermanentRedirect.*;
+
 import java.net.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -23,8 +25,14 @@ import org.apache.juneau.http.annotation.*;
  * The request and all future requests should be repeated using another URI. 307 and 308 parallel the behaviors of 302 and 301, but do not allow the HTTP method to change.
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
-@Response(code=308, example="'Permanent Redirect'")
+@Response(code=CODE, description=MESSAGE)
 public class PermanentRedirect extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 308;
+
+	/** Default message */
+	public static final String MESSAGE = "Permanent Redirect";
 
 	/** Reusable instance. */
 	public static final PermanentRedirect INSTANCE = new PermanentRedirect();
@@ -35,7 +43,7 @@ public class PermanentRedirect extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public PermanentRedirect() {
-		this("Permanent Redirect", null);
+		this(MESSAGE, null);
 	}
 
 	/**
@@ -53,7 +61,7 @@ public class PermanentRedirect extends HttpResponse {
 	 * @param location <code>Location</code> header value.
 	 */
 	public PermanentRedirect(URI location) {
-		this("Permanent Redirect", location);
+		this(MESSAGE, location);
 	}
 
 	/**

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.IMUsed.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -20,8 +22,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The server has fulfilled a request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
  */
-@Response(code=226, example="'IM Used'")
+@Response(code=CODE, description=MESSAGE)
 public class IMUsed extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 226;
+
+	/** Default message */
+	public static final String MESSAGE = "IM Used";
 
 	/** Reusable instance. */
 	public static final IMUsed INSTANCE = new IMUsed();
@@ -30,7 +38,7 @@ public class IMUsed extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public IMUsed() {
-		this("IM Used");
+		this(MESSAGE);
 	}
 
 	/**

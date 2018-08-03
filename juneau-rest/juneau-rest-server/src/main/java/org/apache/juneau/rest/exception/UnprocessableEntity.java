@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The request was well-formed but was unable to be followed due to semantic errors.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class UnprocessableEntity extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Unprocessable Entity";
-
 	/** HTTP status code */
 	public static final int CODE = 422;
+
+	/** Default message */
+	public static final String MESSAGE = "Unprocessable Entity";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class UnprocessableEntity extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UnprocessableEntity(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

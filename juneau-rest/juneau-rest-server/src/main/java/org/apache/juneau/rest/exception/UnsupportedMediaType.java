@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The request entity has a media type which the server or resource does not support.
  * <br>For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class UnsupportedMediaType extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Unsupported Media Type";
-
 	/** HTTP status code */
 	public static final int CODE = 415;
+
+	/** Default message */
+	public static final String MESSAGE = "Unsupported Media Type";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class UnsupportedMediaType extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UnsupportedMediaType(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

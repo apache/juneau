@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.SeeOther.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
@@ -26,8 +27,14 @@ import org.apache.juneau.http.annotation.*;
  * The response to the request can be found under another URI using the GET method.
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  */
-@Response(code=303, example="'See Other'")
+@Response(code=CODE, description=MESSAGE)
 public class SeeOther extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 303;
+
+	/** Default message */
+	public static final String MESSAGE = "See Other";
 
 	/** Reusable instance. */
 	public static final SeeOther INSTANCE = new SeeOther();
@@ -38,7 +45,7 @@ public class SeeOther extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public SeeOther() {
-		this("See Other", null);
+		this(MESSAGE, null);
 	}
 
 	/**
@@ -69,7 +76,7 @@ public class SeeOther extends HttpResponse {
 	 * @param location <code>Location</code> header value.
 	 */
 	public SeeOther(URI location) {
-		this("See Other", location);
+		this(MESSAGE, location);
 	}
 
 	/**

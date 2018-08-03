@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.NotModified.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -21,8 +23,14 @@ import org.apache.juneau.http.annotation.*;
  * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  */
-@Response(code=304, example="'Not Modified'")
+@Response(code=CODE, description=MESSAGE)
 public class NotModified extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 304;
+
+	/** Default message */
+	public static final String MESSAGE = "Not Modified";
 
 	/** Reusable instance. */
 	public static final NotModified INSTANCE = new NotModified();
@@ -31,7 +39,7 @@ public class NotModified extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public NotModified() {
-		this("Not Modified");
+		this(MESSAGE);
 	}
 
 	/**

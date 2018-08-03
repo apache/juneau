@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class MisdirectedRequest extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Misdirected Request";
-
 	/** HTTP status code */
 	public static final int CODE = 421;
+
+	/** Default message */
+	public static final String MESSAGE = "Misdirected Request";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class MisdirectedRequest extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public MisdirectedRequest(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

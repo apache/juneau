@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The request was valid, but the server is refusing action.
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class Forbidden extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Forbidden";
-
 	/** HTTP status code */
 	public static final int CODE = 403;
+
+	/** Default message */
+	public static final String MESSAGE = "Forbidden";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class Forbidden extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Forbidden(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

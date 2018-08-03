@@ -28,18 +28,15 @@ import org.apache.juneau.rest.*;
  * <br>401 semantically means "unauthenticated",i.e. the user does not have the necessary credentials.
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class Unauthorized extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Unauthorized";
-
 	/** HTTP status code */
 	public static final int CODE = 401;
+
+	/** Default message */
+	public static final String MESSAGE = "Unauthorized";
 
 	/**
 	 * Constructor.
@@ -49,7 +46,7 @@ public class Unauthorized extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Unauthorized(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

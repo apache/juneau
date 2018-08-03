@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.Processing.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -22,8 +24,14 @@ import org.apache.juneau.http.annotation.*;
  * This code indicates that the server has received and is processing the request, but no response is available yet.
  * This prevents the client from timing out and assuming the request was lost.
  */
-@Response(code=102, example="'Processing'")
+@Response(code=CODE, description=MESSAGE)
 public class Processing extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 102;
+
+	/** Default message */
+	public static final String MESSAGE = "Processing";
 
 	/** Reusable instance. */
 	public static final Processing INSTANCE = new Processing();
@@ -32,7 +40,7 @@ public class Processing extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public Processing() {
-		this("Processing");
+		this(MESSAGE);
 	}
 
 	/**

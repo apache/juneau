@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The URI provided was too long for the server to process.
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class UriTooLong extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "URI Too Long";
-
 	/** HTTP status code */
 	public static final int CODE = 414;
+
+	/** Default message */
+	public static final String MESSAGE = "URI Too Long";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class UriTooLong extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UriTooLong(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

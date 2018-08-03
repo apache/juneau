@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * A request method is not supported for the requested resource; for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class MethodNotAllowed extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Method Not Allowed";
-
 	/** HTTP status code */
 	public static final int CODE = 405;
+
+	/** Default message */
+	public static final String MESSAGE = "Method Not Allowed";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class MethodNotAllowed extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public MethodNotAllowed(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

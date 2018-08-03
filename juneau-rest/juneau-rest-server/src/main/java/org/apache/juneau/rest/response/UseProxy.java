@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.UseProxy.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -21,8 +23,14 @@ import org.apache.juneau.http.annotation.*;
  * The requested resource is available only through a proxy, the address for which is provided in the response.
  * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
  */
-@Response(code=305, example="'Use Proxy'")
+@Response(code=CODE, description=MESSAGE)
 public class UseProxy extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 305;
+
+	/** Default message */
+	public static final String MESSAGE = "Use Proxy";
 
 	/** Reusable instance. */
 	public static final UseProxy INSTANCE = new UseProxy();
@@ -31,7 +39,7 @@ public class UseProxy extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public UseProxy() {
-		this("Use Proxy");
+		this(MESSAGE);
 	}
 
 	/**

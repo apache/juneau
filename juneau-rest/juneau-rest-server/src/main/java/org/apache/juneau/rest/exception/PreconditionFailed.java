@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server does not meet one of the preconditions that the requester put on the request.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class PreconditionFailed extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Precondition Failed";
-
 	/** HTTP status code */
 	public static final int CODE = 412;
+
+	/** Default message */
+	public static final String MESSAGE = "Precondition Failed";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class PreconditionFailed extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PreconditionFailed(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

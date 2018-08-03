@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.MultipleChoices.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -21,8 +23,14 @@ import org.apache.juneau.http.annotation.*;
  * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
  * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
  */
-@Response(code=300, example="'Multiple Choices'")
+@Response(code=CODE, description=MESSAGE)
 public class MultipleChoices extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 300;
+
+	/** Default message */
+	public static final String MESSAGE = "Multiple Choices";
 
 	/** Reusable instance. */
 	public static final MultipleChoices INSTANCE = new MultipleChoices();
@@ -31,7 +39,7 @@ public class MultipleChoices extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public MultipleChoices() {
-		this("Multiple Choices");
+		this(MESSAGE);
 	}
 
 	/**

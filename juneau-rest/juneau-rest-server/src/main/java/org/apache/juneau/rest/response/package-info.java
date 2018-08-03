@@ -13,6 +13,6 @@
  ***************************************************************************************************************************/
 
 /**
- * HTTP Response Exception Beans
+ * REST Server Utilities
  */
-package org.apache.juneau.rest.exception;
+package org.apache.juneau.rest.response;

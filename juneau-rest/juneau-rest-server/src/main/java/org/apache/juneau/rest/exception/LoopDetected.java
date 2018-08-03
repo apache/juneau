@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported).
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class LoopDetected extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Loop Detected";
-
 	/** HTTP status code */
 	public static final int CODE = 508;
+
+	/** Default message */
+	public static final String MESSAGE = "Loop Detected";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class LoopDetected extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public LoopDetected(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

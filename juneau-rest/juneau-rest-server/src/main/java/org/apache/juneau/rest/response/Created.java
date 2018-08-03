@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.Created.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -20,8 +22,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The request has been fulfilled, resulting in the creation of a new resource.
  */
-@Response(code=201, example="'Created'")
+@Response(code=CODE, description=MESSAGE)
 public class Created extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 201;
+
+	/** Default message */
+	public static final String MESSAGE = "Created";
 
 	/** Reusable instance. */
 	public static final Created INSTANCE = new Created();
@@ -30,7 +38,7 @@ public class Created extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public Created() {
-		this("Created");
+		this(MESSAGE);
 	}
 
 	/**

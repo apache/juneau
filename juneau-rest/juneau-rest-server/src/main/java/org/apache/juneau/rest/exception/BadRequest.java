@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, size too large, invalid request message framing, or deceptive request routing).
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class BadRequest extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Bad Request";
-
 	/** HTTP status code */
 	public static final int CODE = 400;
+
+	/** Default message */
+	public static final String MESSAGE = "Bad Request";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class BadRequest extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public BadRequest(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

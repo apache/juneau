@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.AlreadyReported.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -20,8 +22,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.
  */
-@Response(code=208, example="'Already Reported'")
+@Response(code=CODE, description=MESSAGE)
 public class AlreadyReported extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 208;
+
+	/** Default message */
+	public static final String MESSAGE = "Already Reported";
 
 	/** Reusable instance. */
 	public static final AlreadyReported INSTANCE = new AlreadyReported();
@@ -30,7 +38,7 @@ public class AlreadyReported extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public AlreadyReported() {
-		this("Already Reported");
+		this(MESSAGE);
 	}
 
 	/**

@@ -12,8 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.junit.Assert.*;
+
 import java.net.*;
 
+
+import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -22,6 +28,17 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicTest {
+
+	private static Swagger getSwagger(Object resource) {
+		try {
+			RestContext rc = RestContext.create(resource).build();
+			RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
+			RestInfoProvider ip = rc.getInfoProvider();
+			return ip.getSwagger(req);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic sanity tests
@@ -294,5 +311,138 @@ public class BasicTest {
 	@Test
 	public void c22_useProxy() throws Exception {
 		c.get("/useProxy").execute().assertStatus(305).assertBody("foo");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Should use Accept language for serialization.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource(serializers=SimpleJsonSerializer.class)
+	public static class D {
+		@RestMethod public Accepted accepted() { return new Accepted("foo"); }
+	}
+
+	static MockRest d = MockRest.create(D.class);
+
+	@Test
+	public void d01_accepted() throws Exception {
+		d.get("/accepted").json().execute().assertStatus(202).assertBody("'foo'");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test Swagger
+	//-----------------------------------------------------------------------------------------------------------------
+
+	static Swagger e = getSwagger(new A());
+
+	@Test
+	public void e01_accepted() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/accepted").get("get").getResponse(Accepted.CODE);
+		assertEquals(Accepted.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e02_alreadyReported() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/alreadyReported").get("get").getResponse(AlreadyReported.CODE);
+		assertEquals(AlreadyReported.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e03_continue() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/continue").get("get").getResponse(Continue.CODE);
+		assertEquals(Continue.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e04_created() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/created").get("get").getResponse(Created.CODE);
+		assertEquals(Created.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e05_earlyHints() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/earlyHints").get("get").getResponse(EarlyHints.CODE);
+		assertEquals(EarlyHints.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e06_found() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/found").get("get").getResponse(Found.CODE);
+		assertEquals(Found.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e07_imUsed() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/imUsed").get("get").getResponse(IMUsed.CODE);
+		assertEquals(IMUsed.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e08_movedPermanently() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/movedPermanently").get("get").getResponse(MovedPermanently.CODE);
+		assertEquals(MovedPermanently.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e09_multipleChoices() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/multipleChoices").get("get").getResponse(MultipleChoices.CODE);
+		assertEquals(MultipleChoices.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e10_multiStatus() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/multiStatus").get("get").getResponse(MultiStatus.CODE);
+		assertEquals(MultiStatus.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e11_noContent() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/noContent").get("get").getResponse(NoContent.CODE);
+		assertEquals(NoContent.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e12_nonAuthoritiveInformation() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/nonAuthoritiveInformation").get("get").getResponse(NonAuthoritiveInformation.CODE);
+		assertEquals(NonAuthoritiveInformation.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e13_notModified() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/notModified").get("get").getResponse(NotModified.CODE);
+		assertEquals(NotModified.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e14_ok() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/ok").get("get").getResponse(Ok.CODE);
+		assertEquals(Ok.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e15_partialContent() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/partialContent").get("get").getResponse(PartialContent.CODE);
+		assertEquals(PartialContent.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e16_permanentRedirect() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/permanentRedirect").get("get").getResponse(PermanentRedirect.CODE);
+		assertEquals(PermanentRedirect.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e17_processing() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/processing").get("get").getResponse(Processing.CODE);
+		assertEquals(Processing.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e18_resetContent() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/resetContent").get("get").getResponse(ResetContent.CODE);
+		assertEquals(ResetContent.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e19_seeOther() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/seeOther").get("get").getResponse(SeeOther.CODE);
+		assertEquals(SeeOther.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e20_switchingProtocols() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/switchingProtocols").get("get").getResponse(SwitchingProtocols.CODE);
+		assertEquals(SwitchingProtocols.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e21_temporaryRedirect() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/temporaryRedirect").get("get").getResponse(TemporaryRedirect.CODE);
+		assertEquals(TemporaryRedirect.MESSAGE, ri.getDescription());
+	}
+	@Test
+	public void e22_useProxy() throws Exception {
+		ResponseInfo ri = e.getPaths().get("/useProxy").get("get").getResponse(UseProxy.CODE);
+		assertEquals(UseProxy.MESSAGE, ri.getDescription());
 	}
 }

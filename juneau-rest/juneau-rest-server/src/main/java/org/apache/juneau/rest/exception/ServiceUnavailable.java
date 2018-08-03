@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The server is currently unavailable (because it is overloaded or down for maintenance).
  * <br>Generally, this is a temporary state.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class ServiceUnavailable extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Service Unavailable";
-
 	/** HTTP status code */
 	public static final int CODE = 503;
+
+	/** Default message */
+	public static final String MESSAGE = "Service Unavailable";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class ServiceUnavailable extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public ServiceUnavailable(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

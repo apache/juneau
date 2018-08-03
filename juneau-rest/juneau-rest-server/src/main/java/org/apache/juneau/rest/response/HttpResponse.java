@@ -12,12 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Superclass of all predefined responses in this package.
  *
  * <p>
  * Consists simply of a simple string message.
  */
+@Response
 public abstract class HttpResponse {
 
 	private final String message;
@@ -31,6 +34,7 @@ public abstract class HttpResponse {
 		this.message = message;
 	}
 
+	@ResponseBody
 	@Override /* Object */
 	public String toString() {
 		return message;

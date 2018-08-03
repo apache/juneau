@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.MovedPermanently.*;
+
 import java.net.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -22,8 +24,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * This and all future requests should be directed to the given URI.
  */
-@Response(code=301, example="'Moved Permanently'")
+@Response(code=CODE, description=MESSAGE)
 public class MovedPermanently extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 301;
+
+	/** Default message */
+	public static final String MESSAGE = "Moved Permanently";
 
 	/** Reusable instance. */
 	public static final MovedPermanently INSTANCE = new MovedPermanently();
@@ -34,7 +42,7 @@ public class MovedPermanently extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public MovedPermanently() {
-		this("Moved Permanently", null);
+		this(MESSAGE, null);
 	}
 
 	/**
@@ -52,7 +60,7 @@ public class MovedPermanently extends HttpResponse {
 	 * @param location <code>Location</code> header value.
 	 */
 	public MovedPermanently(URI location) {
-		this("Moved Permanently", location);
+		this(MESSAGE, location);
 	}
 
 	/**

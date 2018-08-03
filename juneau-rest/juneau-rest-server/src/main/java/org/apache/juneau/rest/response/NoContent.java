@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.NoContent.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -20,8 +22,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The server successfully processed the request and is not returning any content.
  */
-@Response(code=204, example="'No Content'")
+@Response(code=CODE, description=MESSAGE)
 public class NoContent extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 204;
+
+	/** Default message */
+	public static final String MESSAGE = "No Content";
 
 	/** Reusable instance. */
 	public static final NoContent INSTANCE = new NoContent();
@@ -30,7 +38,7 @@ public class NoContent extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public NoContent() {
-		this("No Content");
+		this(MESSAGE);
 	}
 
 	/**

@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
  * <br>Usually this implies future availability (e.g., a new feature of a web-service API).
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class NotImplemented extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Implemented";
-
 	/** HTTP status code */
 	public static final int CODE = 501;
+
+	/** Default message */
+	public static final String MESSAGE = "Not Implemented";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class NotImplemented extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotImplemented(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

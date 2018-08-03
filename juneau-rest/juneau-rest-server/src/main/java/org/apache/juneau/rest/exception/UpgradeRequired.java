@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class UpgradeRequired extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Upgrade Required";
-
 	/** HTTP status code */
 	public static final int CODE = 426;
+
+	/** Default message */
+	public static final String MESSAGE = "Upgrade Required";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class UpgradeRequired extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UpgradeRequired(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

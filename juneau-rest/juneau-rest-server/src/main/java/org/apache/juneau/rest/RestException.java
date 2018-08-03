@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.text.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -27,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  * REST methods on subclasses of {@link RestServlet} can throw this exception to trigger an HTTP status other than the
  * automatically-generated <code>404</code>, <code>405</code>, and <code>500</code> statuses.
  */
-public class RestException extends FormattedRuntimeException {
+public class RestException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,8 +41,14 @@ public class RestException extends FormattedRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestException(Throwable cause, int status, String msg, Object...args) {
-		super(cause, msg, args);
+		super(message(cause, msg, args), cause);
 		this.status = status;
+	}
+
+	private static String message(Throwable cause, String msg, Object...args) {
+		if (msg == null && cause != null)
+			return cause.getLocalizedMessage();
+		return format(msg, args);
 	}
 
 	/**
@@ -160,5 +165,11 @@ public class RestException extends FormattedRuntimeException {
 	 */
 	public int getStatus() {
 		return status;
+	}
+
+	// When serialized, just serialize the message itself.
+	@Override /* Object */
+	public String toString() {
+		return getLocalizedMessage();
 	}
 }

@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <br>
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class NotAcceptable extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Acceptable";
-
 	/** HTTP status code */
 	public static final int CODE = 406;
+
+	/** Default message */
+	public static final String MESSAGE = "Not Acceptable";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class NotAcceptable extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotAcceptable(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

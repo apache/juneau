@@ -10,33 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+/**
+ * HTTP Response Beans
+ */
+package org.apache.juneau.marshall;
 
-import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
-import org.apache.juneau.rest.test.client.*;
-
-@RestResource(
-	path="/",
-	children={
-		DebugResource.class,
-		LogsResource.class,
-		ConfigResource.class,
-		LargePojosResource.class,
-		RestClientResource.class,
-		ThirdPartyProxyResource.class,
-		ShutdownResource.class,
-	}
-)
-public class Root extends BasicRestServlet {
-	private static final long serialVersionUID = 1L;
-
-	@RestMethod(name=GET, path="/")
-	public ChildResourceDescriptions doGet(RestRequest req) throws Exception {
-		return new ChildResourceDescriptions(req);
-	}
-}

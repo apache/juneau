@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.TemporaryRedirect.*;
+
 import java.net.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -24,8 +26,14 @@ import org.apache.juneau.http.annotation.*;
  * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
  * For example, a POST request should be repeated using another POST request.
  */
-@Response(code=307, example="'Temporary Redirect'")
+@Response(code=CODE, description=MESSAGE)
 public class TemporaryRedirect extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 307;
+
+	/** Default message */
+	public static final String MESSAGE = "Temporary Redirect";
 
 	/** Reusable instance. */
 	public static final TemporaryRedirect INSTANCE = new TemporaryRedirect();
@@ -36,7 +44,7 @@ public class TemporaryRedirect extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public TemporaryRedirect() {
-		this("Temporary Redirect", null);
+		this(MESSAGE, null);
 	}
 
 	/**
@@ -54,7 +62,7 @@ public class TemporaryRedirect extends HttpResponse {
 	 * @param location <code>Location</code> header value.
 	 */
 	public TemporaryRedirect(URI location) {
-		this("Temporary Redirect", location);
+		this(MESSAGE, location);
 	}
 
 	/**

@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class Conflict extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Conflict";
-
 	/** HTTP status code */
 	public static final int CODE = 409;
+
+	/** Default message */
+	public static final String MESSAGE = "Conflict";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class Conflict extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Conflict(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

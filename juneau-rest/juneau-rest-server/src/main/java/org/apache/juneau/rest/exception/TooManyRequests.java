@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The user has sent too many requests in a given amount of time.
  * <br>Intended for use with rate-limiting schemes.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class TooManyRequests extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Too Many Requests";
-
 	/** HTTP status code */
 	public static final int CODE = 429;
+
+	/** Default message */
+	public static final String MESSAGE = "Too Many Requests";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class TooManyRequests extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public TooManyRequests(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

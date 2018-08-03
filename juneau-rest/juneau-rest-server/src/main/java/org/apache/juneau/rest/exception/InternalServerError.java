@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class InternalServerError extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Internal Server Error";
-
 	/** HTTP status code */
 	public static final int CODE = 500;
+
+	/** Default message */
+	public static final String MESSAGE = "Internal Server Error";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class InternalServerError extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public InternalServerError(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

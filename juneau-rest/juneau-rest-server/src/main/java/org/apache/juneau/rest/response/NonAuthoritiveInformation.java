@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.NonAuthoritiveInformation.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -20,8 +22,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The server is a transforming proxy (e.g. a Web accelerator) that received a 200 OK from its origin, but is returning a modified version of the origin's response.
  */
-@Response(code=203, example="'Non-Authoritative Information'")
+@Response(code=CODE, description=MESSAGE)
 public class NonAuthoritiveInformation extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 203;
+
+	/** Default message */
+	public static final String MESSAGE = "Non-Authoritative Information";
 
 	/** Reusable instance. */
 	public static final NonAuthoritiveInformation INSTANCE = new NonAuthoritiveInformation();
@@ -30,7 +38,7 @@ public class NonAuthoritiveInformation extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public NonAuthoritiveInformation() {
-		this("Non-Authoritative Information");
+		this(MESSAGE);
 	}
 
 	/**

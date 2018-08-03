@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion.
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class RangeNotSatisfiable extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Range Not Satisfiable";
-
 	/** HTTP status code */
 	public static final int CODE = 416;
+
+	/** Default message */
+	public static final String MESSAGE = "Range Not Satisfiable";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class RangeNotSatisfiable extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public RangeNotSatisfiable(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

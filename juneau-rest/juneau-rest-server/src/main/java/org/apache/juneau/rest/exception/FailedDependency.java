@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class FailedDependency extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Failed Dependency";
-
 	/** HTTP status code */
 	public static final int CODE = 424;
+
+	/** Default message */
+	public static final String MESSAGE = "Failed Dependency";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class FailedDependency extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public FailedDependency(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

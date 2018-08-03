@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * A server operator has received a legal demand to deny access to a resource or to a set of resources that includes the requested resource.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class UnavailableForLegalReasons extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Unavailable For Legal Reasons";
-
 	/** HTTP status code */
 	public static final int CODE = 451;
+
+	/** Default message */
+	public static final String MESSAGE = "Unavailable For Legal Reasons";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class UnavailableForLegalReasons extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UnavailableForLegalReasons(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

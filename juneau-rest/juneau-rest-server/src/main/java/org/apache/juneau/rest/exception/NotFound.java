@@ -26,18 +26,15 @@ import org.apache.juneau.rest.*;
  * The requested resource could not be found but may be available in the future.
  * <br>Subsequent requests by the client are permissible.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class NotFound extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Not Found";
-
 	/** HTTP status code */
 	public static final int CODE = 404;
+
+	/** Default message */
+	public static final String MESSAGE = "Not Found";
 
 	/**
 	 * Constructor.
@@ -47,7 +44,7 @@ public class NotFound extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotFound(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

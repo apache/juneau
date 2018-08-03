@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.EarlyHints.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -20,8 +22,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * Used to return some response headers before final HTTP message.
  */
-@Response(code=103, example="'Early Hints'")
+@Response(code=CODE, description=MESSAGE)
 public class EarlyHints extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 103;
+
+	/** Default message */
+	public static final String MESSAGE = "Early Hints";
 
 	/** Reusable instance. */
 	public static final EarlyHints INSTANCE = new EarlyHints();
@@ -30,7 +38,7 @@ public class EarlyHints extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public EarlyHints() {
-		this("Early Hints");
+		this(MESSAGE);
 	}
 
 	/**

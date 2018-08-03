@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.PartialContent.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -21,8 +23,14 @@ import org.apache.juneau.http.annotation.*;
  * The server is delivering only part of the resource (byte serving) due to a range header sent by the client.
  * The range header is used by HTTP clients to enable resuming of interrupted downloads, or split a download into multiple simultaneous streams.
  */
-@Response(code=206, example="'Partial Content'")
+@Response(code=CODE, description=MESSAGE)
 public class PartialContent extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 206;
+
+	/** Default message */
+	public static final String MESSAGE = "Partial Content";
 
 	/** Reusable instance. */
 	public static final PartialContent INSTANCE = new PartialContent();
@@ -31,7 +39,7 @@ public class PartialContent extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public PartialContent() {
-		this("Partial Content");
+		this(MESSAGE);
 	}
 
 	/**

@@ -258,7 +258,7 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	@Response(description="Redirect to root page on success")
-	static class RedirectToRoot extends SeeOtherServletRoot {}
+	static class RedirectToRoot extends SeeOtherRoot {}
 
 	@Response(description="File action")
 	public static class Action extends LinkString {

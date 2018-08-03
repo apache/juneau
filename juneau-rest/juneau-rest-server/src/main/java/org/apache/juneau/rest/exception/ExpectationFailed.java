@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server cannot meet the requirements of the Expect request-header field.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class ExpectationFailed extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Expectation Failed";
-
 	/** HTTP status code */
 	public static final int CODE = 417;
+
+	/** Default message */
+	public static final String MESSAGE = "Expectation Failed";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class ExpectationFailed extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public ExpectationFailed(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The resource that is being accessed is locked.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class Locked extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Locked";
-
 	/** HTTP status code */
 	public static final int CODE = 423;
+
+	/** Default message */
+	public static final String MESSAGE = "Locked";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class Locked extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Locked(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

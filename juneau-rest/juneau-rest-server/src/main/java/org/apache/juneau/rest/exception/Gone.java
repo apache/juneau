@@ -29,18 +29,15 @@ import org.apache.juneau.rest.*;
  * <br>Clients such as search engines should remove the resource from their indices.
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class Gone extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Gone";
-
 	/** HTTP status code */
 	public static final int CODE = 410;
+
+	/** Default message */
+	public static final String MESSAGE = "Gone";
 
 	/**
 	 * Constructor.
@@ -50,7 +47,7 @@ public class Gone extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public Gone(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**

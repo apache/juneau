@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.response;
 
+import static org.apache.juneau.rest.response.SwitchingProtocols.*;
+
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -20,8 +22,14 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  */
-@Response(code=101, example="'Switching Protocols'")
+@Response(code=CODE, description=MESSAGE)
 public class SwitchingProtocols extends HttpResponse {
+
+	/** HTTP status code */
+	public static final int CODE = 101;
+
+	/** Default message */
+	public static final String MESSAGE = "Switching Protocols";
 
 	/** Reusable instance. */
 	public static final SwitchingProtocols INSTANCE = new SwitchingProtocols();
@@ -30,7 +38,7 @@ public class SwitchingProtocols extends HttpResponse {
 	 * Constructor using HTTP-standard message.
 	 */
 	public SwitchingProtocols() {
-		this("Switching Protocols");
+		this(MESSAGE);
 	}
 
 	/**

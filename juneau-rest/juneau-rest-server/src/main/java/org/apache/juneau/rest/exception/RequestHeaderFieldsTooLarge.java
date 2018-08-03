@@ -25,18 +25,15 @@ import org.apache.juneau.rest.*;
  * <p>
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
  */
-@Response(
-	code=CODE,
-	description=MESSAGE
-)
+@Response(code=CODE, description=MESSAGE)
 public class RequestHeaderFieldsTooLarge extends RestException {
 	private static final long serialVersionUID = 1L;
 
-	/** Default message */
-	public static final String MESSAGE = "Request Header Fields Too Large";
-
 	/** HTTP status code */
 	public static final int CODE = 431;
+
+	/** Default message */
+	public static final String MESSAGE = "Request Header Fields Too Large";
 
 	/**
 	 * Constructor.
@@ -46,7 +43,7 @@ public class RequestHeaderFieldsTooLarge extends RestException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public RequestHeaderFieldsTooLarge(Throwable cause, String msg, Object...args) {
-		super(cause, CODE, getMessage(cause, msg, MESSAGE), args);
+		super(cause, CODE, msg, args);
 	}
 
 	/**
