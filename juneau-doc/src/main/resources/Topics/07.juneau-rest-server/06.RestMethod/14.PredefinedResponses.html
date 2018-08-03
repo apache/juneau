@@ -13,7 +13,114 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Predefined Responses
+{new} Predefined Responses
 
 <p>
+	Predefined response beans are provided for all standard HTTP responses.
+	<br>These can be used as-is or extended to provide customized HTTP responses. 
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<jk>public</jk> Ok addPet(<ja>@Body</ja> Pet pet) {
+		<jsm>addPet</jsm>(Pet);
+		
+		<jc>// Predefined "200 OK" response bean.</jc>
+		<jk>return new</jk> Ok();  <jc>// Could also use Ok.OK instance</jc> 
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet pet) {
+		<jsm>addPet</jsm>(Pet);
+		
+		<jc>// Predefined "302 See Other" response bean with redirect to /pets.</jc>
+		<jk>return new</jk> SeeOther(<js>"servlet:/pets"</js>);  
+	}
+</p>
+<ul class='doctree'>
+	<li class='jp'>{@link org.apache.juneau.rest.response}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.rest.response.Accepted}
+		<li class='jc'>{@link org.apache.juneau.rest.response.AlreadyReported}
+		<li class='jc'>{@link org.apache.juneau.rest.response.Continue}
+		<li class='jc'>{@link org.apache.juneau.rest.response.Created}
+		<li class='jc'>{@link org.apache.juneau.rest.response.EarlyHints}
+		<li class='jc'>{@link org.apache.juneau.rest.response.Found}
+		<li class='jc'>{@link org.apache.juneau.rest.response.IMUsed}
+		<li class='jc'>{@link org.apache.juneau.rest.response.MovedPermanently}
+		<li class='jc'>{@link org.apache.juneau.rest.response.MultipleChoices}
+		<li class='jc'>{@link org.apache.juneau.rest.response.MultiStatus}
+		<li class='jc'>{@link org.apache.juneau.rest.response.NoContent}
+		<li class='jc'>{@link org.apache.juneau.rest.response.NonAuthoritiveInformation}
+		<li class='jc'>{@link org.apache.juneau.rest.response.NotModified}
+		<li class='jc'>{@link org.apache.juneau.rest.response.Ok}
+		<li class='jc'>{@link org.apache.juneau.rest.response.PartialContent}
+		<li class='jc'>{@link org.apache.juneau.rest.response.PermanentRedirect}
+		<li class='jc'>{@link org.apache.juneau.rest.response.Processing}
+		<li class='jc'>{@link org.apache.juneau.rest.response.ResetContent}
+		<li class='jc'>{@link org.apache.juneau.rest.response.SeeOther}
+		<li class='jc'>{@link org.apache.juneau.rest.response.SwitchingProtocols}
+		<li class='jc'>{@link org.apache.juneau.rest.response.TemporaryRedirect}
+		<li class='jc'>{@link org.apache.juneau.rest.response.UseProxy}
+	</ul>
+</ul>
+<p>
+	These predefined response beans are an example of {@link org.apache.juneau.http.annotation.Response @Response}-annotated 
+	objects that are describe in detail later.
+	<br>Without going into details, this is how the {@link org.apache.juneau.rest.response.SeeOther} is defined:
+</p>
+<p class='bpcode w800'>
+	<ja>@Response</ja>(
+		code=303  <jc>// Set automatically on response</jc>,
+		description=<js>"See Other"</js> <jc>// Used in generated Swagger</jc>
+	)
+	<jk>public class</jk> SeeOther {
+
+		<jk>private final</jk> String <jf>message</jf>;
+		<jk>private final</jk> URI <jf>location</jf>;
+
+		<jc>// Constructors omitted.</jc>	
+
+		<jc>// Used to populate Location response header.</jc>	
+		<ja>@ResponseHeader</ja>(name=<js>"Location"</js>)
+		<jk>public</jk> URI getLocation() {
+			<jk>return</jk> <jf>location</jf>;
+		}
+	
+		<jc>// Used during serialization.</jc>	
+		<ja>@ResponseBody</ja>
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <jf>message</jf>;
+		}
+	}
+</p>
+<p>
+	The {@link org.apache.juneau.rest.helper.SeeOtherRoot} class shows how these predefined beans can be extended.
+</p>
+<p class='bpcode w800'>
+	<ja>@Response</ja>(
+		description=<js>"Redirect to servlet root"</js> <jc>// Override description in generated Swagger.</jc>
+	)
+	<jk>public class</jk> SeeOtherServletRoot <jk>extends</jk> SeeOther {
+	
+		<jk>public</jk> SeeOtherServletRoot() {
+			<jk>super</jk>(URI.create("servlet:/"));
+		}
+	}
+</p>
+<p>
+	Note that the runtime behavior of the following code is identical to the example above.
+	<br>However, the important distinction is that in the previous example, the 302 response would show in
+	the generated Swagger (since we can see the response through reflection), whereas it will NOT show up
+	in the following example (since all we see is an Object response). 
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<jk>public</jk> Object addPet(<ja>@Body</ja> Pet pet) {
+		<jsm>addPet</jsm>(Pet);
+		
+		<jc>// Note the Object return type.</jc>
+		<jk>return new</jk> SeeOther(<js>"servlet:/pets"</js>);  
+	}
 </p>

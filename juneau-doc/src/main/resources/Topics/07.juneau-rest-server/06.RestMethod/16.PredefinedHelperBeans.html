@@ -26,21 +26,23 @@
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
-		<li class='jc'>{@link org.apache.juneau.rest.helper.SeeOtherServletRoot}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.SeeOtherRoot}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
+		<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescriptions}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
 		<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
 	</ul>
 </ul>
 
-<h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
+<h5 class='topic'>ResourceDescription, ResourceDescrptions</h5>
 <p>
 	The {@link org.apache.juneau.rest.helper.ResourceDescription} class is a bean with name/description
 	properties for labeling and linking to child resources.
 	<br>The following examples is pulled from the REST examples:
 </p>
 <p class='bpcode w800'>
-	<jk>public class</jk> PredefinedLabelsResource <jk>extends</jk> BasicRestServlet {
+	<ja>@Resource</ja>
+	<jk>public class</jk> PredefinedLabelsResource {
 	
 		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
 		<jk>public</jk> ResourceDescription[] getChildMethods() {
@@ -62,12 +64,79 @@
 <p class='bpcode w800'>
 	<jk>public class</jk> ResourceDescription {
 
+		<jc>// Renders as hyperlink when serialized as HTML.</jc>
 		<ja>@Html</ja>(link=<js>"servlet:/{name}"</js>)
-		<jk>public</jk> Object getName() {...}
+		<jk>public</jk> String getName() {...}
 		
-		<jk>public</jk> Object getDescription() {...}
+		<jk>public</jk> String getDescription() {...}
 	}
 </p>
+<p>
+	{@link org.apache.juneau.rest.helper.ResourceDescriptions} is a convenience class for doing the same.
+	<br>The example above can also be written as follows (which you'll notice is more concise):
+</p>
+<p class='bpcode w800'>
+	<ja>@Resource</ja>
+	<jk>public class</jk> PredefinedLabelsResource {
+	
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
+		<jk>public</jk> ResourceDescriptions getChildMethods() {
+			<jk>return new</jk> ResourceDescriptions()
+				.append(<js>"beanDescription"</js>, <js>"BeanDescription"</js>)
+				.append(<js>"htmlLinks"</js>, <js>"HtmlLink"</js>);
+		}
+	}
+</p>
+<h5 class='topic'>@HtmlLink, LinkString</h5>
+<p>
+	The {@link org.apache.juneau.html.annotation.HtmlLink @HtmlLink} annotation can also be useful
+	for rendering custom hyperlinks:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> MyLink[] htmlLinks() {
+		<jk>return new</jk> MyLink[] {
+			<jk>new</jk> MyLink(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> MyLink(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+		};
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@HtmlLink</ja>(nameProperty=<js>"name"</js>, hrefProperty=<js>"href"</js>)
+	<jk>public class</jk> MyLink {
+	
+		<jc>// Simple bean properties.</jc>
+		<jk>public</jk> String <jf>name</jf>, <jf>href</jf>;  
+	
+		<jk>public</jk> MyLink(String name, String href) {
+			<jk>this</jk>.<jf>name</jf> = name;
+			<jk>this</jk>.<jf>href</jf> = href;
+		}
+	}
+</p>			
+<p>
+	The {@link org.apache.juneau.dto.LinkString LinkString} bean is a predefined <ja>@HtmlLink</ja> bean provided
+	to simplify specifying actions.
+	<br>The following is equivalent to above.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>
+	<jk>public</jk> LinkString[] htmlLinks() {
+		<jk>return new</jk> LinkString[] {
+			<jk>new</jk> LinkString(<js>"apache"</js>, <js>"http://apache.org"</js>),
+			<jk>new</jk> LinkString(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
+		};
+	}
+</p>			
+<p>
+	Both examples render the following consisting of a list of hyperlinks:
+</p>
+<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
+<p>
+	In all other languages, it gets serialized as a simple bean with two properties.
+</p>
+
+<h5 class='topic'>BeanDescription</h5>
 <p>
 	The {@link org.apache.juneau.rest.helper.BeanDescription} class provides a simple view
 	of a bean and it's properties.
@@ -82,46 +151,91 @@
 	This example renders the following:
 </p>
 <img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.2.png' style='width:584px'/>
+
+<h5 class='topic'>ChildResourceDescriptions</h5>
 <p>
-	The {@link org.apache.juneau.html.annotation.HtmlLink @HtmlLink} annotation can also be useful
-	for rendering custom hyperlinks:
+	The {@link org.apache.juneau.rest.helper.ChildResourceDescriptions} is a convenience bean for generating
+	a table of child resources.
+</p>
+<p>
+	The {@link org.apache.juneau.rest.BasicRestServletGroup} class uses this to generate router pages:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
-	<jk>public</jk> ALink[] htmlLinks() {
-		<jk>return new</jk> ALink[] {
-			<jk>new</jk> ALink(<js>"apache"</js>, <js>"http://apache.org"</js>),
-			<jk>new</jk> ALink(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
-		};
-	}
+	<ja>@RestResource</ja>
+	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {
 	
-	<ja>@HtmlLink</ja>(nameProperty=<js>"n"</js>, hrefProperty=<js>"l"</js>)
-	<jk>public static class</jk> ALink {
-		<jk>public</jk> String <jf>n</jf>, <jf>l</jf>;
-		<jk>public</jk> ALink(String n, String l) {
-			<jk>this</jk>.<jf>n</jf> = n;
-			<jk>this</jk>.<jf>l</jf> = l;
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, summary=<js>"Navigation page"</js>)
+		<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return new</jk> ChildResourceDescriptions(req);
 		}
 	}
-</p>			
+</p>
 <p>
-	The {@link org.apache.juneau.dto.LinkString LinkString} bean is a predefined <ja>@HtmlLink</ja> bean provided
-	to simplify specifying actions.
-	<br>The following is equivalent to above.
+	Note that all it requires is a {@link org.apache.juneau.rest.RestRequest} object and it will generate a router
+	page using reflection against the resource class.
+</p>
+<p>
+	For example, the <code>RootResources</code> page in the REST examples renders the child resources attached to the root resource:
+</p>
+<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.4.png' style='width:800px'/>
+<p>
+	The <code>RootResources</code> page consists of the following and extends from the {@link org.apache.juneau.rest.BasicRestServletGroup} class:
 </p>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/htmlLinks"</js>)
-	<jk>public</jk> LinkString[] htmlLinks() {
-		<jk>return new</jk> LinkString[] {
-			<jk>new</jk> LinkString(<js>"apache"</js>, <js>"http://apache.org"</js>),
-			<jk>new</jk> LinkString(<js>"juneau"</js>, <js>"http://juneau.apache.org"</js>)
-		};
-	}
-</p>			
-<p>
-	Both examples render the following consisting of a list of hyperlinks:
+	<ja>@RestResource</ja>(
+		...
+		children={
+			HelloWorldResource.<jk>class</jk>,
+			PetStoreResource.<jk>class</jk>,
+			SystemPropertiesResource.<jk>class</jk>,
+			MethodExampleResource.<jk>class</jk>,
+			RequestEchoResource.<jk>class</jk>,
+			AddressBookResource.<jk>class</jk>,
+			SampleRemoteableServlet.<jk>class</jk>,
+			DtoExamples.<jk>class</jk>,
+			PhotosResource.<jk>class</jk>,
+			SqlQueryResource.<jk>class</jk>,
+			CodeFormatterResource.<jk>class</jk>,
+			UrlEncodedFormResource.<jk>class</jk>,
+			TempDirResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			LogsResource.<jk>class</jk>,
+			DockerRegistryResource.<jk>class</jk>,
+			DebugResource.<jk>class</jk>,
+			ShutdownResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {}
 </p>
-<img class='bordered' src='doc-files/juneau-rest-server.PredefinedLabelBeans.3.png' style='width:92px'/>
 
-<h5 class='topic'>ResourceDescription, BeanDescription, ChildResourceDescriptions</h5>
+<h5 class='topic'>SeeOtherRoot</h5>
+<p>
+	The {@link org.apache.juneau.rest.helper.SeeOtherRoot} class can be used to redirect to the root URI
+	of a resource class.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<jk>public</jk> SeeOtherRoot addPet(<ja>@Body</ja> Pet pet) {
+		<jsm>addPet</jsm>(Pet);
+		
+		<jc>// Redirects to the servlet root URL.</jc>
+		<jk>return</jk> SeeOtherRoot.INSTANCE;  
+	}
+</p>
+<p>
+	The runtime behavior is the same as the following:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"POST"</js>, path=<js>"/pets"</js>)
+	<jk>public</jk> SeeOther addPet(<ja>@Body</ja> Pet pet) {
+		<jsm>addPet</jsm>(Pet);
+		
+		<jc>// Redirects to the servlet root URL.</jc>
+		<jk>return new</jk> SeeOther(URI.<jsm>create</jsm>(<js>"servlet:/"</js>));  
+	}
+</p>
+<p>
+	One distinction is that the former defines the description <js>"Redirect to servlet root"</js> in the generated Swagger documentation.
+</p>
 
+<h5 class='topic'>ReaderResource, StreamResource</h5>

@@ -13,24 +13,28 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Predefined Exceptions
+{new} Predefined Exceptions
 
 <p>
 	Exceptions are defined for all standardized HTTP responses.
 	These can be used to trigger HTTP errors simply by throwing an exception.
 </p>
+<p>
+	These are identical in behavior to the Predefined Responses in the previous section, except these are meant
+	to be thrown instead of returned.
+</p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
-	<jk>public</jk> String login(
+	<jk>public</jk> Ok login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,
 	) <jk>throws</jk> Unauthorized 
 	{
-		<jk>if</jk> (! isOK(username, password))
-			<jk>throw new</jk> Unauthorized();
+		<jk>if</jk> (! <jsm>isOK</jsm>(username, password))
+			<jk>throw new</jk> Unauthorized(<js>"You're not welcome!"</js>);
 			
-		<jk>return</jk> <js>"OK"</js>;
+		<jk>return</jk> Ok.<jsf>OK</jsf>;
 	}
 </p>
 <ul class='doctree'>
@@ -71,3 +75,9 @@
 		<li class='jc'>{@link org.apache.juneau.rest.exception.VariantAlsoNegotiates}
 	</ul>
 </ul>
+<p>
+	These exception extend from {@link java.lang.RuntimeException}, so they can optionally be specified in the thrown
+	declaration of the method.
+	<br>The important distinction is that when part of the thrown declaration, they show up in the generated Swagger
+	documentation, whereas they don't if not.  This behavior can be used to define what error conditions show in your Swagger doc.
+</p>
