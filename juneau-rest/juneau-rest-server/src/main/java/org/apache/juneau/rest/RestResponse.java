@@ -67,7 +67,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private FinishablePrintWriter w;
 	private HtmlDocBuilder htmlDocBuilder;
 
-	private ResponseBeanMeta resBeanMeta;
+	private ResponseBeanMeta responseMeta;
 
 	/**
 	 * Constructor.
@@ -120,7 +120,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset"));
 		super.setCharacterEncoding(charset);
 
-		this.resBeanMeta = rjm.responseMeta;
+		this.responseMeta = rjm.responseMeta;
 	}
 
 	/**
@@ -522,8 +522,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * 	The metadata about this response.
 	 * 	<jk>Never <jk>null</jk>.
 	 */
-	public ResponseBeanMeta getResponseBeanMeta() {
-		return resBeanMeta;
+	public ResponseBeanMeta getResponseMeta() {
+		return responseMeta;
 	}
 
 	/**
@@ -532,8 +532,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @param rbm The metadata about this response.
 	 * @return This object (for method chaining).
 	 */
-	public RestResponse setResponseBeanMeta(ResponseBeanMeta rbm) {
-		this.resBeanMeta = rbm;
+	public RestResponse setResponseMeta(ResponseBeanMeta rbm) {
+		this.responseMeta = rbm;
 		return this;
 	}
 

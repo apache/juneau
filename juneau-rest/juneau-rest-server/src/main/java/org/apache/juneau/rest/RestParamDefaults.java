@@ -673,12 +673,12 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ResponseBeanObject extends RestMethodParam {
-		final ResponseBeanMeta rbm;
+	static final class ResponseObject extends RestMethodParam {
+		final ResponseBeanMeta meta;
 
-		protected ResponseBeanObject(Method m, int i, PropertyStore ps) {
+		protected ResponseObject(Method m, int i, PropertyStore ps) {
 			super(RESPONSE, m, i);
-			this.rbm = ResponseBeanMeta.create(m, i, ps);
+			this.meta = ResponseBeanMeta.create(m, i, ps);
 			if (getTypeClass() != Value.class)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be Value.", type);
 		}
@@ -690,10 +690,10 @@ class RestParamDefaults {
 			v.listener(new ValueListener() {
 				@Override
 				public void onSet(Object o) {
-					ResponseBeanMeta rbm = req.getResponseBeanMeta(o);
-					if (rbm == null)
-						rbm = ResponseBeanObject.this.rbm;
-					res.setResponseBeanMeta(rbm);
+					ResponseBeanMeta meta = req.getResponseBeanMeta(o);
+					if (meta == null)
+						meta = ResponseObject.this.meta;
+					res.setResponseMeta(meta);
 					res.setOutput(o);
 				}
 			});

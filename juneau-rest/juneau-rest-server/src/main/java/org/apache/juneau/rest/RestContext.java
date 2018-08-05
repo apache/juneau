@@ -4323,7 +4323,7 @@ public final class RestContext extends BeanContext {
 			} else if (hasAnnotation(RequestBean.class, method, i)) {
 				rp[i] = new RestParamDefaults.RequestBeanObject(method, i, ps);
 			} else if (hasAnnotation(Response.class, method, i)) {
-				rp[i] = new RestParamDefaults.ResponseBeanObject(method, i, ps);
+				rp[i] = new RestParamDefaults.ResponseObject(method, i, ps);
 			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, i, ps);
 			} else if (hasAnnotation(ResponseStatus.class, method, i)) {

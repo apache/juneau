@@ -58,24 +58,24 @@ public class DefaultHandler implements ResponseHandler {
 
 		Object o = res.getOutput();
 
-		ResponseBeanMeta rbm = res.getResponseBeanMeta();
-		if (rbm == null)
-			rbm = req.getResponseBeanMeta(o);
+		ResponseBeanMeta rm = res.getResponseMeta();
+		if (rm == null)
+			rm = req.getResponseBeanMeta(o);
 
-		if (rbm != null) {
+		if (rm != null) {
 
-			Method stm = rbm.getStatusMethod();
+			Method stm = rm.getStatusMethod();
 			if (stm != null) {
 				try {
 					res.setStatus((int)stm.invoke(o));
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not get status.");
 				}
-			} else if (rbm.getCode() != 0) {
-				res.setStatus(rbm.getCode());
+			} else if (rm.getCode() != 0) {
+				res.setStatus(rm.getCode());
 			}
 
-			for (ResponseBeanPropertyMeta hm : rbm.getHeaderMethods()) {
+			for (ResponseBeanPropertyMeta hm : rm.getHeaderMethods()) {
 				try {
 					Object ho = hm.getGetter().invoke(o);
 					if (ho instanceof URI)
@@ -86,14 +86,14 @@ public class DefaultHandler implements ResponseHandler {
 				}
 			}
 
-			Method m = rbm.getBodyMethod();
-			boolean usePartSerializer = rbm.isUsePartSerializer();
-			HttpPartSchema schema = rbm.getSchema();
+			Method m = rm.getBodyMethod();
+			boolean usePartSerializer = rm.isUsePartSerializer();
+			HttpPartSchema schema = rm.getSchema();
 
 			if (m != null) {
 				try {
 					o = m.invoke(o);
-					schema = rbm.getSchema();
+					schema = rm.getSchema();
 					usePartSerializer |= schema.isUsePartSerializer();
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not get body.");
@@ -103,7 +103,7 @@ public class DefaultHandler implements ResponseHandler {
 			if (usePartSerializer) {
 				if (res.getContentType() == null)
 					res.setContentType("text/plain");
-				HttpPartSerializer ps = firstNonNull(rbm.getPartSerializer(), req.getPartSerializer());
+				HttpPartSerializer ps = firstNonNull(rm.getPartSerializer(), req.getPartSerializer());
 				if (ps != null) {
 					try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
 						w.append(ps.serialize(HttpPartType.BODY, schema, o));
