@@ -82,7 +82,7 @@ import org.apache.juneau.httppart.*;
  * </ul>
 */
 @Documented
-@Target({PARAMETER,TYPE,METHOD})
+@Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface ResponseHeader {

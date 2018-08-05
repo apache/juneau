@@ -14,12 +14,20 @@ package org.apache.juneau;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.*;
+import java.util.*;
+
+import org.apache.juneau.internal.*;
 import org.junit.*;
 
 /**
  * Validates the {@link Value} class.
  */
 public class ValueTest {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Value defined on parent class.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class A extends Value<A1>{}
 	public static class A1 {}
@@ -29,14 +37,29 @@ public class ValueTest {
 		assertEquals(A1.class, Value.getParameterType(A.class));
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Value used in parameter.
+	//-----------------------------------------------------------------------------------------------------------------
 	public static class B {
 		public void b(Value<B1> b1) {};
-
 	}
 	public static class B1 {}
 
 	@Test
-	public void testParameter() throws Exception {
+	public void testOnParameter() throws Exception {
 		assertEquals(B1.class, Value.getParameterType(B.class.getMethod("b", Value.class), 0));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Value used on parameter of parameterized-type.
+	//-----------------------------------------------------------------------------------------------------------------
+	public interface C {
+		void m1(Value<List<Integer>> v);
+	}
+
+	@Test
+	public void testOnParameterType() throws Exception {
+		Type t = Value.getParameterType(C.class.getMethod("m1", Value.class), 0);
+		assertEquals("List<Integer>", ClassUtils.getSimpleName(t));
 	}
 }

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
@@ -75,9 +74,7 @@ import org.apache.juneau.httppart.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
-@Inherited
 public @interface Schema {
 
 	/**

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import org.apache.juneau.httppart.*;
+
 /**
  * Various reusable utility methods when working with annotations.
  */
@@ -253,9 +255,10 @@ public class AnnotationUtils {
 	 * @return <jk>true</jk> if all the specified strings are empty or null.
 	 */
 	protected static boolean allEmpty(String...strings) {
-		for (String s : strings)
-			if (s != null && ! s.isEmpty())
-				return false;
+		if (strings != null)
+			for (String s : strings)
+				if (s != null && ! s.isEmpty())
+					return false;
 		return true;
 	}
 
@@ -267,7 +270,7 @@ public class AnnotationUtils {
 	 */
 	protected static boolean allEmpty(String[]...strings) {
 		for (String[] s : strings)
-			if (s.length != 0 || ! allEmpty(s))
+			if (s != null && s.length > 0 && ! allEmpty(s))
 				return false;
 		return true;
 	}
@@ -296,5 +299,57 @@ public class AnnotationUtils {
 			if (i != -1)
 				return false;
 		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the part parser should be used on the specified part.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the part parser should be used on the specified part.
+	 */
+	public static boolean usePartParser(Body a) {
+		return
+			a.usePartParser()
+			|| a.partParser() != HttpPartParser.Null.class
+			|| ! empty(a.schema());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the part serializer should be used on the specified part.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the part serializer should be used on the specified part.
+	 */
+	public static boolean usePartSerializer(Body a) {
+		return
+			a.usePartSerializer()
+			|| a.partSerializer() != HttpPartSerializer.Null.class
+			|| ! empty(a.schema());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the part serializer should be used on the specified part.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the part serializer should be used on the specified part.
+	 */
+	public static boolean usePartSerializer(ResponseBody a) {
+		return
+			a.usePartSerializer()
+			|| a.partSerializer() != HttpPartSerializer.Null.class
+			|| ! empty(a.schema());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the part serializer should be used on the specified part.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the part serializer should be used on the specified part.
+	 */
+	public static boolean usePartSerializer(Response a) {
+		return
+			a.usePartSerializer()
+			|| a.partSerializer() != HttpPartSerializer.Null.class
+			|| ! empty(a.schema());
 	}
 }

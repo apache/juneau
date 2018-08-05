@@ -2157,6 +2157,36 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns the simple name of a class.
+	 *
+	 * <p>
+	 * Similar to {@link Class#getSimpleName()}, but includes the simple name of an enclosing or declaring class.
+	 *
+	 * @param t The class to get the simple name on.
+	 * @return The simple name of a class.
+	 */
+	public static String getSimpleName(Type t) {
+		if (t instanceof Class)
+			return getSimpleName((Class<?>)t);
+		if (t instanceof ParameterizedType) {
+			StringBuilder sb = new StringBuilder();
+			ParameterizedType pt = (ParameterizedType)t;
+			sb.append(getSimpleName(pt.getRawType()));
+			sb.append("<");
+			boolean first = true;
+			for (Type t2 : pt.getActualTypeArguments()) {
+				if (! first)
+					sb.append(',');
+				first = false;
+				sb.append(getSimpleName(t2));
+			}
+			sb.append(">");
+			return sb.toString();
+		}
+		return null;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
 	 *
 	 * @param a The annotation to check for.
@@ -2180,14 +2210,14 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the {@link #getAnnotation(Class, Class)} returns a value.
+	 * Returns <jk>true</jk> if the {@link #getAnnotation(Class, Type)} returns a value.
 	 *
 	 * @param a The annotation to check for.
-	 * @param c The class to check.
-	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Class)} returns a value.
+	 * @param t The class to check.
+	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Type)} returns a value.
 	 */
-	public static boolean hasAnnotation(Class<? extends Annotation> a, Class<?> c) {
-		return getAnnotation(a, c) != null;
+	public static boolean hasAnnotation(Class<? extends Annotation> a, Type t) {
+		return getAnnotation(a, t) != null;
 	}
 
 	/**
@@ -2206,9 +2236,7 @@ public final class ClassUtils {
 		Type t = m.getGenericParameterTypes()[index];
 		if (Value.isType(t))
 			return getAnnotation(a, Value.getParameterType(t));
-		if (t instanceof Class)
-			return getAnnotation(a, (Class<?>)t);
-		return null;
+		return getAnnotation(a, t);
 	}
 
 	/**
@@ -2229,10 +2257,10 @@ public final class ClassUtils {
 			if (a.isInstance(a2))
 				l.add((T)a2);
 		Type t = m.getGenericParameterTypes()[index];
-		if (t instanceof Class)
-			appendAnnotations(a, (Class<?>)t, l);
-		else if (Value.isType(t))
+		if (Value.isType(t))
 			appendAnnotations(a, Value.getParameterType(t), l);
+		else
+			appendAnnotations(a, t, l);
 		return l;
 	}
 
@@ -2270,10 +2298,10 @@ public final class ClassUtils {
 			if (a.isInstance(a2))
 				l.add((T)a2);
 		Type t = m.getGenericReturnType();
-		if (t instanceof Class)
-			appendAnnotations(a, (Class<?>)t, l);
-		else if (Value.isType(t))
+		if (Value.isType(t))
 			appendAnnotations(a, Value.getParameterType(t), l);
+		else
+			appendAnnotations(a, t, l);
 		return l;
 	}
 
@@ -2305,10 +2333,7 @@ public final class ClassUtils {
 		for (Annotation a2 :  m.getAnnotations())
 			if (a.isInstance(a2))
 				return (T)a2;
-		Type t = m.getGenericReturnType();
-		if (t instanceof Class)
-			return getAnnotation(a, (Class<?>)t);
-		return null;
+		return getAnnotation(a, m.getGenericReturnType());
 	}
 
 	/**
@@ -2316,25 +2341,25 @@ public final class ClassUtils {
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class.
-	 * @param c The annotated class.
+	 * @param t The annotated class.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public static <T extends Annotation> T getAnnotation(Class<T> a, Class<?> c) {
-		if (c == null)
-			return null;
+	public static <T extends Annotation> T getAnnotation(Class<T> a, Type t) {
+		Class<?> c = toClass(t);
+		if (c != null) {
+			T t2 = getDeclaredAnnotation(a, c);
+			if (t2 != null)
+				return t2;
 
-		T t = getDeclaredAnnotation(a, c);
-		if (t != null)
-			return t;
+			t2 = getAnnotation(a, c.getSuperclass());
+			if (t2 != null)
+				return t2;
 
-		t = getAnnotation(a, c.getSuperclass());
-		if (t != null)
-			return t;
-
-		for (Class<?> c2 : c.getInterfaces()) {
-			t = getAnnotation(a, c2);
-			if (t != null)
-				return t;
+			for (Class<?> c2 : c.getInterfaces()) {
+				t2 = getAnnotation(a, c2);
+				if (t2 != null)
+					return t2;
+			}
 		}
 		return null;
 	}
@@ -2348,14 +2373,16 @@ public final class ClassUtils {
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class.
-	 * @param c The annotated class.
+	 * @param t The annotated class.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends Annotation> T getDeclaredAnnotation(Class<T> a, Class<?> c) {
-		for (Annotation a2 : c.getDeclaredAnnotations())
-			if (a2.annotationType() == a)
-				return (T)a2;
+	public static <T extends Annotation> T getDeclaredAnnotation(Class<T> a, Type t) {
+		Class<?> c = toClass(t);
+		if (c != null)
+			for (Annotation a2 : c.getDeclaredAnnotations())
+				if (a2.annotationType() == a)
+					return (T)a2;
 		return null;
 	}
 
@@ -2368,30 +2395,30 @@ public final class ClassUtils {
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
-	 * @param c The class being searched.
+	 * @param t The class being searched.
 	 * @return The found matches, or an empty array if annotation was not found.
 	 */
-	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Class<?> c) {
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Type t) {
 		List<T> l = new LinkedList<>();
-		appendAnnotations(a, c, l);
+		appendAnnotations(a, t, l);
 		return l;
 	}
 
 	/**
-	 * Same as {@link #getAnnotations(Class, Class)} but returns the list in parent-to-child order.
+	 * Same as {@link #getAnnotations(Class, Type)} but returns the list in parent-to-child order.
 	 *
 	 * @param a The annotation class type.
-	 * @param c The class being searched.
+	 * @param t The class being searched.
 	 * @return The found matches, or an empty array if annotation was not found.
 	 */
-	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Class<?> c) {
-		List<T> l = getAnnotations(a, c);
+	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Type t) {
+		List<T> l = getAnnotations(a, t);
 		Collections.reverse(l);
 		return l;
 	}
 
 	/**
-	 * Same as {@link #getAnnotations(Class, Class)} except returns the annotations as a map with the keys being the
+	 * Same as {@link #getAnnotations(Class, Type)} except returns the annotations as a map with the keys being the
 	 * class on which the annotation was found.
 	 *
 	 * <p>
@@ -2399,39 +2426,40 @@ public final class ClassUtils {
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
-	 * @param c The class being searched.
+	 * @param t The class being searched.
 	 * @return The found matches, or an empty map if annotation was not found.
 	 */
-	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMap(Class<T> a, Class<?> c) {
+	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMap(Class<T> a, Type t) {
 		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<>();
-		findAnnotationsMap(a, c, m);
+		findAnnotationsMap(a, t, m);
 		return m;
 	}
 
 	/**
-	 * Same as {@link #getAnnotationsMap(Class, Class)} except returns results in parent-to-child order.
+	 * Same as {@link #getAnnotationsMap(Class, Type)} except returns results in parent-to-child order.
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
-	 * @param c The class being searched.
+	 * @param t The class being searched.
 	 * @return The found matches, or an empty map if annotation was not found.
 	 */
-	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMapParentFirst(Class<T> a, Class<?> c) {
-		return CollectionUtils.reverse(getAnnotationsMap(a, c));
+	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMapParentFirst(Class<T> a, Type t) {
+		return CollectionUtils.reverse(getAnnotationsMap(a, t));
 	}
 
-	private static <T extends Annotation> void findAnnotationsMap(Class<T> a, Class<?> c, Map<Class<?>,T> m) {
-		if (c == null)
-			return;
+	private static <T extends Annotation> void findAnnotationsMap(Class<T> a, Type t, Map<Class<?>,T> m) {
+		Class<?> c = toClass(t);
+		if (c != null) {
 
-		T t = getDeclaredAnnotation(a, c);
-		if (t != null)
-			m.put(c, t);
+			T t2 = getDeclaredAnnotation(a, c);
+			if (t2 != null)
+				m.put(c, t2);
 
-		findAnnotationsMap(a, c.getSuperclass(), m);
+			findAnnotationsMap(a, c.getSuperclass(), m);
 
-		for (Class<?> c2 : c.getInterfaces())
-			findAnnotationsMap(a, c2, m);
+			for (Class<?> c2 : c.getInterfaces())
+				findAnnotationsMap(a, c2, m);
+		}
 	}
 
 	/**
@@ -2439,22 +2467,33 @@ public final class ClassUtils {
 	 * list.
 	 *
 	 * @param a The annotation.
-	 * @param c The class.
+	 * @param t The class.
 	 * @param l The list of annotations.
 	 */
-	public static <T extends Annotation> void appendAnnotations(Class<T> a, Class<?> c, List<T> l) {
-		if (c == null)
-			return;
+	public static <T extends Annotation> void appendAnnotations(Class<T> a, Type t, List<T> l) {
+		Class<?> c = toClass(t);
+		if (c != null) {
+			addIfNotNull(l, getDeclaredAnnotation(a, c));
 
-		addIfNotNull(l, getDeclaredAnnotation(a, c));
+			if (c.getPackage() != null)
+				addIfNotNull(l, c.getPackage().getAnnotation(a));
 
-		if (c.getPackage() != null)
-			addIfNotNull(l, c.getPackage().getAnnotation(a));
+			appendAnnotations(a, c.getSuperclass(), l);
 
-		appendAnnotations(a, c.getSuperclass(), l);
+			for (Class<?> c2 : c.getInterfaces())
+				appendAnnotations(a, c2, l);
+		}
+	}
 
-		for (Class<?> c2 : c.getInterfaces())
-			appendAnnotations(a, c2, l);
+	private static Class<?> toClass(Type t) {
+		if (t instanceof Class)
+			return (Class<?>)t;
+		if (t instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)t;
+			// The raw type should always be a class (right?)
+			return (Class<?>)pt.getRawType();
+		}
+		return null;
 	}
 
 	/**

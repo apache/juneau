@@ -27,7 +27,7 @@ import org.apache.juneau.jsonschema.*;
  * TODO
  */
 @Documented
-@Target({PARAMETER,TYPE,METHOD})
+@Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface ResponseBody {

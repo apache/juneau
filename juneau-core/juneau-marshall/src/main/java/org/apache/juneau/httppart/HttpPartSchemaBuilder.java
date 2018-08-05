@@ -128,15 +128,15 @@ public class HttpPartSchemaBuilder {
 		allowEmptyValue(! a.required());
 		serializer(a.partSerializer());
 		parser(a.partParser());
-		usePartSerializer(a.usePartSerializer() || a.partSerializer() != HttpPartSerializer.Null.class);
-		usePartParser(a.usePartParser() || a.partParser() != HttpPartParser.Null.class);
+		usePartSerializer(AnnotationUtils.usePartSerializer(a));
+		usePartParser(AnnotationUtils.usePartParser(a));
 		apply(a.schema());
 		return this;
 	}
 
 	HttpPartSchemaBuilder apply(ResponseBody a) {
 		serializer(a.partSerializer());
-		usePartSerializer(a.usePartSerializer() || a.partSerializer() != HttpPartSerializer.Null.class);
+		usePartSerializer(AnnotationUtils.usePartSerializer(a));
 		apply(a.schema());
 		return this;
 	}
@@ -284,7 +284,7 @@ public class HttpPartSchemaBuilder {
 		required(false);
 		allowEmptyValue(true);
 		serializer(a.partSerializer());
-		usePartSerializer(a.usePartSerializer() || a.partSerializer() != HttpPartSerializer.Null.class);
+		usePartSerializer(AnnotationUtils.usePartSerializer(a));
 		apply(a.schema());
 		return this;
 	}

@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.*;
+
 /**
  * Swagger external documentation annotation.
  *
@@ -51,6 +55,8 @@ package org.apache.juneau.http.annotation;
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">Swagger Specification &gt; External Documentation Object</a>
  * </ul>
  */
+@Documented
+@Retention(RUNTIME)
 public @interface ExternalDocs {
 
 	/**

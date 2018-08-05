@@ -659,7 +659,7 @@ public class ResponseAnnotationTest {
 		@RestMethod
 		public SB01 sb01b() {return null;}
 
-		@Response
+		@Response(usePartSerializer=true)
 		public static class SB02 {
 			public String f1;
 		}
@@ -668,7 +668,7 @@ public class ResponseAnnotationTest {
 		@RestMethod
 		public SB02 sb02b() {return null;}
 
-		@Response
+		@Response(usePartSerializer=true)
 		public static class SB03 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
@@ -677,7 +677,7 @@ public class ResponseAnnotationTest {
 		@RestMethod
 		public SB03 sb03b() {return null;}
 
-		@Response
+		@Response(usePartSerializer=true)
 		public static class SB04 {}
 		@RestMethod
 		public void sb04a(Value<SB04> b) {}

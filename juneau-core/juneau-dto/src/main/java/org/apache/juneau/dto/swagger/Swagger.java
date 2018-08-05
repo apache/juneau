@@ -614,6 +614,48 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Shortcut for calling <code>getPaths().get(path);</code>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @return The operation map for the specified path, or <jk>null</jk> if it doesn't exist.
+	 */
+	public OperationMap getPath(String path) {
+		return getPaths().get(path);
+	}
+
+	/**
+	 * Shortcut for calling <code>getPaths().get(path).get(operation);</code>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
+	 */
+	public Operation getOperation(String path, String operation) {
+		OperationMap om = getPath(path);
+		if (om == null)
+			return null;
+		return om.get(operation);
+	}
+
+	/**
+	 * Shortcut for calling <code>getPaths().get(path).get(operation).getResponse(status);</code>
+	 *
+	 * @param path The path (e.g. <js>"/foo"</js>).
+	 * @param operation The HTTP operation (e.g. <js>"get"</js>).
+	 * @param status The HTTP response status (e.g. <js>"200"</js>).
+	 * @return The operation for the specified path and operation id, or <jk>null</jk> if it doesn't exist.
+	 */
+	public ResponseInfo getResponseInfo(String path, String operation, Object status) {
+		OperationMap om = getPath(path);
+		if (om == null)
+			return null;
+		Operation op = om.get(operation);
+		if (op == null)
+			return null;
+		return op.getResponse(status);
+	}
+
+	/**
 	 * Bean property setter:  <property>paths</property>.
 	 *
 	 * <p>

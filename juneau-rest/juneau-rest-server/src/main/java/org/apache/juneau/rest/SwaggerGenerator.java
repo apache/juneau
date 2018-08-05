@@ -379,25 +379,34 @@ final class SwaggerGenerator {
 				}
 			}
 
+			if (hasAnnotation(ResponseBody.class, m)) {
+				ObjectMap om = responses.getObjectMap("200", true);
+				boolean usePS = false;
+				for (ResponseBody a : getAnnotationsParentFirst(ResponseBody.class, m)) {
+					merge(om, a);
+					usePS |= usePartSerializer(a);
+				}
+				if (usePS && ! om.containsKey("schema"))
+					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
+				addXExamples(sm, om, "ok", m.getGenericReturnType());
+			}
+
 			if (hasAnnotation(Response.class, m)) {
+				boolean usePS = false;
 				for (Response a : getAnnotationsParentFirst(Response.class, m)) {
 					for (Integer code : getCodes(a, 200)) {
 						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 						merge(om, a);
+						usePS |= usePartSerializer(a);
+					}
+				}
+				if (usePS) {
+					for (String code : responses.keySet()) {
+						ObjectMap om = responses.getObjectMap(code);
 						if (! om.containsKey("schema"))
 							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
 					}
 				}
-			}
-
-			if (hasAnnotation(ResponseBody.class, m)) {
-				ObjectMap om = responses.getObjectMap("200", true);
-				for (ResponseBody a : getAnnotationsParentFirst(ResponseBody.class, m)) {
-					merge(om, a);
-					if (! om.containsKey("schema"))
-						om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
-				}
-				addXExamples(sm, om, "ok", m.getGenericReturnType());
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
@@ -414,24 +423,33 @@ final class SwaggerGenerator {
 					}
 
 				} else if (in == RESPONSE) {
+					boolean usePS = false;
 					for (Response a : getAnnotationsParentFirst(Response.class, mp.method, mp.index)) {
 						for (Integer code : getCodes(a, 200)) {
 							ObjectMap response = responses.getObjectMap(String.valueOf(code), true);
 							merge(response, a);
-							if (! response.containsKey("schema")) {
-								Type type = Value.getParameterType(mp.type);
-								if (type != null)
-									response.appendSkipEmpty("schema", getSchema(response.getObjectMap("schema", true), type));
+							usePS |= usePartSerializer(a);
+						}
+					}
+					if (usePS) {
+						Type type = Value.getParameterType(mp.type);
+						if (type != null) {
+							for (String code : responses.keySet()) {
+								ObjectMap om = responses.getObjectMap(code);
+								if (! om.containsKey("schema"))
+									om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), type));
 							}
 						}
 					}
 
 				} else if (in == RESPONSE_BODY) {
 					ObjectMap response = responses.getObjectMap("200", true);
+					boolean usePS = false;
 					for (ResponseBody a : getAnnotationsParentFirst(ResponseBody.class, mp.method, mp.index)) {
 						merge(response, a);
+						usePS |= usePartSerializer(a);
 					}
-					if (! response.containsKey("schema")) {
+					if (usePS && ! response.containsKey("schema")) {
 						Type type = Value.getParameterType(mp.type);
 						if (type != null)
 							response.appendSkipEmpty("schema", getSchema(response.getObjectMap("schema", true), type));

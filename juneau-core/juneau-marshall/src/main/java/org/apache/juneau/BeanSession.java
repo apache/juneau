@@ -76,7 +76,6 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	/**
 	 * Converts the specified value to the specified class type.
 	 *
 	 * <p>

@@ -44,7 +44,7 @@ public class Value<T> {
 	 * @param i The index of the parameter.
 	 * @return The parameter type of the value, or <jk>null</jk> if the method parameter is not of type <code>Value</code>.
 	 */
-	public static Class<?> getParameterType(Method m, int i) {
+	public static Type getParameterType(Method m, int i) {
 		return getParameterType(m.getGenericParameterTypes()[i]);
 	}
 
@@ -54,17 +54,13 @@ public class Value<T> {
 	 * @param t The type to find the parameter type of.
 	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <code>Value</code>.
 	 */
-	public static Class<?> getParameterType(Type t) {
+	public static Type getParameterType(Type t) {
 		if (t instanceof ParameterizedType) {
 			ParameterizedType pt = (ParameterizedType)t;
 			if (pt.getRawType() == Value.class) {
 				Type[] ta = pt.getActualTypeArguments();
-				if (ta.length > 0) {
-					Type t2 = ta[0];
-					if (t2 instanceof Class) {
-						return (Class<?>)t2;
-					}
-				}
+				if (ta.length > 0) 
+					return ta[0];
 			}
 		} else if (t instanceof Class) {
 			Class<?> c = (Class<?>)t;
@@ -83,8 +79,8 @@ public class Value<T> {
 	 * @return <jk>true</jk> if the specified type is this class.
 	 */
 	public static boolean isType(Type t) {
-		return 
-			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class) 
+		return
+			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class)
 			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
 	}
 

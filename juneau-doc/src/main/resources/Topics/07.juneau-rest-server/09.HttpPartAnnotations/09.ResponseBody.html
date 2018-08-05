@@ -16,4 +16,79 @@
 {todo} @ResponseBody
 
 <p>
+	The {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} annotation is used to identify a placeholder parameter
+	for an HTTP response.
 </p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody ResponseBody}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#example() example()} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#examples() examples()} - Serialized examples per media type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#partSerializer() partSerializer()} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#schema() schema()} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#usePartSerializer() usePartSerializer()} - Use the HTTP-Part serializer for serializing the body.
+	</ul>
+</ul>
+<p>
+	It can be used in the following locations:
+</p>
+<ul>
+	<li>Parameters on <ja>@RestMethod</ja>-annotated methods.
+	<li>Classes of parameters on <ja>@RestMethod</ja>-annotated methods.
+	<li><ja>@RestMethod</ja>-annotated methods.
+</ul>
+
+<h5 class='topic'>Parameters on @RestMethod-annotated methods</h5>
+<p>
+	When used on a method parameter, this annotation is used to identify a placeholder {@link org.apache.juneau.Value}
+	object that can be used to return the body of the response.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(path=<js>"/pet/{petId}"</js>)
+	<jk>public void</jk> getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id, <ja>@ResponseBody</ja> Value&lt;Pet&gt; body) {
+		body.set(<jsm>getPet</jsm>(id));
+	}
+</p>
+<p>
+	The behavior is identical to the following:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(path="/pet/{petId}")
+	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id) {
+		<jk>return</jk> <jsm>getPet</jsm>(id);
+	}
+</p>
+<p>
+	You may ask why you would use ever use this.
+	The answer is that it's possible to have your method returns something else such as an HTTP response status
+	or header value.
+	This annotation allows you to set a response body when your method is returning one of these.
+	<br>Also, the annotation allows you to define swagger validation and documentation for your body.
+</p>
+
+<h5 class='topic'>Classes of parameters on @RestMethod-annotated methods</h5>
+<p>
+	The <ja>@ResponseBody</ja> annotation can also be applied to types.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(path=<js>"/pet/{petId}"</js>)
+	<jk>public void</jk> getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id, Value&lt;Pet&gt; body) {
+		body.set(<jsm>getPet</jsm>(id));
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@ResponseBody</ja>(
+		schema=<ja>@Schema</ja>(
+			description=<js>"Pet bean"</js>
+		)
+	)
+	<jk>public class</jk> Pet {...}
+</p>
+<p>
+	Note that this can often be cleaner-looking than usage on the Java method parameter.
+</p>
+
+<h5 class='topic'>@RestMethod-annotated methods</h5>
+
+
