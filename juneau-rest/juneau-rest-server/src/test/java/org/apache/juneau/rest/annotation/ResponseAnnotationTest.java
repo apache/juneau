@@ -22,9 +22,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -39,11 +41,15 @@ public class ResponseAnnotationTest {
 	// Setup
 	//=================================================================================================================
 
-	private static Swagger getSwagger(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
-		RestInfoProvider ip = rc.getInfoProvider();
-		return ip.getSwagger(req);
+	private static Swagger getSwagger(Object resource) {
+		try {
+			RestContext rc = RestContext.create(resource).build();
+			RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
+			RestInfoProvider ip = rc.getInfoProvider();
+			return ip.getSwagger(req);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 
@@ -126,13 +132,13 @@ public class ResponseAnnotationTest {
 	@RestResource(partSerializer=XPartSerializer.class)
 	public static class B {
 
-		@ResponseBody(usePartSerializer=true)
+		@Response(usePartSerializer=true)
 		@RestMethod(name=GET,path="/useOnMethod")
 		public String b01() {
 			return "foo";
 		}
 
-		@ResponseBody(usePartSerializer=false)
+		@Response(usePartSerializer=false)
 		@RestMethod(name=GET,path="/dontUseOnMethod")
 		public String b02() {
 			return "foo";
@@ -159,12 +165,12 @@ public class ResponseAnnotationTest {
 		}
 
 		@RestMethod(name=GET,path="/useOnParameter")
-		public void b07(@ResponseBody(usePartSerializer=true) Value<String> value) {
+		public void b07(@Response(usePartSerializer=true) Value<String> value) {
 			value.set("foo");
 		}
 
 		@RestMethod(name=GET,path="/dontUseOnParameter")
-		public void b08(@ResponseBody(usePartSerializer=false) Value<String> value) {
+		public void b08(@Response(usePartSerializer=false) Value<String> value) {
 			value.set("foo");
 		}
 
@@ -244,7 +250,7 @@ public class ResponseAnnotationTest {
 	@RestResource
 	public static class C {
 
-		@ResponseBody(partSerializer=XPartSerializer.class)
+		@Response(partSerializer=XPartSerializer.class)
 		@RestMethod(name=GET,path="/useOnMethod")
 		public String c01() {
 			return "foo";
@@ -277,12 +283,12 @@ public class ResponseAnnotationTest {
 		}
 
 		@RestMethod(name=GET,path="/useOnParameter")
-		public void c07(@ResponseBody(partSerializer=XPartSerializer.class) Value<String> value) {
+		public void c07(@Response(partSerializer=XPartSerializer.class) Value<String> value) {
 			value.set("foo");
 		}
 
 		@RestMethod(name=GET,path="/dontUseOnParameter")
-		public void c08(@ResponseBody Value<String> value) {
+		public void c08(@Response Value<String> value) {
 			value.set("foo");
 		}
 
@@ -362,7 +368,7 @@ public class ResponseAnnotationTest {
 	@RestResource
 	public static class D {
 
-		@ResponseBody(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true)
+		@Response(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true)
 		@RestMethod(name=GET,path="/useOnMethod")
 		public String[] d01() {
 			return new String[]{"foo","bar"};
@@ -379,11 +385,11 @@ public class ResponseAnnotationTest {
 		}
 
 		@RestMethod(name=GET,path="/useOnParameter")
-		public void d04(@ResponseBody(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true) Value<String[]> value) {
+		public void d04(@Response(schema=@Schema(collectionFormat="pipes"),usePartSerializer=true) Value<String[]> value) {
 			value.set(new String[]{"foo","bar"});
 		}
 
-		@ResponseBody(schema=@Schema(type="string",format="byte"),usePartSerializer=true)
+		@Response(schema=@Schema(type="string",format="byte"),usePartSerializer=true)
 		@RestMethod(name=GET,path="/useOnMethodBytes")
 		public byte[] d05() {
 			return "foo".getBytes();
@@ -401,7 +407,7 @@ public class ResponseAnnotationTest {
 
 
 		@RestMethod(name=GET,path="/useOnParameterBytes")
-		public void d08(@ResponseBody(schema=@Schema(type="string",format="byte"),usePartSerializer=true) Value<byte[]> value) {
+		public void d08(@Response(schema=@Schema(type="string",format="byte"),usePartSerializer=true) Value<byte[]> value) {
 			value.set("foo".getBytes());
 		}
 
@@ -478,6 +484,377 @@ public class ResponseAnnotationTest {
 		d.get("/useOnParameterBytes").execute().assertStatus(200).assertBody("Zm9v");
 	}
 
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class E {
+
+		@RestMethod
+		public void m01(@Response Value<E01> body) {
+			body.set(new E01());
+		}
+
+		@RestMethod
+		public void m02(Value<E02> body) {
+			body.set(new E02());
+		}
+
+		@RestMethod
+		@Response
+		public E01 m03() {
+			return new E01();
+		}
+
+		@RestMethod
+		public E02 m04() {
+			return new E02();
+		}
+	}
+
+	public static class E01 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	@Response
+	public static class E02 {
+		@Override
+		public String toString() {return "foo";}
+	}
+
+	static MockRest e = MockRest.create(E.class);
+
+	@Test
+	public void e01_basic_onParameter() throws Exception {
+		e.get("/m01").execute().assertStatus(200).assertBody("foo");
+	}
+	@Test
+	public void e02_basic_onType() throws Exception {
+		e.get("/m02").execute().assertStatus(200).assertBody("foo");
+	}
+	@Test
+	public void e03_basic_onMethod() throws Exception {
+		e.get("/m03").execute().assertStatus(200).assertBody("foo");
+	}
+	@Test
+	public void e04_basic_onReturnedType() throws Exception {
+		e.get("/m04").execute().assertStatus(200).assertBody("foo");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic swagger
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class F {
+
+		@RestMethod
+		public void m01(@Response(schema=@Schema(description="f01", collectionFormat="pipes")) Value<List<Integer>> body) {
+			body.set(AList.create(1,2));
+		}
+
+		@RestMethod
+		public void m02(Value<F01> body) {
+			body.set(new F01());
+		}
+
+		@RestMethod
+		@Response(schema=@Schema(description="f03", collectionFormat="pipes"))
+		public List<Integer> m03() {
+			return AList.create(1,2);
+		}
+
+		@RestMethod
+		public F01 m04() {
+			return new F01();
+		}
+	}
+
+	@Response(schema=@Schema(description="f01", collectionFormat="pipes"))
+	public static class F01 extends ArrayList<Integer> {
+		public F01() {
+			add(1);
+			add(2);
+		}
+	}
+
+	static MockRest f = MockRest.create(F.class);
+	static Swagger sf = getSwagger(new F());
+
+	@Test
+	public void f01a_basic_onParameter() throws Exception {
+		f.get("/m01").execute().assertStatus(200).assertBody("1|2");
+	}
+	@Test
+	public void f01b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sf.getResponseInfo("/m01", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}", ri);
+	}
+	@Test
+	public void f02a_basic_onType() throws Exception {
+		f.get("/m02").execute().assertStatus(200).assertBody("1|2");
+	}
+	@Test
+	public void f02b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sf.getResponseInfo("/m02", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}", ri);
+	}
+	@Test
+	public void f03a_basic_onMethod() throws Exception {
+		f.get("/m03").execute().assertStatus(200).assertBody("1|2");
+	}
+	@Test
+	public void f03b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sf.getResponseInfo("/m03", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{description:'f03',collectionFormat:'pipes'}}", ri);
+	}
+	@Test
+	public void f04a_basic_onReturnedType() throws Exception {
+		f.get("/m04").execute().assertStatus(200).assertBody("1|2");
+	}
+	@Test
+	public void f04b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sf.getResponseInfo("/m04", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{description:'f01',collectionFormat:'pipes'}}", ri);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test JSON Accept
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource(serializers=SimpleJsonSerializer.class)
+	public static class G {
+
+		@RestMethod
+		public void m01(@Response Value<List<Integer>> body) {
+			body.set(AList.create(1,2));
+		}
+
+		@RestMethod
+		public void m02(Value<G01> body) {
+			body.set(new G01());
+		}
+
+		@RestMethod
+		@Response
+		public List<Integer> m03() {
+			return AList.create(1,2);
+		}
+
+		@RestMethod
+		public G01 m04() {
+			return new G01();
+		}
+	}
+
+	@Response
+	public static class G01 extends ArrayList<Integer> {
+		public G01() {
+			add(1);
+			add(2);
+		}
+	}
+
+	static MockRest g = MockRest.create(G.class);
+	static Swagger sg = getSwagger(new G());
+
+	@Test
+	public void g01a_basic_onParameter() throws Exception {
+		g.get("/m01").json().execute().assertStatus(200).assertBody("[1,2]");
+	}
+	@Test
+	public void g01b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sg.getResponseInfo("/m01", "get", 200);
+		assertObjectEquals("{description:'OK'}", ri);
+	}
+	@Test
+	public void g02a_basic_onType() throws Exception {
+		g.get("/m02").json().execute().assertStatus(200).assertBody("[1,2]");
+	}
+	@Test
+	public void g02b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sg.getResponseInfo("/m02", "get", 200);
+		assertObjectEquals("{description:'OK'}", ri);
+	}
+	@Test
+	public void g03a_basic_onMethod() throws Exception {
+		g.get("/m03").json().execute().assertStatus(200).assertBody("[1,2]");
+	}
+	@Test
+	public void g03b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sg.getResponseInfo("/m03", "get", 200);
+		assertObjectEquals("{description:'OK'}", ri);
+	}
+	@Test
+	public void g04a_basic_onReturnedType() throws Exception {
+		g.get("/m04").json().execute().assertStatus(200).assertBody("[1,2]");
+	}
+	@Test
+	public void g04b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sg.getResponseInfo("/m04", "get", 200);
+		assertObjectEquals("{description:'OK'}", ri);
+	}
+
+	//=================================================================================================================
+	// PartSerializers
+	//=================================================================================================================
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @ResponseBody(usePartSerializer), partSerializer on class
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource(partSerializer=XPartSerializer.class)
+	public static class H {
+
+		@RestMethod
+		public void m01(@Response(usePartSerializer=true) Value<List<Integer>> body) {
+			body.set(AList.create(1,2));
+		}
+
+		@RestMethod
+		public void m02(Value<H01> body) {
+			body.set(new H01());
+		}
+
+		@RestMethod
+		@Response(usePartSerializer=true)
+		public List<Integer> m03() {
+			return AList.create(1,2);
+		}
+
+		@RestMethod
+		public H01 m04() {
+			return new H01();
+		}
+	}
+
+	@Response(usePartSerializer=true)
+	public static class H01 extends ArrayList<Integer> {
+		public H01() {
+			add(1);
+			add(2);
+		}
+	}
+
+	static MockRest h = MockRest.create(H.class);
+	static Swagger sh = getSwagger(new H());
+
+	@Test
+	public void h01a_basic_onParameter() throws Exception {
+		h.get("/m01").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void h01b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sh.getResponseInfo("/m01", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
+	@Test
+	public void h02a_basic_onType() throws Exception {
+		h.get("/m02").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void h02b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sh.getResponseInfo("/m02", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
+	@Test
+	public void h03a_basic_onMethod() throws Exception {
+		h.get("/m03").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void h03b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sh.getResponseInfo("/m03", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
+	@Test
+	public void h04a_basic_onReturnedType() throws Exception {
+		h.get("/m04").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void h04b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = sh.getResponseInfo("/m04", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @ResponseBody(usePartSerializer), partSerializer on part.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestResource
+	public static class I {
+
+		@RestMethod
+		public void m01(@Response(partSerializer=XPartSerializer.class) Value<List<Integer>> body) {
+			body.set(AList.create(1,2));
+		}
+
+		@RestMethod
+		public void m02(Value<I01> body) {
+			body.set(new I01());
+		}
+
+		@RestMethod
+		@Response(partSerializer=XPartSerializer.class)
+		public List<Integer> m03() {
+			return AList.create(1,2);
+		}
+
+		@RestMethod
+		public I01 m04() {
+			return new I01();
+		}
+	}
+
+	@Response(partSerializer=XPartSerializer.class)
+	public static class I01 extends ArrayList<Integer> {
+		public I01() {
+			add(1);
+			add(2);
+		}
+	}
+
+	static MockRest i = MockRest.create(I.class);
+	static Swagger si = getSwagger(new I());
+
+	@Test
+	public void i01a_basic_onParameter() throws Exception {
+		i.get("/m01").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void i01b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = si.getResponseInfo("/m01", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
+	@Test
+	public void i02a_basic_onType() throws Exception {
+		i.get("/m02").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void i02b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = si.getResponseInfo("/m02", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
+	@Test
+	public void i03a_basic_onMethod() throws Exception {
+		i.get("/m03").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void i03b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = si.getResponseInfo("/m03", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
+	@Test
+	public void i04a_basic_onReturnedType() throws Exception {
+		i.get("/m04").execute().assertStatus(200).assertBody("x[1, 2]x");
+	}
+	@Test
+	public void i04b_basic_onParameter_swagger() throws Exception {
+		ResponseInfo ri = si.getResponseInfo("/m04", "get", 200);
+		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
+	}
 
 	//=================================================================================================================
 	// @Response on POJO

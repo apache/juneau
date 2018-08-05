@@ -2485,7 +2485,17 @@ public final class ClassUtils {
 		}
 	}
 
-	private static Class<?> toClass(Type t) {
+	/**
+	 * Returns the specified type as a <code>Class</code>.
+	 *
+	 * <p>
+	 * If it's already a <code>Class</code>, it just does a cast.
+	 * <br>If it's a <code>ParameterizedType</code>, it returns the raw type.
+	 *
+	 * @param t The type to convert.
+	 * @return The type converted to a <code>Class</code>, or <jk>null</jk> if it could not be converted.
+	 */
+	public static Class<?> toClass(Type t) {
 		if (t instanceof Class)
 			return (Class<?>)t;
 		if (t instanceof ParameterizedType) {

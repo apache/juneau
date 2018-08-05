@@ -86,14 +86,14 @@ public class DefaultHandler implements ResponseHandler {
 				}
 			}
 
-			ResponseBeanPropertyMeta m = rbm.getBodyMethod();
+			Method m = rbm.getBodyMethod();
 			boolean usePartSerializer = rbm.isUsePartSerializer();
 			HttpPartSchema schema = rbm.getSchema();
 
 			if (m != null) {
 				try {
-					o = m.getGetter().invoke(o);
-					schema = m.getSchema();
+					o = m.invoke(o);
+					schema = rbm.getSchema();
 					usePartSerializer |= schema.isUsePartSerializer();
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not get body.");
@@ -116,29 +116,6 @@ public class DefaultHandler implements ResponseHandler {
 				}
 			}
 		}
-
-		ResponsePartMeta rpm = res.getResponseBodyMeta();
-		if (rpm == null)
-			rpm = req.getResponseBodyMeta(o);
-
-		if (rpm != null && rpm.getSchema().isUsePartSerializer()) {
-			if (res.getContentType() == null)
-				res.setContentType("text/plain");
-			HttpPartSerializer ps = rpm.getSerializer();
-			if (ps == null)
-				ps = req.getPartSerializer();
-			if (ps != null) {
-				try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
-					w.append(ps.serialize(HttpPartType.BODY, rpm.getSchema(), o));
-					w.flush();
-					w.finish();
-				} catch (SchemaValidationException | SerializeException e) {
-					throw new InternalServerError(e);
-				}
-				return true;
-			}
-		}
-
 
 		if (sm != null) {
 			Serializer s = sm.getSerializer();

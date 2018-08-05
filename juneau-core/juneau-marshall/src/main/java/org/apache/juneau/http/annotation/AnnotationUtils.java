@@ -155,21 +155,6 @@ public class AnnotationUtils {
 			&& empty(a.schema());
 	}
 
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(ResponseBody a) {
-		if (a == null)
-			return true;
-		return
-			allEmpty(a.example(), a.examples(), a.api())
-			&& empty(a.schema());
-	}
-
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -321,19 +306,6 @@ public class AnnotationUtils {
 	 * @return <jk>true</jk> if the part serializer should be used on the specified part.
 	 */
 	public static boolean usePartSerializer(Body a) {
-		return
-			a.usePartSerializer()
-			|| a.partSerializer() != HttpPartSerializer.Null.class
-			|| ! empty(a.schema());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the part serializer should be used on the specified part.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the part serializer should be used on the specified part.
-	 */
-	public static boolean usePartSerializer(ResponseBody a) {
 		return
 			a.usePartSerializer()
 			|| a.partSerializer() != HttpPartSerializer.Null.class

@@ -79,7 +79,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
 	final Map<Class<?>,ResponsePartMeta> bodyPartMetas = new ConcurrentHashMap<>();
-	final ResponsePartMeta returnBodyMeta;
+	final ResponseBeanMeta responseMeta;
 
 	RestJavaMethod(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 		Builder b = new Builder(servlet, method, context);
@@ -107,7 +107,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.priority = b.priority;
 		this.supportedAcceptTypes = b.supportedAcceptTypes;
 		this.supportedContentTypes = b.supportedContentTypes;
-		this.returnBodyMeta = b.returnBodyMeta;
+		this.responseMeta = b.responseMeta;
 		this.widgets = unmodifiableMap(b.widgets);
 	}
 
@@ -130,7 +130,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		Integer priority;
 		Map<String,Widget> widgets;
 		List<MediaType> supportedAcceptTypes, supportedContentTypes;
-		ResponsePartMeta returnBodyMeta;
+		ResponseBeanMeta responseMeta;
 
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
@@ -410,10 +410,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				methodParams = context.findParams(method, pathPattern, false);
 
-				if (hasAnnotation(ResponseBody.class, method)) {
-					HttpPartSchema s = HttpPartSchema.create(ResponseBody.class, method);
-					returnBodyMeta = new ResponsePartMeta(HttpPartType.BODY, s, createPartSerializer(s.getSerializer(), serializers.getPropertyStore(), partSerializer));
-				}
+				if (hasAnnotation(Response.class, method))
+					responseMeta = ResponseBeanMeta.create(method, serializers.getPropertyStore());
 
 				// Need this to access methods in anonymous inner classes.
 				setAccessible(method, true);

@@ -44,7 +44,6 @@ public class AnnotationUtilsTest {
 
 	@Body
 	@Response
-	@ResponseBody
 	@ResponseHeader
 	@X
 	public static class A01 {
@@ -56,7 +55,6 @@ public class AnnotationUtilsTest {
 	public void testEmpty() throws Exception {
 		assertTrue(empty(A01.class.getAnnotation(Body.class)));
 		assertTrue(empty(A01.class.getAnnotation(Response.class)));
-		assertTrue(empty(A01.class.getAnnotation(ResponseBody.class)));
 		assertTrue(empty(A01.class.getAnnotation(ResponseHeader.class)));
 
 		X x = A01.class.getAnnotation(X.class);
@@ -82,7 +80,6 @@ public class AnnotationUtilsTest {
 	public void testEmptyNonExistent() throws Exception {
 		assertTrue(empty(B01.class.getAnnotation(Body.class)));
 		assertTrue(empty(B01.class.getAnnotation(Response.class)));
-		assertTrue(empty(B01.class.getAnnotation(ResponseBody.class)));
 		assertTrue(empty(B01.class.getAnnotation(ResponseHeader.class)));
 
 		assertTrue(empty((Contact)null));
@@ -169,21 +166,6 @@ public class AnnotationUtilsTest {
 		assertFalse(usePartSerializer(D01c.class.getAnnotation(Body.class)));
 		assertTrue(usePartSerializer(D01d.class.getAnnotation(Body.class)));
 		assertTrue(usePartSerializer(D01e.class.getAnnotation(Body.class)));
-	}
-
-	@ResponseBody public static class E01a {}
-	@ResponseBody(usePartSerializer=true) public static class E01b {}
-	@ResponseBody(schema=@Schema) public static class E01c {}
-	@ResponseBody(schema=@Schema(description="foo")) public static class E01d {}
-	@ResponseBody(partSerializer=OpenApiPartSerializer.class) public static class E01e {}
-
-	@Test
-	public void usePartSerializerResponseBody() {
-		assertFalse(usePartSerializer(E01a.class.getAnnotation(ResponseBody.class)));
-		assertTrue(usePartSerializer(E01b.class.getAnnotation(ResponseBody.class)));
-		assertFalse(usePartSerializer(E01c.class.getAnnotation(ResponseBody.class)));
-		assertTrue(usePartSerializer(E01d.class.getAnnotation(ResponseBody.class)));
-		assertTrue(usePartSerializer(E01e.class.getAnnotation(ResponseBody.class)));
 	}
 
 	@Response public static class F01a {}

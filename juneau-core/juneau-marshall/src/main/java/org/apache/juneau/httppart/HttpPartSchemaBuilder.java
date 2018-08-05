@@ -108,8 +108,6 @@ public class HttpPartSchemaBuilder {
 			apply((Path)a);
 		else if (a instanceof Response)
 			apply((Response)a);
-		else if (a instanceof ResponseBody)
-			apply((ResponseBody)a);
 		else if (a instanceof ResponseHeader)
 			apply((ResponseHeader)a);
 		else if (a instanceof HasQuery)
@@ -130,13 +128,6 @@ public class HttpPartSchemaBuilder {
 		parser(a.partParser());
 		usePartSerializer(AnnotationUtils.usePartSerializer(a));
 		usePartParser(AnnotationUtils.usePartParser(a));
-		apply(a.schema());
-		return this;
-	}
-
-	HttpPartSchemaBuilder apply(ResponseBody a) {
-		serializer(a.partSerializer());
-		usePartSerializer(AnnotationUtils.usePartSerializer(a));
 		apply(a.schema());
 		return this;
 	}

@@ -37,16 +37,70 @@ public class ResponseBeanMeta {
 	/**
 	 * Create metadata from specified class.
 	 *
-	 * @param c The class annotated with {@link Response}.
+	 * @param t The class annotated with {@link Response}.
 	 * @param ps
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(Class<?> c, PropertyStore ps) {
-		if (! hasAnnotation(Response.class, c))
+	public static ResponseBeanMeta create(Type t, PropertyStore ps) {
+		if (! hasAnnotation(Response.class, t))
 			return null;
-		return new ResponseBeanMeta.Builder(ps).apply(c).build();
+		Builder b = new Builder(ps);
+		if (Value.isType(t))
+			b.apply(Value.getParameterType(t));
+		else
+			b.apply(t);
+		for (Response r : getAnnotationsParentFirst(Response.class, t))
+			b.apply(r);
+		return b.build();
+	}
+
+	/**
+	 * Create metadata from specified method return.
+	 *
+	 * @param m The method annotated with {@link Response}.
+	 * @param ps
+	 * 	Configuration information used to instantiate part serializers and part parsers.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
+	 */
+	public static ResponseBeanMeta create(Method m, PropertyStore ps) {
+		if (! hasAnnotation(Response.class, m))
+			return null;
+		Builder b = new Builder(ps);
+		Type t = m.getGenericReturnType();
+		if (Value.isType(t))
+			b.apply(Value.getParameterType(t));
+		else
+			b.apply(t);
+		for (Response r : getAnnotationsParentFirst(Response.class, m))
+			b.apply(r);
+		return b.build();
+	}
+
+	/**
+	 * Create metadata from specified method parameter.
+	 *
+	 * @param m The method containing the parameter annotated with {@link Response}.
+	 * @param i The parameter index.
+	 * @param ps
+	 * 	Configuration information used to instantiate part serializers and part parsers.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
+	 */
+	public static ResponseBeanMeta create(Method m, int i, PropertyStore ps) {
+		if (! hasAnnotation(Response.class, m, i))
+			return null;
+		Builder b = new Builder(ps);
+		Type t = m.getGenericParameterTypes()[i];
+		if (Value.isType(t))
+			b.apply(Value.getParameterType(t));
+		else
+			b.apply(t);
+		for (Response r : getAnnotationsParentFirst(Response.class, m, i))
+			b.apply(r);
+		return b.build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -56,8 +110,7 @@ public class ResponseBeanMeta {
 	private final ClassMeta<?> cm;
 	private final int code;
 	private final Map<String,ResponseBeanPropertyMeta> headerMethods;
-	private final Method statusMethod;
-	private final ResponseBeanPropertyMeta bodyMethod;
+	private final Method statusMethod, bodyMethod;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartSchema schema;
 	private final boolean usePartSerializer;
@@ -76,8 +129,7 @@ public class ResponseBeanMeta {
 
 		}
 		this.headerMethods = Collections.unmodifiableMap(hm);
-
-		this.bodyMethod = b.bodyMethod == null ? null : b.bodyMethod.build(partSerializer);
+		this.bodyMethod = b.bodyMethod;
 		this.statusMethod = b.statusMethod;
 	}
 
@@ -90,15 +142,15 @@ public class ResponseBeanMeta {
 		HttpPartSchemaBuilder schema = HttpPartSchema.create();
 
 		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = new LinkedHashMap<>();
-		ResponseBeanPropertyMeta.Builder bodyMethod;
+		Method bodyMethod;
 		Method statusMethod;
 
 		Builder(PropertyStore ps) {
 			this.ps = ps;
 		}
 
-		Builder apply(Class<?> c) {
-			apply(getAnnotation(Response.class, c));
+		Builder apply(Type t) {
+			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			for (Method m : ClassUtils.getAllMethods(c, false)) {
 				if (isAll(m, PUBLIC, HAS_NO_ARGS)) {
@@ -129,9 +181,7 @@ public class ResponseBeanMeta {
 						Class<?> rt = m.getReturnType();
 						if (rt == void.class)
 							throw new InvalidAnnotationException("Invalid return type for @ResponseBody annotation on method.  Method=''{0}''", m);
-						ResponseBody a = getAnnotation(ResponseBody.class, m);
-						HttpPartSchemaBuilder s = HttpPartSchema.create().apply(a);
-						bodyMethod = ResponseBeanPropertyMeta.create().partType(HttpPartType.BODY).apply(s).getter(m);
+						bodyMethod = m;
 					}
 					if (hasAnnotation(Body.class, m))
 						throw new InvalidAnnotationException("@Body annotation cannot be used in a @Response bean.  Use @ResponseBody instead.  Method=''{0}''", m);
@@ -142,17 +192,16 @@ public class ResponseBeanMeta {
 			return this;
 		}
 
-		Builder apply(Response rb) {
-			if (rb != null) {
-				if (rb.partSerializer() != HttpPartSerializer.Null.class)
-					partSerializer = rb.partSerializer();
-				if (rb.usePartSerializer())
-					usePartSerializer = true;
-				if (rb.value().length > 0)
-					code = rb.value()[0];
-				if (rb.code().length > 0)
-					code = rb.code()[0];
-				schema.apply(rb.schema());
+		Builder apply(Response a) {
+			if (a != null) {
+				if (a.partSerializer() != HttpPartSerializer.Null.class)
+					partSerializer = a.partSerializer();
+				if (a.value().length > 0)
+					code = a.value()[0];
+				if (a.code().length > 0)
+					code = a.code()[0];
+				usePartSerializer = AnnotationUtils.usePartSerializer(a);
+				schema.apply(a.schema());
 			}
 			return this;
 		}
@@ -190,18 +239,18 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns metadata about the <ja>@ResponseBody</ja>-annotated method.
+	 * Returns the <ja>@ResponseBody</ja>-annotated method.
 	 *
-	 * @return Metadata about the <ja>@ResponseBody</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
+	 * @return The <ja>@ResponseBody</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
-	public ResponseBeanPropertyMeta getBodyMethod() {
+	public Method getBodyMethod() {
 		return bodyMethod;
 	}
 
 	/**
-	 * Returns metadata about the <ja>@ResponseBody</ja>-annotated method.
+	 * Returns the <ja>@ResponseStatus</ja>-annotated method.
 	 *
-	 * @return Metadata about the <ja>@ResponseBody</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
+	 * @return The <ja>@ResponseStatus</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
 	public Method getStatusMethod() {
 		return statusMethod;

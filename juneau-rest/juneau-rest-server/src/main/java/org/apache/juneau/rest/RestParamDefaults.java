@@ -673,42 +673,12 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class ResponseBodyObject extends RestMethodParam {
-		final ResponsePartMeta rpm;
-
-		protected ResponseBodyObject(Method m, int i, PropertyStore ps) {
-			super(RESPONSE_BODY, m, i);
-			HttpPartSchema schema = HttpPartSchema.create(ResponseBody.class, method, i);
-			this.rpm = new ResponsePartMeta(HttpPartType.BODY, schema, createPartSerializer(schema.getSerializer(), ps));
-
-			if (getTypeClass() != Value.class)
-				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must be Value.", type);
-		}
-
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override /* RestMethodParam */
-		public Object resolve(final RestRequest req, final RestResponse res) throws Exception {
-			Value<Object> v = (Value<Object>)getTypeClass().newInstance();
-			v.listener(new ValueListener() {
-				@Override
-				public void onSet(Object o) {
-					ResponsePartMeta rpm = req.getResponseBodyMeta(o);
-					if (rpm == null)
-						rpm = ResponseBodyObject.this.rpm;
-					res.setResponseBodyMeta(rpm);
-					res.setOutput(o);
-				}
-			});
-			return v;
-		}
-	}
-
 	static final class ResponseBeanObject extends RestMethodParam {
 		final ResponseBeanMeta rbm;
 
 		protected ResponseBeanObject(Method m, int i, PropertyStore ps) {
 			super(RESPONSE, m, i);
-			this.rbm = ResponseBeanMeta.create(m.getParameterTypes()[i], ps);
+			this.rbm = ResponseBeanMeta.create(m, i, ps);
 			if (getTypeClass() != Value.class)
 				throw new InternalServerError("Invalid type {0} specified with @Response annotation.  It must be Value.", type);
 		}

@@ -379,18 +379,6 @@ final class SwaggerGenerator {
 				}
 			}
 
-			if (hasAnnotation(ResponseBody.class, m)) {
-				ObjectMap om = responses.getObjectMap("200", true);
-				boolean usePS = false;
-				for (ResponseBody a : getAnnotationsParentFirst(ResponseBody.class, m)) {
-					merge(om, a);
-					usePS |= usePartSerializer(a);
-				}
-				if (usePS && ! om.containsKey("schema"))
-					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
-				addXExamples(sm, om, "ok", m.getGenericReturnType());
-			}
-
 			if (hasAnnotation(Response.class, m)) {
 				boolean usePS = false;
 				for (Response a : getAnnotationsParentFirst(Response.class, m)) {
@@ -440,19 +428,6 @@ final class SwaggerGenerator {
 									om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), type));
 							}
 						}
-					}
-
-				} else if (in == RESPONSE_BODY) {
-					ObjectMap response = responses.getObjectMap("200", true);
-					boolean usePS = false;
-					for (ResponseBody a : getAnnotationsParentFirst(ResponseBody.class, mp.method, mp.index)) {
-						merge(response, a);
-						usePS |= usePartSerializer(a);
-					}
-					if (usePS && ! response.containsKey("schema")) {
-						Type type = Value.getParameterType(mp.type);
-						if (type != null)
-							response.appendSkipEmpty("schema", getSchema(response.getObjectMap("schema", true), type));
 					}
 				}
 			}
@@ -1085,19 +1060,6 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("type", a.type())
 			.appendSkipFalse("uniqueItems", a.uniqueItems())
 			.appendSkipEmpty("$ref", a.$ref())
-		;
-	}
-
-	private ObjectMap merge(ObjectMap om, ResponseBody a) throws ParseException {
-		if (empty(a))
-			return om;
-		om = newMap(om);
-		if (a.api().length > 0)
-			om.putAll(parseMap(a.api()));
-		return om
-			.appendSkipEmpty("x-example", resolve(a.example()))
-			.appendSkipEmpty("examples", joinnl(a.examples()))
-			.appendSkipEmpty("schema", merge(om.getObjectMap("schema"), a.schema()))
 		;
 	}
 

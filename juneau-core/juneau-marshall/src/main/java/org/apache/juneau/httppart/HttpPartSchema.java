@@ -140,7 +140,6 @@ public class HttpPartSchema {
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseBody}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
@@ -169,7 +168,6 @@ public class HttpPartSchema {
 	 * 		<li>{@link Path}
 	 * 		<li>{@link Response}
 	 * 		<li>{@link ResponseHeader}
-	 * 		<li>{@link ResponseBody}
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
