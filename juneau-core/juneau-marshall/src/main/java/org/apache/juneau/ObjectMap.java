@@ -327,25 +327,6 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
-//	@Override
-//	public Object put(String key, Object value) {
-//		Object oldValue = get(key);
-//		if (shouldSkip(oldValue, value))
-//			return oldValue;
-//		return super.put(key, value);
-//	}
-//
-	/**
-	 * Method that can be overridden to specify that a new value should not be added to this map.
-	 *
-	 * @param oldValue The old value.
-	 * @param newValue
-	 * @return <jk>true</jk> if this value should not be added to this map.
-	 */
-	public boolean shouldSkip(Object oldValue, Object newValue) {
-		return false;
-	}
-
 	/**
 	 * Convenience method for adding an entry to this map.
 	 *
