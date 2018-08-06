@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.*;
@@ -34,17 +34,6 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings("javadoc")
 public class QueryAnnotationTest {
-
-	//=================================================================================================================
-	// Setup
-	//=================================================================================================================
-
-	private static Swagger getSwagger(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
-		RestInfoProvider ip = rc.getInfoProvider();
-		return ip.getSwagger(req);
-	}
 
 	//=================================================================================================================
 	// Simple tests
@@ -158,27 +147,27 @@ public class QueryAnnotationTest {
 			public boolean c;
 		}
 
-		@RestMethod(name=GET, path="/StringArray")
+		@RestMethod
 		public Object c01(@Query(value="x",collectionFormat="multi") String[] x) {
 			return x;
 		}
-		@RestMethod(name=GET, path="/intArray")
+		@RestMethod
 		public Object c02(@Query(value="x",collectionFormat="multi") int[] x) {
 			return x;
 		}
-		@RestMethod(name=GET, path="/ListOfStrings")
+		@RestMethod
 		public Object c03(@Query(value="x",collectionFormat="multi") List<String> x) {
 			return x;
 		}
-		@RestMethod(name=GET, path="/ListOfIntegers")
+		@RestMethod
 		public Object c04(@Query(value="x",collectionFormat="multi") List<Integer> x) {
 			return x;
 		}
-		@RestMethod(name=GET, path="/BeanArray")
+		@RestMethod
 		public Object c05(@Query(value="x",collectionFormat="multi",items=@Items(format="uon")) C01[] x) {
 			return x;
 		}
-		@RestMethod(name=GET, path="/ListOfBeans")
+		@RestMethod
 		public Object c06(@Query(value="x",collectionFormat="multi",items=@Items(format="uon")) List<C01> x) {
 			return x;
 		}
@@ -187,33 +176,33 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void c01_StringArray() throws Exception {
-		c.get("/StringArray?x=a").execute().assertBody("['a']");
-		c.get("/StringArray?x=a&x=b").execute().assertBody("['a','b']");
+		c.get("/c01?x=a").execute().assertBody("['a']");
+		c.get("/c01?x=a&x=b").execute().assertBody("['a','b']");
 	}
 	@Test
 	public void c02_intArray() throws Exception {
-		c.get("/intArray?x=1").execute().assertBody("[1]");
-		c.get("/intArray?x=1&x=2").execute().assertBody("[1,2]");
+		c.get("/c02?x=1").execute().assertBody("[1]");
+		c.get("/c02?x=1&x=2").execute().assertBody("[1,2]");
 	}
 	@Test
 	public void c03_ListOfStrings() throws Exception {
-		c.get("/ListOfStrings?x=a").execute().assertBody("['a']");
-		c.get("/ListOfStrings?x=a&x=b").execute().assertBody("['a','b']");
+		c.get("/c03?x=a").execute().assertBody("['a']");
+		c.get("/c03?x=a&x=b").execute().assertBody("['a','b']");
 	}
 	@Test
 	public void c04_ListOfIntegers() throws Exception {
-		c.get("/ListOfIntegers?x=1").execute().assertBody("[1]");
-		c.get("/ListOfIntegers?x=1&x=2").execute().assertBody("[1,2]");
+		c.get("/c04?x=1").execute().assertBody("[1]");
+		c.get("/c04?x=1&x=2").execute().assertBody("[1,2]");
 	}
 	@Test
 	public void c05_BeanArray() throws Exception {
-		c.get("/BeanArray?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
-		c.get("/BeanArray?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+		c.get("/c05?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
+		c.get("/c05?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
 	}
 	@Test
 	public void c06_ListOfBeans() throws Exception {
-		c.get("/ListOfBeans?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
-		c.get("/ListOfBeans?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
+		c.get("/c06?x=(a=1,b=2,c=false)").execute().assertBody("[{a:'1',b:2,c:false}]");
+		c.get("/c06?x=(a=1,b=2,c=false)&x=(a=3,b=4,c=true)").execute().assertBody("[{a:'1',b:2,c:false},{a:'3',b:4,c:true}]");
 	}
 
 	//=================================================================================================================
@@ -222,28 +211,28 @@ public class QueryAnnotationTest {
 
 	@RestResource
 	public static class D {
-		@RestMethod(name=GET, path="/defaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+		@RestMethod(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 		public ObjectMap d01(RequestQuery query) {
 			return new ObjectMap()
 				.append("f1", query.getString("f1"))
 				.append("f2", query.getString("f2"))
 				.append("f3", query.getString("f3"));
 		}
-		@RestMethod(name=GET, path="/annotatedQuery")
+		@RestMethod
 		public ObjectMap d02(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
 			return new ObjectMap()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);
 		}
-		@RestMethod(name=GET, path="/annotatedQueryDefault")
+		@RestMethod
 		public ObjectMap d03(@Query(value="f1",_default="1") String f1, @Query(value="f2",_default="2") String f2, @Query(value="f3",_default="3") String f3) {
 			return new ObjectMap()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);
 		}
-		@RestMethod(name=GET, path="/annotatedAndDefaultQuery", defaultQuery={"f1:1","f2=2"," f3 : 3 "})
+		@RestMethod(defaultQuery={"f1:1","f2=2"," f3 : 3 "})
 		public ObjectMap d04(@Query(value="f1",_default="4") String f1, @Query(value="f2",_default="5") String f2, @Query(value="f3",_default="6") String f3) {
 			return new ObjectMap()
 				.append("f1", f1)
@@ -255,26 +244,26 @@ public class QueryAnnotationTest {
 
 	@Test
 	public void d01_defaultQuery() throws Exception {
-		d.get("/defaultQuery").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/defaultQuery").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d01").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
+		d.get("/d01").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void d02_annotatedQuery() throws Exception {
-		d.get("/annotatedQuery").execute().assertBody("{f1:null,f2:null,f3:null}");
-		d.get("/annotatedQuery").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d02").execute().assertBody("{f1:null,f2:null,f3:null}");
+		d.get("/d02").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void d03_annotatedQueryDefault() throws Exception {
-		d.get("/annotatedQueryDefault").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/annotatedQueryDefault").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d03").execute().assertBody("{f1:'1',f2:'2',f3:'3'}");
+		d.get("/d03").query("f1",4).query("f2",5).query("f3",6).execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
 	}
 
 	@Test
 	public void d04_annotatedAndDefaultQuery() throws Exception {
-		d.get("/annotatedAndDefaultQuery").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/annotatedAndDefaultQuery").query("f1",7).query("f2",8).query("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
+		d.get("/d04").execute().assertBody("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d04").query("f1",7).query("f2",8).query("f3",9).execute().assertBody("{f1:'7',f2:'8',f3:'9'}");
 	}
 
 	//=================================================================================================================
@@ -296,7 +285,7 @@ public class QueryAnnotationTest {
 		public static class SA01 {
 			public SA01(String x) {}
 		}
-		@RestMethod(name=GET, path="/basic")
+		@RestMethod
 		public void sa01(SA01 q) {}
 
 		@Query(
@@ -309,7 +298,7 @@ public class QueryAnnotationTest {
 		public static class SA02 {
 			public SA02(String x) {}
 		}
-		@RestMethod(name=GET, path="/api")
+		@RestMethod
 		public void sa02(SA02 q) {}
 
 		@Query(
@@ -324,39 +313,41 @@ public class QueryAnnotationTest {
 		public static class SA03 {
 			public SA03(String x) {}
 		}
-		@RestMethod(name=GET, path="/mixed")
+		@RestMethod
 		public void sa03(SA03 q) {}
 
 		@Query("Q")
 		public static class SA04 {}
-		@RestMethod(name=GET,path="/value")
+		@RestMethod
 		public void sa04(SA04 q) {}
 	}
 
+	static Swagger sa = getSwagger(SA.class);
+
 	@Test
 	public void sa01_Query_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("query", "Q");
+		ParameterInfo x = sa.getParameterInfo("/sa01","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void sa02_Query_onPojo_api() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("query", "Q");
+		ParameterInfo x = sa.getParameterInfo("/sa02","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void sa03_Query_onPojo_mixed() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("query", "Q");
+		ParameterInfo x = sa.getParameterInfo("/sa03","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void sa04_Query_onPojo_value() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/value").get("get").getParameter("query", "Q");
+		ParameterInfo x = sa.getParameterInfo("/sa04","get","query","Q");
 		assertEquals("Q", x.getName());
 	}
 
@@ -369,48 +360,50 @@ public class QueryAnnotationTest {
 
 		@Query(name="Q")
 		public static class SB01 {}
-		@RestMethod(name=GET,path="/schemaValue")
+		@RestMethod
 		public void sb01(SB01 q) {}
 
 		@Query("Q")
 		public static class SB02 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/autoDetectBean")
+		@RestMethod
 		public void sb02(SB02 q) {}
 
 		@Query("Q")
 		public static class SB03 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(name=GET,path="/autoDetectList")
+		@RestMethod
 		public void sb03(SB03 q) {}
 
 		@Query("Q")
 		public static class SB04 {}
-		@RestMethod(name=GET,path="/autoDetectStringObject")
+		@RestMethod
 		public void sb04(SB04 q) {}
 	}
 
+	static Swagger sb = getSwagger(SB.class);
+
 	@Test
 	public void sb01_Query_onPojo_schemaValue() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb01","get","query","Q");
+		assertObjectEquals("{'in':'query',name:'Q',type:'string'}", x);
 	}
 	@Test
 	public void sb02_Query_onPojo_autoDetectBean() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb02","get","query","Q");
+		assertObjectEquals("{'in':'query',name:'Q',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
 	}
 	@Test
 	public void sb03_Query_onPojo_autoDetectList() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb03","get","query","Q");
+		assertObjectEquals("{'in':'query',name:'Q',type:'array',items:{type:'string'}}", x);
 	}
 	@Test
 	public void sb04_Query_onPojo_autoDetectStringObject() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb04","get","query","Q");
+		assertObjectEquals("{'in':'query',name:'Q',type:'string'}", x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -424,13 +417,15 @@ public class QueryAnnotationTest {
 		public static class SC01 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/example")
+		@RestMethod
 		public void sc01(SC01 q) {}
 	}
 
+	static Swagger sc = getSwagger(SC.class);
+
 	@Test
 	public void sc01_Query_onPojo_example() throws Exception {
-		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("query", "Q");
+		ParameterInfo x = sc.getParameterInfo("/sc01","get","query","Q");
 		assertEquals("{f1:'a'}", x.getExample());
 	}
 
@@ -445,7 +440,7 @@ public class QueryAnnotationTest {
 	@RestResource
 	public static class TA {
 
-		@RestMethod(name=GET,path="/basic")
+		@RestMethod
 		public void ta01(
 			@Query(
 				name="Q",
@@ -454,7 +449,7 @@ public class QueryAnnotationTest {
 			)
 			String q) {}
 
-		@RestMethod(name=GET,path="/api")
+		@RestMethod
 		public void ta02(
 			@Query(
 				name="Q",
@@ -465,7 +460,7 @@ public class QueryAnnotationTest {
 			)
 			String q) {}
 
-		@RestMethod(name=GET,path="/mixed")
+		@RestMethod
 		public void ta03(
 			@Query(
 				name="Q",
@@ -478,34 +473,36 @@ public class QueryAnnotationTest {
 			)
 			String q) {}
 
-		@RestMethod(name=GET,path="/value")
+		@RestMethod
 		public void ta04(@Query("Q") String q) {}
 	}
 
+	static Swagger ta = getSwagger(TA.class);
+
 	@Test
 	public void ta01_Query_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("query", "Q");
+		ParameterInfo x = ta.getParameterInfo("/ta01","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta02_Query_onParameter_api() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("query", "Q");
+		ParameterInfo x = ta.getParameterInfo("/ta02","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta03_Query_onParameter_mixed() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("query", "Q");
+		ParameterInfo x = ta.getParameterInfo("/ta03","get","query","Q");
 		assertEquals("Q", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta04_Query_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value").get("get").getParameter("query", "Q");
+		ParameterInfo x = ta.getParameterInfo("/ta04","get","query","Q");
 		assertEquals("Q", x.getName());
 	}
 
@@ -516,14 +513,16 @@ public class QueryAnnotationTest {
 	@RestResource
 	public static class TB {
 
-		@RestMethod(name=GET,path="/schemaValue")
+		@RestMethod
 		public void tb01(@Query(name="Q") String q) {}
 	}
 
+	static Swagger tb = getSwagger(TB.class);
+
 	@Test
 	public void tb01_Query_onParameter_schemaValue() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("query", "Q");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = tb.getParameterInfo("/tb01","get","query","Q");
+		assertObjectEquals("{'in':'query',name:'Q',type:'string'}", x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -533,13 +532,15 @@ public class QueryAnnotationTest {
 	@RestResource
 	public static class TC {
 
-		@RestMethod(name=GET,path="/example")
+		@RestMethod
 		public void tc01(@Query(name="Q", example={"a","b"}) String q) {}
 	}
 
+	static Swagger tc = getSwagger(TC.class);
+
 	@Test
-	public void t01_Query_onParameter_example() throws Exception {
-		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("query", "Q");
+	public void tc01_Query_onParameter_example() throws Exception {
+		ParameterInfo x = tc.getParameterInfo("/tc01","get","query","Q");
 		assertEquals("a\nb", x.getExample());
 	}
 }

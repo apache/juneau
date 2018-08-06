@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -28,9 +29,19 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header(type="array",collectionFormat="csv",items=@Items(type="string"))
 public class HeaderStringArray {
 
 	private final String[] value;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The raw header value.
+	 */
+	protected HeaderStringArray(String[] value) {
+		this.value = value;
+	}
 
 	/**
 	 * Constructor.

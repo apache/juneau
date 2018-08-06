@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
@@ -34,15 +32,15 @@ public class RestMethodBpiTest {
 	public static class A extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET, path="/a01", bpi="MyBeanA: a,_b")
+		@RestMethod(bpi="MyBeanA: a,_b")
 		public Object a01() throws Exception {
 			return new MyBeanA().init();
 		}
-		@RestMethod(name=GET, path="/a02", bpi="MyBeanA: a")
+		@RestMethod(bpi="MyBeanA: a")
 		public Object a02() throws Exception {
 			return new MyBeanA().init();
 		}
-		@RestMethod(name=GET, path="/a03", bpi="MyBeanA: _b")
+		@RestMethod(bpi="MyBeanA: _b")
 		public Object a03() throws Exception {
 			return new MyBeanA().init();
 		}
@@ -81,15 +79,15 @@ public class RestMethodBpiTest {
 	public static class B extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET, path="/b01", bpx="MyBeanA: a,_b")
+		@RestMethod(bpx="MyBeanA: a,_b")
 		public Object b01() throws Exception {
 			return new MyBeanA().init();
 		}
-		@RestMethod(name=GET, path="/b02", bpx="MyBeanA: a")
+		@RestMethod(bpx="MyBeanA: a")
 		public Object b02() throws Exception {
 			return new MyBeanA().init();
 		}
-		@RestMethod(name=GET, path="/b03", bpx="MyBeanA: _b")
+		@RestMethod(bpx="MyBeanA: _b")
 		public Object b03() throws Exception {
 			return new MyBeanA().init();
 		}
@@ -128,15 +126,15 @@ public class RestMethodBpiTest {
 	public static class C extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET, path="/c01", bpi="MyBeanB: a,_b")
+		@RestMethod(bpi="MyBeanB: a,_b")
 		public Object c01() throws Exception {
 			return new MyBeanB().init();
 		}
-		@RestMethod(name=GET, path="/c02", bpi="MyBeanB: a")
+		@RestMethod(bpi="MyBeanB: a")
 		public Object c02() throws Exception {
 			return new MyBeanB().init();
 		}
-		@RestMethod(name=GET, path="/c03", bpi="MyBeanB: _b")
+		@RestMethod(bpi="MyBeanB: _b")
 		public Object c03() throws Exception {
 			return new MyBeanB().init();
 		}
@@ -175,15 +173,15 @@ public class RestMethodBpiTest {
 	public static class D extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET, path="/d01", bpx="MyBeanB: a,_b")
+		@RestMethod(bpx="MyBeanB: a,_b")
 		public Object d01() throws Exception {
 			return new MyBeanB().init();
 		}
-		@RestMethod(name=GET, path="/d02", bpx="MyBeanB: a")
+		@RestMethod(bpx="MyBeanB: a")
 		public Object d02() throws Exception {
 			return new MyBeanB().init();
 		}
-		@RestMethod(name=GET, path="/d03", bpx="MyBeanB: _b")
+		@RestMethod(bpx="MyBeanB: _b")
 		public Object d03() throws Exception {
 			return new MyBeanB().init();
 		}
@@ -222,7 +220,7 @@ public class RestMethodBpiTest {
 	public static class E extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET, path="/e01", bpi="*: a")
+		@RestMethod(bpi="*: a")
 		public Object e01() throws Exception {
 			return new MyBeanA().init();
 		}
@@ -245,7 +243,7 @@ public class RestMethodBpiTest {
 	public static class F extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET, path="/f01", bpi="org.apache.juneau.rest.annotation.RestMethodBpiTest$MyBeanA: a")
+		@RestMethod(bpi="org.apache.juneau.rest.annotation.RestMethodBpiTest$MyBeanA: a")
 		public Object f01() throws Exception {
 			return new MyBeanA().init();
 		}
@@ -268,13 +266,13 @@ public class RestMethodBpiTest {
 	public static class G extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
-		@RestMethod(name=GET, path="/g01", bpi="MyBean: a")
-		public Object testD1() throws Exception {
+		@RestMethod(bpi="MyBean: a")
+		public Object g01() throws Exception {
 			// Should not match.
 			return new MyBeanA().init();
 		}
-		@RestMethod(name=GET, path="/g02", bpi="MyBean*: a")
-		public Object testD2() throws Exception {
+		@RestMethod(bpi="MyBean*: a")
+		public Object g02() throws Exception {
 			// Should not match.  We don't support meta-matches in class names.
 			return new MyBeanA().init();
 		}

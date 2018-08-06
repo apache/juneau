@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -47,6 +48,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("Content-Type")
 public class ContentType extends MediaType {
 
 	private static Cache<String,ContentType> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);

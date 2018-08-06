@@ -195,7 +195,7 @@ public class StatusCodesTest {
 	@RestResource
 	public static class C {
 		@RestMethod(name=GET, path="/")
-		public String c() {
+		public String c01() {
 			return "OK";
 		}
 	}

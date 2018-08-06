@@ -17,12 +17,75 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
+
 /**
  * REST response status annotation.
  *
- * <p>
- * TODO
  *
+ * <p>
+ * Annotation used to denote an HTTP response status code.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Arguments of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Public methods of <ja>@Response</ja>-annotated methods.
+ * </ul>
+ *
+ * <h5 class='topic'>Arguments of server-side <ja>@RestMethod</ja>-annotated methods</h5>
+ *
+ * <p>
+ * On server-side REST, this annotation can be applied to method parameters to identify them as an HTTP response value.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestMethod</ja>
+ * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet, <ja>@ResponseStatus</ja> Value&lt;Integer&gt; status) {
+ * 		<jsm>addPet</jsm>(pet);
+ * 		status.set(200);
+ * 	}
+ * </p>
+ *
+ * <p>
+ * The parameter type must be {@link Value} with a parameterized type of {@link Integer}.
+ *
+ * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated methods</h5>
+ *
+ *
+ * <p>
+ * On {@link Response @Response}-annotated classes, this method can be used to denote an HTTP status code on a response.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestMethod</ja>
+ * 	<jk>public</jk> Success addPet() {
+ * 		<jsm>addPet</jsm>(pet);
+ * 		<jk>return new</jk> Success();
+ * 	}
+ * </p>
+ *
+ * <p class='bcode w800'>
+ * 	<ja>@Response</ja>
+ * 	<jk>public class</jk> Success {
+ *
+ * 		<ja>@ResponseStatus</ja>
+ * 		<jk>public int</jk> getStatus() {
+ * 			<jk>return</jk> 201;
+ * 		}
+ *
+ * 		<ja>@Override</ja>
+ * 		<jk>public</jk> String toString() {
+ * 			<jk>return</jk> <js>"Pet was successfully added"</js>;
+ * 		}
+ * 	}
+ * </p>
+ *
+ * <p>
+ * The method being annotated must be public and return a numeric value.
+ *
+ *
+ * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.ResponseStatus">Overview &gt; juneau-rest-server &gt; @ResponseStatus</a>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>

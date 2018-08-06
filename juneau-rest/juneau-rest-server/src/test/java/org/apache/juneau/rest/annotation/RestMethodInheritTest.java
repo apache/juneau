@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -223,23 +221,23 @@ public class RestMethodInheritTest {
 
 	@RestResource(serializers=SimpleJsonSerializer.class)
 	public static class D02 extends D01 {
-		@RestMethod(name=GET, path="/default")
+		@RestMethod
 		public Object[] d01() {
 			// Should show ['F1','F2','Foo3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
-		@RestMethod(name=GET, path="/inheritTransforms", pojoSwaps={F3Swap.class,Inherit.class})
+		@RestMethod(pojoSwaps={F3Swap.class,Inherit.class})
 		public Object[] d02() {
 			// Should show ['F1','F2','F3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
-		@RestMethod(name=GET, path="/overrideSerializer", serializers=SimpleJsonSerializer.class, pojoSwaps=F3Swap.class)
+		@RestMethod(serializers=SimpleJsonSerializer.class, pojoSwaps=F3Swap.class)
 		public Object[] d03() {
 			// Should show ['Foo1','Foo2','F3']"
 			// Overriding serializer does not have parent filters applied.
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
 		}
-		@RestMethod(name=GET, path="/overrideSerializerInheritTransforms", serializers=SimpleJsonSerializer.class, pojoSwaps={F3Swap.class,Inherit.class})
+		@RestMethod(serializers=SimpleJsonSerializer.class, pojoSwaps={F3Swap.class,Inherit.class})
 		public Object[] d04() {
 			// Should show ['F1','F2','F3']
 			return new Object[]{new Foo1(), new Foo2(), new Foo3()};
@@ -249,19 +247,19 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void d01_transforms_default() throws Exception {
-		d.get("/default").json().execute().assertBody("['F1','F2','Foo3']");
+		d.get("/d01").json().execute().assertBody("['F1','F2','Foo3']");
 	}
 	@Test
 	public void d02_transforms_inheritTransforms() throws Exception {
-		d.get("/inheritTransforms").json().execute().assertBody("['F1','F2','F3']");
+		d.get("/d02").json().execute().assertBody("['F1','F2','F3']");
 	}
 	@Test
 	public void d03_transforms_overrideSerializer() throws Exception {
-		d.get("/overrideSerializer").json().execute().assertBody("['Foo1','Foo2','F3']");
+		d.get("/d03").json().execute().assertBody("['Foo1','Foo2','F3']");
 	}
 	@Test
 	public void d04_transforms_overrideSerializerInheritTransforms() throws Exception {
-		d.get("/overrideSerializerInheritTransforms").json().execute().assertBody("['F1','F2','F3']");
+		d.get("/d04").json().execute().assertBody("['F1','F2','F3']");
 	}
 
 	//=================================================================================================================
@@ -276,13 +274,13 @@ public class RestMethodInheritTest {
 
 	@RestResource
 	public static class E02 extends E01 {
-		@RestMethod(name=GET, path="/default")
-		public ObjectMap test1(RequestProperties properties) {
+		@RestMethod
+		public ObjectMap e01(RequestProperties properties) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(properties);
 		}
-		@RestMethod(name=GET, path="/override", properties={@Property(name="p4",value="v4a"), @Property(name="p5", value="v5")})
-		public ObjectMap test2(RequestProperties properties, @HasQuery("override") boolean override) {
+		@RestMethod(properties={@Property(name="p4",value="v4a"), @Property(name="p5", value="v5")})
+		public ObjectMap e02(RequestProperties properties, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
@@ -308,14 +306,14 @@ public class RestMethodInheritTest {
 
 	@Test
 	public void e01_properties_default() throws Exception {
-		e.get("/default").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		e.get("/e01").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
 	}
 	@Test
-	public void e02_properties_override_false() throws Exception {
-		e.get("/override").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+	public void e02a_properties_override_false() throws Exception {
+		e.get("/e02").execute().assertBody("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
 	}
 	@Test
-	public void e03_properties_override_true() throws Exception {
-		e.get("/override?override").execute().assertBody("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+	public void e02b_properties_override_true() throws Exception {
+		e.get("/e02?override").execute().assertBody("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 	}
 }

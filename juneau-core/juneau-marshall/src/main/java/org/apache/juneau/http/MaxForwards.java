@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Represents a parsed <l>Max-Forwards</l> HTTP request header.
  *
@@ -55,7 +57,17 @@ package org.apache.juneau.http;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("Max-Forwards")
 public final class MaxForwards extends HeaderInteger {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 */
+	public MaxForwards(Integer value) {
+		super(value);
+	}
 
 	/**
 	 * Returns a parsed <code>Max-Forwards</code> header.

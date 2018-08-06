@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -32,11 +30,11 @@ public class RestMethodGuardsTest {
 
 	@RestResource
 	public static class A {
-		@RestMethod(name=GET, path="/overlappingOneGuard", guards=Test1Guard.class)
+		@RestMethod(guards=Test1Guard.class)
 		public String a01() {
 			return "OK1";
 		}
-		@RestMethod(name=GET, path="/overlappingTwoGuards", guards={Test1Guard.class,Test2Guard.class})
+		@RestMethod(guards={Test1Guard.class,Test2Guard.class})
 		public String a02() {
 			return "OK2";
 		}
@@ -57,15 +55,15 @@ public class RestMethodGuardsTest {
 
 	@Test
 	public void a01_overlappingOneGuard() throws Exception {
-		a.get("/overlappingOneGuard?t1=1").execute().assertBody("OK1");
-		a.get("/overlappingOneGuard?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/a01?t1=1").execute().assertBody("OK1");
+		a.get("/a01?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
 	}
 
 	@Test
-	public void a01_overlappingTwoGuards() throws Exception {
-		a.get("/overlappingTwoGuards?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
-		a.get("/overlappingTwoGuards?noTrace=true&t1=1").execute().assertStatus(403).assertBodyContains("Access denied by guard");
-		a.get("/overlappingTwoGuards?noTrace=true&t2=2").execute().assertStatus(403).assertBodyContains("Access denied by guard");
-		a.get("/overlappingTwoGuards?t1=1&t2=2").execute().assertBody("OK2");
+	public void a02_overlappingTwoGuards() throws Exception {
+		a.get("/a02?noTrace=true").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/a02?noTrace=true&t1=1").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/a02?noTrace=true&t2=2").execute().assertStatus(403).assertBodyContains("Access denied by guard");
+		a.get("/a02?t1=1&t2=2").execute().assertBody("OK2");
 	}
 }

@@ -44,83 +44,83 @@ public class RestParamsTest {
 
 	@RestResource(messages="RestParamsTest")
 	public static class A {
-		@RestMethod(name=GET, path="/ResourceBundle")
+		@RestMethod
 		public String a01(ResourceBundle t) {
 			return t == null ? null : t.getString("foo");
 		}
-		@RestMethod(name=GET, path="/MessageBundle")
+		@RestMethod
 		public String a02(MessageBundle t) {
 			return t == null ? null : t.getString("foo");
 		}
-		@RestMethod(name=POST, path="/InputStream")
+		@RestMethod(name=POST)
 		public String a03(InputStream t) throws IOException {
 			return read(t);
 		}
-		@RestMethod(name=POST, path="/ServletInputStream")
+		@RestMethod(name=POST)
 		public String a04(ServletInputStream t) throws IOException {
 			return read(t);
 		}
-		@RestMethod(name=POST, path="/Reader")
+		@RestMethod(name=POST)
 		public String a05(Reader t) throws IOException {
 			return read(t);
 		}
-		@RestMethod(name=GET, path="/OutputStream")
+		@RestMethod
 		public void a06(OutputStream t) throws IOException {
 			t.write("OK".getBytes());
 		}
-		@RestMethod(name=GET, path="/ServletOutputStream")
+		@RestMethod
 		public void a07(ServletOutputStream t) throws IOException {
 			t.write("OK".getBytes());
 		}
-		@RestMethod(name=GET, path="/Writer")
+		@RestMethod
 		public void a08(Writer t) throws IOException {
 			t.write("OK");
 		}
-		@RestMethod(name=GET, path="/RequestHeaders")
+		@RestMethod
 		public boolean a09(RequestHeaders t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/RequestQuery")
+		@RestMethod
 		public boolean a10(RequestQuery t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/RequestFormData")
+		@RestMethod
 		public boolean a11(RequestFormData t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/HttpMethod")
+		@RestMethod
 		public String a12(HttpMethod t) {
 			return t.toString();
 		}
-		@RestMethod(name=GET, path="/RestLogger")
+		@RestMethod
 		public boolean a13(RestLogger t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/RestContext")
+		@RestMethod
 		public boolean a14(RestContext t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/Parser",parsers={JsonParser.class})
+		@RestMethod(parsers={JsonParser.class})
 		public String a15(Parser t) {
 			return t.getClass().getName();
 		}
-		@RestMethod(name=GET, path="/Locale")
+		@RestMethod
 		public String a16(Locale t) {
 			return t.toString();
 		}
-		@RestMethod(name=GET, path="/Swagger")
+		@RestMethod
 		public boolean a17(Swagger t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/RequestPathMatch")
+		@RestMethod
 		public boolean a18(RequestPath t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/RequestBody")
+		@RestMethod
 		public boolean a19(RequestBody t) {
 			return t != null;
 		}
-		@RestMethod(name=GET, path="/Config")
+		@RestMethod
 		public boolean a20(Config t) {
 			return t != null;
 		}
@@ -129,85 +129,85 @@ public class RestParamsTest {
 
 	@Test
 	public void a01_ResourceBundle() throws Exception {
-		a.get("/ResourceBundle").acceptLanguage("en-US").execute().assertBody("bar");
-		a.get("/ResourceBundle").acceptLanguage("ja-JP").execute().assertBody("baz");
+		a.get("/a01").acceptLanguage("en-US").execute().assertBody("bar");
+		a.get("/a01").acceptLanguage("ja-JP").execute().assertBody("baz");
 	}
 	@Test
 	public void a02_MessageBundle() throws Exception {
-		a.get("/MessageBundle").acceptLanguage("en-US").execute().assertBody("bar");
-		a.get("/MessageBundle").acceptLanguage("ja-JP").execute().assertBody("baz");
+		a.get("/a02").acceptLanguage("en-US").execute().assertBody("bar");
+		a.get("/a02").acceptLanguage("ja-JP").execute().assertBody("baz");
 	}
 	@Test
 	public void a03_InputStream() throws Exception {
-		a.post("/InputStream", "foo").execute().assertBody("foo");
+		a.post("/a03", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a04_ServletInputStream() throws Exception {
-		a.post("/ServletInputStream", "foo").execute().assertBody("foo");
+		a.post("/a04", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a05_Reader() throws Exception {
-		a.post("/Reader", "foo").execute().assertBody("foo");
+		a.post("/a05", "foo").execute().assertBody("foo");
 	}
 	@Test
 	public void a06_OutputStream() throws Exception {
-		a.get("/OutputStream").execute().assertBody("OK");
+		a.get("/a06").execute().assertBody("OK");
 	}
 	@Test
 	public void a07_ServletOutputStream() throws Exception {
-		a.get("/ServletOutputStream").execute().assertBody("OK");
+		a.get("/a07").execute().assertBody("OK");
 	}
 	@Test
 	public void a08_Writer() throws Exception {
-		a.get("/Writer").execute().assertBody("OK");
+		a.get("/a08").execute().assertBody("OK");
 	}
 	@Test
 	public void a09_RequestHeaders() throws Exception {
-		a.get("/RequestHeaders").execute().assertBody("true");
+		a.get("/a09").execute().assertBody("true");
 	}
 	@Test
 	public void a10_RequestQuery() throws Exception {
-		a.get("/RequestQuery").execute().assertBody("true");
+		a.get("/a10").execute().assertBody("true");
 	}
 	@Test
 	public void a11_RequestFormData() throws Exception {
-		a.get("/RequestFormData").execute().assertBody("true");
+		a.get("/a11").execute().assertBody("true");
 	}
 	@Test
 	public void a12_HttpMethod() throws Exception {
-		a.get("/HttpMethod").execute().assertBody("GET");
+		a.get("/a12").execute().assertBody("GET");
 	}
 	@Test
 	public void a13_RestLogger() throws Exception {
-		a.get("/RestLogger").execute().assertBody("true");
+		a.get("/a13").execute().assertBody("true");
 	}
 	@Test
 	public void a14_RestContext() throws Exception {
-		a.get("/RestContext").execute().assertBody("true");
+		a.get("/a14").execute().assertBody("true");
 	}
 	@Test
 	public void a15_Parser() throws Exception {
-		a.get("/Parser").contentType("application/json").execute().assertBody("org.apache.juneau.json.JsonParser");
+		a.get("/a15").contentType("application/json").execute().assertBody("org.apache.juneau.json.JsonParser");
 	}
 	@Test
 	public void a16_Locale() throws Exception {
-		a.get("/Locale").acceptLanguage("en-US").execute().assertBody("en_US");
-		a.get("/Locale").acceptLanguage("ja-JP").execute().assertBody("ja_JP");
+		a.get("/a16").acceptLanguage("en-US").execute().assertBody("en_US");
+		a.get("/a16").acceptLanguage("ja-JP").execute().assertBody("ja_JP");
 	}
 	@Test
 	public void a17_Swagger() throws Exception {
-		a.get("/Swagger").execute().assertBody("true");
+		a.get("/a17").execute().assertBody("true");
 	}
 	@Test
 	public void a18_RequestPathMatch() throws Exception {
-		a.get("/RequestPathMatch").execute().assertBody("true");
+		a.get("/a18").execute().assertBody("true");
 	}
 	@Test
 	public void a19_RequestBody() throws Exception {
-		a.get("/RequestBody").execute().assertBody("true");
+		a.get("/a19").execute().assertBody("true");
 	}
 	@Test
 	public void a20_Config() throws Exception {
-		a.get("/Config").execute().assertBody("true");
+		a.get("/a20").execute().assertBody("true");
 	}
 }

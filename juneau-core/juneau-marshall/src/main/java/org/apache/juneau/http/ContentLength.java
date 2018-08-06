@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Represents a parsed <l>Content-Length</l> HTTP request/response header.
  *
@@ -57,7 +59,17 @@ package org.apache.juneau.http;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
-public final class ContentLength extends HeaderInteger {
+@Header("Content-Length")
+public final class ContentLength extends HeaderLong {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 */
+	public ContentLength(Long value) {
+		super(value);
+	}
 
 	/**
 	 * Returns a parsed <code>Content-Length</code> header.

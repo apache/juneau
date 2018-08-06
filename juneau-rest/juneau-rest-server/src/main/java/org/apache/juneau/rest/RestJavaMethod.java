@@ -198,7 +198,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					p = method.getName();
 					if (m.name().equals("")) {
 						for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"}) {
-							if (p.startsWith(t)) {
+							if (p.startsWith(t) && (p.length() == t.length() || Character.isUpperCase(p.charAt(t.length())))) {
 								p = Introspector.decapitalize(p.substring(t.length()));
 								break;
 							}
@@ -215,7 +215,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					String mn = method.getName();
 					httpMethod = "GET";
 					for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"}) {
-						if (mn.startsWith(t)) {
+						if (mn.startsWith(t) && (mn.length() == t.length() || Character.isUpperCase(mn.charAt(t.length())))) {
 							httpMethod = t.toUpperCase();
 							break;
 						}

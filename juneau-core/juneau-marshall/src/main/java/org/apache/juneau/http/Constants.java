@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Constants used by classes in this package.
  *
@@ -20,6 +22,7 @@ package org.apache.juneau.http;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("Constants")
 public class Constants {
 	static boolean NOCACHE = Boolean.getBoolean("juneau.http.cache.disable");
 	static int CACHE_MAX_SIZE = Integer.getInteger("juneau.http.cache.maxSize", 1000);

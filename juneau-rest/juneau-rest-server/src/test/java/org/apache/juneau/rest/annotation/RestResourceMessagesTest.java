@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -45,8 +43,8 @@ public class RestResourceMessagesTest {
 
 	@RestResource(messages="RestResourceMessagesTest1")
 	public static class A {
-		@RestMethod(name=GET)
-		public ObjectMap test(ResourceBundle rb) {
+		@RestMethod
+		public ObjectMap a01(ResourceBundle rb) {
 			return convertToMap(rb);
 		}
 	}
@@ -55,7 +53,7 @@ public class RestResourceMessagesTest {
 	@Test
 	public void a01() throws Exception {
 		// Parent resource should just pick up values from its bundle.
-		a.get("/test").execute().assertBody("{key1:'value1a',key2:'value2a'}");
+		a.get("/a01").execute().assertBody("{key1:'value1a',key2:'value2a'}");
 	}
 
 	//====================================================================================================
@@ -70,6 +68,6 @@ public class RestResourceMessagesTest {
 	public void b01() throws Exception {
 		// Child resource should pick up values from both parent and child,
 		// ordered child before parent.
-		b.get("/test").execute().assertBody("{key1:'value1a',key2:'value2b',key3:'value3b'}");
+		b.get("/a01").execute().assertBody("{key1:'value1a',key2:'value2b',key3:'value3b'}");
 	}
 }

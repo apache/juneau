@@ -1371,7 +1371,7 @@ public class BasicRestInfoProviderTest {
 	@Test
 	public void na01a_query_type_default() throws Exception {
 		ParameterInfo x = getSwagger(new NA01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
-		assertEquals(null, x.getType());
+		assertEquals("object", x.getType());
 		assertEquals(null, x.getDescription());
 		assertEquals(null, x.getRequired());
 		assertEquals(null, x.getAllowEmptyValue());
@@ -1445,7 +1445,7 @@ public class BasicRestInfoProviderTest {
 	@Test
 	public void na02a_query_type_swaggerOnClass() throws Exception {
 		ParameterInfo x = getSwagger(new NA02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo");
-		assertEquals("int32", getSwagger(new NA02()).getPaths().get("/path/{foo}/query").get("get").getParameter("query", "foo").getType());
+		assertEquals("int32", x.getType());
 		assertEquals("a-description", x.getDescription());
 		assertObjectEquals("false", x.getRequired());
 		assertObjectEquals("false", x.getAllowEmptyValue());
@@ -1745,7 +1745,7 @@ public class BasicRestInfoProviderTest {
 
 	@Test
 	public void nt01_query_schema_default() throws Exception {
-		assertObjectEquals("{type:'object',properties:{id:{format:'int32',type:'integer'}}}", getSwagger(new NT01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
+		assertObjectEquals("{properties:{id:{format:'int32',type:'integer'}}}", getSwagger(new NT01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
 		assertObjectEquals("{'$ref':'#/definitions/Foo'}", getSwaggerWithFile(new NT01()).getPaths().get("/path/{foo}/query").get("get").getParameter("query","foo").getSchema());
 	}
 

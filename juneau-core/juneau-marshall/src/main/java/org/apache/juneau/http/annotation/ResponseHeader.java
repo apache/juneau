@@ -24,12 +24,14 @@ import org.apache.juneau.httppart.*;
  * REST response header annotation.
  *
  * <p>
- * Annotation that can be applied to parameters and types to denote them as an HTTP response headers.
+ * Annotation used to denote an HTTP response header.
  *
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * 	<li>Arguments of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Argument types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Public methods of <ja>@Response</ja>-annotated methods.
  * </ul>
  *
  * <p>

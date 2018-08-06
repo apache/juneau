@@ -12,16 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -31,17 +28,6 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HeaderAnnotationTest {
-
-	//=================================================================================================================
-	// Setup
-	//=================================================================================================================
-
-	private static Swagger getSwagger(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
-		RestInfoProvider ip = rc.getInfoProvider();
-		return ip.getSwagger(req);
-	}
 
 	//=================================================================================================================
 	// @Header on POJO
@@ -62,7 +48,7 @@ public class HeaderAnnotationTest {
 		public static class SA01 {
 			public SA01(String x) {}
 		}
-		@RestMethod(name=GET,path="/basic")
+		@RestMethod
 		public void sa01(SA01 h) {}
 
 		@Header(
@@ -75,7 +61,7 @@ public class HeaderAnnotationTest {
 		public static class SA02 {
 			public SA02(String x) {}
 		}
-		@RestMethod(name=GET,path="/api")
+		@RestMethod
 		public void sa02(SA02 h) {}
 
 		@Header(
@@ -90,25 +76,27 @@ public class HeaderAnnotationTest {
 		public static class SA03 {
 			public SA03(String x) {}
 		}
-		@RestMethod(name=GET,path="/mixed")
+		@RestMethod
 		public void sa03(SA03 h) {}
 	}
 
+	static Swagger sa = getSwagger(SA.class);
+
 	@Test
 	public void sa01_Header_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic").get("get").getParameter("header", "H");
+		ParameterInfo x = sa.getParameterInfo("/sa01","get","header","H");
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("'string'", x.getType());
 	}
 	@Test
 	public void sa02_Header_onPojo_api() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api").get("get").getParameter("header", "H");
+		ParameterInfo x = sa.getParameterInfo("/sa02","get","header","H");
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("'string'", x.getType());
 	}
 	@Test
 	public void sa03_Header_onPojo_mixed() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed").get("get").getParameter("header", "H");
+		ParameterInfo x = sa.getParameterInfo("/sa03","get","header","H");
 		assertEquals("a\nb", x.getDescription());
 		assertObjectEquals("'string'", x.getType());
 	}
@@ -122,47 +110,50 @@ public class HeaderAnnotationTest {
 
 		@Header(name="H")
 		public static class SB01 {}
-		@RestMethod(name=GET,path="/schemaValue")
+		@RestMethod
 		public void sb01(SB01 h) {}
 
 		@Header(name="H")
 		public static class SB02 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/autoDetectBean")
+		@RestMethod
 		public void sb02(SB02 b) {}
 
 		@Header(name="H")
 		public static class SB03 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(name=GET,path="/autoDetectList")
+		@RestMethod
 		public void sb03(SB03 b) {}
 
 		@Header(name="H")
 		public static class SB04 {}
-		@RestMethod(name=GET,path="/autoDetectStringObject")
+		@RestMethod
 		public void sb04(SB04 b) {}
 	}
+
+	static Swagger sb = getSwagger(SB.class);
+
 	@Test
 	public void sb01_Header_onPojo_schemaValue() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb01","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
 	}
 	@Test
 	public void sb02_Header_onPojo_autoDetectBean() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb02","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
 	}
 	@Test
 	public void sb03_Header_onPojo_autoDetectList() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb03","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'array',items:{type:'string'}}", x);
 	}
 	@Test
 	public void sb04_Header_onPojo_autoDetectStringObject() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/sb04","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -176,13 +167,15 @@ public class HeaderAnnotationTest {
 		public static class SC01 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/example")
+		@RestMethod
 		public void sc01(SC01 h) {}
 	}
 
+	static Swagger sc = getSwagger(SC.class);
+
 	@Test
 	public void sc01_Header_onPojo_example() throws Exception {
-		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example").get("get").getParameter("header", "H");
+		ParameterInfo x = sc.getParameterInfo("/sc01","get","header","H");
 		assertEquals("{f1:'a'}", x.getExample());
 	}
 
@@ -197,7 +190,7 @@ public class HeaderAnnotationTest {
 	@RestResource
 	public static class TA {
 
-		@RestMethod(name=GET,path="/basic")
+		@RestMethod
 		public void ta01(
 			@Header(
 				name="H",
@@ -205,7 +198,7 @@ public class HeaderAnnotationTest {
 				type="string"
 			) String h) {}
 
-		@RestMethod(name=GET,path="/api")
+		@RestMethod
 		public void ta02(
 			@Header(
 				name="H",
@@ -215,7 +208,7 @@ public class HeaderAnnotationTest {
 				}
 			) String h) {}
 
-		@RestMethod(name=GET,path="/mixed")
+		@RestMethod
 		public void ta03(
 			@Header(
 				name="H",
@@ -227,34 +220,36 @@ public class HeaderAnnotationTest {
 				type="string"
 			) String h) {}
 
-		@RestMethod(name=GET,path="/value")
+		@RestMethod
 		public void ta04(@Header("H") String h) {}
 	}
 
+	static Swagger ta = getSwagger(TA.class);
+
 	@Test
 	public void ta01_Header_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic").get("get").getParameter("header", "H");
+		ParameterInfo x = ta.getParameterInfo("/ta01","get","header","H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta02_Header_onParameter_api() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api").get("get").getParameter("header", "H");
+		ParameterInfo x = ta.getParameterInfo("/ta02","get","header","H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta03_Header_onParameter_mixed() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed").get("get").getParameter("header", "H");
+		ParameterInfo x = ta.getParameterInfo("/ta03","get","header","H");
 		assertEquals("H", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta04_Header_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value").get("get").getParameter("header", "H");
+		ParameterInfo x = ta.getParameterInfo("/ta04","get","header","H");
 		assertEquals("H", x.getName());
 	}
 
@@ -265,61 +260,63 @@ public class HeaderAnnotationTest {
 	@RestResource
 	public static class TB {
 
-		@RestMethod(name=GET,path="/schemaValue")
+		@RestMethod
 		public void tb01(@Header(name="H") String h) {}
 
 		public static class TB02 {
 			public String f1;
 		}
-		@RestMethod(name=GET,path="/autoDetectBean")
+		@RestMethod
 		public void tb02(@Header("H") TB02 b) {}
 
 		public static class TB03 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
-		@RestMethod(name=GET,path="/autoDetectList")
+		@RestMethod
 		public void tb03(@Header("H") TB03 b) {}
 
 		public static class TB04 {}
-		@RestMethod(name=GET,path="/autoDetectStringObject")
+		@RestMethod
 		public void tb04(@Header("H") TB04 b) {}
 
-		@RestMethod(name=GET,path="/autoDetectInteger")
+		@RestMethod
 		public void tb05(@Header("H") Integer b) {}
 
-		@RestMethod(name=GET,path="/autoDetectBoolean")
-		public void tbo6(@Header("H") Boolean b) {}
+		@RestMethod
+		public void tb06(@Header("H") Boolean b) {}
 	}
 
+	static Swagger tb = getSwagger(TB.class);
+
 	@Test
-	public void tb01_Header_onParameter_schema2() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+	public void tb01_Header_onParameter_string() throws Exception {
+		ParameterInfo x = tb.getParameterInfo("/tb01","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
 	}
 	@Test
-	public void tb02_Header_onParameter_schema3() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBean").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+	public void tb02_Header_onParameter_bean() throws Exception {
+		ParameterInfo x = tb.getParameterInfo("/tb02","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'object',schema:{properties:{f1:{type:'string'}}}}", x);
 	}
 	@Test
-	public void tb03_Header_onParameter_schema4() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectList").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+	public void tb03_Header_onParameter_array() throws Exception {
+		ParameterInfo x = tb.getParameterInfo("/tb03","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'array',items:{type:'string'}}", x);
 	}
 	@Test
-	public void tb04_Header_onParameter_schema5() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectStringObject").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+	public void tb04_Header_onParameter_beanAsString() throws Exception {
+		ParameterInfo x = tb.getParameterInfo("/tb04","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'string'}", x);
 	}
 	@Test
-	public void tb05_Header_onParameter_schema6() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectInteger").get("get").getParameter("header", "H");
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
+	public void tb05_Header_onParameter_Integer() throws Exception {
+		ParameterInfo x = tb.getParameterInfo("/tb05","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'integer',format:'int32'}", x);
 	}
 	@Test
-	public void tb06_Header_onParameter_schema7() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBoolean").get("get").getParameter("header", "H");
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
+	public void tb06_Header_onParameter_Boolean() throws Exception {
+		ParameterInfo x = tb.getParameterInfo("/tb06","get","header","H");
+		assertObjectEquals("{'in':'header',name:'H',type:'boolean'}", x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -329,13 +326,15 @@ public class HeaderAnnotationTest {
 	@RestResource
 	public static class TC {
 
-		@RestMethod(name=GET,path="/example")
+		@RestMethod
 		public void tc01(@Header(name="H", example={"a","b"}) String h) {}
 	}
 
+	static Swagger tc = getSwagger(TC.class);
+
 	@Test
 	public void tc01_Header_onParameter_example() throws Exception {
-		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example").get("get").getParameter("header", "H");
+		ParameterInfo x = tc.getParameterInfo("/tc01","get","header","H");
 		assertEquals("a\nb", x.getExample());
 	}
 }

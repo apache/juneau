@@ -332,29 +332,34 @@ final class SwaggerGenerator {
 					if (in != BODY)
 						param.append("name", mp.name);
 
+					if (in == BODY)
+						param.put("schema", getSchema(param.getObjectMap("schema", false), mp.getType()));
+					else
+						mergePartSchema(param, getSchema(param.getObjectMap("schema", false), mp.getType()));
+
 					try {
-						if (in == BODY) {
-							for (Body a : getAnnotationsParentFirst(Body.class, mp.method, mp.index))
-								merge(param, a);
-						} else if (in == QUERY) {
-							for (Query a : getAnnotationsParentFirst(Query.class, mp.method, mp.index))
-								merge(param, a);
-						} else if (in == FORM_DATA) {
-							for (FormData a : getAnnotationsParentFirst(FormData.class, mp.method, mp.index))
-								merge(param, a);
-						} else if (in == HEADER) {
-							for (Header a : getAnnotationsParentFirst(Header.class, mp.method, mp.index))
-								merge(param, a);
-						} else if (in == PATH) {
-							for (Path a : getAnnotationsParentFirst(Path.class, mp.method, mp.index))
-								merge(param, a);
+						if (mp.method != null) {
+							if (in == BODY) {
+								for (Body a : getAnnotationsParentFirst(Body.class, mp.method, mp.index))
+									merge(param, a);
+							} else if (in == QUERY) {
+								for (Query a : getAnnotationsParentFirst(Query.class, mp.method, mp.index))
+									merge(param, a);
+							} else if (in == FORM_DATA) {
+								for (FormData a : getAnnotationsParentFirst(FormData.class, mp.method, mp.index))
+									merge(param, a);
+							} else if (in == HEADER) {
+								for (Header a : getAnnotationsParentFirst(Header.class, mp.method, mp.index))
+									merge(param, a);
+							} else if (in == PATH) {
+								for (Path a : getAnnotationsParentFirst(Path.class, mp.method, mp.index))
+									merge(param, a);
+							}
 						}
 					} catch (ParseException e) {
 						throw new SwaggerException(e, "Malformed swagger JSON object encountered in {0} class {1} method {2} parameter {3}", in, c, m, index);
 					}
 
-					if (! param.containsKey("schema"))
-						param.put("schema", getSchema(param.getObjectMap("schema", true), mp.getType()));
 
 					if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 						param.put("required", true);
@@ -695,6 +700,8 @@ final class SwaggerGenerator {
 	}
 
 	private ObjectMap getSchema(ObjectMap schema, Type type) throws Exception {
+
+		schema = newMap(schema);
 
 		ClassMeta<?> cm = bs.getClassMeta(type);
 
@@ -1121,6 +1128,39 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("$ref", a.$ref())
 		;
 	}
+
+	private ObjectMap mergePartSchema(ObjectMap param, ObjectMap schema) {
+		if (schema != null) {
+			param
+				.appendIf(false, true, true, "collectionFormat", schema.remove("collectionFormat"))
+				.appendIf(false, true, true, "default", schema.remove("default"))
+				.appendIf(false, true, true, "description", schema.remove("enum"))
+				.appendIf(false, true, true, "enum", schema.remove("enum"))
+				.appendIf(false, true, true, "x-example", schema.remove("x-example"))
+				.appendIf(false, true, true, "exclusiveMaximum", schema.remove("exclusiveMaximum"))
+				.appendIf(false, true, true, "exclusiveMinimum", schema.remove("exclusiveMinimum"))
+				.appendIf(false, true, true, "format", schema.remove("format"))
+				.appendIf(false, true, true, "items", schema.remove("items"))
+				.appendIf(false, true, true, "maximum", schema.remove("maximum"))
+				.appendIf(false, true, true, "maxItems", schema.remove("maxItems"))
+				.appendIf(false, true, true, "maxLength", schema.remove("maxLength"))
+				.appendIf(false, true, true, "minimum", schema.remove("minimum"))
+				.appendIf(false, true, true, "minItems", schema.remove("minItems"))
+				.appendIf(false, true, true, "minLength", schema.remove("minLength"))
+				.appendIf(false, true, true, "multipleOf", schema.remove("multipleOf"))
+				.appendIf(false, true, true, "pattern", schema.remove("pattern"))
+				.appendIf(false, true, true, "required", schema.remove("required"))
+				.appendIf(false, true, true, "type", schema.remove("type"))
+				.appendIf(false, true, true, "uniqueItems", schema.remove("uniqueItems"));
+
+			if ("object".equals(param.getString("type")) && ! schema.isEmpty())
+				param.put("schema", schema);
+		}
+
+		return param;
+	}
+
+
 
 	private ObjectMap toObjectMap(String[] ss) throws ParseException {
 		if (ss.length == 0)

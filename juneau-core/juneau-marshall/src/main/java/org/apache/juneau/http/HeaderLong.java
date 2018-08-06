@@ -15,34 +15,12 @@ package org.apache.juneau.http;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Represents a parsed <l>User-Agent</l> HTTP request header.
+ * Category of headers that consist of a single long value.
  *
  * <p>
- * The user agent string of the user agent.
- *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode w800'>
- * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
- * </p>
- *
- * <h5 class='topic'>RFC2616 Specification</h5>
- *
- * The User-Agent request-header field contains information about the user agent originating the request.
- * This is for statistical purposes, the tracing of protocol violations, and automated recognition of user agents for
- * the sake of tailoring responses to avoid particular user agent limitations.
- * User agents SHOULD include this field with requests.
- * The field can contain multiple product tokens (section 3.8) and comments identifying the agent and any sub-products
- * which form a significant part of the user agent.
- * By convention, the product tokens are listed in order of their significance for identifying the application.
- *
- * <p class='bcode w800'>
- * 	User-Agent     = "User-Agent" ":" 1*( product | comment )
- * </p>
- *
- * <p>
- * Example:
- * <p class='bcode w800'>
- * 	User-Agent: CERN-LineMode/2.15 libwww/2.17b3
+ * 	Content-Length: 300
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
@@ -50,22 +28,48 @@ import org.apache.juneau.http.annotation.*;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
-@Header("User-Agent")
-public final class UserAgent extends HeaderString {
+@Header(type="integer",format="int64")
+public class HeaderLong {
+
+	private final Long value;
 
 	/**
-	 * Returns a parsed <code>User-Agent</code> header.
+	 * Constructor.
 	 *
-	 * @param value The <code>User-Agent</code> header string.
-	 * @return The parsed <code>User-Agent</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The raw header value.
 	 */
-	public static UserAgent forString(String value) {
-		if (value == null)
-			return null;
-		return new UserAgent(value);
+	protected HeaderLong(String value) {
+		long _value = 0;
+		try {
+			_value = Long.parseLong(value);
+		} catch (NumberFormatException e) {
+		}
+		this.value = _value;
 	}
 
-	private UserAgent(String value) {
-		super(value);
+	/**
+	 * Constructor.
+	 *
+	 * @param value The parsed header value.
+	 */
+	protected HeaderLong(Long value) {
+		this.value = value;
+	}
+
+	/**
+	 * Returns this header as a simple string value.
+	 *
+	 * <p>
+	 * Functionally equivalent to calling {@link #toString()}.
+	 *
+	 * @return This header as a simple string.
+	 */
+	public long asLong() {
+		return value;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return String.valueOf(value);
 	}
 }

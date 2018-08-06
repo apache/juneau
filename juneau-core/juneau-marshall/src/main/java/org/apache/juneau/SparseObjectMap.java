@@ -10,37 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
-
-import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.mock.*;
-import org.junit.*;
-import org.junit.runners.*;
+package org.apache.juneau;
 
 /**
- * Tests related to @ResponseStatus annotation.
+ * TODO
+ *
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings("javadoc")
-public class ResponseStatusAnnotationTest {
+public class SparseObjectMap extends ObjectMap {
 
-	//=================================================================================================================
-	// Test on parameter
-	//=================================================================================================================
-
-	@RestResource
-	public static class A {
-		@RestMethod
-		public void a01(@ResponseStatus Value<Integer> status) {
-			status.set(100);
-		}
-	}
-
-	static MockRest a = MockRest.create(A.class);
-
-	@Test
-	public void a01() throws Exception {
-		a.get("/a01").execute().assertStatus(100);
-	}
 }

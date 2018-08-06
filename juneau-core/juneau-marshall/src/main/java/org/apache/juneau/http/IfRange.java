@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -61,6 +62,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("If-Range")
 public final class IfRange extends HeaderString {
 
 	/**

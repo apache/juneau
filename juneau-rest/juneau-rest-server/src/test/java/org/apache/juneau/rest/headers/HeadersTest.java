@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.headers;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
@@ -43,111 +44,111 @@ public class HeadersTest {
 	)
 	public static class A {
 
-		@RestMethod(name=GET, path="/accept")
+		@RestMethod
 		public String accept(Accept accept) {
 			return accept.toString();
 		}
-		@RestMethod(name=GET, path="/acceptCharset")
+		@RestMethod
 		public String acceptCharset(AcceptCharset acceptCharset) {
 			return acceptCharset.toString();
 		}
-		@RestMethod(name=GET, path="/acceptEncoding")
+		@RestMethod
 		public String acceptEncoding(AcceptEncoding acceptEncoding) {
 			return acceptEncoding.toString();
 		}
-		@RestMethod(name=GET, path="/acceptLanguage")
+		@RestMethod
 		public String acceptLanguage(AcceptLanguage acceptLanguage) {
 			return acceptLanguage.toString();
 		}
-		@RestMethod(name=GET, path="/authorization")
+		@RestMethod
 		public String authorization(Authorization authorization) {
 			return authorization.toString();
 		}
-		@RestMethod(name=GET, path="/cacheControl")
+		@RestMethod
 		public String cacheControl(CacheControl cacheControl) {
 			return cacheControl.toString();
 		}
-		@RestMethod(name=GET, path="/connection")
+		@RestMethod
 		public String connection(Connection connection) {
 			return connection.toString();
 		}
-		@RestMethod(name=GET, path="/contentLength")
+		@RestMethod
 		public String contentLength(ContentLength contentLength) {
 			return contentLength.toString();
 		}
-		@RestMethod(name=GET, path="/contentType")
+		@RestMethod
 		public String contentType(ContentType contentType) {
 			return contentType.toString();
 		}
-		@RestMethod(name=GET, path="/date")
+		@RestMethod
 		public String date(org.apache.juneau.http.Date date) {
 			return date.toString();
 		}
-		@RestMethod(name=GET, path="/expect")
+		@RestMethod
 		public String expect(Expect expect) {
 			return expect.toString();
 		}
-		@RestMethod(name=GET, path="/from")
+		@RestMethod
 		public String from(From from) {
 			return from.toString();
 		}
-		@RestMethod(name=GET, path="/host")
+		@RestMethod
 		public String host(Host host) {
 			return host.toString();
 		}
-		@RestMethod(name=GET, path="/ifMatch")
-		public String IfMatch(IfMatch ifMatch) {
+		@RestMethod
+		public String ifMatch(IfMatch ifMatch) {
 			return ifMatch.toString();
 		}
-		@RestMethod(name=GET, path="/ifModifiedSince")
+		@RestMethod
 		public String ifModifiedSince(IfModifiedSince ifModifiedSince) {
 			return ifModifiedSince.toString();
 		}
-		@RestMethod(name=GET, path="/ifNoneMatch")
+		@RestMethod
 		public String ifNoneMatch(IfNoneMatch ifNoneMatch) {
 			return ifNoneMatch.toString();
 		}
-		@RestMethod(name=GET, path="/ifRange")
+		@RestMethod
 		public String ifRange(IfRange ifRange) {
 			return ifRange.toString();
 		}
-		@RestMethod(name=GET, path="/ifUnmodifiedSince")
+		@RestMethod
 		public String ifUnmodifiedSince(IfUnmodifiedSince ifUnmodifiedSince) {
 			return ifUnmodifiedSince.toString();
 		}
-		@RestMethod(name=GET, path="/maxForwards")
+		@RestMethod
 		public String maxForwards(MaxForwards maxForwards) {
 			return maxForwards.toString();
 		}
-		@RestMethod(name=GET, path="/pragma")
+		@RestMethod
 		public String pragma(Pragma pragma) {
 			return pragma.toString();
 		}
-		@RestMethod(name=GET, path="/proxyAuthorization")
+		@RestMethod
 		public String proxyAuthorization(ProxyAuthorization proxyAuthorization) {
 			return proxyAuthorization.toString();
 		}
-		@RestMethod(name=GET, path="/range")
+		@RestMethod
 		public String range(Range range) {
 			return range.toString();
 		}
-		@RestMethod(name=GET, path="/referer")
+		@RestMethod
 		public String referer(Referer referer) {
 			return referer.toString();
 		}
-		@RestMethod(name=GET, path="/te")
+		@RestMethod
 		public String te(TE te) {
 			return te.toString();
 		}
-		@RestMethod(name=GET, path="/upgrade")
+		@RestMethod
 		public String upgrade(Upgrade upgrade) {
 			return upgrade.toString();
 		}
-		@RestMethod(name=GET, path="/userAgent")
+		@RestMethod
 		public String userAgent(UserAgent userAgent) {
 			return userAgent.toString();
 		}
-		@RestMethod(name=GET, path="/warning")
+		@RestMethod
 		public String warning(Warning warning) {
 			return warning.toString();
 		}
@@ -257,11 +258,11 @@ public class HeadersTest {
 	}
 	@Test
 	public void a10a_date() throws Exception {
-		a.get("/date").date("foo").execute().assertBody("foo");
+		a.get("/date").date("Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a10b_date_query() throws Exception {
-		a.get("/date?Date=foo").execute().assertBody("foo");
+		a.get("/date?Date=Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a11a_expect() throws Exception {
@@ -299,11 +300,11 @@ public class HeadersTest {
 	}
 	@Test
 	public void a15a_ifModifiedSince() throws Exception {
-		a.get("/ifModifiedSince").ifModifiedSince("foo").execute().assertBody("foo");
+		a.get("/ifModifiedSince").ifModifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a15b_ifModifiedSince_query() throws Exception {
-		a.get("/ifModifiedSince?If-Modified-Since=foo").execute().assertBody("foo");
+		a.get("/ifModifiedSince?If-Modified-Since=Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a16a_ifNoneMatch() throws Exception {
@@ -326,11 +327,11 @@ public class HeadersTest {
 	}
 	@Test
 	public void a18a_ifUnmodifiedSince() throws Exception {
-		a.get("/ifUnmodifiedSince").ifUnmodifiedSince("foo").execute().assertBody("foo");
+		a.get("/ifUnmodifiedSince").ifUnmodifiedSince("Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a18b_ifUnmodifiedSince_query() throws Exception {
-		a.get("/ifUnmodifiedSince?If-Unmodified-Since=foo").execute().assertBody("foo");
+		a.get("/ifUnmodifiedSince?If-Unmodified-Since=Wed, 21 Oct 2015 07:28:00 GMT").execute().assertBody("Wed, 21 Oct 2015 07:28:00 GMT");
 	}
 	@Test
 	public void a19a_maxForwards() throws Exception {
@@ -645,5 +646,147 @@ public class HeadersTest {
 	@Test
 	public void h03_annotatedAndDefaultHeaders_override_caseInsensitive() throws Exception {
 		h.get("/h").header("h1",7).header("h2",8).header("h3",9).execute().assertBody("{h1:'7',h2:'8',h3:'9'}");
+	}
+
+	//====================================================================================================
+	// Swagger on default headers.
+	//====================================================================================================
+
+	Swagger sa = getSwagger(A.class);
+
+	@Test
+	public void sa01_accept() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/accept","get","header","Accept");
+		assertObjectEquals("{'in':'header',name:'Accept',type:'string'}", pi);
+	}
+	@Test
+	public void sa02_acceptCharset() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/acceptCharset","get","header","Accept-Charset");
+		assertObjectEquals("{'in':'header',name:'Accept-Charset',type:'string'}", pi);
+	}
+	@Test
+	public void sa03_acceptEncoding() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/acceptEncoding","get","header","Accept-Encoding");
+		assertObjectEquals("{'in':'header',name:'Accept-Encoding',type:'string'}", pi);
+	}
+	@Test
+	public void sa04_acceptLanguage() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/acceptLanguage","get","header","Accept-Language");
+		assertObjectEquals("{'in':'header',name:'Accept-Language',type:'string'}", pi);
+	}
+	@Test
+	public void sa05_authorization() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/authorization","get","header","Authorization");
+		assertObjectEquals("{'in':'header',name:'Authorization',type:'string'}", pi);
+	}
+	@Test
+	public void sa06_cacheControl() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/cacheControl","get","header","Cache-Control");
+		assertObjectEquals("{'in':'header',name:'Cache-Control',type:'string'}", pi);
+	}
+	@Test
+	public void sa07_connection() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/connection","get","header","Connection");
+		assertObjectEquals("{'in':'header',name:'Connection',type:'string'}", pi);
+	}
+	@Test
+	public void sa08_contentLength() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/contentLength","get","header","Content-Length");
+		assertObjectEquals("{'in':'header',name:'Content-Length',type:'integer',format:'int64'}", pi);
+	}
+	@Test
+	public void sa09_contentType() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/contentType","get","header","Content-Type");
+		assertObjectEquals("{'in':'header',name:'Content-Type',type:'string'}", pi);
+	}
+	@Test
+	public void sa10_date() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/date","get","header","Date");
+		assertObjectEquals("{'in':'header',name:'Date',type:'string'}", pi);
+	}
+	@Test
+	public void sa11_expect() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/expect","get","header","Expect");
+		assertObjectEquals("{'in':'header',name:'Expect',type:'string'}", pi);
+	}
+	@Test
+	public void sa12_() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/from","get","header","From");
+		assertObjectEquals("{'in':'header',name:'From',type:'string'}", pi);
+	}
+	@Test
+	public void sa13_host() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/host","get","header","Host");
+		assertObjectEquals("{'in':'header',name:'Host',type:'string'}", pi);
+	}
+	@Test
+	public void sa14_ifMatch() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/ifMatch","get","header","If-Match");
+		assertObjectEquals("{'in':'header',name:'If-Match',type:'string'}", pi);
+	}
+	@Test
+	public void sa15_ifModifiedSince() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/ifModifiedSince","get","header","If-Modified-Since");
+		assertObjectEquals("{'in':'header',name:'If-Modified-Since',type:'string'}", pi);
+	}
+	@Test
+	public void sa16_ifNoneMatch() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/ifNoneMatch","get","header","If-None-Match");
+		assertObjectEquals("{'in':'header',name:'If-None-Match',type:'string'}", pi);
+	}
+	@Test
+	public void sa17_ifRange() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/ifRange","get","header","If-Range");
+		assertObjectEquals("{'in':'header',name:'If-Range',type:'string'}", pi);
+	}
+	@Test
+	public void sa18_ifUnmodifiedSince() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/ifUnmodifiedSince","get","header","If-Unmodified-Since");
+		assertObjectEquals("{'in':'header',name:'If-Unmodified-Since',type:'string'}", pi);
+	}
+	@Test
+	public void sa19_maxForwards() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/maxForwards","get","header","Max-Forwards");
+		assertObjectEquals("{'in':'header',name:'Max-Forwards',type:'integer',format:'int32'}", pi);
+	}
+	@Test
+	public void sa20_pragma() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/pragma","get","header","Pragma");
+		assertObjectEquals("{'in':'header',name:'Pragma',type:'string'}", pi);
+	}
+	@Test
+	public void sa21_proxyAuthorization() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/proxyAuthorization","get","header","Proxy-Authorization");
+		assertObjectEquals("{'in':'header',name:'Proxy-Authorization',type:'string'}", pi);
+	}
+	@Test
+	public void sa22_range() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/range","get","header","Range");
+		assertObjectEquals("{'in':'header',name:'Range',type:'string'}", pi);
+	}
+	@Test
+	public void sa23_referer() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/referer","get","header","Referer");
+		assertObjectEquals("{'in':'header',name:'Referer',type:'string'}", pi);
+	}
+	@Test
+	public void sa24_te() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/te","get","header","TE");
+		assertObjectEquals("{'in':'header',name:'TE',type:'string'}", pi);
+	}
+	@Test
+	public void sa25_upgrade() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/upgrade","get","header","Upgrade");
+		assertObjectEquals("{'in':'header',name:'Upgrade',type:'array',items:{type:'string'},collectionFormat:'csv'}", pi);
+	}
+	@Test
+	public void sa26_userAgent() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/userAgent","get","header","User-Agent");
+		assertObjectEquals("{'in':'header',name:'User-Agent',type:'string'}", pi);
+	}
+	@Test
+	public void sa27_warning() throws Exception {
+		ParameterInfo pi = sa.getParameterInfo("/warning","get","header","Warning");
+		assertObjectEquals("{'in':'header',name:'Warning',type:'string'}", pi);
 	}
 }

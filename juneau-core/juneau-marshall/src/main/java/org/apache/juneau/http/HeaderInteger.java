@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Category of headers that consist of a single integer value.
  *
@@ -26,9 +28,10 @@ package org.apache.juneau.http;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header(type="integer",format="int32")
 public class HeaderInteger {
 
-	private final int value;
+	private final Integer value;
 
 	/**
 	 * Constructor.
@@ -46,6 +49,15 @@ public class HeaderInteger {
 			} catch (NumberFormatException e2) {}
 		}
 		this.value = _value;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The parsed header value.
+	 */
+	protected HeaderInteger(Integer value) {
+		this.value = value;
 	}
 
 	/**

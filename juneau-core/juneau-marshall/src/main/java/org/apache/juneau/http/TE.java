@@ -14,6 +14,7 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.http.Constants.*;
 
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -87,15 +88,16 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("TE")
 public final class TE extends HeaderRangeArray {
 
 	private static final Cache<String,TE> cache = new Cache<>(NOCACHE, CACHE_MAX_SIZE);
 
 	/**
-	 * Returns a parsed <code>Accept</code> header.
+	 * Returns a parsed <code>TE</code> header.
 	 *
-	 * @param value The <code>Accept</code> header string.
-	 * @return The parsed <code>Accept</code> header, or <jk>null</jk> if the string was null.
+	 * @param value The <code>TE</code> header string.
+	 * @return The parsed <code>TE</code> header, or <jk>null</jk> if the string was null.
 	 */
 	public static TE forString(String value) {
 		if (value == null)

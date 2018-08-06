@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
@@ -99,23 +97,23 @@ public class RestResourceSerializersTest {
 
 	@RestResource(serializers=SA.class)
 	public static class A {
-		@RestMethod(name=GET, path="/serializerOnClass")
+		@RestMethod
 		public String a01() {
 			return "test1";
 		}
-		@RestMethod(name=GET, path="/serializerOnMethod", serializers=SB.class)
+		@RestMethod(serializers=SB.class)
 		public String a02() {
 			return "test2";
 		}
-		@RestMethod(name=GET, path="/serializerOverriddenOnMethod", serializers={SB.class,SC.class,Inherit.class})
+		@RestMethod(serializers={SB.class,SC.class,Inherit.class})
 		public String a03() {
 			return "test3";
 		}
-		@RestMethod(name=GET, path="/serializerWithDifferentMediaTypes", serializers={SD.class,Inherit.class})
+		@RestMethod(serializers={SD.class,Inherit.class})
 		public String a04() {
 			return "test4";
 		}
-		@RestMethod(name=GET, path="/validErrorResponse")
+		@RestMethod
 		public String a05() {
 			return "test406";
 		}
@@ -124,8 +122,8 @@ public class RestResourceSerializersTest {
 
 	@Test
 	public void a01_serializerOnClass() throws Exception {
-		a.get("/serializerOnClass").accept("text/a").execute().assertBody("text/a - test1");
-		a.get("/serializerOnClass?noTrace=true").accept("text/b").execute()
+		a.get("/a01").accept("text/a").execute().assertBody("text/a - test1");
+		a.get("/a01?noTrace=true").accept("text/b").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/b'",
@@ -134,7 +132,7 @@ public class RestResourceSerializersTest {
 	}
 	@Test
 	public void a02_serializerOnMethod() throws Exception {
-		a.get("/serializerOnMethod?noTrace=true").accept("text/a").execute()
+		a.get("/a02?noTrace=true").accept("text/a").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/a'",
@@ -143,17 +141,17 @@ public class RestResourceSerializersTest {
 	}
 	@Test
 	public void a03_serializerOverriddenOnMethod() throws Exception {
-		a.get("/serializerOverriddenOnMethod").accept("text/a").execute().assertBody("text/c - test3");
-		a.get("/serializerOverriddenOnMethod").accept("text/b").execute().assertBody("text/b - test3");
+		a.get("/a03").accept("text/a").execute().assertBody("text/c - test3");
+		a.get("/a03").accept("text/b").execute().assertBody("text/b - test3");
 	}
 	@Test
 	public void a04_serializerWithDifferentMediaTypes() throws Exception {
-		a.get("/serializerWithDifferentMediaTypes").accept("text/a").execute().assertBody("text/d - test4");
-		a.get("/serializerWithDifferentMediaTypes").accept("text/d").execute().assertBody("text/d - test4");
+		a.get("/a04").accept("text/a").execute().assertBody("text/d - test4");
+		a.get("/a04").accept("text/d").execute().assertBody("text/d - test4");
 	}
 	@Test
 	public void a05_validErrorResponse() throws Exception {
-		a.get("/validErrorResponse?noTrace=true").accept("text/bad").execute()
+		a.get("/a05?noTrace=true").accept("text/bad").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported media-type in request header 'Accept': 'text/bad'",

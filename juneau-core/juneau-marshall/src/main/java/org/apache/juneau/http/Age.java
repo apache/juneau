@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Represents a parsed <l>Age</l> HTTP response header.
  *
@@ -54,7 +56,17 @@ package org.apache.juneau.http;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("Age")
 public final class Age extends HeaderInteger {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 */
+	public Age(Integer value) {
+		super(value);
+	}
 
 	/**
 	 * Returns a parsed <code>Age</code> header.

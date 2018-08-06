@@ -46,6 +46,11 @@ public class SimpleJson extends Json {
 	public static final SimpleJson DEFAULT = new SimpleJson();
 
 	/**
+	 * Default reusable instance, readable format.
+	 */
+	public static final SimpleJson DEFAULT_READABLE = new SimpleJson(SimpleJsonSerializer.DEFAULT_READABLE, JsonParser.DEFAULT);
+
+	/**
 	 * Constructor.
 	 *
 	 * @param s

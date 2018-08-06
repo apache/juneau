@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Represents a parsed <l>Proxy-Authorization</l> HTTP request header.
  *
@@ -48,6 +50,7 @@ package org.apache.juneau.http;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("Proxy-Authorization")
 public final class ProxyAuthorization extends HeaderString {
 
 	/**

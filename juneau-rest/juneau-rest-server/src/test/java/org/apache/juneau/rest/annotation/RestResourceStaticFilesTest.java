@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -31,8 +29,8 @@ public class RestResourceStaticFilesTest {
 
 	@RestResource(staticFiles={"xdocs:xdocs","xdocs2:xdocs2:{Foo:'Bar'}"})
 	public static class A {
-		@RestMethod(name=GET)
-		public String test() {
+		@RestMethod
+		public String a01() {
 			return null;
 		}
 	}
@@ -55,8 +53,8 @@ public class RestResourceStaticFilesTest {
 
 	@RestResource(staticFiles={"xdocs:xdocs:{Foo:'Bar'}"})
 	public static class B {
-		@RestMethod(name=GET)
-		public String test() {
+		@RestMethod
+		public String b01() {
 			return null;
 		}
 	}

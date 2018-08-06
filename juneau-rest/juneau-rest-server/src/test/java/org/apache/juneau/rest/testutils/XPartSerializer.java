@@ -10,37 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.rest.testutils;
 
-import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.mock.*;
-import org.junit.*;
-import org.junit.runners.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
 
 /**
- * Tests related to @ResponseStatus annotation.
+ * Test serializer.
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings("javadoc")
-public class ResponseStatusAnnotationTest {
-
-	//=================================================================================================================
-	// Test on parameter
-	//=================================================================================================================
-
-	@RestResource
-	public static class A {
-		@RestMethod
-		public void a01(@ResponseStatus Value<Integer> status) {
-			status.set(100);
-		}
+public class XPartSerializer implements HttpPartSerializer {
+	@Override
+	public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
+		return new HttpPartSerializerSession() {
+			@Override
+			public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				return "x" + value + "x";
+			}
+		};
 	}
 
-	static MockRest a = MockRest.create(A.class);
+	@Override
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createSession(null).serialize(partType, schema, value);
+	}
 
-	@Test
-	public void a01() throws Exception {
-		a.get("/a01").execute().assertStatus(100);
+	@Override
+	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createSession(null).serialize(null, schema, value);
 	}
 }

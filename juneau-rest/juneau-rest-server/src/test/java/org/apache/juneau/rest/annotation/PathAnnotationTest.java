@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.testutils.TestUtils.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.*;
@@ -31,17 +31,6 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PathAnnotationTest {
-
-	//=================================================================================================================
-	// Setup
-	//=================================================================================================================
-
-	private static Swagger getSwagger(Object resource) throws Exception {
-		RestContext rc = RestContext.create(resource).build();
-		RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
-		RestInfoProvider ip = rc.getInfoProvider();
-		return ip.getSwagger(req);
-	}
 
 	//=================================================================================================================
 	// Basic tests
@@ -311,6 +300,10 @@ public class PathAnnotationTest {
 		)
 		public static class SA01 {
 			public SA01(String x) {}
+			@Override
+			public String toString() {
+				return "sa01";
+			}
 		}
 		@RestMethod(name=GET,path="/basic/{P}")
 		public void sa01(SA01 f) {}
@@ -326,6 +319,10 @@ public class PathAnnotationTest {
 		)
 		public static class SA02 {
 			public SA02(String x) {}
+			@Override
+			public String toString() {
+				return "sa02";
+			}
 		}
 		@RestMethod(name=GET,path="/api/{P}")
 		public void sa02(SA02 f) {}
@@ -345,61 +342,79 @@ public class PathAnnotationTest {
 		)
 		public static class SA03 {
 			public SA03(String x) {}
+			@Override
+			public String toString() {
+				return "sa03";
+			}
 		}
 		@RestMethod(name=GET,path="/mixed/{P}")
 		public void sa03(SA03 f) {}
 
 
 		@Path("P")
-		public static class SA04 {}
+		public static class SA04 {
+			@Override
+			public String toString() {
+				return "sa04";
+			}
+		}
 		@RestMethod(name=GET,path="/value/{P}")
 		public void sa04(SA04 f) {}
 
 		@Path(name="P", _enum={" ['a','b'] "})
-		public static class SA19 {}
+		public static class SA19 {
+			@Override
+			public String toString() {
+				return "sa19";
+			}
+		}
 		@RestMethod(name=GET,path="/enum/{P}")
 		public void sa19(SA19 f) {}
 	}
 
+	static Swagger sa = getSwagger(SA.class);
+
 	@Test
 	public void sa01_Path_onPojo_basic() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = sa.getParameterInfo("/basic/{P}","get","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
 		assertEquals("'a'", x.getExample());
+		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'\\'a\\'','x-examples':{example:'/basic/sa01'}}", x);
 	}
 	@Test
 	public void sa02_Path_onPojo_api() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/api/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = sa.getParameterInfo("/api/{P}","get","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
 		assertEquals("a", x.getExample());
+		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/api/sa02'}}", x);
 	}
 	@Test
 	public void sa03_Path_onPojo_mixed() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/mixed/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = sa.getParameterInfo("/mixed/{P}","get","path","P");
 		assertEquals("P", x.getName());
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
-		assertObjectEquals("{type:'string'}", x.getSchema());
 		assertObjectEquals("['a','b']", x.getEnum());
 		assertEquals("'a'", x.getExample());
+		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'\\'a\\'','x-examples':{example:'/mixed/sa03'}}", x);
 	}
 	@Test
 	public void sa04_Path_onPojo_value() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/value/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = sa.getParameterInfo("/value/{P}","get","path","P");
 		assertEquals("P", x.getName());
+		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
 	}
 	@Test
 	public void sa05_Path_onPojo_enum() throws Exception {
-		ParameterInfo x = getSwagger(new SA()).getPaths().get("/enum/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = sa.getParameterInfo("/enum/{P}","get","path","P");
 		assertObjectEquals("['a','b']", x.getEnum());
+		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true,'enum':['a','b']}", x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -434,25 +449,27 @@ public class PathAnnotationTest {
 		public void sb04(SB04 b) {}
 	}
 
+	static Swagger sb = getSwagger(SB.class);
+
 	@Test
 	public void sb01_Path_onPojo_schemaValue() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/schemaValue/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/schemaValue/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
 	}
 	@Test
 	public void sb02_Path_onPojo_autoDetectBean() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectBean/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/autoDetectBean/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}", x);
 	}
 	@Test
 	public void sb03_Path_onPojo_autoDetectList() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectList/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		ParameterInfo x = sb.getParameterInfo("/autoDetectList/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}", x);
 	}
 	@Test
-	public void sb04_Path_onPojo_sautoDetectStringObject() throws Exception {
-		ParameterInfo x = getSwagger(new SB()).getPaths().get("/autoDetectStringObject/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+	public void sb04_Path_onPojo_autoDetectStringObject() throws Exception {
+		ParameterInfo x = sb.getParameterInfo("/autoDetectStringObject/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -471,9 +488,11 @@ public class PathAnnotationTest {
 	}
 
 
+	static Swagger sc = getSwagger(SC.class);
+
 	@Test
 	public void sc01_Path_onPojo_example() throws Exception {
-		ParameterInfo x = getSwagger(new SC()).getPaths().get("/example/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = sc.getParameterInfo("/example/{P}","get","path","P");
 		assertEquals("{f1:'a'}", x.getExample());
 	}
 
@@ -522,32 +541,34 @@ public class PathAnnotationTest {
 		public void ta05(@Path(name="P", _enum={" ['a','b'] "}) String h) {}
 	}
 
+	static Swagger ta = getSwagger(TA.class);
+
 	@Test
 	public void ta01_Path_onParameter_basic() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/basic/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = ta.getParameterInfo("/basic/{P}","get","path","P");
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta02_Path_onParameter_api() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/api/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = ta.getParameterInfo("/api/{P}","get","path","P");
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta03_Path_onParameter_mixed() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/mixed/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = ta.getParameterInfo("/mixed/{P}","get","path","P");
 		assertEquals("a", x.getDescription());
 		assertEquals("string", x.getType());
 	}
 	@Test
 	public void ta04_Path_onParameter_value() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/value/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = ta.getParameterInfo("/value/{P}","get","path","P");
 		assertEquals("P", x.getName());
 	}
 	@Test
 	public void ta05_Path_onParameter_enum() throws Exception {
-		ParameterInfo x = getSwagger(new TA()).getPaths().get("/enum/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = ta.getParameterInfo("/enum/{P}","get","path","P");
 		assertObjectEquals("['a','b']", x.getEnum());
 	}
 
@@ -584,35 +605,37 @@ public class PathAnnotationTest {
 		public void tb06(@Path("P") Boolean b) {}
 	}
 
+	static Swagger tb = getSwagger(TB.class);
+
 	@Test
 	public void tb01_Path_onParameter_schemaValue() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/schemaValue/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = tb.getParameterInfo("/schemaValue/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
 	}
 	@Test
 	public void tb02_Path_onParameter_autoDetectBean() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBean/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}}}", x.getSchema());
+		ParameterInfo x = tb.getParameterInfo("/autoDetectBean/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'object',required:true,schema:{properties:{f1:{type:'string'}}}}", x);
 	}
 	@Test
 	public void tb03_Path_onParameter_autoDetectList() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectList/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'array',items:{type:'string'}}", x.getSchema());
+		ParameterInfo x = tb.getParameterInfo("/autoDetectList/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'array',required:true,items:{type:'string'}}", x);
 	}
 	@Test
 	public void tb04_Path_onParameter_autoDetectStringObject() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectStringObject/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'string'}", x.getSchema());
+		ParameterInfo x = tb.getParameterInfo("/autoDetectStringObject/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'string',required:true}", x);
 	}
 	@Test
 	public void tb05_Path_onParameter_autoDetectInteger() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectInteger/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{format:'int32',type:'integer'}", x.getSchema());
+		ParameterInfo x = tb.getParameterInfo("/autoDetectInteger/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'integer',required:true,format:'int32'}", x);
 	}
 	@Test
 	public void tb06_Path_onParameter_autoDetectBoolean() throws Exception {
-		ParameterInfo x = getSwagger(new TB()).getPaths().get("/autoDetectBoolean/{P}").get("get").getParameter("path", "P");
-		assertObjectEquals("{type:'boolean'}", x.getSchema());
+		ParameterInfo x = tb.getParameterInfo("/autoDetectBoolean/{P}","get","path","P");
+		assertObjectEquals("{'in':'path',name:'P',type:'boolean',required:true}", x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -626,9 +649,11 @@ public class PathAnnotationTest {
 		public void ta21(@Path(name="P", example="{f1:'b'}") String h) {}
 	}
 
+	static Swagger tc = getSwagger(TC.class);
+
 	@Test
 	public void tc01_Path_onParameter_example2() throws Exception {
-		ParameterInfo x = getSwagger(new TC()).getPaths().get("/example/{P}").get("get").getParameter("path", "P");
+		ParameterInfo x = tc.getParameterInfo("/example/{P}","get","path","P");
 		assertEquals("{f1:'b'}", x.getExample());
 	}
 }

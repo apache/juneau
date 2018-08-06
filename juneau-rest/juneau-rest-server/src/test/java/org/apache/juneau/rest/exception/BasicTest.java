@@ -13,10 +13,10 @@
 package org.apache.juneau.rest.exception;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -25,17 +25,6 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BasicTest {
-
-	private static Swagger getSwagger(Object resource) {
-		try {
-			RestContext rc = RestContext.create(resource).build();
-			RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
-			RestInfoProvider ip = rc.getInfoProvider();
-			return ip.getSwagger(req);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic sanity tests
@@ -800,7 +789,7 @@ public class BasicTest {
 		@RestMethod public void variantAlsoNegotiates() throws VariantAlsoNegotiates {}
 	}
 
-	static Swagger f = getSwagger(new F());
+	static Swagger f = getSwagger(F.class);
 
 	@Test
 	public void f01_badRequest() throws Exception {

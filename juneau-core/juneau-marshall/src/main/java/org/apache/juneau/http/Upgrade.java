@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Represents a parsed <l>Upgrade</l> HTTP request header.
  *
@@ -78,7 +80,17 @@ package org.apache.juneau.http;
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
+@Header("Upgrade")
 public final class Upgrade extends HeaderStringArray {
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 */
+	public Upgrade(String[] value) {
+		super(value);
+	}
 
 	/**
 	 * Returns a parsed <code>Upgrade</code> header.

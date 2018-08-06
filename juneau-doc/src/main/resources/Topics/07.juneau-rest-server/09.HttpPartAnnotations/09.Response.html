@@ -43,6 +43,16 @@
 	<li>Java method arguments and argument-types of <ja>@RestMethod</ja>-annotated REST Java methods.
 </ul>
 
+<p>
+	When the <ja>@Response</ja> annotation is applied to classes, the following annotations can be used on 
+	public non-static methods of the class to identify parts of a response:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus} 
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} 
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody} 
+</ul>
+	
 <h5 class='topic'>@Resource on exception classes</h5>
 <p>
 	When applied to an exception class, this annotation defines Swagger schema and information on non-200 return types.
@@ -141,6 +151,11 @@
 		<jk>return new</jk> Ok();
 	}
 </p>
+<p>
+	The <ja>@Response</ja> annotation can be simultaneously on both the Java method and return type.
+	<br>When used in both locations, the annotation values are combined, but values defined on the
+	method return annotation take precedence over the values defined on the type.
+</p>
 
 <h5 class='topic'>@Resource on @RestMethod-annotated method parameter</h5>
 <p>
@@ -201,53 +216,69 @@
 	<ja>@RestResource</ja>
 	<jk>public class</jk> ExampleResource {
 
-		<jc>// Example 1 - Pipe-delimited array of strings.  Annotation on method.</jc>
+		<jc>// Example 1 - String[] should be serialized using part serializer.</jc>
 		<ja>@Response</ja>(
-			usePartSerializer=<jk>true</jk>,
-			schema=<ja>@Schema</ja>(collectionFormat=<js>"pipes"</js>)
+			usePartSerializer=<jk>true</jk>
 		)
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/example1"</js>)
+		<ja>@RestMethod</ja>
 		<jk>public</jk> String[] example1() {
 			<jk>return new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>};
 		}
 
 		<jc>// Example 2 - Same as above.  Annotation on parameter.</jc>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/example2"</js>)
+		<ja>@RestMethod</ja>
 		<jk>public void</jk> example2(
 			<ja>@Response</ja>(
-				usePartSerializer=<jk>true</jk>,
-				schema=<ja>@Schema</ja>(collectionFormat=<js>"pipes"</js>)
+				usePartSerializer=<jk>true</jk>
 			) 
 			Value&lt;String[]&gt; body
 		) 
 		{
 			body.set(<jk>new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>});
 		}
+	}
+</p>
+<p>
+	The <code>usePartSerializer</code> flag is assumed to be <jk>true</jk> if you specify <code>schema</code>
+	or <code>partSerializer</code> on the annotation.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>
+	<jk>public class</jk> ExampleResource {
 
-		<jc>// Example 3 - BASE64-encoded byte array.  Annotation on method.</jc>
+		<jc>// Example 1 - Part serializer used because schema is defined</jc>
 		<ja>@Response</ja>(
-			usePartSerializer=<jk>true</jk>,
-			schema=<ja>@Schema</ja>(type=<js>"string"</js>,format=<js>"byte"</js>)
+			schema=<ja>@Schema</ja>(collectionFormat=<js>"pipes"</js>)
 		)
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/example3"</js>)
-		<jk>public byte</jk>[] example3() {
-			<jk>return</jk> <js>"foo"</js>.getBytes();
+		<ja>@RestMethod</ja>
+		<jk>public</jk> String[] example1() {
+			<jk>return new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>};
 		}
 
-		<jc>// Example 4 - Same as above.  Annotation on parameter.</jc>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>,path=<js>"/example4"</js>)
-		<jk>public void</jk> example4(
+		<jc>// Example 2 - Part serializer used because partSerializer is defined</jc>
+		<ja>@RestMethod</ja>
+		<jk>public void</jk> example2(
 			<ja>@Response</ja>(
-				usePartSerializer=<jk>true</jk>,
-				schema=<ja>@Schema</ja>(type=<js>"string"</js>,format=<js>"byte"</js>)
+				partSerializer=OpenApiPartSerializer.<jk>class</jk>
 			) 
-			Value&lt;<jk>byte</jk>[]&gt; body
+			Value&lt;String[]&gt; body
 		) 
 		{
-			body.set(<js>"foo"</js>.getBytes());
+			body.set(<jk>new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>});
 		}
 	}
 </p>
+
+<h5 class='topic'>@ResponseStatus</h5>
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation can be used on 
+	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify HTTP response
+	statuses other than <code>200</code> (the default).	
+</p>
+
+
+<h5 class='topic'>@ResponseHeader</h5>
+<h5 class='topic'>@ResponseBody</h5>
 <p>
 	When using part serialization, any of the types defined in <a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a> can 
 	be used as the POJO type.

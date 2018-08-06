@@ -910,6 +910,26 @@ public class Swagger extends SwaggerElement {
 	}
 
 	/**
+	 * Convenience method for calling <code>getPath(path).get(method).getParameter(in,name);</code>
+	 *
+	 * @param path The HTTP path.
+	 * @param method The HTTP method.
+	 * @param in The parameter type.
+	 * @param name The parameter name.
+	 * @return The parameter information or <jk>null</jk> if not found.
+	 */
+	public ParameterInfo getParameterInfo(String path, String method, String in, String name) {
+		OperationMap om = getPath(path);
+		if (om != null) {
+			Operation o = om.get(method);
+			if (o != null) {
+				return o.getParameter(in, name);
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Bean property getter:  <property>responses</property>.
 	 *
 	 * <p>

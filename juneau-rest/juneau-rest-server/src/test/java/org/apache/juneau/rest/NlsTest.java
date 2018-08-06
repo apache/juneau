@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.http.HttpMethodName.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.annotation.*;
@@ -39,11 +37,11 @@ public class NlsTest {
 		messages="NlsTest"
 	)
 	public static class A {
-		@RestMethod(name=GET, path="/fromClass")
+		@RestMethod
 		public String a01() {
 			return null;
 		}
-		@RestMethod(name=GET, path="/fromMethod",
+		@RestMethod(
 			properties={@Property(name="TestProperty",value="$L{key2}")}
 		)
 		public String a02() {
@@ -69,12 +67,12 @@ public class NlsTest {
 
 	@Test
 	public void a01_fromClass() throws Exception {
-		a.get("/fromClass").execute().assertBody("value1");
+		a.get("/a01").execute().assertBody("value1");
 	}
 
 	@Test
 	public void a02_fromMethod() throws Exception {
-		a.get("/fromMethod").execute().assertBody("value2");
+		a.get("/a02").execute().assertBody("value2");
 	}
 
 	//=================================================================================================================

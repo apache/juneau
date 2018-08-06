@@ -18,6 +18,10 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.util.zip.*;
 
+import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.mock.*;
+
 @SuppressWarnings({"javadoc"})
 public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 
@@ -46,6 +50,22 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 	 */
 	public static final String decompress(byte[] is) throws Exception {
 		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
+	}
+
+	/**
+	 * Gets the swagger for the specified @Resource-annotated object.
+	 * @param c
+	 * @return
+	 */
+	public static Swagger getSwagger(Class<?> c) {
+		try {
+			RestContext rc = RestContext.create(c.newInstance()).build();
+			RestRequest req = rc.getCallHandler().createRequest(new MockServletRequest());
+			RestInfoProvider ip = rc.getInfoProvider();
+			return ip.getSwagger(req);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static final void dumpResponse(String r, String msg, Object...args) {

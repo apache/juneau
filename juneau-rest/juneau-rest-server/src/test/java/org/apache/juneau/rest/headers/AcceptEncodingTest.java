@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.headers;
 
-import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
@@ -120,8 +119,8 @@ public class AcceptEncodingTest {
 
 	@RestResource(encoders=MyEncoder.class)
 	public static class B {
-		@RestMethod(name=GET,path="/")
-		public String test1() {
+		@RestMethod
+		public String b01() {
 			return "foo";
 		}
 	}
@@ -129,47 +128,47 @@ public class AcceptEncodingTest {
 
 	@Test
 	public void b01_withCompression_identity() throws Exception {
-		b.get("/").execute().assertBody("foo");
-		b.get("/").acceptEncoding("").execute().assertBody("foo");
-		b.get("/").acceptEncoding("identity").execute().assertBody("foo");
+		b.get("/b01").execute().assertBody("foo");
+		b.get("/b01").acceptEncoding("").execute().assertBody("foo");
+		b.get("/b01").acceptEncoding("identity").execute().assertBody("foo");
 	}
 	@Test
 	public void b02_withCompression_identity_qValues() throws Exception {
-		b.get("/").acceptEncoding("identity;q=0.8,mycoding;q=0.6").execute().assertBody("foo");
+		b.get("/b01").acceptEncoding("identity;q=0.8,mycoding;q=0.6").execute().assertBody("foo");
 	}
 	@Test
 	public void b03_withCompression_gzip() throws Exception {
-		assertEquals("foo", decompress(b.get("/").acceptEncoding("*").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/").acceptEncoding("mycoding").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("*").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding").execute().getBody()));
 	}
 	@Test
 	public void b04_withCompression_gzip_qValues() throws Exception {
-		assertEquals("foo", decompress(b.get("/").acceptEncoding("mycoding,identity;q=0").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/").acceptEncoding("mycoding,*;q=0").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/").acceptEncoding("mycoding;q=0.8,identity;q=0.6").execute().getBody()));
-		assertEquals("foo", decompress(b.get("/").acceptEncoding("mycoding;q=0.8,*;q=0.6").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,identity;q=0").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding,*;q=0").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,identity;q=0.6").execute().getBody()));
+		assertEquals("foo", decompress(b.get("/b01").acceptEncoding("mycoding;q=0.8,*;q=0.6").execute().getBody()));
 	}
 	@Test
 	public void b05_withCompression_nomatch() throws Exception {
-		b.get("?noTrace=true").acceptEncoding("identity;q=0").execute()
+		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
-		b.get("?noTrace=true").acceptEncoding("identity;q=0.0").execute()
+		b.get("/b01?noTrace=true").acceptEncoding("identity;q=0.0").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported encoding in request header 'Accept-Encoding': 'identity;q=0.0'",
 				"Supported codings: ['mycoding','identity']"
 			);
-		b.get("?noTrace=true").acceptEncoding("*;q=0").execute()
+		b.get("/b01?noTrace=true").acceptEncoding("*;q=0").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0'",
 				"Supported codings: ['mycoding','identity']"
 			);
-		b.get("?noTrace=true").acceptEncoding("*;q=0.0").execute()
+		b.get("/b01?noTrace=true").acceptEncoding("*;q=0.0").execute()
 			.assertStatus(406)
 			.assertBodyContains(
 				"Unsupported encoding in request header 'Accept-Encoding': '*;q=0.0'",
@@ -185,7 +184,7 @@ public class AcceptEncodingTest {
 	@RestResource(encoders=MyEncoder.class)
 	@SuppressWarnings("resource")
 	public static class C {
-		@RestMethod(name=GET, path="/direct1")
+		@RestMethod
 		public void c01(RestResponse res) throws Exception {
 			// This method bypasses the content type and encoding from
 			// the serializers and encoders when calling getOutputStream() directly.
@@ -194,7 +193,7 @@ public class AcceptEncodingTest {
 			os.write("foo".getBytes());
 			os.flush();
 		}
-		@RestMethod(name=GET, path="/direct2")
+		@RestMethod
 		public void c02(RestResponse res) throws Exception {
 			// This method bypasses the content type and encoding from
 			// the serializers and encoders when calling getWriter() directly.
@@ -202,7 +201,7 @@ public class AcceptEncodingTest {
 			w.append("foo");
 			w.flush();
 		}
-		@RestMethod(name=GET, path="/direct3")
+		@RestMethod
 		public void c03(RestResponse res) throws Exception {
 			// This method uses getNegotiatedWriter() which should use GZip encoding.
 			Writer w = res.getNegotiatedWriter();
@@ -210,7 +209,7 @@ public class AcceptEncodingTest {
 			w.flush();
 			w.close();
 		}
-		@RestMethod(name=GET, path="/direct4", encoders={IdentityEncoder.class})
+		@RestMethod(encoders={IdentityEncoder.class})
 		public void c04(RestResponse res) throws Exception {
 			// This method overrides the set of encoders at the method level and so shouldn't use GZip encoding.
 			Writer w = res.getNegotiatedWriter();
@@ -222,42 +221,42 @@ public class AcceptEncodingTest {
 
 	@Test
 	public void c01_direct1() throws Exception {
-		c.get("/direct1").acceptEncoding("mycoding").execute()
+		c.get("/c01").acceptEncoding("mycoding").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertHeader("Content-Type", "text/direct")
 			.assertBody("foo");
-		c.get("/direct1").acceptEncoding("*").execute()
+		c.get("/c01").acceptEncoding("*").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertHeader("Content-Type", "text/direct")
 			.assertBody("foo");
 	}
 	@Test
 	public void c02_direct2() throws Exception {
-		c.get("/direct2").acceptEncoding("mycoding").execute()
+		c.get("/c02").acceptEncoding("mycoding").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertBody("foo");
-		c.get("/direct2").acceptEncoding("*").execute()
+		c.get("/c02").acceptEncoding("*").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertBody("foo");
 	}
 	@Test
 	public void c03_direct3() throws Exception {
 		byte[] body;
-		body = c.get("/direct3").acceptEncoding("mycoding").execute()
+		body = c.get("/c03").acceptEncoding("mycoding").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.getBody();
 		assertEquals("foo", decompress(body));
-		body = c.get("/direct3").acceptEncoding("*").execute()
+		body = c.get("/c03").acceptEncoding("*").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.getBody();
 		assertEquals("foo", decompress(body));
 	}
 	@Test
 	public void c04_direct4() throws Exception {
-		c.get("/direct4").acceptEncoding("mycoding").execute()
+		c.get("/c04").acceptEncoding("mycoding").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertBody("foo");
-		c.get("/direct4").acceptEncoding("*").execute()
+		c.get("/c04").acceptEncoding("*").execute()
 			.assertHeader("Content-Encoding", null) // Should not be set
 			.assertBody("foo");
 	}
