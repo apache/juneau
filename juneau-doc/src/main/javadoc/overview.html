@@ -43,9 +43,9 @@
 	</script>
 </head>
 <body>
-<h1 style='background-color: yellow;color:red;text-align:center;padding:20px;border-radius:15px;'>Apache Juneau 7.2.0 Documentation Preview</h1>
-<h2 class='todo' style='text-align:center;padding:10px;border-radius:15px;'>Documentation in progress</h2>
-<h2 class='new' style='text-align:center;padding:10px;border-radius:15px;'>New/updated documentation</h2>
+<h1 class='preview-title'>Apache Juneau 7.2.0 Documentation Preview</h1>
+<h2 class='preview-section todo'>Documentation in progress</h2>
+<h2 class='preview-section new'>New/updated documentation</h2>
 
 <script type='text/javascript'>
 	function toggle(x) {
@@ -15638,10 +15638,10 @@ TODO(7.2.0)
 <div class='topic'><!-- START: 7.9.8 - juneau-rest-server.HttpPartAnnotations.Request -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
-	to identify it as an interface for retrieving HTTP parts through a bean interface.
+	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
 </p>
 
-<h5 class='section'>Example:</h5>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(UpdatePet updatePet) {...}
@@ -15663,11 +15663,22 @@ TODO(7.2.0)
 	}
 </p>
 <p>
-	The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
-	<br>Schema-based serialization and parsing is used just as if used as individual parameter types.
+	The example above is identical in behavior to specifying individual annotated parameters on the <ja>@RestMethod</ja>-annotated method:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
+	<jk>public void</jk> putPet(
+		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> petId,
+		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> debug,
+		<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; allHeaders,
+		<ja>@Body</ja> Pet pet
+	) 
+	{...}
 </p>
 <p>
-	It should be noted that the annotations used are the exact same used on REST parameters and have all the
+	The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
+	<br>Schema-based serialization and parsing is used just as if used as individual parameter types.
+	<br>Annotations used are the exact same used on REST parameters and have all the
 	same feature support including automatic Swagger validation and documentation.  
 </p>
 <h5 class='figure'>Example:</h5>
@@ -15692,12 +15703,10 @@ TODO(7.2.0)
 	}
 </p>
 <p>
-	The <ja>@Request</ja> annotation can be defined on the parameter, class, or both.
+	For clarity, the <ja>@Request</ja> annotation can be defined on the parameter, class, or both.
 </p>
-<h5 class='section'>Example:</h5>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// @Request defined on both for clarity.</jc>
-
 	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(<ja>@Request</ja> UpdatePet updatePet) {...}
 
@@ -30846,7 +30855,7 @@ TODO(7.2.0)
 		<br>Includes new methods on {@link org.apache.juneau.rest.RestRequest}:
 		<ul class='doctree'>
 			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(Class) getRequest(Class)}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(RequestMeta) getRequest(RequestMeta)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(RequestBeanMeta) getRequest(RequestBeanMeta)}
 		</ul>
 	<li>
 		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:

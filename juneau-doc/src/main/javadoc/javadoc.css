@@ -678,9 +678,24 @@ h5.section {
 	margin: 10px 0 5px 0;
 }
 
+h1.preview-title {
+	text-align:center;
+	padding:20px;
+	border-radius:15px;
+	color: red;
+	background-color:yellow;
+}
+
+h2.preview-section {
+	text-align:center;
+	padding:10px;
+	border-radius:15px;
+}
+
 .new {
 	background-color:lightgreen;
 }
+
 .todo {
 	background-color:yellow;
 }
