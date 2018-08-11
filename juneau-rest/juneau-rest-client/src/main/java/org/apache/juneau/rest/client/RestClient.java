@@ -1072,9 +1072,9 @@ public class RestClient extends BeanContext implements Closeable {
 							if (ba != null)
 								rc.body(args[ba.getIndex()], ba.getSerializer(null), ba.getSchema());
 
-							if (rmm.getRequestBeanArgs().length > 0) {
+							if (rmm.getRequestArgs().length > 0) {
 								BeanSession bs = createBeanSession();
-								for (RemoteMethodBeanArg rmba : rmm.getRequestBeanArgs()) {
+								for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
 									BeanMap<?> bm = bs.toBeanMap(args[rmba.getIndex()]);
 
 									for (BeanPropertyValue bpv : bm.getValues(false)) {

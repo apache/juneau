@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{new} @RequestBean
+{new} @Request
 
 <p>
-	The {@link org.apache.juneau.http.annotation.RequestBean @RequestBean} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
-	to identify it as an interface for retrieving HTTP parts through a bean interface.
+	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
+	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
 </p>
 
 <h5 class='section'>Example:</h5>
@@ -25,7 +25,7 @@
 	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(UpdatePet updatePet) {...}
 
-	<ja>@RequestBean</ja>
+	<ja>@Request</ja>
 	<jk>public interface</jk> UpdatePet {
 
 		<ja>@Path</ja> 
@@ -41,6 +41,15 @@
 		Pet getPet();
 	}
 </p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
+	<jk>public void</jk> putPet(
+		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> petId,
+		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> debug,
+		<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; allHeaders,
+		<ja>@Body</ja> Pet pet
+	) {...}
+</p>
 <p>
 	The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
 	<br>Schema-based serialization and parsing is used just as if used as individual parameter types.
@@ -51,8 +60,8 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RequestBean</ja>
-	<jk>public interface</jk> RequestBean {
+	<ja>@Request</ja>
+	<jk>public interface</jk> Request {
 
 		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
 		<ja>@Query</ja>(
@@ -69,4 +78,17 @@
 		)
 		<jk>int</jk>[][] getPipeCdlInts();
 	}
+</p>
+<p>
+	The <ja>@Request</ja> annotation can be defined on the parameter, class, or both.
+</p>
+<h5 class='section'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// @Request defined on both for clarity.</jc>
+
+	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
+	<jk>public void</jk> putPet(<ja>@Request</ja> UpdatePet updatePet) {...}
+
+	<ja>@Request</ja>
+	<jk>public interface</jk> UpdatePet {...}
 </p>

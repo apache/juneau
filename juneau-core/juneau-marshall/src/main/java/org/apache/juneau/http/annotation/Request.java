@@ -39,9 +39,9 @@ import org.apache.juneau.httppart.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
- * 	<jk>public void</jk> myMethod(<ja>@RequestBean</ja> MyRequestBean rb) {...}
+ * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest rb) {...}
  *
- * 	<jk>public interface</jk> MyRequestBean {
+ * 	<jk>public interface</jk> MyRequest {
  *
  * 		<ja>@Path</ja> <jc>// Path variable name inferred from getter.</jc>
  * 		String getP1();
@@ -73,21 +73,21 @@ import org.apache.juneau.httppart.*;
  * <p class='bcode w800'>
  * 	<jc>// Same as above but annotation defined on interface.</jc>
  * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
- * 	<jk>public void</jk> myMethod(MyRequestBean rb) {...}
+ * 	<jk>public void</jk> myMethod(MyRequest rb) {...}
  *
- *	<ja>@RequestBean</ja>
- * 	<jk>public interface</jk> MyRequestBean {...}
+ *	<ja>@Request</ja>
+ * 	<jk>public interface</jk> MyRequest {...}
  *
  * <p>
  * The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
  * <br>Schema-based serialization and parsing is allowed just as if used as individual parameter types.
  *
  * <p>
- * TODO - Swagger-info in <ja>@RequestBean</ja>s is not currently reflected in generated Swagger documentation.
+ * TODO - Swagger-info in <ja>@Request</ja>s is not currently reflected in generated Swagger documentation.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.RequestBean">Overview &gt; juneau-rest-server &gt; @RequestBean</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request">Overview &gt; juneau-rest-server &gt; @Request</a>
  * </ul>
  *
  * <h5 class='topic'>Client-side REST</h5>
@@ -100,10 +100,10 @@ import org.apache.juneau.httppart.*;
  * 	<jk>public interface</jk> MyProxy {
  *
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{p1}/{p2}"</js>)
- * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
  * 	}
  *
- * 	<jk>public class</jk> MyRequestBean {
+ * 	<jk>public class</jk> MyRequest {
  *
  * 		<ja>@Path</ja> <jc>// Path variable name inferred from getter.</jc>
  * 		<jk>public</jk> String getP1() {...}
@@ -143,7 +143,7 @@ import org.apache.juneau.httppart.*;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface RequestBean {
+public @interface Request {
 
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
@@ -151,7 +151,7 @@ public @interface RequestBean {
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
 	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
 
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
@@ -159,5 +159,5 @@ public @interface RequestBean {
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
 	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
 }

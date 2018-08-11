@@ -135,7 +135,7 @@ import org.apache.juneau.serializer.*;
  *
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument is annotated with
- * {@link RequestBean @RequestBean}:
+ * {@link Request @Request}:
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -143,10 +143,10 @@ import org.apache.juneau.serializer.*;
  * 	<jk>public interface</jk> MyProxy {
  *
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
- * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
  * 	}
  *
- * 	<jk>public interface</jk> MyRequestBean {
+ * 	<jk>public interface</jk> MyRequest {
  * 		<ja>@Body</ja>
  * 		MyPojo getMyPojo();
  * 	}

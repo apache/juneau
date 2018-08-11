@@ -251,17 +251,17 @@ class RestParamDefaults {
 		}
 	}
 
-	static final class RequestBeanObject extends RestMethodParam {
+	static final class RequestObject extends RestMethodParam {
 		private final RequestBeanMeta meta;
 
-		protected RequestBeanObject(Method m, int i, PropertyStore ps) {
+		protected RequestObject(Method m, int i, PropertyStore ps) {
 			super(RESPONSE_BODY, m, i);
 			this.meta = RequestBeanMeta.create(method, i, ps);
 		}
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getRequestBean(meta);
+			return req.getRequest(meta);
 		}
 	}
 

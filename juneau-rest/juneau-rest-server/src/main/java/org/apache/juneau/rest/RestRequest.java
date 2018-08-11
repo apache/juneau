@@ -1415,9 +1415,9 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
-	 * 	<jk>public void</jk> myMethod(@RequestBean MyRequestBean rb) {...}
+	 * 	<jk>public void</jk> myMethod(@Request MyRequest rb) {...}
 	 *
-	 * 	<jk>public interface</jk> MyRequestBean {
+	 * 	<jk>public interface</jk> MyRequest {
 	 *
 	 * 		<ja>@Path</ja> <jc>// Path variable name inferred from getter.</jc>
 	 * 		String getP1();
@@ -1430,10 +1430,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * 		<ja>@Query</ja>
 	 * 		String getQ1();
-	 *
-	 * 		<ja>@Query</ja>
-	 * 		<ja>@BeanProperty</ja>(name=<js>"q2"</js>)
-	 * 		String getQuery2();
 	 *
 	 *		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
 	 * 		<ja>@Query</ja>(
@@ -1454,19 +1450,19 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @param c The request bean interface to instantiate.
 	 * @return A new request bean proxy for this REST request.
 	 */
-	public <T> T getRequestBean(Class<T> c) {
-		return getRequestBean(RequestBeanMeta.create(c, getContext().getPropertyStore()));
+	public <T> T getRequest(Class<T> c) {
+		return getRequest(RequestBeanMeta.create(c, getContext().getPropertyStore()));
 	}
 
 	/**
-	 * Same as {@link #getRequestBean(Class)} but used on pre-instantiated {@link RequestBeanMeta} objects.
+	 * Same as {@link #getRequest(Class)} but used on pre-instantiated {@link RequestBeanMeta} objects.
 	 *
-	 * @param requestBeanMeta The metadata about the request bean interface to create.
+	 * @param rbm The metadata about the request bean interface to create.
 	 * @return A new request bean proxy for this REST request.
 	 */
-	public <T> T getRequestBean(final RequestBeanMeta requestBeanMeta) {
+	public <T> T getRequest(final RequestBeanMeta rbm) {
 		try {
-			Class<T> c = (Class<T>)requestBeanMeta.getClassMeta().getInnerClass();
+			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final BeanMeta<T> bm = getBeanSession().getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(
 				c.getClassLoader(),
@@ -1474,7 +1470,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				new InvocationHandler() {
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RequestBeanPropertyMeta pm = requestBeanMeta.getPropertyByGetter(method.getName());
+						RequestBeanPropertyMeta pm = rbm.getPropertyByGetter(method.getName());
 						if (pm != null) {
 							HttpPartParser pp = pm.getParser(getPartParser());
 							HttpPartSchema schema = pm.getSchema();
@@ -1603,7 +1599,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
 	 *
  	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}. 
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
 		return restJavaMethod.getResponseBeanMeta(o);
@@ -1613,7 +1609,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns metadata about the specified response object if it's annotated with {@link ResponseHeader @ResponseHeader}.
 	 *
  	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}. 
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {
 		return restJavaMethod.getResponseHeaderMeta(o);
@@ -1623,7 +1619,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * Returns metadata about the specified response object if it's annotated with {@link ResponseBody @ResponseBody}.
 	 *
  	 * @param o The response POJO.
-	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}. 
+	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
 	 */
 	public ResponsePartMeta getResponseBodyMeta(Object o) {
 		return restJavaMethod.getResponseBodyMeta(o);

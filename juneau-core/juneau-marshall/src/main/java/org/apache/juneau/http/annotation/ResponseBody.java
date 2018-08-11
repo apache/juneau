@@ -18,7 +18,48 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * TODO
+ * REST response body annotation.
+ *
+ * <p>
+ * Annotation used to denote an HTTP response body.
+ *
+ * <p>
+ * Can be used in the following locations:
+ * <ul>
+ * 	<li>Public methods of <ja>@Response</ja>-annotated methods.
+ * </ul>
+ *
+ *
+ * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated methods</h5>
+ * <p>
+ * On {@link Response @Response}-annotated classes, this method can be used to denote a POJO to use as the response.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@RestMethod</ja>
+ * 	<jk>public</jk> AddPetSuccess addPet() {
+ * 		<jsm>addPet</jsm>(pet);
+ * 		<jk>return new</jk> AddPetSuccess(...);
+ * 	}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@Response</ja>
+ * 	<jk>public class</jk> AddPetSuccess {
+ *
+ * 		<ja>@ResponseBody</ja>
+ * 		<jk>public</jk> Pet getPet() {...}
+ * 	}
+ * </p>
+ *
+ * <p>
+ * The method being annotated must be public.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response">Overview &gt; juneau-rest-server &gt; @Response</a>
+ * </ul>
  */
 @Documented
 @Target(METHOD)

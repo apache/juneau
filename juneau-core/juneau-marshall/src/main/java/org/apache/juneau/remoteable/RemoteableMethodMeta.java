@@ -40,7 +40,7 @@ public class RemoteableMethodMeta {
 	private final String httpMethod;
 	private final String url;
 	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, otherArgs;
-	private final RemoteMethodBeanArg[] requestBeanArgs;
+	private final RemoteMethodBeanArg[] requestArgs;
 	private final RemoteMethodArg bodyArg;
 	private final RemoteMethodReturn methodReturn;
 
@@ -58,7 +58,7 @@ public class RemoteableMethodMeta {
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);
 		this.headerArgs = b.headerArgs.toArray(new RemoteMethodArg[b.headerArgs.size()]);
-		this.requestBeanArgs = b.requestBeanArgs.toArray(new RemoteMethodBeanArg[b.requestBeanArgs.size()]);
+		this.requestArgs = b.requestArgs.toArray(new RemoteMethodBeanArg[b.requestArgs.size()]);
 		this.otherArgs = b.otherArgs.toArray(new RemoteMethodArg[b.otherArgs.size()]);
 		this.bodyArg = b.bodyArg;
 		this.methodReturn = b.methodReturn;
@@ -73,7 +73,7 @@ public class RemoteableMethodMeta {
 			formDataArgs = new LinkedList<>(),
 			otherArgs = new LinkedList<>();
 		List<RemoteMethodBeanArg>
-			requestBeanArgs = new LinkedList<>();
+			requestArgs = new LinkedList<>();
 		RemoteMethodArg bodyArg;
 		RemoteMethodReturn methodReturn;
 
@@ -124,7 +124,7 @@ public class RemoteableMethodMeta {
 				RequestBeanMeta rmba = RequestBeanMeta.create(m, i, PropertyStore.DEFAULT);
 				if (rmba != null) {
 					annotated = true;
-					requestBeanArgs.add(new RemoteMethodBeanArg(i, null, rmba));
+					requestArgs.add(new RemoteMethodBeanArg(i, null, rmba));
 				}
 				if (! annotated) {
 					otherArgs.add(new RemoteMethodArg(i, BODY, null));
@@ -188,12 +188,12 @@ public class RemoteableMethodMeta {
 	}
 
 	/**
-	 * Returns the {@link RequestBean @RequestBean} annotated arguments on this Java method.
+	 * Returns the {@link Request @Request} annotated arguments on this Java method.
 	 *
 	 * @return A list of zero-indexed argument indices.
 	 */
-	public RemoteMethodBeanArg[] getRequestBeanArgs() {
-		return requestBeanArgs;
+	public RemoteMethodBeanArg[] getRequestArgs() {
+		return requestArgs;
 	}
 
 	/**

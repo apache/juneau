@@ -24,22 +24,22 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents the metadata gathered from a parameter or class annotated with {@link RequestBean}.
+ * Represents the metadata gathered from a parameter or class annotated with {@link Request}.
  */
 public class RequestBeanMeta {
 
 	/**
 	 * Create metadata from specified parameter.
 	 *
-	 * @param m The method containing the parameter or parameter type annotated with {@link RequestBean}.
+	 * @param m The method containing the parameter or parameter type annotated with {@link Request}.
 	 * @param i The parameter index.
 	 * @param ps
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link RequestBean}.
+	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(Method m, int i, PropertyStore ps) {
-		if (! hasAnnotation(RequestBean.class, m, i))
+		if (! hasAnnotation(Request.class, m, i))
 			return null;
 		return new RequestBeanMeta.Builder(ps).apply(m, i).build();
 	}
@@ -47,14 +47,14 @@ public class RequestBeanMeta {
 	/**
 	 * Create metadata from specified class.
 	 *
-	 * @param c The class annotated with {@link RequestBean}.
+	 * @param c The class annotated with {@link Request}.
 	 * @param ps
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link RequestBean}.
+	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(Class<?> c, PropertyStore ps) {
-		if (! hasAnnotation(RequestBean.class, c))
+		if (! hasAnnotation(Request.class, c))
 			return null;
 		return new RequestBeanMeta.Builder(ps).apply(c).build();
 	}
@@ -95,11 +95,11 @@ public class RequestBeanMeta {
 		}
 
 		Builder apply(Method m, int i) {
-			return apply(m.getParameterTypes()[i]).apply(getAnnotation(RequestBean.class, m, i));
+			return apply(m.getParameterTypes()[i]).apply(getAnnotation(Request.class, m, i));
 		}
 
 		Builder apply(Class<?> c) {
-			apply(getAnnotation(RequestBean.class, c));
+			apply(getAnnotation(Request.class, c));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
 			for (BeanPropertyMeta bp : bm.getPropertyMetas()) {
@@ -134,12 +134,12 @@ public class RequestBeanMeta {
 			return this;
 		}
 
-		Builder apply(RequestBean rb) {
-			if (rb != null) {
-				if (rb.serializer() != HttpPartSerializer.Null.class)
-					serializer = rb.serializer();
-				if (rb.parser() != HttpPartParser.Null.class)
-					parser = rb.parser();
+		Builder apply(Request a) {
+			if (a != null) {
+				if (a.partSerializer() != HttpPartSerializer.Null.class)
+					serializer = a.partSerializer();
+				if (a.partParser() != HttpPartParser.Null.class)
+					parser = a.partParser();
 			}
 			return this;
 		}

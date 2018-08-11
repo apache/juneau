@@ -19,7 +19,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 
 /**
- * Represents the metadata about an {@link RequestBean}-annotated argument of a method on a remote proxy interface.
+ * Represents the metadata about an {@link Request}-annotated argument of a method on a remote proxy interface.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>

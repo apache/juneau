@@ -120,7 +120,7 @@ import org.apache.juneau.jsonschema.*;
  *
  * <p>
  * The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
- * {@link RequestBean @RequestBean}:
+ * {@link Request @Request}:
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -128,10 +128,10 @@ import org.apache.juneau.jsonschema.*;
  * 	<jk>public interface</jk> MyProxy {
  *
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
- * 		String myProxyMethod(<ja>@RequestBean</ja> MyRequestBean bean);
+ * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
  * 	}
  *
- * 	<jk>public interface</jk> MyRequestBean {
+ * 	<jk>public interface</jk> MyRequest {
  *
  * 		<jc>// Name explicitly specified.</jc>
  * 		<ja>@Header</ja>(<js>"Foo"</js>)
@@ -141,12 +141,6 @@ import org.apache.juneau.jsonschema.*;
  * 		<jc>// Same as @Header("bar")</jc>
  * 		<ja>@Header</ja>
  * 		String getBar();
- *
- * 		<jc>// Name inherited from bean property.</jc>
- * 		<jc>// Same as @Header("Baz")</jc>
- * 		<ja>@Header</ja>
- * 		<ja>@BeanProperty</ja>(<js>"Baz"</js>)
- * 		String getY();
  *
  * 		<jc>// Multiple values pulled from NameValuePairs object.</jc>
  * 		<jc>// Same as @Header("*")</jc>
@@ -243,7 +237,7 @@ public @interface Header {
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a request bean method</jc>
-	 * 	<jk>public interface</jk> MyRequestBean {
+	 * 	<jk>public interface</jk> MyRequest {
 	 *
 	 * 		<jc>// Equivalent to @Header("*")</jc>
 	 * 		<ja>@Header</ja>
@@ -256,7 +250,7 @@ public @interface Header {
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
 	 * 		<p class='bcode w800'>
-	 * 	<jk>public interface</jk> MyRequestBean {
+	 * 	<jk>public interface</jk> MyRequest {
 	 *
 	 * 		<jc>// Equivalent to @Header("Foo")</jc>
 	 * 		<ja>@Header</ja>

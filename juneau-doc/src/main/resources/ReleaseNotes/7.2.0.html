@@ -35,7 +35,7 @@
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.RequestBean}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 		</ul>
 		<br>These are used with new Swagger schema/documentation annotations to produce schema-based serialization/parsing/validation 
 			and auto-generated Swagger documentation:
@@ -52,7 +52,7 @@
 		Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
 		<code><ja>@Query</ja>(<js>"*"</js>)</code>, <code><ja>@FormData</ja>(<js>"*"</js>)</code>, <code><ja>@Header</ja>(<js>"*"</js>)</code>, <code><ja>@Path</ja>(<js>"*"</js>)</code>
 	<li>
-		Support for server-side use of <ja>@ResourceBean</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta)} method.
+		Support for server-side use of <ja>@Request</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link org.apache.juneau.rest.RestRequest#getRequest(RequestBeanMeta)} method.
 	<li>
 		Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
 	<li>
@@ -408,11 +408,11 @@
 	<li>
 		<code>RequestPathMatch</code> class has been renamed to {@link org.apache.juneau.rest.RequestPath}.
 	<li>
-		{@link org.apache.juneau.http.annotation.RequestBean @RequestBean} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
+		{@link org.apache.juneau.http.annotation.Request @Request} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
 		<br>Includes new methods on {@link org.apache.juneau.rest.RestRequest}:
 		<ul class='doctree'>
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(Class) getRequestBean(Class)}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta) getRequestBean(RequestBeanMeta)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(Class) getRequest(Class)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(RequestMeta) getRequest(RequestMeta)}
 		</ul>
 	<li>
 		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:

@@ -84,7 +84,7 @@
 	}
 </p>
 <p>
-	Custom exception can also extend from one of the predefined HTTP exceptions such as the {@link org.apache.juneau.rest.exception.Unauthorized} exception:
+	Custom exceptions can also extend from one of the predefined HTTP exceptions such as the {@link org.apache.juneau.rest.exception.Unauthorized} exception:
 </p>
 <p class='bpcode w800'>
 	<jc>// Our annotated exception.</jc>
@@ -175,32 +175,6 @@
 	}
 </p>
 
-
-<h5 class='topic'>Automatic HTTP status</h5>
-<p>
-	When the {@link org.apache.juneau.http.annotation.Response#code() @Response(code)} value is specified, 
-	the HTTP status is automatically set to that value on the response regardless of how it's used.
-</p>
-<p>
-	The following two examples are equivalent:
-</p>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
-	<jk>public void</jk> sendContinue(
-		<ja>@Response</ja>(code=100) Value&lt;String&gt; body
-	) 
-	{
-		body.set(<js>"OK"</js>);
-	}
-</p>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
-	<jk>public void</jk> sendContinue(RestResponse res) {
-		res.setStatus(100);
-		res.setOutput(<js>"OK"</js>);
-	}
-</p>
-
 <h5 class='topic'>OpenAPI part serialization</h5>
 <p>
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
@@ -276,15 +250,67 @@
 	statuses other than <code>200</code> (the default).	
 </p>
 
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseStatus</ja>
+		<jk>public int</jk> getStatus() {
+			<jk>return</jk> 201;
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <js>"Pet was successfully added"</js>;
+		}
+	}
+</p>
+
 
 <h5 class='topic'>@ResponseHeader</h5>
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be used on
+	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify a header
+	to add to the response.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseHeader</ja>(
+			name=<js>"X-PetId"</js>,
+			type=<js>"integer"</js>,
+			format=<js>"int32"</js>,
+			description=<js>"ID of added pet."</js>,
+			example=<js>"123"</js>
+		)
+		<jk>public int</jk> getPetId() {...}
+	}
+</p>
+
 <h5 class='topic'>@ResponseBody</h5>
 <p>
-	When using part serialization, any of the types defined in <a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a> can 
-	be used as the POJO type.
+	The {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} annotation can be used on
+	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify a POJO
+	as the body of the HTTP response.
 </p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseBody</ja>
+		<jk>public</jk> Pet getPet() {...}
+	}
+</p>
+
 <p>
-	Part serialization can also be used on exception classes as well.
+	If a <ja>@Response</ja> class does not have a <ja>@ResponseBody</ja>-annotated method, then the response
+	object itself is serialized in the response (typically using <code>toString()</code>).
 </p>
 
 <h5 class='topic'>Swagger documentation</h5>
@@ -301,6 +327,31 @@
 				}
 			}
 		}
+	}
+</p>
+
+<h5 class='topic'>Automatic HTTP status</h5>
+<p>
+	When the {@link org.apache.juneau.http.annotation.Response#code() @Response(code)} value is specified, 
+	the HTTP status is automatically set to that value on the response regardless of how it's used.
+</p>
+<p>
+	The following two examples are equivalent:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<jk>public void</jk> sendContinue(
+		<ja>@Response</ja>(code=100) Value&lt;String&gt; body
+	) 
+	{
+		body.set(<js>"OK"</js>);
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<jk>public void</jk> sendContinue(RestResponse res) {
+		res.setStatus(100);
+		res.setOutput(<js>"OK"</js>);
 	}
 </p>
 

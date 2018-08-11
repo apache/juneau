@@ -312,10 +312,9 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.HasQuery'>@HasQuery</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Header'>@Header</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Path'>@Path</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.RequestBean'>@RequestBean</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Request'>@Request</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.Response'>@Response</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader'>@ResponseHeader</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseBody'>@ResponseBody</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus'>@ResponseStatus</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingFormPosts'>Handling Form Posts</a></p>
@@ -13294,7 +13293,10 @@ TODO(7.2.0)
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A header value.
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP content parsed as a POJO.
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.Method} - The HTTP method name. 
-			<li class='ja'>{@link org.apache.juneau.http.annotation.RequestBean} - HTTP parts available through a proxy bean interface.
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Request} - HTTP request parts available through a proxy bean interface.
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Response} - HTTP response parts available through a POJO.
+			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} - HTTP response header.
+			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus} - HTTP response status code.
 		</ul>
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -15632,10 +15634,10 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.RequestBean' id='juneau-rest-server.HttpPartAnnotations.RequestBean'>7.9.8 - @RequestBean</a></h4>
-<div class='topic'><!-- START: 7.9.8 - juneau-rest-server.HttpPartAnnotations.RequestBean -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Request' id='juneau-rest-server.HttpPartAnnotations.Request'>7.9.8 - @Request</a></h4>
+<div class='topic'><!-- START: 7.9.8 - juneau-rest-server.HttpPartAnnotations.Request -->
 <p>
-	The {@link org.apache.juneau.http.annotation.RequestBean @RequestBean} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
+	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
 	to identify it as an interface for retrieving HTTP parts through a bean interface.
 </p>
 
@@ -15644,7 +15646,7 @@ TODO(7.2.0)
 	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
 	<jk>public void</jk> putPet(UpdatePet updatePet) {...}
 
-	<ja>@RequestBean</ja>
+	<ja>@Request</ja>
 	<jk>public interface</jk> UpdatePet {
 
 		<ja>@Path</ja> 
@@ -15658,6 +15660,7 @@ TODO(7.2.0)
 
 		<ja>@Body</ja>
 		Pet getPet();
+	}
 </p>
 <p>
 	The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
@@ -15669,8 +15672,8 @@ TODO(7.2.0)
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RequestBean</ja>
-	<jk>public interface</jk> RequestBean {
+	<ja>@Request</ja>
+	<jk>public interface</jk> Request {
 
 		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
 		<ja>@Query</ja>(
@@ -15688,7 +15691,20 @@ TODO(7.2.0)
 		<jk>int</jk>[][] getPipeCdlInts();
 	}
 </p>
-</div><!-- END: 7.9.8 - juneau-rest-server.HttpPartAnnotations.RequestBean -->
+<p>
+	The <ja>@Request</ja> annotation can be defined on the parameter, class, or both.
+</p>
+<h5 class='section'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// @Request defined on both for clarity.</jc>
+
+	<ja>@RestMethod</ja>(path=<js>"/pets/{petId}"</js>)
+	<jk>public void</jk> putPet(<ja>@Request</ja> UpdatePet updatePet) {...}
+
+	<ja>@Request</ja>
+	<jk>public interface</jk> UpdatePet {...}
+</p>
+</div><!-- END: 7.9.8 - juneau-rest-server.HttpPartAnnotations.Request -->
 
 <!-- ==================================================================================================== -->
 
@@ -15727,8 +15743,8 @@ TODO(7.2.0)
 	public non-static methods of the class to identify parts of a response:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus} 
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} 
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody} 
 </ul>
 	
@@ -15763,7 +15779,7 @@ TODO(7.2.0)
 	}
 </p>
 <p>
-	Custom exception can also extend from one of the predefined HTTP exceptions such as the {@link org.apache.juneau.rest.exception.Unauthorized} exception:
+	Custom exceptions can also extend from one of the predefined HTTP exceptions such as the {@link org.apache.juneau.rest.exception.Unauthorized} exception:
 </p>
 <p class='bpcode w800'>
 	<jc>// Our annotated exception.</jc>
@@ -15854,32 +15870,6 @@ TODO(7.2.0)
 	}
 </p>
 
-
-<h5 class='topic'>Automatic HTTP status</h5>
-<p>
-	When the {@link org.apache.juneau.http.annotation.Response#code() @Response(code)} value is specified, 
-	the HTTP status is automatically set to that value on the response regardless of how it's used.
-</p>
-<p>
-	The following two examples are equivalent:
-</p>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
-	<jk>public void</jk> sendContinue(
-		<ja>@Response</ja>(code=100) Value&lt;String&gt; body
-	) 
-	{
-		body.set(<js>"OK"</js>);
-	}
-</p>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
-	<jk>public void</jk> sendContinue(RestResponse res) {
-		res.setStatus(100);
-		res.setOutput(<js>"OK"</js>);
-	}
-</p>
-
 <h5 class='topic'>OpenAPI part serialization</h5>
 <p>
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
@@ -15955,15 +15945,67 @@ TODO(7.2.0)
 	statuses other than <code>200</code> (the default).	
 </p>
 
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseStatus</ja>
+		<jk>public int</jk> getStatus() {
+			<jk>return</jk> 201;
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <js>"Pet was successfully added"</js>;
+		}
+	}
+</p>
+
 
 <h5 class='topic'>@ResponseHeader</h5>
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be used on
+	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify a header
+	to add to the response.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseHeader</ja>(
+			name=<js>"X-PetId"</js>,
+			type=<js>"integer"</js>,
+			format=<js>"int32"</js>,
+			description=<js>"ID of added pet."</js>,
+			example=<js>"123"</js>
+		)
+		<jk>public int</jk> getPetId() {...}
+	}
+</p>
+
 <h5 class='topic'>@ResponseBody</h5>
 <p>
-	When using part serialization, any of the types defined in <a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a> can 
-	be used as the POJO type.
+	The {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} annotation can be used on
+	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify a POJO
+	as the body of the HTTP response.
 </p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseBody</ja>
+		<jk>public</jk> Pet getPet() {...}
+	}
+</p>
+
 <p>
-	Part serialization can also be used on exception classes as well.
+	If a <ja>@Response</ja> class does not have a <ja>@ResponseBody</ja>-annotated method, then the response
+	object itself is serialized in the response (typically using <code>toString()</code>).
 </p>
 
 <h5 class='topic'>Swagger documentation</h5>
@@ -15980,6 +16022,31 @@ TODO(7.2.0)
 				}
 			}
 		}
+	}
+</p>
+
+<h5 class='topic'>Automatic HTTP status</h5>
+<p>
+	When the {@link org.apache.juneau.http.annotation.Response#code() @Response(code)} value is specified, 
+	the HTTP status is automatically set to that value on the response regardless of how it's used.
+</p>
+<p>
+	The following two examples are equivalent:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<jk>public void</jk> sendContinue(
+		<ja>@Response</ja>(code=100) Value&lt;String&gt; body
+	) 
+	{
+		body.set(<js>"OK"</js>);
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/ok"</js>)
+	<jk>public void</jk> sendContinue(RestResponse res) {
+		res.setStatus(100);
+		res.setOutput(<js>"OK"</js>);
 	}
 </p>
 
@@ -16108,89 +16175,8 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseBody' id='juneau-rest-server.HttpPartAnnotations.ResponseBody'>7.9.11 - @ResponseBody</a></h4>
-<div class='topic'><!-- START: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseBody -->
-<p>
-	The {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} annotation is used to identify a placeholder parameter
-	for an HTTP response.
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody ResponseBody}
-	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#examples() examples()} - Serialized examples per media type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#partSerializer() partSerializer()} - Override the part serializer.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#schema() schema()} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseBody#usePartSerializer() usePartSerializer()} - Use the HTTP-Part serializer for serializing the body.
-	</ul>
-</ul>
-<p>
-	It can be used in the following locations:
-</p>
-<ul>
-	<li>Parameters on <ja>@RestMethod</ja>-annotated methods.
-	<li>Classes of parameters on <ja>@RestMethod</ja>-annotated methods.
-	<li><ja>@RestMethod</ja>-annotated methods.
-</ul>
-
-<h5 class='topic'>Parameters on @RestMethod-annotated methods</h5>
-<p>
-	When used on a method parameter, this annotation is used to identify a placeholder {@link org.apache.juneau.Value}
-	object that can be used to return the body of the response.
-</p>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(path=<js>"/pet/{petId}"</js>)
-	<jk>public void</jk> getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id, <ja>@ResponseBody</ja> Value&lt;Pet&gt; body) {
-		body.set(<jsm>getPet</jsm>(id));
-	}
-</p>
-<p>
-	The behavior is identical to the following:
-</p>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(path="/pet/{petId}")
-	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id) {
-		<jk>return</jk> <jsm>getPet</jsm>(id);
-	}
-</p>
-<p>
-	You may ask why you would use ever use this.
-	The answer is that it's possible to have your method returns something else such as an HTTP response status
-	or header value.
-	This annotation allows you to set a response body when your method is returning one of these.
-	<br>Also, the annotation allows you to define swagger validation and documentation for your body.
-</p>
-
-<h5 class='topic'>Classes of parameters on @RestMethod-annotated methods</h5>
-<p>
-	The <ja>@ResponseBody</ja> annotation can also be applied to types.
-</p>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(path=<js>"/pet/{petId}"</js>)
-	<jk>public void</jk> getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id, Value&lt;Pet&gt; body) {
-		body.set(<jsm>getPet</jsm>(id));
-	}
-</p>
-<p class='bpcode w800'>
-	<ja>@ResponseBody</ja>(
-		schema=<ja>@Schema</ja>(
-			description=<js>"Pet bean"</js>
-		)
-	)
-	<jk>public class</jk> Pet {...}
-</p>
-<p>
-	Note that this can often be cleaner-looking than usage on the Java method parameter.
-</p>
-
-<h5 class='topic'>@RestMethod-annotated methods</h5>
-</div><!-- END: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseBody -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.9.12 - @ResponseStatus</a></h4>
-<div class='topic'><!-- START: 7.9.12 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.9.11 - @ResponseStatus</a></h4>
+<div class='topic'><!-- START: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
 <p>
 	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation is applied to parameters and parameter 
 	types to denote them as an HTTP response status on server-side REST method parameters.
@@ -16224,7 +16210,7 @@ TODO(7.2.0)
 			status.set(401);
 	}
 </p>
-</div><!-- END: 7.9.12 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
+</div><!-- END: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
 </div><!-- END: 7.9 - juneau-rest-server.HttpPartAnnotations -->
 
 <!-- ==================================================================================================== -->
@@ -30483,7 +30469,7 @@ TODO(7.2.0)
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.RequestBean}
+			<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 		</ul>
 		<br>These are used with new Swagger schema/documentation annotations to produce schema-based serialization/parsing/validation 
 			and auto-generated Swagger documentation:
@@ -30500,7 +30486,7 @@ TODO(7.2.0)
 		Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
 		<code><ja>@Query</ja>(<js>"*"</js>)</code>, <code><ja>@FormData</ja>(<js>"*"</js>)</code>, <code><ja>@Header</ja>(<js>"*"</js>)</code>, <code><ja>@Path</ja>(<js>"*"</js>)</code>
 	<li>
-		Support for server-side use of <ja>@ResourceBean</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta)} method.
+		Support for server-side use of <ja>@Request</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link org.apache.juneau.rest.RestRequest#getRequest(RequestBeanMeta)} method.
 	<li>
 		Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
 	<li>
@@ -30856,11 +30842,11 @@ TODO(7.2.0)
 	<li>
 		<code>RequestPathMatch</code> class has been renamed to {@link org.apache.juneau.rest.RequestPath}.
 	<li>
-		{@link org.apache.juneau.http.annotation.RequestBean @RequestBean} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
+		{@link org.apache.juneau.http.annotation.Request @Request} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
 		<br>Includes new methods on {@link org.apache.juneau.rest.RestRequest}:
 		<ul class='doctree'>
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(Class) getRequestBean(Class)}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequestBean(RequestBeanMeta) getRequestBean(RequestBeanMeta)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(Class) getRequest(Class)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(RequestMeta) getRequest(RequestMeta)}
 		</ul>
 	<li>
 		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:

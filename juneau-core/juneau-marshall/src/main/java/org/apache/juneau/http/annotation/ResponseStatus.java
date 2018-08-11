@@ -22,7 +22,6 @@ import org.apache.juneau.*;
 /**
  * REST response status annotation.
  *
- *
  * <p>
  * Annotation used to denote an HTTP response status code.
  *

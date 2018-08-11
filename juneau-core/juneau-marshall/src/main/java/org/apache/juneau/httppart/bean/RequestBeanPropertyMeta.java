@@ -18,7 +18,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents the metadata gathered from a getter method of a class annotated with {@link RequestBean}.
+ * Represents the metadata gathered from a getter method of a class annotated with {@link Request}.
  */
 public class RequestBeanPropertyMeta {
 

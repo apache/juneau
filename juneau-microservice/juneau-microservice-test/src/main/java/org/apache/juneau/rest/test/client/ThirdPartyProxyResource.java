@@ -1092,7 +1092,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	}
 
 	//--------------------------------------------------------------------------------
-	// RequestBean tests
+	// @Request tests
 	//--------------------------------------------------------------------------------
 
 	@RestMethod(name=POST, path="/reqBeanPath/{a}/{b}")

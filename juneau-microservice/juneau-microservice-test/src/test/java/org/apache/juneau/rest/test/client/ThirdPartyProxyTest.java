@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Request;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
@@ -1207,7 +1208,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	//--------------------------------------------------------------------------------
-	// RequestBean tests - Path
+	// @Request tests - Path
 	//--------------------------------------------------------------------------------
 
 	@Test
@@ -1322,7 +1323,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	//--------------------------------------------------------------------------------
-	// RequestBean tests - Query
+	// @Request tests - Query
 	//--------------------------------------------------------------------------------
 
 	@Test
@@ -1437,7 +1438,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	//--------------------------------------------------------------------------------
-	// RequestBean tests - FormData
+	// @Request tests - FormData
 	//--------------------------------------------------------------------------------
 
 	@Test
@@ -1552,7 +1553,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	//--------------------------------------------------------------------------------
-	// RequestBean tests - Header
+	// @Request tests - Header
 	//--------------------------------------------------------------------------------
 
 	@Test
@@ -2057,12 +2058,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		);
 
 		//--------------------------------------------------------------------------------
-		// RequestBean tests - Path
+		// @Request tests - Path
 		//--------------------------------------------------------------------------------
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath1(
-			@RequestBean ReqBeanPath1 rb
+			@Request ReqBeanPath1 rb
 		);
 
 		public static interface ReqBeanPath1 {
@@ -2087,7 +2088,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath2(
-			@RequestBean ReqBeanPath2 rb
+			@Request ReqBeanPath2 rb
 		);
 
 		public static class ReqBeanPath2 {
@@ -2104,7 +2105,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath3(
-			@RequestBean ReqBeanPath3 rb
+			@Request ReqBeanPath3 rb
 		);
 
 		public static interface ReqBeanPath3 {
@@ -2117,7 +2118,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath4(
-			@RequestBean ReqBeanPath4 rb
+			@Request ReqBeanPath4 rb
 		);
 
 		public static interface ReqBeanPath4 {
@@ -2132,7 +2133,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath5(
-			@RequestBean ReqBeanPath5 rb
+			@Request ReqBeanPath5 rb
 		);
 
 		public static interface ReqBeanPath5 {
@@ -2147,7 +2148,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath6(
-			@RequestBean ReqBeanPath6 rb
+			@Request ReqBeanPath6 rb
 		);
 
 		public static interface ReqBeanPath6 {
@@ -2157,7 +2158,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath7(
-			@RequestBean ReqBeanPath7 rb
+			@Request ReqBeanPath7 rb
 		);
 
 		public static interface ReqBeanPath7 {
@@ -2166,12 +2167,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 		//--------------------------------------------------------------------------------
-		// RequestBean tests - Query
+		// @Request tests - Query
 		//--------------------------------------------------------------------------------
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
 		String reqBeanQuery1(
-			@RequestBean ReqBeanQuery1 rb
+			@Request ReqBeanQuery1 rb
 		);
 
 		public static interface ReqBeanQuery1 {
@@ -2196,7 +2197,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
 		String reqBeanQuery2(
-			@RequestBean ReqBeanQuery2 rb
+			@Request ReqBeanQuery2 rb
 		);
 
 		public static class ReqBeanQuery2 {
@@ -2213,7 +2214,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
 		String reqBeanQuery3(
-			@RequestBean ReqBeanQuery3 rb
+			@Request ReqBeanQuery3 rb
 		);
 
 		public static interface ReqBeanQuery3 {
@@ -2226,7 +2227,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
 		String reqBeanQuery4(
-			@RequestBean ReqBeanQuery4 rb
+			@Request ReqBeanQuery4 rb
 		);
 
 		public static interface ReqBeanQuery4 {
@@ -2241,7 +2242,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
 		String reqBeanQuery5(
-			@RequestBean ReqBeanQuery5 rb
+			@Request ReqBeanQuery5 rb
 		);
 
 		public static interface ReqBeanQuery5 {
@@ -2256,7 +2257,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
 		String reqBeanQuery6(
-			@RequestBean ReqBeanQuery6 rb
+			@Request ReqBeanQuery6 rb
 		);
 
 		public static interface ReqBeanQuery6 {
@@ -2266,7 +2267,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
 		String reqBeanQuery7(
-			@RequestBean ReqBeanQuery7 rb
+			@Request ReqBeanQuery7 rb
 		);
 
 		public static interface ReqBeanQuery7 {
@@ -2275,12 +2276,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 		//--------------------------------------------------------------------------------
-		// RequestBean tests - FormData
+		// @Request tests - FormData
 		//--------------------------------------------------------------------------------
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData1(
-			@RequestBean ReqBeanFormData1 rb
+			@Request ReqBeanFormData1 rb
 		);
 
 		public static interface ReqBeanFormData1 {
@@ -2305,7 +2306,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData2(
-			@RequestBean ReqBeanFormData2 rb
+			@Request ReqBeanFormData2 rb
 		);
 
 		public static class ReqBeanFormData2 {
@@ -2322,7 +2323,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData3(
-			@RequestBean ReqBeanFormData3 rb
+			@Request ReqBeanFormData3 rb
 		);
 
 		public static interface ReqBeanFormData3 {
@@ -2335,7 +2336,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData4(
-			@RequestBean ReqBeanFormData4 rb
+			@Request ReqBeanFormData4 rb
 		);
 
 		public static interface ReqBeanFormData4 {
@@ -2350,7 +2351,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData5(
-			@RequestBean ReqBeanFormData5 rb
+			@Request ReqBeanFormData5 rb
 		);
 
 		public static interface ReqBeanFormData5 {
@@ -2365,7 +2366,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData6(
-			@RequestBean ReqBeanFormData6 rb
+			@Request ReqBeanFormData6 rb
 		);
 
 		public static interface ReqBeanFormData6 {
@@ -2375,7 +2376,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData7(
-			@RequestBean ReqBeanFormData7 rb
+			@Request ReqBeanFormData7 rb
 		);
 
 		public static interface ReqBeanFormData7 {
@@ -2384,12 +2385,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 		//--------------------------------------------------------------------------------
-		// RequestBean tests - Header
+		// @Request tests - Header
 		//--------------------------------------------------------------------------------
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
 		String reqBeanHeader1(
-			@RequestBean ReqBeanHeader1 rb
+			@Request ReqBeanHeader1 rb
 		);
 
 		public static interface ReqBeanHeader1 {
@@ -2414,7 +2415,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
 		String reqBeanHeader2(
-			@RequestBean ReqBeanHeader2 rb
+			@Request ReqBeanHeader2 rb
 		);
 
 		public static class ReqBeanHeader2 {
@@ -2431,7 +2432,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
 		String reqBeanHeader3(
-			@RequestBean ReqBeanHeader3 rb
+			@Request ReqBeanHeader3 rb
 		);
 
 		public static interface ReqBeanHeader3 {
@@ -2444,7 +2445,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
 		String reqBeanHeader4(
-			@RequestBean ReqBeanHeader4 rb
+			@Request ReqBeanHeader4 rb
 		);
 
 		public static interface ReqBeanHeader4 {
@@ -2459,7 +2460,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
 		String reqBeanHeader5(
-			@RequestBean ReqBeanHeader5 rb
+			@Request ReqBeanHeader5 rb
 		);
 
 		public static interface ReqBeanHeader5 {
@@ -2474,7 +2475,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
 		String reqBeanHeader6(
-			@RequestBean ReqBeanHeader6 rb
+			@Request ReqBeanHeader6 rb
 		);
 
 		public static interface ReqBeanHeader6 {
@@ -2484,7 +2485,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
 		String reqBeanHeader7(
-			@RequestBean ReqBeanHeader7 rb
+			@Request ReqBeanHeader7 rb
 		);
 
 		public static interface ReqBeanHeader7 {

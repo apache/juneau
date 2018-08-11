@@ -13,6 +13,6 @@
 
 Test @Header("*") using maps/beans and related annotations.
 Simplify @Body annotation by merging @Schema into it.
-Test RestRequest.getRequestBean() and @RequestBean as an annotation.
-Document RestRequest.getRequestBean().
+Test RestRequest.getRequest() and @Request as an annotation.
+Document RestRequest.getRequest().
 Find references to JsonSerializer.Simple
