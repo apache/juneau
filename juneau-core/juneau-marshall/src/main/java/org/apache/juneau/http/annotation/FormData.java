@@ -33,11 +33,11 @@ import org.apache.juneau.jsonschema.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Java method arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated REST interface proxies.
- * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Server-side REST</h5>
+ * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
  *
  * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as a form-data parameter.
  *
@@ -80,7 +80,7 @@ import org.apache.juneau.jsonschema.*;
  * The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
  * servlet to drain the body content.
  *
- * <h5 class='topic'>Client-side REST</h5>
+ * <h5 class='topic'>Arguments and argument-types of client-side @Remoteableß-annotated interfaces</h5>
  * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
  * request.
  *

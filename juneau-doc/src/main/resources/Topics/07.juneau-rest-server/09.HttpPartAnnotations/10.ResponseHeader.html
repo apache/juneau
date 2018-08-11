@@ -13,10 +13,10 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @ResponseHeader
+{new} @ResponseHeader
 
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation is applied to parameters and parameter types to denote them as an HTTP response headers.
+	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response headers.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
@@ -49,13 +49,7 @@
 	</ul>
 </ul>
 <p>
-	It can be used in the following locations:
-</p>
-<ul>
-	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
-</ul>
-<p>
-	This annotation can only be applied to subclasses or parameters of type {@link org.apache.juneau.Value}.
+	This annotation can only be applied to parameters of type {@link org.apache.juneau.Value}.
 </p>
 <p>
 	The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
@@ -88,8 +82,8 @@
 
 	<jc>// Example #3 - Use on type.</jc>
 	<ja>@RestMethod</ja>(...)
-	<jk>public void</jk> login(RateLimit rateLimit) {
-		rateLimit.set(1000);
+	<jk>public void</jk> login(Value&lt;RateLimit&gt; rateLimit) {
+		rateLimit.set(<jk>new</jk> RateLimit());
 		...
 	}
 
@@ -100,7 +94,12 @@
 		description=<js>"Calls per hour allowed by the user."</js>, 
 		example=<js>"123"</js>
 	)
-	<jk>public class</jk> RateLimit <jk>extends</jk> Value&lt;Integer&gt; {}
+	<jk>public class</jk> RateLimit {
+		<jc>// OpenApiPartSerializer knows to look for this method based on format/type.</jc>
+		<jk>public</jk> Integer toInteger() {
+			<jk>return</jk> 1000;
+		}
+	}
 </p>
 
 <h5 class='topic'>Swagger documentation</h5>

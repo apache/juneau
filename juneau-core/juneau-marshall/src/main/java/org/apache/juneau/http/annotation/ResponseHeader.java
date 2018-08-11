@@ -30,12 +30,14 @@ import org.apache.juneau.httppart.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Arguments of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Argument types of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Public methods of <ja>@Response</ja>-annotated methods.
+ * 	<li>Public methods of <ja>@Response</ja>-annotated types.
  * </ul>
  *
+ * <h5 class='topic'>Arguments of server-side <ja>@RestMethod</ja>-annotated methods</h5>
+ *
  * <p>
- * This annotation can only be applied to subclasses of type {@link Value}.
+ * On server-side REST, this annotation can be applied to method parameters to identify them as an HTTP response header.
+ * <br>In this case, the annotation can only be applied to subclasses of type {@link Value}.
  *
  * <p>
  * The following examples show 3 different ways of accomplishing the same task of setting an HTTP header
@@ -67,14 +69,46 @@ import org.apache.juneau.httppart.*;
  *
  *	<jc>// Example #3 - Use on type.</jc>
  * 	<ja>@RestMethod</ja>(...)
- * 	<jk>public void</jk> login(RateLimit rateLimit) {
- * 		rateLimit.set(1000);
+ * 	<jk>public void</jk> login(Value&lt;RateLimit&gt; rateLimit) {
+ * 		rateLimit.set(new RateLimit(1000));
  * 		...
  * 	}
  *
- * 	<ja>@ResponseHeader</ja>(name=<js>"X-Rate-Limit"</js>, type=<js>"integer"</js>, format=<js>"int32"</js>, description=<js>"Calls per hour allowed by the user."</js>, example=<js>"123"</js>)
- * 	<jk>public static class</jk> RateLimit <jk>extends</jk> Value&lt;Integer&gt; {}
+ * 	<ja>@ResponseHeader</ja>(
+ * 		name=<js>"X-Rate-Limit"</js>,
+ * 		type=<js>"integer"</js>,
+ * 		format=<js>"int32"</js>,
+ * 		description=<js>"Calls per hour allowed by the user."</js>,
+ * 		example=<js>"123"</js>
+ * 	)
+ * 	<jk>public class</jk> RateLimit {
+ * 		<jc>// OpenApiPartSerializer knows to look for this method based on format/type.</jc>
+ * 		<jk>public</jk> Integer toInteger() {
+ * 			<jk>return</jk> 1000;
+ * 		}
+ * 	}
  * </p>
+ *
+ * <h5 class='topic'>Public methods of @Response-annotated types</h5>
+ *
+ * <p>
+ * On server-side REST, this annotation can also be applied to public methods of {@link Response}-annotated methods.
+ *
+ * <p class='bcode w800'>
+ * 	<ja>@Response</ja>
+ * 	<jk>public class</jk> AddPetSuccess {
+ *
+ * 		<ja>@ResponseHeader</ja>(
+ * 			name=<js>"X-PetId"</js>,
+ * 			type=<js>"integer"</js>,
+ * 			format=<js>"int32"</js>,
+ * 			description=<js>"ID of added pet."</js>,
+ * 			example=<js>"123"</js>
+ * 		)
+ * 		<jk>public int</jk> getPetId() {...}
+ * 	}
+ * </p>
+ *
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

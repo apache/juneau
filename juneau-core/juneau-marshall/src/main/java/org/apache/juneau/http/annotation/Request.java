@@ -28,11 +28,11 @@ import org.apache.juneau.httppart.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Java method arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated REST interface proxies.
- * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Server-side REST</h5>
+ * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
  *
  * Annotation that can be applied to a parameter of a <ja>@RestMethod</ja>-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.
  *
@@ -82,15 +82,12 @@ import org.apache.juneau.httppart.*;
  * The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
  * <br>Schema-based serialization and parsing is allowed just as if used as individual parameter types.
  *
- * <p>
- * TODO - Swagger-info in <ja>@Request</ja>s is not currently reflected in generated Swagger documentation.
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request">Overview &gt; juneau-rest-server &gt; @Request</a>
  * </ul>
  *
- * <h5 class='topic'>Client-side REST</h5>
+ * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
  *
  * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
 

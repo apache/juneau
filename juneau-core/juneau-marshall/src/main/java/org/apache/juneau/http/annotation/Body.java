@@ -34,11 +34,11 @@ import org.apache.juneau.serializer.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Java method arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated REST interface proxies.
- * 	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Server-side REST</h5>
+ * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
  *
  * <p>
  * On server-side REST, this annotation can be applied to method parameters or parameter classes to identify them as the body of an HTTP request.
@@ -106,7 +106,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  *
- * <h5 class='topic'>Client-side REST</h5>
+ * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
  *
  * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
  *

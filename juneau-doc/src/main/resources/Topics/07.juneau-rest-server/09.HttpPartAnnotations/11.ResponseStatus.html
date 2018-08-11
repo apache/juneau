@@ -13,35 +13,26 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @ResponseStatus
+{new} @ResponseStatus
 
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation is applied to parameters and parameter 
-	types to denote them as an HTTP response status on server-side REST method parameters.
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response status codes.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
 </ul>
 <p>
-	It can be used in the following locations:
-</p>
-<ul>
-	<li>Java method arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated REST Java methods.
-</ul>
-<p>
 	This can only be applied to parameters of the {@link org.apache.juneau.Value} class with an {@link java.lang.Integer} type.
-	<br>The {@link org.apache.juneau.Value} object is mean to be a place-holder for the set value.
 </p>
 
-<h5 class='section'>Examples:</h5>
+<h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
 	<jc>// Defined on parameter.</jc>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		<ja>@ResponseStatus</ja> 
-		Value&lt;Integer&gt; status
+		<ja>@ResponseStatus</ja> Value&lt;Integer&gt; status
 	) 
 	{
 		<jk>if</jk> (! isValid(username, password))

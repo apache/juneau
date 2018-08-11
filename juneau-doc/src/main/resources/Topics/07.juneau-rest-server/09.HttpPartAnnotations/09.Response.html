@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Response
+{new} @Response
 
 <p>
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
@@ -37,10 +37,10 @@
 	It can be used in the following locations:
 </p>
 <ul>
-	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated REST Java methods.
-	<li>Return type classes of <ja>@RestMethod</ja>-annotated REST Java methods.
-	<li><ja>@RestMethod</ja>-annotated REST Java methods themselves.
-	<li>Java method arguments and argument-types of <ja>@RestMethod</ja>-annotated REST Java methods.
+	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated methods.
+	<li>Return type classes of <ja>@RestMethod</ja>-annotated methods.
+	<li><ja>@RestMethod</ja>-annotated methods themselves.
+	<li>Arguments and argument-types of <ja>@RestMethod</ja>-annotated methods.
 </ul>
 
 <p>
@@ -97,7 +97,7 @@
 		}
 	}
 
-	<jc>// Parent exception class.</jc>
+	<jc>// Parent predefined exception class.</jc>
 	<ja>@Response</ja>(
 		code=401, 
 		description=<js>"Unauthorized"</js>
@@ -113,35 +113,64 @@
 	In the example above, we're using the <code>Ok</code> class which is defined like so:
 </p>
 <p class='bpcode w800'>
-	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
-	<jk>public class</jk> Ok {...}
+	<ja>@Response</ja>(
+		code=200, 
+		description=<js>"OK"</js>
+	)
+	<jk>public class</jk> Ok {
+
+		<ja>@ResponseBody</ja>
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <js>"OK"</js>;
+		}
+	}
 </p>
 <p>
-	Another example is <code>Redirect</code> which is defined like so:
+	Another example showing how a redirect can be defined:
 </p>
 <p class='bpcode w800'>
 	<ja>@Response</ja>(
-		code=302,
-		description=<js>"Redirect"</js>,
-		headers={ <jc>// Added to Swagger documentation</jc>
-			<ja>@ResponseHeader</ja>(
-				name=<js>"Location"</js>,
-				type=<js>"string"</js>,
-				format=<js>"uri"</js>
-			)
-		}
+		code=307,
+		description=<js>"Temporary Redirect"</js>
 	)
-	<jk>public class</jk> Redirect {...}
+	<jk>public class</jk> Redirect {
+		<jk>private final</jk> URI <jf>location</jf>;
+	
+		<jk>public</jk> Redirect(URI location) {
+			<jk>this</jk>.<jf>location</jf> = location;
+		}
+	
+		<ja>@ResponseHeader</ja>(
+			name=<js>"Location"</js>,
+			format=<js>"uri"</js>
+		)
+		<jk>public</jk> URI getLocation() {
+			<jk>return</jk> location;
+		}
+
+		<ja>@ResponseBody</ja>
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <js>"Temporary Redirect"</js>;
+		}
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Usage</jc>
+	<ja>@RestMethod</ja>(method=<jsf>POST</jsf>)
+	<jk>public</jk> Redirect addPet(Pet pet) {
+		<jc>// Redirect to servlet root</jc>
+		<jk>return new</jk> Redirect(URI.<jsm>create</jsm>(<js>"servlet:/"</js>));
+	}
 </p>
 
-<h5 class='topic'>@Resource on @RestMethod-annotated method</h5>
+<h5 class='topic'>@Resource on @RestMethod-annotated methods</h5>
 <p>
 	The <ja>@Response</ja> annotation can also be applied to the Java method itself which is effectively
 	the same as applying it to the return type (albeit for this method only).
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
-	<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>)
+	<ja>@Response</ja>(code=200, description=<js>"OK"</js>)
 	<jk>public</jk> Ok login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password
@@ -157,7 +186,7 @@
 	method return annotation take precedence over the values defined on the type.
 </p>
 
-<h5 class='topic'>@Resource on @RestMethod-annotated method parameter</h5>
+<h5 class='topic'>@Resource on @RestMethod-annotated method parameters</h5>
 <p>
 	The <ja>@Response</ja> annotation can also be applied to the Java method parameters when the parameter type 
 	is {@link org.apache.juneau.Value} (a placeholder for objects).
@@ -167,15 +196,114 @@
 	<jk>public void</jk> login(
 		<ja>@FormData</ja>(<js>"username"</js>) String username, 
 		<ja>@FormData</ja>(<js>"password"</js>) String password,
-		<ja>@Response</ja>(code=200, example=<js>"'OK'"</js>) Value&lt;String&gt; body
+		<ja>@Response</ja>(code=200, description=<js>"Login succeeded"</js>) Value&lt;String&gt; body
 	) <jk>throws</jk> InvalidLogin 
 	{
 		checkCredentials(username, password);
 		body.set(<js>"OK"</js>);
 	}
 </p>
+<p>
+	<ja>@Response</ja>-annotated types can also be used as value parameters:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(...)
+	<jk>public void</jk> login(
+		...
+		<ja>@Response</ja> Value&lt;Ok&gt; res
+	) <jk>throws</jk> InvalidLogin 
+	{
+		...
+		res.set(<jk>new</jk> Ok());
+	}
+</p>
+<p>
+	In the above example, the <ja>@Response</ja> annotation is optional since it is inferred from the class
+	that it's a <ja>@Response</ja> bean.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
+	<jk>public void</jk> login(
+		...
+		Value&lt;Ok&gt; res  <jc>// @Response annotation not needed.</jc>
+	) <jk>throws</jk> InvalidLogin 
+	{
+		...
+		res.set(<jk>new</jk> Ok());
+	}
+</p>
 
-<h5 class='topic'>OpenAPI part serialization</h5>
+<h5 class='topic'>@ResponseStatus on methods of @Response-annotated types</h5>
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation can be used on 
+	the method of a <ja>@Response</ja>-annotated class to identify HTTP response
+	statuses other than <code>200</code> (the default).	
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseStatus</ja>
+		<jk>public int</jk> getStatus() {
+			<jk>return</jk> 201;
+		}
+
+		<ja>@Override</ja>
+		<jk>public</jk> String toString() {
+			<jk>return</jk> <js>"Pet was successfully added"</js>;
+		}
+	}
+</p>
+
+
+<h5 class='topic'>@ResponseHeader on methods of @Response-annotated types</h5>
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be used on
+	the method of a <ja>@Response</ja>-annotated class to identify a header
+	to add to the response.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseHeader</ja>(
+			name=<js>"X-PetId"</js>,
+			type=<js>"integer"</js>,
+			format=<js>"int32"</js>,
+			description=<js>"ID of added pet."</js>,
+			example=<js>"123"</js>
+		)
+		<jk>public int</jk> getPetId() {...}
+	}
+</p>
+
+<h5 class='topic'>@ResponseBody on methods of @Response-annotated types</h5>
+<p>
+	The {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} annotation can be used on
+	the method of a <ja>@Response</ja>-annotated class to identify a POJO
+	as the body of the HTTP response.
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Response</ja>
+	<jk>public class</jk> AddPetSuccess {
+ 
+		<ja>@ResponseBody</ja>
+		<jk>public</jk> Pet getPet() {...}
+	}
+</p>
+
+<p>
+	If a <ja>@Response</ja> class does not have a <ja>@ResponseBody</ja>-annotated method, then the response
+	object itself is serialized in the response (typically using <code>toString()</code>).
+</p>
+
+<h5 class='topic'>Notes about OpenAPI part serialization</h5>
 <p>
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
 	matching the requesting <code>Accept</code> header.
@@ -241,76 +369,6 @@
 			body.set(<jk>new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>});
 		}
 	}
-</p>
-
-<h5 class='topic'>@ResponseStatus</h5>
-<p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation can be used on 
-	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify HTTP response
-	statuses other than <code>200</code> (the default).	
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@Response</ja>
-	<jk>public class</jk> AddPetSuccess {
- 
-		<ja>@ResponseStatus</ja>
-		<jk>public int</jk> getStatus() {
-			<jk>return</jk> 201;
-		}
-
-		<ja>@Override</ja>
-		<jk>public</jk> String toString() {
-			<jk>return</jk> <js>"Pet was successfully added"</js>;
-		}
-	}
-</p>
-
-
-<h5 class='topic'>@ResponseHeader</h5>
-<p>
-	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be used on
-	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify a header
-	to add to the response.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@Response</ja>
-	<jk>public class</jk> AddPetSuccess {
- 
-		<ja>@ResponseHeader</ja>(
-			name=<js>"X-PetId"</js>,
-			type=<js>"integer"</js>,
-			format=<js>"int32"</js>,
-			description=<js>"ID of added pet."</js>,
-			example=<js>"123"</js>
-		)
-		<jk>public int</jk> getPetId() {...}
-	}
-</p>
-
-<h5 class='topic'>@ResponseBody</h5>
-<p>
-	The {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} annotation can be used on
-	the method of a {@link org.apache.juneau.http.annotation.Response}-annotated class to identify a POJO
-	as the body of the HTTP response.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@Response</ja>
-	<jk>public class</jk> AddPetSuccess {
- 
-		<ja>@ResponseBody</ja>
-		<jk>public</jk> Pet getPet() {...}
-	}
-</p>
-
-<p>
-	If a <ja>@Response</ja> class does not have a <ja>@ResponseBody</ja>-annotated method, then the response
-	object itself is serialized in the response (typically using <code>toString()</code>).
 </p>
 
 <h5 class='topic'>Swagger documentation</h5>

@@ -29,7 +29,7 @@ import org.apache.juneau.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Arguments of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Public methods of <ja>@Response</ja>-annotated methods.
+ * 	<li>Public methods of <ja>@Response</ja>-annotated types.
  * </ul>
  *
  * <h5 class='topic'>Arguments of server-side <ja>@RestMethod</ja>-annotated methods</h5>
@@ -49,7 +49,7 @@ import org.apache.juneau.*;
  * <p>
  * The parameter type must be {@link Value} with a parameterized type of {@link Integer}.
  *
- * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated methods</h5>
+ * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated types</h5>
  *
  *
  * <p>

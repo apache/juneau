@@ -31,10 +31,10 @@ import org.apache.juneau.jsonschema.*;
  * <p>
  * Can be used in the following locations:
  *  <ul>
- * 	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated REST Java methods.
- * 	<li>Return type classes of <ja>@RestMethod</ja>-annotated REST Java methods.
- * 	<li><ja>@RestMethod</ja>-annotated REST Java methods themselves.
- * 	<li>Java method arguments and argument-types of <ja>@RestMethod</ja>-annotated REST Java methods.
+ * 	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Return type classes of <ja>@RestMethod</ja>-annotated methods.
+ * 	<li><ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of <ja>@RestMethod</ja>-annotated methods.
  * </ul>
  *
  * <p>
