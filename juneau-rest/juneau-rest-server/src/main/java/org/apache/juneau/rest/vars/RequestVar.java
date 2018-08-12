@@ -27,6 +27,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The possible values are:
  * <ul>
+ * 	<li><js>"authorityPath"</js> - Value returned by {@link RestRequest#getAuthorityPath()}
  * 	<li><js>"contextPath"</js> - Value returned by {@link RestRequest#getContextPath()}
  * 	<li><js>"method"</js> - Value returned by {@link RestRequest#getMethod()}
  * 	<li><js>"methodDescription"</js> - Value returned by {@link RestRequest#getMethodDescription()}
@@ -94,7 +95,10 @@ public class RequestVar extends MultipartResolvingVar {
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		char c = StringUtils.charAt(key, 0);
-		if (c == 'c') {
+		if (c == 'a') {
+			if ("authorityPath".equals(key))
+				return req.getAuthorityPath();
+		} else if (c == 'c') {
 			if ("contextPath".equals(key))
 				return req.getContextPath();
 		} else if (c == 'm') {

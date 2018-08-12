@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-ReaderResource
+{updated} ReaderResource
 
 <p>
 	The {@link org.apache.juneau.rest.helper.ReaderResource} class is a convenience object for defining thread-safe
@@ -21,14 +21,23 @@ ReaderResource
 	<br>In essence, it's a container for character data with optional response headers and support for
 	resolving SVL variables.
 </p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#contents(Object...) contents(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#varResolver(VarResolverSession) varResolver(VarResolverSession)}
+	</ul>
+</ul>
+
 <p>
-	The {@link org.apache.juneau.rest.helper.ReaderResource} class implements the {@link org.apache.juneau.Writable}
-	interface which is handled by the {@link org.apache.juneau.rest.reshandlers.WritableHandler} class.
-	<br>This allows these objects to be returned as responses by REST methods.
+	The class is annotated with {@link org.apache.juneau.http.annotation.Response @Response}
+	which allows it to be returned as responses by REST methods.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestMethod</ja>(...)
+	<ja>@RestMethod</ja>
 	<jk>public</jk> Object sayHello(RestRequest req) {
 	
 		<jc>// Return a reader resource loaded from a file with support for request-time SVL variables.</jc>
@@ -40,15 +49,3 @@ ReaderResource
 			.build();
 	}
 </p>
-<p>
-	The important methods on this class are:
-</p>
-<ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
-	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#contents(Object...) contents(Object...)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#header(String,Object) header(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#varResolver(VarResolverSession) varResolver(VarResolverSession)}
-	</ul>
-</ul>

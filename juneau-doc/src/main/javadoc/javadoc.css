@@ -696,7 +696,11 @@ h2.preview-section {
 	background-color:lightgreen;
 }
 
+.updated {
+	background-color:#CFC;
+}
+
 .todo {
-	background-color:yellow;
+	background-color:#FD8;
 }
 

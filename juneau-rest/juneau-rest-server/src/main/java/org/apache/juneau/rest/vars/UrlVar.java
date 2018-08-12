@@ -34,8 +34,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <p>
- * Uses the URI resolver returned by {@link RestRequest#getUriResolver(UriResolution, UriRelativity)} with resolution
- * {@link UriResolution#ROOT_RELATIVE} and relativity {@link UriRelativity#RESOURCE}.
+ * Uses the URI resolver returned by {@link RestRequest#getUriResolver()}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

@@ -96,7 +96,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private RequestPath pathParams;
 	private boolean isPost;
 	private UriContext uriContext;
-	private String charset;
+	private String charset, authorityPath;
 	private RequestHeaders headers;
 	private Config cf;
 	private Swagger swagger;
@@ -745,13 +745,32 @@ public final class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* HttpServletRequest */
 	public String getContextPath() {
-		String cp = context.getContextPath();
+		String cp = context.getUriContext();
 		return cp == null ? super.getContextPath() : cp;
+	}
+
+	/**
+	 * Returns the URI authority portion of the request.
+	 *
+	 * @return The URI authority portion of the request.
+	 */
+	public String getAuthorityPath() {
+		if (authorityPath == null)
+			authorityPath = context.getUriAuthority();
+		if (authorityPath == null) {
+			String scheme = getScheme();
+			int port = getServerPort();
+			StringBuilder sb = new StringBuilder(getScheme()).append("://").append(getServerName());
+			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
+				sb.append(':').append(port);
+			authorityPath = sb.toString();
+		}
+		return authorityPath;
 	}
 
 	@Override /* HttpServletRequest */
 	public String getServletPath() {
-		String cp = context.getContextPath();
+		String cp = context.getUriContext();
 		String sp = super.getServletPath();
 		return cp == null || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());
 	}
@@ -766,14 +785,8 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The URI context of the request.
 	 */
 	public UriContext getUriContext() {
-		if (uriContext == null) {
-			String scheme = getScheme();
-			int port = getServerPort();
-			StringBuilder authority = new StringBuilder(getScheme()).append("://").append(getServerName());
-			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
-				authority.append(':').append(port);
-			uriContext = new UriContext(authority.toString(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(super.getPathInfo()));
-		}
+		if (uriContext == null)
+			uriContext = new UriContext(getAuthorityPath(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(super.getPathInfo()));
 		return uriContext;
 	}
 
@@ -795,7 +808,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The URI resolver for this request.
 	 */
 	public UriResolver getUriResolver() {
-		return new UriResolver(UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, getUriContext());
+		return new UriResolver(context.getUriResolution(), context.getUriRelativity(), getUriContext());
 	}
 
 	/**

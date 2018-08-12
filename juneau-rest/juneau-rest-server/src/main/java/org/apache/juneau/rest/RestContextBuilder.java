@@ -172,10 +172,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					set(p, true);
 				serializers(false, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), r.serializers()));
 				parsers(false, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), r.parsers()));
-				if (r.partSerializer() != HttpPartSerializer.Null.class)
-					partSerializer(r.partSerializer());
-				if (r.partParser() != HttpPartParser.Null.class)
-					partParser(r.partParser());
+				partSerializer(r.partSerializer());
+				partParser(r.partParser());
 				encoders(r.encoders());
 				if (r.produces().length > 0)
 					produces(false, resolveVars(vr, r.produces()));
@@ -190,11 +188,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				beanFilters(false, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), r.beanFilters()));
 				pojoSwaps(false, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), r.pojoSwaps()));
 				paramResolvers(r.paramResolvers());
-				if (r.serializerListener() != SerializerListener.Null.class)
-					serializerListener(r.serializerListener());
-				if (r.parserListener() != ParserListener.Null.class)
-					parserListener(r.parserListener());
-				contextPath(vr.resolve(r.contextPath()));
+				serializerListener(r.serializerListener());
+				parserListener(r.parserListener());
+				uriContext(vr.resolve(r.uriContext()));
+				uriAuthority(vr.resolve(r.uriAuthority()));
+				uriRelativity(vr.resolve(r.uriRelativity()));
+				uriResolution(vr.resolve(r.uriResolution()));
 				for (String mapping : r.staticFiles())
 					staticFiles(c, vr.resolve(mapping));
 				if (! r.messages().isEmpty())
@@ -719,30 +718,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
-	 * Configuration property:  Resource context path.
-	 *
-	 * <p>
-	 * Overrides the context path value for this resource and any child resources.
-	 *
-	 * <p>
-	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
-	 * the context path is not actually specified on the servlet container.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_contextPath}
-	 * </ul>
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder contextPath(String value) {
-		if (! value.isEmpty())
-			set(REST_contextPath, value);
-		return this;
-	}
-
-	/**
 	 * Configuration property:  Class-level response converters.
 	 *
 	 * <p>
@@ -1229,7 +1204,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder parserListener(Class<? extends ParserListener> value) {
-		return set(PARSER_listener, value);
+		if (value != ParserListener.Null.class)
+			set(PARSER_listener, value);
+		return this;
 	}
 
 	/**
@@ -1309,7 +1286,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(Class<? extends HttpPartParser> value) {
-		return set(REST_partParser, value);
+		if (value != HttpPartParser.Null.class)
+			set(REST_partParser, value);
+		return this;
 	}
 
 	/**
@@ -1349,7 +1328,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
-		return set(REST_partSerializer, value);
+		if (value != HttpPartSerializer.Null.class)
+			set(REST_partSerializer, value);
+		return this;
 	}
 
 	/**
@@ -1525,7 +1506,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder serializerListener(Class<? extends SerializerListener> value) {
-		return set(SERIALIZER_listener, value);
+		if (value != SerializerListener.Null.class)
+			set(SERIALIZER_listener, value);
+		return this;
 	}
 
 	/**
@@ -1855,6 +1838,99 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder consumes(boolean append, MediaType...values) {
 		return set(append, REST_consumes, values);
+	}
+
+	/**
+	 * Configuration property:  Resource authority path.
+	 *
+	 * <p>
+	 * Overrides the authority path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to resolve relative URIs to absolute paths and want to explicitly specify the hostname/port.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriAuthority}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder uriAuthority(String value) {
+		if (! value.isEmpty())
+			set(REST_uriAuthority, value);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  Resource context path.
+	 *
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <p>
+	 * This setting is useful if you want to use <js>"context:/child/path"</js> URLs in child resource POJOs but
+	 * the context path is not actually specified on the servlet container.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriContext}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder uriContext(String value) {
+		if (! value.isEmpty())
+			set(REST_uriContext, value);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  URI resolution relativity.
+	 *
+	 * <p>
+	 * Specifies how relative URIs should be interpreted by serializers.
+	 *
+	 * <p>
+	 * See {@link UriResolution} for possible values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriRelativity}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder uriRelativity(String value) {
+		if (! value.isEmpty())
+			set(REST_uriRelativity, value);
+		return this;
+	}
+
+	/**
+	 * Configuration property:  URI resolution.
+	 *
+	 * <p>
+	 * Specifies how relative URIs should be interpreted by serializers.
+	 *
+	 * <p>
+	 * See {@link UriResolution} for possible values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriResolution}
+	 * </ul>
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder uriResolution(String value) {
+		if (! value.isEmpty())
+			set(REST_uriResolution, value);
+		return this;
 	}
 
 	/**

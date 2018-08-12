@@ -13,16 +13,23 @@
  ***************************************************************************************************************************/
  -->
 
-StreamResource
+{updated} StreamResource
 
 <p>
 	The {@link org.apache.juneau.rest.helper.StreamResource} class is the binary equivalent to the {@link org.apache.juneau.rest.helper.ReaderResource} object.
 	<br>In essence, it's a container for binary data with optional response headers.
 </p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#contents(Object...) contents(Object...)}
+		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+	</ul>
+</ul>
 <p>
-	The {@link org.apache.juneau.rest.helper.StreamResource} class implements the {@link org.apache.juneau.Streamable}
-	interface which is handled by the {@link org.apache.juneau.rest.reshandlers.StreamableHandler} class.
-	<br>This allows these objects to be returned as responses by REST methods.
+	The class is annotated with {@link org.apache.juneau.http.annotation.Response @Response}
+	which allows it to be returned as responses by REST methods.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -37,14 +44,3 @@ StreamResource
 			.build();
 	}
 </p>
-<p>
-	The important methods on this class are:
-</p>
-<ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
-	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#contents(Object...) contents(Object...)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#header(String,Object) header(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
-	</ul>
-</ul>

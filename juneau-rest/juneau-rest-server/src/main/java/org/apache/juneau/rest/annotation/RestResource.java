@@ -222,26 +222,6 @@ public @interface RestResource {
 	String config() default "";
 
 	/**
-	 * Resource context path.
-	 *
-	 * <p>
-	 * Overrides the context path value for this resource and any child resources.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_contextPath}
-	 * </ul>
-	 */
-	String contextPath() default "";
-
-	/**
 	 * Class-level response converters.
 	 *
 	 * <p>
@@ -903,6 +883,92 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String[] title() default {};
+
+	/**
+	 * Resource authority path.
+	 *
+	 * <p>
+	 * Overrides the authority path value for this resource and any child resources.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriAuthority}
+	 * </ul>
+	 */
+	String uriAuthority() default "";
+
+	/**
+	 * Resource context path.
+	 *
+	 * <p>
+	 * Overrides the context path value for this resource and any child resources.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriContext}
+	 * </ul>
+	 */
+	String uriContext() default "";
+
+	/**
+	 * URI-resolution relativity.
+	 *
+	 * <p>
+	 * Specifies how relative URIs should be interpreted by serializers.
+	 *
+	 * <p>
+	 * See {@link UriResolution} for possible values.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriRelativity}
+	 * </ul>
+	 */
+	String uriRelativity() default "";
+
+	/**
+	 * URI-resolution.
+	 *
+	 * <p>
+	 * Specifies how relative URIs should be interpreted by serializers.
+	 *
+	 * <p>
+	 * See {@link UriResolution} for possible values.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_uriResolution}
+	 * </ul>
+	 */
+	String uriResolution() default "";
 
 	/**
 	 * Configuration property:  Use classpath resource caching.
