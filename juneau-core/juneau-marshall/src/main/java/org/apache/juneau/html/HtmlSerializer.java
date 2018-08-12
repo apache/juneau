@@ -636,7 +636,7 @@ public class HtmlSerializer extends XmlSerializer {
 		addBeanTypes;
 	private final String labelParameter;
 
-	private volatile HtmlSchemaDocSerializer schemaSerializer;
+	private volatile HtmlSchemaSerializer schemaSerializer;
 
 	/**
 	 * Constructor.
@@ -706,16 +706,16 @@ public class HtmlSerializer extends XmlSerializer {
 		return new HtmlSerializerBuilder();
 	}
 
-	@Override /* XmlSerializer */
-	public HtmlSerializer getSchemaSerializer() {
-		if (schemaSerializer == null)
-			schemaSerializer = builder().build(HtmlSchemaDocSerializer.class);
-		return schemaSerializer;
-	}
-
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlSerializerSession(this, args);
+	}
+
+	@Override /* XmlSerializer */
+	public HtmlSerializer getSchemaSerializer() {
+		if (schemaSerializer == null)
+			schemaSerializer = builder().build(HtmlSchemaSerializer.class);
+		return schemaSerializer;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -57,8 +57,14 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		ObjectMap schema = getSchema(getClassMetaForObject(o), "root", null, false, false, null);
+		ObjectMap schema = getSchema(toClassMeta(o), "root", null, false, false, null);
 		serializeAnything(getJsonWriter(out), schema, getExpectedRootType(o), "root", null);
+	}
+
+	private ClassMeta<?> toClassMeta(Object o) {
+		if (o instanceof Type)
+			return getClassMeta((Type)o);
+		return getClassMetaForObject(o);
 	}
 
 	/**

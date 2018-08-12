@@ -90,9 +90,9 @@ table.unstyled,.contentContainer .description table.unstyled,.contentContainer u
 	border-collapse: collapse;
 }
 
-table.unstyled { border: 1px solid #9eadc0; } 
-table.unstyled th { background-color: #dee3e9; border: 1px solid #9eadc0; padding: 3px 10px 3px 10px; }
-table.unstyled td { padding: 3px !important; border: 1px solid #b5c8de; }
+table.unstyled, table.unstyled table { border: 1px solid #9eadc0; border-collapse:collapse; } 
+table.unstyled th { background-color: #dee3e9; border: 1px solid #9eadc0; border-collapse:collapse; padding: 3px 10px 3px 10px; }
+table.unstyled td { padding: 3px !important; border: 1px solid #b5c8de; border-collapse:collapse; }
 table.unstyled ul { padding: 0px 10px; }
 table.unstyled tr:nth-child(1) { background-color: white; }
 table.unstyled tr:nth-child(2n+2) { background-color: white; }

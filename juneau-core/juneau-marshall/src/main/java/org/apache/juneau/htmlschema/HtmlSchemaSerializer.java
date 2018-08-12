@@ -37,9 +37,75 @@ import org.apache.juneau.serializer.*;
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
  */
-public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
+public class HtmlSchemaSerializer extends HtmlSerializer {
+
+	/** Default serializer, all default settings.*/
+	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(PropertyStore.DEFAULT);
+
+	/** Default serializer, all default settings.*/
+	public static final HtmlSchemaSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+
+	/** Default serializer, single quotes, simple mode. */
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE = new Simple(PropertyStore.DEFAULT);
+
+	/** Default serializer, single quotes, simple mode, with whitespace. */
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
 
 	private final JsonSchemaSerializer jsctx;
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Predefined subclasses
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/** Default serializer, with whitespace. */
+	public static class Readable extends HtmlSchemaSerializer {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param ps The property store containing all the settings for this object.
+		 */
+		public Readable(PropertyStore ps) {
+			super(
+				ps.builder().set(SERIALIZER_useWhitespace, true).build()
+			);
+		}
+	}
+
+	/** Default serializer, single quotes, simple mode. */
+	public static class Simple extends HtmlSchemaSerializer {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param ps The property store containing all the settings for this object.
+		 */
+		public Simple(PropertyStore ps) {
+			super(
+				ps.builder()
+					.set(WSERIALIZER_quoteChar, '\'')
+					.build()
+				);
+		}
+	}
+
+	/** Default serializer, single quotes, simple mode, with whitespace. */
+	public static class SimpleReadable extends HtmlSchemaSerializer {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param ps The property store containing all the settings for this object.
+		 */
+		public SimpleReadable(PropertyStore ps) {
+			super(
+				ps.builder()
+					.set(WSERIALIZER_quoteChar, '\'')
+					.set(SERIALIZER_useWhitespace, true)
+					.build()
+			);
+		}
+	}
 
 	/**
 	 * Constructor.
@@ -47,8 +113,13 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * @param ps
 	 * 	The property store to use for creating the context for this serializer.
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore ps) {
+	public HtmlSchemaSerializer(PropertyStore ps) {
 		this(ps, "text/html", "text/html+schema");
+	}
+
+	@Override /* Context */
+	public HtmlSchemaSerializerBuilder builder() {
+		return new HtmlSchemaSerializerBuilder(getPropertyStore());
 	}
 
 	/**
@@ -78,7 +149,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * <p>
 	 * The accept value can also contain q-values.
 	 */
-	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String accept) {
+	public HtmlSchemaSerializer(PropertyStore ps, String produces, String accept) {
 		super(
 			ps.builder()
 				.set(SERIALIZER_detectRecursions, true)
@@ -91,7 +162,12 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	}
 
 	@Override /* Serializer */
-	public HtmlSchemaDocSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlSchemaDocSerializerSession(jsctx, this, args);
+	public HtmlSchemaSerializerSession createSession(SerializerSessionArgs args) {
+		return new HtmlSchemaSerializerSession(jsctx, this, args);
+	}
+
+	@Override /* Context */
+	public HtmlSchemaSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
 	}
 }

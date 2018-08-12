@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.json;
+package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.transform.*;
@@ -371,15 +370,15 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void customBeanDefMapper() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().beanDefMapper(CustomBeanDefMapper.class).build().createSession();
-		assertObjectEquals("{'$ref':'#/definitions/org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
-		assertObjectEquals("{'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
+		assertObjectEquals("{'$ref':'#/definitions/org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
+		assertObjectEquals("{'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
 
 	@Test
 	public void customBeanDefMapperInstance() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().beanDefMapper(new CustomBeanDefMapper()).build().createSession();
-		assertObjectEquals("{'$ref':'#/definitions/org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
-		assertObjectEquals("{'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
+		assertObjectEquals("{'$ref':'#/definitions/org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
+		assertObjectEquals("{'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
 
 	public static class CustomBeanDefMapper extends BasicBeanDefMapper {
@@ -392,8 +391,8 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void customBeanDefMapper_customURI() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().useBeanDefs().beanDefMapper(CustomBeanDefMapper2.class).build().createSession();
-		assertObjectEquals("{'$ref':'/foo/bar/org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
-		assertObjectEquals("{'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
+		assertObjectEquals("{'$ref':'/foo/bar/org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
+		assertObjectEquals("{'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean':{type:'object',properties:{f1:{type:'string'}}}}", s.getBeanDefs());
 	}
 
 	public static class CustomBeanDefMapper2 extends BasicBeanDefMapper {
@@ -891,13 +890,13 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void addDescription_BEAN() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("bean").build().createSession();
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
 	}
 
 	@Test
 	public void addDescription_BEAN_array2d() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("bean").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}}}", s.getSchema(SimpleBean[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean'}}}", s.getSchema(SimpleBean[][].class));
 	}
 
 	//====================================================================================================
@@ -907,13 +906,13 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void addDescription_MAP() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("map").build().createSession();
-		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanMap.class));
+		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanMap.class));
 	}
 
 	@Test
 	public void addDescription_MAP_2darray() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("map").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}}}", s.getSchema(BeanMap[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}}}", s.getSchema(BeanMap[][].class));
 	}
 
 	//====================================================================================================
@@ -923,19 +922,19 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void addDescription_COLLECTION() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("collection").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
+		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
 	}
 
 	@Test
 	public void addDescription_COLLECTION_2darray() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("collection").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}}}", s.getSchema(BeanList[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}}}", s.getSchema(BeanList[][].class));
 	}
 
 	@Test
 	public void addDescription_ARRAY() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("array").build().createSession();
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>[][]'}", s.getSchema(BeanList[][].class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>[][]'}", s.getSchema(BeanList[][].class));
 	}
 
 	//====================================================================================================
@@ -1032,10 +1031,10 @@ public class JsonSchemaSerializerTest {
 	@Test
 	public void addDescription_ANY() throws Exception {
 		JsonSchemaSerializerSession s = JsonSchemaSerializer.DEFAULT_SIMPLE.builder().addDescriptionsTo("any").build().createSession();
-		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
-		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanMap.class));
-		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>[][]'}", s.getSchema(BeanList[][].class));
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean'}", s.getSchema(SimpleBean.class));
+		assertObjectEquals("{type:'object',additionalProperties:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanMap<java.lang.Integer,org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanMap.class));
+		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}}}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>[][]'}", s.getSchema(BeanList[][].class));
 		assertObjectEquals("{type:'boolean',description:'boolean'}", s.getSchema(boolean.class));
 		assertObjectEquals("{type:'boolean',description:'java.lang.Boolean'}", s.getSchema(Boolean.class));
 		assertObjectEquals("{type:'integer',format:'int16',description:'short'}", s.getSchema(short.class));
@@ -1195,7 +1194,7 @@ public class JsonSchemaSerializerTest {
 			.addDescriptionsTo("collection,bean")
 			.build().createSession();
 
-		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean'},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
+		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean'},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
 	}
 
 	@Test
@@ -1204,7 +1203,7 @@ public class JsonSchemaSerializerTest {
 			.addDescriptionsTo("collection,bean")
 			.build().createSession();
 
-		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.json.JsonSchemaSerializerTest$BeanList<org.apache.juneau.json.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
+		assertObjectEquals("{type:'array',items:{type:'object',properties:{f1:{type:'string'}}},description:'org.apache.juneau.jsonschema.JsonSchemaSerializerTest$BeanList<org.apache.juneau.jsonschema.JsonSchemaSerializerTest$SimpleBean>'}", s.getSchema(BeanList.class));
 	}
 
 	//====================================================================================================

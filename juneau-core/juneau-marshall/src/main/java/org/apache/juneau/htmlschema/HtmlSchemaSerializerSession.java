@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.htmlschema;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jsonschema.*;
@@ -23,7 +25,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
-public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
+public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 
 	private final JsonSchemaSerializerSession js;
 
@@ -38,14 +40,20 @@ public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
 	 * @param args
 	 * 	Runtime arguments.
 	 */
-	protected HtmlSchemaDocSerializerSession(JsonSchemaSerializer jsctx, HtmlSchemaDocSerializer ctx, SerializerSessionArgs args) {
+	protected HtmlSchemaSerializerSession(JsonSchemaSerializer jsctx, HtmlSchemaSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
 		this.js = jsctx.createSession(args);
 	}
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		ObjectMap schema = js.getSchema(getClassMetaForObject(o));
+		ObjectMap schema = js.getSchema(toClassMeta(o));
 		super.doSerialize(out, schema);
+	}
+
+	private ClassMeta<?> toClassMeta(Object o) {
+		if (o instanceof Type)
+			return getClassMeta((Type)o);
+		return getClassMetaForObject(o);
 	}
 }

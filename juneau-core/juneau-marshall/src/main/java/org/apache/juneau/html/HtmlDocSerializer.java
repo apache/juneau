@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
+import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -524,6 +525,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
 
+	private volatile HtmlSchemaDocSerializer schemaSerializer;
+
 	/**
 	 * Constructor.
 	 *
@@ -580,6 +583,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlDocSerializerSession(this, args);
 	}
+
+	@Override /* XmlSerializer */
+	public HtmlSerializer getSchemaSerializer() {
+		if (schemaSerializer == null)
+			schemaSerializer = builder().build(HtmlSchemaDocSerializer.class);
+		return schemaSerializer;
+	}
+
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
