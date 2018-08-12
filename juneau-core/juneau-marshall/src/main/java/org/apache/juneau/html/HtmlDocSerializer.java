@@ -492,7 +492,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * Specifies the template to use for serializing the page.
 	 *
 	 * <p>
-	 * By default, the {@link HtmlDocTemplateBasic} class is used to construct the contents of the HTML page, but
+	 * By default, the {@link BasicHtmlDocTemplate} class is used to construct the contents of the HTML page, but
 	 * can be overridden with your own custom implementation class.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -573,7 +573,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		nowrap = getBooleanProperty(HTMLDOC_nowrap, false);
 		navlinks = getArrayProperty(HTMLDOC_navlinks, String.class);
 		noResultsMessage = getStringProperty(HTMLDOC_noResultsMessage, "<p>no results</p>");
-		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, HtmlDocTemplateBasic.class);
+		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
 	}
 
 	@Override /* Serializer */

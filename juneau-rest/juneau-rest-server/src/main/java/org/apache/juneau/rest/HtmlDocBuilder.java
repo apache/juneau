@@ -437,7 +437,7 @@ public class HtmlDocBuilder {
 	 * Specifies the template class to use for rendering the HTML page.
 	 *
 	 * <p>
-	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
+	 * By default, uses {@link BasicHtmlDocTemplate} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -460,7 +460,7 @@ public class HtmlDocBuilder {
 	 * Specifies the template class to use for rendering the HTML page.
 	 *
 	 * <p>
-	 * By default, uses {@link HtmlDocTemplateBasic} to render the contents, although you can provide your own custom
+	 * By default, uses {@link BasicHtmlDocTemplate} to render the contents, although you can provide your own custom
 	 * renderer or subclasses from the basic class to have full control over how the page is rendered.
 	 *
 	 * <h5 class='section'>Notes:</h5>

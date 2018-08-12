@@ -66,14 +66,16 @@
 			<jk>return</jk> FileSpaceStatus.<jsf>SEVERE</jsf>;
 		}
 	}
-
+</p>
+<p class='bpcode w800'>
 	<jc>// Possible values for the getStatus() method</jc>
-	<jk>public static enum</jk> FileSpaceStatus {
+	<jk>public enum</jk> FileSpaceStatus {
 		<jsf>OK</jsf>, <jsf>WARNING</jsf>, <jsf>SEVERE</jsf>;
 	}
-
+</p>
+<p class='bpcode w800'>
 	<jc>// Custom render for getPctFull() method</jc>
-	<jk>public static class</jk> FileSpacePctRender <jk>extends</jk> HtmlRender&lt;Float&gt; {
+	<jk>public class</jk> FileSpacePctRender <jk>extends</jk> HtmlRender&lt;Float&gt; {
 
 		<ja>@Override</ja>
 		<jk>public</jk> String getStyle(SerializerSession session, Float value) {
@@ -94,9 +96,10 @@
 			<jk>return</jk> String.<jsm>format</jsm>(<js>"%.0f%%"</js>, value);
 		}
 	}
-
+</p>
+<p class='bpcode w800'>
 	<jc>// Custom render for getStatus() method</jc>
-	<jk>public static class</jk> FileSpaceStatusRender <jk>extends</jk> HtmlRender&lt;FileSpaceStatus&gt; {
+	<jk>public class</jk> FileSpaceStatusRender <jk>extends</jk> HtmlRender&lt;FileSpaceStatus&gt; {
 
 		<ja>@Override</ja>
 		<jk>public</jk> String getStyle(SerializerSession session, FileSpaceStatus value) {

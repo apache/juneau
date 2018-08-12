@@ -93,16 +93,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
 
 		try (HtmlWriter w = getHtmlWriter(out)) {
-			HtmlDocTemplate t = getTemplate();
-
-			w.sTag("html").nl(0);
-			w.sTag(1, "head").nl(1);
-			t.head(this, w, o);
-			w.eTag(1, "head").nl(1);
-			w.sTag(1, "body").nl(1);
-			t.body(this, w, o);
-			w.eTag(1, "body").nl(1);
-			w.eTag("html").nl(0);
+			getTemplate().writeTo(this, w, o);
 		}
 	}
 

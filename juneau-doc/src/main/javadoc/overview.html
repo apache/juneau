@@ -162,8 +162,9 @@
 			<li><p class='new'><a class='doclink' href='#juneau-marshall.HtmlDetails.Parsers'>HTML Parsers</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlAnnotation'>@Html Annotation</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlRenderAnnotation'>@Html(render) Annotation</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlDocSerializer'>HtmlDocSerializer</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-marshall.HtmlDetails.CustomTemplates'>Custom Templates</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlDocSerializer'>HtmlDocSerializer</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-marshall.HtmlDetails.BasicHtmlDocTemplate'>BasicHtmlDocTemplate</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-marshall.HtmlDetails.CustomTemplates'>Custom Templates</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-marshall.HtmlDetails.HtmlSchema'>HTML-Schema Support</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.UonDetails'>UON Details</a></p>
@@ -7709,14 +7710,16 @@
 			<jk>return</jk> FileSpaceStatus.<jsf>SEVERE</jsf>;
 		}
 	}
-
+</p>
+<p class='bpcode w800'>
 	<jc>// Possible values for the getStatus() method</jc>
-	<jk>public static enum</jk> FileSpaceStatus {
+	<jk>public enum</jk> FileSpaceStatus {
 		<jsf>OK</jsf>, <jsf>WARNING</jsf>, <jsf>SEVERE</jsf>;
 	}
-
+</p>
+<p class='bpcode w800'>
 	<jc>// Custom render for getPctFull() method</jc>
-	<jk>public static class</jk> FileSpacePctRender <jk>extends</jk> HtmlRender&lt;Float&gt; {
+	<jk>public class</jk> FileSpacePctRender <jk>extends</jk> HtmlRender&lt;Float&gt; {
 
 		<ja>@Override</ja>
 		<jk>public</jk> String getStyle(SerializerSession session, Float value) {
@@ -7737,9 +7740,10 @@
 			<jk>return</jk> String.<jsm>format</jsm>(<js>"%.0f%%"</js>, value);
 		}
 	}
-
+</p>
+<p class='bpcode w800'>
 	<jc>// Custom render for getStatus() method</jc>
-	<jk>public static class</jk> FileSpaceStatusRender <jk>extends</jk> HtmlRender&lt;FileSpaceStatus&gt; {
+	<jk>public class</jk> FileSpaceStatusRender <jk>extends</jk> HtmlRender&lt;FileSpaceStatus&gt; {
 
 		<ja>@Override</ja>
 		<jk>public</jk> String getStyle(SerializerSession session, FileSpaceStatus value) {
@@ -7760,24 +7764,126 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlDocSerializer' id='juneau-marshall.HtmlDetails.HtmlDocSerializer'>2.21.6 - HtmlDocSerializer</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlDocSerializer' id='juneau-marshall.HtmlDetails.HtmlDocSerializer'>2.21.6 - HtmlDocSerializer</a></h4>
 <div class='topic'><!-- START: 2.21.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
-TODO(7.2.0)
+<p>
+	{@link org.apache.juneau.html.HtmlDocSerializer} is an extension of {@link org.apache.juneau.html.HtmlSerializer}
+	that wraps serialized POJOs in a complete HTML document. 
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
+		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
+	</ul>
+</ul>
+<p>
+	This class is used extensively in the creation of POJO-based user interfaces in the REST API.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jd>/** 
+	 * Sample REST resource that prints out a simple "Hello world!" message.
+	 */</jd>
+	<ja>@RestResource</ja>(
+		path=<js>"/helloWorld"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			}
+		)
+	)
+	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {...}
+</p>
+<p>
+	The {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template} setting defines
+	a template for the HTML page being generated.
+	The default template is described next.
+</p>
 </div><!-- END: 2.21.6 - juneau-marshall.HtmlDetails.HtmlDocSerializer -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.CustomTemplates' id='juneau-marshall.HtmlDetails.CustomTemplates'>2.21.7 - Custom Templates</a></h4>
-<div class='topic'><!-- START: 2.21.7 - juneau-marshall.HtmlDetails.CustomTemplates -->
-TODO(7.2.0)
-</div><!-- END: 2.21.7 - juneau-marshall.HtmlDetails.CustomTemplates -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.BasicHtmlDocTemplate' id='juneau-marshall.HtmlDetails.BasicHtmlDocTemplate'>2.21.7 - BasicHtmlDocTemplate</a></h4>
+<div class='topic'><!-- START: 2.21.7 - juneau-marshall.HtmlDetails.BasicHtmlDocTemplate -->
+<p>
+	The {@link org.apache.juneau.html.BasicHtmlDocTemplate} class defines a default template for HTML documents
+	created by {@link org.apache.juneau.html.HtmlDocSerializer}.
+</p>
+<p>
+	The HTML document created by this template consists of the following structure:
+</p>
+<p class='bpcode w800'>
+	<xt>&lt;html&gt;
+		&lt;head&gt;
+			&lt;style <xa>type</xa>=<xs>'text/css'</xs>&gt;
+				<xv>CSS styles and links to stylesheets</xv>
+			&lt;/style&gt;
+		&lt;/head&gt;
+		&lt;body&gt;
+			&lt;header&gt;
+				<xv>Page header</xv>
+			&lt;/header&gt;
+			&lt;nav&gt;
+				<xv>Navigation links</xv>
+			&lt;/nav&gt;
+			&lt;aside&gt;
+				<xv>Side-bar text</xv>
+			&lt;/aside&gt;
+			&lt;article&gt;
+				<xv>Contents of serialized object</xv>
+			&lt;/article&gt;
+			&lt;footer&gt;
+				<xv>Footer message</xv>
+			&lt;/footer&gt;
+		&lt;/body&gt;
+	&lt;/html&gt;</xt>
+</p>
+</div><!-- END: 2.21.7 - juneau-marshall.HtmlDetails.BasicHtmlDocTemplate -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSchema' id='juneau-marshall.HtmlDetails.HtmlSchema'>2.21.8 - HTML-Schema Support</a></h4>
-<div class='topic'><!-- START: 2.21.8 - juneau-marshall.HtmlDetails.HtmlSchema -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.CustomTemplates' id='juneau-marshall.HtmlDetails.CustomTemplates'>2.21.8 - Custom Templates</a></h4>
+<div class='topic'><!-- START: 2.21.8 - juneau-marshall.HtmlDetails.CustomTemplates -->
+<p>
+	Custom page templates can be created by implementing the {@link org.apache.juneau.html.HtmlDocTemplate}
+	interface and associating it with your {@link org.apache.juneau.html.HtmlDocSerializer} using the {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
+	setting.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.html.HtmlDocTemplate}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.html.HtmlDocTemplate#writeTo(HtmlDocSerializerSession,HtmlWriter,Object) writeTo(HtmlDocSerializerSession,HtmlWriter,Object)}
+	</ul>
+</ul>
+<p>
+	The interface implementation is open-ended allowing you to define the contents of the page any way you wish.
+</p>
+</div><!-- END: 2.21.8 - juneau-marshall.HtmlDetails.CustomTemplates -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSchema' id='juneau-marshall.HtmlDetails.HtmlSchema'>2.21.9 - HTML-Schema Support</a></h4>
+<div class='topic'><!-- START: 2.21.9 - juneau-marshall.HtmlDetails.HtmlSchema -->
 TODO(7.2.0)
-</div><!-- END: 2.21.8 - juneau-marshall.HtmlDetails.HtmlSchema -->
+</div><!-- END: 2.21.9 - juneau-marshall.HtmlDetails.HtmlSchema -->
 </div><!-- END: 2.21 - juneau-marshall.HtmlDetails -->
 
 <!-- ==================================================================================================== -->

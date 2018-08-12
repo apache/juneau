@@ -13,6 +13,19 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Custom Templates
+{new} Custom Templates
 
-TODO(7.2.0)
+<p>
+	Custom page templates can be created by implementing the {@link org.apache.juneau.html.HtmlDocTemplate}
+	interface and associating it with your {@link org.apache.juneau.html.HtmlDocSerializer} using the {@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}
+	setting.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.html.HtmlDocTemplate}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.html.HtmlDocTemplate#writeTo(HtmlDocSerializerSession,HtmlWriter,Object) writeTo(HtmlDocSerializerSession,HtmlWriter,Object)}
+	</ul>
+</ul>
+<p>
+	The interface implementation is open-ended allowing you to define the contents of the page any way you wish.
+</p>
