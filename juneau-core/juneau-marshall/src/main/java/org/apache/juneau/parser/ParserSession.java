@@ -89,7 +89,10 @@ public abstract class ParserSession extends BeanSession {
 	//--------------------------------------------------------------------------------
 
 	/**
-	 * Workhorse method.  Subclasses are expected to implement this method.
+	 * Workhorse method.
+	 *
+	 * <p>
+	 * Subclasses are expected to implement this method.
 	 *
 	 * @param pipe Where to get the input from.
 	 * @param type

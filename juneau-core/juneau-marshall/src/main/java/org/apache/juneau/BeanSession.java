@@ -745,7 +745,7 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Wraps an object inside a {@link BeanMap} object (i.e. a modifiable {@link Map}).
+	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
 	 *
 	 * <p>
 	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
@@ -829,7 +829,7 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Creates a new {@link BeanMap} object (i.e. a modifiable {@link Map}) of the given class with uninitialized
+	 * Creates a new {@link BeanMap} object (a modifiable {@link Map}) of the given class with uninitialized
 	 * property values.
 	 *
 	 * <p>

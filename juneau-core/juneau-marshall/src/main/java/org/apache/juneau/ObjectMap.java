@@ -197,13 +197,13 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Construct an empty JSON object (i.e. an empty {@link LinkedHashMap}).
+	 * Construct an empty JSON object (an empty {@link LinkedHashMap}).
 	 */
 	public ObjectMap() {
 	}
 
 	/**
-	 * Construct an empty JSON object (i.e. an empty {@link LinkedHashMap}) with the specified bean context.
+	 * Construct an empty JSON object (an empty {@link LinkedHashMap}) with the specified bean context.
 	 *
 	 * @param session The bean session to use for creating beans.
 	 */

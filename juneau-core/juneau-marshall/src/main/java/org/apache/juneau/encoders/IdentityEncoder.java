@@ -15,7 +15,10 @@ package org.apache.juneau.encoders;
 import java.io.*;
 
 /**
- * Encoder for handling <js>"identity"</js> encoding and decoding (e.g. no encoding at all).
+ * Encoder for handling <js>"identity"</js> encoding and decoding.
+ *
+ * <p>
+ * Identity encoding is just another name for no encoding at all.
  */
 public class IdentityEncoder extends Encoder {
 

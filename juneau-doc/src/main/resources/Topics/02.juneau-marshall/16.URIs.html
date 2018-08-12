@@ -57,8 +57,7 @@
 			<jf>f4a</jf> = URI.<jsm>create</jsm>(<js>"request:/f4a/x"</js>),
 			<jf>f4b</jf> = URI.<jsm>create</jsm>(<js>"request:/f4b"</js>),
 			<jf>f4c</jf> = URI.<jsm>create</jsm>(<js>"request:/"</js>),
-			<jf>f4d</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>),
-			<jf>f5 </jf> = <jk>null</jk>;
+			<jf>f4d</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>);;
 	}	
 	
 	<jc>// Create a serializer.</jc>
@@ -89,7 +88,7 @@
 	<jc>//	f4a:'http://foo.com:123/myContext/myServlet/myPath/f4a/x',</jc>
 	<jc>//	f4b:'http://foo.com:123/myContext/myServlet/myPath/f4b',</jc>
 	<jc>//	f4c:'http://foo.com:123/myContext/myServlet/myPath',</jc>
-	<jc>//	f4d:'http://foo.com:123/myContext/myServlet',</jc>
+	<jc>//	f4d:'http://foo.com:123/myContext/myServlet'</jc>
 	<jc>// }</jc>
 	String json = s.serialize(<jk>new</jk> TestURIs());
 </p>

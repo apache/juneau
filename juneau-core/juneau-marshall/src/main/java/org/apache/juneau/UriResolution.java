@@ -18,12 +18,16 @@ package org.apache.juneau;
 public enum UriResolution {
 
 	/**
-	 * Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+	 * Resolve to an absolute URL.
+	 * <p>
+	 * (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>)
 	 */
 	ABSOLUTE,
 
 	/**
-	 * Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
+	 * Resolve to a root-relative URL.
+	 * <p>
+	 * (e.g. <js>"/context-root/servlet-path/path-info"</js>)
 	 */
 	ROOT_RELATIVE,
 

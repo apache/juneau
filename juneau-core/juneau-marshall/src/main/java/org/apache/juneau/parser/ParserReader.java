@@ -106,7 +106,7 @@ public class ParserReader extends Reader implements Positionable {
 	}
 
 	/**
-	 * Same as {@link #read()} but detects and combines extended unicode characters (i.e. characters above 0x10000).
+	 * Same as {@link #read()} but detects and combines extended unicode characters (characters above 0x10000).
 	 *
 	 * @return The character read, or -1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.

@@ -58,7 +58,10 @@ public final class PojoIntrospector {
 	}
 
 	/**
-	 * Primary method.  Invokes the specified method on this bean.
+	 * Primary method.
+	 *
+	 * <p>
+	 * Invokes the specified method on this bean.
 	 *
 	 * @param method The method being invoked.
 	 * @param args

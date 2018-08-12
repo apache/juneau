@@ -77,7 +77,7 @@ public final class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate
 	}
 
 	/**
-	 * A set with ordered entries (i.e. a List with a Set API).
+	 * A set with ordered entries (a List with a Set API).
 	 */
 	private static final class ListSet<E> extends AbstractSet<E> {
 

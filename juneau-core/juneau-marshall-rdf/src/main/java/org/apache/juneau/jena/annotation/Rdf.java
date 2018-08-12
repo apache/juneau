@@ -51,7 +51,7 @@ public @interface Rdf {
 	boolean beanUri() default false;
 
 	/**
-	 * The format for how collections (e.g. lists and arrays) are serialized in RDF.
+	 * The format for how collections (lists and arrays for example) are serialized in RDF.
 	 *
 	 * @see RdfCollectionFormat
 	 */

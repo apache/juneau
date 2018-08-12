@@ -57,7 +57,10 @@ public final class DateUtils {
 	}
 
 	/**
-	 * Parses a date value. The formats used for parsing the date value are retrieved from the default http params.
+	 * Parses a date value.
+	 *
+	 * <p>
+	 * The formats used for parsing the date value are retrieved from the default http params.
 	 *
 	 * @param dateValue the date value to parse
 	 * @return the parsed date or null if input could not be parsed

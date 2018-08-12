@@ -22,7 +22,10 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
- * The object provides metadata about the API. The metadata can be used by the clients if needed, and can be presented
+ * The object provides metadata about the API.
+ *
+ * <p>
+ * The metadata can be used by the clients if needed, and can be presented
  * in the Swagger-UI for convenience.
  *
  * <h5 class='section'>Example:</h5>

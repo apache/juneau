@@ -81,7 +81,7 @@ public enum XmlFormat {
 	ELEMENTS,
 
 	/**
-	 * Same as {@link #ELEMENTS} except primitive types (e.g. string/boolean/number/null) are not wrapped in elements.
+	 * Same as {@link #ELEMENTS} except primitive types (string/boolean/number/null for example) are not wrapped in elements.
 	 *
 	 * <p>
 	 * Only applicable for bean properties, not bean classes.

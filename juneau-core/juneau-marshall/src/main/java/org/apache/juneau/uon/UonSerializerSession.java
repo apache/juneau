@@ -77,8 +77,10 @@ public class UonSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization
-	 * method.
+	 * Workhorse method.
+	 *
+	 * <p>
+	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 *
 	 * @param out The writer to serialize to.
 	 * @param o The object being serialized.

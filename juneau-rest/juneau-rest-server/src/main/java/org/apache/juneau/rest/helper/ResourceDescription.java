@@ -17,7 +17,10 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Shortcut label for child resources.  Typically used in router resources.
+ * Shortcut label for child resources.
+ *
+ * <p>
+ * Typically used in router resources.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>

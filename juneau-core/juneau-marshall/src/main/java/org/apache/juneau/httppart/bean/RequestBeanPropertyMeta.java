@@ -82,7 +82,7 @@ public class RequestBeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the HTTP part name for this property (e.g. query parameter name).
+	 * Returns the HTTP part name for this property (query parameter name for example).
 	 *
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
@@ -102,7 +102,7 @@ public class RequestBeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the HTTP part type for this property (e.g. query parameter, header, etc...).
+	 * Returns the HTTP part type for this property (query parameter for example).
 	 *
 	 * @return
 	 * 	The HTTP part type for this property.

@@ -194,13 +194,13 @@ public class ObjectList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Construct an empty JSON array. (i.e. an empty {@link LinkedList}).
+	 * Construct an empty JSON array (an empty {@link LinkedList}).
 	 */
 	public ObjectList() {
 	}
 
 	/**
-	 * Construct an empty JSON array with the specified bean context. (i.e. an empty {@link LinkedList}).
+	 * Construct an empty JSON array (an empty {@link LinkedList}) with the specified bean context.
 	 *
 	 * @param session The bean context to associate with this object list for creating beans.
 	 */

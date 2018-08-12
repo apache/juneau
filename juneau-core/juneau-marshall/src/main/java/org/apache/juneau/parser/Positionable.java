@@ -13,7 +13,7 @@
 package org.apache.juneau.parser;
 
 /**
- * Interface for objects with positions (e.g. lines/columns/byte-positions).
+ * Interface for objects with positions (lines/columns/byte-positions for example).
  */
 public interface Positionable {
 

@@ -1450,8 +1450,12 @@ public class JsonSchema {
 		if (not != null)
 			not.setMaster(master);
 	}
+
 	/**
-	 * If this schema is a reference to another schema (i.e. has its <property>$ref</property> property set), this
+	 * Resolve schema if reference.
+	 *
+	 * <p>
+	 * If this schema is a reference to another schema (has its <property>$ref</property> property set), this
 	 * method will retrieve the referenced schema from the schema map registered with this schema.
 	 *
 	 * <p>
