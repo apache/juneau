@@ -240,8 +240,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			}
 
 			responseHandlers(
-				StreamableHandler.class,
-				WritableHandler.class,
 				ReaderHandler.class,
 				InputStreamHandler.class,
 				DefaultHandler.class

@@ -13,10 +13,10 @@
 package org.apache.juneau.rest.reshandlers;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -78,9 +78,18 @@ public class DefaultHandler implements ResponseHandler {
 			for (ResponseBeanPropertyMeta hm : rm.getHeaderMethods()) {
 				try {
 					Object ho = hm.getGetter().invoke(o);
-					if (ho instanceof URI)
-						ho = req.getUriResolver().resolve(ho);
-					res.setHeader(new HttpPart(hm.getPartName(), HttpPartType.HEADER, hm.getSchema(), firstNonNull(hm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
+					String n = hm.getPartName();
+					if ("*".equals(n) && ho instanceof Map) {
+						@SuppressWarnings("rawtypes") Map m = (Map)ho;
+						for (Object key : m.keySet()) {
+							String k = asString(key);
+							Object v = m.get(key);
+							HttpPartSchema s = hm.getSchema().getProperty(k);
+							res.setHeader(new HttpPart(k, HttpPartType.HEADER, s, firstNonNull(hm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), v));
+						}
+					} else {
+						res.setHeader(new HttpPart(n, HttpPartType.HEADER, hm.getSchema(), firstNonNull(hm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
+					}
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());
 				}
@@ -92,6 +101,15 @@ public class DefaultHandler implements ResponseHandler {
 
 			if (m != null) {
 				try {
+					Class<?>[] pt = m.getParameterTypes();
+					if (pt.length == 1) {
+						Class<?> ptt = pt[0];
+						if (ptt == OutputStream.class)
+							m.invoke(o, res.getOutputStream());
+						else if (ptt == Writer.class)
+							m.invoke(o, res.getWriter());
+						return true;
+					}
 					o = m.invoke(o);
 					schema = rm.getSchema();
 					usePartSerializer |= schema.isUsePartSerializer();

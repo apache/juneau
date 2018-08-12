@@ -73,6 +73,11 @@ import org.apache.juneau.http.*;
  */
 public final class ParserGroup extends BeanContext {
 
+	/**
+	 * An unmodifiable empty parser group.
+	 */
+	public static final ParserGroup EMPTY = create().build();
+
 	// Maps Content-Type headers to matches.
 	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
 

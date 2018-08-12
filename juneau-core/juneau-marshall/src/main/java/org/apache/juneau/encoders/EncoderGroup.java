@@ -56,6 +56,11 @@ import org.apache.juneau.http.*;
  */
 public final class EncoderGroup {
 
+	/**
+	 * A default encoder group consisting of identity and G-Zip encoding.
+	 */
+	public static final EncoderGroup DEFAULT = create().append(IdentityEncoder.class, GzipEncoder.class).build();
+
 	// Maps Accept-Encoding headers to matching encoders.
 	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
 

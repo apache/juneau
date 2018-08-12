@@ -16,6 +16,10 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
+
 /**
  * Utility class for representing the contents of a zip file as a list of entries whose contents don't resolve until
  * serialization time.
@@ -25,12 +29,39 @@ import java.util.zip.*;
  * REST methods can easily create ZIP file responses by simply returning instances of this class.
  */
 @SuppressWarnings("serial")
-public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> {
+@Response
+public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements Streamable {
 
 	/**
 	 * The name of the zip file.
 	 */
 	public final String fileName;
+
+	@Header("Content-Type")
+	@Override /* Streamable */
+	public MediaType getMediaType() {
+		return MediaType.forString("application/zip");
+	}
+
+	/**
+	 * Returns the value for the <code>Content-Disposition</code> header.
+	 *
+	 * @return The value for the <code>Content-Disposition</code> header.
+	 */
+	@Header("Content-Disposition")
+	public String getContentDisposition() {
+		return "attachment;filename=" + fileName;
+	}
+
+	@ResponseBody
+	@Override /* Streamable */
+	public void streamTo(OutputStream os) throws IOException {
+		try (ZipOutputStream zos = new ZipOutputStream(os)) {
+			for (ZipFileEntry e : this)
+				e.write(zos);
+		}
+		os.flush();
+	}
 
 	/**
 	 * Constructor.

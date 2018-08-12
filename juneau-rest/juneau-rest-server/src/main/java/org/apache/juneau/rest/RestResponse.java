@@ -134,7 +134,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The serializer group for the response.
 	 */
 	public SerializerGroup getSerializers() {
-		return restJavaMethod.serializers;
+		return restJavaMethod == null ? SerializerGroup.EMPTY : restJavaMethod.serializers;
 	}
 
 	/**
@@ -143,7 +143,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		return restJavaMethod.supportedAcceptTypes;
+		return restJavaMethod == null ? Collections.<MediaType>emptyList() : restJavaMethod.supportedAcceptTypes;
 	}
 
 	/**
@@ -154,7 +154,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @throws RestServletException
 	 */
 	public List<String> getSupportedEncodings() throws RestServletException {
-		return restJavaMethod.encoders.getSupportedEncodings();
+		return restJavaMethod == null ? Collections.<String>emptyList() : restJavaMethod.encoders.getSupportedEncodings();
 	}
 
 	/**
@@ -360,7 +360,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
-			EncoderGroup encoders = restJavaMethod.encoders;
+			EncoderGroup encoders = restJavaMethod == null ? EncoderGroup.DEFAULT : restJavaMethod.encoders;
 
 			String ae = request.getHeader("Accept-Encoding");
 			if (! (ae == null || ae.isEmpty())) {

@@ -138,6 +138,11 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 			type = schema.getParsedType();
 		}
 
+		if (type.isUri()) {
+			value = getUriResolver().resolve(value);
+			type = string();
+		}
+
 		if (value != null) {
 
 			if (t == STRING) {

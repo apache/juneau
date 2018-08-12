@@ -65,6 +65,11 @@ import org.apache.juneau.http.*;
  */
 public final class SerializerGroup extends BeanContext {
 
+	/**
+	 * An unmodifiable empty serializer group.
+	 */
+	public static final SerializerGroup EMPTY = create().build();
+
 	// Maps Accept headers to matching serializers.
 	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
 

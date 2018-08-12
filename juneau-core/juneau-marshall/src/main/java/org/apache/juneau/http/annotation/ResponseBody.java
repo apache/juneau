@@ -15,6 +15,7 @@ package org.apache.juneau.http.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
+import java.io.*;
 import java.lang.annotation.*;
 
 /**
@@ -33,6 +34,13 @@ import java.lang.annotation.*;
  * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated methods</h5>
  * <p>
  * On {@link Response @Response}-annotated classes, this method can be used to denote a POJO to use as the response.
+ *
+ * <p>
+ * The method must be public and be one of the following:
+ * <ul>
+ * 	<li>A public no-arg method with a POJO return type.
+ * 	<li>A public one-arg method with a <jk>void</jk> return type that takes in a {@link Reader} or {@link OutputStream}.
+ * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -53,8 +61,22 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <p>
- * The method being annotated must be public.
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<ja>@Response</ja>
+ * 	<jk>public class</jk> MyCustomJsonResponse {
+ *
+ * 		<ja>@ResponseHeader</ja>(<js>"Content-Type"</js>)
+ * 		<jk>public</jk> String getContentType() {
+ * 			<jk>return</jk> <js>"application/json"</js>;
+ * 		}
+ *
+ * 		<ja>@ResponseBody</ja>
+ * 		<jk>public void</jk> writeTo(Writer out) {
+ * 			out.write(<js>"{'foo':'bar'}"</js>);
+ * 		}
+ * 	}
+ * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

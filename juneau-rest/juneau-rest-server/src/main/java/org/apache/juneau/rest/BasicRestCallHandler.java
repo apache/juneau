@@ -23,6 +23,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.rest.RestContext.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
@@ -145,10 +146,13 @@ public class BasicRestCallHandler implements RestCallHandler {
 			StreamResource r = null;
 			if (pathInfo != null) {
 				String p = pathInfo.substring(1);
-				if (context.isStaticFile(p))
-					r = context.resolveStaticFile(p);
-				else if (p.equals("favicon.ico"))
+				if (context.isStaticFile(p)) {
+					StaticFile sf = context.resolveStaticFile(p);
+					r = sf.resource;
+					res.setResponseMeta(sf.meta);
+				} else if (p.equals("favicon.ico")) {
 					res.setOutput(null);
+				}
 			}
 
 			if (r != null) {

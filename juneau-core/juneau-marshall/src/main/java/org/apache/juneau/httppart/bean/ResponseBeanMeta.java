@@ -15,6 +15,7 @@ package org.apache.juneau.httppart.bean;
 import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -153,7 +154,7 @@ public class ResponseBeanMeta {
 			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			for (Method m : ClassUtils.getAllMethods(c, false)) {
-				if (isAll(m, PUBLIC, HAS_NO_ARGS)) {
+				if (isAll(m, PUBLIC)) {
 					if (hasAnnotation(ResponseHeader.class, m)) {
 						if (m.getParameterTypes().length != 0)
 							throw new InvalidAnnotationException("@ResponseHeader annotation on method cannot have arguments.  Method=''{0}''", m);
@@ -176,11 +177,18 @@ public class ResponseBeanMeta {
 						statusMethod = m;
 					}
 					if (hasAnnotation(ResponseBody.class, m)) {
-						if (m.getParameterTypes().length != 0)
+						Class<?>[] pt = m.getParameterTypes();
+						if (pt.length == 0) {
+							Class<?> rt = m.getReturnType();
+							if (rt == void.class)
+								throw new InvalidAnnotationException("Invalid return type for @ResponseBody annotation on method.  Method=''{0}''", m);
+						} else if (pt.length == 1) {
+							Class<?> rt = pt[0];
+							if (rt != OutputStream.class && rt != Writer.class)
+								throw new InvalidAnnotationException("Invalid return type for @ResponseBody annotation on method.  Method=''{0}''", m);
+						} else {
 							throw new InvalidAnnotationException("@ResponseBody annotation on method cannot have arguments.  Method=''{0}''", m);
-						Class<?> rt = m.getReturnType();
-						if (rt == void.class)
-							throw new InvalidAnnotationException("Invalid return type for @ResponseBody annotation on method.  Method=''{0}''", m);
+						}
 						bodyMethod = m;
 					}
 					if (hasAnnotation(Body.class, m))

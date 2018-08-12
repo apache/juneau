@@ -39,6 +39,7 @@ import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -2150,11 +2151,8 @@ public final class RestContext extends BeanContext {
 	 * <p>
 	 * By default, the following response handlers are provided out-of-the-box:
 	 * <ul>
-	 * 	<li class='jc'>{@link StreamableHandler} - {@link Streamable} objects.
-	 * 	<li class='jc'>{@link WritableHandler} - {@link Writable} objects.
 	 * 	<li class='jc'>{@link ReaderHandler} - {@link Reader} objects.
 	 * 	<li class='jc'>{@link InputStreamHandler} - {@link InputStream} objects.
-	 * 	<li class='jc'>{@link ZipFileListResponseHandler} - {@link ZipFileList} objects.
 	 * 	<li class='jc'>{@link DefaultHandler} - All other POJOs.
 	 * </ul>
 	 *
@@ -2846,7 +2844,7 @@ public final class RestContext extends BeanContext {
 		destroyMethodParams;
 
 	// In-memory cache of images and stylesheets in the org.apache.juneau.rest.htdocs package.
-	private final Map<String,StreamResource> staticFilesCache = new ConcurrentHashMap<>();
+	private final Map<String,StaticFile> staticFilesCache = new ConcurrentHashMap<>();
 
 	private final ClasspathResourceManager staticResourceManager;
 	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
@@ -3354,15 +3352,16 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * @param pathInfo The unencoded path info.
-	 * @return The resource, or <jk>null</jk> if the resource could not be resolved.
+	 * @return The wrapped resource, never <jk>null</jk>.
 	 * @throws NotFound Invalid path.
 	 * @throws IOException
 	 */
-	public StreamResource resolveStaticFile(String pathInfo) throws NotFound, IOException {
+	protected StaticFile resolveStaticFile(String pathInfo) throws NotFound, IOException {
 		if (! staticFilesCache.containsKey(pathInfo)) {
 			String p = urlDecode(trimSlashes(pathInfo));
 			if (p.indexOf("..") != -1)
 				throw new NotFound("Invalid path");
+			StreamResource sr = null;
 			for (StaticFileMapping sfm : staticFiles) {
 				String path = sfm.path;
 				if (p.startsWith(path)) {
@@ -3375,17 +3374,40 @@ public final class RestContext extends BeanContext {
 								String name = (i == -1 ? p2 : p2.substring(i+1));
 								String mediaType = mimetypesFileTypeMap.getContentType(name);
 								Map<String,Object> responseHeaders = sfm.responseHeaders != null ? sfm.responseHeaders : staticFileResponseHeaders;
-								StreamResource sr = new StreamResource(MediaType.forString(mediaType), responseHeaders, is);
-								if (useClasspathResourceCaching)
-									staticFilesCache.put(pathInfo, sr);
-								return sr;
+								sr = new StreamResource(MediaType.forString(mediaType), responseHeaders, is);
+								break;
 							}
 						}
 					}
 				}
 			}
+			StaticFile sf = new StaticFile(sr);
+			if (useClasspathResourceCaching) {
+				if (staticFilesCache.size() > 100)
+					staticFilesCache.clear();
+				staticFilesCache.put(pathInfo, sf);
+			}
+			return sf;
 		}
 		return staticFilesCache.get(pathInfo);
+	}
+
+	/**
+	 * A cached static file instance.
+	 */
+	protected class StaticFile {
+		StreamResource resource;
+		ResponseBeanMeta meta;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param resource
+		 */
+		protected StaticFile(StreamResource resource) {
+			this.resource = resource;
+			this.meta = resource == null ? null : ResponseBeanMeta.create(resource.getClass(), getPropertyStore());
+		}
 	}
 
 	/**

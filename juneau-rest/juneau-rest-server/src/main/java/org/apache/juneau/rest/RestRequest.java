@@ -371,7 +371,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the serializer group of this request.
 	 */
 	public List<MediaType> getProduces() {
-		return restJavaMethod.supportedAcceptTypes;
+		return restJavaMethod == null ? Collections.<MediaType>emptyList() : restJavaMethod.supportedAcceptTypes;
 	}
 
 	/**
@@ -380,7 +380,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The set of media types registered in the parser group of this request.
 	 */
 	public List<MediaType> getConsumes() {
-		return restJavaMethod.supportedContentTypes;
+		return restJavaMethod == null ? Collections.<MediaType>emptyList() : restJavaMethod.supportedContentTypes;
 	}
 
 	/**
@@ -406,8 +406,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				if (i > 0)
 					charset = h.substring(i+9).trim();
 			}
-			if (charset == null)
+			if (charset == null && restJavaMethod != null)
 				charset = restJavaMethod.defaultCharset;
+			if (charset == null)
+				charset = "UTF-8";
 			if (! Charset.isSupported(charset))
 				throw new UnsupportedMediaType("Unsupported charset in header ''Content-Type'': ''{0}''", h);
 		}
@@ -561,7 +563,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public RequestFormData getFormData() throws InternalServerError {
 		try {
 			if (formData == null) {
-				formData = new RequestFormData(this, restJavaMethod.partParser);
+				formData = new RequestFormData(this, restJavaMethod == null ? OpenApiPartParser.DEFAULT : restJavaMethod.partParser);
 				if (! body.isLoaded()) {
 					formData.putAll(getParameterMap());
 				} else {
@@ -572,7 +574,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 					}
 				}
 			}
-			formData.addDefault(restJavaMethod.defaultFormData);
+			formData.addDefault(restJavaMethod == null ? null : restJavaMethod.defaultFormData);
 			return formData;
 		} catch (Exception e) {
 			throw new InternalServerError(e);
@@ -1057,7 +1059,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The serializers associated with this request.
 	 */
 	public SerializerGroup getSerializers() {
-		return restJavaMethod.serializers;
+		return restJavaMethod == null ? SerializerGroup.EMPTY : restJavaMethod.serializers;
 	}
 
 	/**
@@ -1071,7 +1073,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parsers associated with this request.
 	 */
 	public ParserGroup getParsers() {
-		return restJavaMethod.parsers;
+		return restJavaMethod == null ? ParserGroup.EMPTY : restJavaMethod.parsers;
 	}
 
 	/**
@@ -1080,7 +1082,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The part serializer associated with this request.
 	 */
 	public HttpPartParser getPartParser() {
-		return restJavaMethod.partParser;
+		return restJavaMethod == null ? OpenApiPartParser.DEFAULT : restJavaMethod.partParser;
 	}
 
 	/**
@@ -1089,7 +1091,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The part serializer associated with this request.
 	 */
 	public HttpPartSerializer getPartSerializer() {
-		return restJavaMethod.partSerializer;
+		return restJavaMethod == null ? OpenApiPartSerializer.DEFAULT : restJavaMethod.partSerializer;
 	}
 
 	/**
@@ -1406,7 +1408,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * 	Never <jk>null</jk>.
 	 */
 	public Map<String,Widget> getWidgets() {
-		return restJavaMethod.widgets;
+		return restJavaMethod == null ? Collections.<String,Widget>emptyMap() : restJavaMethod.widgets;
 	}
 
 	/**
@@ -1602,7 +1604,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-		return restJavaMethod.getResponseBeanMeta(o);
+		return restJavaMethod == null ? null : restJavaMethod.getResponseBeanMeta(o);
 	}
 
 	/**
@@ -1612,7 +1614,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseHeader @ResponseHeader}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {
-		return restJavaMethod.getResponseHeaderMeta(o);
+		return restJavaMethod == null ? null : restJavaMethod.getResponseHeaderMeta(o);
 	}
 
 	/**
@@ -1622,7 +1624,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link ResponseBody @ResponseBody}.
 	 */
 	public ResponsePartMeta getResponseBodyMeta(Object o) {
-		return restJavaMethod.getResponseBodyMeta(o);
+		return restJavaMethod == null ? null : restJavaMethod.getResponseBodyMeta(o);
 	}
 
 	//--------------------------------------------------------------------------------

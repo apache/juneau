@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.reshandlers.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -28,8 +28,7 @@ import org.apache.juneau.svl.*;
  * HTTP response headers.
  *
  * <p>
- * This class is handled special by the {@link WritableHandler} class.
- * <br>This allows these objects to be returned as responses by REST methods.
+ * <br>These objects can be returned as responses by REST methods.
  *
  * <p>
  * <l>ReaderResources</l> are meant to be thread-safe and reusable objects.
@@ -43,6 +42,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod.ReaderResource">Overview &gt; juneau-rest-server &gt; ReaderResource</a>
  * </ul>
  */
+@Response
 public class ReaderResource implements Writable {
 
 	private final MediaType mediaType;
@@ -109,10 +109,12 @@ public class ReaderResource implements Writable {
 	 * 	<br>An unmodifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
+	@ResponseHeader("*")
 	public Map<String,Object> getHeaders() {
 		return headers;
 	}
 
+	@ResponseBody
 	@Override /* Writeable */
 	public Writer writeTo(Writer w) throws IOException {
 		for (String s : contents) {
@@ -124,6 +126,7 @@ public class ReaderResource implements Writable {
 		return w;
 	}
 
+	@ResponseHeader("Content-Type")
 	@Override /* Writeable */
 	public MediaType getMediaType() {
 		return mediaType;

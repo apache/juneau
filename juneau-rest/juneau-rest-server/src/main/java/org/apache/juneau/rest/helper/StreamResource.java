@@ -20,14 +20,13 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.reshandlers.*;
+import org.apache.juneau.http.annotation.*;
 
 /**
  * Represents the contents of a byte stream file with convenience methods for adding HTTP response headers.
  *
  * <p>
- * This class is handled special by the {@link StreamableHandler} class.
- * <br>This allows these objects to be returned as responses by REST methods.
+ * <br>These objects can to be returned as responses by REST methods.
  *
  * <p>
  * <l>StreamResources</l> are meant to be thread-safe and reusable objects.
@@ -41,6 +40,7 @@ import org.apache.juneau.rest.reshandlers.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod.StreamResource">Overview &gt; juneau-rest-server &gt; @RestMethod &gt; StreamResource</a>
  * </ul>
  */
+@Response
 public class StreamResource implements Streamable {
 
 	private final MediaType mediaType;
@@ -107,10 +107,12 @@ public class StreamResource implements Streamable {
 	 * 	<br>An unmodifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
+	@ResponseHeader("*")
 	public Map<String,Object> getHeaders() {
 		return headers;
 	}
 
+	@ResponseBody
 	@Override /* Streamable */
 	public void streamTo(OutputStream os) throws IOException {
 		for (byte[] b : contents)
@@ -118,6 +120,7 @@ public class StreamResource implements Streamable {
 		os.flush();
 	}
 
+	@ResponseHeader("Content-Type")
 	@Override /* Streamable */
 	public MediaType getMediaType() {
 		return mediaType;
