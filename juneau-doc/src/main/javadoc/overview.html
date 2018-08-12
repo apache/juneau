@@ -2134,7 +2134,7 @@
 <p>
 	The implementation of the FreeMarker swap would look something like this:
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Our templated swap class.</jc>
 	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
 
@@ -2424,7 +2424,7 @@
 	serialization.
 	<br>Additional properties on subclasses will be ignored.
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Parent class</jc>
 	<ja>@Bean</ja>(interfaceClass=A.<jk>class</jk>)
 	<jk>public abstract class</jk> A {
@@ -2645,8 +2645,8 @@
 				is for bean properties of type map or collection.
 				<br>It's used to identify the class types of the contents of the bean property object when
 				the general parameter types are interfaces or abstract classes.
-			</p>
-			<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
 
 		<jc>// This is a HashMap&lt;String,Integer&gt;.</jc>
@@ -2684,8 +2684,8 @@
 			<p>
 				The {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty.format()} 
 				annotation specifies a String format for converting a bean property value to a formatted string.
-			</p>
-			<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jc>// Serialize a float as a string with 2 decimal places.</jc>
 	<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
 	<jk>public float</jk> <jf>price</jf>;
@@ -2792,8 +2792,8 @@
 		<jok>id1</jok>: {<jok>name</jok>: <jov>'John Smith'</jov>, <jok>sex</jok>: <jov>'M'</jov>},
 		<jok>id2</jok>: {<jok>name</jok>: <jov>'Jane Doe'</jov>, <jok>sex</jok>: <jov>'F'</jov>}
 	}
-				</p>
-				<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jk>public class</jk> Person {
 		
 		<ja>@NameProperty</ja> 
@@ -3447,11 +3447,11 @@
 	a1.<jf>f1</jf> = <js>"f1"</js>;
 	String r = s.serialize(a1);
 	<jsm>assertEquals</jsm>(<js>"{_type:'A1',f1:'f1',f0:'f0'}"</js>, r);
-			</p>
-			<p>
-				The following shows what happens when parsing back into the original object.
-			</p>
-			<p class='bcode w800'>
+</p>
+<p>
+	The following shows what happens when parsing back into the original object.
+</p>
+<p class='bpcode w800'>
 	JsonParser p = JsonParser.<jsf>DEFAULT</jsf>;
 	A a = p.parse(r, A.<jk>class</jk>);
 	<jsm>assertTrue</jsm>(a <jk>instanceof</jk> A1);
@@ -11077,8 +11077,8 @@ TODO(7.2.0)
 			state: 'NY',
 			zip: 12345
 		}</cv>
-			</p>
-			<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jc>// Example bean</jc>
 	<jk>public class</jk> Address {
 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
@@ -11841,7 +11841,7 @@ TODO(7.2.0)
 <p>
 	In both cases, the listener is triggered after the changes have been committed.
 </p>
-		<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jk>final</jk> Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
 	
 	<jc>// Add a listener for changes to MySection/key1</jc>
@@ -16920,8 +16920,8 @@ TODO(7.2.0)
 	<jc>// DELETE method</jc>
 	<ja>@RestMethod</ja>(name=<jsf>DELETE</jsf>, guards={AdminGuard.<jk>class</jk>})
 	<jk>public void</jk> doDelete(RestRequest req, RestResponse res) <jk>throws</jk> Exception {...}
-		</p>
-		<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
 
 		<ja>@Override</ja> <jc>/* RestGuard */</jc>
@@ -17531,8 +17531,8 @@ TODO(7.2.0)
 	<cc>#-------------------------------------</cc>
 	<cs>[HelloWorldResource]</cs>
 	<ck>message</ck> = <cv>Hello $RQ{person}!</cv>
-		</p>
-		<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jd>/** 
 	 * Sample REST resource that prints out a simple "Hello world!" message.
 	 */</jd>

@@ -152,8 +152,8 @@
 				is for bean properties of type map or collection.
 				<br>It's used to identify the class types of the contents of the bean property object when
 				the general parameter types are interfaces or abstract classes.
-			</p>
-			<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
 
 		<jc>// This is a HashMap&lt;String,Integer&gt;.</jc>
@@ -191,8 +191,8 @@
 			<p>
 				The {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty.format()} 
 				annotation specifies a String format for converting a bean property value to a formatted string.
-			</p>
-			<p class='bcode w800'>
+</p>
+<p class='bpcode w800'>
 	<jc>// Serialize a float as a string with 2 decimal places.</jc>
 	<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
 	<jk>public float</jk> <jf>price</jf>;
