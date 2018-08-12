@@ -178,7 +178,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.Methodology'>URL-Encoding Methodology</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.Serializers'>URL-Encoding Serializers</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.Parsers'>URL-Encoding Parsers</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>@UrlEncoding Annotation</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>@UrlEncoding Annotation</a></p>
 		</ol>
 		<li><p class='todo'><a class='doclink' href='#juneau-marshall.MsgPackDetails'>MessagePack Details</a></p>
 		<ol>
@@ -4578,12 +4578,22 @@
 <h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonAnnotation' id='juneau-marshall.JsonDetails.JsonAnnotation'>2.19.5 - @Json Annotation</a></h4>
 <div class='topic'><!-- START: 2.19.5 - juneau-marshall.JsonDetails.JsonAnnotation -->
 <p>
-	The {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
-	can be used to wrap beans inside a JSON object with a specified attribute name.
-</p>		
+	The {@link org.apache.juneau.json.annotation.Json @Json} annotation
+	is used to override the behavior of {@link org.apache.juneau.json.JsonSerializer} on individual bean classes or properties.
+</p>
 <p>
 	The annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
 </p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.json.annotation.Json}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.json.annotation.Json#wrapperAttr() wrapperAttr}
+	</ul>
+</ul>		
+<p>
+	The {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
+	can be used to wrap beans inside a JSON object with a specified attribute name.
+</p>		
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@Json</ja>(wrapperAttr=<js>"personBean"</js>)
@@ -7612,9 +7622,21 @@
 <p>
 	The {@link org.apache.juneau.html.annotation.Html @Html} annotation can be used to customize how POJOs are serialized to HTML on a per-class/field/method basis.
 </p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.html.annotation.Html}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.html.annotation.Html#anchorText() anchorText}
+		<li class='jf'>{@link org.apache.juneau.html.annotation.Html#format() format}
+		<li class='jf'>{@link org.apache.juneau.html.annotation.Html#link() link}
+		<li class='jf'>{@link org.apache.juneau.html.annotation.Html#noTableHeaders() noTableHeaders}
+		<li class='jf'>{@link org.apache.juneau.html.annotation.Html#noTables() noTables}
+		<li class='jf'>{@link org.apache.juneau.html.annotation.Html#render() render}
+	</ul>
+</ul>		
 <p>
 	The {@link org.apache.juneau.html.annotation.Html#link @Html(link)} annotation adds a hyperlink to a bean property when rendered as HTML.
 </p>
+
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jk>public class</jk> FileSpace {
@@ -8461,9 +8483,24 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation' id='juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>2.23.4 - @UrlEncoding Annotation</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation' id='juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation'>2.23.4 - @UrlEncoding Annotation</a></h4>
 <div class='topic'><!-- START: 2.23.4 - juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.urlencoding.annotation.UrlEncoding @UrlEncoding} annotation
+	is used to override the behavior of {@link org.apache.juneau.urlencoding.UrlEncodingSerializer} on individual bean classes or properties.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() expandedParams}
+	</ul>
+</ul>		
+<p>
+	The {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() expandedParams} setting is
+	used to force bean properties of type array or Collection to be expanded into multiple key/value pairings.
+	<br>It's identical in behavior to using the {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams}
+	and {@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams} properties, but applies to only individual bean properties.
+</p>
 </div><!-- END: 2.23.4 - juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation -->
 </div><!-- END: 2.23 - juneau-marshall.UrlEncodingDetails -->
 

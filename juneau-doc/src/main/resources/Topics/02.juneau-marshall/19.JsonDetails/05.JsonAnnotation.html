@@ -16,12 +16,22 @@
 @Json Annotation
 
 <p>
-	The {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
-	can be used to wrap beans inside a JSON object with a specified attribute name.
-</p>		
+	The {@link org.apache.juneau.json.annotation.Json @Json} annotation
+	is used to override the behavior of {@link org.apache.juneau.json.JsonSerializer} on individual bean classes or properties.
+</p>
 <p>
 	The annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
 </p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.json.annotation.Json}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.json.annotation.Json#wrapperAttr() wrapperAttr}
+	</ul>
+</ul>		
+<p>
+	The {@link org.apache.juneau.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)} annotation
+	can be used to wrap beans inside a JSON object with a specified attribute name.
+</p>		
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<ja>@Json</ja>(wrapperAttr=<js>"personBean"</js>)
