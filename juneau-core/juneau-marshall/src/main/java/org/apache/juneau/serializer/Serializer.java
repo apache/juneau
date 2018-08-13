@@ -18,7 +18,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 
 /**
  * Parent class for all Juneau serializers.
@@ -39,7 +38,7 @@ import org.apache.juneau.parser.*;
  * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
  */
-public abstract class Serializer extends BeanContext {
+public abstract class Serializer extends BeanTraverseContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -164,146 +163,6 @@ public abstract class Serializer extends BeanContext {
 	public static final String SERIALIZER_addRootType = PREFIX + "addRootType.b";
 
 	/**
-	 * Configuration property:  Automatically detect POJO recursions.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.detectRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#detectRecursions()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Specifies that recursions should be checked for during serialization.
-	 *
-	 * <p>
-	 * Recursions can occur when serializing models that aren't true trees but rather contain loops.
-	 * <br>In general, unchecked recursions cause stack-overflow-errors.
-	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
-	 *
-	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link #SERIALIZER_ignoreRecursions}.
-	 *
-	 * <p>
-	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * 	the following when <jsf>SERIALIZER_ignoreRecursions</jsf> is <jk>true</jk>...
-	 *
-	 * <p class='bcode w800'>
-	 * 	{A:{B:{C:<jk>null</jk>}}}
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that never adds _type to nodes.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.detectRecursions()
-	 * 		.ignoreRecursions()
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_detectRecursions</jsf>, <jk>true</jk>)
-	 * 		.set(<jsf>SERIALIZER_ignoreRecursions</jsf>, <jk>true</jk>)
-	 * 		.build();
-	 *
-	 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-	 * 	<jk>public class</jk> A {
-	 * 		<jk>public</jk> Object <jf>f</jf>;
-	 * 	}
-	 * 	A a = <jk>new</jk> A();
-	 * 	a.<jf>f</jf> = a;
-	 *
-	 * 	<jc>// Produces "{f:null}"</jc>
-	 * 	String json = s.serialize(a);
-	 * </p>
-	 */
-	public static final String SERIALIZER_detectRecursions = PREFIX + "detectRecursions.b";
-
-	/**
-	 * Configuration property:  Ignore recursion errors.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.ignoreRecursions.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions(boolean)}
-	 * 			<li class='jm'>{@link SerializerBuilder#ignoreRecursions()}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Used in conjunction with {@link #SERIALIZER_detectRecursions}.
-	 * <br>Setting is ignored if <jsf>SERIALIZER_detectRecursions</jsf> is <jk>false</jk>.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
-	 * <br>Otherwise, a {@link SerializeException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
-	 */
-	public static final String SERIALIZER_ignoreRecursions = PREFIX + "ignoreRecursions.b";
-
-	/**
-	 * Configuration property:  Initial depth.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.initialDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>0</code>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#initialDepth(int)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * The initial indentation level at the root.
-	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.ws()
-	 * 		.initialDepth(2)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_useWhitespace</jsf>, <jk>true</jk>)
-	 * 		.set(<jsf>SERIALIZER_initialDepth</jsf>, 2)
-	 * 		.build();
-	 *
-	 * 	<jc>// Produces "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
-	 * 	String json = s.serialize(<jk>new</jk> MyBean());
-	 * </p>
-	 */
-	public static final String SERIALIZER_initialDepth = PREFIX + "initialDepth.i";
-
-	/**
 	 * Configuration property:  Serializer listener.
 	 *
 	 * <h5 class='section'>Property:</h5>
@@ -365,43 +224,6 @@ public abstract class Serializer extends BeanContext {
 	 * </p>
 	 */
 	public static final String SERIALIZER_listener = PREFIX + "listener.c";
-
-	/**
-	 * Configuration property:  Max serialization depth.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Serializer.maxDepth.i"</js>
-	 * 	<li><b>Data type:</b>  <code>Integer</code>
-	 * 	<li><b>Default:</b>  <code>100</code>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link SerializerBuilder#maxDepth(int)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Abort serialization if specified depth is reached in the POJO tree.
-	 * <br>If this depth is exceeded, an exception is thrown.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Create a serializer that throws an exception if the depth is greater than 20.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.maxDepth(20)
-	 * 		.build();
-	 *
-	 * 	<jc>// Same, but use property.</jc>
-	 * 	WriterSerializer s = JsonSerializer
-	 * 		.<jsm>create</jsm>()
-	 * 		.set(<jsf>SERIALIZER_maxDepth</jsf>, 20)
-	 * 		.build();
-	 * </p>
-	 */
-	public static final String SERIALIZER_maxDepth = PREFIX + "maxDepth.i";
 
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.
@@ -880,10 +702,7 @@ public abstract class Serializer extends BeanContext {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final int initialDepth, maxDepth;
 	private final boolean
-		detectRecursions,
-		ignoreRecursions,
 		addBeanTypes,
 		trimNullProperties,
 		trimEmptyCollections,
@@ -932,10 +751,6 @@ public abstract class Serializer extends BeanContext {
 	protected Serializer(PropertyStore ps, String produces, String accept) {
 		super(ps);
 
-		maxDepth = getIntegerProperty(SERIALIZER_maxDepth, 100);
-		initialDepth = getIntegerProperty(SERIALIZER_initialDepth, 0);
-		detectRecursions = getBooleanProperty(SERIALIZER_detectRecursions, false);
-		ignoreRecursions = getBooleanProperty(SERIALIZER_ignoreRecursions, false);
 		addBeanTypes = getBooleanProperty(SERIALIZER_addBeanTypes, false);
 		trimNullProperties = getBooleanProperty(SERIALIZER_trimNullProperties, true);
 		trimEmptyCollections = getBooleanProperty(SERIALIZER_trimEmptyCollections, false);
@@ -1124,51 +939,6 @@ public abstract class Serializer extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Initial depth.
-	 *
-	 * @see #SERIALIZER_initialDepth
-	 * @return
-	 * 	The initial indentation level at the root.
-	 */
-	protected final int getInitialDepth() {
-		return initialDepth;
-	}
-
-	/**
-	 * Configuration property:  Max serialization depth.
-	 *
-	 * @see #SERIALIZER_maxDepth
-	 * @return
-	 * 	The depth at which serialization is aborted if depth is reached in the POJO tree.
-	 *	<br>If this depth is exceeded, an exception is thrown.
-	 */
-	protected final int getMaxDepth() {
-		return maxDepth;
-	}
-
-	/**
-	 * Configuration property:  Automatically detect POJO recursions.
-	 * @see #SERIALIZER_detectRecursions
-	 * @return
-	 * 	<jk>true</jk> if recursions should be checked for during serialization.
-	 */
-	protected final boolean isDetectRecursions() {
-		return detectRecursions;
-	}
-
-	/**
-	 * Configuration property:  Ignore recursion errors.
-	 *
-	 * @see #SERIALIZER_ignoreRecursions
-	 * @return
-	 * 	<jk>true</jk> if when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
-	 * 	<br>Otherwise, a {@link SerializeException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
-	 */
-	protected final boolean isIgnoreRecursions() {
-		return ignoreRecursions;
-	}
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #SERIALIZER_addBeanTypes
@@ -1316,10 +1086,6 @@ public abstract class Serializer extends BeanContext {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("Serializer", new ObjectMap()
-				.append("maxDepth", maxDepth)
-				.append("initialDepth", initialDepth)
-				.append("detectRecursions", detectRecursions)
-				.append("ignoreRecursions", ignoreRecursions)
 				.append("addBeanTypes", addBeanTypes)
 				.append("trimNullProperties", trimNullProperties)
 				.append("trimEmptyCollections", trimEmptyCollections)

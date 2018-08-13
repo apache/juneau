@@ -63,7 +63,7 @@ import org.apache.juneau.http.*;
  * 	String json = s.serialize(addressBook);
  * </p>
  */
-public final class SerializerGroup extends BeanContext {
+public final class SerializerGroup extends BeanTraverseContext {
 
 	/**
 	 * An unmodifiable empty serializer group.

@@ -10,50 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.htmlschema;
+package org.apache.juneau;
 
-import java.lang.reflect.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.serializer.*;
+import java.text.*;
 
 /**
- * Context object that lives for the duration of a single serialization of {@link HtmlSchemaDocSerializer} and its subclasses.
- *
- * <p>
- * This class is NOT thread safe.  It is meant to be discarded after one-time use.
+ * Exception that indicates that a recursion was detected while traversing a POJO model.
  */
-public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
+public class BeanRecursionException extends FormattedException {
 
-	private final JsonSchemaSerializerSession js;
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Create a new session using properties specified in the context.
+	 * Constructor.
 	 *
-	 * @param jsctx
-	 * 	The JSON-Schema serializer used to convert a POJO into JSON-Schema metadata.
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime arguments.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected HtmlSchemaSerializerSession(JsonSchemaSerializer jsctx, HtmlSchemaSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
-		this.js = jsctx.createSession(args);
-	}
-
-	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		ObjectMap schema = js.getSchema(toClassMeta(o));
-		super.doSerialize(out, schema);
-	}
-
-	private ClassMeta<?> toClassMeta(Object o) {
-		if (o instanceof Type)
-			return getClassMeta((Type)o);
-		return getClassMetaForObject(o);
+	public BeanRecursionException(String message, Object...args) {
+		super(message, args);
 	}
 }

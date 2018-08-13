@@ -53,8 +53,8 @@ import org.apache.juneau.transforms.*;
 		nowrap="false"
 	),
 	properties={
-		@Property(name=SERIALIZER_maxDepth, value="5"),
-		@Property(name=SERIALIZER_detectRecursions, value="true")
+		@Property(name=BEANTRAVERSE_maxDepth, value="5"),
+		@Property(name=BEANTRAVERSE_detectRecursions, value="true")
 	},
 	beanFilters={
 		// Interpret these as their parent classes, not subclasses

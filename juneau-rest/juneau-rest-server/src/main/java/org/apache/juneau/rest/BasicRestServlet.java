@@ -13,7 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
+import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 import static org.apache.juneau.rest.BasicRestInfoProvider.*;
 
 import org.apache.juneau.dto.swagger.*;
@@ -21,7 +21,6 @@ import org.apache.juneau.dto.swagger.ui.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.soap.*;

@@ -13,7 +13,6 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
-import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.serializer.*;
 
 /**

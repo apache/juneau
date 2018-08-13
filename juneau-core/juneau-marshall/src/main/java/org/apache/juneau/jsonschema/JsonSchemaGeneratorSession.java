@@ -32,10 +32,11 @@ import org.apache.juneau.transform.*;
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class JsonSchemaSerializerSession extends JsonSerializerSession {
+public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
-	private final JsonSchemaSerializer ctx;
+	private final JsonSchemaGenerator ctx;
 	private final Map<String,ObjectMap> defs;
+	private JsonSerializerSession jsSession;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -49,22 +50,23 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * 	It also include session-level properties that override the properties defined on the bean and
 	 * 	serializer contexts.
 	 */
-	protected JsonSchemaSerializerSession(JsonSchemaSerializer ctx, SerializerSessionArgs args) {
+	protected JsonSchemaGeneratorSession(JsonSchemaGenerator ctx, BeanSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
 		defs = isUseBeanDefs() ? new TreeMap<String,ObjectMap>() : null;
 	}
 
-	@Override /* SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		ObjectMap schema = getSchema(toClassMeta(o), "root", null, false, false, null);
-		serializeAnything(getJsonWriter(out), schema, getExpectedRootType(o), "root", null);
-	}
-
-	private ClassMeta<?> toClassMeta(Object o) {
-		if (o instanceof Type)
-			return getClassMeta((Type)o);
-		return getClassMetaForObject(o);
+	/**
+	 * Returns the JSON-schema for the specified object.
+	 *
+	 * @param o
+	 * 	The object.
+	 * 	<br>Can either be a POJO or a <code>Class</code>/<code>Type</code>.
+	 * @return The schema for the type.
+	 * @throws Exception
+	 */
+	public ObjectMap getSchema(Object o) throws Exception {
+		return getSchema(toClassMeta(o), "root", null, false, false, null);
 	}
 
 	/**
@@ -274,9 +276,15 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
 			Object example = sType.getExample(this);
 			if (example != null)
-				return JsonParser.DEFAULT.parse(serializeJson(example), Object.class);
+				return JsonParser.DEFAULT.parse(toJson(example), Object.class);
 		}
 		return null;
+	}
+
+	private String toJson(Object o) throws SerializeException {
+		if (jsSession == null)
+			jsSession = ctx.getJsonSerializer().createSession(null);
+		return jsSession.serializeToString(o);
 	}
 
 	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
@@ -323,7 +331,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * This map is modifiable and affects the map in the session.
 	 *
 	 * @return
-	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} was not enabled.
+	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} was not enabled.
 	 */
 	public Map<String,ObjectMap> getBeanDefs() {
 		return defs;
@@ -336,7 +344,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	 * @param def The definition schema.
 	 * @return This object (for method chaining).
 	 */
-	public JsonSchemaSerializerSession addBeanDef(String id, ObjectMap def) {
+	public JsonSchemaGeneratorSession addBeanDef(String id, ObjectMap def) {
 		if (defs != null)
 			defs.put(id, def);
 		return this;
@@ -349,7 +357,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Use bean definitions.
 	 *
-	 * @see JsonSchemaSerializer#JSONSCHEMA_useBeanDefs
+	 * @see JsonSchemaGenerator#JSONSCHEMA_useBeanDefs
 	 * @return
 	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
 	 */
@@ -360,7 +368,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Allow nested examples.
 	 *
-	 * @see JsonSchemaSerializer#JSONSCHEMA_allowNestedExamples
+	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples
 	 * @return
 	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
 	 */
@@ -371,7 +379,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Allow nested descriptions.
 	 *
-	 * @see JsonSchemaSerializer#JSONSCHEMA_allowNestedDescriptions
+	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions
 	 * @return
 	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
@@ -382,7 +390,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Bean schema definition mapper.
 	 *
-	 * @see JsonSchemaSerializer#JSONSCHEMA_beanDefMapper
+	 * @see JsonSchemaGenerator#JSONSCHEMA_beanDefMapper
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
@@ -393,7 +401,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Add examples.
 	 *
-	 * @see JsonSchemaSerializer#JSONSCHEMA_addExamplesTo
+	 * @see JsonSchemaGenerator#JSONSCHEMA_addExamplesTo
 	 * @return
 	 * 	Set of categories of types that examples should be automatically added to generated schemas.
 	 */
@@ -404,7 +412,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Add descriptions to types.
 	 *
-	 * @see JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo
+	 * @see JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo
 	 * @return
 	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
@@ -415,11 +423,21 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	/**
 	 * Configuration property:  Default schemas.
 	 *
-	 * @see JsonSchemaSerializer#JSONSCHEMA_defaultSchemas
+	 * @see JsonSchemaGenerator#JSONSCHEMA_defaultSchemas
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
 	protected final Map<String,ObjectMap> getDefaultSchemas() {
 		return ctx.getDefaultSchemas();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private ClassMeta<?> toClassMeta(Object o) {
+		if (o instanceof Type)
+			return getClassMeta((Type)o);
+		return getClassMetaForObject(o);
 	}
 }

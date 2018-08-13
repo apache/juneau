@@ -20,8 +20,8 @@ import org.apache.juneau.internal.*;
  * Represents possible values for the following properties:
  *
  * <ul class='doctree'>
- * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo}
- * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo}
+ * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
+ * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
  * </ul>
  */
 public enum TypeCategory {

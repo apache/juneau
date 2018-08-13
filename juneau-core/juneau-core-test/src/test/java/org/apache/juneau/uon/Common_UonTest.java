@@ -266,7 +266,7 @@ public class Common_UonTest {
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("It's recommended you use the Serializer.SERIALIZER_detectRecursions setting to help locate the loop."));
+			assertContains(msg, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		}
 
 		// Recursion detection, no ignore

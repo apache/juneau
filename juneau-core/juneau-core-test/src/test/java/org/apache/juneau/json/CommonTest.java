@@ -274,7 +274,7 @@ public class CommonTest {
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("It's recommended you use the Serializer.SERIALIZER_detectRecursions setting to help locate the loop."));
+			assertContains(msg, "It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		}
 
 		// Recursion detection, no ignore
@@ -284,10 +284,12 @@ public class CommonTest {
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("[0]root:org.apache.juneau.json.CommonTest$R1"));
-			assertTrue(msg.contains("->[1]r2:org.apache.juneau.json.CommonTest$R2"));
-			assertTrue(msg.contains("->[2]r3:org.apache.juneau.json.CommonTest$R3"));
-			assertTrue(msg.contains("->[3]r1:org.apache.juneau.json.CommonTest$R1"));
+			assertContains(msg,
+				"[0]root:org.apache.juneau.json.CommonTest$R1",
+				"->[1]r2:org.apache.juneau.json.CommonTest$R2",
+				"->[2]r3:org.apache.juneau.json.CommonTest$R3",
+				"->[3]r1:org.apache.juneau.json.CommonTest$R1"
+			);
 		}
 
 		s.ignoreRecursions();

@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 
 /**
@@ -963,8 +964,8 @@ public @interface Header {
 	 * 	</ul>
 	 * 	<li class='jc'>{@link JsonSchemaSerializer}
 	 * 	<ul>
-	 * 		<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
-	 * 		<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
+	 * 		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
+	 * 		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
 	 * 	</ul>
 	 * </ul>
 	 *

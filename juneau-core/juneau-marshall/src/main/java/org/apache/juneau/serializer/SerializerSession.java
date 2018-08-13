@@ -46,25 +46,16 @@ import org.apache.juneau.transform.*;
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public abstract class SerializerSession extends BeanSession {
+public abstract class SerializerSession extends BeanTraverseSession {
 
 	private final Serializer ctx;
 	private final UriResolver uriResolver;
 
-	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
-	private final LinkedList<StackElement> stack = new LinkedList<>();              // Contains the current objects in the current branch of the model.
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
 
 	// Writable properties
-	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
-	private BeanPropertyMeta currentProperty;
-	private ClassMeta<?> currentClass;
 	private final boolean useWhitespace;
 	private final SerializerListener listener;
-
-	/** The current indentation depth into the model. */
-	public int indent;
-
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -87,13 +78,6 @@ public abstract class SerializerSession extends BeanSession {
 		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
 		this.listener = newInstance(SerializerListener.class, ctx.getListener());
 		this.useWhitespace = args.useWhitespace != null ? args.useWhitespace : ctx.isUseWhitespace();
-
-		this.indent = getInitialDepth();
-		if (isDetectRecursions() || isDebug()) {
-			set = new IdentityHashMap<>();
-		} else {
-			set = Collections.emptyMap();
-		}
 	}
 
 	/**
@@ -210,30 +194,12 @@ public abstract class SerializerSession extends BeanSession {
 			throw e;
 		} catch (StackOverflowError e) {
 			throw new SerializeException(this,
-				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the Serializer.SERIALIZER_detectRecursions setting to help locate the loop.").initCause(e);
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.").initCause(e);
 		} catch (Exception e) {
 			throw new SerializeException(this, e);
 		} finally {
 			checkForWarnings();
 		}
-	}
-
-	/**
-	 * Sets the current bean property being serialized for proper error messages.
-	 *
-	 * @param currentProperty The current property being serialized.
-	 */
-	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
-		this.currentProperty = currentProperty;
-	}
-
-	/**
-	 * Sets the current class being serialized for proper error messages.
-	 *
-	 * @param currentClass The current class being serialized.
-	 */
-	protected final void setCurrentClass(ClassMeta<?> currentClass) {
-		this.currentClass = currentClass;
 	}
 
 	/**
@@ -259,77 +225,6 @@ public abstract class SerializerSession extends BeanSession {
 	}
 
 	/**
-	 * Push the specified object onto the stack.
-	 *
-	 * @param attrName The attribute name.
-	 * @param o The current object being serialized.
-	 * @param eType The expected class type.
-	 * @return
-	 * 	The {@link ClassMeta} of the object so that <code>instanceof</code> operations only need to be performed
-	 * 	once (since they can be expensive).
-	 * @throws SerializeException If recursion occurred.
-	 */
-	protected final ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
-		indent++;
-		isBottom = true;
-		if (o == null)
-			return null;
-		Class<?> c = o.getClass();
-		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : getClassMeta(c);
-		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
-			return cm;
-		if (isDetectRecursions() || isDebug()) {
-			if (stack.size() > getMaxDepth())
-				return null;
-			if (willRecurse(attrName, o, cm))
-				return null;
-			isBottom = false;
-			stack.add(new StackElement(stack.size(), attrName, o, cm));
-			if (isDebug())
-				getLogger().info(getStack(false));
-			set.put(o, o);
-		}
-		return cm;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if {@link Serializer#SERIALIZER_detectRecursions} is enabled, and the specified
-	 * object is already higher up in the serialization chain.
-	 *
-	 * @param attrName The bean property attribute name, or some other identifier.
-	 * @param o The object to check for recursion.
-	 * @param cm The metadata on the object class.
-	 * @return <jk>true</jk> if recursion detected.
-	 * @throws SerializeException If recursion occurred.
-	 */
-	protected final boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws SerializeException {
-		if (! (isDetectRecursions() || isDebug()))
-			return false;
-		if (! set.containsKey(o))
-			return false;
-		if (isIgnoreRecursions() && ! isDebug())
-			return true;
-
-		stack.add(new StackElement(stack.size(), attrName, o, cm));
-		throw new SerializeException("Recursion occurred, stack={0}", getStack(true));
-	}
-
-	/**
-	 * Pop an object off the stack.
-	 */
-	protected final void pop() {
-		indent--;
-		if ((isDetectRecursions() || isDebug()) && ! isBottom)  {
-			Object o = stack.removeLast().o;
-			Object o2 = set.remove(o);
-			if (o2 == null)
-				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.",
-					o.getClass().getName(), stack);
-		}
-		isBottom = false;
-	}
-
-	/**
 	 * Specialized warning when an exception is thrown while executing a bean getter.
 	 *
 	 * @param p The bean map entry representing the bean property.
@@ -350,10 +245,11 @@ public abstract class SerializerSession extends BeanSession {
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected final void onError(Throwable t, String msg, Object... args) {
+	@Override
+	protected void onError(Throwable t, String msg, Object... args) {
 		if (listener != null)
 			listener.onError(this, t, format(msg, args));
-		super.addWarning(msg, args);
+		super.onError(t, msg, args);
 	}
 
 	/**
@@ -433,8 +329,12 @@ public abstract class SerializerSession extends BeanSession {
 			}
 		}
 
-		if (isTrimNullProperties() && willRecurse(attrName, value, cm))
-			return true;
+		try {
+			if (isTrimNullProperties() && willRecurse(attrName, value, cm))
+				return true;
+		} catch (BeanRecursionException e) {
+			throw new SerializeException(e);
+		}
 
 		return false;
 	}
@@ -585,62 +485,6 @@ public abstract class SerializerSession extends BeanSession {
 		return s;
 	}
 
-	private static final class StackElement {
-		final int depth;
-		final String name;
-		final Object o;
-		final ClassMeta<?> aType;
-
-		StackElement(int depth, String name, Object o, ClassMeta<?> aType) {
-			this.depth = depth;
-			this.name = name;
-			this.o = o;
-			this.aType = aType;
-		}
-
-		String toString(boolean simple) {
-			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']');
-			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
-			sb.append(aType.toString(simple));
-			if (aType != aType.getSerializedClassMeta(null))
-				sb.append('/').append(aType.getSerializedClassMeta(null).toString(simple));
-			return sb.toString();
-		}
-	}
-
-	private String getStack(boolean full) {
-		StringBuilder sb = new StringBuilder();
-		for (StackElement e : stack) {
-			if (full) {
-				sb.append("\n\t");
-				for (int i = 1; i < e.depth; i++)
-					sb.append("  ");
-				if (e.depth > 0)
-					sb.append("->");
-				sb.append(e.toString(false));
-			} else {
-				sb.append(" > ").append(e.toString(true));
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Returns information used to determine at what location in the parse a failure occurred.
-	 *
-	 * @return A map, typically containing something like <code>{line:123,column:456,currentProperty:"foobar"}</code>
-	 */
-	protected final ObjectMap getLastLocation() {
-		ObjectMap m = new ObjectMap();
-		if (currentClass != null)
-			m.put("currentClass", currentClass);
-		if (currentProperty != null)
-			m.put("currentProperty", currentProperty);
-		if (stack != null && ! stack.isEmpty())
-			m.put("stack", stack);
-		return m;
-	}
-
 	/**
 	 * Create a "_type" property that contains the dictionary name of the bean.
 	 *
@@ -771,52 +615,6 @@ public abstract class SerializerSession extends BeanSession {
 	 */
 	public final boolean isUseWhitespace() {
 		return useWhitespace;
-	}
-
-	/**
-	 * Configuration property:  Initial depth.
-	 *
-	 * @see Serializer#SERIALIZER_initialDepth
-	 * @return
-	 * 	The initial indentation level at the root.
-	 */
-	protected final int getInitialDepth() {
-		return ctx.getInitialDepth();
-	}
-
-	/**
-	 * Configuration property:  Max serialization depth.
-	 *
-	 * @see Serializer#SERIALIZER_maxDepth
-	 * @return
-	 * 	The depth at which serialization is aborted if depth is reached in the POJO tree.
-	 *	<br>If this depth is exceeded, an exception is thrown.
-	 */
-	protected final int getMaxDepth() {
-		return ctx.getMaxDepth();
-	}
-
-	/**
-	 * Configuration property:  Automatically detect POJO recursions.
-	 *
-	 * @see Serializer#SERIALIZER_detectRecursions
-	 * @return
-	 * 	<jk>true</jk> if recursions should be checked for during serialization.
-	 */
-	protected final boolean isDetectRecursions() {
-		return ctx.isDetectRecursions();
-	}
-
-	/**
-	 * Configuration property:  Ignore recursion errors.
-	 *
-	 * @see Serializer#SERIALIZER_ignoreRecursions
-	 * @return
-	 * 	<jk>true</jk> if when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
-	 * 	<br>Otherwise, a {@link SerializeException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
-	 */
-	protected final boolean isIgnoreRecursions() {
-		return ctx.isIgnoreRecursions();
 	}
 
 	/**

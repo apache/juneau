@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.htmlschema.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 

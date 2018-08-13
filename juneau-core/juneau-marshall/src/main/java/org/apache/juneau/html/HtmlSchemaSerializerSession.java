@@ -10,42 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.htmlschema;
+package org.apache.juneau.html;
 
-import org.apache.juneau.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Context object that lives for the duration of a single serialization of {@link HtmlSchemaDocSerializer} and its subclasses.
+ * Context object that lives for the duration of a single serialization of {@link HtmlSchemaSerializer} and its subclasses.
  *
  * <p>
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
-public class HtmlSchemaDocSerializerSession extends HtmlDocSerializerSession {
+public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 
-	private final JsonSchemaSerializerSession js;
+	private final JsonSchemaGeneratorSession genSession;
 
 	/**
 	 * Create a new session using properties specified in the context.
 	 *
-	 * @param jsctx
-	 * 	The JSON-Schema serializer used to convert a POJO into JSON-Schema metadata.
 	 * @param ctx
 	 * 	The context creating this session object.
 	 * 	The context contains all the configuration settings for this object.
 	 * @param args
 	 * 	Runtime arguments.
 	 */
-	protected HtmlSchemaDocSerializerSession(JsonSchemaSerializer jsctx, HtmlSchemaDocSerializer ctx, SerializerSessionArgs args) {
+	protected HtmlSchemaSerializerSession(HtmlSchemaSerializer ctx, SerializerSessionArgs args) {
 		super(ctx, args);
-		this.js = jsctx.createSession(args);
+		this.genSession = ctx.getGenerator().createSession(args);
 	}
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
-		ObjectMap schema = js.getSchema(getClassMetaForObject(o));
-		super.doSerialize(out, schema);
+		super.doSerialize(out, genSession.getSchema(o));
 	}
 }

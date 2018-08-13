@@ -10,47 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jsonschema.annotation;
+package org.apache.juneau.json;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
-
-import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.serializer.*;
 
 /**
- * Annotation for specifying various JSON-SCHEMA information for {@link JsonSchemaSerializer}.
+ * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.
  *
  * <p>
- * Can be applied to Java types and bean methods/fields.
+ * This class is NOT thread safe.
+ * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-@Documented
-@Target({TYPE,METHOD,FIELD})
-@Retention(RUNTIME)
-@Inherited
-public @interface JsonSchema {
+public class JsonSchemaSerializerSession extends JsonSerializerSession {
+
+	private final JsonSchemaGeneratorSession genSession;
 
 	/**
-	 * Defines the type for the class or property.
-	 */
-	String type() default "";
-
-	/**
-	 * Defines the format for the class or property.
-	 */
-	String format() default "";
-
-	/**
-	 * Defines the description for the class or property.
-	 */
-	String description() default "";
-
-	/**
-	 * Defines the example for the class or property.
+	 * Create a new session using properties specified in the context.
 	 *
-	 * <p>
-	 * The format of the value is Lax-JSON.
+	 * @param ctx
+	 * 	The context creating this session object.
+	 * 	The context contains all the configuration settings for this object.
+	 * @param args
+	 * 	Runtime arguments.
+	 * 	These specify session-level information such as locale and URI context.
+	 * 	It also include session-level properties that override the properties defined on the bean and
+	 * 	serializer contexts.
 	 */
-	String example() default "";
+	protected JsonSchemaSerializerSession(JsonSchemaSerializer ctx, SerializerSessionArgs args) {
+		super(ctx, args);
+		genSession = ctx.getGenerator().createSession(args);
+	}
+
+	@Override /* SerializerSession */
+	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+		super.doSerialize(out, genSession.getSchema(o));
+	}
 }

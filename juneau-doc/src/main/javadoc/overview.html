@@ -97,7 +97,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-marshall.ConfigurableProperties'>Configurable Properties</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.ConfigurableProperties.Common'>Common Serializer Properties</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a></p>
+			<li><p class='updated'><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonSerializer'>Common Serializer Properties</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.ConfigurableProperties.CommonParser'>Common Parser Properties</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.ObjectMap'>ObjectMap and ObjectList</a></p>
@@ -858,7 +858,7 @@
 		<ul>
 			<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
 			<ul>
-			<li class='jc'>{@link org.apache.juneau.jsonschema.JsonSchemaSerializer}
+			<li class='jc'>{@link org.apache.juneau.json.JsonSchemaSerializer}
 			<li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}
 			</ul>
 			<li class='jc'>{@link org.apache.juneau.plaintext.PlainTextSerializer}
@@ -883,11 +883,12 @@
 			<ul>
 				<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
 				<ul>
+					<li class='jc'>{@link org.apache.juneau.html.HtmlSchemaSerializer}
 					<li class='jc'>{@link org.apache.juneau.html.HtmlStrippedDocSerializer}
 					<ul>
 						<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
 						<ul>
-							<li class='jc'>{@link org.apache.juneau.htmlschema.HtmlSchemaDocSerializer}
+							<li class='jc'>{@link org.apache.juneau.html.HtmlSchemaDocSerializer}
 						</ul>
 					</ul>
 				</ul>
@@ -1306,39 +1307,42 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.CommonSerializer' id='juneau-marshall.ConfigurableProperties.CommonSerializer'>2.6.2 - Common Serializer Properties</a></h4>
+<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-marshall.ConfigurableProperties.CommonSerializer' id='juneau-marshall.ConfigurableProperties.CommonSerializer'>2.6.2 - Common Serializer Properties</a></h4>
 <div class='topic'><!-- START: 2.6.2 - juneau-marshall.ConfigurableProperties.CommonSerializer -->
 <p>
 	In addition to the common properties above, the following properties are common to all serializers:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
+	<li class='jc'>{@link org.apache.juneau.BeanTraverseContext}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions SERIALIZER_ignoreRecursions}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_initialDepth SERIALIZER_initialDepth}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth SERIALIZER_maxDepth}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace}
-		<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions BEANTRAVERSE_ignoreRecursions}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth BEANTRAVERSE_initialDepth}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth BEANTRAVERSE_maxDepth}
+		<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
 		<ul>
-			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
-			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
-		</ul>
-		<li class='jc'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace}
+			<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
+				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
+			</ul>
+			<li class='jc'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}
+			</ul>
 		</ul>
 	</ul>
 </ul>
@@ -3520,12 +3524,12 @@
 	The Juneau Serializer API is designed to be used against POJO tree structures. 
 	<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
 	<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
-	be thrown (if {@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth} is not reached 
+	be thrown (if {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth} is not reached 
 	first).
 </p>
 <p>
 	If you still want to use the Juneau serializers on such models, Juneau provides the 
-	{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions} setting.
+	{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions} setting.
 	<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 	serialization when a duplicate is encountered.
 </p>
@@ -4631,7 +4635,7 @@
 <h4 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.JsonDetails.JsonSchema' id='juneau-marshall.JsonDetails.JsonSchema'>2.19.6 - JSON-Schema Support</a></h4>
 <div class='topic'><!-- START: 2.19.6 - juneau-marshall.JsonDetails.JsonSchema -->
 <p>
-	Juneau provides the {@link org.apache.juneau.jsonschema.JsonSchemaSerializer} class for generating JSON-Schema 
+	Juneau provides the {@link org.apache.juneau.json.JsonSchemaSerializer} class for generating JSON-Schema 
 	documents that describe the output generated by the {@link org.apache.juneau.json.JsonSerializer} class.
 	<br>This class shares the same properties as <code>JsonSerializer</code>.
 	<br>For convenience the {@link org.apache.juneau.json.JsonSerializer#getSchemaSerializer()} method has been 
@@ -7904,8 +7908,8 @@
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.HtmlDetails.HtmlSchema' id='juneau-marshall.HtmlDetails.HtmlSchema'>2.21.9 - HTML-Schema Support</a></h4>
 <div class='topic'><!-- START: 2.21.9 - juneau-marshall.HtmlDetails.HtmlSchema -->
 <p>
-	The {@link org.apache.juneau.htmlschema.HtmlSchemaSerializer} class is the HTML-equivalent to the
-	{@link org.apache.juneau.jsonschema.JsonSchemaSerializer} class.
+	The {@link org.apache.juneau.html.HtmlSchemaSerializer} class is the HTML-equivalent to the
+	{@link org.apache.juneau.json.JsonSchemaSerializer} class.
 	It's used to generate HTML versions of JSON-Schema documents that describe the output generated by the 
 	{@link org.apache.juneau.json.JsonSerializer} class.
 </p>
@@ -9556,7 +9560,7 @@ TODO(7.2.0)
 		Reuse instances of serializers and parsers whenever possible.
 		<br>They are designed to be thread safe and maintain internal caches of bean metadata to increase performance.
 	<li>
-		The {@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions} 
+		The {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions} 
 		option on the {@link org.apache.juneau.serializer.Serializer} class can cause a performance penalty of 
 		around 20%.  
 		<br>Therefore, it's recommended that this option be used only when necessary. 
@@ -22846,8 +22850,8 @@ TODO(7.2.0)
 			}
 		),
 		properties={
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_maxDepth</jsf>, value=<js>"5"</js>),
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_detectRecursions</jsf>, value="<js>true"</js>)
+			<ja>@Property</ja>(name=<jsf>BEANTRAVERSE_maxDepth</jsf>, value=<js>"5"</js>),
+			<ja>@Property</ja>(name=<jsf>BEANTRAVERSE_detectRecursions</jsf>, value="<js>true"</js>)
 		},
 		beanFilters={
 			<jc>// Interpret these as their parent classes, not subclasses</jc>
@@ -27232,7 +27236,7 @@ TODO(7.2.0)
 	<li>Improved error handling.  
 	<li>New <code><del>ParserContext.PARSER_debug</del></code> and <code><del>SerializerContext.SERIALIZER_debug</del></code>.
 		settings for logging additional information for debugging problems.
-	<li>New {@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions} setting for explicitely ignoring recursions when 
+	<li>New <code><del>SERIALIZER_ignoreRecursions</del></code> setting for explicitly ignoring recursions when 
 		serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
 		and throws exceptions when they occur.
 	<li>Improved handling of <code>StackOverflowErrors</code>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
@@ -31012,13 +31016,6 @@ TODO(7.2.0)
 	<li>
 		If a bean has both a <code>getX()</code> and <code>isX()</code> method, the <code>getX()</code> method takes precedence.
 		<br>The previous behavior was arbitrary.
-	<li>
-		The schema serializers have been moved into their own packages:
-		<ul class='doctree'>
-			<li class='jp'>{@link org.apache.juneau.jsonschema}
-			<li class='jp'>{@link org.apache.juneau.htmlschema}
-			<li class='jp'>{@link org.apache.juneau.xmlschema}
-		</ul>
 	<li>
 		Significant improvements to JSON-Schema serialization support.
 		<ul>

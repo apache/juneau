@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
  */
-public class SerializerGroupBuilder extends BeanContextBuilder {
+public class SerializerGroupBuilder extends BeanTraverseBuilder {
 
 	private final List<Object> serializers;
 
@@ -208,113 +208,6 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * Configuration property:  Automatically detect POJO recursions.
-	 *
-	 * <p>
-	 * Specifies that recursions should be checked for during serialization.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder detectRecursions(boolean value) {
-		return set(SERIALIZER_detectRecursions, value);
-	}
-
-	/**
-	 * Configuration property:  Automatically detect POJO recursions.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>detectRecursions(<jk>true</jk>)</code>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder detectRecursions() {
-		return set(SERIALIZER_detectRecursions, true);
-	}
-
-	/**
-	 * Configuration property:  Ignore recursion errors.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, when we encounter the same object when serializing a tree, we set the value to <jk>null</jk>.
-	 * Otherwise, an exception is thrown.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder ignoreRecursions(boolean value) {
-		return set(SERIALIZER_ignoreRecursions, value);
-	}
-
-	/**
-	 * Configuration property:  Ignore recursion errors.
-	 *
-	 * <p>
-	 * Shortcut for calling <code>ignoreRecursions(<jk>true</jk>)</code>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
-	 * </ul>
-	 *
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder ignoreRecursions() {
-		return set(SERIALIZER_ignoreRecursions, true);
-	}
-
-	/**
-	 * Configuration property:  Initial depth.
-	 *
-	 * <p>
-	 * The initial indentation level at the root.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <code>0</code>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder initialDepth(int value) {
-		return set(SERIALIZER_initialDepth, value);
-	}
-
-	/**
 	 * Configuration property:  Serializer listener.
 	 *
 	 * <p>
@@ -331,28 +224,6 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 */
 	public SerializerGroupBuilder listener(Class<? extends SerializerListener> value) {
 		return set(SERIALIZER_listener, value);
-	}
-
-	/**
-	 * Configuration property:  Max serialization depth.
-	 *
-	 * <p>
-	 * Abort serialization if specified depth is reached in the POJO tree.
-	 * <br>If this depth is exceeded, an exception is thrown.
-	 * <br>This prevents stack overflows from occurring when trying to serialize models with recursive references.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <code>100</code>.
-	 * @return This object (for method chaining).
-	 */
-	public SerializerGroupBuilder maxDepth(int value) {
-		return set(SERIALIZER_maxDepth, value);
 	}
 
 	/**
@@ -744,6 +615,42 @@ public class SerializerGroupBuilder extends BeanContextBuilder {
 	 */
 	public SerializerGroupBuilder binaryOutputFormat(BinaryFormat value) {
 		return set(OSSERIALIZER_binaryFormat, value);
+	}
+
+	@Override /* BeanTraverseBuilder */
+	public SerializerGroupBuilder detectRecursions(boolean value) {
+		super.detectRecursions(value);
+		return this;
+	}
+
+	@Override /* BeanTraverseBuilder */
+	public SerializerGroupBuilder detectRecursions() {
+		super.detectRecursions();
+		return this;
+	}
+
+	@Override /* BeanTraverseBuilder */
+	public SerializerGroupBuilder ignoreRecursions(boolean value) {
+		super.ignoreRecursions(value);
+		return this;
+	}
+
+	@Override /* BeanTraverseBuilder */
+	public SerializerGroupBuilder ignoreRecursions() {
+		super.ignoreRecursions();
+		return this;
+	}
+
+	@Override /* BeanTraverseBuilder */
+	public SerializerGroupBuilder initialDepth(int value) {
+		super.initialDepth(value);
+		return this;
+	}
+
+	@Override /* BeanTraverseBuilder */
+	public SerializerGroupBuilder maxDepth(int value) {
+		super.maxDepth(value);
+		return this;
 	}
 
 	@Override /* BeanContextBuilder */

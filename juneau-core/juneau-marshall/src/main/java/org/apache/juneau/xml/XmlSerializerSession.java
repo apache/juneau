@@ -150,7 +150,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 */
 	protected final void findNsfMappings(Object o) throws SerializeException {
 		ClassMeta<?> aType = null;						// The actual type
-		aType = push(null, o, null);
+
+		try {
+			aType = push(null, o, null);
+		} catch (BeanRecursionException e) {
+			throw new SerializeException(e);
+		}
 
 		if (aType != null) {
 			Namespace ns = cXml(aType).getNamespace();

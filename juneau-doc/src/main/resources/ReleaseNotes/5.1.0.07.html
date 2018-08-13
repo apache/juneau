@@ -22,7 +22,7 @@
 	<li>Improved error handling.  
 	<li>New <code><del>ParserContext.PARSER_debug</del></code> and <code><del>SerializerContext.SERIALIZER_debug</del></code>.
 		settings for logging additional information for debugging problems.
-	<li>New {@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions} setting for explicitely ignoring recursions when 
+	<li>New <code><del>SERIALIZER_ignoreRecursions</del></code> setting for explicitly ignoring recursions when 
 		serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
 		and throws exceptions when they occur.
 	<li>Improved handling of <code>StackOverflowErrors</code>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message

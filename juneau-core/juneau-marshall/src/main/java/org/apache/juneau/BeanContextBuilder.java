@@ -555,7 +555,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 		When bean getters throws exceptions, the exception includes the object stack information
 	 * 		in order to determine how that method was invoked.
 	 * 	<li>
-	 * 		Enables {@link Serializer#SERIALIZER_detectRecursions}.
+	 * 		Enables {@link Serializer#BEANTRAVERSE_detectRecursions}.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

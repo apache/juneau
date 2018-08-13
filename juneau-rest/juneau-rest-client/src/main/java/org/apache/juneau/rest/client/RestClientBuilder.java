@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.parser.InputStreamParser.*;
 import static org.apache.juneau.parser.ReaderParser.*;
 import static org.apache.juneau.rest.client.RestClient.*;
+import static org.apache.juneau.BeanTraverseContext.*;
 import static org.apache.juneau.serializer.OutputStreamSerializer.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
 import static org.apache.juneau.uon.UonSerializer.*;
@@ -1381,7 +1382,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
 	 * </ul>
 	 *
 	 * @param value
@@ -1390,7 +1391,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder detectRecursions(boolean value) {
-		return set(SERIALIZER_detectRecursions, value);
+		return set(BEANTRAVERSE_detectRecursions, value);
 	}
 
 	/**
@@ -1401,13 +1402,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_detectRecursions}
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder detectRecursions() {
-		return set(SERIALIZER_detectRecursions, true);
+		return set(BEANTRAVERSE_detectRecursions, true);
 	}
 
 	/**
@@ -1425,7 +1426,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
 	 * </ul>
 	 *
 	 * @param value
@@ -1434,7 +1435,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder ignoreRecursions(boolean value) {
-		return set(SERIALIZER_ignoreRecursions, value);
+		return set(BEANTRAVERSE_ignoreRecursions, value);
 	}
 
 	/**
@@ -1445,13 +1446,13 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_ignoreRecursions}
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder ignoreRecursions() {
-		return set(SERIALIZER_ignoreRecursions, true);
+		return set(BEANTRAVERSE_ignoreRecursions, true);
 	}
 
 	/**
@@ -1462,7 +1463,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_initialDepth}
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_initialDepth}
 	 * </ul>
 	 *
 	 * @param value
@@ -1471,7 +1472,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder initialDepth(int value) {
-		return set(SERIALIZER_initialDepth, value);
+		return set(BEANTRAVERSE_initialDepth, value);
 	}
 
 	/**
@@ -1503,7 +1504,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link Serializer#SERIALIZER_maxDepth}
+	 * 	<li class='jf'>{@link BeanTraverseContext#BEANTRAVERSE_maxDepth}
 	 * </ul>
 	 *
 	 * @param value
@@ -1512,7 +1513,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder maxDepth(int value) {
-		return set(SERIALIZER_maxDepth, value);
+		return set(BEANTRAVERSE_maxDepth, value);
 	}
 
 	/**

@@ -62,7 +62,7 @@ final class SwaggerGenerator {
 	private final Locale locale;
 	private final RestContext context;
 	private final JsonParser jp = JsonParser.DEFAULT;
-	private final JsonSchemaSerializerSession js;
+	private final JsonSchemaGeneratorSession js;
 	private final Class<?> c;
 	private final Object resource;
 	private final MessageBundle mb;
@@ -79,7 +79,7 @@ final class SwaggerGenerator {
 		this.ignoreTypes = ignoreTypes;
 		this.locale = req.getLocale();
 		this.context = req.getContext();
-		this.js = context.getJsonSchemaSerializer().createSession();
+		this.js = context.getJsonSchemaGenerator().createSession();
 		this.c = context.getResource().getClass();
 		this.resource = context.getResource();
 		this.mb = context.getMessages();

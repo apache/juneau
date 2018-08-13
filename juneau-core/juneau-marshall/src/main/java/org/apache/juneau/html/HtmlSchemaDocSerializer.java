@@ -10,10 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.htmlschema;
+package org.apache.juneau.html;
 
 import org.apache.juneau.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -28,7 +27,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Description</h5>
  *
- * Essentially the same as {@link HtmlSerializer}, except serializes the POJO metamodel instead of the model itself.
+ * Essentially the same as {@link HtmlDocSerializer}, except serializes the POJO metamodel instead of the model itself.
  *
  * <p>
  * Produces output that describes the POJO metamodel similar to an XML schema document.
@@ -39,7 +38,7 @@ import org.apache.juneau.serializer.*;
  */
 public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
-	private final JsonSchemaSerializer jsctx;
+	private final JsonSchemaGenerator generator;
 
 	/**
 	 * Constructor.
@@ -81,17 +80,22 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String accept) {
 		super(
 			ps.builder()
-				.set(SERIALIZER_detectRecursions, true)
-				.set(SERIALIZER_ignoreRecursions, true)
+				.set(BEANTRAVERSE_detectRecursions, true)
+				.set(BEANTRAVERSE_ignoreRecursions, true)
 				.build(),
 			produces,
 			accept
 		);
-		this.jsctx = new JsonSchemaSerializer(ps);
+
+		generator = JsonSchemaGenerator.create().apply(getPropertyStore()).build();
 	}
 
 	@Override /* Serializer */
 	public HtmlSchemaDocSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlSchemaDocSerializerSession(jsctx, this, args);
+		return new HtmlSchemaDocSerializerSession(this, args);
+	}
+
+	JsonSchemaGenerator getGenerator() {
+		return generator;
 	}
 }

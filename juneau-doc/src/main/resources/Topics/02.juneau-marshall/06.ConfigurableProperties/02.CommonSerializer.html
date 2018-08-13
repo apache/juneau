@@ -13,39 +13,42 @@
  ***************************************************************************************************************************/
  -->
 
-Common Serializer Properties
+{updated} Common Serializer Properties
 
 <p>
 	In addition to the common properties above, the following properties are common to all serializers:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
+	<li class='jc'>{@link org.apache.juneau.BeanTraverseContext}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_detectRecursions SERIALIZER_detectRecursions}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_ignoreRecursions SERIALIZER_ignoreRecursions}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_initialDepth SERIALIZER_initialDepth}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_maxDepth SERIALIZER_maxDepth}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace}
-		<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_ignoreRecursions BEANTRAVERSE_ignoreRecursions}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_initialDepth BEANTRAVERSE_initialDepth}
+		<li class='jf'>{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth BEANTRAVERSE_maxDepth}
+		<li class='jc'>{@link org.apache.juneau.serializer.Serializer}
 		<ul>
-			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
-			<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
-		</ul>
-		<li class='jc'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_listener SERIALIZER_listener}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortCollections SERIALIZER_sortCollections}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_sortMaps SERIALIZER_sortMaps}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyCollections SERIALIZER_trimEmptyCollections}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimEmptyMaps SERIALIZER_trimEmptyMaps}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimNullProperties SERIALIZER_trimNullProperties}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_trimStrings SERIALIZER_trimStrings}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext SERIALIZER_uriContext}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity SERIALIZER_uriRelativity}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution SERIALIZER_uriResolution}
+			<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_useWhitespace SERIALIZER_useWhitespace}
+			<li class='jc'>{@link org.apache.juneau.serializer.WriterSerializer}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_maxIndent WSERIALIZER_maxIndent}
+				<li class='jf'>{@link org.apache.juneau.serializer.WriterSerializer#WSERIALIZER_quoteChar WSERIALIZER_quoteChar}
+			</ul>
+			<li class='jc'>{@link org.apache.juneau.serializer.OutputStreamSerializer}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat OSSERIALIZER_binaryFormat}
+			</ul>
 		</ul>
 	</ul>
 </ul>

@@ -15,7 +15,6 @@ package org.apache.juneau.json;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -295,7 +294,7 @@ public class JsonSerializer extends WriterSerializer {
 					.set(JSON_simpleMode, true)
 					.set(WSERIALIZER_quoteChar, '\'')
 					.set(SERIALIZER_useWhitespace, true)
-					.set(SERIALIZER_detectRecursions, true)
+					.set(BEANTRAVERSE_detectRecursions, true)
 					.build()
 			);
 		}

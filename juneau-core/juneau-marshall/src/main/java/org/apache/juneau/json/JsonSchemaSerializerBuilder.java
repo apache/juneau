@@ -10,16 +10,16 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jsonschema;
+package org.apache.juneau.json;
 
-import static org.apache.juneau.jsonschema.JsonSchemaSerializer.*;
+import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -63,7 +63,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addDescriptionsTo}
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo}
 	 * </ul>
 	 *
 	 * @param value
@@ -90,7 +90,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_addExamplesTo}
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}
 	 * </ul>
 	 *
 	 * @param value
@@ -110,7 +110,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_allowNestedDescriptions}
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -127,7 +127,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_allowNestedExamples}
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -144,11 +144,11 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 * <p>
-	 * This setting is ignored if {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} is not enabled.
+	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_beanDefMapper}
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
 	 * </ul>
 	 *
 	 * @param value
@@ -168,11 +168,11 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 * <p>
-	 * This setting is ignored if {@link JsonSchemaSerializer#JSONSCHEMA_useBeanDefs} is not enabled.
+	 * This setting is ignored if {@link JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} is not enabled.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_beanDefMapper}
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_beanDefMapper}
 	 * </ul>
 	 *
 	 * @param value
@@ -194,7 +194,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link JsonSchemaSerializer#JSONSCHEMA_defaultSchemas}
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_defaultSchemas}
 	 * </ul>
 	 *
 	 * @param c
@@ -218,11 +218,6 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
 	 * 	}
 	 * </p>
-	 *
-	 * <p>
-	 * The definitions can then be retrieved from the session using {@link JsonSchemaSerializerSession#getBeanDefs()}.
-	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaSerializerSession#addBeanDef(String, ObjectMap)}.
 	 *
 	 * @return This object (for method chaining).
 	 */

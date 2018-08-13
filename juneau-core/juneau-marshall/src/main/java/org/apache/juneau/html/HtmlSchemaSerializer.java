@@ -10,10 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.htmlschema;
+package org.apache.juneau.html;
 
 import org.apache.juneau.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -50,8 +49,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(PropertyStore.DEFAULT);
-
-	private final JsonSchemaSerializer jsctx;
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -107,6 +104,12 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 	}
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private final JsonSchemaGenerator generator;
+
 	/**
 	 * Constructor.
 	 *
@@ -114,7 +117,15 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	 * 	The property store to use for creating the context for this serializer.
 	 */
 	public HtmlSchemaSerializer(PropertyStore ps) {
-		this(ps, "text/html", "text/html+schema");
+		super(
+			ps.builder()
+				.set(BEANTRAVERSE_detectRecursions, true)
+				.set(BEANTRAVERSE_ignoreRecursions, true)
+				.build(),
+			"text/html", "text/html+schema"
+		);
+
+		generator = JsonSchemaGenerator.create().apply(getPropertyStore()).build();
 	}
 
 	@Override /* Context */
@@ -122,52 +133,17 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		return new HtmlSchemaSerializerBuilder(getPropertyStore());
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param ps
-	 * 	The property store containing all the settings for this object.
-	 * @param produces
-	 * 	The media type that this serializer produces.
-	 * @param accept
-	 * 	The accept media types that the serializer can handle.
-	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of
-	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
-	 * 	<p>
-	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
-	 * 	<p>
-	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
-	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-	 * 	</p>
-	 * 	<br>...or...
-	 * 	<p class='bcode w800'>
-	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
-	 * 	</p>
-	 * <p>
-	 * The accept value can also contain q-values.
-	 */
-	public HtmlSchemaSerializer(PropertyStore ps, String produces, String accept) {
-		super(
-			ps.builder()
-				.set(SERIALIZER_detectRecursions, true)
-				.set(SERIALIZER_ignoreRecursions, true)
-				.build(),
-			produces,
-			accept
-		);
-		this.jsctx = new JsonSchemaSerializer(ps);
-	}
-
 	@Override /* Serializer */
 	public HtmlSchemaSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlSchemaSerializerSession(jsctx, this, args);
+		return new HtmlSchemaSerializerSession(this, args);
 	}
 
 	@Override /* Context */
 	public HtmlSchemaSerializerSession createSession() {
 		return createSession(createDefaultSessionArgs());
+	}
+
+	JsonSchemaGenerator getGenerator() {
+		return generator;
 	}
 }

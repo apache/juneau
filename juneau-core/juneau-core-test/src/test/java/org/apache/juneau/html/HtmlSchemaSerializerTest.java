@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.htmlschema;
+package org.apache.juneau.html;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +19,9 @@ import java.util.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
+/**
+ * Most of the heavy testing for HtmlSchemaSerializer is done in JsonSchemaGeneratorTest.
+ */
 public class HtmlSchemaSerializerTest {
 
 	//====================================================================================================
