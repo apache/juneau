@@ -211,7 +211,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-dto.HTML5'>HTML5</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-dto.Atom'>Atom</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-dto.Swagger'>Swagger</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-dto.SwaggerUI'>Swagger UI</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-dto.SwaggerUI'>Swagger UI</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-svl'>juneau-svl</a></p>
 	<ol>
@@ -10613,9 +10613,85 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-dto.SwaggerUI' id='juneau-dto.SwaggerUI'>4.4 - Swagger UI</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-dto.SwaggerUI' id='juneau-dto.SwaggerUI'>4.4 - Swagger UI</a></h3>
 <div class='topic'><!-- START: 4.4 - juneau-dto.SwaggerUI -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
+	from {@link org.apache.juneau.dto.swagger.Swagger} beans.
+</p>
+<p>
+	The <code>PetStore</code> example described later provides an example of auto-generated Swagger JSON:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/SwaggerUI.json.png'>
+<p>
+	Using {@link org.apache.juneau.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
+	when the request is asking for HTML:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/SwaggerUI.html.png'>
+
+<p>
+	The class itself is nothing more than a POJO swap that swaps out {@link org.apache.juneau.dto.swagger.Swagger} beans
+	with {@link org.apache.juneau.dto.html5.Div} elements:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> SwaggerUI <jk>extends</jk> PojoSwap&lt;Swagger,Div&gt; {
+	
+		<ja>@Override</ja>
+		<jk>public</jk> MediaType[] forMediaTypes() {
+			<jc>// Only use this swap when the Accept type is HTML.</jc>
+			<jk>return new</jk> MediaType[] {MediaType.<jsf>HTML</jsf>};
+		}
+	
+		<ja>@Override</ja>
+		<jk>public</jk> Div swap(BeanSession beanSession, Swagger swagger) <jk>throws</jk> Exception {
+			...
+		}
+	}
+</p>
+<p>
+	The {@link org.apache.juneau.rest.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
+	generate the Swagger UI shown above:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+	
+		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.</jc>
+		allowedMethodParams=<js>"OPTIONS"</js>,
+	
+		<jc>// POJO swaps to apply to all serializers/parsers.</jc>
+		pojoSwaps={
+			<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+			SwaggerUI.<jk>class</jk>
+		},
+	
+		...
+	)
+	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+	
+		<jd>/**
+		 * [OPTIONS /*] - Show resource options.
+		 */</jd>
+		<ja>@RestMethod</ja>(
+			name=<jsf>OPTIONS</jsf>, 
+			path=<js>"/*"</js>,
+			summary=<js>"Swagger documentation"</js>,
+			description=<js>"Swagger documentation for this resource."</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				<jc>// Override the nav links for the swagger page.</jc>
+				navlinks={
+					<js>"back: servlet:/"</js>,
+					<js>"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"</js>
+				},
+				<jc>// Never show aside contents of page inherited from class.</jc>
+				aside="<js>NONE"</js>
+			)
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {
+			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
+			<jk>return</jk> req.getSwagger();
+		}
+	}
+</p>
 </div><!-- END: 4.4 - juneau-dto.SwaggerUI -->
 </div><!-- END: 4 - juneau-dto -->
 
