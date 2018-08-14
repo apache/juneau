@@ -27,12 +27,23 @@ public class DocGenerator {
 	 * @param args Not used
 	 */
 	public static void main(String[] args) {
+		if (args.length == 0 || args.length == 1 && args[0].equals("build"))
+			build();
+	}
+
+
+	private static void build() {
 		try {
 			long startTime = System.currentTimeMillis();
 
 			String template = IOUtils.readFile("src/main/resources/overview-template.html");
 
-			Topics topics = new Topics(new File("src/main/resources/Topics"));
+			File top = new File("src/main/resources/Topics");
+
+			reorder(top);
+
+			Topics topics = new Topics(top);
+
 			ReleaseNotes releaseNotes = new ReleaseNotes(new File("src/main/resources/ReleaseNotes"));
 
 			StringBuilder toc = new StringBuilder(), contents = new StringBuilder();
@@ -125,6 +136,20 @@ public class DocGenerator {
 		}
 	}
 
+	private static void reorder(File dir) throws IOException {
+		Topics t = new Topics(dir);
+
+		int i = 1;
+		for (PageFile f : t.pageFiles) {
+			f.reorder(i++);
+		}
+
+		t = new Topics(dir);
+		for (PageFile f : t.pageFiles)
+			if (f.dir != null)
+				reorder(f.dir);
+	}
+
 	static class Topics {
 		Set<PageFile> pageFiles = new TreeSet<>();
 		List<File> docFiles = new ArrayList<>();
@@ -155,20 +180,23 @@ public class DocGenerator {
 
 	static class PageFile implements Comparable<PageFile> {
 		String idWithNum, id, num, fullId, title, contents;
-		String number, fullNumber;
+		String fullNumber;
+		int pageNumber, dirNumber;
 		String tags = "";
+		File file, dir;
 
 		Set<PageFile> pageFiles = new TreeSet<>();
 
 		PageFile(PageFile parent, File f, List<File> docFiles) throws IOException {
+			this.file = f;
 			try {
 				String n = f.getName();
 				idWithNum = n.substring(0, n.lastIndexOf('.'));
 				num = n.substring(0, n.indexOf('.'));
 				id = idWithNum.substring(n.indexOf('.') + 1);
 				fullId = (parent == null ? "" : parent.fullId + ".") + id;
-				number = n.substring(0, n.indexOf('.')).replaceAll("^[0]+", "");
-				fullNumber = (parent == null ? "" : parent.fullNumber + ".") + number;
+				pageNumber = Integer.parseInt(n.substring(0, n.indexOf('.')));
+				fullNumber = (parent == null ? "" : parent.fullNumber + ".") + pageNumber;
 				String s = IOUtils.read(f);
 				int i = s.indexOf("-->");
 				s = s.substring(i+4).trim();
@@ -184,16 +212,43 @@ public class DocGenerator {
 			}
 
 			for (File d : f.getParentFile().listFiles()) {
-				if (d.isDirectory() && d.getName().startsWith(num + '.')) {
-					if (! d.getName().matches(idWithNum))
-						throw new RuntimeException("Unmatched file/directory: file=["+f.getName()+"], directory=["+d.getName()+"]");
-					for (File f2 : d.listFiles()) {
-						if (f2.isFile())
-							pageFiles.add(new PageFile(this, f2, docFiles));
-						else if (f2.isDirectory() && f2.getName().contains("doc-files"))
-							docFiles.addAll(Arrays.asList(f2.listFiles()));
+				if (d.isDirectory()) {
+					String n = d.getName();
+					if (n.matches("\\d+\\..*")) {
+						int dirNumber = Integer.parseInt(n.substring(0, n.indexOf('.')));
+						String dirName = n.substring(n.indexOf('.') + 1);
+						if (dirName.equals(id)) {
+							this.dirNumber = dirNumber;
+							dir = d;
+							for (File f2 : d.listFiles()) {
+								if (f2.isFile())
+									pageFiles.add(new PageFile(this, f2, docFiles));
+								else if (f2.isDirectory() && f2.getName().contains("doc-files"))
+									docFiles.addAll(Arrays.asList(f2.listFiles()));
+							}
+						}
 					}
 				}
+			}
+
+		}
+
+		public String getPageDirName(File f) {
+			String n = f.getName();
+			n = n.substring(n.indexOf('.') + 1);
+			return n;
+		}
+
+		void reorder(int i) {
+			if (pageNumber != i) {
+				File f2 = new File(file.getParentFile(), String.format("%0"+num.length()+"d", i) + '.' + id + ".html");
+				System.err.println("Renaming "+file.getName()+" to "+f2.getName());
+				file.renameTo(f2);
+			}
+			if (dir != null && dirNumber != i) {
+				File f2 = new File(file.getParentFile(), String.format("%0"+num.length()+"d", i) + '.' + id);
+				System.err.println("Renaming "+dir.getName()+" to "+f2.getName());
+				dir.renameTo(f2);
 			}
 		}
 
