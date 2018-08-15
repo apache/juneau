@@ -13,18 +13,6 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Header
+{todo} @Request
 
 TODO(7.2.0)
-
-{@link org.apache.juneau.http.annotation.Header} 
-- A request header.
-<br>The argument can be any of the following types:
-<ul>
-	<li class='normal'>Any serializable POJO 
-		- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-	<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-		- Individual name-value pairs.
-		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-</ul>
-

@@ -362,16 +362,17 @@
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server-jaxrs.BaseProvider'>Juneau JAX-RS Provider</a></p>
 	</ol>
-	<li><p class='toc2 '><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
+	<li><p class='toc2 updated'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
 	<ol>
-		<li><p class=''><a class='doclink' href='#juneau-rest-client.3rdPartyProxies'>Interface Proxies Against 3rd-party REST Interfaces</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations'>HTTP-Part Annotations</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies'>Interface Proxies Against 3rd-party REST Interfaces</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations'>HTTP-Part Annotations</a></p>
 		<ol>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Body'>@Body</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.FormData'>@FormData</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Query'>@Query</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Header'>Header</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Header'>@Header</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Path'>@Path</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Request'>@Request</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
@@ -19964,7 +19965,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>9 - juneau-rest-client</a></h2>
+<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>9 - juneau-rest-client</a></h2>
 <div class='topic'><!-- START: 9 - juneau-rest-client -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -20028,13 +20029,12 @@ TODO(7.2.0)
  	<li>
  		Converts HTTP response message bodies directly to POJOs using {@link org.apache.juneau.parser.Parser} 
  		classes.
+ 	<li>
+ 		Serializes and parses HTTP request and response parts (query/form-data parameters, headers, path variables) 
+ 		using OpenAPI marshalling and validation.
 	<li>
 		Exposes the full functionality of the Apache HttpClient API by exposing all methods defined on the 
 		{@link org.apache.http.impl.client.HttpClientBuilder} class.
-	<li>
-		Provides various convenience methods for setting up common SSL and authentication methods.
-	<li>
-		Provides a fluent interface that allows you to make complex REST calls in a single line of code.
 </ul>	
 <p>
 	The client API is designed to work as a thin layer on top of the proven Apache HttpClient API.  
@@ -20154,7 +20154,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies' id='juneau-rest-client.3rdPartyProxies'>9.1 - Interface Proxies Against 3rd-party REST Interfaces</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies' id='juneau-rest-client.3rdPartyProxies'>9.1 - Interface Proxies Against 3rd-party REST Interfaces</a></h3>
 <div class='topic'><!-- START: 9.1 - juneau-rest-client.3rdPartyProxies -->
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
@@ -20174,7 +20174,8 @@ TODO(7.2.0)
 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/method"</js>)
 		String callMyMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
 	}
-	
+</p>
+<p class='bpcode w800'>	
 	<jc>// Use a RestClient with default JSON support.</jc>
 	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().build()) {
 		MyProxyInterface p = client.getRemoteableProxy(MyProxyInterface.<jk>class</jk>, <js>"http://hostname/some/rest/interface"</js>);
@@ -20193,15 +20194,6 @@ TODO(7.2.0)
 	{ "foo": "bar", "baz": 123, "qux": true}
 </p>
 
-<p>
-	The Java method arguments can be annotated with any of the following:
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
-</ul>
 <p>
 	The return type of the Java method can be any of the following:
 </p>
@@ -20226,70 +20218,29 @@ TODO(7.2.0)
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
 </ul>
+<p>
+	The next section describes how annotations can be used on parameters to specify HTTP parts.
+</p>
 </div><!-- END: 9.1 - juneau-rest-client.3rdPartyProxies -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations' id='juneau-rest-client.HttpPartAnnotations'>9.2 - HTTP-Part Annotations</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations' id='juneau-rest-client.HttpPartAnnotations'>9.2 - HTTP-Part Annotations</a></h3>
 <div class='topic'><!-- START: 9.2 - juneau-rest-client.HttpPartAnnotations -->
-TODO(7.2.0)
-
-<ul class='spaced-list'>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-				- Individual name-value pairs.
-				<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'><code>String</code> 
-				- Treated as a query string.
-		</ul>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.FormData} 
-		- A form-data parameter.
-		<br>Note that this is only available if the HTTP method is <code>POST</code>.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
-				- Individual name-value pairs.
-			<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-				- Individual name-value pairs.
-				<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-		</ul>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.Header} 
-		- A request header.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-				- Individual name-value pairs.
-				<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-		</ul>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.Body} 
-		- The HTTP request body.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered 
-				with the <code>RestClient</code>.
-			<li class='normal'>{@link java.io.Reader} 
-				- Raw contents of reader will be serialized to remote resource.
-			<li class='normal'>{@link java.io.InputStream} 
-				- Raw contents of input stream will be serialized to remote resource.
-			<li class='normal'>{@link org.apache.http.HttpEntity} 
-				- Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-			<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
-				- Converted to a URL-encoded FORM post.
-		</ul>
-</ul>ß
+<p>
+	The Java method arguments on 3rd-party REST interfaces can be annotated with any of the following:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path} - A request path variable.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request} - A request bean.
+</ul>
+<p>
+	These are the exact same annotations used for server-side HTTP parts.
+</p>
 
 <!-- ==================================================================================================== -->
 
@@ -20357,7 +20308,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Header' id='juneau-rest-client.HttpPartAnnotations.Header'>9.2.4 - Header</a></h4>
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Header' id='juneau-rest-client.HttpPartAnnotations.Header'>9.2.4 - @Header</a></h4>
 <div class='topic'><!-- START: 9.2.4 - juneau-rest-client.HttpPartAnnotations.Header -->
 TODO(7.2.0)
 
@@ -20379,6 +20330,13 @@ TODO(7.2.0)
 <div class='topic'><!-- START: 9.2.5 - juneau-rest-client.HttpPartAnnotations.Path -->
 TODO(7.2.0)
 </div><!-- END: 9.2.5 - juneau-rest-client.HttpPartAnnotations.Path -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Request' id='juneau-rest-client.HttpPartAnnotations.Request'>9.2.6 - @Request</a></h4>
+<div class='topic'><!-- START: 9.2.6 - juneau-rest-client.HttpPartAnnotations.Request -->
+TODO(7.2.0)
+</div><!-- END: 9.2.6 - juneau-rest-client.HttpPartAnnotations.Request -->
 </div><!-- END: 9.2 - juneau-rest-client.HttpPartAnnotations -->
 
 <!-- ==================================================================================================== -->

@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-juneau-rest-client
+{updated} juneau-rest-client
 
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -77,13 +77,12 @@ juneau-rest-client
  	<li>
  		Converts HTTP response message bodies directly to POJOs using {@link org.apache.juneau.parser.Parser} 
  		classes.
+ 	<li>
+ 		Serializes and parses HTTP request and response parts (query/form-data parameters, headers, path variables) 
+ 		using OpenAPI marshalling and validation.
 	<li>
 		Exposes the full functionality of the Apache HttpClient API by exposing all methods defined on the 
 		{@link org.apache.http.impl.client.HttpClientBuilder} class.
-	<li>
-		Provides various convenience methods for setting up common SSL and authentication methods.
-	<li>
-		Provides a fluent interface that allows you to make complex REST calls in a single line of code.
 </ul>	
 <p>
 	The client API is designed to work as a thin layer on top of the proven Apache HttpClient API.  

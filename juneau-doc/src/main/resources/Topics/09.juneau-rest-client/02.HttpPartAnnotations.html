@@ -13,63 +13,19 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} HTTP-Part Annotations
+{new} HTTP-Part Annotations
 
-TODO(7.2.0)
-
-<ul class='spaced-list'>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-				- Individual name-value pairs.
-				<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'><code>String</code> 
-				- Treated as a query string.
-		</ul>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.FormData} 
-		- A form-data parameter.
-		<br>Note that this is only available if the HTTP method is <code>POST</code>.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
-				- Individual name-value pairs.
-			<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-				- Individual name-value pairs.
-				<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-		</ul>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.Header} 
-		- A request header.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-			<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-				- Individual name-value pairs.
-				<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-		</ul>
-	<li class='ja'>
-		{@link org.apache.juneau.http.annotation.Body} 
-		- The HTTP request body.
-		<br>The argument can be any of the following types:
-		<ul>
-			<li class='normal'>Any serializable POJO 
-				- Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered 
-				with the <code>RestClient</code>.
-			<li class='normal'>{@link java.io.Reader} 
-				- Raw contents of reader will be serialized to remote resource.
-			<li class='normal'>{@link java.io.InputStream} 
-				- Raw contents of input stream will be serialized to remote resource.
-			<li class='normal'>{@link org.apache.http.HttpEntity} 
-				- Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-			<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
-				- Converted to a URL-encoded FORM post.
-		</ul>
-</ul>ß
+<p>
+	The Java method arguments on 3rd-party REST interfaces can be annotated with any of the following:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path} - A request path variable.
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request} - A request bean.
+</ul>
+<p>
+	These are the exact same annotations used for server-side HTTP parts.
+</p>

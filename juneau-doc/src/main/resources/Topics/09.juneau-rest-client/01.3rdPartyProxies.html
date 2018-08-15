@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Interface Proxies Against 3rd-party REST Interfaces
+{updated} Interface Proxies Against 3rd-party REST Interfaces
 
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
@@ -33,7 +33,8 @@ Interface Proxies Against 3rd-party REST Interfaces
 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/method"</js>)
 		String callMyMethod(<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, <ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug, <ja>@Body</ja> MyPojo pojo);
 	}
-	
+</p>
+<p class='bpcode w800'>	
 	<jc>// Use a RestClient with default JSON support.</jc>
 	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().build()) {
 		MyProxyInterface p = client.getRemoteableProxy(MyProxyInterface.<jk>class</jk>, <js>"http://hostname/some/rest/interface"</js>);
@@ -52,15 +53,6 @@ Interface Proxies Against 3rd-party REST Interfaces
 	{ "foo": "bar", "baz": 123, "qux": true}
 </p>
 
-<p>
-	The Java method arguments can be annotated with any of the following:
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
-</ul>
 <p>
 	The return type of the Java method can be any of the following:
 </p>
@@ -85,3 +77,6 @@ Interface Proxies Against 3rd-party REST Interfaces
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
 </ul>
+<p>
+	The next section describes how annotations can be used on parameters to specify HTTP parts.
+</p>
