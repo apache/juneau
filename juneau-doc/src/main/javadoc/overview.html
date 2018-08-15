@@ -365,14 +365,14 @@
 	<li><p class='toc2 updated'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
 	<ol>
 		<li><p class='updated'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies'>Interface Proxies Against 3rd-party REST Interfaces</a></p>
-		<li><p class='new'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations'>HTTP-Part Annotations</a></p>
 		<ol>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Body'>@Body</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.FormData'>@FormData</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Query'>@Query</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Header'>@Header</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Path'>@Path</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.HttpPartAnnotations.Request'>@Request</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.MethodReturnTypes'>Method Return Types</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Body'>@Body</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.FormData'>@FormData</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Query'>@Query</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Header'>@Header</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Path'>@Path</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Request'>@Request</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
@@ -20195,7 +20195,15 @@ TODO(7.2.0)
 </p>
 
 <p>
-	The return type of the Java method can be any of the following:
+	The next section describes how annotations can be used on parameters to specify HTTP parts.
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.MethodReturnTypes' id='juneau-rest-client.3rdPartyProxies.MethodReturnTypes'>9.1.1 - Method Return Types</a></h4>
+<div class='topic'><!-- START: 9.1.1 - juneau-rest-client.3rdPartyProxies.MethodReturnTypes -->
+<p>
+	The return type of the Java methods of 3rd-party proxies can be any of the following:
 </p>
 <ul class='spaced-list'>
 	<li>
@@ -20218,34 +20226,12 @@ TODO(7.2.0)
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
 </ul>
-<p>
-	The next section describes how annotations can be used on parameters to specify HTTP parts.
-</p>
-</div><!-- END: 9.1 - juneau-rest-client.3rdPartyProxies -->
+</div><!-- END: 9.1.1 - juneau-rest-client.3rdPartyProxies.MethodReturnTypes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations' id='juneau-rest-client.HttpPartAnnotations'>9.2 - HTTP-Part Annotations</a></h3>
-<div class='topic'><!-- START: 9.2 - juneau-rest-client.HttpPartAnnotations -->
-<p>
-	The Java method arguments on 3rd-party REST interfaces can be annotated with any of the following:
-</p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path} - A request path variable.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Request} - A request bean.
-</ul>
-<p>
-	These are the exact same annotations used for server-side HTTP parts.
-</p>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Body' id='juneau-rest-client.HttpPartAnnotations.Body'>9.2.1 - @Body</a></h4>
-<div class='topic'><!-- START: 9.2.1 - juneau-rest-client.HttpPartAnnotations.Body -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Body' id='juneau-rest-client.3rdPartyProxies.Body'>9.1.2 - @Body</a></h4>
+<div class='topic'><!-- START: 9.1.2 - juneau-rest-client.3rdPartyProxies.Body -->
 TODO(7.2.0)
 
 {@link org.apache.juneau.http.annotation.Body} 
@@ -20264,12 +20250,12 @@ TODO(7.2.0)
 	<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
 		- Converted to a URL-encoded FORM post.
 </ul>
-</div><!-- END: 9.2.1 - juneau-rest-client.HttpPartAnnotations.Body -->
+</div><!-- END: 9.1.2 - juneau-rest-client.3rdPartyProxies.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.FormData' id='juneau-rest-client.HttpPartAnnotations.FormData'>9.2.2 - @FormData</a></h4>
-<div class='topic'><!-- START: 9.2.2 - juneau-rest-client.HttpPartAnnotations.FormData -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.FormData' id='juneau-rest-client.3rdPartyProxies.FormData'>9.1.3 - @FormData</a></h4>
+<div class='topic'><!-- START: 9.1.3 - juneau-rest-client.3rdPartyProxies.FormData -->
 TODO(7.2.0)
 
 {@link org.apache.juneau.http.annotation.FormData} 
@@ -20285,12 +20271,12 @@ TODO(7.2.0)
 		- Individual name-value pairs.
 		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 </ul>
-</div><!-- END: 9.2.2 - juneau-rest-client.HttpPartAnnotations.FormData -->
+</div><!-- END: 9.1.3 - juneau-rest-client.3rdPartyProxies.FormData -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Query' id='juneau-rest-client.HttpPartAnnotations.Query'>9.2.3 - @Query</a></h4>
-<div class='topic'><!-- START: 9.2.3 - juneau-rest-client.HttpPartAnnotations.Query -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Query' id='juneau-rest-client.3rdPartyProxies.Query'>9.1.4 - @Query</a></h4>
+<div class='topic'><!-- START: 9.1.4 - juneau-rest-client.3rdPartyProxies.Query -->
 TODO(7.2.0)
 
 {@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
@@ -20304,12 +20290,12 @@ TODO(7.2.0)
 	<li class='normal'><code>String</code> 
 		- Treated as a query string.
 </ul>
-</div><!-- END: 9.2.3 - juneau-rest-client.HttpPartAnnotations.Query -->
+</div><!-- END: 9.1.4 - juneau-rest-client.3rdPartyProxies.Query -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Header' id='juneau-rest-client.HttpPartAnnotations.Header'>9.2.4 - @Header</a></h4>
-<div class='topic'><!-- START: 9.2.4 - juneau-rest-client.HttpPartAnnotations.Header -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Header' id='juneau-rest-client.3rdPartyProxies.Header'>9.1.5 - @Header</a></h4>
+<div class='topic'><!-- START: 9.1.5 - juneau-rest-client.3rdPartyProxies.Header -->
 TODO(7.2.0)
 
 {@link org.apache.juneau.http.annotation.Header} 
@@ -20322,27 +20308,27 @@ TODO(7.2.0)
 		- Individual name-value pairs.
 		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 </ul>
-</div><!-- END: 9.2.4 - juneau-rest-client.HttpPartAnnotations.Header -->
+</div><!-- END: 9.1.5 - juneau-rest-client.3rdPartyProxies.Header -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Path' id='juneau-rest-client.HttpPartAnnotations.Path'>9.2.5 - @Path</a></h4>
-<div class='topic'><!-- START: 9.2.5 - juneau-rest-client.HttpPartAnnotations.Path -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Path' id='juneau-rest-client.3rdPartyProxies.Path'>9.1.6 - @Path</a></h4>
+<div class='topic'><!-- START: 9.1.6 - juneau-rest-client.3rdPartyProxies.Path -->
 TODO(7.2.0)
-</div><!-- END: 9.2.5 - juneau-rest-client.HttpPartAnnotations.Path -->
+</div><!-- END: 9.1.6 - juneau-rest-client.3rdPartyProxies.Path -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.HttpPartAnnotations.Request' id='juneau-rest-client.HttpPartAnnotations.Request'>9.2.6 - @Request</a></h4>
-<div class='topic'><!-- START: 9.2.6 - juneau-rest-client.HttpPartAnnotations.Request -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Request' id='juneau-rest-client.3rdPartyProxies.Request'>9.1.7 - @Request</a></h4>
+<div class='topic'><!-- START: 9.1.7 - juneau-rest-client.3rdPartyProxies.Request -->
 TODO(7.2.0)
-</div><!-- END: 9.2.6 - juneau-rest-client.HttpPartAnnotations.Request -->
-</div><!-- END: 9.2 - juneau-rest-client.HttpPartAnnotations -->
+</div><!-- END: 9.1.7 - juneau-rest-client.3rdPartyProxies.Request -->
+</div><!-- END: 9.1 - juneau-rest-client.3rdPartyProxies -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.SSL' id='juneau-rest-client.SSL'>9.3 - SSL Support</a></h3>
-<div class='topic'><!-- START: 9.3 - juneau-rest-client.SSL -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.SSL' id='juneau-rest-client.SSL'>9.2 - SSL Support</a></h3>
+<div class='topic'><!-- START: 9.2 - juneau-rest-client.SSL -->
 <p>
 	The simplest way to enable SSL support in the client is to use the 
 	{@link org.apache.juneau.rest.client.RestClientBuilder#enableLaxSSL()} method.
@@ -20376,18 +20362,18 @@ TODO(7.2.0)
 <p>
 	SSL support can also be enabled by passing in your own connection manager using {@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}.
 </p>
-</div><!-- END: 9.3 - juneau-rest-client.SSL -->
+</div><!-- END: 9.2 - juneau-rest-client.SSL -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>9.4 - Authentication</a></h3>
-<div class='topic'><!-- START: 9.4 - juneau-rest-client.Authentication -->
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>9.3 - Authentication</a></h3>
+<div class='topic'><!-- START: 9.3 - juneau-rest-client.Authentication -->
 TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.BASIC' id='juneau-rest-client.Authentication.BASIC'>9.4.1 - BASIC Authentication</a></h4>
-<div class='topic'><!-- START: 9.4.1 - juneau-rest-client.Authentication.BASIC -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.BASIC' id='juneau-rest-client.Authentication.BASIC'>9.3.1 - BASIC Authentication</a></h4>
+<div class='topic'><!-- START: 9.3.1 - juneau-rest-client.Authentication.BASIC -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#basicAuth(String,int,String,String)} method 
 	can be used to quickly enable BASIC authentication support.
@@ -20411,12 +20397,12 @@ TODO(7.2.0)
 	p.setCredentials(scope, up);
 	builder.setDefaultCredentialsProvider(p);
 </p>
-</div><!-- END: 9.4.1 - juneau-rest-client.Authentication.BASIC -->
+</div><!-- END: 9.3.1 - juneau-rest-client.Authentication.BASIC -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.FORM' id='juneau-rest-client.Authentication.FORM'>9.4.2 - FORM-based Authentication</a></h4>
-<div class='topic'><!-- START: 9.4.2 - juneau-rest-client.Authentication.FORM -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.FORM' id='juneau-rest-client.Authentication.FORM'>9.3.2 - FORM-based Authentication</a></h4>
+<div class='topic'><!-- START: 9.3.2 - juneau-rest-client.Authentication.FORM -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder} class does not itself provide FORM-based 
 	authentication since there is no standard way of providing such support. 
@@ -20500,12 +20486,12 @@ TODO(7.2.0)
 		}
 	}
 </p>
-</div><!-- END: 9.4.2 - juneau-rest-client.Authentication.FORM -->
+</div><!-- END: 9.3.2 - juneau-rest-client.Authentication.FORM -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.OIDC' id='juneau-rest-client.Authentication.OIDC'>9.4.3 - OIDC Authentication</a></h4>
-<div class='topic'><!-- START: 9.4.3 - juneau-rest-client.Authentication.OIDC -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.OIDC' id='juneau-rest-client.Authentication.OIDC'>9.3.3 - OIDC Authentication</a></h4>
+<div class='topic'><!-- START: 9.3.3 - juneau-rest-client.Authentication.OIDC -->
 <p>
 	The following example shows how the <code>JazzRestClient</code> class provides OIDC authentication 
 	support.
@@ -20628,13 +20614,13 @@ TODO(7.2.0)
 		}
 	}
 </p>
-</div><!-- END: 9.4.3 - juneau-rest-client.Authentication.OIDC -->
-</div><!-- END: 9.4 - juneau-rest-client.Authentication -->
+</div><!-- END: 9.3.3 - juneau-rest-client.Authentication.OIDC -->
+</div><!-- END: 9.3 - juneau-rest-client.Authentication -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.ResponsePatterns' id='juneau-rest-client.ResponsePatterns'>9.5 - Using Response Patterns</a></h3>
-<div class='topic'><!-- START: 9.5 - juneau-rest-client.ResponsePatterns -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.ResponsePatterns' id='juneau-rest-client.ResponsePatterns'>9.4 - Using Response Patterns</a></h3>
+<div class='topic'><!-- START: 9.4 - juneau-rest-client.ResponsePatterns -->
 <p>
 	One issue with REST (and HTTP in general) is that the HTTP response code must be set as a header before the 
 	body of the request is sent.  
@@ -20724,12 +20710,12 @@ TODO(7.2.0)
 	use {@link org.apache.juneau.rest.client.RestCall#getCapturedResponse()} since this method will not absorb 
 	the response for those other methods.
 </p>
-</div><!-- END: 9.5 - juneau-rest-client.ResponsePatterns -->
+</div><!-- END: 9.4 - juneau-rest-client.ResponsePatterns -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.PipingOutput' id='juneau-rest-client.PipingOutput'>9.6 - Piping Response Output</a></h3>
-<div class='topic'><!-- START: 9.6 - juneau-rest-client.PipingOutput -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.PipingOutput' id='juneau-rest-client.PipingOutput'>9.5 - Piping Response Output</a></h3>
+<div class='topic'><!-- START: 9.5 - juneau-rest-client.PipingOutput -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestCall} class provides various convenience <code>pipeTo()</code> 
 	methods to pipe output to output streams and writers.
@@ -20747,12 +20733,12 @@ TODO(7.2.0)
 	<jc>// Pipe output from REST call to System.out in real-time.</jc>
 	restClient.doPost(<jsf>URL</jsf>).byLines().pipeTo(<jk>new</jk> PrintWriter(System.<jk>out</jk>)).run();
 </p>
-</div><!-- END: 9.6 - juneau-rest-client.PipingOutput -->
+</div><!-- END: 9.5 - juneau-rest-client.PipingOutput -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Debugging' id='juneau-rest-client.Debugging'>9.7 - Debugging</a></h3>
-<div class='topic'><!-- START: 9.7 - juneau-rest-client.Debugging -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Debugging' id='juneau-rest-client.Debugging'>9.6 - Debugging</a></h3>
+<div class='topic'><!-- START: 9.6 - juneau-rest-client.Debugging -->
 <p>
 	Use the {@link org.apache.juneau.rest.client.RestClientBuilder#debug()} method to enable logging for HTTP requests
 	made from the client.
@@ -20806,12 +20792,12 @@ TODO(7.2.0)
 	{"foo":"bar","baz":123}
 	=== END ========================================================================
 </p>
-</div><!-- END: 9.7 - juneau-rest-client.Debugging -->
+</div><!-- END: 9.6 - juneau-rest-client.Debugging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Logging' id='juneau-rest-client.Logging'>9.8 - Logging</a></h3>
-<div class='topic'><!-- START: 9.8 - juneau-rest-client.Logging -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Logging' id='juneau-rest-client.Logging'>9.7 - Logging</a></h3>
+<div class='topic'><!-- START: 9.7 - juneau-rest-client.Logging -->
 <p>
 	Use the {@link org.apache.juneau.rest.client.RestClientBuilder#logTo(Level,Logger)} and 
 	{@link org.apache.juneau.rest.client.RestCall#logTo(Level,Logger)} methods to log HTTP calls.
@@ -20830,12 +20816,12 @@ TODO(7.2.0)
 	Customized logging can be handled by sub-classing the {@link org.apache.juneau.rest.client.RestCallLogger} 
 	class and using the  {@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} method.
 </p>
-</div><!-- END: 9.8 - juneau-rest-client.Logging -->
+</div><!-- END: 9.7 - juneau-rest-client.Logging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Interceptors' id='juneau-rest-client.Interceptors'>9.9 - Interceptors</a></h3>
-<div class='topic'><!-- START: 9.9 - juneau-rest-client.Interceptors -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Interceptors' id='juneau-rest-client.Interceptors'>9.8 - Interceptors</a></h3>
+<div class='topic'><!-- START: 9.8 - juneau-rest-client.Interceptors -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#interceptors(RestCallInterceptor...)} and 
 	{@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} methods can be used to 
@@ -20934,12 +20920,12 @@ TODO(7.2.0)
 		}
 	}
 </p>
-</div><!-- END: 9.9 - juneau-rest-client.Interceptors -->
+</div><!-- END: 9.8 - juneau-rest-client.Interceptors -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.UnitTesting' id='juneau-rest-client.UnitTesting'>9.10 - Serverless Unit Testing</a></h3>
-<div class='topic'><!-- START: 9.10 - juneau-rest-client.UnitTesting -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.UnitTesting' id='juneau-rest-client.UnitTesting'>9.9 - Serverless Unit Testing</a></h3>
+<div class='topic'><!-- START: 9.9 - juneau-rest-client.UnitTesting -->
 <p>
 	The {@link org.apache.juneau.rest.mock.MockRest} class is used for performing serverless unit testing of REST interfaces.
 </p>
@@ -21018,12 +21004,12 @@ TODO(7.2.0)
 		<jsm>assertEquals</jsm>(123, r.echoQuery(123));
 	}
 </p>
-</div><!-- END: 9.10 - juneau-rest-client.UnitTesting -->
+</div><!-- END: 9.9 - juneau-rest-client.UnitTesting -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Other' id='juneau-rest-client.Other'>9.11 - Other Useful Methods</a></h3>
-<div class='topic'><!-- START: 9.11 - juneau-rest-client.Other -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Other' id='juneau-rest-client.Other'>9.10 - Other Useful Methods</a></h3>
+<div class='topic'><!-- START: 9.10 - juneau-rest-client.Other -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#rootUrl(Object)} method can be used to specify a 
 	root URL on all requests so that you don't have to use absolute paths on individual calls.
@@ -21060,7 +21046,7 @@ TODO(7.2.0)
 		.retryable(180, 10000, RetryOn.<jsf>DEFAULT</jsf>)
 		.run();
 </p>
-</div><!-- END: 9.11 - juneau-rest-client.Other -->
+</div><!-- END: 9.10 - juneau-rest-client.Other -->
 </div><!-- END: 9 - juneau-rest-client -->
 
 <!-- ==================================================================================================== -->

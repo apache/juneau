@@ -13,19 +13,29 @@
  ***************************************************************************************************************************/
  -->
 
-{new} HTTP-Part Annotations
+{new} Method Return Types
 
 <p>
-	The Java method arguments on 3rd-party REST interfaces can be annotated with any of the following:
+	The return type of the Java methods of 3rd-party proxies can be any of the following:
 </p>
-<ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP request body.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - A form-data parameter.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A request header.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path} - A request path variable.
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Request} - A request bean.
+<ul class='spaced-list'>
+	<li>
+		<jk>void</jk> 
+		- Don't parse any response.  
+		<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
+	<li>
+		Any <a class='doclink' href='#juneau-marshall.PojoCategories'>parsable</a> POJO 
+		- The body of the response will be converted to the POJO using the parser defined on the 
+		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
+	<li>
+		<code>HttpResponse</code> 
+		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+	<li>
+		{@link java.io.Reader} 
+		- Returns access to the raw reader of the response.
+		<br>Note that if you don't want your response parsed as a POJO, you'll want to get the response reader 
+		directly.
+	<li>
+		{@link java.io.InputStream} 
+		- Returns access to the raw input stream of the response.
 </ul>
-<p>
-	These are the exact same annotations used for server-side HTTP parts.
-</p>

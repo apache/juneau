@@ -133,7 +133,7 @@ import org.apache.juneau.httppart.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Request</a>
  * </ul>
  */
 @Documented
