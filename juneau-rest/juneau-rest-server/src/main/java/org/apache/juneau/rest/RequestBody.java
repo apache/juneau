@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -473,7 +474,7 @@ public class RequestBody {
 
 		if (partParser != null) {
 			String in = asString();
-			return partParser.createSession(req.getParserSessionArgs()).parse(HttpPartType.BODY, schema, isEmpty(in) ? null : in, cm);
+			return partParser.createSession(req.getParserSessionArgs()).parse(BODY, schema, isEmpty(in) ? null : in, cm);
 		}
 
 		MediaType mt = getMediaType();

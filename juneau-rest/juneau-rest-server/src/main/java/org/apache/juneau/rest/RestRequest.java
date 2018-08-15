@@ -1485,7 +1485,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 				new InvocationHandler() {
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RequestBeanPropertyMeta pm = rbm.getPropertyByGetter(method.getName());
+						RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
 						if (pm != null) {
 							HttpPartParser pp = pm.getParser(getPartParser());
 							HttpPartSchema schema = pm.getSchema();
@@ -1494,13 +1494,13 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							HttpPartType pt = pm.getPartType();
 							if (pt == HttpPartType.BODY)
 								return getBody().asType(pm.getParser(null), schema, type);
-							if (pt == HttpPartType.QUERY)
+							if (pt == QUERY)
 								return getQuery().get(pp, schema, name, type);
-							if (pt == HttpPartType.FORMDATA)
+							if (pt == FORMDATA)
 								return getFormData().get(pp, schema, name, type);
-							if (pt == HttpPartType.HEADER)
+							if (pt == HEADER)
 								return getHeaders().get(pp, schema, name, type);
-							if (pt == HttpPartType.PATH)
+							if (pt == PATH)
 								return getPathMatch().get(pp, schema, name, type);
 						}
 						return null;

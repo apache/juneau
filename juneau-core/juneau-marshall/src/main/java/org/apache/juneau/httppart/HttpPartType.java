@@ -29,8 +29,17 @@ public enum HttpPartType {
 	/** A form-data parameter */
 	FORMDATA,
 
-	/** An HTTP header */
+	/** An HTTP request header */
 	HEADER,
+
+	/** An HTTP response header */
+	RESPONSE_HEADER,
+
+	/** An HTTP response body */
+	RESPONSE_BODY,
+
+	/** An HTTP response status code */
+	RESPONSE_STATUS,
 
 	/** A non-standard field */
 	OTHER;

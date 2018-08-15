@@ -57,12 +57,11 @@ public final class RemoteMethodBeanArg {
 	}
 
 	/**
-	 * Returns metadata on the specified property of the request bean.
+	 * Returns metadata on the request bean.
 	 *
-	 * @param name The bean property name.
-	 * @return Metadata about the bean property, or <jk>null</jk> if not found.
+	 * @return Metadata about the bean.
 	 */
-	public RequestBeanPropertyMeta getProperty(String name) {
-		return meta.getProperty(name);
+	public RequestBeanMeta getMeta() {
+		return meta;
 	}
 }

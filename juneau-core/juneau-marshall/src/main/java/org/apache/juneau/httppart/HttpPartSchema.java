@@ -211,6 +211,18 @@ public class HttpPartSchema {
 		return create().apply(a).build();
 	}
 
+	/**
+	 * Finds the schema information on the specified annotation.
+	 *
+	 * @param a
+	 * 	The annotation to find the schema information on..
+	 * @param defaultName The default part name if not specified on the annotation.
+	 * @return The schema information found on the annotation.
+	 */
+	public static HttpPartSchema create(Annotation a, String defaultName) {
+		return create().name(defaultName).apply(a).build();
+	}
+
 	HttpPartSchema(HttpPartSchemaBuilder b) {
 		this.name = b.name;
 		this.codes = copy(b.codes);

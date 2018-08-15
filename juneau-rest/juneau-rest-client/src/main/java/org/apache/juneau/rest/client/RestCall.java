@@ -15,9 +15,11 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.lang.reflect.Proxy;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -37,6 +39,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
@@ -213,7 +216,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (! isMulti) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				try {
-					uriBuilder.addParameter(name, serializer.createSession(null).serialize(HttpPartType.QUERY, schema, value));
+					uriBuilder.addParameter(name, serializer.createSession(null).serialize(QUERY, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request query parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
@@ -454,9 +457,9 @@ public final class RestCall extends BeanSession implements Closeable {
 			try {
 				String p = null;
 				if (name.equals("/*"))
-					p = path.replaceAll("\\/\\*$", serializer.createSession(null).serialize(HttpPartType.PATH, schema, value));
+					p = path.replaceAll("\\/\\*$", serializer.createSession(null).serialize(PATH, schema, value));
 				else
-					p = path.replace(var, serializer.createSession(null).serialize(HttpPartType.PATH, schema, value));
+					p = path.replace(var, serializer.createSession(null).serialize(PATH, schema, value));
 				uriBuilder.setPath(p);
 			} catch (SchemaValidationException e) {
 				throw new RestCallException(e, "Validation error on request path parameter ''{0}''=''{1}''", name, value);
@@ -557,7 +560,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	public RestCall body(Object input, HttpPartSerializer partSerializer, HttpPartSchema schema) throws RestCallException {
 		try {
 			if (partSerializer != null)
-				body(new StringEntity(partSerializer.serialize(HttpPartType.BODY, schema, input)));
+				body(new StringEntity(partSerializer.serialize(BODY, schema, input)));
 			else
 				body(input);
 		} catch (SchemaValidationException e) {
@@ -626,7 +629,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (! isMulti) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				try {
-					request.setHeader(name, serializer.createSession(null).serialize(HttpPartType.HEADER, schema, value));
+					request.setHeader(name, serializer.createSession(null).serialize(HEADER, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request header parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
@@ -1828,6 +1831,51 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
+	 * Same as {@link #getResponseHeader(String)} except parses the header value using the specified part parser and schema.
+	 *
+	 * @param name The header name.
+	 * @param partParser The part parser to use for parsing the header.
+	 * @param schema The part schema.  Can be <jk>null</jk>.
+	 * @param c The type to convert the part into.
+	 * @return The parsed part.
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	public <T> T getResponseHeader(HttpPartParser partParser, HttpPartSchema schema, String name, Class<T> c) throws IOException, ParseException {
+		return getResponseHeader(partParser, schema, name, (Type)c);
+	}
+
+	/**
+	 * Same as {@link #getResponseHeader(String)} except parses the header value using the specified part parser and schema.
+	 *
+	 * @param name The header name.
+	 * @param partParser The part parser to use for parsing the header.
+	 * @param schema The part schema.  Can be <jk>null</jk>.
+	 * @param type The type to convert the part into.
+	 * @param args The type arguments to convert the part into.
+	 * @return The parsed part.
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	public <T> T getResponseHeader(HttpPartParser partParser, HttpPartSchema schema, String name, Type type, Type...args) throws IOException, ParseException {
+		try {
+			HttpResponse r = getResponse();
+			Header h = r.getFirstHeader(name);
+			if (h == null)
+				return null;
+			String hs = h.getValue();
+			if (partParser == null)
+				partParser = client.getPartParser();
+			return partParser.parse(schema, hs, type, args);
+		} catch (IOException e) {
+			isFailed = true;
+			throw e;
+		} finally {
+			close();
+		}
+	}
+
+	/**
 	 * Connects to the remote resource (if {@code connect()} hasn't already been called) and returns the HTTP response code.
 	 *
 	 * <p>
@@ -2030,7 +2078,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws IOException If a connection error occurred.
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
-	public <T> T getResponse(HttpPartParser partParser, HttpPartSchema schema, Type type, Type...args) throws IOException, ParseException {
+	public <T> T getResponseBody(HttpPartParser partParser, HttpPartSchema schema, Type type, Type...args) throws IOException, ParseException {
 		BeanContext bc = parser;
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
@@ -2120,7 +2168,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				if (type.hasStringTransform())
 					return type.getStringTransform().transform(getResponseAsString());
 				if (partParser != null)
-					return partParser.createSession(null).parse(HttpPartType.BODY, schema, getResponseAsString(), type);
+					return partParser.createSession(null).parse(BODY, schema, getResponseAsString(), type);
 			}
 
 			if (parser != null) {
@@ -2156,6 +2204,45 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
 		return bc;
+	}
+
+	/**
+	 * Converts the response from this call into a response bean.
+	 *
+	 * @param rbm The metadata used to construct the response bean.
+	 * @return A new response bean.
+	 */
+	public <T> T getResponse(final ResponseBeanMeta rbm) {
+		try {
+			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
+			final RestClient rc = this.client;
+			return (T)Proxy.newProxyInstance(
+				c.getClassLoader(),
+				new Class[] { c },
+				new InvocationHandler() {
+					@Override /* InvocationHandler */
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+						ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
+						if (pm != null) {
+							HttpPartParser pp = pm.getParser(rc.getPartParser());
+							HttpPartSchema schema = pm.getSchema();
+							String name = pm.getPartName();
+							ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
+							HttpPartType pt = pm.getPartType();
+							if (pt == RESPONSE_BODY)
+								return getResponseBody(pp, schema, type);
+							if (pt == RESPONSE_HEADER)
+								return getResponseHeader(pp, schema, name, type);
+							if (pt == RESPONSE_STATUS)
+								return getResponseCode();
+						}
+						return null;
+					}
+
+			});
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Request;
@@ -1262,40 +1261,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void ga04_reqBeanPath4() throws Exception {
-		String r = proxy.reqBeanPath4(
-			new ReqBeanPath4() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
-	public void ga05_reqBeanPath5() throws Exception {
-		String r = proxy.reqBeanPath5(
-			new ReqBeanPath5() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
 	public void ga06_reqBeanPath6() throws Exception {
 		String r = proxy.reqBeanPath6(
 			new ReqBeanPath6() {
@@ -1363,40 +1328,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void gb03_reqBeanQuery3() throws Exception {
 		String r = proxy.reqBeanQuery3(
 			new ReqBeanQuery3() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
-	public void gb04_reqBeanQuery4() throws Exception {
-		String r = proxy.reqBeanQuery4(
-			new ReqBeanQuery4() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
-	public void gb05_reqBeanQuery5() throws Exception {
-		String r = proxy.reqBeanQuery5(
-			new ReqBeanQuery5() {
 				@Override
 				public int getX() {
 					return 1;
@@ -1492,40 +1423,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	@Test
-	public void gd04_reqBeanFormData4() throws Exception {
-		String r = proxy.reqBeanFormData4(
-			new ReqBeanFormData4() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
-	public void gd05_reqBeanFormData5() throws Exception {
-		String r = proxy.reqBeanFormData5(
-			new ReqBeanFormData5() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
 	public void gd06_reqBeanFormData6() throws Exception {
 		String r = proxy.reqBeanFormData6(
 			new ReqBeanFormData6() {
@@ -1593,40 +1490,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public void gf03_reqBeanHeader3() throws Exception {
 		String r = proxy.reqBeanHeader3(
 			new ReqBeanHeader3() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
-	public void gf04_reqBeanHeader4() throws Exception {
-		String r = proxy.reqBeanHeader4(
-			new ReqBeanHeader4() {
-				@Override
-				public int getX() {
-					return 1;
-				}
-				@Override
-				public String getY() {
-					return "foo";
-				}
-			}
-		);
-		assertEquals("OK", r);
-	}
-
-	@Test
-	public void gf05_reqBeanHeader5() throws Exception {
-		String r = proxy.reqBeanHeader5(
-			new ReqBeanHeader5() {
 				@Override
 				public int getX() {
 					return 1;
@@ -2117,36 +1980,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
-		String reqBeanPath4(
-			@Request ReqBeanPath4 rb
-		);
-
-		public static interface ReqBeanPath4 {
-			@Path
-			@BeanProperty(name="a")
-			int getX();
-
-			@Path
-			@BeanProperty(name="b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
-		String reqBeanPath5(
-			@Request ReqBeanPath5 rb
-		);
-
-		public static interface ReqBeanPath5 {
-			@Path
-			@BeanProperty(name="a")
-			int getX();
-
-			@Path
-			@BeanProperty(name="b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath6(
 			@Request ReqBeanPath6 rb
 		);
@@ -2222,36 +2055,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			int getX();
 
 			@Query("b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
-		String reqBeanQuery4(
-			@Request ReqBeanQuery4 rb
-		);
-
-		public static interface ReqBeanQuery4 {
-			@Query
-			@BeanProperty(name="a")
-			int getX();
-
-			@Query
-			@BeanProperty(name="b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
-		String reqBeanQuery5(
-			@Request ReqBeanQuery5 rb
-		);
-
-		public static interface ReqBeanQuery5 {
-			@Query
-			@BeanProperty(name="a")
-			int getX();
-
-			@Query
-			@BeanProperty(name="b")
 			String getY();
 		}
 
@@ -2335,36 +2138,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
-		String reqBeanFormData4(
-			@Request ReqBeanFormData4 rb
-		);
-
-		public static interface ReqBeanFormData4 {
-			@FormData
-			@BeanProperty(name="a")
-			int getX();
-
-			@FormData
-			@BeanProperty(name="b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
-		String reqBeanFormData5(
-			@Request ReqBeanFormData5 rb
-		);
-
-		public static interface ReqBeanFormData5 {
-			@FormData
-			@BeanProperty(name="a")
-			int getX();
-
-			@FormData
-			@BeanProperty(name="b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
 		String reqBeanFormData6(
 			@Request ReqBeanFormData6 rb
 		);
@@ -2440,36 +2213,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			int getX();
 
 			@Header("b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
-		String reqBeanHeader4(
-			@Request ReqBeanHeader4 rb
-		);
-
-		public static interface ReqBeanHeader4 {
-			@Header
-			@BeanProperty(name="a")
-			int getX();
-
-			@Header
-			@BeanProperty(name="b")
-			String getY();
-		}
-
-		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
-		String reqBeanHeader5(
-			@Request ReqBeanHeader5 rb
-		);
-
-		public static interface ReqBeanHeader5 {
-			@Header
-			@BeanProperty(name="a")
-			int getX();
-
-			@Header
-			@BeanProperty(name="b")
 			String getY();
 		}
 

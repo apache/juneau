@@ -37,8 +37,8 @@ public final class RemoteMethodReturn {
 
 	RemoteMethodReturn(Method m, ReturnValue returnValue) {
 		this.returnType = m.getGenericReturnType();
-		if (hasAnnotation(Body.class, m)) {
-			this.schema = HttpPartSchema.create(Body.class, m);
+		if (hasAnnotation(Response.class, m)) {
+			this.schema = HttpPartSchema.create(Response.class, m);
 			this.parser = newInstance(HttpPartParser.class, schema.getParser());
 		} else {
 			this.schema = null;

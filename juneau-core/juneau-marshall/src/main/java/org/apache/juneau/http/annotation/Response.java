@@ -54,6 +54,22 @@ import org.apache.juneau.jsonschema.*;
 public @interface Response {
 
 	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
+	 *
+	 * <p>
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
+	 */
+	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
+
+	/**
+	 * Specifies whether a part parser should be used for parsing this value.
+	 *
+	 * <p>
+	 * If <jk>false</jk>, then it indicates that normal Juneau parsers (e.g. {@link JsonParser}) should be used for this part.
+	 */
+	public boolean usePartParser() default false;
+
+	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>

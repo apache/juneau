@@ -1073,30 +1073,26 @@ public class RestClient extends BeanContext implements Closeable {
 								rc.body(args[ba.getIndex()], ba.getSerializer(null), ba.getSchema());
 
 							if (rmm.getRequestArgs().length > 0) {
-								BeanSession bs = createBeanSession();
 								for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
-									BeanMap<?> bm = bs.toBeanMap(args[rmba.getIndex()]);
-
-									for (BeanPropertyValue bpv : bm.getValues(false)) {
-										BeanPropertyMeta pMeta = bpv.getMeta();
-										Object val = bpv.getValue();
-										RequestBeanPropertyMeta a = rmba.getProperty(pMeta.getName());
-										if (a != null) {
-											HttpPartType pt = a.getPartType();
-											HttpPartSchema schema = a.getSchema();
-											if (pt == PATH)
-												rc.path(a.getPartName(), val, a.getSerializer(s), schema);
-											if (val != null) {
-												if (pt == QUERY) {
-													rc.query(a.getPartName(), val, schema.isSkipIfEmpty(), a.getSerializer(s), schema);
-												} else if (pt == FORMDATA) {
-													rc.formData(a.getPartName(), val, schema.isSkipIfEmpty(), a.getSerializer(s), schema);
-												} else if (pt == HEADER) {
-													rc.header(a.getPartName(), val, schema.isSkipIfEmpty(), a.getSerializer(s), schema);
-												} else if (pt == HttpPartType.BODY) {
-													rc.body(val, a.getSerializer(s), schema);
-												}
-											}
+									RequestBeanMeta rbm = rmba.getMeta();
+									for (RequestBeanPropertyMeta p : rbm.getProperties()) {
+										Object val = p.getGetter().invoke(args[rmba.getIndex()]);
+										HttpPartType pt = p.getPartType();
+										HttpPartSerializer ps = p.getSerializer(s);
+										String pn = p.getPartName();
+										HttpPartSchema schema = p.getSchema();
+										boolean sie = schema.isSkipIfEmpty();
+										if (pt == PATH)
+											rc.path(pn, val, p.getSerializer(s), schema);
+										else if (val != null) {
+											if (pt == QUERY) 
+												rc.query(pn, val, sie, ps, schema);
+											else if (pt == FORMDATA)
+												rc.formData(pn, val, sie, ps, schema);
+											else if (pt == HEADER)
+												rc.header(pn, val, sie, ps, schema);
+											else if (pt == HttpPartType.BODY)
+												rc.body(val, p.getSerializer(s), schema);
 										}
 									}
 								}
@@ -1124,7 +1120,7 @@ public class RestClient extends BeanContext implements Closeable {
 									return returnCode < 400;
 								throw new RestCallException("Invalid return type on method annotated with @RemoteableMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
 							} else {
-								Object v = rc.getResponse(rmr.getParser(), rmr.getSchema(), method.getGenericReturnType());
+								Object v = rc.getResponseBody(rmr.getParser(), rmr.getSchema(), method.getGenericReturnType());
 								if (v == null && method.getReturnType().isPrimitive())
 									v = ClassUtils.getPrimitiveDefault(method.getReturnType());
 								return v;

@@ -12,6 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.httppart.bean.Utils.*;
+
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -22,15 +28,18 @@ import org.apache.juneau.internal.*;
  */
 public class RequestBeanPropertyMeta {
 
-	static RequestBeanPropertyMeta.Builder create() {
-		return new Builder();
+	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, Method m) {
+		HttpPartSchemaBuilder sb = HttpPartSchema.create().name(getPropertyName(m));
+		for (Annotation a : getAnnotationsParentFirst(c, m))
+			sb.apply(a);
+		return new Builder().partType(partType).schema(sb.build()).getter(m);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final String partName, getter;
+	private final Method getter;
 	private final HttpPartType partType;
 	private final HttpPartSerializer serializer;
 	private final HttpPartParser parser;
@@ -38,8 +47,7 @@ public class RequestBeanPropertyMeta {
 
 	RequestBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
 		this.partType = b.partType;
-		this.schema = b.schema.build();
-		this.partName = StringUtils.firstNonEmpty(schema.getName(), b.name);
+		this.schema = b.schema;
 		this.getter = b.getter;
 		this.serializer = schema.getSerializer() == null ? serializer : ClassUtils.newInstance(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
 		this.parser = schema.getParser() == null ? parser : ClassUtils.newInstance(HttpPartParser.class, schema.getParser(), true, b.ps);
@@ -47,16 +55,11 @@ public class RequestBeanPropertyMeta {
 
 	static class Builder {
 		HttpPartType partType;
-		HttpPartSchemaBuilder schema;
-		String name, getter;
+		HttpPartSchema schema;
+		Method getter;
 		PropertyStore ps = PropertyStore.DEFAULT;
 
-		Builder name(String value) {
-			name = value;
-			return this;
-		}
-
-		Builder getter(String value) {
+		Builder getter(Method value) {
 			getter = value;
 			return this;
 		}
@@ -66,13 +69,8 @@ public class RequestBeanPropertyMeta {
 			return this;
 		}
 
-		Builder schema(HttpPartSchemaBuilder value) {
+		Builder schema(HttpPartSchema value) {
 			schema = value;
-			return this;
-		}
-
-		Builder apply(HttpPartSchemaBuilder s) {
-			schema = s;
 			return this;
 		}
 
@@ -87,7 +85,7 @@ public class RequestBeanPropertyMeta {
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
 	public String getPartName() {
-		return partName;
+		return schema == null ? null : schema.getName();
 	}
 
 	/**
@@ -97,7 +95,7 @@ public class RequestBeanPropertyMeta {
 	 * 	The name of the Java method getter that defines this property.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public String getGetter() {
+	public Method getGetter() {
 		return getter;
 	}
 

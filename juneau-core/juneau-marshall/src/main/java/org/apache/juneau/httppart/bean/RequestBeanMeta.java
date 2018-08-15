@@ -13,8 +13,9 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.httppart.bean.Utils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -64,7 +65,7 @@ public class RequestBeanMeta {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final ClassMeta<?> cm;
-	private final Map<String,RequestBeanPropertyMeta> properties, propertiesByGetter;
+	private final Map<String,RequestBeanPropertyMeta> properties;
 	private final HttpPartSerializer serializer;
 	private final HttpPartParser parser;
 
@@ -72,15 +73,10 @@ public class RequestBeanMeta {
 		this.cm = b.cm;
 		this.serializer = ClassUtils.newInstance(HttpPartSerializer.class, b.serializer, true, b.ps);
 		this.parser = ClassUtils.newInstance(HttpPartParser.class, b.parser, true, b.ps);
-		Map<String,RequestBeanPropertyMeta> properties = new LinkedHashMap<>(), propertiesByGetter = new LinkedHashMap<>();
-		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet()) {
-			RequestBeanPropertyMeta pm = e.getValue().build(serializer, parser);
-			properties.put(e.getKey(), pm);
-			propertiesByGetter.put(pm.getGetter(), pm);
-
-		}
+		Map<String,RequestBeanPropertyMeta> properties = new LinkedHashMap<>();
+		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet())
+			properties.put(e.getKey(), e.getValue().build(serializer, parser));
 		this.properties = Collections.unmodifiableMap(properties);
-		this.propertiesByGetter = Collections.unmodifiableMap(propertiesByGetter);
 	}
 
 	static class Builder {
@@ -101,34 +97,31 @@ public class RequestBeanMeta {
 		Builder apply(Class<?> c) {
 			apply(getAnnotation(Request.class, c));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
-			for (BeanPropertyMeta bp : bm.getPropertyMetas()) {
-				String n = bp.getName();
-				Annotation a = bp.getAnnotation(Path.class);
-				String g = bp.getGetter().getName();
-				if (a != null) {
-					HttpPartSchemaBuilder s = HttpPartSchema.create().apply(a);
-					getProperty(n, HttpPartType.PATH).apply(s).getter(g);
-				}
-				a = bp.getAnnotation(Header.class);
-				if (a != null) {
-					HttpPartSchemaBuilder s = HttpPartSchema.create().apply(a);
-					getProperty(n, HttpPartType.HEADER).apply(s).getter(g);
-				}
-				a = bp.getAnnotation(Query.class);
-				if (a != null) {
-					HttpPartSchemaBuilder s = HttpPartSchema.create().apply(a);
-					getProperty(n, HttpPartType.QUERY).apply(s).getter(g);
-				}
-				a = bp.getAnnotation(FormData.class);
-				if (a != null) {
-					HttpPartSchemaBuilder s = HttpPartSchema.create().apply(a);
-					getProperty(n, HttpPartType.FORMDATA).apply(s).getter(g);
-				}
-				a = bp.getAnnotation(Body.class);
-				if (a != null) {
-					HttpPartSchemaBuilder s = HttpPartSchema.create().apply(a);
-					getProperty(n, HttpPartType.BODY).apply(s).getter(g);
+			for (Method m : ClassUtils.getAllMethods(c, false)) {
+				if (isPublic(m)) {
+					assertNoAnnotations(m, Request.class, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
+					String n = m.getName();
+					if (hasAnnotation(Body.class, m)) {
+						assertNoArgs(m, Body.class);
+						assertReturnNotVoid(m, Body.class);
+						properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, m));
+					} else if (hasAnnotation(Header.class, m)) {
+						assertNoArgs(m, Header.class);
+						assertReturnNotVoid(m, Header.class);
+						properties.put(n, RequestBeanPropertyMeta.create(HEADER, Header.class, m));
+					} else if (hasAnnotation(Query.class, m)) {
+						assertNoArgs(m, Query.class);
+						assertReturnNotVoid(m, Query.class);
+						properties.put(n, RequestBeanPropertyMeta.create(QUERY, Query.class, m));
+					} else if (hasAnnotation(FormData.class, m)) {
+						assertNoArgs(m, FormData.class);
+						assertReturnNotVoid(m, FormData.class);
+						properties.put(n, RequestBeanPropertyMeta.create(FORMDATA, FormData.class, m));
+					} else if (hasAnnotation(Path.class, m)) {
+						assertNoArgs(m, Path.class);
+						assertReturnNotVoid(m, Path.class);
+						properties.put(n, RequestBeanPropertyMeta.create(PATH, Path.class, m));
+					}
 				}
 			}
 			return this;
@@ -147,15 +140,15 @@ public class RequestBeanMeta {
 		RequestBeanMeta build() {
 			return new RequestBeanMeta(this);
 		}
+	}
 
-		private RequestBeanPropertyMeta.Builder getProperty(String name, HttpPartType partType) {
-			RequestBeanPropertyMeta.Builder b = properties.get(name);
-			if (b == null) {
-				b = RequestBeanPropertyMeta.create().name(name).partType(partType);
-				properties.put(name, b);
-			}
-			return b;
-		}
+	/**
+	 * Returns metadata about the class.
+	 *
+	 * @return Metadata about the class.
+	 */
+	public ClassMeta<?> getClassMeta() {
+		return cm;
 	}
 
 	/**
@@ -169,21 +162,11 @@ public class RequestBeanMeta {
 	}
 
 	/**
-	 * Returns metadata about the bean property with the specified method getter name.
+	 * Returns all the annotated methods on this bean.
 	 *
-	 * @param name The bean method getter name.
-	 * @return Metadata about the bean property, or <jk>null</jk> if none found.
+	 * @return All the annotated methods on this bean.
 	 */
-	public RequestBeanPropertyMeta getPropertyByGetter(String name) {
-		return propertiesByGetter.get(name);
-	}
-
-	/**
-	 * Returns metadata about the class.
-	 *
-	 * @return Metadata about the class.
-	 */
-	public ClassMeta<?> getClassMeta() {
-		return cm;
+	public Collection<RequestBeanPropertyMeta> getProperties() {
+		return properties.values();
 	}
 }

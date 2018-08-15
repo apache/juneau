@@ -14,6 +14,7 @@ package org.apache.juneau.rest.reshandlers;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -64,10 +65,10 @@ public class DefaultHandler implements ResponseHandler {
 
 		if (rm != null) {
 
-			Method stm = rm.getStatusMethod();
+			ResponseBeanPropertyMeta stm = rm.getStatusMethod();
 			if (stm != null) {
 				try {
-					res.setStatus((int)stm.invoke(o));
+					res.setStatus((int)stm.getGetter().invoke(o));
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not get status.");
 				}
@@ -85,21 +86,22 @@ public class DefaultHandler implements ResponseHandler {
 							String k = asString(key);
 							Object v = m.get(key);
 							HttpPartSchema s = hm.getSchema().getProperty(k);
-							res.setHeader(new HttpPart(k, HttpPartType.HEADER, s, firstNonNull(hm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), v));
+							res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializer()), req.getSerializerSessionArgs(), v));
 						}
 					} else {
-						res.setHeader(new HttpPart(n, HttpPartType.HEADER, hm.getSchema(), firstNonNull(hm.getSerializer(), req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
+						res.setHeader(new HttpPart(n, RESPONSE_HEADER, hm.getSchema(), hm.getSerializer(req.getPartSerializer()), req.getSerializerSessionArgs(), ho));
 					}
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not set header ''{0}''", hm.getPartName());
 				}
 			}
 
-			Method m = rm.getBodyMethod();
+			ResponseBeanPropertyMeta bm = rm.getBodyMethod();
 			boolean usePartSerializer = rm.isUsePartSerializer();
 			HttpPartSchema schema = rm.getSchema();
 
-			if (m != null) {
+			if (bm != null) {
+				Method m = bm.getGetter();
 				try {
 					Class<?>[] pt = m.getParameterTypes();
 					if (pt.length == 1) {
@@ -124,7 +126,7 @@ public class DefaultHandler implements ResponseHandler {
 				HttpPartSerializer ps = firstNonNull(rm.getPartSerializer(), req.getPartSerializer());
 				if (ps != null) {
 					try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
-						w.append(ps.serialize(HttpPartType.BODY, schema, o));
+						w.append(ps.serialize(BODY, schema, o));
 						w.flush();
 						w.finish();
 					} catch (SchemaValidationException | SerializeException e) {

@@ -20,6 +20,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.Utils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.beans.*;
 import java.lang.annotation.*;
@@ -449,7 +450,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
 				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer);
-				pm = new ResponsePartMeta(HttpPartType.HEADER, schema, serializer);
+				pm = new ResponsePartMeta(HEADER, schema, serializer);
 			}
 			if (pm == null)
 				pm = ResponsePartMeta.NULL;
@@ -470,7 +471,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
 				HttpPartSerializer serializer = schema.isUsePartSerializer() ? createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer) : null;
-				pm = new ResponsePartMeta(HttpPartType.BODY, schema, serializer);
+				pm = new ResponsePartMeta(BODY, schema, serializer);
 			}
 			if (pm == null)
 				pm = ResponsePartMeta.NULL;

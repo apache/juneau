@@ -20,7 +20,6 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.remoteable.*;
@@ -68,7 +67,6 @@ public class RequestBeanProxyTest {
 		@Query String getA();
 		@Query("b") String getX1();
 		@Query(name="c") String getX2();
-		@Query @BeanProperty("d") String getX3();
 		@Query(name="e",allowEmptyValue=true) String getX4();
 		@Query("f") String getX5();
 		@Query("g") String getX6();
@@ -79,7 +77,6 @@ public class RequestBeanProxyTest {
 		@Override public String getA() { return "a1"; }
 		@Override public String getX1() { return "b1"; }
 		@Override public String getX2() { return "c1"; }
-		@Override public String getX3() { return "d1"; }
 		@Override public String getX4() { return ""; }
 		@Override public String getX5() { return null; }
 		@Override public String getX6() { return "true"; }
@@ -91,15 +88,15 @@ public class RequestBeanProxyTest {
 
 	@Test
 	public void a01a_query_simpleVals_plainText() throws Exception {
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'true',h:'123'}", a01a.normal(new A01_BeanImpl()));
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123'}", a01a.normal(new A01_BeanImpl()));
 	}
 	@Test
 	public void a01b_query_simpleVals_uon() throws Exception {
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'\\'true\\'',h:'\\'123\\''}", a01b.normal(new A01_BeanImpl()));
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\''}", a01b.normal(new A01_BeanImpl()));
 	}
 	@Test
 	public void a01c_query_simpleVals_x() throws Exception {
-		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',d:'xd1x',e:'xx',g:'xtruex',h:'x123x'}", a01b.serialized(new A01_BeanImpl()));
+		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x'}", a01b.serialized(new A01_BeanImpl()));
 	}
 
 	//=================================================================================================================
@@ -368,11 +365,6 @@ public class RequestBeanProxyTest {
 		public String getX2() {
 			return "c1";
 		}
-		@FormData
-		@BeanProperty("d")
-		public String getX3() {
-			return "d1";
-		}
 		@FormData(name="e",allowEmptyValue=true)
 		public String getX4() {
 			return "";
@@ -397,17 +389,17 @@ public class RequestBeanProxyTest {
 	@Test
 	public void c01a_formData_simpleVals_plainText() throws Exception {
 		String r = c01a.normal(new C01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'true',h:'123'}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123'}", r);
 	}
 	@Test
 	public void c01b_formData_simpleVals_uon() throws Exception {
 		String r = c01b.normal(new C01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'\\'true\\'',h:'\\'123\\''}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\''}", r);
 	}
 	@Test
 	public void c01c_formData_simpleVals_x() throws Exception {
 		String r = c01b.serialized(new C01_Bean());
-		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',d:'xd1x',e:'xx',g:'xtruex',h:'x123x'}", r);
+		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x'}", r);
 	}
 
 	//=================================================================================================================
@@ -677,11 +669,6 @@ public class RequestBeanProxyTest {
 		public String getX2() {
 			return "c1";
 		}
-		@Header
-		@BeanProperty("d")
-		public String getX3() {
-			return "d1";
-		}
 		@Header(name="e",allowEmptyValue=true)
 		public String getX4() {
 			return "";
@@ -706,17 +693,17 @@ public class RequestBeanProxyTest {
 	@Test
 	public void e01a_headerSimpleValsPlainText() throws Exception {
 		String r = e01a.normal(new E01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'true',h:'123'}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'true',h:'123'}", r);
 	}
 	@Test
 	public void e01b_headerSimpleValsUon() throws Exception {
 		String r = e01b.normal(new E01_Bean());
-		assertEquals("{a:'a1',b:'b1',c:'c1',d:'d1',e:'',g:'\\'true\\'',h:'\\'123\\''}", r);
+		assertEquals("{a:'a1',b:'b1',c:'c1',e:'',g:'\\'true\\'',h:'\\'123\\''}", r);
 	}
 	@Test
 	public void e01c_headerSimpleValsX() throws Exception {
 		String r = e01b.serialized(new E01_Bean());
-		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',d:'xd1x',e:'xx',g:'xtruex',h:'x123x'}", r);
+		assertEquals("{a:'xa1x',b:'xb1x',c:'xc1x',e:'xx',g:'xtruex',h:'x123x'}", r);
 	}
 
 	//=================================================================================================================
@@ -915,10 +902,10 @@ public class RequestBeanProxyTest {
 	@Remoteable(path="/")
 	public static interface G01_Remoteable {
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}")
+		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
 		String normal(@Request G01_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}")
+		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
 		String serialized(@Request(partSerializer=XSerializer.class) G01_Bean rb);
 	}
 
@@ -934,11 +921,6 @@ public class RequestBeanProxyTest {
 		@Path(name="c")
 		public String getX2() {
 			return "c1";
-		}
-		@Path
-		@BeanProperty("d")
-		public String getX3() {
-			return "d1";
 		}
 		@Path(name="e",allowEmptyValue=true)
 		public String getX4() {
@@ -964,17 +946,17 @@ public class RequestBeanProxyTest {
 	@Test
 	public void g01a_pathSimpleValsPlainText() throws Exception {
 		String r = g01a.normal(new G01_Bean());
-		assertEquals("echoPath/a1/b1/c1/d1//null/true/123", r);
+		assertEquals("echoPath/a1/b1/c1//null/true/123", r);
 	}
 	@Test
 	public void g01b_pathSimpleValsUon() throws Exception {
 		String r = g01b.normal(new G01_Bean());
-		assertEquals("echoPath/a1/b1/c1/d1//null/'true'/'123'", r);
+		assertEquals("echoPath/a1/b1/c1//null/'true'/'123'", r);
 	}
 	@Test
 	public void g01c_pathSimpleValsX() throws Exception {
 		String r = g01b.serialized(new G01_Bean());
-		assertEquals("echoPath/xa1x/xb1x/xc1x/xd1x/xx/NULL/xtruex/x123x", r);
+		assertEquals("echoPath/xa1x/xb1x/xc1x/xx/NULL/xtruex/x123x", r);
 	}
 
 	//=================================================================================================================

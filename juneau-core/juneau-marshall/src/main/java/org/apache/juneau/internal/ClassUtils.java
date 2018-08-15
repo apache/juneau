@@ -1180,6 +1180,32 @@ public final class ClassUtils {
 		return null;
 	}
 
+	/**
+	 * Given a specific method, finds all declared methods with the same name and arguments on all
+	 * superclasses and interfaces.
+	 *
+	 * @param m The method to find matches against.
+	 * @return All matching methods including the input method itself.
+	 */
+	public static List<Method> findMatchingMethods(Method m) {
+		return findMatchingMethods(new ArrayList<Method>(), m);
+	}
+
+	private static List<Method> findMatchingMethods(List<Method> l, Method m) {
+		l.add(m);
+		Class<?> c = m.getDeclaringClass();
+		Class<?> pc = c.getSuperclass();
+		if (pc != null)
+			for (Method m2 : pc.getDeclaredMethods())
+				if (isSameMethod(m, m2))
+					findMatchingMethods(l, m2);
+		for (Class<?> ic : c.getInterfaces())
+			for (Method m2 : ic.getDeclaredMethods())
+				if (isSameMethod(m, m2))
+					findMatchingMethods(l, m2);
+		return l;
+	}
+
 	private static boolean isSameMethod(Method m1, Method m2) {
 		return m1.getName().equals(m2.getName()) && Arrays.equals(m1.getParameterTypes(), m2.getParameterTypes());
 	}
@@ -2294,9 +2320,10 @@ public final class ClassUtils {
 	@SuppressWarnings("unchecked")
 	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m) {
 		List<T> l = new ArrayList<>();
-		for (Annotation a2 :  m.getAnnotations())
-			if (a.isInstance(a2))
-				l.add((T)a2);
+		for (Method m2 : findMatchingMethods(m))
+			for (Annotation a2 :  m2.getAnnotations())
+				if (a.isInstance(a2))
+					l.add((T)a2);
 		Type t = m.getGenericReturnType();
 		if (Value.isType(t))
 			appendAnnotations(a, Value.getParameterType(t), l);

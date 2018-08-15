@@ -12,43 +12,48 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Response}.
  */
 public class ResponseBeanPropertyMeta {
 
-	static ResponseBeanPropertyMeta.Builder create() {
-		return new Builder();
+	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, HttpPartSchema schema, Method m) {
+		return new Builder().partType(partType).schema(schema).getter(m);
+	}
+
+	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, Method m) {
+		return new Builder().partType(partType).getter(m);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final String partName;
 	private final Method getter;
 	private final HttpPartType partType;
 	private final HttpPartSerializer serializer;
+	private final HttpPartParser parser;
 	private final HttpPartSchema schema;
 
-	ResponseBeanPropertyMeta(Builder b, HttpPartSerializer serializer) {
+	ResponseBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
 		this.partType = b.partType;
-		this.schema = b.schema.build();
-		this.partName = StringUtils.firstNonEmpty(schema.getName(), b.name);
+		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = schema.getSerializer() == null ? serializer : ClassUtils.newInstance(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
+		this.serializer = schema.getSerializer() == null ? serializer : newInstance(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
+		this.parser = schema.getParser() == null ? parser : newInstance(HttpPartParser.class, schema.getParser(), true, b.ps);
 	}
 
 	static class Builder {
 		HttpPartType partType;
-		HttpPartSchemaBuilder schema;
+		HttpPartSchema schema;
 		String name;
 		Method getter;
 		PropertyStore ps = PropertyStore.DEFAULT;
@@ -68,18 +73,13 @@ public class ResponseBeanPropertyMeta {
 			return this;
 		}
 
-		Builder schema(HttpPartSchemaBuilder value) {
+		Builder schema(HttpPartSchema value) {
 			schema = value;
 			return this;
 		}
 
-		Builder apply(HttpPartSchemaBuilder s) {
-			schema = s;
-			return this;
-		}
-
-		ResponseBeanPropertyMeta build(HttpPartSerializer serializer) {
-			return new ResponseBeanPropertyMeta(this, serializer);
+		ResponseBeanPropertyMeta build(HttpPartSerializer serializer, HttpPartParser parser) {
+			return new ResponseBeanPropertyMeta(this, serializer, parser);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ResponseBeanPropertyMeta {
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
 	public String getPartName() {
-		return partName;
+		return schema == null ? null : schema.getName();
 	}
 
 	/**
@@ -117,10 +117,21 @@ public class ResponseBeanPropertyMeta {
 	/**
 	 * Returns the serializer to use for serializing the bean property value.
 	 *
+	 * @param _default The default serializer to use if not defined on the annotation.
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	public HttpPartSerializer getSerializer() {
-		return serializer;
+	public HttpPartSerializer getSerializer(HttpPartSerializer _default) {
+		return serializer == null ? _default : serializer;
+	}
+
+	/**
+	 * Returns the parser to use for parsing the bean property value.
+	 *
+	 * @param _default The default parser to use if not defined on the annotation.
+	 * @return The parser to use for parsing the bean property value.
+	 */
+	public HttpPartParser getParser(HttpPartParser _default) {
+		return parser == null ? _default : parser;
 	}
 
 	/**

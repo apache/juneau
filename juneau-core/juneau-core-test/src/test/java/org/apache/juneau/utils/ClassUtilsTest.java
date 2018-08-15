@@ -448,4 +448,25 @@ public class ClassUtilsTest {
 		assertEquals("['0','1','2','3','4']", l.toString());
 	}
 
+
+	//====================================================================================================
+	// findMatchingMethods()
+	//====================================================================================================
+
+	public static interface I1 {
+		public int foo(int x);
+	}
+	public static class I2 {
+		public int foo(int x) { return 0; }
+	}
+	public static class I3 extends I2 implements I1 {
+		@Override
+		public int foo(int x) {return 0;}
+	}
+
+	@Test
+	public void findMatchingMethods() throws Exception {
+		assertObjectEquals("['public int org.apache.juneau.utils.ClassUtilsTest$I3.foo(int)','public int org.apache.juneau.utils.ClassUtilsTest$I2.foo(int)','public abstract int org.apache.juneau.utils.ClassUtilsTest$I1.foo(int)']", ClassUtils.findMatchingMethods(I3.class.getMethod("foo", int.class)));
+	}
+
 }
