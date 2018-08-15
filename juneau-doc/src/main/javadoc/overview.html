@@ -375,7 +375,7 @@
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Request'>@Request</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-rest-client.Authentication.BASIC'>BASIC Authentication</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-client.Authentication.FORM'>FORM-based Authentication</a></p>
@@ -20366,9 +20366,15 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>9.3 - Authentication</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>9.3 - Authentication</a></h3>
 <div class='topic'><!-- START: 9.3 - juneau-rest-client.Authentication -->
-TODO(7.2.0)
+<p>
+	The Juneau REST client itself does not implement any support for authentication.  
+	Instead, it delegates it to the underlying Apache HTTP Client interface.
+</p>
+<p>
+	The following sections show how some common authentication mechanisms can be set up using HTTP Client APIs.
+</p>
 
 <!-- ==================================================================================================== -->
 
