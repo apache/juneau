@@ -15,7 +15,6 @@ package org.apache.juneau.http.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
-import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;
 
@@ -36,6 +35,7 @@ import org.apache.juneau.jsonschema.*;
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
  * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
+ * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
@@ -81,124 +81,24 @@ import org.apache.juneau.jsonschema.*;
  * The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
  * servlet to drain the body content.
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @Remoteableß-annotated interfaces</h5>
+ * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
  * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
  * request.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
- * 	<jk>public interface</jk> MyProxy {
- *
- * 		<jc>// Explicit names specified for form data parameters.</jc>
- * 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
- * 		String myProxyMethod1(
- * 			<ja>@FormData</ja>(<js>"foo"</js>)</ja> String foo,
- * 			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo
- *		);
- *
- * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
- * 		<jc>// Name "*" is inferred.</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
- * 		String myProxyMethod2(<ja>@FormData</ja> NameValuePairs nameValuePairs);
- *
- * 		<jc>// Multiple values pulled from a Map.</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3"</js>)
- * 		String myProxyMethod3(<ja>@FormData</ja> Map&lt;String,Object&gt; map);
- *
- * 		<jc>// Multiple values pulled from a bean.</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4"</js>)
- * 		String myProxyMethod4(<ja>@FormData</ja> MyBean bean);
- *
- * 		<jc>// An entire form-data HTTP body as a String.</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod5"</js>)
- * 		String myProxyMethod5(<ja>@FormData</ja> String string);
- *
- * 		<jc>// An entire form-data HTTP body as a Reader.</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod6"</js>)
- * 		String myProxyMethod6(<ja>@FormData</ja> Reader reader);
- * 	}
- * </p>
- *
- * <p>
- * Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Any serializable POJO - Converted to a string using the {@link HttpPartSerializer} registered with the
- * 		<code>RestClient</code> or associated via the {@link #serializer()} annotation.
- * </ul>
- *
- * <p>
- * Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
- * <ul class='spaced-list'>
- * 	<li>
- * 		{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
- * 	<li>
- * 		{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
- * 	<li>
- * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
- * 	<li>
- * 		<code>Map</code> - Converted to key-value pairs.
- * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
- * 	<li>
- * 		Bean - Converted to key-value pairs.
- * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
- * 	<li>
- * 		<code>CharSequence</code> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
- * </ul>
- *
- * <p>
- * The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
- * {@link Request @Request}:
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
- * 	<jk>public interface</jk> MyProxy {
- *
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
- * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
- * 	}
- *
- * 	<jk>public interface</jk> MyRequest {
- *
- * 		<jc>// Name explicitly specified.</jc>
- * 		<ja>@FormData</ja>(<js>"foo"</js>)
- * 		String getX();
- *
- * 		<jc>// Name inherited from bean property.</jc>
- * 		<jc>// Same as @FormData("bar")</jc>
- * 		<ja>@FormData</ja>
- * 		String getBar();
- *
- * 		<jc>// Multiple values pulled from NameValuePairs object.</jc>
- * 		<jc>// Same as @FormData("*")</jc>
- * 		<ja>@FormData</ja>
- * 		NameValuePairs getNameValuePairs();
- *
- * 		<jc>// Multiple values pulled from Map.</jc>
- * 		<jc>// Same as @FormData("*")</jc>
- * 		<ja>@FormData</ja>
- * 	 	Map&lt;String,Object&gt; getMap();
- *
- * 		<jc>// Multiple values pulled from bean.</jc>
- * 		<jc>// Same as @FormData("*")</jc>
- * 		<ja>@FormData</ja>
- * 	 	MyBean getMyBean();
- *
- * 		<jc>// An entire form-data HTTP body as a Reader.</jc>
- * 		<jc>// Same as @FormData("*")</jc>
- * 		<ja>@FormData</ja>
- * 		Reader getReader();
- * 	}
- * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.FormData'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @FormData</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Request</a>
  * </ul>
- */
+ *
+ * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request'>Overview &gt; juneau-rest-server &gt; @Request</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; @Request</a>
+ * </ul>
+*/
 @Documented
 @Target({PARAMETER,FIELD,METHOD,TYPE})
 @Retention(RUNTIME)

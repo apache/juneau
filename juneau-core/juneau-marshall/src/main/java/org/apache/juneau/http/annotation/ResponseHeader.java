@@ -30,7 +30,7 @@ import org.apache.juneau.httppart.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Arguments of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Public methods of <ja>@Response</ja>-annotated types.
+ * 	<li>Methods and return types of server-side and client-side <ja>@Response</ja>-annotated interfaces.
  * </ul>
  *
  * <h5 class='topic'>Arguments of server-side <ja>@RestMethod</ja>-annotated methods</h5>
@@ -115,6 +115,14 @@ import org.apache.juneau.httppart.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.ResponseHeader">Overview &gt; juneau-rest-server &gt; @ResponseHeader</a>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Swagger Specification &gt; Header Object</a>
+ * </ul>
+ *
+ * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response'>Overview &gt; juneau-rest-server &gt; @Response</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Response'>Overview &gt; juneau-rest-client &gt; @Response</a>
  * </ul>
 */
 @Documented

@@ -15,7 +15,6 @@ package org.apache.juneau.http.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
-import java.io.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
@@ -23,7 +22,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * REST request body annotation.
@@ -35,7 +33,8 @@ import org.apache.juneau.serializer.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
+ * 	<li>Arguments and argument-types of client-side <ja>@RemoteMethod</ja>-annotated interfaces.
+ * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
@@ -108,98 +107,17 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
  *
- * Annotation applied to Java method arguments of interface proxies to denote that they are the HTTP body of the request.
- *
- * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
- * 	<jc>// Used on parameter</jc>
- * 	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
- * 	<jk>public interface</jk> PetStore {
- *
- * 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
- * 		String addPet(<ja>@Body</ja> Pet pet);
- * 	}
- * </p>
- * <p class='bcode w800'>
- * 	<jc>// Used on class</jc>
- * 	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
- * 	<jk>public interface</jk> PetStore {
- *
- * 		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
- * 		String addPet(Pet pet);
- * 	}
- *
- * 	<ja>@Body</ja>
- * 	<jk>public class</jk> Pet {...}
- * </p>
- *
- * <p>
- * The annotation can also be applied to a bean property field or getter when the argument is annotated with
- * {@link Request @Request}:
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
- * 	<jk>public interface</jk> MyProxy {
- *
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
- * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
- * 	}
- *
- * 	<jk>public interface</jk> MyRequest {
- * 		<ja>@Body</ja>
- * 		MyPojo getMyPojo();
- * 	}
- * </p>
- *
- * <p>
- * The argument can be any of the following types:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Any serializable POJO - Converted to text using the {@link Serializer} registered with the
- * 		<code>RestClient</code>.
- * 	<li>
- * 		{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
- * 	<li>
- * 		{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
- * 	<li>
- * 		<code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
- * 	<li>
- * 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Body'>Overview &gt; juneau-rest-client &gt; @Body</a>
  * </ul>
  *
- * <p>
- * OpenAPI schema based serialization can be used by specifying a value for the {@link #partSerializer()} annotation.
- *
- * <p class='bcode w800'>
- * 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
- * 	String addCommaDelimitedPipeDelimitedInts(
- * 		<ja>@Body</ja>(
- * 			serializer=OpenApiPartSerializer.<jk>class</jk>,
- * 			schema=<ja>@Schema</ja>(
- * 				type=<js>"array"</js>,
- * 				collectionFormat=<js>"pipes"</js>,
- * 				items=<ja>@Items</ja>(
- * 					type=<js>"array"</js>
- * 					items=<ja>@SubItems</ja>(
- * 						type=<js>"int32"</js>,
- * 					 	<jc>// Auto-validates on client side!</jc>
- * 						minimum=<js>"0"</js>,
- * 						maximum=<js>"64"</js>
- * 					)
- * 				)
- * 			)
- * 		)
- * 		<jk>int</jk>[][] input
- * 	);
- * </p>
- *
- * <p>
- * When using OpenAPI serialization, the argument can be any data type specified in {@link OpenApiPartSerializer}.
+ * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Body'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Body</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request'>Overview &gt; juneau-rest-server &gt; @Request</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; @Request</a>
  * </ul>
  */
 @Documented

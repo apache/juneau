@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * <p>
  * Can be used in the following locations:
  * <ul>
- * 	<li>Public methods of <ja>@Response</ja>-annotated methods.
+ * 	<li>Methods and return types of server-side and client-side <ja>@Response</ja>-annotated interfaces.
  * </ul>
  *
  *
@@ -78,9 +78,12 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
+ * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
+ *
  * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response">Overview &gt; juneau-rest-server &gt; @Response</a>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response'>Overview &gt; juneau-rest-server &gt; @Response</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Response'>Overview &gt; juneau-rest-client &gt; @Response</a>
  * </ul>
  */
 @Documented

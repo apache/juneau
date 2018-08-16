@@ -15,7 +15,6 @@ package org.apache.juneau.http.annotation;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
-import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;
 
@@ -36,6 +35,7 @@ import org.apache.juneau.jsonschema.*;
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
  * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
+ * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
@@ -79,122 +79,17 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
  *
- * Annotation applied to Java method arguments of interface proxies to denote that they are QUERY parameters on the
- * request.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
- * 	<jk>public interface</jk> MyProxy {
- *
- * 		<jc>// Explicit names specified for query parameters.</jc>
- * 		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
- * 		String myProxyMethod1(
- * 			<ja>@Query</ja>(<js>"foo"</js>)</ja> String foo,
- * 			<ja>@Query</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
- *
- * 		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
- * 		<jc>// Same as @Query("*").</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
- * 		String myProxyMethod2(<ja>@Query</ja> NameValuePairs nameValuePairs);
- *
- * 		<jc>// Multiple values pulled from a Map.</jc>
- * 		<jc>// Same as @Query("*").</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3"</js>)
- * 		String myProxyMethod3(<ja>@Query</ja> Map&lt;String,Object&gt; map);
- *
- * 		<jc>// Multiple values pulled from a bean.</jc>
- * 		<jc>// Same as @Query("*").</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4"</js>)
- * 		String myProxyMethod4(<ja>@Query</ja> MyBean myBean);
- *
- * 		<jc>// An entire query string as a String.</jc>
- * 		<jc>// Same as @Query("*").</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod5"</js>)
- * 		String myProxyMethod5(<ja>@Query</ja> String string);
- *
- * 		<jc>// An entire query string as a Reader.</jc>
- * 		<jc>// Same as @Query("*").</jc>
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod6"</js>)
- * 		String myProxyMethod6(<ja>@Query</ja> Reader reader);
- * 	}
- * </p>
- *
- * <p>
- * Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
- * <ul class='spaced-list'>
- * 	<li>
- * 		Any serializable POJO - Converted to a string using the {@link HttpPartSerializer} registered with the
- * 		<code>RestClient</code> or associated via the {@link #serializer()} annotation.
- * </ul>
- *
- * <p>
- * Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
- * <ul class='spaced-list'>
- * 	<li>
- * 		{@link Reader} - Raw contents of {@code Reader} will be serialized directly a query string.
- * 	<li>
- * 		<code>NameValuePairs</code> - Serialized as individual query parameters.
- * 	<li>
- * 		<code>Map</code> - Converted to key-value pairs.
- * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
- * 	<li>
- * 		Bean - Converted to key-value pairs.
- * 			<br>Values serialized using the registered {@link HttpPartSerializer}.
- * 	<li>
- * 		<code>CharSequence</code> - Serialized directly a query string.
- * </ul>
- *
- * <p>
- * The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
- * {@link Request @Request}:
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
- * 	<jk>public interface</jk> MyProxy {
- *
- * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
- * 		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
- * 	}
- *
- * 	<jk>public interface</jk> MyRequest {
- *
- * 		<jc>// Name explicitly specified.</jc>
- * 		<ja>@Query</ja>(<js>"foo"</js>)
- * 		String getX();
- *
- * 		<jc>// Name inherited from bean property.</jc>
- * 		<jc>// Same as @Query("bar")</jc>
- * 		<ja>@Query</ja>
- * 		String getBar();
- *
- * 		<jc>// Multiple values pulled from NameValuePairs object.</jc>
- * 		<jc>// Same as @Query("*")</jc>
- * 		<ja>@Query</ja>
- * 		NameValuePairs getNameValuePairs();
- *
- * 		<jc>// Multiple values pulled from Map.</jc>
- * 		<jc>// Same as @Query("*")</jc>
- * 		<ja>@Query</ja>
- * 	 	Map&lt;String,Object&gt; getMap();
- *
- * 		<jc>// Multiple values pulled from bean.</jc>
- * 		<jc>// Same as @Query("*")</jc>
- * 		<ja>@Query</ja>
- * 	 	MyBean getMyBean();
- *
- * 		<jc>// An entire query string as a Reader.</jc>
- * 		<jc>// Same as @Query("*")</jc>
- * 		<ja>@Query</ja>
- * 		Reader getReader();
- * 	}
- * </p>
- *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Query'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Query</a>
+ * </ul>
+ *
+ * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request'>Overview &gt; juneau-rest-server &gt; @Request</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; @Request</a>
  * </ul>
  */
 @Documented

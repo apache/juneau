@@ -26,7 +26,8 @@ import org.apache.juneau.jsonschema.*;
 /**
  * REST response annotation.
  *
- * Identifies the HTTP status code and description about an HTTP response.
+ * <p>
+ * Identifies an interface to use to interact with HTTP parts of an HTTP response through a bean.
  *
  * <p>
  * Can be used in the following locations:
@@ -35,6 +36,7 @@ import org.apache.juneau.jsonschema.*;
  * 	<li>Return type classes of <ja>@RestMethod</ja>-annotated methods.
  * 	<li><ja>@RestMethod</ja>-annotated methods.
  * 	<li>Arguments and argument-types of <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Return type classes of <ja>@RemoteMethod</ja>-annotated methods.
  * </ul>
  *
  * <p>
@@ -43,6 +45,7 @@ import org.apache.juneau.jsonschema.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response">Overview &gt; juneau-rest-server &gt; @Response</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Response">Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Response</a>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Swagger Specification &gt; Response Object</a>
  * </ul>
