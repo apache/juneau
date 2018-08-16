@@ -28,6 +28,8 @@
 		- The body of the response will be converted to the POJO using the parser defined on the 
 		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
 	<li>
+		Any {@link org.apache.juneau.http.annotation.Response @Response}-annotated type. (described below)
+	<li>
 		<code>HttpResponse</code> 
 		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
 	<li>

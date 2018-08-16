@@ -366,13 +366,15 @@
 	<ol>
 		<li><p class='updated'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies'>Interface Proxies Against 3rd-party REST Interfaces</a></p>
 		<ol>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.MethodNames'>Method Names</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.MethodReturnTypes'>Method Return Types</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Body'>@Body</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.FormData'>@FormData</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Query'>@Query</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Body'>@Body</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.FormData'>@FormData</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Query'>@Query</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Header'>@Header</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Path'>@Path</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Request'>@Request</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.3rdPartyProxies.Response'>@Request</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
@@ -15015,15 +15017,15 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples()} - Serialized examples per media type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partParser() partParser()} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required()} - Input validation.  Body must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema()} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartParser() usePartParser()} - Use the HTTP-Part parser for parsing body.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#value() value()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples} - Serialized examples per media type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partParser() partParser} - Override the part parser.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing body.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 
@@ -15199,31 +15201,31 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default()} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum()} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat()} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#description() description()} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#description() description} - Description.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#format() format()} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maximum() maximum()} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxLength() maxLength()} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minimum() minimum()} - Input validation.  Minimum numeric value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minLength() minLength()} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#name() name()} - Form data entry name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#parser() parser()} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#pattern() pattern()} - Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#required() required()} - Input validation.  Form data entry must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#value() value()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minItems() minItems} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#name() name} - Form data entry name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#parser() parser} - Override the part parser.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#required() required} - Input validation.  Form data entry must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 
@@ -15446,31 +15448,31 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default()} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum()} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#collectionFormat() collectionFormat()} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#format() format()} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maximum() maximum()} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxLength() maxLength()} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minimum() minimum()} - Input validation.  Minimum numeric value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minItems() minItems()} - Input validation.  Minimum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minLength() minLength()} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#name() name()} - Query parameter name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#parser() parser()} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#pattern() pattern()} - Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#required() required()} - Input validation.  Query parameter must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#value() value()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#description() description} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#example() example} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minItems() minItems} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#name() name} - Query parameter name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#parser() parser} - Override the part parser.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#required() required} - Input validation.  Query parameter must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 
@@ -15686,31 +15688,31 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default()} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum()} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#collectionFormat() collectionFormat()} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#format() format()} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maximum() maximum()} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxItems() maxItems()} - Input validation.  Maximum number of items in a collection. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxLength() maxLength()} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minimum() minimum()} - Input validation.  Minimum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minItems() minItems()} - Input validation.  Minimum number of items in a collection. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minLength() minLength()} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#name() name()} - Header name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#parser() parser()} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#pattern() pattern()} - Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#required() required()} - Input validation.  Header must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#uniqueItems() uniqueItems()} - Input validation. Collections must contain unique items only.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#value() value()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#description() description} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#example() example} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxItems() maxItems} - Input validation.  Maximum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minimum() minimum} - Input validation.  Minimum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minItems() minItems} - Input validation.  Minimum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#name() name} - Header name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#parser() parser} - Override the part parser.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#required() required} - Input validation.  Header must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 <p>
@@ -15845,26 +15847,26 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum()} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#allowEmptyValue() allowEmptyValue()} - Input validation.  Allow empty value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#collectionFormat() collectionFormat()} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMaximum() exclusiveMaximum()} - Input validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMinimum() exclusiveMinimum()} - Input validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#format() format()} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maximum() maximum()} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maxLength() maxLength()} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minimum() minimum()} - Input validation.  Minimum numeric value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minLength() minLength()} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#multipleOf() multipleOf()} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#name() name()} - Path variable name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#parser() parser()} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#pattern() pattern()} - Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#value() value()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#description() description} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#example() example} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#name() name} - Path variable name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#parser() parser} - Override the part parser.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 <p>
@@ -16094,16 +16096,16 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#code() code()} - HTTP status code.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#examples() examples()} - Serialized examples per media type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#headers() headers()} - Swagger about headers added to response.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partSerializer() partSerializer()} - Override the part serializer.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema()} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer()} - Use the HTTP-Part serializer for serializing the body.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#value() value()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#code() code} - HTTP status code.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#description() description} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#example() example} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#examples() examples} - Serialized examples per media type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#headers() headers} - Swagger about headers added to response.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partSerializer() partSerializer} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 <p>
@@ -16502,31 +16504,31 @@
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default()} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_enum() _enum()} - Output validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#$ref() $ref()} - Schema reference.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#code() code()} - HTTP status codes that this header applies to.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#collectionFormat() collectionFormat()} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#description() description()} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum()} - Output validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum()} - Output validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#format() format()} - The schema type format.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#items() items()} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maximum() maximum()} - Output validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxItems() maxItems()} - Output validation.  Maximum number of items in a collection. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxLength() maxLength()} - Output validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minimum() minimum()} - Output validation.  Minimum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minItems() minItems()} - Output validation.  Minimum number of items in a collection. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minLength() minLength()} - Output validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#multipleOf() multipleOf()} - Output validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#name() name()} - Header name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#pattern() pattern()} - Output validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer()} - Override the part serializer.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#type() type()} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#uniqueItems() uniqueItems()} - Output validation. Collections must contain unique items only.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value()} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_enum() _enum} - Output validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#$ref() $ref} - Schema reference.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#code() code} - HTTP status codes that this header applies to.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#description() description} - Description.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#example() example} - Serialized example.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMaximum() exclusiveMaximum} - Output validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#exclusiveMinimum() exclusiveMinimum} - Output validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#format() format} - The schema type format.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maximum() maximum} - Output validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxItems() maxItems} - Output validation.  Maximum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#maxLength() maxLength} - Output validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minimum() minimum} - Output validation.  Minimum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minItems() minItems} - Output validation.  Minimum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#minLength() minLength} - Output validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#multipleOf() multipleOf} - Output validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#name() name} - Header name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#pattern() pattern} - Output validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#serializer() serializer} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#uniqueItems() uniqueItems} - Output validation. Collections must contain unique items only.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 <p>
@@ -20200,8 +20202,18 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.MethodReturnTypes' id='juneau-rest-client.3rdPartyProxies.MethodReturnTypes'>9.1.1 - Method Return Types</a></h4>
-<div class='topic'><!-- START: 9.1.1 - juneau-rest-client.3rdPartyProxies.MethodReturnTypes -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.MethodNames' id='juneau-rest-client.3rdPartyProxies.MethodNames'>9.1.1 - Method Names</a></h4>
+<div class='topic'><!-- START: 9.1.1 - juneau-rest-client.3rdPartyProxies.MethodNames -->
+<p>
+	The method names used in 3rd-party proxies can be anything.  
+	However, shortcuts are provided for 
+</p>
+</div><!-- END: 9.1.1 - juneau-rest-client.3rdPartyProxies.MethodNames -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.MethodReturnTypes' id='juneau-rest-client.3rdPartyProxies.MethodReturnTypes'>9.1.2 - Method Return Types</a></h4>
+<div class='topic'><!-- START: 9.1.2 - juneau-rest-client.3rdPartyProxies.MethodReturnTypes -->
 <p>
 	The return type of the Java methods of 3rd-party proxies can be any of the following:
 </p>
@@ -20215,6 +20227,8 @@ TODO(7.2.0)
 		- The body of the response will be converted to the POJO using the parser defined on the 
 		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
 	<li>
+		Any {@link org.apache.juneau.http.annotation.Response @Response}-annotated type. (described below)
+	<li>
 		<code>HttpResponse</code> 
 		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
 	<li>
@@ -20226,77 +20240,358 @@ TODO(7.2.0)
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
 </ul>
-</div><!-- END: 9.1.1 - juneau-rest-client.3rdPartyProxies.MethodReturnTypes -->
+</div><!-- END: 9.1.2 - juneau-rest-client.3rdPartyProxies.MethodReturnTypes -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Body' id='juneau-rest-client.3rdPartyProxies.Body'>9.1.2 - @Body</a></h4>
-<div class='topic'><!-- START: 9.1.2 - juneau-rest-client.3rdPartyProxies.Body -->
-TODO(7.2.0)
-
-{@link org.apache.juneau.http.annotation.Body} 
-- The HTTP request body.
-<br>The argument can be any of the following types:
-<ul>
-	<li class='normal'>Any serializable POJO 
-		- Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered 
-		with the <code>RestClient</code>.
-	<li class='normal'>{@link java.io.Reader} 
-		- Raw contents of reader will be serialized to remote resource.
-	<li class='normal'>{@link java.io.InputStream} 
-		- Raw contents of input stream will be serialized to remote resource.
-	<li class='normal'>{@link org.apache.http.HttpEntity} 
-		- Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
-		- Converted to a URL-encoded FORM post.
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Body' id='juneau-rest-client.3rdPartyProxies.Body'>9.1.3 - @Body</a></h4>
+<div class='topic'><!-- START: 9.1.3 - juneau-rest-client.3rdPartyProxies.Body -->
+<p>
+	The {@link org.apache.juneau.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	to denote that they are the HTTP body of the request.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partSerializer() partSerializer} - Override the part serializer defined on client.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
+	</ul>
 </ul>
-</div><!-- END: 9.1.2 - juneau-rest-client.3rdPartyProxies.Body -->
 
-<!-- ==================================================================================================== -->
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// Used on parameter</jc>
+	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.FormData' id='juneau-rest-client.3rdPartyProxies.FormData'>9.1.3 - @FormData</a></h4>
-<div class='topic'><!-- START: 9.1.3 - juneau-rest-client.3rdPartyProxies.FormData -->
-TODO(7.2.0)
+		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+		String addPet(<ja>@Body</ja> Pet pet);
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Used on class</jc>
+	<ja>@Remoteable</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
 
-{@link org.apache.juneau.http.annotation.FormData} 
-- A form-data parameter.
-<br>Note that this is only available if the HTTP method is <code>POST</code>.
-<br>The argument can be any of the following types:
-<ul>
-	<li class='normal'>Any serializable POJO 
-		- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-	<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
-		- Individual name-value pairs.
-	<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-		- Individual name-value pairs.
-		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
+		<ja>@RemoteMethod</ja>(path=<js>"/pets"</js>)
+		String addPet(Pet pet);
+	}
+
+	<ja>@Body</ja>
+	<jk>public class</jk> Pet {...}
+</p>
+
+<p>
+	The argument can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Any serializable POJO - Converted to text using the {@link org.apache.juneau.serializer.Serializer} or {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> or specified on annotation.
+	<li>
+		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	<li>
+		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	<li>
+		<code>HttpEntity</code> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	<li>
+		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
 </ul>
-</div><!-- END: 9.1.3 - juneau-rest-client.3rdPartyProxies.FormData -->
+ 
+<p>
+	OpenAPI schema based serialization can be used by specifying a value for the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
+</p>
 
-<!-- ==================================================================================================== -->
+<p class='bpcode w800'>
+	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
+	String addCommaDelimitedPipeDelimitedInts(
+		<ja>@Body</ja>(
+			serializer=OpenApiPartSerializer.<jk>class</jk>,
+			schema=<ja>@Schema</ja>(
+				type=<js>"array"</js>,
+				collectionFormat=<js>"pipes"</js>,
+				items=<ja>@Items</ja>(
+					type=<js>"array"</js>
+					items=<ja>@SubItems</ja>(
+						type=<js>"int32"</js>,
+					 	<jc>// Auto-validates on client side!</jc>
+						minimum=<js>"0"</js>,
+						maximum=<js>"64"</js>
+					)
+				)
+			)
+		)
+		<jk>int</jk>[][] input
+	);
+</p>
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Query' id='juneau-rest-client.3rdPartyProxies.Query'>9.1.4 - @Query</a></h4>
-<div class='topic'><!-- START: 9.1.4 - juneau-rest-client.3rdPartyProxies.Query -->
-TODO(7.2.0)
+<p>
+	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+</p>
 
-{@link org.apache.juneau.http.annotation.Query} - A URL query parameter.
-<br>The argument can be any of the following types:
+<h5 class='section'>See Also:</h5>
 <ul>
-	<li class='normal'>Any serializable POJO 
-		- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-	<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-		- Individual name-value pairs.
-		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-	<li class='normal'><code>String</code> 
-		- Treated as a query string.
+	<li class='link'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a>
 </ul>
-</div><!-- END: 9.1.4 - juneau-rest-client.3rdPartyProxies.Query -->
+</div><!-- END: 9.1.3 - juneau-rest-client.3rdPartyProxies.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Header' id='juneau-rest-client.3rdPartyProxies.Header'>9.1.5 - @Header</a></h4>
-<div class='topic'><!-- START: 9.1.5 - juneau-rest-client.3rdPartyProxies.Header -->
-TODO(7.2.0)
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.FormData' id='juneau-rest-client.3rdPartyProxies.FormData'>9.1.4 - @FormData</a></h4>
+<div class='topic'><!-- START: 9.1.4 - juneau-rest-client.3rdPartyProxies.FormData -->
+<p>
+	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	to denote that they are form-data parameters on the request.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minItems() minItems} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#name() name} - Form data entry name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#pattern() pattern}- Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#required() required}- Input validation.  Form data entry must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#serializer() serializer}- Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#skipIfEmpty() skipIfEmpty}- Don't add if value is null or empty.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+	</ul>
+</ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<jc>// Explicit names specified for form data parameters.</jc>
+		<ja>@RemoteMethod</ja>
+		String postParameters(
+			<ja>@FormData</ja>(<js>"foo"</js>)</ja> String foo,
+			<ja>@FormData</ja>(<js>"bar"</js>)</ja> MyPojo pojo
+		);
+
+		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Name "*" is inferred.</jc>
+		<ja>@RemoteMethod</ja>
+		String postNameValuePairs(<ja>@FormData</ja> NameValuePairs nameValuePairs);
+
+		<jc>// Multiple values pulled from a Map.</jc>
+		<ja>@RemoteMethod</ja>
+		String postMap(<ja>@FormData</ja> Map&lt;String,Object&gt; map);
+
+		<jc>// Multiple values pulled from a bean.</jc>
+		<ja>@RemoteMethod</ja>
+		String postBean(<ja>@FormData</ja> MyBean bean);
+
+		<jc>// An entire form-data HTTP body as a String.</jc>
+		<ja>@RemoteMethod</ja>
+		String postString(<ja>@FormData</ja> String string);
+
+		<jc>// An entire form-data HTTP body as a Reader.</jc>
+		<ja>@RemoteMethod</ja>
+		String postReader(<ja>@FormData</ja> Reader reader);
+	}
+</p>
+
+<p>
+	Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> or associated via the {@link org.apache.juneau.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
+</ul>
+<p>
+	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	<li>
+		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	<li>
+		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
+	<li>
+		<code>Map</code> - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+	<li>
+		Bean - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+	<li>
+		<code>CharSequence</code> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
+</ul>
+
+<p>
+	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+</p>
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='link'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a>
+</ul>
+</div><!-- END: 9.1.4 - juneau-rest-client.3rdPartyProxies.FormData -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Query' id='juneau-rest-client.3rdPartyProxies.Query'>9.1.5 - @Query</a></h4>
+<div class='topic'><!-- START: 9.1.5 - juneau-rest-client.3rdPartyProxies.Query -->
+<p>
+	The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	to denote that they are query parameters on the request.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minItems() minItems} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#name() name} - Query parameter name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#required() required} - Input validation.  Query parameter must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#serializer() serializer} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#skipIfEmpty() skipIfEmpty}- Don't add if value is null or empty.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+	</ul>
+</ul>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+ 
+		<jc>// Explicit names specified for query parameters.</jc>
+		<ja>@RemoteMethod</ja>
+		String parameters(
+			<ja>@Query</ja>(<js>"foo"</js>)</ja> String foo,
+			<ja>@Query</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
+ 
+		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Same as @Query("*").</jc>
+		<ja>@RemoteMethod</ja>
+		String nameValuePairs(<ja>@Query</ja> NameValuePairs nameValuePairs);
+ 
+		<jc>// Multiple values pulled from a Map.</jc>
+		<jc>// Same as @Query("*").</jc>
+		<ja>@RemoteMethod</ja>
+		String map(<ja>@Query</ja> Map&lt;String,Object&gt; map);
+
+		<jc>// Multiple values pulled from a bean.</jc>
+		<jc>// Same as @Query("*").</jc>
+		<ja>@RemoteMethod</ja>
+		String bean(<ja>@Query</ja> MyBean myBean);
+
+		<jc>// An entire query string as a String.</jc>
+		<jc>// Same as @Query("*").</jc>
+		<ja>@RemoteMethod</ja>
+		String string(<ja>@Query</ja> String string);
+
+		<jc>// An entire query string as a Reader.</jc>
+		<jc>// Same as @Query("*").</jc>
+		<ja>@RemoteMethod</ja>
+		String reader(<ja>@Query</ja> Reader reader);
+	}
+</p>
+
+<p>
+	Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> or associated via the {@link org.apache.juneau.http.annotation.Query#serializer() @Query(serializer)} annotation.
+</ul>
+
+<p>
+	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized directly a query string.
+	<li>
+		<code>NameValuePairs</code> - Serialized as individual query parameters.
+	<li>
+		<code>Map</code> - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+	<li>
+		Bean - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+	<li>
+		<code>CharSequence</code> - Serialized directly a query string.
+</ul>
+
+<p>
+	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+</p>
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='link'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a>
+</ul>
+</div><!-- END: 9.1.5 - juneau-rest-client.3rdPartyProxies.Query -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Header' id='juneau-rest-client.3rdPartyProxies.Header'>9.1.6 - @Header</a></h4>
+<div class='topic'><!-- START: 9.1.6 - juneau-rest-client.3rdPartyProxies.Header -->
+<p>
+	The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	to denote that they are header parameters on the request.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default} - Default value if not present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxItems() maxItems} - Input validation.  Maximum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minimum() minimum} - Input validation.  Minimum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minItems() minItems} - Input validation.  Minimum number of items in a collection. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#name() name} - Header name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#required() required} - Input validation.  Header must be present.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#serializer() serializer} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#skipIfEmpty() skipIfEmpty} - Don't add if value is null or empty.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#type() type} - The schema type.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+	</ul>
+</ul>
 
 {@link org.apache.juneau.http.annotation.Header} 
 - A request header.
@@ -20308,21 +20603,189 @@ TODO(7.2.0)
 		- Individual name-value pairs.
 		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
 </ul>
-</div><!-- END: 9.1.5 - juneau-rest-client.3rdPartyProxies.Header -->
+
+
+
+
+<p>
+	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+</p>
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='link'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a>
+</ul>
+</div><!-- END: 9.1.6 - juneau-rest-client.3rdPartyProxies.Header -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Path' id='juneau-rest-client.3rdPartyProxies.Path'>9.1.6 - @Path</a></h4>
-<div class='topic'><!-- START: 9.1.6 - juneau-rest-client.3rdPartyProxies.Path -->
-TODO(7.2.0)
-</div><!-- END: 9.1.6 - juneau-rest-client.3rdPartyProxies.Path -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Path' id='juneau-rest-client.3rdPartyProxies.Path'>9.1.7 - @Path</a></h4>
+<div class='topic'><!-- START: 9.1.7 - juneau-rest-client.3rdPartyProxies.Path -->
+<p>
+	The {@link org.apache.juneau.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	to denote that they are path parameters on the request.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#format() format} - The schema type format. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#name() name} - Path variable name.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#serializer() serializer} - Override the part serializer.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#type() type} - The schema type.
+	</ul>
+</ul>
+
+<p>
+	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+</p>
+
+<h5 class='section'>See Also:</h5>
+<ul>
+	<li class='link'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a>
+</ul>
+</div><!-- END: 9.1.7 - juneau-rest-client.3rdPartyProxies.Path -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Request' id='juneau-rest-client.3rdPartyProxies.Request'>9.1.7 - @Request</a></h4>
-<div class='topic'><!-- START: 9.1.7 - juneau-rest-client.3rdPartyProxies.Request -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Request' id='juneau-rest-client.3rdPartyProxies.Request'>9.1.8 - @Request</a></h4>
+<div class='topic'><!-- START: 9.1.8 - juneau-rest-client.3rdPartyProxies.Request -->
 TODO(7.2.0)
-</div><!-- END: 9.1.7 - juneau-rest-client.3rdPartyProxies.Request -->
+
+
+<p>
+	The annotation can also be applied to a bean property field or getter when the argument is annotated with
+	{@link org.apache.juneau.http.annotation.Request @Request}:
+</p>
+
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Our remotable interface.</jc>
+	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+		String myProxyMethod(MyRequest bean);
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Our request bean interface.</jc>
+	<ja>@Request</ja> 
+	<jk>public interface</jk> MyRequest {
+		<ja>@Body</ja>
+		MyPojo getMyPojo();
+	}
+</p>
+<p>
+	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
+	{@link org.apache.juneau.http.annotation.Request @Request}:
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+	}
+
+	<jk>public interface</jk> MyRequest {
+
+		<jc>// Name explicitly specified.</jc>
+		<ja>@FormData</ja>(<js>"foo"</js>)
+		String getX();
+
+		<jc>// Name inherited from bean property.</jc>
+		<jc>// Same as @FormData("bar")</jc>
+		<ja>@FormData</ja>
+		String getBar();
+
+		<jc>// Multiple values pulled from NameValuePairs object.</jc>
+		<jc>// Same as @FormData("*")</jc>
+		<ja>@FormData</ja>
+		NameValuePairs getNameValuePairs();
+
+		<jc>// Multiple values pulled from Map.</jc>
+		<jc>// Same as @FormData("*")</jc>
+		<ja>@FormData</ja>
+	 	Map&lt;String,Object&gt; getMap();
+
+		<jc>// Multiple values pulled from bean.</jc>
+		<jc>// Same as @FormData("*")</jc>
+		<ja>@FormData</ja>
+	 	MyBean getMyBean();
+
+		<jc>// An entire form-data HTTP body as a Reader.</jc>
+		<jc>// Same as @FormData("*")</jc>
+		<ja>@FormData</ja>
+		Reader getReader();
+	}
+</p>
+
+<p>
+	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
+{@link org.apache.juneau.http.annotation.Request @Request}:
+ *
+<h5 class='section'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+ *
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+	}
+ *
+	<jk>public interface</jk> MyRequest {
+ *
+		<jc>// Name explicitly specified.</jc>
+		<ja>@Query</ja>(<js>"foo"</js>)
+		String getX();
+ *
+		<jc>// Name inherited from bean property.</jc>
+		<jc>// Same as @Query("bar")</jc>
+		<ja>@Query</ja>
+		String getBar();
+ *
+		<jc>// Multiple values pulled from NameValuePairs object.</jc>
+		<jc>// Same as @Query("*")</jc>
+		<ja>@Query</ja>
+		NameValuePairs getNameValuePairs();
+ *
+		<jc>// Multiple values pulled from Map.</jc>
+		<jc>// Same as @Query("*")</jc>
+		<ja>@Query</ja>
+	 	Map&lt;String,Object&gt; getMap();
+ *
+		<jc>// Multiple values pulled from bean.</jc>
+		<jc>// Same as @Query("*")</jc>
+		<ja>@Query</ja>
+	 	MyBean getMyBean();
+ *
+		<jc>// An entire query string as a Reader.</jc>
+		<jc>// Same as @Query("*")</jc>
+		<ja>@Query</ja>
+		Reader getReader();
+	}
+</p>
+</div><!-- END: 9.1.8 - juneau-rest-client.3rdPartyProxies.Request -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.3rdPartyProxies.Response' id='juneau-rest-client.3rdPartyProxies.Response'>9.1.9 - @Request</a></h4>
+<div class='topic'><!-- START: 9.1.9 - juneau-rest-client.3rdPartyProxies.Response -->
+TODO(7.2.0)
+</div><!-- END: 9.1.9 - juneau-rest-client.3rdPartyProxies.Response -->
 </div><!-- END: 9.1 - juneau-rest-client.3rdPartyProxies -->
 
 <!-- ==================================================================================================== -->

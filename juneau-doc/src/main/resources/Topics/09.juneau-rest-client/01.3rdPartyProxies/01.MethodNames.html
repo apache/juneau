@@ -13,23 +13,9 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Body
+{new} Method Names
 
-TODO(7.2.0)
-
-{@link org.apache.juneau.http.annotation.Body} 
-- The HTTP request body.
-<br>The argument can be any of the following types:
-<ul>
-	<li class='normal'>Any serializable POJO 
-		- Converted to text/bytes using the {@link org.apache.juneau.serializer.Serializer} registered 
-		with the <code>RestClient</code>.
-	<li class='normal'>{@link java.io.Reader} 
-		- Raw contents of reader will be serialized to remote resource.
-	<li class='normal'>{@link java.io.InputStream} 
-		- Raw contents of input stream will be serialized to remote resource.
-	<li class='normal'>{@link org.apache.http.HttpEntity} 
-		- Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	<li class='normal'>{@link org.apache.juneau.rest.client.NameValuePairs} 
-		- Converted to a URL-encoded FORM post.
-</ul>
+<p>
+	The method names used in 3rd-party proxies can be anything.  
+	However, shortcuts are provided for 
+</p>
