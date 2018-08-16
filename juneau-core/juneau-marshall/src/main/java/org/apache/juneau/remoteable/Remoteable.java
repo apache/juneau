@@ -57,20 +57,63 @@ public @interface Remoteable {
 	 * 	<li><js>"ALL"</js> - All methods defined on the interface or class are exposed.
 	 * </ul>
 	 */
-	String expose() default "DECLARED";
+	String expose() default "";
 
 	/**
-	 * Defines the methodology to use for the path names of the methods when not explicitly defined via
-	 * {@link RemoteMethod#path() @RemoteMethod.path()}.
+	 * Enable method signature paths.
 	 *
 	 * <p>
-	 * The options are:
-	 * <ul>
-	 * 	<li><js>"NAME"</js> (default) - Use the method name (e.g. "myMethod").
-	 * 	<li><js>"SIGNATURE"</js> - Use the method signature (e.g. "myMethod(int,boolean,java.lang.String,int[][][])").
-	 * </ul>
+	 * When enabled, the HTTP paths for Java methods will default to the full method signature when not specified via {@link RemoteMethod#path() @RemoteMethod(path)}.
+	 *
 	 * <p>
-	 * Note that if you use <js>"NAME"</js>, method names must be unique in the interface.
+	 * For example, the HTTP path for the <code>createPerson</code> method below is <js>"createPerson(org.apache.addressbook.CreatePerson)"</js>.
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jk>package</jk> org.apache.addressbook;
+	 *
+	 * 	<ja>@Remoteable</ja>(useMethodSignatures=<jk>true</jk>)
+	 * 	<jk>public interface</jk> IAddressBook {
+	 * 		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+	 * 	}
+	 *
+	 * 	<jk>public class</jk> CreatePerson {...}
+	 * </p>
+	 *
+	 * <p>
+	 * By default, if you do not specify a <ja>@Remoteable</ja> annotation on your class, the default value for this setting is <jk>true</jk>.
+	 * <br>So the path for the <code>createPerson</code> method shown is the same as above:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jk>public interface</jk> IAddressBook {
+	 * 		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The path can always be overridden using the {@link RemoteMethod#path() @RemoteMethod(path)} setting like so:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<jk>public interface</jk> IAddressBook {
+	 * 		<ja>@RemoteMethod</ja>(path=<jk>"/people"</jk>)
+	 * 		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * If this setting is NOT enabled, then we infer the HTTP method and path from the Java method name.
+	 * <br>In the example below, the HTTP method is detected as <js>"POST"</js> and the path is <js>"/person"</js>.
+	 *
+	 * <p class='bcode w800'>
+	 * 	<ja>@Remoteable</ja>
+	 * 	<jk>public interface</jk> IAddressBook {
+	 * 		Person postPerson(CreatePerson cp) <jk>throws</jk> Exception;
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.MethodNames'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; Method Names</a>
+	 * </ul>
 	 */
-	String methodPaths() default "NAME";
+	boolean useMethodSignatures() default false;
 }

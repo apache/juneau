@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.remoteable.ReturnValue.*;
@@ -1020,9 +1019,8 @@ public class RestClient extends BeanContext implements Closeable {
 	public <T> T getRemoteableProxy(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {
-			Remoteable r = getAnnotation(Remoteable.class, interfaceClass);
-
-			String path = r == null ? "" : trimSlashes(r.path());
+			RemoteableMeta rm = new RemoteableMeta(interfaceClass, asString(restUrl));
+			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
 				if (rootUrl == null)
 					throw new RemoteableMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remoteable proxy.");
@@ -1085,7 +1083,7 @@ public class RestClient extends BeanContext implements Closeable {
 										if (pt == PATH)
 											rc.path(pn, val, p.getSerializer(s), schema);
 										else if (val != null) {
-											if (pt == QUERY) 
+											if (pt == QUERY)
 												rc.query(pn, val, sie, ps, schema);
 											else if (pt == FORMDATA)
 												rc.formData(pn, val, sie, ps, schema);

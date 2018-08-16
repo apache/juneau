@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.remoteable;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -23,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Contains the meta-data about a Java method on a remoteable interface.
@@ -38,21 +38,25 @@ import org.apache.juneau.httppart.bean.*;
 public class RemoteableMethodMeta {
 
 	private final String httpMethod;
-	private final String url;
+	private final String url, path;
 	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, otherArgs;
 	private final RemoteMethodBeanArg[] requestArgs;
 	private final RemoteMethodArg bodyArg;
 	private final RemoteMethodReturn methodReturn;
+	private final Method method;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
 	 * @param m The Java method.
+	 * @param useMethodSignatures If <jk>true</jk> then the default path for the method should be the full method signature.
 	 */
-	public RemoteableMethodMeta(final String restUrl, Method m) {
-		Builder b = new Builder(restUrl, m);
+	public RemoteableMethodMeta(final String restUrl, Method m, boolean useMethodSignatures) {
+		Builder b = new Builder(restUrl, m, useMethodSignatures);
+		this.method = m;
 		this.httpMethod = b.httpMethod;
+		this.path = b.path;
 		this.url = b.url;
 		this.pathArgs = b.pathArgs.toArray(new RemoteMethodArg[b.pathArgs.size()]);
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
@@ -65,7 +69,7 @@ public class RemoteableMethodMeta {
 	}
 
 	private static final class Builder {
-		String httpMethod, url;
+		String httpMethod, url, path;
 		List<RemoteMethodArg>
 			pathArgs = new LinkedList<>(),
 			queryArgs = new LinkedList<>(),
@@ -77,30 +81,33 @@ public class RemoteableMethodMeta {
 		RemoteMethodArg bodyArg;
 		RemoteMethodReturn methodReturn;
 
-		Builder(String restUrl, Method m) {
-			Remoteable r = m.getDeclaringClass().getAnnotation(Remoteable.class);
+		Builder(String restUrl, Method m, boolean useMethodSignatures) {
+
 			RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 
-			httpMethod = rm == null ? "POST" : rm.httpMethod();
-			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT"))
+			httpMethod = rm == null ? "" : rm.httpMethod();
+			path = rm == null ? "" : rm.path();
+
+			if (path.isEmpty()) {
+				path = HttpUtils.detectHttpPath(m, ! useMethodSignatures);
+				if (useMethodSignatures)
+					path += HttpUtils.getMethodArgsSignature(m, true);
+			}
+			if (httpMethod.isEmpty())
+				httpMethod = HttpUtils.detectHttpMethod(m, ! useMethodSignatures, "POST");
+
+			if (path.startsWith("/"))
+				path = path.substring(1);
+
+			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
 				throw new RemoteableMetadataException(m,
 					"Invalid value specified for @RemoteMethod.httpMethod() annotation.  Valid values are [DELTE,GET,POST,PUT].");
-
-			String path = rm == null || rm.path().isEmpty() ? null : rm.path();
-			String methodPaths = r == null ? "NAME" : r.methodPaths();
-
-			if (! isOneOf(methodPaths, "NAME", "SIGNATURE"))
-				throw new RemoteableMetadataException(m,
-					"Invalid value specified for @Remoteable.methodPaths() annotation.  Valid values are [NAME,SIGNATURE].");
 
 			ReturnValue rv = m.getReturnType() == void.class ? ReturnValue.NONE : rm == null ? ReturnValue.BODY : rm.returns();
 
 			methodReturn = new RemoteMethodReturn(m, rv);
 
-			url =
-				trimSlashes(restUrl)
-				+ '/'
-				+ (path != null ? trimSlashes(path) : urlEncode("NAME".equals(methodPaths) ? m.getName() : getMethodSignature(m)));
+			url = trimSlashes(restUrl) + '/' + urlEncode(path);
 
 			for (int i = 0; i < m.getParameterTypes().length; i++) {
 				RemoteMethodArg rma = RemoteMethodArg.create(m, i);
@@ -221,5 +228,28 @@ public class RemoteableMethodMeta {
 	 */
 	public RemoteMethodReturn getReturns() {
 		return methodReturn;
+	}
+
+	/**
+	 * Returns the HTTP path of this method.
+	 *
+	 * @return
+	 * 	The HTTP path of this method relative to the parent interface.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>Never has leading or trailing slashes.
+	 */
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * Returns the underlying Java method that this metadata is about.
+	 *
+	 * @return
+	 * 	The underlying Java method that this metadata is about.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Method getJavaMethod() {
+		return method;
 	}
 }

@@ -31,7 +31,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.remoteable.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -93,7 +92,6 @@ public final class ClassMeta<T> implements Type {
 		isMemberClass;                                       // True if this is a non-static member class.
 	private final Object primitiveDefault;                  // Default value for primitive type classes.
 	private final Map<String,Method>
-		remoteableMethods,                                   // Methods annotated with @RemoteMethod.
 		publicMethods;                                       // All public methods, including static methods.
 	private final PojoSwap<?,?>[] childPojoSwaps;           // Any PojoSwaps where the normal type is a subclass of this class.
 	private final ConcurrentHashMap<Class<?>,PojoSwap<?,?>>
@@ -177,7 +175,6 @@ public final class ClassMeta<T> implements Type {
 			this.numberConstructorType = builder.numberConstructorType;
 			this.primitiveDefault = builder.primitiveDefault;
 			this.publicMethods = builder.publicMethods;
-			this.remoteableMethods = builder.remoteableMethods;
 			this.beanFilter = beanFilter;
 			this.pojoSwaps = builder.pojoSwaps.isEmpty() ? null : builder.pojoSwaps.toArray(new PojoSwap[builder.pojoSwaps.size()]);
 			this.builderSwap = builder.builderSwap;
@@ -246,7 +243,6 @@ public final class ClassMeta<T> implements Type {
 		this.isAbstract = mainType.isAbstract;
 		this.isMemberClass = mainType.isMemberClass;
 		this.primitiveDefault = mainType.primitiveDefault;
-		this.remoteableMethods = mainType.remoteableMethods;
 		this.publicMethods = mainType.publicMethods;
 		this.beanContext = mainType.beanContext;
 		this.elementType = elementType;
@@ -299,7 +295,6 @@ public final class ClassMeta<T> implements Type {
 		this.isAbstract = false;
 		this.isMemberClass = false;
 		this.primitiveDefault = null;
-		this.remoteableMethods = null;
 		this.publicMethods = null;
 		this.beanContext = null;
 		this.elementType = null;
@@ -351,8 +346,7 @@ public final class ClassMeta<T> implements Type {
 			numberConstructorType = null;
 		Object primitiveDefault = null;
 		Map<String,Method>
-			publicMethods = new LinkedHashMap<>(),
-			remoteableMethods = new LinkedHashMap<>();
+			publicMethods = new LinkedHashMap<>();
 		ClassMeta<?>
 			keyType = null,
 			valueType = null,
@@ -574,24 +568,6 @@ public final class ClassMeta<T> implements Type {
 			for (Method m : c.getMethods())
 				if (isAll(m, PUBLIC, NOT_DEPRECATED))
 					publicMethods.put(getMethodSignature(m), m);
-
-			Map<Class<?>,Remoteable> remoteableMap = getAnnotationsMap(Remoteable.class, c);
-			if (! remoteableMap.isEmpty()) {
-				Map.Entry<Class<?>,Remoteable> e = remoteableMap.entrySet().iterator().next();  // Grab the first one.
-				Class<?> ic = e.getKey();
-				Remoteable r = e.getValue();
-				String methodPaths = r.methodPaths();
-				String expose = r.expose();
-				for (Method m : "DECLARED".equals(expose) ? ic.getDeclaredMethods() : ic.getMethods()) {
-					if (isPublic(m)) {
-						RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
-						if (rm != null || ! "ANNOTATED".equals(expose)) {
-							String path = "NAME".equals(methodPaths) ? m.getName() : getMethodSignature(m);
-							remoteableMethods.put(path, m);
-						}
-					}
-				}
-			}
 
 			if (innerClass != Object.class) {
 				noArgConstructor = (Constructor<T>)findNoArgConstructor(implClass == null ? innerClass : implClass, Visibility.PUBLIC);
@@ -1484,15 +1460,6 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class or one of it's methods are annotated with {@link Remoteable @Remotable}.
-	 *
-	 * @return <jk>true</jk> if this class is remoteable.
-	 */
-	public boolean isRemoteable() {
-		return remoteableMethods != null;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this class is abstract.
 	 *
 	 * @return <jk>true</jk> if this class is abstract.
@@ -1508,19 +1475,6 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isMemberClass() {
 		return isMemberClass;
-	}
-
-	/**
-	 * All methods on this class annotated with {@link Remoteable @Remotable}, or all public methods if class is
-	 * annotated.
-	 *
-	 * <p>
-	 * Keys are method signatures.
-	 *
-	 * @return All remoteable methods on this class.
-	 */
-	public Map<String,Method> getRemoteableMethods() {
-		return remoteableMethods;
 	}
 
 	/**

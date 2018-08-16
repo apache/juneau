@@ -49,10 +49,12 @@ public @interface RemoteMethod {
 	 * The path to the REST service for this Java method relative to the parent proxy interface URL.
 	 *
 	 * <p>
-	 * The default value is the Java method name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface/myMethod"</js>)
-	 * if {@link Remoteable#methodPaths() @Remoteable.methodPaths()} is <js>"NAME"</js>, or the Java method signature
-	 * (e.g. <js>"http://localhost/root-url/org.foo.MyInterface/myMethod(int,boolean,java.lang.String)"</js>) if
-	 * it's <js>"SIGNATURE"</js>.
+	 * If you do not specify a value, then the path is inferred from the Java method name.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul class='doctree'>
+	 * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.MethodNames'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; Method Names</a>
+	 * </ul>
 	 */
 	String path() default "";
 
@@ -69,7 +71,7 @@ public @interface RemoteMethod {
 	 * <p>
 	 * The default value is <js>"POST"</js>.
 	 */
-	String httpMethod() default "POST";
+	String httpMethod() default "";
 
 	/**
 	 * The value the remoteable method returns.

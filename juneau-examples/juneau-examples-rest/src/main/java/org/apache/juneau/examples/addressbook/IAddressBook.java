@@ -14,12 +14,9 @@ package org.apache.juneau.examples.addressbook;
 
 import java.util.*;
 
-import org.apache.juneau.remoteable.*;
-
 /**
  * Interface used to help illustrate proxy interfaces.
  */
-@Remoteable
 public interface IAddressBook {
 
 	/** Initialize this address book with preset entries */

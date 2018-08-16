@@ -22,7 +22,6 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -37,6 +36,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
@@ -195,34 +195,13 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				}
 
 				String p = m.path();
-				if (isEmpty(p)) {
-					p = method.getName();
-					if (m.name().equals("")) {
-						for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"}) {
-							if (p.startsWith(t) && (p.length() == t.length() || Character.isUpperCase(p.charAt(t.length())))) {
-								p = Introspector.decapitalize(p.substring(t.length()));
-								break;
-							}
-						}
-						if (! p.startsWith("/"))
-							p = "/" + p;
-					}
-				}
+				if (isEmpty(p))
+					p = HttpUtils.detectHttpPath(method, true);
 
 				httpMethod = m.name().toUpperCase(Locale.ENGLISH);
-				if (httpMethod.equals("") && method.getName().startsWith("do"))
-					httpMethod = method.getName().substring(2).toUpperCase(Locale.ENGLISH);
-				if (httpMethod.equals("")) {
-					String mn = method.getName();
-					httpMethod = "GET";
-					for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"}) {
-						if (mn.startsWith(t) && (mn.length() == t.length() || Character.isUpperCase(mn.charAt(t.length())))) {
-							httpMethod = t.toUpperCase();
-							break;
-						}
-					}
-				}
-				if (httpMethod.equals("METHOD"))
+				if (httpMethod.isEmpty())
+					httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
+				if ("METHOD".equals(httpMethod))
 					httpMethod = "*";
 
 				priority = m.priority();

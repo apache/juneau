@@ -45,6 +45,7 @@ import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.exception.*;
@@ -3234,8 +3235,8 @@ public final class RestContext extends BeanContext {
 						if ("PROXY".equals(httpMethod)) {
 
 							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(method.getGenericReturnType());
-							final Map<String,Method> remoteableMethods = interfaceClass.getRemoteableMethods();
-							if (remoteableMethods.isEmpty())
+							final RemoteableMeta rm = new RemoteableMeta(interfaceClass.getInnerClass(), "/foo");
+							if (rm.getMethodsByPath().isEmpty())
 								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remoteable methods.", getMethodSignature(method), interfaceClass.getReadableName());
 
 							sm = new RestJavaMethod(resource, method, this) {
@@ -3250,15 +3251,16 @@ public final class RestContext extends BeanContext {
 									final Object o = res.getOutput();
 
 									if ("GET".equals(req.getMethod())) {
-										res.setOutput(getMethodInfo(remoteableMethods.values()));
+										res.setOutput(rm.getMethodsByPath().keySet());
 										return SC_OK;
 
 									} else if ("POST".equals(req.getMethod())) {
 										if (pathInfo.indexOf('/') != -1)
 											pathInfo = pathInfo.substring(pathInfo.lastIndexOf('/')+1);
 										pathInfo = urlDecode(pathInfo);
-										java.lang.reflect.Method m = remoteableMethods.get(pathInfo);
-										if (m != null) {
+										RemoteableMethodMeta rmm = rm.getMethodMetaByPath(pathInfo);
+										if (rmm != null) {
+											Method m = rmm.getJavaMethod();
 											try {
 												// Parse the args and invoke the method.
 												Parser p = req.getBody().getParser();

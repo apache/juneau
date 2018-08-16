@@ -54,7 +54,7 @@ public class PoweredByJuneau extends Widget {
 	@Override /* Widget */
 	public String getHtml(RestRequest req) throws Exception {
 		UriResolver r = req.getUriResolver();
-		return "<a href='http://juneau.apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/juneau.png")+"'>";
+		return "<a href='http://juneau.apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/images/juneau.png")+"'>";
 	}
 }
 

@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.*;
@@ -30,6 +29,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
@@ -52,7 +52,7 @@ import org.apache.juneau.rest.exception.*;
 @SuppressWarnings({"serial","javadoc"})
 public abstract class RemoteableServlet extends BasicRestServlet {
 
-	private final Map<String,Class<?>> classNameMap = new ConcurrentHashMap<>();
+	private final Map<String,RemoteableMeta> serviceMap = new ConcurrentHashMap<>();
 
 	//--------------------------------------------------------------------------------
 	// Abstract methods
@@ -81,10 +81,8 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	)
 	public List<LinkString> getInterfaces() throws Exception {
 		List<LinkString> l = new LinkedList<>();
-		boolean useAll = ! useOnlyAnnotated();
 		for (Class<?> c : getServiceMap().keySet())
-			if (useAll || getContext().getBeanContext().getClassMeta(c).isRemoteable())
-				l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));
+			l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));
 		return l;
 	}
 
@@ -125,13 +123,13 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		) throws NotFound, Exception {
 
 		// Find the method.
-		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
-		if (m == null)
+		RemoteableMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
+		if (rmm == null)
 			throw new NotFound("Method not found");
 
 		Table t = table();
 
-		Type[] types = m.getGenericParameterTypes();
+		Type[] types = rmm.getJavaMethod().getGenericParameterTypes();
 		if (types.length == 0) {
 			t.child(tr(td("No arguments").colspan(3).style("text-align:center")));
 		} else {
@@ -195,19 +193,20 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 		// Find the parser.
 		if (p == null)
 			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);
-		Class<?> c = getInterfaceClass(javaInterface);
+		RemoteableMeta c = getInterfaceClass(javaInterface);
 
 		// Find the service.
-		Object service = getServiceMap().get(c);
+		Object service = getServiceMap().get(c.getJavaClass());
 		if (service == null)
 			throw new NotFound("Service not found");
 
 		// Find the method.
-		java.lang.reflect.Method m = getMethods(javaInterface).get(javaMethod);
-		if (m == null)
+		RemoteableMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
+		if (rmm == null)
 			throw new NotFound("Method not found");
 
 		// Parse the args and invoke the method.
+		java.lang.reflect.Method m = rmm.getJavaMethod();
 		Object[] params = p.parseArgs(r, m.getGenericParameterTypes());
 		return m.invoke(service, params);
 	}
@@ -217,29 +216,25 @@ public abstract class RemoteableServlet extends BasicRestServlet {
 	// Other methods
 	//--------------------------------------------------------------------------------
 
-	private boolean useOnlyAnnotated() {
-		return getContext().getProperties().getBoolean(RemoteableServiceProperties.REMOTEABLE_includeOnlyRemotableMethods, false);
-	}
-
-	private Map<String,java.lang.reflect.Method> getMethods(String javaInterface) throws Exception {
-		Class<?> c = getInterfaceClass(javaInterface);
-		ClassMeta<?> cm = getContext().getBeanContext().getClassMeta(c);
-		return (useOnlyAnnotated() ? cm.getRemoteableMethods() : cm.getPublicMethods());
+	private Map<String,RemoteableMethodMeta> getMethods(String javaInterface) throws Exception {
+		return getInterfaceClass(javaInterface).getMethodsByPath();
 	}
 
 	/**
 	 * Return the <code>Class</code> given it's name if it exists in the services map.
 	 */
-	private Class<?> getInterfaceClass(String javaInterface) throws NotFound, Exception {
-		Class<?> c = classNameMap.get(javaInterface);
-		if (c == null) {
-			for (Class<?> c2 : getServiceMap().keySet())
-				if (c2.getName().equals(javaInterface)) {
-					classNameMap.put(javaInterface, c2);
-					return c2;
+	private RemoteableMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {
+		RemoteableMeta rm = serviceMap.get(javaInterface);
+		if (rm == null) {
+			for (Class<?> c : getServiceMap().keySet()) {
+				if (c.getName().equals(javaInterface)) {
+					rm = new RemoteableMeta(c, null);
+					serviceMap.put(javaInterface, rm);
+					return rm;
 				}
+			}
 			throw new NotFound("Interface class not found");
 		}
-		return c;
+		return rm;
 	}
 }
