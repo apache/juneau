@@ -52,7 +52,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">Swagger Specification &gt; External Documentation Object</a>
+ * 	<li class='extlink'>{@doc SwaggerExternalDocumentationObject}
  * </ul>
  */
 @Documented
@@ -60,7 +60,7 @@ import java.lang.annotation.*;
 public @interface ExternalDocs {
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">ExternalDocumentation</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
 	 * A short description of the target documentation.
@@ -78,7 +78,7 @@ public @interface ExternalDocs {
 	String[] description() default {};
 
 	/**
-	 * <mk>url</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">ExternalDocumentation</a> object.
+	 * <mk>url</mk> field of the {@doc SwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
 	 * The URL for the target documentation. Value MUST be in the format of a URL.
@@ -97,7 +97,7 @@ public @interface ExternalDocs {
 	String url() default "";
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#externalDocumentationObject">ExternalDocumentation</a> object.
+	 * Free-form value for the {@doc SwaggerExternalDocumentationObject}.
 	 *
 	 * <p>
 	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.

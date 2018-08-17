@@ -264,8 +264,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
-	 * 	<br>The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">
-	 * 		path templating</a>
+	 * 	<br>The host does not support {@doc SwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -283,7 +282,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>This MUST be the host only and does not include the scheme nor sub-paths.
 	 * 	<br>It MAY include a port.
 	 * 	<br>If the host is not included, the host serving the documentation is to be used (including the port).
-	 * 	<br>The host does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>
+	 * 	<br>The host does not support {@doc SwaggerPathTemplating path templating}
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -313,7 +312,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>If it is not included, the API is served directly under the <code>host</code>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <code>basePath</code> does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
+	 * 	<br>The <code>basePath</code> does not support {@doc SwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -330,7 +329,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
 	 * 	<br>If it is not included, the API is served directly under the <code>host</code>.
 	 * 	<br>The value MUST start with a leading slash (/).
-	 * 	<br>The <code>basePath</code> does not support <a class="doclink" href="http://swagger.io/specification/#pathTemplating">path templating</a>.
+	 * 	<br>The <code>basePath</code> does not support {@doc SwaggerPathTemplating path templating}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -461,7 +460,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -477,11 +476,11 @@ public class Swagger extends SwaggerElement {
 	 * A list of MIME types the operation can consume.
 	 * This overrides the <code>consumes</code> definition at the Swagger Object.
 	 * An empty value MAY be used to clear the global definition.
-	 * Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * Value MUST be as described under {@doc SwaggerMimeTypes}.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Values MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * 	<br>Values MUST be as described under {@doc SwaggerMimeTypes}.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
@@ -544,7 +543,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -564,7 +563,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @param values
 	 * 	The values to add to this property.
-	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -1217,7 +1216,7 @@ public class Swagger extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
+	 * 	<br>Not all tags that are used by the {@doc SwaggerOperationObject Operation Object} must be declared.
 	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -1237,7 +1236,7 @@ public class Swagger extends SwaggerElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>The order of the tags can be used to reflect on their order by the parsing tools.
-	 * 	<br>Not all tags that are used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a> must be declared.
+	 * 	<br>Not all tags that are used by the {@doc SwaggerOperationObject Operation Object} must be declared.
 	 * 	<br>The tags that are not declared may be organized randomly or based on the tools' logic.
 	 * 	<br>Each tag name in the list MUST be unique.
 	 * 	<br>Ignored if <jk>null</jk>.

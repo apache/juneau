@@ -19,33 +19,33 @@ import java.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
 public enum HttpMethod {
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2" class="doclink">OPTIONS</a> */
+	/** {@doc RFC2616.section9#sec9.2 OPTIONS} */
 	OPTIONS,
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" class="doclink">GET</a> */
+	/** {@doc RFC2616.section9#sec9.3 GET} */
 	GET,
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4" class="doclink">HEAD</a> */
+	/** {@doc RFC2616.section9#sec9.4 HEAD} */
 	HEAD,
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5" class="doclink">POST</a> */
+	/** {@doc RFC2616.section9#sec9.5 POST} */
 	POST,
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6" class="doclink">PUT</a> */
+	/** {@doc RFC2616.section9#sec9.6 PUT} */
 	PUT,
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7" class="doclink">DELETE</a> */
+	/** {@doc RFC2616.section9#sec9.7 DELETE} */
 	DELETE,
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8" class="doclink">TRACE</a> */
+	/** {@doc RFC2616.section9#sec9.8 TRACE} */
 	TRACE,
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9" class="doclink">CONNECT</a> */
+	/** {@doc RFC2616.section9#sec9.9 CONNECT} */
 	CONNECT,
 
 	/** A non-standard value. */

@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-strong-element">&lt;strong&gt;</a>
+ * DTO for an HTML {@doc HTML5.text-level-semantics#the-strong-element <strong>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>

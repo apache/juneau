@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-pre-element">&lt;pre&gt;</a>
+ * DTO for an HTML {@doc HTML5.grouping-content#the-pre-element <pre>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>

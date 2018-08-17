@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements">&lt;h5&gt;</a>
+ * DTO for an HTML {@doc HTML5.sections#the-h1,-h2,-h3,-h4,-h5,-and-h6-elements <h5>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>

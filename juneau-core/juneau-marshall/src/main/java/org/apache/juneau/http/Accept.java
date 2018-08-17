@@ -141,7 +141,7 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
 @Header("Accept")
@@ -198,8 +198,7 @@ public final class Accept {
 	 * present in the header.
 	 *
 	 * <p>
-	 * See <a class='doclink' href='https://www.w3.org/TR/activitypub/#retrieving-objects'>
-	 * ActivityPub / Retrieving Objects</a>
+	 * See {@doc https://www.w3.org/TR/activitypub/#retrieving-objects ActivityPub / Retrieving Objects}
 	 *
 	 * @param mediaTypes The media types to match against.
 	 * @return The index into the array of the best match, or <code>-1</code> if no suitable matches could be found.

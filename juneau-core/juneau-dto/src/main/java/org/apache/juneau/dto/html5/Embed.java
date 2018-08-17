@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-embed-element">&lt;embed&gt;</a>
+ * DTO for an HTML {@doc HTML5.embedded-content-0#the-embed-element <embed>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Embed extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
+	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -48,7 +48,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-src">src</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-embed-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -71,7 +71,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-type">type</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-embed-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.
@@ -85,7 +85,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

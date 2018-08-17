@@ -102,7 +102,7 @@ import org.apache.juneau.jsonschema.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Body}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
+ * 	<li class='extlink'>{@doc SwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
@@ -163,7 +163,7 @@ public @interface Body {
 	//=================================================================================================================
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -204,7 +204,7 @@ public @interface Body {
 	String[] description() default {};
 
 	/**
-	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Determines whether the body is mandatory.
@@ -255,7 +255,7 @@ public @interface Body {
 	//=================================================================================================================
 
 	/**
-	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>schema</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The schema defining the type used for the body parameter.
@@ -455,7 +455,7 @@ public @interface Body {
 	String[] examples() default {};
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * Free-form value for the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this parameter-info.

@@ -20,7 +20,7 @@
 	the server side.
 </p>
 <p>
-	Remote interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getInterfaceProxy(Class)} 
+	Remote interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class)} 
 	method.
 	<br>{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a 
 	full-blown REST interface for calling remote services (e.g. POJOs) remotely. 
@@ -65,7 +65,7 @@
 	<li>
 		The method must be public.
 	<li>
-		The parameter and return types must be <a class='doclink' href='#juneau-marshall.PojoCategories'>serializable and parsable</a>.
+		The parameter and return types must be {@doc PojoCategories serializable and parsable}.
 	<li>
 		The method can optionally throw any <code>Throwable</code> that has a public no-arg or single-arg-string constructors.
 		<br>There are automatically recreated on the client side when thrown on the server side.
@@ -176,7 +176,7 @@
 	a browser with no coding involved.
 </p>
 <p>
-	The parameters and return types of the Java methods can be any of the supported <a class='doclink' href='#juneau-marshall.PojoCategories'>serializable and parsable types</a>.
+	The parameters and return types of the Java methods can be any of the supported {@doc PojoCategories serializable and parsable} types.
 	<br>This ends up being WAY more flexible than other proxy interfaces since Juneau can handle so may POJO types 
 	out-of-the-box.
 	<br>Most of the time you don't even need to modify your existing Java implementation code.

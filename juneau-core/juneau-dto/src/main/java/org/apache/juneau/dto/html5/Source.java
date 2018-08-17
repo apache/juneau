@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-source-element">&lt;source&gt;</a>
+ * DTO for an HTML {@doc HTML5.embedded-content-0#the-source-element <source>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Source extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-src">src</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-source-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -54,7 +54,7 @@ public class Source extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-source-type">type</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-source-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.

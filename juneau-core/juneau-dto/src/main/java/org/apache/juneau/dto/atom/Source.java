@@ -43,7 +43,7 @@ import org.apache.juneau.annotation.*;
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>{@doc juneau-dto.Atom}
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.atom</a>
+ * 	<li class='jp'>{@doc package-summary.html#TOC}
  * </ul>
  */
 public class Source extends CommonEntry {

@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-canvas-element">&lt;canvas&gt;</a>
+ * DTO for an HTML {@doc HTML5.scripting-1#the-canvas-element <canvas>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Canvas extends HtmlElementContainer {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height">height</a> attribute.
+	 * {@doc HTML5.scripting-1#attr-canvas-height height} attribute.
 	 *
 	 * <p>
 	 * Vertical dimension.
@@ -43,7 +43,7 @@ public class Canvas extends HtmlElementContainer {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width">width</a> attribute.
+	 * {@doc HTML5.scripting-1#attr-canvas-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

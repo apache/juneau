@@ -53,7 +53,7 @@ public @interface RemoteMethod {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Methods}
+	 * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.RemoteMethod}
 	 * </ul>
 	 */
 	String path() default "";

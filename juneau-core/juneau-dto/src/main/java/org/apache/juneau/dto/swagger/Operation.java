@@ -334,7 +334,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -349,7 +349,7 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -481,7 +481,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Values MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * 	<br>Values MUST be as described under {@doc SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -502,7 +502,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Values MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * 	<br>Values MUST be as described under {@doc SwaggerMimeTypes}.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
@@ -568,7 +568,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to add to this property.
-	 * 	<br>Value MUST be as described under <a class="doclink" href="http://swagger.io/specification/#mimeTypes">Mime Types</a>.
+	 * 	<br>Value MUST be as described under {@doc SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -635,15 +635,15 @@ public class Operation extends SwaggerElement {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>,
+	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
 	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
 	 * 	<li>
-	 * 		The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
-	 * 		to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
+	 * 		The list can use the {@doc SwaggerReferenceObject}
+	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
@@ -679,15 +679,15 @@ public class Operation extends SwaggerElement {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>,
+	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
 	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
 	 * 	<li>
-	 * 		The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
-	 * 		to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
+	 * 		The list can use the {@doc SwaggerReferenceObject}
+	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
@@ -711,15 +711,15 @@ public class Operation extends SwaggerElement {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		If a parameter is already defined at the <a class="doclink" href="http://swagger.io/specification/#pathItemParameters">Path Item</a>,
+	 * 		If a parameter is already defined at the {@doc SwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
 	 * 	<li>
 	 * 		The list MUST NOT include duplicated parameters.
 	 * 	<li>
 	 * 		A unique parameter is defined by a combination of a <code>name</code> and <code>location</code>.
 	 * 	<li>
-	 * 		The list can use the <a class="doclink" href="http://swagger.io/specification/#referenceObject">Reference Object</a>
-	 * 		to link to parameters that are defined at the <a class="doclink" href="http://swagger.io/specification/#swaggerParameters">Swagger Object's parameters</a>.
+	 * 		The list can use the {@doc SwaggerReferenceObject}
+	 * 		to link to parameters that are defined at the {@doc SwaggerParameterObject Swagger Object's parameters}.
 	 * 	<li>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>

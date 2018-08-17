@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a>
+ * DTO for an HTML {@doc HTML5.scripting-1#the-script-element <script>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Script extends HtmlElementRawText {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-async">async</a> attribute.
+	 * {@doc HTML5.scripting-1#attr-script-async async} attribute.
 	 *
 	 * <p>
 	 * Execute script asynchronously.
@@ -47,7 +47,7 @@ public class Script extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-charset">charset</a> attribute.
+	 * {@doc HTML5.scripting-1#attr-script-charset charset} attribute.
 	 *
 	 * <p>
 	 * Character encoding of the external script resource.
@@ -61,7 +61,7 @@ public class Script extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-crossorigin">crossorigin</a>
+	 * {@doc HTML5.scripting-1#attr-script-crossorigin crossorigin}
 	 * attribute.
 	 *
 	 * <p>
@@ -76,7 +76,7 @@ public class Script extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-defer">defer</a> attribute.
+	 * {@doc HTML5.scripting-1#attr-script-defer defer} attribute.
 	 *
 	 * <p>
 	 * Defer script execution.
@@ -92,7 +92,7 @@ public class Script extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-src">src</a> attribute.
+	 * {@doc HTML5.scripting-1#attr-script-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -115,7 +115,7 @@ public class Script extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-type">type</a> attribute.
+	 * {@doc HTML5.scripting-1#attr-script-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.

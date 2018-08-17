@@ -55,7 +55,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Swagger Specification &gt; Contact Object</a>
+ * 	<li class='extlink'>{@doc SwaggerContactObject}
  * </ul>
  */
 @Documented
@@ -63,7 +63,7 @@ import java.lang.annotation.*;
 public @interface Contact {
 
 	/**
-	 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Contact</a> object.
+	 * <mk>name</mk> field of the {@doc SwaggerContactObject}.
 	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
@@ -80,7 +80,7 @@ public @interface Contact {
 	String name() default "";
 
 	/**
-	 * <mk>url</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Contact</a> object.
+	 * <mk>url</mk> field of the {@doc SwaggerContactObject}.
 	 *
 	 * <p>
 	 * The URL pointing to the contact information. MUST be in the format of a URL.
@@ -97,7 +97,7 @@ public @interface Contact {
 	String url() default "";
 
 	/**
-	 * <mk>email</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Contact</a> object.
+	 * <mk>email</mk> field of the {@doc SwaggerContactObject}.
 	 *
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
@@ -114,7 +114,7 @@ public @interface Contact {
 	String email() default "";
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#contactObject">Contact</a> object.
+	 * Free-form value for the {@doc SwaggerContactObject}.
 	 *
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

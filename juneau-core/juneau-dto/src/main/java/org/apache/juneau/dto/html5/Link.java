@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-link-element">&lt;link&gt;</a>
+ * DTO for an HTML {@doc HTML5.document-metadata#the-link-element <link>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Link extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a>
+	 * {@doc HTML5.document-metadata#attr-link-crossorigin crossorigin}
 	 * attribute.
 	 *
 	 * <p>
@@ -46,7 +46,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-href">href</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-link-href href} attribute.
 	 *
 	 * <p>
 	 * Address of the hyperlink.
@@ -69,7 +69,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-hreflang">hreflang</a>
+	 * {@doc HTML5.document-metadata#attr-link-hreflang hreflang}
 	 * attribute.
 	 *
 	 * <p>
@@ -84,7 +84,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-media">media</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-link-media media} attribute.
 	 *
 	 * <p>
 	 * Applicable media.
@@ -98,7 +98,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel">rel</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-link-rel rel} attribute.
 	 *
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
@@ -112,7 +112,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes">sizes</a> attribute.
+	 * {@doc HTML5.links#attr-link-sizes sizes} attribute.
 	 *
 	 * <p>
 	 * Sizes of the icons (for rel="icon").
@@ -126,7 +126,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type">type</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-link-type type} attribute.
 	 *
 	 * <p>
 	 * Hint for the type of the referenced resource.

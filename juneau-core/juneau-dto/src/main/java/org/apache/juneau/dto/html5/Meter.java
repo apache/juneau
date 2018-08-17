@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-meter-element">&lt;meter&gt;</a>
+ * DTO for an HTML {@doc HTML5.forms#the-meter-element <meter>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Meter extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.
+	 * {@doc HTML5.forms#attr-meter-high high} attribute.
 	 *
 	 * <p>
 	 * Low limit of high range.
@@ -43,7 +43,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-low">low</a> attribute.
+	 * {@doc HTML5.forms#attr-meter-low low} attribute.
 	 *
 	 * <p>
 	 * High limit of low range.
@@ -59,7 +59,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-max">max</a> attribute.
+	 * {@doc HTML5.forms#attr-meter-max max} attribute.
 	 *
 	 * <p>
 	 * Upper bound of range.
@@ -75,7 +75,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-min">min</a> attribute.
+	 * {@doc HTML5.forms#attr-meter-min min} attribute.
 	 *
 	 * <p>
 	 * Lower bound of range.
@@ -91,7 +91,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-optimum">optimum</a> attribute.
+	 * {@doc HTML5.forms#attr-meter-optimum optimum} attribute.
 	 *
 	 * <p>
 	 * Optimum value in gauge.
@@ -107,7 +107,7 @@ public class Meter extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-value">value</a> attribute.
+	 * {@doc HTML5.forms#attr-meter-value value} attribute.
 	 *
 	 * <p>
 	 * Current value of the element.

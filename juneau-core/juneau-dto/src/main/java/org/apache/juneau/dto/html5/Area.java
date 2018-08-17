@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-area-element">&lt;area&gt;</a>
+ * DTO for an HTML {@doc HTML5.embedded-content-0#the-area-element <area>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Area extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-area-alt alt} attribute.
 	 *
 	 * <p>
 	 * Replacement text for use when images are not available.
@@ -45,7 +45,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-coords">coords</a>
+	 * {@doc HTML5.embedded-content-0#attr-area-coords coords}
 	 * attribute.
 	 *
 	 * <p>
@@ -60,7 +60,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
+	 * {@doc HTML5.links#attr-hyperlink-download download} attribute.
 	 *
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
@@ -76,7 +76,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-href">href</a> attribute.
+	 * {@doc HTML5.links#attr-hyperlink-href href} attribute.
 	 *
 	 * <p>
 	 * Address of the hyperlink.
@@ -99,7 +99,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-hreflang">hreflang</a> attribute.
+	 * {@doc HTML5.links#attr-hyperlink-hreflang hreflang} attribute.
 	 *
 	 * <p>
 	 * Language of the linked resource.
@@ -113,7 +113,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
+	 * {@doc HTML5.links#attr-hyperlink-rel rel} attribute.
 	 *
 	 * <p>
 	 * Relationship between the document containing the hyperlink and the destination resource.
@@ -127,7 +127,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-area-shape shape} attribute.
 	 *
 	 * <p>
 	 * The kind of shape to be created in an image map.
@@ -141,7 +141,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
+	 * {@doc HTML5.links#attr-hyperlink-target target} attribute.
 	 *
 	 * <p>
 	 * Browsing context for hyperlink navigation.
@@ -155,7 +155,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
+	 * {@doc HTML5.links#attr-hyperlink-type type} attribute.
 	 *
 	 * <p>
 	 * Hint for the type of the referenced resource.

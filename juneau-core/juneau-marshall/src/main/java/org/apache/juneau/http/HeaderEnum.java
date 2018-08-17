@@ -23,7 +23,7 @@ package org.apache.juneau.http;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  *
  * @param <E> The enum type.

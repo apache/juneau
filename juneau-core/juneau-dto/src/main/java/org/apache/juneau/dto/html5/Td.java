@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-td-element">&lt;td&gt;</a>
+ * DTO for an HTML {@doc HTML5.tabular-data#the-td-element <td>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Td extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-tdth-colspan colspan} attribute.
 	 *
 	 * <p>
 	 * Number of columns that the cell is to span.
@@ -43,7 +43,7 @@ public class Td extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-tdth-headers headers} attribute.
 	 *
 	 * <p>
 	 * The header cells for this cell.
@@ -57,7 +57,7 @@ public class Td extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-tdth-rowspan rowspan} attribute.
 	 *
 	 * <p>
 	 * Number of rows that the cell is to span.

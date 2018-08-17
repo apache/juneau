@@ -20,7 +20,7 @@ import java.lang.annotation.*;
  * Swagger tag annotation.
  *
  * <p>
- * Allows adding meta data to a single tag that is used by the <a class='doclink' href='https://swagger.io/specification/v2/#operationObject'>Operation Object</a>.
+ * Allows adding meta data to a single tag that is used by the {@doc SwaggerOperationObject}.
  * It is not mandatory to have a Tag Object per tag used there.
  *
  * <p>
@@ -57,7 +57,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Swagger Specification &gt; Tag Object</a>
+ * 	<li class='extlink'>{@doc SwaggerTagObject}
  * </ul>
  */
 @Documented
@@ -65,7 +65,7 @@ import java.lang.annotation.*;
 public @interface Tag {
 
 	/**
-	 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
+	 * <mk>name</mk> field of the {@doc SwaggerTagObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -76,7 +76,7 @@ public @interface Tag {
 	String name() default "";
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerTagObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -91,7 +91,7 @@ public @interface Tag {
 	String[] description() default {};
 
 	/**
-	 * <mk>externalDocs</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
+	 * <mk>externalDocs</mk> field of the {@doc SwaggerTagObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -106,7 +106,7 @@ public @interface Tag {
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#tagObject">Tag</a> object.
+	 * Free-form value for the {@doc SwaggerTagObject}.
 	 *
 	 * <p>
 	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this Tag object.

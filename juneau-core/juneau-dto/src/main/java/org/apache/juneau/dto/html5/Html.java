@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#the-html-element">&lt;html&gt;</a>
+ * DTO for an HTML {@doc HTML5.semantics#the-html-element <html>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Html extends HtmlElementContainer {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#attr-html-manifest">manifest</a> attribute.
+	 * {@doc HTML5.semantics#attr-html-manifest manifest} attribute.
 	 *
 	 * <p>
 	 * Application cache manifest.

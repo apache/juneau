@@ -162,7 +162,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -176,7 +176,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -263,7 +263,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
@@ -871,7 +871,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -939,7 +939,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value

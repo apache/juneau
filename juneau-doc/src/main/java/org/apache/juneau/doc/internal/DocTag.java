@@ -78,37 +78,74 @@ public class DocTag implements Taglet {
 		String key = tag.text();
 		String href = null;
 		String label = null;
+
 		int i = key.indexOf(' ');
 		if (key.indexOf(' ') != -1) {
 			label = key.substring(i + 1);
 			key = key.substring(0, i).trim();
 		}
-		DocStore.Link l = STORE.getLink(key);
-		if (l == null) {
-			System.err.println("Unknown doc tag '" + key + "'");
-			return tag.text();
+
+		String hrefRemainder = "";
+
+		if (key.matches("^\\w+\\:\\/\\/.*")) {
+			href = key;
+			if (label == null)
+				label = href;
+		} else if (key.startsWith("org.apache.juneau")) {
+			i = firstDelimiter(key, 0);
+			if (i == -1)
+				href = key.replace('.', '/') + "/package-summary.html";
+			else
+				href = key.substring(0, i).replace('.', '/') + "/package-summary.html" + key.substring(i);
+			if (label == null)
+				label = href;
+		} else {
+			i = firstDelimiter(key, 0);
+			if (i != -1) {
+				hrefRemainder = key.substring(i);
+				key = key.substring(0, i);
+			}
+			DocStore.Link l = STORE.getLink(key);
+			if (l == null) {
+				System.err.println("Unknown doc tag '" + key + "'");
+				return tag.text();
+			}
+			href = l.href;
+			if (label == null)
+				label = l.label;
 		}
-		href = l.href;
+
 		if (label == null)
-			label = l.label;
+			label = "link";
+		label = label.replace("<", "&lt;").replace(">", "&gt;");
+
 		if (href.startsWith("#") && !f.getName().equals("overview.html")) {
 			StringBuilder sb = new StringBuilder();
 			while (true) {
 				f = f.getParentFile();
-				if (f == null)
+				if (f == null) {
 					System.err.println("Unknown doc tag href: " + tag.text());
-				if (f == null || f.getName().equals("java"))
+					return tag.text();
+				}
+				if (f.getName().equals("java"))
 					break;
 				sb.append("../");
 			}
 			sb.append("overview-summary.html" + href);
 			href = sb.toString();
 		}
-		return "<a class='doclink' href='" + href + "'>" + label + "</a>";
+		return "<a class='doclink' href='" + href + hrefRemainder + "'>" + label + "</a>";
 	}
 
 	@Override
 	public String toString(Tag[] tags) {
 		return null;
+	}
+
+	private int firstDelimiter(String path, int from) {
+		int i = path.indexOf('/', from);
+		if (i == -1)
+			i = path.indexOf('#', from);
+		return i;
 	}
 }

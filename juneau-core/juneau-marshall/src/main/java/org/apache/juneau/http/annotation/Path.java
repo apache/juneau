@@ -60,7 +60,7 @@ import org.apache.juneau.jsonschema.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Path}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
+ * 	<li class='extlink'>{@doc SwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
@@ -252,8 +252,8 @@ public @interface Path {
 	 * </ul>
 	 *
 	 * <p>
-	 * The name field MUST correspond to the associated <a href='https://swagger.io/specification/v2/#pathsPath'>path</a> segment from the path field in the <a href='https://swagger.io/specification/v2/#pathsObject'>Paths Object</a>.
-	 * See <a href='https://swagger.io/specification/v2/#pathTemplating'>Path Templating</a> for further information.
+	 * The name field MUST correspond to the associated {@doc SwaggerPathsPath path} segment from the path field in the {@doc SwaggerPathsObject Paths Object}.
+	 * See {@doc SwaggerPathTemplating Path Templating} for further information.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -289,7 +289,7 @@ public @interface Path {
 	String value() default "";
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A brief description of the parameter. This could contain examples of use.
@@ -317,7 +317,7 @@ public @interface Path {
 	//=================================================================================================================
 
 	/**
-	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>type</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The type of the parameter.
@@ -369,16 +369,16 @@ public @interface Path {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 */
 	String type() default "";
 
 	/**
-	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>format</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>.
+	 * The extending format for the previously mentioned {@doc SwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -433,13 +433,13 @@ public @interface Path {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
 
 	/**
-	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>allowEmptyValue</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued path parameter values.
@@ -460,7 +460,7 @@ public @interface Path {
 	boolean allowEmptyValue() default false;
 
 	/**
-	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>items</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -481,7 +481,7 @@ public @interface Path {
 	Items items() default @Items;
 
 	/**
-	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>collectionFormat</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
@@ -523,7 +523,7 @@ public @interface Path {
 	String collectionFormat() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>maximum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines the maximum value for a parameter of numeric types.
@@ -550,7 +550,7 @@ public @interface Path {
 	String maximum() default "";
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines whether the maximum is matched exclusively.
@@ -577,7 +577,7 @@ public @interface Path {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>minimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines the minimum value for a parameter of numeric types.
@@ -604,7 +604,7 @@ public @interface Path {
 	String minimum() default "";
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines whether the minimum is matched exclusively.
@@ -631,7 +631,7 @@ public @interface Path {
 	boolean exclusiveMinimum() default false;
 
 	/**
-	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>maxLength</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
@@ -659,7 +659,7 @@ public @interface Path {
 	long maxLength() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>minLength</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -687,7 +687,7 @@ public @interface Path {
 	long minLength() default -1;
 
 	/**
-	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>pattern</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string input is valid if it matches the specified regular expression pattern.
@@ -713,7 +713,7 @@ public @interface Path {
 	String pattern() default "";
 
 	/**
-	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>enum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
@@ -762,7 +762,7 @@ public @interface Path {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>multipleOf</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
@@ -848,7 +848,7 @@ public @interface Path {
 	String[] example() default {};
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * Free-form value for the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.

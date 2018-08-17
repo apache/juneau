@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-colgroup-element">&lt;colgroup&gt;</a>
+ * DTO for an HTML {@doc HTML5.tabular-data#the-colgroup-element <colgroup>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Colgroup extends HtmlElementContainer {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span">span</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-colgroup-span span} attribute.
 	 *
 	 * <p>
 	 * Number of columns spanned by the element.

@@ -397,8 +397,8 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -417,7 +417,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a>
+	 * 	<li>{@doc SwaggerResponsesObject Responses}
 	 * </ul>
 	 *
 	 * @param value
@@ -438,7 +438,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#responsesObject">Responses</a>
+	 * 	<li>{@doc SwaggerResponsesObject Responses}
 	 * </ul>
 	 *
 	 * @param value
@@ -464,8 +464,8 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -553,15 +553,15 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#securitySchemeObject">Security Scheme</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerSecuritySchemeObject SecurityScheme}
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -583,7 +583,7 @@ public class HttpPartSchemaBuilder {
 	 * <mk>format</mk> field.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>.
+	 * The extending format for the previously mentioned {@doc SwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -630,15 +630,15 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @param value
@@ -667,7 +667,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
 	 * </ul>
 	 *
 	 * @param value
@@ -720,10 +720,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -783,9 +783,9 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * <p>
@@ -816,10 +816,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -845,10 +845,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -875,10 +875,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -931,10 +931,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -961,10 +961,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1018,10 +1018,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1063,10 +1063,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1107,10 +1107,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1140,10 +1140,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1184,10 +1184,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1232,10 +1232,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1329,10 +1329,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1373,10 +1373,10 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a>
+	 * 	<li>{@doc SwaggerParameterObject Parameter}
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
+	 * 	<li>{@doc SwaggerItemsObject Items}
+	 * 	<li>{@doc SwaggerHeaderObject Header}
 	 * </ul>
 	 *
 	 * @param value
@@ -1396,7 +1396,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -1431,7 +1431,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value
@@ -1466,7 +1466,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param key
@@ -1498,7 +1498,7 @@ public class HttpPartSchemaBuilder {
 	 * <p>
 	 * Applicable to the following Swagger schema objects:
 	 * <ul>
-	 * 	<li><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a>
+	 * 	<li>{@doc SwaggerSchemaObject Schema}
 	 * </ul>
 	 *
 	 * @param value

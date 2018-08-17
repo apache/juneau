@@ -52,7 +52,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#licenseObject">Swagger Specification &gt; License Object</a>
+ * 	<li class='extlink'>{@doc SwaggerLicenseObject}
  * </ul>
  */
 @Documented
@@ -60,7 +60,7 @@ import java.lang.annotation.*;
 public @interface License {
 
 	/**
-	 * <mk>name</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#licenseObject">License</a> object.
+	 * <mk>name</mk> field of the {@doc SwaggerLicenseObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -74,7 +74,7 @@ public @interface License {
 	String name() default "";
 
 	/**
-	 * <mk>url</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#licenseObject">License</a> object.
+	 * <mk>url</mk> field of the {@doc SwaggerLicenseObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -88,7 +88,7 @@ public @interface License {
 	String url() default "";
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#licenseObject">License</a> object.
+	 * Free-form value for the {@doc SwaggerLicenseObject}.
 	 *
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

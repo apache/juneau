@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-head-element">&lt;head&gt;</a>
+ * DTO for an HTML {@doc HTML5.document-metadata#the-head-element <head>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>

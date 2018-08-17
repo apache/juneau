@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Allows adding meta data to a single tag that is used by the <a class="doclink" href="http://swagger.io/specification/#operationObject">Operation Object</a>.
+ * Allows adding meta data to a single tag that is used by the {@doc SwaggerOperationObject Operation Object}.
  *
  * <p>
  * It is not mandatory to have a Tag Object per tag used there.
@@ -148,7 +148,7 @@ public class Tag extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */

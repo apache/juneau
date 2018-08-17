@@ -68,7 +68,7 @@ import org.apache.juneau.jsonschema.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.FormData}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
+ * 	<li class='extlink'>{@doc SwaggerParameterObject}
  * </ul>
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
@@ -222,7 +222,7 @@ public @interface FormData {
 	String value() default "";
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A brief description of the parameter. This could contain examples of use.
@@ -246,7 +246,7 @@ public @interface FormData {
 	String[] description() default {};
 
 	/**
-	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>required</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Determines whether the parameter is mandatory.
@@ -273,7 +273,7 @@ public @interface FormData {
 	//=================================================================================================================
 
 	/**
-	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>type</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * The type of the parameter.
@@ -328,16 +328,16 @@ public @interface FormData {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 */
 	String type() default "";
 
 	/**
-	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>format</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
-	 * The extending format for the previously mentioned <a href='https://swagger.io/specification/v2/#parameterType'>type</a>.
+	 * The extending format for the previously mentioned {@doc SwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -392,13 +392,13 @@ public @interface FormData {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
 
 	/**
-	 * <mk>allowEmptyValue</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>allowEmptyValue</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Sets the ability to pass empty-valued parameters.
@@ -418,7 +418,7 @@ public @interface FormData {
 	boolean allowEmptyValue() default false;
 
 	/**
-	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>items</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -440,7 +440,7 @@ public @interface FormData {
 	Items items() default @Items;
 
 	/**
-	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>collectionFormat</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
@@ -481,7 +481,7 @@ public @interface FormData {
 	String collectionFormat() default "";
 
 	/**
-	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>default</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request.
@@ -517,7 +517,7 @@ public @interface FormData {
 	String[] _default() default {};
 
 	/**
-	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>maximum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines the maximum value for a parameter of numeric types.
@@ -544,7 +544,7 @@ public @interface FormData {
 	String maximum() default "";
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines whether the maximum is matched exclusively.
@@ -571,7 +571,7 @@ public @interface FormData {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>minimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines the minimum value for a parameter of numeric types.
@@ -598,7 +598,7 @@ public @interface FormData {
 	String minimum() default "";
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * Defines whether the minimum is matched exclusively.
@@ -625,7 +625,7 @@ public @interface FormData {
 	boolean exclusiveMinimum() default false;
 
 	/**
-	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>maxLength</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
@@ -653,7 +653,7 @@ public @interface FormData {
 	long maxLength() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>minLength</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -681,7 +681,7 @@ public @interface FormData {
 	long minLength() default -1;
 
 	/**
-	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>pattern</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A string input is valid if it matches the specified regular expression pattern.
@@ -707,7 +707,7 @@ public @interface FormData {
 	String pattern() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>maxItems</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
@@ -733,7 +733,7 @@ public @interface FormData {
 	long maxItems() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>minItems</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
@@ -759,7 +759,7 @@ public @interface FormData {
 	long minItems() default -1;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>uniqueItems</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, the input validates successfully if all of its elements are unique.
@@ -789,7 +789,7 @@ public @interface FormData {
 	boolean uniqueItems() default false;
 
 	/**
-	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>enum</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * If specified, the input validates successfully if it is equal to one of the elements in this array.
@@ -836,7 +836,7 @@ public @interface FormData {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * <mk>multipleOf</mk> field of the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * A numeric instance is valid if the result of the division of the instance by this keyword's value is an integer.
@@ -921,7 +921,7 @@ public @interface FormData {
 	String[] example() default {};
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
+	 * Free-form value for the {@doc SwaggerParameterObject}.
 	 *
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

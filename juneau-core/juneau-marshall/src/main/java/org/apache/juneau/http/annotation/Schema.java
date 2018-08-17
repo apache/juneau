@@ -70,7 +70,7 @@ import org.apache.juneau.httppart.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Swagger Specification &gt; Schema Object</a>
+ * 	<li class='extlink'>{@doc SwaggerSchemaObject}
  * </ul>
  */
 @Documented
@@ -78,7 +78,7 @@ import org.apache.juneau.httppart.*;
 public @interface Schema {
 
 	/**
-	 * <mk>$ref</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>$ref</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * 	A JSON reference to the schema definition.
@@ -95,7 +95,7 @@ public @interface Schema {
 	String $ref() default "";
 
 	/**
-	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>format</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -117,13 +117,13 @@ public @interface Schema {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
 
 	/**
-	 * <mk>title</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>title</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -137,7 +137,7 @@ public @interface Schema {
 	String title() default "";
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
@@ -172,7 +172,7 @@ public @interface Schema {
 	String[] description() default {};
 
 	/**
-	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>default</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -187,7 +187,7 @@ public @interface Schema {
 	String[] _default() default {};
 
 	/**
-	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>multipleOf</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -201,7 +201,7 @@ public @interface Schema {
 	String multipleOf() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>maximum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -215,7 +215,7 @@ public @interface Schema {
 	String maximum() default "";
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -229,7 +229,7 @@ public @interface Schema {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>minimum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -243,7 +243,7 @@ public @interface Schema {
 	String minimum() default "";
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -257,7 +257,7 @@ public @interface Schema {
 	boolean exclusiveMinimum() default false;
 
 	/**
-	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>maxLength</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -271,7 +271,7 @@ public @interface Schema {
 	long maxLength() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>minLength</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -285,7 +285,7 @@ public @interface Schema {
 	long minLength() default -1;
 
 	/**
-	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>pattern</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -307,7 +307,7 @@ public @interface Schema {
 	String pattern() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>maxItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -321,7 +321,7 @@ public @interface Schema {
 	long maxItems() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>minItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -335,7 +335,7 @@ public @interface Schema {
 	long minItems() default -1;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>uniqueItems</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -350,7 +350,7 @@ public @interface Schema {
 
 
 	/**
-	 * <mk>maxProperties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>maxProperties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -366,7 +366,7 @@ public @interface Schema {
 
 
 	/**
-	 * <mk>minProperties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>minProperties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -381,7 +381,7 @@ public @interface Schema {
 	long minProperties() default -1;
 
 	/**
-	 * <mk>required</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>required</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * 	Determines whether this parameter is mandatory.
@@ -416,7 +416,7 @@ public @interface Schema {
 	boolean required() default false;
 
 	/**
-	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>enum</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -431,7 +431,7 @@ public @interface Schema {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>type</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -472,14 +472,14 @@ public @interface Schema {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
 	 */
 	String type() default "";
 
 	/**
-	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>items</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -539,7 +539,7 @@ public @interface Schema {
 	String collectionFormat() default "";
 
 	/**
-	 * <mk>allOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>allOf</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -554,7 +554,7 @@ public @interface Schema {
 	String[] allOf() default {};
 
 	/**
-	 * <mk>properties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>properties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -569,7 +569,7 @@ public @interface Schema {
 	String[] properties() default {};
 
 	/**
-	 * <mk>additionalProperties</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>additionalProperties</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -584,7 +584,7 @@ public @interface Schema {
 	String[] additionalProperties() default {};
 
 	/**
-	 * <mk>discriminator</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>discriminator</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -599,7 +599,7 @@ public @interface Schema {
 	String discriminator() default "";
 
 	/**
-	 * <mk>readOnly</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>readOnly</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -614,7 +614,7 @@ public @interface Schema {
 	boolean readOnly() default false;
 
 	/**
-	 * <mk>xml</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>xml</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -629,7 +629,7 @@ public @interface Schema {
 	String[] xml() default {};
 
 	/**
-	 * <mk>externalDocs</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>externalDocs</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -644,7 +644,7 @@ public @interface Schema {
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
-	 * <mk>example</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>example</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * A free-form property to include an example of an instance for this schema.
@@ -666,7 +666,7 @@ public @interface Schema {
 	String[] example() default {};
 
 	/**
-	 * <mk>x-examples</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * <mk>x-examples</mk> field of the {@doc SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * This is a JSON object whose keys are media types and values are string representations of that value.
@@ -689,7 +689,7 @@ public @interface Schema {
 	boolean ignore() default false;
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#schemaObject">Schema</a> object.
+	 * Free-form value for the {@doc SwaggerSchemaObject}.
 	 *
 	 * <p>
 	 * This is a JSON object that makes up the swagger information for this field.

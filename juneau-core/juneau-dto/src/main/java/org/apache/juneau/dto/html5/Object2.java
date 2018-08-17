@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-object-element">&lt;object&gt;</a>
+ * DTO for an HTML {@doc HTML5.embedded-content-0#the-object-element <object>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Object2 extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-data">data</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-object-data data} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -41,7 +41,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fae-form">form</a> attribute.
+	 * {@doc HTML5.forms#attr-fae-form form} attribute.
 	 *
 	 * <p>
 	 * Associates the control with a form element.
@@ -55,7 +55,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
+	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -72,7 +72,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-name">name</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-object-name name} attribute.
 	 *
 	 * <p>
 	 * Name of nested browsing context.
@@ -86,7 +86,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-type">type</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-object-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.
@@ -100,7 +100,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch">typemustmatch</a>
+	 * {@doc HTML5.embedded-content-0#attr-object-typemustmatch typemustmatch}
 	 * attribute.
 	 *
 	 * <p>
@@ -117,7 +117,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a>
+	 * {@doc HTML5.embedded-content-0#attr-hyperlink-usemap usemap}
 	 * attribute.
 	 *
 	 * <p>
@@ -132,7 +132,7 @@ public class Object2 extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

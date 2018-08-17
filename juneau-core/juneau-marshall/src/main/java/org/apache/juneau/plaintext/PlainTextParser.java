@@ -20,7 +20,7 @@ import org.apache.juneau.transform.*;
  * Parsers HTTP plain text request bodies into Group 5 POJOs.
  *
  * <p>
- * See {@doc juneau-marshall.PojoCategories}.
+ * See {@doc PojoCategories}.
  *
  * <h5 class='topic'>Media types</h5>
  *
@@ -66,8 +66,7 @@ public class PlainTextParser extends ReaderParser {
 	 * @param ps The property store containing all the settings for this object.
 	 * @param consumes The media types that this parser consumes.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of
-	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
 	 */
 	public PlainTextParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);

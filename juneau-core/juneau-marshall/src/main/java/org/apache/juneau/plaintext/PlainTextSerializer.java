@@ -67,8 +67,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	 * @param accept
 	 * 	The accept media types that the serializer can handle.
 	 * 	<p>
-	 * 	Can contain meta-characters per the <code>media-type</code> specification of
-	 * 	<a class="doclink" href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1">RFC2616/14.1</a>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
 	 * 	<p>
 	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
 	 * 	<p>

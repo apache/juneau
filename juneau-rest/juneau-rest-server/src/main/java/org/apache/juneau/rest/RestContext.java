@@ -206,8 +206,7 @@ public final class RestContext extends BeanContext {
 	 * </ul>
 	 *
 	 * <p>
-	 * Note that per the <a class="doclink"
-	 * href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">HTTP specification</a>, special care should
+	 * Note that per the {@doc RFC2616.section9 HTTP specification}, special care should
 	 * be taken when allowing non-safe (POST, PUT, DELETE) methods to be invoked through GET requests.
 	 */
 	public static final String REST_allowedMethodParams = PREFIX + "allowedMethodParams.s";

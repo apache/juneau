@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-ul-element">&lt;ul&gt;</a>
+ * DTO for an HTML {@doc HTML5.grouping-content#the-ul-element <ul>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>

@@ -19,7 +19,7 @@ import java.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='jp'><a class='doclink' href='package-summary.html#TOC'>org.apache.juneau.dto.jsonschema</a>
+ * 	<li class='jp'>{@doc package-summary.html#TOC org.apache.juneau.dto.jsonschema}
  * </ul>
  */
 public class JsonSchemaArray extends LinkedList<JsonSchema> {

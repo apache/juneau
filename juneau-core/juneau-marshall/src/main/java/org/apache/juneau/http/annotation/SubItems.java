@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Swagger Specification &gt; Items Object</a>
+ * 	<li class='extlink'>{@doc SwaggerItemsObject}
  * </ul>
  */
 @Documented
@@ -37,7 +37,7 @@ import java.lang.annotation.*;
 public @interface SubItems {
 
 	/**
-	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>type</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -51,7 +51,7 @@ public @interface SubItems {
 	String type() default "";
 
 	/**
-	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>format</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -65,7 +65,7 @@ public @interface SubItems {
 	String format() default "";
 
 	/**
-	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>collectionFormat</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -79,7 +79,7 @@ public @interface SubItems {
 	String collectionFormat() default "";
 
 	/**
-	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>pattern</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -93,7 +93,7 @@ public @interface SubItems {
 	String pattern() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>maximum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -107,7 +107,7 @@ public @interface SubItems {
 	String maximum() default "";
 
 	/**
-	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>minimum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -121,7 +121,7 @@ public @interface SubItems {
 	String minimum() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>multipleOf</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -135,7 +135,7 @@ public @interface SubItems {
 	String multipleOf() default "";
 
 	/**
-	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>maxLength</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -149,7 +149,7 @@ public @interface SubItems {
 	long maxLength() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>minLength</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -163,7 +163,7 @@ public @interface SubItems {
 	long minLength() default -1;
 
 	/**
-	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>maxItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -177,7 +177,7 @@ public @interface SubItems {
 	long maxItems() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>minItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -191,7 +191,7 @@ public @interface SubItems {
 	long minItems() default -1;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -205,7 +205,7 @@ public @interface SubItems {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -219,7 +219,7 @@ public @interface SubItems {
 	boolean exclusiveMinimum() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>uniqueItems</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -233,7 +233,7 @@ public @interface SubItems {
 	boolean uniqueItems() default false;
 
 	/**
-	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>default</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -247,7 +247,7 @@ public @interface SubItems {
 	String[] _default() default {};
 
 	/**
-	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>enum</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -261,7 +261,7 @@ public @interface SubItems {
 	String[] _enum() default {};
 
 	/**
-	 * <mk>$ref</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>$ref</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
@@ -275,7 +275,7 @@ public @interface SubItems {
 	String $ref() default "";
 
 	/**
-	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * <mk>items</mk> field of the {@doc SwaggerItemsObject}.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -287,7 +287,7 @@ public @interface SubItems {
 	String[] items() default {};
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#itemsObject">Items</a> object.
+	 * Free-form value for the {@doc SwaggerItemsObject}.
 	 *
 	 * <p>
 	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.

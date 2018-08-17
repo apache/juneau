@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#the-q-element">&lt;q&gt;</a>
+ * DTO for an HTML {@doc HTML5.text-level-semantics#the-q-element <q>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Q extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-q-cite">cite</a> attribute.
+	 * {@doc HTML5.text-level-semantics#attr-q-cite cite} attribute.
 	 *
 	 * <p>
 	 * Link to the source of the quotation or more information about the edit.

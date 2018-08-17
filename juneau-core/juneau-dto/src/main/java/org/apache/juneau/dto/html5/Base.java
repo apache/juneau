@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-base-element">&lt;base&gt;</a>
+ * DTO for an HTML {@doc HTML5.document-metadata#the-base-element <base>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Base extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-href">href</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-base-href href} attribute.
 	 *
 	 * <p>
 	 * Document base URL.
@@ -54,7 +54,7 @@ public class Base extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a>
+	 * {@doc HTML5.document-metadata#attr-base-target target}
 	 * attribute.
 	 *
 	 * <p>

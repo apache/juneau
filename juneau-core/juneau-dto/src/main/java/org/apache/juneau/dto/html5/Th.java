@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#the-th-element">&lt;th&gt;</a>
+ * DTO for an HTML {@doc HTML5.tabular-data#the-th-element <th>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Th extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-abbr">abbr</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-th-abbr abbr} attribute.
 	 *
 	 * <p>
 	 * Alternative label to use for the header cell when referencing the cell in other contexts.
@@ -41,7 +41,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-tdth-colspan colspan} attribute.
 	 *
 	 * <p>
 	 * Number of columns that the cell is to span.
@@ -57,7 +57,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-tdth-headers headers} attribute.
 	 *
 	 * <p>
 	 * The headers for this cell.
@@ -71,7 +71,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-tdth-rowspan rowspan} attribute.
 	 *
 	 * <p>
 	 * Number of rows that the cell is to span.
@@ -87,7 +87,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-scope">scope</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-th-scope scope} attribute.
 	 *
 	 * <p>
 	 * Specifies which cells the header cell applies to.
@@ -101,7 +101,7 @@ public class Th extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="-">sorted</a> attribute.
+	 * {@doc HTML5.tabular-data#attr-th-sorted sorted}  attribute.
 	 *
 	 * <p>
 	 * Column sort direction and ordinality.

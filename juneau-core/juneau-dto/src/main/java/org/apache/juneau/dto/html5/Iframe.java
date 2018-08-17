@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-iframe-element">&lt;iframe&gt;</a>
+ * DTO for an HTML {@doc HTML5.embedded-content-0#the-iframe-element <iframe>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Iframe extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
+	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -48,7 +48,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-name">name</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-iframe-name name} attribute.
 	 *
 	 * <p>
 	 * Name of nested browsing context.
@@ -62,7 +62,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-sandbox">sandbox</a>
+	 * {@doc HTML5.embedded-content-0#attr-iframe-sandbox sandbox}
 	 * attribute.
 	 *
 	 * <p>
@@ -77,7 +77,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src">src</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-iframe-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -100,7 +100,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-srcdoc">srcdoc</a>
+	 * {@doc HTML5.embedded-content-0#attr-iframe-srcdoc srcdoc}
 	 * attribute.
 	 *
 	 * <p>
@@ -115,7 +115,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

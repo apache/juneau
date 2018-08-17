@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-style-element">&lt;style&gt;</a>
+ * DTO for an HTML {@doc HTML5.document-metadata#the-style-element <style>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Style extends HtmlElementRawText {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-style-media media} attribute.
 	 *
 	 * <p>
 	 * Applicable media.
@@ -41,7 +41,7 @@ public class Style extends HtmlElementRawText {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-type">type</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-style-type type} attribute.
 	 *
 	 * <p>
 	 * Type of embedded resource.

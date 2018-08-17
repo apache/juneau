@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-track-element">&lt;track&gt;</a>
+ * DTO for an HTML {@doc HTML5.embedded-content-0#the-track-element <track>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Track extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default">default</a>
+	 * {@doc HTML5.embedded-content-0#attr-track-default default}
 	 * attribute.
 	 *
 	 * <p>
@@ -46,7 +46,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-track-kind kind} attribute.
 	 *
 	 * <p>
 	 * The type of text track.
@@ -60,7 +60,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-track-label label} attribute.
 	 *
 	 * <p>
 	 * User-visible label.
@@ -74,7 +74,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src">src</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-track-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -97,7 +97,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang">srclang</a>
+	 * {@doc HTML5.embedded-content-0#attr-track-srclang srclang}
 	 * attribute.
 	 *
 	 * <p>

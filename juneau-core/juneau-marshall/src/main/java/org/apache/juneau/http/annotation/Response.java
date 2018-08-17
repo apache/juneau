@@ -47,7 +47,7 @@ import org.apache.juneau.jsonschema.*;
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
  * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Response}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'>{@doc swagger.responseObject}
+ * 	<li class='extlink'>{@doc SwaggerResponseObject}
  * </ul>
  */
 @Documented
@@ -115,7 +115,7 @@ public @interface Response {
 	int[] value() default {};
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerResponseObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -136,7 +136,7 @@ public @interface Response {
 	String[] description() default {};
 
 	/**
-	 * <mk>schema</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
+	 * <mk>schema</mk> field of the {@doc SwaggerResponseObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -149,7 +149,7 @@ public @interface Response {
 	Schema schema() default @Schema;
 
 	/**
-	 * <mk>headers</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
+	 * <mk>headers</mk> field of the {@doc SwaggerResponseObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -325,7 +325,7 @@ public @interface Response {
 	String[] examples() default {};
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Response</a> object.
+	 * Free-form value for the {@doc SwaggerResponseObject}.
 	 *
 	 * <p>
 	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.

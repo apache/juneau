@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-meta-element">&lt;meta&gt;</a>
+ * DTO for an HTML {@doc HTML5.document-metadata#the-meta-element <meta>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Meta extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a>
+	 * {@doc HTML5.document-metadata#attr-meta-charset charset}
 	 * attribute.
 	 *
 	 * <p>
@@ -42,7 +42,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-content">content</a>
+	 * {@doc HTML5.document-metadata#attr-meta-content content}
 	 * attribute.
 	 *
 	 * <p>
@@ -57,7 +57,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-http-equiv">http-equiv</a>
+	 * {@doc HTML5.document-metadata#attr-meta-http-equiv http-equiv}
 	 * attribute.
 	 *
 	 * <p>
@@ -72,7 +72,7 @@ public class Meta extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-name">name</a> attribute.
+	 * {@doc HTML5.document-metadata#attr-meta-name name} attribute.
 	 *
 	 * <p>
 	 * Metadata name.

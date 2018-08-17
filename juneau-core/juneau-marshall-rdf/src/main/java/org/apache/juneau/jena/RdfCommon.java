@@ -182,8 +182,8 @@ public interface RdfCommon {
 	 * 		in IRIs.
 	 * 	<li>
 	 * 		<js>"iri"</js> - Sets the IRI engine to IRI
-	 * 		(<a class="doclink" href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>,
-	 * 		<a class="doclink" href="http://www.ietf.org/rfc/rfc3987.txt">RFC 3987</a>).
+	 * 		({@doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
+	 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
 	 * </ul>
 	 */
 	public static final String RDF_arp_iriRules = PREFIX + "jena.rdfXml.iri-rules.s";
@@ -218,13 +218,13 @@ public interface RdfCommon {
 	 * See also:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setDefaultErrorMode()">ARPOptions.setDefaultErrorMode()</a>
+	 * 		{@doc ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 	 * 	<li>
-	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setLaxErrorMode()">ARPOptions.setLaxErrorMode()</a>
+	 * 		{@doc ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
 	 * 	<li>
-	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode()">ARPOptions.setStrictErrorMode()</a>
+	 * 		{@doc ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
 	 * 	<li>
-	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setStrictErrorMode(int)">ARPOptions.setStrictErrorMode(int)</a>
+	 * 		{@doc ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 	 * </ul>
 	 */
 	public static final String RDF_arp_errorMode = PREFIX + "jena.rdfXml.error-mode.s";
@@ -247,7 +247,7 @@ public interface RdfCommon {
 	 * See also:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setEmbedding(boolean)">ARPOptions.setEmbedding(boolean)</a>
+	 * 		{@doc ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
 	 */
 	public static final String RDF_arp_embedding = PREFIX + "jena.rdfXml.embedding.b";
@@ -278,9 +278,9 @@ public interface RdfCommon {
 	 * See also:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPErrorNumbers.html">ARPErrorNumbers</a>
+	 * 		{@doc ARP/ARPErrorNumbers.html ARPErrorNumbers}
 	 * 	<li>
-	 * 		<a class="doclink" href="http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp/ARPOptions.html#setErrorMode(int,%20int)">ARPOptions.setErrorMode(int, int)</a>
+	 * 		{@doc ARP/ARPOptions.html#setErrorMode(int,%20int) ARPOptions.setErrorMode(int, int)}
 	 * </ul>
 	 */
 	public static final String RDF_arp_err_ = PREFIX + "jena.rdfXml.ERR_";
@@ -492,7 +492,7 @@ public interface RdfCommon {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from
-	 * <a class="doclink" href="http://www.w3.org/TR/rdf-syntax-grammar">RDF Syntax Grammar</a> indicating grammar
+	 * <{@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 	 * rules that will not be used.
 	 */
 	public static final String RDF_rdfxml_blockRules = PREFIX + "jena.rdfXml.blockRules.s";

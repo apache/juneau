@@ -191,7 +191,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -238,7 +238,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://swagger.io/specification/#dataTypeFormat">Data Type Formats</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -255,7 +255,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 *
 	 * @param value
@@ -399,7 +399,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -424,7 +424,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor101">http://json-schema.org/latest/json-schema-validation.html#anchor101</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -452,7 +452,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -466,7 +466,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -497,7 +497,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -511,7 +511,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor17">http://json-schema.org/latest/json-schema-validation.html#anchor17</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -542,7 +542,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -556,7 +556,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -587,7 +587,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -601,7 +601,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor21">http://json-schema.org/latest/json-schema-validation.html#anchor21</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -632,7 +632,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -646,7 +646,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor26">http://json-schema.org/latest/json-schema-validation.html#anchor26</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -677,7 +677,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -691,7 +691,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor29">http://json-schema.org/latest/json-schema-validation.html#anchor29</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -722,7 +722,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -739,7 +739,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor33">http://json-schema.org/latest/json-schema-validation.html#anchor33</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -770,7 +770,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -784,7 +784,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor42">http://json-schema.org/latest/json-schema-validation.html#anchor42</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -815,7 +815,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -829,7 +829,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor45">http://json-schema.org/latest/json-schema-validation.html#anchor45</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -860,7 +860,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -874,7 +874,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor49">http://json-schema.org/latest/json-schema-validation.html#anchor49</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -905,7 +905,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -919,7 +919,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor76">http://json-schema.org/latest/json-schema-validation.html#anchor76</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -978,7 +978,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -992,7 +992,7 @@ public class HeaderInfo extends SwaggerElement {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='extlink'><a class="doclink" href="http://json-schema.org/latest/json-schema-validation.html#anchor14">http://json-schema.org/latest/json-schema-validation.html#anchor14</a>
+	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value

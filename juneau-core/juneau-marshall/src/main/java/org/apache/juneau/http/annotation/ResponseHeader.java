@@ -114,7 +114,7 @@ import org.apache.juneau.httppart.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseHeader}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Swagger Specification &gt; Header Object</a>
+ * 	<li class='extlink'>{@doc SwaggerHeaderObject}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
@@ -181,7 +181,7 @@ public @interface ResponseHeader {
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
 	/**
-	 * <mk>description</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>description</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -202,7 +202,7 @@ public @interface ResponseHeader {
 	String[] description() default {};
 
 	/**
-	 * <mk>type</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>type</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * The type of the parameter.
@@ -237,13 +237,13 @@ public @interface ResponseHeader {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/#dataTypes'>Swagger specification &gt; Data Types</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
 	 * </ul>
 	 */
 	String type() default "";
 
 	/**
-	 * <mk>format</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>format</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * The possible values are:
@@ -290,13 +290,13 @@ public @interface ResponseHeader {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul class='doctree'>
-	 * 	<li class='link'><a class='doclink' href='https://swagger.io/specification/v2/#dataTypeFormat'>Swagger specification &gt; Data Type Formats</a>
+	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
 	 * </ul>
 	 */
 	String format() default "";
 
 	/**
-	 * <mk>collectionFormat</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>collectionFormat</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * Determines the format of the array if <code>type</code> <js>"array"</js> is used.
@@ -333,7 +333,7 @@ public @interface ResponseHeader {
 	String collectionFormat() default "";
 
 	/**
-	 * <mk>$ref</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>$ref</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * Denotes a reference to a definition object.
@@ -347,7 +347,7 @@ public @interface ResponseHeader {
 	String $ref() default "";
 
 	/**
-	 * <mk>maximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>maximum</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -358,7 +358,7 @@ public @interface ResponseHeader {
 	String maximum() default "";
 
 	/**
-	 * <mk>minimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>minimum</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -369,7 +369,7 @@ public @interface ResponseHeader {
 	String minimum() default "";
 
 	/**
-	 * <mk>multipleOf</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>multipleOf</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -380,7 +380,7 @@ public @interface ResponseHeader {
 	String multipleOf() default "";
 
 	/**
-	 * <mk>maxLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>maxLength</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -391,7 +391,7 @@ public @interface ResponseHeader {
 	long maxLength() default -1;
 
 	/**
-	 * <mk>minLength</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>minLength</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -402,7 +402,7 @@ public @interface ResponseHeader {
 	long minLength() default -1;
 
 	/**
-	 * <mk>pattern</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>pattern</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * A string value is valid if it matches the specified regular expression pattern.
@@ -422,7 +422,7 @@ public @interface ResponseHeader {
 	String pattern() default "";
 
 	/**
-	 * <mk>maxItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>maxItems</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -433,7 +433,7 @@ public @interface ResponseHeader {
 	long maxItems() default -1;
 
 	/**
-	 * <mk>minItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>minItems</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -444,7 +444,7 @@ public @interface ResponseHeader {
 	long minItems() default -1;
 
 	/**
-	 * <mk>exclusiveMaximum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>exclusiveMaximum</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -455,7 +455,7 @@ public @interface ResponseHeader {
 	boolean exclusiveMaximum() default false;
 
 	/**
-	 * <mk>exclusiveMinimum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>exclusiveMinimum</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -466,7 +466,7 @@ public @interface ResponseHeader {
 	boolean exclusiveMinimum() default false;
 
 	/**
-	 * <mk>uniqueItems</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>uniqueItems</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -477,7 +477,7 @@ public @interface ResponseHeader {
 	boolean uniqueItems() default false;
 
 	/**
-	 * <mk>items</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>items</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -488,7 +488,7 @@ public @interface ResponseHeader {
 	Items items() default @Items;
 
 	/**
-	 * <mk>default</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>default</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -499,7 +499,7 @@ public @interface ResponseHeader {
 	String[] _default() default {};
 
 	/**
-	 * <mk>enum</mk> field of the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * <mk>enum</mk> field of the {@doc SwaggerHeaderObject}.
 	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
@@ -535,7 +535,7 @@ public @interface ResponseHeader {
 	String[] example() default {};
 
 	/**
-	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
+	 * Free-form value for the {@doc SwaggerHeaderObject}.
 	 *
 	 * <p>
 	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.

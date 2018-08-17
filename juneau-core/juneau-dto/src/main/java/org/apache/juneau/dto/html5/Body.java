@@ -15,7 +15,7 @@ package org.apache.juneau.dto.html5;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/sections.html#the-body-element">&lt;body&gt;</a>
+ * DTO for an HTML {@doc HTML5.sections#the-body-element <body>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 public class Body extends HtmlElementMixed {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a>
+	 * {@doc HTML5.webappapis#handler-window-onafterprint onafterprint}
 	 * attribute.
 	 *
 	 * @param onafterprint The new value for this attribute.
@@ -39,7 +39,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a>
+	 * {@doc HTML5.webappapis#handler-window-onbeforeunload onbeforeunload}
 	 * attribute.
 	 *
 	 * @param onbeforeunload The new value for this attribute.
@@ -51,7 +51,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a>
+	 * {@doc HTML5.webappapis#handler-window-onmessage onmessage}
 	 * attribute.
 	 *
 	 * @param onmessage The new value for this attribute.
@@ -63,7 +63,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a>
+	 * {@doc HTML5.webappapis#handler-window-ononline ononline}
 	 * attribute.
 	 *
 	 * @param ononline The new value for this attribute.
@@ -75,7 +75,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a>
+	 * {@doc HTML5.webappapis#handler-window-onpageshow onpageshow}
 	 * attribute.
 	 *
 	 * @param onpageshow The new value for this attribute.
@@ -87,7 +87,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a>
+	 * {@doc HTML5.webappapis#handler-window-onstorage onstorage}
 	 * attribute.
 	 *
 	 * @param onstorage The new value for this attribute.

@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-img-element">&lt;img&gt;</a>
+ * DTO for an HTML {@doc HTML5.embedded-content-0#the-img-element <img>}
  * element.
  *
  * <h5 class='section'>See Also:</h5>
@@ -31,7 +31,7 @@ import org.apache.juneau.annotation.*;
 public class Img extends HtmlElementVoid {
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-alt">alt</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-img-alt alt} attribute.
 	 *
 	 * <p>
 	 * Replacement text for use when images are not available.
@@ -45,7 +45,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-crossorigin">crossorigin</a>
+	 * {@doc HTML5.embedded-content-0#attr-img-crossorigin crossorigin}
 	 * attribute.
 	 *
 	 * <p>
@@ -60,7 +60,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
+	 * {@doc HTML5.embedded-content-0#attr-dim-height height}
 	 * attribute.
 	 *
 	 * <p>
@@ -77,7 +77,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-ismap">ismap</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-img-ismap ismap} attribute.
 	 *
 	 * <p>
 	 * Whether the image is a server-side image map.
@@ -93,7 +93,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src">src</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-img-src src} attribute.
 	 *
 	 * <p>
 	 * Address of the resource.
@@ -116,7 +116,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a>
+	 * {@doc HTML5.embedded-content-0#attr-hyperlink-usemap usemap}
 	 * attribute.
 	 *
 	 * <p>
@@ -131,7 +131,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 * {@doc HTML5.embedded-content-0#attr-dim-width width} attribute.
 	 *
 	 * <p>
 	 * Horizontal dimension.

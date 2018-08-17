@@ -17,33 +17,33 @@ package org.apache.juneau.http;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616.html'>Hypertext Transfer Protocol -- HTTP/1.1</a>
+ * 	<li class='extlink'>{@doc RFC2616}
  * </ul>
  */
 public final class HttpMethodName {
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.2" class="doclink">OPTIONS</a> */
+	/** {@doc RFC2616.section9#sec9.2 OPTIONS} */
 	public static final String OPTIONS = "OPTIONS";
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.3" class="doclink">GET</a> */
+	/** {@doc RFC2616.section9#sec9.3 GET} */
 	public static final String GET = "GET";
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4" class="doclink">HEAD</a> */
+	/** {@doc RFC2616.section9#sec9.4 HEAD} */
 	public static final String HEAD = "HEAD";
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.5" class="doclink">POST</a> */
+	/** {@doc RFC2616.section9#sec9.5 POST} */
 	public static final String POST = "POST";
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.6" class="doclink">PUT</a> */
+	/** {@doc RFC2616.section9#sec9.6 PUT} */
 	public static final String PUT = "PUT";
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.7" class="doclink">DELETE</a> */
+	/** {@doc RFC2616.section9#sec9.7 DELETE} */
 	public static final String DELETE = "DELETE";
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.8" class="doclink">TRACE</a> */
+	/** {@doc RFC2616.section9#sec9.8 TRACE} */
 	public static final String TRACE = "TRACE";
 
-	/** <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9" class="doclink">CONNECT</a> */
+	/** {@doc RFC2616.section9#sec9.9 CONNECT} */
 	public static final String CONNECT = "CONNECT";
 
 	/** Special case for a REST method that implements a proxy interface. */
