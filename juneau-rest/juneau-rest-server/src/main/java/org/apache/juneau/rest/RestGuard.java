@@ -67,7 +67,7 @@ import org.apache.juneau.rest.exception.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Guards">Overview &gt; juneau-rest-server &gt; Guards</a>
+ * 	<li class='link'>{@doc juneau-rest-server.Guards}
  * </ul>
  */
 public abstract class RestGuard {

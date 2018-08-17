@@ -80,7 +80,7 @@ import org.apache.juneau.rest.widget.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
  * </ul>
  */
 public @interface HtmlDoc {
@@ -107,7 +107,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -152,7 +152,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -198,7 +198,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is HTML.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -246,7 +246,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Multiple values are combined with newlines into a single string.
@@ -289,7 +289,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		When {@link #navlinks()} is also specified, this content is placed AFTER the navigation links.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -341,7 +341,7 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -350,7 +350,7 @@ public @interface HtmlDoc {
 	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
 	 * 		to place a link inside the list of parent links.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#juneau-marshall.URIs">URI resolution</a> (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
+	 * 		Supports {@doc juneau-marshall.URIs} (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
 	 * 	<li>
@@ -372,7 +372,7 @@ public @interface HtmlDoc {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -417,7 +417,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is Javascript.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -460,7 +460,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is CSS.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
@@ -503,7 +503,7 @@ public @interface HtmlDoc {
 	 * 	<li>
 	 * 		The format of this value is a URL.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDoc</ja> annotation on the servlet/resource class.
@@ -598,7 +598,7 @@ public @interface HtmlDoc {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
 	 * </ul>
 	 */
 	Class<? extends Widget>[] widgets() default {};

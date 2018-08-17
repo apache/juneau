@@ -59,7 +59,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">Overview &gt; juneau-rest-client</a>
+ * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
 @SuppressWarnings("rawtypes")

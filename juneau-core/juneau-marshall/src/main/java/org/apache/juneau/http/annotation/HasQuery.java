@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.HasQuery">Overview &gt; juneau-rest-server &gt; @HasQuery</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.HasQuery}
  * </ul>
  */
 @Documented

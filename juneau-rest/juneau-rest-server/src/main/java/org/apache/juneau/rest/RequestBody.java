@@ -36,7 +36,7 @@ import org.apache.juneau.rest.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestBody">Overview &gt; juneau-rest-server &gt; RequestBody</a>
+ * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestBody}
  * </ul>
  */
 @SuppressWarnings("unchecked")
@@ -138,7 +138,7 @@ public class RequestBody {
 	 * </table>
 	 *
 	 * <p>
-	 * Refer to <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">POJO Categories</a> for
+	 * Refer to {@doc juneau-marshall.PojoCategories} for
 	 * a complete definition of supported POJOs.
 	 *
 	 * <h5 class='section'>Examples:</h5>

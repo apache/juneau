@@ -86,16 +86,16 @@ import org.apache.juneau.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.ResponseStatus">Overview &gt; juneau-rest-server &gt; @ResponseStatus</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseStatus}
+ * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response'>Overview &gt; juneau-rest-server &gt; @Response</a>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Response'>Overview &gt; juneau-rest-client &gt; Remote Resources &gt; @Response</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Response}
  * </ul>
  */
 @Documented

@@ -40,7 +40,7 @@ import org.apache.juneau.svl.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-config'>Overview &gt; juneau-config</a>
+ * 	<li class='link'>{@doc juneau-config}
  * </ul>
  */
 public final class Config extends Context implements ConfigEventListener, Writable {

@@ -61,7 +61,7 @@ import org.apache.juneau.dto.html5.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
  * </ul>
  */
 public class Tooltip {

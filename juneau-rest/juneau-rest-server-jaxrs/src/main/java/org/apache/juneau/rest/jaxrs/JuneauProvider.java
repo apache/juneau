@@ -35,7 +35,7 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server-jaxrs">Overview &gt; juneau-rest-server-jaxrs</a>
+ * 	<li class='link'>{@doc juneau-rest-server-jaxrs}
  * </ul>
  */
 @Documented

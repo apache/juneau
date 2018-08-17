@@ -22,8 +22,8 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-server.RemoteInterfaces'>Overview &gt; juneau-rest-server &gt; Remote Interfaces</a>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-rest-client.RemoteResources'>Overview &gt; juneau-rest-client &gt; Remote Resources</a>
+ * 	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces}
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
  * </ul>
  */
 @Documented

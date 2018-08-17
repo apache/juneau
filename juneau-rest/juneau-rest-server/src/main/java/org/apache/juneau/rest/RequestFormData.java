@@ -49,7 +49,7 @@ import org.apache.juneau.rest.exception.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RequestFormData">Overview &gt; juneau-rest-server &gt; RequestFormData</a>
+ * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RequestFormData}
  * </ul>
  */
 @SuppressWarnings("unchecked")

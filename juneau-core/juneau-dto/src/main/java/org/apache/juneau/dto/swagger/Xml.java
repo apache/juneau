@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.Swagger'>Overview &gt; juneau-dto &gt; Swagger</a>
+ * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
 @Bean(properties="name,namespace,prefix,attribute,wrapped,*")

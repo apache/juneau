@@ -85,7 +85,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestContext">Overview &gt; juneau-rest-server &gt; RestContext</a>
+ * 	<li class='link'>{@doc juneau-rest-server.RestContext}
  * </ul>
  */
 public class RestContextBuilder extends BeanContextBuilder implements ServletConfig {

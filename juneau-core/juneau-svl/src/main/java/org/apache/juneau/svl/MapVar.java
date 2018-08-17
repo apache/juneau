@@ -22,7 +22,7 @@ import java.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-svl &gt; SVL Variables</a>
+ * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */
 @SuppressWarnings("rawtypes")

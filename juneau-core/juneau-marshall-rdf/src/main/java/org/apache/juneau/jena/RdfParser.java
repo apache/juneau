@@ -37,7 +37,7 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall-rdf">Overview &gt; juneau-rest-server &gt; juneau-marshall-rdf</a>
+ * 	<li class='link'>{@doc juneau-marshall-rdf}
  * </ul>
  */
 public class RdfParser extends ReaderParser implements RdfCommon {

@@ -52,7 +52,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.RestResponse">Overview &gt; juneau-rest-server &gt; RestResponse</a>
+ * 	<li class='link'>{@doc juneau-rest-server.RestMethod.RestResponse}
  * </ul>
  */
 public final class RestResponse extends HttpServletResponseWrapper {
@@ -128,7 +128,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Serializers">Overview &gt; juneau-rest-server &gt; Serializers</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.Serializers}
 	 * </ul>
 	 *
 	 * @return The serializer group for the response.
@@ -187,7 +187,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_responseHandlers}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.RestMethod.MethodReturnTypes">Overview &gt; juneau-rest-server &gt; Method Return Types</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.MethodReturnTypes}
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.
@@ -230,7 +230,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='ja'>{@link RestMethod#htmldoc()}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
 	 *
 	 * @return A new programmatic interface for setting properties for the HTML doc view.
@@ -277,7 +277,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link #prop(String, Object)}
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Properties">Overview &gt; juneau-rest-server &gt; Properties</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.Properties}
 	 * </ul>
 	 *
 	 * @return The properties active for this request.

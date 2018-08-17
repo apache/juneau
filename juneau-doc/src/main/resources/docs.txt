@@ -1,1 +1,2 @@
 swagger.responseObject = https://swagger.io/specification/v2/#responseObject, Swagger Specification > Response Object
+DefaultRestSvlVariables = #DefaultRestSvlVariables, Default REST SVL Variables

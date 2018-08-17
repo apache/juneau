@@ -50,7 +50,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_infoProvider}
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS Pages</a>
+ * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * </ul>
  */
 final class SwaggerGenerator {

@@ -24,7 +24,7 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-dto.HTML5'>Overview &gt; juneau-dto &gt; HTML5</a>
+ * 	<li class='link'>{@doc juneau-dto.HTML5}
  * </ul>
  */
 @Bean(typeName="base")

@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.OpenApiDetails">Overview &gt; juneau-marshall &gt; OpenAPI Details</a>
+ * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails}
  * </ul>
  */
 public class HttpPartSchema {

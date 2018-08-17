@@ -20,7 +20,7 @@ import org.apache.juneau.parser.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.OpenApiDetails.Parsers">Overview &gt; juneau-marshall &gt; OpenAPI Details &gt; OpenAPI Parsers</a>
+ * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Parsers}
  * </ul>
  */
 public class OpenApiPartParser extends UonPartParser {

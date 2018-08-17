@@ -76,7 +76,7 @@ import org.apache.juneau.xml.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client">Overview &gt; juneau-rest-client</a>
+ * 	<li class='link'>{@doc juneau-rest-client}
  * </ul>
  */
 public class RestClientBuilder extends BeanContextBuilder {
@@ -565,7 +565,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.UnitTesting">Overview &gt; juneau-rest-client &gt;Server-less Unit Testing</a>
+	 * 	<li class='link'>{@doc juneau-rest-client.UnitTesting}
 	 * </ul>
 	 *
 	 * @param c The mock connection.

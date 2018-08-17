@@ -32,7 +32,7 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.SwapAnnotation">Overview &gt; juneau-marshall &gt; @Swap Annotation</a>
+ * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
  * </ul>
  */
 @Documented
@@ -68,7 +68,7 @@ public @interface Swap {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.PerMediaTypePojoSwaps">Overview &gt; juneau-marshall &gt; Per-media-type PojoSwaps</a>
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
 	 * </ul>
 	 */
 	String[] mediaTypes() default {};
@@ -105,7 +105,7 @@ public @interface Swap {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.TemplatedSwaps">Overview &gt; juneau-marshall &gt; Templated Swaps</a>
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.TemplatedSwaps}
 	 * </ul>
 	 */
 	String template() default "";

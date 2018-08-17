@@ -589,7 +589,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; juneau-marshall &gt; URIs</a>
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 */
 	public static final String SERIALIZER_uriRelativity = PREFIX + "uriRelativity.s";
@@ -643,7 +643,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.URIs">Overview &gt; juneau-marshall &gt; URIs</a>
+	 * 	<li class='link'>{@doc juneau-marshall.URIs}
 	 * </ul>
 	 */
 	public static final String SERIALIZER_uriResolution = PREFIX + "uriResolution.s";

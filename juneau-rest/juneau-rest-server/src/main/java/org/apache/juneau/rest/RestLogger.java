@@ -25,7 +25,7 @@ import org.apache.juneau.json.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jf'>{@link RestContext#REST_logger}
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.LoggingAndErrorHandling">Overview &gt; juneau-rest-server &gt; Logging and Error Handling</a>
+ * 	<li class='link'>{@doc juneau-rest-server.LoggingAndErrorHandling}
  * </ul>
  */
 public interface RestLogger {

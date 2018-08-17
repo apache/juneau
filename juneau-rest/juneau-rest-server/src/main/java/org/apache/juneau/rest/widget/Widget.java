@@ -124,7 +124,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
  * </ul>
  */
 public abstract class Widget {
@@ -256,7 +256,7 @@ public abstract class Widget {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
@@ -292,7 +292,7 @@ public abstract class Widget {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
@@ -328,7 +328,7 @@ public abstract class Widget {
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.

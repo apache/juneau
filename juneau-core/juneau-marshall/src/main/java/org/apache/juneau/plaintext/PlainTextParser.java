@@ -20,7 +20,7 @@ import org.apache.juneau.transform.*;
  * Parsers HTTP plain text request bodies into Group 5 POJOs.
  *
  * <p>
- * See <a class="doclink" href="../../../../overview-summary.html#juneau-marshall.PojoCategories">Group 5 POJOs</a>.
+ * See {@doc juneau-marshall.PojoCategories}.
  *
  * <h5 class='topic'>Media types</h5>
  *

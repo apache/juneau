@@ -62,7 +62,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-svl.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+ * 	<li class='link'>{@doc juneau-svl.SvlVariables}
  * </ul>
  */
 public class FileVar extends DefaultingVar {

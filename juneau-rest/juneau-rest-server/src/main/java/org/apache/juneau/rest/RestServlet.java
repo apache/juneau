@@ -30,7 +30,7 @@ import org.apache.juneau.rest.exception.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Instantiation.RestServlet">Overview &gt; juneau-rest-server &gt; RestServlet</a>
+ * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RestServlet}
  * </ul>
  */
 public abstract class RestServlet extends HttpServlet {

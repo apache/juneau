@@ -141,7 +141,7 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.ContextsBuildersSessionsPropertyStores">Overview &gt; juneau-marshall &gt; Contexts, Builders, Sessions, and PropertyStores</a>
+ * 	<li class='link'>{@doc juneau-marshall.ContextsBuildersSessionsPropertyStores}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -307,7 +307,7 @@ public class BeanContext extends Context {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; juneau-marshall &gt; Bean Names and Dictionaries</a>
+	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 */
 	public static final String BEAN_beanDictionary = PREFIX + "beanDictionary.lc";
@@ -431,8 +431,8 @@ public class BeanContext extends Context {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.BeanFilters">Overview &gt; juneau-marshall &gt; BeanFilters</a>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.InterfaceFilters">Overview &gt; juneau-marshall &gt; Interface Filters</a>
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanFilters}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.InterfaceFilters}
 	 * </ul>
 	 */
 	public static final String BEAN_beanFilters = PREFIX + "beanFilters.lc";
@@ -734,7 +734,7 @@ public class BeanContext extends Context {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.BeanDictionaries">Overview &gt; juneau-marshall &gt; Bean Names and Dictionaries</a>
+	 * 	<li class='link'>{@doc juneau-marshall.BeanDictionaries}
 	 * </ul>
 	 */
 	public static final String BEAN_beanTypePropertyName = PREFIX + "beanTypePropertyName.s";
@@ -1563,12 +1563,12 @@ public class BeanContext extends Context {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.PojoSwaps">Overview &gt; juneau-marshall &gt; PojoSwaps</a>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.PerMediaTypePojoSwaps">Overview &gt; juneau-marshall &gt; Per-media-type PojoSwaps</a>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.OneWayPojoSwaps">Overview &gt; juneau-marshall &gt; One-way PojoSwaps</a>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.SwapAnnotation">Overview &gt; juneau-marshall &gt; @Swap Annotation</a>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.SwapMethods">Overview &gt; juneau-marshall &gt; Swap Methods</a>
-	 * 	<li class='link'><a class="doclink" href="../../../overview-summary.html#juneau-marshall.Transforms.SurrogateClasses">Overview &gt; juneau-marshall &gt; Surrogate Classes</a>
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoSwaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.PerMediaTypePojoSwaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.OneWayPojoSwaps}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapAnnotation}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SwapMethods}
+	 * 	<li class='link'>{@doc juneau-marshall.Transforms.SurrogateClasses}
 	 * </ul>
 	 */
 	public static final String BEAN_pojoSwaps = PREFIX + "pojoSwaps.lo";

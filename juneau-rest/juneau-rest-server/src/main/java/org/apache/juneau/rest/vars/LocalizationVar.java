@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.SvlVariables">Overview &gt; juneau-rest-server &gt; SVL Variables</a>
+ * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
  * </ul>
  */
 public class LocalizationVar extends MultipartVar {

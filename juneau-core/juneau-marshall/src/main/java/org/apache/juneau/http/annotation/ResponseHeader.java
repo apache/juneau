@@ -112,8 +112,8 @@ import org.apache.juneau.httppart.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.ResponseHeader">Overview &gt; juneau-rest-server &gt; @ResponseHeader</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.ResponseHeader}
+ * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Swagger Specification &gt; Header Object</a>
  * </ul>
  *
@@ -195,7 +195,7 @@ public @interface ResponseHeader {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -538,7 +538,7 @@ public @interface ResponseHeader {
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#headerObject">Header</a> object.
 	 *
 	 * <p>
-	 * This is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object that makes up the swagger information for this field.
+	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the Header object:
@@ -592,7 +592,7 @@ public @interface ResponseHeader {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -603,7 +603,7 @@ public @interface ResponseHeader {
 	 * 	<ja>@ResponseHeader</ja>(<js>"description:'The new location of this resource'"</js>)
 	 * 		</p>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

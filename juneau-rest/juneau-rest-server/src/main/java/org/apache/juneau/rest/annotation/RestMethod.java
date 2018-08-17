@@ -27,7 +27,7 @@ import org.apache.juneau.remote.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.RestMethod">Overview &gt; juneau-rest-server &gt; @RestMethod</a>
+ * 	<li class='link'>{@doc juneau-rest-server.RestMethod}
  * </ul>
  */
 @Documented
@@ -254,7 +254,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -288,7 +288,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -316,7 +316,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 */
@@ -338,7 +338,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -368,7 +368,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/description</code>.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
@@ -431,7 +431,7 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HtmlDocAnnotation">Overview &gt; juneau-rest-server &gt; @HtmlDoc</a>
+	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
 	 */
 	HtmlDoc htmldoc() default @HtmlDoc;
@@ -470,7 +470,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -718,7 +718,7 @@ public @interface RestMethod {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <code>/paths/{path}/{method}/summary</code>.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -733,7 +733,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -753,7 +753,7 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
@@ -797,14 +797,14 @@ public @interface RestMethod {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a>.
+	 * 		The format is {@doc juneau-marshall.JsonDetails.SimplifiedJson}.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 * 	<li>
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *

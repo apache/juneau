@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Marshalls">Overview &gt; juneau-marshall &gt;Marshalls</a>
+ * 	<li class='link'>{@doc juneau-marshall.Marshalls}
  * </ul>
  */
 public abstract class CharMarshall extends Marshall {

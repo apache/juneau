@@ -51,7 +51,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
+ * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#licenseObject">Swagger Specification &gt; License Object</a>
  * </ul>
  */
@@ -67,7 +67,7 @@ public @interface License {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -81,7 +81,7 @@ public @interface License {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -138,7 +138,7 @@ public @interface License {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -151,7 +151,7 @@ public @interface License {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

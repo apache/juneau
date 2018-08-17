@@ -33,7 +33,7 @@ import org.apache.juneau.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Overview &gt; juneau-marshall &gt; Simplified JSON</a>
+ * 	<li class='link'>{@doc juneau-marshall.JsonDetails.SimplifiedJson}
  * </ul>
  */
 public class SimpleJsonSerializer extends JsonSerializer {

@@ -32,7 +32,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
+ * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
  * </ul>
  */
 public class MockServletRequest implements HttpServletRequest, MockHttpRequest {

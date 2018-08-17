@@ -72,8 +72,8 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Query">Overview &gt; juneau-rest-server &gt; @Query</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Query}
+ * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  *
@@ -81,7 +81,7 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Query'>Overview &gt; juneau-rest-client &gt; Remote Resources &gt; @Query</a>
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Query}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
@@ -230,7 +230,7 @@ public @interface Query {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -790,7 +790,7 @@ public @interface Query {
 	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
-	 * The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> array or comma-delimited list.
+	 * The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array or comma-delimited list.
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -902,10 +902,10 @@ public @interface Query {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object or plain text string.
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -915,7 +915,7 @@ public @interface Query {
 	 * Free-form value for the Swagger <a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Parameter</a> object.
 	 *
 	 * <p>
-	 * This is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object that makes up the swagger information for this field.
+	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object that makes up the swagger information for this field.
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of the Query object:
@@ -983,7 +983,7 @@ public @interface Query {
 	 * 	<li>
 	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
 	 * 		The leading/trailing <code>{ }</code> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
@@ -996,7 +996,7 @@ public @interface Query {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

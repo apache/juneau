@@ -51,8 +51,8 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.UnitTesting">Overview &gt; juneau-rest-server &gt; Server-less Unit Testing of REST Interfaces</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.UnitTesting">Overview &gt; juneau-rest-client &gt; Server-less Unit Testing</a>
+ * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
+ * 	<li class='link'>{@doc juneau-rest-client.UnitTesting}
  * </ul>
  */
 public class MockRest implements MockHttpConnection {

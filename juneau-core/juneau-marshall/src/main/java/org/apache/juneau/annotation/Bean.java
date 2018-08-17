@@ -29,7 +29,7 @@ import org.apache.juneau.transform.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.BeanAnnotation">Overview &gt; juneau-marshall &gt; @Bean Annotation</a>
+ * 	<li class='link'>{@doc juneau-marshall.Transforms.BeanAnnotation}
  * </ul>
  */
 @Documented

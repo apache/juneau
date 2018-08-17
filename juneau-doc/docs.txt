@@ -1,3 +1,4 @@
+DefaultRestSvlVariables = #DefaultRestSvlVariables, Default REST SVL Variables
 Introduction = #Introduction, Overview > Introduction
 Introduction.Components = #Introduction.Components, Overview > Introduction > Components
 Introduction.Features = #Introduction.Features, Overview > Introduction > Features

@@ -20,7 +20,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.OpenApiDetails.Serializers">Overview &gt; juneau-marshall &gt; OpenAPI Details &gt; OpenAPI Serializers</a>
+ * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
  * </ul>
  */
 public class OpenApiPartSerializer extends UonPartSerializer {

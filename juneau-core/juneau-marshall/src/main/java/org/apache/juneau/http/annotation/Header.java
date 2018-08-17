@@ -61,8 +61,8 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Header">Overview &gt; juneau-rest-server &gt; @Header</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Header}
+ * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  *
@@ -163,15 +163,15 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Header'>Overview &gt; juneau-rest-client &gt; Remote Resources &gt; @Header</a>
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Header}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request'>Overview &gt; juneau-rest-server &gt; @Request</a>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Request'>Overview &gt; juneau-rest-client &gt; @Request</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Request}
  * </ul>
  */
 @Documented
@@ -308,7 +308,7 @@ public @interface Header {
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -869,7 +869,7 @@ public @interface Header {
 	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
 	 *
 	 * <p>
-	 * The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> array or comma-delimited list.
+	 * The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array or comma-delimited list.
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -981,10 +981,10 @@ public @interface Header {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object or plain text string.
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object or plain text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 */
@@ -1048,7 +1048,7 @@ public @interface Header {
 	 * 	<li>
 	 * 		Note that the only swagger field you can't specify using this value is <js>"name"</js> whose value needs to be known during servlet initialization.
 	 * 	<li>
-	 * 		The format is a <a class='doclink' href='../../../../../overview-summary.html#juneau-marshall.JsonDetails.SimplifiedJson'>Simplified JSON</a> object.
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
 	 * 	<li>
 	 * 		Automatic validation is NOT performed on input based on attributes in this value.
 	 * 	<li>
@@ -1063,7 +1063,7 @@ public @interface Header {
 	 * 	<li>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
 	 * 	<li>
-	 * 		Supports <a class="doclink" href="../../../../../overview-summary.html#DefaultRestSvlVariables">initialization-time and request-time variables</a>
+	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.

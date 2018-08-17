@@ -53,7 +53,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.Transforms.PojoBuilders">Overview &gt; juneau-marshall &gt; POJO Builders</a>
+ * 	<li class='link'>{@doc juneau-marshall.Transforms.PojoBuilders}
  * </ul>
  */
 @Documented

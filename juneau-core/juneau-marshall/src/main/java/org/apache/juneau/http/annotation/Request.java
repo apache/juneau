@@ -84,7 +84,7 @@ import org.apache.juneau.httppart.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request">Overview &gt; juneau-rest-server &gt; @Request</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
@@ -133,7 +133,7 @@ import org.apache.juneau.httppart.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Request'>Overview &gt; juneau-rest-client &gt; Remote Resources &gt; @Request</a>
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Request}
  * </ul>
  */
 @Documented

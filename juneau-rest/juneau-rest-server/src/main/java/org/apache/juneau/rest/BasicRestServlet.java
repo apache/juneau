@@ -162,7 +162,7 @@ import org.apache.juneau.xmlschema.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-rest-server.Instantiation.BasicRestServlet">Overview &gt; juneau-rest-server &gt; BasicRestServlet</a>
+ * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestServlet}
  * </ul>
  */
 @RestResource(

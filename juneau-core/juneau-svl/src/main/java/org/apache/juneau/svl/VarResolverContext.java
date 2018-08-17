@@ -26,7 +26,7 @@ import java.util.concurrent.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-svl.VarResolvers">Overview &gt; juneau-svl &gt; VarResolvers and VarResolverSessions</a>
+ * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */
 public class VarResolverContext {

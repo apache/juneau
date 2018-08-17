@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../overview-summary.html#juneau-marshall.HtmlDetails.HtmlRenderAnnotation">Overview &gt; juneau-marshall &gt; @Html(render) Annotation</a>
+ * 	<li class='link'>{@doc juneau-marshall.HtmlDetails.HtmlRenderAnnotation}
  * </ul>
  *
  * @param <T> The bean property type.
