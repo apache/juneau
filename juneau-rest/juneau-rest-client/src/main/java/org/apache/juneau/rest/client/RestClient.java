@@ -13,8 +13,8 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.remote.RemoteReturn.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.remoteable.ReturnValue.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -35,7 +35,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.remoteable.*;
+import org.apache.juneau.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -53,7 +53,7 @@ import org.apache.juneau.urlencoding.*;
  * 	<li>
  * 		Thread safe.
  * 	<li>
- * 		API for interacting with remoteable services.
+ * 		API for interacting with remote services.
  * </ul>
  *
  *
@@ -923,12 +923,12 @@ public class RestClient extends BeanContext implements Closeable {
 	}
 
 	/**
-	 * Create a new proxy interface against a REST interface.
+	 * Create a new proxy interface against a 3rd-party REST interface.
 	 *
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
 	 * <ul>
-	 * 	<li>The {@link Remoteable#path() @Remoteable.path()} annotation on the interface (<code>remoteable-path</code>).
+	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<code>remote-path</code>).
 	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<code>root-url</code>).
 	 * 	<li>The fully-qualified class name of the interface (<code>class-name</code>).
 	 * </ul>
@@ -936,23 +936,23 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <p>
 	 * The URL calculation is as follows:
 	 * <ul>
-	 * 	<li><code>remoteable-path</code> - If remoteable path is absolute.
-	 * 	<li><code>root-url/remoteable-path</code> - If remoteable path is relative and root-url has been specified.
-	 * 	<li><code>root-url/class-name</code> - If remoteable path is not specified.
+	 * 	<li><code>remote-path</code> - If remote path is absolute.
+	 * 	<li><code>root-url/remote-path</code> - If remote path is relative and root-url has been specified.
+	 * 	<li><code>root-url/class-name</code> - If remote path is not specified.
 	 * </ul>
 	 *
 	 * <p>
-	 * If the information is not available to resolve to an absolute URL, a {@link RemoteableMetadataException} is thrown.
+	 * If the information is not available to resolve to an absolute URL, a {@link RemoteMetadataException} is thrown.
 	 *
 	 * <p>
 	 * Examples:
 	 * <p class='bcode w800'>
 	 * 	<jk>package</jk> org.apache.foo;
 	 *
-	 * 	<ja>@Remoteable</ja>(path=<js>"http://hostname/resturl/myinterface1"</js>)
+	 * 	<ja>@RemoteResource</ja>(path=<js>"http://hostname/resturl/myinterface1"</js>)
 	 * 	<jk>public interface</jk> MyInterface1 { ... }
 	 *
-	 * 	<ja>@Remoteable</ja>(path=<js>"/myinterface2"</js>)
+	 * 	<ja>@RemoteResource</ja>(path=<js>"/myinterface2"</js>)
 	 * 	<jk>public interface</jk> MyInterface2 { ... }
 	 *
 	 * 	<jk>public interface</jk> MyInterface3 { ... }
@@ -961,21 +961,21 @@ public class RestClient extends BeanContext implements Closeable {
 	 * 	MyInterface1 i1 = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.build()
-	 * 		.getRemoteableProxy(MyInterface1.<jk>class</jk>);
+	 * 		.getRemoteResource(MyInterface1.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturl/myinterface2"</jc>
 	 * 	MyInterface2 i2 = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
 	 * 		.build()
-	 * 		.getRemoteableProxy(MyInterface2.<jk>class</jk>);
+	 * 		.getRemoteResource(MyInterface2.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturl/org.apache.foo.MyInterface3"</jc>
 	 * 	MyInterface3 i3 = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUrl(<js>"http://hostname/resturl"</js>)
 	 * 		.build()
-	 * 		.getRemoteableProxy(MyInterface3.<jk>class</jk>);
+	 * 		.getRemoteResource(MyInterface3.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <h5 class='section'>Notes:</h5>
@@ -989,25 +989,25 @@ public class RestClient extends BeanContext implements Closeable {
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @return The new proxy interface.
-	 * @throws RemoteableMetadataException If the REST URI cannot be determined based on the information given.
+	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
 	 */
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass) {
-		return getRemoteableProxy(interfaceClass, null);
+	public <T> T getRemoteResource(final Class<T> interfaceClass) {
+		return getRemoteResource(interfaceClass, null);
 	}
 
 	/**
-	 * Same as {@link #getRemoteableProxy(Class)} except explicitly specifies the URL of the REST interface.
+	 * Same as {@link #getRemoteResource(Class)} except explicitly specifies the URL of the REST interface.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object restUrl) {
-		return getRemoteableProxy(interfaceClass, restUrl, serializer, parser);
+	public <T> T getRemoteResource(final Class<T> interfaceClass, final Object restUrl) {
+		return getRemoteResource(interfaceClass, restUrl, serializer, parser);
 	}
 
 	/**
-	 * Same as {@link #getRemoteableProxy(Class, Object)} but allows you to override the serializer and parser used.
+	 * Same as {@link #getRemoteResource(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
@@ -1016,14 +1016,14 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRemoteResource(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {
-			RemoteableMeta rm = new RemoteableMeta(interfaceClass, asString(restUrl));
+			RemoteResourceMeta rm = new RemoteResourceMeta(interfaceClass, asString(restUrl));
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
 				if (rootUrl == null)
-					throw new RemoteableMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remoteable proxy.");
+					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 				path = trimSlashes(rootUrl) + '/' + path;
 			}
 			restUrl = path;
@@ -1037,14 +1037,14 @@ public class RestClient extends BeanContext implements Closeable {
 				new Class[] { interfaceClass },
 				new InvocationHandler() {
 
-					final RemoteableMeta rm = new RemoteableMeta(interfaceClass, restUrl2);
+					final RemoteResourceMeta rm = new RemoteResourceMeta(interfaceClass, restUrl2);
 
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RemoteableMethodMeta rmm = rm.getMethodMeta(method);
+						RemoteMethodMeta rmm = rm.getMethodMeta(method);
 
 						if (rmm == null)
-							throw new RuntimeException("Method is not exposed as a remoteable method.");
+							throw new RuntimeException("Method is not exposed as a remote method.");
 
 						String url = rmm.getUrl();
 						String httpMethod = rmm.getHttpMethod();
@@ -1116,7 +1116,7 @@ public class RestClient extends BeanContext implements Closeable {
 									return returnCode;
 								if (rt == Boolean.class || rt == boolean.class)
 									return returnCode < 400;
-								throw new RestCallException("Invalid return type on method annotated with @RemoteableMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
+								throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
 							} else {
 								Object v = rc.getResponseBody(rmr.getParser(), rmr.getSchema(), method.getGenericReturnType());
 								if (v == null && method.getReturnType().isPrimitive())
@@ -1137,6 +1137,134 @@ public class RestClient extends BeanContext implements Closeable {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Create a new Remote Interface against a {@link RemoteInterface @RemoteInterface}-annotated class.
+	 *
+	 * <p>
+	 * Remote interfaces are interfaces exposed on the server side using either the <code>RemoteInterfaceServlet</code>
+	 * or <code>PROXY</code> REST methods.
+	 *
+	 * <p>
+	 * The URL to the REST interface is based on the following values:
+	 * <ul>
+	 * 	<li>The {@link RemoteResource#path() @RemoteResource(path)} annotation on the interface (<code>remote-path</code>).
+	 * 	<li>The {@link RestClientBuilder#rootUrl(Object) rootUrl} on the client (<code>root-url</code>).
+	 * 	<li>The fully-qualified class name of the interface (<code>class-name</code>).
+	 * </ul>
+	 *
+	 * <p>
+	 * The URL calculation is as follows:
+	 * <ul>
+	 * 	<li><code>remote-path</code> - If remote path is absolute.
+	 * 	<li><code>root-url/remote-path</code> - If remote path is relative and root-url has been specified.
+	 * 	<li><code>root-url/class-name</code> - If remote path is not specified.
+	 * </ul>
+	 *
+	 * <p>
+	 * If the information is not available to resolve to an absolute URL, a {@link RemoteMetadataException} is thrown.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
+	 * 		pooling client connection manager.
+	 * 		The easiest way to do this is to use the {@link RestClientBuilder#pooled()} method.
+	 * 		If you don't do this, you may end up seeing "Connection still allocated" exceptions.
+	 * </ul>
+	 *
+	 * @param interfaceClass The interface to create a proxy for.
+	 * @return The new proxy interface.
+	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
+	 */
+	public <T> T getRemoteInterface(final Class<T> interfaceClass) {
+		return getRemoteInterface(interfaceClass, null);
+	}
+
+	/**
+	 * Same as {@link #getRemoteInterface(Class)} except explicitly specifies the URL of the REST interface.
+	 *
+	 * @param interfaceClass The interface to create a proxy for.
+	 * @param restUrl The URL of the REST interface.
+	 * @return The new proxy interface.
+	 */
+	public <T> T getRemoteInterface(final Class<T> interfaceClass, final Object restUrl) {
+		return getRemoteInterface(interfaceClass, restUrl, serializer, parser);
+	}
+
+	/**
+	 * Same as {@link #getRemoteInterface(Class, Object)} but allows you to override the serializer and parser used.
+	 *
+	 * @param interfaceClass The interface to create a proxy for.
+	 * @param restUrl The URL of the REST interface.
+	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
+	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
+	 * @return The new proxy interface.
+	 */
+	@SuppressWarnings({ "unchecked" })
+	public <T> T getRemoteInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+
+		if (restUrl == null) {
+			RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, asString(restUrl));
+			String path = rm.getPath();
+			if (path.indexOf("://") == -1) {
+				if (rootUrl == null)
+					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
+				path = trimSlashes(rootUrl) + '/' + path;
+			}
+			restUrl = path;
+		}
+
+		final String restUrl2 = asString(restUrl);
+
+		try {
+			return (T)Proxy.newProxyInstance(
+				interfaceClass.getClassLoader(),
+				new Class[] { interfaceClass },
+				new InvocationHandler() {
+
+					final RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, restUrl2);
+
+					@Override /* InvocationHandler */
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+						RemoteMethodMeta rmm = rm.getMethodMeta(method);
+
+						if (rmm == null)
+							throw new RuntimeException("Method is not exposed as a remote method.");
+
+						String url = rmm.getUrl();
+
+						try (RestCall rc = doCall("POST", url, true)) {
+
+							rc.serializer(serializer).parser(parser);
+
+							if (rmm.getOtherArgs().length > 0) {
+								Object[] otherArgs = new Object[rmm.getOtherArgs().length];
+								int i = 0;
+								for (RemoteMethodArg a : rmm.getOtherArgs())
+									otherArgs[i++] = args[a.getIndex()];
+								rc.body(otherArgs);
+							}
+
+							Object v = rc.getResponse(method.getGenericReturnType());
+							if (v == null && method.getReturnType().isPrimitive())
+								v = ClassUtils.getPrimitiveDefault(method.getReturnType());
+							return v;
+
+						} catch (RestCallException e) {
+							// Try to throw original exception if possible.
+							e.throwServerException(interfaceClass.getClassLoader());
+							throw new RuntimeException(e);
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
+					}
+			});
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 
 	static final String getName(String name1, String name2, BeanPropertyMeta pMeta) {
 		String n = name1.isEmpty() ? name2 : name1;

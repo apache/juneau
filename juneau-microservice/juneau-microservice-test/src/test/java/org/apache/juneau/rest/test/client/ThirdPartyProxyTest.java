@@ -28,7 +28,7 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.remoteable.*;
+import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.test.client.ThirdPartyProxyTest.ThirdPartyProxy.*;
@@ -65,7 +65,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = getCached(label, ThirdPartyProxy.class);
 		if (proxy == null) {
-			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonPartSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemoteableProxy(ThirdPartyProxy.class, null, serializer, parser);
+			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonPartSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemoteResource(ThirdPartyProxy.class, null, serializer, parser);
 			cache(label, proxy);
 		}
 	}
@@ -1540,7 +1540,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	}
 
 	//--------------------------------------------------------------------------------
-	// @RemoteableMethod(returns=HTTP_STATUS)
+	// @RemoteMethod(returns=HTTP_STATUS)
 	//--------------------------------------------------------------------------------
 	@Test
 	public void i01a() throws Exception {
@@ -1593,7 +1593,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	// Proxy class
 	//--------------------------------------------------------------------------------
 
-	@Remoteable(path="/testThirdPartyProxy")
+	@RemoteResource(path="/testThirdPartyProxy")
 	public static interface ThirdPartyProxy {
 
 		//--------------------------------------------------------------------------------
@@ -2567,28 +2567,28 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		// Method returns status code
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		int httpStatusReturnInt200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		Integer httpStatusReturnInteger200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		int httpStatusReturnInt404();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		Integer httpStatusReturnInteger404();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		boolean httpStatusReturnBool200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		Boolean httpStatusReturnBoolean200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		boolean httpStatusReturnBool404();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=ReturnValue.HTTP_STATUS)
+		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		Boolean httpStatusReturnBoolean404();
 	}
 

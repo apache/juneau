@@ -1,0 +1,183 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{updated} Remote Interfaces
+
+<p>
+	The Remote INterface Service API allows for client side code to use interface proxies for calling methods on POJOs on 
+	the server side.
+</p>
+<p>
+	Remote interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getInterfaceProxy(Class)} 
+	method.
+	<br>{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a 
+	full-blown REST interface for calling remote services (e.g. POJOs) remotely. 
+</p>
+<p>
+	The following simplified example shows how a method on a POJO on a server can be called through an interface
+	on a client...
+</p>
+<p class='bpcode w800'>
+	<ja>@RemoteInterface</ja> <jc>// Annotation is optional</jc>
+	<jk>public interface</jk> IAddressBook {
+
+		<jd>/** Initialize this address book with preset entries */</jd>
+		<jk>void</jk> init() <jk>throws</jk> Exception;
+	
+		<jd>/** Return all people in the address book */</jd>
+		List&lt;Person&gt; getPeople();
+	
+		<jd>/** Return all addresses in the address book */</jd>
+		List&lt;Address&gt; getAddresses();
+	
+		<jd>/** Create a person in this address book */</jd>
+		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+	
+		<jd>/** Find a person by id */</jd>
+		Person findPerson(<jk>int</jk> id);
+	
+		<jd>/** Find an address by id */</jd>
+		Address findAddress(<jk>int</jk> id);
+	
+		<jd>/** Find a person by address id */</jd>
+		Person findPersonWithAddress(<jk>int</jk> id);
+	
+		<jd>/** Remove a person by id */</jd>
+		Person removePerson(<jk>int</jk> id);
+	}
+</p>			
+<p>
+	The requirements for an interface method to be callable through the remote interface service are:
+</p>
+<ul class='spaced-list'>
+	<li>
+		The method must be public.
+	<li>
+		The parameter and return types must be <a class='doclink' href='#juneau-marshall.PojoCategories'>serializable and parsable</a>.
+	<li>
+		The method can optionally throw any <code>Throwable</code> that has a public no-arg or single-arg-string constructors.
+		<br>There are automatically recreated on the client side when thrown on the server side.
+</ul>
+<p>
+	The client side code for invoking this method is shown below...
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remote interface servlet.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>()
+		.rootUrl(<js>"http://localhost:10000/remote"</js>)
+		.build();
+	
+	<jc>// Create a proxy interface.</jc>
+	IAddressBook ab = client.getRemoteInterface(IAddressBook.<jk>class</jk>);
+	
+	<jc>// Invoke a method on the server side and get the returned result.</jc>
+	Person p = ab.createPerson(
+		<jk>new</jk> Person(
+			<js>"John Smith"</js>, 
+			<js>"Aug 1, 1999"</js>,
+			<jk>new</jk> Address(<js>"My street"</js>, <js>"My city"</js>, <js>"My state"</js>, 12345, <jk>true</jk>)
+		)
+	);
+</p>
+<p>
+	Under the covers, this method call gets converted to a REST POST.
+</p>
+<p class='bpcode w800'>
+	HTTP POST http://localhost:10000/remote/org.apache.juneau.examples.rest.IAddressBook/createPerson
+	Accept: application/json
+	Content-Type: application/json
+	
+	[
+		{
+			"name":"John Smith",
+			"birthDate":"Aug 1, 1999",
+			"addresses":[
+				{
+					"street":"My street",
+					"city":"My city",
+					"state":"My state",
+					"zip":12345,
+					"isCurrent":true
+				}
+			]
+		}
+	]
+</p>
+<p>
+	Note that the body of the request is an array.  
+	<br>This array contains the serialized arguments of the method.
+	<br>The object returned by the method is then serialized as the body of the response.
+</p>
+<p>
+	There are two ways to expose remote interfaces on the server side:
+</p>
+<ol class='spaced-list'>
+	<li>
+		Extending from {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet}.
+	<li>
+		Using a <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> annotation on a Java method.
+</ol>
+<p>
+	The {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} class is a simple specialized servlet with an abstract 
+	<code>getServiceMap()</code> method to define the server-side POJOs:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/remote"</js>
+	)
+	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
+	
+		<jc>// Our server-side POJO.</jc>
+		AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
+	
+		<ja>@Override</ja> <jc>/* RemoteInterfaceServlet */</jc>
+		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
+			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
+	
+			<jc>// In this simplified example, we expose the same POJO service under two different interfaces.
+			// One is IAddressBook which only exposes methods defined on that interface, and
+			// the other is AddressBook itself which exposes all methods defined on the class itself (dangerous!).</jc>
+			m.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+			m.put(AddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+			<jk>return</jk> m;
+		}
+	}
+</p>
+<p>
+	The <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> approach is easier if you only have a single 
+	interface you want to expose.  
+	<br>You simply define a Java method whose return type is an interface, and return the implementation of that 
+	interface:
+</p>
+<p class='bpcode w800'>
+	<jc>// Our exposed interface.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/addressbookproxy/*"</js>)
+	<jk>public</jk> IAddressBook getProxy() {
+		<jk>return</jk> addressBook;
+	}
+</p>
+<p>
+	In either case, the proxy communications layer is pure REST.
+	<br>Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
+	be made through pure REST calls.  
+	<br>This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
+	a browser with no coding involved.
+</p>
+<p>
+	The parameters and return types of the Java methods can be any of the supported <a class='doclink' href='#juneau-marshall.PojoCategories'>serializable and parsable types</a>.
+	<br>This ends up being WAY more flexible than other proxy interfaces since Juneau can handle so may POJO types 
+	out-of-the-box.
+	<br>Most of the time you don't even need to modify your existing Java implementation code.
+</p>

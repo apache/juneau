@@ -92,6 +92,13 @@
 			<artifactId>juneau-examples-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.sun</groupId>
+		    <artifactId>tools</artifactId>
+		    <version>1.8.0</version>
+		    <scope>system</scope>
+		    <systemPath>${basedir}/tools.jar</systemPath>
+		</dependency>
 	</dependencies>
 	
 	<build>

@@ -99,7 +99,7 @@
 		</ul>
 	<li>New common serializer setting: <code><del>SerializerContext.SERIALIZER_abridged</del></code>.
 	<li>Support for defining interface proxies against 3rd-party REST interfaces.
-		<br>New package {@link org.apache.juneau.remoteable} for all remoteable proxy interface annotations.
+		<br>New package <code><del>org.apache.juneau.remoteable</del></code> for all remoteable proxy interface annotations.
 		<br><ja>@Remoteable</ja> annotation has been moved to this package.
 	<li>Updated doc: <code><del>6 - Remoteable Services</del></code>
 	<li>New doc: <code><del>6.1 -  Interface proxies against 3rd-party REST interfaces</del></code>
@@ -197,7 +197,7 @@
 	<li><code><del>StreamResource</del></code> can now contain multiple sources from a variety of source types (e.g. <code><jk>byte</jk>[]</code> arrays, <code>InputStreams</code>, <code>Files</code>, etc...)
 		and is now immutable.  It also includes a new <code><del>StreamResourceBuilder</del></code> class.
 	<li>Simplified remoteable proxies using the <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> annotation on REST methods.
-		Used to expose interface proxies without the need for {@link org.apache.juneau.rest.remoteable.RemoteableServlet}.
+		Used to expose interface proxies without the need for <code><del>RemoteableServlet</del></code>.
 	<p class='bcode w800'>
 	<jc>// Server side</jc>
 	<ja>@RestMethod</ja>(name=<js>"PROXY"</js>, path=<js>"/myproxy/*"</js>)
@@ -222,8 +222,8 @@
 	<li>The <code>RestClient</code> class <code>doX(Object url)</code> methods now handle HttpClient <code>URIBuilder</code> instances.
 	<li>New methods added/updated to {@link org.apache.juneau.rest.client.RestClient}:
 	<ul>
-		<li>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class,Object) getRemoteableProxy(Class,Object)} - For interface proxies defined using <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
-		<li>{@link org.apache.juneau.rest.client.RestClient#getRemoteableProxy(Class,Object,Serializer,Parser) getRemoteableProxy(Class,Object,Serializer,Parser)} - Same as above, but overrides the serializer and parser defined on the client.
+		<li><code><del>RestClient.getRemoteableProxy(Class,Object)</del></code> - For interface proxies defined using <code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code>.
+		<li><code><del>RestClient.getRemoteableProxy(Class,Object,Serializer,Parser)</del></code> - Same as above, but overrides the serializer and parser defined on the client.
 		<li>{@link org.apache.juneau.rest.client.RestClient#doPost(Object) doPost(Object)} 
 		<li>{@link org.apache.juneau.rest.client.RestClient#doCall(HttpMethod,Object,Object) doCall(HttpMethod,Object,Object)} - Can now pass in instances of {@link org.apache.juneau.rest.client.NameValuePairs} for easy form posts.
 			<br>This extends to all methods that take in the input.

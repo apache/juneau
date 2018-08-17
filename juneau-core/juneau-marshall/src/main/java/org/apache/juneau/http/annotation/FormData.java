@@ -34,7 +34,7 @@ import org.apache.juneau.jsonschema.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
+ * 	<li>Arguments and argument-types of client-side <ja>@RemoteResource</ja>-annotated interfaces.
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
@@ -81,22 +81,22 @@ import org.apache.juneau.jsonschema.*;
  * The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
  * servlet to drain the body content.
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
+ * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
  * request.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.FormData'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @FormData</a>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Request</a>
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.FormData}
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Request}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request'>Overview &gt; juneau-rest-server &gt; @Request</a>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; @Request</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Request}
  * </ul>
 */
 @Documented
@@ -163,7 +163,7 @@ public @interface FormData {
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
-	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	 * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @FormData("*")</jc>

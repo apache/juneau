@@ -59,14 +59,14 @@
 	}
 </p>
 <p>
-	Mocked connections can also be used for serverless testing of remoteable proxies.
+	Mocked connections can also be used for serverless testing of remote resources and interfaces.
 </p>
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Our remoteable interface to test.</jc>
-	<ja>@Remoteable</ja>
-	<jk>public interface</jk> MyRemoteableInterface {
+	<jc>// Our remote resource to test.</jc>
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> MyRemoteInterface {
 	
 		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
 		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
@@ -85,11 +85,11 @@
 	<ja>@Test</ja>
 	<jk>public void</jk> testProxy() {
 		MockRest mr = MockRest.create(MyRest.<jk>class</jk>);
-		MyRemoteableInterface r = RestClient
+		MyRemoteInterface r = RestClient
 			.<jsm>create</jsm>()
 			.mockHttpConnection(mr)
 			.build()
-			.getRemoteableProxy(MyRemoteable.<jk>class</jk>);
+			.getRemoteResource(MyRemoteInterface.<jk>class</jk>);
 		<jsm>assertEquals</jsm>(123, r.echoQuery(123));
 	}
 </p>

@@ -1767,7 +1767,7 @@ public class ThirdPartyProxyResource extends BasicRestServletJena {
 	}
 
 	//--------------------------------------------------------------------------------
-	// @RemoteableMethod(returns=HTTP_STATUS)
+	// @RemoteMethod(returns=HTTP_STATUS)
 	//--------------------------------------------------------------------------------
 
 	@RestMethod(name=GET, path="/httpStatusReturn200")

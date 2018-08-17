@@ -63,7 +63,7 @@ import org.apache.juneau.rest.widget.*;
 		MethodExampleResource.class,
 		RequestEchoResource.class,
 		AddressBookResource.class,
-		SampleRemoteableServlet.class,
+		SampleRemoteInterfaceServlet.class,
 		DtoExamples.class,
 		PhotosResource.class,
 		SqlQueryResource.class,

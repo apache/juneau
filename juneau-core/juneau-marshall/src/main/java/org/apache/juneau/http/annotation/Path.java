@@ -33,7 +33,7 @@ import org.apache.juneau.jsonschema.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
+ * 	<li>Arguments and argument-types of client-side <ja>@RemoteResource</ja>-annotated interfaces.
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
@@ -63,13 +63,13 @@ import org.apache.juneau.jsonschema.*;
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameterObject">Swagger Specification &gt; Parameter Object</a>
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
+ * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
  * 		<jc>// Explicit names specified for path parameters.</jc>
@@ -121,7 +121,7 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}/{baz}"</js>)
@@ -158,7 +158,7 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Path'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Path</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Path'>Overview &gt; juneau-rest-client &gt; Remote Resources &gt; @Path</a>
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
@@ -166,7 +166,7 @@ import org.apache.juneau.jsonschema.*;
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request'>Overview &gt; juneau-rest-server &gt; @Request</a>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; @Request</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Request'>Overview &gt; juneau-rest-client &gt; @Request</a>
  * </ul>
  */
 @Documented
@@ -220,7 +220,7 @@ public @interface Path {
 	 * 		</p>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// When used on a remote method parameter</jc>
-	 * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+	 * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
 	 *
 	 * 		<jc>// Equivalent to @Path("*")</jc>

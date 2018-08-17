@@ -38,6 +38,8 @@ public class DocGenerator {
 
 			String template = IOUtils.readFile("src/main/resources/overview-template.html");
 
+			DocStore ds = new DocStore(new File("src/main/resources/docs.txt"));
+
 			File top = new File("src/main/resources/Topics");
 
 			reorder(top);
@@ -50,6 +52,8 @@ public class DocGenerator {
 			for (PageFile pf1 : topics.pageFiles) {
 				toc
 					.append("\t<li><p class='toc2 ").append(pf1.tags).append("'><a class='doclink' href='#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
+				ds
+					.addLink(pf1.fullId, "#" + pf1.fullId, "Overview > " + pf1.title);
 				contents
 					.append("\n")
 					.append("<!-- ==================================================================================================== -->\n\n")
@@ -65,6 +69,8 @@ public class DocGenerator {
 
 						toc
 							.append("\t\t<li><p class='").append(pf2.tags).append("'><a class='doclink' href='#").append(pf2.fullId).append("'>").append(pf2.title).append("</a></p>\n");
+						ds
+							.addLink(pf2.fullId, "#" + pf2.fullId, "Overview > " + pf1.title + " > " + pf2.title);
 						contents
 							.append("\n")
 							.append("<!-- ==================================================================================================== -->\n\n")
@@ -79,6 +85,8 @@ public class DocGenerator {
 
 								toc
 									.append("\t\t\t<li><p class='").append(pf3.tags).append("'><a class='doclink' href='#").append(pf3.fullId).append("'>").append(pf3.title).append("</a></p>\n");
+								ds
+									.addLink(pf3.fullId, "#" + pf3.fullId, "Overview > " + pf1.title + " > " + pf2.title + " > " + pf3.title);
 								contents
 									.append("\n")
 									.append("<!-- ==================================================================================================== -->\n\n")
@@ -119,6 +127,8 @@ public class DocGenerator {
 			template = template.replace("<!--{TOC-CONTENTS}-->", toc.toString()).replace("<!--{CONTENTS}-->", contents.toString()).replace("<!--{TOC-RELEASE-NOTES}-->", tocRn).replace("<!--{RELEASE-NOTES}-->", rn);
 
 			IOUtils.writeFile("src/main/javadoc/overview.html", template);
+
+			ds.save(new File("docs.txt"));
 
 			System.err.println("Generated target/overview.html in "+(System.currentTimeMillis()-startTime)+"ms");  // NOT DEBUG
 

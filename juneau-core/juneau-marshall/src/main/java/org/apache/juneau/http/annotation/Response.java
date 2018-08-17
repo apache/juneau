@@ -45,9 +45,9 @@ import org.apache.juneau.jsonschema.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response">Overview &gt; juneau-rest-server &gt; @Response</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Response">Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Response</a>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Swagger">Overview &gt; juneau-rest-server &gt; OPTIONS pages and Swagger</a>
- * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#responseObject">Swagger Specification &gt; Response Object</a>
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Response">Overview &gt; juneau-rest-client &gt; Remote Resources &gt; @Response</a>
+ * 	<li class='link'>{@doc juneau-rest-server.Swagger}
+ * 	<li class='link'>{@doc swagger.responseObject}
  * </ul>
  */
 @Documented

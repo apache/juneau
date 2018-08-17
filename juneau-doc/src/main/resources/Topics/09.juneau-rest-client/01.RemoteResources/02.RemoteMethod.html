@@ -1,0 +1,115 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{todo} @RemoteMethod
+
+<p>
+	The {@link org.apache.juneau.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
+	of {@link org.apache.juneau.remote.RemoteResource}-annotated interfaces to identify REST endpoint calls.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.remote.RemoteMethod}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.remote.RemoteMethod#httpMethod httpMethod}
+		<li class='jf'>{@link org.apache.juneau.remote.RemoteMethod#path path}
+		<li class='jf'>{@link org.apache.juneau.remote.RemoteMethod#returns returns}
+	</ul>
+</ul>
+<p>
+	The HTTP method and path are mapped to a Java method using the <code>httpMethod</code> and <code>path</code> annotations.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// GET /pets/{petId}</jc>
+		<ja>@RemoteMethod(httpMethod="GET", path="/pets/{petId}")</ja>
+		Pet getPet(@Path(<js>"petId"</js>) <jk>int</jk> id);
+	}
+</p>
+<p>
+	The method names used in 3rd-party proxies can be anything.  
+</p>
+<p>
+	However, the method names can also be used to infer the HTTP method and path if not explicitly specified
+	via the {@link org.apache.juneau.remote.RemoteMethod#httpMethod() @RemoteMethod(httpMethod)} and 
+	{@link org.apache.juneau.remote.RemoteMethod#path() @RemoteMethod(path)} annotations.
+</p>
+<p>
+	For example, the <code>getPet</code> method below defaults to <code>GET /pet</code>:
+</p>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// GET /pet</jc>
+		<ja>@RemoteMethod</ja>
+		Pet getPet(@Query(<js>"id"</js>) <jk>int</jk> id);
+	}
+</p>
+<p>
+	Method names matching the following pattern are assumed to be implying the HTTP method name:
+</p>
+<p class='bpcode w800'>
+	(get|put|post|delete|options|head|connect|trace|patch).*
+</p>
+<p class='bpcode w800'>
+	do(?i)(get|put|post|delete|options|head|connect|trace|patch)
+</p>
+
+<h5 class='figure'>Examples:</h5>
+<table class='styled w500'>
+	<tr>
+		<th>Java method name</th>
+		<th>Inferred HTTP method</th>
+		<th>Inferred HTTP path</th>
+	</tr>
+	<tr>
+		<td class='code'>getPet()</td>
+		<td class='code'>GET</td>
+		<td class='code'>/pet</td>
+	</tr>
+	<tr>
+		<td class='code'>get()</td>
+		<td class='code'>GET</td>
+		<td class='code'>/</td>
+	</tr>
+	<tr>
+		<td class='code'>postPet()</td>
+		<td class='code'>POST</td>
+		<td class='code'>/pet</td>
+	</tr>
+	<tr>
+		<td class='code'>fooPet()</td>
+		<td class='code'>[default]</td>
+		<td class='code'>/fooPet</td>
+	</tr>
+	<tr>
+		<td class='code'>doGet()</td>
+		<td class='code'>GET</td>
+		<td class='code'>/</td>
+	</tr>
+	<tr>
+		<td class='code'>doGET()</td>
+		<td class='code'>GET</td>
+		<td class='code'>/</td>
+	</tr>
+	<tr>
+		<td class='code'>doFoo()</td>
+		<td class='code'>[default]</td>
+		<td class='code'>/doFoo</td>
+	</tr>
+</table>

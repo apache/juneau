@@ -29,7 +29,7 @@ import org.apache.juneau.httppart.*;
  * Can be used in the following locations:
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Arguments and argument-types of client-side <ja>@Remoteable</ja>-annotated interfaces.
+ * 	<li>Arguments and argument-types of client-side <ja>@RemoteResource</ja>-annotated interfaces.
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestMethod-annotated methods</h5>
@@ -87,13 +87,13 @@ import org.apache.juneau.httppart.*;
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Request">Overview &gt; juneau-rest-server &gt; @Request</a>
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @Remoteable-annotated interfaces</h5>
+ * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
- * Annotation applied to Java method arguments of interface proxies to denote a bean with remoteable annotations.
+ * Annotation applied to Java method arguments of interface proxies to denote a bean with remote resource annotations.
 
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<ja>@Remoteable</ja>(path=<js>"/myproxy"</js>)
+ * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *
  * 		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{p1}/{p2}"</js>)
@@ -133,7 +133,7 @@ import org.apache.juneau.httppart.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Request'>Overview &gt; juneau-rest-client &gt; Interface Proxies Against 3rd-party REST Interfaces &gt; @Request</a>
+ * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.RemoteResources.Request'>Overview &gt; juneau-rest-client &gt; Remote Resources &gt; @Request</a>
  * </ul>
  */
 @Documented

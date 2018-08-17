@@ -27,7 +27,7 @@ import org.junit.runners.Suite.*;
 	AddressBookResourceTest.class,
 	RootResourcesTest.class,
 	RootContentTest.class,
-	SampleRemoteableServicesResourceTest.class,
+	SampleRemoteInterfaceServletTest.class,
 	TestMultiPartFormPostsTest.class
 })
 public class _TestSuite {

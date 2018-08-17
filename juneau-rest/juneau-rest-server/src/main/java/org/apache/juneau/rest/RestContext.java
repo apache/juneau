@@ -45,7 +45,7 @@ import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.remoteable.*;
+import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.exception.*;
@@ -3235,9 +3235,9 @@ public final class RestContext extends BeanContext {
 						if ("PROXY".equals(httpMethod)) {
 
 							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(method.getGenericReturnType());
-							final RemoteableMeta rm = new RemoteableMeta(interfaceClass.getInnerClass(), "/foo");
-							if (rm.getMethodsByPath().isEmpty())
-								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remoteable methods.", getMethodSignature(method), interfaceClass.getReadableName());
+							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
+							if (rim.getMethodsByPath().isEmpty())
+								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", getMethodSignature(method), interfaceClass.getReadableName());
 
 							sm = new RestJavaMethod(resource, method, this) {
 
@@ -3251,14 +3251,14 @@ public final class RestContext extends BeanContext {
 									final Object o = res.getOutput();
 
 									if ("GET".equals(req.getMethod())) {
-										res.setOutput(rm.getMethodsByPath().keySet());
+										res.setOutput(rim.getMethodsByPath().keySet());
 										return SC_OK;
 
 									} else if ("POST".equals(req.getMethod())) {
 										if (pathInfo.indexOf('/') != -1)
 											pathInfo = pathInfo.substring(pathInfo.lastIndexOf('/')+1);
 										pathInfo = urlDecode(pathInfo);
-										RemoteableMethodMeta rmm = rm.getMethodMetaByPath(pathInfo);
+										RemoteMethodMeta rmm = rim.getMethodMetaByPath(pathInfo);
 										if (rmm != null) {
 											Method m = rmm.getJavaMethod();
 											try {

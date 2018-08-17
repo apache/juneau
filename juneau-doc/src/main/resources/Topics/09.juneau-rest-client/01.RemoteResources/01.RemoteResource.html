@@ -1,0 +1,54 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{todo} @RemoteResource
+
+<p>
+	The {@link org.apache.juneau.remote.RemoteResource @RemoteResource} annotation is used on your interface class
+	to identify it as a REST proxy interface.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.remote.RemoteResource}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.remote.RemoteResource#path path}
+	</ul>
+</ul>
+<p>
+	The {@link org.apache.juneau.remote.RemoteResource#path @RemoteResource(path)} annotation is used to define the
+	HTTP path of the REST service.
+</p>
+<p>
+	The path can be an absolute path to your REST service.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>(path=<js>"http://localhost:10000/petstore"</js>)
+	<jk>public interface</jk> PetStore {...}
+</p>
+<p class='bpcode w800'>	
+	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
+</p>
+<p>
+	When a relative path is specified, it's relative to the root-url defined on the <code>RestClient</code> used to instantiate the interface.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {...}
+</p>
+<p class='bpcode w800'>
+	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();	
+	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
+</p>

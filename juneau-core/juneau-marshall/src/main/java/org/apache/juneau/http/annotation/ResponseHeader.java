@@ -121,8 +121,8 @@ import org.apache.juneau.httppart.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-server.HttpPartAnnotations.Response'>Overview &gt; juneau-rest-server &gt; @Response</a>
- * 	<li class='link'><a class='doclink' href='../../../../../overview-summary.html#juneau-rest-client.3rdPartyProxies.Response'>Overview &gt; juneau-rest-client &gt; @Response</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Response}
  * </ul>
 */
 @Documented

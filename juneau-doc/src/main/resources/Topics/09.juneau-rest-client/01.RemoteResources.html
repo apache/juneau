@@ -1,0 +1,61 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{todo} Remote Resources
+
+<p>
+	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
+	<br>This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
+	virtually any REST interface.
+</p>
+<p>
+	Similar in concept to remote interfaces defined previously, but in this case we simply define our interface with
+	special annotations that tell us how to convert input and output to HTTP headers, query parameters, form 
+	post parameters, or request/response bodies.
+</p>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
+		String addPet(
+			<ja>@Body</ja> PetCreate pet, 
+			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, 
+			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
+		);
+	}
+</p>
+<p class='bpcode w800'>	
+	<jc>// Use a RestClient with default Simple JSON support.</jc>
+	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build()) {
+		PetStore p = c.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000/petstore"</js>);
+		PetCreate pet = <jk>new</jk> PetCreate(<js>"Fluffy"</js>, 9.99);
+		String response = p.createPet(pet, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+	}
+</p>
+<p>
+	The call above translates to the following REST call:
+</p>
+<p class='bpcode w800'>
+	POST http://localhost:10000/petstore/pets?debug=true HTTP/1.1
+	Accept: application/json
+	Content-Type: application/json
+	E-Tag: 475588d4-0b27-4f56-9296-cc683251d314
+	
+	{
+		name: 'Fluffy',
+		price: 9.99 
+	}
+</p>

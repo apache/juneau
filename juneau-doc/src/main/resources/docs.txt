@@ -1,0 +1,1 @@
+swagger.responseObject = https://swagger.io/specification/v2/#responseObject, Swagger Specification > Response Object

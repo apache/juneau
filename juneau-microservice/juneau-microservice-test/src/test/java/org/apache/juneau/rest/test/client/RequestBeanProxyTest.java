@@ -22,7 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.remoteable.*;
+import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -53,8 +53,8 @@ public class RequestBeanProxyTest {
 	// @Query - Simple values
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface A01_Remoteable {
+	@RemoteResource(path="/")
+	public static interface A01_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@Request A01_BeanImpl rb);
@@ -83,8 +83,8 @@ public class RequestBeanProxyTest {
 		@Override public String getX7() { return "123"; }
 	}
 
-	static A01_Remoteable a01a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A01_Remoteable.class, null);
-	static A01_Remoteable a01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteableProxy(A01_Remoteable.class, null);
+	static A01_RemoteResource a01a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A01_RemoteResource.class, null);
+	static A01_RemoteResource a01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A01_RemoteResource.class, null);
 
 	@Test
 	public void a01a_query_simpleVals_plainText() throws Exception {
@@ -103,8 +103,8 @@ public class RequestBeanProxyTest {
 	// @Query - Maps
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface A02_Remoteable {
+	@RemoteResource(path="/")
+	public static interface A02_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@Request A02_Bean rb);
@@ -132,8 +132,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static A02_Remoteable a02a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A02_Remoteable.class, null);
-	static A02_Remoteable a02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteableProxy(A02_Remoteable.class, null);
+	static A02_RemoteResource a02a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A02_RemoteResource.class, null);
+	static A02_RemoteResource a02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A02_RemoteResource.class, null);
 
 	@Test
 	public void a02a_query_maps_plainText() throws Exception {
@@ -155,8 +155,8 @@ public class RequestBeanProxyTest {
 	// @Query - NameValuePairs
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface A03_Remoteable {
+	@RemoteResource(path="/")
+	public static interface A03_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@Request A03_Bean rb);
@@ -184,8 +184,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static A03_Remoteable a03a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A03_Remoteable.class, null);
-	static A03_Remoteable a03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteableProxy(A03_Remoteable.class, null);
+	static A03_RemoteResource a03a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A03_RemoteResource.class, null);
+	static A03_RemoteResource a03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A03_RemoteResource.class, null);
 
 	@Test
 	public void a03a_query_nameValuePairs_plainText() throws Exception {
@@ -207,8 +207,8 @@ public class RequestBeanProxyTest {
 	// @Query - CharSequence
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface A04_Remoteable {
+	@RemoteResource(path="/")
+	public static interface A04_RemoteResource {
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@Request A04_Bean rb);
 	}
@@ -220,7 +220,7 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static A04_Remoteable a04a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A04_Remoteable.class, null);
+	static A04_RemoteResource a04a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A04_RemoteResource.class, null);
 
 	@Test
 	public void a04a_query_charSequence() throws Exception {
@@ -232,8 +232,8 @@ public class RequestBeanProxyTest {
 	// @Query - Reader
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface A05_Remoteable {
+	@RemoteResource(path="/")
+	public static interface A05_RemoteResource {
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@Request A05_Bean rb);
 	}
@@ -245,7 +245,7 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static A05_Remoteable a05a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A05_Remoteable.class, null);
+	static A05_RemoteResource a05a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A05_RemoteResource.class, null);
 
 	@Test
 	public void a05a_query_reader() throws Exception {
@@ -257,8 +257,8 @@ public class RequestBeanProxyTest {
 	// @Query - Collections
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface A06_Remoteable {
+	@RemoteResource(path="/")
+	public static interface A06_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoQuery")
 		String normal(@Request A06_Bean rb);
@@ -306,8 +306,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static A06_Remoteable a06a = RestClient.create().mockHttpConnection(a).build().getRemoteableProxy(A06_Remoteable.class, null);
-	static A06_Remoteable a06b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteableProxy(A06_Remoteable.class, null);
+	static A06_RemoteResource a06a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A06_RemoteResource.class, null);
+	static A06_RemoteResource a06b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A06_RemoteResource.class, null);
 
 	@Test
 	public void a06a_query_collections_plainText() throws Exception {
@@ -342,8 +342,8 @@ public class RequestBeanProxyTest {
 	// @FormData, Simple values
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface C01_Remoteable {
+	@RemoteResource(path="/")
+	public static interface C01_RemoteResource {
 
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
 		String normal(@Request C01_Bean rb);
@@ -383,8 +383,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static C01_Remoteable c01a = RestClient.create().mockHttpConnection(c).build().getRemoteableProxy(C01_Remoteable.class, null);
-	static C01_Remoteable c01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteableProxy(C01_Remoteable.class, null);
+	static C01_RemoteResource c01a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C01_RemoteResource.class, null);
+	static C01_RemoteResource c01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C01_RemoteResource.class, null);
 
 	@Test
 	public void c01a_formData_simpleVals_plainText() throws Exception {
@@ -406,8 +406,8 @@ public class RequestBeanProxyTest {
 	// @FormData, Maps
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface C02_Remoteable {
+	@RemoteResource(path="/")
+	public static interface C02_RemoteResource {
 
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
 		String normal(@Request C02_Bean rb);
@@ -435,8 +435,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static C02_Remoteable c02a = RestClient.create().mockHttpConnection(c).build().getRemoteableProxy(C02_Remoteable.class, null);
-	static C02_Remoteable c02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteableProxy(C02_Remoteable.class, null);
+	static C02_RemoteResource c02a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C02_RemoteResource.class, null);
+	static C02_RemoteResource c02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C02_RemoteResource.class, null);
 
 	@Test
 	public void c02a_formData_maps_plainText() throws Exception {
@@ -458,8 +458,8 @@ public class RequestBeanProxyTest {
 	// @FormData, NameValuePairs
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface C03_Remoteable {
+	@RemoteResource(path="/")
+	public static interface C03_RemoteResource {
 
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
 		String normal(@Request C03_Bean rb);
@@ -487,8 +487,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static C03_Remoteable c03a = RestClient.create().mockHttpConnection(c).build().getRemoteableProxy(C03_Remoteable.class, null);
-	static C03_Remoteable c03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteableProxy(C03_Remoteable.class, null);
+	static C03_RemoteResource c03a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C03_RemoteResource.class, null);
+	static C03_RemoteResource c03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C03_RemoteResource.class, null);
 
 	@Test
 	public void c03a_formData_nameValuePairs_plainText() throws Exception {
@@ -510,8 +510,8 @@ public class RequestBeanProxyTest {
 	// @FormData, CharSequence
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface C04_Remoteable {
+	@RemoteResource(path="/")
+	public static interface C04_RemoteResource {
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
 		String normal(@Request C04_Bean rb);
 	}
@@ -523,7 +523,7 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static C04_Remoteable c04a = RestClient.create().mockHttpConnection(c).build().getRemoteableProxy(C04_Remoteable.class, null);
+	static C04_RemoteResource c04a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C04_RemoteResource.class, null);
 
 	@Test
 	public void c04a_formDataCharSequence() throws Exception {
@@ -535,8 +535,8 @@ public class RequestBeanProxyTest {
 	// @FormData, Reader
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface C05_Remoteable {
+	@RemoteResource(path="/")
+	public static interface C05_RemoteResource {
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
 		String normal(@Request C05_Bean rb);
 	}
@@ -548,7 +548,7 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static C05_Remoteable c05a = RestClient.create().mockHttpConnection(c).build().getRemoteableProxy(C05_Remoteable.class, null);
+	static C05_RemoteResource c05a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C05_RemoteResource.class, null);
 
 	@Test
 	public void c05a_formDataReader() throws Exception {
@@ -560,8 +560,8 @@ public class RequestBeanProxyTest {
 	// @FormData, Collections
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface C06_Remoteable {
+	@RemoteResource(path="/")
+	public static interface C06_RemoteResource {
 
 		@RemoteMethod(httpMethod="POST", path="/echoFormData")
 		String normal(@Request C06_Bean rb);
@@ -609,8 +609,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static C06_Remoteable c06a = RestClient.create().mockHttpConnection(c).build().getRemoteableProxy(C06_Remoteable.class, null);
-	static C06_Remoteable c06b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteableProxy(C06_Remoteable.class, null);
+	static C06_RemoteResource c06a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C06_RemoteResource.class, null);
+	static C06_RemoteResource c06b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C06_RemoteResource.class, null);
 
 	@Test
 	public void c06a_formData_collections_plainText() throws Exception {
@@ -646,8 +646,8 @@ public class RequestBeanProxyTest {
 	// @Header, Simple values
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface E01_Remoteable {
+	@RemoteResource(path="/")
+	public static interface E01_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
 		String normal(@Request E01_Bean rb);
@@ -687,8 +687,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static E01_Remoteable e01a = RestClient.create().mockHttpConnection(e).build().getRemoteableProxy(E01_Remoteable.class, null);
-	static E01_Remoteable e01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteableProxy(E01_Remoteable.class, null);
+	static E01_RemoteResource e01a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E01_RemoteResource.class, null);
+	static E01_RemoteResource e01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E01_RemoteResource.class, null);
 
 	@Test
 	public void e01a_headerSimpleValsPlainText() throws Exception {
@@ -710,8 +710,8 @@ public class RequestBeanProxyTest {
 	// @Header, Maps
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface E02_Remoteable {
+	@RemoteResource(path="/")
+	public static interface E02_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
 		String normal(@Request E02_Bean rb);
@@ -739,8 +739,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static E02_Remoteable e02a = RestClient.create().mockHttpConnection(e).build().getRemoteableProxy(E02_Remoteable.class, null);
-	static E02_Remoteable e02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteableProxy(E02_Remoteable.class, null);
+	static E02_RemoteResource e02a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E02_RemoteResource.class, null);
+	static E02_RemoteResource e02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E02_RemoteResource.class, null);
 
 	@Test
 	public void e02a_header_maps_plainText() throws Exception {
@@ -762,8 +762,8 @@ public class RequestBeanProxyTest {
 	// @Header, NameValuePairs
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface E03_Remoteable {
+	@RemoteResource(path="/")
+	public static interface E03_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
 		String normal(@Request E03_Bean rb);
@@ -791,8 +791,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static E03_Remoteable e03a = RestClient.create().mockHttpConnection(e).build().getRemoteableProxy(E03_Remoteable.class, null);
-	static E03_Remoteable e03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteableProxy(E03_Remoteable.class, null);
+	static E03_RemoteResource e03a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E03_RemoteResource.class, null);
+	static E03_RemoteResource e03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E03_RemoteResource.class, null);
 
 	@Test
 	public void e03a_header_nameValuePairs_plainText() throws Exception {
@@ -814,8 +814,8 @@ public class RequestBeanProxyTest {
 	// @Header, Collections
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface E04_Remoteable {
+	@RemoteResource(path="/")
+	public static interface E04_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
 		String normal(@Request E04_Bean rb);
@@ -863,8 +863,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static E04_Remoteable e04a = RestClient.create().mockHttpConnection(e).build().getRemoteableProxy(E04_Remoteable.class, null);
-	static E04_Remoteable e04b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteableProxy(E04_Remoteable.class, null);
+	static E04_RemoteResource e04a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E04_RemoteResource.class, null);
+	static E04_RemoteResource e04b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E04_RemoteResource.class, null);
 
 	@Test
 	public void e04a_header_collections_plainText() throws Exception {
@@ -899,8 +899,8 @@ public class RequestBeanProxyTest {
 	// @Path, Simple values
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface G01_Remoteable {
+	@RemoteResource(path="/")
+	public static interface G01_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
 		String normal(@Request G01_Bean rb);
@@ -940,8 +940,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static G01_Remoteable g01a = RestClient.create().mockHttpConnection(g).build().getRemoteableProxy(G01_Remoteable.class, null);
-	static G01_Remoteable g01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteableProxy(G01_Remoteable.class, null);
+	static G01_RemoteResource g01a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G01_RemoteResource.class, null);
+	static G01_RemoteResource g01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G01_RemoteResource.class, null);
 
 	@Test
 	public void g01a_pathSimpleValsPlainText() throws Exception {
@@ -963,8 +963,8 @@ public class RequestBeanProxyTest {
 	// @Path, Maps
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface G02_Remoteable {
+	@RemoteResource(path="/")
+	public static interface G02_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
 		String normal(@Request G02_Bean rb);
@@ -992,8 +992,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static G02_Remoteable g02a = RestClient.create().mockHttpConnection(g).build().getRemoteableProxy(G02_Remoteable.class, null);
-	static G02_Remoteable g02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteableProxy(G02_Remoteable.class, null);
+	static G02_RemoteResource g02a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G02_RemoteResource.class, null);
+	static G02_RemoteResource g02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G02_RemoteResource.class, null);
 
 	@Test
 	public void g02a_path_maps_plainText() throws Exception {
@@ -1015,8 +1015,8 @@ public class RequestBeanProxyTest {
 	// @Path, NameValuePairs
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface G03_Remoteable {
+	@RemoteResource(path="/")
+	public static interface G03_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
 		String normal(@Request G03_Bean rb);
@@ -1044,8 +1044,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static G03_Remoteable g03a = RestClient.create().mockHttpConnection(g).build().getRemoteableProxy(G03_Remoteable.class, null);
-	static G03_Remoteable g03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteableProxy(G03_Remoteable.class, null);
+	static G03_RemoteResource g03a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G03_RemoteResource.class, null);
+	static G03_RemoteResource g03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G03_RemoteResource.class, null);
 
 	@Test
 	public void g03a_path_nameValuePairs_plainText() throws Exception {
@@ -1067,8 +1067,8 @@ public class RequestBeanProxyTest {
 	// @Path, Collections
 	//=================================================================================================================
 
-	@Remoteable(path="/")
-	public static interface G04_Remoteable {
+	@RemoteResource(path="/")
+	public static interface G04_RemoteResource {
 
 		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
 		String normal(@Request G04_Bean rb);
@@ -1116,8 +1116,8 @@ public class RequestBeanProxyTest {
 		}
 	}
 
-	static G04_Remoteable g04a = RestClient.create().mockHttpConnection(g).build().getRemoteableProxy(G04_Remoteable.class, null);
-	static G04_Remoteable g04b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteableProxy(G04_Remoteable.class, null);
+	static G04_RemoteResource g04a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G04_RemoteResource.class, null);
+	static G04_RemoteResource g04b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G04_RemoteResource.class, null);
 
 	@Test
 	public void g04a_path_collections_plainText() throws Exception {

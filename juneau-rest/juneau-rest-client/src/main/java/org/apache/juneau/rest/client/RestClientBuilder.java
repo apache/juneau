@@ -132,6 +132,18 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
+	 * Convenience method for specifying Simple JSON as the transmission media type.
+	 *
+	 * <p>
+	 * Identical to calling <code>serializer(SimpleJsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</code>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder simpleJson() {
+		return serializer(SimpleJsonSerializer.class).parser(JsonParser.class);
+	}
+
+	/**
 	 * Convenience method for specifying XML as the transmission media type.
 	 *
 	 * <p>

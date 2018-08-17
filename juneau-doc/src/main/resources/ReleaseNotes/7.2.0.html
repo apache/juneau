@@ -48,6 +48,16 @@
 			<li class='ja'>{@link org.apache.juneau.http.annotation.SubItems}
 			<li class='ja'>{@link org.apache.juneau.http.annotation.Tag}
 		</ul>
+		<br>Additionally, the <ja>@Remoteable</ja> annotation has been split into the following two annotations:
+		<ul class='doctree'>
+			<li class='ja'>{@link org.apache.juneau.http.remote.RemoteInterface} 
+				- Used for remote proxy interfaces served up through 
+				{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
+				<br>Defaults to <js>"POST"</js> with method signatures as paths.
+			<li class='ja'>{@link org.apache.juneau.http.remote.RemoteResource} 
+				- Used for 3rd-party REST interfaces.
+				<br>Defaults to <js>"GET"</js> with standardized naming conventions for paths.
+		</ul>
 	<li>
 		Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
 		<code><ja>@Query</ja>(<js>"*"</js>)</code>, <code><ja>@FormData</ja>(<js>"*"</js>)</code>, <code><ja>@Header</ja>(<js>"*"</js>)</code>, <code><ja>@Path</ja>(<js>"*"</js>)</code>
@@ -140,7 +150,7 @@
 		<br>See new options #4 on {@link org.apache.juneau.annotation.BeanProperty#name()}
 	<li>
 		New formats for the {@link org.apache.juneau.html.annotation.Html#format() @Html.format()} annotation:
-		<ul>
+		<ul class='doctree'>
 			<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
 			<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
 		</ul> 
@@ -242,7 +252,9 @@
 	<li>
 		Fixed bug where incorrect media type was being set on responses (e.g. <code>text/html+schema</code> instead of <code>text/html</code> for schema documents).
 	<li>
-		{@link org.apache.juneau.rest.remoteable.RemoteableServlet} now provides a form page for invoking remoteable methods in a browser.
+		The <code>RemoteableServlet</code> class has been moved and renamed to {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet}.
+	<li>
+		{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} now provides a form page for invoking remote interface methods in a browser.
 	<li>
 		Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
 	<li>
@@ -351,7 +363,7 @@
 		<br>The contents of <code>nav()</code> are free-form HTML that gets rendered immediately after the navigation links.
 	<li>
 		The following new parameter types can be used on REST methods:
-		<ul>
+		<ul class='doctree'>
 			<li class='jc'>{@link org.apache.juneau.parser.ReaderParser} - The reader parser matching the request content type.
 			<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser} - The input stream parser matching the request content type.
 		</ul>
@@ -377,17 +389,17 @@
 		The {@link org.apache.juneau.http.annotation.Path#name()} annotation parameter is now required.
 	<li>
 		New class for mock unit testing of REST resources:
-		<ul>
+		<ul class='doctree'>
 			<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
 		</ul>
 	<li>
 		<code><ja>@RestMethod</ja>(inherit)</code> annotation has been removed and replaced with the following classes:
-		<ul>
+		<ul class='doctree'>
 			<li class='jc'>{@link org.apache.juneau.rest.Inherit}
 			<li class='jc'>{@link org.apache.juneau.rest.None}
 		</ul>
 		<br>These can be used in the following locations:
-		<ul>
+		<ul class='doctree'>
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#serializers()}
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#parsers()}
 			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters()}
@@ -409,18 +421,22 @@
 		</ul>
 	<li>
 		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
-		<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
-			<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
+				<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
+			</ul>
 		</ul>
 	<li>
 		New methods added to {@link org.apache.juneau.rest.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
-		<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
-			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
-			<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
+				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
+				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
+			</ul>
 		</ul>
 	<li>
 		New/updated documentation: 
@@ -434,19 +450,21 @@
 		<code>RedirectToServletRoot</code> class has been renamed to {@link org.apache.juneau.rest.helper.SeeOtherRoot}.
 	<li>
 		New REST context settings:
-		<li class='jc'>{@link org.apache.juneau.rest.RestContext}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriAuthority REST_uriAuthority}
-			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriContext REST_uriContext}
-			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriRelativity REST_uriRelativity}
-			<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriResolution REST_uriResolution}
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.RestContext}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriAuthority REST_uriAuthority}
+				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriContext REST_uriContext}
+				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriRelativity REST_uriRelativity}
+				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriResolution REST_uriResolution}
+			</ul>
 		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>
 <ul class='spaced-list'>
 	<li>
-		Remoteable interfaces support OpenAPI annotations.
+		Remote Resource interfaces support OpenAPI annotations.
 	<li>
 		Made improvements to the builder API for defining SSL support.
 		<br>New methods added:
@@ -468,21 +486,25 @@
 		POJOs that can be converted to Strings and converted from Strings/InputStreams/Readers.
 	<li>
 		Methods added to client builder to make it easy to define the transport language:
-		<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#json() json()}
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#xml() xml()}
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#html() html()}
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#uon() uon()}
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#urlEnc() urlEnc()}
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#msgpack() msgpack()}
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#plainText() plainText()}
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#json() json()}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#xml() xml()}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#html() html()}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#uon() uon()}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#urlEnc() urlEnc()}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#msgpack() msgpack()}
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#plainText() plainText()}
+			</ul>
 		</ul>
 	<li>
 		New method added for allowing serverless client testing against REST interfaces.
-		<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
-		<ul>
-			<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection) mockHttpConnection(MockHttpConnection)}
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection) mockHttpConnection(MockHttpConnection)}
+			</ul>
 		</ul>
 	<li>
 		Removed the deprecated <code>RestCall.execute()</code> method.
@@ -491,6 +513,19 @@
 		<code>RestCall.input(Object)</code> method renamed to {@link org.apache.juneau.rest.client.RestCall#body(Object)} to match OpenAPI terminology.
 	<li>
 		Made constructors on <code>RestClient</code> and <code>RestClientBuilder</code> protected so that they can be subclassed.
+	<li>
+		The <code>RestClient.getRemoteableProxy()</code> methods have been split into separate methods for Remote Interfaces and Remote Resources:
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
+			<ul>
+				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class)}
+				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object)}
+				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object,Serializer,Parser)}
+				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class)}
+				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object)}
+				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object,Serializer,Parser)}
+			</ul>
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-microservice</h5>

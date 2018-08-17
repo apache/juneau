@@ -18,9 +18,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.remoteable.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.remote.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
@@ -513,8 +513,8 @@ public @interface RestMethod {
 	 * 		<js>"PROXY"</js>
 	 * 		- Remote-proxy interface.
 	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
-	 * 		{@link Remoteable @Remoteable} annotation) to be used as a remote proxy using
-	 * 		<code>RestClient.getRemoteableProxy(Class&lt;T&gt; interfaceClass, String url)</code>.
+	 * 		{@link RemoteInterface @RemoteInterface} annotation) to be used as a remote proxy using
+	 * 		<code>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</code>.
 	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
 	 * 		<br>Conceptually, this is simply a fancy <code>POST</code> against the url <js>"/{path}/{javaMethodName}"</js>
 	 * 		where the arguments are marshalled from the client to the server as an HTTP body containing an array of

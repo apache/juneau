@@ -27,7 +27,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.remoteable.*;
+import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -60,7 +60,7 @@ public class InterfaceProxyTest {
 		});
 	}
 
-	@Remoteable
+	@RemoteInterface
 	public interface InterfaceProxy {
 
 		public static final String SWAP = "swap-~!@#$%^&*()_+`-={}[]|:;\"<,>.?/";
@@ -945,17 +945,10 @@ public class InterfaceProxyTest {
 	public InterfaceProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
-			proxy = RestClient.create().mockHttpConnection(interfaceProxyResource).serializer(serializer).parser(parser).build().getRemoteableProxy(InterfaceProxy.class, "/proxy");
+			proxy = RestClient.create().mockHttpConnection(interfaceProxyResource).serializer(serializer).parser(parser).build().getRemoteInterface(InterfaceProxy.class, "/proxy");
 			cache.put(label, proxy);
 		}
-//		if (proxy == null) {
-//			proxy = getClient(label, serializer, parser).getRemoteableProxy(InterfaceProxy.class, "/testInterfaceProxyResource/proxy");
-//			cache(label, proxy);
-//		}
 	}
-
-
-
 
 	//--------------------------------------------------------------------------------
 	// Test return types.
