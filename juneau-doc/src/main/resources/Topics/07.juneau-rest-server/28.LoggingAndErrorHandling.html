@@ -16,30 +16,30 @@
 Logging and Error Handling
 
 <p>
-	The {@link org.apache.juneau.rest.RestContext#REST_logger} property allows you to configure 
+	The {@link oajr.RestContext#REST_logger} property allows you to configure 
 	logging for your resource.
 	<br>The interface is shown below:
 </p>
 <ul class='doctree'>
 	<li class='jac'>
-		{@link org.apache.juneau.rest.RestLogger}
+		{@link oajr.RestLogger}
 		<ul>
 			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#log(Level,String,Object[]) log(Level,String,Object[])}
+				{@link oajr.RestLogger#log(Level,String,Object[]) log(Level,String,Object[])}
 			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
+				{@link oajr.RestLogger#log(Level,Throwable,String,Object[]) log(Level,Throwable,String,Object[])}
 			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects(Level,String,Object[])}
+				{@link oajr.RestLogger#logObjects(Level,String,Object[]) logObjects(Level,String,Object[])}
 			<li class='jm'>
-				{@link org.apache.juneau.rest.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
+				{@link oajr.RestLogger#onError(HttpServletRequest,HttpServletResponse,RestException) onError(HttpServletRequest,HttpServletResponse,RestException)}
 				<br>Gets called when an error occurs on a request call.
 				<br>Default implementation logs the error.
 		</ul>
 	</li>
 </ul>
 <p>
-	The {@link org.apache.juneau.rest.RestLogger#logObjects(Level,String,Object[]) logObjects()} method is particularly useful because it allows you to pass in POJOs as arguments
-	that serialized using {@link org.apache.juneau.json.SimpleJsonSerializer#DEFAULT_READABLE}, but only
+	The {@link oajr.RestLogger#logObjects(Level,String,Object[]) logObjects()} method is particularly useful because it allows you to pass in POJOs as arguments
+	that serialized using {@link oaj.json.SimpleJsonSerializer#DEFAULT_READABLE}, but only
 	if the message is actually logged.
 </p>
 
@@ -52,11 +52,11 @@ Logging and Error Handling
 	<br>But you can define your own implementation to use any framework you wish.
 </p>
 <p>
-	The {@link org.apache.juneau.rest.RestLogger} instance is accessible via the following:
+	The {@link oajr.RestLogger} instance is accessible via the following:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getLogger()}
-	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger()}
+	<li class='jm'>{@link oajr.RestContext#getLogger()}
+	<li class='jm'>{@link oajr.RestRequest#getLogger()}
 </ul>
 <p>
 	In addition, the logger can be accessed by passing it as a parameter to your REST java method:
@@ -66,10 +66,10 @@ Logging and Error Handling
 	<jk>public</jk> Object doSomething(RestLogger logger) {...}
 </p>
 <p>
-	If your resource extends from {@link org.apache.juneau.rest.RestServlet}, you can also
+	If your resource extends from {@link oajr.RestServlet}, you can also
 	use and override the following methods:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...)}
-	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...)}
+	<li class='jm'>{@link oajr.RestServlet#log(Level,String,Object...)}
+	<li class='jm'>{@link oajr.RestServlet#log(Level,Throwable,String,Object...)}
 </ul>

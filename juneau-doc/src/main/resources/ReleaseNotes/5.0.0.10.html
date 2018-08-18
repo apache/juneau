@@ -20,13 +20,13 @@
 </p>
 <h5 class='topic w800'>Core API changes</h5>
 <ul class='spaced-list'>
-	<li>New {@link org.apache.juneau.ObjectMap#findKeyIgnoreCase(String)} method.
+	<li>New {@link oaj.ObjectMap#findKeyIgnoreCase(String)} method.
 	<li>HtmlSerializer will now create 2-dimensional tables for collections of mixed beans/maps if all object have the same set of property names/keys.</li>
 </ul>
 <h5 class='topic w800'>REST server API changes</h5>
 <ul class='spaced-list'>
 	<li>New <code>RestServletProperties</code> class that defines all the class-level properties that can be set on the servlet.</li>
-	<li>Properties can be set through {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties} annotation, or new <code><del>RestServlet.setProperty(String,Object)</del></code> method.</li>
+	<li>Properties can be set through {@link oajr.annotation.RestResource#properties() @RestResource.properties} annotation, or new <code><del>RestServlet.setProperty(String,Object)</del></code> method.</li>
 	<li>New <js>"?noTrace"</js> URL parameter to prevent stack traces from being logged (for JUnit testing of error conditions).</li>
 	<li>New <code>RestServletProperties.REST_useStackTraceHashes</code> property to prevent the same stack trace from being logged multiple times.</li>
 	<li>New <code>RestServletProperties.REST_renderResponseStackTraces</code> property for preventing stack traces in responses for security reasons.</li>

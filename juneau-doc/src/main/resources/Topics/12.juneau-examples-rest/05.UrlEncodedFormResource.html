@@ -22,7 +22,7 @@ UrlEncodedFormResource
 	<li>
 		How to use form entry beans to process form POSTs.
 	<li>
-		How to use the {@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)} method to 
+		How to use the {@link oajr.RestRequest#getClasspathReaderResource(String)} method to 
 		serve up static files with embedded string variables.
 </ul>
 <p>
@@ -133,8 +133,8 @@ UrlEncodedFormResource
 <p>
 	The <l>$R</l> variables are request string variables.  
 	<br>In this case, <l>$R{resourceTitle}</l> and <l>$R{resourceDescription}</l> resolve to the values returned by 
-	{@link org.apache.juneau.rest.RestRequest#getResourceTitle()} and 
-	{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}.
+	{@link oajr.RestRequest#getResourceTitle()} and 
+	{@link oajr.RestRequest#getResourceDescription()}.
 </p>
 <p>
 	Pointing a browser to the resource shows the following:
@@ -155,9 +155,9 @@ UrlEncodedFormResource
 <h5 class='toc'>Additional Information</h5>
 <ul class='toc'>
 	<li class='jm'>
-		{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])} 
+		{@link oajr.RestContextBuilder#vars(Class[])} 
 		- Servlet and request variables.
 	<li class='jm'>
-		{@link org.apache.juneau.rest.RestCallHandler#getSessionObjects(RestRequest)} 
+		{@link oajr.RestCallHandler#getSessionObjects(RestRequest)} 
 		- Var resolver session objects.
 </ul>

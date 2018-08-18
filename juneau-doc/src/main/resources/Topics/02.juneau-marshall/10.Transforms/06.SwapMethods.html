@@ -54,7 +54,7 @@ Swap Methods
 </ul>
 <p>
 	If you want to force a bean-like class to be serialized as a string, you can use the 
-	{@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} annotation on the class to force it to be 
+	{@link oaj.annotation.BeanIgnore @BeanIgnore} annotation on the class to force it to be 
 	serialized to a string using the <code>toString()</code> method.
 </p>
 <p>
@@ -69,11 +69,11 @@ Swap Methods
 	The <code>BeanSession</code> parameter allows you access to various information about the current 
 	serialization session.
 	<br>For example, you could provide customized results based on the media type being produced 
-	({@link org.apache.juneau.BeanSession#getMediaType()}).
+	({@link oaj.BeanSession#getMediaType()}).
 </p>
 <p>
 	The following example shows how an HTML5 form template object can be created that gets serialized as a 
-	populated HTML5 {@link org.apache.juneau.dto.html5.Form} bean.
+	populated HTML5 {@link oaj.dto.html5.Form} bean.
 </p>
 <p class='bpcode w800'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;

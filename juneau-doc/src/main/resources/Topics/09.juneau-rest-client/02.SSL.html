@@ -17,7 +17,7 @@ SSL Support
 
 <p>
 	The simplest way to enable SSL support in the client is to use the 
-	{@link org.apache.juneau.rest.client.RestClientBuilder#enableLaxSSL()} method.
+	{@link oajrc.RestClientBuilder#enableLaxSSL()} method.
 </p>
 
 <h5 class='figure'>Example:</h5>
@@ -35,16 +35,16 @@ SSL Support
 	The following convenience methods are provided in the builder class for specifying SSL parameters:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+	<li class='jc'>{@link oajrc.RestClientBuilder}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
-		<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
-		<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
-		<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
-		<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#trustManagers(TrustManager...)}
-		<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#secureRandom(SecureRandom)}
+		<li class='jf'>{@link oajrc.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
+		<li class='jf'>{@link oajrc.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
+		<li class='jf'>{@link oajrc.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+		<li class='jf'>{@link oajrc.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+		<li class='jf'>{@link oajrc.RestClientBuilder#trustManagers(TrustManager...)}
+		<li class='jf'>{@link oajrc.RestClientBuilder#secureRandom(SecureRandom)}
 	</ul>
 </ul>
 <p>
-	SSL support can also be enabled by passing in your own connection manager using {@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}.
+	SSL support can also be enabled by passing in your own connection manager using {@link oajrc.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}.
 </p>

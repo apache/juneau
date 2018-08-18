@@ -16,8 +16,8 @@
 Logging
 
 <p>
-	Use the {@link org.apache.juneau.rest.client.RestClientBuilder#logTo(Level,Logger)} and 
-	{@link org.apache.juneau.rest.client.RestCall#logTo(Level,Logger)} methods to log HTTP calls.
+	Use the {@link oajrc.RestClientBuilder#logTo(Level,Logger)} and 
+	{@link oajrc.RestCall#logTo(Level,Logger)} methods to log HTTP calls.
 	<br>These methods will cause the HTTP request and response headers and body to be logged to the specified logger.  
 </p>
 
@@ -30,6 +30,6 @@ Logging
 	The method call is ignored if the logger level is below the specified level.
 </p>
 <p>
-	Customized logging can be handled by sub-classing the {@link org.apache.juneau.rest.client.RestCallLogger} 
-	class and using the  {@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} method.
+	Customized logging can be handled by sub-classing the {@link oajrc.RestCallLogger} 
+	class and using the  {@link oajrc.RestCall#interceptor(RestCallInterceptor)} method.
 </p>

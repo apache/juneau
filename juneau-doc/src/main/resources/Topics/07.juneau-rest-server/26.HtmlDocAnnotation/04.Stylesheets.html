@@ -41,8 +41,8 @@ Stylesheets
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.Stylesheets.3.png'>
 <p>
-	The stylesheet URL is controlled by the {@link org.apache.juneau.rest.annotation.HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
-	<br>The {@link org.apache.juneau.rest.BasicRestServlet} class defines the stylesheet served up as a static file:
+	The stylesheet URL is controlled by the {@link oajr.annotation.HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
+	<br>The {@link oajr.BasicRestServlet} class defines the stylesheet served up as a static file:
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -97,7 +97,7 @@ Stylesheets
 	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {...}
 </p>
 <p>
-	The <l>StyleMenuItem</l> is a widget that extends from {@link org.apache.juneau.rest.widget.MenuItemWidget}, a
+	The <l>StyleMenuItem</l> is a widget that extends from {@link oajr.widget.MenuItemWidget}, a
 	specialized widget for creating pop-up menus.
 	<br>In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
 </p>

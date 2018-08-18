@@ -22,11 +22,11 @@ Config Stores
 	The methods that need to be implemented on a store are:
 </p>
 <ul class='doctree'>
-	<li class='jac'>{@link org.apache.juneau.config.store.ConfigStore}
+	<li class='jac'>{@link oaj.config.store.ConfigStore}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#read(String) read(String)} - Read a config file.
-		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#write(String,String,String) write(String,String,String)} - Write a config file.
-		<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#update(String,String) update(String,String)} - Update the contents of a config file.
+		<li class='jm'>{@link oaj.config.store.ConfigStore#read(String) read(String)} - Read a config file.
+		<li class='jm'>{@link oaj.config.store.ConfigStore#write(String,String,String) write(String,String,String)} - Write a config file.
+		<li class='jm'>{@link oaj.config.store.ConfigStore#update(String,String) update(String,String)} - Update the contents of a config file.
 	</ul>
 </ul>
 <p>
@@ -64,14 +64,14 @@ Config Stores
 	Two configuration stores are provided by default:
 </p>
 <ul>
-	<li class='jc'>{@link org.apache.juneau.config.store.ConfigFileStore} - File-system storage.
-	<li class='jc'>{@link org.apache.juneau.config.store.ConfigMemoryStore} - In-memory storage.
+	<li class='jc'>{@link oaj.config.store.ConfigFileStore} - File-system storage.
+	<li class='jc'>{@link oaj.config.store.ConfigMemoryStore} - In-memory storage.
 </ul>
 <p>
 	The store is defined on the <code>Config</code> object via the following setting:
 </p>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_store}
+	<li class='jf'>{@link oaj.config.Config#CONFIG_store}
 </ul>
 
 <h5 class='figure'>Example:</h5>
@@ -80,6 +80,6 @@ Config Stores
 	Config c = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
 </p>
 <p>
-	The default store used is {@link org.apache.juneau.config.store.ConfigFileStore#DEFAULT} which defines
+	The default store used is {@link oaj.config.store.ConfigFileStore#DEFAULT} which defines
 	the execution directory as the file system directory to store and retrieve files. 
 </p>

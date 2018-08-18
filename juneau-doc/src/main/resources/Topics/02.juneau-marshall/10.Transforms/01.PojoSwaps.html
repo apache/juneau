@@ -16,7 +16,7 @@
 PojoSwaps
 
 <p>
-	{@link org.apache.juneau.transform.PojoSwap PojoSwaps} are a critical component of Juneau.
+	{@link oaj.transform.PojoSwap PojoSwaps} are a critical component of Juneau.
 	They allow the serializers and parsers to handle Java objects that wouldn't normally be serializable.
 </p>
 <p>
@@ -71,7 +71,7 @@ PojoSwaps
 	<jk>int</jk> day = bean.<jf>date</jf>.getDay(); 						<jc>// == 3</jc>
 </p>
 <p>
-	The {@link org.apache.juneau.BeanMap#get(Object)} and {@link org.apache.juneau.BeanMap#put(String,Object)} 
+	The {@link oaj.BeanMap#get(Object)} and {@link oaj.BeanMap#put(String,Object)} 
 	methods will automatically convert to swapped values as the following example shows:
 </p>
 <p class='bpcode w800'>
@@ -145,30 +145,30 @@ PojoSwaps
 	<li class='jp'><jk>org.apache.juneau.transforms</jk>
 		<ul>
 			<li class='jc'>
-				{@link org.apache.juneau.transforms.ByteArrayBase64Swap}
+				{@link oaj.transforms.ByteArrayBase64Swap}
 			<li class='jac'>
-				{@link org.apache.juneau.transforms.CalendarSwap}
+				{@link oaj.transforms.CalendarSwap}
 			<li class='jac'>
-				{@link org.apache.juneau.transforms.DateSwap}
+				{@link oaj.transforms.DateSwap}
 			<li class='jc'>
-				{@link org.apache.juneau.transforms.EnumerationSwap}
+				{@link oaj.transforms.EnumerationSwap}
 			<li class='jc'>
-				{@link org.apache.juneau.transforms.IteratorSwap}
+				{@link oaj.transforms.IteratorSwap}
 			<li class='jc'>
-				{@link org.apache.juneau.transforms.ReaderSwap}
+				{@link oaj.transforms.ReaderSwap}
 			<li class='jc'>
-				{@link org.apache.juneau.transforms.XMLGregorianCalendarSwap}
+				{@link oaj.transforms.XMLGregorianCalendarSwap}
 		</ul>
 	</li>
 </ul>
 <p>
-	In particular, the {@link org.apache.juneau.transforms.CalendarSwap} and 
-	{@link org.apache.juneau.transforms.DateSwap} transforms provide a large number of customized swaps to 
+	In particular, the {@link oaj.transforms.CalendarSwap} and 
+	{@link oaj.transforms.DateSwap} transforms provide a large number of customized swaps to 
 	ISO, RFC, or localized strings.
 </p>
 <p>
-	Swaps have access to the session locale and timezone through the {@link org.apache.juneau.BeanSession#getLocale()} and
-	{@link org.apache.juneau.BeanSession#getTimeZone()} methods.
+	Swaps have access to the session locale and timezone through the {@link oaj.BeanSession#getLocale()} and
+	{@link oaj.BeanSession#getTimeZone()} methods.
 	<br>This allows you to specify localized swap values when needed.
 </p>
 <p>

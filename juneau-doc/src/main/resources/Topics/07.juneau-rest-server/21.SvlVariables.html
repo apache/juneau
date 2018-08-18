@@ -43,7 +43,7 @@ SVL Variables
 	Variables are configured on resources via the following API:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])}
+	<li class='jm'>{@link oajr.RestContextBuilder#vars(Class[])}
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -74,20 +74,20 @@ SVL Variables
 	The methods involved with variables are:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession()}
-	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean)}
+	<li class='jm'>{@link oajr.RestContext#getVarResolver()}
+	<li class='jm'>{@link oajr.RestRequest#getVarResolverSession()}
+	<li class='jm'>{@link oajr.RestRequest#getClasspathReaderResource(String,boolean)}
 </ul>
 <p>
 	There are two distinct groups of variables:
 </p>
 <ul class='spaced-list'>
 	<li><l>Initialization-time variables</l>
-		<br>These are variables that can be used in many of the annotations in {@link org.apache.juneau.rest.annotation.RestResource @RestResource}. 
-		<br>The {@link org.apache.juneau.rest.RestContext#getVarResolver()} method returns initialization-time variables only.
+		<br>These are variables that can be used in many of the annotations in {@link oajr.annotation.RestResource @RestResource}. 
+		<br>The {@link oajr.RestContext#getVarResolver()} method returns initialization-time variables only.
 	<li><l>Request-time variables</l>
-		<br>These are variables that are available during HTTP-requests and can be used on annotation such as {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc}. 
-		<br>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession()} method returns initialization and request-time variables.
+		<br>These are variables that are available during HTTP-requests and can be used on annotation such as {@link oajr.annotation.HtmlDoc @HtmlDoc}. 
+		<br>{@link oajr.RestRequest#getVarResolverSession()} method returns initialization and request-time variables.
 </ul>
 <p>
 	The following is the default list of supported variables.
@@ -99,77 +99,77 @@ SVL Variables
 	</tr>
 	<tr class='dark'>
 		<td rowspan='11' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
-		<td>{@link org.apache.juneau.svl.vars.EnvVariablesVar}</td>
+		<td>{@link oaj.svl.vars.EnvVariablesVar}</td>
 		<td class='code'>$E{key[,default]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$E{PATH}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.SystemPropertiesVar}</td>
+		<td>{@link oaj.svl.vars.SystemPropertiesVar}</td>
 		<td class='code'>$S{key[,default]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$S{java.home}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.ArgsVar}</td>
+		<td>{@link oaj.svl.vars.ArgsVar}</td>
 		<td class='code'>$A{key[,default]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$A{foo,null}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.ManifestFileVar}</td>
+		<td>{@link oaj.svl.vars.ManifestFileVar}</td>
 		<td class='code'>$MF{key[,default]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$MF{Main-Class}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.IfVar}</td>
+		<td>{@link oaj.svl.vars.IfVar}</td>
 		<td class='code'>$IF{arg,then[,else]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$IF{$S{my.boolean.property},foo,bar}</td>
 	</tr>
 	<tr class='dark dd'>
-		<td>{@link org.apache.juneau.svl.vars.SwitchVar}</td>
+		<td>{@link oaj.svl.vars.SwitchVar}</td>
 		<td class='code'>$SW{arg,p1:then1[,p2:then2...]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$SW{$P{os.name},*win*:Windows,*:Something else}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.CoalesceVar}</td>
+		<td>{@link oaj.svl.vars.CoalesceVar}</td>
 		<td class='code'>$CO{arg1[,arg2...]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$CO{$S{my.property},$E{my.property},n/a}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.PatternMatchVar}</td>
+		<td>{@link oaj.svl.vars.PatternMatchVar}</td>
 		<td class='code'>$PM{arg,pattern}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$PM{$P{os.name},*win*}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.NotEmptyVar}</td>
+		<td>{@link oaj.svl.vars.NotEmptyVar}</td>
 		<td class='code'>$NE{arg}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$NE{$S{foo}}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.UpperCaseVar}</td>
+		<td>{@link oaj.svl.vars.UpperCaseVar}</td>
 		<td class='code'>$UC{arg}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$UC{$S{foo}}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.svl.vars.LowerCaseVar}</td>
+		<td>{@link oaj.svl.vars.LowerCaseVar}</td>
 		<td class='code'>$LC{arg}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
@@ -177,7 +177,7 @@ SVL Variables
 	</tr>
 	<tr class='light dd'>
 		<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-config</td>
-		<td>{@link org.apache.juneau.config.vars.ConfigVar}</td>
+		<td>{@link oaj.config.vars.ConfigVar}</td>
 		<td class='code'>$C{key[,default]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
@@ -185,98 +185,98 @@ SVL Variables
 	</tr>
 	<tr class='dark'>
 		<td rowspan='14' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest-server</td>
-		<td>{@link org.apache.juneau.rest.vars.FileVar}</td>
+		<td>{@link oajr.vars.FileVar}</td>
 		<td class='code'>$F{path[,default]}}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$F{resources/MyAsideMessage.html, Oops not found!}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.ServletInitParamVar}</td>
+		<td>{@link oajr.vars.ServletInitParamVar}</td>
 		<td class='code'>$I{name[,default]}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$I{my.param}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.LocalizationVar}</td>
+		<td>{@link oajr.vars.LocalizationVar}</td>
 		<td class='code'>$L{key[,args...]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$L{MyMessage,foo,bar}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.RequestAttributeVar}</td>
+		<td>{@link oajr.vars.RequestAttributeVar}</td>
 		<td class='code'>$RA{key1[,key2...]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$RA{attrName}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.RequestFormDataVar}</td>
+		<td>{@link oajr.vars.RequestFormDataVar}</td>
 		<td class='code'>$RF{key1[,key2...]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$RF{paramName}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.RequestHeaderVar}</td>
+		<td>{@link oajr.vars.RequestHeaderVar}</td>
 		<td class='code'>$RH{key1[,key2...]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$RH{Header-Name}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.RequestPathVar}</td>
+		<td>{@link oajr.vars.RequestPathVar}</td>
 		<td class='code'>$RP{key1[,key2...]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$RP{pathVAr}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.RequestQueryVar}</td>
+		<td>{@link oajr.vars.RequestQueryVar}</td>
 		<td class='code'>$RQ{key1[,key2...]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$RQ{paramName}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.RequestVar}</td>
+		<td>{@link oajr.vars.RequestVar}</td>
 		<td class='code'>$R{key1[,key2...]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$R{contextPath}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.RestInfoVar}</td>
+		<td>{@link oajr.vars.RestInfoVar}</td>
 		<td class='code'>$RI{key}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$RI{externalDocs}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.SerializedRequestAttrVar}</td>
+		<td>{@link oajr.vars.SerializedRequestAttrVar}</td>
 		<td class='code'>$SA{contentType,key[,default]}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$SA{application/json,$RA{foo}}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.UrlVar}</td>
+		<td>{@link oajr.vars.UrlVar}</td>
 		<td class='code'>$U{uri}></td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$U{servlet:/foo}</td>
 	</tr>
 	<tr class='dark'>
-		<td>{@link org.apache.juneau.rest.vars.UrlEncodeVar}</td>
+		<td>{@link oajr.vars.UrlEncodeVar}</td>
 		<td class='code'>$UE{uriPart}</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>
 		<td class='code'>$U{servlet:/foo?bar=$UE{$RA{bar}}</td>
 	</tr>
 	<tr class='dark dd'>
-		<td>{@link org.apache.juneau.rest.vars.WidgetVar}</td>
+		<td>{@link oajr.vars.WidgetVar}</td>
 		<td class='code'>$W{name}</td>
 		<td style='text-align:center;font-weight:bold'>no</td>
 		<td style='text-align:center;font-weight:bold'>yes</td>

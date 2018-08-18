@@ -16,15 +16,15 @@
 {new} @RemoteMethod
 
 <p>
-	The {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
+	The {@link oajrc.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
 	of <ja>@RemoteResource</ja>-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
+	<li class='ja'>{@link oajrc.remote.RemoteMethod}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#method method}
-		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#path path}
-		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#returns returns}
+		<li class='jf'>{@link oajrc.remote.RemoteMethod#method method}
+		<li class='jf'>{@link oajrc.remote.RemoteMethod#path path}
+		<li class='jf'>{@link oajrc.remote.RemoteMethod#returns returns}
 	</ul>
 </ul>
 <h5 class='topic w800'>@RemoteMethod(method/path)</h5>
@@ -133,7 +133,7 @@
 		- The body of the response will be converted to the POJO using the parser defined on the 
 		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
 	<li>
-		Any {@link org.apache.juneau.http.annotation.Response @Response}-annotated type. (described later)
+		Any {@link oaj.http.annotation.Response @Response}-annotated type. (described later)
 	<li>
 		<code>HttpResponse</code> 
 		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
@@ -146,8 +146,8 @@
 </ul>
 
 <p>
-	If you're only interested in the HTTP status code of the response, you can use the {@link org.apache.juneau.rest.client.remote.RemoteMethod#returns() returns}
-	annotation with a value of {@link org.apache.juneau.rest.client.remote.RemoteReturn#STATUS STATUS}:
+	If you're only interested in the HTTP status code of the response, you can use the {@link oajrc.remote.RemoteMethod#returns() returns}
+	annotation with a value of {@link oajrc.remote.RemoteReturn#STATUS STATUS}:
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
@@ -162,9 +162,9 @@
 </p>
 
 <p>
-	If your <code>RestClient</code> does not have a parser associated with it, then the {@link org.apache.juneau.httppart.OpenApiPartParser OpenAPI part parser}
+	If your <code>RestClient</code> does not have a parser associated with it, then the {@link oaj.httppart.OpenApiPartParser OpenAPI part parser}
 	is used to parse the response.  
-	<br>If your <code>RestClient</code> does have a parser associated with it, then you can force it to use the part parser using the {@link org.apache.juneau.http.annotation.Response#usePartParser() @Response(usePartParser)}
+	<br>If your <code>RestClient</code> does have a parser associated with it, then you can force it to use the part parser using the {@link oaj.http.annotation.Response#usePartParser() @Response(usePartParser)}
 	annotation on your method like so: 
 </p>
 <p class='bpcode w800'>	

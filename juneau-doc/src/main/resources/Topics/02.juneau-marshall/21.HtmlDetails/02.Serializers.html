@@ -16,10 +16,10 @@
 {new} HTML Serializers
 
 <p>
-	The {@link org.apache.juneau.html.HtmlSerializer} class is used to serialize POJOs into HTML.
+	The {@link oaj.html.HtmlSerializer} class is used to serialize POJOs into HTML.
 </p>	
 <p>
-	The {@link org.apache.juneau.html.HtmlDocSerializer} class is the same, but wraps the serialized POJO
+	The {@link oaj.html.HtmlDocSerializer} class is the same, but wraps the serialized POJO
 	inside a document template consisting of header, nav, aside, and footer sections.
 </p>
 <p>
@@ -28,43 +28,43 @@
 <ul class='doctree'>
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.Common Common Properties}
 	<li class='link'>{@doc juneau-marshall.ConfigurableProperties.CommonSerializer Common Serializer Properties}
-	<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
+	<li class='jc'>{@link oaj.html.HtmlSerializer}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_addBeanTypes HTML_addBeanTypes}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_addKeyValueTableHeaders HTML_addKeyValueTableHeaders}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_labelParameter HTML_labelParameter}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#HTML_uriAnchorText HTML_uriAnchorText}
+		<li class='jf'>{@link oaj.html.HtmlSerializer#HTML_addBeanTypes HTML_addBeanTypes}
+		<li class='jf'>{@link oaj.html.HtmlSerializer#HTML_addKeyValueTableHeaders HTML_addKeyValueTableHeaders}
+		<li class='jf'>{@link oaj.html.HtmlSerializer#HTML_detectLabelParameters HTML_detectLabelParameters}
+		<li class='jf'>{@link oaj.html.HtmlSerializer#HTML_detectLinksInStrings HTML_detectLinksInStrings}
+		<li class='jf'>{@link oaj.html.HtmlSerializer#HTML_labelParameter HTML_labelParameter}
+		<li class='jf'>{@link oaj.html.HtmlSerializer#HTML_uriAnchorText HTML_uriAnchorText}
 	</ul>
-	<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
+	<li class='jc'>{@link oaj.html.HtmlDocSerializer}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}				
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_aside HTMLDOC_aside}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_footer HTMLDOC_footer}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_head HTMLDOC_head}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_header HTMLDOC_header}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_nav HTMLDOC_nav}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_navlinks HTMLDOC_navlinks}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_noResultsMessage HTMLDOC_noResultsMessage}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_nowrap HTMLDOC_nowrap}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_script HTMLDOC_script}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_style HTMLDOC_style}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_stylesheet HTMLDOC_stylesheet}
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#HTMLDOC_template HTMLDOC_template}				
 	</ul>
 </ul>
 <p>
 	The following pre-configured serializers are provided for convenience:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}
+	<li class='jc'>{@link oaj.html.HtmlSerializer}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#DEFAULT }
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#DEFAULT_SQ }
-		<li class='jf'>{@link org.apache.juneau.html.HtmlSerializer#DEFAULT_SQ_READABLE }
+		<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT }
+		<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT_SQ }
+		<li class='jf'>{@link oaj.html.HtmlSerializer#DEFAULT_SQ_READABLE }
 	</ul>
-	<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}
+	<li class='jc'>{@link oaj.html.HtmlDocSerializer}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.html.HtmlDocSerializer#DEFAULT }
+		<li class='jf'>{@link oaj.html.HtmlDocSerializer#DEFAULT }
 	</ul>
 </ul>

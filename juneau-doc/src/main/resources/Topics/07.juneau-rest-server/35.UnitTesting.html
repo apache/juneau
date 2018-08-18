@@ -16,7 +16,7 @@
 {new} Serverless Unit Testing
 
 <p>
-	The {@link org.apache.juneau.rest.mock.MockRest} class is a simple yet powerful interface for creating serverless
+	The {@link oajr.mock.MockRest} class is a simple yet powerful interface for creating serverless
 	unit tests for your REST interfaces.
 </p>
 <p>
@@ -46,19 +46,19 @@
 	The API consists of the following classes:
 </p>	
 <ul class='doctree'>
-	<li class='jp'>{@link org.apache.juneau.rest.mock}
+	<li class='jp'>{@link oajr.mock}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+		<li class='jc'>{@link oajr.mock.MockRest}
 			<br>The API for instantiating mocks of REST resource classes.
-		<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+		<li class='jc'>{@link oajr.mock.MockServletRequest}
 			<br>An implementation of {@link javax.servlet.http.HttpServletRequest} with additional convenience methods for building requests.
-		<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletResponse}
+		<li class='jc'>{@link oajr.mock.MockServletResponse}
 			<br>An implementation of {@link javax.servlet.http.HttpServletRequest} with additional convenience methods for testing responses.
 	</ul>
 </ul>
 <p>
-	The concept of the design is simple.  The {@link org.apache.juneau.rest.mock.MockRest} class is used to create instances of {@link org.apache.juneau.rest.mock.MockServletRequest}
-	and {@link org.apache.juneau.rest.mock.MockServletResponse} which are passed directly to the call handler on the resource class {@link org.apache.juneau.rest.RestCallHandler#service(HttpServletRequest,HttpServletResponse)}.
+	The concept of the design is simple.  The {@link oajr.mock.MockRest} class is used to create instances of {@link oajr.mock.MockServletRequest}
+	and {@link oajr.mock.MockServletResponse} which are passed directly to the call handler on the resource class {@link oajr.RestCallHandler#service(HttpServletRequest,HttpServletResponse)}.
 </p>
 <p>
 	Breaking apart the fluent method call above will help you understand how this works.
@@ -82,86 +82,86 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.rest.mock.MockRest} class provides the following methods for creating requests:
+	The {@link oajr.mock.MockRest} class provides the following methods for creating requests:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+	<li class='jc'>{@link oajr.mock.MockRest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#request(String,String) request(String,String)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#request(String,String,Object) request(String,String,Object)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#get(String) get(String)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#put(String,Object) put(String,Object)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#post(String,Object) post(String,Object)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#delete(String) delete(String)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#options(String) options(String)} 
+		<li class='jm'>{@link oajr.mock.MockRest#request(String,String) request(String,String)} 
+		<li class='jm'>{@link oajr.mock.MockRest#request(String,String,Object) request(String,String,Object)} 
+		<li class='jm'>{@link oajr.mock.MockRest#get(String) get(String)} 
+		<li class='jm'>{@link oajr.mock.MockRest#put(String,Object) put(String,Object)} 
+		<li class='jm'>{@link oajr.mock.MockRest#post(String,Object) post(String,Object)} 
+		<li class='jm'>{@link oajr.mock.MockRest#delete(String) delete(String)} 
+		<li class='jm'>{@link oajr.mock.MockRest#options(String) options(String)} 
 	</ul>
 </ul>
 <p>
-	The {@link org.apache.juneau.rest.mock.MockServletRequest} class provides default implementations for all the methods defined
+	The {@link oajr.mock.MockServletRequest} class provides default implementations for all the methods defined
 	on the {@link javax.servlet.http.HttpServletRequest} in addition to many convenience methods.
 </p>
 <p>
 	The following fluent convenience methods are provided for setting common <code>Accept</code> and <code>Content-Type</code> headers.
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+	<li class='jc'>{@link oajr.mock.MockServletRequest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#json() json()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#xml() xml()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#html() html()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#plainText() plainText()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#msgpack() msgpack()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#uon() uon()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#urlEnc() urlEnc()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#yaml() yaml()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#json() json()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#xml() xml()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#html() html()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#plainText() plainText()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#msgpack() msgpack()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#uon() uon()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#urlEnc() urlEnc()}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#yaml() yaml()}
 	</ul>
 </ul>
 <p>
 	The following fluent convenience methods are provided for building up your request.
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+	<li class='jc'>{@link oajr.mock.MockServletRequest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#header(String,Object) header(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#query(String,Object) query(String,Object}}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#formData(String,Object) formData(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#attribute(String,Object) attribute(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#body(Object) body(Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#query(String,Object) query(String,Object}}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#formData(String,Object) formData(String,Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#attribute(String,Object) attribute(String,Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#body(Object) body(Object)}
 	</ul>
 </ul>
 <p>
 	Fluent setters are provided for all common request headers:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+	<li class='jc'>{@link oajr.mock.MockServletRequest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#accept(Object) accept(Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#acceptCharset(Object) acceptCharset(Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#acceptEncoding(Object) acceptEncoding(Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#acceptLanguage(Object) acceptLanguage(Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#accept(Object) accept(Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#acceptCharset(Object) acceptCharset(Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#acceptEncoding(Object) acceptEncoding(Object)}
+		<li class='jm'>{@link oajr.mock.MockServletRequest#acceptLanguage(Object) acceptLanguage(Object)}
 		<li class='jm'>...
 	</ul>
 </ul>
 <p>
-	The {@link org.apache.juneau.rest.mock.MockServletResponse} class provides default implementations for all the methods defined
+	The {@link oajr.mock.MockServletResponse} class provides default implementations for all the methods defined
 	on the {@link javax.servlet.http.HttpServletResponse} in addition to many convenience methods.
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletResponse}
+	<li class='jc'>{@link oajr.mock.MockServletResponse}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#getBody() getBody()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#getBodyAsString() getBodyAsString()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertStatus(int) assertStatus(int)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBody(String) assertBody(String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBodyContains(String...) assertBodyContains(String...)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBodyMatches(String) assertBodyMatches(String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBodyMatchesRE(String) assertBodyMatchesRE(String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertHeader(String,String) assertHeader(String,String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertHeaderContains(String,String...) assertHeaderContains(String,String...)}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#getBody() getBody()}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#getBodyAsString() getBodyAsString()}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#assertStatus(int) assertStatus(int)}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#assertBody(String) assertBody(String)}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#assertBodyContains(String...) assertBodyContains(String...)}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#assertBodyMatches(String) assertBodyMatches(String)}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#assertBodyMatchesRE(String) assertBodyMatchesRE(String)}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#assertHeader(String,String) assertHeader(String,String)}
+		<li class='jm'>{@link oajr.mock.MockServletResponse#assertHeaderContains(String,String...) assertHeaderContains(String,String...)}
 	</ul>
 </ul>	
 <p>
-	The {@link org.apache.juneau.rest.mock.MockRest} object can also be used with the {@link org.apache.juneau.rest.client.RestClient} class to 
+	The {@link oajr.mock.MockRest} object can also be used with the {@link oajrc.RestClient} class to 
 	perform serverless unit testing through the client API of REST resources.
 	<br>This can be useful for testing of interface proxies against REST interfaces (described later).
 </p>
@@ -191,9 +191,9 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method allows you to pass in a mocked
+	The {@link oajrc.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method allows you to pass in a mocked
 	interface for creating HTTP requests through the client interface.
 	<br>The method creates a specialized <code>HttpClientConnectionManager</code> for handling requests by taking information on the 
-	client-side request and populating the {@link org.apache.juneau.rest.mock.MockServletRequest} and {@link org.apache.juneau.rest.mock.MockServletResponse} objects
+	client-side request and populating the {@link oajr.mock.MockServletRequest} and {@link oajr.mock.MockServletResponse} objects
 	directly without involving any sockets.
 </p>

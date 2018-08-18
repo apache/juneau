@@ -37,13 +37,13 @@ Class Hierarchy
 		{@link javax.servlet.http.HttpServlet javax.servlet.http.HttpServlet} 
 		<ul>
 			<li class='jac'>
-				{@link org.apache.juneau.rest.RestServlet org.apache.juneau.rest.RestServlet}
+				{@link oajr.RestServlet org.apache.juneau.rest.RestServlet}
 				<br>Contains all the main logic.
 				<ul>
-					<li class='jac'>{@link org.apache.juneau.rest.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
+					<li class='jac'>{@link oajr.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
 						<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
 						<ul>
-							<li class='jac'>{@link org.apache.juneau.rest.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
+							<li class='jac'>{@link oajr.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
 								<br>A default implementation for "router" pages.
 							</li>
 						</ul>
@@ -63,6 +63,6 @@ Class Hierarchy
 	Everything is configured through the following classes which you will see a lot:
 </p>
 <ul>
-	<li class='jc'>{@link org.apache.juneau.rest.RestContext} - Each resource class instance has one copy that holds all of its configuration.
-	<li class='jc'>{@link org.apache.juneau.rest.RestContextBuilder} - Builder for the class above.
+	<li class='jc'>{@link oajr.RestContext} - Each resource class instance has one copy that holds all of its configuration.
+	<li class='jc'>{@link oajr.RestContextBuilder} - Builder for the class above.
 </ul>

@@ -16,8 +16,8 @@
 Hello World Example
 
 <p>
-	A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.RestResource}.
-	<br>The most common case is a class that extends {@link org.apache.juneau.rest.RestServlet}, which itself is simply an 
+	A REST resource is simply a Java class annotated with {@link oajr.annotation.RestResource}.
+	<br>The most common case is a class that extends {@link oajr.RestServlet}, which itself is simply an 
 	extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 </p>
 <p>
@@ -85,8 +85,8 @@ Hello World Example
 	<br>However, we could have returned any POJO consisting of beans, maps, collections, etc...
 </p>
 <p>
-	The {@link org.apache.juneau.rest.BasicRestServlet} class that we're using here is a subclass of 
-	{@link org.apache.juneau.rest.RestServlet} that provides default support for a variety of content types.  
+	The {@link oajr.BasicRestServlet} class that we're using here is a subclass of 
+	{@link oajr.RestServlet} that provides default support for a variety of content types.  
 	<br>Implementers can choose to use this class, or create their own subclass of 
-	{@link org.apache.juneau.rest.RestServlet} with their own specialized serializers and parsers.
+	{@link oajr.RestServlet} with their own specialized serializers and parsers.
 </p>

@@ -16,7 +16,7 @@
 RequestPathMatch
 
 <p>
-	The {@link org.apache.juneau.rest.RequestPath} object is the API for accessing the matched variables
+	The {@link oajr.RequestPath} object is the API for accessing the matched variables
 	and remainder on the URL path.
 </p>
 <p class='bpcode w800'>
@@ -39,18 +39,18 @@ RequestPathMatch
 	Some important methods on this class are:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>{@link org.apache.juneau.rest.RequestPath} <jk>extends</jk> TreeMap&lt;String,String&gt;</code>
+	<li class='jc'><code>{@link oajr.RequestPath} <jk>extends</jk> TreeMap&lt;String,String&gt;</code>
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RequestPath#get(String,Class) get(String,Class)} - Get path match variable converted to a POJO.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestPath#get(String,Type,Type...) get(String,Type,Type)} - Get path match variable converted to a map or collection of POJOs.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getString(String) getString(String)} - Get patch match variable as a simple string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getInt(String) getInt(String)} - Get path match variable as an integer.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getBoolean(String) getBoolean(String)} - Get path match variable as a boolean.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getRemainder() getRemainder()} - Get the path match remainder.
+		<li class='jm'>{@link oajr.RequestPath#get(String,Class) get(String,Class)} - Get path match variable converted to a POJO.
+		<li class='jm'>{@link oajr.RequestPath#get(String,Type,Type...) get(String,Type,Type)} - Get path match variable converted to a map or collection of POJOs.
+		<li class='jm'>{@link oajr.RequestPath#getString(String) getString(String)} - Get patch match variable as a simple string.
+		<li class='jm'>{@link oajr.RequestPath#getInt(String) getInt(String)} - Get path match variable as an integer.
+		<li class='jm'>{@link oajr.RequestPath#getBoolean(String) getBoolean(String)} - Get path match variable as a boolean.
+		<li class='jm'>{@link oajr.RequestPath#getRemainder() getRemainder()} - Get the path match remainder.
 	</ul>
 </ul>
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	<li class='ja'>{@link oaj.http.annotation.Path}
 </ul>

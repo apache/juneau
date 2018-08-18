@@ -54,21 +54,21 @@ Lifecycle Hooks
 <ul class='spaced-list'>
 	<li>Resource lifecycle events:
 		<ul>
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#INIT INIT} - Right before initialization.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
+			<li class='jf'>{@link oajr.annotation.HookEvent#INIT INIT} - Right before initialization.
+			<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
+			<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
+			<li class='jf'>{@link oajr.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
 		</ul>
 	<li>REST call lifecycle events:
 		<ul>
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestMethod</ja> method is invoked.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestMethod</ja> method is invoked.
-			<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
+			<li class='jf'>{@link oajr.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
+			<li class='jf'>{@link oajr.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestMethod</ja> method is invoked.
+			<li class='jf'>{@link oajr.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestMethod</ja> method is invoked.
+			<li class='jf'>{@link oajr.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
 		</ul>
 </ul>
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestHook}
+	<li class='ja'>{@link oajr.annotation.RestHook}
 </ul>

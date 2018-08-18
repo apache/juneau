@@ -16,7 +16,7 @@
 RestContext
 
 <p>
-	The {@link org.apache.juneau.rest.RestContext} object is the workhorse class for all of the configuration
+	The {@link oajr.RestContext} object is the workhorse class for all of the configuration
 	of a single REST resource class.
 	<br>It's by-far the most important class in the REST API.
 </p>
@@ -26,15 +26,15 @@ RestContext
 	<br>It is populated through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource} - Settings copied from the annotation during servlet initialization.
-	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder} - Builder used during servlet initialization.
+	<li class='ja'>{@link oajr.annotation.RestResource} - Settings copied from the annotation during servlet initialization.
+	<li class='jm'>{@link oajr.RestContextBuilder} - Builder used during servlet initialization.
 </ul>
 <p>
 	The annotation should be self-explanatory at this point.
 	<br>The builder allows you to perform all of the same configuration as the annotation programmatically.
 </p>
 <p>
-	The {@link org.apache.juneau.rest.RestContextBuilder} class extends {@link org.apache.juneau.BeanContextBuilder}
+	The {@link oajr.RestContextBuilder} class extends {@link oaj.BeanContextBuilder}
 	allowing you to programmatically set any properties defined on that builder class.
 	<br>It also implements {@link javax.servlet.ServletConfig}
 </p>

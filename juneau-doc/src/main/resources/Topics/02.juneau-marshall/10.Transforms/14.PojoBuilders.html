@@ -18,7 +18,7 @@ POJO Builders
 <p>
 	Juneau parsers can use builders to instantiate POJOs.
 	<br>This is useful in cases where you want to create beans with read-only properties.
-	<br>Note that while it's possible to do this using the {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor}
+	<br>Note that while it's possible to do this using the {@link oaj.annotation.BeanConstructor @BeanConstructor}
 	annotation, using builders can often be cleaner.
 </p>
 <p>
@@ -94,12 +94,12 @@ POJO Builders
 		<p class='bcode w800'>
 	<jk>public static</jk> MyBuilder <jsm>create</jsm>() {...}
 		</p>
-	<li>A public constructor on the POJO class that takes in a single parameter that implements the {@link org.apache.juneau.transform.Builder} interface.
+	<li>A public constructor on the POJO class that takes in a single parameter that implements the {@link oaj.transform.Builder} interface.
 		<br>The builder class must have a public no-arg constructor.
 		<p class='bcode w800'>
 	<jk>public</jk> MyPojo(MyBuilder b) {...}
 		</p>
-	<li>A {@link org.apache.juneau.annotation.Builder @Builder} annotation on the POJO class.
+	<li>A {@link oaj.annotation.Builder @Builder} annotation on the POJO class.
 		<br>The builder class must have a public no-arg constructor.
 		<p class='bcode w800'>
 	<ja>@Builder</ja>(MyBuilder.<jk>class</jk>)
@@ -121,6 +121,6 @@ POJO Builders
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.annotation.Builder}
-	<li class='jic'>{@link org.apache.juneau.transform.Builder}
+	<li class='ja'>{@link oaj.annotation.Builder}
+	<li class='jic'>{@link oaj.transform.Builder}
 </ul>

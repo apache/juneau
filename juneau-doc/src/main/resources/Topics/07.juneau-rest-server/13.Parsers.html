@@ -16,25 +16,25 @@
 Parsers
 
 <p>
-	REST resources use the {@link org.apache.juneau.parser.Parser} API for defining parsers for parsing request
+	REST resources use the {@link oaj.parser.Parser} API for defining parsers for parsing request
 	body content and converting them into POJOs.
 </p>
 <p>
 	The servlet will pick which parser to use by matching the request <l>Content-Type</l> header with the
-	media types defined through the {@link org.apache.juneau.parser.Parser#getMediaTypes()} method.
+	media types defined through the {@link oaj.parser.Parser#getMediaTypes()} method.
 </p>
 <p>
 	Parsers can be associated with REST servlets in the following ways:
 </p>
 <ul class='doctree'>
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestResource#parsers()} 
+		{@link oajr.annotation.RestResource#parsers()} 
 		- Annotation on resource Java class.
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestMethod#parsers()} 
+		{@link oajr.annotation.RestMethod#parsers()} 
 		- Annotation on resource Java method.
 	<li class='jm'>
-		{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class[])} 
+		{@link oajr.RestContextBuilder#parsers(Class[])} 
 		- Programmatic.
 </ul>
 <p>
@@ -73,5 +73,5 @@ Parsers
 </p>
 <h5 class='section'>See Also:</h5>
 <ul class='doctree'>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_parsers}
+	<li class='jf'>{@link oajr.RestContext#REST_parsers}
 </ul>

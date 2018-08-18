@@ -16,7 +16,7 @@
 Router Pages
 
 <p>
-	The {@link org.apache.juneau.rest.BasicRestServletGroup} class provides a default "router" page for 
+	The {@link oajr.BasicRestServletGroup} class provides a default "router" page for 
 	child resources when a parent resource is nothing more than a grouping of child resources.
 </p>		
 <p>
@@ -63,8 +63,8 @@ Router Pages
 </p>
 <img class='bordered w800' src='doc-files/juneau-rest-server.RouterPages.1.png'/>
 <p> 
-	The {@link org.apache.juneau.rest.BasicRestServletGroup} class is nothing more than a subclass of 
-	{@link org.apache.juneau.rest.BasicRestServlet} with a <l>getChildren()</l> method mapped to the servlet 
+	The {@link oajr.BasicRestServletGroup} class is nothing more than a subclass of 
+	{@link oajr.BasicRestServlet} with a <l>getChildren()</l> method mapped to the servlet 
 	root path.
 	<br>The method returns a POJO with is just a linked-list of beans with name/description properties.
 </p>	

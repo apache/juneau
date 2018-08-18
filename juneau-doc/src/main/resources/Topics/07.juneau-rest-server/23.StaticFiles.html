@@ -16,7 +16,7 @@
 Static files
 
 <p>
-	The {@link org.apache.juneau.rest.annotation.RestResource#staticFiles @RestResource.staticFiles()} 
+	The {@link oajr.annotation.RestResource#staticFiles @RestResource.staticFiles()} 
 	annotation is used to define paths and locations of statically-served files such as images or HTML 
 	documents.
 </p>
@@ -55,9 +55,9 @@ Static files
 		<br>Child resources can override mappings made on parent resources.
 	<li>
 		The media type on the response is determined by the 
-		{@link org.apache.juneau.rest.RestContext#getMediaTypeForName(String)} method.
+		{@link oajr.RestContext#getMediaTypeForName(String)} method.
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_staticFiles}
+	<li class='jf'>{@link oajr.RestContext#REST_staticFiles}
 </ul>

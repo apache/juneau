@@ -21,21 +21,21 @@
 
 <h5 class='topic w800'>Core</h5>		
 <ul class='spaced-list'>
-	<li>{@link org.apache.juneau.ClassMeta#newInstance()} method can now create new instances of arrays.
-	<li>Arguments passed to <code><del>Link</del></code> are now serialized using {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
+	<li>{@link oaj.ClassMeta#newInstance()} method can now create new instances of arrays.
+	<li>Arguments passed to <code><del>Link</del></code> are now serialized using {@link oaj.urlencoding.UrlEncodingSerializer}, so arbitrary POJOs can now be passed as arguments.
 	<li>New date filters:  <code>org.apache.juneau.transforms.Datefilter.ISO8601DTZP</code> and <code>org.apache.juneau.transforms.Datefilter.SimpleP</code>.
-	<li>New <code><del>HtmlDocSerializerContext.HTMLDOC_nowrap</del></code> setting for {@link org.apache.juneau.html.HtmlDocSerializer} class.  
+	<li>New <code><del>HtmlDocSerializerContext.HTMLDOC_nowrap</del></code> setting for {@link oaj.html.HtmlDocSerializer} class.  
 		Adds <js>"* {white-space:nowrap}"</js> to the style header to prevent word wrapping.
-	<li>Fixed bug in {@link org.apache.juneau.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <code>ClassCastException</code>.  
+	<li>Fixed bug in {@link oaj.uon.UonParser} where passing in a blank value on an array or collection type in a form post would cause a <code>ClassCastException</code>.  
 		New behavior creates an empty array or <code>Collection</code>.
 	<li>Improved implementation of <code><del>UrlEncodingSerializer.serializeUrlPart(Object)</del></code> method.
 </ul>
 
 <h5 class='topic w800'>Server</h5>		
 <ul class='spaced-list'>
-	<li>{@link org.apache.juneau.rest.RestConverter} API fixed to handle the existence of POJO filters.
-		{@link org.apache.juneau.rest.converters.Introspectable}/{@link org.apache.juneau.rest.converters.Queryable}/{@link org.apache.juneau.rest.converters.Traversable} classes can now work with filtered POJOs.  
-	<li>{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages()} annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
+	<li>{@link oajr.RestConverter} API fixed to handle the existence of POJO filters.
+		{@link oajr.converters.Introspectable}/{@link oajr.converters.Queryable}/{@link oajr.converters.Traversable} classes can now work with filtered POJOs.  
+	<li>{@link oajr.annotation.RestResource#messages() @RestResource.messages()} annotation can now be defined on super and subclasses so that NLS messages can be defined in multiple resource bundles.
 	<li>Performance improvements in <code>RestServletNls</code> class. 
 	<li>Fixed bug where two REST java methods mapped to the same path pattern wasn't triggering an exception when it was supposed to.
 </ul>

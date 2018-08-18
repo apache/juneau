@@ -16,7 +16,7 @@
 RequestBody
 
 <p>
-	The {@link org.apache.juneau.rest.RequestBody} object is the API for accessing the body of an HTTP request.
+	The {@link oajr.RequestBody} object is the API for accessing the body of an HTTP request.
 	<br>It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
@@ -36,19 +36,19 @@ RequestBody
 	Some important methods on this class are:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.RequestBody} 
+	<li class='jc'>{@link oajr.RequestBody} 
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getReader() getReader()} - Get body as a Reader.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#getInputStream() getInputStream()} - Get body as an InputStream.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Class) asType(Class)} - Get body converted to a POJO.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asType(Type,Type...) asType(Type,Type...)} - Get body converted to a map or collection of POJOs.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asString() asString()} - Get body as a simple string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asHex() asHex()} - Get body as a hex-encoded string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestBody#asSpacedHex() asSpacedHex()} - Get body as spaced-hex-encoded string.
+		<li class='jm'>{@link oajr.RequestBody#getReader() getReader()} - Get body as a Reader.
+		<li class='jm'>{@link oajr.RequestBody#getInputStream() getInputStream()} - Get body as an InputStream.
+		<li class='jm'>{@link oajr.RequestBody#asType(Class) asType(Class)} - Get body converted to a POJO.
+		<li class='jm'>{@link oajr.RequestBody#asType(Type,Type...) asType(Type,Type...)} - Get body converted to a map or collection of POJOs.
+		<li class='jm'>{@link oajr.RequestBody#asString() asString()} - Get body as a simple string.
+		<li class='jm'>{@link oajr.RequestBody#asHex() asHex()} - Get body as a hex-encoded string.
+		<li class='jm'>{@link oajr.RequestBody#asSpacedHex() asSpacedHex()} - Get body as spaced-hex-encoded string.
 	</ul>
 </ul>
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+	<li class='ja'>{@link oaj.http.annotation.Body}
 </ul>

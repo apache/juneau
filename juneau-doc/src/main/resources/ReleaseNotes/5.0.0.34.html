@@ -40,7 +40,7 @@
 		 Eliminated <ja>@Property.type</ja> annotation which was the old way of specifying NLS variables that got resolved at runtime.
 	</li> 
 	<li>
-		New methods on {@link org.apache.juneau.rest.RestRequest}:
+		New methods on {@link oajr.RestRequest}:
 		<ul>
 			<li><code><del>RestRequest.getVarResolver()</del></code></li>
 			<li><code><del>RestRequest.getServletURI()</del></code></li>
@@ -48,13 +48,13 @@
 		</ul>
 	</li>
 	<li>
-		New methods on {@link org.apache.juneau.rest.RestResponse}:
+		New methods on {@link oajr.RestResponse}:
 		<ul>
 			<li><code>RestResponse.sendRedirect(CharSequence)</code>
 		</ul>
 	</li>
 	<li>
-		New methods on {@link org.apache.juneau.rest.RestServlet} that allow easier customization by subclasses:
+		New methods on {@link oajr.RestServlet} that allow easier customization by subclasses:
 		<ul>
 			<li><code><del>RestServlet.createConfigFactory()</del></code></li>
 			<li><code><del>RestServlet.createConverters()</del></code></li>
@@ -84,13 +84,13 @@
 		Exception APIs now use {@link java.text.MessageFormat} (e.g. <js>"{0}"</js>) for message variables instead of <js>"%s"</js>.
 	</li>
 	<li>
-		New {@link org.apache.juneau.annotation.Bean#stopClass @Bean.stopClass} annotation for specifying stop classes for bean properties.
+		New {@link oaj.annotation.Bean#stopClass @Bean.stopClass} annotation for specifying stop classes for bean properties.
 	</li>
 	<li>
 		New <code><del>BeanFilter.setStopClass(Class)</del></code> which is the program equivalent to the annotation above.
 	</li>
 	<li>
-		New methods on {@link org.apache.juneau.dto.ResultSetList}:
+		New methods on {@link oaj.dto.ResultSetList}:
 		<ul>
 			<li><code>ResultSetList.handleBlob(Blob)</code></li>
 			<li><code>ResultSetList.handleClob(Clob)</code></li>

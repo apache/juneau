@@ -22,7 +22,7 @@
 	<li>
 		Revamped the API for filter support:
 		<ul>
-			<li>Updated {@link org.apache.juneau.transform.BeanFilter} class to mirror the {@link org.apache.juneau.annotation.Bean @Bean} annotation.</li>
+			<li>Updated {@link oaj.transform.BeanFilter} class to mirror the {@link oaj.annotation.Bean @Bean} annotation.</li>
 			<li>Introduced support for bean <code><del>Bean.subTypeProperty() subtypes</del></code>. </li>
 			<li>Replaced <code><ja>@Bean</ja>(filter=xxx)</code> with new <code><del>@Transform</del></code> annotation.</li>
 		</ul>
@@ -37,7 +37,7 @@
 		The new number parser should handle any valid numeric syntax for decimals and floats that Java itself supports.
 	</li>
 	<li>
-		{@link org.apache.juneau.json.JsonSerializer} LAX mode now quotes reserved word attributes.
+		{@link oaj.json.JsonSerializer} LAX mode now quotes reserved word attributes.
 	</li>
 	<li>
 		New predefined DateFilters with millisecond precision:

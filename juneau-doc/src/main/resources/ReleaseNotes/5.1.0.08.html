@@ -21,16 +21,16 @@
 <ul class='spaced-list'>
 	<li>Improved performance on JSON and URL-Encoding parsers by approximately 50% on large data sets. 
 		<ul>
-			<li>Rewrote {@link org.apache.juneau.parser.ParserReader} class to handle it's own buffering.
+			<li>Rewrote {@link oaj.parser.ParserReader} class to handle it's own buffering.
 				The change allowed several optimizations to be made when dealing with JSON and URL-Encoding
 				text by avoiding char array copies.  
-			<li>Added a <code>estimatedSize</code> parameter to the {@link org.apache.juneau.parser.Parser} parse methods to 
+			<li>Added a <code>estimatedSize</code> parameter to the {@link oaj.parser.Parser} parse methods to 
 				optimize buffering when the input size is known beforehand.
 		</ul>
 	</li>
-	<li>Revamped the {@link org.apache.juneau.BeanContext} API to perform better in multi-threaded environments.
+	<li>Revamped the {@link oaj.BeanContext} API to perform better in multi-threaded environments.
 		<ul>
-			<li>Introduced a new <code>BeanPropertyStore</code> class that handles creation of {@link org.apache.juneau.BeanContext} objects.
+			<li>Introduced a new <code>BeanPropertyStore</code> class that handles creation of {@link oaj.BeanContext} objects.
 				This allows <code>BeanContext</code> objects to be considered immutable, and therefore cacheable/reusable by the framework.
 				While this was technically possible to cache these objects beforehand, it relied on a locking mechanism to prevent bean contexts
 					from being modified after being created.  The new mechanism is much more straightforward.

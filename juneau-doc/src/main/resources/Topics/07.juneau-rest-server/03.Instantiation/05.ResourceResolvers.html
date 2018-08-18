@@ -16,7 +16,7 @@
 Resource Resolvers
 
 <p>
-	By default, you can add the {@link org.apache.juneau.rest.annotation.RestResource @RestResource}
+	By default, you can add the {@link oajr.annotation.RestResource @RestResource}
 	to any class as long as it has one of the following constructors:
 </p>
 <ul>
@@ -24,16 +24,16 @@ Resource Resolvers
 	<li class='jm'><code><jk>public</jk> T(RestContextBuilder)</code>
 </ul>
 	<p>
-	The latter constructor can be used to get access to the {@link org.apache.juneau.rest.RestContextBuilder} object to make
+	The latter constructor can be used to get access to the {@link oajr.RestContextBuilder} object to make
 	any configurations to the resource before it's initialized.
 </p>
 <p>
 	Resource object resolution is controlled through the following API:
 </p>
 <ul class='doctree'>
-	<li class='jic'>{@link org.apache.juneau.rest.RestResourceResolver}
+	<li class='jic'>{@link oajr.RestResourceResolver}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.rest.BasicRestResourceResolver}
+		<li class='jc'>{@link oajr.BasicRestResourceResolver}
 	</ul>
 </ul>
 <p>
@@ -42,5 +42,5 @@ Resource Resolvers
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver}
+	<li class='jf'>{@link oajr.RestContext#REST_resourceResolver}
 </ul>

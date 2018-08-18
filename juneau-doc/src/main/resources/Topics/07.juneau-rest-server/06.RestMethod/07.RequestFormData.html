@@ -16,7 +16,7 @@
 RequestFormData
 
 <p>
-	The {@link org.apache.juneau.rest.RequestFormData} object is the API for accessing the HTTP request body as form data.
+	The {@link oajr.RequestFormData} object is the API for accessing the HTTP request body as form data.
 	<br>It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
@@ -41,19 +41,19 @@ RequestFormData
 	Some important methods on this class are:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>{@link org.apache.juneau.rest.RequestFormData} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</code>
+	<li class='jc'><code>{@link oajr.RequestFormData} <jk>extends</jk> LinkedHashMap&lt;String,String[]&gt;</code>
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Class) get(String,Class)} - Get form-data parameter values converted to a POJO.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#get(String,Type,Type...) get(String,Type,Type)} - Get form-data parameter value converted to a map or collection of POJOs.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getString(String,String) getString(String,String)} - Get form-data parameter value as a simple string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getInt(String,int) getInt(String,int)} - Get form-data parameter value as an integer.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#getBoolean(String,boolean) getBoolean(String,boolean)} - Get form-data parameter value as a boolean.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestFormData#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a form-data parameter.
+		<li class='jm'>{@link oajr.RequestFormData#get(String,Class) get(String,Class)} - Get form-data parameter values converted to a POJO.
+		<li class='jm'>{@link oajr.RequestFormData#get(String,Type,Type...) get(String,Type,Type)} - Get form-data parameter value converted to a map or collection of POJOs.
+		<li class='jm'>{@link oajr.RequestFormData#getString(String,String) getString(String,String)} - Get form-data parameter value as a simple string.
+		<li class='jm'>{@link oajr.RequestFormData#getInt(String,int) getInt(String,int)} - Get form-data parameter value as an integer.
+		<li class='jm'>{@link oajr.RequestFormData#getBoolean(String,boolean) getBoolean(String,boolean)} - Get form-data parameter value as a boolean.
+		<li class='jm'>{@link oajr.RequestFormData#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a form-data parameter.
 	</ul>
 </ul>
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
+	<li class='ja'>{@link oaj.http.annotation.FormData}
+	<li class='ja'>{@link oaj.http.annotation.HasFormData}
 </ul>

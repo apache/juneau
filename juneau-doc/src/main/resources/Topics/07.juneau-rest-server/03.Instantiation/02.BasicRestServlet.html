@@ -16,7 +16,7 @@
 BasicRestServlet
 
 <p>
-	The {@link org.apache.juneau.rest.BasicRestServlet} class is a subclass of {@link org.apache.juneau.rest.RestServlet}
+	The {@link oajr.BasicRestServlet} class is a subclass of {@link oajr.RestServlet}
 	preconfigured with the following:
 </p>
 <ul class='spaced-list'>
@@ -98,7 +98,7 @@ BasicRestServlet
 	}
 </p>
 <p>
-	Additional annotations are pulled in from the {@link org.apache.juneau.rest.BasicRestConfig} interface which simply
+	Additional annotations are pulled in from the {@link oajr.BasicRestConfig} interface which simply
 	exists to define a common set of annotations.  
 	Notice that it has no code at all.
 </p>
@@ -194,7 +194,7 @@ BasicRestServlet
 	They'll all get merged into a single set of annotation values for the resource class.
 </p>
 <p>
-	Not shown but equally important is that all of the annotations shown have programmatic equivalents via the {@link org.apache.juneau.rest.RestContextBuilder} class
+	Not shown but equally important is that all of the annotations shown have programmatic equivalents via the {@link oajr.RestContextBuilder} class
 	which can be manipulated during servlet initialization.
 	<br>(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
 </p>

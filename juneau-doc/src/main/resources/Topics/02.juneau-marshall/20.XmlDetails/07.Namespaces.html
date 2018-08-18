@@ -46,8 +46,8 @@ Namespaces
 	}	
 </p>
 <p>
-	The namespace URLs can either be defined as part of the {@link org.apache.juneau.xml.annotation.Xml @Xml}
-	annotation, or can be defined at the package level with the {@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema}
+	The namespace URLs can either be defined as part of the {@link oaj.xml.annotation.Xml @Xml}
+	annotation, or can be defined at the package level with the {@link oaj.xml.annotation.XmlSchema @XmlSchema}
 	annotation.
 	<br>Below shows it defined at the package level:
 </p>
@@ -103,7 +103,7 @@ Namespaces
 	<xt>&lt;/per:person&gt;</xt>
 </p>
 <p>
-	Enabling the {@link org.apache.juneau.xml.XmlSerializer#XML_addNamespaceUrisToRoot} setting results
+	Enabling the {@link oaj.xml.XmlSerializer#XML_addNamespaceUrisToRoot} setting results
 	in the namespace URLs being added to the root node:
 </p>
 <p class='bpcode w800'>
@@ -161,7 +161,7 @@ Namespaces
 </p>
 <p>
 	One important property on the XML serializer class is 
-	{@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}.
+	{@link oaj.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}.
 	<br>This property tells the serializer to make a first-pass over the data structure to look for namespaces 
 	defined on classes and bean properties.
 	<br>In high-performance environments, you may want to consider disabling auto-detection and providing your 

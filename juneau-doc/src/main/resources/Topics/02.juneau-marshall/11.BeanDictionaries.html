@@ -27,7 +27,7 @@ Bean Names and Dictionaries
 	reflection.  
 </p>
 <p>
-	Bean classes are given names through the {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()} 
+	Bean classes are given names through the {@link oaj.annotation.Bean#typeName() @Bean.typeName()} 
 	annotation.
 	<br>These names are then added to the serialized output as virtual <js>"_type"</js> properties (or element 
 	names in XML).
@@ -86,22 +86,22 @@ Bean Names and Dictionaries
 	Bean dictionaries are registered through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} 
+	<li class='ja'>{@link oaj.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} 
 		- On individual bean properties through the annotation.
-	<li class='ja'>{@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean.beanDictionary()} 
+	<li class='ja'>{@link oaj.annotation.Bean#beanDictionary() @Bean.beanDictionary()} 
 		- On all properties on a bean and all subclasses.
-	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary} 
+	<li class='jf'>{@link oaj.BeanContext#BEAN_beanDictionary} 
 		- Configuration property on serializers and parsers.
-	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanDictionary(Object...)}
+	<li class='jm'>{@link oaj.BeanContextBuilder#beanDictionary(Object...)}
 		- Builder method on serializers and parsers.
 </ul>
 <p>
 	The bean dictionary setting can consist of any of the following types:
 </p>
 <ul>
-	<li>Any bean class that specifies a value for {@link org.apache.juneau.annotation.Bean#typeName() @Bean.typeName()}.
-	<li>Any subclass of {@link org.apache.juneau.BeanDictionaryList} containing a collection of bean classes with type name annotations.
-	<li>Any subclass of {@link org.apache.juneau.BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	<li>Any bean class that specifies a value for {@link oaj.annotation.Bean#typeName() @Bean.typeName()}.
+	<li>Any subclass of {@link oaj.BeanDictionaryList} containing a collection of bean classes with type name annotations.
+	<li>Any subclass of {@link oaj.BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	<li>Any array or collection of the objects above.
 </ul>
 <p class='bpcode w800'>
@@ -128,11 +128,11 @@ Bean Names and Dictionaries
 	The <js>"_type"</js> property name can be overridden through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName() @Bean.typePropertyName()} 
+	<li class='ja'>{@link oaj.annotation.Bean#typePropertyName() @Bean.typePropertyName()} 
 		- On individual beans through the annotation.
-	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} 
+	<li class='jf'>{@link oaj.BeanContext#BEAN_beanTypePropertyName} 
 		- Configuration property on serializers and parsers.
-	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanTypePropertyName(String)} 
+	<li class='jm'>{@link oaj.BeanContextBuilder#beanTypePropertyName(String)} 
 		- Builder method on serializers and parsers.
 </ul>
 <p>
@@ -164,6 +164,6 @@ Bean Names and Dictionaries
 	<li class='info'>
 		Serialized type names are DISABLED by default.
 		They must be enabled on the serializer using the 
-		{@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes} 
+		{@link oaj.serializer.Serializer#SERIALIZER_addBeanTypes} 
 		configuration property.
 </ul>

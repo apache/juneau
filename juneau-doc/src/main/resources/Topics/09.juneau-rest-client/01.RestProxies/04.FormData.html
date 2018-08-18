@@ -16,34 +16,34 @@
 {new} @FormData
 
 <p>
-	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	The {@link oaj.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are form-data parameters on the request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link oaj.http.annotation.FormData FormData}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#format() format} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#items() items} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maximum() maximum} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxLength() maxLength} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minimum() minimum} - Input validation.  Minimum numeric value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minItems() minItems} - Input validation.  Minimum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minLength() minLength} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#name() name} - Form data entry name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#pattern() pattern}- Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#required() required}- Input validation.  Form data entry must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#serializer() serializer}- Override the part serializer.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#skipIfEmpty() skipIfEmpty}- Don't add if value is null or empty.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#type() type} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link oaj.http.annotation.FormData#_default() _default} - Default value if not present.
+		<li class='jf'>{@link oaj.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link oaj.http.annotation.FormData#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link oaj.http.annotation.FormData#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link oaj.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link oaj.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link oaj.http.annotation.FormData#format() format} - The schema type format. 
+		<li class='jf'>{@link oaj.http.annotation.FormData#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link oaj.http.annotation.FormData#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link oaj.http.annotation.FormData#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link oaj.http.annotation.FormData#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link oaj.http.annotation.FormData#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link oaj.http.annotation.FormData#minItems() minItems} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link oaj.http.annotation.FormData#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link oaj.http.annotation.FormData#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link oaj.http.annotation.FormData#name() name} - Form data entry name.
+		<li class='jf'>{@link oaj.http.annotation.FormData#pattern() pattern}- Input validation.  Must match regular expression.
+		<li class='jf'>{@link oaj.http.annotation.FormData#required() required}- Input validation.  Form data entry must be present.
+		<li class='jf'>{@link oaj.http.annotation.FormData#serializer() serializer}- Override the part serializer.
+		<li class='jf'>{@link oaj.http.annotation.FormData#skipIfEmpty() skipIfEmpty}- Don't add if value is null or empty.
+		<li class='jf'>{@link oaj.http.annotation.FormData#type() type} - The schema type.
+		<li class='jf'>{@link oaj.http.annotation.FormData#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
 	</ul>
 </ul>
 
@@ -87,8 +87,8 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
+		Any serializable POJO - Converted to a string using the {@link oaj.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> ({@link oaj.httppart.OpenApiPartSerializer} by default) or associated via the {@link oaj.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
 </ul>
 <p>
 	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
@@ -102,10 +102,10 @@
 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.httppart.OpenApiPartSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.httppart.OpenApiPartSerializer} by default).
 	<li>
 		<code>CharSequence</code> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
 </ul>

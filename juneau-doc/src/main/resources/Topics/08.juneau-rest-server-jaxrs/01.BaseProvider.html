@@ -21,7 +21,7 @@ Juneau JAX-RS Provider
 </p>
 <p>
 	It should be noted that although some of the functionality of the Juneau Server API is provided through the JAX-RS 
-	integration components, it is not nearly as flexible as using the {@link org.apache.juneau.rest.RestServlet} class directly.
+	integration components, it is not nearly as flexible as using the {@link oajr.RestServlet} class directly.
 </p>
 <p>
 	What you can do with the Juneau JAX-RS provider classes:
@@ -30,8 +30,8 @@ Juneau JAX-RS Provider
 	<li>
 		Use existing Juneau serializers and parsers for converting streams to POJOs and vis-versa.
 	<li>
-		Use annotations to specify filters and properties using the {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}
-		and {@link org.apache.juneau.rest.jaxrs.JuneauProvider} annotations.
+		Use annotations to specify filters and properties using the {@link oajr.annotation.RestMethod @RestMethod}
+		and {@link oajr.jaxrs.JuneauProvider} annotations.
 </ul>
 <p>
 	What you can't do with the Juneau JAX-RS provider classes:
@@ -44,7 +44,7 @@ Juneau JAX-RS Provider
 	<li>
 		Specify or override filters and properties at the Java class level.
 	<li>
-		Default stylesheets for the {@link org.apache.juneau.html.HtmlDocSerializer} class.
+		Default stylesheets for the {@link oaj.html.HtmlDocSerializer} class.
 		<br>It will produce HTML, but it won't contain any styles applied.
 	<li>
 		The ability to specify HTTP method, headers, and content using GET parameters.
@@ -62,15 +62,15 @@ Juneau JAX-RS Provider
 </p>
 <ul class='spaced-list'>
 	<li class='jc'>
-		{@link org.apache.juneau.rest.jaxrs.BaseProvider} - The base provider class that implements the JAX-RS 
+		{@link oajr.jaxrs.BaseProvider} - The base provider class that implements the JAX-RS 
 		<code>MessageBodyReader</code> and <code>MessageBodyWriter</code> interfaces.
 	<li class='jc'>
-		{@link org.apache.juneau.rest.jaxrs.JuneauProvider} - Annotation that is applied to subclasses of <code>BaseProvider</code>
+		{@link oajr.jaxrs.JuneauProvider} - Annotation that is applied to subclasses of <code>BaseProvider</code>
 		to specify the serializers/parsers associated with a provider, and optionally filters and properties to 
 		apply to those serializers and parsers.
 	<li class='jc'>
-		{@link org.apache.juneau.rest.jaxrs.BasicProvider} - A default provider that provides the same level
-		of media type support as the {@link org.apache.juneau.rest.BasicRestServlet} class.
+		{@link oajr.jaxrs.BasicProvider} - A default provider that provides the same level
+		of media type support as the {@link oajr.BasicRestServlet} class.
 </ul>
 <p>
 	For the most part, when using these components, you'll either use the existing <l>BasicProvider</l>, 

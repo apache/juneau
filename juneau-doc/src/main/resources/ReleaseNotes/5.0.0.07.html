@@ -22,11 +22,11 @@
 <ul class='spaced-list'>
 	<li>Combined previous 3 libraries into a single library.</li>
 	<li>
-		New {@link org.apache.juneau.parser.ParserListener} class.<br>
+		New {@link oaj.parser.ParserListener} class.<br>
 		Adds ability to find and process unknown bean properties during parsing.
 	</li>
 	<li>
-		Enhancements to {@link org.apache.juneau.xml.XmlParser}:
+		Enhancements to {@link oaj.xml.XmlParser}:
 		<ul>
 			<li>Coalescing support</li>
 			<li>Validations support</li>
@@ -40,7 +40,7 @@
 		Enhanced XML support:
 		<ul>
 			<li>
-				New {@link org.apache.juneau.xml.annotation.Xml#format() @Xml.format} annotation.<br>
+				New {@link oaj.xml.annotation.Xml#format() @Xml.format} annotation.<br>
 				Controls how POJOs get serialized to XML.<br>
 				Also allows you to collapse collections and arrays.
 			</li>
@@ -64,19 +64,19 @@
 	<li>
 		New configurable property classes for everything are now structured better and easier to locate and identify through the following new classes:
 		<ul>
-			<li>{@link org.apache.juneau.BeanContext}</li>
+			<li>{@link oaj.BeanContext}</li>
 			<li><code><del>SerializerContext</del></code></li>
 			<li><code><del>ParserContext</del></code></li>
 		</ul>		
 	</li>
 	<li>
-		Enhancements to {@link org.apache.juneau.BeanContext}:
+		Enhancements to {@link oaj.BeanContext}:
 		<ul>
 			<li>
 				Ability to mark bean properties as hidden using <code>@BeanProperty.hidden()</code> so that they don't get serialized.
 			</li>
 			<li>
-				Simplified <code>ClassType</code> {@link org.apache.juneau.ClassMeta} API.<br>
+				Simplified <code>ClassType</code> {@link oaj.ClassMeta} API.<br>
 				Combined 4 classes into a single class.
 			</li>
 			<li>
@@ -84,7 +84,7 @@
 				Used for defining filters on bean classes and bean properties instead of just globally through <code>BeanContext.addTransforms(Class[])</code>.
 			</li>
 			<li>
-				New {@link org.apache.juneau.PropertyNamer} API / {@link org.apache.juneau.annotation.Bean#propertyNamer() @Bean.propertyNamer} annotation.<br>
+				New {@link oaj.PropertyNamer} API / {@link oaj.annotation.Bean#propertyNamer() @Bean.propertyNamer} annotation.<br>
 				Used for customizing bean property names.
 			</li>
 			<li>
@@ -94,7 +94,7 @@
 				Used by RDF/XML serializer to construct <code>rdf:resource</code> attributes.
 			</li>
 			<li>
-				New {@link org.apache.juneau.annotation.BeanProperty#properties() @BeanProperty.properties()} annotation.
+				New {@link oaj.annotation.BeanProperty#properties() @BeanProperty.properties()} annotation.
 				Used for limiting properties on child elements.
 			</li>	
 		</ul>
@@ -111,7 +111,7 @@
 		Improvements to Javadocs.
 	</li>
 	<li>
-		Improved {@link org.apache.juneau.utils.PojoQuery} support.
+		Improved {@link oaj.utils.PojoQuery} support.
 	</li>
 </ul>
 <h5 class='topic w800'>REST client updates</h5>
@@ -129,16 +129,16 @@
 		Several new annotations on REST servlets:
 		<ul>
 			<li><code>@RestResource.filters()</code> - Associate post-formatting filters on a resource level.</li>
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#guards() @RestResource.guards} - Associate resource-level guards.</li>
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#messages() @RestResource.messages} - Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties} - Override default bean context, serializer, and parser properties though an annotation.</li>
+			<li>{@link oajr.annotation.RestResource#guards() @RestResource.guards} - Associate resource-level guards.</li>
+			<li>{@link oajr.annotation.RestResource#messages() @RestResource.messages} - Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
+			<li>{@link oajr.annotation.RestResource#properties() @RestResource.properties} - Override default bean context, serializer, and parser properties though an annotation.</li>
 		</ul> 
 	</li>
 	<li>
 		Several new annotations on REST methods:
 		<ul>
 			<li><code>@RestMethod.filters()</code> - Associate post-formatting filters on a method level.</li>
-			<li>{@link org.apache.juneau.rest.annotation.RestMethod#guards() @RestMethod.guards()} - Associate method-level guards.</li>
+			<li>{@link oajr.annotation.RestMethod#guards() @RestMethod.guards()} - Associate method-level guards.</li>
 		</ul>
 	</li>
 	<li>				
@@ -149,10 +149,10 @@
 			<li><code><del>@PathRemainder</del></code>- The remainder after a URL pattern match as a String.</li>
 			<li><code><del>@Header</del></code> - An HTTP header value as a parsed POJO.</li>
 			<li><code><del>@Content</del></code> - The HTTP content as a parsed POJO.</li>
-			<li>{@link org.apache.juneau.rest.annotation.Method @Method} - The HTTP method name as a String.</li>
+			<li>{@link oajr.annotation.Method @Method} - The HTTP method name as a String.</li>
 		</ul>
 	</li>
 	<li>
-		HTTP response content POJOs can now simply be returned from methods instead of calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)}.		
+		HTTP response content POJOs can now simply be returned from methods instead of calling {@link oajr.RestResponse#setOutput(Object)}.		
 	</li>	
 </ul>

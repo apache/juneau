@@ -23,9 +23,9 @@
 <h5 class='topic w800'>org.apache.juneau</h5>
 <ul class='spaced-list'>
 	<li>
-		New package:  {@link org.apache.juneau.http}.
+		New package:  {@link oaj.http}.
 	<li>
-		Support for dynamic beans.  See {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()}.
+		Support for dynamic beans.  See {@link oaj.annotation.BeanProperty#name() @BeanProperty.name()}.
 	<li>
 		New doc: <code><del>2.8 - Virtual Beans</del></code>
 	<li>
@@ -55,9 +55,9 @@
 			<li><code><del>ConfigFile.getObjectWithDefault(String,Parser,Object,Class)</del></code> 
 		</ul>
 	<li>New ability to interact with config file sections with proxy interfaces with new method <code><del>ConfigFile.getSectionAsInterface(String,Class)</del></code>.
-	<li>{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation can now be applied to getters
+	<li>{@link oaj.annotation.BeanProperty @BeanProperty} annotation can now be applied to getters
 		and setters defined on interfaces.
-	<li>New methods on {@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
+	<li>New methods on {@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
 		for retrieving context and runtime-override properties:
 		<ul>
 			<li><code><del>Session.getProperty(String)</del></code>
@@ -99,13 +99,13 @@
 				these new protocols should (hopefully) be easier to understand.
 				<br>
 				These protocols work on all serialized URL and URI objects, as well as classes and properties 
-				annotated with {@link org.apache.juneau.annotation.URI @URI}.
+				annotated with {@link oaj.annotation.URI @URI}.
 			<li>New classes:
 				<ul>
-					<li>{@link org.apache.juneau.UriContext}
-					<li>{@link org.apache.juneau.UriRelativity}
-					<li>{@link org.apache.juneau.UriResolution}
-					<li>{@link org.apache.juneau.UriResolver}
+					<li>{@link oaj.UriContext}
+					<li>{@link oaj.UriRelativity}
+					<li>{@link oaj.UriResolution}
+					<li>{@link oaj.UriResolver}
 				</ul>
 			<li>New configuration properties:
 				<li><code><del>SerializerContext.SERIALIZER_uriContext</del></code>
@@ -113,7 +113,7 @@
 				<li><code><del>SerializerContext.SERIALIZER_uriResolution</del></code>
 				<li><code><del>SerializerContext.SERIALIZER_maxIndent</del></code>
 		</ul>
-	<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#value() @BeanProperty.value()}.
+	<li>New annotation property: {@link oaj.annotation.BeanProperty#value() @BeanProperty.value()}.
 		<br>The following two annotations are considered equivalent:
 		<p class='bcode w800'>
 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
@@ -126,23 +126,23 @@
 		<br>This means that arrays and maps are converted to simple comma-delimited lists.
 	<li>Listener APIs added to serializers and parsers:
 		<ul>
-			<li>{@link org.apache.juneau.serializer.SerializerListener}
-			<li>{@link org.apache.juneau.serializer.SerializerBuilder#listener(Class)}
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener() @RestResource.serializerListener()}
+			<li>{@link oaj.serializer.SerializerListener}
+			<li>{@link oaj.serializer.SerializerBuilder#listener(Class)}
+			<li>{@link oajr.annotation.RestResource#serializerListener() @RestResource.serializerListener()}
 			<li><code><del>RestConfig.serializerListener(Class)</del></code>
-			<li>{@link org.apache.juneau.parser.ParserListener}
-			<li>{@link org.apache.juneau.parser.ParserBuilder#listener(Class)}
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener() @RestResource.parserListener()}
+			<li>{@link oaj.parser.ParserListener}
+			<li>{@link oaj.parser.ParserBuilder#listener(Class)}
+			<li>{@link oajr.annotation.RestResource#parserListener() @RestResource.parserListener()}
 			<li><code><del>RestConfig.parserListener(Class)</del></code>
 			<li><code><del>RestClientBuilder.listeners(Class,Class)</del></code>
 		</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
-	<li>The {@link org.apache.juneau.BeanContext#BEAN_debug} flag will now capture parser input and make it
+	<li>The {@link oaj.BeanContext#BEAN_debug} flag will now capture parser input and make it
 		available through the <code><del>ParserSession.getInputAsString()</del></code> method so that it can be used
 		in the listeners.
 	<li>Significant new functionality introduced to the HTML serializer.  
 		<br>Lots of new options for customizing the HTML output.
 		<ul>
-			<li>New {@link org.apache.juneau.html.annotation.Html#render() @Html.render()} annotation and {@link org.apache.juneau.html.HtmlRender} class that allows you
+			<li>New {@link oaj.html.annotation.Html#render() @Html.render()} annotation and {@link oaj.html.HtmlRender} class that allows you
 				to customize the HTML output and CSS style on bean properties:
 				<br><img class='bordered' src='doc-files/ReleaseNotes.630.1.png'>
 				<br>Annotation can be applied to POJO classes and bean properties.
@@ -160,18 +160,18 @@
 					<li><code><del>HtmlDocSerializerContext.HTMLDOC_css</del></code>
 					<li><code><del>HtmlDocSerializerContext.HTMLDOC_template</del></code>
 				</ul>
-			<li>New interface {@link org.apache.juneau.html.HtmlDocTemplate} that allows full control over rendering
-				of HTML produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
+			<li>New interface {@link oaj.html.HtmlDocTemplate} that allows full control over rendering
+				of HTML produced by {@link oaj.html.HtmlDocSerializer}.
 			
 		</ul>
-	<li>{@link org.apache.juneau.annotation.NameProperty @NameProperty} and {@link org.apache.juneau.annotation.ParentProperty @ParentProperty}
+	<li>{@link oaj.annotation.NameProperty @NameProperty} and {@link oaj.annotation.ParentProperty @ParentProperty}
 		can now be applied to fields.  
-	<li>New properties on {@link org.apache.juneau.BeanContext}:
+	<li>New properties on {@link oaj.BeanContext}:
 		<ul>
-			<li>{@link org.apache.juneau.BeanContext#BEAN_includeProperties BEAN_includeProperties}
-			<li>{@link org.apache.juneau.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
+			<li>{@link oaj.BeanContext#BEAN_includeProperties BEAN_includeProperties}
+			<li>{@link oaj.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
 		</ul>
-	<li>New annotation property: {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty.format()}.
+	<li>New annotation property: {@link oaj.annotation.BeanProperty#format() @BeanProperty.format()}.
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest</h5>
@@ -179,62 +179,62 @@
 	<li>
 		MAJOR enhancements made to the REST API.
 	<li>
-		The {@link org.apache.juneau.rest.RestRequest} class functionality has been broken up into the following
+		The {@link oajr.RestRequest} class functionality has been broken up into the following
 		functional pieces to reduce its complexity:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RestRequest#getBody()} - The request body.
-			<li>{@link org.apache.juneau.rest.RestRequest#getHeaders()} - The request headers.
-			<li>{@link org.apache.juneau.rest.RestRequest#getQuery()} - The request query parameters.
-			<li>{@link org.apache.juneau.rest.RestRequest#getFormData()} - The request form data parameters.
-			<li>{@link org.apache.juneau.rest.RestRequest#getPathMatch()} - The path variables and remainder.
+			<li>{@link oajr.RestRequest#getBody()} - The request body.
+			<li>{@link oajr.RestRequest#getHeaders()} - The request headers.
+			<li>{@link oajr.RestRequest#getQuery()} - The request query parameters.
+			<li>{@link oajr.RestRequest#getFormData()} - The request form data parameters.
+			<li>{@link oajr.RestRequest#getPathMatch()} - The path variables and remainder.
 		</ul>	
 		The following classes have been introduced:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RequestBody}
-			<li>{@link org.apache.juneau.rest.RequestHeaders}
-			<li>{@link org.apache.juneau.rest.RequestQuery}
-			<li>{@link org.apache.juneau.rest.RequestFormData}
-			<li>{@link org.apache.juneau.rest.RequestPath}
+			<li>{@link oajr.RequestBody}
+			<li>{@link oajr.RequestHeaders}
+			<li>{@link oajr.RequestQuery}
+			<li>{@link oajr.RequestFormData}
+			<li>{@link oajr.RequestPath}
 		</ul>						
 	<li>
 		The un-annotated parameter types that can be passed in through REST Java methods has been significantly expanded.
 		<br>For reference, the previous supported types were:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RestRequest} - The request object.
+			<li>{@link oajr.RestRequest} - The request object.
 			<li>{@link javax.servlet.http.HttpServletRequest} - The superclass of <code>RestRequest</code>.
-			<li>{@link org.apache.juneau.rest.RestResponse} - The response object.
+			<li>{@link oajr.RestResponse} - The response object.
 			<li>{@link javax.servlet.http.HttpServletResponse} - The superclass of <code>RestResponse</code>.
 		</ul>
 		The new supported types are:
 		<ul>
-			<li>{@link org.apache.juneau.http.Accept}
-			<li>{@link org.apache.juneau.http.AcceptCharset}
-			<li>{@link org.apache.juneau.http.AcceptEncoding}
-			<li>{@link org.apache.juneau.http.AcceptLanguage}
-			<li>{@link org.apache.juneau.http.Authorization}
-			<li>{@link org.apache.juneau.http.CacheControl}
-			<li>{@link org.apache.juneau.http.Connection}
-			<li>{@link org.apache.juneau.http.ContentLength}
-			<li>{@link org.apache.juneau.http.ContentType}
-			<li>{@link org.apache.juneau.http.Date}
-			<li>{@link org.apache.juneau.http.Expect}
-			<li>{@link org.apache.juneau.http.From}
-			<li>{@link org.apache.juneau.http.Host}
-			<li>{@link org.apache.juneau.http.IfMatch}
-			<li>{@link org.apache.juneau.http.IfModifiedSince}
-			<li>{@link org.apache.juneau.http.IfNoneMatch}
-			<li>{@link org.apache.juneau.http.IfRange}
-			<li>{@link org.apache.juneau.http.IfUnmodifiedSince}
-			<li>{@link org.apache.juneau.http.MaxForwards}
-			<li>{@link org.apache.juneau.http.Pragma}
-			<li>{@link org.apache.juneau.http.ProxyAuthorization}
-			<li>{@link org.apache.juneau.http.Range}
-			<li>{@link org.apache.juneau.http.Referer}
-			<li>{@link org.apache.juneau.http.TE}
-			<li>{@link org.apache.juneau.http.UserAgent}
-			<li>{@link org.apache.juneau.http.Upgrade}
-			<li>{@link org.apache.juneau.http.Via}
-			<li>{@link org.apache.juneau.http.Warning}
+			<li>{@link oaj.http.Accept}
+			<li>{@link oaj.http.AcceptCharset}
+			<li>{@link oaj.http.AcceptEncoding}
+			<li>{@link oaj.http.AcceptLanguage}
+			<li>{@link oaj.http.Authorization}
+			<li>{@link oaj.http.CacheControl}
+			<li>{@link oaj.http.Connection}
+			<li>{@link oaj.http.ContentLength}
+			<li>{@link oaj.http.ContentType}
+			<li>{@link oaj.http.Date}
+			<li>{@link oaj.http.Expect}
+			<li>{@link oaj.http.From}
+			<li>{@link oaj.http.Host}
+			<li>{@link oaj.http.IfMatch}
+			<li>{@link oaj.http.IfModifiedSince}
+			<li>{@link oaj.http.IfNoneMatch}
+			<li>{@link oaj.http.IfRange}
+			<li>{@link oaj.http.IfUnmodifiedSince}
+			<li>{@link oaj.http.MaxForwards}
+			<li>{@link oaj.http.Pragma}
+			<li>{@link oaj.http.ProxyAuthorization}
+			<li>{@link oaj.http.Range}
+			<li>{@link oaj.http.Referer}
+			<li>{@link oaj.http.TE}
+			<li>{@link oaj.http.UserAgent}
+			<li>{@link oaj.http.Upgrade}
+			<li>{@link oaj.http.Via}
+			<li>{@link oaj.http.Warning}
 			<li>{@link java.util.TimeZone}
 			<li>{@link java.io.InputStream}
 			<li>{@link javax.servlet.ServletInputStream}
@@ -243,19 +243,19 @@
 			<li>{@link javax.servlet.ServletOutputStream}
 			<li>{@link java.io.Writer}
 			<li>{@link java.util.ResourceBundle} - Client-localized resource bundle.
-			<li>{@link org.apache.juneau.utils.MessageBundle} - A resource bundle with additional features.
+			<li>{@link oaj.utils.MessageBundle} - A resource bundle with additional features.
 			<li>{@link java.util.Locale} - Client locale.
-			<li>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
-			<li>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
-			<li>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
-			<li>{@link org.apache.juneau.rest.RequestPath} - API for accessing path variables.
-			<li>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
-			<li>{@link org.apache.juneau.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
+			<li>{@link oajr.RequestHeaders} - API for accessing request headers.
+			<li>{@link oajr.RequestQuery} - API for accessing request query parameters.
+			<li>{@link oajr.RequestFormData} - API for accessing request form data.
+			<li>{@link oajr.RequestPath} - API for accessing path variables.
+			<li>{@link oajr.RequestBody} - API for accessing request body.
+			<li>{@link oaj.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
 			<li>{@link java.util.logging.Logger} - The logger to use for logging.
-			<li>{@link org.apache.juneau.internal.JuneauLogger} - Logger with additional features.
-			<li>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
-			<li>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
-			<li>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
+			<li>{@link oaj.internal.JuneauLogger} - Logger with additional features.
+			<li>{@link oajr.RestContext} - The resource read-only context.
+			<li>{@link oaj.parser.Parser} - The parser matching the request content type.
+			<li>{@link oaj.dto.swagger.Swagger} - The auto-generated Swagger doc.
 			<li><code><del>ConfigFile</del></code> - The external config file for the resource.
 		</ul>
 		So, for example...
@@ -285,16 +285,16 @@
 	)
 		</p>
 	<li>
-		A new annotation {@link org.apache.juneau.rest.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
+		A new annotation {@link oajr.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
 		that allows you to define your own custom Java method parameter resolvers.
 	<li>
-		Fixed bug where Writer returned by {@link org.apache.juneau.rest.RestResponse#getWriter()} was not being flushed automatically
+		Fixed bug where Writer returned by {@link oajr.RestResponse#getWriter()} was not being flushed automatically
 		at the end of the HTTP call.
 	<li>
-		New annotations added to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
+		New annotations added to {@link oajr.annotation.RestMethod @RestMethod}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultQuery() defaultQuery()}
-			<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultFormData() defaultFormData()}
+			<li>{@link oajr.annotation.RestMethod#defaultQuery() defaultQuery()}
+			<li>{@link oajr.annotation.RestMethod#defaultFormData() defaultFormData()}
 			<li><code><del>bpIncludes()</del></code>
 			<li><code><del>bpExcludes()</del></code>
 		</ul>
@@ -306,26 +306,26 @@
 			<li><code><del>@FormData.def()</del></code> - Default form data parameter value.
 		</ul>
 	<li>
-		New attributes on {@link org.apache.juneau.rest.annotation.RestResource @RestResource}:
+		New attributes on {@link oajr.annotation.RestResource @RestResource}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#serializerListener() serializerListener()}
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#parserListener() parserListener()}
+			<li>{@link oajr.annotation.RestResource#serializerListener() serializerListener()}
+			<li>{@link oajr.annotation.RestResource#parserListener() parserListener()}
 			<li><code><del>widgets()</del></code>
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#swagger() swagger()}
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#htmldoc() htmldoc()}
+			<li>{@link oajr.annotation.RestResource#swagger() swagger()}
+			<li>{@link oajr.annotation.RestResource#htmldoc() htmldoc()}
 		</ul>
 	<li>
-		New attributes on {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
+		New attributes on {@link oajr.annotation.RestMethod @RestMethod}:
 		<ul>
 			<li><code><del>widgets()</del></code>
-			<li>{@link org.apache.juneau.rest.annotation.RestMethod#swagger() swagger()}
-			<li>{@link org.apache.juneau.rest.annotation.RestMethod#htmldoc() htmldoc()}
+			<li>{@link oajr.annotation.RestMethod#swagger() swagger()}
+			<li>{@link oajr.annotation.RestMethod#htmldoc() htmldoc()}
 		</ul>
 	<li>
 		New string vars:
 		<ul>
-			<li>{@link org.apache.juneau.rest.vars.UrlVar} - Resolve <js>"$U{...}"</js> variables to URLs.
-			<li>{@link org.apache.juneau.rest.vars.WidgetVar} - Resolve <js>"$W{...}"</js> variables to widget contents.
+			<li>{@link oajr.vars.UrlVar} - Resolve <js>"$U{...}"</js> variables to URLs.
+			<li>{@link oajr.vars.WidgetVar} - Resolve <js>"$W{...}"</js> variables to widget contents.
 		</ul>
 	<li>
 		New methods on <code><del>RestConfig</del></code>:
@@ -347,7 +347,7 @@
 			<li><code><del>addWidget(Class)</del></code>
 		</ul>
 	<li>
-		New methods on {@link org.apache.juneau.rest.RestResponse}:
+		New methods on {@link oajr.RestResponse}:
 		<ul>
 			<li><code><del>setHtmlTitle(Object)</del></code>
 			<li><code><del>setHtmlDescription(Object)</del></code>
@@ -369,7 +369,7 @@
 	<li>
 		New classes for widget support:
 		<ul>
-			<li>{@link org.apache.juneau.rest.widget.Widget}
+			<li>{@link oajr.widget.Widget}
 			<li><code><del>PoweredByJuneauWidget</del></code>
 			<li><code><del>ContentTypeLinksColumnWidget</del></code>
 			<li><code><del>ContentTypeLinksRowWidget</del></code>
@@ -378,17 +378,17 @@
 	<li>
 		<code>devops.css</code> cleaned up.
 	<li>
-		Removed a bunch of URL-related methods from {@link org.apache.juneau.rest.RestRequest}.  
-		These all have equivalents in {@link org.apache.juneau.rest.RestRequest#getUriContext()}.
+		Removed a bunch of URL-related methods from {@link oajr.RestRequest}.  
+		These all have equivalents in {@link oajr.RestRequest#getUriContext()}.
 	<li>
 		New annotation attributes:
 		<ul>
-			<li>{@link org.apache.juneau.http.annotation.Query#name() @Query.name()}
-			<li>{@link org.apache.juneau.http.annotation.FormData#name() @FormData.name()}
-			<li>{@link org.apache.juneau.http.annotation.Header#name() @Header.name()}
-			<li>{@link org.apache.juneau.http.annotation.Path#name() @Path.name()}
-			<li>{@link org.apache.juneau.http.annotation.HasQuery#name() @HasQuery.name()}
-			<li>{@link org.apache.juneau.http.annotation.HasFormData#name() @HasFormData.name()}
+			<li>{@link oaj.http.annotation.Query#name() @Query.name()}
+			<li>{@link oaj.http.annotation.FormData#name() @FormData.name()}
+			<li>{@link oaj.http.annotation.Header#name() @Header.name()}
+			<li>{@link oaj.http.annotation.Path#name() @Path.name()}
+			<li>{@link oaj.http.annotation.HasQuery#name() @HasQuery.name()}
+			<li>{@link oaj.http.annotation.HasFormData#name() @HasFormData.name()}
 		</ul>
 	</li>
 </ul>

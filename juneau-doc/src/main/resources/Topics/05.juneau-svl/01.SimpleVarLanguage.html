@@ -25,25 +25,25 @@ Simple Variable Language
 	and can return values that themselves contain more variables.
 </p>
 <p>
-	The {@link org.apache.juneau.svl.VarResolver} class is used to resolve variables.
-	<br>The {@link org.apache.juneau.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
+	The {@link oaj.svl.VarResolver} class is used to resolve variables.
+	<br>The {@link oaj.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
 	configured with the following basic variables:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - <code>$S{key[,default]}</code>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - <code>$E{key[,default]}</code>
+	<li class='jc'>{@link oaj.svl.vars.SystemPropertiesVar} - <code>$S{key[,default]}</code>
+		<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <code>$E{key[,default]}</code>
 </ul>
 <p>
 	The following logic variables are also provided:
 </p>
 <ul class='doctree'>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.IfVar} - <code>$IF{arg,then[,else]}</code>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.SwitchVar} - <code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.CoalesceVar} - <code>$CO{arg1[,arg2...]}</code>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code> 
-		<li class='jc'>{@link org.apache.juneau.svl.vars.NotEmptyVar} - <code>$NE{arg}</code>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.UpperCaseVar} - <code>$UC{arg}</code>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
+		<li class='jc'>{@link oaj.svl.vars.IfVar} - <code>$IF{arg,then[,else]}</code>
+		<li class='jc'>{@link oaj.svl.vars.SwitchVar} - <code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code>
+		<li class='jc'>{@link oaj.svl.vars.CoalesceVar} - <code>$CO{arg1[,arg2...]}</code>
+		<li class='jc'>{@link oaj.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code> 
+		<li class='jc'>{@link oaj.svl.vars.NotEmptyVar} - <code>$NE{arg}</code>
+		<li class='jc'>{@link oaj.svl.vars.UpperCaseVar} - <code>$UC{arg}</code>
+		<li class='jc'>{@link oaj.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>

@@ -23,9 +23,9 @@
 	<li><code>name</code> parameter of <code><del>ResourceDescription#ResourceDescription(String,String,String)</del></code>. 
 		is now automatically URL-encoded so that the name can contain special characters (e.g. <js>"foo/bar(baz)"</js>).
 	<li>Support for URL-matching and path info containing encoded characters (e.g. <js>'/'</js>) now supported.	
-	<li>Removed some lazy-initialization of bean information in {@link org.apache.juneau.ClassMeta} that allowed the removal of
+	<li>Removed some lazy-initialization of bean information in {@link oaj.ClassMeta} that allowed the removal of
 		some synchronized blocks.
 	<li>Improved support of <code><del>BeanContext.getClassMetaFromString(String)</del></code>.
 		Now supports primitive arrays such as <js>"long[]"</js> in addition to the previous support for the equivalent <js>"[J"</js>.
-	<li>Various new convenience methods added to {@link org.apache.juneau.internal.StringUtils} and {@link org.apache.juneau.internal.ClassUtils}.
+	<li>Various new convenience methods added to {@link oaj.internal.StringUtils} and {@link oaj.internal.ClassUtils}.
 </ul>	

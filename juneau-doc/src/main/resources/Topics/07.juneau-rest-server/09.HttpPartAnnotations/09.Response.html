@@ -16,21 +16,21 @@
 {new} @Response
 
 <p>
-	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
+	The {@link oaj.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<li class='ja'>{@link oaj.http.annotation.Response Response}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#api() api} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#code() code} - HTTP status code.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#description() description} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#example() example} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#examples() examples} - Serialized examples per media type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#headers() headers} - Swagger about headers added to response.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partSerializer() partSerializer} - Override the part serializer.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#value() value} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.Response#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.Response#code() code} - HTTP status code.
+		<li class='jf'>{@link oaj.http.annotation.Response#description() description} - Description.
+		<li class='jf'>{@link oaj.http.annotation.Response#example() example} - Serialized example.
+		<li class='jf'>{@link oaj.http.annotation.Response#examples() examples} - Serialized examples per media type.
+		<li class='jf'>{@link oaj.http.annotation.Response#headers() headers} - Swagger about headers added to response.
+		<li class='jf'>{@link oaj.http.annotation.Response#partSerializer() partSerializer} - Override the part serializer.
+		<li class='jf'>{@link oaj.http.annotation.Response#schema() schema} - Swagger schema.
+		<li class='jf'>{@link oaj.http.annotation.Response#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
+		<li class='jf'>{@link oaj.http.annotation.Response#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 <p>
@@ -48,9 +48,9 @@
 	public non-static methods of the class to identify parts of a response:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus} 
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} 
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody} 
+	<li class='ja'>{@link oaj.http.annotation.ResponseStatus} 
+	<li class='ja'>{@link oaj.http.annotation.ResponseHeader} 
+	<li class='ja'>{@link oaj.http.annotation.ResponseBody} 
 </ul>
 	
 <h5 class='topic'>@Resource on exception classes</h5>
@@ -84,7 +84,7 @@
 	}
 </p>
 <p>
-	Custom exceptions can also extend from one of the predefined HTTP exceptions such as the {@link org.apache.juneau.rest.exception.Unauthorized} exception:
+	Custom exceptions can also extend from one of the predefined HTTP exceptions such as the {@link oajr.exception.Unauthorized} exception:
 </p>
 <p class='bpcode w800'>
 	<jc>// Our annotated exception.</jc>
@@ -189,7 +189,7 @@
 <h5 class='topic'>@Resource on @RestMethod-annotated method parameters</h5>
 <p>
 	The <ja>@Response</ja> annotation can also be applied to the Java method parameters when the parameter type 
-	is {@link org.apache.juneau.Value} (a placeholder for objects).
+	is {@link oaj.Value} (a placeholder for objects).
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/user/login"</js>)
@@ -235,7 +235,7 @@
 
 <h5 class='topic'>@ResponseStatus on methods of @Response-annotated types</h5>
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation can be used on 
+	The {@link oaj.http.annotation.ResponseStatus @ResponseStatus} annotation can be used on 
 	the method of a <ja>@Response</ja>-annotated class to identify HTTP response
 	statuses other than <code>200</code> (the default).	
 </p>
@@ -260,7 +260,7 @@
 
 <h5 class='topic'>@ResponseHeader on methods of @Response-annotated types</h5>
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be used on
+	The {@link oaj.http.annotation.ResponseHeader @ResponseHeader} annotation can be used on
 	the method of a <ja>@Response</ja>-annotated class to identify a header
 	to add to the response.
 </p>
@@ -283,7 +283,7 @@
 
 <h5 class='topic'>@ResponseBody on methods of @Response-annotated types</h5>
 <p>
-	The {@link org.apache.juneau.http.annotation.ResponseBody @ResponseBody} annotation can be used on
+	The {@link oaj.http.annotation.ResponseBody @ResponseBody} annotation can be used on
 	the method of a <ja>@Response</ja>-annotated class to identify a POJO
 	as the body of the HTTP response.
 </p>
@@ -308,7 +308,7 @@
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
 	matching the requesting <code>Accept</code> header.
 	<br>It is also possible to use OpenAPI part serialization for the body of the response using 
-	the {@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer} flag.
+	the {@link oaj.http.annotation.Response#usePartSerializer() usePartSerializer} flag.
 	<br>The flag is needed to identify that we should use the part serializer instead of normal serializers for the POJO.
 </p>
 <p>
@@ -390,7 +390,7 @@
 
 <h5 class='topic'>Automatic HTTP status</h5>
 <p>
-	When the {@link org.apache.juneau.http.annotation.Response#code() @Response(code)} value is specified, 
+	When the {@link oaj.http.annotation.Response#code() @Response(code)} value is specified, 
 	the HTTP status is automatically set to that value on the response regardless of how it's used.
 </p>
 <p>

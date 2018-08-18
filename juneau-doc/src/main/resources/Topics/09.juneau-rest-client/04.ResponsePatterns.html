@@ -26,11 +26,11 @@ Using Response Patterns
 	succeeded (e.g. <js>"FAILED"</js> or <js>"SUCCEEDED"</js>).
 </p>
 <p>
-	The {@link org.apache.juneau.rest.client.RestClient} class has convenience methods for scanning the 
+	The {@link oajrc.RestClient} class has convenience methods for scanning the 
 	response without interfering with the other methods used for retrieving output.  
 </p>
 <p>
-	The following example shows how the {@link org.apache.juneau.rest.client.RestCall#successPattern(String)} 
+	The following example shows how the {@link oajrc.RestCall#successPattern(String)} 
 	method can be used to look for a SUCCESS message in the output:
 </p>	
 
@@ -42,7 +42,7 @@ Using Response Patterns
 		.run();
 </p>
 <p>
-	The {@link org.apache.juneau.rest.client.RestCall#failurePattern(String)} method does the opposite.  
+	The {@link oajrc.RestCall#failurePattern(String)} method does the opposite.  
 	It throws an exception if a failure message is detected.
 </p>	
 
@@ -55,7 +55,7 @@ Using Response Patterns
 </p>
 <p>
 	These convenience methods are specialized methods that use the 
-	{@link org.apache.juneau.rest.client.RestCall#responsePattern(ResponsePattern)} method which uses regular 
+	{@link oajrc.RestCall#responsePattern(ResponsePattern)} method which uses regular 
 	expression matching against the response body.
 	<br>This method can be used to search for arbitrary patterns in the response body.
 </p>
@@ -98,9 +98,9 @@ Using Response Patterns
 </p>
 <p>
 	Using response patterns does not affect the functionality of any of the other methods
-	used to retrieve the response such as {@link org.apache.juneau.rest.client.RestCall#getResponseAsString()} 
-	or {@link org.apache.juneau.rest.client.RestCall#getResponse(Class)}.
+	used to retrieve the response such as {@link oajrc.RestCall#getResponseAsString()} 
+	or {@link oajrc.RestCall#getResponse(Class)}.
 	<br>HOWEVER, if you want to retrieve the entire text of the response from inside the match methods,
-	use {@link org.apache.juneau.rest.client.RestCall#getCapturedResponse()} since this method will not absorb 
+	use {@link oajrc.RestCall#getCapturedResponse()} since this method will not absorb 
 	the response for those other methods.
 </p>

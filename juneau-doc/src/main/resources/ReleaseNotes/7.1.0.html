@@ -35,15 +35,15 @@
 				<br>Additionally, these classes are their own bean contexts.
 				<br>For example, the class hierarchy of <code>JsonSerializer</code> is now:
 				<ul class='doctree'>
-					<li class='jac'>{@link org.apache.juneau.Context}
+					<li class='jac'>{@link oaj.Context}
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.BeanContext}
+						<li class='jc'>{@link oaj.BeanContext}
 						<ul>
-							<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
+							<li class='jac'>{@link oaj.serializer.Serializer}
 							<ul>
-								<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
+								<li class='jac'>{@link oaj.serializer.WriterSerializer}
 								<ul>
-									<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
+									<li class='jc'>{@link oaj.json.JsonSerializer}
 								</ul>
 							</ul>
 						</ul>
@@ -54,15 +54,15 @@
 				Session objects also now have a consistent class hierarchy.
 				<br>For example, the class hierarchy of <code>JsonSerializerSession</code> is now:
 				<ul class='doctree'>
-					<li class='jac'>{@link org.apache.juneau.Session}
+					<li class='jac'>{@link oaj.Session}
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.BeanSession}
+						<li class='jc'>{@link oaj.BeanSession}
 						<ul>
-							<li class='jac'>{@link org.apache.juneau.serializer.SerializerSession}
+							<li class='jac'>{@link oaj.serializer.SerializerSession}
 							<ul>
-								<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializerSession}
+								<li class='jac'>{@link oaj.serializer.WriterSerializerSession}
 								<ul>
-									<li class='jc'>{@link org.apache.juneau.json.JsonSerializerSession}
+									<li class='jc'>{@link oaj.json.JsonSerializerSession}
 								</ul>
 							</ul>
 						</ul>
@@ -73,21 +73,21 @@
 				Builder objects also now have a consistent class hierarchy.
 				<br>For example, the class hierarchy of <code>JsonSerializerBuilder</code> is now:
 				<ul class='doctree'>
-					<li class='jac'>{@link org.apache.juneau.ContextBuilder}
+					<li class='jac'>{@link oaj.ContextBuilder}
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
+						<li class='jc'>{@link oaj.BeanContextBuilder}
 						<ul>
-							<li class='jac'>{@link org.apache.juneau.serializer.SerializerBuilder}
+							<li class='jac'>{@link oaj.serializer.SerializerBuilder}
 							<ul>
-								<li class='jc'>{@link org.apache.juneau.json.JsonSerializerBuilder}
+								<li class='jc'>{@link oaj.json.JsonSerializerBuilder}
 							</ul>
 						</ul>
 					</ul>
 				</ul>
 				Builder objects are used for building up and creating <code>Context</code> objects.
 			<li>
-				The {@link org.apache.juneau.PropertyStore} class has been completely rewritten.
-				It is now a read-only configuration store build using the {@link org.apache.juneau.PropertyStoreBuilder}
+				The {@link oaj.PropertyStore} class has been completely rewritten.
+				It is now a read-only configuration store build using the {@link oaj.PropertyStoreBuilder}
 				class.
 				<br>The previous <code>PropertyStore</code> class was overly-complicated with many read/write
 				locks to ensure thread-safety. 
@@ -99,61 +99,61 @@
 		<br>The existing <code>PartSerializer</code>/<code>PartParser</code> classes
 		have been replaced with the following all located in the new <code>org.apache.juneau.httppart</code> package:
 		<ul class='doctree'>
-			<li class='jp'>{@link org.apache.juneau.httppart}
+			<li class='jp'>{@link oaj.httppart}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.httppart.HttpPartType}
-				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
+				<li class='jc'>{@link oaj.httppart.HttpPartType}
+				<li class='jic'>{@link oaj.httppart.HttpPartSerializer}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer}
-					<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer}
-					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer}
+					<li class='jc'>{@link oaj.httppart.UonPartSerializer}
+					<li class='jc'>{@link oaj.httppart.SimpleUonPartSerializer}
+					<li class='jc'>{@link oaj.httppart.SimplePartSerializer}
 				</ul>
-				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
+				<li class='jic'>{@link oaj.httppart.HttpPartParser}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser}
-					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser}
+					<li class='jc'>{@link oaj.httppart.UonPartParser}
+					<li class='jc'>{@link oaj.httppart.SimplePartParser}
 				</ul>
 			</ul>
 		</ul>
 		Code for marshalling of parts have been removed from the URL-Encoding serializers and parsers.
 	<li>	
-		<code>ContextBuilder.property(String,Object)</code> renamed to {@link org.apache.juneau.ContextBuilder#set(String,Object)}.
+		<code>ContextBuilder.property(String,Object)</code> renamed to {@link oaj.ContextBuilder#set(String,Object)}.
 	<li>
 		<code>ResourceFinder</code> class has been replaced with the following:
 		<ul>
-			<li>{@link org.apache.juneau.utils.ClasspathResourceFinder}
-			<li>{@link org.apache.juneau.utils.ClasspathResourceFinderSimple}
-			<li>{@link org.apache.juneau.utils.ClasspathResourceFinderBasic}
-			<li>{@link org.apache.juneau.utils.ClasspathResourceFinderRecursive}
-			<li>{@link org.apache.juneau.utils.ClasspathResourceManager}
+			<li>{@link oaj.utils.ClasspathResourceFinder}
+			<li>{@link oaj.utils.ClasspathResourceFinderSimple}
+			<li>{@link oaj.utils.ClasspathResourceFinderBasic}
+			<li>{@link oaj.utils.ClasspathResourceFinderRecursive}
+			<li>{@link oaj.utils.ClasspathResourceManager}
 		</ul>
 	<li>
-		New methods on {@link org.apache.juneau.serializer.SerializerSession}:
+		New methods on {@link oaj.serializer.SerializerSession}:
 		<ul>
-			<li>{@link org.apache.juneau.serializer.SerializerSession#getListener() getListener()}
-			<li>{@link org.apache.juneau.serializer.SerializerSession#getListener(Class) getListener(Class)}
+			<li>{@link oaj.serializer.SerializerSession#getListener() getListener()}
+			<li>{@link oaj.serializer.SerializerSession#getListener(Class) getListener(Class)}
 		</ul>
 	<li>
-		New methods on {@link org.apache.juneau.parser.ParserSession}:
+		New methods on {@link oaj.parser.ParserSession}:
 		<ul>
-			<li>{@link org.apache.juneau.parser.ParserSession#getListener() getListener()}
-			<li>{@link org.apache.juneau.parser.ParserSession#getListener(Class) getListener(Class)}
+			<li>{@link oaj.parser.ParserSession#getListener() getListener()}
+			<li>{@link oaj.parser.ParserSession#getListener(Class) getListener(Class)}
 		</ul>
 	<li>
-		New {@link org.apache.juneau.parser.Parser#PARSER_unbuffered} setting allows you to disable internal
+		New {@link oaj.parser.Parser#PARSER_unbuffered} setting allows you to disable internal
 		buffering on the JSON and UON parsers so that they can be used to read continous streams of objects.
 	<li>
-		New {@link org.apache.juneau.json.JsonParser#JSON_validateEnd} and {@link org.apache.juneau.uon.UonParser#UON_validateEnd} 
+		New {@link oaj.json.JsonParser#JSON_validateEnd} and {@link oaj.uon.UonParser#UON_validateEnd} 
 		settings allow you to control whether we validate that there is no garbage at the end of the parsed input.
 	<li>
-		New {@link org.apache.juneau.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
+		New {@link oaj.parser.Parser#PARSER_autoCloseStreams} setting allows input streams and
 		readers passed into parsers to be automatically closed after parsing.
 	<li>
-		Syntax changed on unswap method on {@link org.apache.juneau.transform.Surrogate} classes.
+		Syntax changed on unswap method on {@link oaj.transform.Surrogate} classes.
 		<br>It's now a regular method instead of a static method.
 	<li>
-		{@link org.apache.juneau.annotation.Swap @Swap} annotation can now be used with 
-		{@link org.apache.juneau.transform.Surrogate} classes.
+		{@link oaj.annotation.Swap @Swap} annotation can now be used with 
+		{@link oaj.transform.Surrogate} classes.
 	<li>
 		New support for {@doc juneau-marshall.Transforms.PojoBuilders POJO Builders}.	
 </ul>
@@ -163,17 +163,17 @@
 	<li>
 		New variables:
 		<ul>
-			<li>{@link org.apache.juneau.svl.vars.CoalesceVar}
-			<li>{@link org.apache.juneau.svl.vars.PatternMatchVar}
-			<li>{@link org.apache.juneau.svl.vars.NotEmptyVar}
-			<li>{@link org.apache.juneau.svl.vars.UpperCaseVar}
-			<li>{@link org.apache.juneau.svl.vars.LowerCaseVar}
+			<li>{@link oaj.svl.vars.CoalesceVar}
+			<li>{@link oaj.svl.vars.PatternMatchVar}
+			<li>{@link oaj.svl.vars.NotEmptyVar}
+			<li>{@link oaj.svl.vars.UpperCaseVar}
+			<li>{@link oaj.svl.vars.LowerCaseVar}
 		</ul>
 	<li>
 		Variables moved from <l>juneau-microservice</l>:
 		<ul>
-			<li>{@link org.apache.juneau.svl.vars.ArgsVar}
-			<li>{@link org.apache.juneau.svl.vars.ManifestFileVar}
+			<li>{@link oaj.svl.vars.ArgsVar}
+			<li>{@link oaj.svl.vars.ManifestFileVar}
 		</ul>
 </ul>
 
@@ -198,8 +198,8 @@
 		<ul>
 			<li>New methods for setting and retrieving properties via name:
 				<ul>
-					<li>{@link org.apache.juneau.dto.swagger.SwaggerElement#get(String,Class)}
-					<li>{@link org.apache.juneau.dto.swagger.SwaggerElement#set(String,Object)}
+					<li>{@link oaj.dto.swagger.SwaggerElement#get(String,Class)}
+					<li>{@link oaj.dto.swagger.SwaggerElement#set(String,Object)}
 				</ul>
 			<li>
 				Support for setting non-standard fields such as <js>"$ref"</js> via getter and setter
@@ -213,179 +213,179 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		<code>RestServletDefault</code> renamed to {@link org.apache.juneau.rest.BasicRestServlet}.
+		<code>RestServletDefault</code> renamed to {@link oajr.BasicRestServlet}.
 	<li>
-		<code>RestServletGroupDefault</code> renamed to {@link org.apache.juneau.rest.BasicRestServletGroup}.
+		<code>RestServletGroupDefault</code> renamed to {@link oajr.BasicRestServletGroup}.
 	<li>
 		The <js>"$R{...}"</js> variable has been split into the following:
 		<ul>
-			<li><js>"$RA{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestAttributeVar}, first non-null value returned by <code>HttpServletRequest.getAttribute(String)</code>.
-			<li><js>"$RF{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestFormDataVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getFormData(String)}.
-			<li><js>"$RH{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestHeaderVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getHeader(String)}.
-			<li><js>"$RI{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RestInfoVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getInfoProvider()}.
+			<li><js>"$RA{key1[,key2...]}"</js> - {@link oajr.vars.RequestAttributeVar}, first non-null value returned by <code>HttpServletRequest.getAttribute(String)</code>.
+			<li><js>"$RF{key1[,key2...]}"</js> - {@link oajr.vars.RequestFormDataVar}, first non-null value returned by {@link oajr.RestRequest#getFormData(String)}.
+			<li><js>"$RH{key1[,key2...]}"</js> - {@link oajr.vars.RequestHeaderVar}, first non-null value returned by {@link oajr.RestRequest#getHeader(String)}.
+			<li><js>"$RI{key1[,key2...]}"</js> - {@link oajr.vars.RestInfoVar}, first non-null value returned by {@link oajr.RestRequest#getInfoProvider()}.
 				<br>The possible values are:
 				<ul>
-					<li><js>"contact"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Info#getContact()}
-					<li><js>"description"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest)}
-					<li><js>"externalDocs"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Swagger#getExternalDocs()}
-					<li><js>"license"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Info#getLicense()}
-					<li><js>"methodDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(Method,RestRequest)}
-					<li><js>"methodSummary"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(Method,RestRequest)}
-					<li><js>"siteName"</js> - Value returned by {@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest)}
-					<li><js>"tags"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Swagger#getTags()}
-					<li><js>"termsOfService"</js> - Value returned by {@link org.apache.juneau.dto.swagger.Info#getTermsOfService()}
-					<li><js>"title"</js> - See {@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest)}
-					<li><js>"version"</js> - See {@link org.apache.juneau.dto.swagger.Info#getVersion()}
+					<li><js>"contact"</js> - Value returned by {@link oaj.dto.swagger.Info#getContact()}
+					<li><js>"description"</js> - Value returned by {@link oajr.RestInfoProvider#getDescription(RestRequest)}
+					<li><js>"externalDocs"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getExternalDocs()}
+					<li><js>"license"</js> - Value returned by {@link oaj.dto.swagger.Info#getLicense()}
+					<li><js>"methodDescription"</js> - Value returned by {@link oajr.RestInfoProvider#getMethodDescription(Method,RestRequest)}
+					<li><js>"methodSummary"</js> - Value returned by {@link oajr.RestInfoProvider#getMethodSummary(Method,RestRequest)}
+					<li><js>"siteName"</js> - Value returned by {@link oajr.RestInfoProvider#getSiteName(RestRequest)}
+					<li><js>"tags"</js> - Value returned by {@link oaj.dto.swagger.Swagger#getTags()}
+					<li><js>"termsOfService"</js> - Value returned by {@link oaj.dto.swagger.Info#getTermsOfService()}
+					<li><js>"title"</js> - See {@link oajr.RestInfoProvider#getTitle(RestRequest)}
+					<li><js>"version"</js> - See {@link oaj.dto.swagger.Info#getVersion()}
 				</ul>					
-			<li><js>"$RP{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestPathVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getPath(String)}.
-			<li><js>"$RQ{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestQueryVar}, first non-null value returned by {@link org.apache.juneau.rest.RestRequest#getQuery(String)}
-			<li><js>"$R{key1[,key2...]}"</js> - {@link org.apache.juneau.rest.vars.RequestVar}, first non-null other request variable.
+			<li><js>"$RP{key1[,key2...]}"</js> - {@link oajr.vars.RequestPathVar}, first non-null value returned by {@link oajr.RestRequest#getPath(String)}.
+			<li><js>"$RQ{key1[,key2...]}"</js> - {@link oajr.vars.RequestQueryVar}, first non-null value returned by {@link oajr.RestRequest#getQuery(String)}
+			<li><js>"$R{key1[,key2...]}"</js> - {@link oajr.vars.RequestVar}, first non-null other request variable.
 				<br>The possible values are:
 				<ul>
-					<li><js>"contextPath"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getContextPath()}
-					<li><js>"method"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethod()}
-					<li><js>"methodDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodDescription()}
-					<li><js>"methodSummary"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getMethodSummary()}
-					<li><js>"pathInfo"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getPathInfo()}
-					<li><js>"requestParentURI"</js> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativePathInfoParent()}
-					<li><js>"requestURI"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getRequestURI()}
-					<li><js>"resourceDescription"</js> - Value returned by {@link org.apache.juneau.rest.RestRequest#getResourceDescription()}
-					<li><js>"resourceTitle"</js> - See {@link org.apache.juneau.rest.RestRequest#getResourceTitle()}
-					<li><js>"servletParentURI"</js> - Value returned by {@link org.apache.juneau.UriContext#getRootRelativeServletPathParent()}
-					<li><js>"servletPath"</js> - See {@link org.apache.juneau.rest.RestRequest#getServletPath()}
-					<li><js>"servletURI"</js> - See {@link org.apache.juneau.UriContext#getRootRelativeServletPath()}
-					<li><js>"siteName"</js> - See {@link org.apache.juneau.rest.RestRequest#getSiteName()}
+					<li><js>"contextPath"</js> - Value returned by {@link oajr.RestRequest#getContextPath()}
+					<li><js>"method"</js> - Value returned by {@link oajr.RestRequest#getMethod()}
+					<li><js>"methodDescription"</js> - Value returned by {@link oajr.RestRequest#getMethodDescription()}
+					<li><js>"methodSummary"</js> - Value returned by {@link oajr.RestRequest#getMethodSummary()}
+					<li><js>"pathInfo"</js> - Value returned by {@link oajr.RestRequest#getPathInfo()}
+					<li><js>"requestParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativePathInfoParent()}
+					<li><js>"requestURI"</js> - Value returned by {@link oajr.RestRequest#getRequestURI()}
+					<li><js>"resourceDescription"</js> - Value returned by {@link oajr.RestRequest#getResourceDescription()}
+					<li><js>"resourceTitle"</js> - See {@link oajr.RestRequest#getResourceTitle()}
+					<li><js>"servletParentURI"</js> - Value returned by {@link oaj.UriContext#getRootRelativeServletPathParent()}
+					<li><js>"servletPath"</js> - See {@link oajr.RestRequest#getServletPath()}
+					<li><js>"servletURI"</js> - See {@link oaj.UriContext#getRootRelativeServletPath()}
+					<li><js>"siteName"</js> - See {@link oajr.RestRequest#getSiteName()}
 				</ul>
 		</ul>
 	<li>
-		Refactored the <code>RestConfig</code> class into {@link org.apache.juneau.rest.RestContextBuilder}.
-		<br>Settings on {@link org.apache.juneau.rest.RestContext} objects can now be set declaratively through the 
+		Refactored the <code>RestConfig</code> class into {@link oajr.RestContextBuilder}.
+		<br>Settings on {@link oajr.RestContext} objects can now be set declaratively through the 
 			following new properties:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RestContext#REST_allowHeaderParams REST_allowHeaderParams}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_allowBodyParam REST_allowBodyParam}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_useStackTraceHashes REST_useStackTraceHashes}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_defaultCharset REST_defaultCharset}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_maxInput REST_maxInput}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_paramResolvers REST_paramResolvers}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_converters REST_converters}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_guards REST_guards}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers REST_responseHandlers}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_defaultRequestHeaders REST_defaultRequestHeaders}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_defaultResponseHeaders REST_defaultResponseHeaders}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_produces REST_produces}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_consumes REST_consumes}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_resourceResolver REST_resourceResolver}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_logger REST_logger}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_callHandler REST_callHandler}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_infoProvider REST_infoProvider}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_path REST_path}
+			<li>{@link oajr.RestContext#REST_allowHeaderParams REST_allowHeaderParams}
+			<li>{@link oajr.RestContext#REST_allowBodyParam REST_allowBodyParam}
+			<li>{@link oajr.RestContext#REST_allowedMethodParams REST_allowedMethodParams}
+			<li>{@link oajr.RestContext#REST_renderResponseStackTraces REST_renderResponseStackTraces}
+			<li>{@link oajr.RestContext#REST_useStackTraceHashes REST_useStackTraceHashes}
+			<li>{@link oajr.RestContext#REST_defaultCharset REST_defaultCharset}
+			<li>{@link oajr.RestContext#REST_maxInput REST_maxInput}
+			<li>{@link oajr.RestContext#REST_paramResolvers REST_paramResolvers}
+			<li>{@link oajr.RestContext#REST_converters REST_converters}
+			<li>{@link oajr.RestContext#REST_guards REST_guards}
+			<li>{@link oajr.RestContext#REST_responseHandlers REST_responseHandlers}
+			<li>{@link oajr.RestContext#REST_defaultRequestHeaders REST_defaultRequestHeaders}
+			<li>{@link oajr.RestContext#REST_defaultResponseHeaders REST_defaultResponseHeaders}
+			<li>{@link oajr.RestContext#REST_produces REST_produces}
+			<li>{@link oajr.RestContext#REST_consumes REST_consumes}
+			<li>{@link oajr.RestContext#REST_clientVersionHeader REST_clientVersionHeader}
+			<li>{@link oajr.RestContext#REST_resourceResolver REST_resourceResolver}
+			<li>{@link oajr.RestContext#REST_logger REST_logger}
+			<li>{@link oajr.RestContext#REST_callHandler REST_callHandler}
+			<li>{@link oajr.RestContext#REST_infoProvider REST_infoProvider}
+			<li>{@link oajr.RestContext#REST_path REST_path}
 			<li><code><del>REST_contextPath</del></code>
-			<li>{@link org.apache.juneau.rest.RestContext#REST_staticFiles REST_staticFiles}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_widgets REST_widgets}
-			<li>{@link org.apache.juneau.rest.RestContext#REST_mimeTypes REST_mimeTypes}
+			<li>{@link oajr.RestContext#REST_staticFiles REST_staticFiles}
+			<li>{@link oajr.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}
+			<li>{@link oajr.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
+			<li>{@link oajr.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}
+			<li>{@link oajr.RestContext#REST_widgets REST_widgets}
+			<li>{@link oajr.RestContext#REST_mimeTypes REST_mimeTypes}
 		</ul>
 	<li>
 		Support for static files has been simplified and improved.
 		<ul>
-			<li>Syntax on {@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource.staticFiles()} has been simplified, and
+			<li>Syntax on {@link oajr.annotation.RestResource#staticFiles() @RestResource.staticFiles()} has been simplified, and
 				now allows you to specify response headers in the strings.
 			<li>Response headers for static files can also be configured through 
-				{@link org.apache.juneau.rest.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}.
+				{@link oajr.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}.
 			<li>Static file in-memory caching now configurable through 
-				{@link org.apache.juneau.rest.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}.
+				{@link oajr.RestContext#REST_useClasspathResourceCaching REST_useClasspathResourceCaching}.
 			<li>Static file retrieval can be customized through 
-				{@link org.apache.juneau.rest.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
+				{@link oajr.RestContext#REST_classpathResourceFinder REST_classpathResourceFinder}
 		</ul>
 	<li>
 		Eliminated the <code>RestMatcherReflecting</code> class.
-		<br>You can now simply create a {@link org.apache.juneau.rest.RestMatcher} that has a public constructor that 
+		<br>You can now simply create a {@link oajr.RestMatcher} that has a public constructor that 
 		takes in the server and method arguments.
 	<li>
-		<code>@RestResource.allowMethodParam</code> renamed to {@link org.apache.juneau.rest.annotation.RestResource#allowedMethodParams}.
+		<code>@RestResource.allowMethodParam</code> renamed to {@link oajr.annotation.RestResource#allowedMethodParams}.
 	<li>
 		<code>@RestMethod.serializersInherit</code> and <code>@RestMethod.parsersInherit</code> replaced with
 		simplified <code><del>@RestMethod.inherit()</del></code>. 
 	<li>
-		Changes to {@link org.apache.juneau.rest.RequestFormData}:
+		Changes to {@link oajr.RequestFormData}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RequestFormData#addDefault(Map) addDefault(Map)} takes in a 
+			<li>{@link oajr.RequestFormData#addDefault(Map) addDefault(Map)} takes in a 
 				<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
 		</ul>
 	<li>
-		Changes to {@link org.apache.juneau.rest.RequestHeaders}:
+		Changes to {@link oajr.RequestHeaders}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RequestHeaders#addDefault(Map) addDefault(Map)} takes in a 
+			<li>{@link oajr.RequestHeaders#addDefault(Map) addDefault(Map)} takes in a 
 				<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
 		</ul>
 	<li>
-		Changes to {@link org.apache.juneau.rest.RequestQuery}:
+		Changes to {@link oajr.RequestQuery}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RequestQuery#addDefault(Map) addDefault(Map)} takes in a 
+			<li>{@link oajr.RequestQuery#addDefault(Map) addDefault(Map)} takes in a 
 				<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
 		</ul>
 	<li>
-		Changes to {@link org.apache.juneau.rest.RestContext}:
+		Changes to {@link oajr.RestContext}:
 		<ul>
-			<li><code>getResource(String,Locale)</code> renamed to {@link org.apache.juneau.rest.RestContext#getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
-			<li><code>getResourceAsString(String,Locale)</code> renamed to {@link org.apache.juneau.rest.RestContext#getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
-			<li><code>getResource(Class,MediaType,String,Locale)</code> renamed to {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,MediaType,String,Locale) getClasspathResourceAsString(Class,MediaType,String,Locale)}
-			<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,String,Locale) getClasspathResource(Class,String,Locale)}.
-			<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResourceAsString(Class,String,Locale) getClasspathResourceAsString(Class,String,Locale)}.
-			<li>New method {@link org.apache.juneau.rest.RestContext#getClasspathResource(Class,Class,MediaType,String,Locale) getClasspathResource(Class,Class,MediaType,String,Locale)}.
-			<li>{@link org.apache.juneau.rest.RestContext#getDefaultRequestHeaders() getDefaultRequestHeaders} returns a 
+			<li><code>getResource(String,Locale)</code> renamed to {@link oajr.RestContext#getClasspathResource(String,Locale) getClasspathResource(String,Locale)}
+			<li><code>getResourceAsString(String,Locale)</code> renamed to {@link oajr.RestContext#getClasspathResourceAsString(String,Locale) getClasspathResourceAsString(String,Locale)}
+			<li><code>getResource(Class,MediaType,String,Locale)</code> renamed to {@link oajr.RestContext#getClasspathResource(Class,MediaType,String,Locale) getClasspathResourceAsString(Class,MediaType,String,Locale)}
+			<li>New method {@link oajr.RestContext#getClasspathResource(Class,String,Locale) getClasspathResource(Class,String,Locale)}.
+			<li>New method {@link oajr.RestContext#getClasspathResourceAsString(Class,String,Locale) getClasspathResourceAsString(Class,String,Locale)}.
+			<li>New method {@link oajr.RestContext#getClasspathResource(Class,Class,MediaType,String,Locale) getClasspathResource(Class,Class,MediaType,String,Locale)}.
+			<li>{@link oajr.RestContext#getDefaultRequestHeaders() getDefaultRequestHeaders} returns a 
 				<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
-			<li>{@link org.apache.juneau.rest.RestContext#getDefaultResponseHeaders() getDefaultRequestHeaders} returns a 
+			<li>{@link oajr.RestContext#getDefaultResponseHeaders() getDefaultRequestHeaders} returns a 
 				<code>Map&lt;String,Object&gt;</code> instead of <code>Map&lt;String,String&gt;</code>.
 		</ul>
 	<li>
-		Changes to {@link org.apache.juneau.rest.RestRequest}:
+		Changes to {@link oajr.RestRequest}:
 		<ul>	
 			<li><code>getSupportedMediaTypes()</code> replaced with
-				{@link org.apache.juneau.rest.RestRequest#getConsumes() getConsumes()} and
-				{@link org.apache.juneau.rest.RestRequest#getProduces() getProduces()}.
+				{@link oajr.RestRequest#getConsumes() getConsumes()} and
+				{@link oajr.RestRequest#getProduces() getProduces()}.
 			<li><code>getReaderResource(String,boolean,MediaType)</code> renamed to 
-				{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
+				{@link oajr.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
 			<li><code>getReaderResource(String,boolean)</code> renamed to 
-				{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean) getClasspathReaderResource(String,boolean)}
+				{@link oajr.RestRequest#getClasspathReaderResource(String,boolean) getClasspathReaderResource(String,boolean)}
 			<li><code>getReaderResource(String)</code> renamed to 
-				{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
+				{@link oajr.RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
 		</ul>
 	<li>
-		Changes to {@link org.apache.juneau.rest.annotation.RestResource @RestResource}:
+		Changes to {@link oajr.annotation.RestResource @RestResource}:
 		<ul>
-			<li>New {@link org.apache.juneau.rest.annotation.RestResource#mimeTypes() mimeTypes()} annotation.
+			<li>New {@link oajr.annotation.RestResource#mimeTypes() mimeTypes()} annotation.
 		</ul>
 	<li>
-		Changes to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
+		Changes to {@link oajr.annotation.RestMethod @RestMethod}:
 		<ul>
-			<li>New {@link org.apache.juneau.rest.annotation.RestMethod#consumes() consumes()} and
-				{@link org.apache.juneau.rest.annotation.RestMethod#produces() produces()}
+			<li>New {@link oajr.annotation.RestMethod#consumes() consumes()} and
+				{@link oajr.annotation.RestMethod#produces() produces()}
 				for overriding the supported media types inferred from the serializers and parsers.
 		</ul>
 	<li>
-		<code>RestCallHandler</code> split up into {@link org.apache.juneau.rest.RestCallHandler} and 
-		{@link org.apache.juneau.rest.BasicRestCallHandler}
+		<code>RestCallHandler</code> split up into {@link oajr.RestCallHandler} and 
+		{@link oajr.BasicRestCallHandler}
 	<li>
-		<code>RestInfoProvider</code> split up into {@link org.apache.juneau.rest.RestInfoProvider} and 
-		{@link org.apache.juneau.rest.BasicRestInfoProvider}
+		<code>RestInfoProvider</code> split up into {@link oajr.RestInfoProvider} and 
+		{@link oajr.BasicRestInfoProvider}
 	<li>
-		<code>RestLogger</code> split up into {@link org.apache.juneau.rest.RestLogger}, 
-		{@link org.apache.juneau.rest.BasicRestLogger} and {@link org.apache.juneau.rest.NoOpRestLogger}
+		<code>RestLogger</code> split up into {@link oajr.RestLogger}, 
+		{@link oajr.BasicRestLogger} and {@link oajr.NoOpRestLogger}
 	<li>
-		<code>RestResourceResolverSimple</code> renamed to {@link org.apache.juneau.rest.BasicRestResourceResolver}
+		<code>RestResourceResolverSimple</code> renamed to {@link oajr.BasicRestResourceResolver}
 	<li>
 		Introduced the following classes that helps make the code more understandable:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RestContextProperties}
-			<li>{@link org.apache.juneau.rest.RestMethodProperties}
-			<li>{@link org.apache.juneau.rest.RequestProperties}
+			<li>{@link oajr.RestContextProperties}
+			<li>{@link oajr.RestMethodProperties}
+			<li>{@link oajr.RequestProperties}
 		</ul>
 	<li>
 		Eliminated the <code>@Messages</code> and <code>@Properties</code> REST java method parameter
@@ -393,7 +393,7 @@
 		<br>These aren't needed anymore since you can just pass in <code>MessageBundle</code> and
 		<code>RestRequestProperties</code> as unannotated parameters.
 	<li>
-		Revamped the {@link org.apache.juneau.rest.RestInfoProvider} class.
+		Revamped the {@link oajr.RestInfoProvider} class.
 	<li>
 		New builder classes:
 		<ul>
@@ -401,14 +401,14 @@
 			<li><code><del>StreamResourceBuilder</del></code>
 		</ul>
 	<li>
-		{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} now returns a 
-		<code><del>FinishableServletOutputStream</del></code> and {@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}
+		{@link oajr.RestResponse#getNegotiatedOutputStream()} now returns a 
+		<code><del>FinishableServletOutputStream</del></code> and {@link oajr.RestResponse#getNegotiatedWriter()}
 		now returns a <code><del>FinishablePrintWriter</del></code> that allows you to finish the output
 		without closing the stream.
-		<br>The {@link org.apache.juneau.rest.reshandlers.DefaultHandler} class now calls <code>finish()</code>
+		<br>The {@link oajr.reshandlers.DefaultHandler} class now calls <code>finish()</code>
 		instead of <code>close()</code> on the stream.
 	<li>
-		Added the following annotations to the {@link org.apache.juneau.rest.BasicRestServlet} class
+		Added the following annotations to the {@link oajr.BasicRestServlet} class
 		(which were previously defined on the <code><del>Resource</del></code> class):
 		<p class='bcode w800'>
 	<ja>@RestResource</ja>(
@@ -429,21 +429,21 @@
 <h5 class='topic w800'>juneau-rest-client</h5>
 <ul class='spaced-list'>
 	<li>
-		New configuration property {@link org.apache.juneau.rest.client.RestClient#RESTCLIENT_query} and
-		builder method {@link org.apache.juneau.rest.client.RestClientBuilder#query(String,Object)}.
+		New configuration property {@link oajrc.RestClient#RESTCLIENT_query} and
+		builder method {@link oajrc.RestClientBuilder#query(String,Object)}.
 	<li>
-		API changes to replace <code>PartSerializer</code> with {@link org.apache.juneau.httppart.HttpPartSerializer}.
-		<br>The default value is now {@link org.apache.juneau.httppart.SimpleUonPartSerializer} which will
+		API changes to replace <code>PartSerializer</code> with {@link oaj.httppart.HttpPartSerializer}.
+		<br>The default value is now {@link oaj.httppart.SimpleUonPartSerializer} which will
 		serialize strings as plain-text and collections/arrays as comma-delimited lists.
 		<br>We decided to change the default behavior in favor of practicality over purity.
 	<li>
-		New methods on {@link org.apache.juneau.rest.client.RestCall} class:
+		New methods on {@link oajrc.RestCall} class:
 		<ul>
-			<li>{@link org.apache.juneau.rest.client.RestCall#getResponseHeader(String) getResponseHeader(String)}
-			<li>{@link org.apache.juneau.rest.client.RestCall#getResponseCode() getResponseCode()}
+			<li>{@link oajrc.RestCall#getResponseHeader(String) getResponseHeader(String)}
+			<li>{@link oajrc.RestCall#getResponseCode() getResponseCode()}
 		</ul>
 	<li>
-		{@link org.apache.juneau.rest.client.RestCall} and {@link org.apache.juneau.rest.client.RestClient}
+		{@link oajrc.RestCall} and {@link oajrc.RestClient}
 		now implement the <code>Closeable</code> interface.
 </ul>
 
@@ -451,8 +451,8 @@
 <ul class='spaced-list'>
 	<li>
 		<code>Resource</code> and <code>ResourceGroup</code> classes removed.
-		<br>{@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestServletGroup} can be used instead.
+		<br>{@link oajr.BasicRestServlet} and {@link oajr.BasicRestServletGroup} can be used instead.
 	<li>
 		<code>ResourceJena</code> and <code>ResourceJenaGroup</code> classes renamed to
-		{@link org.apache.juneau.microservice.BasicRestServletJena} and {@link org.apache.juneau.microservice.BasicRestServletJenaGroup}.
+		{@link oaj.microservice.BasicRestServletJena} and {@link oaj.microservice.BasicRestServletJenaGroup}.
 </ul>

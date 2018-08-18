@@ -16,25 +16,25 @@
 Serializers
 
 <p>
-	REST resources use the {@link org.apache.juneau.serializer.Serializer} API for defining serializers for 
+	REST resources use the {@link oaj.serializer.Serializer} API for defining serializers for 
 	serializing response POJOs.
 </p>
 <p>
 	The servlet will pick which serializer to use by matching the request <l>Accept</l> header with the
-	media types defined through the {@link org.apache.juneau.serializer.Serializer#getMediaTypeRanges()} method.
+	media types defined through the {@link oaj.serializer.Serializer#getMediaTypeRanges()} method.
 </p>
 <p>
 	Serializers can be associated with REST servlets in the following ways:
 </p>
 <ul class='doctree'>
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestResource#serializers()} 
+		{@link oajr.annotation.RestResource#serializers()} 
 		- Annotation on resource Java class.
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestMethod#serializers()} 
+		{@link oajr.annotation.RestMethod#serializers()} 
 		- Annotation on resource Java method.
 	<li class='jf'>
-		{@link org.apache.juneau.rest.RestContext#REST_serializers} 
+		{@link oajr.RestContext#REST_serializers} 
 		- Programmatic.
 </ul>
 <p>
@@ -75,5 +75,5 @@ Serializers
 
 <h5 class='section'>See Also:</h5>
 <ul class='doctree'>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_serializers}
+	<li class='jf'>{@link oajr.RestContext#REST_serializers}
 </ul>

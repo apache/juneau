@@ -16,22 +16,22 @@
 {new} Swagger UI
 
 <p>
-	The {@link org.apache.juneau.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
-	from {@link org.apache.juneau.dto.swagger.Swagger} beans.
+	The {@link oaj.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
+	from {@link oaj.dto.swagger.Swagger} beans.
 </p>
 <p>
 	The <code>PetStore</code> example described later provides an example of auto-generated Swagger JSON:
 </p>
 <img class='bordered' style='width:900px' src='doc-files/SwaggerUI.json.png'>
 <p>
-	Using {@link org.apache.juneau.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
+	Using {@link oaj.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
 	when the request is asking for HTML:
 </p>
 <img class='bordered' style='width:900px' src='doc-files/SwaggerUI.html.png'>
 
 <p>
-	The class itself is nothing more than a POJO swap that swaps out {@link org.apache.juneau.dto.swagger.Swagger} beans
-	with {@link org.apache.juneau.dto.html5.Div} elements:
+	The class itself is nothing more than a POJO swap that swaps out {@link oaj.dto.swagger.Swagger} beans
+	with {@link oaj.dto.html5.Div} elements:
 </p>
 <p class='bpcode w800'>
 	<jk>public class</jk> SwaggerUI <jk>extends</jk> PojoSwap&lt;Swagger,Div&gt; {
@@ -49,7 +49,7 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.rest.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
+	The {@link oajr.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
 	generate the Swagger UI shown above:
 </p>
 <p class='bpcode w800'>

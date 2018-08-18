@@ -19,16 +19,16 @@ Serializing
 	The following methods are used for serializing <code>Config</code> objects back into INI files:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<li class='jc'>{@link oaj.config.Config}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.Config#writeTo(Writer) writeTo(Writer)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#toString() toString()}
+		<li class='jm'>{@link oaj.config.Config#writeTo(Writer) writeTo(Writer)}
+		<li class='jm'>{@link oaj.config.Config#toString() toString()}
 	</ul>
 </ul>
 <p>
 	Both methods are thread safe.
 </p>
 <p>
-	The <code>Config</code> class implements the {@link org.apache.juneau.Writable} which means it can be 
+	The <code>Config</code> class implements the {@link oaj.Writable} which means it can be 
 	returned as-is by REST methods to be serialized as INI text.
 </p>

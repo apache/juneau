@@ -23,8 +23,8 @@ Properties
 	These properties can be defined for serializers and parsers registered on a REST resource via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#properties()} 
-	<li class='jc'>{@link org.apache.juneau.rest.RestContextBuilder} - Various methods on the context builder.
+	<li class='ja'>{@link oajr.annotation.RestResource#properties()} 
+	<li class='jc'>{@link oajr.RestContextBuilder} - Various methods on the context builder.
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -68,8 +68,8 @@ Properties
 	Properties can also be overridden at the Java method level:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties()} 
-	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
+	<li class='ja'>{@link oajr.annotation.RestMethod#properties()} 
+	<li class='jc'>{@link oajr.RequestProperties} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// GET method with method-level properties</jc>
@@ -90,7 +90,7 @@ Properties
 	}
 </p>
 <p>
-	Using the {@link org.apache.juneau.rest.RequestProperties} object:
+	Using the {@link oajr.RequestProperties} object:
 </p>
 <p class='bpcode w800'>
 	<jc>// Access it from RestRequest.</jc>
@@ -105,9 +105,9 @@ Properties
 	}
 </p>
 <p>
-	Properties set via {@link org.apache.juneau.rest.RequestProperties} are session-override
-	properties that are passed in through {@link org.apache.juneau.serializer.SerializerSessionArgs}
-	and {@link org.apache.juneau.parser.ParserSessionArgs} and can only be used on configuration settings
+	Properties set via {@link oajr.RequestProperties} are session-override
+	properties that are passed in through {@link oaj.serializer.SerializerSessionArgs}
+	and {@link oaj.parser.ParserSessionArgs} and can only be used on configuration settings
 	marked as <code>Session property: <jk>true</jk></code>.
 </p>			
 <p>
@@ -115,14 +115,14 @@ Properties
 	<br>They're made available through the following methods:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getProperties()}
-	<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties()}
+	<li class='jm'>{@link oajr.RestContext#getProperties()}
+	<li class='jm'>{@link oajr.RestRequest#getProperties()}
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#flags()} - Shorthand for boolean properties.
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags()} - Shorthand for boolean properties.
-	<li class='jc'>{@link org.apache.juneau.rest.RestContextProperties} 
-	<li class='jc'>{@link org.apache.juneau.rest.RestMethodProperties} 
-	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
+	<li class='ja'>{@link oajr.annotation.RestResource#flags()} - Shorthand for boolean properties.
+	<li class='ja'>{@link oajr.annotation.RestMethod#flags()} - Shorthand for boolean properties.
+	<li class='jc'>{@link oajr.RestContextProperties} 
+	<li class='jc'>{@link oajr.RestMethodProperties} 
+	<li class='jc'>{@link oajr.RequestProperties} 
 </ul>

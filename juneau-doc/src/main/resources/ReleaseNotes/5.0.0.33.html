@@ -20,7 +20,7 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		Removed generic parameter from {@link org.apache.juneau.serializer.WriterSerializer} class. 
+		Removed generic parameter from {@link oaj.serializer.WriterSerializer} class. 
 		<ul>
 			<li>
 				Many of the examples in the documentation were written as follows, which resulted in "unchecked" compile warnings:<br>
@@ -32,14 +32,14 @@
 	<li>
 		New settings in BeanContext.  These can be applied to all serializers/parsers.
 		<ul>
-			<li>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
-			<li>{@link org.apache.juneau.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
-			<li>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_add}
-			<li>{@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_remove}
+			<li>{@link oaj.BeanContext#BEAN_ignoreInvocationExceptionsOnGetters}
+			<li>{@link oaj.BeanContext#BEAN_ignoreInvocationExceptionsOnSetters}
+			<li>{@link oaj.BeanContext#BEAN_notBeanPackages_add}
+			<li>{@link oaj.BeanContext#BEAN_notBeanPackages_remove}
 		</ul>
 	</li>
 	<li>
-		Eliminated <code>addNotBeanClassPatterns(String...)</code> methods throughout API since these are now controlled by {@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_add} / {@link org.apache.juneau.BeanContext#BEAN_notBeanPackages_remove} properties.
+		Eliminated <code>addNotBeanClassPatterns(String...)</code> methods throughout API since these are now controlled by {@link oaj.BeanContext#BEAN_notBeanPackages_add} / {@link oaj.BeanContext#BEAN_notBeanPackages_remove} properties.
 	</li>
 	<li>
 		New settings in <code>RestServletProperties</code>.
@@ -51,14 +51,14 @@
 		</ul>
 	</li>
 	<li>
-		New JSON-Schema {@link org.apache.juneau.dto.jsonschema.JsonSchemaMap} class for supporting linked schemas.
+		New JSON-Schema {@link oaj.dto.jsonschema.JsonSchemaMap} class for supporting linked schemas.
 	</li>
 	<li>
 		Serializers will no longer throw an exception when <code>maxDepth</code> setting is reached, and will instead simply ignore content below the specified depth.<br>
 		While the old behavior was as-designed, the new behavior is more in-line with expected behavior.
 	</li>
 	<li>
-		Added support for HTTP header <js>"X-Response-Headers"</js> to {@link org.apache.juneau.rest.RestServlet}. <br>
+		Added support for HTTP header <js>"X-Response-Headers"</js> to {@link oajr.RestServlet}. <br>
 		Allows you to specify one or more headers that should be returned on the response from the servlet.<br>
 		For example, to get a page to automatically refresh every 1 second, you can append the following to a URL:  <code>?x-response-headers={Refresh=1}</code>
 	</li>

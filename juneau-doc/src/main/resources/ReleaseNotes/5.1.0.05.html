@@ -20,17 +20,17 @@
 </p>
 <ul class='spaced-list'>
 	<li>New <code><del>Redirect</del></code> class that simplifies performing redirections in REST methods.
-	<li>New pluggable {@link org.apache.juneau.rest.ResponseHandler} class and {@link org.apache.juneau.rest.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} annotation
+	<li>New pluggable {@link oajr.ResponseHandler} class and {@link oajr.annotation.RestResource#responseHandlers() @RestResource.responseHandlers()} annotation
 		for defining customer response handlers for special kinds of POJOs.
 	<li>New method <code><del>UrlEncodingSerializer.serializeUrlPart(Object)</del></code> method.
 	<li>New method <code><del>RestRequest.getServletURIBuilder()</del></code> for construcing servlet-based URLs more efficiently.
-	<li>New method {@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
-		and {@link org.apache.juneau.rest.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
+	<li>New method {@link oajr.RestResponse#getNegotiatedOutputStream()} that uses encoders if a match is found, 
+		and {@link oajr.RestResponse#getOutputStream()} that just return the underlying output stream without any modifications.
 	<li>Fixed bug where some properties were not being propagated correctly when using <code><del>CoreObject.setProperties(ObjectMap)</del></code>
 		on serializer and parser subclasses.
-	<li>Fixed bug in {@link org.apache.juneau.html.HtmlSerializer} where URL keys in Maps were not being serialized as hyperlinks.
-	<li>Fixed bug in {@link org.apache.juneau.json.JsonSerializer} where <js>"_class"</js> and <js>"items"</js> attributes were not quoted in strict mode when using SERIALIZER_addClassAttrs feature.	
-	<li>Fixed bug where <code>Content-Encoding</code> and<code>Character-Encoding</code> headers were being set when calling {@link org.apache.juneau.rest.RestResponse#getOutputStream()}.
+	<li>Fixed bug in {@link oaj.html.HtmlSerializer} where URL keys in Maps were not being serialized as hyperlinks.
+	<li>Fixed bug in {@link oaj.json.JsonSerializer} where <js>"_class"</js> and <js>"items"</js> attributes were not quoted in strict mode when using SERIALIZER_addClassAttrs feature.	
+	<li>Fixed bug where <code>Content-Encoding</code> and<code>Character-Encoding</code> headers were being set when calling {@link oajr.RestResponse#getOutputStream()}.
 		These should not be set if interacting with the output streams at a low level.
 	<li>Eliminated various convenience <code>RestResponse.sendRedirect(...)</code> methods due to the introduction of the <code><del>Redirect</del></code> class.
 </ul>

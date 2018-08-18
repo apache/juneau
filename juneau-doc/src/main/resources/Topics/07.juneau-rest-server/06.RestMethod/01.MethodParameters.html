@@ -24,41 +24,41 @@ Java Method Parameters
 		<ul class='spaced-list'>
 			<li><b>Request/response objects:</b>
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.rest.RestRequest} - The request object.
+					<li class='jc'>{@link oajr.RestRequest} - The request object.
 					<li class='jc'>{@link javax.servlet.http.HttpServletRequest} - The superclass of <code>RestRequest</code>.
-					<li class='jc'>{@link org.apache.juneau.rest.RestResponse} - The response object.
+					<li class='jc'>{@link oajr.RestResponse} - The response object.
 					<li class='jc'>{@link javax.servlet.http.HttpServletResponse} - The superclass of <code>RestResponse</code>.
 				</ul>
 			<li><b>Parsed request header values:</b>
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.http.Accept}
-					<li class='jc'>{@link org.apache.juneau.http.AcceptCharset}
-					<li class='jc'>{@link org.apache.juneau.http.AcceptEncoding}
-					<li class='jc'>{@link org.apache.juneau.http.AcceptLanguage}
-					<li class='jc'>{@link org.apache.juneau.http.Authorization}
-					<li class='jc'>{@link org.apache.juneau.http.CacheControl}
-					<li class='jc'>{@link org.apache.juneau.http.Connection}
-					<li class='jc'>{@link org.apache.juneau.http.ContentLength}
-					<li class='jc'>{@link org.apache.juneau.http.ContentType}
-					<li class='jc'>{@link org.apache.juneau.http.Date}
-					<li class='jc'>{@link org.apache.juneau.http.Expect}
-					<li class='jc'>{@link org.apache.juneau.http.From}
-					<li class='jc'>{@link org.apache.juneau.http.Host}
-					<li class='jc'>{@link org.apache.juneau.http.IfMatch}
-					<li class='jc'>{@link org.apache.juneau.http.IfModifiedSince}
-					<li class='jc'>{@link org.apache.juneau.http.IfNoneMatch}
-					<li class='jc'>{@link org.apache.juneau.http.IfRange}
-					<li class='jc'>{@link org.apache.juneau.http.IfUnmodifiedSince}
-					<li class='jc'>{@link org.apache.juneau.http.MaxForwards}
-					<li class='jc'>{@link org.apache.juneau.http.Pragma}
-					<li class='jc'>{@link org.apache.juneau.http.ProxyAuthorization}
-					<li class='jc'>{@link org.apache.juneau.http.Range}
-					<li class='jc'>{@link org.apache.juneau.http.Referer}
-					<li class='jc'>{@link org.apache.juneau.http.TE}
-					<li class='jc'>{@link org.apache.juneau.http.UserAgent}
-					<li class='jc'>{@link org.apache.juneau.http.Upgrade}
-					<li class='jc'>{@link org.apache.juneau.http.Via}
-					<li class='jc'>{@link org.apache.juneau.http.Warning}
+					<li class='jc'>{@link oaj.http.Accept}
+					<li class='jc'>{@link oaj.http.AcceptCharset}
+					<li class='jc'>{@link oaj.http.AcceptEncoding}
+					<li class='jc'>{@link oaj.http.AcceptLanguage}
+					<li class='jc'>{@link oaj.http.Authorization}
+					<li class='jc'>{@link oaj.http.CacheControl}
+					<li class='jc'>{@link oaj.http.Connection}
+					<li class='jc'>{@link oaj.http.ContentLength}
+					<li class='jc'>{@link oaj.http.ContentType}
+					<li class='jc'>{@link oaj.http.Date}
+					<li class='jc'>{@link oaj.http.Expect}
+					<li class='jc'>{@link oaj.http.From}
+					<li class='jc'>{@link oaj.http.Host}
+					<li class='jc'>{@link oaj.http.IfMatch}
+					<li class='jc'>{@link oaj.http.IfModifiedSince}
+					<li class='jc'>{@link oaj.http.IfNoneMatch}
+					<li class='jc'>{@link oaj.http.IfRange}
+					<li class='jc'>{@link oaj.http.IfUnmodifiedSince}
+					<li class='jc'>{@link oaj.http.MaxForwards}
+					<li class='jc'>{@link oaj.http.Pragma}
+					<li class='jc'>{@link oaj.http.ProxyAuthorization}
+					<li class='jc'>{@link oaj.http.Range}
+					<li class='jc'>{@link oaj.http.Referer}
+					<li class='jc'>{@link oaj.http.TE}
+					<li class='jc'>{@link oaj.http.UserAgent}
+					<li class='jc'>{@link oaj.http.Upgrade}
+					<li class='jc'>{@link oaj.http.Via}
+					<li class='jc'>{@link oaj.http.Warning}
 					<li class='jc'>{@link java.util.TimeZone}
 				</ul>
 			<li><b>Direct streams on request/response:</b>
@@ -73,44 +73,44 @@ Java Method Parameters
 			<li><b>Localization:</b>
 				<ul>
 					<li class='jc'>{@link java.util.ResourceBundle} - Client-localized resource bundle.
-					<li class='jc'>{@link org.apache.juneau.utils.MessageBundle} - A resource bundle with additional features.
+					<li class='jc'>{@link oaj.utils.MessageBundle} - A resource bundle with additional features.
 					<li class='jc'>{@link java.util.Locale} - Client locale.
 				</ul>
 			<li><b>Request APIs:</b>
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders} - API for accessing request headers.
-					<li class='jc'>{@link org.apache.juneau.rest.RequestQuery} - API for accessing request query parameters.
-					<li class='jc'>{@link org.apache.juneau.rest.RequestFormData} - API for accessing request form data.
-					<li class='jc'>{@link org.apache.juneau.rest.RequestPath} - API for accessing path variables.
-					<li class='jc'>{@link org.apache.juneau.rest.RequestBody} - API for accessing request body.
+					<li class='jc'>{@link oajr.RequestHeaders} - API for accessing request headers.
+					<li class='jc'>{@link oajr.RequestQuery} - API for accessing request query parameters.
+					<li class='jc'>{@link oajr.RequestFormData} - API for accessing request form data.
+					<li class='jc'>{@link oajr.RequestPath} - API for accessing path variables.
+					<li class='jc'>{@link oajr.RequestBody} - API for accessing request body.
 				</ul>
 			<li><b>Other:</b>
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
-					<li class='jc'>{@link org.apache.juneau.rest.RestLogger} - Logger with additional features.
-					<li class='jc'>{@link org.apache.juneau.rest.RestContext} - The resource read-only context.
-					<li class='jc'>{@link org.apache.juneau.parser.Parser} - The parser matching the request content type.
-					<li class='jc'>{@link org.apache.juneau.parser.ReaderParser} - The reader parser matching the request content type.
-					<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser} - The input stream parser matching the request content type.
-					<li class='jc'>{@link org.apache.juneau.dto.swagger.Swagger} - The auto-generated Swagger doc.
-					<li class='jc'>{@link org.apache.juneau.config.Config} - The external config for the resource.
-					<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} - API for modifying request-time configuration properties.
+					<li class='jc'>{@link oaj.http.HttpMethod} - The method name matched (when using <code><ja>@RestMethod</ja>(name=<js>"*"</js>)</code>)
+					<li class='jc'>{@link oajr.RestLogger} - Logger with additional features.
+					<li class='jc'>{@link oajr.RestContext} - The resource read-only context.
+					<li class='jc'>{@link oaj.parser.Parser} - The parser matching the request content type.
+					<li class='jc'>{@link oaj.parser.ReaderParser} - The reader parser matching the request content type.
+					<li class='jc'>{@link oaj.parser.InputStreamParser} - The input stream parser matching the request content type.
+					<li class='jc'>{@link oaj.dto.swagger.Swagger} - The auto-generated Swagger doc.
+					<li class='jc'>{@link oaj.config.Config} - The external config for the resource.
+					<li class='jc'>{@link oajr.RequestProperties} - API for modifying request-time configuration properties.
 				</ul>
 		</ul>
 	<li><b>Annotated parameters:</b>
 		<ul>
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Path} - Variables in matched URL path patterns.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData} - Multipart form post parameter values.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData} - Denotes whether the form data parameter exists.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Query} - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery} - Denotes whether the query parameter exists.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Header} - A header value.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Body} - The HTTP content parsed as a POJO.
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.Method} - The HTTP method name. 
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Request} - HTTP request parts available through a proxy bean interface.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Response} - HTTP response parts available through a POJO.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader} - HTTP response header.
-			<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus} - HTTP response status code.
+			<li class='ja'>{@link oaj.http.annotation.Path} - Variables in matched URL path patterns.
+			<li class='ja'>{@link oaj.http.annotation.FormData} - Multipart form post parameter values.
+			<li class='ja'>{@link oaj.http.annotation.HasFormData} - Denotes whether the form data parameter exists.
+			<li class='ja'>{@link oaj.http.annotation.Query} - Query parameters.  Using this prevents the HTTP body from being processed as a URL-Encoded form post.
+			<li class='ja'>{@link oaj.http.annotation.HasQuery} - Denotes whether the query parameter exists.
+			<li class='ja'>{@link oaj.http.annotation.Header} - A header value.
+			<li class='ja'>{@link oaj.http.annotation.Body} - The HTTP content parsed as a POJO.
+			<li class='ja'>{@link oajr.annotation.Method} - The HTTP method name. 
+			<li class='ja'>{@link oaj.http.annotation.Request} - HTTP request parts available through a proxy bean interface.
+			<li class='ja'>{@link oaj.http.annotation.Response} - HTTP response parts available through a POJO.
+			<li class='ja'>{@link oaj.http.annotation.ResponseHeader} - HTTP response header.
+			<li class='ja'>{@link oaj.http.annotation.ResponseStatus} - HTTP response status code.
 		</ul>
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -139,9 +139,9 @@ Java Method Parameters
 </p>
 <h5 class='section'>Notes:</h5>
 <ul>
-	<li>All annotations have programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} class.
+	<li>All annotations have programmatic equivalents on the {@link oajr.RestRequest} class.
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_paramResolvers} - For configuring custom parameter types.
+	<li class='jf'>{@link oajr.RestContext#REST_paramResolvers} - For configuring custom parameter types.
 </ul>

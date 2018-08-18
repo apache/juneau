@@ -21,7 +21,7 @@
 <h5 class='topic w800'>Core API updates</h5>
 <ul class='spaced-list'>
 	<li>
-		New support for {@link org.apache.juneau.dto.atom ATOM}.
+		New support for {@link oaj.dto.atom ATOM}.
 		<ul>
 			<li>New <code>AtomFeedResource</code> class added to sample war.
 		</ul>
@@ -36,19 +36,19 @@
 		Added for support of ATOM text content that must support both plain text and embedded XHTML.
 	</li>
 	<li>
-		New {@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema} and updated {@link org.apache.juneau.xml.annotation.XmlNs @XmlNs} annotations to better mimic JAXB.
+		New {@link oaj.xml.annotation.XmlSchema @XmlSchema} and updated {@link oaj.xml.annotation.XmlNs @XmlNs} annotations to better mimic JAXB.
 	</li>
 	<li>
 		Removed <code><ja>@Xml</ja>.valAttr</code> annotation since it's now redundant with <code><ja>@Xml</ja>(format=<jsf>CONTENT</jsf>)</code>.
 		</li>
 		<li>
-		Fixed timezone bug in {@link org.apache.juneau.transforms.CalendarSwap}.
+		Fixed timezone bug in {@link oaj.transforms.CalendarSwap}.
 	</li>
 		<li>
 		Simplified <code>Serializer.serialize(Object,Object,SerializerContext)</code> method.
 	</li>
 	<li>
-		Fixed bug where lists returned by {@link org.apache.juneau.ObjectMap#getObjectList(String)} were not updatable.
+		Fixed bug where lists returned by {@link oaj.ObjectMap#getObjectList(String)} were not updatable.
 	</li>
 	<li>
 		Eliminated old RDF/XML serializer.
@@ -56,8 +56,8 @@
 </ul>	
 <h5 class='topic w800'>Documentation updates</h5>
 <ul>
-	<li>New {@link org.apache.juneau.json JSON Support Overview} document.</li>
-	<li>New {@link org.apache.juneau.xml XML Support Overview} document.</li>
-	<li>New {@link org.apache.juneau.jena RDF Languages Support Overview} document.</li>
-	<li>New {@link org.apache.juneau.dto.atom ATOM Support Overview} document.</li>
+	<li>New {@link oaj.json JSON Support Overview} document.</li>
+	<li>New {@link oaj.xml XML Support Overview} document.</li>
+	<li>New {@link oaj.jena RDF Languages Support Overview} document.</li>
+	<li>New {@link oaj.dto.atom ATOM Support Overview} document.</li>
 </ul>

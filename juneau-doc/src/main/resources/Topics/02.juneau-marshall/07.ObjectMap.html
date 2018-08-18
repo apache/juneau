@@ -16,7 +16,7 @@
 ObjectMap and ObjectList
 
 <p>
-	The {@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} classes are generic Java 
+	The {@link oaj.ObjectMap} and {@link oaj.ObjectList} classes are generic Java 
 	representations of JSON objects and arrays.  
 	These classes can be used to create "unstructured" models for serialization (as opposed to "structured" 
 	models consisting of beans).  
@@ -31,14 +31,14 @@ ObjectMap and ObjectList
 		{@link java.util.LinkedHashMap java.util.LinkedHashMap}
 		<ul>
 			<li class='jc'> 
-			{@link org.apache.juneau.ObjectMap org.apache.juneau.ObjectMap}
+			{@link oaj.ObjectMap org.apache.juneau.ObjectMap}
 		</ul>
 	</li>
 	<li class='jc'> 
 		{@link java.util.LinkedList java.util.LinkedList}
 		<ul>
 			<li class='jc'> 
-				{@link org.apache.juneau.ObjectMap org.apache.juneau.ObjectList}
+				{@link oaj.ObjectMap org.apache.juneau.ObjectList}
 		</ul>
 	</li>
 </ul>
@@ -53,17 +53,17 @@ ObjectMap and ObjectList
 </p>
 <ol class='spaced-list'>
 	<li>
-		Using the provided {@link org.apache.juneau.ObjectMap#serializeTo(java.io.Writer)} or 
-		{@link org.apache.juneau.ObjectList#serializeTo(java.io.Writer)} methods.
+		Using the provided {@link oaj.ObjectMap#serializeTo(java.io.Writer)} or 
+		{@link oaj.ObjectList#serializeTo(java.io.Writer)} methods.
 	<li>
-		Passing them to one of the {@link org.apache.juneau.serializer.Serializer} serialize methods.
+		Passing them to one of the {@link oaj.serializer.Serializer} serialize methods.
 	<li>
-		Simply calling the {@link org.apache.juneau.ObjectMap#toString()} or {@link org.apache.juneau.ObjectList#toString()}
+		Simply calling the {@link oaj.ObjectMap#toString()} or {@link oaj.ObjectList#toString()}
 		methods which will serialize it as Simplified JSON.
 </ol>
 <p>
 	Any valid JSON can be parsed into an unstructured model consisting of generic 
-	{@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} objects. 
+	{@link oaj.ObjectMap} and {@link oaj.ObjectList} objects. 
 	<br>
 	(In theory, any valid XML can also be parsed into an unstructured model, although this has not been 
 	officially 'tested')

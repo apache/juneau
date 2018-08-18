@@ -34,7 +34,7 @@ Configuration Files
 	<ck>customMessage</ck> = <cv>Java home is $C{MyProperties/javaHome} and the environment path is $C{MyProperties/path}.</cv>
 </p>
 <p>
-	These properties are then accessible through the {@link org.apache.juneau.config.Config} class.
+	These properties are then accessible through the {@link oaj.config.Config} class.
 </p>
 <p class='bpcode w800'>
 	Config c = Config.<jsm>create</jsm>(<js>"myconfig.cfg"</js>).build();
@@ -46,7 +46,7 @@ Configuration Files
 	Configuration files are associated with REST resources through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#config()}
+	<li class='ja'>{@link oajr.annotation.RestResource#config()}
 </ul>
 
 <h5 class='figure'>Example:</h5>
@@ -60,7 +60,7 @@ Configuration Files
 </p>
 <p>
 	The annotation itself can contain string variables.  
-	<br>For example, the Microservice API {@link org.apache.juneau.rest.BasicRestServlet} class defines the 
+	<br>For example, the Microservice API {@link oajr.BasicRestServlet} class defines the 
 	location of the config file as a system property <l>"juneau.configFile"</l>:
 </p>
 <p class='bpcode w800'>
@@ -73,7 +73,7 @@ Configuration Files
 </p>
 <p>
 	Once a config file has been associated with a REST resource, it can be accessed through the 
-	{@link org.apache.juneau.rest.RestContextBuilder#getConfig()} method.
+	{@link oajr.RestContextBuilder#getConfig()} method.
 </p>
 <p>
 	A common usage is to use this method to initialize fields in your servlet.
@@ -109,7 +109,7 @@ Configuration Files
 </p>
 <p>
 	It's even possible to reference request-level variables in your config file if you use 
-	{@link org.apache.juneau.rest.RestRequest#getConfig()} to access the config file:
+	{@link oajr.RestRequest#getConfig()} to access the config file:
 </p>
 <p class='bpcode w800'>
 	<cc>#-------------------------------------</cc>

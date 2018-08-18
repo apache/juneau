@@ -16,12 +16,12 @@
 Piping Response Output
 
 <p>
-	The {@link org.apache.juneau.rest.client.RestCall} class provides various convenience <code>pipeTo()</code> 
+	The {@link oajrc.RestCall} class provides various convenience <code>pipeTo()</code> 
 	methods to pipe output to output streams and writers.
 </p>
 <p>
 	If you want to pipe output without any intermediate buffering, you can use the 
-	{@link org.apache.juneau.rest.client.RestCall#byLines()} method.  
+	{@link oajrc.RestCall#byLines()} method.  
 	This will cause the output to be piped and flushed after every line.  
 	This can be useful if you want to display the results in real-time from a long running process producing
 	output on a REST call.

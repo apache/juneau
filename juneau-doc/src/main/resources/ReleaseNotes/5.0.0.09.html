@@ -21,7 +21,7 @@
 <h5 class='topic w800'>Core API changes</h5>
 <ul class='spaced-list'>
 	<li>
-		{@link org.apache.juneau.config INI config file support}:
+		{@link oaj.config INI config file support}:
 		<ul>
 			<li>A convenient API for reading, writing, and manipulating INI files.</li>
 			<li>Ability to convert INI files to batch and shell environment variables.</li>
@@ -30,17 +30,17 @@
 		</ul>
 	</li>
 	<li>Support for fluent-style bean setters (setters that return the bean itself).</li>
-	<li>Ability to use {@link org.apache.juneau.annotation.Bean @Bean} annotation to override bean identification settings.</li>
-	<li>New {@link org.apache.juneau.ObjectMap#cast(Class)} method to convert <code>ObjectMaps</code> directly to beans.</li>
+	<li>Ability to use {@link oaj.annotation.Bean @Bean} annotation to override bean identification settings.</li>
+	<li>New {@link oaj.ObjectMap#cast(Class)} method to convert <code>ObjectMaps</code> directly to beans.</li>
 </ul>
 <h5 class='topic w800'>REST server API changes</h5>
 <ul class='spaced-list'>
 	<li>Build-in default <code>OPTIONS</code> pages.</li>
-	<li>New {@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders} and {@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders} annotations.</li>
-	<li>New {@link org.apache.juneau.rest.annotation.RestMethod#serializers() @RestMethod.serializers()} and {@link org.apache.juneau.rest.annotation.RestMethod#parsers() @RestMethod.parsers()} annotations.</li>
-	<li>New {@link org.apache.juneau.rest.annotation.RestMethod#properties() @RestMethod.properties()} annotation.</li>
-	<li>New {@link org.apache.juneau.rest.annotation.RestMethod#defaultRequestHeaders() @RestMethod.defaultRequestHeaders()} annotation.</li>
-	<li>New {@link org.apache.juneau.rest.annotation.RestMethod#matchers() @RestMethod.matchers()} annotation and {@link org.apache.juneau.rest.RestMatcher} class.</li>
+	<li>New {@link oajr.annotation.RestResource#defaultRequestHeaders() @RestResource.defaultRequestHeaders} and {@link oajr.annotation.RestResource#defaultResponseHeaders() @RestResource.defaultResponseHeaders} annotations.</li>
+	<li>New {@link oajr.annotation.RestMethod#serializers() @RestMethod.serializers()} and {@link oajr.annotation.RestMethod#parsers() @RestMethod.parsers()} annotations.</li>
+	<li>New {@link oajr.annotation.RestMethod#properties() @RestMethod.properties()} annotation.</li>
+	<li>New {@link oajr.annotation.RestMethod#defaultRequestHeaders() @RestMethod.defaultRequestHeaders()} annotation.</li>
+	<li>New {@link oajr.annotation.RestMethod#matchers() @RestMethod.matchers()} annotation and {@link oajr.RestMatcher} class.</li>
 	<li><code>Readers</code> and <code>InputStreams</code> can be specified on <code><del>@Content</del></code> annotated parameters.</li>
 	<li>New <code><del>@HasParam</del></code> annotation.</li>
 	<li>Full RFC2616 support for matching <code>Accept</code> headers to serializers.</li>		

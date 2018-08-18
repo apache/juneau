@@ -19,41 +19,41 @@ Listeners
 	Configuration change events can be listened for using the following methods:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<li class='jc'>{@link oaj.config.Config}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.Config#addListener(ConfigEventListener) addListener(ConfigEventListener)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#removeListener(ConfigEventListener) removeListener(ConfigEventListener)}
+		<li class='jm'>{@link oaj.config.Config#addListener(ConfigEventListener) addListener(ConfigEventListener)}
+		<li class='jm'>{@link oaj.config.Config#removeListener(ConfigEventListener) removeListener(ConfigEventListener)}
 	</ul>
 </ul>
 <p>
-	The {@link org.apache.juneau.config.event.ConfigEventListener} interface consists of the following method:
+	The {@link oaj.config.event.ConfigEventListener} interface consists of the following method:
 </p>		
 <ul class='doctree'>
-	<li class='jic'>{@link org.apache.juneau.config.event.ConfigEventListener}
+	<li class='jic'>{@link oaj.config.event.ConfigEventListener}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEventListener#onConfigChange(List) onConfigChange(List&lt;ConfigEvent&gt;)}
+		<li class='jm'>{@link oaj.config.event.ConfigEventListener#onConfigChange(List) onConfigChange(List&lt;ConfigEvent&gt;)}
 	</ul>
 </ul>
 <p>
-	The {@link org.apache.juneau.config.event.ConfigEvent} class provides access to all the information about the updated entry:
+	The {@link oaj.config.event.ConfigEvent} class provides access to all the information about the updated entry:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.config.event.ConfigEvent}
+	<li class='jc'>{@link oaj.config.event.ConfigEvent}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getType() getType()}
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getSection() getSection()}
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getKey() getKey()}
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getValue() getValue()}
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getModifiers() getModifiers()}
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getComment() getComment()}
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEvent#getPreLines() getPreLines}
+		<li class='jm'>{@link oaj.config.event.ConfigEvent#getType() getType()}
+		<li class='jm'>{@link oaj.config.event.ConfigEvent#getSection() getSection()}
+		<li class='jm'>{@link oaj.config.event.ConfigEvent#getKey() getKey()}
+		<li class='jm'>{@link oaj.config.event.ConfigEvent#getValue() getValue()}
+		<li class='jm'>{@link oaj.config.event.ConfigEvent#getModifiers() getModifiers()}
+		<li class='jm'>{@link oaj.config.event.ConfigEvent#getComment() getComment()}
+		<li class='jm'>{@link oaj.config.event.ConfigEvent#getPreLines() getPreLines}
 	</ul>
 </ul>
 <p>
 	The listener method is triggered:
 </p>
 <ul class='spaced-list'>
-	<li>After {@link org.apache.juneau.config.Config#commit()} is called.
+	<li>After {@link oaj.config.Config#commit()} is called.
 	<li>When the file changes on the file system. 
 </ul>
 <p>

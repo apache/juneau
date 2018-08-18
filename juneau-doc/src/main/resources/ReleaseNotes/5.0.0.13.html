@@ -31,10 +31,10 @@
 		New <code>SerializerContext.SERIALIZER_uriContext</code> and <code>SerializerContext.SERIALIZER_uriAuthority</code> serializer properties for specifying values for relative URIs.
    		</li>
    		<li>
-		New {@link org.apache.juneau.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <code>java.net.URI</code> or <code>java.net.URL</code>.
+		New {@link oaj.annotation.URI @URI} annotation that allows you to specify classes and bean properties as URLs that aren't <code>java.net.URI</code> or <code>java.net.URL</code>.
 	</li>
 	<li>
-		New {@link org.apache.juneau.html.HtmlSerializer#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
+		New {@link oaj.html.HtmlSerializer#HTML_uriAnchorText} HTML serializer property for tailoring how anchor text is rendered.
 	</li>
 	<li>
 		Renamed <code>BeanProperty#uri</code> annotation to <code>BeanProperty#beanUri</code> to make it clear that this property represents the URI of the bean itself instead of an arbitrary property containing a URI.
@@ -46,7 +46,7 @@
 <h5 class='topic w800'>REST server API changes</h5>
 <ul class='spaced-list'>
 	<li>
-		Improvements to {@link org.apache.juneau.rest.RestServlet} to automatically handle relative URIs in POJOs.
+		Improvements to {@link oajr.RestServlet} to automatically handle relative URIs in POJOs.
 		<ul>
       			<li><code>SerializerContext.SERIALIZER_uriContext</code> property set by default to web app context root.</li>
 			<li><code>SerializerContext.SERIALIZER_uriAuthority</code> property set by default to the request scheme+hostname+port.</li>

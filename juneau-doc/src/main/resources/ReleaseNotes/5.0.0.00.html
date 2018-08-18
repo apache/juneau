@@ -32,7 +32,7 @@
 		Significant improvements have been made to the parsers to make it easier to convert serialized POJOs back into their original forms.
 	</li>
 	<li>
-		Serializer/Parser classes now directly subclass from {@link org.apache.juneau.BeanContext}.<br>
+		Serializer/Parser classes now directly subclass from {@link oaj.BeanContext}.<br>
 		In previous releases, if you wanted to change the way beans were handled by the serializers and parsers, you had to construct a separate bean map factory and pass it to the serializer or parser.  
 		Now, you can call the bean map factory methods directly on the serializer or parser class.
 	</li>
@@ -41,8 +41,8 @@
 		The API for handling non-standard POJOs has been simplified by introducing the concept of a <code><del>Transform</del></code> class, which is associated with the <code>BeanContext</code> class (and thus the Serializer and Parser classes too) through the <code>BeanContext.addTransforms(Class[])</code> method.<br>
 		Two new subclasses of <code><del>Transform</del></code>:
 		<ul>
-			<li>{@link org.apache.juneau.transform.BeanFilter} - Filter POJO beans.</li>
-			<li>{@link org.apache.juneau.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
+			<li>{@link oaj.transform.BeanFilter} - Filter POJO beans.</li>
+			<li>{@link oaj.transform.PojoSwap} - Filter POJOs that aren't beans.</li>
 		</ul>
 		This new API replaces the previous separate <code>Cast</code> and <code>BeanFilter</code> APIs which were considerably more complicated and puts them under a common API. 
 	</li>
@@ -84,7 +84,7 @@
 		JSON-schema support.
 	</li>
 	<li>
-		New {@link org.apache.juneau.utils.PojoIntrospector} class.
+		New {@link oaj.utils.PojoIntrospector} class.
 	</li>
 	<li>
 		Significant REST servlet API improvements.
@@ -136,7 +136,7 @@
 		</ul>
 	</li>
 	<li>
-		New {@link org.apache.juneau.html.HtmlParser} and {@link org.apache.juneau.urlencoding.UrlEncodingParser} classes.
+		New {@link oaj.html.HtmlParser} and {@link oaj.urlencoding.UrlEncodingParser} classes.
 	</li>
 	<li>
 		HtmlSerializer now produces XHTML.

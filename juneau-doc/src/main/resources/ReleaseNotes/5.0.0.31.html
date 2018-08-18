@@ -20,17 +20,17 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		Simplified the {@link org.apache.juneau.serializer.Serializer} and {@link org.apache.juneau.parser.Parser} class hierarchies.<br> 
+		Simplified the {@link oaj.serializer.Serializer} and {@link oaj.parser.Parser} class hierarchies.<br> 
 		This reverses a previous change that added a bunch of interfaces in these APIs (and subsequently required compiling with Java 7 to get around a compiler bug).<br>
 		The new class hierarchy is much simpler to understand.
 	</li>
 	<li>
-		Added {@link org.apache.juneau.transforms.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
+		Added {@link oaj.transforms.XMLGregorianCalendarSwap} to convert these to ISO8601 strings during serialization, and vice versa during parsing.
 	</li>
 	<li>
-		Added a strict mode to {@link org.apache.juneau.json.JsonParser}.
+		Added a strict mode to {@link oaj.json.JsonParser}.
 	</li>
 	<li>
-		Added default {@link org.apache.juneau.json.JsonParser#DEFAULT_STRICT} parser.
+		Added default {@link oaj.json.JsonParser#DEFAULT_STRICT} parser.
 	</li>
 </ul>	

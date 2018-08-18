@@ -19,9 +19,9 @@ Config File API
 	There are 3 primary ways of getting access to the config file.
 </p>
 <ul class='doctree'>
-	<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig()} 
+	<li class='jm'>{@link oaj.microservice.Microservice#getConfig()} 
 		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
-	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfig()} 
+	<li class='jm'>{@link oajr.RestContext#getConfig()} 
 		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
 		<h5 class='figure'>Example usage:</h5>
 		<p class='bcode w800'>
@@ -46,11 +46,11 @@ Config File API
 		</p>
 		<p>
 			Additional user-defined variables can be defined at this level by adding a  
-			{@link org.apache.juneau.rest.annotation.HookEvent#INIT} hook method
-			and using the {@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
+			{@link oajr.annotation.HookEvent#INIT} hook method
+			and using the {@link oajr.RestContextBuilder#vars(Class...)} method.
 		</p>
 	<li class='jm'>
-		{@link org.apache.juneau.rest.RestRequest#getConfig()} 
+		{@link oajr.RestRequest#getConfig()} 
 		- An instance method to access it from inside a REST method.
 		<br>Any {@doc DefaultRestSvlVariables initialization-time or request-time variables} can be used.
 		
@@ -95,7 +95,7 @@ Config File API
 		</p>
 		<p>
 			Additional user-defined variables can be defined at this level by overriding the 
-			{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
+			{@link oajr.RestContextBuilder#vars(Class...)} method.
 		</p>
 </ul>
 <p>

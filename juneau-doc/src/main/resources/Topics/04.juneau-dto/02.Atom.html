@@ -18,7 +18,7 @@ Atom
 <p>
 	The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
 	<br>The following code shows a feed being created programmatically using the 
-	{@link org.apache.juneau.dto.atom.AtomBuilder} class.
+	{@link oaj.dto.atom.AtomBuilder} class.
 </p>
 <p class='bpcode w800'>
 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
@@ -56,7 +56,7 @@ Atom
 		);
 </p>
 <p>
-	To serialize this to ATOM, use the {@link org.apache.juneau.xml.XmlSerializer} class:
+	To serialize this to ATOM, use the {@link oaj.xml.XmlSerializer} class:
 </p>
 
 <h5 class='figure'>Example with no namespaces</h5>
@@ -121,10 +121,10 @@ Atom
 	<xt>&lt;/feed&gt;</xt>		
 </p>
 <p>
-	The {@link org.apache.juneau.xml.XmlParser} class can be used convert these Atom documents back into POJOs.
+	The {@link oaj.xml.XmlParser} class can be used convert these Atom documents back into POJOs.
 </p>
 <p>
-	Other serializers and parsers (e.g. {@link org.apache.juneau.json.JsonSerializer}) can be used to 
+	Other serializers and parsers (e.g. {@link oaj.json.JsonSerializer}) can be used to 
 	represent these POJOs in languages other than XML.
 </p>
 

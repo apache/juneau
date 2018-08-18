@@ -71,7 +71,7 @@ URI Properties
 	<xt>&lt;/rdf:RDF&gt;</xt>
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.URI @URI} annotation can also be used on classes and properties 
+	The {@link oaj.annotation.URI @URI} annotation can also be used on classes and properties 
 	to identify them as URLs when they're not instances of <code>java.net.URI</code> or <code>java.net.URL</code> 
 	(not needed if <code><ja>@Rdf</ja>(beanUri=<jk>true</jk>)</code> is already specified).
 </p>
@@ -88,9 +88,9 @@ URI Properties
 		<ja>@URI</ja> <jk>public</jk> String <jf>addressBookUri</jf>;
 </p>
 <p>
-	Also take note of the {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution},
-	{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}, and 
-	and {@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
+	Also take note of the {@link oaj.serializer.Serializer#SERIALIZER_uriResolution},
+	{@link oaj.serializer.Serializer#SERIALIZER_uriRelativity}, and 
+	and {@link oaj.serializer.Serializer#SERIALIZER_uriContext}
 	settings that can be specified on the serializer to resolve relative and context-root-relative URIs to 
 	fully-qualified URIs.
 </p>

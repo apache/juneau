@@ -16,7 +16,7 @@
 RestInfoProvider
 
 <p>
-	The {@link org.apache.juneau.rest.RestInfoProvider} class is used to find the title
+	The {@link oajr.RestInfoProvider} class is used to find the title
 	and description for your resource and also generate the Swagger documentation.
 	<br>It can be overridden to provide your own custom Swagger documentation.
 </p>
@@ -24,35 +24,35 @@ RestInfoProvider
 	The methods on this interface are:
 </p>
 <ul class='doctree'>
-	<li class='jic'>{@link org.apache.juneau.rest.RestInfoProvider}
+	<li class='jic'>{@link oajr.RestInfoProvider}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getSwagger(RestRequest) getSwagger(RestRequest)}
-		<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getSiteName(RestRequest) getSiteName(RestRequest)}
-		<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getTitle(RestRequest) getTitle(RestRequest)}
-		<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getDescription(RestRequest) getDescription(RestRequest)}
-		<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
-		<li class='jm'>{@link org.apache.juneau.rest.RestInfoProvider#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
+		<li class='jm'>{@link oajr.RestInfoProvider#getSwagger(RestRequest) getSwagger(RestRequest)}
+		<li class='jm'>{@link oajr.RestInfoProvider#getSiteName(RestRequest) getSiteName(RestRequest)}
+		<li class='jm'>{@link oajr.RestInfoProvider#getTitle(RestRequest) getTitle(RestRequest)}
+		<li class='jm'>{@link oajr.RestInfoProvider#getDescription(RestRequest) getDescription(RestRequest)}
+		<li class='jm'>{@link oajr.RestInfoProvider#getMethodSummary(Method,RestRequest) getMethodSummary(Method,RestRequest)}
+		<li class='jm'>{@link oajr.RestInfoProvider#getMethodDescription(Method,RestRequest) getMethodDescription(Method,RestRequest)}
 	</ul>
 </ul>
 <p>
 	The info provider in turn supplies the information returned by the following methods:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
+	<li class='jc'>{@link oajr.RestRequest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()}
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSiteName() getSiteName()}
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceTitle() getResourceTitle()}
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getResourceDescription() getResourceDescription()}
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodSummary() getMethodSummary()}
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethodDescription() getMethodDescription()}
+		<li class='jm'>{@link oajr.RestRequest#getSwagger() getSwagger()}
+		<li class='jm'>{@link oajr.RestRequest#getSiteName() getSiteName()}
+		<li class='jm'>{@link oajr.RestRequest#getResourceTitle() getResourceTitle()}
+		<li class='jm'>{@link oajr.RestRequest#getResourceDescription() getResourceDescription()}
+		<li class='jm'>{@link oajr.RestRequest#getMethodSummary() getMethodSummary()}
+		<li class='jm'>{@link oajr.RestRequest#getMethodDescription() getMethodDescription()}
 	</ul>
 </ul>
 <p>
 	Info providers are registered through the following property:
 </p>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_infoProvider}
+	<li class='jf'>{@link oajr.RestContext#REST_infoProvider}
 </ul>
 <p>
 	While you can implement this interface from scratch, you may want to instead consider extending

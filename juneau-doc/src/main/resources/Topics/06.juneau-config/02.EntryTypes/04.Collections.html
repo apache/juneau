@@ -19,12 +19,12 @@ Collections
 	The following methods are provided for accessing maps and collections:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<li class='jc'>{@link oaj.config.Config}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Type,Type...) getObject(String,Type,Type...)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#getObject(String,Parser,Type,Type...) getObject(String,Parser,Type,Type...)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,T,Type,Type...)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#getObjectWithDefault(String,Parser,Object,Type,Type...) getObjectWithDefault(String,T,Parser,Type,Type...)}
+		<li class='jm'>{@link oaj.config.Config#getObject(String,Type,Type...) getObject(String,Type,Type...)}
+		<li class='jm'>{@link oaj.config.Config#getObject(String,Parser,Type,Type...) getObject(String,Parser,Type,Type...)}
+		<li class='jm'>{@link oaj.config.Config#getObjectWithDefault(String,Object,Type,Type...) getObjectWithDefault(String,T,Type,Type...)}
+		<li class='jm'>{@link oaj.config.Config#getObjectWithDefault(String,Parser,Object,Type,Type...) getObjectWithDefault(String,T,Parser,Type,Type...)}
 	</ul>
 </ul>
 <p>
@@ -74,7 +74,7 @@ Collections
 	List&lt;Address&gt; addresses = c.getObject(<js>"addresses"</js>, ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
 </p>
 <p>
-	Oftentimes, it might be useful to parse into the {@link org.apache.juneau.ObjectList} and {@link org.apache.juneau.ObjectMap}
+	Oftentimes, it might be useful to parse into the {@link oaj.ObjectList} and {@link oaj.ObjectMap}
 	classes that provide the various convenience methods for working with JSON-like data structures:
 </p>
 <p class='bpcode w800'>

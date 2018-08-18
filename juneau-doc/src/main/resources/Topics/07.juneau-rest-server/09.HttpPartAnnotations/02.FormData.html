@@ -16,36 +16,36 @@
 {new} @FormData
 
 <p>
-	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
+	The {@link oaj.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link oaj.http.annotation.FormData FormData}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#api() api()} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#collectionFormat() collectionFormat} - How collections of items are formatted.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#description() description} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#example() example()} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#format() format} - The schema type format. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#items() items} - The schema of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maximum() maximum} - Input validation.  Maximum numeric value. 
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#maxLength() maxLength} - Input validation.  Maximum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minimum() minimum} - Input validation.  Minimum numeric value.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minItems() minItems} - Input validation.  Minimum number of items in a collection.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#minLength() minLength} - Input validation.  Minimum length of a string.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#name() name} - Form data entry name.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#parser() parser} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#pattern() pattern} - Input validation.  Must match regular expression.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#required() required} - Input validation.  Form data entry must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#type() type} - The schema type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#value() value} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.FormData#_default() _default} - Default value if not present.
+		<li class='jf'>{@link oaj.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
+		<li class='jf'>{@link oaj.http.annotation.FormData#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
+		<li class='jf'>{@link oaj.http.annotation.FormData#api() api()} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.FormData#collectionFormat() collectionFormat} - How collections of items are formatted.
+		<li class='jf'>{@link oaj.http.annotation.FormData#description() description} - Description.
+		<li class='jf'>{@link oaj.http.annotation.FormData#example() example()} - Serialized example.
+		<li class='jf'>{@link oaj.http.annotation.FormData#exclusiveMaximum() exclusiveMaximum} - Input validation.  Whether maximum is exclusive.
+		<li class='jf'>{@link oaj.http.annotation.FormData#exclusiveMinimum() exclusiveMinimum} - Input validation.  Whether minimum is exclusive.
+		<li class='jf'>{@link oaj.http.annotation.FormData#format() format} - The schema type format. 
+		<li class='jf'>{@link oaj.http.annotation.FormData#items() items} - The schema of items in a collection.
+		<li class='jf'>{@link oaj.http.annotation.FormData#maximum() maximum} - Input validation.  Maximum numeric value. 
+		<li class='jf'>{@link oaj.http.annotation.FormData#maxItems() maxItems} - Input validation.  Maximum number of items in a collection.
+		<li class='jf'>{@link oaj.http.annotation.FormData#maxLength() maxLength} - Input validation.  Maximum length of a string.
+		<li class='jf'>{@link oaj.http.annotation.FormData#minimum() minimum} - Input validation.  Minimum numeric value.
+		<li class='jf'>{@link oaj.http.annotation.FormData#minItems() minItems} - Input validation.  Minimum number of items in a collection.
+		<li class='jf'>{@link oaj.http.annotation.FormData#minLength() minLength} - Input validation.  Minimum length of a string.
+		<li class='jf'>{@link oaj.http.annotation.FormData#multipleOf() multipleOf} - Input validation.  Number must be a multiple of.
+		<li class='jf'>{@link oaj.http.annotation.FormData#name() name} - Form data entry name.
+		<li class='jf'>{@link oaj.http.annotation.FormData#parser() parser} - Override the part parser.
+		<li class='jf'>{@link oaj.http.annotation.FormData#pattern() pattern} - Input validation.  Must match regular expression.
+		<li class='jf'>{@link oaj.http.annotation.FormData#required() required} - Input validation.  Form data entry must be present.
+		<li class='jf'>{@link oaj.http.annotation.FormData#type() type} - The schema type.
+		<li class='jf'>{@link oaj.http.annotation.FormData#uniqueItems() uniqueItems} - Input validation. Collections must contain unique items only.
+		<li class='jf'>{@link oaj.http.annotation.FormData#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 
@@ -95,9 +95,9 @@
 </p>
 
 <p>
-	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
+	The registered {@link oajr.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+	<br>By default, this is the {@link oaj.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -172,14 +172,14 @@
 <h5 class='section'>Notes:</h5>
 <ul class='doctree'>
 	<li class='warn'>
-			This annotation should not be combined with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or {@link org.apache.juneau.rest.RestRequest#getBody()} method
+			This annotation should not be combined with the {@link oaj.http.annotation.Body @Body} annotation or {@link oajr.RestRequest#getBody()} method
 			for <code>application/x-www-form-urlencoded POST</code> posts, since it will trigger the underlying servlet
 		API to parse the body content as key-value pairs resulting in empty content.
-		<br>The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
+		<br>The {@link oaj.http.annotation.Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
 		servlet to drain the body content.
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
+	<li class='jc'>{@link oajr.RequestFormData}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>

@@ -16,20 +16,20 @@
 {new} @Body
 
 <p>
-	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
+	The {@link oaj.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link oaj.http.annotation.Body Body}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api} - Free-form Swagger JSON.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description} - Description.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example} - Serialized example.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples} - Serialized examples per media type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partParser() partParser} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing body.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#value() value} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.Body#api() api} - Free-form Swagger JSON.
+		<li class='jf'>{@link oaj.http.annotation.Body#description() description} - Description.
+		<li class='jf'>{@link oaj.http.annotation.Body#example() example} - Serialized example.
+		<li class='jf'>{@link oaj.http.annotation.Body#examples() examples} - Serialized examples per media type.
+		<li class='jf'>{@link oaj.http.annotation.Body#partParser() partParser} - Override the part parser.
+		<li class='jf'>{@link oaj.http.annotation.Body#required() required} - Input validation.  Body must be present.
+		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - Swagger schema.
+		<li class='jf'>{@link oaj.http.annotation.Body#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing body.
+		<li class='jf'>{@link oaj.http.annotation.Body#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
 
@@ -102,9 +102,9 @@
 		Note that this also includes all enums.
 </ol>
 <p>
-	If the {@link org.apache.juneau.http.annotation.Body#usePartParser usePartParser} flag is set on the annotation,
-	then the body can be parsed using the registered {@link org.apache.juneau.httppart.HttpPartParser} which by default
-	is {@link org.apache.juneau.httppart.OpenApiPartParser}.
+	If the {@link oaj.http.annotation.Body#usePartParser usePartParser} flag is set on the annotation,
+	then the body can be parsed using the registered {@link oaj.httppart.HttpPartParser} which by default
+	is {@link oaj.httppart.OpenApiPartParser}.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -190,6 +190,6 @@
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
+	<li class='jc'>{@link oajr.RequestBody}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>

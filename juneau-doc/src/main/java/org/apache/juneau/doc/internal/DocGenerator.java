@@ -284,7 +284,11 @@ public class DocGenerator {
 			s = s.substring(i+4).trim();
 			i = s.indexOf("\n");
 			title = s.substring(0, i);
-			contents = s.substring(i).trim();
+			contents = s.substring(i).trim()
+				.replaceAll("oaj\\.", "org.apache.juneau.")
+				.replaceAll("oajr\\.", "org.apache.juneau.rest.")
+				.replaceAll("oajrc\\.", "org.apache.juneau.rest.client.")
+			;
 		}
 
 		@Override

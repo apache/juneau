@@ -24,13 +24,13 @@ RootResources
 </p>
 <ul class='doctree'>
 	<li class='jac'>
-		{@link org.apache.juneau.rest.RestServlet} - Contains all the REST servlet logic.
+		{@link oajr.RestServlet} - Contains all the REST servlet logic.
 		<ul>
 			<li class='jac'>
-				{@link org.apache.juneau.rest.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
+				{@link oajr.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
 				<ul>
 					<li class='jac'>
-						{@link org.apache.juneau.rest.BasicRestServletGroup} - Specialized subclass for grouping other resources.
+						{@link oajr.BasicRestServletGroup} - Specialized subclass for grouping other resources.
 					</li>
 				</ul>
 			</li>
@@ -134,13 +134,13 @@ RootResources
 	<br>These are resources whose paths are direct decendents to the parent resource.			
 </p>
 <p>
-	Child resources must be annotated with the {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource.path()} annotation to 
+	Child resources must be annotated with the {@link oajr.annotation.RestResource#path() @RestResource.path()} annotation to 
 	identify the subpath of the child.
-	<br>Children CAN extend from {@link org.apache.juneau.rest.BasicRestServlet}, but it is not a requirement.
+	<br>Children CAN extend from {@link oajr.BasicRestServlet}, but it is not a requirement.
 </p>
 <p>
 	Child resources can also be defined programmatically by using the 
-	{@link org.apache.juneau.rest.RestContextBuilder#children(Class[])} method.
+	{@link oajr.RestContextBuilder#children(Class[])} method.
 </p>
 <p>
 	Note that these router pages can be arbitrarily nested deep.  

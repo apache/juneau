@@ -22,22 +22,22 @@
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
 	<li>
-		New class {@link org.apache.juneau.http.HttpMethodName} with valid static string HTTP method names.
+		New class {@link oaj.http.HttpMethodName} with valid static string HTTP method names.
 </ul>
 
 <h5 class='topic w800'>juneau-dto</h5>
 <ul class='spaced-list'>
 	<li>
-		Class <code>org.apache.juneau.dto.Link</code> renamed to {@link org.apache.juneau.dto.LinkString}.
+		Class <code>org.apache.juneau.dto.Link</code> renamed to {@link oaj.dto.LinkString}.
 		Helps avoid confusion since there are other Link classes in the library.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		Annotation <code><ja>@HtmlDoc</ja>(links)</code> renamed to {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() navlinks}.
+		Annotation <code><ja>@HtmlDoc</ja>(links)</code> renamed to {@link oajr.annotation.HtmlDoc#navlinks() navlinks}.
 	<li>
-		New annotation {@link org.apache.juneau.rest.annotation.HtmlDoc#head() @HtmlDoc.head()}.
+		New annotation {@link oajr.annotation.HtmlDoc#head() @HtmlDoc.head()}.
 		<br>Allows you to specify arbitrary HTML content in the <xt>&lt;head&gt;</xt> section of the page.
 	<li>
 		Removed annotation <code><ja>@HtmlDoc</ja>(favIcon)</code>.
@@ -50,5 +50,5 @@
 		</p>
 	<li>
 		Removed several of the HTMLDOC-related methods from the <code>RestResponse/RestConfig/RestContext</code>
-		classes and moved it into the new {@link org.apache.juneau.rest.HtmlDocBuilder} class.
+		classes and moved it into the new {@link oajr.HtmlDocBuilder} class.
 </ul>

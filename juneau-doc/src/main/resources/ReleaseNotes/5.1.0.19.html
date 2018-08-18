@@ -22,25 +22,25 @@
 
 <h5 class='topic w800'>Core</h5>
 <ul class='spaced-list'>
-	<li>Beans can now be serialized to and parsed from {@link org.apache.juneau.ObjectMap ObjectMaps}.
+	<li>Beans can now be serialized to and parsed from {@link oaj.ObjectMap ObjectMaps}.
 		See <del>Serializing to ObjectMaps</del> for details.
-	<li>New {@link org.apache.juneau.ObjectMap#include(String[])} and {@link org.apache.juneau.ObjectMap#exclude(String[])} methods.
-	<li>{@link org.apache.juneau.html.annotation.Html @Html} annotations can now be applied to bean properties.
-	<li>New {@link org.apache.juneau.utils.IOPipe} utility class.
+	<li>New {@link oaj.ObjectMap#include(String[])} and {@link oaj.ObjectMap#exclude(String[])} methods.
+	<li>{@link oaj.html.annotation.Html @Html} annotations can now be applied to bean properties.
+	<li>New {@link oaj.utils.IOPipe} utility class.
 	<li>Behavior change on <code><del>StringVarResolver</del></code>.  <jk>null</jk> input now results in blank strings instead of <jk>null</jk>.
 </ul>
 
 <h5 class='topic w800'>Client</h5>
 <ul class='spaced-list'>
-	<li>New {@link org.apache.juneau.rest.client.RestClient#doCallback(String)} method.
+	<li>New {@link oajrc.RestClient#doCallback(String)} method.
 </ul>
 
 <h5 class='topic w800'>Server</h5>
 <ul class='spaced-list'>
-	<li>New {@link org.apache.juneau.rest.RestRequest#getHeaders()} method.
+	<li>New {@link oajr.RestRequest#getHeaders()} method.
 	<li>New <code>RestResponse.getUnbufferedWriter()</code> method.
 	<li>Fixed bug that was preventing <code>x-response-headers</code> parameter from working correctly.
-	<li>Added {@link org.apache.juneau.annotation.Bean#properties() @Bean.properties} annotations to the various 
+	<li>Added {@link oaj.annotation.Bean#properties() @Bean.properties} annotations to the various 
 		classes in <code>org.apache.juneau.rest.labels</code> so that the order of the bean properties are consistent
 		on all JVMs.  On IBM JVMs this is unnecessary because the order of the properties as defined in the class
 		are stored in the bytecode.  Other JVMs such as OpenJRE do not implement this feature causing the bean

@@ -16,7 +16,7 @@
 RestRequest
 
 <p>
-	The {@link org.apache.juneau.rest.RestRequest} object is an extension of the <l>HttpServletRequest</l> class
+	The {@link oajr.RestRequest} object is an extension of the <l>HttpServletRequest</l> class
 	with various built-in convenience methods for use in building REST interfaces.
 	<br>It can be accessed by passing it as a parameter on your REST Java method:
 </p>
@@ -28,20 +28,20 @@ RestRequest
 	There are many useful methods on this object, but the main ones are shown below:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>{@link org.apache.juneau.rest.RestRequest} <jk>extends</jk> HttpServletRequest</code>
+	<li class='jc'><code>{@link oajr.RestRequest} <jk>extends</jk> HttpServletRequest</code>
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders() getHeaders()} - HTTP request headers.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getQuery() getQuery()} - Query parameters.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getFormData() getFormData()} - Form-data parameters.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getBody() getBody()} - HTTP request body.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getPathMatch() getPathMatch()} - Path match variables.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getLogger() getLogger()} - Logging.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getInfoProvider() getInfoProvider()} - Swagger documentation provider.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getSwagger() getSwagger()} - Generated Swagger information.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getConfig() getConfig()} - External configuration API.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession() getVarResolverSession()} - String variable resolver.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessageBundle() getMessageBundle()} - Localized messages.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getProperties() getProperties()} - Configuration properties.
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)} - Various methods for retrieving static files from classpath.
+		<li class='jm'>{@link oajr.RestRequest#getHeaders() getHeaders()} - HTTP request headers.
+		<li class='jm'>{@link oajr.RestRequest#getQuery() getQuery()} - Query parameters.
+		<li class='jm'>{@link oajr.RestRequest#getFormData() getFormData()} - Form-data parameters.
+		<li class='jm'>{@link oajr.RestRequest#getBody() getBody()} - HTTP request body.
+		<li class='jm'>{@link oajr.RestRequest#getPathMatch() getPathMatch()} - Path match variables.
+		<li class='jm'>{@link oajr.RestRequest#getLogger() getLogger()} - Logging.
+		<li class='jm'>{@link oajr.RestRequest#getInfoProvider() getInfoProvider()} - Swagger documentation provider.
+		<li class='jm'>{@link oajr.RestRequest#getSwagger() getSwagger()} - Generated Swagger information.
+		<li class='jm'>{@link oajr.RestRequest#getConfig() getConfig()} - External configuration API.
+		<li class='jm'>{@link oajr.RestRequest#getVarResolverSession() getVarResolverSession()} - String variable resolver.
+		<li class='jm'>{@link oajr.RestRequest#getMessageBundle() getMessageBundle()} - Localized messages.
+		<li class='jm'>{@link oajr.RestRequest#getProperties() getProperties()} - Configuration properties.
+		<li class='jm'>{@link oajr.RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)} - Various methods for retrieving static files from classpath.
 	</ul>
 </ul>

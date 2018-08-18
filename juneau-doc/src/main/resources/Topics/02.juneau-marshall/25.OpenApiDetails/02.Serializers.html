@@ -16,7 +16,7 @@
 {new} OpenAPI Serializers
 
 <p>
-	The {@link org.apache.juneau.httppart.OpenApiPartSerializer} class is used to convert POJOs to HTTP parts.
+	The {@link oaj.httppart.OpenApiPartSerializer} class is used to convert POJOs to HTTP parts.
 </p>
 <p>
 	Later we'll describe how to use HTTP-Part annotations to define OpenAPI schemas for serialization and parsing
@@ -108,7 +108,7 @@
 						<li><code><jk>public byte</jk>[] toBytes() {...}</code>
 						<li><code><jk>public byte</jk>[]</jk> toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a <code><jk>byte</jk>[]</code> via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -123,7 +123,7 @@
 						<li><code><jk>public</jk> Calendar toCalendar() {...}</code>
 						<li><code><jk>public</jk> Calendar toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.util.Calendar} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.util.Calendar} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -144,7 +144,7 @@
 					<ul>
 						<li><code><jk>public</jk> String toString() {...}</code>
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.String} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.String} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -161,7 +161,7 @@
 						<li><code><jk>public</jk> Boolean toBoolean() {...}</code>
 						<li><code><jk>public</jk> Boolean toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Boolean} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Boolean} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -178,7 +178,7 @@
 						<li><code><jk>public</jk> Integer toInteger() {...}</code>
 						<li><code><jk>public</jk> Integer toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to an {@link java.lang.Integer} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to an {@link java.lang.Integer} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -194,7 +194,7 @@
 						<li><code><jk>public</jk> Long toLong() {...}</code>
 						<li><code><jk>public</jk> Long toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Long} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Long} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -211,7 +211,7 @@
 						<li><code><jk>public</jk> Float toFloat() {...}</code>
 						<li><code><jk>public</jk> Float toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Float} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Float} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -227,7 +227,7 @@
 						<li><code><jk>public</jk> Double toDouble() {...}</code>
 						<li><code><jk>public</jk> Double toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to a {@link java.lang.Double} via a {@link org.apache.juneau.transform.PojoSwap}.
+				<li>Any POJO transformable to a {@link java.lang.Double} via a {@link oaj.transform.PojoSwap}.
 			</ul>
 		</td>
 	</tr>
@@ -242,7 +242,7 @@
 					<ul>
 						<li><code><jk>public</jk> Boolean[][] toFoo() {...}</code> (any method name starting with "to")
 					</ul>
-				<li>Any POJO transformable to arrays of the default types via a {@link org.apache.juneau.transform.PojoSwap}
+				<li>Any POJO transformable to arrays of the default types via a {@link oaj.transform.PojoSwap}
 			</ul>
 		</td>
 	</tr>
@@ -261,7 +261,7 @@
 			<ul>
 				<li><code>Map&lt;String,Object&gt;</code> (default)
 				<li>Beans with properties of anything on this list.
-				<li>Any POJO transformable to a map via a {@link org.apache.juneau.transform.PojoSwap}
+				<li>Any POJO transformable to a map via a {@link oaj.transform.PojoSwap}
 			</ul>
 		</td>
 	</tr>

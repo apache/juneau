@@ -27,14 +27,14 @@
 		and throws exceptions when they occur.
 	<li>Improved handling of <code>StackOverflowErrors</code>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
 		is displayed showing the exact chain of objects that resulted in the stack overflow.
-	<li>Bug fixes in {@link org.apache.juneau.dto.ResultSetList} for Oracle and SQL Server.
+	<li>Bug fixes in {@link oaj.dto.ResultSetList} for Oracle and SQL Server.
 	<li>Serializers and parsers can now access HTTP request attributes, parameters, and headers through <code>SerializerContext.getProperties()</code> and
 		<code>ParserContext.getProperties()</code>.		
 	<li>Removed media-type and encoding attributes from <code><del>SerializerContext</del></code> and <code><del>ParserContext</del></code>	
 		since these are now available through context properties, and are typically not used.
-	<li>{@link org.apache.juneau.xml.XmlParser} now accepts <code>application/xml</code>.		
+	<li>{@link oaj.xml.XmlParser} now accepts <code>application/xml</code>.		
 	<li>Improved handling of bean property serialization when multiple matching pojo filters for the bean property class exist.
 	<li>Improved concurrency on BeanContext class.
-	<li>Fixed bug in {@link org.apache.juneau.rest.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.
-	<li>Fixed bug in {@link org.apache.juneau.rest.converters.Traversable} where it was not picking up filters and properties defined on REST Java methods. 
+	<li>Fixed bug in {@link oajr.converters.Traversable} that was causing it to be executed even if the servlet extra path info was empty.
+	<li>Fixed bug in {@link oajr.converters.Traversable} where it was not picking up filters and properties defined on REST Java methods. 
 </ul>

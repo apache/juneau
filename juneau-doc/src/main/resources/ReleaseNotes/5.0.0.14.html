@@ -20,7 +20,7 @@
 </p>
 <p>
 	The biggest change is that the <code>RestSerializer</code>, <code>RestParser</code>, <code>RestSerializerGroup</code>, and <code>RestParserGroup</code> classes have been eliminated entirely.<br>  
-	Instead, the existing {@link org.apache.juneau.serializer.Serializer}, {@link org.apache.juneau.parser.Parser}, {@link org.apache.juneau.serializer.SerializerGroup}, and {@link org.apache.juneau.parser.ParserGroup} classes of the core API have been augmented to replace them.
+	Instead, the existing {@link oaj.serializer.Serializer}, {@link oaj.parser.Parser}, {@link oaj.serializer.SerializerGroup}, and {@link oaj.parser.ParserGroup} classes of the core API have been augmented to replace them.
 </p>
 <p>
 	Adoptions will be required if you have previously used these classes.
@@ -31,9 +31,9 @@
 		New <code>org.apache.juneau.serializer</code> package.
 		<ul>
 			<li>Entirely reworked class hierarchy to make it easier to define new serializers.</li>
-			<li>New {@link org.apache.juneau.serializer.WriterSerializer} base class for defining character-based serializers.</li>
-			<li>New {@link org.apache.juneau.serializer.OutputStreamSerializer} base class for defining byte-based serializers.</li>
-			<li>Updated {@link org.apache.juneau.serializer.SerializerGroup} class with full support for RFC2616 <code>Accept-Content</code> headers.</li>
+			<li>New {@link oaj.serializer.WriterSerializer} base class for defining character-based serializers.</li>
+			<li>New {@link oaj.serializer.OutputStreamSerializer} base class for defining byte-based serializers.</li>
+			<li>Updated {@link oaj.serializer.SerializerGroup} class with full support for RFC2616 <code>Accept-Content</code> headers.</li>
 			<li>Improved cloning support on serializers and serializer groups.</li>
 		</ul>
        	</li>
@@ -41,8 +41,8 @@
        		New <code>org.apache.juneau.parser</code> package.
        		<ul>
        			<li>Entirely reworked class hierarchy to make it easier to define new parsers.</li>
-			<li>New {@link org.apache.juneau.parser.ReaderParser} base class for defining character-based parsers.</li>
-			<li>New {@link org.apache.juneau.parser.InputStreamParser} base class for defining byte-based parsers.</li>
+			<li>New {@link oaj.parser.ReaderParser} base class for defining character-based parsers.</li>
+			<li>New {@link oaj.parser.InputStreamParser} base class for defining byte-based parsers.</li>
 			<li>Improved cloning support on parsers and parser groups.</li>
        		</ul>
        	</li>
@@ -50,48 +50,48 @@
 		New <code>org.apache.juneau.transform</code> package.
 		<ul>
 			<li>Cleaner class structure.</li>
-			<li>Improved {@link org.apache.juneau.transform.BeanFilter} class for defining property filters on beans.</li>
-			<li>Improved {@link org.apache.juneau.utils.PojoQuery} class for defining filters on objects (previously called <code>ObjectFilter</code>).</li>
+			<li>Improved {@link oaj.transform.BeanFilter} class for defining property filters on beans.</li>
+			<li>Improved {@link oaj.utils.PojoQuery} class for defining filters on objects (previously called <code>ObjectFilter</code>).</li>
        		</ul>
        	</li>
        	<li>
 		New <code>org.apache.juneau.encoders</code> package.
 		<ul>
-			<li>Defines API for {@link org.apache.juneau.encoders.Encoder Encoders} for enabling compression in REST servlets and clients.</li>
+			<li>Defines API for {@link oaj.encoders.Encoder Encoders} for enabling compression in REST servlets and clients.</li>
 			<li>Previously, gzip compression was enabled by default.  This new API allows you to plug in your own compression algorithms.</li>
-			<li>New {@link org.apache.juneau.encoders.GzipEncoder} class for enabling gzip compression.</li>
-			<li>New {@link org.apache.juneau.encoders.EncoderGroup} class for managing multiple encoders and finding them based on RFC2616 <code>Accept-Encoding</code> header values.</li>
+			<li>New {@link oaj.encoders.GzipEncoder} class for enabling gzip compression.</li>
+			<li>New {@link oaj.encoders.EncoderGroup} class for managing multiple encoders and finding them based on RFC2616 <code>Accept-Encoding</code> header values.</li>
 		</ul>
 	</li>
 	<li>
 		New <code>org.apache.juneau.plaintext</code> package.
 		<ul>
-			<li>New {@link org.apache.juneau.plaintext.PlainTextSerializer} and {@link org.apache.juneau.plaintext.PlainTextParser} classes for serializing/parsing text/plain content.</li>
+			<li>New {@link oaj.plaintext.PlainTextSerializer} and {@link oaj.plaintext.PlainTextParser} classes for serializing/parsing text/plain content.</li>
 		</ul>
 	</li>
 	<li>
 		New <code>org.apache.juneau.jso</code> package.
 		<ul>
-			<li>New {@link org.apache.juneau.jso.JsoSerializer} class for serializing <code>application/x-java-serialized-object</code> content.</li>
+			<li>New {@link oaj.jso.JsoSerializer} class for serializing <code>application/x-java-serialized-object</code> content.</li>
 		</ul>
 	</li>
 	<li>
 		New <code>org.apache.juneau.soap</code> package.
 		<ul>
-			<li>New {@link org.apache.juneau.soap.SoapXmlSerializer} class for serializing <code>text/xml+soap</code> content.</li>
+			<li>New {@link oaj.soap.SoapXmlSerializer} class for serializing <code>text/xml+soap</code> content.</li>
 		</ul>
 	</li>
 	<li>
-		Improved cloning support on the {@link org.apache.juneau.BeanContext} class.
+		Improved cloning support on the {@link oaj.BeanContext} class.
 		<ul>
 			<li>Better caching.  Improved caching performance.</li>
 		</ul>
 	</li>
        	<li>
-		<code>JsonMap</code> and <code>JsonList</code> changed to {@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} to better reflect that they're not limited to just JSON support.
+		<code>JsonMap</code> and <code>JsonList</code> changed to {@link oaj.ObjectMap} and {@link oaj.ObjectList} to better reflect that they're not limited to just JSON support.
    		</li>
    		<li>
-		Renamed <code>PojoSwap</code> to {@link org.apache.juneau.utils.PojoQuery} to not confuse it with the new Filter API.
+		Renamed <code>PojoSwap</code> to {@link oaj.utils.PojoQuery} to not confuse it with the new Filter API.
 	</li>
 </ul>
 <h5 class='topic w800'>REST server API changes</h5>
@@ -106,10 +106,10 @@
 <h5 class='topic w800'>REST client API changes</h5>
 <ul class='spaced-list'>
 	<li>
-		Simplified {@link org.apache.juneau.rest.client.RestClient} API.
+		Simplified {@link oajrc.RestClient} API.
 		<ul>
 			<li>You can now only specify a single serializer or parser per client.  This significantly simplifies the code.</li>
-			<li>Support for {@link org.apache.juneau.encoders.Encoder Encoders}.</li>
+			<li>Support for {@link oaj.encoders.Encoder Encoders}.</li>
 		</ul>
 	</li>
 	<li>

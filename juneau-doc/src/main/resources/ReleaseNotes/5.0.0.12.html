@@ -21,7 +21,7 @@
 <h5 class='topic w800'>Core API changes</h5>
 <ul class='spaced-list'>
 	<li>
-		Relaxed method naming conventions when using {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation.<br>
+		Relaxed method naming conventions when using {@link oaj.annotation.BeanProperty @BeanProperty} annotation.<br>
 		Methods with zero parameters are interpreted as getters, and methods with one parameter are interpreted as setters.<br>
 		Eliminated the <code>BeanProperty.method</code> annotation, since it's now unnecessary.
 			</li>
@@ -38,7 +38,7 @@
 	</li>
    		<li>
 		<code>Readers</code> and <code>InputStreams</code> can now be passed in as <code><del>@Content</del></code> parameters if you need direct access to the HTTP body content without involving the parsers.<br> 
-		Equivalent to previously calling {@link org.apache.juneau.rest.RestRequest#getInputStream()} and {@link org.apache.juneau.rest.RestRequest#getReader()}.
+		Equivalent to previously calling {@link oajr.RestRequest#getInputStream()} and {@link oajr.RestRequest#getReader()}.
    		</li>
    		<li>
 		Improved support for the <code>?debug</code> parameter.<br>

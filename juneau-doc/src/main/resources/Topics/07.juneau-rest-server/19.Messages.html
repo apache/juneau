@@ -16,7 +16,7 @@
 Messages
 
 <p>
-	The {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation is used to associate a resource bundle with a servlet class.
+	The {@link oajr.annotation.RestResource#messages @RestResource.messages()} annotation is used to associate a resource bundle with a servlet class.
 </p>
 <p class='bpcode w800'>
 	<jc>// Servlet with associated resource bundle</jc>
@@ -31,7 +31,7 @@ Messages
 </p>
 <p>	
 	The resource bundle can also be passed into the method by simply specifying a parameter
-	of type {@link java.util.ResourceBundle} or {@link org.apache.juneau.utils.MessageBundle}:
+	of type {@link java.util.ResourceBundle} or {@link oaj.utils.MessageBundle}:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>)
@@ -57,5 +57,5 @@ Messages
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
+	<li class='jf'>{@link oajr.RestContext#REST_messages}
 </ul>

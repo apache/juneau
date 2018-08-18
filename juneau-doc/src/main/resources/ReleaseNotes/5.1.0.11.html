@@ -21,29 +21,29 @@
 
 <h5 class='topic w800'>Core</h5>		
 <ul class='spaced-list'>
-	<li>Additions to {@link org.apache.juneau.html.annotation.Html @Html} bean annotation.
+	<li>Additions to {@link oaj.html.annotation.Html @Html} bean annotation.
 		<ul>
-			<li>New {@link org.apache.juneau.html.annotation.Html#noTables() @Html.noTables()} annotation that prevents
+			<li>New {@link oaj.html.annotation.Html#noTables() @Html.noTables()} annotation that prevents
 				arrays/Collections from being serialized as tables.
-			<li>New {@link org.apache.juneau.html.annotation.Html#noTableHeaders() @Html.noTableHeaders()} annotation that prevents
+			<li>New {@link oaj.html.annotation.Html#noTableHeaders() @Html.noTableHeaders()} annotation that prevents
 				HTML tables from having header rows.
 		</ul>
 	</li>
 	<li>Several improvements to URL-Encoding support.
 		<ul>
-			<li>Improved whitespace handling in {@link org.apache.juneau.uon.UonParser}.
+			<li>Improved whitespace handling in {@link oaj.uon.UonParser}.
 			<li>New <code><del>UonParserContext.UON_whitespaceAware</del></code> property for controlling whether whitespace is ignored.
 			<li>New <code><del>UrlEncodingContext.URLENC_expandedParams</del></code> property for controlling whether arrays/Collections 
 				should be serialized/parsed as multi-part parameters.
-			<li>New {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() @UrlEncoding.expandedParams()}
+			<li>New {@link oaj.urlencoding.annotation.UrlEncoding#expandedParams() @UrlEncoding.expandedParams()}
 				annotation that specifies that bean properties of type array/Collection be serialized as multi-part parameters (e.g. <code>&amp;key=val1&amp;key=val2</code>).
 		</ul>
 	</li>
 	<li>New <code><del>JsonSerializerContext.JSON_escapeSolidus</del></code> property for controlling whether slash characters should be escaped.
-	<li>New {@link org.apache.juneau.internal.TeeOutputStream} and {@link org.apache.juneau.internal.TeeWriter} classes.
-	<li>New {@link org.apache.juneau.ClassMeta#isInstance(Object)} method.
-	<li>Performance improvements when using the {@link org.apache.juneau.BeanMap#add(String,Object)} method.  
-		Array properties are stored in a temporary list cache until {@link org.apache.juneau.BeanMap#getBean()} is called.
+	<li>New {@link oaj.internal.TeeOutputStream} and {@link oaj.internal.TeeWriter} classes.
+	<li>New {@link oaj.ClassMeta#isInstance(Object)} method.
+	<li>Performance improvements when using the {@link oaj.BeanMap#add(String,Object)} method.  
+		Array properties are stored in a temporary list cache until {@link oaj.BeanMap#getBean()} is called.
 	<li>New <code><del>BeanPropertyMeta.add(BeanMap,Object)</del></code> method for adding values to Collection and array properties.
 	<li>Config INI files now support keys with name <js>"*"</js>.
 </ul>
@@ -66,27 +66,27 @@
 		</ul>
 	</li>
 	<li>Performance improvements around query parameters.
-	<li>New methods on {@link org.apache.juneau.rest.RestRequest} for handling multi-part parameters:
+	<li>New methods on {@link oajr.RestRequest} for handling multi-part parameters:
 		<ul>
 			<li><code><del>RestRequest.getParameters(String,Class)</del></code>
 			<li><code><del>RestRequest#getQueryParameters(String,Class)</del></code>
 		</ul>
 	</li>
-	<li>Fixed Jetty issue in {@link org.apache.juneau.rest.RestResponse#setHeader(String,String)} where setting 
+	<li>Fixed Jetty issue in {@link oajr.RestResponse#setHeader(String,String)} where setting 
 		the <code>Content-Type</code> through this method was inconsistent with the behavior in WAS/Tomcat.
 	<li><code>&amp;noTrace=true</code> now prevents any errors from being logged in log file.
 	<li>Workaround for Jetty issue where <code>ServletContext.getContextPath()</code> always ends with <js>"null"</js>.
 	<li><code>RestServletProperties.REST_allowMethodParam</code> is now <jk>true</jk> by default on all subclasses 
-		of {@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
+		of {@link oajr.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
 </ul>
 		
 <h5 class='topic w800'>Client</h5>		
 <ul class='spaced-list'>
-	<li>New method {@link org.apache.juneau.rest.client.RestCall#allowRedirectsOnPosts(boolean)}.
+	<li>New method {@link oajrc.RestCall#allowRedirectsOnPosts(boolean)}.
 	<li>New method <code>RestCall.peekInputStream()</code> allows you to read response bodies without interrupting execution flow.
-	<li>New method {@link org.apache.juneau.rest.client.RestCall#toString()} now useful for debugging purposes.  
+	<li>New method {@link oajrc.RestCall#toString()} now useful for debugging purposes.  
 		Shows all request/response headers and bodies.
-	<li>{@link org.apache.juneau.rest.client.RestCallException} now includes <code>HttpResponse</code> object for easier debugging.
+	<li>{@link oajrc.RestCallException} now includes <code>HttpResponse</code> object for easier debugging.
 	<li>New method <code>RestClient.addListener(RestClientListener)</code> for registering request/response listeners.
 	<li>New <code><del>RestClient.setClassLoader(ClassLoader)</del></code> method.
 	<li>TLS support in <code>JazzRestClient</code>.

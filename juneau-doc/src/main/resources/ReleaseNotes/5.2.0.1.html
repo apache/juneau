@@ -24,20 +24,20 @@
 	<li>Improved support for multi-line values in config files.
 		Any line that begins with whitespace is interpreted as a continuation of the previous line.
 	<li>Support for <js>'\uXXXX'</js> character sequences in config files.
-	<li>Fixed issue in {@link org.apache.juneau.xml.XmlSerializer} where <js>'\r'</js> and <js>'\n'</js> characters were not being handled per XML specs.
-	<li>New methods on {@link org.apache.juneau.ObjectList}:  
+	<li>Fixed issue in {@link oaj.xml.XmlSerializer} where <js>'\r'</js> and <js>'\n'</js> characters were not being handled per XML specs.
+	<li>New methods on {@link oaj.ObjectList}:  
 		<ul>
 			<li><code><del>ObjectList.getAt(Class,String)</del></code>
-			<li>{@link org.apache.juneau.ObjectList#putAt(String,Object)}
-			<li>{@link org.apache.juneau.ObjectList#postAt(String,Object)}
-			<li>{@link org.apache.juneau.ObjectList#deleteAt(String)}
+			<li>{@link oaj.ObjectList#putAt(String,Object)}
+			<li>{@link oaj.ObjectList#postAt(String,Object)}
+			<li>{@link oaj.ObjectList#deleteAt(String)}
 		</ul>
-	<li>New methods on {@link org.apache.juneau.ObjectMap}:  
+	<li>New methods on {@link oaj.ObjectMap}:  
 		<ul>
 			<li><code><del>ObjectMap.getAt(Class,String)</del></code>
-			<li>{@link org.apache.juneau.ObjectMap#putAt(String,Object)}
-			<li>{@link org.apache.juneau.ObjectMap#postAt(String,Object)}
-			<li>{@link org.apache.juneau.ObjectMap#deleteAt(String)}
+			<li>{@link oaj.ObjectMap#putAt(String,Object)}
+			<li>{@link oaj.ObjectMap#postAt(String,Object)}
+			<li>{@link oaj.ObjectMap#deleteAt(String)}
 		</ul>
 	<li><code><del>@ThreadSafe</del></code> annotation.
 	<li>New <code>ClassFilter</code> class.
@@ -46,26 +46,26 @@
 	<li>New <code><del>ParserContext.PARSER_trimStrings</del></code> property.
 	<li>New <code><del>SerializerContext.SERIALIZER_trimStrings</del></code> property.
 	<li><code><del>Args.getStringVar()}</del></code> method.
-	<li>New {@link org.apache.juneau.utils.ManifestFile} class
-	<li>New {@link org.apache.juneau.utils.MessageBundle} class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
+	<li>New {@link oaj.utils.ManifestFile} class
+	<li>New {@link oaj.utils.MessageBundle} class.  Replaces <l>SafeResourceBundle</l>/<l>SafeResourceMultiBundle</l>/<l>RestNls</l>.
 	<li>New <code><del>StringMapVar</del></code> class.
 	<li>New <code><del>StringVars</del></code> class with reusable common <code><del>StringVar</del></code> instances.
-	<li>New {@link org.apache.juneau.internal.JuneauLogger} class.
+	<li>New {@link oaj.internal.JuneauLogger} class.
 	<li>Default value for <code><del>XmlParserContext.XML_trimWhitespace</del></code> changed to <jk>true</jk>.			
 </ul>
 
 <h5 class='topic w800'>Server</h5>
 <ul class='spaced-list'>
-	<li>New methods on {@link org.apache.juneau.rest.RestContext}:
+	<li>New methods on {@link oajr.RestContext}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.RestContext#getMessages()}
+			<li>{@link oajr.RestContext#getMessages()}
 		</ul>
 </ul>
 
 <h5 class='topic w800'>Client</h5>
 <ul class='spaced-list'>
-	<li>Fixed potential issue in {@link org.apache.juneau.rest.client.RestClient} where the HTTP connection pool could end up exhausted if an error occurred.
-	<li>Improved thread safety on {@link org.apache.juneau.rest.client.RestClient}.
-	<li>New warning message is logged if a {@link org.apache.juneau.rest.client.RestClient} is garbage collected without being closed:  
+	<li>Fixed potential issue in {@link oajrc.RestClient} where the HTTP connection pool could end up exhausted if an error occurred.
+	<li>Improved thread safety on {@link oajrc.RestClient}.
+	<li>New warning message is logged if a {@link oajrc.RestClient} is garbage collected without being closed:  
 		<js>"WARNING:  RestClient garbage collected before it was finalized."</js>
 </ul>

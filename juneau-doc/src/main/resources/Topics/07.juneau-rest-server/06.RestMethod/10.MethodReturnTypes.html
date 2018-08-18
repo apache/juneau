@@ -18,7 +18,7 @@ Method Return Types
 <p>
 	The return type can be any serializable POJO as defined in {@doc PojoCategories}.
 	<br>It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
-	setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+	setting the output using the {@link oajr.RestResponse#setOutput(Object)} method.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -33,30 +33,30 @@ Method Return Types
 <ul class='spaced-list'>
 	<li class='jc'>{@link java.io.InputStream}
 		<br>The contents are simply piped to the output stream returned by 
-		{@link org.apache.juneau.rest.RestResponse#getNegotiatedOutputStream()}.
-		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+		{@link oajr.RestResponse#getNegotiatedOutputStream()}.
+		<br>Note that you should call {@link oajr.RestResponse#setContentType(String)} to set 
 		the <l>Content-Type</l> header if you use this object type.
 	<li class='jc'>{@link java.io.Reader}
 		<br>The contents are simply piped to the output stream returned by 
-		{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()}.
-		<br>Note that you should call {@link org.apache.juneau.rest.RestResponse#setContentType(String)} to set 
+		{@link oajr.RestResponse#getNegotiatedWriter()}.
+		<br>Note that you should call {@link oajr.RestResponse#setContentType(String)} to set 
 		the <l>Content-Type</l> header if you use this object type.
-	<li class='jc'>{@link org.apache.juneau.Streamable}
+	<li class='jc'>{@link oaj.Streamable}
 		<br>Interface that identifies that an object can be serialized directly to an output stream.
-	<li class='jc'>{@link org.apache.juneau.Writable}
+	<li class='jc'>{@link oaj.Writable}
 		<br>Interface that identifies that an object can be serialized directly to a writer.
-	<li class='jc'>{@link org.apache.juneau.utils.ZipFileList}
+	<li class='jc'>{@link oaj.utils.ZipFileList}
 		<br>Special interface for sending zip files as responses.
 </ul>
 <p>
 	This is controlled through the following extensible API:
 </p>
 <ul class='doctree'>
-	<li class='jic'>{@link org.apache.juneau.rest.ResponseHandler}
+	<li class='jic'>{@link oajr.ResponseHandler}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.DefaultHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.InputStreamHandler}
-		<li class='jc'>{@link org.apache.juneau.rest.reshandlers.ReaderHandler}
+		<li class='jc'>{@link oajr.reshandlers.DefaultHandler}
+		<li class='jc'>{@link oajr.reshandlers.InputStreamHandler}
+		<li class='jc'>{@link oajr.reshandlers.ReaderHandler}
 	</ul>
 </ul>
 <p>
@@ -65,13 +65,13 @@ Method Return Types
 <ul class='spaced-list'>
 	<li>
 		By returning a serializable POJO, or any of the following:
-		<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link org.apache.juneau.Streamable}, 
-		{@link org.apache.juneau.Writable} 
+		<br>{@link java.io.Reader}, {@link java.io.InputStream}, {@link oaj.Streamable}, 
+		{@link oaj.Writable} 
 	<li>
-		By calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} with any of the types above.
+		By calling {@link oajr.RestResponse#setOutput(Object)} with any of the types above.
 	<li>
 		By accessing the {@link java.io.Writer} directly by calling 
-		{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output yourself.
+		{@link oajr.RestResponse#getNegotiatedWriter()} and writing the output yourself.
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -102,5 +102,5 @@ Method Return Types
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_responseHandlers} - For configuring custom response handlers.
+	<li class='jf'>{@link oajr.RestContext#REST_responseHandlers} - For configuring custom response handlers.
 </ul>

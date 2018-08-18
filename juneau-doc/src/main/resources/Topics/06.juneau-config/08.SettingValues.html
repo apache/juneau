@@ -19,17 +19,17 @@ Setting Values
 	The following methods allow you to add, remove, and modify entries and sections in a config file:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<li class='jc'>{@link oaj.config.Config}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object) set(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer) set(String,Object,Serializer)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod,String,List) set(String,Object,Serializer,ConfigMod,String,List)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List) set(String,Object,Serializer,ConfigMod[],String,List)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#set(String,String) set(String,String)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#remove(String) remove(String)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#setSection(String,List) setSection(String,List)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#setSection(String,List,Map) setSection(String,List,Map)}
-		<li class='jm'>{@link org.apache.juneau.config.Config#removeSection(String) removeSection(String)}
+		<li class='jm'>{@link oaj.config.Config#set(String,Object) set(String,Object)}
+		<li class='jm'>{@link oaj.config.Config#set(String,Object,Serializer) set(String,Object,Serializer)}
+		<li class='jm'>{@link oaj.config.Config#set(String,Object,Serializer,ConfigMod,String,List) set(String,Object,Serializer,ConfigMod,String,List)}
+		<li class='jm'>{@link oaj.config.Config#set(String,Object,Serializer,ConfigMod[],String,List) set(String,Object,Serializer,ConfigMod[],String,List)}
+		<li class='jm'>{@link oaj.config.Config#set(String,String) set(String,String)}
+		<li class='jm'>{@link oaj.config.Config#remove(String) remove(String)}
+		<li class='jm'>{@link oaj.config.Config#setSection(String,List) setSection(String,List)}
+		<li class='jm'>{@link oaj.config.Config#setSection(String,List,Map) setSection(String,List,Map)}
+		<li class='jm'>{@link oaj.config.Config#removeSection(String) removeSection(String)}
 	</ul>
 </ul>
 <p class='bpcode w800'>
@@ -46,7 +46,7 @@ Setting Values
 		.commit();
 </p>
 <p>
-	The method {@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} can be used
+	The method {@link oaj.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} can be used
 	for adding comments and pre-lines to entries, and specifying encoded values.
 </p>
 <p class='bpcode w800'>
@@ -64,7 +64,7 @@ Setting Values
 	<ck>key1</ck> = <cv>1</cv> <cc># Same-line comment</cc>
 </p>	
 <p>
-	The last 4 arguments in {@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} 
+	The last 4 arguments in {@link oaj.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} 
 	are optional in that if you pass <jk>null</jk>, the current value will not be overwritten.
 	<br>To unset the same-line comment, you should pass in a blank string.
 	<br>To remove pre-lines, you should pass in an empty list.
@@ -88,10 +88,10 @@ Setting Values
 </p>		
 <p>
 	Changes made to the configuration are transactional in nature.  
-	<br>They are kept in memory until you call the {@link org.apache.juneau.config.Config#commit()} method.
+	<br>They are kept in memory until you call the {@link oaj.config.Config#commit()} method.
 	<br>Until then, you still see the modified values when you call any of the getters, but the modified values
 	exist only in memory.
 </p>
 <p>
-	Changes can be rolled back using the {@link org.apache.juneau.config.Config#rollback()} method.
+	Changes can be rolled back using the {@link oaj.config.Config#rollback()} method.
 </p>

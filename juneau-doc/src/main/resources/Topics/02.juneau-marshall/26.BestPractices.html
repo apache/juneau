@@ -20,8 +20,8 @@ Best Practices
 		Reuse instances of serializers and parsers whenever possible.
 		<br>They are designed to be thread safe and maintain internal caches of bean metadata to increase performance.
 	<li>
-		The {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions} 
-		option on the {@link org.apache.juneau.serializer.Serializer} class can cause a performance penalty of 
+		The {@link oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions BEANTRAVERSE_detectRecursions} 
+		option on the {@link oaj.serializer.Serializer} class can cause a performance penalty of 
 		around 20%.  
 		<br>Therefore, it's recommended that this option be used only when necessary. 
 	<li>
@@ -33,8 +33,8 @@ Best Practices
 		<br>RDF simply isn't efficient with node traversal, so creating tree structures out of RDF models
 		is highly inefficient.  	
 	<li>
-		The {@link org.apache.juneau.parser.Parser} methods that take in {@link org.apache.juneau.ClassMeta} 
+		The {@link oaj.parser.Parser} methods that take in {@link oaj.ClassMeta} 
 		parameters are slightly faster than methods that 
 		take in {@link java.lang.Class} or {@link java.lang.Object} parameters, since the latter methods involve 
-		hash lookups to resolve to {@link org.apache.juneau.ClassMeta} parameters.
+		hash lookups to resolve to {@link oaj.ClassMeta} parameters.
 </ol>

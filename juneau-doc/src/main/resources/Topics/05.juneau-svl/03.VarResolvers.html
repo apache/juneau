@@ -16,21 +16,21 @@
 VarResolvers and VarResolverSessions
 
 <p>
-	The main class for performing variable resolution is {@link org.apache.juneau.svl.VarResolver}.
+	The main class for performing variable resolution is {@link oaj.svl.VarResolver}.
 	<br>Two methods are provided for resolving variables:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.svl.VarResolver}
+	<li class='jc'>{@link oaj.svl.VarResolver}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolve(String) resolve(String)} 
+		<li class='jm'>{@link oaj.svl.VarResolver#resolve(String) resolve(String)} 
 			- Resolves variables and returns the results as a simple string.
-		<li class='jm'>{@link org.apache.juneau.svl.VarResolver#resolveTo(String,Writer) resolveTo(String,Writer)} 
+		<li class='jm'>{@link oaj.svl.VarResolver#resolveTo(String,Writer) resolveTo(String,Writer)} 
 			- Resolves variables and sends results to a writer.
 	</ul>
 </ul>
 <p>
 	Var resolvers can rely on the existence of other objects.
-	<br>For example, {@link org.apache.juneau.config.vars.ConfigVar} relies on the existence of a {@link org.apache.juneau.config.Config}.
+	<br>For example, {@link oaj.config.vars.ConfigVar} relies on the existence of a {@link oaj.config.Config}.
 	<br>This is accomplished through the following:
 </p>
 <ul class='spaced-list'>
@@ -41,26 +41,26 @@ VarResolvers and VarResolverSessions
 	The following two classes are identical in behavior except for which objects they can access:
 </p>
 <ul>
-	<li class='jc'>{@link org.apache.juneau.svl.VarResolver} - Has access to context objects only.
-	<li class='jc'>{@link org.apache.juneau.svl.VarResolverSession} - Has access to context and session objects.
+	<li class='jc'>{@link oaj.svl.VarResolver} - Has access to context objects only.
+	<li class='jc'>{@link oaj.svl.VarResolverSession} - Has access to context and session objects.
 </ul>
 <p>
 	Context and session objects are set through the following methods:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.svl.VarResolverBuilder#contextObject(String,Object)} - Context objects.
-	<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#sessionObject(String,Object)} - Session objects.
-	<li class='jm'>{@link org.apache.juneau.svl.VarResolver#createSession(Map)} - Session objects.
+	<li class='jm'>{@link oaj.svl.VarResolverBuilder#contextObject(String,Object)} - Context objects.
+	<li class='jm'>{@link oaj.svl.VarResolverSession#sessionObject(String,Object)} - Session objects.
+	<li class='jm'>{@link oaj.svl.VarResolver#createSession(Map)} - Session objects.
 </ul>
 <p>
 	Both kinds of objects are accessible through the following method:
 </p>
 <ul>
-	<li class='jm'>{@link org.apache.juneau.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
+	<li class='jm'>{@link oaj.svl.VarResolverSession#getSessionObject(Class, String, boolean)}
 </ul>
 <p>
-	Var resolvers can be cloned and extended by using the {@link org.apache.juneau.svl.VarResolver#builder()} method.
-	<br>Cloning a resolver will copy it's {@link org.apache.juneau.svl.Var} class names and context objects.
+	Var resolvers can be cloned and extended by using the {@link oaj.svl.VarResolver#builder()} method.
+	<br>Cloning a resolver will copy it's {@link oaj.svl.Var} class names and context objects.
 </p>
 
 <h5 class='figure'>Example:</h5>

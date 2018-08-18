@@ -19,15 +19,15 @@
 	The server side is only slightly more complex, but boasts useful debugging and discovery capabilities.  
 </p>
 <p>
-	The {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} class is an implementation of 
-	{@link org.apache.juneau.rest.RestServlet} that provides a REST interface for invoking calls on POJOs.
+	The {@link oajr.remote.RemoteInterfaceServlet} class is an implementation of 
+	{@link oajr.RestServlet} that provides a REST interface for invoking calls on POJOs.
 	<br>The <code>RemoteInterfaceServlet</code> class is abstract and must implement a single method for providing the set 
 	of POJOs to expose as remote interfaces.  
 </p>
 <p>
 	The samples bundle includes a sample implementation of a remote interface service that can be used to interact with 
 	the address book POJO also included in the bundle.  
-	<br>The method that must be implemented is {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet#getServiceMap()}
+	<br>The method that must be implemented is {@link oajr.remote.RemoteInterfaceServlet#getServiceMap()}
 	that simply returns a mapping of Java interfaces (or classes) to POJO instances.
 </p>
 <p class='bpcode w800'>
@@ -181,7 +181,7 @@
 <p>
 	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
 	notation.
-	<br>See {@link org.apache.juneau.uon.UonSerializer} for more information about this encoding.
+	<br>See {@link oaj.uon.UonSerializer} for more information about this encoding.
 	<br>Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
 	but passing in unencoded JSON in a URL may not work in all browsers.  
 	<br>Therefore, UON is preferred.

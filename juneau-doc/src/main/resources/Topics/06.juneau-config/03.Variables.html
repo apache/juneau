@@ -16,7 +16,7 @@
 Variables
 
 <p>
-	Config files can contain variables that get resolved dynamically using the previously-described {@link org.apache.juneau.svl.VarResolver} API.
+	Config files can contain variables that get resolved dynamically using the previously-described {@link oaj.svl.VarResolver} API.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -49,23 +49,23 @@ Variables
 	ABean bean = cf.getObject(<js>"MySection/aBean"</js>, ABean.<jk>class</jk>); 
 </p>
 <p>
-	By default, <code>Configs</code> use the {@link org.apache.juneau.svl.VarResolver#DEFAULT} variable resolver
+	By default, <code>Configs</code> use the {@link oaj.svl.VarResolver#DEFAULT} variable resolver
 	which provides support for the following variables and constructs:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.svl.vars.SystemPropertiesVar} - <code>$S{key[,default]}</code>
-		<li class='jc'>{@link org.apache.juneau.svl.vars.EnvVariablesVar} - <code>$E{key[,default]}</code>
-		<li class='jc'>{@link org.apache.juneau.config.vars.ConfigVar} - <code>$C{key[,default]}</code>
+	<li class='jc'>{@link oaj.svl.vars.SystemPropertiesVar} - <code>$S{key[,default]}</code>
+		<li class='jc'>{@link oaj.svl.vars.EnvVariablesVar} - <code>$E{key[,default]}</code>
+		<li class='jc'>{@link oaj.config.vars.ConfigVar} - <code>$C{key[,default]}</code>
 </ul>
 <p>
 	The variable resolver is controlled via the following setting:
 </p>
 <ul class='doctree'>
-	<li class='jf'>{@link org.apache.juneau.config.Config#CONFIG_varResolver}
+	<li class='jf'>{@link oaj.config.Config#CONFIG_varResolver}
 </ul>
 <p>
 	Additionally, the following method can be used to retrieve a <code>Config</code> with a different variable resolver:
 </p>
 <ul class='doctree'>
-	<li class='jm'>{@link org.apache.juneau.config.Config#resolving(VarResolverSession)}
+	<li class='jm'>{@link oaj.config.Config#resolving(VarResolverSession)}
 </ul>

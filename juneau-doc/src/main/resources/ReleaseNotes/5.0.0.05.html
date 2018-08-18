@@ -21,7 +21,7 @@
 <ul class='spaced-list'>
 	<li>New <code><ja>@RestChild</ja></code> annotation for identifying child resources.</li>
 	<li>
-		New <code>traversable</code> and <code>filterable</code> attributes added to {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation.<br>
+		New <code>traversable</code> and <code>filterable</code> attributes added to {@link oajr.annotation.RestMethod @RestMethod} annotation.<br>
 		Eliminates the need for <code>PojoResource</code> and <code>FilteredRestResource</code> classes.
 	</li>
 	<li>Simplified client API.  Easier to use when making multiple connections to the same server.</li>
@@ -33,8 +33,8 @@
 	<li>
 		New <code>resourceUri</code> attributed added to <ja>@Bean</ja> annotation to associate beans with resource URIs.
 		<ul>
-			<li>Used for automatically creating hyperlinks in {@link org.apache.juneau.html.HtmlSerializer}.</li>
-			<li>Used for automatically creating <xa>uri</xa> attributes in {@link org.apache.juneau.xml.XmlSerializer}.</li>
+			<li>Used for automatically creating hyperlinks in {@link oaj.html.HtmlSerializer}.</li>
+			<li>Used for automatically creating <xa>uri</xa> attributes in {@link oaj.xml.XmlSerializer}.</li>
 			<li>Used for automatically creating <xa>rdf:about</xa> attributes in <code>RdfXmlSerializer</code>.</li>
 		</ul>
 	</li>	

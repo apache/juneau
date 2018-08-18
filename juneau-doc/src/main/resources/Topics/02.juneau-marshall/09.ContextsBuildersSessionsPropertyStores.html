@@ -48,15 +48,15 @@ Contexts, Builders, Sessions, and PropertyStores
 <ul class='doctree'>
 	<li class='jc'><code>Object</code>
 	<ul>
-		<li class='jac'>{@link org.apache.juneau.Context}
+		<li class='jac'>{@link oaj.Context}
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.BeanContext}
+			<li class='jc'>{@link oaj.BeanContext}
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
+				<li class='jac'>{@link oaj.serializer.Serializer}
 				<ul>
-					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializer}
+					<li class='jac'>{@link oaj.serializer.WriterSerializer}
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
+						<li class='jc'>{@link oaj.json.JsonSerializer}
 					</ul>
 				</ul>
 			</ul>
@@ -73,15 +73,15 @@ Contexts, Builders, Sessions, and PropertyStores
 <ul class='doctree'>
 	<li class='jc'><code>Object</code>
 	<ul>
-		<li class='jac'>{@link org.apache.juneau.ContextBuilder}
+		<li class='jac'>{@link oaj.ContextBuilder}
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.BeanContextBuilder}
+			<li class='jc'>{@link oaj.BeanContextBuilder}
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.serializer.SerializerBuilder}
+				<li class='jac'>{@link oaj.serializer.SerializerBuilder}
 				<ul>
-					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializerBuilder}
+					<li class='jac'>{@link oaj.serializer.WriterSerializerBuilder}
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.json.JsonSerializerBuilder}
+						<li class='jc'>{@link oaj.json.JsonSerializerBuilder}
 					</ul>
 				</ul>
 			</ul>
@@ -94,15 +94,15 @@ Contexts, Builders, Sessions, and PropertyStores
 <ul class='doctree'>
 	<li class='jc'><code>Object</code>
 	<ul>
-		<li class='jac'>{@link org.apache.juneau.Session}
+		<li class='jac'>{@link oaj.Session}
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.BeanSession}
+			<li class='jc'>{@link oaj.BeanSession}
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.serializer.SerializerSession}
+				<li class='jac'>{@link oaj.serializer.SerializerSession}
 				<ul>
-					<li class='jac'>{@link org.apache.juneau.serializer.WriterSerializerSession}
+					<li class='jac'>{@link oaj.serializer.WriterSerializerSession}
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.json.JsonSerializerSession}
+						<li class='jc'>{@link oaj.json.JsonSerializerSession}
 					</ul>
 				</ul>
 			</ul>
@@ -110,7 +110,7 @@ Contexts, Builders, Sessions, and PropertyStores
 	</ul>
 </ul>
 <p>
-	The general idea behind a {@link org.apache.juneau.PropertyStore} is to serve as a reusable configuration of an artifact 
+	The general idea behind a {@link oaj.PropertyStore} is to serve as a reusable configuration of an artifact 
 	(such as a serializer) such that the artifact can be cached and reused if the property stores are 'equal'.
 </p>
 <p>
@@ -128,7 +128,7 @@ Contexts, Builders, Sessions, and PropertyStores
 	serializers and parsers.
 </p>
 <p>
-	The {@link org.apache.juneau.PropertyStoreBuilder} class is used to build up and instantiate immutable 
+	The {@link oaj.PropertyStoreBuilder} class is used to build up and instantiate immutable 
 	<code>PropertyStore</code> objects.
 </p>
 <p>
@@ -146,6 +146,6 @@ Contexts, Builders, Sessions, and PropertyStores
 	That makes them particularly suited for use as hashmap keys, and thus for caching reusable serializers and parsers.
 </p>
 <p>
-	Refer to the {@link org.apache.juneau.PropertyStore} javadoc for a detailed explaination on how
+	Refer to the {@link oaj.PropertyStore} javadoc for a detailed explaination on how
 	property stores work.
 </p>

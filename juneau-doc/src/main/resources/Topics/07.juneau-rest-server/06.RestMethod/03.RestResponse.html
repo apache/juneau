@@ -16,7 +16,7 @@
 RestResponse
 
 <p>
-	The {@link org.apache.juneau.rest.RestResponse} object is an extension of the <l>HttpServletResponse</l> class
+	The {@link oajr.RestResponse} object is an extension of the <l>HttpServletResponse</l> class
 	with various built-in convenience methods for use in building REST interfaces.
 	<br>It can be accessed by passing it as a parameter on your REST Java method:
 </p>
@@ -28,10 +28,10 @@ RestResponse
 	Some important methods on this class are:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>{@link org.apache.juneau.rest.RestResponse} <jk>extends</jk> HttpServletResponse</code>
+	<li class='jc'><code>{@link oajr.RestResponse} <jk>extends</jk> HttpServletResponse</code>
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RestResponse#setOutput(Object) setOutput(Object)} - Set response output programmatically.
-		<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getHtmlDocBuilder() getHtmlDocBuilder()} - Set HTTP page contents programmatically.
-		<li class='jm'>{@link org.apache.juneau.rest.RestResponse#getDirectWriter(String) getDirectWriter(String)} - Direct access to underlying response writer.
+		<li class='jm'>{@link oajr.RestResponse#setOutput(Object) setOutput(Object)} - Set response output programmatically.
+		<li class='jm'>{@link oajr.RestResponse#getHtmlDocBuilder() getHtmlDocBuilder()} - Set HTTP page contents programmatically.
+		<li class='jm'>{@link oajr.RestResponse#getDirectWriter(String) getDirectWriter(String)} - Direct access to underlying response writer.
 	</ul>
 </ul>

@@ -16,13 +16,13 @@
 @Xml(format) Annotation
 
 <p>
-	The {@link org.apache.juneau.xml.annotation.Xml#format() @Xml.format()} annotation can be used to tweak 
+	The {@link oaj.xml.annotation.Xml#format() @Xml.format()} annotation can be used to tweak 
 	the XML format of a POJO.
-	<br>The value is set to an enum value of type {@link org.apache.juneau.xml.annotation.XmlFormat}.
+	<br>The value is set to an enum value of type {@link oaj.xml.annotation.XmlFormat}.
 	<br>This annotation can be applied to both classes and bean properties.
 </p>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} format can be applied to bean properties to 
+	The {@link oaj.xml.annotation.XmlFormat#ATTR} format can be applied to bean properties to 
 	serialize them as XML attributes instead of elements.
 	<br>Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
 </p>
@@ -58,7 +58,7 @@
 	</tr>
 </table>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can be applied to bean classes to 
+	The {@link oaj.xml.annotation.XmlFormat#ATTRS} format can be applied to bean classes to 
 	force all bean properties to be serialized as XML attributes instead of child elements.
 </p>
 
@@ -96,8 +96,8 @@
 	</tr>
 </table>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENT} format can be applied to bean properties 
-	to override the {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format applied on the bean 
+	The {@link oaj.xml.annotation.XmlFormat#ELEMENT} format can be applied to bean properties 
+	to override the {@link oaj.xml.annotation.XmlFormat#ATTRS} format applied on the bean 
 	class.
 </p>
 
@@ -138,10 +138,10 @@
 	</tr>
 </table>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can be applied to a single bean 
+	The {@link oaj.xml.annotation.XmlFormat#ATTRS} format can be applied to a single bean 
 	property of type <code>Map&lt;String,Object&gt;</code> to denote arbitrary XML attribute values on the 
 	element.
-	<br>These can be mixed with other {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} annotated 
+	<br>These can be mixed with other {@link oaj.xml.annotation.XmlFormat#ATTR} annotated 
 	properties, but there must not be an overlap in bean property names and map keys. 
 </p>
 
@@ -186,10 +186,10 @@
 	</tr>
 </table>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
+	The {@link oaj.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
 	of type array/Collection.
 	<br>This causes the child objects to be serialized directly inside the bean element.
-	<br>This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml.childName()}
+	<br>This format must be used in conjunction with {@link oaj.xml.annotation.Xml#childName() @Xml.childName()}
 	to differentiate which collection the values came from if you plan on parsing the output back into beans.
 	<br>Note that child names must not conflict with other property names.
 </p>
@@ -238,7 +238,7 @@
 	</tr>
 </table>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a single bean 
+	The {@link oaj.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a single bean 
 	property of either a simple type or array/Collection.
 	<br>It allows free-form child elements to be formed.
 	<br>All other properties on the bean MUST be serialized as attributes.
@@ -303,16 +303,16 @@
 	</tr>
 </table>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} format is similar to 
-	{@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
+	The {@link oaj.xml.annotation.XmlFormat#MIXED} format is similar to 
+	{@link oaj.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
 	(string/number/boolean/null) are stripped from the output.
 	<br>This format particularly useful when combined with bean dictionaries to produce mixed content.  
 	<br>The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
 	types.
 </p>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED_PWS} format identical to 
-	{@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} except whitespace characters are preserved in 
+	The {@link oaj.xml.annotation.XmlFormat#MIXED_PWS} format identical to 
+	{@link oaj.xml.annotation.XmlFormat#MIXED} except whitespace characters are preserved in 
 	the output.  
 </p>
 <table class='styled w800'>
@@ -650,11 +650,11 @@
 	same content since side-by-side strings in the content will end up concatenated when parsed.
 </p>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} format is similar to 
-	{@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} except it's meant for solitary objects that 
+	The {@link oaj.xml.annotation.XmlFormat#TEXT} format is similar to 
+	{@link oaj.xml.annotation.XmlFormat#MIXED} except it's meant for solitary objects that 
 	get serialized as simple child text nodes.
 	<br>Any object that can be serialize to a <code>String</code> can be used.
-	<br>The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
+	<br>The {@link oaj.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
 	preserved in the output.
 </p>
 <table class='styled w800'>
@@ -687,8 +687,8 @@
 	</tr>
 </table>
 <p>
-	The {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format is similar to 
-	{@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except it's meant for strings containing XML 
+	The {@link oaj.xml.annotation.XmlFormat#XMLTEXT} format is similar to 
+	{@link oaj.xml.annotation.XmlFormat#TEXT} except it's meant for strings containing XML 
 	that should be serialized as-is to the document.
 	<br>Any object that can be serialize to a <code>String</code> can be used.
 	<br>During parsing, the element content gets parsed with the rest of the document and then re-serialized to 

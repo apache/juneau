@@ -16,15 +16,15 @@
 Manifest API
 
 <p>
-	The {@link org.apache.juneau.microservice.Microservice#getManifest()} method is a static method that
-	can be used to retrieve the manifest file as a {@link org.apache.juneau.utils.ManifestFile}.  
+	The {@link oaj.microservice.Microservice#getManifest()} method is a static method that
+	can be used to retrieve the manifest file as a {@link oaj.utils.ManifestFile}.  
 </p>
 <p class='bpcode w800'>
 	<jc>// Get Main-Class from manifest file.</jc>
 	String mainClass = Microservice.<jsm>getInstance</jsm>().getManifest().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
 </p>
 <p>
-	The {@link org.apache.juneau.utils.ManifestFile} class extends {@link org.apache.juneau.ObjectMap},
+	The {@link oaj.utils.ManifestFile} class extends {@link oaj.ObjectMap},
 	making it possible to retrieve entries as a wide variety of object types such as java primitives, arrays, collections, 
 	maps, or even POJOs serialized as JSON.
 </p>

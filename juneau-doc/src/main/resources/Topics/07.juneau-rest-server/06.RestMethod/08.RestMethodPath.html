@@ -16,7 +16,7 @@
 @RestMethod.path()
 
 <p>
-	The {@link org.apache.juneau.rest.annotation.RestMethod#path() @RestMethod.path()} annotation allows 
+	The {@link oajr.annotation.RestMethod#path() @RestMethod.path()} annotation allows 
 	you to define URL path patterns to match against.
 	<br>These patterns can contain variables of the form <l>"{xxx}"</l> that can be passed in directly to the
 	Java methods as extra parameters.
@@ -76,14 +76,14 @@
 </p>
 <p>
 	The match heuristic behavior can be overridden by the 
-	{@link org.apache.juneau.rest.annotation.RestMethod#priority() @RestMethod.priority()} annotation 
+	{@link oajr.annotation.RestMethod#priority() @RestMethod.priority()} annotation 
 	property.
 	<br>However, in practice this is almost never needed.
 </p>
 <p>
 	Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
 	<br>Any remainder after the match can be accessed through 
-	{@link org.apache.juneau.rest.RequestPath#getRemainder()} or parameters with the 
+	{@link oajr.RequestPath#getRemainder()} or parameters with the 
 	<code><ja>@Path</ja>(<js>"/*"</js>)</code> annotation.
 	<br>On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 	require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
@@ -115,7 +115,7 @@
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_path}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
-	<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
+	<li class='jf'>{@link oajr.RestContext#REST_path}
+	<li class='ja'>{@link oaj.http.annotation.Path}
+	<li class='jc'>{@link oajr.RequestPath}
 </ul>

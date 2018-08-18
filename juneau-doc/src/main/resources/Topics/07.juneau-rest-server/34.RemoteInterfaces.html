@@ -20,9 +20,9 @@
 	the server side.
 </p>
 <p>
-	Remote interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class)} 
+	Remote interfaces are retrieved using the {@link oajrc.RestClient#getRemoteInterface(Class)} 
 	method.
-	<br>{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a 
+	<br>{@link oajr.remote.RemoteInterfaceServlet} is a specialized subclass of {@link oajr.RestServlet} that provides a 
 	full-blown REST interface for calling remote services (e.g. POJOs) remotely. 
 </p>
 <p>
@@ -125,12 +125,12 @@
 </p>
 <ol class='spaced-list'>
 	<li>
-		Extending from {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet}.
+		Extending from {@link oajr.remote.RemoteInterfaceServlet}.
 	<li>
 		Using a <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> annotation on a Java method.
 </ol>
 <p>
-	The {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} class is a simple specialized servlet with an abstract 
+	The {@link oajr.remote.RemoteInterfaceServlet} class is a simple specialized servlet with an abstract 
 	<code>getServiceMap()</code> method to define the server-side POJOs:
 </p>
 <p class='bpcode w800'>

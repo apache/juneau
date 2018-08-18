@@ -16,8 +16,8 @@
 BasicRestInfoProvider
 
 <p>
-	The {@link org.apache.juneau.rest.BasicRestInfoProvider} class is the default implementation of the
-	{@link org.apache.juneau.rest.RestInfoProvider} interface.
+	The {@link oajr.BasicRestInfoProvider} class is the default implementation of the
+	{@link oajr.RestInfoProvider} interface.
 </p>
 <p>
 	It finds and collects information gathered from the following locations:
@@ -46,7 +46,7 @@ BasicRestInfoProvider
 	MyResource_ja_JP.json
 		</p>
 	<li>
-		Use {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)} and {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)}
+		Use {@link oajr.annotation.RestResource#swagger() @RestResource(swagger)} and {@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)}
 		annotations on your resource classes and methods.
 		<br><h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
@@ -56,7 +56,7 @@ BasicRestInfoProvider
 	<jk>public</jk> Object myMethod() {...}
 		</p>
 	<li> 
-		Use properties files identified by the {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation.
+		Use properties files identified by the {@link oajr.annotation.RestResource#messages @RestResource.messages()} annotation.
 		<br><h5 class='figure'>Example:</h5>
 		<p class='bcode w800'>
 	<ck>MyResource.myMethod.tags</ck> = <cv>foo,bar,baz</cv>

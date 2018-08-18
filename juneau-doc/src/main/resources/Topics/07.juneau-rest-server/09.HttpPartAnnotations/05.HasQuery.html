@@ -16,17 +16,17 @@
 {new} @HasQuery
 
 <p>
-	Identical to {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
+	Identical to {@link oaj.http.annotation.HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
 	URL-encoded form posts.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+	<li class='ja'>{@link oaj.http.annotation.HasQuery HasQuery}
 </ul>
 <p>
-	Unlike {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
+	Unlike {@link oaj.http.annotation.HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
 	of URL-encoded form posts.
-	Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
-	{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
+	Therefore, this annotation can be used in conjunction with the {@link oaj.http.annotation.Body @Body} annotation or
+	{@link oajr.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
  </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>

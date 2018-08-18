@@ -20,16 +20,16 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		Fixed some HTML formatting issues in {@link org.apache.juneau.html.HtmlSerializer}.
+		Fixed some HTML formatting issues in {@link oaj.html.HtmlSerializer}.
 	</li>
 	<li>
-  			{@link org.apache.juneau.rest.BasicRestServlet} now includes {@link org.apache.juneau.plaintext.PlainTextSerializer} and {@link org.apache.juneau.plaintext.PlainTextParser} for plain-text support.
+  			{@link oajr.BasicRestServlet} now includes {@link oaj.plaintext.PlainTextSerializer} and {@link oaj.plaintext.PlainTextParser} for plain-text support.
   		</li>
   		<li>
 		Child resources now render on default <code>OPTIONS</code> pages through new method <code><del>ResourceOptions.getChildren()</del></code>.
 	</li>
 	<li>
-		Changes to {@link org.apache.juneau.urlencoding.UrlEncodingSerializer}/{@link org.apache.juneau.urlencoding.UrlEncodingParser} to reduce the need for quoted string values.<br>
+		Changes to {@link oaj.urlencoding.UrlEncodingSerializer}/{@link oaj.urlencoding.UrlEncodingParser} to reduce the need for quoted string values.<br>
 		More changes are likely in this area of the code to support multipart form posts.
 	</li>
 	<li>

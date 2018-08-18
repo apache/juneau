@@ -16,17 +16,17 @@
 BeanFilter Class
 
 <p>
-	The {@link org.apache.juneau.transform.BeanFilter} class is the programmatic equivalent to the
-	{@link org.apache.juneau.annotation.Bean @Bean} annotation.
+	The {@link oaj.transform.BeanFilter} class is the programmatic equivalent to the
+	{@link oaj.annotation.Bean @Bean} annotation.
 </p>
 <p>
-	In practice, it's usually simpler to use the {@link org.apache.juneau.annotation.Bean @Bean} and 
-	{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotations on your bean classes.
+	In practice, it's usually simpler to use the {@link oaj.annotation.Bean @Bean} and 
+	{@link oaj.annotation.BeanProperty @BeanProperty} annotations on your bean classes.
 	<br>However, bean filters make it possible to accomplish the same when you can't add annotations
 	to existing code.
 </p>
 <p>
-	Bean filters are defined through {@link org.apache.juneau.transform.BeanFilterBuilder BeanFilterBuilders}.
+	Bean filters are defined through {@link oaj.transform.BeanFilterBuilder BeanFilterBuilders}.
 </p>
 <p>
 	In the previous examples, we defined this bean annotation:
@@ -51,8 +51,8 @@ BeanFilter Class
 	Bean filters are added to serializers and parsers using the following:
 </p>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters}
-	<li class='jm'>{@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)}
+	<li class='jf'>{@link oaj.BeanContext#BEAN_beanFilters}
+	<li class='jm'>{@link oaj.BeanContextBuilder#beanFilters(Object...)}
 </ul>
 <p>
 	For example:
@@ -69,8 +69,8 @@ BeanFilter Class
 	<br>The annotations will be detected and bean filters will automatically be created for them.
 </p>
 <p>
-	The {@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)} method also allows you to pass in interfaces.
-	<br>Any class that's not a subclass of {@link org.apache.juneau.transform.BeanFilterBuilder} get interpreted 
+	The {@link oaj.BeanContextBuilder#beanFilters(Object...)} method also allows you to pass in interfaces.
+	<br>Any class that's not a subclass of {@link oaj.transform.BeanFilterBuilder} get interpreted 
 	as bean interface classes.
 	<br>These cause bean implementations of those interfaces to only expose the properties defined on the 
 	interface.

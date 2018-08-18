@@ -25,14 +25,14 @@ RequestEchoResource
 </p>
 <ul class='spaced-list'>
 	<li>
-		Using the {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()}
+		Using the {@link oajr.annotation.RestResource#properties() @RestResource.properties()}
 		annotation to set serializer properties.
 	<li>
-		Using the {@link org.apache.juneau.rest.annotation.RestResource#beanFilters() @RestResource.beanFilters()} 
-		and {@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()}
+		Using the {@link oajr.annotation.RestResource#beanFilters() @RestResource.beanFilters()} 
+		and {@link oajr.annotation.RestResource#pojoSwaps() @RestResource.pojoSwaps()}
 		annotations to set serializer transforms.
 	<li>
-		Simply passing in an {@link org.apache.juneau.ObjectMap} parameter on the Java method.
+		Simply passing in an {@link oaj.ObjectMap} parameter on the Java method.
 		<br>This object map contains the modifiable properties on the request. 
 </ul>
 <p>
@@ -102,13 +102,13 @@ RequestEchoResource
 	not implementation-specific (i.e. WAS or Jetty) fields which can get messy.
 </p>
 <p>
-	The {@link org.apache.juneau.rest.annotation.RestResource#properties() @RestResource.properties()}, 
-		{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() @RestResopurce.beanFilters()}, and
-		{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() @RestResopurce.pojoSwaps()} 
+	The {@link oajr.annotation.RestResource#properties() @RestResource.properties()}, 
+		{@link oajr.annotation.RestResource#beanFilters() @RestResopurce.beanFilters()}, and
+		{@link oajr.annotation.RestResource#pojoSwaps() @RestResopurce.pojoSwaps()} 
 		annotations are used to set behavior properties on the resource's underlying bean context, serializers, 
 		and parsers.  
 	<br>You're using them here to modify the behavior of serialization for all content types.  
-	<br>The annotations are functionally equivalent to using the {@link org.apache.juneau.rest.RestContextBuilder} class, 
+	<br>The annotations are functionally equivalent to using the {@link oajr.RestContextBuilder} class, 
 	as follows:
 </p>
 

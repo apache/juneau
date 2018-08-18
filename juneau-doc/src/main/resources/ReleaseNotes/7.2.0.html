@@ -24,37 +24,37 @@
 	<li>
 		The REST client <ja>@Remoteable</ja> annotations and REST server <ja>@RemoteMethod</ja> annotations which used to be
 		in separate packages in the client and server projects have been combined into a single set of annotations in 
-		the {@link org.apache.juneau.http.annotation} package.
+		the {@link oaj.http.annotation} package.
 		<br>This fixes a long-standing problem where it was easy to mix up using client-side annotations in server-side code, and vis-versa.
 		<br>Additionally, much work has been done on these annotations to add support for Swagger-style validations and documentation.
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
+			<li class='ja'>{@link oaj.http.annotation.Body}
+			<li class='ja'>{@link oaj.http.annotation.FormData}
+			<li class='ja'>{@link oaj.http.annotation.Header}
+			<li class='ja'>{@link oaj.http.annotation.Path}
+			<li class='ja'>{@link oaj.http.annotation.Query}
+			<li class='ja'>{@link oaj.http.annotation.HasFormData}
+			<li class='ja'>{@link oaj.http.annotation.HasQuery}
+			<li class='ja'>{@link oaj.http.annotation.Request}
 		</ul>
 		<br>These are used with new Swagger schema/documentation annotations to produce schema-based serialization/parsing/validation 
 			and auto-generated Swagger documentation:
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Contact}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.ExternalDocs}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Items}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.License}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Schema}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.SubItems}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Tag}
+			<li class='ja'>{@link oaj.http.annotation.Contact}
+			<li class='ja'>{@link oaj.http.annotation.ExternalDocs}
+			<li class='ja'>{@link oaj.http.annotation.Items}
+			<li class='ja'>{@link oaj.http.annotation.License}
+			<li class='ja'>{@link oaj.http.annotation.Schema}
+			<li class='ja'>{@link oaj.http.annotation.SubItems}
+			<li class='ja'>{@link oaj.http.annotation.Tag}
 		</ul>
 		<br>Additionally, the <ja>@Remoteable</ja> annotation has been split into the following two annotations:
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.remote.RemoteInterface} 
+			<li class='ja'>{@link oaj.remote.RemoteInterface} 
 				- Used for remote proxy interfaces served up through 
-				{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
+				{@link oajr.remote.RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
 				<br>Defaults to <js>"POST"</js> with method signatures as paths.
-			<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteResource} 
+			<li class='ja'>{@link oajrc.remote.RemoteResource} 
 				- Used for 3rd-party REST interfaces.
 				<br>Defaults to <js>"GET"</js> with standardized naming conventions for paths.
 		</ul>
@@ -62,7 +62,7 @@
 		Support for multi-valued parameters as maps or beans on server-side annotations (it was previously supported on client-side):
 		<code><ja>@Query</ja>(<js>"*"</js>)</code>, <code><ja>@FormData</ja>(<js>"*"</js>)</code>, <code><ja>@Header</ja>(<js>"*"</js>)</code>, <code><ja>@Path</ja>(<js>"*"</js>)</code>
 	<li>
-		Support for server-side use of <ja>@Request</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link org.apache.juneau.rest.RestRequest#getRequest(RequestBeanMeta)} method.
+		Support for server-side use of <ja>@Request</ja> annotation on <ja>@RestMethod</ja> annotations and new {@link oajr.RestRequest#getRequest(RequestBeanMeta)} method.
 	<li>
 		Fixed bug where <code><ja>@Bean</ja>(typeName)</code> was not being detected on non-bean POJO classes.
 	<li>
@@ -70,8 +70,8 @@
 	<li>
 		Support for POJO examples:
 		<ul class='doctree'>
-			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_examples}
-			<li class='ja'>{@link org.apache.juneau.annotation.Example}
+			<li class='jf'>{@link oaj.BeanContext#BEAN_examples}
+			<li class='ja'>{@link oaj.annotation.Example}
 		</ul>
 	<li>
 		Fixed bug where parsers could report the wrong line number when an error occurred.
@@ -80,7 +80,7 @@
 		add it to your <code><ja>@Bean</ja>(properties)</code> annotation.
 	<li>
 		<code><ja>@Html</ja>(asXml)</code> and <code><ja>@Html</ja>(asPlainText)</code> replaced with
-		{@link org.apache.juneau.html.annotation.Html#format() @Html(format)}.
+		{@link oaj.html.annotation.Html#format() @Html(format)}.
 	<li>
 		HTML serializer will now serializers beans and maps as HTML even when those objects are embedded
 		within an object with <code><ja>@Html</ja>(format=<jsf>XML</jsf>)</code>.
@@ -88,19 +88,19 @@
 	<li>
 		New settings for binary-based serializers and parsers:
 		<ul class='doctree'>
-			<li class='jf'>{@link org.apache.juneau.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat}
-			<li class='jf'>{@link org.apache.juneau.parser.InputStreamParser#ISPARSER_binaryFormat}
+			<li class='jf'>{@link oaj.serializer.OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+			<li class='jf'>{@link oaj.parser.InputStreamParser#ISPARSER_binaryFormat}
 		</ul>
 	<li>
 		Added support for auto-detection of fluent-style setters:
 		<ul class='doctree'>
-			<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_fluentSetters}
-			<li class='ja'>{@link org.apache.juneau.annotation.Bean#fluentSetters()}
+			<li class='jf'>{@link oaj.BeanContext#BEAN_fluentSetters}
+			<li class='ja'>{@link oaj.annotation.Bean#fluentSetters()}
 		</ul>
 	<li>
-		The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
+		The <jsf>SERIALIZER_abridged</jsf> setting has been replaced with {@link oaj.serializer.Serializer#SERIALIZER_addRootType SERIALIZER_addRootType}
 	<li>
-		The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@link org.apache.juneau.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
+		The <jsf>SERIALIZER_addBeanTypeProperties</jsf> setting has been replaced with {@link oaj.serializer.Serializer#SERIALIZER_addBeanTypes SERIALIZER_addBeanTypes}
 		and is disabled by default.
 	<li>
 		Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
@@ -125,14 +125,14 @@
 	---end---
 		</p>
 	<li>
-		New property {@link org.apache.juneau.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
+		New property {@link oaj.parser.Parser#PARSER_debugOutputLines} for controlling how many input lines are added to the exception message above.
 	<li>
-		New property {@link org.apache.juneau.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
+		New property {@link oaj.BeanContext#BEAN_useEnumNames} for controlling whether enums are serialized
 		using their name or the <code>toString()</code> method.
 	<li>
-		New property {@link org.apache.juneau.BeanContext#BEAN_examples} for defining examples of POJOs.
+		New property {@link oaj.BeanContext#BEAN_examples} for defining examples of POJOs.
 	<li>
-		New {@link org.apache.juneau.annotation.Example @Example} annotation for defining examples of POJOs.
+		New {@link oaj.annotation.Example @Example} annotation for defining examples of POJOs.
 		<br>Used heavily in JSON-Schema support.
 	<li>
 		If a bean has both a <code>getX()</code> and <code>isX()</code> method, the <code>getX()</code> method takes precedence.
@@ -140,54 +140,54 @@
 	<li>
 		Significant improvements to JSON-Schema serialization support.
 		<ul>
-			<li>New {@link org.apache.juneau.jsonschema.annotation.JsonSchema @JsonSchema} annotation.
+			<li>New {@link oaj.jsonschema.annotation.JsonSchema @JsonSchema} annotation.
 		</ul>
 	<li>
 		Fixed <code>NullPointerException</code> when serializing beans with a dyna-property (i.e. <code><ja>@Bean</ja>(<js>"*"</js>)</code>)
 		which returns a <jk>null</jk> value.
 	<li>
 		New option for dyna-property (i.e. <code><ja>@Bean</ja>(<js>"*"</js>)</code>) using a method that returns a collection of extra keys.
-		<br>See new options #4 on {@link org.apache.juneau.annotation.BeanProperty#name()}
+		<br>See new options #4 on {@link oaj.annotation.BeanProperty#name()}
 	<li>
-		New formats for the {@link org.apache.juneau.html.annotation.Html#format() @Html.format()} annotation:
+		New formats for the {@link oaj.html.annotation.Html#format() @Html.format()} annotation:
 		<ul class='doctree'>
-			<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
-			<li class='jf'>{@link org.apache.juneau.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
+			<li class='jf'>{@link oaj.html.annotation.HtmlFormat#HTML_CDC} - Format collections as comma-delimited lists.
+			<li class='jf'>{@link oaj.html.annotation.HtmlFormat#HTML_SDC} - Format collections as space-delimited lists.
 		</ul> 
 	<li>
 		Serializers now allow for q-values on the media types they handle.
 		<br>For example, the accept media type on <code>JsonSerializer.Simple</code> is <js>"application/json+simple,application/json;q=0.9"</js>.
 		<br>This means the serializer CAN handle requests for <js>"application/json"</js> if no other serializers provide a better match.
 	<li>
-		New methods for creating unmodifiable {@link org.apache.juneau.ObjectMap ObjectMaps} and {@link org.apache.juneau.ObjectList ObjectLists}.
+		New methods for creating unmodifiable {@link oaj.ObjectMap ObjectMaps} and {@link oaj.ObjectList ObjectLists}.
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.ObjectMap}
+			<li class='jc'>{@link oaj.ObjectMap}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.ObjectMap#isUnmodifiable() isUnmodifable()}
-				<li class='jm'>{@link org.apache.juneau.ObjectMap#unmodifiable() unmodifiable()}
-				<li class='jm'>{@link org.apache.juneau.ObjectMap#modifiable() modifiable()}
+				<li class='jm'>{@link oaj.ObjectMap#isUnmodifiable() isUnmodifable()}
+				<li class='jm'>{@link oaj.ObjectMap#unmodifiable() unmodifiable()}
+				<li class='jm'>{@link oaj.ObjectMap#modifiable() modifiable()}
 			</ul>
-			<li class='jp'>{@link org.apache.juneau.ObjectList}
+			<li class='jp'>{@link oaj.ObjectList}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.ObjectList#isUnmodifiable() isUnmodifable()}
-				<li class='jm'>{@link org.apache.juneau.ObjectList#unmodifiable() unmodifiable()}
-				<li class='jm'>{@link org.apache.juneau.ObjectList#modifiable() modifiable()}
+				<li class='jm'>{@link oaj.ObjectList#isUnmodifiable() isUnmodifable()}
+				<li class='jm'>{@link oaj.ObjectList#unmodifiable() unmodifiable()}
+				<li class='jm'>{@link oaj.ObjectList#modifiable() modifiable()}
 			</ul>
 		</ul>
 	<li>
-		The <code>JsonSerializer.Simple</code> class has been moved into the top-level {@link org.apache.juneau.json.SimpleJsonSerializer} class.
+		The <code>JsonSerializer.Simple</code> class has been moved into the top-level {@link oaj.json.SimpleJsonSerializer} class.
 	<li>
 		RDF serializer subclasses have been moved into top-level classes:
 		<ul>
-			<li><code>RdfSerializer.Xml</code> -&gt; {@link org.apache.juneau.jena.RdfXmlSerializer}
-			<li><code>RdfSerializer.XmlAbbrev</code> -&gt; {@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}
-			<li><code>RdfSerializer.N3</code> -&gt; {@link org.apache.juneau.jena.N3Serializer}
-			<li><code>RdfSerializer.NTriple</code> -&gt; {@link org.apache.juneau.jena.NTripleSerializer}
-			<li><code>RdfSerializer.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleSerializer}
-			<li><code>RdfParser.Xml</code> -&gt; {@link org.apache.juneau.jena.RdfXmlParser}
-			<li><code>RdfParser.N3</code> -&gt; {@link org.apache.juneau.jena.N3Parser}
-			<li><code>RdfParser.NTriple</code> -&gt; {@link org.apache.juneau.jena.NTripleParser}
-			<li><code>RdfParser.Turtle</code> -&gt; {@link org.apache.juneau.jena.TurtleParser}
+			<li><code>RdfSerializer.Xml</code> -&gt; {@link oaj.jena.RdfXmlSerializer}
+			<li><code>RdfSerializer.XmlAbbrev</code> -&gt; {@link oaj.jena.RdfXmlAbbrevSerializer}
+			<li><code>RdfSerializer.N3</code> -&gt; {@link oaj.jena.N3Serializer}
+			<li><code>RdfSerializer.NTriple</code> -&gt; {@link oaj.jena.NTripleSerializer}
+			<li><code>RdfSerializer.Turtle</code> -&gt; {@link oaj.jena.TurtleSerializer}
+			<li><code>RdfParser.Xml</code> -&gt; {@link oaj.jena.RdfXmlParser}
+			<li><code>RdfParser.N3</code> -&gt; {@link oaj.jena.N3Parser}
+			<li><code>RdfParser.NTriple</code> -&gt; {@link oaj.jena.NTripleParser}
+			<li><code>RdfParser.Turtle</code> -&gt; {@link oaj.jena.TurtleParser}
 		</ul>
 	<li>
 		New API for pairing serializers and parsers for simplified syntax:
@@ -204,27 +204,27 @@
 	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
 		</p>
 		<ul class='doctree'>
-			<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
+			<li class='jac'>{@link oaj.marshall.Marshall}
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.marshall.CharMarshall}
+				<li class='jac'>{@link oaj.marshall.CharMarshall}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.marshall.Html}
-					<li class='jc'>{@link org.apache.juneau.marshall.Json}
-					<li class='jc'>{@link org.apache.juneau.marshall.PlainText}
-					<li class='jc'>{@link org.apache.juneau.marshall.SimpleJson}
-					<li class='jc'>{@link org.apache.juneau.marshall.Uon}
-					<li class='jc'>{@link org.apache.juneau.marshall.UrlEncoding}
-					<li class='jc'>{@link org.apache.juneau.marshall.Xml}
-					<li class='jc'>{@link org.apache.juneau.marshall.N3}
-					<li class='jc'>{@link org.apache.juneau.marshall.NTriple}
-					<li class='jc'>{@link org.apache.juneau.marshall.RdfXml}
-					<li class='jc'>{@link org.apache.juneau.marshall.RdfXmlAbbrev}
-					<li class='jc'>{@link org.apache.juneau.marshall.Turtle}	
+					<li class='jc'>{@link oaj.marshall.Html}
+					<li class='jc'>{@link oaj.marshall.Json}
+					<li class='jc'>{@link oaj.marshall.PlainText}
+					<li class='jc'>{@link oaj.marshall.SimpleJson}
+					<li class='jc'>{@link oaj.marshall.Uon}
+					<li class='jc'>{@link oaj.marshall.UrlEncoding}
+					<li class='jc'>{@link oaj.marshall.Xml}
+					<li class='jc'>{@link oaj.marshall.N3}
+					<li class='jc'>{@link oaj.marshall.NTriple}
+					<li class='jc'>{@link oaj.marshall.RdfXml}
+					<li class='jc'>{@link oaj.marshall.RdfXmlAbbrev}
+					<li class='jc'>{@link oaj.marshall.Turtle}	
 				</ul>
-				<li class='jac'>{@link org.apache.juneau.marshall.StreamMarshall}
+				<li class='jac'>{@link oaj.marshall.StreamMarshall}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.marshall.Jso}
-					<li class='jc'>{@link org.apache.juneau.marshall.MsgPack}
+					<li class='jc'>{@link oaj.marshall.Jso}
+					<li class='jc'>{@link oaj.marshall.MsgPack}
 				</ul>
 			</ul>
 		</ul>
@@ -238,36 +238,36 @@
 <h5 class='topic w800'>juneau-dto</h5>
 <ul class='spaced-list'>
 	<li>
-		Fixed bug where Swagger {@link org.apache.juneau.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
+		Fixed bug where Swagger {@link oaj.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
 		instead of a list of strings.
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
-		Simplified {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)}
-		and {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
+		Simplified {@link oajr.annotation.RestResource#swagger() @RestResource(swagger)}
+		and {@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
 	<li>
 		Fixed bug in <code>UriResolver</code> when request path info had special characters.
 	<li>
 		Fixed bug where incorrect media type was being set on responses (e.g. <code>text/html+schema</code> instead of <code>text/html</code> for schema documents).
 	<li>
-		The <code>RemoteableServlet</code> class has been moved and renamed to {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet}.
+		The <code>RemoteableServlet</code> class has been moved and renamed to {@link oajr.remote.RemoteInterfaceServlet}.
 	<li>
-		{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} now provides a form page for invoking remote interface methods in a browser.
+		{@link oajr.remote.RemoteInterfaceServlet} now provides a form page for invoking remote interface methods in a browser.
 	<li>
 		Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
 	<li>
-		New {@link org.apache.juneau.http.annotation.Response @Response} annotation that can be applied to
+		New {@link oaj.http.annotation.Response @Response} annotation that can be applied to
 		throwables thrown from REST methods and POJOs returned by REST methods to specify non-200 status return codes and descriptions in Swagger documentation.
 	<li>
 		Swagger fields added to the following annotations:
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+			<li class='ja'>{@link oaj.http.annotation.Body}
+			<li class='ja'>{@link oaj.http.annotation.FormData}
+			<li class='ja'>{@link oaj.http.annotation.Header}
+			<li class='ja'>{@link oaj.http.annotation.Path}
+			<li class='ja'>{@link oaj.http.annotation.Query}
 		</ul>
 	<li>
 		The <ja>@PathRemainder</ja> annotation has been removed entirely.  
@@ -275,97 +275,97 @@
 	<li>
 		"Helper" classes (i.e. reusable beans that can be returned by REST methods) have been moved to the following package with some new additions:
 		<ul class='doctree'>
-			<li class='jp'>{@link org.apache.juneau.rest.helper}
+			<li class='jp'>{@link oajr.helper}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.rest.helper.BeanDescription}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.ChildResourceDescriptions}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResource}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.SeeOtherRoot}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.ResourceDescription}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResource}
-				<li class='jc'>{@link org.apache.juneau.rest.helper.StreamResourceBuilder}
+				<li class='jc'>{@link oajr.helper.BeanDescription}
+				<li class='jc'>{@link oajr.helper.ChildResourceDescriptions}
+				<li class='jc'>{@link oajr.helper.ReaderResource}
+				<li class='jc'>{@link oajr.helper.ReaderResourceBuilder}
+				<li class='jc'>{@link oajr.helper.SeeOtherRoot}
+				<li class='jc'>{@link oajr.helper.ResourceDescription}
+				<li class='jc'>{@link oajr.helper.StreamResource}
+				<li class='jc'>{@link oajr.helper.StreamResourceBuilder}
 			</ul>
 		</ul>
 	<li>
 		Predefined HTTP responses.
 		<ul class='doctree'>
-			<li class='jp'>{@link org.apache.juneau.rest.response}
+			<li class='jp'>{@link oajr.response}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.rest.response.Accepted}
-				<li class='jc'>{@link org.apache.juneau.rest.response.AlreadyReported}
-				<li class='jc'>{@link org.apache.juneau.rest.response.Continue}
-				<li class='jc'>{@link org.apache.juneau.rest.response.Created}
-				<li class='jc'>{@link org.apache.juneau.rest.response.EarlyHints}
-				<li class='jc'>{@link org.apache.juneau.rest.response.Found}
-				<li class='jc'>{@link org.apache.juneau.rest.response.IMUsed}
-				<li class='jc'>{@link org.apache.juneau.rest.response.MovedPermanently}
-				<li class='jc'>{@link org.apache.juneau.rest.response.MultipleChoices}
-				<li class='jc'>{@link org.apache.juneau.rest.response.MultiStatus}
-				<li class='jc'>{@link org.apache.juneau.rest.response.NoContent}
-				<li class='jc'>{@link org.apache.juneau.rest.response.NonAuthoritiveInformation}
-				<li class='jc'>{@link org.apache.juneau.rest.response.NotModified}
-				<li class='jc'>{@link org.apache.juneau.rest.response.Ok}
-				<li class='jc'>{@link org.apache.juneau.rest.response.PartialContent}
-				<li class='jc'>{@link org.apache.juneau.rest.response.PermanentRedirect}
-				<li class='jc'>{@link org.apache.juneau.rest.response.Processing}
-				<li class='jc'>{@link org.apache.juneau.rest.response.ResetContent}
-				<li class='jc'>{@link org.apache.juneau.rest.response.SeeOther}
-				<li class='jc'>{@link org.apache.juneau.rest.response.SwitchingProtocols}
-				<li class='jc'>{@link org.apache.juneau.rest.response.TemporaryRedirect}
-				<li class='jc'>{@link org.apache.juneau.rest.response.UseProxy}			
+				<li class='jc'>{@link oajr.response.Accepted}
+				<li class='jc'>{@link oajr.response.AlreadyReported}
+				<li class='jc'>{@link oajr.response.Continue}
+				<li class='jc'>{@link oajr.response.Created}
+				<li class='jc'>{@link oajr.response.EarlyHints}
+				<li class='jc'>{@link oajr.response.Found}
+				<li class='jc'>{@link oajr.response.IMUsed}
+				<li class='jc'>{@link oajr.response.MovedPermanently}
+				<li class='jc'>{@link oajr.response.MultipleChoices}
+				<li class='jc'>{@link oajr.response.MultiStatus}
+				<li class='jc'>{@link oajr.response.NoContent}
+				<li class='jc'>{@link oajr.response.NonAuthoritiveInformation}
+				<li class='jc'>{@link oajr.response.NotModified}
+				<li class='jc'>{@link oajr.response.Ok}
+				<li class='jc'>{@link oajr.response.PartialContent}
+				<li class='jc'>{@link oajr.response.PermanentRedirect}
+				<li class='jc'>{@link oajr.response.Processing}
+				<li class='jc'>{@link oajr.response.ResetContent}
+				<li class='jc'>{@link oajr.response.SeeOther}
+				<li class='jc'>{@link oajr.response.SwitchingProtocols}
+				<li class='jc'>{@link oajr.response.TemporaryRedirect}
+				<li class='jc'>{@link oajr.response.UseProxy}			
 			</ul>
 		</ul>
 	<li>
 		Predefined HTTP error throwables.
 		<br>When added to REST Java methods, reflected in generated Swagger documentation.
 		<ul class='doctree'>
-			<li class='jp'>{@link org.apache.juneau.rest.exception}
+			<li class='jp'>{@link oajr.exception}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.rest.exception.BadRequest}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.Conflict}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.ExpectationFailed}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.FailedDependency}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.Forbidden}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.Gone}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.HttpVersionNotSupported}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.InsufficientStorage}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.InternalServerError}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.LengthRequired}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.Locked}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.LoopDetected}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.MethodNotAllowed}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.MisdirectedRequest}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.NetworkAuthenticationRequired}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.NotAcceptable}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.NotExtended}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.NotFound}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.NotImplemented}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.PayloadTooLarge}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionFailed}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.PreconditionRequired}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.RangeNotSatisfiable}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.RequestHeaderFieldsTooLarge}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.ServiceUnavailable}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.TooManyRequests}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.Unauthorized}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.UnavailableForLegalReasons}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.UnprocessableEntity}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.UnsupportedMediaType}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.UpgradeRequired}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.UriTooLong}
-				<li class='jc'>{@link org.apache.juneau.rest.exception.VariantAlsoNegotiates}
+				<li class='jc'>{@link oajr.exception.BadRequest}
+				<li class='jc'>{@link oajr.exception.Conflict}
+				<li class='jc'>{@link oajr.exception.ExpectationFailed}
+				<li class='jc'>{@link oajr.exception.FailedDependency}
+				<li class='jc'>{@link oajr.exception.Forbidden}
+				<li class='jc'>{@link oajr.exception.Gone}
+				<li class='jc'>{@link oajr.exception.HttpVersionNotSupported}
+				<li class='jc'>{@link oajr.exception.InsufficientStorage}
+				<li class='jc'>{@link oajr.exception.InternalServerError}
+				<li class='jc'>{@link oajr.exception.LengthRequired}
+				<li class='jc'>{@link oajr.exception.Locked}
+				<li class='jc'>{@link oajr.exception.LoopDetected}
+				<li class='jc'>{@link oajr.exception.MethodNotAllowed}
+				<li class='jc'>{@link oajr.exception.MisdirectedRequest}
+				<li class='jc'>{@link oajr.exception.NetworkAuthenticationRequired}
+				<li class='jc'>{@link oajr.exception.NotAcceptable}
+				<li class='jc'>{@link oajr.exception.NotExtended}
+				<li class='jc'>{@link oajr.exception.NotFound}
+				<li class='jc'>{@link oajr.exception.NotImplemented}
+				<li class='jc'>{@link oajr.exception.PayloadTooLarge}
+				<li class='jc'>{@link oajr.exception.PreconditionFailed}
+				<li class='jc'>{@link oajr.exception.PreconditionRequired}
+				<li class='jc'>{@link oajr.exception.RangeNotSatisfiable}
+				<li class='jc'>{@link oajr.exception.RequestHeaderFieldsTooLarge}
+				<li class='jc'>{@link oajr.exception.ServiceUnavailable}
+				<li class='jc'>{@link oajr.exception.TooManyRequests}
+				<li class='jc'>{@link oajr.exception.Unauthorized}
+				<li class='jc'>{@link oajr.exception.UnavailableForLegalReasons}
+				<li class='jc'>{@link oajr.exception.UnprocessableEntity}
+				<li class='jc'>{@link oajr.exception.UnsupportedMediaType}
+				<li class='jc'>{@link oajr.exception.UpgradeRequired}
+				<li class='jc'>{@link oajr.exception.UriTooLong}
+				<li class='jc'>{@link oajr.exception.VariantAlsoNegotiates}
 			</ul>
 		</ul>	
 	<li>
-		The {@link org.apache.juneau.rest.annotation.HtmlDoc#nav() @HtmlDoc.nav()} and {@link org.apache.juneau.rest.annotation.HtmlDoc#navlinks() @HtmlDoc.navlinks()}
+		The {@link oajr.annotation.HtmlDoc#nav() @HtmlDoc.nav()} and {@link oajr.annotation.HtmlDoc#navlinks() @HtmlDoc.navlinks()}
 		can now both be used on the same annotation.
 		<br>The contents of <code>nav()</code> are free-form HTML that gets rendered immediately after the navigation links.
 	<li>
 		The following new parameter types can be used on REST methods:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.parser.ReaderParser} - The reader parser matching the request content type.
-			<li class='jc'>{@link org.apache.juneau.parser.InputStreamParser} - The input stream parser matching the request content type.
+			<li class='jc'>{@link oaj.parser.ReaderParser} - The reader parser matching the request content type.
+			<li class='jc'>{@link oaj.parser.InputStreamParser} - The input stream parser matching the request content type.
 		</ul>
 	<li>
 		The <code>$F</code> variable can now be used as a initialization time variable.
@@ -386,77 +386,77 @@
 		The <code><del>RestResource.nowrap()</del></code> annotation has been changed to a string with a default value of <js>"true"</js>.
 		<br>Having it as a string allows us to differentiate between a set and unset value so that it can be overridden in subclasses.
 	<li>
-		The {@link org.apache.juneau.http.annotation.Path#name()} annotation parameter is now required.
+		The {@link oaj.http.annotation.Path#name()} annotation parameter is now required.
 	<li>
 		New class for mock unit testing of REST resources:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+			<li class='jc'>{@link oajr.mock.MockRest}
 		</ul>
 	<li>
 		<code><ja>@RestMethod</ja>(inherit)</code> annotation has been removed and replaced with the following classes:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.Inherit}
-			<li class='jc'>{@link org.apache.juneau.rest.None}
+			<li class='jc'>{@link oajr.Inherit}
+			<li class='jc'>{@link oajr.None}
 		</ul>
 		<br>These can be used in the following locations:
 		<ul class='doctree'>
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#serializers()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#parsers()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#serializers()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#parsers()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters()}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps()}
+			<li class='ja'>{@link oajr.annotation.RestResource#serializers()}
+			<li class='ja'>{@link oajr.annotation.RestResource#parsers()}
+			<li class='ja'>{@link oajr.annotation.RestResource#beanFilters()}
+			<li class='ja'>{@link oajr.annotation.RestResource#pojoSwaps()}
+			<li class='ja'>{@link oajr.annotation.RestMethod#serializers()}
+			<li class='ja'>{@link oajr.annotation.RestMethod#parsers()}
+			<li class='ja'>{@link oajr.annotation.RestMethod#beanFilters()}
+			<li class='ja'>{@link oajr.annotation.RestMethod#pojoSwaps()}
 		</ul>
 		<br>One advantage is that you now have control over the precedence of serializers and parsers by where you insert the <code>Inherit</code> class. 
 	<li>
-		<code>RequestPathMatch</code> class has been renamed to {@link org.apache.juneau.rest.RequestPath}.
+		<code>RequestPathMatch</code> class has been renamed to {@link oajr.RequestPath}.
 	<li>
-		{@link org.apache.juneau.http.annotation.Request @Request} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
-		<br>Includes new methods on {@link org.apache.juneau.rest.RestRequest}:
+		{@link oaj.http.annotation.Request @Request} objects can now be used as parameters in <ja>@RestMethod</ja> methods.
+		<br>Includes new methods on {@link oajr.RestRequest}:
 		<ul class='doctree'>
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(Class) getRequest(Class)}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getRequest(RequestBeanMeta) getRequest(RequestBeanMeta)}
+			<li class='jm'>{@link oajr.RestRequest#getRequest(Class) getRequest(Class)}
+			<li class='jm'>{@link oajr.RestRequest#getRequest(RequestBeanMeta) getRequest(RequestBeanMeta)}
 		</ul>
 	<li>
-		New methods added to {@link org.apache.juneau.rest.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
+		New methods added to {@link oajr.widget.MenuItemWidget} to allow population of menu item content using Javascript and Ajax calls:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
+			<li class='jc'>{@link oajr.widget.MenuItemWidget}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
-				<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
+				<li class='jm'>{@link oajr.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
+				<li class='jm'>{@link oajr.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
 			</ul>
 		</ul>
 	<li>
-		New methods added to {@link org.apache.juneau.rest.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
+		New methods added to {@link oajr.widget.Widget} to allow retrieving classpath resources with embedded SVL variables:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
+			<li class='jc'>{@link oajr.widget.Widget}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
-				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
-				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
+				<li class='jm'>{@link oajr.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
+				<li class='jm'>{@link oajr.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
+				<li class='jm'>{@link oajr.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
 			</ul>
 		</ul>
 	<li>
 		New/updated documentation: 
 		<br>{@doc juneau-rest-server.UnitTesting}
 	<li>
-		The behavior of the default values for {@link org.apache.juneau.rest.annotation.RestMethod#name()} and {@link org.apache.juneau.rest.annotation.RestMethod#path()}
+		The behavior of the default values for {@link oajr.annotation.RestMethod#name()} and {@link oajr.annotation.RestMethod#path()}
 		have changed.
 		<br>If not specified, the values are inferred from the Java method name.
 		<br>See also: {@doc juneau-rest-server.RestMethod}
 	<li>
-		<code>RedirectToServletRoot</code> class has been renamed to {@link org.apache.juneau.rest.helper.SeeOtherRoot}.
+		<code>RedirectToServletRoot</code> class has been renamed to {@link oajr.helper.SeeOtherRoot}.
 	<li>
 		New REST context settings:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.RestContext}
+			<li class='jc'>{@link oajr.RestContext}
 			<ul>
-				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriAuthority REST_uriAuthority}
-				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriContext REST_uriContext}
-				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriRelativity REST_uriRelativity}
-				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriResolution REST_uriResolution}
+				<li class='jf'>{@link oajr.RestContext#REST_uriAuthority REST_uriAuthority}
+				<li class='jf'>{@link oajr.RestContext#REST_uriContext REST_uriContext}
+				<li class='jf'>{@link oajr.RestContext#REST_uriRelativity REST_uriRelativity}
+				<li class='jf'>{@link oajr.RestContext#REST_uriResolution REST_uriResolution}
 			</ul>
 		</ul>
 </ul>
@@ -469,15 +469,15 @@
 		Made improvements to the builder API for defining SSL support.
 		<br>New methods added:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+			<li class='jc'>{@link oajrc.RestClientBuilder}
 			<ul>
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#trustManagers(TrustManager...)}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#secureRandom(SecureRandom)}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#sslProtocols(String...) sslProtocols(String...)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#cipherSuites(String...) cipherSuites(String...)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#hostnameVerifier(HostnameVerifier) hostnameVerifier(HostnameVerifier)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#keyManagers(KeyManager...) keyManagers(KeyManager...)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#trustManagers(TrustManager...)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#secureRandom(SecureRandom)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}
 			</ul>
 		</ul>
 	<li>
@@ -487,43 +487,43 @@
 	<li>
 		Methods added to client builder to make it easy to define the transport language:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+			<li class='jc'>{@link oajrc.RestClientBuilder}
 			<ul>
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#json() json()}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#xml() xml()}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#html() html()}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#uon() uon()}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#urlEnc() urlEnc()}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#msgpack() msgpack()}
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#plainText() plainText()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#json() json()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#xml() xml()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#html() html()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#uon() uon()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#urlEnc() urlEnc()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#msgpack() msgpack()}
+				<li class='jf'>{@link oajrc.RestClientBuilder#plainText() plainText()}
 			</ul>
 		</ul>
 	<li>
 		New method added for allowing serverless client testing against REST interfaces.
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
+			<li class='jc'>{@link oajrc.RestClientBuilder}
 			<ul>
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection) mockHttpConnection(MockHttpConnection)}
+				<li class='jf'>{@link oajrc.RestClientBuilder#mockHttpConnection(MockHttpConnection) mockHttpConnection(MockHttpConnection)}
 			</ul>
 		</ul>
 	<li>
 		Removed the deprecated <code>RestCall.execute()</code> method.
-		<br>Use {@link org.apache.juneau.rest.client.RestCall#run()}.
+		<br>Use {@link oajrc.RestCall#run()}.
 	<li>
-		<code>RestCall.input(Object)</code> method renamed to {@link org.apache.juneau.rest.client.RestCall#body(Object)} to match OpenAPI terminology.
+		<code>RestCall.input(Object)</code> method renamed to {@link oajrc.RestCall#body(Object)} to match OpenAPI terminology.
 	<li>
 		Made constructors on <code>RestClient</code> and <code>RestClientBuilder</code> protected so that they can be subclassed.
 	<li>
 		The <code>RestClient.getRemoteableProxy()</code> methods have been split into separate methods for Remote Interfaces and Remote Resources:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
+			<li class='jc'>{@link oajrc.RestClient}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class)}
-				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object)}
-				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object,Serializer,Parser)}
-				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class)}
-				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object)}
-				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object,Serializer,Parser)}
+				<li class='jm'>{@link oajrc.RestClient#getRemoteInterface(Class)}
+				<li class='jm'>{@link oajrc.RestClient#getRemoteInterface(Class,Object)}
+				<li class='jm'>{@link oajrc.RestClient#getRemoteInterface(Class,Object,Serializer,Parser)}
+				<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class)}
+				<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class,Object)}
+				<li class='jm'>{@link oajrc.RestClient#getRemoteResource(Class,Object,Serializer,Parser)}
 			</ul>
 		</ul>
 </ul>

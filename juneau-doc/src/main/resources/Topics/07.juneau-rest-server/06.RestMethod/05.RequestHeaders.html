@@ -16,7 +16,7 @@
 RequestHeaders
 
 <p>
-	The {@link org.apache.juneau.rest.RequestHeaders} object is the API for accessing the headers of an HTTP request.
+	The {@link oajr.RequestHeaders} object is the API for accessing the headers of an HTTP request.
 	<br>It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
@@ -42,18 +42,18 @@ RequestHeaders
 	Some important methods on this class are:
 </p>
 <ul class='doctree'>
-	<li class='jc'><code>{@link org.apache.juneau.rest.RequestHeaders} <jk>extends</jk> TreeMap&lt;String,String[]&gt;</code>
+	<li class='jc'><code>{@link oajr.RequestHeaders} <jk>extends</jk> TreeMap&lt;String,String[]&gt;</code>
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Class) get(String,Class)} - Get header value converted to a POJO.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#get(String,Type,Type...) get(String,Type,Type)} - Get header value converted to a map or collection of POJOs.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getString(String,String) getString(String,String)} - Get header value as a simple string.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getInt(String,int) getInt(String,int)} - Get header value as an integer.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#getBoolean(String,boolean) getBoolean(String,boolean)} - Get header value as a boolean.
-		<li class='jm'>{@link org.apache.juneau.rest.RequestHeaders#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a header.
+		<li class='jm'>{@link oajr.RequestHeaders#get(String,Class) get(String,Class)} - Get header value converted to a POJO.
+		<li class='jm'>{@link oajr.RequestHeaders#get(String,Type,Type...) get(String,Type,Type)} - Get header value converted to a map or collection of POJOs.
+		<li class='jm'>{@link oajr.RequestHeaders#getString(String,String) getString(String,String)} - Get header value as a simple string.
+		<li class='jm'>{@link oajr.RequestHeaders#getInt(String,int) getInt(String,int)} - Get header value as an integer.
+		<li class='jm'>{@link oajr.RequestHeaders#getBoolean(String,boolean) getBoolean(String,boolean)} - Get header value as a boolean.
+		<li class='jm'>{@link oajr.RequestHeaders#addDefault(String,Object) addDefault(String,Object)} - Programmatically set a default value for a header.
 	</ul>
 </ul>
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	<li class='ja'>{@link oaj.http.annotation.Header}
 </ul>

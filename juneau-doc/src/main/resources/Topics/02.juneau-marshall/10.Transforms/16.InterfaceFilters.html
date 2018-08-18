@@ -23,9 +23,9 @@ Interface Filters
 	Interface filters are defined through the following:
 </p>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters}
-	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interfaceClass() @Bean.interfaceClass()}
-	<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#interfaceClass(Class)}
+	<li class='jf'>{@link oaj.BeanContext#BEAN_beanFilters}
+	<li class='ja'>{@link oaj.annotation.Bean#interfaceClass() @Bean.interfaceClass()}
+	<li class='jm'>{@link oaj.transform.BeanFilterBuilder#interfaceClass(Class)}
 </ul>
 <p>
 	For example, let's define the following interface and implementation:
@@ -71,7 +71,7 @@ Interface Filters
 	String json = s.serialize(o);  
 </p>	
 <p>
-	The {@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
+	The {@link oaj.BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
 	non-<code>BeanFilter</code> classes passed in as meaning interface classes. 
 	<br>So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
 	passing in <code>MyInterface.<jk>class</jk></code> to the serializer, like so:
@@ -83,7 +83,7 @@ Interface Filters
 		.build();
 </p>
 <p>
-	The annotation equivalent is {@link org.apache.juneau.annotation.Bean#interfaceClass() Bean#interfaceClass()}.
+	The annotation equivalent is {@link oaj.annotation.Bean#interfaceClass() Bean#interfaceClass()}.
 </p>
 <p class='bpcode w800'>
 	<ja>@Bean</ja>(interfaceClass=MyInterface.<jk>class</jk>)

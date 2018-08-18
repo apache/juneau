@@ -16,17 +16,17 @@
 @HtmlDoc
 
 <p>
-	The {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc} annotation is used to customize the HTML 
+	The {@link oajr.annotation.HtmlDoc @HtmlDoc} annotation is used to customize the HTML 
 	view of your serialized POJOs.
 	<br>It's used in the following locations:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#htmldoc()}
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#htmldoc()}
+	<li class='ja'>{@link oajr.annotation.RestResource#htmldoc()}
+	<li class='ja'>{@link oajr.annotation.RestMethod#htmldoc()}
 </ul>
 <p>
 	The annotation itself is just a convenience for setting configuration properties set
-	on the {@link org.apache.juneau.html.HtmlDocSerializer} class.
+	on the {@link oaj.html.HtmlDocSerializer} class.
 	<br>For example, the following two pieces of code are equivalent:
 </p>
 <p class='bpcode w800'>
@@ -75,8 +75,8 @@
 	&lt;/html&gt;</xt>
 </p>
 <p>
-	The outline above is controlled by the {@link org.apache.juneau.html.HtmlDocTemplate} interface
-	which can be overridden via the {@link org.apache.juneau.rest.annotation.HtmlDoc#template @HtmlDoc.template()} annotation.
+	The outline above is controlled by the {@link oaj.html.HtmlDocTemplate} interface
+	which can be overridden via the {@link oajr.annotation.HtmlDoc#template @HtmlDoc.template()} annotation.
 </p>
 <p>
 	The <l>HelloWorldResource</l> class was an example of the <l>@HtmlDoc</l> annotation in use:
@@ -130,6 +130,6 @@
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.HtmlDoc}
-	<li class='jc'>{@link org.apache.juneau.rest.HtmlDocBuilder}
+	<li class='ja'>{@link oajr.annotation.HtmlDoc}
+	<li class='jc'>{@link oajr.HtmlDocBuilder}
 </ul>

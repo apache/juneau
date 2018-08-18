@@ -25,13 +25,13 @@
 
 <h5 class='topic w800'>Core</h5>		
 <ul class='spaced-list'>
-	<li>Simplified {@link org.apache.juneau.utils.PojoIntrospector} class.
-	<li>New {@link org.apache.juneau.internal.ClassUtils#getMethodSignature(Method)} method.
+	<li>Simplified {@link oaj.utils.PojoIntrospector} class.
+	<li>New {@link oaj.internal.ClassUtils#getMethodSignature(Method)} method.
 </ul>
 
 <h5 class='topic w800'>Client</h5>		
 <ul class='spaced-list'>
-	<li>New methods in {@link org.apache.juneau.rest.client.RestClient} for working with remoteable services:
+	<li>New methods in {@link oajrc.RestClient} for working with remoteable services:
 	<ul>
 		<li><code><del>RestClient.setRemoteableServletUri(String)</del></code>
 		<li><code><del>RestClient#getRemoteableProxy(Class)</del></code>
@@ -40,10 +40,10 @@
 
 <h5 class='topic w800'>Server</h5>		
 <ul class='spaced-list'>
-	<li>Added a default OPTIONS page to {@link org.apache.juneau.rest.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
+	<li>Added a default OPTIONS page to {@link oajr.BasicRestServlet} and <code><del>RestServletJenaDefault</del></code>.
 	<li><code>RestServletProperties.REST_allowMethodParam</code> has been enhanced to allow you to
 		explicitly specify which HTTP methods can be used in the <code>&amp;method</code> parameter.
-	<li>New methods added to {@link org.apache.juneau.rest.RestRequest}:
+	<li>New methods added to {@link oajr.RestRequest}:
 	<ul>
 		<li><code><del>RestRequest.getParser()</del></code>
 		<li><code><del>RestRequest.getReaderParser()</del></code>

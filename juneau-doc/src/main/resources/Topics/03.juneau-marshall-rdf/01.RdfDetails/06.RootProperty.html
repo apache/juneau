@@ -23,14 +23,14 @@ Root Property
 	form, and in some cases it's impossible.
 </p>
 <p>
-	By default, the {@link org.apache.juneau.jena.RdfParser} class handles this by scanning all the nodes and 
+	By default, the {@link oaj.jena.RdfParser} class handles this by scanning all the nodes and 
 	identifying the nodes without incoming references.
 	<br>However, this is inefficient, especially for large models.
 	<br>And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
 	locate the root at all.
 </p>
 <p>
-	To resolve this issue, the property {@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty} 
+	To resolve this issue, the property {@link oaj.jena.RdfSerializer#RDF_addRootProperty} 
 	was introduced.
 	<br>When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
 	by the parser.

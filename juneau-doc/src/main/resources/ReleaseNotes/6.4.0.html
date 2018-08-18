@@ -202,7 +202,7 @@
 	<li>
 		Improvements to swap support.
 		<ul>
-			<li>New {@link org.apache.juneau.annotation.Swap @Swap} annotation.
+			<li>New {@link oaj.annotation.Swap @Swap} annotation.
 				<br>Replaces the <code>@Pojo</code> and <code>@BeanProperty.swap()</code> annotations.
 			<li>Support for per-media-type swaps.
 				<br>Programmatic example:
@@ -250,7 +250,7 @@
 		<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
 		<jk>public class</jk> MyPojo {}
 				</p>
-			<li>New {@link org.apache.juneau.annotation.Swaps @Swaps} annotation for defining multiple swaps
+			<li>New {@link oaj.annotation.Swaps @Swaps} annotation for defining multiple swaps
 				against the same POJO when they're differentiated by media types:
 				<p class='bcode w800'>
 	<ja>@Swaps</ja>(
@@ -264,7 +264,7 @@
 				</p>
 		</ul>
 	<li>
-		New {@link org.apache.juneau.transform.Surrogate} interface for identifying surrogate classes.
+		New {@link oaj.transform.Surrogate} interface for identifying surrogate classes.
 	<li>
 		Serializers can now serialize to {@link java.util.StringBuilder StringBuilders}.
 	<li>
@@ -292,7 +292,7 @@
 		<br>This feature helps with the implementation of language-agnostic template support such as for
 		using FreeMaker to serialize POJOs to HTML.
 	<li>
-		{@link org.apache.juneau.serializer.SerializerSession} and {@link org.apache.juneau.parser.ParserSession}
+		{@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
 		objects are now reusable if used within the same thread.
 		<p class='bcode w800'>
 	<jc>// Old way (still works)</jc>
@@ -310,46 +310,46 @@
 		</p>
 		This is mostly an internal change and doesn't affect the existing APIs.
 	<li>
-		{@link org.apache.juneau.transform.PojoSwap#swap(BeanSession,Object)} and {@link org.apache.juneau.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
+		{@link oaj.transform.PojoSwap#swap(BeanSession,Object)} and {@link oaj.transform.PojoSwap#unswap(BeanSession,Object,ClassMeta)} 
 		can now throw arbitrary exceptions instead of having to wrap them in <code>SerializeException</code>/<code>ParseException</code>.
 	<li>
-		New {@link org.apache.juneau.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@link org.apache.juneau.transforms.CalendarSwap} and 
-		{@link org.apache.juneau.transforms.DateSwap}.
+		New {@link oaj.utils.CalendarUtils} class that encapsulates serialization/parsing logic from {@link oaj.transforms.CalendarSwap} and 
+		{@link oaj.transforms.DateSwap}.
 	<li>
-		New annotation {@link org.apache.juneau.html.annotation.Html#anchorText}.
+		New annotation {@link oaj.html.annotation.Html#anchorText}.
 	<li>
-		New methods on {@link org.apache.juneau.ObjectList}:
+		New methods on {@link oaj.ObjectList}:
 		<ul>
-			<li>{@link org.apache.juneau.ObjectList#get(int,Class) get(int,Class)}
-			<li>{@link org.apache.juneau.ObjectList#get(int,Type,Type...) get(int,Type,Type...)}
-			<li>{@link org.apache.juneau.ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)}
-			<li>{@link org.apache.juneau.ObjectList#getList(int,Class) getList(int,Class)}
+			<li>{@link oaj.ObjectList#get(int,Class) get(int,Class)}
+			<li>{@link oaj.ObjectList#get(int,Type,Type...) get(int,Type,Type...)}
+			<li>{@link oaj.ObjectList#getMap(int,Class,Class) getMap(int,Class,Class)}
+			<li>{@link oaj.ObjectList#getList(int,Class) getList(int,Class)}
 		</ul>
 	<li>
-		New methods on {@link org.apache.juneau.ObjectMap}:
+		New methods on {@link oaj.ObjectMap}:
 		<ul>
-			<li>{@link org.apache.juneau.ObjectMap#get(String,Class) get(String,Class)}
-			<li>{@link org.apache.juneau.ObjectMap#get(String,Type,Type...) get(String,Type,Type...)}
-			<li>{@link org.apache.juneau.ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)}
-			<li>{@link org.apache.juneau.ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
-			<li>{@link org.apache.juneau.ObjectMap#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
-			<li>{@link org.apache.juneau.ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)}
-			<li>{@link org.apache.juneau.ObjectMap#getAt(String,Class) getAt(String,Class)}
-			<li>{@link org.apache.juneau.ObjectMap#getAt(String,Type,Type...) getAt(String,Type,Type...)}
-			<li>{@link org.apache.juneau.ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)}
-			<li>{@link org.apache.juneau.ObjectMap#getList(String,Class,List) getList(String,Class,List)}
+			<li>{@link oaj.ObjectMap#get(String,Class) get(String,Class)}
+			<li>{@link oaj.ObjectMap#get(String,Type,Type...) get(String,Type,Type...)}
+			<li>{@link oaj.ObjectMap#getWithDefault(String,Object) getWithDefault(String,Object)}
+			<li>{@link oaj.ObjectMap#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+			<li>{@link oaj.ObjectMap#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
+			<li>{@link oaj.ObjectMap#getSwapped(String,PojoSwap) getSwapped(String,PojoSwap)}
+			<li>{@link oaj.ObjectMap#getAt(String,Class) getAt(String,Class)}
+			<li>{@link oaj.ObjectMap#getAt(String,Type,Type...) getAt(String,Type,Type...)}
+			<li>{@link oaj.ObjectMap#getMap(String,Class,Class,Map) getMap(String,Class,Class,Map)}
+			<li>{@link oaj.ObjectMap#getList(String,Class,List) getList(String,Class,List)}
 		</ul>
 	<li>
-		New methods on {@link org.apache.juneau.utils.PojoRest}:
+		New methods on {@link oaj.utils.PojoRest}:
 		<ul>
-			<li>{@link org.apache.juneau.utils.PojoRest#get(String,Class) get(String,Class)}
-			<li>{@link org.apache.juneau.utils.PojoRest#get(String,Type,Type...) get(String,Type,Type...)}
-			<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)}
-			<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
-			<li>{@link org.apache.juneau.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
+			<li>{@link oaj.utils.PojoRest#get(String,Class) get(String,Class)}
+			<li>{@link oaj.utils.PojoRest#get(String,Type,Type...) get(String,Type,Type...)}
+			<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object) getWithDefault(String,Object)}
+			<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object,Class) getWithDefault(String,Object,Class)}
+			<li>{@link oaj.utils.PojoRest#getWithDefault(String,Object,Type,Type...) getWithDefault(String,Object,Type,Type...)}
 		</ul>
 	<li>
-		Fixed bug where {@link org.apache.juneau.BeanSession#getMediaType()} wasn't returning a value.
+		Fixed bug where {@link oaj.BeanSession#getMediaType()} wasn't returning a value.
 	<li>
 		Eliminated the <ja>@Consumes</ja> and <ja>@Produces</ja> annotations.
 		<br>The supported media types are now passed in through the constructors.
@@ -357,7 +357,7 @@
 		the call to <code>getClass()</code> to retrieve the annotation value could not be called before calling
 		the <code><jk>super</jk>()</code> method.
 	<li>
-		New class: {@link org.apache.juneau.utils.PojoMerge}
+		New class: {@link oaj.utils.PojoMerge}
 	<li>
 		New doc: <del>2.6.2 - @Pojo annotation</del>
 	<li>
@@ -367,7 +367,7 @@
 <h5 class='topic w800'>juneau-dto</h5>
 <ul class='spaced-list'>
 	<li>
-		{@link org.apache.juneau.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
+		{@link oaj.dto.html5.HtmlElementMixed#children(Object...)} can now take in collections
 		of objects.
 	<li>
 		The DTO beans can now be serialized to strings of their typical language by calling the <code>toString()</code> method.
@@ -380,58 +380,58 @@
 <ul class='spaced-list'>
 	<li>
 		Revamped and simplified servlet and REST-call lifecycle handling through new
-		{@link org.apache.juneau.rest.annotation.RestHook @RestHook} annotation.
+		{@link oajr.annotation.RestHook @RestHook} annotation.
 		<ul>
-			<li>The {@link org.apache.juneau.rest.RestServlet#init(ServletConfig)} method is now final and can
+			<li>The {@link oajr.RestServlet#init(ServletConfig)} method is now final and can
 				no longer be extended.
-				<br>Instead, use {@link org.apache.juneau.rest.annotation.HookEvent#INIT} or 
-				{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT} for initialization.
-			<li>The following methods on {@link org.apache.juneau.rest.RestServlet} have been removed:
+				<br>Instead, use {@link oajr.annotation.HookEvent#INIT} or 
+				{@link oajr.annotation.HookEvent#POST_INIT} for initialization.
+			<li>The following methods on {@link oajr.RestServlet} have been removed:
 				<ul>
 					<li><code>init(RestConfig)</code> 
-						- Use {@link org.apache.juneau.rest.annotation.HookEvent#INIT} instead.
+						- Use {@link oajr.annotation.HookEvent#INIT} instead.
 					<li><code>onSuccess(RestRequest, RestResponse, long)</code>
-						- Use {@link org.apache.juneau.rest.annotation.HookEvent#END_CALL} instead.
+						- Use {@link oajr.annotation.HookEvent#END_CALL} instead.
 					<li><code>onPreCall(RestRequest)</code>
-						- Use {@link org.apache.juneau.rest.annotation.HookEvent#PRE_CALL} instead.
+						- Use {@link oajr.annotation.HookEvent#PRE_CALL} instead.
 					<li><code>onPostCall(RestRequest, RestResponse)</code>
-						- Use {@link org.apache.juneau.rest.annotation.HookEvent#POST_CALL} instead.
+						- Use {@link oajr.annotation.HookEvent#POST_CALL} instead.
 				</ul> 	
 		</ul>
 	<li>
-		Simplified {@link org.apache.juneau.rest.widget.MenuItemWidget}.
-		<br>Exposes an abstract method {@link org.apache.juneau.rest.widget.MenuItemWidget#getContent(RestRequest)} that
+		Simplified {@link oajr.widget.MenuItemWidget}.
+		<br>Exposes an abstract method {@link oajr.widget.MenuItemWidget#getContent(RestRequest)} that
 		can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
-		get converted to HTML using {@link org.apache.juneau.html.HtmlSerializer#DEFAULT}.
+		get converted to HTML using {@link oaj.html.HtmlSerializer#DEFAULT}.
 	<li>
-		{@link org.apache.juneau.rest.RestResourceResolver} instances are now inherited from parent resources to child resources
+		{@link oajr.RestResourceResolver} instances are now inherited from parent resources to child resources
 		unless explicitly overridden at the child level.
 		<br>It's also been changed to an interface.
-	<li>New annotations on {@link org.apache.juneau.rest.annotation.RestResource @RestResource}:
+	<li>New annotations on {@link oajr.annotation.RestResource @RestResource}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#resourceResolver() resourceResolver()}
+			<li>{@link oajr.annotation.RestResource#resourceResolver() resourceResolver()}
 				<br>Allows you to specify a resource resolver on the servlet context to make it easier to work with
 				dependency injection frameworks.
 			<li><code><del>RestResource.contextPath()</del></code> - 
 				<br>Allows you to override the context path value inherited from the servlet container.
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#allowHeaderParams() allowHeaderParams()} - 
+			<li>{@link oajr.annotation.RestResource#allowHeaderParams() allowHeaderParams()} - 
 				<br>Replaces the <code>RestContext.REST_allowHeaderParams</code> setting.
 			<li><code><del>RestResource.allowMethodParam()</del></code> - 
 				<br>Replaces the <code>RestContext.REST_allowMethodParam</code> setting.
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#allowBodyParam() allowBodyParam()} - 
+			<li>{@link oajr.annotation.RestResource#allowBodyParam() allowBodyParam()} - 
 				<br>Replaces the <code>RestContext.REST_allowBodyParam</code> setting.
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#renderResponseStackTraces() renderResponseStackTraces()} - 
+			<li>{@link oajr.annotation.RestResource#renderResponseStackTraces() renderResponseStackTraces()} - 
 				<br>Replaces the <code>RestContext.REST_xxx</code> setting.
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#useStackTraceHashes() useStackTraceHashes()} - 
+			<li>{@link oajr.annotation.RestResource#useStackTraceHashes() useStackTraceHashes()} - 
 				<br>Replaces the <code>RestContext.REST_useStackTraceHashes</code> setting.
-			<li>{@link org.apache.juneau.rest.annotation.RestResource#defaultCharset() defaultCharset()} - 
+			<li>{@link oajr.annotation.RestResource#defaultCharset() defaultCharset()} - 
 				<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
 			<li><code><del>RestResource.paramFormat()</del></code> - 
 				<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
 		</ul>
-	<li>New annotations on {@link org.apache.juneau.rest.annotation.RestMethod @RestMethod}:
+	<li>New annotations on {@link oajr.annotation.RestMethod @RestMethod}:
 		<ul>
-			<li>{@link org.apache.juneau.rest.annotation.RestMethod#defaultCharset() defaultCharset()} - 
+			<li>{@link oajr.annotation.RestMethod#defaultCharset() defaultCharset()} - 
 				<br>Replaces the <code>RestContext.REST_defaultCharset</code> setting.
 			<li><code><del>RestMethod.paramFormat()</del></code> - 
 				<br>Replaces the <code>RestContext.REST_paramFormat</code> setting.
@@ -439,18 +439,18 @@
 	<li>
 		The following implementation classes can now be defined as non-static inner classes of servlets/resources:
 		<ul>
-			<li>{@link org.apache.juneau.rest.widget.Widget}
-			<li>{@link org.apache.juneau.rest.RestConverter}
-			<li>{@link org.apache.juneau.rest.RestGuard}
-			<li>{@link org.apache.juneau.rest.ResponseHandler}
-			<li>{@link org.apache.juneau.rest.RestCallHandler}
-			<li>{@link org.apache.juneau.rest.RestInfoProvider}
-			<li>{@link org.apache.juneau.rest.RestResourceResolver}
-			<li>{@link org.apache.juneau.rest.RestLogger}
-			<li>{@link org.apache.juneau.html.HtmlDocTemplate}
+			<li>{@link oajr.widget.Widget}
+			<li>{@link oajr.RestConverter}
+			<li>{@link oajr.RestGuard}
+			<li>{@link oajr.ResponseHandler}
+			<li>{@link oajr.RestCallHandler}
+			<li>{@link oajr.RestInfoProvider}
+			<li>{@link oajr.RestResourceResolver}
+			<li>{@link oajr.RestLogger}
+			<li>{@link oaj.html.HtmlDocTemplate}
 		</ul>
 	<li>
-		New tooltip template: {@link org.apache.juneau.rest.widget.Tooltip}
+		New tooltip template: {@link oajr.widget.Tooltip}
 	<li>
 		New dark theme:
 		<br><img src='doc-files/ReleaseNotes.632.DarkStyle.png'>
@@ -472,27 +472,27 @@
 		for maximum flexibility instead of the hodge-podge of support in the config file.
 		<br>Top-level servlets should now be defined in the provided <code>jetty.xml</code> file.
 	<li>
-		New methods on {@link org.apache.juneau.microservice.RestMicroservice}:
+		New methods on {@link oaj.microservice.RestMicroservice}:
 		<ul>
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#addServlet(Servlet,String) addServlet(Servlet,String)}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#addServletAttribute(String,Object) addServletAttribute(String,Object)}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getServer() getServer()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getInstance() getInstance()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getPort() getPort()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getContextPath() getContextPath()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getProtocol() getProtocol()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getHostName() getHostName()}
+			<li>{@link oaj.microservice.RestMicroservice#addServlet(Servlet,String) addServlet(Servlet,String)}
+			<li>{@link oaj.microservice.RestMicroservice#addServletAttribute(String,Object) addServletAttribute(String,Object)}
+			<li>{@link oaj.microservice.RestMicroservice#getServer() getServer()}
+			<li>{@link oaj.microservice.RestMicroservice#getInstance() getInstance()}
+			<li>{@link oaj.microservice.RestMicroservice#getPort() getPort()}
+			<li>{@link oaj.microservice.RestMicroservice#getContextPath() getContextPath()}
+			<li>{@link oaj.microservice.RestMicroservice#getProtocol() getProtocol()}
+			<li>{@link oaj.microservice.RestMicroservice#getHostName() getHostName()}
 		</ul>
 	<li>
-		New methods on {@link org.apache.juneau.microservice.Microservice}:
+		New methods on {@link oaj.microservice.Microservice}:
 		<ul>
-			<li>{@link org.apache.juneau.microservice.Microservice#getInstance() getInstance()}
+			<li>{@link oaj.microservice.Microservice#getInstance() getInstance()}
 		</ul>
 	<li>
-		New class {@link org.apache.juneau.microservice.JettyLogger} for directing Jetty logging to the
+		New class {@link oaj.microservice.JettyLogger} for directing Jetty logging to the
 		java.util.logging framework.
 	<li>
-		New class {@link org.apache.juneau.microservice.resources.DebugResource} for viewing and generating
+		New class {@link oaj.microservice.resources.DebugResource} for viewing and generating
 		Jetty thread dumps through REST calls.
 </ul>
 

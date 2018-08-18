@@ -16,7 +16,7 @@
 Other Useful Methods
 
 <p>
-	The {@link org.apache.juneau.rest.client.RestClientBuilder#rootUrl(Object)} method can be used to specify a 
+	The {@link oajrc.RestClientBuilder#rootUrl(Object)} method can be used to specify a 
 	root URL on all requests so that you don't have to use absolute paths on individual calls.
 </p>
 <p class='bpcode w800'>
@@ -25,10 +25,10 @@ Other Useful Methods
 	String r = rc.doGet(<js>"/baz"</js>).getResponseAsString();  <jc>// Gets "http://localhost:9080/foobar/baz"</jc>
 </p>
 <p>
-	The {@link org.apache.juneau.rest.client.RestClientBuilder#set(String,Object)} method can be used to 
+	The {@link oajrc.RestClientBuilder#set(String,Object)} method can be used to 
 	set serializer and parser properties.
 	<br>For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
-	POJOs, you can use the {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
+	POJOs, you can use the {@link oaj.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a rest client that ignores unknown fields in the response</jc>
@@ -39,7 +39,7 @@ Other Useful Methods
 	MyPojo myPojo = rc.doGet(<jsf>URL</jsf>).getResponse(MyPojo.<jk>class</jk>);
 </p>
 <p>
-	The {@link org.apache.juneau.rest.client.RestCall#retryable(int,long,RetryOn)} method can be used to 
+	The {@link oajrc.RestCall#retryable(int,long,RetryOn)} method can be used to 
 	automatically retry requests on failures.
 	<br>This can be particularly useful if you're attempting to connect to a REST resource that may be in the 
 	process of still initializing.

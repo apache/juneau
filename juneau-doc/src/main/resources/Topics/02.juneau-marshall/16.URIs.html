@@ -22,15 +22,15 @@
 	The classes and settings that control the behavior are:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.UriResolver} 
-	<li class='jc'>{@link org.apache.juneau.UriContext}
-	<li class='jc'>{@link org.apache.juneau.UriRelativity}
-	<li class='jc'>{@link org.apache.juneau.UriResolution}
-	<li class='jac'>{@link org.apache.juneau.serializer.Serializer}
+	<li class='jc'>{@link oaj.UriResolver} 
+	<li class='jc'>{@link oaj.UriContext}
+	<li class='jc'>{@link oaj.UriRelativity}
+	<li class='jc'>{@link oaj.UriResolution}
+	<li class='jac'>{@link oaj.serializer.Serializer}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}
-		<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution}
+		<li class='jf'>{@link oaj.serializer.Serializer#SERIALIZER_uriContext}
+		<li class='jf'>{@link oaj.serializer.Serializer#SERIALIZER_uriRelativity}
+		<li class='jf'>{@link oaj.serializer.Serializer#SERIALIZER_uriResolution}
 	</ul> 
 </ul>
 <p>
@@ -96,37 +96,37 @@
 	URI resolution is controlled by the following settings:
 </p>
 <ul class='doctree'>
-	<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriContext}
+	<li class='jf'>{@link oaj.serializer.Serializer#SERIALIZER_uriContext}
 		<br>Setting that defines the URI contextual information used to resolve relative URIs.
-	<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriRelativity}
+	<li class='jf'>{@link oaj.serializer.Serializer#SERIALIZER_uriRelativity}
 		<br>Setting that defines how relative URIs should be interpreted.
 		<br>Possible values:
 		<ul>
-			<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
+			<li class='jf'>{@link oaj.UriRelativity#RESOURCE}
 				<br>Relative URIs should be considered relative to the servlet URI.
 				<br>(e.g. <js>"http://host:port/context-root/servlet-path"</js>).
-			<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
+			<li class='jf'>{@link oaj.UriRelativity#PATH_INFO}
 				<br>Relative URIs should be considered relative to the request URI.
 				<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
 		</ul>
-	<li class='jf'>{@link org.apache.juneau.serializer.Serializer#SERIALIZER_uriResolution}
+	<li class='jf'>{@link oaj.serializer.Serializer#SERIALIZER_uriResolution}
 		<br>Setting that defines the final format of serialized URIs.
 		<br>Possible values:
 		<ul>
-			<li class='jf'>{@link org.apache.juneau.UriResolution#ABSOLUTE}
+			<li class='jf'>{@link oaj.UriResolution#ABSOLUTE}
 				<br>Resolve to an absolute URL.
 				<br>(e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
-			<li class='jf'>{@link org.apache.juneau.UriResolution#ROOT_RELATIVE}
+			<li class='jf'>{@link oaj.UriResolution#ROOT_RELATIVE}
 				<br>Resolve to a root-relative URL.
 				<br>(e.g. <js>"/context-root/servlet-path/path-info"</js>).
-			<li class='jf'>{@link org.apache.juneau.UriResolution#NONE}
+			<li class='jf'>{@link oaj.UriResolution#NONE}
 				<br>Don't do any URL resolution.
 		</ul>
 </ul>
 <p>
 	Juneau automatically interprets any {@link java.net.URL} and {@link java.net.URI} objects as URIs and will
 	resolve them accordingly.
-	<br>The {@link org.apache.juneau.annotation.URI @URI} annotation can be used to extend that to other bean 
+	<br>The {@link oaj.annotation.URI @URI} annotation can be used to extend that to other bean 
 	properties and class types so that they also get interpreted as URIs.
 	<br>For example:
 </p>

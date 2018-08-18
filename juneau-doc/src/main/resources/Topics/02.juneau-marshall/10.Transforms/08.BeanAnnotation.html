@@ -16,12 +16,12 @@
 @BeanProperty Annotation
 
 <p>
-	The {@link org.apache.juneau.annotation.Bean @Bean} annotation is used to tailor how beans are 
+	The {@link oaj.annotation.Bean @Bean} annotation is used to tailor how beans are 
 	interpreted by the framework.
 </p>
 <p> 
 	Bean property inclusion and ordering on a bean class can be done using the 
-	{@link org.apache.juneau.annotation.Bean#properties() @Bean.properties()} annotation.
+	{@link oaj.annotation.Bean#properties() @Bean.properties()} annotation.
 </p>
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
@@ -30,7 +30,7 @@
 	<jk>public class</jk> Address { ... }
 </p>
 <p> 
-	Bean properties can be excluded using the {@link org.apache.juneau.annotation.Bean#excludeProperties() @Bean.excludeProperties()}
+	Bean properties can be excluded using the {@link oaj.annotation.Bean#excludeProperties() @Bean.excludeProperties()}
 	annotation.
 </p>
 <p class='bpcode w800'>
@@ -40,7 +40,7 @@
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
-	Bean properties can be sorted alphabetically using {@link org.apache.juneau.annotation.Bean#sort() @Bean.sort()}
+	Bean properties can be sorted alphabetically using {@link oaj.annotation.Bean#sort() @Bean.sort()}
 </p>
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
@@ -49,12 +49,12 @@
 	<jk>public class</jk> MyBean { ... }
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.Bean#propertyNamer() @Bean.propertyNamer()} annotation
+	The {@link oaj.annotation.Bean#propertyNamer() @Bean.propertyNamer()} annotation
 	is used to provide customized naming of properties.
 </p>
 <p>
 	Property namers are used to transform bean property names from standard form to some other form.
-	<br>For example, the {@link org.apache.juneau.PropertyNamerDLC} will convert property names to 
+	<br>For example, the {@link oaj.PropertyNamerDLC} will convert property names to 
 	dashed-lowercase, and these will be used as attribute names in JSON and element names in XML.
 </p>
 <p class='bpcode w800'>
@@ -63,7 +63,7 @@
 	<jk>public class</jk> MyBean { ... }
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.Bean#interfaceClass @Bean.interfaceClass()} annotation is used
+	The {@link oaj.annotation.Bean#interfaceClass @Bean.interfaceClass()} annotation is used
 	to limit properties on beans to specific interface classes.
 	<br>When specified, only the list of properties defined on the interface class will be used during 
 	serialization.
@@ -92,7 +92,7 @@
 	<br>Or can be set individually on the child classes.
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.Bean#stopClass @Bean.stopClass()} annotation is another
+	The {@link oaj.annotation.Bean#stopClass @Bean.stopClass()} annotation is another
 	way to limit which properties are serialized (except from the opposite direction).
 	<br>It's identical in purpose to the stop class specified by {@link java.beans.Introspector#getBeanInfo(Class, Class)}.
 	<br>Any properties in the stop class or in its base classes will be ignored during analysis.
@@ -116,8 +116,8 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.Bean#propertyFilter() @Bean.propertyFilter()} annotation
-	and {@link org.apache.juneau.transform.PropertyFilter} class can be used to perform interception
+	The {@link oaj.annotation.Bean#propertyFilter() @Bean.propertyFilter()} annotation
+	and {@link oaj.transform.PropertyFilter} class can be used to perform interception
 	and inline handling of bean getter and setter calls.
 </p>
 <p class='bpcode w800'>

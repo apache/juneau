@@ -16,16 +16,16 @@
 {new} @Body
 
 <p>
-	The {@link org.apache.juneau.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
+	The {@link oaj.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are the HTTP body of the request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link oaj.http.annotation.Body Body}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partSerializer() partSerializer} - Override the part serializer defined on client.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
+		<li class='jf'>{@link oaj.http.annotation.Body#partSerializer() partSerializer} - Override the part serializer defined on client.
+		<li class='jf'>{@link oaj.http.annotation.Body#required() required} - Input validation.  Body must be present.
+		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - Swagger schema.
+		<li class='jf'>{@link oaj.http.annotation.Body#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
 	</ul>
 </ul>
 
@@ -57,8 +57,8 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		Any serializable POJO - Converted to output using the {@link org.apache.juneau.serializer.Serializer} or {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
+		Any serializable POJO - Converted to output using the {@link oaj.serializer.Serializer} or {@link oaj.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> ({@link oaj.httppart.OpenApiPartSerializer} by default) or associated via the {@link oaj.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
 	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
 	<li>
@@ -70,8 +70,8 @@
 </ul>
  
 <p>
-	OpenAPI schema based serialization can be used by specifying a value for the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation
-	or setting {@link org.apache.juneau.http.annotation.Body#usePartSerializer() @Body(usePartSerializer)} to <jk>true</jk>.
+	OpenAPI schema based serialization can be used by specifying a value for the {@link oaj.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation
+	or setting {@link oaj.http.annotation.Body#usePartSerializer() @Body(usePartSerializer)} to <jk>true</jk>.
 </p>
 
 <p class='bpcode w800'>

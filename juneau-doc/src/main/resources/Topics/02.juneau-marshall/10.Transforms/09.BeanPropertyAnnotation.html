@@ -16,11 +16,11 @@
 @BeanProperty Annotation
 
 <p>
-	The {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation is used to tailor how 
+	The {@link oaj.annotation.BeanProperty @BeanProperty} annotation is used to tailor how 
 	individual bean properties are interpreted by the framework.
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()} annotation
+	The {@link oaj.annotation.BeanProperty#name() @BeanProperty.name()} annotation
 	is used to override the name of the bean property.
 </p>
 <p class='bpcode w800'>
@@ -30,7 +30,7 @@
 	}
 </p>
 <p>
-	If the {@link org.apache.juneau.BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field 
+	If the {@link oaj.BeanContext#BEAN_beanFieldVisibility} setting on the bean context excludes this field 
 	(e.g. the visibility is set to the default of PUBLIC, but the field is PROTECTED), this annotation 
 	can be used to force the field to be identified as a property.
 </p>
@@ -113,12 +113,12 @@
 <ul class='doctree'>
 	<li class='info'>
 		Note that if you're not interested in these additional properties, you can also use the
-		{@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} setting to ignore values 
+		{@link oaj.BeanContext#BEAN_ignoreUnknownBeanProperties} setting to ignore values 
 		that don't fit into existing properties.
 </ul>
 <p>
-	The {@link org.apache.juneau.annotation.BeanProperty#value() @BeanProperty.value()} annotation
-	is a synonym for {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty.name()}.
+	The {@link oaj.annotation.BeanProperty#value() @BeanProperty.value()} annotation
+	is a synonym for {@link oaj.annotation.BeanProperty#name() @BeanProperty.name()}.
 	<br>Use it in cases where you're only specifying a name so that you can shorten your annotation.
 </p>
 <p>
@@ -130,7 +130,7 @@
 	<ja>@BeanProperty</ja>(<js>"foo"</js>)
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.BeanProperty#type() @BeanProperty.type()} annotation
+	The {@link oaj.annotation.BeanProperty#type() @BeanProperty.type()} annotation
 	is used to identify a specialized class type for a generalized property.
 	<br>Normally the type is inferred through reflection of the field type or getter return type.
 	<br>However, you'll want to specify this value if you're parsing beans where the bean property class 
@@ -148,7 +148,7 @@
 		<jk>public</jk> Map <jf>p1</jf>;
 			</p>
 			<p>
-				The {@link org.apache.juneau.annotation.BeanProperty#params() @BeanProperty.params()} annotation
+				The {@link oaj.annotation.BeanProperty#params() @BeanProperty.params()} annotation
 				is for bean properties of type map or collection.
 				<br>It's used to identify the class types of the contents of the bean property object when
 				the general parameter types are interfaces or abstract classes.
@@ -162,7 +162,7 @@
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.annotation.BeanProperty#properties() @BeanProperty.properties()} 
+	The {@link oaj.annotation.BeanProperty#properties() @BeanProperty.properties()} 
 	annotation is used to limit which child properties are rendered by the serializers.
 	<br>It can be used on any of the following bean property types:
 </p>
@@ -189,7 +189,7 @@
 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
 			</p>
 			<p>
-				The {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty.format()} 
+				The {@link oaj.annotation.BeanProperty#format() @BeanProperty.format()} 
 				annotation specifies a String format for converting a bean property value to a formatted string.
 </p>
 <p class='bpcode w800'>

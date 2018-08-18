@@ -24,22 +24,22 @@
 		See <code><del>org.apache.juneau.dto.jsonschema</del></code> for information.
 	</li>
 	<li>
-		New methods added to {@link org.apache.juneau.parser.Parser}:
+		New methods added to {@link oaj.parser.Parser}:
 		<ul>
 			<li><code>org.apache.juneau.parser.Parser.parseMap(Object,int,Class,Class,Class)</code></li>
 			<li><code>org.apache.juneau.parser.Parser.parseCollection(Object,int,Class,Class)</code></li>
 		</ul>
 	</li>
 		<li>
-		{@link org.apache.juneau.annotation.Bean @Bean} annotation can now be defined on interfaces and inherited by subclasses.
+		{@link oaj.annotation.Bean @Bean} annotation can now be defined on interfaces and inherited by subclasses.
 	</li>
 	<li>
 			Support for customizing serialized values for <code>Enums</code> through overriding <code>toString()</code> and <code>fromString()</code> on the enum class.<br>
 		Previously used <code>Enum.valueOf()</code> to convert strings back into <code>Enums</code>.<br>
-		Used for JSON-Schema support to allow {@link org.apache.juneau.dto.jsonschema.JsonType} enum to be serialized to lowercase per the specification (e.g. <js>"string"</js> instead of <js>"STRING"</js>).
+		Used for JSON-Schema support to allow {@link oaj.dto.jsonschema.JsonType} enum to be serialized to lowercase per the specification (e.g. <js>"string"</js> instead of <js>"STRING"</js>).
 		</li>
 		<li>
-		{@link org.apache.juneau.dto.cognos Cognos} DTOs now have fluent-style bean setters.
+		{@link oaj.dto.cognos Cognos} DTOs now have fluent-style bean setters.
 		</li>
 		<li>
 		Support for generic bean objects whose type was erased at compile time.<br> 
@@ -50,7 +50,7 @@
 			Bug fixes:
 			<ul>
 				<li>
-				When duplicate fluent-style setters were defined with different parameter types (e.g. <code>setFoo(Foo f)</code>, <code>setFoo(Bar b)</code>), the {@link org.apache.juneau.BeanMap} API would sometime choose the wrong setter as the bean property setter. <br>
+				When duplicate fluent-style setters were defined with different parameter types (e.g. <code>setFoo(Foo f)</code>, <code>setFoo(Bar b)</code>), the {@link oaj.BeanMap} API would sometime choose the wrong setter as the bean property setter. <br>
 				Now validates that the setter being chosen is the one whose return type matches the property getter.
 			</li>
 			<li>

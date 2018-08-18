@@ -16,23 +16,23 @@
 {updated} ReaderResource
 
 <p>
-	The {@link org.apache.juneau.rest.helper.ReaderResource} class is a convenience object for defining thread-safe
+	The {@link oajr.helper.ReaderResource} class is a convenience object for defining thread-safe
 	reusable character-based responses.
 	<br>In essence, it's a container for character data with optional response headers and support for
 	resolving SVL variables.
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder}
+	<li class='jc'>{@link oajr.helper.ReaderResourceBuilder}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#contents(Object...) contents(Object...)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#header(String,Object) header(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
-		<li class='jm'>{@link org.apache.juneau.rest.helper.ReaderResourceBuilder#varResolver(VarResolverSession) varResolver(VarResolverSession)}
+		<li class='jm'>{@link oajr.helper.ReaderResourceBuilder#contents(Object...) contents(Object...)}
+		<li class='jm'>{@link oajr.helper.ReaderResourceBuilder#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link oajr.helper.ReaderResourceBuilder#mediaType(MediaType) mediaType(MediaType)}
+		<li class='jm'>{@link oajr.helper.ReaderResourceBuilder#varResolver(VarResolverSession) varResolver(VarResolverSession)}
 	</ul>
 </ul>
 
 <p>
-	The class is annotated with {@link org.apache.juneau.http.annotation.Response @Response}
+	The class is annotated with {@link oaj.http.annotation.Response @Response}
 	which allows it to be returned as responses by REST methods.
 </p>
 <h5 class='figure'>Example:</h5>

@@ -16,11 +16,11 @@
 FORM-based Authentication
 
 <p>
-	The {@link org.apache.juneau.rest.client.RestClientBuilder} class does not itself provide FORM-based 
+	The {@link oajrc.RestClientBuilder} class does not itself provide FORM-based 
 	authentication since there is no standard way of providing such support. 
 	<br>Typically, to perform FORM-based or other types of authentication, you'll want to create your own
-	subclass of {@link org.apache.juneau.rest.client.RestClientBuilder} and override the 
-	{@link org.apache.juneau.rest.client.RestClientBuilder#createHttpClient()} method to provide an 
+	subclass of {@link oajrc.RestClientBuilder} and override the 
+	{@link oajrc.RestClientBuilder#createHttpClient()} method to provide an 
 	authenticated client.
 </p>
 <p>

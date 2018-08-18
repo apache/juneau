@@ -24,33 +24,33 @@ AddressBookResource
 	<li>
 		How to create RESTful interfaces using only POJOs.
 	<li>
-		How to use the {@link org.apache.juneau.xml.annotation.Xml @Xml} and
-		{@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema} annotations to provide XML namespaces
+		How to use the {@link oaj.xml.annotation.Xml @Xml} and
+		{@link oaj.xml.annotation.XmlSchema @XmlSchema} annotations to provide XML namespaces
 		and alter how beans are handled by the XML serializer. 
 	<li>
-		How to use the {@link org.apache.juneau.jena.annotation.Rdf @Rdf} and
-		{@link org.apache.juneau.xml.annotation.XmlSchema @RdfSchema} annotations to provide XML namespaces
+		How to use the {@link oaj.jena.annotation.Rdf @Rdf} and
+		{@link oaj.xml.annotation.XmlSchema @RdfSchema} annotations to provide XML namespaces
 		and alter how beans are handled by the Jena serializers. 
 	<li>
-		How to use the {@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotation
+		How to use the {@link oaj.annotation.BeanProperty @BeanProperty} annotation
 		to alter how bean properties are handled by the serializers.
 	<li>
-		How to use the {@link org.apache.juneau.rest.annotation.RestMethod#name() RestMethod.name()} annotation
+		How to use the {@link oajr.annotation.RestMethod#name() RestMethod.name()} annotation
 		to create overloaded methods beyond the standard GET/PUT/POST/DELETE.
 	<li>
 		How to augment data in the OPTIONS page.
 	<li>
-		How to use the {@link org.apache.juneau.rest.client.RestClient} API to interact with the REST resource 
+		How to use the {@link oajrc.RestClient} API to interact with the REST resource 
 		using the same POJOs used to create the server-side API.
 	<li>
 		How to interact with the REST resource using only a browser.
 	<li>
-		Using the {@link org.apache.juneau.rest.converters.Traversable} converter to drill down into POJO models.
+		Using the {@link oajr.converters.Traversable} converter to drill down into POJO models.
 	<li>
-		Using the {@link org.apache.juneau.rest.converters.Queryable} converter to provide search/view/sort 
+		Using the {@link oajr.converters.Queryable} converter to provide search/view/sort 
 		functionality against POJOs.
 	<li>
-		Using the {@link org.apache.juneau.rest.converters.Introspectable} converter to invoke methods on POJOs.
+		Using the {@link oajr.converters.Introspectable} converter to invoke methods on POJOs.
 	<li>
 		Using proxy interfaces.
 </ul>
@@ -119,7 +119,7 @@ AddressBookResource
 </p>
 <p>
 	Technically since the RDF and XML namespaces used are the same, we didn't need to define them separately
-	since the {@link org.apache.juneau.jena.RdfCommon#RDF_useXmlNamespaces} setting is enabled by default.
+	since the {@link oaj.jena.RdfCommon#RDF_useXmlNamespaces} setting is enabled by default.
 	<br>We keep them separate here though to show that they can be defined separately.
 </p>
 <p> 
@@ -265,7 +265,7 @@ AddressBookResource
 		The <code><ja>@BeanProperty</ja>(swap=CalendarSwap.Medium.<jk>class</jk>)</code> annotation causes 
 		the date field to be serialized in the format <l>"MM dd, yyyy"</l>.
 		<br>This could have also been specified globally on the resource level through the 
-		{@link org.apache.juneau.rest.annotation.RestResource#properties} annotation.
+		{@link oajr.annotation.RestResource#properties} annotation.
 </ul>
 <p>	
 	The <l>Address</l> bean is defined as follows:
@@ -719,7 +719,7 @@ AddressBookResource
 	<li>
 		You are setting <l>XML_enableNamespaces</l> to <l>true</l> to enable XML namespaces. 
 		By default, XML namespace support is disabled per 
-		{@link org.apache.juneau.xml.XmlSerializer#XML_enableNamespaces}, so you have to explicitly 
+		{@link oaj.xml.XmlSerializer#XML_enableNamespaces}, so you have to explicitly 
 		enable it on our serializers.
 	<li>
 		The <l>XML_autoDetectNamespaces</l> setting is needed to get the XML serializer to add <l>xmlns</l> 
@@ -737,7 +737,7 @@ AddressBookResource
 		access.  
 	<li>
 		The <l>updatePerson()</l> and <l>updateAddress()</l> methods use the 
-		{@link org.apache.juneau.utils.PojoRest} class
+		{@link oaj.utils.PojoRest} class
 		to locate and update individual nodes in a POJO tree using the path remainder on the request. 
 	<li>
 		The <l>doInit()</l> method shows an example of an overloaded method using the 

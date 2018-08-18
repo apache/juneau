@@ -47,10 +47,10 @@ HelloWorldResource
 	}
 </p>
 <p>
-	Notice that in this case we're not extending from {@link org.apache.juneau.rest.RestServlet}.  
-	<br>We are however implementing {@link org.apache.juneau.rest.BasicRestConfig} which is a no-op
+	Notice that in this case we're not extending from {@link oajr.RestServlet}.  
+	<br>We are however implementing {@link oajr.BasicRestConfig} which is a no-op
 	interface that defines a default <ja>@RestResource</ja> annotation with all the serializers, parsers, 
-	and configuration defined on the {@link org.apache.juneau.rest.BasicRestServlet} class.
+	and configuration defined on the {@link oajr.BasicRestServlet} class.
 </p>
 <p>
 	The only difference between implementing <l>BasicRestConfig</l> and extending from <l>BasicRestServlet</l>

@@ -16,7 +16,7 @@
 juneau-svl
 
 <p>
-	Care must be used when defining new {@link org.apache.juneau.svl.Var Vars} using the SVL API since mistakes 
+	Care must be used when defining new {@link oaj.svl.Var Vars} using the SVL API since mistakes 
 	could potentially expose system properties, environment variables, or even file system files.
 </p>
 <p>
@@ -46,8 +46,8 @@ juneau-svl
 </p>
 <ul class='spaced-list'>
 	<li>
-		<code>Vars</code> have two methods {@link org.apache.juneau.svl.Var#allowNested()} and 
-		{@link org.apache.juneau.svl.Var#allowRecurse()} that can be overridden to prevent recursive processing
+		<code>Vars</code> have two methods {@link oaj.svl.Var#allowNested()} and 
+		{@link oaj.svl.Var#allowRecurse()} that can be overridden to prevent recursive processing
 		of string variables.  These are both <jk>false</jk> for the <code>$R</code> variable, so the <code>$F</code>
 		variable in the result will never get processed and instead be treated as plain text. 
 	<li>
@@ -56,6 +56,6 @@ juneau-svl
 <p>
 	Even though the built-in Juneau variables are safe, special care is needed when defining your own custom
 	variables.  If your variable resolves user input in any way, it's HIGHLY recommended that you override the
-	{@link org.apache.juneau.svl.Var#allowNested()} and {@link org.apache.juneau.svl.Var#allowRecurse()} 
+	{@link oaj.svl.Var#allowNested()} and {@link oaj.svl.Var#allowRecurse()} 
 	methods to prevent recursive handling of variables.
 </p>

@@ -21,12 +21,12 @@
 <ul class='spaced-list'>
 	<li>
 		Support for parsing into read-only beans (i.e. beans with only getters, property values set through constructor args).<br>
-		To support this, the {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation has been added.
+		To support this, the {@link oaj.annotation.BeanConstructor @BeanConstructor} annotation has been added.
 	</li>
 	<li>
 		Merged separate settings classes back into their base classes (simplifies the API).
 	</li>
 	<li>
-		{@link org.apache.juneau.serializer.SerializerGroup SerializerGroups} and {@link org.apache.juneau.parser.ParserGroup ParserGroups} now share {@link org.apache.juneau.BeanContext BeanContexts} to reduce memory consumption of class type metadata.	
+		{@link oaj.serializer.SerializerGroup SerializerGroups} and {@link oaj.parser.ParserGroup ParserGroups} now share {@link oaj.BeanContext BeanContexts} to reduce memory consumption of class type metadata.	
 	</li>	
 </ul>

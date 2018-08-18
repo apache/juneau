@@ -22,9 +22,9 @@ Guards
 	Guards are associated with resource classes and methods via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#guards()} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#guards()} 
-	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(Class...)} 
+	<li class='ja'>{@link oajr.annotation.RestResource#guards()} 
+	<li class='ja'>{@link oajr.annotation.RestMethod#guards()} 
+	<li class='jm'>{@link oajr.RestContextBuilder#guards(Class...)} 
 </ul>
 <p class='bpcode w800'>
 	<jc>// Define a guard that only lets Billy make a request</jc>
@@ -65,7 +65,7 @@ Guards
 <p>
 	A guard failure results in an <l>HTTP 401 Unauthorized</l> response.
 	<br>However, this can be configured by overriding the 
-	{@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
+	{@link oajr.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
 	yourself.
 </p>
 <p class='bpcode w800'>
@@ -86,5 +86,5 @@ Guards
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_guards}
+	<li class='jf'>{@link oajr.RestContext#REST_guards}
 </ul>

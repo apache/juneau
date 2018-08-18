@@ -22,9 +22,9 @@ Converters
 	Converters are associated with resource classes and methods via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#converters()} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#converters()} 
-	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(Class...)} 
+	<li class='ja'>{@link oajr.annotation.RestResource#converters()} 
+	<li class='ja'>{@link oajr.annotation.RestMethod#converters()} 
+	<li class='jm'>{@link oajr.RestContextBuilder#converters(Class...)} 
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -53,7 +53,7 @@ Converters
 	The following converter is used to provide support for addressing child nodes in a POJO tree with URL path 
 	remainders.  
 	<br>In this code, the 3rd parameter is the object that was returned by the Java method.
-	<br>The converter uses the {@link org.apache.juneau.utils.PojoRest} wrapper class to address nodes in the 
+	<br>The converter uses the {@link oaj.utils.PojoRest} wrapper class to address nodes in the 
 	tree.
 </p>
 <p class='bpcode w800'>
@@ -93,18 +93,18 @@ Converters
 </p>
 <ul class='doctree'>
 	<li class='jic'>
-	{@link org.apache.juneau.rest.RestConverter}
+	{@link oajr.RestConverter}
 	<ul>
 		<li class='jc'>
-			{@link org.apache.juneau.rest.converters.Queryable}
+			{@link oajr.converters.Queryable}
 			<br>Provides query parameters that can be used to transform the response (i.e. search/view/sort the 
 			POJO response before being serialized).
 		<li class='jc'>
-			{@link org.apache.juneau.rest.converters.Traversable}
+			{@link oajr.converters.Traversable}
 			<br>Allows nodes in the POJO response tree to be individually accessed through additional path info on 
 			the request.
 		<li class='jc'>
-			{@link org.apache.juneau.rest.converters.Introspectable}
+			{@link oajr.converters.Introspectable}
 			<br>Allows method calls to be made on the response POJO, and for the result of that method call to be 
 			serialized as the response.
 	</ul>
@@ -112,5 +112,5 @@ Converters
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_converters} 
+	<li class='jf'>{@link oajr.RestContext#REST_converters} 
 </ul>
