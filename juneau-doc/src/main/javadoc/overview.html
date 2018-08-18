@@ -374,8 +374,8 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Query'>@Query</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Header'>@Header</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Path'>@Path</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Request'>@Request</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Response'>@Request</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Request'>@Request</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Response'>@Response</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
@@ -475,7 +475,7 @@
 	Not only can we help you with feedback, but it helps us understand usage patterns to further improve the product.
 </p>
 
-<h5 class='topic w800'>History</h5>
+<h5 class='topic'>History</h5>
 <p>
 	Juneau started off as a popular internal IBM toolkit called Juno.
 	Originally used for serializing POJOs to and from JSON, it later expanded in scope to include a variety of 
@@ -3908,7 +3908,7 @@
 	The following charts describe equivalent features between the two libraries:
 </p>
 
-<h5 class='topic w800'>Annotations</h5>
+<h5 class='topic'>Annotations</h5>
 <table class='styled w800'>
 	<tr><th>Jackson</th><th>Juneau</th></tr>
 	<tr>
@@ -4815,7 +4815,7 @@
 	They mirror how the data structures are represented in JSON.
 </p>
 
-<h5 class='topic w800'>Simple types</h5>
+<h5 class='topic'>Simple types</h5>
 <p>
 	The representation of loose (not a direct bean property value) simple types are shown below:
 </p>
@@ -4852,7 +4852,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Maps</h5>
+<h5 class='topic'>Maps</h5>
 <p>
 	Loose maps and beans use the element <xt>&lt;object&gt;</xt> for encapsulation.
 </p>
@@ -4927,7 +4927,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Arrays</h5>
+<h5 class='topic'>Arrays</h5>
 <p>
 	Loose collections and arrays use the element <xt>&lt;array&gt;</xt> for encapsulation.
 </p>
@@ -5107,7 +5107,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Beans</h5>
+<h5 class='topic'>Beans</h5>
 <table class='styled w800'>
 	<tr>
 		<th>Data type</th>
@@ -5162,7 +5162,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Beans with Map properties</h5>
+<h5 class='topic'>Beans with Map properties</h5>
 <table class='styled w800'>
 	<tr>
 		<th>Data type</th>
@@ -7030,7 +7030,7 @@
 	They mirror how the data structures are represented in JSON.
 </p>
 
-<h5 class='topic w800'>Simple types</h5>
+<h5 class='topic'>Simple types</h5>
 <p>
 	The representation for simple types mirror those produced by the XML serializer.
 	Tags are added to help differentiate data types when they cannot be inferred through reflection.
@@ -7069,7 +7069,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Maps</h5>
+<h5 class='topic'>Maps</h5>
 <p>
 	Maps and beans are represented as tables.
 </p>
@@ -7174,7 +7174,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Arrays</h5>
+<h5 class='topic'>Arrays</h5>
 <p>
 	Collections and arrays are represented as ordered lists.
 </p>
@@ -7297,7 +7297,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Collections</h5>
+<h5 class='topic'>Collections</h5>
 <table class='styled w800'>
 	<tr>
 		<th>Data type</th>
@@ -7365,7 +7365,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Beans</h5>
+<h5 class='topic'>Beans</h5>
 <table class='styled w800'>
 	<tr>
 		<th>Data type</th>
@@ -7450,7 +7450,7 @@
 	</tr>
 </table>
 
-<h5 class='topic w800'>Beans with Map properties</h5>
+<h5 class='topic'>Beans with Map properties</h5>
 <table class='styled w800'>
 	<tr>
 		<th>Data type</th>
@@ -12610,7 +12610,7 @@
 	<br>It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
 </p>
 
-<h5 class='topic w800'>Features</h5>
+<h5 class='topic'>Features</h5>
 <ul class='spaced-list'>
 	<li>
 		Serializes POJOs to JSON, XML, HTML, URL-Encoding, UON, RDF/XML, N-Triple, Turtle, N3, SOAP, or 
@@ -16013,6 +16013,12 @@
 	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
 	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
 </p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Request#partParser() partParser} - Override the part parser.
+	</ul>
+</ul>
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -17432,7 +17438,7 @@
 	Variables take the form <l>$X{contents}</l> where <l>X</l> can consist of zero or more ASCII characters and <l>contents</l> can be virtually anything.
 	<br>This is called Simple Variable Language, or SVL, and is defined here: {@doc juneau-svl juneau-svl}.
 </p>
-<h5 class='topic w800'>Features</h5>
+<h5 class='topic'>Features</h5>
 <ul class='spaced-list'>
 	<li>
 		Variables can be nested arbitrarily deep (e.g. <l>"$X{$Y{foo}}"</l>).
@@ -20002,7 +20008,7 @@ TODO(7.2.0)
 	seemlessly send and receive serialized POJOs in requests and responses.  
 </p>
 
-<h5 class='topic w800'>Features</h5>
+<h5 class='topic'>Features</h5>
 <ul class='spaced-list'>
 	<li>
 		Converts POJOs directly to HTTP request message bodies using {@link org.apache.juneau.serializer.Serializer} 
@@ -20231,7 +20237,7 @@ TODO(7.2.0)
 	The <ja>@RemoteResource</ja> annotation is optional, but often included for code readability.
 </p>
 
-<h5 class='topic w800'>@RemoteResource(path)</h5>
+<h5 class='topic'>@RemoteResource(path)</h5>
 <p>
 	The {@link org.apache.juneau.rest.client.remote.RemoteResource#path @RemoteResource(path)} annotation is used to define the
 	HTTP path of the REST service.
@@ -20289,7 +20295,7 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#returns returns}
 	</ul>
 </ul>
-<h5 class='topic w800'>@RemoteMethod(method/path)</h5>
+<h5 class='topic'>@RemoteMethod(method/path)</h5>
 <p>
 	The HTTP method and path are mapped to a Java method using the <code>method</code> and <code>path</code> annotations.
 </p>
@@ -20307,7 +20313,7 @@ TODO(7.2.0)
 	The Java method name can be anything.  
 </p>
 
-<h5 class='topic w800'>Inferred method/path</h5>
+<h5 class='topic'>Inferred method/path</h5>
 <p>
 	In such cases, <code>method</code> and <code>path</code> annotations are optional if you follow certain naming
 	conventions on your method that identify the method and path.
@@ -20381,7 +20387,7 @@ TODO(7.2.0)
 	</tr>
 </table>
 
-<h5 class='topic w800'>@RemoteMethod(returns)</h5>
+<h5 class='topic'>@RemoteMethod(returns)</h5>
 <p>
 	The return type of the Java methods of can be any of the following:
 </p>
@@ -20951,214 +20957,206 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Request' id='juneau-rest-client.RestProxies.Request'>9.1.8 - @Request</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Request' id='juneau-rest-client.RestProxies.Request'>9.1.8 - @Request</a></h4>
 <div class='topic'><!-- START: 9.1.8 - juneau-rest-client.RestProxies.Request -->
-TODO(7.2.0)
-
-
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument is annotated with
-	{@link org.apache.juneau.http.annotation.Request @Request}:
+	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a type of a <ja>@RemoteMethod</ja>-annotated method 
+	to identify it as a bean for setting HTTP parts through a bean-like interface.
 </p>
+
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Request#partSerializer() partSerializer} - Override the part serializer.
+	</ul>
+</ul>
+
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Our remotable interface.</jc>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
 
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(MyRequest bean);
+		<ja>@RemoteMethod</ja>
+		String postPet(CreatePetRequest bean);
 	}
 </p>
 <p class='bpcode w800'>
-	<jc>// Our request bean interface.</jc>
 	<ja>@Request</ja> 
-	<jk>public interface</jk> MyRequest {
+	<jk>public class</jk> CreatePetRequest {
+	
+		<jk>private</jk> CreatePet <jf>pet</jf>;
+	
+		<jk>public</jk> CreatePetRequest(String name, <jk>float</jk> price) {
+			<jk>this</jk>.<jf>pet</jf> = <jk>new</jk> CreatePet(name, price);
+		}
+		
 		<ja>@Body</ja>
-		MyPojo getMyPojo();
+		<jk>public</jk> CreatePet getBody() {
+			<jk>return</jk> <jk>this</jk>.<jf>pet</jf>;
+		}
+	
+		<ja>@Query</ja>
+	 	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
+	 		<jk>return new</jk> ObjectMap().append(<js>"debug"</js>, <jk>true</jk>);
+	 	}
+	 	
+	 	<ja>@Header</ja>(<js>"E-Tag"</js>)
+	 	<jk>public static</jk> UUID <jsm>getUUID</jsm>() {
+	 		<jk>return</jk> UUID.<jsm>generatedUUID</jsm>();
+	 	}
 	}
 </p>
-<p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
-	{@link org.apache.juneau.http.annotation.Request @Request}:
-</p>
-<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
-	}
-
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@FormData</ja>(<js>"foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @FormData("bar")</jc>
-		<ja>@FormData</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-	 	MyBean getMyBean();
-
-		<jc>// An entire form-data HTTP body as a Reader.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-		Reader getReader();
-	}
+	PetStore store = restClient.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePetRequest requestBean = <jk>new</jk> CreatePetRequest(<js>"Fluffy"</js>, 9.99);
+	String response = store.postPet(requestBean);
 </p>
-
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
-	{@link org.apache.juneau.http.annotation.Request @Request}:
-
-<h5 class='section'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
-	}
-
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@Query</ja>(<js>"foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @Query("bar")</jc>
-		<ja>@Query</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-	 	MyBean getMyBean();
-
-		<jc>// An entire query string as a Reader.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-		Reader getReader();
-	}
+	The <ja>@Request</ja> annotation can be applied to either the class or argument.
 </p>
-
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with {@link org.apache.juneau.http.annotation.Request @Request}:
+	The annotated methods must be no-arg and public.  
+	They can be named anything.
 </p>
-
-<h5 class='section'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
-	}
-
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@Header</ja>(<js>"Foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @Header("bar")</jc>
-		<ja>@Header</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @Header("*")</jc>
-		<ja>@Header</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @Header("*")</jc>
-		<ja>@Header</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @Header("*")</jc>
-		<ja>@Header</ja>
-	 	MyBean getBean();
-	}
-</p>
-
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
-	{@link org.apache.juneau.http.annotation.Request @Request}:
+	Any of the following annotations can be used on the methods:
 </p>
-<h5 class='section'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}/{baz}"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+</ul>
+<p>
+	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly.
+	This means full support for OpenAPI serialization and validation.
+</p>
+<p>
+	Annotations on methods are inherited from parent classes and interfaces. 
+	<br>For example, the request bean above could have defined annotations in an interface to keep them clear from the implementation:
+</p>
+<p class='bpcode w800'>
+	<ja>@Request</ja> 
+	<jk>public interface</jk> CreatePetRequest {
+	
+		<ja>@Body</ja>
+		CreatePet getBody();
+	
+		<ja>@Query</ja>
+	 	Map&lt;String,Object&gt; getQueryParams();
+	 	
+	 	<ja>@Header</ja>(<js>"E-Tag"</js>)
+	 	UUID getUUID();
 	}
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> CreatePetRequestImpl <jk>implements</jk> CreatePetRequest {
+	
+		<jk>public</jk> CreatePetRequestImpl(String name, <jk>float</jk> price) {...}
 
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@Path</ja>(<js>"foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @Path("bar")</jc>
-		<ja>@Path</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @Path("*")</jc>
-		<ja>@Path</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @Path("*")</jc>
-		<ja>@Path</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @Path("*")</jc>
-		<ja>@Path</ja>
-	 	MyBean getMyBean();
+		<ja>@Override</ja>
+		<jk>public</jk> CreatePet getBody() {
+			<jk>return</jk> <jk>this</jk>.<jf>pet</jf>;
+		}
+	
+		<ja>@Override</ja>
+	 	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
+	 		<jk>return new</jk> ObjectMap().append(<js>"debug"</js>, <jk>true</jk>);
+	 	}
+	 	
+		<ja>@Override</ja>
+	 	<jk>public</jk> UUID getUUID() {
+	 		<jk>return</jk> UUID.<jsm>generateUUID</jsm>();
+	 	}
 	}
 </p>
 </div><!-- END: 9.1.8 - juneau-rest-client.RestProxies.Request -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>9.1.9 - @Request</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>9.1.9 - @Response</a></h4>
 <div class='topic'><!-- START: 9.1.9 - juneau-rest-client.RestProxies.Response -->
-TODO(7.2.0)
+<p>
+	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to either <ja>@RemoteMethod</ja>-annotated methods
+	or types returned by <ja>@RemoteMethod</ja>-annotated methods.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<ul>
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partParser() partParser} - Override the part parser.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema} - Swagger schema.
+		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing the response body.
+	</ul>
+</ul>
+<h5 class='topic'>On @RemoteMethod-annotated methods</h5>
+<p>
+	As shown previously, the <ja>@Response</ja> annotation can be added to your <ja>@RemoteMethod</ja>-annotated method directly
+	to specify whether the response body should use the OpenAPI part parser.
+</p>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// Force the part parser to be used for the response body.</jc>
+		<ja>@RemoteMethod</ja>
+		<ja>@Response</ja>(usePartParser=<jk>true</jk>)
+		String postPet(...);
+	}
+</p>
+<p>
+	It can also be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
+</p>
+
+<h5 class='topic'>Response interfaces</h5>
+<p>
+	The <ja>@Response</ja> annotation can also be used to define interfaces for retrieving response parts using a bean-like proxies.
+</p>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<ja>@RemoteMethod</ja>
+		CreatePetResponse postPet(...);
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@Response</ja> 
+	<jk>public interface</jk> CreatePetResponse {
+	
+		<ja>@ResponseBody</ja>
+		Pet getBody();
+	
+		<ja>@ResponseHeader</ja>(<js>"E-Tag"</js>)
+		UUID getUUID();
+		
+		<ja>@ResponseStatus</ja>
+		int getStatus();
+	}
+</p>
+<p class='bpcode w800'>
+	PetStore store = restClient.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePetResponse response = store.postPet(...);
+	Pet pet = response.getBody();
+	UUID uuid = response.getUUID();
+	<jk>int</jk> status = response.getStatus();
+</p>
+
+<p>
+	The annotated methods must be no-arg.  
+	They can be named anything.
+</p>
+<p>
+	Any of the following annotations can be used on the methods:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody ResponseBody}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+</ul>
 </div><!-- END: 9.1.9 - juneau-rest-client.RestProxies.Response -->
 </div><!-- END: 9.1 - juneau-rest-client.RestProxies -->
 
@@ -22659,7 +22657,7 @@ TODO(7.2.0)
 	<code>juneau-examples-core-7.2.0.zip</code> file. 
 </p>
 
-<h5 class='topic w800'>juneau-examples-core install instructions</h5>
+<h5 class='topic'>juneau-examples-core install instructions</h5>
 <p>
 	Download the <code>juneau-examples-core-7.2.0.zip</code> file from the downloads page
 	(located in the binaries) and import it into your workspace as an existing project:
@@ -22698,7 +22696,7 @@ TODO(7.2.0)
 	using embedded Jetty.
 </p>	
 
-<h5 class='topic w800'>juneau-examples-rest install instructions</h5>
+<h5 class='topic'>juneau-examples-rest install instructions</h5>
 <p>
 	Download the <code>juneau-examples-rest-7.2.0.zip</code> file from the downloads page
 	(located in the binaries) and import it into your workspace as an existing project:
@@ -23452,7 +23450,7 @@ TODO(7.2.0)
 	Notice how the conversion to POJOs is automatically done for us, even for non-standard POJOs such as UUID.
 </p>
 
-<h5 class='topic w800'>Self-documenting design through Swagger OPTIONS pages</h5>
+<h5 class='topic'>Self-documenting design through Swagger OPTIONS pages</h5>
 <p>
 	One of the main features of Juneau is that it produces OPTIONS pages for self-documenting design (i.e. REST 
 	interfaces that document themselves).
@@ -26242,7 +26240,7 @@ TODO(7.2.0)
 
 <h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-marshall' id='Security.juneau-marshall'>13.1 - juneau-marshall</a></h3>
 <div class='topic'><!-- START: 13.1 - Security.juneau-marshall -->
-<h5 class='topic w800'>Demarshalling vulnerabilities</h5>
+<h5 class='topic'>Demarshalling vulnerabilities</h5>
 <p>
 	One common security vulnerability is the ability to create arbitrary Java object instances through crafted
 	user input.  For example, support for constructing POJOs based on an input attribute defining a 
@@ -26302,7 +26300,7 @@ TODO(7.2.0)
 	should be safe from demarshalling vulnerabilities.  
 </p>
 
-<h5 class='topic w800'>Dependent libraries</h5>
+<h5 class='topic'>Dependent libraries</h5>
 <p>
 	When accessing security vulnerabilities of any library, dependent libraries must also be taken into account:
 </p>

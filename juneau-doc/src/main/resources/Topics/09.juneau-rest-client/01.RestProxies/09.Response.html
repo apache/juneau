@@ -13,6 +13,81 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Request
+{new} @Response
 
-TODO(7.2.0)
+<p>
+	The {@link oaj.http.annotation.Response @Response} annotation can be applied to either <ja>@RemoteMethod</ja>-annotated methods
+	or types returned by <ja>@RemoteMethod</ja>-annotated methods.
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link oaj.http.annotation.Response Response}
+	<ul>
+		<li class='jf'>{@link oaj.http.annotation.Response#partParser() partParser} - Override the part parser.
+		<li class='jf'>{@link oaj.http.annotation.Response#schema() schema} - Swagger schema.
+		<li class='jf'>{@link oaj.http.annotation.Response#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing the response body.
+	</ul>
+</ul>
+<h5 class='topic'>On @RemoteMethod-annotated methods</h5>
+<p>
+	As shown previously, the <ja>@Response</ja> annotation can be added to your <ja>@RemoteMethod</ja>-annotated method directly
+	to specify whether the response body should use the OpenAPI part parser.
+</p>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// Force the part parser to be used for the response body.</jc>
+		<ja>@RemoteMethod</ja>
+		<ja>@Response</ja>(usePartParser=<jk>true</jk>)
+		String postPet(...);
+	}
+</p>
+<p>
+	It can also be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
+</p>
+
+<h5 class='topic'>Response interfaces</h5>
+<p>
+	The <ja>@Response</ja> annotation can also be used to define interfaces for retrieving response parts using a bean-like proxies.
+</p>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<ja>@RemoteMethod</ja>
+		CreatePetResponse postPet(...);
+	}
+</p>
+<p class='bpcode w800'>
+	<ja>@Response</ja> 
+	<jk>public interface</jk> CreatePetResponse {
+	
+		<ja>@ResponseBody</ja>
+		Pet getBody();
+	
+		<ja>@ResponseHeader</ja>(<js>"E-Tag"</js>)
+		UUID getUUID();
+		
+		<ja>@ResponseStatus</ja>
+		int getStatus();
+	}
+</p>
+<p class='bpcode w800'>
+	PetStore store = restClient.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePetResponse response = store.postPet(...);
+	Pet pet = response.getBody();
+	UUID uuid = response.getUUID();
+	<jk>int</jk> status = response.getStatus();
+</p>
+<p>
+	The annotated methods must be no-arg.  
+	They can be named anything.
+</p>
+<p>
+	Any of the following annotations can be used on the methods:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link oaj.http.annotation.ResponseBody ResponseBody}
+	<li class='ja'>{@link oaj.http.annotation.ResponseHeader ResponseHeader}
+	<li class='ja'>{@link oaj.http.annotation.ResponseStatus ResponseStatus}
+</ul>

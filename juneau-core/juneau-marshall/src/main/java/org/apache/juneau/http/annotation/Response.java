@@ -32,15 +32,13 @@ import org.apache.juneau.jsonschema.*;
  * <p>
  * Can be used in the following locations:
  *  <ul>
- * 	<li>Exception classes thrown from <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Return type classes of <ja>@RestMethod</ja>-annotated methods.
- * 	<li><ja>@RestMethod</ja>-annotated methods.
- * 	<li>Arguments and argument-types of <ja>@RestMethod</ja>-annotated methods.
- * 	<li>Return type classes of <ja>@RemoteMethod</ja>-annotated methods.
+ * 	<li>Exception classes thrown from server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Return type classes of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Arguments and argument-types of server-side <ja>@RestMethod</ja>-annotated methods.
+ * 	<li>Return type classes of server-side <ja>@RemoteMethod</ja>-annotated methods.
+ * 	<li>Client-side <ja>@RemoteMethod</ja>-annotated methods.
+ * 	<li>Return type interfaces of client-side <ja>@RemoteMethod</ja>-annotated methods.
  * </ul>
- *
- * <p>
- * When applied to exception classes, this annotation defines Swagger information on non-200 return types.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

@@ -13,214 +13,121 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Request
-
-TODO(7.2.0)
-
+{new} @Request
 
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument is annotated with
-	{@link oaj.http.annotation.Request @Request}:
+	The {@link oaj.http.annotation.Request @Request} annotation can be applied to a type of a <ja>@RemoteMethod</ja>-annotated method 
+	to identify it as a bean for setting HTTP parts through a bean-like interface.
 </p>
+
+<ul class='doctree'>
+	<li class='ja'>{@link oaj.http.annotation.Request Request}
+	<ul>
+		<li class='jf'>{@link oaj.http.annotation.Request#partSerializer() partSerializer} - Override the part serializer.
+	</ul>
+</ul>
+
 
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Our remotable interface.</jc>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
 
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(MyRequest bean);
+		<ja>@RemoteMethod</ja>
+		String postPet(CreatePetRequest bean);
 	}
 </p>
 <p class='bpcode w800'>
-	<jc>// Our request bean interface.</jc>
 	<ja>@Request</ja> 
-	<jk>public interface</jk> MyRequest {
+	<jk>public class</jk> CreatePetRequest {
+	
+		<jk>private</jk> CreatePet <jf>pet</jf>;
+	
+		<jk>public</jk> CreatePetRequest(String name, <jk>float</jk> price) {
+			<jk>this</jk>.<jf>pet</jf> = <jk>new</jk> CreatePet(name, price);
+		}
+		
 		<ja>@Body</ja>
-		MyPojo getMyPojo();
+		<jk>public</jk> CreatePet getBody() {
+			<jk>return</jk> <jk>this</jk>.<jf>pet</jf>;
+		}
+	
+		<ja>@Query</ja>
+	 	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
+	 		<jk>return new</jk> ObjectMap().append(<js>"debug"</js>, <jk>true</jk>);
+	 	}
+	 	
+	 	<ja>@Header</ja>(<js>"E-Tag"</js>)
+	 	<jk>public static</jk> UUID <jsm>getUUID</jsm>() {
+	 		<jk>return</jk> UUID.<jsm>generatedUUID</jsm>();
+	 	}
 	}
 </p>
-<p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
-	{@link oaj.http.annotation.Request @Request}:
-</p>
-<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
-	}
-
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@FormData</ja>(<js>"foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @FormData("bar")</jc>
-		<ja>@FormData</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-	 	MyBean getMyBean();
-
-		<jc>// An entire form-data HTTP body as a Reader.</jc>
-		<jc>// Same as @FormData("*")</jc>
-		<ja>@FormData</ja>
-		Reader getReader();
-	}
+	PetStore store = restClient.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+	CreatePetRequest requestBean = <jk>new</jk> CreatePetRequest(<js>"Fluffy"</js>, 9.99);
+	String response = store.postPet(requestBean);
 </p>
-
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
-	{@link oaj.http.annotation.Request @Request}:
-
-<h5 class='section'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
-	}
-
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@Query</ja>(<js>"foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @Query("bar")</jc>
-		<ja>@Query</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-	 	MyBean getMyBean();
-
-		<jc>// An entire query string as a Reader.</jc>
-		<jc>// Same as @Query("*")</jc>
-		<ja>@Query</ja>
-		Reader getReader();
-	}
+	The <ja>@Request</ja> annotation can be applied to either the class or argument.
 </p>
-
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with {@link oaj.http.annotation.Request @Request}:
+	The annotated methods must be no-arg and public.  
+	They can be named anything.
 </p>
-
-<h5 class='section'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
-	}
-
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@Header</ja>(<js>"Foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @Header("bar")</jc>
-		<ja>@Header</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @Header("*")</jc>
-		<ja>@Header</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @Header("*")</jc>
-		<ja>@Header</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @Header("*")</jc>
-		<ja>@Header</ja>
-	 	MyBean getBean();
-	}
-</p>
-
 <p>
-	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
-	{@link oaj.http.annotation.Request @Request}:
+	Any of the following annotations can be used on the methods:
 </p>
-<h5 class='section'>Example:</h5>
-<p class='bcode w800'>
-	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
-	<jk>public interface</jk> MyProxy {
-
-		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}/{baz}"</js>)
-		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
-	}
-
-	<jk>public interface</jk> MyRequest {
-
-		<jc>// Name explicitly specified.</jc>
-		<ja>@Path</ja>(<js>"foo"</js>)
-		String getX();
-
-		<jc>// Name inherited from bean property.</jc>
-		<jc>// Same as @Path("bar")</jc>
-		<ja>@Path</ja>
-		String getBar();
-
-		<jc>// Multiple values pulled from NameValuePairs object.</jc>
-		<jc>// Same as @Path("*")</jc>
-		<ja>@Path</ja>
-		NameValuePairs getNameValuePairs();
-
-		<jc>// Multiple values pulled from Map.</jc>
-		<jc>// Same as @Path("*")</jc>
-		<ja>@Path</ja>
-	 	Map&lt;String,Object&gt; getMap();
-
-		<jc>// Multiple values pulled from bean.</jc>
-		<jc>// Same as @Path("*")</jc>
-		<ja>@Path</ja>
-	 	MyBean getMyBean();
+<ul class='doctree'>
+	<li class='ja'>{@link oaj.http.annotation.Body Body}
+	<li class='ja'>{@link oaj.http.annotation.Header Header}
+	<li class='ja'>{@link oaj.http.annotation.FormData FormData}
+	<li class='ja'>{@link oaj.http.annotation.Query Query}
+	<li class='ja'>{@link oaj.http.annotation.Path Path}
+	<li class='ja'>{@link oaj.http.annotation.HasFormData HasFormData}
+	<li class='ja'>{@link oaj.http.annotation.HasQuery HasQuery}
+</ul>
+<p>
+	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly.
+	This means full support for OpenAPI serialization and validation.
+</p>
+<p>
+	Annotations on methods are inherited from parent classes and interfaces. 
+	<br>For example, the request bean above could have defined annotations in an interface to keep them clear from the implementation:
+</p>
+<p class='bpcode w800'>
+	<ja>@Request</ja> 
+	<jk>public interface</jk> CreatePetRequest {
+	
+		<ja>@Body</ja>
+		CreatePet getBody();
+	
+		<ja>@Query</ja>
+	 	Map&lt;String,Object&gt; getQueryParams();
+	 	
+	 	<ja>@Header</ja>(<js>"E-Tag"</js>)
+	 	UUID getUUID();
 	}
 </p>
+<p class='bpcode w800'>
+	<jk>public class</jk> CreatePetRequestImpl <jk>implements</jk> CreatePetRequest {
+	
+		<jk>public</jk> CreatePetRequestImpl(String name, <jk>float</jk> price) {...}
 
-
-
-
-
-
-
-
-
+		<ja>@Override</ja>
+		<jk>public</jk> CreatePet getBody() {
+			<jk>return</jk> <jk>this</jk>.<jf>pet</jf>;
+		}
+	
+		<ja>@Override</ja>
+	 	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
+	 		<jk>return new</jk> ObjectMap().append(<js>"debug"</js>, <jk>true</jk>);
+	 	}
+	 	
+		<ja>@Override</ja>
+	 	<jk>public</jk> UUID getUUID() {
+	 		<jk>return</jk> UUID.<jsm>generateUUID</jsm>();
+	 	}
+	}
+</p>
 
