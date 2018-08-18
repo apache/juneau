@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @Header
+{new} @Header
 
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
@@ -47,22 +47,59 @@
 	</ul>
 </ul>
 
-{@link org.apache.juneau.http.annotation.Header} 
-- A request header.
-<br>The argument can be any of the following types:
-<ul>
-	<li class='normal'>Any serializable POJO 
-		- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-	<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-		- Individual name-value pairs.
-		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
 
+		<jc>// Explicit names specified for HTTP headers.</jc>
+		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
+		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String foo,
+			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo pojo);
 
+		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Same as @Header("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
+		String myProxyMethod2(<ja>@Header</ja> NameValuePairs nameValuePairs);
 
+		<jc>// Multiple values pulled from a Map.</jc>
+		<jc>// Same as @Header("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3"</js>)
+		String myProxyMethod3(<ja>@Header</ja> Map&lt;String,Object&gt; map);
+
+		<jc>// Multiple values pulled from a bean.</jc>
+		<jc>// Same as @Header("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4"</js>)
+		String myProxyMethod4(<ja>@Header</ja> MyBean myBean);
+	}
+</p>
 
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Header#serializer() @Header(serializer)} annotation.
+</ul>
+
+<p>
+	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<code>NameValuePairs</code> - Serialized as individual headers.
+	<li>
+		<code>Map</code> - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+	<li>
+		Bean - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+</ul>
+
+<p>
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>

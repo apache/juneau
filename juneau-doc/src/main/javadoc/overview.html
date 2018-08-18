@@ -372,8 +372,8 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Body'>@Body</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.FormData'>@FormData</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Query'>@Query</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Header'>@Header</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Path'>@Path</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Header'>@Header</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Path'>@Path</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Request'>@Request</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Response'>@Request</a></p>
 		</ol>
@@ -19977,7 +19977,7 @@ TODO(7.2.0)
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a reusable JSON client.</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().build()) {
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
 	
 		<jc>// The address of the root resource.</jc>
 		String url = <js>"http://localhost:10000/addressBook"</js>;
@@ -20037,7 +20037,7 @@ TODO(7.2.0)
 	<jc>// Examples below use the Juneau Address Book resource example</jc>
 
 	<jc>// Create a reusable client with JSON support</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().build()) {
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
 	
 		<jc>// GET request, ignoring output</jc>
 		<jk>try</jk> {
@@ -20279,7 +20279,7 @@ TODO(7.2.0)
 <div class='topic'><!-- START: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 <p>
 	The {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
-	of {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource}-annotated interfaces to identify REST endpoints.
+	of <ja>@RemoteResource</ja>-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
@@ -20304,12 +20304,12 @@ TODO(7.2.0)
 	}
 </p>
 <p>
-	The method names can be anything.  
+	The Java method name can be anything.  
 </p>
 
 <h5 class='topic w800'>Inferred method/path</h5>
 <p>
-	The <code>method</code> and <code>path</code> annotations are optional if you follow certain naming
+	In such cases, <code>method</code> and <code>path</code> annotations are optional if you follow certain naming
 	conventions on your method that identify the method and path.
 </p>
 <p>
@@ -20323,6 +20323,9 @@ TODO(7.2.0)
 		<ja>@RemoteMethod</ja>
 		Pet getPet(...);
 	}
+</p>
+<p>
+	In such cases, the <ja>@RemoteMethod</ja> annotation is optional.
 </p>
 <p>
 	Method names matching the following pattern are assumed to be implying the HTTP method name:
@@ -20380,7 +20383,7 @@ TODO(7.2.0)
 
 <h5 class='topic w800'>@RemoteMethod(returns)</h5>
 <p>
-	By default, the return type of the Java methods of can be any of the following:
+	The return type of the Java methods of can be any of the following:
 </p>
 <ul class='spaced-list'>
 	<li>
@@ -20399,8 +20402,6 @@ TODO(7.2.0)
 	<li>
 		{@link java.io.Reader} 
 		- Returns access to the raw reader of the response.
-		<br>Note that if you don't want your response parsed as a POJO, you'll want to get the response reader 
-		directly.
 	<li>
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
@@ -20416,10 +20417,30 @@ TODO(7.2.0)
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// POST /pets</jc>
-		<jc>// Returns HTTP status code.
+		<jc>// Returns HTTP status code.</jc>
 		<ja>@RemoteMethod</ja>(returns=<jsf>STATUS</jsf>)
 		<jk>int</jk> postPets(...);
 	}
+</p>
+
+<p>
+	If your <code>RestClient</code> does not have a parser associated with it, then the {@link org.apache.juneau.httppart.OpenApiPartParser OpenAPI part parser}
+	is used to parse the response.  
+	<br>If your <code>RestClient</code> does have a parser associated with it, then you can force it to use the part parser using the {@link org.apache.juneau.http.annotation.Response#usePartParser() @Response(usePartParser)}
+	annotation on your method like so: 
+</p>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// Force the part parser to be used for the response body.</jc>
+		<ja>@RemoteMethod</ja>
+		<ja>@Response</ja>(usePartParser=<jk>true</jk>)
+		String postPets(...);
+	}
+</p>
+<p>
+	The usage of <ja>@Response</ja> is described in detail below.
 </p>
 </div><!-- END: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 
@@ -20469,8 +20490,8 @@ TODO(7.2.0)
 </p>
 <ul class='spaced-list'>
 	<li>
-		Any serializable POJO - Converted to text using the {@link org.apache.juneau.serializer.Serializer} or {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> or specified on annotation.
+		Any serializable POJO - Converted to output using the {@link org.apache.juneau.serializer.Serializer} or {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
 	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
 	<li>
@@ -20482,14 +20503,15 @@ TODO(7.2.0)
 </ul>
  
 <p>
-	OpenAPI schema based serialization can be used by specifying a value for the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
+	OpenAPI schema based serialization can be used by specifying a value for the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation
+	or setting {@link org.apache.juneau.http.annotation.Body#usePartSerializer() @Body(usePartSerializer)} to <jk>true</jk>.
 </p>
 
 <p class='bpcode w800'>
 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
 	String addCommaDelimitedPipeDelimitedInts(
 		<ja>@Body</ja>(
-			serializer=OpenApiPartSerializer.<jk>class</jk>,
+			usePartSerializer=<jk>true</jk>,
 			schema=<ja>@Schema</ja>(
 				type=<js>"array"</js>,
 				collectionFormat=<js>"pipes"</js>,
@@ -20507,9 +20529,12 @@ TODO(7.2.0)
 		<jk>int</jk>[][] input
 	);
 </p>
-
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized using the registered
+	OpenAPI part serializer.
+</p>
+<p>
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>
@@ -20595,7 +20620,7 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> or associated via the {@link org.apache.juneau.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
 </ul>
 <p>
 	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
@@ -20609,16 +20634,15 @@ TODO(7.2.0)
 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
 	<li>
 		<code>CharSequence</code> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
 </ul>
-
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>
@@ -20707,7 +20731,7 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> or associated via the {@link org.apache.juneau.http.annotation.Query#serializer() @Query(serializer)} annotation.
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Query#serializer() @Query(serializer)} annotation.
 </ul>
 
 <p>
@@ -20720,16 +20744,16 @@ TODO(7.2.0)
 		<code>NameValuePairs</code> - Serialized as individual query parameters.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
 	<li>
 		<code>CharSequence</code> - Serialized directly a query string.
 </ul>
 
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>
@@ -20740,7 +20764,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Header' id='juneau-rest-client.RestProxies.Header'>9.1.6 - @Header</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Header' id='juneau-rest-client.RestProxies.Header'>9.1.6 - @Header</a></h4>
 <div class='topic'><!-- START: 9.1.6 - juneau-rest-client.RestProxies.Header -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
@@ -20774,22 +20798,59 @@ TODO(7.2.0)
 	</ul>
 </ul>
 
-{@link org.apache.juneau.http.annotation.Header} 
-- A request header.
-<br>The argument can be any of the following types:
-<ul>
-	<li class='normal'>Any serializable POJO 
-		- Converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-	<li class='normal'><code>Map&lt;String,Object&gt;</code> 
-		- Individual name-value pairs.
-		<br>Values are converted to text using {@link org.apache.juneau.httppart.SimpleUonPartSerializerSession#serialize(HttpPartType,HttpPartSchema,Object)}.
-</ul>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
 
+		<jc>// Explicit names specified for HTTP headers.</jc>
+		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1"</js>)
+		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String foo,
+			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo pojo);
 
+		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Same as @Header("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2"</js>)
+		String myProxyMethod2(<ja>@Header</ja> NameValuePairs nameValuePairs);
 
+		<jc>// Multiple values pulled from a Map.</jc>
+		<jc>// Same as @Header("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3"</js>)
+		String myProxyMethod3(<ja>@Header</ja> Map&lt;String,Object&gt; map);
+
+		<jc>// Multiple values pulled from a bean.</jc>
+		<jc>// Same as @Header("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4"</js>)
+		String myProxyMethod4(<ja>@Header</ja> MyBean myBean);
+	}
+</p>
 
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Header#serializer() @Header(serializer)} annotation.
+</ul>
+
+<p>
+	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<code>NameValuePairs</code> - Serialized as individual headers.
+	<li>
+		<code>Map</code> - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+	<li>
+		Bean - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+</ul>
+
+<p>
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>
@@ -20800,7 +20861,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Path' id='juneau-rest-client.RestProxies.Path'>9.1.7 - @Path</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Path' id='juneau-rest-client.RestProxies.Path'>9.1.7 - @Path</a></h4>
 <div class='topic'><!-- START: 9.1.7 - juneau-rest-client.RestProxies.Path -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
@@ -20828,8 +20889,58 @@ TODO(7.2.0)
 	</ul>
 </ul>
 
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<jc>// Explicit names specified for path parameters.</jc>
+		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod1/{foo}/{bar}"</js>)
+		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String foo, <ja>@Path</ja>(<js>"bar"</js>)</ja> MyPojo pojo);
+
+		<jc>// Multiple values pulled from a NameValuePairs object.</jc>
+		<jc>// Same as @Path("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod2/{foo}/{bar}/{baz}"</js>)
+		String myProxyMethod2(<ja>@Path</ja> NameValuePairs nameValuePairs);
+
+		<jc>// Multiple values pulled from a Map.</jc>
+		<jc>// Same as @Path("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod3/{foo}/{bar}/{baz}"</js>)
+		String myProxyMethod3(<ja>@Path</ja> Map&lt;String,Object&gt; map);
+
+		<jc>// Multiple values pulled from a bean.</jc>
+		<jc>// Same as @Path("*").</jc>
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod4/{foo}/{bar}/{baz}"</js>)
+		String myProxyMethod4(<ja>@Path</ja> MyBean myBean);
+	}
+</p>
+
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Path#serializer() @Path(serializer)} annotation.
+</ul>
+
+<p>
+	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<code>NameValuePairs</code> - Serialized as individual query parameters.
+	<li>
+		<code>Map</code> - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+	<li>
+		Bean - Converted to key-value pairs.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+</ul>
+
+<p>
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>
@@ -20957,6 +21068,88 @@ TODO(7.2.0)
 		<jc>// Same as @Query("*")</jc>
 		<ja>@Query</ja>
 		Reader getReader();
+	}
+</p>
+
+<p>
+	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with {@link org.apache.juneau.http.annotation.Request @Request}:
+</p>
+
+<h5 class='section'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+	}
+
+	<jk>public interface</jk> MyRequest {
+
+		<jc>// Name explicitly specified.</jc>
+		<ja>@Header</ja>(<js>"Foo"</js>)
+		String getX();
+
+		<jc>// Name inherited from bean property.</jc>
+		<jc>// Same as @Header("bar")</jc>
+		<ja>@Header</ja>
+		String getBar();
+
+		<jc>// Multiple values pulled from NameValuePairs object.</jc>
+		<jc>// Same as @Header("*")</jc>
+		<ja>@Header</ja>
+		NameValuePairs getNameValuePairs();
+
+		<jc>// Multiple values pulled from Map.</jc>
+		<jc>// Same as @Header("*")</jc>
+		<ja>@Header</ja>
+	 	Map&lt;String,Object&gt; getMap();
+
+		<jc>// Multiple values pulled from bean.</jc>
+		<jc>// Same as @Header("*")</jc>
+		<ja>@Header</ja>
+	 	MyBean getBean();
+	}
+</p>
+
+<p>
+	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
+	{@link org.apache.juneau.http.annotation.Request @Request}:
+</p>
+<h5 class='section'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}/{baz}"</js>)
+		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+	}
+
+	<jk>public interface</jk> MyRequest {
+
+		<jc>// Name explicitly specified.</jc>
+		<ja>@Path</ja>(<js>"foo"</js>)
+		String getX();
+
+		<jc>// Name inherited from bean property.</jc>
+		<jc>// Same as @Path("bar")</jc>
+		<ja>@Path</ja>
+		String getBar();
+
+		<jc>// Multiple values pulled from NameValuePairs object.</jc>
+		<jc>// Same as @Path("*")</jc>
+		<ja>@Path</ja>
+		NameValuePairs getNameValuePairs();
+
+		<jc>// Multiple values pulled from Map.</jc>
+		<jc>// Same as @Path("*")</jc>
+		<ja>@Path</ja>
+	 	Map&lt;String,Object&gt; getMap();
+
+		<jc>// Multiple values pulled from bean.</jc>
+		<jc>// Same as @Path("*")</jc>
+		<ja>@Path</ja>
+	 	MyBean getMyBean();
 	}
 </p>
 </div><!-- END: 9.1.8 - juneau-rest-client.RestProxies.Request -->

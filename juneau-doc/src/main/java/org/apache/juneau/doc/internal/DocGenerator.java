@@ -216,7 +216,11 @@ public class DocGenerator {
 					tags = title.substring(1, title.indexOf('}'));
 					title = title.substring(tags.length()+2).trim();
 				}
-				contents = s.substring(i).trim();
+				contents = s.substring(i).trim()
+					.replaceAll("oaj\\.", "org.apache.juneau.")
+					.replaceAll("oajr\\.", "org.apache.juneau.rest.")
+					.replaceAll("oajrc\\.", "org.apache.juneau.rest.client.")
+				;
 			} catch (Exception e) {
 				throw new RuntimeException("Problem with file " + f.getAbsolutePath());
 			}

@@ -275,7 +275,9 @@ public class HttpPartSchemaBuilder {
 		required(false);
 		allowEmptyValue(true);
 		serializer(a.partSerializer());
+		parser(a.partParser());
 		usePartSerializer(AnnotationUtils.usePartSerializer(a));
+		usePartParser(AnnotationUtils.usePartParser(a));
 		apply(a.schema());
 		return this;
 	}

@@ -82,6 +82,7 @@ import org.apache.juneau.jsonschema.*;
  * servlet to drain the body content.
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
+ *
  * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
  * request.
  *

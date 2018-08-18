@@ -742,6 +742,28 @@ public class ResponseAnnotationTest {
 		assertObjectEquals("{description:'OK',schema:{type:'array',items:{type:'integer',format:'int32'}}}", ri);
 	}
 
+
+	//=================================================================================================================
+	// @Response on RestMethod
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	public static class J {
+
+		@RestMethod(name="POST")
+		@Response(usePartSerializer=true)
+		public String j01(@Body(usePartParser=true) String body) {
+			return body;
+		}
+	}
+	static MockRest j = MockRest.create(J.class);
+
+	@Test
+	public void j01a_basic() throws Exception {
+		j.post("/j01", "foo").execute().assertStatus(200).assertBody("foo").assertHeader("Content-Type", "text/plain");
+	}
+
+
 	//=================================================================================================================
 	// @Response on POJO
 	//=================================================================================================================

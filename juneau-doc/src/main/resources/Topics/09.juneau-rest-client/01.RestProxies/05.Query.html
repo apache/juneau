@@ -91,7 +91,7 @@
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> or associated via the {@link org.apache.juneau.http.annotation.Query#serializer() @Query(serializer)} annotation.
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Query#serializer() @Query(serializer)} annotation.
 </ul>
 
 <p>
@@ -104,16 +104,16 @@
 		<code>NameValuePairs</code> - Serialized as individual query parameters.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer}.
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
 	<li>
 		<code>CharSequence</code> - Serialized directly a query string.
 </ul>
 
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>

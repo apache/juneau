@@ -96,6 +96,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	private boolean hasInput;  // input() was called, even if it's setting 'null'.
 	private Serializer serializer;
 	private Parser parser;
+	private HttpPartSerializer partSerializer;
 	private HttpPartParser partParser;
 	private URIBuilder uriBuilder;
 	private NameValuePairs formData;
@@ -119,6 +120,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		this.retryInterval = client.retryInterval;
 		this.serializer = client.serializer;
 		this.parser = client.parser;
+		this.partSerializer = client.getPartSerializer();
 		this.partParser = client.getPartParser();
 		uriBuilder = new URIBuilder(uri);
 	}
@@ -559,6 +561,8 @@ public final class RestCall extends BeanSession implements Closeable {
 	 */
 	public RestCall body(Object input, HttpPartSerializer partSerializer, HttpPartSchema schema) throws RestCallException {
 		try {
+			if (schema != null && schema.isUsePartSerializer())
+				partSerializer = this.partSerializer;
 			if (partSerializer != null)
 				body(new StringEntity(partSerializer.serialize(BODY, schema, input)));
 			else
@@ -2167,7 +2171,11 @@ public final class RestCall extends BeanSession implements Closeable {
 			Header h = response.getFirstHeader("Content-Type");
 			MediaType mt = MediaType.forString(h == null ? null : h.getValue());
 
-			if ((isEmpty(mt) || mt.toString().equals("text/plain"))) {
+			boolean usePartParser = isEmpty(mt)
+				|| mt.toString().equals("text/plain")
+				|| (schema != null && partParser != null && schema.isUsePartParser());
+
+			if (usePartParser) {
 				if (type.hasStringTransform())
 					return type.getStringTransform().transform(getResponseAsString());
 				if (partParser != null)

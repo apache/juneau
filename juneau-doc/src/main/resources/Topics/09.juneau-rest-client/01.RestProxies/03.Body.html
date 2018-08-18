@@ -57,8 +57,8 @@
 </p>
 <ul class='spaced-list'>
 	<li>
-		Any serializable POJO - Converted to text using the {@link org.apache.juneau.serializer.Serializer} or {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> or specified on annotation.
+		Any serializable POJO - Converted to output using the {@link org.apache.juneau.serializer.Serializer} or {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
+		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
 	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
 	<li>
@@ -70,14 +70,15 @@
 </ul>
  
 <p>
-	OpenAPI schema based serialization can be used by specifying a value for the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
+	OpenAPI schema based serialization can be used by specifying a value for the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation
+	or setting {@link org.apache.juneau.http.annotation.Body#usePartSerializer() @Body(usePartSerializer)} to <jk>true</jk>.
 </p>
 
 <p class='bpcode w800'>
 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
 	String addCommaDelimitedPipeDelimitedInts(
 		<ja>@Body</ja>(
-			serializer=OpenApiPartSerializer.<jk>class</jk>,
+			usePartSerializer=<jk>true</jk>,
 			schema=<ja>@Schema</ja>(
 				type=<js>"array"</js>,
 				collectionFormat=<js>"pipes"</js>,
@@ -95,13 +96,18 @@
 		<jk>int</jk>[][] input
 	);
 </p>
-
 <p>
-	When using OpenAPI serialization, the argument can be any data type specified in {@link org.apache.juneau.httppart.OpenApiPartSerializer}.
+	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized using the registered
+	OpenAPI part serializer.
+</p>
+<p>
+	See the link below for information about supported data types in OpenAPI serialization.
 </p>
 
 <h5 class='section'>See Also:</h5>
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
+
+
 

@@ -300,6 +300,19 @@ public class AnnotationUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the part parser should be used on the specified part.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the part parser should be used on the specified part.
+	 */
+	public static boolean usePartParser(Response a) {
+		return
+			a.usePartParser()
+			|| a.partParser() != HttpPartParser.Null.class
+			|| ! empty(a.schema());
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the part serializer should be used on the specified part.
 	 *
 	 * @param a The annotation to check.

@@ -17,7 +17,9 @@ import static org.junit.Assert.*;
 import java.io.*;
 
 import org.apache.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -124,9 +126,91 @@ public class RemoteMethodAnnotationTest {
 	public void b01_returnTypes() throws Exception {
 		B01 t = rb.getRemoteResource(B01.class);
 		t.b01();
-//		assertEquals("foo", t.b02());
+		assertEquals("foo", t.b02());
 		assertEquals("bar", IOUtils.read(t.b02a().getEntity().getContent()));
 		assertEquals("baz", IOUtils.read(t.b02b()));
 		assertEquals("qux", IOUtils.read(t.b02c()));
+	}
+
+	//=================================================================================================================
+	// Return types, JSON
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	public static class C {
+
+		@RestMethod(name="POST")
+		public String c01(@Body String body) {
+			return body;
+		}
+	}
+	private static MockRest c = MockRest.create(C.class);
+	private static RestClient rc = RestClient.create().mockHttpConnection(c).simpleJson().build();
+
+	@RemoteResource
+	public static interface C01 {
+
+		@RemoteMethod(method="POST",path="c01")
+		public String c01a(@Body String foo);
+
+		@RemoteMethod(method="POST",path="c01")
+		public HttpResponse c01b(@Body String foo);
+
+		@RemoteMethod(method="POST",path="c01")
+		public Reader c01c(@Body String foo);
+
+		@RemoteMethod(method="POST",path="c01")
+		public InputStream c01d(@Body String foo);
+	}
+
+	@Test
+	public void c01_returnTypes_json() throws Exception {
+		C01 t = rc.getRemoteResource(C01.class);
+		assertEquals("foo", t.c01a("foo"));
+		assertEquals("'foo'", IOUtils.read(t.c01b("foo").getEntity().getContent()));
+		assertEquals("'foo'", IOUtils.read(t.c01c("foo")));
+		assertEquals("'foo'", IOUtils.read(t.c01d("foo")));
+	}
+
+	//=================================================================================================================
+	// Return types, part serialization
+	//=================================================================================================================
+
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	public static class D {
+
+		@RestMethod(name="POST")
+		@Response(usePartSerializer=true)
+		public String d01(@Body(usePartParser=true) String body) {
+			return body;
+		}
+	}
+	private static MockRest d = MockRest.create(D.class, true);
+	private static RestClient rd = RestClient.create().debug().mockHttpConnection(d).build();
+
+	@RemoteResource
+	public static interface D01 {
+
+		@RemoteMethod(method="POST",path="d01")
+		@Response(usePartParser=true)
+		public String d01a(@Body(usePartSerializer=true) String foo);
+
+		@RemoteMethod(method="POST",path="d01")
+		public HttpResponse d01b(@Body(usePartSerializer=true) String foo);
+
+		@RemoteMethod(method="POST",path="d01")
+		public Reader d01c(@Body(usePartSerializer=true) String foo);
+
+		@RemoteMethod(method="POST",path="d01")
+		public InputStream d01d(@Body(usePartSerializer=true) String foo);
+	}
+
+	@Test
+	public void d01_returnTypes_partSerialization() throws Exception {
+		D01 t = rd.getRemoteResource(D01.class);
+		assertEquals("foo", t.d01a("foo"));
+		assertEquals("foo", IOUtils.read(t.d01b("foo").getEntity().getContent()));
+		assertEquals("foo", IOUtils.read(t.d01c("foo")));
+		assertEquals("foo", IOUtils.read(t.d01d("foo")));
 	}
 }

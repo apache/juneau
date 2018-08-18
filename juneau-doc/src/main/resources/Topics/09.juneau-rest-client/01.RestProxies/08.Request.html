@@ -133,3 +133,94 @@ TODO(7.2.0)
 	}
 </p>
 
+<p>
+	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with {@link org.apache.juneau.http.annotation.Request @Request}:
+</p>
+
+<h5 class='section'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod"</js>)
+		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+	}
+
+	<jk>public interface</jk> MyRequest {
+
+		<jc>// Name explicitly specified.</jc>
+		<ja>@Header</ja>(<js>"Foo"</js>)
+		String getX();
+
+		<jc>// Name inherited from bean property.</jc>
+		<jc>// Same as @Header("bar")</jc>
+		<ja>@Header</ja>
+		String getBar();
+
+		<jc>// Multiple values pulled from NameValuePairs object.</jc>
+		<jc>// Same as @Header("*")</jc>
+		<ja>@Header</ja>
+		NameValuePairs getNameValuePairs();
+
+		<jc>// Multiple values pulled from Map.</jc>
+		<jc>// Same as @Header("*")</jc>
+		<ja>@Header</ja>
+	 	Map&lt;String,Object&gt; getMap();
+
+		<jc>// Multiple values pulled from bean.</jc>
+		<jc>// Same as @Header("*")</jc>
+		<ja>@Header</ja>
+	 	MyBean getBean();
+	}
+</p>
+
+<p>
+	The annotation can also be applied to a bean property field or getter when the argument or argument class is annotated with
+	{@link org.apache.juneau.http.annotation.Request @Request}:
+</p>
+<h5 class='section'>Example:</h5>
+<p class='bcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
+	<jk>public interface</jk> MyProxy {
+
+		<ja>@RemoteMethod</ja>(path=<js>"/mymethod/{foo}/{bar}/{baz}"</js>)
+		String myProxyMethod(<ja>@Request</ja> MyRequest bean);
+	}
+
+	<jk>public interface</jk> MyRequest {
+
+		<jc>// Name explicitly specified.</jc>
+		<ja>@Path</ja>(<js>"foo"</js>)
+		String getX();
+
+		<jc>// Name inherited from bean property.</jc>
+		<jc>// Same as @Path("bar")</jc>
+		<ja>@Path</ja>
+		String getBar();
+
+		<jc>// Multiple values pulled from NameValuePairs object.</jc>
+		<jc>// Same as @Path("*")</jc>
+		<ja>@Path</ja>
+		NameValuePairs getNameValuePairs();
+
+		<jc>// Multiple values pulled from Map.</jc>
+		<jc>// Same as @Path("*")</jc>
+		<ja>@Path</ja>
+	 	Map&lt;String,Object&gt; getMap();
+
+		<jc>// Multiple values pulled from bean.</jc>
+		<jc>// Same as @Path("*")</jc>
+		<ja>@Path</ja>
+	 	MyBean getMyBean();
+	}
+</p>
+
+
+
+
+
+
+
+
+
+
