@@ -17,7 +17,7 @@
 
 <p>
 	The {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
-	of {@link org.apache.juneau.rest.client.remote.RemoteResource}-annotated interfaces to identify REST endpoints.
+	of {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource}-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
@@ -27,8 +27,9 @@
 		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#returns returns}
 	</ul>
 </ul>
+<h5 class='topic w800'>@RemoteMethod(method/path)</h5>
 <p>
-	The HTTP method and path are mapped to a Java method using the <code>httpMethod</code> and <code>path</code> annotations.
+	The HTTP method and path are mapped to a Java method using the <code>method</code> and <code>path</code> annotations.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
@@ -36,15 +37,18 @@
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// GET /pets/{petId}</jc>
-		<ja>@RemoteMethod(httpMethod="GET", path="/pets/{petId}")</ja>
-		Pet getPet(@Path(<js>"petId"</js>) <jk>int</jk> id);
+		<ja>@RemoteMethod</ja>(method=<js>"GET"</js>, path=<js>"/pets/{petId}"</js>)
+		Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id);
 	}
 </p>
 <p>
-	The method names used in 3rd-party proxies can be anything.  
-	However, the method names can also be used to infer the HTTP method and path if not explicitly specified
-	via the {@link org.apache.juneau.rest.client.remote.RemoteMethod#method() @RemoteMethod(method)} and 
-	{@link org.apache.juneau.rest.client.remote.RemoteMethod#path() @RemoteMethod(path)} annotations.
+	The method names can be anything.  
+</p>
+
+<h5 class='topic w800'>Inferred method/path</h5>
+<p>
+	The <code>method</code> and <code>path</code> annotations are optional if you follow certain naming
+	conventions on your method that identify the method and path.
 </p>
 <p>
 	For example, the <code>getPet</code> method below defaults to <code>GET /pet</code>:
@@ -55,8 +59,11 @@
 		
 		<jc>// GET /pet</jc>
 		<ja>@RemoteMethod</ja>
-		Pet getPet(@Query(<js>"id"</js>) <jk>int</jk> id);
+		Pet getPet(...);
 	}
+</p>
+<p>
+	In such cases, the <ja>@RemoteMethod</ja> annotation is optional.
 </p>
 <p>
 	Method names matching the following pattern are assumed to be implying the HTTP method name:
@@ -111,3 +118,47 @@
 		<td class='code'>/doFoo</td>
 	</tr>
 </table>
+
+<h5 class='topic w800'>@RemoteMethod(returns)</h5>
+<p>
+	The return type of the Java methods of can be any of the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<jk>void</jk> 
+		- Don't parse any response.  
+		<br>Note that the method will still throw a runtime exception if an error HTTP status is returned.
+	<li>
+		Any {@doc PojoCategories parsable} POJO 
+		- The body of the response will be converted to the POJO using the parser defined on the 
+		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
+	<li>
+		Any {@link org.apache.juneau.http.annotation.Response @Response}-annotated type. (described later)
+	<li>
+		<code>HttpResponse</code> 
+		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
+	<li>
+		{@link java.io.Reader} 
+		- Returns access to the raw reader of the response.
+		<br>Note that if you don't want your response parsed as a POJO, you'll want to get the response reader 
+		directly.
+	<li>
+		{@link java.io.InputStream} 
+		- Returns access to the raw input stream of the response.
+</ul>
+
+<p>
+	If you're only interested in the HTTP status code of the response, you can use the {@link org.apache.juneau.rest.client.remote.RemoteMethod#returns() returns}
+	annotation with a value of {@link org.apache.juneau.rest.client.remote.RemoteReturn#STATUS STATUS}:
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// POST /pets</jc>
+		<jc>// Returns HTTP status code.</jc>
+		<ja>@RemoteMethod</ja>(returns=<jsf>STATUS</jsf>)
+		<jk>int</jk> postPets(...);
+	}
+</p>

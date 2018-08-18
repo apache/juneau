@@ -32,13 +32,13 @@ import org.apache.juneau.internal.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */
 public class RemoteMethodMeta {
 
 	private final String httpMethod;
-	private final String url, path;
+	private final String fullPath, path;
 	private final RemoteMethodArg[] pathArgs, queryArgs, headerArgs, formDataArgs, otherArgs;
 	private final RemoteMethodBeanArg[] requestArgs;
 	private final RemoteMethodArg bodyArg;
@@ -48,17 +48,17 @@ public class RemoteMethodMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
+	 * @param parentPath The absolute URL of the REST interface backing the interface proxy.
 	 * @param m The Java method.
 	 * @param useMethodSignatures If <jk>true</jk> then the default path for the method should be the full method signature.
 	 * @param defaultMethod The default HTTP method if not specified through annotation.
 	 */
-	public RemoteMethodMeta(final String restUrl, Method m, boolean useMethodSignatures, String defaultMethod) {
-		Builder b = new Builder(restUrl, m, useMethodSignatures, defaultMethod);
+	public RemoteMethodMeta(final String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {
+		Builder b = new Builder(parentPath, m, useMethodSignatures, defaultMethod);
 		this.method = m;
 		this.httpMethod = b.httpMethod;
 		this.path = b.path;
-		this.url = b.url;
+		this.fullPath = b.fullPath;
 		this.pathArgs = b.pathArgs.toArray(new RemoteMethodArg[b.pathArgs.size()]);
 		this.queryArgs = b.queryArgs.toArray(new RemoteMethodArg[b.queryArgs.size()]);
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteMethodArg[b.formDataArgs.size()]);
@@ -70,7 +70,7 @@ public class RemoteMethodMeta {
 	}
 
 	private static final class Builder {
-		String httpMethod, url, path;
+		String httpMethod, fullPath, path;
 		List<RemoteMethodArg>
 			pathArgs = new LinkedList<>(),
 			queryArgs = new LinkedList<>(),
@@ -82,7 +82,7 @@ public class RemoteMethodMeta {
 		RemoteMethodArg bodyArg;
 		RemoteMethodReturn methodReturn;
 
-		Builder(String restUrl, Method m, boolean useMethodSignatures, String defaultMethod) {
+		Builder(String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {
 
 			RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 
@@ -97,8 +97,7 @@ public class RemoteMethodMeta {
 			if (httpMethod.isEmpty())
 				httpMethod = HttpUtils.detectHttpMethod(m, ! useMethodSignatures, defaultMethod);
 
-			if (path.startsWith("/"))
-				path = path.substring(1);
+			path = trimSlashes(path);
 
 			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
 				throw new RemoteMetadataException(m,
@@ -108,7 +107,7 @@ public class RemoteMethodMeta {
 
 			methodReturn = new RemoteMethodReturn(m, rv);
 
-			url = trimSlashes(restUrl) + '/' + urlEncode(path);
+			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncode(path) : (trimSlashes(parentPath) + '/' + urlEncode(path)));
 
 			for (int i = 0; i < m.getParameterTypes().length; i++) {
 				RemoteMethodArg rma = RemoteMethodArg.create(m, i);
@@ -155,8 +154,8 @@ public class RemoteMethodMeta {
 	 *
 	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
 	 */
-	public String getUrl() {
-		return url;
+	public String getFullPath() {
+		return fullPath;
 	}
 
 	/**

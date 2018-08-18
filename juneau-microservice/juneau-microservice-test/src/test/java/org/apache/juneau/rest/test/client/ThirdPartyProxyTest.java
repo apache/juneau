@@ -2567,28 +2567,28 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		// Method returns status code
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.STATUS)
 		int httpStatusReturnInt200();
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.STATUS)
 		Integer httpStatusReturnInteger200();
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.STATUS)
 		int httpStatusReturnInt404();
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.STATUS)
 		Integer httpStatusReturnInteger404();
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.STATUS)
 		boolean httpStatusReturnBool200();
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.STATUS)
 		Boolean httpStatusReturnBoolean200();
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.STATUS)
 		boolean httpStatusReturnBool404();
 
-		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.STATUS)
 		Boolean httpStatusReturnBoolean404();
 	}
 

@@ -1018,18 +1018,10 @@ public class RestClient extends BeanContext implements Closeable {
 	@SuppressWarnings({ "unchecked" })
 	public <T> T getRemoteResource(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
-		if (restUrl == null) {
-			RemoteResourceMeta rm = new RemoteResourceMeta(interfaceClass, asString(restUrl));
-			String path = rm.getPath();
-			if (path.indexOf("://") == -1) {
-				if (rootUrl == null)
-					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
-				path = trimSlashes(rootUrl) + '/' + path;
-			}
-			restUrl = path;
-		}
+		if (restUrl == null)
+			restUrl = rootUrl;
 
-		final String restUrl2 = restUrl.toString();
+		final String restUrl2 = trimSlashes(emptyIfNull(restUrl));
 
 		try {
 			return (T)Proxy.newProxyInstance(
@@ -1037,7 +1029,7 @@ public class RestClient extends BeanContext implements Closeable {
 				new Class[] { interfaceClass },
 				new InvocationHandler() {
 
-					final RemoteResourceMeta rm = new RemoteResourceMeta(interfaceClass, restUrl2);
+					final RemoteResourceMeta rm = new RemoteResourceMeta(interfaceClass);
 
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -1046,7 +1038,12 @@ public class RestClient extends BeanContext implements Closeable {
 						if (rmm == null)
 							throw new RuntimeException("Method is not exposed as a remote method.");
 
-						String url = rmm.getUrl();
+						String url = rmm.getFullPath();
+						if (url.indexOf("://") == -1)
+							url = restUrl2 + '/' + url;
+						if (url.indexOf("://") == -1)
+							throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
+
 						String httpMethod = rmm.getHttpMethod();
 						HttpPartSerializer s = getPartSerializer();
 
@@ -1108,7 +1105,7 @@ public class RestClient extends BeanContext implements Closeable {
 							if (rmr.getReturnValue() == RemoteReturn.NONE) {
 								rc.run();
 								return null;
-							} else if (rmr.getReturnValue() == RemoteReturn.HTTP_STATUS) {
+							} else if (rmr.getReturnValue() == RemoteReturn.STATUS) {
 								rc.ignoreErrors();
 								int returnCode = rc.run();
 								Class<?> rt = method.getReturnType();

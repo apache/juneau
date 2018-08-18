@@ -28,7 +28,7 @@ import java.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */
 public class RemoteResourceMeta {
@@ -40,9 +40,8 @@ public class RemoteResourceMeta {
 	 * Constructor.
 	 *
 	 * @param c The interface class annotated with a {@link RemoteResource @RemoteResource} annotation (optional).
-	 * @param restUrl The absolute URL of the remote REST interface that implements this proxy interface.
 	 */
-	public RemoteResourceMeta(Class<?> c, String restUrl) {
+	public RemoteResourceMeta(Class<?> c) {
 		String path = "";
 
 		for (RemoteResource r : getAnnotationsParentFirst(RemoteResource.class, c))
@@ -52,7 +51,7 @@ public class RemoteResourceMeta {
 		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
 		for (Method m : c.getMethods())
 			if (isPublic(m))
-				methods.put(m, new RemoteMethodMeta(restUrl, m, false, "GET"));
+				methods.put(m, new RemoteMethodMeta(path, m, false, "GET"));
 
 		this.methods = unmodifiableMap(methods);
 		this.path = path;

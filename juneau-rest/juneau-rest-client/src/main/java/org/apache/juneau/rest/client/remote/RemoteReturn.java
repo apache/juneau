@@ -21,7 +21,7 @@ public enum RemoteReturn {
 	BODY,
 
 	/** HTTP status code */
-	HTTP_STATUS,
+	STATUS,
 
 	/** Ignore (used for void methods) */
 	NONE;

@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */
 @Documented
@@ -35,15 +35,25 @@ import org.apache.juneau.http.annotation.*;
 public @interface RemoteMethod {
 
 	/**
-	 * The path to the REST service for this Java method relative to the parent proxy interface URL.
+	 * REST service path.
 	 *
 	 * <p>
-	 * If you do not specify a value, then the path is inferred from the Java method name.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.RemoteMethod}
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>An absolute URL.
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <code>RestClient</code> and/or {@link RemoteResource#path()}.
+	 * 	<li>No path.
 	 * </ul>
+	 *
+	 * <p>
+	 * If you do not specify a path, then the path is inferred from the Java method name.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// POST /pet</jc>
+	 * 	<ja>@RestMethod</ja>
+	 * 	<jk>public void</jk> postPet(...) {...}
+	 * </p>
 	 */
 	String path() default "";
 
@@ -51,7 +61,16 @@ public @interface RemoteMethod {
 	 * Defines the HTTP method to use for REST calls.
 	 *
 	 * <p>
-	 * The default value is <js>"GET"</js> although any valid HTTP method is possible.
+	 * If not specified, then the method is inferred from the Java method name.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	<jc>// POST /pet</jc>
+	 * 	<ja>@RestMethod</ja>
+	 * 	<jk>public void</jk> postPet(...) {...}
+	 * </p>
+	 *
+	 * <br>If the method cannot be inferred, then the default is <js>"GET"</js>.
 	 */
 	String method() default "";
 
@@ -83,7 +102,7 @@ public @interface RemoteMethod {
 	 * 				{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 		</ul>
 	 * 	<li>
-	 * 		{@link RemoteReturn#HTTP_STATUS} - The HTTP status code on the response.
+	 * 		{@link RemoteReturn#STATUS} - The HTTP status code on the response.
 	 * 		<br>The return type on the Java method can be any of the following:
 	 * 		<ul>
 	 * 			<li><jk>int</jk>/<code>Integer</code> - The HTTP response code.

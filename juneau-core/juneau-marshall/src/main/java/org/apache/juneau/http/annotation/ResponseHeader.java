@@ -122,7 +122,7 @@ import org.apache.juneau.httppart.*;
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Response}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Response}
  * </ul>
 */
 @Documented

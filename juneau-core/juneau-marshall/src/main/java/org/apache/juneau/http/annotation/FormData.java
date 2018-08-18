@@ -87,8 +87,8 @@ import org.apache.juneau.jsonschema.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.FormData}
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Request}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies.FormData}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Request}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
@@ -96,7 +96,7 @@ import org.apache.juneau.jsonschema.*;
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Request}
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Request}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Request}
  * </ul>
 */
 @Documented

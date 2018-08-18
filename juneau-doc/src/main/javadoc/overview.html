@@ -365,18 +365,17 @@
 	</ol>
 	<li><p class='toc2 updated'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
 	<ol>
-		<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources'>Remote Resources</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies'>REST Proxies</a></p>
 		<ol>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteResource'>@RemoteResource</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteMethod'>@RemoteMethod</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.MethodReturnTypes'>Method Return Types</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.Body'>@Body</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.FormData'>@FormData</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.Query'>@Query</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.Header'>@Header</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.Path'>@Path</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.Request'>@Request</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.Response'>@Request</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.RemoteResource'>@RemoteResource</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.RemoteMethod'>@RemoteMethod</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Body'>@Body</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.FormData'>@FormData</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.Query'>@Query</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Header'>@Header</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Path'>@Path</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Request'>@Request</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RestProxies.Response'>@Request</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
@@ -14981,6 +14980,7 @@
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
 </ul>
 <p>
 	The annotations used for defining the schema for response HTTP parts are:
@@ -20135,8 +20135,8 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources' id='juneau-rest-client.RemoteResources'>9.1 - Remote Resources</a></h3>
-<div class='topic'><!-- START: 9.1 - juneau-rest-client.RemoteResources -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.1 - REST Proxies</a></h3>
+<div class='topic'><!-- START: 9.1 - juneau-rest-client.RestProxies -->
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
 	<br>This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
@@ -20154,17 +20154,37 @@ TODO(7.2.0)
 	</ul>
 </ul>
 <p>
-	Similar in concept to remote interfaces defined previously, but in this case we simply define our interface with
-	special annotations that tell us how to convert input and output to HTTP headers, query parameters, form 
+	Annotations are used on the interface and interface methods to specify how to convert input and output to HTTP headers, query parameters, form 
 	post parameters, or request/response bodies.
 </p>
+<ul class='doctree'>
+	<li class='jp'>{@link org.apache.juneau.rest.client.remote}
+	<ul>
+		<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteResource}
+		<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
+	</ul>
+	<li class='jp'>{@link org.apache.juneau.http.annotation}
+	<ul>
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	</ul>
+</ul>
+
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 		
 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
 		String addPet(
-			<ja>@Body</ja> PetCreate pet, 
+			<ja>@Body</ja> CreatePet pet, 
 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, 
 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
 		);
@@ -20172,10 +20192,10 @@ TODO(7.2.0)
 </p>
 <p class='bpcode w800'>	
 	<jc>// Use a RestClient with default Simple JSON support.</jc>
-	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build()) {
-		PetStore p = c.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000/petstore"</js>);
-		PetCreate pet = <jk>new</jk> PetCreate(<js>"Fluffy"</js>, 9.99);
-		String response = p.createPet(pet, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build()) {
+		PetStore store = client.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		CreatePet pet = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+		String response = store.createPet(pet, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 	}
 </p>
 <p>
@@ -20195,8 +20215,8 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.RemoteResource' id='juneau-rest-client.RemoteResources.RemoteResource'>9.1.1 - @RemoteResource</a></h4>
-<div class='topic'><!-- START: 9.1.1 - juneau-rest-client.RemoteResources.RemoteResource -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteResource' id='juneau-rest-client.RestProxies.RemoteResource'>9.1.1 - @RemoteResource</a></h4>
+<div class='topic'><!-- START: 9.1.1 - juneau-rest-client.RestProxies.RemoteResource -->
 <p>
 	The {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource} annotation is used on your interface class
 	to identify it as a REST proxy interface.
@@ -20251,15 +20271,15 @@ TODO(7.2.0)
 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000/petstore"</js>).build();	
 	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
 </p>
-</div><!-- END: 9.1.1 - juneau-rest-client.RemoteResources.RemoteResource -->
+</div><!-- END: 9.1.1 - juneau-rest-client.RestProxies.RemoteResource -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.RemoteMethod' id='juneau-rest-client.RemoteResources.RemoteMethod'>9.1.2 - @RemoteMethod</a></h4>
-<div class='topic'><!-- START: 9.1.2 - juneau-rest-client.RemoteResources.RemoteMethod -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteMethod' id='juneau-rest-client.RestProxies.RemoteMethod'>9.1.2 - @RemoteMethod</a></h4>
+<div class='topic'><!-- START: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 <p>
 	The {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
-	of {@link org.apache.juneau.rest.client.remote.RemoteResource}-annotated interfaces to identify REST endpoints.
+	of {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource}-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
@@ -20269,8 +20289,9 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#returns returns}
 	</ul>
 </ul>
+<h5 class='topic w800'>@RemoteMethod(method/path)</h5>
 <p>
-	The HTTP method and path are mapped to a Java method using the <code>httpMethod</code> and <code>path</code> annotations.
+	The HTTP method and path are mapped to a Java method using the <code>method</code> and <code>path</code> annotations.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
@@ -20278,15 +20299,18 @@ TODO(7.2.0)
 	<jk>public interface</jk> PetStore {
 		
 		<jc>// GET /pets/{petId}</jc>
-		<ja>@RemoteMethod(httpMethod="GET", path="/pets/{petId}")</ja>
-		Pet getPet(@Path(<js>"petId"</js>) <jk>int</jk> id);
+		<ja>@RemoteMethod</ja>(method=<js>"GET"</js>, path=<js>"/pets/{petId}"</js>)
+		Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> id);
 	}
 </p>
 <p>
-	The method names used in 3rd-party proxies can be anything.  
-	However, the method names can also be used to infer the HTTP method and path if not explicitly specified
-	via the {@link org.apache.juneau.rest.client.remote.RemoteMethod#method() @RemoteMethod(method)} and 
-	{@link org.apache.juneau.rest.client.remote.RemoteMethod#path() @RemoteMethod(path)} annotations.
+	The method names can be anything.  
+</p>
+
+<h5 class='topic w800'>Inferred method/path</h5>
+<p>
+	The <code>method</code> and <code>path</code> annotations are optional if you follow certain naming
+	conventions on your method that identify the method and path.
 </p>
 <p>
 	For example, the <code>getPet</code> method below defaults to <code>GET /pet</code>:
@@ -20297,7 +20321,7 @@ TODO(7.2.0)
 		
 		<jc>// GET /pet</jc>
 		<ja>@RemoteMethod</ja>
-		Pet getPet(@Query(<js>"id"</js>) <jk>int</jk> id);
+		Pet getPet(...);
 	}
 </p>
 <p>
@@ -20353,14 +20377,10 @@ TODO(7.2.0)
 		<td class='code'>/doFoo</td>
 	</tr>
 </table>
-</div><!-- END: 9.1.2 - juneau-rest-client.RemoteResources.RemoteMethod -->
 
-<!-- ==================================================================================================== -->
-
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.MethodReturnTypes' id='juneau-rest-client.RemoteResources.MethodReturnTypes'>9.1.3 - Method Return Types</a></h4>
-<div class='topic'><!-- START: 9.1.3 - juneau-rest-client.RemoteResources.MethodReturnTypes -->
+<h5 class='topic w800'>@RemoteMethod(returns)</h5>
 <p>
-	The return type of the Java methods of 3rd-party proxies can be any of the following:
+	By default, the return type of the Java methods of can be any of the following:
 </p>
 <ul class='spaced-list'>
 	<li>
@@ -20372,7 +20392,7 @@ TODO(7.2.0)
 		- The body of the response will be converted to the POJO using the parser defined on the 
 		<code>RestClient</code> based on the <code>Content-Type</code> of the response.
 	<li>
-		Any {@link org.apache.juneau.http.annotation.Response @Response}-annotated type. (described below)
+		Any {@link org.apache.juneau.http.annotation.Response @Response}-annotated type. (described later)
 	<li>
 		<code>HttpResponse</code> 
 		- Returns the raw <code>HttpResponse</code> returned by the inner <code>HttpClient</code>.
@@ -20385,12 +20405,28 @@ TODO(7.2.0)
 		{@link java.io.InputStream} 
 		- Returns access to the raw input stream of the response.
 </ul>
-</div><!-- END: 9.1.3 - juneau-rest-client.RemoteResources.MethodReturnTypes -->
+
+<p>
+	If you're only interested in the HTTP status code of the response, you can use the {@link org.apache.juneau.rest.client.remote.RemoteMethod#returns() returns}
+	annotation with a value of {@link org.apache.juneau.rest.client.remote.RemoteReturn#STATUS STATUS}:
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {
+		
+		<jc>// POST /pets</jc>
+		<jc>// Returns HTTP status code.
+		<ja>@RemoteMethod</ja>(returns=<jsf>STATUS</jsf>)
+		<jk>int</jk> postPets(...);
+	}
+</p>
+</div><!-- END: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.Body' id='juneau-rest-client.RemoteResources.Body'>9.1.4 - @Body</a></h4>
-<div class='topic'><!-- START: 9.1.4 - juneau-rest-client.RemoteResources.Body -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Body' id='juneau-rest-client.RestProxies.Body'>9.1.3 - @Body</a></h4>
+<div class='topic'><!-- START: 9.1.3 - juneau-rest-client.RestProxies.Body -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are the HTTP body of the request.
@@ -20480,12 +20516,12 @@ TODO(7.2.0)
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.4 - juneau-rest-client.RemoteResources.Body -->
+</div><!-- END: 9.1.3 - juneau-rest-client.RestProxies.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.FormData' id='juneau-rest-client.RemoteResources.FormData'>9.1.5 - @FormData</a></h4>
-<div class='topic'><!-- START: 9.1.5 - juneau-rest-client.RemoteResources.FormData -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.FormData' id='juneau-rest-client.RestProxies.FormData'>9.1.4 - @FormData</a></h4>
+<div class='topic'><!-- START: 9.1.4 - juneau-rest-client.RestProxies.FormData -->
 <p>
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are form-data parameters on the request.
@@ -20589,12 +20625,12 @@ TODO(7.2.0)
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.5 - juneau-rest-client.RemoteResources.FormData -->
+</div><!-- END: 9.1.4 - juneau-rest-client.RestProxies.FormData -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.Query' id='juneau-rest-client.RemoteResources.Query'>9.1.6 - @Query</a></h4>
-<div class='topic'><!-- START: 9.1.6 - juneau-rest-client.RemoteResources.Query -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Query' id='juneau-rest-client.RestProxies.Query'>9.1.5 - @Query</a></h4>
+<div class='topic'><!-- START: 9.1.5 - juneau-rest-client.RestProxies.Query -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are query parameters on the request.
@@ -20700,12 +20736,12 @@ TODO(7.2.0)
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.6 - juneau-rest-client.RemoteResources.Query -->
+</div><!-- END: 9.1.5 - juneau-rest-client.RestProxies.Query -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.Header' id='juneau-rest-client.RemoteResources.Header'>9.1.7 - @Header</a></h4>
-<div class='topic'><!-- START: 9.1.7 - juneau-rest-client.RemoteResources.Header -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Header' id='juneau-rest-client.RestProxies.Header'>9.1.6 - @Header</a></h4>
+<div class='topic'><!-- START: 9.1.6 - juneau-rest-client.RestProxies.Header -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are header parameters on the request.
@@ -20760,12 +20796,12 @@ TODO(7.2.0)
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.7 - juneau-rest-client.RemoteResources.Header -->
+</div><!-- END: 9.1.6 - juneau-rest-client.RestProxies.Header -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.Path' id='juneau-rest-client.RemoteResources.Path'>9.1.8 - @Path</a></h4>
-<div class='topic'><!-- START: 9.1.8 - juneau-rest-client.RemoteResources.Path -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Path' id='juneau-rest-client.RestProxies.Path'>9.1.7 - @Path</a></h4>
+<div class='topic'><!-- START: 9.1.7 - juneau-rest-client.RestProxies.Path -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are path parameters on the request.
@@ -20800,12 +20836,12 @@ TODO(7.2.0)
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.8 - juneau-rest-client.RemoteResources.Path -->
+</div><!-- END: 9.1.7 - juneau-rest-client.RestProxies.Path -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.Request' id='juneau-rest-client.RemoteResources.Request'>9.1.9 - @Request</a></h4>
-<div class='topic'><!-- START: 9.1.9 - juneau-rest-client.RemoteResources.Request -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Request' id='juneau-rest-client.RestProxies.Request'>9.1.8 - @Request</a></h4>
+<div class='topic'><!-- START: 9.1.8 - juneau-rest-client.RestProxies.Request -->
 TODO(7.2.0)
 
 
@@ -20923,15 +20959,15 @@ TODO(7.2.0)
 		Reader getReader();
 	}
 </p>
-</div><!-- END: 9.1.9 - juneau-rest-client.RemoteResources.Request -->
+</div><!-- END: 9.1.8 - juneau-rest-client.RestProxies.Request -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.Response' id='juneau-rest-client.RemoteResources.Response'>9.1.10 - @Request</a></h4>
-<div class='topic'><!-- START: 9.1.10 - juneau-rest-client.RemoteResources.Response -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>9.1.9 - @Request</a></h4>
+<div class='topic'><!-- START: 9.1.9 - juneau-rest-client.RestProxies.Response -->
 TODO(7.2.0)
-</div><!-- END: 9.1.10 - juneau-rest-client.RemoteResources.Response -->
-</div><!-- END: 9.1 - juneau-rest-client.RemoteResources -->
+</div><!-- END: 9.1.9 - juneau-rest-client.RestProxies.Response -->
+</div><!-- END: 9.1 - juneau-rest-client.RestProxies -->
 
 <!-- ==================================================================================================== -->
 

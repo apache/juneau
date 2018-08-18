@@ -2148,6 +2148,9 @@ public final class RestCall extends BeanSession implements Closeable {
 
 	<T> T getResponseInner(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> type) throws IOException, ParseException {
 		try {
+			if (response == null)
+				connect();
+
 			if (partParser == null)
 				partParser = this.partParser;
 

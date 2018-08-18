@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{new} Remote Resources
+{new} REST Proxies
 
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
@@ -32,17 +32,37 @@
 	</ul>
 </ul>
 <p>
-	Similar in concept to remote interfaces defined previously, but in this case we simply define our interface with
-	special annotations that tell us how to convert input and output to HTTP headers, query parameters, form 
+	Annotations are used on the interface and interface methods to specify how to convert input and output to HTTP headers, query parameters, form 
 	post parameters, or request/response bodies.
 </p>
+<ul class='doctree'>
+	<li class='jp'>{@link org.apache.juneau.rest.client.remote}
+	<ul>
+		<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteResource}
+		<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
+	</ul>
+	<li class='jp'>{@link org.apache.juneau.http.annotation}
+	<ul>
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	</ul>
+</ul>
+
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
 	<jk>public interface</jk> PetStore {
 		
 		<ja>@RemoteMethod</ja>(httpMethod=<jsf>POST</jsf>, path=<js>"/pets"</js>)
 		String addPet(
-			<ja>@Body</ja> PetCreate pet, 
+			<ja>@Body</ja> CreatePet pet, 
 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID etag, 
 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> debug
 		);
@@ -50,10 +70,10 @@
 </p>
 <p class='bpcode w800'>	
 	<jc>// Use a RestClient with default Simple JSON support.</jc>
-	<jk>try</jk> (RestClient c = RestClient.<jsm>create</jsm>().simpleJson().build()) {
-		PetStore p = c.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000/petstore"</js>);
-		PetCreate pet = <jk>new</jk> PetCreate(<js>"Fluffy"</js>, 9.99);
-		String response = p.createPet(pet, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().simpleJson().build()) {
+		PetStore store = client.getRemoteResource(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		CreatePet pet = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
+		String response = store.createPet(pet, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 	}
 </p>
 <p>

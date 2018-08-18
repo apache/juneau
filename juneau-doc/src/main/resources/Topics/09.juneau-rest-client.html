@@ -44,7 +44,7 @@
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a reusable JSON client.</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().build()) {
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
 	
 		<jc>// The address of the root resource.</jc>
 		String url = <js>"http://localhost:10000/addressBook"</js>;
@@ -104,7 +104,7 @@
 	<jc>// Examples below use the Juneau Address Book resource example</jc>
 
 	<jc>// Create a reusable client with JSON support</jc>
-	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().build()) {
+	<jk>try</jk> (RestClient client = RestClient.<jsm>create</jsm>().json().build()) {
 	
 		<jc>// GET request, ignoring output</jc>
 		<jk>try</jk> {

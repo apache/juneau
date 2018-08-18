@@ -45,7 +45,7 @@ import org.apache.juneau.jsonschema.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HttpPartAnnotations.Response}
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources.Response}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies.Response}
  * 	<li class='link'>{@doc juneau-rest-server.Swagger}
  * 	<li class='extlink'>{@doc SwaggerResponseObject}
  * </ul>

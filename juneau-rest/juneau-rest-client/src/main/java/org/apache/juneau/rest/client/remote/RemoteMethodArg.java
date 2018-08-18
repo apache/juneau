@@ -25,7 +25,7 @@ import org.apache.juneau.httppart.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
+ * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */
 public final class RemoteMethodArg {
