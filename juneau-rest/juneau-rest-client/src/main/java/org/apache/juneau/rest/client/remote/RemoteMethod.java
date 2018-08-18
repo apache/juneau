@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -18,21 +18,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.io.*;
 import java.lang.annotation.*;
 
+import org.apache.juneau.http.annotation.*;
+
 /**
- * Annotation applied to Java methods on interface proxy classes.
- *
- * <p>
- * The return type on the Java method can be any of the following:
- * <ul>
- * 	<li><jk>void</jk> - Don't parse any response.  Note that the method will still throw an exception if an error
- * 		HTTP status is returned.
- * 	<li>Any parsable POJO - The body of the response will be converted to the POJO using the parser defined on the
- * 		<code>RestClient</code>.
- * 	<li><code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner
- * 		<code>HttpClient</code>.
- * 	<li>{@link Reader} - Returns access to the raw reader of the response.
- * 	<li>{@link InputStream} - Returns access to the raw input stream of the response.
- * </ul>
+ * Annotation applied to Java methods on REST proxy.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
@@ -62,35 +51,36 @@ public @interface RemoteMethod {
 	 * Defines the HTTP method to use for REST calls.
 	 *
 	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><jsf>POST</jsf> (default) - Parameters are serialized using the serializer registered with the RestClient.
-	 * 	<li><jsf>GET</jsf> - Parameters are serialized using the UrlEncodingSerializer registered with the RestClient.
-	 * </ul>
-	 *
-	 * <p>
-	 * The default value is <js>"POST"</js>.
+	 * The default value is <js>"GET"</js> although any valid HTTP method is possible.
 	 */
-	String httpMethod() default "";
+	String method() default "";
 
 	/**
 	 * The value the remote method returns.
 	 *
 	 * <p>
 	 * Possible values:
-	 * <ul>
+	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		{@link RemoteReturn#BODY} (default) - The body of the HTTP response converted to a POJO.
 	 * 		<br>The return type on the Java method can be any of the following:
-	 * 		<ul>
-	 * 			<li><jk>void</jk> - Don't parse any response.  Note that the method will still throw an exception if an
-	 * 					error HTTP status is returned.
-	 * 			<li>Any parsable POJO - The body of the response will be converted to the POJO using the parser defined
-	 * 					on the <code>RestClient</code>.
-	 * 			<li><code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner
-	 * 					<code>HttpClient</code>.
-	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
-	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
+	 * 		<ul class='spaced-list'>
+	 * 			<li>
+	 * 				<jk>void</jk> - Don't parse any response.  Note that the method will still throw an exception if an
+	 * 				error HTTP status is returned.
+	 * 			<li>
+	 * 				Any parsable POJO - The body of the response will be converted to the POJO using the parser defined
+	 * 				on the <code>RestClient</code>.
+	 * 			<li>
+	 * 				Any POJO annotated with the {@link Response @Response} annotation.
+	 * 				This allows for response beans to be used which also allows for OpenAPI-based parsing and validation.
+	 * 			<li>
+	 * 				<code>HttpResponse</code> - Returns the raw <code>HttpResponse</code> returned by the inner
+	 * 				<code>HttpClient</code>.
+	 * 			<li>
+	 * 				{@link Reader} - Returns access to the raw reader of the response.
+	 * 			<li>
+	 * 				{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 		</ul>
 	 * 	<li>
 	 * 		{@link RemoteReturn#HTTP_STATUS} - The HTTP status code on the response.

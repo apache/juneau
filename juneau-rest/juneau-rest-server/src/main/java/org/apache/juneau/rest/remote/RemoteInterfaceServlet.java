@@ -123,7 +123,7 @@ public abstract class RemoteInterfaceServlet extends BasicRestServlet {
 		) throws NotFound, Exception {
 
 		// Find the method.
-		RemoteMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
+		RemoteInterfaceMethod rmm = getMethods(javaInterface).get(javaMethod);
 		if (rmm == null)
 			throw new NotFound("Method not found");
 
@@ -201,7 +201,7 @@ public abstract class RemoteInterfaceServlet extends BasicRestServlet {
 			throw new NotFound("Service not found");
 
 		// Find the method.
-		RemoteMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
+		RemoteInterfaceMethod rmm = getMethods(javaInterface).get(javaMethod);
 		if (rmm == null)
 			throw new NotFound("Method not found");
 
@@ -216,7 +216,7 @@ public abstract class RemoteInterfaceServlet extends BasicRestServlet {
 	// Other methods
 	//--------------------------------------------------------------------------------
 
-	private Map<String,RemoteMethodMeta> getMethods(String javaInterface) throws Exception {
+	private Map<String,RemoteInterfaceMethod> getMethods(String javaInterface) throws Exception {
 		return getInterfaceClass(javaInterface).getMethodsByPath();
 	}
 

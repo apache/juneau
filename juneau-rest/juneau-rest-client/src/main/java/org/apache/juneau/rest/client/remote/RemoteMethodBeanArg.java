@@ -10,19 +10,58 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
+
+import static org.apache.juneau.internal.ClassUtils.*;
+
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.httppart.bean.*;
 
 /**
- * Possible values for the {@link RemoteMethod#returns() @RemoteMethod.returns()} annotation.
+ * Represents the metadata about an {@link Request}-annotated argument of a method on a REST proxy class.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
+ * </ul>
  */
-public enum RemoteReturn {
+public final class RemoteMethodBeanArg {
 
-	/** HTTP response body */
-	BODY,
+	private final int index;
+	private final RequestBeanMeta meta;
+	private final HttpPartSerializer serializer;
 
-	/** HTTP status code */
-	HTTP_STATUS,
+	RemoteMethodBeanArg(int index, Class<? extends HttpPartSerializer> serializer, RequestBeanMeta meta) {
+		this.index = index;
+		this.serializer = newInstance(HttpPartSerializer.class, serializer);
+		this.meta = meta;
+	}
 
-	/** Ignore (used for void methods) */
-	NONE;
+	/**
+	 * Returns the index of the parameter in the method that is a request bean.
+	 *
+	 * @return The index of the parameter in the method that is a request bean.
+	 */
+	public int getIndex() {
+		return index;
+	}
+
+	/**
+	 * Returns the serializer to use for serializing parts on the request bean.
+	 *
+	 * @return The serializer to use for serializing parts on the request bean, or <jk>null</jk> if not defined.
+	 */
+	public HttpPartSerializer getSerializer() {
+		return serializer;
+	}
+
+	/**
+	 * Returns metadata on the request bean.
+	 *
+	 * @return Metadata about the bean.
+	 */
+	public RequestBeanMeta getMeta() {
+		return meta;
+	}
 }

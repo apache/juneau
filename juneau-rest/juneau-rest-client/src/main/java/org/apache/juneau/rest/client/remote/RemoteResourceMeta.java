@@ -10,58 +10,73 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.bean.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
- * Represents the metadata about an {@link Request}-annotated argument of a method on a remote proxy interface.
+ * Contains the meta-data about a REST proxy class.
+ *
+ * <p>
+ * Captures the information in {@link RemoteResource @RemoteResource} and {@link RemoteMethod @RemoteMethod} annotations for
+ * caching and reuse.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
  * </ul>
  */
-public final class RemoteMethodBeanArg {
+public class RemoteResourceMeta {
 
-	private final int index;
-	private final RequestBeanMeta meta;
-	private final HttpPartSerializer serializer;
+	private final Map<Method,RemoteMethodMeta> methods;
+	private final String path;
 
-	RemoteMethodBeanArg(int index, Class<? extends HttpPartSerializer> serializer, RequestBeanMeta meta) {
-		this.index = index;
-		this.serializer = newInstance(HttpPartSerializer.class, serializer);
-		this.meta = meta;
+	/**
+	 * Constructor.
+	 *
+	 * @param c The interface class annotated with a {@link RemoteResource @RemoteResource} annotation (optional).
+	 * @param restUrl The absolute URL of the remote REST interface that implements this proxy interface.
+	 */
+	public RemoteResourceMeta(Class<?> c, String restUrl) {
+		String path = "";
+
+		for (RemoteResource r : getAnnotationsParentFirst(RemoteResource.class, c))
+			if (! r.path().isEmpty())
+				path = trimSlashes(r.path());
+
+		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
+		for (Method m : c.getMethods())
+			if (isPublic(m))
+				methods.put(m, new RemoteMethodMeta(restUrl, m, false, "GET"));
+
+		this.methods = unmodifiableMap(methods);
+		this.path = path;
 	}
 
 	/**
-	 * Returns the index of the parameter in the method that is a request bean.
+	 * Returns the metadata about the specified method on this resource proxy.
 	 *
-	 * @return The index of the parameter in the method that is a request bean.
+	 * @param m The method to look up.
+	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
 	 */
-	public int getIndex() {
-		return index;
+	public RemoteMethodMeta getMethodMeta(Method m) {
+		return methods.get(m);
 	}
 
 	/**
-	 * Returns the serializer to use for serializing parts on the request bean.
+	 * Returns the HTTP path of this interface.
 	 *
-	 * @return The serializer to use for serializing parts on the request bean, or <jk>null</jk> if not defined.
+	 * @return
+	 * 	The HTTP path of this interface.
+	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>Never has leading or trailing slashes.
 	 */
-	public HttpPartSerializer getSerializer() {
-		return serializer;
-	}
-
-	/**
-	 * Returns metadata on the request bean.
-	 *
-	 * @return Metadata about the bean.
-	 */
-	public RequestBeanMeta getMeta() {
-		return meta;
+	public String getPath() {
+		return path;
 	}
 }

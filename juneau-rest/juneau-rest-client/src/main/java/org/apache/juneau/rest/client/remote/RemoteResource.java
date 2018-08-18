@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -18,11 +18,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Identifies a remote proxy interface against a REST interface.
+ * Identifies a proxy against a REST interface.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces}
  * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
  * </ul>
  */
@@ -33,16 +32,15 @@ import java.lang.annotation.*;
 public @interface RemoteResource {
 
 	/**
-	 * The absolute or relative path of the REST service.
+	 * REST service path.
 	 *
 	 * <p>
-	 * When a relative path is specified, it's relative to the root-url defined on the <code>RestClient</code> used
-	 * to instantiate the interface.
-	 *
-	 * <p>
-	 * When no path is specified, the path is assumed to be the class name (e.g.
-	 * <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>An absolute URL.
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <code>RestClient</code>
+	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
+	 * </ul>
 	 */
 	String path() default "";
-
 }

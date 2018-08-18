@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -21,7 +21,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 
 /**
- * Represents the metadata about an annotated argument of a method on a remote proxy interface.
+ * Represents the metadata about an annotated argument of a method on a REST proxy class.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>

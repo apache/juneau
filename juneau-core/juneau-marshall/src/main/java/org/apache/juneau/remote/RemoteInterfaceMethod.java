@@ -12,71 +12,69 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
-import java.util.*;
+
+import org.apache.juneau.internal.*;
 
 /**
- * Contains the meta-data about a remote resource.
+ * Contains the meta-data about a Java method on a remote class.
  *
  * <p>
- * Captures the information in {@link RemoteResource @RemoteResource} and {@link RemoteMethod @RemoteMethod} annotations for
- * caching and reuse.
+ * Captures the information in {@link RemoteInterface @RemoteInterface} annotations for caching and reuse.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
+ * 	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces}
  * </ul>
  */
-public class RemoteResourceMeta {
+public class RemoteInterfaceMethod {
 
-	private final Map<Method,RemoteMethodMeta> methods;
-	private final String path;
+	private final String url, path;
+	private final Method method;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param c The interface class annotated with a {@link RemoteResource @RemoteResource} annotation (optional).
-	 * @param restUrl The absolute URL of the remote REST interface that implements this proxy interface.
+	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
+	 * @param m The Java method.
 	 */
-	public RemoteResourceMeta(Class<?> c, String restUrl) {
-		String path = "";
-
-		for (RemoteResource r : getAnnotationsParentFirst(RemoteResource.class, c))
-			if (! r.path().isEmpty())
-				path = trimSlashes(r.path());
-
-		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
-		for (Method m : c.getMethods())
-			if (isPublic(m))
-				methods.put(m, new RemoteMethodMeta(restUrl, m, false, "GET"));
-
-		this.methods = unmodifiableMap(methods);
-		this.path = path;
+	public RemoteInterfaceMethod(final String restUrl, Method m) {
+		this.method = m;
+		this.path =  m.getName() + '/' + HttpUtils.getMethodArgsSignature(m, true);
+		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);
 	}
 
 	/**
-	 * Returns the metadata about the specified method on this resource proxy.
+	 * Returns the absolute URL of the REST interface invoked by this Java method.
 	 *
-	 * @param m The method to look up.
-	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
+	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
 	 */
-	public RemoteMethodMeta getMethodMeta(Method m) {
-		return methods.get(m);
+	public String getUrl() {
+		return url;
 	}
 
 	/**
-	 * Returns the HTTP path of this interface.
+	 * Returns the HTTP path of this method.
 	 *
 	 * @return
-	 * 	The HTTP path of this interface.
+	 * 	The HTTP path of this method relative to the parent interface.
 	 * 	<br>Never <jk>null</jk>.
 	 * 	<br>Never has leading or trailing slashes.
 	 */
 	public String getPath() {
 		return path;
+	}
+
+	/**
+	 * Returns the underlying Java method that this metadata is about.
+	 *
+	 * @return
+	 * 	The underlying Java method that this metadata is about.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Method getJavaMethod() {
+		return method;
 	}
 }

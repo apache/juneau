@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
 
 import java.lang.reflect.*;
 import java.text.*;
@@ -18,7 +18,7 @@ import java.text.*;
 import org.apache.juneau.*;
 
 /**
- * Exceptions caused by invalid remote classes.
+ * Exceptions caused by invalid REST proxy classes.
  */
 public class RemoteMetadataException extends FormattedRuntimeException {
 

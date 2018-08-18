@@ -3257,7 +3257,7 @@ public final class RestContext extends BeanContext {
 										if (pathInfo.indexOf('/') != -1)
 											pathInfo = pathInfo.substring(pathInfo.lastIndexOf('/')+1);
 										pathInfo = urlDecode(pathInfo);
-										RemoteMethodMeta rmm = rim.getMethodMetaByPath(pathInfo);
+										RemoteInterfaceMethod rmm = rim.getMethodMetaByPath(pathInfo);
 										if (rmm != null) {
 											Method m = rmm.getJavaMethod();
 											try {

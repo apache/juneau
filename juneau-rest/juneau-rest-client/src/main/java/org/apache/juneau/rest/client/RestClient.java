@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.remote.RemoteReturn.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
@@ -36,6 +35,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remote.*;
+import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -1105,10 +1105,10 @@ public class RestClient extends BeanContext implements Closeable {
 							}
 
 							RemoteMethodReturn rmr = rmm.getReturns();
-							if (rmr.getReturnValue() == NONE) {
+							if (rmr.getReturnValue() == RemoteReturn.NONE) {
 								rc.run();
 								return null;
-							} else if (rmr.getReturnValue() == HTTP_STATUS) {
+							} else if (rmr.getReturnValue() == RemoteReturn.HTTP_STATUS) {
 								rc.ignoreErrors();
 								int returnCode = rc.run();
 								Class<?> rt = method.getReturnType();
@@ -1227,24 +1227,16 @@ public class RestClient extends BeanContext implements Closeable {
 
 					@Override /* InvocationHandler */
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						RemoteMethodMeta rmm = rm.getMethodMeta(method);
+						RemoteInterfaceMethod rim = rm.getMethodMeta(method);
 
-						if (rmm == null)
+						if (rim == null)
 							throw new RuntimeException("Method is not exposed as a remote method.");
 
-						String url = rmm.getUrl();
+						String url = rim.getUrl();
 
 						try (RestCall rc = doCall("POST", url, true)) {
 
-							rc.serializer(serializer).parser(parser);
-
-							if (rmm.getOtherArgs().length > 0) {
-								Object[] otherArgs = new Object[rmm.getOtherArgs().length];
-								int i = 0;
-								for (RemoteMethodArg a : rmm.getOtherArgs())
-									otherArgs[i++] = args[a.getIndex()];
-								rc.body(otherArgs);
-							}
+							rc.serializer(serializer).parser(parser).body(args);
 
 							Object v = rc.getResponse(method.getGenericReturnType());
 							if (v == null && method.getReturnType().isPrimitive())

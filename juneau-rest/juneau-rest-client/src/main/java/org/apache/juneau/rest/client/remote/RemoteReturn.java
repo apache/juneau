@@ -10,33 +10,19 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
 
 /**
- * Specifies possible values for the {@link RemoteInterface#expose()} annotation.
+ * Possible values for the {@link RemoteMethod#returns() @RemoteMethod.returns()} annotation.
  */
-public enum RemoteExpose {
+public enum RemoteReturn {
 
-	/**
-	 * Expose all methods defined on the interface or class.
-	 */
-	ALL,
+	/** HTTP response body */
+	BODY,
 
-	/**
-	 * Expose only methods declared on the immediate interface/class.
-	 * Methods on parent interfaces/classes are ignored.
-	 * <p>
-	 * This is the default value.
-	 */
-	DECLARED,
+	/** HTTP status code */
+	HTTP_STATUS,
 
-	/**
-	 * Only methods annotated with {@link RemoteMethod} are exposed.
-	 */
-	ANNOTATED,
-
-	/**
-	 * A placeholder for no value.
-	 */
-	DEFAULT;
+	/** Ignore (used for void methods) */
+	NONE;
 }

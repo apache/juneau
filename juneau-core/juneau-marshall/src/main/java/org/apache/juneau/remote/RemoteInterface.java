@@ -18,12 +18,11 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Identifies a remote proxy interface against a REST interface.
+ * Identifies a remote proxy REST interface.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces}
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
  * </ul>
  */
 @Documented
@@ -33,20 +32,15 @@ import java.lang.annotation.*;
 public @interface RemoteInterface {
 
 	/**
-	 * The absolute or relative path of the REST service.
+	 * REST service path.
 	 *
 	 * <p>
-	 * When a relative path is specified, it's relative to the root-url defined on the <code>RestClient</code> used
-	 * to instantiate the interface.
-	 *
-	 * <p>
-	 * When no path is specified, the path is assumed to be the class name (e.g.
-	 * <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
+	 * The possible values are:
+	 * <ul class='spaced-list'>
+	 * 	<li>An absolute URL.
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <code>RestClient</code>
+	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
+	 * </ul>
 	 */
 	String path() default "";
-
-	/**
-	 * Identifies which methods on the interface should be exposed through the proxy.
-	 */
-	RemoteExpose expose() default RemoteExpose.DEFAULT;
 }

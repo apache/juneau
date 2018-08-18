@@ -17,7 +17,6 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.remote.RemoteReturn.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
 import java.io.*;

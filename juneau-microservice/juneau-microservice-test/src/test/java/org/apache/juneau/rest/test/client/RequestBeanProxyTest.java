@@ -22,10 +22,10 @@ import java.util.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
@@ -56,10 +56,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface A01_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String normal(@Request A01_BeanImpl rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String serialized(@Request(partSerializer=XSerializer.class) A01_BeanImpl rb);
 	}
 
@@ -106,10 +106,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface A02_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String normal(@Request A02_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String serialized(@Request(partSerializer=XSerializer.class) A02_Bean rb);
 	}
 
@@ -158,10 +158,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface A03_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String normal(@Request A03_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String serialized(@Request(partSerializer=XSerializer.class) A03_Bean rb);
 	}
 
@@ -209,7 +209,7 @@ public class RequestBeanProxyTest {
 
 	@RemoteResource(path="/")
 	public static interface A04_RemoteResource {
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String normal(@Request A04_Bean rb);
 	}
 
@@ -234,7 +234,7 @@ public class RequestBeanProxyTest {
 
 	@RemoteResource(path="/")
 	public static interface A05_RemoteResource {
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String normal(@Request A05_Bean rb);
 	}
 
@@ -260,10 +260,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface A06_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String normal(@Request A06_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoQuery")
+		@RemoteMethod(method="GET", path="/echoQuery")
 		String serialized(@Request(partSerializer=XSerializer.class) A06_Bean rb);
 	}
 
@@ -345,10 +345,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface C01_RemoteResource {
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String normal(@Request C01_Bean rb);
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String serialized(@Request(partSerializer=XSerializer.class) C01_Bean rb);
 	}
 
@@ -409,10 +409,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface C02_RemoteResource {
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String normal(@Request C02_Bean rb);
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String serialized(@Request(partSerializer=XSerializer.class) C02_Bean rb);
 	}
 
@@ -461,10 +461,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface C03_RemoteResource {
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String normal(@Request C03_Bean rb);
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String serialized(@Request(partSerializer=XSerializer.class) C03_Bean rb);
 	}
 
@@ -512,7 +512,7 @@ public class RequestBeanProxyTest {
 
 	@RemoteResource(path="/")
 	public static interface C04_RemoteResource {
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String normal(@Request C04_Bean rb);
 	}
 
@@ -537,7 +537,7 @@ public class RequestBeanProxyTest {
 
 	@RemoteResource(path="/")
 	public static interface C05_RemoteResource {
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String normal(@Request C05_Bean rb);
 	}
 
@@ -563,10 +563,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface C06_RemoteResource {
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String normal(@Request C06_Bean rb);
 
-		@RemoteMethod(httpMethod="POST", path="/echoFormData")
+		@RemoteMethod(method="POST", path="/echoFormData")
 		String serialized(@Request(partSerializer=XSerializer.class) C06_Bean rb);
 	}
 
@@ -649,10 +649,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface E01_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String normal(@Request E01_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String serialized(@Request(partSerializer=XSerializer.class) E01_Bean rb);
 	}
 
@@ -713,10 +713,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface E02_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String normal(@Request E02_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String serialized(@Request(partSerializer=XSerializer.class) E02_Bean rb);
 	}
 
@@ -765,10 +765,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface E03_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String normal(@Request E03_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String serialized(@Request(partSerializer=XSerializer.class) E03_Bean rb);
 	}
 
@@ -817,10 +817,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface E04_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String normal(@Request E04_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoHeaders")
+		@RemoteMethod(method="GET", path="/echoHeaders")
 		String serialized(@Request(partSerializer=XSerializer.class) E04_Bean rb);
 	}
 
@@ -902,10 +902,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface G01_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
 		String normal(@Request G01_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
 		String serialized(@Request(partSerializer=XSerializer.class) G01_Bean rb);
 	}
 
@@ -966,10 +966,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface G02_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
+		@RemoteMethod(method="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
 		String normal(@Request G02_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
+		@RemoteMethod(method="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
 		String serialized(@Request(partSerializer=XSerializer.class) G02_Bean rb);
 	}
 
@@ -1018,10 +1018,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface G03_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
+		@RemoteMethod(method="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
 		String normal(@Request G03_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
+		@RemoteMethod(method="GET", path="/echoPath/{a1}/{a2}/{a3}/{a4}/{b1}/{b2}/{b3}/{c1}/{c2}/{c3}/{c4}")
 		String serialized(@Request(partSerializer=XSerializer.class) G03_Bean rb);
 	}
 
@@ -1070,10 +1070,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface G04_RemoteResource {
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
 		String normal(@Request G04_Bean rb);
 
-		@RemoteMethod(httpMethod="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
 		String serialized(@Request(partSerializer=XSerializer.class) G04_Bean rb);
 	}
 

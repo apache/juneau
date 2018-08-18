@@ -368,7 +368,7 @@
 		<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources'>Remote Resources</a></p>
 		<ol>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteResource'>@RemoteResource</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteMethod'>@RemoteMethod</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteMethod'>@RemoteMethod</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.MethodReturnTypes'>Method Return Types</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.Body'>@Body</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.FormData'>@FormData</a></p>
@@ -19506,7 +19506,7 @@ TODO(7.2.0)
 <p>
 	What if you want fine-tuned control over which methods are exposed in an interface instead of just all public 
 	methods?
-	<br>For this, the {@link org.apache.juneau.remote.RemoteMethod @RemoteMethod} annotation is provided.
+	<br>For this, the {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is provided.
 	<br>It can be applied to individual interface methods to only expose those methods through the remote interface servlet.
 </p>
 <p>
@@ -20198,13 +20198,13 @@ TODO(7.2.0)
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.RemoteResource' id='juneau-rest-client.RemoteResources.RemoteResource'>9.1.1 - @RemoteResource</a></h4>
 <div class='topic'><!-- START: 9.1.1 - juneau-rest-client.RemoteResources.RemoteResource -->
 <p>
-	The {@link org.apache.juneau.remote.RemoteResource @RemoteResource} annotation is used on your interface class
+	The {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource} annotation is used on your interface class
 	to identify it as a REST proxy interface.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.remote.RemoteResource}
+	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteResource}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.remote.RemoteResource#path path}
+		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteResource#path path}
 	</ul>
 </ul>
 <p>
@@ -20213,7 +20213,7 @@ TODO(7.2.0)
 
 <h5 class='topic w800'>@RemoteResource(path)</h5>
 <p>
-	The {@link org.apache.juneau.remote.RemoteResource#path @RemoteResource(path)} annotation is used to define the
+	The {@link org.apache.juneau.rest.client.remote.RemoteResource#path @RemoteResource(path)} annotation is used to define the
 	HTTP path of the REST service.
 </p>
 <p>
@@ -20255,18 +20255,18 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.RemoteMethod' id='juneau-rest-client.RemoteResources.RemoteMethod'>9.1.2 - @RemoteMethod</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.RemoteMethod' id='juneau-rest-client.RemoteResources.RemoteMethod'>9.1.2 - @RemoteMethod</a></h4>
 <div class='topic'><!-- START: 9.1.2 - juneau-rest-client.RemoteResources.RemoteMethod -->
 <p>
-	The {@link org.apache.juneau.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
-	of {@link org.apache.juneau.remote.RemoteResource}-annotated interfaces to identify REST endpoint calls.
+	The {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
+	of {@link org.apache.juneau.rest.client.remote.RemoteResource}-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.remote.RemoteMethod}
+	<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteMethod}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.remote.RemoteMethod#httpMethod httpMethod}
-		<li class='jf'>{@link org.apache.juneau.remote.RemoteMethod#path path}
-		<li class='jf'>{@link org.apache.juneau.remote.RemoteMethod#returns returns}
+		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#method method}
+		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#path path}
+		<li class='jf'>{@link org.apache.juneau.rest.client.remote.RemoteMethod#returns returns}
 	</ul>
 </ul>
 <p>
@@ -20284,11 +20284,9 @@ TODO(7.2.0)
 </p>
 <p>
 	The method names used in 3rd-party proxies can be anything.  
-</p>
-<p>
 	However, the method names can also be used to infer the HTTP method and path if not explicitly specified
-	via the {@link org.apache.juneau.remote.RemoteMethod#httpMethod() @RemoteMethod(httpMethod)} and 
-	{@link org.apache.juneau.remote.RemoteMethod#path() @RemoteMethod(path)} annotations.
+	via the {@link org.apache.juneau.rest.client.remote.RemoteMethod#method() @RemoteMethod(method)} and 
+	{@link org.apache.juneau.rest.client.remote.RemoteMethod#path() @RemoteMethod(path)} annotations.
 </p>
 <p>
 	For example, the <code>getPet</code> method below defaults to <code>GET /pet</code>:
@@ -31597,7 +31595,7 @@ TODO(7.2.0)
 				- Used for remote proxy interfaces served up through 
 				{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
 				<br>Defaults to <js>"POST"</js> with method signatures as paths.
-			<li class='ja'>{@link org.apache.juneau.remote.RemoteResource} 
+			<li class='ja'>{@link org.apache.juneau.rest.client.remote.RemoteResource} 
 				- Used for 3rd-party REST interfaces.
 				<br>Defaults to <js>"GET"</js> with standardized naming conventions for paths.
 		</ul>

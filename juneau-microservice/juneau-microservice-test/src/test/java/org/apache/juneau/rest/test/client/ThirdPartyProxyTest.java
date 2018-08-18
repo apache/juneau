@@ -28,8 +28,8 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.rest.test.client.ThirdPartyProxyTest.ThirdPartyProxy.*;
 import org.apache.juneau.rest.testutils.*;
@@ -1600,7 +1600,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// Header tests
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="GET", path="/primitiveHeaders")
+		@RemoteMethod(method="GET", path="/primitiveHeaders")
 		String primitiveHeaders(
 			@Header("a") String a,
 			@Header("an") String an,
@@ -1612,7 +1612,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("f") Float f
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/primitiveCollectionHeaders")
+		@RemoteMethod(method="GET", path="/primitiveCollectionHeaders")
 		String primitiveCollectionHeaders(
 			@Header("a") int[][][] a,
 			@Header("b") Integer[][][] b,
@@ -1624,7 +1624,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("h") List<String> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/beanHeaders")
+		@RemoteMethod(method="GET", path="/beanHeaders")
 		String beanHeaders(
 			@Header("a") ABean a,
 			@Header("an") ABean an,
@@ -1637,7 +1637,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("h") Map<Integer,List<ABean>> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/typedBeanHeaders")
+		@RemoteMethod(method="GET", path="/typedBeanHeaders")
 		String typedBeanHeaders(
 			@Header("a") TypedBean a,
 			@Header("an") TypedBean an,
@@ -1650,7 +1650,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("h") Map<Integer,List<TypedBean>> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/swappedPojoHeaders")
+		@RemoteMethod(method="GET", path="/swappedPojoHeaders")
 		String swappedPojoHeaders(
 			@Header("a") SwappedPojo a,
 			@Header("b") SwappedPojo[][][] b,
@@ -1658,7 +1658,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/implicitSwappedPojoHeaders")
+		@RemoteMethod(method="GET", path="/implicitSwappedPojoHeaders")
 		String implicitSwappedPojoHeaders(
 			@Header("a") ImplicitSwappedPojo a,
 			@Header("b") ImplicitSwappedPojo[][][] b,
@@ -1666,7 +1666,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/enumHeaders")
+		@RemoteMethod(method="GET", path="/enumHeaders")
 		String enumHeaders(
 			@Header("a") TestEnum a,
 			@Header("an") TestEnum an,
@@ -1679,17 +1679,17 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Header("h") Map<TestEnum,List<TestEnum[][][]>> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/mapHeader")
+		@RemoteMethod(method="GET", path="/mapHeader")
 		String mapHeader(
 			@Header("*") Map<String,Object> a
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/beanHeader")
+		@RemoteMethod(method="GET", path="/beanHeader")
 		String beanHeader(
 			@Header("*") NeBean a
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/nameValuePairsHeader")
+		@RemoteMethod(method="GET", path="/nameValuePairsHeader")
 		String nameValuePairsHeader(
 			@Header("*") NameValuePairs a
 		);
@@ -1698,7 +1698,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// Query tests
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="GET", path="/primitiveQueries")
+		@RemoteMethod(method="GET", path="/primitiveQueries")
 		String primitiveQueries(
 			@Query("a") String a,
 			@Query("an") String an,
@@ -1710,7 +1710,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("f") Float f
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/primitiveCollectionQueries")
+		@RemoteMethod(method="GET", path="/primitiveCollectionQueries")
 		String primitiveCollectionQueries(
 			@Query("a") int[][][] a,
 			@Query("b") Integer[][][] b,
@@ -1722,7 +1722,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("h") List<String> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/beanQueries")
+		@RemoteMethod(method="GET", path="/beanQueries")
 		String beanQueries(
 			@Query("a") ABean a,
 			@Query("an") ABean an,
@@ -1735,7 +1735,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("h") Map<Integer,List<ABean>> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/typedBeanQueries")
+		@RemoteMethod(method="GET", path="/typedBeanQueries")
 		String typedBeanQueries(
 			@Query("a") TypedBean a,
 			@Query("an") TypedBean an,
@@ -1748,7 +1748,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("h") Map<Integer,List<TypedBean>> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/swappedPojoQueries")
+		@RemoteMethod(method="GET", path="/swappedPojoQueries")
 		String swappedPojoQueries(
 			@Query("a") SwappedPojo a,
 			@Query("b") SwappedPojo[][][] b,
@@ -1756,7 +1756,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/implicitSwappedPojoQueries")
+		@RemoteMethod(method="GET", path="/implicitSwappedPojoQueries")
 		String implicitSwappedPojoQueries(
 			@Query("a") ImplicitSwappedPojo a,
 			@Query("b") ImplicitSwappedPojo[][][] b,
@@ -1764,7 +1764,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/enumQueries")
+		@RemoteMethod(method="GET", path="/enumQueries")
 		String enumQueries(
 			@Query("a") TestEnum a,
 			@Query("an") TestEnum an,
@@ -1777,27 +1777,27 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@Query("h") Map<TestEnum,List<TestEnum[][][]>> h
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/stringQuery1")
+		@RemoteMethod(method="GET", path="/stringQuery1")
 		String stringQuery1(
 			@Query String a
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/stringQuery2")
+		@RemoteMethod(method="GET", path="/stringQuery2")
 		String stringQuery2(
 			@Query("*") String a
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/mapQuery")
+		@RemoteMethod(method="GET", path="/mapQuery")
 		String mapQuery(
 			@Query("*") Map<String,Object> a
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/beanQuery")
+		@RemoteMethod(method="GET", path="/beanQuery")
 		String beanQuery(
 			@Query("*") NeBean a
 		);
 
-		@RemoteMethod(httpMethod="GET", path="/nameValuePairsQuery")
+		@RemoteMethod(method="GET", path="/nameValuePairsQuery")
 		String nameValuePairsQuery(
 			@Query("*") NameValuePairs a
 		);
@@ -1806,7 +1806,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// FormData tests
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="POST", path="/primitiveFormData")
+		@RemoteMethod(method="POST", path="/primitiveFormData")
 		String primitiveFormData(
 			@FormData("a") String a,
 			@FormData("an") String an,
@@ -1818,7 +1818,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("f") Float f
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/primitiveCollectionFormData")
+		@RemoteMethod(method="POST", path="/primitiveCollectionFormData")
 		String primitiveCollectionFormData(
 			@FormData("a") int[][][] a,
 			@FormData("b") Integer[][][] b,
@@ -1830,7 +1830,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("h") List<String> h
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/beanFormData")
+		@RemoteMethod(method="POST", path="/beanFormData")
 		String beanFormData(
 			@FormData("a") ABean a,
 			@FormData("an") ABean an,
@@ -1843,7 +1843,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("h") Map<Integer,List<ABean>> h
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/typedBeanFormData")
+		@RemoteMethod(method="POST", path="/typedBeanFormData")
 		String typedBeanFormData(
 			@FormData("a") TypedBean a,
 			@FormData("an") TypedBean an,
@@ -1856,7 +1856,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("h") Map<Integer,List<TypedBean>> h
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/swappedPojoFormData")
+		@RemoteMethod(method="POST", path="/swappedPojoFormData")
 		String swappedPojoFormData(
 			@FormData("a") SwappedPojo a,
 			@FormData("b") SwappedPojo[][][] b,
@@ -1864,7 +1864,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("d") Map<SwappedPojo,SwappedPojo[][][]> d
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/implicitSwappedPojoFormData")
+		@RemoteMethod(method="POST", path="/implicitSwappedPojoFormData")
 		String implicitSwappedPojoFormData(
 			@FormData("a") ImplicitSwappedPojo a,
 			@FormData("b") ImplicitSwappedPojo[][][] b,
@@ -1872,7 +1872,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("d") Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> d
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/enumFormData")
+		@RemoteMethod(method="POST", path="/enumFormData")
 		String enumFormData(
 			@FormData("a") TestEnum a,
 			@FormData("an") TestEnum an,
@@ -1885,17 +1885,17 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			@FormData("h") Map<TestEnum,List<TestEnum[][][]>> h
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/mapFormData")
+		@RemoteMethod(method="POST", path="/mapFormData")
 		String mapFormData(
 			@FormData("*") Map<String,Object> a
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/beanFormData2")
+		@RemoteMethod(method="POST", path="/beanFormData2")
 		String beanFormData(
 			@FormData("*") NeBean a
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/nameValuePairsFormData")
+		@RemoteMethod(method="POST", path="/nameValuePairsFormData")
 		String nameValuePairsFormData(
 			@FormData("*") NameValuePairs a
 		);
@@ -1904,18 +1904,18 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// Path tests
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="POST", path="/pathVars1/{a}/{b}")
+		@RemoteMethod(method="POST", path="/pathVars1/{a}/{b}")
 		String pathVars1(
 			@Path("a") int a,
 			@Path("b") String b
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/pathVars2/{a}/{b}")
+		@RemoteMethod(method="POST", path="/pathVars2/{a}/{b}")
 		String pathVars2(
 			@Path Map<String,Object> a
 		);
 
-		@RemoteMethod(httpMethod="POST", path="/pathVars3/{a}/{b}")
+		@RemoteMethod(method="POST", path="/pathVars3/{a}/{b}")
 		String pathVars3(
 			@Path ABean a
 		);
@@ -1924,7 +1924,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// @Request tests - Path
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		@RemoteMethod(method="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath1(
 			@Request ReqBeanPath1 rb
 		);
@@ -1949,7 +1949,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		@RemoteMethod(method="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath2(
 			@Request ReqBeanPath2 rb
 		);
@@ -1966,7 +1966,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			}
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		@RemoteMethod(method="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath3(
 			@Request ReqBeanPath3 rb
 		);
@@ -1979,7 +1979,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			String getY();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		@RemoteMethod(method="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath6(
 			@Request ReqBeanPath6 rb
 		);
@@ -1989,7 +1989,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			Map<String,Object> getX();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanPath/{a}/{b}")
+		@RemoteMethod(method="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath7(
 			@Request ReqBeanPath7 rb
 		);
@@ -2003,7 +2003,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// @Request tests - Query
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		@RemoteMethod(method="POST", path="/reqBeanQuery")
 		String reqBeanQuery1(
 			@Request ReqBeanQuery1 rb
 		);
@@ -2028,7 +2028,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		@RemoteMethod(method="POST", path="/reqBeanQuery")
 		String reqBeanQuery2(
 			@Request ReqBeanQuery2 rb
 		);
@@ -2045,7 +2045,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			}
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		@RemoteMethod(method="POST", path="/reqBeanQuery")
 		String reqBeanQuery3(
 			@Request ReqBeanQuery3 rb
 		);
@@ -2058,7 +2058,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			String getY();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		@RemoteMethod(method="POST", path="/reqBeanQuery")
 		String reqBeanQuery6(
 			@Request ReqBeanQuery6 rb
 		);
@@ -2068,7 +2068,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			Map<String,Object> getX();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanQuery")
+		@RemoteMethod(method="POST", path="/reqBeanQuery")
 		String reqBeanQuery7(
 			@Request ReqBeanQuery7 rb
 		);
@@ -2082,7 +2082,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// @Request tests - FormData
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		@RemoteMethod(method="POST", path="/reqBeanFormData")
 		String reqBeanFormData1(
 			@Request ReqBeanFormData1 rb
 		);
@@ -2107,7 +2107,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		@RemoteMethod(method="POST", path="/reqBeanFormData")
 		String reqBeanFormData2(
 			@Request ReqBeanFormData2 rb
 		);
@@ -2124,7 +2124,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			}
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		@RemoteMethod(method="POST", path="/reqBeanFormData")
 		String reqBeanFormData3(
 			@Request ReqBeanFormData3 rb
 		);
@@ -2137,7 +2137,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			String getY();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		@RemoteMethod(method="POST", path="/reqBeanFormData")
 		String reqBeanFormData6(
 			@Request ReqBeanFormData6 rb
 		);
@@ -2147,7 +2147,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			Map<String,Object> getX();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanFormData")
+		@RemoteMethod(method="POST", path="/reqBeanFormData")
 		String reqBeanFormData7(
 			@Request ReqBeanFormData7 rb
 		);
@@ -2161,7 +2161,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// @Request tests - Header
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		@RemoteMethod(method="POST", path="/reqBeanHeader")
 		String reqBeanHeader1(
 			@Request ReqBeanHeader1 rb
 		);
@@ -2186,7 +2186,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		@RemoteMethod(method="POST", path="/reqBeanHeader")
 		String reqBeanHeader2(
 			@Request ReqBeanHeader2 rb
 		);
@@ -2203,7 +2203,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			}
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		@RemoteMethod(method="POST", path="/reqBeanHeader")
 		String reqBeanHeader3(
 			@Request ReqBeanHeader3 rb
 		);
@@ -2216,7 +2216,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			String getY();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		@RemoteMethod(method="POST", path="/reqBeanHeader")
 		String reqBeanHeader6(
 			@Request ReqBeanHeader6 rb
 		);
@@ -2226,7 +2226,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			Map<String,Object> getX();
 		}
 
-		@RemoteMethod(httpMethod="POST", path="/reqBeanHeader")
+		@RemoteMethod(method="POST", path="/reqBeanHeader")
 		String reqBeanHeader7(
 			@Request ReqBeanHeader7 rb
 		);
@@ -2240,7 +2240,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// PartFormatters
 		//--------------------------------------------------------------------------------
 
-		@RemoteMethod(httpMethod="POST", path="/partFormatters/{p1}")
+		@RemoteMethod(method="POST", path="/partFormatters/{p1}")
 		String partFormatters(
 			@Path(value="p1", serializer=DummyPartSerializer.class) String p1,
 			@Header(value="h1", serializer=DummyPartSerializer.class) String h1,
@@ -2254,158 +2254,158 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		// Various primitives
 
-		@RemoteMethod(httpMethod="GET", path="/returnVoid")
+		@RemoteMethod(method="GET", path="/returnVoid")
 		void returnVoid();
 
-		@RemoteMethod(httpMethod="GET", path="/returnInt")
+		@RemoteMethod(method="GET", path="/returnInt")
 		int returnInt();
 
-		@RemoteMethod(httpMethod="GET", path="/returnInteger")
+		@RemoteMethod(method="GET", path="/returnInteger")
 		Integer returnInteger();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBoolean")
+		@RemoteMethod(method="GET", path="/returnBoolean")
 		boolean returnBoolean();
 
-		@RemoteMethod(httpMethod="GET", path="/returnFloat")
+		@RemoteMethod(method="GET", path="/returnFloat")
 		float returnFloat();
 
-		@RemoteMethod(httpMethod="GET", path="/returnFloatObject")
+		@RemoteMethod(method="GET", path="/returnFloatObject")
 		Float returnFloatObject();
 
-		@RemoteMethod(httpMethod="GET", path="/returnString")
+		@RemoteMethod(method="GET", path="/returnString")
 		String returnString();
 
-		@RemoteMethod(httpMethod="GET", path="/returnNullString")
+		@RemoteMethod(method="GET", path="/returnNullString")
 		String returnNullString();
 
-		@RemoteMethod(httpMethod="GET", path="/returnInt3dArray")
+		@RemoteMethod(method="GET", path="/returnInt3dArray")
 		int[][][] returnInt3dArray();
 
-		@RemoteMethod(httpMethod="GET", path="/returnInteger3dArray")
+		@RemoteMethod(method="GET", path="/returnInteger3dArray")
 		Integer[][][] returnInteger3dArray();
 
-		@RemoteMethod(httpMethod="GET", path="/returnString3dArray")
+		@RemoteMethod(method="GET", path="/returnString3dArray")
 		String[][][] returnString3dArray();
 
-		@RemoteMethod(httpMethod="GET", path="/returnIntegerList")
+		@RemoteMethod(method="GET", path="/returnIntegerList")
 		List<Integer> returnIntegerList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnInteger3dList")
+		@RemoteMethod(method="GET", path="/returnInteger3dList")
 		List<List<List<Integer>>> returnInteger3dList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnInteger1d3dList")
+		@RemoteMethod(method="GET", path="/returnInteger1d3dList")
 		List<Integer[][][]> returnInteger1d3dList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnInt1d3dList")
+		@RemoteMethod(method="GET", path="/returnInt1d3dList")
 		List<int[][][]> returnInt1d3dList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnStringList")
+		@RemoteMethod(method="GET", path="/returnStringList")
 		List<String> returnStringList();
 
 		// Beans
 
-		@RemoteMethod(httpMethod="GET", path="/returnBean")
+		@RemoteMethod(method="GET", path="/returnBean")
 		ABean returnBean();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBean3dArray")
+		@RemoteMethod(method="GET", path="/returnBean3dArray")
 		ABean[][][] returnBean3dArray();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBeanList")
+		@RemoteMethod(method="GET", path="/returnBeanList")
 		List<ABean> returnBeanList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBean1d3dList")
+		@RemoteMethod(method="GET", path="/returnBean1d3dList")
 		List<ABean[][][]> returnBean1d3dList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBeanMap")
+		@RemoteMethod(method="GET", path="/returnBeanMap")
 		Map<String,ABean> returnBeanMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBeanListMap")
+		@RemoteMethod(method="GET", path="/returnBeanListMap")
 		Map<String,List<ABean>> returnBeanListMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBean1d3dListMap")
+		@RemoteMethod(method="GET", path="/returnBean1d3dListMap")
 		Map<String,List<ABean[][][]>> returnBean1d3dListMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnBeanListMapIntegerKeys")
+		@RemoteMethod(method="GET", path="/returnBeanListMapIntegerKeys")
 		Map<Integer,List<ABean>> returnBeanListMapIntegerKeys();
 
 		// Typed beans
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBean")
+		@RemoteMethod(method="GET", path="/returnTypedBean")
 		TypedBean returnTypedBean();
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBean3dArray")
+		@RemoteMethod(method="GET", path="/returnTypedBean3dArray")
 		TypedBean[][][] returnTypedBean3dArray();
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBeanList")
+		@RemoteMethod(method="GET", path="/returnTypedBeanList")
 		List<TypedBean> returnTypedBeanList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBean1d3dList")
+		@RemoteMethod(method="GET", path="/returnTypedBean1d3dList")
 		List<TypedBean[][][]> returnTypedBean1d3dList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBeanMap")
+		@RemoteMethod(method="GET", path="/returnTypedBeanMap")
 		Map<String,TypedBean> returnTypedBeanMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBeanListMap")
+		@RemoteMethod(method="GET", path="/returnTypedBeanListMap")
 		Map<String,List<TypedBean>> returnTypedBeanListMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBean1d3dListMap")
+		@RemoteMethod(method="GET", path="/returnTypedBean1d3dListMap")
 		Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnTypedBeanListMapIntegerKeys")
+		@RemoteMethod(method="GET", path="/returnTypedBeanListMapIntegerKeys")
 		Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys();
 
 		// Swapped POJOs
 
-		@RemoteMethod(httpMethod="GET", path="/returnSwappedPojo")
+		@RemoteMethod(method="GET", path="/returnSwappedPojo")
 		SwappedPojo returnSwappedPojo();
 
-		@RemoteMethod(httpMethod="GET", path="/returnSwappedPojo3dArray")
+		@RemoteMethod(method="GET", path="/returnSwappedPojo3dArray")
 		SwappedPojo[][][] returnSwappedPojo3dArray();
 
-		@RemoteMethod(httpMethod="GET", path="/returnSwappedPojoMap")
+		@RemoteMethod(method="GET", path="/returnSwappedPojoMap")
 		Map<SwappedPojo,SwappedPojo> returnSwappedPojoMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnSwappedPojo3dMap")
+		@RemoteMethod(method="GET", path="/returnSwappedPojo3dMap")
 		Map<SwappedPojo,SwappedPojo[][][]> returnSwappedPojo3dMap();
 
 		// Implicit swapped POJOs
 
-		@RemoteMethod(httpMethod="GET", path="/returnImplicitSwappedPojo")
+		@RemoteMethod(method="GET", path="/returnImplicitSwappedPojo")
 		ImplicitSwappedPojo returnImplicitSwappedPojo();
 
-		@RemoteMethod(httpMethod="GET", path="/returnImplicitSwappedPojo3dArray")
+		@RemoteMethod(method="GET", path="/returnImplicitSwappedPojo3dArray")
 		ImplicitSwappedPojo[][][] returnImplicitSwappedPojo3dArray();
 
-		@RemoteMethod(httpMethod="GET", path="/returnImplicitSwappedPojoMap")
+		@RemoteMethod(method="GET", path="/returnImplicitSwappedPojoMap")
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo> returnImplicitSwappedPojoMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnImplicitSwappedPojo3dMap")
+		@RemoteMethod(method="GET", path="/returnImplicitSwappedPojo3dMap")
 		Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> returnImplicitSwappedPojo3dMap();
 
 		// Enums
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnum")
+		@RemoteMethod(method="GET", path="/returnEnum")
 		TestEnum returnEnum();
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnum3d")
+		@RemoteMethod(method="GET", path="/returnEnum3d")
 		TestEnum[][][] returnEnum3d();
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnumList")
+		@RemoteMethod(method="GET", path="/returnEnumList")
 		List<TestEnum> returnEnumList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnum3dList")
+		@RemoteMethod(method="GET", path="/returnEnum3dList")
 		List<List<List<TestEnum>>> returnEnum3dList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnum1d3dList")
+		@RemoteMethod(method="GET", path="/returnEnum1d3dList")
 		List<TestEnum[][][]> returnEnum1d3dList();
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnumMap")
+		@RemoteMethod(method="GET", path="/returnEnumMap")
 		Map<TestEnum,TestEnum> returnEnumMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnum3dArrayMap")
+		@RemoteMethod(method="GET", path="/returnEnum3dArrayMap")
 		Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap();
 
-		@RemoteMethod(httpMethod="GET", path="/returnEnum1d3dListMap")
+		@RemoteMethod(method="GET", path="/returnEnum1d3dListMap")
 		Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap();
 
 		//--------------------------------------------------------------------------------
@@ -2414,181 +2414,181 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		// Various primitives
 
-		@RemoteMethod(httpMethod="POST", path="/setInt")
+		@RemoteMethod(method="POST", path="/setInt")
 		void setInt(@Body int x);
 
-		@RemoteMethod(httpMethod="POST", path="/setInteger")
+		@RemoteMethod(method="POST", path="/setInteger")
 		void setInteger(@Body Integer x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBoolean")
+		@RemoteMethod(method="POST", path="/setBoolean")
 		void setBoolean(@Body boolean x);
 
-		@RemoteMethod(httpMethod="POST", path="/setFloat")
+		@RemoteMethod(method="POST", path="/setFloat")
 		void setFloat(@Body float x);
 
-		@RemoteMethod(httpMethod="POST", path="/setFloatObject")
+		@RemoteMethod(method="POST", path="/setFloatObject")
 		void setFloatObject(@Body Float x);
 
-		@RemoteMethod(httpMethod="POST", path="/setString")
+		@RemoteMethod(method="POST", path="/setString")
 		void setString(@Body String x);
 
-		@RemoteMethod(httpMethod="POST", path="/setNullString")
+		@RemoteMethod(method="POST", path="/setNullString")
 		void setNullString(@Body String x);
 
-		@RemoteMethod(httpMethod="POST", path="/setInt3dArray")
+		@RemoteMethod(method="POST", path="/setInt3dArray")
 		String setInt3dArray(@Body int[][][] x, @org.apache.juneau.http.annotation.Query("I") int i);
 
-		@RemoteMethod(httpMethod="POST", path="/setInteger3dArray")
+		@RemoteMethod(method="POST", path="/setInteger3dArray")
 		void setInteger3dArray(@Body Integer[][][] x);
 
-		@RemoteMethod(httpMethod="POST", path="/setString3dArray")
+		@RemoteMethod(method="POST", path="/setString3dArray")
 		void setString3dArray(@Body String[][][] x);
 
-		@RemoteMethod(httpMethod="POST", path="/setIntegerList")
+		@RemoteMethod(method="POST", path="/setIntegerList")
 		void setIntegerList(@Body List<Integer> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setInteger3dList")
+		@RemoteMethod(method="POST", path="/setInteger3dList")
 		void setInteger3dList(@Body List<List<List<Integer>>> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setInteger1d3dList")
+		@RemoteMethod(method="POST", path="/setInteger1d3dList")
 		void setInteger1d3dList(@Body List<Integer[][][]> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setInt1d3dList")
+		@RemoteMethod(method="POST", path="/setInt1d3dList")
 		void setInt1d3dList(@Body List<int[][][]> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setStringList")
+		@RemoteMethod(method="POST", path="/setStringList")
 		void setStringList(@Body List<String> x);
 
 		// Beans
 
-		@RemoteMethod(httpMethod="POST", path="/setBean")
+		@RemoteMethod(method="POST", path="/setBean")
 		void setBean(@Body ABean x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBean3dArray")
+		@RemoteMethod(method="POST", path="/setBean3dArray")
 		void setBean3dArray(@Body ABean[][][] x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBeanList")
+		@RemoteMethod(method="POST", path="/setBeanList")
 		void setBeanList(@Body List<ABean> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBean1d3dList")
+		@RemoteMethod(method="POST", path="/setBean1d3dList")
 		void setBean1d3dList(@Body List<ABean[][][]> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBeanMap")
+		@RemoteMethod(method="POST", path="/setBeanMap")
 		void setBeanMap(@Body Map<String,ABean> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBeanListMap")
+		@RemoteMethod(method="POST", path="/setBeanListMap")
 		void setBeanListMap(@Body Map<String,List<ABean>> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBean1d3dListMap")
+		@RemoteMethod(method="POST", path="/setBean1d3dListMap")
 		void setBean1d3dListMap(@Body Map<String,List<ABean[][][]>> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setBeanListMapIntegerKeys")
+		@RemoteMethod(method="POST", path="/setBeanListMapIntegerKeys")
 		void setBeanListMapIntegerKeys(@Body Map<Integer,List<ABean>> x);
 
 		// Typed beans
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBean")
+		@RemoteMethod(method="POST", path="/setTypedBean")
 		void setTypedBean(@Body TypedBean x);
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBean3dArray")
+		@RemoteMethod(method="POST", path="/setTypedBean3dArray")
 		void setTypedBean3dArray(@Body TypedBean[][][] x);
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBeanList")
+		@RemoteMethod(method="POST", path="/setTypedBeanList")
 		void setTypedBeanList(@Body List<TypedBean> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBean1d3dList")
+		@RemoteMethod(method="POST", path="/setTypedBean1d3dList")
 		void setTypedBean1d3dList(@Body List<TypedBean[][][]> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBeanMap")
+		@RemoteMethod(method="POST", path="/setTypedBeanMap")
 		void setTypedBeanMap(@Body Map<String,TypedBean> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBeanListMap")
+		@RemoteMethod(method="POST", path="/setTypedBeanListMap")
 		void setTypedBeanListMap(@Body Map<String,List<TypedBean>> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBean1d3dListMap")
+		@RemoteMethod(method="POST", path="/setTypedBean1d3dListMap")
 		void setTypedBean1d3dListMap(@Body Map<String,List<TypedBean[][][]>> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setTypedBeanListMapIntegerKeys")
+		@RemoteMethod(method="POST", path="/setTypedBeanListMapIntegerKeys")
 		void setTypedBeanListMapIntegerKeys(@Body Map<Integer,List<TypedBean>> x);
 
 		// Swapped POJOs
 
-		@RemoteMethod(httpMethod="POST", path="/setSwappedPojo")
+		@RemoteMethod(method="POST", path="/setSwappedPojo")
 		void setSwappedPojo(@Body SwappedPojo x);
 
-		@RemoteMethod(httpMethod="POST", path="/setSwappedPojo3dArray")
+		@RemoteMethod(method="POST", path="/setSwappedPojo3dArray")
 		void setSwappedPojo3dArray(@Body SwappedPojo[][][] x);
 
-		@RemoteMethod(httpMethod="POST", path="/setSwappedPojoMap")
+		@RemoteMethod(method="POST", path="/setSwappedPojoMap")
 		void setSwappedPojoMap(@Body Map<SwappedPojo,SwappedPojo> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setSwappedPojo3dMap")
+		@RemoteMethod(method="POST", path="/setSwappedPojo3dMap")
 		void setSwappedPojo3dMap(@Body Map<SwappedPojo,SwappedPojo[][][]> x);
 
 		// Implicit swapped POJOs
 
-		@RemoteMethod(httpMethod="POST", path="/setImplicitSwappedPojo")
+		@RemoteMethod(method="POST", path="/setImplicitSwappedPojo")
 		void setImplicitSwappedPojo(@Body ImplicitSwappedPojo x);
 
-		@RemoteMethod(httpMethod="POST", path="/setImplicitSwappedPojo3dArray")
+		@RemoteMethod(method="POST", path="/setImplicitSwappedPojo3dArray")
 		void setImplicitSwappedPojo3dArray(@Body ImplicitSwappedPojo[][][] x);
 
-		@RemoteMethod(httpMethod="POST", path="/setImplicitSwappedPojoMap")
+		@RemoteMethod(method="POST", path="/setImplicitSwappedPojoMap")
 		void setImplicitSwappedPojoMap(@Body Map<ImplicitSwappedPojo,ImplicitSwappedPojo> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setImplicitSwappedPojo3dMap")
+		@RemoteMethod(method="POST", path="/setImplicitSwappedPojo3dMap")
 		void setImplicitSwappedPojo3dMap(@Body Map<ImplicitSwappedPojo,ImplicitSwappedPojo[][][]> x);
 
 		// Enums
 
-		@RemoteMethod(httpMethod="POST", path="/setEnum")
+		@RemoteMethod(method="POST", path="/setEnum")
 		void setEnum(@Body TestEnum x);
 
-		@RemoteMethod(httpMethod="POST", path="/setEnum3d")
+		@RemoteMethod(method="POST", path="/setEnum3d")
 		void setEnum3d(@Body TestEnum[][][] x);
 
-		@RemoteMethod(httpMethod="POST", path="/setEnumList")
+		@RemoteMethod(method="POST", path="/setEnumList")
 		void setEnumList(@Body List<TestEnum> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setEnum3dList")
+		@RemoteMethod(method="POST", path="/setEnum3dList")
 		void setEnum3dList(@Body List<List<List<TestEnum>>> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setEnum1d3dList")
+		@RemoteMethod(method="POST", path="/setEnum1d3dList")
 		void setEnum1d3dList(@Body List<TestEnum[][][]> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setEnumMap")
+		@RemoteMethod(method="POST", path="/setEnumMap")
 		void setEnumMap(@Body Map<TestEnum,TestEnum> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setEnum3dArrayMap")
+		@RemoteMethod(method="POST", path="/setEnum3dArrayMap")
 		void setEnum3dArrayMap(@Body Map<TestEnum,TestEnum[][][]> x);
 
-		@RemoteMethod(httpMethod="POST", path="/setEnum1d3dListMap")
+		@RemoteMethod(method="POST", path="/setEnum1d3dListMap")
 		void setEnum1d3dListMap(@Body Map<TestEnum,List<TestEnum[][][]>> x);
 
 		// Method returns status code
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		int httpStatusReturnInt200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		Integer httpStatusReturnInteger200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		int httpStatusReturnInt404();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		Integer httpStatusReturnInteger404();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		boolean httpStatusReturnBool200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn200", returns=RemoteReturn.HTTP_STATUS)
 		Boolean httpStatusReturnBoolean200();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		boolean httpStatusReturnBool404();
 
-		@RemoteMethod(httpMethod="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
+		@RemoteMethod(method="GET", path="/httpStatusReturn404", returns=RemoteReturn.HTTP_STATUS)
 		Boolean httpStatusReturnBoolean404();
 	}
 

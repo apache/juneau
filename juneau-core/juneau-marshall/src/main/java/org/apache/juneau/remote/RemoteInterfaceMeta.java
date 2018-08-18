@@ -15,28 +15,25 @@ package org.apache.juneau.remote;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.remote.RemoteExpose.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 /**
- * Contains the meta-data about a remoteable interface.
+ * Contains the meta-data about a remote proxy REST interface.
  *
  * <p>
- * Captures the information in {@link RemoteResource @RemoteInterface} and {@link RemoteMethod @RemoteMethod} annotations for
- * caching and reuse.
+ * Captures the information in {@link RemoteInterface @RemoteInterface} annotations for caching and reuse.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces}
- * 	<li class='link'>{@doc juneau-rest-client.RemoteResources}
  * </ul>
  */
 public class RemoteInterfaceMeta {
 
-	private final Map<Method,RemoteMethodMeta> methods;
-	private final Map<String,RemoteMethodMeta> methodsByPath;
+	private final Map<Method,RemoteInterfaceMethod> methods;
+	private final Map<String,RemoteInterfaceMethod> methodsByPath;
 	private final String path;
 	private final Class<?> c;
 
@@ -44,7 +41,7 @@ public class RemoteInterfaceMeta {
 	 * Constructor.
 	 *
 	 * @param c
-	 * 	The interface class annotated with a {@link RemoteInterface @RemoteInterface} or {@link RemoteResource @RemoteResource} annotation.
+	 * 	The interface class annotated with a {@link RemoteInterface @RemoteInterface} annotation.
 	 * 	<br>Note that the annotations are optional.
 	 * @param uri
 	 * 	The absolute URL of the remote REST interface that implements this proxy interface.
@@ -52,27 +49,19 @@ public class RemoteInterfaceMeta {
 	 */
 	public RemoteInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
-		RemoteExpose expose = DECLARED;
 		String path = "";
 		List<RemoteInterface> rr = getAnnotationsParentFirst(RemoteInterface.class, c);
-		for (RemoteInterface r : rr) {
-			if (r.expose() != DEFAULT)
-				expose = r.expose();
+		for (RemoteInterface r : rr)
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
-		}
 
-		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
-		for (Method m : expose == DECLARED ? c.getDeclaredMethods() : c.getMethods()) {
-			if (isPublic(m)) {
-				RemoteMethod rm = c.getAnnotation(RemoteMethod.class);
-				if (rm != null || expose != ANNOTATED)
-					methods.put(m, new RemoteMethodMeta(uri, m, true, "POST"));
-			}
-		}
+		Map<Method,RemoteInterfaceMethod> methods = new LinkedHashMap<>();
+		for (Method m : c.getMethods())
+			if (isPublic(m))
+				methods.put(m, new RemoteInterfaceMethod(uri, m));
 
-		Map<String,RemoteMethodMeta> methodsByPath = new LinkedHashMap<>();
-		for (RemoteMethodMeta rmm : methods.values())
+		Map<String,RemoteInterfaceMethod> methodsByPath = new LinkedHashMap<>();
+		for (RemoteInterfaceMethod rmm : methods.values())
 			methodsByPath.put(rmm.getPath(), rmm);
 
 		this.methods = unmodifiableMap(methods);
@@ -88,7 +77,7 @@ public class RemoteInterfaceMeta {
 	 * 	<br>The keys never have leading slashes.
 	 * 	<br>The map is never <jk>null</jk>.
 	 */
-	public Map<String,RemoteMethodMeta> getMethodsByPath() {
+	public Map<String,RemoteInterfaceMethod> getMethodsByPath() {
 		return methodsByPath;
 	}
 
@@ -98,7 +87,7 @@ public class RemoteInterfaceMeta {
 	 * @param m The method to look up.
 	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
 	 */
-	public RemoteMethodMeta getMethodMeta(Method m) {
+	public RemoteInterfaceMethod getMethodMeta(Method m) {
 		return methods.get(m);
 	}
 
@@ -108,7 +97,7 @@ public class RemoteInterfaceMeta {
 	 * @param p The HTTP path to look for.
 	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
 	 */
-	public RemoteMethodMeta getMethodMetaByPath(String p) {
+	public RemoteInterfaceMethod getMethodMetaByPath(String p) {
 		return methodsByPath.get(p);
 	}
 

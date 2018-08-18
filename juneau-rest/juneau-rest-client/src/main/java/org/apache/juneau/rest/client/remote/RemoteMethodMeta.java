@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.remote;
+package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -25,7 +25,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Contains the meta-data about a Java method on a remote class.
+ * Contains the meta-data about a Java method on a REST proxy class.
  *
  * <p>
  * Captures the information in {@link RemoteMethod @RemoteMethod} annotations for caching and reuse.
@@ -86,7 +86,7 @@ public class RemoteMethodMeta {
 
 			RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 
-			httpMethod = rm == null ? "" : rm.httpMethod();
+			httpMethod = rm == null ? "" : rm.method();
 			path = rm == null ? "" : rm.path();
 
 			if (path.isEmpty()) {
@@ -142,7 +142,7 @@ public class RemoteMethodMeta {
 	}
 
 	/**
-	 * Returns the value of the {@link RemoteMethod#httpMethod() @RemoteMethod.httpMethod()} annotation on this Java method.
+	 * Returns the value of the {@link RemoteMethod#method() @RemoteMethod.httpMethod()} annotation on this Java method.
 	 *
 	 * @return The value of the annotation, never <jk>null</jk>.
 	 */
