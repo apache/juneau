@@ -365,9 +365,9 @@
 	</ol>
 	<li><p class='toc2 updated'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
 	<ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources'>Remote Resources</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources'>Remote Resources</a></p>
 		<ol>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteResource'>@RemoteResource</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteResource'>@RemoteResource</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.RemoteMethod'>@RemoteMethod</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-client.RemoteResources.MethodReturnTypes'>Method Return Types</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RemoteResources.Body'>@Body</a></p>
@@ -19263,9 +19263,16 @@ TODO(7.2.0)
 <h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteInterfaces.ClientSide' id='juneau-rest-server.RemoteInterfaces.ClientSide'>7.34.1 - Client Side</a></h4>
 <div class='topic'><!-- START: 7.34.1 - juneau-rest-server.RemoteInterfaces.ClientSide -->
 <p>
-	Remote Interface Proxies are retrieved through the existing {@link org.apache.juneau.rest.client.RestClient} 
-	class.
+	Remote Interface proxies are instantiated using one of the following methods:
 </p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class) getRemoteResource(Class)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object) getRemoteResource(Class,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object,Serializer,Parser) getRemoteResource(Class,Object,Serializer,Parser)}
+	</ul>
+</ul>
 <p>
 	It may seem that the client-side code would need to be complex.
 	<br>In reality, it builds upon existing serializing, parsing, and REST capabilities in Juneau resulting in very 
@@ -20128,13 +20135,24 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources' id='juneau-rest-client.RemoteResources'>9.1 - Remote Resources</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources' id='juneau-rest-client.RemoteResources'>9.1 - Remote Resources</a></h3>
 <div class='topic'><!-- START: 9.1 - juneau-rest-client.RemoteResources -->
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
 	<br>This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
 	virtually any REST interface.
 </p>
+<p>
+	Remote resources are instantiated using one of the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class) getRemoteResource(Class)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object) getRemoteResource(Class,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object,Serializer,Parser) getRemoteResource(Class,Object,Serializer,Parser)}
+	</ul>
+</ul>
 <p>
 	Similar in concept to remote interfaces defined previously, but in this case we simply define our interface with
 	special annotations that tell us how to convert input and output to HTTP headers, query parameters, form 
@@ -20177,7 +20195,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.RemoteResource' id='juneau-rest-client.RemoteResources.RemoteResource'>9.1.1 - @RemoteResource</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RemoteResources.RemoteResource' id='juneau-rest-client.RemoteResources.RemoteResource'>9.1.1 - @RemoteResource</a></h4>
 <div class='topic'><!-- START: 9.1.1 - juneau-rest-client.RemoteResources.RemoteResource -->
 <p>
 	The {@link org.apache.juneau.remote.RemoteResource @RemoteResource} annotation is used on your interface class
@@ -20189,6 +20207,11 @@ TODO(7.2.0)
 		<li class='jf'>{@link org.apache.juneau.remote.RemoteResource#path path}
 	</ul>
 </ul>
+<p>
+	The <ja>@RemoteResource</ja> annotation is optional, but often included for code readability.
+</p>
+
+<h5 class='topic w800'>@RemoteResource(path)</h5>
 <p>
 	The {@link org.apache.juneau.remote.RemoteResource#path @RemoteResource(path)} annotation is used to define the
 	HTTP path of the REST service.
@@ -20214,6 +20237,18 @@ TODO(7.2.0)
 </p>
 <p class='bpcode w800'>
 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();	
+	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
+</p>
+<p>
+	When no path is specified, the root-url defined on the <code>RestClient</code> is used.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {...}
+</p>
+<p class='bpcode w800'>
+	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000/petstore"</js>).build();	
 	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
 </p>
 </div><!-- END: 9.1.1 - juneau-rest-client.RemoteResources.RemoteResource -->

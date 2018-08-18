@@ -16,9 +16,16 @@
 {todo} Client Side
 
 <p>
-	Remote Interface Proxies are retrieved through the existing {@link org.apache.juneau.rest.client.RestClient} 
-	class.
+	Remote Interface proxies are instantiated using one of the following methods:
 </p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class) getRemoteResource(Class)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object) getRemoteResource(Class,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object,Serializer,Parser) getRemoteResource(Class,Object,Serializer,Parser)}
+	</ul>
+</ul>
 <p>
 	It may seem that the client-side code would need to be complex.
 	<br>In reality, it builds upon existing serializing, parsing, and REST capabilities in Juneau resulting in very 

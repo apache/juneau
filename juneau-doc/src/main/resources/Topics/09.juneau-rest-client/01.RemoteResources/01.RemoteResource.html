@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @RemoteResource
+{new} @RemoteResource
 
 <p>
 	The {@link org.apache.juneau.remote.RemoteResource @RemoteResource} annotation is used on your interface class
@@ -25,6 +25,11 @@
 		<li class='jf'>{@link org.apache.juneau.remote.RemoteResource#path path}
 	</ul>
 </ul>
+<p>
+	The <ja>@RemoteResource</ja> annotation is optional, but often included for code readability.
+</p>
+
+<h5 class='topic w800'>@RemoteResource(path)</h5>
 <p>
 	The {@link org.apache.juneau.remote.RemoteResource#path @RemoteResource(path)} annotation is used to define the
 	HTTP path of the REST service.
@@ -52,3 +57,16 @@
 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();	
 	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
 </p>
+<p>
+	When no path is specified, the root-url defined on the <code>RestClient</code> is used.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>	
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> PetStore {...}
+</p>
+<p class='bpcode w800'>
+	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000/petstore"</js>).build();	
+	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
+</p>
+

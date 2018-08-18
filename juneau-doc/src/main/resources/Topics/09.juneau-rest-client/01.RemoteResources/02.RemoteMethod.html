@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} @RemoteMethod
+{new} @RemoteMethod
 
 <p>
 	The {@link org.apache.juneau.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
-	of {@link org.apache.juneau.remote.RemoteResource}-annotated interfaces to identify REST endpoint calls.
+	of {@link org.apache.juneau.remote.RemoteResource}-annotated interfaces to identify REST endpoints.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.remote.RemoteMethod}
@@ -42,8 +42,6 @@
 </p>
 <p>
 	The method names used in 3rd-party proxies can be anything.  
-</p>
-<p>
 	However, the method names can also be used to infer the HTTP method and path if not explicitly specified
 	via the {@link org.apache.juneau.remote.RemoteMethod#httpMethod() @RemoteMethod(httpMethod)} and 
 	{@link org.apache.juneau.remote.RemoteMethod#path() @RemoteMethod(path)} annotations.

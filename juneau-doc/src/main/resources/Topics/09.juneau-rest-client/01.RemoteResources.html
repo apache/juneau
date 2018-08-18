@@ -13,13 +13,24 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Remote Resources
+{new} Remote Resources
 
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
 	<br>This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
 	virtually any REST interface.
 </p>
+<p>
+	Remote resources are instantiated using one of the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class) getRemoteResource(Class)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object) getRemoteResource(Class,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class,Object,Serializer,Parser) getRemoteResource(Class,Object,Serializer,Parser)}
+	</ul>
+</ul>
 <p>
 	Similar in concept to remote interfaces defined previously, but in this case we simply define our interface with
 	special annotations that tell us how to convert input and output to HTTP headers, query parameters, form 
