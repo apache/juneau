@@ -101,7 +101,7 @@ public class RemoteMethodMeta {
 
 			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
 				throw new RemoteMetadataException(m,
-					"Invalid value specified for @RemoteMethod.httpMethod() annotation.  Valid values are [DELTE,GET,POST,PUT].");
+					"Invalid value specified for @RemoteMethod(httpMethod) annotation.  Valid values are [DELTE,GET,POST,PUT].");
 
 			RemoteReturn rv = m.getReturnType() == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
 
@@ -141,7 +141,7 @@ public class RemoteMethodMeta {
 	}
 
 	/**
-	 * Returns the value of the {@link RemoteMethod#method() @RemoteMethod.httpMethod()} annotation on this Java method.
+	 * Returns the value of the {@link RemoteMethod#method() @RemoteMethod(httpMethod)} annotation on this Java method.
 	 *
 	 * @return The value of the annotation, never <jk>null</jk>.
 	 */
@@ -161,7 +161,7 @@ public class RemoteMethodMeta {
 	/**
 	 * Returns the {@link Path @Path} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link Path#value() @Path.value()} names to zero-indexed argument indices.
+	 * @return A map of {@link Path#value() @Path(value)} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getPathArgs() {
 		return pathArgs;
@@ -170,7 +170,7 @@ public class RemoteMethodMeta {
 	/**
 	 * Returns the {@link Query @Query} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link Query#value() @Query.value()} names to zero-indexed argument indices.
+	 * @return A map of {@link Query#value() @Query(value)} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getQueryArgs() {
 		return queryArgs;
@@ -179,7 +179,7 @@ public class RemoteMethodMeta {
 	/**
 	 * Returns the {@link FormData @FormData} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link FormData#value() @FormData.value()} names to zero-indexed argument indices.
+	 * @return A map of {@link FormData#value() @FormData(value)} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getFormDataArgs() {
 		return formDataArgs;
@@ -188,7 +188,7 @@ public class RemoteMethodMeta {
 	/**
 	 * Returns the {@link Header @Header} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link Header#value() @Header.value()} names to zero-indexed argument indices.
+	 * @return A map of {@link Header#value() @Header(value)} names to zero-indexed argument indices.
 	 */
 	public RemoteMethodArg[] getHeaderArgs() {
 		return headerArgs;

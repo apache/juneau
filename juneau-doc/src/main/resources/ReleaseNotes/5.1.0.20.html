@@ -83,10 +83,10 @@
 				<code>getWriter()</code> now returns an unnegotiated writer.  
 				<code>getUnbufferedWriter()</code> has been removed.
 		</ul>
-	<li>New {@link oajr.annotation.RestMethod#encoders() @RestMethod.encoders()} and 
+	<li>New {@link oajr.annotation.RestMethod#encoders() @RestMethod(encoders)} and 
 		<code><del>RestMethod.inheritEncoders()</del></code> annotations.  
 		Allows encoders to be fine-tuned at the method level.
-	<li>New {@link oajr.annotation.RestResource#config() @RestResource.config()} annotation for associating external <code><del>ConfigFile</del></code> config files with servlets.
+	<li>New {@link oajr.annotation.RestResource#config() @RestResource(config)} annotation for associating external <code><del>ConfigFile</del></code> config files with servlets.
 	<li><code><del>ResourceLink</del></code>.
 	<li>New <code>org.apache.juneau.rest.matchers</code> package for commonly-used {@link oajr.RestMatcher RestMatchers}:
 		<ul>

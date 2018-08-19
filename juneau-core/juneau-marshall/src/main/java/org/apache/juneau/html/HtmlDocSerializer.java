@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  * <code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
  *
  * <p>
- * Configurable properties are typically specified via <ja>@RestResource.properties()</ja> and <ja>@RestMethod.properties()</ja>
+ * Configurable properties are typically specified via <ja>@RestResource(properties)</ja> and <ja>@RestMethod(properties)</ja>
  * annotations, although they can also be set programmatically via the <code>RestResponse.setProperty()</code> method.
  *
  * <h5 class='section'>Example:</h5>

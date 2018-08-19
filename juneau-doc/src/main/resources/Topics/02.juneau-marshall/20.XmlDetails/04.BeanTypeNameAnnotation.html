@@ -16,7 +16,7 @@
 @Bean(typeName) Annotation
 
 <p>
-	The {@link oaj.annotation.Bean#typeName() @Bean.typeName()} annotation can be used to 
+	The {@link oaj.annotation.Bean#typeName() @Bean(typeName)} annotation can be used to 
 	override the Juneau default name on bean elements. 
 	Types names serve two distinct purposes:
 </p>
@@ -120,8 +120,8 @@
 </ul>
 <p>
 	Beans with type names are often used in conjunction with the 
-	{@link oaj.annotation.Bean#beanDictionary() @Bean.beanDictionary()} and 
-	{@link oaj.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} 
+	{@link oaj.annotation.Bean#beanDictionary() @Bean(beanDictionary)} and 
+	{@link oaj.annotation.BeanProperty#beanDictionary() @BeanProperty(beanDictionary)} 
 	annotations so that the beans can be resolved at parse time.  
 	<br>These annotations are not necessary during serialization, but are needed during parsing in order to 
 	resolve the bean types.

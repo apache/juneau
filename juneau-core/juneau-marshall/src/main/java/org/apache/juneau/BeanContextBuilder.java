@@ -246,7 +246,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The values to add to this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
 	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	 * 		<li>Any array or collection of the objects above.
@@ -293,7 +293,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The new values for this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
 	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	 * 		<li>Any array or collection of the objects above.
@@ -319,7 +319,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	The values to remove from this property.
 	 * 	<br>Values can consist of any of the following types:
 	 * 	<ul>
-	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
 	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	 * 		<li>Any array or collection of the objects above.

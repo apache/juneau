@@ -73,7 +73,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Returns the RDF namespace associated with this bean property.
 	 *
 	 * <p>
-	 * Namespace is determined in the following order of {@link Rdf#prefix() @Rdf.prefix()} annotations:
+	 * Namespace is determined in the following order of {@link Rdf#prefix() @Rdf(prefix)} annotations:
 	 * <ol>
 	 * 	<li>Bean property field.
 	 * 	<li>Bean getter.
@@ -93,7 +93,7 @@ public class RdfBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this bean property is marked with {@link Rdf#beanUri() @Rdf.beanUri()} as <jk>true</jk>.
+	 * Returns <jk>true</jk> if this bean property is marked with {@link Rdf#beanUri() @Rdf(beanUri)} as <jk>true</jk>.
 	 *
 	 * @return <jk>true</jk> if this bean property annotation is <jk>true</jk>.
 	 */

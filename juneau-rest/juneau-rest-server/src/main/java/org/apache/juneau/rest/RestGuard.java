@@ -25,8 +25,8 @@ import org.apache.juneau.rest.exception.*;
  * For example, guards can be used to ensure that only administrators can call certain methods.
  *
  * <p>
- * Guards are applied to REST methods declaratively through the {@link RestResource#guards() @RestResource.guards()} or
- * {@link RestMethod#guards() @RestMethod.guards()} annotations.
+ * Guards are applied to REST methods declaratively through the {@link RestResource#guards() @RestResource(guards)} or
+ * {@link RestMethod#guards() @RestMethod(guards)} annotations.
  *
  * <p>
  * If multiple guards are specified, ALL guards must pass in order for the request to proceed.

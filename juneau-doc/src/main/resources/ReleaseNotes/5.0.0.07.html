@@ -73,7 +73,7 @@
 		Enhancements to {@link oaj.BeanContext}:
 		<ul>
 			<li>
-				Ability to mark bean properties as hidden using <code>@BeanProperty.hidden()</code> so that they don't get serialized.
+				Ability to mark bean properties as hidden using <code>@BeanProperty(hidden)</code> so that they don't get serialized.
 			</li>
 			<li>
 				Simplified <code>ClassType</code> {@link oaj.ClassMeta} API.<br>
@@ -94,7 +94,7 @@
 				Used by RDF/XML serializer to construct <code>rdf:resource</code> attributes.
 			</li>
 			<li>
-				New {@link oaj.annotation.BeanProperty#properties() @BeanProperty.properties()} annotation.
+				New {@link oaj.annotation.BeanProperty#properties() @BeanProperty(properties)} annotation.
 				Used for limiting properties on child elements.
 			</li>	
 		</ul>
@@ -128,7 +128,7 @@
 	<li>
 		Several new annotations on REST servlets:
 		<ul>
-			<li><code>@RestResource.filters()</code> - Associate post-formatting filters on a resource level.</li>
+			<li><code>@RestResource(filters)</code> - Associate post-formatting filters on a resource level.</li>
 			<li>{@link oajr.annotation.RestResource#guards() @RestResource.guards} - Associate resource-level guards.</li>
 			<li>{@link oajr.annotation.RestResource#messages() @RestResource.messages} - Associate a resource bundle with a REST servlet.  Comes with several convenience methods for looking up messages for the client locale.</li>
 			<li>{@link oajr.annotation.RestResource#properties() @RestResource.properties} - Override default bean context, serializer, and parser properties though an annotation.</li>
@@ -137,8 +137,8 @@
 	<li>
 		Several new annotations on REST methods:
 		<ul>
-			<li><code>@RestMethod.filters()</code> - Associate post-formatting filters on a method level.</li>
-			<li>{@link oajr.annotation.RestMethod#guards() @RestMethod.guards()} - Associate method-level guards.</li>
+			<li><code>@RestMethod(filters)</code> - Associate post-formatting filters on a method level.</li>
+			<li>{@link oajr.annotation.RestMethod#guards() @RestMethod(guards)} - Associate method-level guards.</li>
 		</ul>
 	</li>
 	<li>				

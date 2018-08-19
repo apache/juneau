@@ -170,12 +170,12 @@
 	<li>General improvements to Bean Dictionary support.
 		<ul>
 			<li>New {@link oaj.BeanDictionaryList} class can be used for defining reusable sets of bean dictionaries consisting
-				of classes annotated with {@link oaj.annotation.Bean#typeName() @Bean.typeName()}.
+				of classes annotated with {@link oaj.annotation.Bean#typeName() @Bean(typeName)}.
 			<li>New {@link oaj.BeanDictionaryMap} class can be used for defining reusable sets of bean dictionaries consisting
-				of classes not annotated with {@link oaj.annotation.Bean#typeName() @Bean.typeName()}.
-			<li>New {@link oaj.annotation.Bean#beanDictionary() @Bean.beanDictionary()} annotation.
+				of classes not annotated with {@link oaj.annotation.Bean#typeName() @Bean(typeName)}.
+			<li>New {@link oaj.annotation.Bean#beanDictionary() @Bean(beanDictionary)} annotation.
 		</ul>
-	<li>Removed restriction on getters and setters to be prefixed with "getX/setX/isX" if a {@link oaj.annotation.BeanProperty#name() @BeanProperty.name()} annotation is used.
+	<li>Removed restriction on getters and setters to be prefixed with "getX/setX/isX" if a {@link oaj.annotation.BeanProperty#name() @BeanProperty(name)} annotation is used.
 	<li>Improvements to ATOM DTO:
 		<ul>
 			<li>New {@link oaj.dto.atom.AtomBuilder} class.
@@ -205,7 +205,7 @@
 		<br>Equivalently, the {@link oaj.parser.InputStreamParser#parse(Object,Class)} method can now 
 			read the output from this method.
 	<li>Eliminated the <code><ja>@Bean</ja>(subTypeProperty)</code> and <code><ja>@Bean</ja>(subTypes)</code> annotations
-		and replaced them with the ability to define subtypes using the existing {@link oaj.annotation.Bean#beanDictionary() @Bean.beanDictionary()}
+		and replaced them with the ability to define subtypes using the existing {@link oaj.annotation.Bean#beanDictionary() @Bean(beanDictionary)}
 		annotation on parent classes and interfaces.
 		<br>This has the added benefit of simplifying the overall code.
 	<li>The <code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> setting is now enabled by default.

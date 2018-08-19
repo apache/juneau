@@ -21,7 +21,7 @@ Using with Spring and Injection frameworks
 <p>
 	The important class is the {@link oajr.RestResourceResolver} class which is used
 	to resolve child servlet/resource implementation classes inside parent contexts.
-	In other words, it's used for resolving {@link oajr.annotation.RestResource#children() @RestResource.children()} instances.
+	In other words, it's used for resolving {@link oajr.annotation.RestResource#children() @RestResource(children)} instances.
 </p>
 <p>
 	The general approach starts with defining a resolver that uses the Spring application context for resolution:

@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
  * this to <js>"foo-bar-url"</js>.
  *
  * <p>
- * Property namers are associated with beans through the {@link Bean#propertyNamer @Bean.propertyNamer()} annotation.
+ * Property namers are associated with beans through the {@link Bean#propertyNamer @Bean(propertyNamer)} annotation.
  */
 public interface PropertyNamer {
 

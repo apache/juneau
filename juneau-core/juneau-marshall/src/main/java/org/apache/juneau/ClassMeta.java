@@ -819,7 +819,7 @@ public final class ClassMeta<T> implements Type {
 	 * Returns the bean dictionary name associated with this class.
 	 *
 	 * <p>
-	 * The lexical name is defined by {@link Bean#typeName() @Bean.typeName()}.
+	 * The lexical name is defined by {@link Bean#typeName() @Bean(typeName)}.
 	 *
 	 * @return
 	 * 	The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this
@@ -833,7 +833,7 @@ public final class ClassMeta<T> implements Type {
 	 * Returns the bean registry for this class.
 	 *
 	 * <p>
-	 * This bean registry contains names specified in the {@link Bean#beanDictionary() @Bean.beanDictionary()} annotation
+	 * This bean registry contains names specified in the {@link Bean#beanDictionary() @Bean(beanDictionary)} annotation
 	 * defined on the class, regardless of whether the class is an actual bean.
 	 * This allows interfaces to define subclasses with type names.
 	 *

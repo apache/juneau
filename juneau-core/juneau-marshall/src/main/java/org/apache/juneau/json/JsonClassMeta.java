@@ -52,7 +52,7 @@ public class JsonClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Json#wrapperAttr() @Json.wrapperAttr()} annotation defined on the class.
+	 * Returns the {@link Json#wrapperAttr() @Json(wrapperAttr)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */

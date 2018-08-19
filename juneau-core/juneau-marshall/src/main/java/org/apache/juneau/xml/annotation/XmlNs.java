@@ -20,7 +20,7 @@ import java.lang.annotation.*;
  * Namespace name/URL mapping pair.
  *
  * <p>
- * Used to identify a namespace/URI pair on a {@link XmlSchema#xmlNs() @XmlSchema.xmlNs()} annotation.
+ * Used to identify a namespace/URI pair on a {@link XmlSchema#xmlNs() @XmlSchema(xmlNs)} annotation.
  */
 @Documented
 @Target({})

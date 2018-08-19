@@ -19,7 +19,7 @@ import org.apache.juneau.serializer.*;
  * Allows custom rendering of bean property values when serialized as HTML.
  *
  * <p>
- * Associated with bean properties using the {@link Html#render() @Html.render()} annotation.
+ * Associated with bean properties using the {@link Html#render() @Html(render)} annotation.
  *
  * <p>
  * Using this class, you can alter the CSS style and HTML content of the bean property.

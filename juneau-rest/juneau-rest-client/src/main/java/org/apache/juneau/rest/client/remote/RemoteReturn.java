@@ -13,7 +13,7 @@
 package org.apache.juneau.rest.client.remote;
 
 /**
- * Possible values for the {@link RemoteMethod#returns() @RemoteMethod.returns()} annotation.
+ * Possible values for the {@link RemoteMethod#returns() @RemoteMethod(returns)} annotation.
  */
 public enum RemoteReturn {
 

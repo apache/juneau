@@ -25,7 +25,7 @@ import org.apache.juneau.rest.helper.*;
  * They're meant to be used as jumping-off points for child resources.
  *
  * <p>
- * Child resources are specified using the {@link RestResource#children() @RestResource.children()} annotation.
+ * Child resources are specified using the {@link RestResource#children() @RestResource(children)} annotation.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

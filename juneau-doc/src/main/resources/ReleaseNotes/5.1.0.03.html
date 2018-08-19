@@ -40,7 +40,7 @@
 	<li>New {@link oaj.annotation.BeanIgnore @BeanIgnore} annotation.  Replaces the previous <code><ja>@BeanProperty</ja>(hidden=<jk>true</jk>)</code> annotation
 		for ignoring bean properties.  Can also be used on classes that look like beans so that they're not treated as beans.
 	<li>Support for parsing into non-static member classes.  This applies to all parsers.
-	<li>New {@link oaj.json.annotation.Json#wrapperAttr() @Json.wrapperAttr()}	annotation that automatically wraps beans and objects in a wrapper
+	<li>New {@link oaj.json.annotation.Json#wrapperAttr() @Json(wrapperAttr)}	annotation that automatically wraps beans and objects in a wrapper
 		attribute when serializing to or parsing from JSON.
 	<li>Changed the default ordering of bean properties to be in parent-to-child class order.
 	<li>New {@link oaj.transform.BeanFilter#readProperty(Object,String,Object) readProperty()} and {@link oaj.transform.BeanFilter#writeProperty(Object,String,Object) writeProperty()}

@@ -175,7 +175,7 @@ public class XmlBeanMeta extends BeanMetaExtended {
 
 	/**
 	 * The list of properties that should be rendered as collapsed child elements.
-	 * <br>See {@link Xml#childName() @Xml.childName()}
+	 * <br>See {@link Xml#childName() @Xml(childName)}
 	 *
 	 * @return Map of property names to property metadata.
 	 */

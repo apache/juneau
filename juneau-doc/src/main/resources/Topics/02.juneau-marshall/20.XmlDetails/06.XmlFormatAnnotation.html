@@ -16,7 +16,7 @@
 @Xml(format) Annotation
 
 <p>
-	The {@link oaj.xml.annotation.Xml#format() @Xml.format()} annotation can be used to tweak 
+	The {@link oaj.xml.annotation.Xml#format() @Xml(format)} annotation can be used to tweak 
 	the XML format of a POJO.
 	<br>The value is set to an enum value of type {@link oaj.xml.annotation.XmlFormat}.
 	<br>This annotation can be applied to both classes and bean properties.
@@ -189,7 +189,7 @@
 	The {@link oaj.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
 	of type array/Collection.
 	<br>This causes the child objects to be serialized directly inside the bean element.
-	<br>This format must be used in conjunction with {@link oaj.xml.annotation.Xml#childName() @Xml.childName()}
+	<br>This format must be used in conjunction with {@link oaj.xml.annotation.Xml#childName() @Xml(childName)}
 	to differentiate which collection the values came from if you plan on parsing the output back into beans.
 	<br>Note that child names must not conflict with other property names.
 </p>

@@ -58,7 +58,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Rdf#collectionFormat() @Rdf.collectionFormat()} annotation defined on the class.
+	 * Returns the {@link Rdf#collectionFormat() @Rdf(collectionFormat)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if annotation is not
 	 * specified.
@@ -71,7 +71,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 	 * Returns the RDF namespace associated with this class.
 	 *
 	 * <p>
-	 * Namespace is determined in the following order of {@link Rdf#prefix() @Rdf.prefix()} annotation:
+	 * Namespace is determined in the following order of {@link Rdf#prefix() @Rdf(prefix)} annotation:
 	 * <ol>
 	 * 	<li>Class.
 	 * 	<li>Package.

@@ -20,7 +20,7 @@ import org.apache.juneau.rest.widget.*;
  * Contains all the configurable annotations for the {@link HtmlDocSerializer}.
  *
  * <p>
- * Used with {@link RestResource#htmldoc() @RestResource.htmldoc()} and {@link RestMethod#htmldoc() @RestMethod.htmldoc()}
+ * Used with {@link RestResource#htmldoc() @RestResource(htmldoc)} and {@link RestMethod#htmldoc() @RestMethod(htmldoc)}
  * to customize the HTML view of serialized POJOs.
  *
  * <p>

@@ -25,7 +25,7 @@
 	<li>
 		New package:  {@link oaj.http}.
 	<li>
-		Support for dynamic beans.  See {@link oaj.annotation.BeanProperty#name() @BeanProperty.name()}.
+		Support for dynamic beans.  See {@link oaj.annotation.BeanProperty#name() @BeanProperty(name)}.
 	<li>
 		New doc: <code><del>2.8 - Virtual Beans</del></code>
 	<li>
@@ -113,7 +113,7 @@
 				<li><code><del>SerializerContext.SERIALIZER_uriResolution</del></code>
 				<li><code><del>SerializerContext.SERIALIZER_maxIndent</del></code>
 		</ul>
-	<li>New annotation property: {@link oaj.annotation.BeanProperty#value() @BeanProperty.value()}.
+	<li>New annotation property: {@link oaj.annotation.BeanProperty#value() @BeanProperty(value)}.
 		<br>The following two annotations are considered equivalent:
 		<p class='bcode w800'>
 	<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
@@ -128,11 +128,11 @@
 		<ul>
 			<li>{@link oaj.serializer.SerializerListener}
 			<li>{@link oaj.serializer.SerializerBuilder#listener(Class)}
-			<li>{@link oajr.annotation.RestResource#serializerListener() @RestResource.serializerListener()}
+			<li>{@link oajr.annotation.RestResource#serializerListener() @RestResource(serializerListener)}
 			<li><code><del>RestConfig.serializerListener(Class)</del></code>
 			<li>{@link oaj.parser.ParserListener}
 			<li>{@link oaj.parser.ParserBuilder#listener(Class)}
-			<li>{@link oajr.annotation.RestResource#parserListener() @RestResource.parserListener()}
+			<li>{@link oajr.annotation.RestResource#parserListener() @RestResource(parserListener)}
 			<li><code><del>RestConfig.parserListener(Class)</del></code>
 			<li><code><del>RestClientBuilder.listeners(Class,Class)</del></code>
 		</ul>juneau-examples-core.import1.pngjuneau-examples-core.import1.png
@@ -142,7 +142,7 @@
 	<li>Significant new functionality introduced to the HTML serializer.  
 		<br>Lots of new options for customizing the HTML output.
 		<ul>
-			<li>New {@link oaj.html.annotation.Html#render() @Html.render()} annotation and {@link oaj.html.HtmlRender} class that allows you
+			<li>New {@link oaj.html.annotation.Html#render() @Html(render)} annotation and {@link oaj.html.HtmlRender} class that allows you
 				to customize the HTML output and CSS style on bean properties:
 				<br><img class='bordered' src='doc-files/ReleaseNotes.630.1.png'>
 				<br>Annotation can be applied to POJO classes and bean properties.
@@ -171,7 +171,7 @@
 			<li>{@link oaj.BeanContext#BEAN_includeProperties BEAN_includeProperties}
 			<li>{@link oaj.BeanContext#BEAN_excludeProperties BEAN_excludeProperties}
 		</ul>
-	<li>New annotation property: {@link oaj.annotation.BeanProperty#format() @BeanProperty.format()}.
+	<li>New annotation property: {@link oaj.annotation.BeanProperty#format() @BeanProperty(format)}.
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest</h5>
@@ -285,7 +285,7 @@
 	)
 		</p>
 	<li>
-		A new annotation {@link oajr.annotation.RestResource#paramResolvers() @RestResource.paramResolvers()}
+		A new annotation {@link oajr.annotation.RestResource#paramResolvers() @RestResource(paramResolvers)}
 		that allows you to define your own custom Java method parameter resolvers.
 	<li>
 		Fixed bug where Writer returned by {@link oajr.RestResponse#getWriter()} was not being flushed automatically
@@ -301,9 +301,9 @@
 	<li>
 		Default values on header, query, and form-data annotations:
 		<ul>
-			<li><code><del>@Header.def()</del></code> - Default header value.
-			<li><code><del>@Query.def()</del></code> - Default query parameter value.
-			<li><code><del>@FormData.def()</del></code> - Default form data parameter value.
+			<li><code><del>@Header(def)</del></code> - Default header value.
+			<li><code><del>@Query(def)</del></code> - Default query parameter value.
+			<li><code><del>@FormData(def)</del></code> - Default form data parameter value.
 		</ul>
 	<li>
 		New attributes on {@link oajr.annotation.RestResource @RestResource}:
@@ -383,12 +383,12 @@
 	<li>
 		New annotation attributes:
 		<ul>
-			<li>{@link oaj.http.annotation.Query#name() @Query.name()}
-			<li>{@link oaj.http.annotation.FormData#name() @FormData.name()}
-			<li>{@link oaj.http.annotation.Header#name() @Header.name()}
-			<li>{@link oaj.http.annotation.Path#name() @Path.name()}
-			<li>{@link oaj.http.annotation.HasQuery#name() @HasQuery.name()}
-			<li>{@link oaj.http.annotation.HasFormData#name() @HasFormData.name()}
+			<li>{@link oaj.http.annotation.Query#name() @Query(name)}
+			<li>{@link oaj.http.annotation.FormData#name() @FormData(name)}
+			<li>{@link oaj.http.annotation.Header#name() @Header(name)}
+			<li>{@link oaj.http.annotation.Path#name() @Path(name)}
+			<li>{@link oaj.http.annotation.HasQuery#name() @HasQuery(name)}
+			<li>{@link oaj.http.annotation.HasFormData#name() @HasFormData(name)}
 		</ul>
 	</li>
 </ul>

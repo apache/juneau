@@ -51,16 +51,16 @@
 		The parsers use a 'dictionary' of bean classes to resolve those names to actual bean classes.
 		The following features were added to enable this support:
 		<ul>
-			<li>{@link oaj.annotation.Bean#typeName() @Bean.typeName()} - Annotation that defines an identifying name for a bean class.
+			<li>{@link oaj.annotation.Bean#typeName() @Bean(typeName)} - Annotation that defines an identifying name for a bean class.
 			<li>{@link oaj.transform.BeanFilterBuilder#typeName(String)} - Programmatic equivalent to annotation above.
 			<li>{@link oaj.BeanContext#BEAN_beanDictionary} - List of bean classes that make up the bean dictionary for lookup
 				during parsing. 
 			<li>{@link oaj.BeanContext#BEAN_beanTypePropertyName} - The overridable type property name.  Default is <js>"_type"</js>.
-			<li>{@link oaj.annotation.BeanProperty#beanDictionary() @BeanProperty.beanDictionary()} - Define a type dictionary
+			<li>{@link oaj.annotation.BeanProperty#beanDictionary() @BeanProperty(beanDictionary)} - Define a type dictionary
 				for a particular bean property value.  This overrides the value specified using {@link oaj.BeanContext#BEAN_beanDictionary}.
 			<li><code><del>SerializerContext.SERIALIZER_addBeanTypeProperties</del></code> - Controls whether type properties are serialized.
 		</ul>
-		In addition, the {@link oaj.annotation.Bean#typeName() @Bean.typeName()} value replaces the <code>@Xml.name()</code> annotation, and the 
+		In addition, the {@link oaj.annotation.Bean#typeName() @Bean(typeName)} value replaces the <code>@Xml(name)</code> annotation, and the 
 		<js>"type"</js> and <js>"_class"</js> attributes in the XML and HTML serializers have been standardized on a single <js>"_type"</js> attribute.
 	<li>Refactor bean filter support to use {@link oaj.transform.BeanFilterBuilder} class.
 		Allows the <code>BeanFilter</code> class to use final fields.
@@ -85,7 +85,7 @@
 			<li><code><del>Serializer.getMediaRanges()</del></code>
 		</ul>
 	</li>
-	<li>New {@link oaj.annotation.Bean#sort() @Bean.sort()} annotation.
+	<li>New {@link oaj.annotation.Bean#sort() @Bean(sort)} annotation.
 	<li>Added <ja>@Bean.properties</ja> annotations on various DTO beans to make the ordering consistent
 		between IBM and Oracle JVMs.<br>
 		IBM JVMs maintain the order of methods in a class, whereas Oracle JVMs do not.
@@ -122,21 +122,21 @@
 			<li>Eliminated <code>ResourceOptions</code> and related code.
 			<li>New annotations and related methods:
 				<ul>
-					<li>{@link oajr.annotation.RestResource#title() @RestResource.title()} / {@link oajr.RestInfoProvider#getTitle(RestRequest)}
-					<li>{@link oajr.annotation.RestResource#description() @RestResource.description()} / {@link oajr.RestInfoProvider#getDescription(RestRequest)}
-					<li><code><del>@RestResource.termsOfService()</del></code> / <code><del>RestInfoProvider.getTermsOfService(RestRequest)</del></code>
-					<li><code><del>@RestResource.contact()</del></code> / <code><del>RestInfoProvider.getContact(RestRequest)</del></code>
-					<li><code><del>@RestResource.license()</del></code> / <code><del>RestInfoProvider.getLicense(RestRequest)</del></code>
-					<li><code><del>@RestResource.version()</del></code> / <code><del>RestInfoProvider.getVersion(RestRequest)</del></code>
-					<li><code><del>@RestResource.tags()</del></code> / <code><del>RestInfoProvider.getTags(RestRequest)</del></code>
-					<li><code><del>@RestResource.externalDocs()</del></code> / <code><del>RestInfoProvidergetExternalDocs(RestRequest)</del></code>
-					<li>{@link oajr.annotation.RestMethod#summary() @RestMethod.summary()} / <code><del>RestInfoProvider.getMethodSummary(String,RestRequest)</del></code>
-					<li>{@link oajr.annotation.RestMethod#description() @RestMethod.description()} /<code><del>RestInfoProvider.getMethodDescription(String,RestRequest)</del></code>
-					<li><code><del>@RestMethod.externalDocs()</del></code>
-					<li><code><del>@RestMethod.tags()</del></code>
-					<li><code><del>@RestMethod.deprecated()</del></code> 
-					<li><code><del>@RestMethod.parameters()</del></code> 
-					<li><code><del>@RestMethod.responses()</del></code>
+					<li>{@link oajr.annotation.RestResource#title() @RestResource(title)} / {@link oajr.RestInfoProvider#getTitle(RestRequest)}
+					<li>{@link oajr.annotation.RestResource#description() @RestResource(description)} / {@link oajr.RestInfoProvider#getDescription(RestRequest)}
+					<li><code><del>@RestResource(termsOfService)</del></code> / <code><del>RestInfoProvider.getTermsOfService(RestRequest)</del></code>
+					<li><code><del>@RestResource(contact)</del></code> / <code><del>RestInfoProvider.getContact(RestRequest)</del></code>
+					<li><code><del>@RestResource(license)</del></code> / <code><del>RestInfoProvider.getLicense(RestRequest)</del></code>
+					<li><code><del>@RestResource(version)</del></code> / <code><del>RestInfoProvider.getVersion(RestRequest)</del></code>
+					<li><code><del>@RestResource(tags)</del></code> / <code><del>RestInfoProvider.getTags(RestRequest)</del></code>
+					<li><code><del>@RestResource(externalDocs)</del></code> / <code><del>RestInfoProvidergetExternalDocs(RestRequest)</del></code>
+					<li>{@link oajr.annotation.RestMethod#summary() @RestMethod(summary)} / <code><del>RestInfoProvider.getMethodSummary(String,RestRequest)</del></code>
+					<li>{@link oajr.annotation.RestMethod#description() @RestMethod(description)} /<code><del>RestInfoProvider.getMethodDescription(String,RestRequest)</del></code>
+					<li><code><del>@RestMethod(externalDocs)</del></code>
+					<li><code><del>@RestMethod(tags)</del></code>
+					<li><code><del>@RestMethod(deprecated)</del></code> 
+					<li><code><del>@RestMethod(parameters)</del></code> 
+					<li><code><del>@RestMethod(responses)</del></code>
 				</ul>
 			</li>					
 		</ul>

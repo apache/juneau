@@ -676,7 +676,7 @@ public final class JsonParserSession extends ReaderParserSession {
 
 	/*
 	 * Doesn't actually parse anything, but moves the position beyond the construct "{wrapperAttr:" when
-	 * the @Json.wrapperAttr() annotation is used on a class.
+	 * the @Json(wrapperAttr) annotation is used on a class.
 	 */
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws Exception {
 
@@ -727,7 +727,7 @@ public final class JsonParserSession extends ReaderParserSession {
 
 	/*
 	 * Doesn't actually parse anything, but moves the position beyond the construct "}" when
-	 * the @Json.wrapperAttr() annotation is used on a class.
+	 * the @Json(wrapperAttr) annotation is used on a class.
 	 */
 	private void skipWrapperAttrEnd(ParserReader r) throws ParseException, IOException {
 		int c = 0;

@@ -116,7 +116,7 @@
 				</ul>
 			</li>
 			<li>
-				Declaration of widgets moved to {@link oajr.annotation.HtmlDoc#widgets() @HtmlDoc.widgets()} 
+				Declaration of widgets moved to {@link oajr.annotation.HtmlDoc#widgets() @HtmlDoc(widgets)} 
 				instead of separately on <ja>@RestResource</ja> and <ja>@RestMethod</ja> annotations.
 			<li>
 				{@link oajr.widget.Widget#getName()} now defaults to the simple class name.
@@ -153,7 +153,7 @@
 		</ul>
 
 	<li>
-		Bug fix with {@link oajr.annotation.HtmlDoc#nowrap() @HtmlDoc.nowrap()} so that the setting only applies
+		Bug fix with {@link oajr.annotation.HtmlDoc#nowrap() @HtmlDoc(nowrap)} so that the setting only applies
 		to the data contents, not the whole page.
 	<li>
 		Two convenience methods added to {@link oajr.RestRequest}:
@@ -165,16 +165,16 @@
 	<li>
 		Annotations added:
 		<ul>
-			<li>{@link oajr.annotation.RestResource#siteName() @RestResource.siteName()}
-			<li>{@link oajr.annotation.RestResource#flags() @RestResource.flags()}
-			<li>{@link oajr.annotation.RestMethod#flags() @RestMethod.flags()}
+			<li>{@link oajr.annotation.RestResource#siteName() @RestResource(siteName)}
+			<li>{@link oajr.annotation.RestResource#flags() @RestResource(flags)}
+			<li>{@link oajr.annotation.RestMethod#flags() @RestMethod(flags)}
 		</ul>
 	</li>
 	<li>
-		Eliminated the <code>@RestResource.stylesheet()</code> annotation.  
+		Eliminated the <code>@RestResource(stylesheet)</code> annotation.  
 		It's no longer needed now that you can easily specify styles via <ja>@Htmldoc</ja>.
 	<li>
-		Eliminated the following annotations since they are now redundant with {@link oajr.annotation.HtmlDoc#header() @HtmlDoc.header()}:
+		Eliminated the following annotations since they are now redundant with {@link oajr.annotation.HtmlDoc#header() @HtmlDoc(header)}:
 		<ul>
 			<li><code>title()</code>
 			<li><code>description()</code>

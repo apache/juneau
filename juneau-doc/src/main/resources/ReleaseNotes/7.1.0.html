@@ -294,7 +294,7 @@
 	<li>
 		Support for static files has been simplified and improved.
 		<ul>
-			<li>Syntax on {@link oajr.annotation.RestResource#staticFiles() @RestResource.staticFiles()} has been simplified, and
+			<li>Syntax on {@link oajr.annotation.RestResource#staticFiles() @RestResource(staticFiles)} has been simplified, and
 				now allows you to specify response headers in the strings.
 			<li>Response headers for static files can also be configured through 
 				{@link oajr.RestContext#REST_staticFileResponseHeaders REST_staticFileResponseHeaders}.
@@ -311,7 +311,7 @@
 		<code>@RestResource.allowMethodParam</code> renamed to {@link oajr.annotation.RestResource#allowedMethodParams}.
 	<li>
 		<code>@RestMethod.serializersInherit</code> and <code>@RestMethod.parsersInherit</code> replaced with
-		simplified <code><del>@RestMethod.inherit()</del></code>. 
+		simplified <code><del>@RestMethod(inherit)</del></code>. 
 	<li>
 		Changes to {@link oajr.RequestFormData}:
 		<ul>

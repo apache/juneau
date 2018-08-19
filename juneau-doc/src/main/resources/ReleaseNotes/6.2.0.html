@@ -90,7 +90,7 @@
 			<li>{@link oaj.utils.ASet}
 			<li>{@link oaj.utils.AMap}
 		</ul>
-	<li>New {@link oaj.annotation.Bean#typePropertyName @Bean.typePropertyName()} annotation allows you to 
+	<li>New {@link oaj.annotation.Bean#typePropertyName @Bean(typePropertyName)} annotation allows you to 
 		specify the name of the <js>"_type"</js> property at the class level.
 	<li>New methods added to HTML5 container beans:
 		<ul>
@@ -158,12 +158,12 @@
 	<li>New annotations added to {@link oajr.annotation.RestResource @RestResource} and {@link oajr.annotation.RestMethod @RestMethod}
 		to simplify defining page title, text, and links on HTML views:
 		<ul>
-			<li><code><del>@RestResource.pageTitle()</del></code>
-			<li><code><del>@RestMethod.pageTitle()</del></code> 
-			<li><code><del>@RestResource.pageText()</del></code> 
-			<li><code><del>@RestMethod.pageText()</del></code> 
-			<li><code><del>@RestResource.pageLinks()</del></code> 
-			<li><code><del>@RestMethod.pageLinks()</del></code> 
+			<li><code><del>@RestResource(pageTitle)</del></code>
+			<li><code><del>@RestMethod(pageTitle)</del></code> 
+			<li><code><del>@RestResource(pageText)</del></code> 
+			<li><code><del>@RestMethod(pageText)</del></code> 
+			<li><code><del>@RestResource(pageLinks)</del></code> 
+			<li><code><del>@RestMethod(pageLinks)</del></code> 
 		</ul>				
 		<p class='bcode w800'>
 	<jc>// Old method</jc>
@@ -209,10 +209,10 @@
 	RestClient client = RestClient.<jsm>create</jsm>().rootUrl(<jf>samplesUrl</jf>).build();			
 	IAddressBook ab = client.getRemoteableProxy(IAddressBook.<jk>class</jk>, <js>"/addressBook/myproxy"</js>);
 	</p>
-		See {@link oajr.annotation.RestMethod#name() @RestMethod.name()} for more information.
+		See {@link oajr.annotation.RestMethod#name() @RestMethod(name)} for more information.
 	<li>{@link oajr.RestRequest#toString()} can be called at any time to view the headers and content of the request
 		without affecting functionality.  Very useful for debugging.
-	<li>{@link oajr.annotation.RestMethod#name() @RestMethod.name()} annotation is now optional.  Defaults to <js>"GET"</js>.
+	<li>{@link oajr.annotation.RestMethod#name() @RestMethod(name)} annotation is now optional.  Defaults to <js>"GET"</js>.
 </ul>
 
 <h5 class='topic w800'>org.apache.juneau.rest.client</h5>

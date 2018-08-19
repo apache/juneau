@@ -444,7 +444,7 @@ public final class BeanPropertyMeta {
 	 * <p>
 	 * The order of lookup for the dictionary is as follows:
 	 * <ol>
-	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary() @BeanProperty.beanDictionary()}.
+	 * 	<li>Dictionary defined via {@link BeanProperty#beanDictionary() @BeanProperty(beanDictionary)}.
 	 * 	<li>Dictionary defined via {@link BeanContext#BEAN_beanDictionary} context property.
 	 * </ol>
 	 *
@@ -481,7 +481,7 @@ public final class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the override list of properties defined through a {@link BeanProperty#properties() @BeanProperty.properties()} annotation
+	 * Returns the override list of properties defined through a {@link BeanProperty#properties() @BeanProperty(properties)} annotation
 	 * on this property.
 	 *
 	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.

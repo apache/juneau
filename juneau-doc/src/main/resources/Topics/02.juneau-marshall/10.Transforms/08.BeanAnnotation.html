@@ -21,7 +21,7 @@
 </p>
 <p> 
 	Bean property inclusion and ordering on a bean class can be done using the 
-	{@link oaj.annotation.Bean#properties() @Bean.properties()} annotation.
+	{@link oaj.annotation.Bean#properties() @Bean(properties)} annotation.
 </p>
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
@@ -30,7 +30,7 @@
 	<jk>public class</jk> Address { ... }
 </p>
 <p> 
-	Bean properties can be excluded using the {@link oaj.annotation.Bean#excludeProperties() @Bean.excludeProperties()}
+	Bean properties can be excluded using the {@link oaj.annotation.Bean#excludeProperties() @Bean(excludeProperties)}
 	annotation.
 </p>
 <p class='bpcode w800'>
@@ -40,7 +40,7 @@
 	<jk>public class</jk> Address { ... }
 </p>
 <p>
-	Bean properties can be sorted alphabetically using {@link oaj.annotation.Bean#sort() @Bean.sort()}
+	Bean properties can be sorted alphabetically using {@link oaj.annotation.Bean#sort() @Bean(sort)}
 </p>
 <p class='bpcode w800'>
 	<jc>// Address class with only street/city/state properties (in that order).</jc>
@@ -49,7 +49,7 @@
 	<jk>public class</jk> MyBean { ... }
 </p>
 <p>
-	The {@link oaj.annotation.Bean#propertyNamer() @Bean.propertyNamer()} annotation
+	The {@link oaj.annotation.Bean#propertyNamer() @Bean(propertyNamer)} annotation
 	is used to provide customized naming of properties.
 </p>
 <p>
@@ -63,7 +63,7 @@
 	<jk>public class</jk> MyBean { ... }
 </p>
 <p>
-	The {@link oaj.annotation.Bean#interfaceClass @Bean.interfaceClass()} annotation is used
+	The {@link oaj.annotation.Bean#interfaceClass @Bean(interfaceClass)} annotation is used
 	to limit properties on beans to specific interface classes.
 	<br>When specified, only the list of properties defined on the interface class will be used during 
 	serialization.
@@ -92,7 +92,7 @@
 	<br>Or can be set individually on the child classes.
 </p>
 <p>
-	The {@link oaj.annotation.Bean#stopClass @Bean.stopClass()} annotation is another
+	The {@link oaj.annotation.Bean#stopClass @Bean(stopClass)} annotation is another
 	way to limit which properties are serialized (except from the opposite direction).
 	<br>It's identical in purpose to the stop class specified by {@link java.beans.Introspector#getBeanInfo(Class, Class)}.
 	<br>Any properties in the stop class or in its base classes will be ignored during analysis.
@@ -116,7 +116,7 @@
 	}
 </p>
 <p>
-	The {@link oaj.annotation.Bean#propertyFilter() @Bean.propertyFilter()} annotation
+	The {@link oaj.annotation.Bean#propertyFilter() @Bean(propertyFilter)} annotation
 	and {@link oaj.transform.PropertyFilter} class can be used to perform interception
 	and inline handling of bean getter and setter calls.
 </p>

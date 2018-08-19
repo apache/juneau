@@ -98,7 +98,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#header() @HtmlDoc.header()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#header() @HtmlDoc(header)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -137,7 +137,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#navlinks() @HtmlDoc.navlinks()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#navlinks() @HtmlDoc(navlinks)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -175,7 +175,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#nav() @HtmlDoc.nav()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#nav() @HtmlDoc(nav)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -211,7 +211,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#aside() @HtmlDoc.aside()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#aside() @HtmlDoc(aside)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -247,7 +247,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#footer() @HtmlDoc.footer()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#footer() @HtmlDoc(footer)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -280,7 +280,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#style() @HtmlDoc.style()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#style() @HtmlDoc(style)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -312,7 +312,7 @@ public class HtmlDocBuilder {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc.stylesheet()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#stylesheet() @HtmlDoc(stylesheet)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -345,7 +345,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#script() @HtmlDoc.script()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#script() @HtmlDoc(script)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -378,7 +378,7 @@ public class HtmlDocBuilder {
 	 * 	<li>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#head() @HtmlDoc.head()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#head() @HtmlDoc(head)} annotation.
 	 * </ul>
 	 *
 	 * @param value
@@ -404,7 +404,7 @@ public class HtmlDocBuilder {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#nowrap() @HtmlDoc.nowrap()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#nowrap() @HtmlDoc(nowrap)} annotation.
 	 * </ul>
 	 *
 	 * @param value The new nowrap setting.
@@ -423,7 +423,7 @@ public class HtmlDocBuilder {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc.noResultsMessage()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#noResultsMessage() @HtmlDoc(noResultsMessage)} annotation.
 	 * </ul>
 	 *
 	 * @param value The text to display when serializing an empty array or collection.
@@ -446,7 +446,7 @@ public class HtmlDocBuilder {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc(template)} annotation.
 	 * </ul>
 	 *
 	 * @param value The HTML page template to use to render the HTML page.
@@ -469,7 +469,7 @@ public class HtmlDocBuilder {
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
-	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc.template()} annotation.
+	 * 		This is the programmatic equivalent to the {@link HtmlDoc#template() @HtmlDoc(template)} annotation.
 	 * </ul>
 	 *
 	 * @param value The HTML page template to use to render the HTML page.

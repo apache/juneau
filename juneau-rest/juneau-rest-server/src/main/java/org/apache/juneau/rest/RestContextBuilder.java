@@ -136,7 +136,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = getAnnotationsMapParentFirst(RestResource.class, resourceClass);
 
-			// Find our config file.  It's the last non-empty @RestResource.config().
+			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";
 			for (RestResource r : restResourceAnnotationsParentFirst.values())
 				if (! r.config().isEmpty())
@@ -364,7 +364,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Overwrites the default config file with a custom config file.
 	 *
 	 * <p>
-	 * By default, the config file is determined using the {@link RestResource#config() @RestResource.config()}
+	 * By default, the config file is determined using the {@link RestResource#config() @RestResource(config)}
 	 * annotation.
 	 * This method allows you to programmatically override it with your own custom config file.
 	 *
@@ -403,7 +403,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Returns the external configuration file for this resource.
 	 *
 	 * <p>
-	 * The configuration file location is determined via the {@link RestResource#config() @RestResource.config()}
+	 * The configuration file location is determined via the {@link RestResource#config() @RestResource(config)}
 	 * annotation on the resource.
 	 *
 	 * <p>
@@ -425,7 +425,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Returns the configuration properties for this resource.
 	 *
 	 * <p>
-	 * The configuration properties are determined via the {@link RestResource#properties() @RestResource.properties()} annotation on the resource.
+	 * The configuration properties are determined via the {@link RestResource#properties() @RestResource(properties)} annotation on the resource.
 	 *
 	 * <p>
 	 * The configuration properties can be augmented programmatically by adding the following method to your resource:
@@ -638,7 +638,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Shortcut for adding a single child to this resource.
 	 *
 	 * <p>
-	 * This can be used for resources that don't have a {@link RestResource#path() @RestResource.path()} annotation.
+	 * This can be used for resources that don't have a {@link RestResource#path() @RestResource(path)} annotation.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -701,7 +701,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * <p>
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod.clientVersion()} annotation.
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod(clientVersion)} annotation.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

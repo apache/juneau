@@ -128,7 +128,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * type information that might normally be included to determine the data type will not be serialized.
 	 *
 	 * <p>
-	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean.typeName()} value, a
+	 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
 	 * <js>'_type'</js> attribute will only be added when this setting is enabled.
 	 *
 	 * <p>

@@ -31,7 +31,7 @@ public @interface RdfSchema {
 	 *
 	 * <p>
 	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #rdfNs()} mapping with the same
-	 * {@link RdfNs#namespaceURI() @RdfNs.namespaceURI()} value.
+	 * {@link RdfNs#namespaceURI() @RdfNs(namespaceURI)} value.
 	 */
 	public String namespace() default "";
 
@@ -49,7 +49,7 @@ public @interface RdfSchema {
 	 *
 	 * <p>
 	 * The purpose of this annotation is to allow namespace mappings to be defined in a single location and referred to
-	 * by name through just the {@link Rdf#prefix() @Rdf.prefix()} annotation.
+	 * by name through just the {@link Rdf#prefix() @Rdf(prefix)} annotation.
 	 *
 	 * <p>
 	 * Inherited by child packages.

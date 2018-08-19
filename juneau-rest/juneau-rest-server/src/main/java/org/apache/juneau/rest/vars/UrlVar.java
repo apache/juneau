@@ -30,7 +30,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * See {@link UriResolver} for the kinds of URIs that can be resolved.
  * <ul>
- * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
+ * 	<li>{@link HtmlDoc#widgets() @HtmlDoc(widgets)}
  * </ul>
  *
  * <p>

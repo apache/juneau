@@ -398,7 +398,7 @@ public final class RestContext extends BeanContext {
 	 * large numbers of servlets.
 	 *
 	 * <p>
-	 * Child resources must specify a value for {@link RestResource#path() @RestResource.path()} that identifies the subpath of the child resource
+	 * Child resources must specify a value for {@link RestResource#path() @RestResource(path)} that identifies the subpath of the child resource
 	 * relative to the ascendant path UNLESS you use the {@link RestContextBuilder#child(String, Object)} method to register it.
 	 *
 	 * <p>
@@ -604,7 +604,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * <p>
 	 * The client version is used to support backwards compatibility for breaking REST interface changes.
-	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod.clientVersion()} annotation.
+	 * <br>Used in conjunction with {@link RestMethod#clientVersion() @RestMethod(clientVersion)} annotation.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
@@ -1897,7 +1897,7 @@ public final class RestContext extends BeanContext {
 	 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
 	 * 	<li>
 	 * 		Typically, this setting is only applicable to resources defined as children through the
-	 * 		{@link RestResource#children() @RestResource.children()} annotation.
+	 * 		{@link RestResource#children() @RestResource(children)} annotation.
 	 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
 	 * 	<li>
 	 * 		Slashes are trimmed from the path ends.
@@ -3854,7 +3854,7 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
-	 * Returns the path for this resource as defined by the {@link RestResource#path() @RestResource.path()} annotation or
+	 * Returns the path for this resource as defined by the {@link RestResource#path() @RestResource(path)} annotation or
 	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
 	 *
 	 * <p>
@@ -4085,7 +4085,7 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @return
 	 * 	An unmodifiable map of child resources.
-	 * 	Keys are the {@link RestResource#path() @RestResource.path()} annotation defined on the child resource.
+	 * 	Keys are the {@link RestResource#path() @RestResource(path)} annotation defined on the child resource.
 	 */
 	public Map<String,RestContext> getChildResources() {
 		return Collections.unmodifiableMap(childResources);

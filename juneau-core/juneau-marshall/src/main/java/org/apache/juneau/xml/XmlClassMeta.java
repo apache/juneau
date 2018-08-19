@@ -63,7 +63,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Xml#format() @Xml.format()} annotation defined on the class.
+	 * Returns the {@link Xml#format() @Xml(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.
 	 */
@@ -72,7 +72,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Xml#childName() @Xml.childName()} annotation defined on the class.
+	 * Returns the {@link Xml#childName() @Xml(childName)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -84,7 +84,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 * Returns the XML namespace associated with this class.
 	 *
 	 * <p>
-	 * Namespace is determined in the following order of {@link Xml#prefix() @Xml.prefix()} annotation:
+	 * Namespace is determined in the following order of {@link Xml#prefix() @Xml(prefix)} annotation:
 	 * <ol>
 	 * 	<li>Class.
 	 * 	<li>Package.

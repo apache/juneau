@@ -22,11 +22,11 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * In general, this approach for defining dictionary names for classes is used when it's not possible to use the
- * {@link Bean#typeName() @Bean.typeName()} annotation.
+ * {@link Bean#typeName() @Bean(typeName)} annotation.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
- * 	<jc>// A bean dictionary map consisting of classes without @Bean.typeName() annotations</jc>
+ * 	<jc>// A bean dictionary map consisting of classes without @Bean(typeName) annotations</jc>
  * 	<jc>// that require type names to be explicitly specified.</jc>
  * 	<jk>public class</jk> MyBeanDictionaryMap <jk>extends</jk> BeanDictionaryMap {
  *

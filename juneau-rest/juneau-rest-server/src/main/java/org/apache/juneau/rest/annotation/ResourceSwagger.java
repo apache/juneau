@@ -15,7 +15,7 @@ package org.apache.juneau.rest.annotation;
 import org.apache.juneau.http.annotation.*;
 
 /**
- * Extended annotation for {@link RestResource#swagger() @RestResource.swagger()}.
+ * Extended annotation for {@link RestResource#swagger() @RestResource(swagger)}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>

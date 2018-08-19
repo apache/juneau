@@ -96,7 +96,7 @@ public class BeanMeta<T> {
 	final String typePropertyName;                         // "_type" property actual name.
 	private final BeanPropertyMeta typeProperty;           // "_type" mock bean property.
 	final BeanPropertyMeta dynaProperty;                   // "extras" property.
-	private final String dictionaryName;                   // The @Bean.typeName() annotation defined on this bean class.
+	private final String dictionaryName;                   // The @Bean(typeName) annotation defined on this bean class.
 	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
 	final BeanRegistry beanRegistry;
 	final boolean sortProperties;
@@ -491,7 +491,7 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean.typeName()} annotation.
+	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean(typeName)} annotation.
 	 *
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */

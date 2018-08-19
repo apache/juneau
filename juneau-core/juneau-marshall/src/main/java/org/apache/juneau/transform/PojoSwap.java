@@ -149,7 +149,7 @@ public abstract class PojoSwap<T,S> {
 	 * This method can be overridden to programmatically specify what media types it applies to.
 	 *
 	 * <p>
-	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap.mediaTypes()} annotation.
+	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.
 	 *
 	 * <h5 class='topic'>Documentation</h5>
 	 * <ul>
@@ -171,7 +171,7 @@ public abstract class PojoSwap<T,S> {
 	 * This method can be overridden to programmatically specify a template value.
 	 *
 	 * <p>
-	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap.template()} annotation.
+	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

@@ -29,7 +29,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * They're registered via the following mechanisms:
  * <ul>
- * 	<li>{@link HtmlDoc#widgets() @HtmlDoc.widgets()}
+ * 	<li>{@link HtmlDoc#widgets() @HtmlDoc(widgets)}
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>

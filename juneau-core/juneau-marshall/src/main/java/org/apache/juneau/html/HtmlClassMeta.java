@@ -58,7 +58,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Html#format() @Html.format()} annotation defined on the class.
+	 * Returns the {@link Html#format() @Html(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */
@@ -112,7 +112,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Html#noTables() @Html.noTables()} annotation defined on the class.
+	 * Returns the {@link Html#noTables() @Html(noTables)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */
@@ -121,7 +121,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Html#noTableHeaders() @Html.noTableHeaders()} annotation defined on the class.
+	 * Returns the {@link Html#noTableHeaders() @Html(noTableHeaders)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */
@@ -130,7 +130,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link Html#render() @Html.render()} annotation defined on the class.
+	 * Returns the {@link Html#render() @Html(render)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */

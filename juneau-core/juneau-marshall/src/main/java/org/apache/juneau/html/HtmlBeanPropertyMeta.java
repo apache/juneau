@@ -147,7 +147,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Returns whether this bean property should not be serialized as an HTML table.
 	 *
 	 * @return
-	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTables() @Html.noTables()} is
+	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTables() @Html(noTables)} is
 	 * 	<jk>true</jk>.
 	 */
 	protected boolean isNoTables() {
@@ -158,7 +158,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Returns whether this bean property should not include table headers when serialized as an HTML table.
 	 *
 	 * @return
-	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTableHeaders() @Html.noTableHeaders()} is
+	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTableHeaders() @Html(noTableHeaders)} is
 	 * 	<jk>true</jk>.
 	 */
 	public boolean isNoTableHeaders() {
@@ -169,7 +169,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Returns the render class for rendering the style and contents of this property value in HTML.
 	 *
 	 * <p>
-	 * This value is specified via the {@link Html#render() @Html.render()} annotation.
+	 * This value is specified via the {@link Html#render() @Html(render)} annotation.
 	 *
 	 * @return The render class, never <jk>null</jk>.
 	 */
@@ -181,7 +181,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Adds a hyperlink to this value in HTML.
 	 *
 	 * <p>
-	 * This value is specified via the {@link Html#link() @Html.link()} annotation.
+	 * This value is specified via the {@link Html#link() @Html(link)} annotation.
 	 *
 	 * @return The link string, or <jk>null</jk> if not specified.
 	 */
@@ -193,7 +193,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 * Specifies the anchor text for this property.
 	 *
 	 * <p>
-	 * This value is specified via the {@link Html#anchorText() @Html.anchorText()} annotation.
+	 * This value is specified via the {@link Html#anchorText() @Html(anchorText)} annotation.
 	 *
 	 * @return The link string, or <jk>null</jk> if not specified.
 	 */

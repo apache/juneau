@@ -74,7 +74,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#type() @JsonSchema.type()} annotation defined on the class.
+	 * Returns the {@link JsonSchema#type() @JsonSchema(type)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -83,7 +83,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#format() @JsonSchema.format()} annotation defined on the class.
+	 * Returns the {@link JsonSchema#format() @JsonSchema(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -92,7 +92,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#description() @JsonSchema.description()} annotation defined on the class.
+	 * Returns the {@link JsonSchema#description() @JsonSchema(description)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -101,7 +101,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#example() @JsonSchema.example()} annotation defined on the class.
+	 * Returns the {@link JsonSchema#example() @JsonSchema(example)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */

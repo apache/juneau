@@ -47,7 +47,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <p>
- * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource.converters()} annotation.
+ * Converters can also be associated at the servlet level using the {@link RestResource#converters() @RestResource(converters)} annotation.
  * <br>Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  *
  * <h5 class='topic'>How to implement</h5>

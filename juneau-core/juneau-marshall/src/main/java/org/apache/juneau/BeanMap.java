@@ -184,7 +184,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * in a transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
 	 * {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
-	 * {@link Swap#value() @Swap.value()} annotation, the value being passed in must be
+	 * {@link Swap#value() @Swap(value)} annotation, the value being passed in must be
 	 * a String containing an ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -242,7 +242,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * As a general rule, adding to arrays is not recommended since the array must be recreate each time this method is
 	 * called.
 	 *
-	 * @param property Property name or child-element name (if {@link Xml#childName() @Xml.childName()} is specified).
+	 * @param property Property name or child-element name (if {@link Xml#childName() @Xml(childName)} is specified).
 	 * @param value The value to add to the collection or array.
 	 */
 	public void add(String property, Object value) {
@@ -264,7 +264,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * will return the transformed value.
 	 * For example, if the bean property type class is a {@link Date} and the bean property has the
 	 * {@link org.apache.juneau.transforms.DateSwap.ISO8601DT} swap associated with it through the
-	 * {@link Swap#value() @Swap.value()} annotation, this method will return a String containing an
+	 * {@link Swap#value() @Swap(value)} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>

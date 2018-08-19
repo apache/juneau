@@ -22,7 +22,7 @@ import java.io.*;
  * Used to wrap input and output streams within compression/decompression streams.
  *
  * <p>
- * Encoders are registered with <code>RestServlets</code> through the <ja>@RestResource.encoders()</ja> annotation.
+ * Encoders are registered with <code>RestServlets</code> through the <ja>@RestResource(encoders)</ja> annotation.
  */
 public abstract class Encoder {
 

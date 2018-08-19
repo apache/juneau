@@ -203,7 +203,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * Returns a programmatic interface for setting properties for the HTML doc view.
 	 *
 	 * <p>
-	 * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod.htmldoc()} annotation.
+	 * This is the programmatic equivalent to the {@link RestMethod#htmldoc() @RestMethod(htmldoc)} annotation.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>

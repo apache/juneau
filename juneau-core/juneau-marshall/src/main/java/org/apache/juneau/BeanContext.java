@@ -262,7 +262,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
 	 * through reflection.
-	 * <br>The names are defined through the {@link Bean#typeName() @Bean.typeName()} annotation defined on the bean class.
+	 * <br>The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined on the bean class.
 	 * <br>For example, if a class <code>Foo</code> has a type-name of <js>"myfoo"</js>, then it would end up serialized
 	 * as <js>"{_type:'myfoo',...}"</js>.
 	 *
@@ -272,7 +272,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Values can consist of any of the following types:
 	 * <ul>
-	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean.typeName()}.
+	 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
 	 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
 	 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 	 * 	<li>Any array or collection of the objects above.
@@ -1502,7 +1502,7 @@ public class BeanContext extends Context {
 	 * <p>
 	 * Multiple POJO swaps can be associated with a single class.
 	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
-	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap.mediaTypes()} are used to come up with the best match.
+	 * {@link PojoSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
 	 * <p>
 	 * Values can consist of any of the following types:

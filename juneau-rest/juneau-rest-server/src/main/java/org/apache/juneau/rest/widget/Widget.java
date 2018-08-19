@@ -61,7 +61,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * The following shows an example of a widget that renders an image located in the <code>htdocs</code> static files
- * directory in your classpath (see {@link RestResource#staticFiles() @RestResource.staticFiles()}):
+ * directory in your classpath (see {@link RestResource#staticFiles() @RestResource(staticFiles)}):
  * <p class='bcode w800'>
  * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
  *

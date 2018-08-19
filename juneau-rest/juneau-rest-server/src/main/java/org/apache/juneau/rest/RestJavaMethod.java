@@ -245,7 +245,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 								int i = s2.indexOf(':');
 								if (i == -1)
 									throw new RestServletException(
-										"Invalid format for @RestMethod.bpi() on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
+										"Invalid format for @RestMethod(bpi) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
 								bpiMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 							}
 						}
@@ -258,7 +258,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 								int i = s2.indexOf(':');
 								if (i == -1)
 									throw new RestServletException(
-										"Invalid format for @RestMethod.bpx() on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
+										"Invalid format for @RestMethod(bpx) on method ''{0}''.  Must be in the format \"ClassName: comma-delimited-tokens\".  \nValue: {1}", sig, s);
 								bpxMap.put(s2.substring(0, i).trim(), s2.substring(i+1).trim());
 							}
 						}

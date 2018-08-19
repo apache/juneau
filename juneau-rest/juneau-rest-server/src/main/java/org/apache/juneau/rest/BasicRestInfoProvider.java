@@ -169,7 +169,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
-	 * 	<li>{@link RestMethod#summary() @RestMethod.summary()} annotation.
+	 * 	<li>{@link RestMethod#summary() @RestMethod(summary)} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
@@ -180,13 +180,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<ja>@RestMethod</ja>(summary=<js>"$L{myLocalizedSummary}"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
 	 * 		</p>
-	 * 	<li>Localized string from resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li>Localized string from resource bundle identified by {@link RestResource#messages() @RestResource(messages)}
 	 * 		on the resource class, then any parent classes.
 	 * 		<ol>
 	 * 			<li><ck>[ClassName].[javaMethodName].summary</ck>
 	 * 			<li><ck>[javaMethodName].summary</ck>
 	 * 		</ol>
-	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#summary() @RestMethod.summary()} annotation.
+	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#summary() @RestMethod(summary)} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
@@ -225,7 +225,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
-	 * 	<li>{@link RestMethod#description() @RestMethod.description()} annotation.
+	 * 	<li>{@link RestMethod#description() @RestMethod(description)} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
@@ -236,13 +236,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<ja>@RestMethod</ja>(description=<js>"$L{myLocalizedDescription}"</js>)
 	 * 	<jk>public</jk> Object myMethod() {...}
 	 * 		</p>
-	 * 	<li>Localized string from resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li>Localized string from resource bundle identified by {@link RestResource#messages() @RestResource(messages)}
 	 * 		on the resource class, then any parent classes.
 	 * 		<ol>
 	 * 			<li><ck>[ClassName].[javaMethodName].description</ck>
 	 * 			<li><ck>[javaMethodName].description</ck>
 	 * 		</ol>
-	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#description() @RestMethod.description()} annotation.
+	 * 		<br>Value can contain any SVL variables defined on the {@link RestMethod#description() @RestMethod(description)} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
@@ -281,7 +281,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
-	 * 	<li>{@link RestResource#siteName() @RestResource.siteName()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link RestResource#siteName() @RestResource(siteName)} annotation on this class, and then any parent classes.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
@@ -292,13 +292,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<ja>@RestResource</ja>(siteName=<js>"$L{myLocalizedSiteName}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * 		</p>
-	 * 	<li>Localized strings from resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li>Localized strings from resource bundle identified by {@link RestResource#messages() @RestResource(messages)}
 	 * 		on the resource class, then any parent classes.
 	 * 		<ol>
 	 * 			<li><ck>[ClassName].siteName</ck>
 	 * 			<li><ck>siteName</ck>
 	 * 		</ol>
-	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#siteName() @RestResource.siteName()} annotation.
+	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#siteName() @RestResource(siteName)} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
@@ -333,7 +333,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
-	 * 	<li>{@link RestResource#title() @RestResource.siteName()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link RestResource#title() @RestResource(siteName)} annotation on this class, and then any parent classes.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
@@ -344,13 +344,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<ja>@RestResource</ja>(title=<js>"$L{myLocalizedTitle}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * 		</p>
-	 * 	<li>Localized strings from resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li>Localized strings from resource bundle identified by {@link RestResource#messages() @RestResource(messages)}
 	 * 		on the resource class, then any parent classes.
 	 * 		<ol>
 	 * 			<li><ck>[ClassName].title</ck>
 	 * 			<li><ck>title</ck>
 	 * 		</ol>
-	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#title() @RestResource.title()} annotation.
+	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#title() @RestResource(title)} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>
@@ -389,7 +389,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * <p>
 	 * The default implementation returns the value from the following locations (whichever matches first):
 	 * <ol class='spaced-list'>
-	 * 	<li>{@link RestResource#description() @RestResource.description()} annotation on this class, and then any parent classes.
+	 * 	<li>{@link RestResource#description() @RestResource(description)} annotation on this class, and then any parent classes.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<jc>// Direct value</jc>
@@ -400,13 +400,13 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 * 	<ja>@RestResource</ja>(description=<js>"$L{myLocalizedDescription}"</js>)
 	 * 	<jk>public class</jk> MyResource {...}
 	 * 		</p>
-	 * 	<li>Localized strings from resource bundle identified by {@link RestResource#messages() @RestResource.messages()}
+	 * 	<li>Localized strings from resource bundle identified by {@link RestResource#messages() @RestResource(messages)}
 	 * 		on the resource class, then any parent classes.
 	 * 		<ol>
 	 * 			<li><ck>[ClassName].description</ck>
 	 * 			<li><ck>description</ck>
 	 * 		</ol>
-	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#description() @RestResource.description()} annotation.
+	 * 		<br>Value can contain any SVL variables defined on the {@link RestResource#description() @RestResource(description)} annotation.
 	 * 		<h5 class='figure'>Examples:</h5>
 	 * 		<p class='bcode w800'>
 	 * 	<cc>// Direct value</cc>

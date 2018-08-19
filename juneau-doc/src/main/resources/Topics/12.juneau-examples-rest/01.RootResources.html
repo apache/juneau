@@ -134,7 +134,7 @@ RootResources
 	<br>These are resources whose paths are direct decendents to the parent resource.			
 </p>
 <p>
-	Child resources must be annotated with the {@link oajr.annotation.RestResource#path() @RestResource.path()} annotation to 
+	Child resources must be annotated with the {@link oajr.annotation.RestResource#path() @RestResource(path)} annotation to 
 	identify the subpath of the child.
 	<br>Children CAN extend from {@link oajr.BasicRestServlet}, but it is not a requirement.
 </p>
@@ -149,11 +149,11 @@ RootResources
 <p>
 	Let's step back and describe what's going on here:
 	<br>During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the 
-	<l>@RestResource.children()</l> annotation.  
+	<l>@RestResource(children)</l> annotation.  
 	<br>If it finds it, it instantiates instances of each class and recursively performs servlet initialization 
 	on them.  
 	<br>It then associates the child resource with the parent by the name specified by the 
-	<l>@RestResource.path()</l> annotation on the child class.  
+	<l>@RestResource(path)</l> annotation on the child class.  
 	<br>When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet 
 	gets the request and sees that the URL remainder matches one of its child resources.  
 	<br>It then forwards the request to the child resource for processing.  

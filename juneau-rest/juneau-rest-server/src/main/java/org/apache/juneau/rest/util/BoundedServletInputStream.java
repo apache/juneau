@@ -133,12 +133,12 @@ public final class BoundedServletInputStream extends ServletInputStream {
 	private void decrement() throws IOException {
 		remain--;
 		if (remain < 0)
-			throw new IOException("Input limit exceeded.  See @RestResource.maxInput().");
+			throw new IOException("Input limit exceeded.  See @RestResource(maxInput).");
 	}
 
 	private void decrement(long count) throws IOException {
 		remain -= count;
 		if (remain < 0)
-			throw new IOException("Input limit exceeded.  See @RestResource.maxInput().");
+			throw new IOException("Input limit exceeded.  See @RestResource(maxInput).");
 	}
 }
