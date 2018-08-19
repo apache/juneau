@@ -297,6 +297,7 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedExceptions'>Predefined Exceptions</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedHelperBeans'>Predefined Helper Beans</a></p>
 		</ol>
+		<li><p class='updated'><a class='doclink' href='#juneau-rest-server.rRPC'>rRPC</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations'>HTTP-Part Annotations</a></p>
@@ -347,13 +348,6 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.BuiltInParameters'>Built-in Parameters</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.CustomSerializersAndParsers'>Custom Serializers and Parsers</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.UsingWithOsgi'>Using with OSGi</a></p>
-		<li><p class='updated'><a class='doclink' href='#juneau-rest-server.RemoteInterfaces'>Remote Interfaces</a></p>
-		<ol>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RemoteInterfaces.ClientSide'>Client Side</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RemoteInterfaces.ServerSide'>Server Side</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RemoteInterfaces.RemoteInterface'>@RemoteInterface Annotation</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.RemoteInterfaces.RemoteMethod'>@RemoteMethod Annotation</a></p>
-		</ol>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.UnitTesting'>Serverless Unit Testing</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Injection'>Using with Spring and Injection frameworks</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HTTP2'>Using HTTP/2 features</a></p>
@@ -14782,8 +14776,329 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.OpenApiSchemaPartParsing' id='juneau-rest-server.OpenApiSchemaPartParsing'>7.7 - OpenAPI Schema Part Parsing</a></h3>
-<div class='topic'><!-- START: 7.7 - juneau-rest-server.OpenApiSchemaPartParsing -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.rRPC' id='juneau-rest-server.rRPC'>7.7 - rRPC</a></h3>
+<div class='topic'><!-- START: 7.7 - juneau-rest-server.rRPC -->
+<p>
+	The rRPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
+</p>
+
+<h5 class='topic'>Remote Interfaces</h5>
+<p>
+	The following example shows a remote interface:
+</p>
+<p class='bpcode w800'>
+	<ja>@RemoteInterface</ja> <jc>// Annotation is optional</jc>
+	<jk>public interface</jk> IAddressBook {
+
+		<jk>void</jk> init() <jk>throws</jk> Exception;
+	
+		List&lt;Person&gt; getPeople();
+	
+		List&lt;Address&gt; getAddresses();
+	
+		<jk>int</jk> createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+	
+		Person findPerson(<jk>int</jk> id);
+	
+		Address findAddress(<jk>int</jk> id);
+	
+		Person findPersonWithAddress(<jk>int</jk> id);
+	
+		Person removePerson(<jk>int</jk> id);
+	}
+</p>			
+<p>
+	The requirements for an remote interface methods are:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Must be public.
+	<li>
+		Can have any number of {@doc PojoCategories serializable and parsable} parameters.
+	<li>
+		Can return a {@doc PojoCategories serializable and parsable} value.
+	<li>
+		Can throw any <code>Throwables</code>.
+</ul>
+<p>
+	Throwables with public no-arg or single-arg-string constructors are automatically recreated on the client side
+	when thrown on the server side.
+</p>
+
+<h5 class='topic'>Client side</h5>
+<p>
+	Remote Interface proxies are instantiated using one of the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class) getRemoteInterface(Class)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object) getRemoteInterface(Class,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object,Serializer,Parser) getRemoteInterface(Class,Object,Serializer,Parser)}
+	</ul>
+</ul>
+<p>
+	Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
+	<br>For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
+	serializers and parsers, and the ability to provide your own customized Apache <code>HttpClient</code> for 
+	handling various scenarios involving authentication and Internet proxies.
+</p>
+<p>
+	Here's an example of the above interface being used:
+</p>
+<p class='bpcode w800'>
+	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remote interface servlet.</jc>
+	RestClient client = RestClient.<jsm>create</jsm>()
+		.json()
+		.rootUrl(<js>"http://localhost:10000/remote"</js>)
+		.build();
+	
+	<jc>// Create a proxy interface.</jc>
+	IAddressBook ab = client.getRemoteInterface(IAddressBook.<jk>class</jk>);
+	
+	<jc>// Invoke a method on the server side and get the returned result.</jc>
+	Person p = ab.createPerson(
+		<jk>new</jk> Person(
+			<js>"John Smith"</js>, 
+			<js>"Aug 1, 1999"</js>,
+			<jk>new</jk> Address(<js>"My street"</js>, <js>"My city"</js>, <js>"My state"</js>, 12345, <jk>true</jk>)
+		)
+	);
+</p>
+<p>
+	Under the covers, this method call gets converted to a REST POST.
+</p>
+<p class='bpcode w800'>
+	HTTP POST http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.Person)
+	Accept: application/json
+	Content-Type: application/json
+	
+	[
+		{
+			"name":"John Smith",
+			"birthDate":"Aug 1, 1999",
+			"addresses":[
+				{
+					"street":"My street",
+					"city":"My city",
+					"state":"My state",
+					"zip":12345,
+					"isCurrent":true
+				}
+			]
+		}
+	]
+</p>
+<p>
+	Note that the body of the request is an array.  
+	<br>This array contains the serialized arguments of the method.
+	<br>The object returned by the method is then serialized as the body of the response.
+</p>
+
+<h5 class='topic'>Server side</h5>
+<p>
+	There are two ways to expose remote interfaces on the server side:
+</p>
+<ol class='spaced-list'>
+	<li>
+		Extending from {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet}.
+	<li>
+		Using a <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> annotation on a Java method.
+</ol>
+<p>
+	In either case, the proxy communications layer is pure REST.
+	<br>Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
+	be made through pure REST calls.  
+	<br>This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
+	a browser with no coding involved.
+</p>
+
+<h5 class='topic'>RemoteInterfaceServlet</h5>
+<p>
+	The {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} class is a simple specialized servlet with an abstract 
+	<code>getServiceMap()</code> method to define the server-side POJOs:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/remote"</js>
+	)
+	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
+	
+		<jc>// Our server-side POJO.</jc>
+		AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
+	
+		<ja>@Override</ja> <jc>/* RemoteInterfaceServlet */</jc>
+		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
+			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
+	
+			<jc>// In this simplified example, we expose the same POJO service under two different interfaces.
+			// One is IAddressBook which only exposes methods defined on that interface, and
+			// the other is AddressBook itself which exposes all methods defined on the class itself (dangerous!).</jc>
+			m.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+			<jk>return</jk> m;
+		}
+	}
+</p>
+
+<h5 class='topic'>@RestMethod(name=PROXY)</h5>
+<p>
+	The <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> approach is easier if you only have a single 
+	interface you want to expose.  
+	<br>You simply define a Java method whose return type is an interface, and return the implementation of that 
+	interface:
+</p>
+<p class='bpcode w800'>
+	<jc>// Our exposed interface.</jc>
+	<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/addressbookproxy/*"</js>)
+	<jk>public</jk> IAddressBook getProxy() {
+		<jk>return</jk> addressBook;
+	}
+</p>
+
+<h5 class='topic'>RemoteInterfaceServlet in a browser</h5>
+<p>
+	If you point your browser to the servlet above, you get a list of available interfaces:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/remote
+</p>
+<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.1.png'>
+<p>
+	Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
+	<br>Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
+	interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
+</p>
+<h5 class='figure'>IAddressBook</h5>
+<p class='bpcode w800'>
+	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook
+</p>
+<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.2.png'>
+<p>
+	Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
+	framework methods listed.
+</p>
+<h5 class='figure'>AddressBook</h5>
+<p class='bpcode w800'>
+	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.AddressBook
+</p>
+<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.3.png'>
+<p>
+	Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
+	how this works.
+	<br>We'll use the same method call as in the introduction.
+	<br>First, we need to create the serialized form of the arguments:
+</p>
+<p class='bpcode w800'>
+	Object[] args = <jk>new</jk> Object[] {
+		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
+			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
+			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
+	};
+	String asJson = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(args);
+	System.<jsf>err</jsf>.println(asJson);
+</p>
+<p>
+	That produces the following JSON output:
+</p>
+<p class='bpcode w800'>
+	[
+		{
+			name: <js>'Test Person'</js>, 
+			birthDate: <js>'Aug 1, 1999'</js>, 
+			addresses: [
+				{
+					street: <js>'Test street'</js>, 
+					city: <js>'Test city'</js>, 
+					state: <js>'Test state'</js>, 
+					zip: 12345, 
+					isCurrent: <jk>true</jk>
+				}
+			]
+		}
+	]	
+</p>
+<p>
+	Note that in this example we're using JSON.  
+	<br>However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
+	<br>In practice however, JSON will preferred since it is often the most efficient.
+</p>
+<p>
+	Next, we can use a tool such as Poster to make the REST call.
+	<br>Methods are invoked by POSTing the serialized object array to the URI of the interface method.
+	In this case, we want to POST our JSON to the following URL:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
+</p>
+<p>
+	<br>Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
+	<br>We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
+	<code>text/json</code> as well.
+</p>
+<img class='bordered w400' src='doc-files/juneau-rest-server.rRPC.4.png'>
+<p>
+	When we execute the POST, we should see the following successful response whose body contains the returned 
+	<code>Person</code> bean serialized to JSON:
+</p>
+<img class='bordered w400' src='doc-files/juneau-rest-server.rRPC.5.png'>
+<p>
+	From there, we could use the following code snippet to reconstruct the response object from JSON:
+</p>
+<p class='bpcode w800'>
+	String response = <js>"<i>output from above</i>"</js>;
+	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(response, Person.<jk>class</jk>);
+</p>
+<p>
+	If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a 
+	browser...
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/remote"</js>,
+		
+		<jc>// Allow us to use method=POST from a browser.</jc>
+		allowedMethodParams=<js>"*"</js>
+	)
+	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
+</p>
+<p>
+	For example, to invoke the <code>getPeople()</code> method on our bean:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
+</p>			
+<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.6.png'>
+<p>
+	Here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the 
+	returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
+	browser):
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
+</p>			
+<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.7.png'>
+<p>
+	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
+	notation.
+	<br>See {@link org.apache.juneau.uon.UonSerializer} for more information about this encoding.
+	<br>Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
+	but passing in unencoded JSON in a URL may not work in all browsers.  
+	<br>Therefore, UON is preferred.
+</p>
+<p>
+	The hyperlinks on the method names above lead you to a simple form-entry page where you can test
+	passing parameters in UON notation as URL-encoded form posts.
+</p>
+<h5 class='figure'>Sample form entry page</h5>
+<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.8.png'>
+<h5 class='figure'>Sample form entry page results</h5>
+<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.9.png'>
+</div><!-- END: 7.7 - juneau-rest-server.rRPC -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.OpenApiSchemaPartParsing' id='juneau-rest-server.OpenApiSchemaPartParsing'>7.8 - OpenAPI Schema Part Parsing</a></h3>
+<div class='topic'><!-- START: 7.8 - juneau-rest-server.OpenApiSchemaPartParsing -->
 <p>
 	Parameters annotated with any of the following are parsed using the registered {@link org.apache.juneau.httppart.OpenApiPartParser} and
 	therefore support OpenAPI syntax and validation:
@@ -14892,12 +15207,12 @@
 	As you can see, the complexity of possible input types expands significantly.
 	<br>For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
 </p>
-</div><!-- END: 7.7 - juneau-rest-server.OpenApiSchemaPartParsing -->
+</div><!-- END: 7.8 - juneau-rest-server.OpenApiSchemaPartParsing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.OpenApiSchemaPartSerializing' id='juneau-rest-server.OpenApiSchemaPartSerializing'>7.8 - OpenAPI Schema Part Serializing</a></h3>
-<div class='topic'><!-- START: 7.8 - juneau-rest-server.OpenApiSchemaPartSerializing -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.OpenApiSchemaPartSerializing' id='juneau-rest-server.OpenApiSchemaPartSerializing'>7.9 - OpenAPI Schema Part Serializing</a></h3>
+<div class='topic'><!-- START: 7.9 - juneau-rest-server.OpenApiSchemaPartSerializing -->
 <p>
 	Parameters annotated with any of the following are serialized using the registered {@link org.apache.juneau.httppart.OpenApiPartSerializer} and
 	therefore support OpenAPI syntax and validation:
@@ -14963,12 +15278,12 @@
 <p>
 	For more information about the valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Serializers OpenAPI Serializers}
 </p>
-</div><!-- END: 7.8 - juneau-rest-server.OpenApiSchemaPartSerializing -->
+</div><!-- END: 7.9 - juneau-rest-server.OpenApiSchemaPartSerializing -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations' id='juneau-rest-server.HttpPartAnnotations'>7.9 - HTTP-Part Annotations</a></h3>
-<div class='topic'><!-- START: 7.9 - juneau-rest-server.HttpPartAnnotations -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations' id='juneau-rest-server.HttpPartAnnotations'>7.10 - HTTP-Part Annotations</a></h3>
+<div class='topic'><!-- START: 7.10 - juneau-rest-server.HttpPartAnnotations -->
 <p>
 	The annotations used for defining the schema for request HTTP parts are:
 </p>
@@ -15011,8 +15326,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Body' id='juneau-rest-server.HttpPartAnnotations.Body'>7.9.1 - @Body</a></h4>
-<div class='topic'><!-- START: 7.9.1 - juneau-rest-server.HttpPartAnnotations.Body -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Body' id='juneau-rest-server.HttpPartAnnotations.Body'>7.10.1 - @Body</a></h4>
+<div class='topic'><!-- START: 7.10.1 - juneau-rest-server.HttpPartAnnotations.Body -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 </p>
@@ -15191,12 +15506,12 @@
 	<li class='jc'>{@link org.apache.juneau.rest.RequestBody}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
-</div><!-- END: 7.9.1 - juneau-rest-server.HttpPartAnnotations.Body -->
+</div><!-- END: 7.10.1 - juneau-rest-server.HttpPartAnnotations.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.FormData' id='juneau-rest-server.HttpPartAnnotations.FormData'>7.9.2 - @FormData</a></h4>
-<div class='topic'><!-- START: 7.9.2 - juneau-rest-server.HttpPartAnnotations.FormData -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.FormData' id='juneau-rest-server.HttpPartAnnotations.FormData'>7.10.2 - @FormData</a></h4>
+<div class='topic'><!-- START: 7.10.2 - juneau-rest-server.HttpPartAnnotations.FormData -->
 <p>
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
 </p>
@@ -15365,12 +15680,12 @@
 	<li class='jc'>{@link org.apache.juneau.rest.RequestFormData}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
-</div><!-- END: 7.9.2 - juneau-rest-server.HttpPartAnnotations.FormData -->
+</div><!-- END: 7.10.2 - juneau-rest-server.HttpPartAnnotations.FormData -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasFormData' id='juneau-rest-server.HttpPartAnnotations.HasFormData'>7.9.3 - @HasFormData</a></h4>
-<div class='topic'><!-- START: 7.9.3 - juneau-rest-server.HttpPartAnnotations.HasFormData -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasFormData' id='juneau-rest-server.HttpPartAnnotations.HasFormData'>7.10.3 - @HasFormData</a></h4>
+<div class='topic'><!-- START: 7.10.3 - juneau-rest-server.HttpPartAnnotations.HasFormData -->
 <p>
 	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
 </p>
@@ -15437,12 +15752,12 @@
 	The {@link org.apache.juneau.http.annotation.HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
 	without triggering the servlet to drain the body content.
 </p>
-</div><!-- END: 7.9.3 - juneau-rest-server.HttpPartAnnotations.HasFormData -->
+</div><!-- END: 7.10.3 - juneau-rest-server.HttpPartAnnotations.HasFormData -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Query' id='juneau-rest-server.HttpPartAnnotations.Query'>7.9.4 - @Query</a></h4>
-<div class='topic'><!-- START: 7.9.4 - juneau-rest-server.HttpPartAnnotations.Query -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Query' id='juneau-rest-server.HttpPartAnnotations.Query'>7.10.4 - @Query</a></h4>
+<div class='topic'><!-- START: 7.10.4 - juneau-rest-server.HttpPartAnnotations.Query -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
 	<br>It's identical to {@link org.apache.juneau.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
@@ -15611,12 +15926,12 @@
 	<li class='jc'>{@link org.apache.juneau.rest.RequestQuery}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
-</div><!-- END: 7.9.4 - juneau-rest-server.HttpPartAnnotations.Query -->
+</div><!-- END: 7.10.4 - juneau-rest-server.HttpPartAnnotations.Query -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasQuery' id='juneau-rest-server.HttpPartAnnotations.HasQuery'>7.9.5 - @HasQuery</a></h4>
-<div class='topic'><!-- START: 7.9.5 - juneau-rest-server.HttpPartAnnotations.HasQuery -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.HasQuery' id='juneau-rest-server.HttpPartAnnotations.HasQuery'>7.10.5 - @HasQuery</a></h4>
+<div class='topic'><!-- START: 7.10.5 - juneau-rest-server.HttpPartAnnotations.HasQuery -->
 <p>
 	Identical to {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
 	URL-encoded form posts.
@@ -15678,12 +15993,12 @@
 		<td><jk>null</jk></td>
 	</tr>
 </table>
-</div><!-- END: 7.9.5 - juneau-rest-server.HttpPartAnnotations.HasQuery -->
+</div><!-- END: 7.10.5 - juneau-rest-server.HttpPartAnnotations.HasQuery -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Header' id='juneau-rest-server.HttpPartAnnotations.Header'>7.9.6 - @Header</a></h4>
-<div class='topic'><!-- START: 7.9.6 - juneau-rest-server.HttpPartAnnotations.Header -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Header' id='juneau-rest-server.HttpPartAnnotations.Header'>7.10.6 - @Header</a></h4>
+<div class='topic'><!-- START: 7.10.6 - juneau-rest-server.HttpPartAnnotations.Header -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
 </p>
@@ -15837,12 +16152,12 @@
 	<li class='jc'>{@link org.apache.juneau.rest.RequestHeaders}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
-</div><!-- END: 7.9.6 - juneau-rest-server.HttpPartAnnotations.Header -->
+</div><!-- END: 7.10.6 - juneau-rest-server.HttpPartAnnotations.Header -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Path' id='juneau-rest-server.HttpPartAnnotations.Path'>7.9.7 - @Path</a></h4>
-<div class='topic'><!-- START: 7.9.7 - juneau-rest-server.HttpPartAnnotations.Path -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Path' id='juneau-rest-server.HttpPartAnnotations.Path'>7.10.7 - @Path</a></h4>
+<div class='topic'><!-- START: 7.10.7 - juneau-rest-server.HttpPartAnnotations.Path -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation is used to retrieve request path parameters.
 </p>
@@ -16003,12 +16318,12 @@
 	<li class='jc'>{@link org.apache.juneau.rest.RequestPath}
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartParsing}
 </ul>
-</div><!-- END: 7.9.7 - juneau-rest-server.HttpPartAnnotations.Path -->
+</div><!-- END: 7.10.7 - juneau-rest-server.HttpPartAnnotations.Path -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Request' id='juneau-rest-server.HttpPartAnnotations.Request'>7.9.8 - @Request</a></h4>
-<div class='topic'><!-- START: 7.9.8 - juneau-rest-server.HttpPartAnnotations.Request -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Request' id='juneau-rest-server.HttpPartAnnotations.Request'>7.10.8 - @Request</a></h4>
+<div class='topic'><!-- START: 7.10.8 - juneau-rest-server.HttpPartAnnotations.Request -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a parameter interface type of a <ja>@RestMethod</ja>-annotated method 
 	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
@@ -16092,12 +16407,12 @@
 	<ja>@Request</ja>
 	<jk>public interface</jk> UpdatePet {...}
 </p>
-</div><!-- END: 7.9.8 - juneau-rest-server.HttpPartAnnotations.Request -->
+</div><!-- END: 7.10.8 - juneau-rest-server.HttpPartAnnotations.Request -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Response' id='juneau-rest-server.HttpPartAnnotations.Response'>7.9.9 - @Response</a></h4>
-<div class='topic'><!-- START: 7.9.9 - juneau-rest-server.HttpPartAnnotations.Response -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.Response' id='juneau-rest-server.HttpPartAnnotations.Response'>7.10.9 - @Response</a></h4>
+<div class='topic'><!-- START: 7.10.9 - juneau-rest-server.HttpPartAnnotations.Response -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
 </p>
@@ -16500,12 +16815,12 @@
 <ul>
 	<li class='link'>{@doc juneau-rest-server.OpenApiSchemaPartSerializing}
 </ul>
-</div><!-- END: 7.9.9 - juneau-rest-server.HttpPartAnnotations.Response -->
+</div><!-- END: 7.10.9 - juneau-rest-server.HttpPartAnnotations.Response -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader' id='juneau-rest-server.HttpPartAnnotations.ResponseHeader'>7.9.10 - @ResponseHeader</a></h4>
-<div class='topic'><!-- START: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseHeader' id='juneau-rest-server.HttpPartAnnotations.ResponseHeader'>7.10.10 - @ResponseHeader</a></h4>
+<div class='topic'><!-- START: 7.10.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
 <p>
 	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response headers.
 </p>
@@ -16616,12 +16931,12 @@
 		}
 	}
 </p>
-</div><!-- END: 7.9.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
+</div><!-- END: 7.10.10 - juneau-rest-server.HttpPartAnnotations.ResponseHeader -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.9.11 - @ResponseStatus</a></h4>
-<div class='topic'><!-- START: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus' id='juneau-rest-server.HttpPartAnnotations.ResponseStatus'>7.10.11 - @ResponseStatus</a></h4>
+<div class='topic'><!-- START: 7.10.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
 <p>
 	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response status codes.
 </p>
@@ -16646,13 +16961,13 @@
 			status.set(401);
 	}
 </p>
-</div><!-- END: 7.9.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
-</div><!-- END: 7.9 - juneau-rest-server.HttpPartAnnotations -->
+</div><!-- END: 7.10.11 - juneau-rest-server.HttpPartAnnotations.ResponseStatus -->
+</div><!-- END: 7.10 - juneau-rest-server.HttpPartAnnotations -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HandlingFormPosts' id='juneau-rest-server.HandlingFormPosts'>7.10 - Handling Form Posts</a></h3>
-<div class='topic'><!-- START: 7.10 - juneau-rest-server.HandlingFormPosts -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HandlingFormPosts' id='juneau-rest-server.HandlingFormPosts'>7.11 - Handling Form Posts</a></h3>
+<div class='topic'><!-- START: 7.11 - juneau-rest-server.HandlingFormPosts -->
 <p>
 	The best way to handle a form post is usually by using an input bean.
 	<br>The samples include a <l>UrlEncodedFormResource</l> class that takes in URL-Encoded form post of the 
@@ -16704,12 +17019,12 @@
 		has parsed the body of the request.
 		<br>This applies to WHENEVER you use <l>@Body</l> or {@link org.apache.juneau.rest.RestRequest#getBody()}
 </ul>
-</div><!-- END: 7.10 - juneau-rest-server.HandlingFormPosts -->
+</div><!-- END: 7.11 - juneau-rest-server.HandlingFormPosts -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HandlingMultiPartFormPosts' id='juneau-rest-server.HandlingMultiPartFormPosts'>7.11 - Handling Multi-Part Form Posts</a></h3>
-<div class='topic'><!-- START: 7.11 - juneau-rest-server.HandlingMultiPartFormPosts -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HandlingMultiPartFormPosts' id='juneau-rest-server.HandlingMultiPartFormPosts'>7.12 - Handling Multi-Part Form Posts</a></h3>
+<div class='topic'><!-- START: 7.12 - juneau-rest-server.HandlingMultiPartFormPosts -->
 <p>
 	The Juneau framework does not natively support multipart form posts.  
 	<br>However, it can be done in conjunction with the Apache Commons File Upload library.
@@ -16753,12 +17068,12 @@
 			}
 		}
 </p>
-</div><!-- END: 7.11 - juneau-rest-server.HandlingMultiPartFormPosts -->
+</div><!-- END: 7.12 - juneau-rest-server.HandlingMultiPartFormPosts -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Serializers' id='juneau-rest-server.Serializers'>7.12 - Serializers</a></h3>
-<div class='topic'><!-- START: 7.12 - juneau-rest-server.Serializers -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Serializers' id='juneau-rest-server.Serializers'>7.13 - Serializers</a></h3>
+<div class='topic'><!-- START: 7.13 - juneau-rest-server.Serializers -->
 <p>
 	REST resources use the {@link org.apache.juneau.serializer.Serializer} API for defining serializers for 
 	serializing response POJOs.
@@ -16821,12 +17136,12 @@
 <ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_serializers}
 </ul>
-</div><!-- END: 7.12 - juneau-rest-server.Serializers -->
+</div><!-- END: 7.13 - juneau-rest-server.Serializers -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Parsers' id='juneau-rest-server.Parsers'>7.13 - Parsers</a></h3>
-<div class='topic'><!-- START: 7.13 - juneau-rest-server.Parsers -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Parsers' id='juneau-rest-server.Parsers'>7.14 - Parsers</a></h3>
+<div class='topic'><!-- START: 7.14 - juneau-rest-server.Parsers -->
 <p>
 	REST resources use the {@link org.apache.juneau.parser.Parser} API for defining parsers for parsing request
 	body content and converting them into POJOs.
@@ -16887,12 +17202,12 @@
 <ul class='doctree'>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_parsers}
 </ul>
-</div><!-- END: 7.13 - juneau-rest-server.Parsers -->
+</div><!-- END: 7.14 - juneau-rest-server.Parsers -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Properties' id='juneau-rest-server.Properties'>7.14 - Properties</a></h3>
-<div class='topic'><!-- START: 7.14 - juneau-rest-server.Properties -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Properties' id='juneau-rest-server.Properties'>7.15 - Properties</a></h3>
+<div class='topic'><!-- START: 7.15 - juneau-rest-server.Properties -->
 <p>
 	As shown in previous sections, Juneau serializers and parsers are highly-configurable through properties.
 	(See {@doc ConfigurableProperties})
@@ -17004,12 +17319,12 @@
 	<li class='jc'>{@link org.apache.juneau.rest.RestMethodProperties} 
 	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
 </ul>
-</div><!-- END: 7.14 - juneau-rest-server.Properties -->
+</div><!-- END: 7.15 - juneau-rest-server.Properties -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Transforms' id='juneau-rest-server.Transforms'>7.15 - Transforms</a></h3>
-<div class='topic'><!-- START: 7.15 - juneau-rest-server.Transforms -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Transforms' id='juneau-rest-server.Transforms'>7.16 - Transforms</a></h3>
+<div class='topic'><!-- START: 7.16 - juneau-rest-server.Transforms -->
 <p>
 	The Juneau serializers and parsers can be configured on how to handle POJOs through the use of Transforms.
 	(See {@doc juneau-marshall.Transforms Transforms})
@@ -17061,12 +17376,12 @@
 		}
 	}
 </p>
-</div><!-- END: 7.15 - juneau-rest-server.Transforms -->
+</div><!-- END: 7.16 - juneau-rest-server.Transforms -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.URIs' id='juneau-rest-server.URIs'>7.16 - URIs</a></h3>
-<div class='topic'><!-- START: 7.16 - juneau-rest-server.URIs -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.URIs' id='juneau-rest-server.URIs'>7.17 - URIs</a></h3>
+<div class='topic'><!-- START: 7.17 - juneau-rest-server.URIs -->
 <p>
 	As mention earlier {@doc juneau-marshall.URIs here}, Juneau serializers have sophisticated support for transforming relative URIs to absolute form.
 </p>
@@ -17147,12 +17462,12 @@
 	URIs are resolved by both regular and part serializers.
 </p>
 </p>
-</div><!-- END: 7.16 - juneau-rest-server.URIs -->
+</div><!-- END: 7.17 - juneau-rest-server.URIs -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Guards' id='juneau-rest-server.Guards'>7.17 - Guards</a></h3>
-<div class='topic'><!-- START: 7.17 - juneau-rest-server.Guards -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Guards' id='juneau-rest-server.Guards'>7.18 - Guards</a></h3>
+<div class='topic'><!-- START: 7.18 - juneau-rest-server.Guards -->
 <p>
 	Guards are classes that control access to REST classes and methods.
 </p>
@@ -17226,12 +17541,12 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_guards}
 </ul>
-</div><!-- END: 7.17 - juneau-rest-server.Guards -->
+</div><!-- END: 7.18 - juneau-rest-server.Guards -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Converters' id='juneau-rest-server.Converters'>7.18 - Converters</a></h3>
-<div class='topic'><!-- START: 7.18 - juneau-rest-server.Converters -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Converters' id='juneau-rest-server.Converters'>7.19 - Converters</a></h3>
+<div class='topic'><!-- START: 7.19 - juneau-rest-server.Converters -->
 <p>
 	Converters can be thought of as "post-processors" for POJOs before they get passed to the serializers.
 </p>
@@ -17331,12 +17646,12 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_converters} 
 </ul>
-</div><!-- END: 7.18 - juneau-rest-server.Converters -->
+</div><!-- END: 7.19 - juneau-rest-server.Converters -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Messages' id='juneau-rest-server.Messages'>7.19 - Messages</a></h3>
-<div class='topic'><!-- START: 7.19 - juneau-rest-server.Messages -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Messages' id='juneau-rest-server.Messages'>7.20 - Messages</a></h3>
+<div class='topic'><!-- START: 7.20 - juneau-rest-server.Messages -->
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestResource#messages @RestResource.messages()} annotation is used to associate a resource bundle with a servlet class.
 </p>
@@ -17381,12 +17696,12 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_messages}
 </ul>
-</div><!-- END: 7.19 - juneau-rest-server.Messages -->
+</div><!-- END: 7.20 - juneau-rest-server.Messages -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Encoders' id='juneau-rest-server.Encoders'>7.20 - Encoders</a></h3>
-<div class='topic'><!-- START: 7.20 - juneau-rest-server.Encoders -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Encoders' id='juneau-rest-server.Encoders'>7.21 - Encoders</a></h3>
+<div class='topic'><!-- START: 7.21 - juneau-rest-server.Encoders -->
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestResource#encoders @RestResource.encoders()} annotation can 
 	be used to associate character encoders with a servlet class.
@@ -17419,12 +17734,12 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_encoders}
 </ul>
-</div><!-- END: 7.20 - juneau-rest-server.Encoders -->
+</div><!-- END: 7.21 - juneau-rest-server.Encoders -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.SvlVariables' id='juneau-rest-server.SvlVariables'>7.21 - SVL Variables</a></h3>
-<div class='topic'><!-- START: 7.21 - juneau-rest-server.SvlVariables -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.SvlVariables' id='juneau-rest-server.SvlVariables'>7.22 - SVL Variables</a></h3>
+<div class='topic'><!-- START: 7.22 - juneau-rest-server.SvlVariables -->
 <p>	
 	In the previous examples, there were several cases where embedded variables were contained within
 	annotation values:
@@ -17693,12 +18008,12 @@
 		<td class='code'>$W{MenuItemWidget}</td>
 	</tr>
 </table>
-</div><!-- END: 7.21 - juneau-rest-server.SvlVariables -->
+</div><!-- END: 7.22 - juneau-rest-server.SvlVariables -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.ConfigurationFiles' id='juneau-rest-server.ConfigurationFiles'>7.22 - Configuration Files</a></h3>
-<div class='topic'><!-- START: 7.22 - juneau-rest-server.ConfigurationFiles -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.ConfigurationFiles' id='juneau-rest-server.ConfigurationFiles'>7.23 - Configuration Files</a></h3>
+<div class='topic'><!-- START: 7.23 - juneau-rest-server.ConfigurationFiles -->
 <p>
 	The Server API provides methods for associating configuration files with REST servlets so that 
 	configuration properties can be defined in external files.
@@ -17863,12 +18178,12 @@
 <ul class='doctree'>
 	{@doc juneau-config}
 </ul>
-</div><!-- END: 7.22 - juneau-rest-server.ConfigurationFiles -->
+</div><!-- END: 7.23 - juneau-rest-server.ConfigurationFiles -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.StaticFiles' id='juneau-rest-server.StaticFiles'>7.23 - Static files</a></h3>
-<div class='topic'><!-- START: 7.23 - juneau-rest-server.StaticFiles -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.StaticFiles' id='juneau-rest-server.StaticFiles'>7.24 - Static files</a></h3>
+<div class='topic'><!-- START: 7.24 - juneau-rest-server.StaticFiles -->
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestResource#staticFiles @RestResource.staticFiles()} 
 	annotation is used to define paths and locations of statically-served files such as images or HTML 
@@ -17915,12 +18230,12 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_staticFiles}
 </ul>
-</div><!-- END: 7.23 - juneau-rest-server.StaticFiles -->
+</div><!-- END: 7.24 - juneau-rest-server.StaticFiles -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.ClientVersioning' id='juneau-rest-server.ClientVersioning'>7.24 - Client Versioning</a></h3>
-<div class='topic'><!-- START: 7.24 - juneau-rest-server.ClientVersioning -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.ClientVersioning' id='juneau-rest-server.ClientVersioning'>7.25 - Client Versioning</a></h3>
+<div class='topic'><!-- START: 7.25 - juneau-rest-server.ClientVersioning -->
 <p>
 	Client version headers are used to support backwards compatibility for breaking REST interface changes.
 	<br>Using them, you're able to return different responses based on which client is making a request.
@@ -17962,12 +18277,12 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_clientVersionHeader}
 </ul>
-</div><!-- END: 7.24 - juneau-rest-server.ClientVersioning -->
+</div><!-- END: 7.25 - juneau-rest-server.ClientVersioning -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger' id='juneau-rest-server.Swagger'>7.25 - Swagger</a></h3>
-<div class='topic'><!-- START: 7.25 - juneau-rest-server.Swagger -->
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger' id='juneau-rest-server.Swagger'>7.26 - Swagger</a></h3>
+<div class='topic'><!-- START: 7.26 - juneau-rest-server.Swagger -->
 <p>
 	One of the most useful features of Juneau is the ability to generate Swagger-based OPTIONS pages for self-documenting designs 
 	(i.e. REST interfaces that document themselves).
@@ -18005,8 +18320,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.RestInfoProvider' id='juneau-rest-server.Swagger.RestInfoProvider'>7.25.1 - RestInfoProvider</a></h4>
-<div class='topic'><!-- START: 7.25.1 - juneau-rest-server.Swagger.RestInfoProvider -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.RestInfoProvider' id='juneau-rest-server.Swagger.RestInfoProvider'>7.26.1 - RestInfoProvider</a></h4>
+<div class='topic'><!-- START: 7.26.1 - juneau-rest-server.Swagger.RestInfoProvider -->
 <p>
 	The {@link org.apache.juneau.rest.RestInfoProvider} class is used to find the title
 	and description for your resource and also generate the Swagger documentation.
@@ -18050,12 +18365,12 @@
 	While you can implement this interface from scratch, you may want to instead consider extending
 	from the <l>BasicRestInfoProvider</l> class described next.
 </p>
-</div><!-- END: 7.25.1 - juneau-rest-server.Swagger.RestInfoProvider -->
+</div><!-- END: 7.26.1 - juneau-rest-server.Swagger.RestInfoProvider -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.BasicRestInfoProvider' id='juneau-rest-server.Swagger.BasicRestInfoProvider'>7.25.2 - BasicRestInfoProvider</a></h4>
-<div class='topic'><!-- START: 7.25.2 - juneau-rest-server.Swagger.BasicRestInfoProvider -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.BasicRestInfoProvider' id='juneau-rest-server.Swagger.BasicRestInfoProvider'>7.26.2 - BasicRestInfoProvider</a></h4>
+<div class='topic'><!-- START: 7.26.2 - juneau-rest-server.Swagger.BasicRestInfoProvider -->
 <p>
 	The {@link org.apache.juneau.rest.BasicRestInfoProvider} class is the default implementation of the
 	{@link org.apache.juneau.rest.RestInfoProvider} interface.
@@ -18130,13 +18445,13 @@
 	<jk>public class</jk> MyResource {...}
 		</p>
 </ul>
-</div><!-- END: 7.25.2 - juneau-rest-server.Swagger.BasicRestInfoProvider -->
-</div><!-- END: 7.25 - juneau-rest-server.Swagger -->
+</div><!-- END: 7.26.2 - juneau-rest-server.Swagger.BasicRestInfoProvider -->
+</div><!-- END: 7.26 - juneau-rest-server.Swagger -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation' id='juneau-rest-server.HtmlDocAnnotation'>7.26 - @HtmlDoc</a></h3>
-<div class='topic'><!-- START: 7.26 - juneau-rest-server.HtmlDocAnnotation -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation' id='juneau-rest-server.HtmlDocAnnotation'>7.27 - @HtmlDoc</a></h3>
+<div class='topic'><!-- START: 7.27 - juneau-rest-server.HtmlDocAnnotation -->
 <p>
 	The {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc} annotation is used to customize the HTML 
 	view of your serialized POJOs.
@@ -18258,8 +18573,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Widgets' id='juneau-rest-server.HtmlDocAnnotation.Widgets'>7.26.1 - Widgets</a></h4>
-<div class='topic'><!-- START: 7.26.1 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Widgets' id='juneau-rest-server.HtmlDocAnnotation.Widgets'>7.27.1 - Widgets</a></h4>
+<div class='topic'><!-- START: 7.27.1 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
 <p>
 	The {@link org.apache.juneau.rest.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
 	to HTML pages.
@@ -18374,19 +18689,19 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
 </ul>
-</div><!-- END: 7.26.1 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
+</div><!-- END: 7.27.1 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets' id='juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>7.26.2 - Predefined Widgets</a></h4>
-<div class='topic'><!-- START: 7.26.2 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets' id='juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>7.27.2 - Predefined Widgets</a></h4>
+<div class='topic'><!-- START: 7.27.2 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
 TODO(7.2.0)
-</div><!-- END: 7.26.2 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
+</div><!-- END: 7.27.2 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>7.26.3 - UI Customization</a></h4>
-<div class='topic'><!-- START: 7.26.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>7.27.3 - UI Customization</a></h4>
+<div class='topic'><!-- START: 7.27.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 <p>
 	The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
 	<br>In reality, a better term for them would be a Developer Interface as they're meant to be used 
@@ -18509,12 +18824,12 @@ TODO(7.2.0)
 	<p>
 		Note how the "User Interface" is open-ended to pretty much lets you do whatever you want.
 	</p>
-</div><!-- END: 7.26.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
+</div><!-- END: 7.27.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets' id='juneau-rest-server.HtmlDocAnnotation.Stylesheets'>7.26.4 - Stylesheets</a></h4>
-<div class='topic'><!-- START: 7.26.4 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets' id='juneau-rest-server.HtmlDocAnnotation.Stylesheets'>7.27.4 - Stylesheets</a></h4>
+<div class='topic'><!-- START: 7.27.4 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
 <p>
 	The sample root page renders in the default "devops" look-and-feel:
 </p>
@@ -18624,13 +18939,13 @@ TODO(7.2.0)
 		}
 	}
 </p>
-</div><!-- END: 7.26.4 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
-</div><!-- END: 7.26 - juneau-rest-server.HtmlDocAnnotation -->
+</div><!-- END: 7.27.4 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
+</div><!-- END: 7.27 - juneau-rest-server.HtmlDocAnnotation -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.DefaultHeaders' id='juneau-rest-server.DefaultHeaders'>7.27 - Default Headers</a></h3>
-<div class='topic'><!-- START: 7.27 - juneau-rest-server.DefaultHeaders -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.DefaultHeaders' id='juneau-rest-server.DefaultHeaders'>7.28 - Default Headers</a></h3>
+<div class='topic'><!-- START: 7.28 - juneau-rest-server.DefaultHeaders -->
 <p>
 	The following annotations are provided for specifying default header values for requests and responses:
 </p>
@@ -18672,12 +18987,12 @@ TODO(7.2.0)
 		</ul>
 	</li>
 </ul>
-</div><!-- END: 7.27 - juneau-rest-server.DefaultHeaders -->
+</div><!-- END: 7.28 - juneau-rest-server.DefaultHeaders -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndErrorHandling' id='juneau-rest-server.LoggingAndErrorHandling'>7.28 - Logging and Error Handling</a></h3>
-<div class='topic'><!-- START: 7.28 - juneau-rest-server.LoggingAndErrorHandling -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.LoggingAndErrorHandling' id='juneau-rest-server.LoggingAndErrorHandling'>7.29 - Logging and Error Handling</a></h3>
+<div class='topic'><!-- START: 7.29 - juneau-rest-server.LoggingAndErrorHandling -->
 <p>
 	The {@link org.apache.juneau.rest.RestContext#REST_logger} property allows you to configure 
 	logging for your resource.
@@ -18736,12 +19051,12 @@ TODO(7.2.0)
 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,String,Object...)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestServlet#log(Level,Throwable,String,Object...)}
 </ul>
-</div><!-- END: 7.28 - juneau-rest-server.LoggingAndErrorHandling -->
+</div><!-- END: 7.29 - juneau-rest-server.LoggingAndErrorHandling -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HttpStatusCodes' id='juneau-rest-server.HttpStatusCodes'>7.29 - HTTP Status Codes</a></h3>
-<div class='topic'><!-- START: 7.29 - juneau-rest-server.HttpStatusCodes -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HttpStatusCodes' id='juneau-rest-server.HttpStatusCodes'>7.30 - HTTP Status Codes</a></h3>
+<div class='topic'><!-- START: 7.30 - juneau-rest-server.HttpStatusCodes -->
 <p>
 	By default, a 200 (OK) status is automatically set as the HTTP status when a Java method executes 
 	successfully.
@@ -18804,12 +19119,12 @@ TODO(7.2.0)
 		<td>The Java method threw an exception other than {@link org.apache.juneau.rest.RestException}</td>
 	</tr>
 </table>
-</div><!-- END: 7.29 - juneau-rest-server.HttpStatusCodes -->
+</div><!-- END: 7.30 - juneau-rest-server.HttpStatusCodes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.OverloadingHttpMethods' id='juneau-rest-server.OverloadingHttpMethods'>7.30 - Overloading HTTP Methods</a></h3>
-<div class='topic'><!-- START: 7.30 - juneau-rest-server.OverloadingHttpMethods -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.OverloadingHttpMethods' id='juneau-rest-server.OverloadingHttpMethods'>7.31 - Overloading HTTP Methods</a></h3>
+<div class='topic'><!-- START: 7.31 - juneau-rest-server.OverloadingHttpMethods -->
 <p>
 	Through the use of the built-in <l>"method"</l> GET parameter, you can implement requests beyond the basic 
 	REST http method types.
@@ -18833,12 +19148,12 @@ TODO(7.2.0)
 		allowedMethodParams=<js>"BAR"</js>
 	)
 </p>
-</div><!-- END: 7.30 - juneau-rest-server.OverloadingHttpMethods -->
+</div><!-- END: 7.31 - juneau-rest-server.OverloadingHttpMethods -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.BuiltInParameters' id='juneau-rest-server.BuiltInParameters'>7.31 - Built-in Parameters</a></h3>
-<div class='topic'><!-- START: 7.31 - juneau-rest-server.BuiltInParameters -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.BuiltInParameters' id='juneau-rest-server.BuiltInParameters'>7.32 - Built-in Parameters</a></h3>
+<div class='topic'><!-- START: 7.32 - juneau-rest-server.BuiltInParameters -->
 <p>
 	The following URL parameters have special meaning and can be passed in through the URL of the request:
 </p>
@@ -18898,12 +19213,12 @@ TODO(7.2.0)
 		</td>
 	</tr>
 </table>
-</div><!-- END: 7.31 - juneau-rest-server.BuiltInParameters -->
+</div><!-- END: 7.32 - juneau-rest-server.BuiltInParameters -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.CustomSerializersAndParsers' id='juneau-rest-server.CustomSerializersAndParsers'>7.32 - Custom Serializers and Parsers</a></h3>
-<div class='topic'><!-- START: 7.32 - juneau-rest-server.CustomSerializersAndParsers -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.CustomSerializersAndParsers' id='juneau-rest-server.CustomSerializersAndParsers'>7.33 - Custom Serializers and Parsers</a></h3>
+<div class='topic'><!-- START: 7.33 - juneau-rest-server.CustomSerializersAndParsers -->
 <p>
 	A very easy-to-use API is provided for defining your own serializers and parsers at both the servlet and 
 	method levels.
@@ -19024,12 +19339,12 @@ TODO(7.2.0)
 		}
 	}
 </p>
-</div><!-- END: 7.32 - juneau-rest-server.CustomSerializersAndParsers -->
+</div><!-- END: 7.33 - juneau-rest-server.CustomSerializersAndParsers -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.UsingWithOsgi' id='juneau-rest-server.UsingWithOsgi'>7.33 - Using with OSGi</a></h3>
-<div class='topic'><!-- START: 7.33 - juneau-rest-server.UsingWithOsgi -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.UsingWithOsgi' id='juneau-rest-server.UsingWithOsgi'>7.34 - Using with OSGi</a></h3>
+<div class='topic'><!-- START: 7.34 - juneau-rest-server.UsingWithOsgi -->
 <p>
 	Since REST servlets are basically just <l>HttpServlets</l>, incorporating them into an OSGi environment
 	is pretty straightforward.
@@ -19091,443 +19406,7 @@ TODO(7.2.0)
 		}
 	}
 </p>
-</div><!-- END: 7.33 - juneau-rest-server.UsingWithOsgi -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteInterfaces' id='juneau-rest-server.RemoteInterfaces'>7.34 - Remote Interfaces</a></h3>
-<div class='topic'><!-- START: 7.34 - juneau-rest-server.RemoteInterfaces -->
-<p>
-	The Remote INterface Service API allows for client side code to use interface proxies for calling methods on POJOs on 
-	the server side.
-</p>
-<p>
-	Remote interfaces are retrieved using the {@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class)} 
-	method.
-	<br>{@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} is a specialized subclass of {@link org.apache.juneau.rest.RestServlet} that provides a 
-	full-blown REST interface for calling remote services (e.g. POJOs) remotely. 
-</p>
-<p>
-	The following simplified example shows how a method on a POJO on a server can be called through an interface
-	on a client...
-</p>
-<p class='bpcode w800'>
-	<ja>@RemoteInterface</ja> <jc>// Annotation is optional</jc>
-	<jk>public interface</jk> IAddressBook {
-
-		<jd>/** Initialize this address book with preset entries */</jd>
-		<jk>void</jk> init() <jk>throws</jk> Exception;
-	
-		<jd>/** Return all people in the address book */</jd>
-		List&lt;Person&gt; getPeople();
-	
-		<jd>/** Return all addresses in the address book */</jd>
-		List&lt;Address&gt; getAddresses();
-	
-		<jd>/** Create a person in this address book */</jd>
-		Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
-	
-		<jd>/** Find a person by id */</jd>
-		Person findPerson(<jk>int</jk> id);
-	
-		<jd>/** Find an address by id */</jd>
-		Address findAddress(<jk>int</jk> id);
-	
-		<jd>/** Find a person by address id */</jd>
-		Person findPersonWithAddress(<jk>int</jk> id);
-	
-		<jd>/** Remove a person by id */</jd>
-		Person removePerson(<jk>int</jk> id);
-	}
-</p>			
-<p>
-	The requirements for an interface method to be callable through the remote interface service are:
-</p>
-<ul class='spaced-list'>
-	<li>
-		The method must be public.
-	<li>
-		The parameter and return types must be {@doc PojoCategories serializable and parsable}.
-	<li>
-		The method can optionally throw any <code>Throwable</code> that has a public no-arg or single-arg-string constructors.
-		<br>There are automatically recreated on the client side when thrown on the server side.
-</ul>
-<p>
-	The client side code for invoking this method is shown below...
-</p>
-<p class='bpcode w800'>
-	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remote interface servlet.</jc>
-	RestClient client = RestClient.<jsm>create</jsm>()
-		.rootUrl(<js>"http://localhost:10000/remote"</js>)
-		.build();
-	
-	<jc>// Create a proxy interface.</jc>
-	IAddressBook ab = client.getRemoteInterface(IAddressBook.<jk>class</jk>);
-	
-	<jc>// Invoke a method on the server side and get the returned result.</jc>
-	Person p = ab.createPerson(
-		<jk>new</jk> Person(
-			<js>"John Smith"</js>, 
-			<js>"Aug 1, 1999"</js>,
-			<jk>new</jk> Address(<js>"My street"</js>, <js>"My city"</js>, <js>"My state"</js>, 12345, <jk>true</jk>)
-		)
-	);
-</p>
-<p>
-	Under the covers, this method call gets converted to a REST POST.
-</p>
-<p class='bpcode w800'>
-	HTTP POST http://localhost:10000/remote/org.apache.juneau.examples.rest.IAddressBook/createPerson
-	Accept: application/json
-	Content-Type: application/json
-	
-	[
-		{
-			"name":"John Smith",
-			"birthDate":"Aug 1, 1999",
-			"addresses":[
-				{
-					"street":"My street",
-					"city":"My city",
-					"state":"My state",
-					"zip":12345,
-					"isCurrent":true
-				}
-			]
-		}
-	]
-</p>
-<p>
-	Note that the body of the request is an array.  
-	<br>This array contains the serialized arguments of the method.
-	<br>The object returned by the method is then serialized as the body of the response.
-</p>
-<p>
-	There are two ways to expose remote interfaces on the server side:
-</p>
-<ol class='spaced-list'>
-	<li>
-		Extending from {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet}.
-	<li>
-		Using a <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> annotation on a Java method.
-</ol>
-<p>
-	The {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} class is a simple specialized servlet with an abstract 
-	<code>getServiceMap()</code> method to define the server-side POJOs:
-</p>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		path=<js>"/remote"</js>
-	)
-	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
-	
-		<jc>// Our server-side POJO.</jc>
-		AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
-	
-		<ja>@Override</ja> <jc>/* RemoteInterfaceServlet */</jc>
-		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
-			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
-	
-			<jc>// In this simplified example, we expose the same POJO service under two different interfaces.
-			// One is IAddressBook which only exposes methods defined on that interface, and
-			// the other is AddressBook itself which exposes all methods defined on the class itself (dangerous!).</jc>
-			m.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>);
-			m.put(AddressBook.<jk>class</jk>, <jf>addressBook</jf>);
-			<jk>return</jk> m;
-		}
-	}
-</p>
-<p>
-	The <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> approach is easier if you only have a single 
-	interface you want to expose.  
-	<br>You simply define a Java method whose return type is an interface, and return the implementation of that 
-	interface:
-</p>
-<p class='bpcode w800'>
-	<jc>// Our exposed interface.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/addressbookproxy/*"</js>)
-	<jk>public</jk> IAddressBook getProxy() {
-		<jk>return</jk> addressBook;
-	}
-</p>
-<p>
-	In either case, the proxy communications layer is pure REST.
-	<br>Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
-	be made through pure REST calls.  
-	<br>This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
-	a browser with no coding involved.
-</p>
-<p>
-	The parameters and return types of the Java methods can be any of the supported {@doc PojoCategories serializable and parsable} types.
-	<br>This ends up being WAY more flexible than other proxy interfaces since Juneau can handle so may POJO types 
-	out-of-the-box.
-	<br>Most of the time you don't even need to modify your existing Java implementation code.
-</p>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteInterfaces.ClientSide' id='juneau-rest-server.RemoteInterfaces.ClientSide'>7.34.1 - Client Side</a></h4>
-<div class='topic'><!-- START: 7.34.1 - juneau-rest-server.RemoteInterfaces.ClientSide -->
-<p>
-	Remote Interface proxies are instantiated using one of the following methods:
-</p>
-<ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.client.RestClient}
-	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class) getRemoteResource(Class)}
-		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object) getRemoteResource(Class,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#getRemoteInterface(Class,Object,Serializer,Parser) getRemoteResource(Class,Object,Serializer,Parser)}
-	</ul>
-</ul>
-<p>
-	It may seem that the client-side code would need to be complex.
-	<br>In reality, it builds upon existing serializing, parsing, and REST capabilities in Juneau resulting in very 
-	little additional code.
-	<br>The entire code for the <code>RestClient.getRemoteInterface(Class)</code> method is shown below:
-</p>
-<p class='bpcode w800'>
-	<jk>public</jk> &lt;T&gt; T getRemoteInterfaceProxy(<jk>final</jk> Class&lt;T&gt; interfaceClass) {
-		<jk>return</jk> (T)Proxy.newProxyInstance(
-			interfaceClass.getClassLoader(),
-			<jk>new</jk> Class[] { interfaceClass },
-			<jk>new</jk> InvocationHandler() {
-				<ja>@Override</ja> <jc>/* InvocationHandler */</jc>
-				<jk>public</jk> Object invoke(Object proxy, Method method, Object[] args) {
-					<jk>try</jk> {
-						String uri = <jf>remoteInterfaceServletUri</jf> + <js>'/'</js> + interfaceClass.getName() + <js>'/'</js> + ClassUtils.<jsm>getMethodSignature</jsm>(method);
-						<jk>return</jk> doPost(uri, args).getResponse(method.getReturnType());
-					} <jk>catch</jk> (Exception e) {
-						<jk>throw new</jk> RuntimeException(e);
-					}
-				}
-		});
-	}
-</p>
-<p>
-	Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
-	<br>For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
-	serializers and parsers, and the ability to provide your own customized Apache <code>HttpClient</code> for 
-	handling various scenarios involving authentication and Internet proxies.
-</p>
-</div><!-- END: 7.34.1 - juneau-rest-server.RemoteInterfaces.ClientSide -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteInterfaces.ServerSide' id='juneau-rest-server.RemoteInterfaces.ServerSide'>7.34.2 - Server Side</a></h4>
-<div class='topic'><!-- START: 7.34.2 - juneau-rest-server.RemoteInterfaces.ServerSide -->
-<p>
-	The server side is only slightly more complex, but boasts useful debugging and discovery capabilities.  
-</p>
-<p>
-	The {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet} class is an implementation of 
-	{@link org.apache.juneau.rest.RestServlet} that provides a REST interface for invoking calls on POJOs.
-	<br>The <code>RemoteInterfaceServlet</code> class is abstract and must implement a single method for providing the set 
-	of POJOs to expose as remote interfaces.  
-</p>
-<p>
-	The samples bundle includes a sample implementation of a remote interface service that can be used to interact with 
-	the address book POJO also included in the bundle.  
-	<br>The method that must be implemented is {@link org.apache.juneau.rest.remote.RemoteInterfaceServlet#getServiceMap()}
-	that simply returns a mapping of Java interfaces (or classes) to POJO instances.
-</p>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		path=<js>"/remote"</js>
-	)
-	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
-	
-		<jc>// The POJO being manipulated (i.e. the remote service)</jc>
-		AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
-	
-		<ja>@Override</ja> <jc>/* RemoteInterfaceServlet */</jc>
-		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
-			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
-	
-			<jc>// In this simplified example, we expose the same POJO service under two different interfaces.
-			// One is IAddressBook which only exposes methods defined on that interface, and
-			// the other is AddressBook itself which exposes all public methods defined on the class itself.</jc>
-			m.put(IAddressBook.<jk>class</jk>, addressBook);
-			m.put(AddressBook.<jk>class</jk>, addressBook);
-			<jk>return</jk> m;
-		}
-	}
-</p>
-<p>
-	Since this class is a servlet, and can be deployed as such.  
-	<br>In the sample code, it's listed as a child resource to <code>org.apache.juneau.rest.samples.RootResources</code>
-		which makes it available under the URL <code>/sample/remote</code>.
-</p>
-<p>
-	If you point your browser to that URL, you get a list of available interfaces:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/remote
-</p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.1.png'>
-<p>
-	Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
-	<br>Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
-	interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
-</p>
-<h5 class='figure'>IAddressBook</h5>
-<p class='bpcode w800'>
-	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook
-</p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.2.png'>
-<p>
-	Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
-	framework methods listed.
-</p>
-<h5 class='figure'>AddressBook</h5>
-<p class='bpcode w800'>
-	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.AddressBook
-</p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.3.png'>
-<p>
-	Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
-	how this works.
-	<br>We'll use the same method call as in the introduction.
-	<br>First, we need to create the serialized form of the arguments:
-</p>
-<p class='bpcode w800'>
-	Object[] args = <jk>new</jk> Object[] {
-		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
-			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
-			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
-	};
-	String asJson = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(args);
-	System.<jsf>err</jsf>.println(asJson);
-</p>
-<p>
-	That produces the following JSON output:
-</p>
-<p class='bpcode w800'>
-	[
-		{
-			name: <js>'Test Person'</js>, 
-			birthDate: <js>'Aug 1, 1999'</js>, 
-			addresses: [
-				{
-					street: <js>'Test street'</js>, 
-					city: <js>'Test city'</js>, 
-					state: <js>'Test state'</js>, 
-					zip: 12345, 
-					isCurrent: <jk>true</jk>
-				}
-			]
-		}
-	]	
-</p>
-<p>
-	Note that in this example we're using JSON.  
-	<br>However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
-	<br>In practice however, JSON will preferred since it is often the most efficient.
-</p>
-<p>
-	Next, we can use a tool such as Poster to make the REST call.
-	<br>Methods are invoked by POSTing the serialized object array to the URI of the interface method.
-	In this case, we want to POST our JSON to the following URL:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
-</p>
-<p>
-	<br>Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
-	<br>We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
-	<code>text/json</code> as well.
-</p>
-<img class='bordered w400' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.4.png'>
-<p>
-	When we execute the POST, we should see the following successful response whose body contains the returned 
-	<code>Person</code> bean serialized to JSON:
-</p>
-<img class='bordered w400' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.5.png'>
-<p>
-	From there, we could use the following code snippet to reconstruct the response object from JSON:
-</p>
-<p class='bpcode w800'>
-	String response = <js>"<i>output from above</i>"</js>;
-	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(response, Person.<jk>class</jk>);
-</p>
-<p>
-	If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a 
-	browser...
-</p>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		path=<js>"/remote"</js>,
-		
-		<jc>// Allow us to use method=POST from a browser.</jc>
-		allowedMethodParams=<js>"*"</js>
-	)
-	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
-</p>
-<p>
-	For example, to invoke the <code>getPeople()</code> method on our bean:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
-</p>			
-<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.6.png'>
-<p>
-	Here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the 
-	returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
-	browser):
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
-</p>			
-<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.7.png'>
-<p>
-	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
-	notation.
-	<br>See {@link org.apache.juneau.uon.UonSerializer} for more information about this encoding.
-	<br>Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
-	but passing in unencoded JSON in a URL may not work in all browsers.  
-	<br>Therefore, UON is preferred.
-</p>
-<p>
-	The hyperlinks on the method names above lead you to a simple form-entry page where you can test
-	passing parameters in UON notation as URL-encoded form posts.
-</p>
-<h5 class='figure'>Sample form entry page</h5>
-<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.8.png'>
-<h5 class='figure'>Sample form entry page results</h5>
-<img class='bordered w800' src='doc-files/juneau-rest-server.RemoteInterfacesServerSide.9.png'>
-</div><!-- END: 7.34.2 - juneau-rest-server.RemoteInterfaces.ServerSide -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteInterfaces.RemoteInterface' id='juneau-rest-server.RemoteInterfaces.RemoteInterface'>7.34.3 - @RemoteInterface Annotation</a></h4>
-<div class='topic'><!-- START: 7.34.3 - juneau-rest-server.RemoteInterfaces.RemoteInterface -->
-<p>
-	TODO
-</p>
-</div><!-- END: 7.34.3 - juneau-rest-server.RemoteInterfaces.RemoteInterface -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.RemoteInterfaces.RemoteMethod' id='juneau-rest-server.RemoteInterfaces.RemoteMethod'>7.34.4 - @RemoteMethod Annotation</a></h4>
-<div class='topic'><!-- START: 7.34.4 - juneau-rest-server.RemoteInterfaces.RemoteMethod -->
-<p>
-	What if you want fine-tuned control over which methods are exposed in an interface instead of just all public 
-	methods?
-	<br>For this, the {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is provided.
-	<br>It can be applied to individual interface methods to only expose those methods through the remote interface servlet.
-</p>
-<p>
-	For example, to expose only the first 2 methods in our <code>IAddressBook</code> interface...
-</p>
-<p class='bpcode w800'>
-	<jk>public interface</jk> IAddressBook {
-		<ja>@RemoteMethod</ja> Person createPerson(CreatePerson cp) <jk>throws</jk> Exception;
-		<ja>@RemoteMethod</ja> Person findPerson(<jk>int</jk> id);
-		Address findAddress(<jk>int</jk> id);
-		Person findPersonWithAddress(<jk>int</jk> id);
-	}
-</p>
-</div><!-- END: 7.34.4 - juneau-rest-server.RemoteInterfaces.RemoteMethod -->
-</div><!-- END: 7.34 - juneau-rest-server.RemoteInterfaces -->
+</div><!-- END: 7.34 - juneau-rest-server.UsingWithOsgi -->
 
 <!-- ==================================================================================================== -->
 
@@ -21144,7 +21023,6 @@ TODO(7.2.0)
 	UUID uuid = response.getUUID();
 	<jk>int</jk> status = response.getStatus();
 </p>
-
 <p>
 	The annotated methods must be no-arg.  
 	They can be named anything.
@@ -24931,7 +24809,7 @@ TODO(7.2.0)
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces.ServerSide}
+	<li class='link'>{@doc juneau-rest-server.rRPC.ServerSide}
 </ul>
 </div><!-- END: 12.8 - juneau-examples-rest.SampleRemoteableServlet -->
 
