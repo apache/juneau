@@ -141,14 +141,12 @@ public class OpenApiPartParserSession extends UonPartParserSession {
 					ss = split(in, ',');
 				}
 
-				Object[] o = null;
-				if (schema.getItems() != null) {
-					o = new Object[ss.length];
-					for (int i = 0; i < ss.length; i++)
-						o[i] = parse(partType, schema.getItems(), ss[i], eType);
-				} else {
-					o = ss;
-				}
+				HttpPartSchema items = schema.getItems();
+				if (items == null)
+					items = HttpPartSchema.DEFAULT;
+				Object[] o = new Object[ss.length];
+				for (int i = 0; i < ss.length; i++)
+					o[i] = parse(partType, items, ss[i], eType);
 				if (type.hasTransformFrom(schema.getParsedType()) || schema.getParsedType().hasTransformTo(type))
 					return toType(toType(o, schema.getParsedType()), type);
 				return toType(o, type);

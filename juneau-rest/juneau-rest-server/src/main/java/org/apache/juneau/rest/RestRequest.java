@@ -181,6 +181,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.body
 			.encoders(rjm.encoders)
 			.parsers(rjm.parsers)
+			.partParser(rjm.partParser)
 			.headers(headers)
 			.maxInput(rjm.maxInput);
 

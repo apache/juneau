@@ -153,7 +153,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a03b_onParameter_int_noContentType() throws Exception {
-		a.put("/int?noTrace=true", "123").execute().assertBodyContains("Unsupported Media Type");
+		a.put("/int", "123").execute().assertBody("123"); // Uses part parser.
 	}
 	@Test
 	public void a04a_onParameter_Boolean() throws Exception {
@@ -170,7 +170,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a05b_onParameter_boolean_noContentType() throws Exception {
-		a.put("/boolean?noTrace=true", "true").execute().assertBodyContains("Unsupported Media Type");
+		a.put("/boolean", "true").execute().assertBody("true"); // Uses part parser.
 	}
 	@Test
 	public void a06a_onParameter_float() throws Exception {
@@ -178,7 +178,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a06b_onParameter_float_noContentType() throws Exception {
-		a.put("/float?noTrace=true", "1.23").execute().assertBodyContains("Unsupported Media Type");
+		a.put("/float", "1.23").execute().assertBody("1.23");  // Uses part parser.
 	}
 	@Test
 	public void a07a_onParameter_Float() throws Exception {
@@ -195,7 +195,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a08b_onParameter_Map_noContentType() throws Exception {
-		a.put("/Map?noTrace=true", "{foo:123}").execute().assertBodyContains("Unsupported Media Type");
+		a.put("/Map", "(foo=123)").execute().assertBody("{foo:123}");  // Uses part parser.
 	}
 	@Test
 	public void a09a_onParameter_enum() throws Exception {
@@ -211,7 +211,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a11b_onParameter_Bean_noContentType() throws Exception {
-		a.put("/Bean?noTrace=true", "{f1:'a'}").execute().assertBodyContains("Unsupported Media Type");
+		a.put("/Bean", "(f1=a)").execute().assertBody("{f1:'a'}");  // Uses part parser.
 	}
 	@Test
 	public void a12a_onParameter_InputStream() throws Exception {
@@ -328,7 +328,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void b02b_onPojo_Bean_noContentType() throws Exception {
-		b.put("/Bean?noTrace=true", "{f1:'a'}").execute().assertBodyContains("Unsupported Media Type");
+		b.put("/Bean", "(f1=a)").execute().assertBody("{f1:'a'}");  // Uses part parser.
 	}
 	@Test
 	public void b03a_onPojo_BeanList() throws Exception {
@@ -336,7 +336,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void b03b_onPojo_BeanList_noContentType() throws Exception {
-		b.put("/BeanList?noTrace=true", "[{f1:'a'}]").execute().assertBodyContains("Unsupported Media Type");
+		b.put("/BeanList", "(f1=a)").execute().assertBody("[{f1:'a'}]");  // Uses part parser.
 	}
 	@Test
 	public void b04a_onPojo_InputStreamTransform() throws Exception {

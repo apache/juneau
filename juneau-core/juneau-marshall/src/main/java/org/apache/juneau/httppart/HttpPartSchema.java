@@ -1340,4 +1340,19 @@ public class HttpPartSchema {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return toString(new StringBuilder()).toString();
+	}
+
+	private StringBuilder toString(StringBuilder sb) {
+		ObjectMap m = new ObjectMap();
+		m.appendSkipEmpty("name", name);
+		m.appendSkipEmpty("type", type);
+		m.appendSkipEmpty("format", format);
+		sb.append(m.toString());
+		return sb;
+	}
+
 }

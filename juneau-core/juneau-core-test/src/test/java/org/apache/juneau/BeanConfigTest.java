@@ -370,7 +370,7 @@ public class BeanConfigTest {
 		assertEquals(new Integer(1), session.convertToType(o, LinkedList.class).get(0));
 
 		// HashMap to TreeMap
-		o = new AMap<Integer,String>().append(1, "foo");
+		o = AMap.create(1, "foo");
 		assertEquals("foo", session.convertToType(o, TreeMap.class).firstEntry().getValue());
 
 		// String to TreeMap

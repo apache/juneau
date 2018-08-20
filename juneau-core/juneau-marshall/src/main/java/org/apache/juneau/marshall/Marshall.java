@@ -114,10 +114,13 @@ public abstract class Marshall {
 	 *
 	 * @param o The object to serialize.
 	 * @return The output serialized to a string.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public final String toString(Object o) throws SerializeException {
-		return s.createSession().serializeToString(o);
+	public final String toString(Object o) {
+		try {
+			return s.serializeToString(o);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 
@@ -128,11 +131,7 @@ public abstract class Marshall {
 	 * @return This object (for method chaining).
 	 */
 	public final Marshall println(Object o) {
-		try {
-			System.out.println(toString(o));
-		} catch (SerializeException e) {
-			e.printStackTrace();
-		}
+		System.out.println(toString(o));
 		return this;
 	}
 

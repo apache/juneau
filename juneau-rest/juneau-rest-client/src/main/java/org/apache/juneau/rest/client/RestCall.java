@@ -33,6 +33,7 @@ import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
 import org.apache.http.entity.*;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
@@ -72,6 +73,8 @@ import org.apache.juneau.utils.*;
  */
 @SuppressWarnings({ "unchecked" })
 public final class RestCall extends BeanSession implements Closeable {
+
+	private static final ContentType TEXT_PLAIN = ContentType.create("text/plain");
 
 	private final RestClient client;                       // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
@@ -540,10 +543,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
 	public RestCall body(Object input) throws RestCallException {
-		this.input = input;
-		this.hasInput = true;
-		this.formData = null;
-		return this;
+		return body(input, null, null);
 	}
 
 	/**
@@ -564,9 +564,11 @@ public final class RestCall extends BeanSession implements Closeable {
 			if (schema != null && schema.isUsePartSerializer())
 				partSerializer = this.partSerializer;
 			if (partSerializer != null)
-				body(new StringEntity(partSerializer.serialize(BODY, schema, input)));
+				this.input = new StringEntity(partSerializer.serialize(BODY, schema, input), TEXT_PLAIN);
 			else
-				body(input);
+				this.input = input;
+			this.hasInput = true;
+			this.formData = null;
 		} catch (SchemaValidationException e) {
 			throw new RestCallException(e, "Validation error on request body.");
 		} catch (Exception e) {
@@ -1567,13 +1569,15 @@ public final class RestCall extends BeanSession implements Closeable {
 				else if (input instanceof HttpEntity)
 					entity = (HttpEntity)input;
 				else if (input instanceof Reader)
-					entity = new StringEntity(IOUtils.read((Reader)input));
+					entity = new StringEntity(IOUtils.read((Reader)input), getRequestContentType(TEXT_PLAIN));
 				else if (input instanceof InputStream)
-					entity = new InputStreamEntity((InputStream)input);
+					entity = new InputStreamEntity((InputStream)input, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (serializer != null)
 					entity = new RestRequestEntity(input, serializer);
+				else if (partSerializer != null)
+					entity = new StringEntity(partSerializer.serialize(null, input), getRequestContentType(TEXT_PLAIN));
 				else
-					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input));
+					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input), getRequestContentType(TEXT_PLAIN));
 
 				if (retries > 1 && ! entity.isRepeatable())
 					throw new RestCallException("Rest call set to retryable, but entity is not repeatable.");
@@ -1644,6 +1648,16 @@ public final class RestCall extends BeanSession implements Closeable {
 		}
 
 		return this;
+	}
+
+	private ContentType getRequestContentType(ContentType def) {
+		Header h = request.getFirstHeader("Content-Type");
+		if (h != null) {
+			String s = h.getValue();
+			if (! isEmpty(s))
+				return ContentType.create(s);
+		}
+		return def;
 	}
 
 	private void reset() {

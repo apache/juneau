@@ -189,7 +189,7 @@ public class DefaultHandler implements ResponseHandler {
 		}
 
 		// Non-existent Accept or plain/text can just be serialized as-is.
-		if ("".equals(accept) || "plain/text".equals(accept)) {
+		if (isEmpty(accept) || accept.startsWith("text/plain")) {
 			FinishablePrintWriter w = res.getNegotiatedWriter();
 			ClassMeta<?> cm = req.getBeanSession().getClassMetaForObject(o);
 			if (cm != null)
