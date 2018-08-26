@@ -10,10 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.oapi;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 
 /**
  * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
@@ -23,49 +25,55 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
  * </ul>
  */
-public class OpenApiPartSerializer extends UonPartSerializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final String PREFIX = "OpenApiPartSerializer.";
-
-	/**
-	 * Configuration property:  OpenAPI schema description.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"OpenApiPartSerializer.schema"</js>
-	 * 	<li><b>Data type:</b>  <code>HttpPartSchema</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link OpenApiPartSerializerBuilder#schema(HttpPartSchema)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines the OpenAPI schema for this part serializer.
-	 */
-	public static final String OAPI_schema = PREFIX + "schema.o";
-
+public class OpenApiSerializer extends UonSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Reusable instance of {@link OpenApiPartSerializer}, all default settings. */
-	public static final OpenApiPartSerializer DEFAULT = new OpenApiPartSerializer(PropertyStore.DEFAULT);
+	/** Reusable instance of {@link OpenApiSerializer}, all default settings. */
+	public static final OpenApiSerializer DEFAULT = new OpenApiSerializer(PropertyStore.DEFAULT);
 
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final HttpPartSchema schema;
+	/**
+	 * Constructor.
+	 *
+	 * @param ps
+	 * 	The property store containing all the settings for this object.
+	 * @param produces
+	 * 	The media type that this serializer produces.
+	 * @param accept
+	 * 	The accept media types that the serializer can handle.
+	 * 	<p>
+	 * 	Can contain meta-characters per the <code>media-type</code> specification of {@doc RFC2616.section14.1}
+	 * 	<p>
+	 * 	If empty, then assumes the only media type supported is <code>produces</code>.
+	 * 	<p>
+	 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
+	 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
+	 * 	<p class='bcode w800'>
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
+	 * 	</p>
+	 * 	<br>...or...
+	 * 	<p class='bcode w800'>
+	 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
+	 * 	</p>
+	 * <p>
+	 * The accept value can also contain q-values.
+	 */
+	public OpenApiSerializer(PropertyStore ps, String produces, String accept) {
+		super(
+			ps.builder()
+				.set(UON_encoding, false)
+				.build(),
+			produces,
+			accept
+		);
+	}
 
 	/**
 	 * Constructor.
@@ -73,59 +81,59 @@ public class OpenApiPartSerializer extends UonPartSerializer {
 	 * @param ps
 	 * 	The property store containing all the settings for this object.
 	 */
-	public OpenApiPartSerializer(PropertyStore ps) {
-		super(
-			ps.builder()
-				.set(UON_encoding, false)
-				.build()
-		);
-		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, HttpPartSchema.DEFAULT);
+	public OpenApiSerializer(PropertyStore ps) {
+		this(ps, "text/openapi", null);
 	}
 
 	@Override /* Context */
-	public OpenApiPartSerializerBuilder builder() {
-		return new OpenApiPartSerializerBuilder(getPropertyStore());
+	public OpenApiSerializerBuilder builder() {
+		return new OpenApiSerializerBuilder(getPropertyStore());
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link UonPartSerializerBuilder} object.
+	 * Instantiates a new clean-slate {@link OpenApiSerializerBuilder} object.
 	 *
 	 * <p>
 	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
 	 *
-	 * @return A new {@link UonPartSerializerBuilder} object.
+	 * @return A new {@link OpenApiSerializerBuilder} object.
 	 */
-	public static OpenApiPartSerializerBuilder create() {
-		return new OpenApiPartSerializerBuilder();
+	public static OpenApiSerializerBuilder create() {
+		return new OpenApiSerializerBuilder();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Entry point methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override
-	public OpenApiPartSerializerSession createSession(SerializerSessionArgs args) {
-		return new OpenApiPartSerializerSession(this, args);
+	@Override /* Context */
+	public OpenApiSerializerSession createSession() {
+		return createSession(null);
 	}
 
-	@Override
-	public OpenApiPartSerializerSession createSession() {
-		return new OpenApiPartSerializerSession(this, SerializerSessionArgs.DEFAULT);
+	@Override /* Serializer */
+	public OpenApiSerializerSession createSession(SerializerSessionArgs args) {
+		return new OpenApiSerializerSession(this, args);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* HttpPartSerializer */
+	public OpenApiSerializerSession createPartSession() {
+		return createPartSession(null);
+	}
 
-	/**
-	 * Configuration property:  OpenAPI schema description.
-	 *
-	 * @see #OAPI_schema
-	 * @return
-	 * 	The default part schema on this serializer, or <jk>null</jk> if none is defined.
-	 */
-	protected final HttpPartSchema getSchema() {
-		return schema;
+	@Override /* HttpPartSerializer */
+	public OpenApiSerializerSession createPartSession(SerializerSessionArgs args) {
+		return new OpenApiSerializerSession(this, args);
+	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createPartSession().serialize(partType, schema, value);
+	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createPartSession().serialize(null, schema, value);
 	}
 }

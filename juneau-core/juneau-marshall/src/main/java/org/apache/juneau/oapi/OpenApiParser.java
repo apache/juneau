@@ -10,10 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.oapi;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.uon.*;
 
 /**
  * OpenAPI part parser.
@@ -23,70 +24,48 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Parsers}
  * </ul>
  */
-public class OpenApiPartParser extends UonPartParser {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final String PREFIX = "OpenApiPartParser.";
-
-	/**
-	 * Configuration property:  OpenAPI schema description.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"OpenApiPartParser.schema"</js>
-	 * 	<li><b>Data type:</b>  <code>HttpPartSchema</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link OpenApiPartParserBuilder#schema(HttpPartSchema)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines the OpenAPI schema for this part parser.
-	 */
-	public static final String OAPI_schema = PREFIX + "schema.o";
+public class OpenApiParser extends UonParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Reusable instance of {@link OpenApiPartParser}. */
-	public static final OpenApiPartParser DEFAULT = new OpenApiPartParser(PropertyStore.DEFAULT);
+	/** Reusable instance of {@link OpenApiParser}. */
+	public static final OpenApiParser DEFAULT = new OpenApiParser(PropertyStore.DEFAULT);
 
-	// Cache these for faster lookup
-	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
-
-	private final HttpPartSchema schema;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param ps The property store containing all the settings for this object.
 	 */
-	public OpenApiPartParser(PropertyStore ps) {
-		super(
-			ps.builder().build()
-		);
-		this.schema = getProperty(OAPI_schema, HttpPartSchema.class, DEFAULT_SCHEMA);
-	}
-
-	@Override /* Context */
-	public UonPartParserBuilder builder() {
-		return new UonPartParserBuilder(getPropertyStore());
+	public OpenApiParser(PropertyStore ps) {
+		this(ps, "text/openapi");
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link UonPartParserBuilder} object.
+	 * Constructor.
+	 *
+	 * @param ps
+	 * 	The property store containing all the settings for this object.
+	 * @param consumes
+	 * 	The list of media types that this parser consumes (e.g. <js>"application/json"</js>, <js>"*&#8203;/json"</js>).
+	 */
+	public OpenApiParser(PropertyStore ps, String...consumes) {
+		super(ps, consumes);
+	}
+
+	@Override /* Context */
+	public OpenApiParserBuilder builder() {
+		return new OpenApiParserBuilder(getPropertyStore());
+	}
+
+	/**
+	 * Instantiates a new clean-slate {@link OpenApiParserBuilder} object.
 	 *
 	 * <p>
 	 * This is equivalent to simply calling <code><jk>new</jk> UonPartParserBuilder()</code>.
@@ -95,10 +74,10 @@ public class OpenApiPartParser extends UonPartParser {
 	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
 	 * the settings of the object called on.
 	 *
-	 * @return A new {@link UonPartParserBuilder} object.
+	 * @return A new {@link OpenApiParserBuilder} object.
 	 */
-	public static UonPartParserBuilder create() {
-		return new UonPartParserBuilder();
+	public static OpenApiParserBuilder create() {
+		return new OpenApiParserBuilder();
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -106,27 +85,12 @@ public class OpenApiPartParser extends UonPartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	@Override
-	public OpenApiPartParserSession createSession() {
-		return new OpenApiPartParserSession(this, ParserSessionArgs.DEFAULT);
+	public OpenApiParserSession createSession() {
+		return new OpenApiParserSession(this, ParserSessionArgs.DEFAULT);
 	}
 
 	@Override
-	public OpenApiPartParserSession createSession(ParserSessionArgs args) {
-		return new OpenApiPartParserSession(this, args);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Configuration property:  OpenAPI schema description.
-	 *
-	 * @see #OAPI_schema
-	 * @return
-	 * 	The default part schema on this serializer, or <jk>null</jk> if none is defined.
-	 */
-	protected final HttpPartSchema getSchema() {
-		return schema;
+	public OpenApiParserSession createPartSession(ParserSessionArgs args) {
+		return new OpenApiParserSession(this, args);
 	}
 }

@@ -15,6 +15,7 @@ package org.apache.juneau;
 import java.util.*;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 
 /**
  * Runtime arguments common to all bean, serializer, and parser sessions.
@@ -30,6 +31,7 @@ public class BeanSessionArgs extends SessionArgs {
 	TimeZone timeZone;
 	MediaType mediaType;
 	Boolean debug;
+	HttpPartSchema schema;
 
 	/**
 	 * Constructor
@@ -52,15 +54,19 @@ public class BeanSessionArgs extends SessionArgs {
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
 	 * 	<br>Can be <jk>null</jk>.
+	 * @param schema
+	 * 	The part schema for the serialized part.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param debug
 	 * 	Enable debug mode for this session.
 	 * 	<br>Can be <jk>null</jk> to use the debug setting on the bean context..
 	 */
-	public BeanSessionArgs(ObjectMap properties, Locale locale, TimeZone timeZone, MediaType mediaType, Boolean debug) {
+	public BeanSessionArgs(ObjectMap properties, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug) {
 		super(properties);
 		this.locale = locale;
 		this.timeZone = timeZone;
 		this.mediaType = mediaType;
+		this.schema = schema;
 		this.debug = debug;
 	}
 

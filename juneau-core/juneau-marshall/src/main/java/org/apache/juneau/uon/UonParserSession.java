@@ -20,6 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
@@ -32,7 +33,7 @@ import org.apache.juneau.transform.*;
  * It is typically discarded after one-time use although it can be reused against multiple inputs.
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public class UonParserSession extends ReaderParserSession {
+public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
 
 	// Characters that need to be preceded with an escape character.
 	private static final AsciiSet escapedChars = AsciiSet.create("~'\u0001\u0002");
@@ -111,6 +112,56 @@ public class UonParserSession extends ReaderParserSession {
 			validateEnd(r);
 			return c;
 		}
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		if (in == null)
+			return null;
+		if (toType.isString() && in.length() > 0) {
+			// Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then
+			// just return the string since it's a plain value.
+			// This allows us to bypass the creation of a UonParserSession object.
+			char x = firstNonWhitespaceChar(in);
+			if (x != '\'' && x != 'n' && in.indexOf('~') == -1)
+				return (T)in;
+			if (x == 'n' && "null".equals(in))
+				return null;
+		}
+		try (ParserPipe pipe = createPipe(in)) {
+			try (UonReader r = getUonReader(pipe, false)) {
+				return parseAnything(toType, r, null, true, null);
+			}
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
+	}
+
+	@Override /* HttpPartParserSession */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, getClassMeta(toType));
+	}
+
+	@Override /* HttpPartParserSession */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return (T)parse(null, schema, in, getClassMeta(toType, toTypeArgs));
+	}
+
+	@Override /* HttpPartParserSession */
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, getClassMeta(toType));
+	}
+
+	@Override /* HttpPartParserSession */
+	public <T> T parse(HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, toType);
+	}
+
+	@Override /* HttpPartParserSession */
+	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return (T)parse(null, schema, in, getClassMeta(toType, toTypeArgs));
 	}
 
 	/**

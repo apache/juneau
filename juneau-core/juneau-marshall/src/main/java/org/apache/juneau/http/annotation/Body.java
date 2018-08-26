@@ -126,38 +126,6 @@ import org.apache.juneau.jsonschema.*;
 @Inherited
 public @interface Body {
 
-	/**
-	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings when using schema-based HTTP part serializing.
-	 *
-	 * <p>
-	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
-	 */
-	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
-
-	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing strings to values when using when using schema-based HTTP part parsing.
-	 *
-	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
-	 */
-	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
-
-	/**
-	 * Specifies whether a part serializer should be used for serializing this value.
-	 *
-	 * <p>
-	 * If <jk>false</jk>, then it indicates that normal Juneau serializers (e.g. {@link JsonSerializer}) should be used for this part.
-	 */
-	public boolean usePartSerializer() default false;
-
-	/**
-	 * Specifies whether a part parser should be used for parsing this value.
-	 *
-	 * <p>
-	 * If <jk>false</jk>, then it indicates that normal Juneau parsers (e.g. {@link JsonParser}) should be used for this part.
-	 */
-	public boolean usePartParser() default false;
-
 	//=================================================================================================================
 	// Attributes common to all Swagger Parameter objects
 	//=================================================================================================================

@@ -28,6 +28,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -84,7 +85,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static A01_RemoteResource a01a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A01_RemoteResource.class, null);
-	static A01_RemoteResource a01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A01_RemoteResource.class, null);
+	static A01_RemoteResource a01b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(a).build().getRemoteResource(A01_RemoteResource.class, null);
 
 	@Test
 	public void a01a_query_simpleVals_plainText() throws Exception {
@@ -133,7 +134,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static A02_RemoteResource a02a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A02_RemoteResource.class, null);
-	static A02_RemoteResource a02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A02_RemoteResource.class, null);
+	static A02_RemoteResource a02b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(a).build().getRemoteResource(A02_RemoteResource.class, null);
 
 	@Test
 	public void a02a_query_maps_plainText() throws Exception {
@@ -185,7 +186,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static A03_RemoteResource a03a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A03_RemoteResource.class, null);
-	static A03_RemoteResource a03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A03_RemoteResource.class, null);
+	static A03_RemoteResource a03b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(a).build().getRemoteResource(A03_RemoteResource.class, null);
 
 	@Test
 	public void a03a_query_nameValuePairs_plainText() throws Exception {
@@ -307,7 +308,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static A06_RemoteResource a06a = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A06_RemoteResource.class, null);
-	static A06_RemoteResource a06b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(a).build().getRemoteResource(A06_RemoteResource.class, null);
+	static A06_RemoteResource a06b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(a).build().getRemoteResource(A06_RemoteResource.class, null);
 
 	@Test
 	public void a06a_query_collections_plainText() throws Exception {
@@ -384,7 +385,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static C01_RemoteResource c01a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C01_RemoteResource.class, null);
-	static C01_RemoteResource c01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C01_RemoteResource.class, null);
+	static C01_RemoteResource c01b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(c).build().getRemoteResource(C01_RemoteResource.class, null);
 
 	@Test
 	public void c01a_formData_simpleVals_plainText() throws Exception {
@@ -436,7 +437,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static C02_RemoteResource c02a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C02_RemoteResource.class, null);
-	static C02_RemoteResource c02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C02_RemoteResource.class, null);
+	static C02_RemoteResource c02b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(c).build().getRemoteResource(C02_RemoteResource.class, null);
 
 	@Test
 	public void c02a_formData_maps_plainText() throws Exception {
@@ -488,7 +489,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static C03_RemoteResource c03a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C03_RemoteResource.class, null);
-	static C03_RemoteResource c03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C03_RemoteResource.class, null);
+	static C03_RemoteResource c03b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(c).build().getRemoteResource(C03_RemoteResource.class, null);
 
 	@Test
 	public void c03a_formData_nameValuePairs_plainText() throws Exception {
@@ -610,7 +611,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static C06_RemoteResource c06a = RestClient.create().mockHttpConnection(c).build().getRemoteResource(C06_RemoteResource.class, null);
-	static C06_RemoteResource c06b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(c).build().getRemoteResource(C06_RemoteResource.class, null);
+	static C06_RemoteResource c06b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(c).build().getRemoteResource(C06_RemoteResource.class, null);
 
 	@Test
 	public void c06a_formData_collections_plainText() throws Exception {
@@ -688,7 +689,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static E01_RemoteResource e01a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E01_RemoteResource.class, null);
-	static E01_RemoteResource e01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E01_RemoteResource.class, null);
+	static E01_RemoteResource e01b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(e).build().getRemoteResource(E01_RemoteResource.class, null);
 
 	@Test
 	public void e01a_headerSimpleValsPlainText() throws Exception {
@@ -740,7 +741,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static E02_RemoteResource e02a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E02_RemoteResource.class, null);
-	static E02_RemoteResource e02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E02_RemoteResource.class, null);
+	static E02_RemoteResource e02b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(e).build().getRemoteResource(E02_RemoteResource.class, null);
 
 	@Test
 	public void e02a_header_maps_plainText() throws Exception {
@@ -773,26 +774,26 @@ public class RequestBeanProxyTest {
 	}
 
 	public static class E03_Bean {
-		@Header
+		@Header(allowEmptyValue=true)
 		public NameValuePairs getA() {
 			return new NameValuePairs().append("a1","v1").append("a2", 123).append("a3", null).append("a4", "");
 		}
-		@Header("*")
+		@Header(value="*",allowEmptyValue=true)
 		public NameValuePairs getB() {
 			return new NameValuePairs().append("b1","true").append("b2", "123").append("b3", "null");
 		}
-		@Header(name="*")
+		@Header(name="*",allowEmptyValue=true)
 		public NameValuePairs getC() {
 			return new NameValuePairs().append("c1","v1").append("c2", 123).append("c3", null).append("c4", "");
 		}
-		@Header("*")
+		@Header(value="*",allowEmptyValue=true)
 		public NameValuePairs getD() {
 			return null;
 		}
 	}
 
 	static E03_RemoteResource e03a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E03_RemoteResource.class, null);
-	static E03_RemoteResource e03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E03_RemoteResource.class, null);
+	static E03_RemoteResource e03b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(e).build().getRemoteResource(E03_RemoteResource.class, null);
 
 	@Test
 	public void e03a_header_nameValuePairs_plainText() throws Exception {
@@ -802,12 +803,12 @@ public class RequestBeanProxyTest {
 	@Test
 	public void e03b_header_nameValuePairs_uon() throws Exception {
 		String r = e03b.normal(new E03_Bean());
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
+		assertEquals("{a1:'v1',a2:'\\'123\\'',a4:'',b1:'\\'true\\'',b2:'\\'123\\'',b3:'\\'null\\'',c1:'v1',c2:'\\'123\\'',c4:''}", r);
 	}
 	@Test
 	public void e03c_header_nameValuePairs_x() throws Exception {
 		String r = e03b.serialized(new E03_Bean());
-		assertEquals("{a1:'v1',a2:'123',a4:'',b1:'true',b2:'123',b3:'null',c1:'v1',c2:'123',c4:''}", r);
+		assertEquals("{a1:'xv1x',a2:'x123x',a4:'xx',b1:'xtruex',b2:'x123x',b3:'xnullx',c1:'xv1x',c2:'x123x',c4:'xx'}", r);
 	}
 
 	//=================================================================================================================
@@ -864,7 +865,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static E04_RemoteResource e04a = RestClient.create().mockHttpConnection(e).build().getRemoteResource(E04_RemoteResource.class, null);
-	static E04_RemoteResource e04b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(e).build().getRemoteResource(E04_RemoteResource.class, null);
+	static E04_RemoteResource e04b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(e).build().getRemoteResource(E04_RemoteResource.class, null);
 
 	@Test
 	public void e04a_header_collections_plainText() throws Exception {
@@ -941,7 +942,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static G01_RemoteResource g01a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G01_RemoteResource.class, null);
-	static G01_RemoteResource g01b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G01_RemoteResource.class, null);
+	static G01_RemoteResource g01b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(g).build().getRemoteResource(G01_RemoteResource.class, null);
 
 	@Test
 	public void g01a_pathSimpleValsPlainText() throws Exception {
@@ -993,7 +994,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static G02_RemoteResource g02a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G02_RemoteResource.class, null);
-	static G02_RemoteResource g02b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G02_RemoteResource.class, null);
+	static G02_RemoteResource g02b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(g).build().getRemoteResource(G02_RemoteResource.class, null);
 
 	@Test
 	public void g02a_path_maps_plainText() throws Exception {
@@ -1045,7 +1046,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static G03_RemoteResource g03a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G03_RemoteResource.class, null);
-	static G03_RemoteResource g03b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G03_RemoteResource.class, null);
+	static G03_RemoteResource g03b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(g).build().getRemoteResource(G03_RemoteResource.class, null);
 
 	@Test
 	public void g03a_path_nameValuePairs_plainText() throws Exception {
@@ -1117,7 +1118,7 @@ public class RequestBeanProxyTest {
 	}
 
 	static G04_RemoteResource g04a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G04_RemoteResource.class, null);
-	static G04_RemoteResource g04b = RestClient.create().partSerializer(UonPartSerializer.class).mockHttpConnection(g).build().getRemoteResource(G04_RemoteResource.class, null);
+	static G04_RemoteResource g04b = RestClient.create().partSerializer(UonSerializer.class).mockHttpConnection(g).build().getRemoteResource(G04_RemoteResource.class, null);
 
 	@Test
 	public void g04a_path_collections_plainText() throws Exception {
@@ -1139,10 +1140,10 @@ public class RequestBeanProxyTest {
 	// Support classes
 	//=================================================================================================================
 
-	public static class XSerializer implements HttpPartSerializer {
+	public static class XSerializer extends BaseHttpPartSerializer {
 		@Override
-		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
-			return new HttpPartSerializerSession() {
+		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+			return new BaseHttpPartSerializerSession() {
 				@Override
 				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 					if (value == null)
@@ -1158,19 +1159,19 @@ public class RequestBeanProxyTest {
 
 		@Override
 		public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-			return createSession(null).serialize(partType, schema, value);
+			return createPartSession().serialize(partType, schema, value);
 		}
 
 		@Override
 		public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-			return createSession(null).serialize(null, schema, value);
+			return createPartSession().serialize(null, schema, value);
 		}
 	}
 
-	public static class ListSerializer implements HttpPartSerializer {
+	public static class ListSerializer extends BaseHttpPartSerializer {
 		@Override
-		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
-			return new HttpPartSerializerSession() {
+		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+			return new BaseHttpPartSerializerSession() {
 				@Override
 				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 					if (value == null)
@@ -1186,12 +1187,12 @@ public class RequestBeanProxyTest {
 
 		@Override
 		public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-			return createSession(null).serialize(partType, schema, value);
+			return createPartSession().serialize(partType, schema, value);
 		}
 
 		@Override
 		public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-			return createSession(null).serialize(null, schema, value);
+			return createPartSession().serialize(null, schema, value);
 		}
 	}
 }

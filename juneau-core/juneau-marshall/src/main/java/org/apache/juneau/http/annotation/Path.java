@@ -22,6 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.oapi.*;
 
 /**
   * REST request path annotation.
@@ -90,7 +91,7 @@ public @interface Path {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
+	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 
@@ -98,7 +99,7 @@ public @interface Path {
 	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
 	 *
 	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
 

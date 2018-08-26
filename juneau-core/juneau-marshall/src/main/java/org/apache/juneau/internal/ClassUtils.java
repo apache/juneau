@@ -215,6 +215,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the {@link #getPrimitiveWrapper(Class)} class returns a value for the specified class.
+	 *
+	 * @param c The class.
+	 * @return <jk>true</jk> if the {@link #getPrimitiveWrapper(Class)} class returns a value for the specified class.
+	 */
+	public static boolean hasPrimitiveWrapper(Class<?> c) {
+		return pmap1.containsKey(c);
+	}
+
+	/**
 	 * If the specified class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
 	 * (e.g. <code>Integer.<jk>class</jk></code>).
 	 *

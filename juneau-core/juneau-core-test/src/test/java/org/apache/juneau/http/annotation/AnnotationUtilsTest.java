@@ -20,7 +20,6 @@ import static org.apache.juneau.http.annotation.AnnotationUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.httppart.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -136,50 +135,5 @@ public class AnnotationUtilsTest {
 		assertTrue(allMinusOne(-1l,-1l));
 		assertFalse(allMinusOne(-1l,0l));
 		assertFalse(allMinusOne(0l));
-	}
-
-	@Body public static class C01a {}
-	@Body(usePartParser=true) public static class C01b {}
-	@Body(schema=@Schema) public static class C01c {}
-	@Body(schema=@Schema(description="foo")) public static class C01d {}
-	@Body(partParser=OpenApiPartParser.class) public static class C01e {}
-
-	@Test
-	public void usePartParserBody() {
-		assertFalse(usePartParser(C01a.class.getAnnotation(Body.class)));
-		assertTrue(usePartParser(C01b.class.getAnnotation(Body.class)));
-		assertFalse(usePartParser(C01c.class.getAnnotation(Body.class)));
-		assertTrue(usePartParser(C01d.class.getAnnotation(Body.class)));
-		assertTrue(usePartParser(C01e.class.getAnnotation(Body.class)));
-	}
-
-	@Body public static class D01a {}
-	@Body(usePartSerializer=true) public static class D01b {}
-	@Body(schema=@Schema) public static class D01c {}
-	@Body(schema=@Schema(description="foo")) public static class D01d {}
-	@Body(partSerializer=OpenApiPartSerializer.class) public static class D01e {}
-
-	@Test
-	public void usePartSerializerBody() {
-		assertFalse(usePartSerializer(D01a.class.getAnnotation(Body.class)));
-		assertTrue(usePartSerializer(D01b.class.getAnnotation(Body.class)));
-		assertFalse(usePartSerializer(D01c.class.getAnnotation(Body.class)));
-		assertTrue(usePartSerializer(D01d.class.getAnnotation(Body.class)));
-		assertTrue(usePartSerializer(D01e.class.getAnnotation(Body.class)));
-	}
-
-	@Response public static class F01a {}
-	@Response(usePartSerializer=true) public static class F01b {}
-	@Response(schema=@Schema) public static class F01c {}
-	@Response(schema=@Schema(description="foo")) public static class F01d {}
-	@Response(partSerializer=OpenApiPartSerializer.class) public static class F01e {}
-
-	@Test
-	public void usePartSerializerResponse() {
-		assertFalse(usePartSerializer(F01a.class.getAnnotation(Response.class)));
-		assertTrue(usePartSerializer(F01b.class.getAnnotation(Response.class)));
-		assertFalse(usePartSerializer(F01c.class.getAnnotation(Response.class)));
-		assertTrue(usePartSerializer(F01d.class.getAnnotation(Response.class)));
-		assertTrue(usePartSerializer(F01e.class.getAnnotation(Response.class)));
 	}
 }

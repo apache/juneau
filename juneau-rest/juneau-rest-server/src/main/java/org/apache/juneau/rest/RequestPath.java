@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.exception.*;
 
@@ -154,7 +155,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
+	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
 	 * @param name The attribute name.
 	 * @param type The class type to convert the attribute value to.
 	 * @param <T> The class type to convert the attribute value to.
@@ -230,7 +231,7 @@ public class RequestPath extends TreeMap<String,String> {
 	 * 	The schema object that defines the format of the input.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part parser is not a subclass of {@link OpenApiPartParser}.
+	 * 	<br>Only used if parser is schema-aware (e.g. {@link OpenApiParser}).
 	 * @param name The attribute name.
 	 * @param type
 	 * 	The type of object to create.
@@ -276,7 +277,7 @@ public class RequestPath extends TreeMap<String,String> {
 	private <T> T parse(HttpPartParser parser, HttpPartSchema schema, String val, ClassMeta<T> cm) throws SchemaValidationException, ParseException {
 		if (parser == null)
 			parser = this.parser;
-		return parser.createSession(req.getParserSessionArgs()).parse(HttpPartType.PATH, schema, val, cm);
+		return parser.createPartSession(req.getParserSessionArgs()).parse(HttpPartType.PATH, schema, val, cm);
 	}
 
 	/**

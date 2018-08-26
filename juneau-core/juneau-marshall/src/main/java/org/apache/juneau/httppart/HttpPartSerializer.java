@@ -23,10 +23,8 @@ import org.apache.juneau.serializer.*;
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Parts encoded based on OpenAPI schema.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer} - Parts encoded in UON notation, but
- * 		strings are treated as plain-text and arrays/collections are serialized as comma-delimited lists.
+ * 	<li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer} - Parts encoded based on OpenAPI schema.
+ * 	<li class='jc'>{@link org.apache.juneau.uon.UonSerializer} - Parts encoded in UON notation.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Parts encoded in plain text.
  * </ul>
  *
@@ -62,7 +60,14 @@ public interface HttpPartSerializer {
 	 * @param args The runtime arguments for the session.
 	 * @return A new serializer session.
 	 */
-	public HttpPartSerializerSession createSession(SerializerSessionArgs args);
+	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args);
+
+	/**
+	 * Creates a new no-argument serializer session.
+	 *
+	 * @return A new serializer session.
+	 */
+	public HttpPartSerializerSession createPartSession();
 
 	/**
 	 * Convenience method for creating a no-arg session and serializing a part.

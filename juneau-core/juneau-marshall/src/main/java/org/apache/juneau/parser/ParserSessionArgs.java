@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 
 /**
  * Runtime arguments common to all parser sessions.
@@ -55,14 +56,17 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 	 * @param mediaType
 	 * 	The session media type (e.g. <js>"application/json"</js>).
 	 * 	<br>Can be <jk>null</jk>.
+	 * @param schema
+	 * 	The part schema for the serialized part.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param debug
 	 * 	Enable debug mode for this session.
 	 * 	<br>Can be <jk>null</jk> to use the debug setting on the bean context..
 	 * @param outer
 	 * 	The outer object for instantiating top-level non-static inner classes.
 	 */
-	public ParserSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, Boolean debug, Object outer) {
-		super(properties, locale, timeZone, mediaType, debug);
+	public ParserSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug, Object outer) {
+		super(properties, locale, timeZone, mediaType, schema, debug);
 		this.javaMethod = javaMethod;
 		this.outer = outer;
 	}

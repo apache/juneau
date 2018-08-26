@@ -23,8 +23,8 @@ import org.apache.juneau.parser.*;
  * <p>
  * The following default implementations are provided:
  * <ul class='doctree'>
- * 	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parts encoded in based on OpenAPI schema.
- * 	<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parts encoded in UON notation.
+ * 	<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser} - Parts encoded in based on OpenAPI schema.
+ * 	<li class='jc'>{@link org.apache.juneau.uon.UonParser} - Parts encoded in UON notation.
  * 	<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parts encoded in plain text.
  * </ul>
  *
@@ -48,24 +48,15 @@ public interface HttpPartParser {
 	 * @param args The runtime arguments for the session.
 	 * @return A new parser session.
 	 */
-	public HttpPartParserSession createSession(ParserSessionArgs args);
+	public HttpPartParserSession createPartSession(ParserSessionArgs args);
 
-//	/**
-//	 * Convenience method for creating a no-arg session and parsing a part.
-//	 *
-//	 * @param partType The category of value being parsed.
-//	 * @param schema
-//	 * 	Schema information about the part.
-//	 * 	<br>May be <jk>null</jk>.
-//	 * 	<br>Not all part parsers use the schema information.
-//	 * @param in The value being parsed.
-//	 * @param toType The POJO type to transform the input into.
-//	 * @return The parsed value.
-//	 * @throws ParseException If a problem occurred while trying to parse the input.
-//	 * @throws SchemaValidationException If the input fails schema validation.
-//	 */
-//	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException;
-//
+	/**
+	 * Creates a new no-argument parser session.
+	 *
+	 * @return A new parser session.
+	 */
+	public HttpPartParserSession createPartSession();
+
 	/**
 	 * Convenience method for creating a no-arg session and parsing a part.
 	 *
@@ -99,21 +90,6 @@ public interface HttpPartParser {
 	 */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException;
 
-//	/**
-//	 * Convenience method for creating a no-arg session and parsing a part of an unspecified part type.
-//	 *
-//	 * @param schema
-//	 * 	Schema information about the part.
-//	 * 	<br>May be <jk>null</jk>.
-//	 * 	<br>Not all part parsers use the schema information.
-//	 * @param in The value being parsed.
-//	 * @param toType The POJO type to transform the input into.
-//	 * @return The parsed value.
-//	 * @throws ParseException If a problem occurred while trying to parse the input.
-//	 * @throws SchemaValidationException If the input fails schema validation.
-//	 */
-//	public <T> T parse(HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException;
-//
 	/**
 	 * Convenience method for creating a no-arg session and parsing a part of an unspecified part type.
 	 *

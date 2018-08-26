@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -47,7 +48,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 */
 	public SerializedNameValuePair(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema) {
 		this.name = name;
@@ -64,7 +65,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {
-			return serializer.createSession(null).serialize(HttpPartType.FORMDATA, schema, value);
+			return serializer.createPartSession().serialize(HttpPartType.FORMDATA, schema, value);
 		} catch (SchemaValidationException e) {
 			throw new FormattedRuntimeException(e, "Validation error on request form-data parameter ''{0}''=''{1}''", name, value);
 		} catch (SerializeException e) {

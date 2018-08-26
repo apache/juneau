@@ -22,13 +22,14 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.oapi.*;
 import org.junit.*;
 import org.junit.runners.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenApiPartParserTest {
 
-	static OpenApiPartParserSession p = OpenApiPartParser.DEFAULT.createSession();
+	static OpenApiParserSession p = OpenApiParser.DEFAULT.createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Input validations

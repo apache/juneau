@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -43,6 +44,7 @@ public class BeanSession extends Session {
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
 	private final boolean debug;
+	private final HttpPartSchema schema;
 	private Stack<StringBuilder> sbStack = new Stack<>();
 
 	/**
@@ -60,6 +62,7 @@ public class BeanSession extends Session {
 		locale = ObjectUtils.firstNonNull(args.locale, ctx.getLocale(), Locale.getDefault());
 		timeZone = ObjectUtils.firstNonNull(args.timeZone, ctx.getTimeZone());
 		debug = ObjectUtils.firstNonNull(args.debug, ctx.isDebug(), false);
+		schema = args.schema;
 		mediaType = ObjectUtils.firstNonNull(args.mediaType, ctx.getMediaType());
 	}
 
@@ -70,6 +73,7 @@ public class BeanSession extends Session {
 			.append("BeanSession", new ObjectMap()
 				.append("debug", debug)
 				.append("locale", locale)
+				.append("schema", schema)
 				.append("mediaType", mediaType)
 				.append("timeZone", timeZone)
 			);
@@ -1499,6 +1503,15 @@ public class BeanSession extends Session {
 	 */
 	public final MediaType getMediaType() {
 		return mediaType;
+	}
+
+	/**
+	 * HTTP part schema of object being serialized or parsed.
+	 * 
+	 * @return HTTP part schema of object being serialized or parsed, or <jk>null</jk> if not specified.
+	 */
+	public final HttpPartSchema getSchema() {
+		return schema;
 	}
 
 	@Override /* Session */

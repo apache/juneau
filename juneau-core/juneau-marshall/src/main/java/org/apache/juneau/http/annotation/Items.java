@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 
 /**
  * Swagger items annotation.
@@ -26,7 +26,7 @@ import org.apache.juneau.httppart.*;
  *
  * <p>
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
- * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiPartSerializer} and parsed through {@link OpenApiPartParser}.
+ * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>

@@ -101,7 +101,7 @@ public class HttpPart {
 	public String asString() throws SchemaValidationException, SerializeException {
 		if (spart != null)
 			return spart;
-		return serializer.createSession(sargs).serialize(partType, schema, opart);
+		return serializer.createPartSession(sargs).serialize(partType, schema, opart);
 	}
 
 	/**
@@ -113,6 +113,6 @@ public class HttpPart {
 	 * @throws ParseException
 	 */
 	public <T> T asType(Class<T> c) throws SchemaValidationException, ParseException {
-		return parser.createSession(pargs).parse(partType, schema, spart, c);
+		return parser.createPartSession(pargs).parse(partType, schema, spart, c);
 	}
 }

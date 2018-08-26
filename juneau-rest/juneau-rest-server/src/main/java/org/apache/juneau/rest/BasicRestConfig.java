@@ -17,6 +17,7 @@ import static org.apache.juneau.serializer.Serializer.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.soap.*;
@@ -46,6 +47,7 @@ import org.apache.juneau.xmlschema.*;
 		XmlSchemaDocSerializer.class,
 		UonSerializer.class,
 		UrlEncodingSerializer.class,
+		OpenApiSerializer.class,
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
 		PlainTextSerializer.class
@@ -59,6 +61,7 @@ import org.apache.juneau.xmlschema.*;
 		HtmlParser.class,
 		UonParser.class,
 		UrlEncodingParser.class,
+		OpenApiParser.class,
 		MsgPackParser.class,
 		PlainTextParser.class
 	},

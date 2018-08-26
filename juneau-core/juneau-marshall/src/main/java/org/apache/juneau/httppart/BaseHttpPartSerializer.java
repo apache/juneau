@@ -12,54 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import java.io.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.uon.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link UonPartSerializer}.
- *
- * <p>
- * This class is NOT thread safe.
- * It is typically discarded after one-time use although it can be reused within the same thread.
+ * Base class for implementations of {@link HttpPartSerializer}
  */
-public class UonPartSerializerSession extends UonSerializerSession implements HttpPartSerializerSession {
+public abstract class BaseHttpPartSerializer implements HttpPartSerializer {
 
-	/**
-	 * Create a new session using properties specified in the context.
-	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
-	 */
-	protected UonPartSerializerSession(UonPartSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, false, args);
+	@Override
+	public HttpPartSerializerSession createPartSession() {
+		return createPartSession(null);
 	}
 
-	@Override /* PartSerializer */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-		try {
-			// Shortcut for simple types.
-			ClassMeta<?> cm = getClassMetaForObject(value);
-			if (cm != null) {
-				if (cm.isNumber() || cm.isBoolean())
-					return ClassUtils.toString(value);
-				if (cm.isString()) {
-					String s = ClassUtils.toString(value);
-					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
-						return s;
-				}
-			}
-			StringWriter w = new StringWriter();
-			super.serialize(value, w);
-			return w.toString();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	@Override
+	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return serialize(null, schema, value);
 	}
 }

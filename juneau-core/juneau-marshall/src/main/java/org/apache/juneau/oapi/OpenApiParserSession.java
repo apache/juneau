@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.oapi;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
@@ -20,17 +20,19 @@ import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.uon.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link OpenApiPartParser}.
+ * Session object that lives for the duration of a single use of {@link OpenApiParser}.
  *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class OpenApiPartParserSession extends UonPartParserSession {
+public class OpenApiParserSession extends UonParserSession {
 
 	// Cache these for faster lookup
 	private static final BeanContext BC = BeanContext.DEFAULT;
@@ -48,7 +50,7 @@ public class OpenApiPartParserSession extends UonPartParserSession {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final OpenApiPartParser ctx;
+	private final OpenApiParser ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -59,7 +61,7 @@ public class OpenApiPartParserSession extends UonPartParserSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected OpenApiPartParserSession(OpenApiPartParser ctx, ParserSessionArgs args) {
+	protected OpenApiParserSession(OpenApiParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
 	}
@@ -67,7 +69,7 @@ public class OpenApiPartParserSession extends UonPartParserSession {
 
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
-		schema = ObjectUtils.firstNonNull(schema, ctx.getSchema(), DEFAULT_SCHEMA);
+		schema = ObjectUtils.firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
 			t = type.getPrimitiveDefault();

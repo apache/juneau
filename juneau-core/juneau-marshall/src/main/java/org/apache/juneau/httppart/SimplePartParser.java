@@ -40,7 +40,7 @@ import org.apache.juneau.parser.*;
  * 	</ul>
  * </ul>
  */
-public class SimplePartParser implements HttpPartParser {
+public class SimplePartParser extends BaseHttpPartParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -54,40 +54,17 @@ public class SimplePartParser implements HttpPartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	@Override
-	public SimplePartParserSession createSession(ParserSessionArgs args) {
-		return new SimplePartParserSession();
-	}
-
-	/**
-	 * Create a new parser session on the properties defined on this context.
-	 *
-	 * <p>
-	 * Use this method for creating sessions if you don't need to override any
-	 * properties or locale/timezone currently set on this context.
-	 *
-	 * @return A new session object.
-	 */
-	public SimplePartParserSession createSession() {
+	public SimplePartParserSession createPartSession(ParserSessionArgs args) {
 		return new SimplePartParserSession();
 	}
 
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return createSession().parse(partType, schema, in, toType);
+		return createPartSession().parse(partType, schema, in, toType);
 	}
 
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		return createSession().parse(partType, schema, in, toType, toTypeArgs);
-	}
-
-	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return createSession().parse(null, schema, in, toType);
-	}
-
-	@Override /* HttpPartParser */
-	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		return createSession().parse(null, schema, in, toType, toTypeArgs);
+		return createPartSession().parse(partType, schema, in, toType, toTypeArgs);
 	}
 }

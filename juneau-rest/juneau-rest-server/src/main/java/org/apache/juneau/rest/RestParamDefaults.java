@@ -210,18 +210,16 @@ class RestParamDefaults {
 	}
 
 	static final class BodyObject extends RestMethodParam {
-		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
 		protected BodyObject(Method m, int i, PropertyStore ps) {
 			super(BODY, m, i);
 			this.schema = HttpPartSchema.create(Body.class, m, i);
-			this.partParser = schema.isUsePartParser() ? createPartParser(schema.getParser(), ps) : null;
 		}
 
 		@Override /* RestMethodParam */
 		public Object resolve(RestRequest req, RestResponse res) throws Exception {
-			return req.getBody().asType(partParser, schema, type);
+			return req.getBody().schema(schema).asType(type);
 		}
 	}
 

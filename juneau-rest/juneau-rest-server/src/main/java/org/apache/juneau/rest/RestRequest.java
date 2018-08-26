@@ -40,6 +40,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
@@ -181,7 +182,6 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		this.body
 			.encoders(rjm.encoders)
 			.parsers(rjm.parsers)
-			.partParser(rjm.partParser)
 			.headers(headers)
 			.maxInput(rjm.maxInput);
 
@@ -563,7 +563,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public RequestFormData getFormData() throws InternalServerError {
 		try {
 			if (formData == null) {
-				formData = new RequestFormData(this, restJavaMethod == null ? OpenApiPartParser.DEFAULT : restJavaMethod.partParser);
+				formData = new RequestFormData(this, restJavaMethod == null ? OpenApiParser.DEFAULT : restJavaMethod.partParser);
 				if (! body.isLoaded()) {
 					formData.putAll(getParameterMap());
 				} else {
@@ -1095,7 +1095,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The part serializer associated with this request.
 	 */
 	public HttpPartParser getPartParser() {
-		return restJavaMethod == null ? OpenApiPartParser.DEFAULT : restJavaMethod.partParser;
+		return restJavaMethod == null ? OpenApiParser.DEFAULT : restJavaMethod.partParser;
 	}
 
 	/**
@@ -1104,7 +1104,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return The part serializer associated with this request.
 	 */
 	public HttpPartSerializer getPartSerializer() {
-		return restJavaMethod == null ? OpenApiPartSerializer.DEFAULT : restJavaMethod.partSerializer;
+		return restJavaMethod == null ? OpenApiSerializer.DEFAULT : restJavaMethod.partSerializer;
 	}
 
 	/**
@@ -1493,7 +1493,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 							ClassMeta<?> type = getContext().getBeanContext().getClassMeta(method.getGenericReturnType());
 							HttpPartType pt = pm.getPartType();
 							if (pt == HttpPartType.BODY)
-								return getBody().asType(pm.getParser(null), schema, type);
+								return getBody().schema(schema).asType(type);
 							if (pt == QUERY)
 								return getQuery().get(pp, schema, name, type);
 							if (pt == FORMDATA)
@@ -1547,7 +1547,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public SerializerSessionArgs getSerializerSessionArgs() {
 		if (serializerSessionArgs == null)
-			serializerSessionArgs = new SerializerSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, isDebug() ? true : null, getUriContext(), isPlainText() ? true : null);
+			serializerSessionArgs = new SerializerSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, null, isDebug() ? true : null, getUriContext(), isPlainText() ? true : null);
 		return serializerSessionArgs;
 	}
 
@@ -1558,7 +1558,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public ParserSessionArgs getParserSessionArgs() {
 		if (parserSessionArgs == null)
-			parserSessionArgs = new ParserSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, isDebug() ? true : null, getUriContext());
+			parserSessionArgs = new ParserSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, null, isDebug() ? true : null, getUriContext());
 		return parserSessionArgs;
 	}
 

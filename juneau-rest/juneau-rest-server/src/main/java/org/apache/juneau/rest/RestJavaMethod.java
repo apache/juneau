@@ -328,6 +328,14 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					defaultRequestHeaders.put(h[0], h[1]);
 				}
 
+				String defaultAccept = vr.resolve(m.defaultAccept());
+				if (isNotEmpty(defaultAccept))
+					defaultRequestHeaders.put("Accept", defaultAccept);
+
+				String defaultContentType = vr.resolve(m.defaultContentType());
+				if (isNotEmpty(defaultContentType))
+					defaultRequestHeaders.put("Content-Type", defaultAccept);
+
 				defaultQuery = new LinkedHashMap<>();
 				for (String s : m.defaultQuery()) {
 					String[] h = RestUtils.parseKeyValuePair(vr.resolve(s));
@@ -449,7 +457,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			ResponseBody a = c.getAnnotation(ResponseBody.class);
 			if (a != null) {
 				HttpPartSchema schema = HttpPartSchema.create(a);
-				HttpPartSerializer serializer = schema.isUsePartSerializer() ? createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer) : null;
+				HttpPartSerializer serializer = createPartSerializer(schema.getSerializer(), serializers.getPropertyStore(), partSerializer);
 				pm = new ResponsePartMeta(BODY, schema, serializer);
 			}
 			if (pm == null)

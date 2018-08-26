@@ -385,20 +385,16 @@ final class SwaggerGenerator {
 			}
 
 			if (hasAnnotation(Response.class, m)) {
-				boolean usePS = false;
 				for (Response a : getAnnotationsParentFirst(Response.class, m)) {
 					for (Integer code : getCodes(a, 200)) {
 						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 						merge(om, a);
-						usePS |= usePartSerializer(a);
 					}
 				}
-				if (usePS) {
-					for (String code : responses.keySet()) {
-						ObjectMap om = responses.getObjectMap(code);
-						if (! om.containsKey("schema"))
-							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
-					}
+				for (String code : responses.keySet()) {
+					ObjectMap om = responses.getObjectMap(code);
+					if (! om.containsKey("schema"))
+						om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
 				}
 			}
 
@@ -416,22 +412,18 @@ final class SwaggerGenerator {
 					}
 
 				} else if (in == RESPONSE) {
-					boolean usePS = false;
 					for (Response a : getAnnotationsParentFirst(Response.class, mp.method, mp.index)) {
 						for (Integer code : getCodes(a, 200)) {
 							ObjectMap response = responses.getObjectMap(String.valueOf(code), true);
 							merge(response, a);
-							usePS |= usePartSerializer(a);
 						}
 					}
-					if (usePS) {
-						Type type = Value.getParameterType(mp.type);
-						if (type != null) {
-							for (String code : responses.keySet()) {
-								ObjectMap om = responses.getObjectMap(code);
-								if (! om.containsKey("schema"))
-									om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), type));
-							}
+					Type type = Value.getParameterType(mp.type);
+					if (type != null) {
+						for (String code : responses.keySet()) {
+							ObjectMap om = responses.getObjectMap(code);
+							if (! om.containsKey("schema"))
+								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), type));
 						}
 					}
 				}
@@ -768,7 +760,7 @@ final class SwaggerGenerator {
 				if (mt != MediaType.HTML) {
 					Serializer s2 = sm.getSerializers().getSerializer(mt);
 					if (s2 != null) {
-						SerializerSessionArgs args = new SerializerSessionArgs(null, req.getJavaMethod(), req.getLocale(), null, mt, req.isDebug() ? true : null, req.getUriContext(), true);
+						SerializerSessionArgs args = new SerializerSessionArgs(null, req.getJavaMethod(), req.getLocale(), null, mt, null, req.isDebug() ? true : null, req.getUriContext(), true);
 						try {
 							String eVal = s2.createSession(args).serializeToString(example);
 							examples.put(s2.getPrimaryMediaType().toString(), eVal);
@@ -780,7 +772,7 @@ final class SwaggerGenerator {
 			}
 		} else {
 			String paramName = piri.getString("name");
-			String s = sm.partSerializer.createSession(req.getSerializerSessionArgs()).serialize(HttpPartType.valueOf(in.toUpperCase()), null, example);
+			String s = sm.partSerializer.createPartSession(req.getSerializerSessionArgs()).serialize(HttpPartType.valueOf(in.toUpperCase()), null, example);
 			if ("query".equals(in))
 				s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
 			else if ("formData".equals(in))

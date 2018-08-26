@@ -21,7 +21,7 @@ import org.apache.juneau.serializer.*;
  * <p>
  * More precisely, uses the {@link ClassUtils#toString(Object)} method to stringify objects.
  */
-public class SimplePartSerializer implements HttpPartSerializer {
+public class SimplePartSerializer extends BaseHttpPartSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -35,26 +35,12 @@ public class SimplePartSerializer implements HttpPartSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	@Override
-	public SimplePartSerializerSession createSession(SerializerSessionArgs args) {
-		return new SimplePartSerializerSession();
-	}
-
-	/**
-	 * Convenience method for creating a new serializer session with default session args.
-	 *
-	 * @return A new session object.
-	 */
-	public SimplePartSerializerSession createSession() {
+	public SimplePartSerializerSession createPartSession(SerializerSessionArgs args) {
 		return new SimplePartSerializerSession();
 	}
 
 	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) {
-		return createSession().serialize(partType, schema, value);
-	}
-
-	@Override /* HttpPartSerializer */
-	public String serialize(HttpPartSchema schema, Object value) {
-		return createSession().serialize(null, schema, value);
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createPartSession().serialize(partType, schema, value);
 	}
 }

@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.uon.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -25,7 +26,7 @@ import org.junit.runners.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UonPartParserTest {
 
-	static UonPartParserSession p = UonPartParser.DEFAULT.createSession();
+	static UonParserSession p = UonParser.DEFAULT.createSession();
 	static BeanSession bs = p;
 
 	//====================================================================================================
@@ -250,7 +251,7 @@ public class UonPartParserTest {
 	//====================================================================================================
 	@Test
 	public void testSimpleBean() throws Exception {
-		UonPartParserSession p = UonPartParser.DEFAULT.createSession();
+		UonParserSession p = UonParser.DEFAULT.createSession();
 		A t;
 		String s = null;
 
@@ -274,7 +275,7 @@ public class UonPartParserTest {
 	public void testParseParameterObjectMap() throws Exception {
 		String in = "(name='foo bar')";
 
-		ObjectMap r =  UonPartParser.DEFAULT.createSession().parse(null, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
+		ObjectMap r =  UonParser.DEFAULT.createSession().parse(null, in, BeanContext.DEFAULT.createSession().getClassMeta(ObjectMap.class));
 
 		assertEquals("{name:'foo bar'}", SimpleJsonSerializer.DEFAULT.toString(r));
 	}

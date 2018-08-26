@@ -235,6 +235,24 @@ public @interface RestResource {
 	Class<? extends RestConverter>[] converters() default {};
 
 	/**
+	 * Default <code>Accept</code> header.
+	 *
+	 * <p>
+	 * The default value for the <code>Accept</code> header if not specified on a request.
+	 *
+	 * <p>
+	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String defaultAccept() default "";
+
+	/**
 	 * Default character encoding.
 	 *
 	 * <p>
@@ -253,6 +271,24 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String defaultCharset() default "";
+
+	/**
+	 * Default <code>Content-Type</code> header.
+	 *
+	 * <p>
+	 * The default value for the <code>Content-Type</code> header if not specified on a request.
+	 *
+	 * <p>
+	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 */
+	String defaultContentType() default "";
 
 	/**
 	 * Default request headers.

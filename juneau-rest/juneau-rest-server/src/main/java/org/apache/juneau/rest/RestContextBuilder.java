@@ -34,6 +34,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
@@ -118,8 +119,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 		// Default values.
 		logger(BasicRestLogger.class);
-		partSerializer(OpenApiPartSerializer.class);
-		partParser(OpenApiPartParser.class);
+		partSerializer(OpenApiSerializer.class);
+		partParser(OpenApiParser.class);
 		staticFileResponseHeader("Cache-Control", "max-age=86400, public");
 		encoders(IdentityEncoder.INSTANCE);
 
@@ -180,6 +181,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				if (r.consumes().length > 0)
 					consumes(false, resolveVars(vr, r.consumes()));
 				defaultRequestHeaders(resolveVars(vr, r.defaultRequestHeaders()));
+				defaultAccept(vr.resolve(r.defaultAccept()));
+				defaultContentType(vr.resolve(r.defaultContentType()));
 				defaultResponseHeaders(resolveVars(vr, r.defaultResponseHeaders()));
 				responseHandlers(r.responseHandlers());
 				converters(r.converters());
@@ -837,6 +840,34 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Specifies a default <code>Accept</code> header value if not specified on a request.
+	 *
+	 * @param value
+	 * 	The default value of the <code>Accept</code> header.
+	 * 	<br>Ignored if <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder defaultAccept(String value) {
+		if (isNotEmpty(value))
+			defaultRequestHeader("Accept", value);
+		return this;
+	}
+
+	/**
+	 * Specifies a default <code>Content-Type</code> header value if not specified on a request.
+	 *
+	 * @param value
+	 * 	The default value of the <code>Content-Type</code> header.
+	 * 	<br>Ignored if <jk>null</jk> or empty.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder defaultContentType(String value) {
+		if (isNotEmpty(value))
+			defaultRequestHeader("Content-Type", value);
+		return this;
+	}
+
+	/**
 	 * Configuration property:  Default request headers.
 	 *
 	 * <p>
@@ -1282,7 +1313,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiPartParser}.
+	 * 	<br>The default is {@link OpenApiParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(Class<? extends HttpPartParser> value) {
@@ -1304,7 +1335,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiPartParser}.
+	 * 	<br>The default is {@link OpenApiParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partParser(HttpPartParser value) {
@@ -1324,7 +1355,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiPartSerializer}.
+	 * 	<br>The default is {@link OpenApiSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
@@ -1346,7 +1377,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default is {@link OpenApiPartSerializer}.
+	 * 	<br>The default is {@link OpenApiSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestContextBuilder partSerializer(HttpPartSerializer value) {

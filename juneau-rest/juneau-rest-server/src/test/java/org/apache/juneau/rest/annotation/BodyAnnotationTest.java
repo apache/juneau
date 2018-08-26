@@ -42,7 +42,7 @@ public class BodyAnnotationTest {
 	// @Body on parameter
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static class A {
 		@RestMethod(name=PUT, path="/String")
 		public String a01(@Body String b) {
@@ -195,7 +195,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a08b_onParameter_Map_noContentType() throws Exception {
-		a.put("/Map", "(foo=123)").execute().assertBody("{foo:123}");  // Uses part parser.
+		a.put("/Map", "(foo=123)").execute().assertStatus(415);
 	}
 	@Test
 	public void a09a_onParameter_enum() throws Exception {
@@ -211,7 +211,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a11b_onParameter_Bean_noContentType() throws Exception {
-		a.put("/Bean", "(f1=a)").execute().assertBody("{f1:'a'}");  // Uses part parser.
+		a.put("/Bean", "(f1=a)").execute().assertStatus(415);
 	}
 	@Test
 	public void a12a_onParameter_InputStream() throws Exception {
@@ -264,7 +264,7 @@ public class BodyAnnotationTest {
 	// @Body on POJO
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class B {
 		@RestMethod(name=PUT, path="/StringTransform")
 		public B01 b01(B01 b) {
@@ -328,7 +328,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void b02b_onPojo_Bean_noContentType() throws Exception {
-		b.put("/Bean", "(f1=a)").execute().assertBody("{f1:'a'}");  // Uses part parser.
+		b.put("/Bean", "(f1=a)").execute().assertStatus(415);
 	}
 	@Test
 	public void b03a_onPojo_BeanList() throws Exception {
@@ -336,7 +336,7 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void b03b_onPojo_BeanList_noContentType() throws Exception {
-		b.put("/BeanList", "(f1=a)").execute().assertBody("[{f1:'a'}]");  // Uses part parser.
+		b.put("/BeanList", "(f1=a)").execute().assertStatus(415);
 	}
 	@Test
 	public void b04a_onPojo_InputStreamTransform() throws Exception {
@@ -609,7 +609,7 @@ public class BodyAnnotationTest {
 	// Complex POJOs
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class E {
 		@RestMethod(name=PUT, path="/B")
 		public DTOs.B testPojo1(@Body DTOs.B b) {

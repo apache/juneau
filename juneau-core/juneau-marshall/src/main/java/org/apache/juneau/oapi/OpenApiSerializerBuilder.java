@@ -10,9 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
-
-import static org.apache.juneau.httppart.OpenApiPartSerializer.*;
+package org.apache.juneau.oapi;
 
 import java.util.*;
 
@@ -20,17 +18,16 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
- * Builder class for building instances of {@link UonPartSerializer}.
+ * Builder class for building instances of {@link OpenApiSerializer}.
  */
-public class OpenApiPartSerializerBuilder extends UonPartSerializerBuilder {
+public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 
 	/**
 	 * Constructor, default settings.
 	 */
-	public OpenApiPartSerializerBuilder() {
+	public OpenApiSerializerBuilder() {
 		super();
 	}
 
@@ -39,13 +36,13 @@ public class OpenApiPartSerializerBuilder extends UonPartSerializerBuilder {
 	 *
 	 * @param ps The initial configuration settings for this builder.
 	 */
-	public OpenApiPartSerializerBuilder(PropertyStore ps) {
+	public OpenApiSerializerBuilder(PropertyStore ps) {
 		super(ps);
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializer build() {
-		return build(OpenApiPartSerializer.class);
+	public OpenApiSerializer build() {
+		return build(OpenApiSerializer.class);
 	}
 
 
@@ -53,586 +50,565 @@ public class OpenApiPartSerializerBuilder extends UonPartSerializerBuilder {
 	// Properties
 	//--------------------------------------------------------------------------------
 
-	/**
-	 * Configuration property: Decode <js>"%xx"</js> sequences.
-	 *
-	 * <p>
-	 * Specify <jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been
-	 * decoded before being passed to this parser.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link UonParser#UON_decoding}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Default is <jk>false</jk> for {@link UonParser}, <jk>true</jk> for {@link UrlEncodingParser}
-	 * @return This object (for method chaining).
-	 */
-	public OpenApiPartSerializerBuilder schema(HttpPartSchema value) {
-		return set(OAPI_schema, value);
-	}
-
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder addBeanTypes(boolean value) {
+	public OpenApiSerializerBuilder addBeanTypes(boolean value) {
 		super.addBeanTypes(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder addBeanTypes() {
+	public OpenApiSerializerBuilder addBeanTypes() {
 		super.addBeanTypes();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder addRootType(boolean value) {
+	public OpenApiSerializerBuilder addRootType(boolean value) {
 		super.addRootType(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder addRootType() {
+	public OpenApiSerializerBuilder addRootType() {
 		super.addRootType();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder detectRecursions(boolean value) {
+	public OpenApiSerializerBuilder detectRecursions(boolean value) {
 		super.detectRecursions(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder detectRecursions() {
+	public OpenApiSerializerBuilder detectRecursions() {
 		super.detectRecursions();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder ignoreRecursions(boolean value) {
+	public OpenApiSerializerBuilder ignoreRecursions(boolean value) {
 		super.ignoreRecursions(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder ignoreRecursions() {
+	public OpenApiSerializerBuilder ignoreRecursions() {
 		super.ignoreRecursions();
 		return this;
 	}
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder initialDepth(int value) {
+	public OpenApiSerializerBuilder initialDepth(int value) {
 		super.initialDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder listener(Class<? extends SerializerListener> value) {
+	public OpenApiSerializerBuilder listener(Class<? extends SerializerListener> value) {
 		super.listener(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder maxDepth(int value) {
+	public OpenApiSerializerBuilder maxDepth(int value) {
 		super.maxDepth(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder maxIndent(int value) {
+	public OpenApiSerializerBuilder maxIndent(int value) {
 		super.maxIndent(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder quoteChar(char value) {
+	public OpenApiSerializerBuilder quoteChar(char value) {
 		super.quoteChar(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder sortCollections(boolean value) {
+	public OpenApiSerializerBuilder sortCollections(boolean value) {
 		super.sortCollections(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder sortCollections() {
+	public OpenApiSerializerBuilder sortCollections() {
 		super.sortCollections();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder sortMaps(boolean value) {
+	public OpenApiSerializerBuilder sortMaps(boolean value) {
 		super.sortMaps(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder sortMaps() {
+	public OpenApiSerializerBuilder sortMaps() {
 		super.sortMaps();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder sq() {
+	public OpenApiSerializerBuilder sq() {
 		super.sq();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder trimEmptyCollections(boolean value) {
+	public OpenApiSerializerBuilder trimEmptyCollections(boolean value) {
 		super.trimEmptyCollections(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder trimEmptyCollections() {
+	public OpenApiSerializerBuilder trimEmptyCollections() {
 		super.trimEmptyCollections();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder trimEmptyMaps(boolean value) {
+	public OpenApiSerializerBuilder trimEmptyMaps(boolean value) {
 		super.trimEmptyMaps(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder trimEmptyMaps() {
+	public OpenApiSerializerBuilder trimEmptyMaps() {
 		super.trimEmptyMaps();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder trimNullProperties(boolean value) {
+	public OpenApiSerializerBuilder trimNullProperties(boolean value) {
 		super.trimNullProperties(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder trimStrings(boolean value) {
+	public OpenApiSerializerBuilder trimStrings(boolean value) {
 		super.trimStrings(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder trimStrings() {
+	public OpenApiSerializerBuilder trimStrings() {
 		super.trimStrings();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder uriContext(UriContext value) {
+	public OpenApiSerializerBuilder uriContext(UriContext value) {
 		super.uriContext(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder uriRelativity(UriRelativity value) {
+	public OpenApiSerializerBuilder uriRelativity(UriRelativity value) {
 		super.uriRelativity(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder uriResolution(UriResolution value) {
+	public OpenApiSerializerBuilder uriResolution(UriResolution value) {
 		super.uriResolution(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder useWhitespace(boolean value) {
+	public OpenApiSerializerBuilder useWhitespace(boolean value) {
 		super.useWhitespace(value);
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder useWhitespace() {
+	public OpenApiSerializerBuilder useWhitespace() {
 		super.useWhitespace();
 		return this;
 	}
 
 	@Override /* SerializerBuilder */
-	public OpenApiPartSerializerBuilder ws() {
+	public OpenApiSerializerBuilder ws() {
 		super.ws();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanClassVisibility(Visibility value) {
+	public OpenApiSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanConstructorVisibility(Visibility value) {
+	public OpenApiSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanDictionary(boolean append, Object...values) {
+	public OpenApiSerializerBuilder beanDictionary(boolean append, Object...values) {
 		super.beanDictionary(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanDictionary(Class<?>...values) {
+	public OpenApiSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanDictionary(Object...values) {
+	public OpenApiSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanDictionaryRemove(Object...values) {
+	public OpenApiSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanFieldVisibility(Visibility value) {
+	public OpenApiSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanFilters(boolean append, Object...values) {
+	public OpenApiSerializerBuilder beanFilters(boolean append, Object...values) {
 		super.beanFilters(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanFilters(Class<?>...values) {
+	public OpenApiSerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanFilters(Object...values) {
+	public OpenApiSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanFiltersRemove(Object...values) {
+	public OpenApiSerializerBuilder beanFiltersRemove(Object...values) {
 		super.beanFiltersRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
+	public OpenApiSerializerBuilder beanMapPutReturnsOldValue(boolean value) {
 		super.beanMapPutReturnsOldValue(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanMapPutReturnsOldValue() {
+	public OpenApiSerializerBuilder beanMapPutReturnsOldValue() {
 		super.beanMapPutReturnsOldValue();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanMethodVisibility(Visibility value) {
+	public OpenApiSerializerBuilder beanMethodVisibility(Visibility value) {
 		super.beanMethodVisibility(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beansRequireDefaultConstructor(boolean value) {
+	public OpenApiSerializerBuilder beansRequireDefaultConstructor(boolean value) {
 		super.beansRequireDefaultConstructor(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beansRequireDefaultConstructor() {
+	public OpenApiSerializerBuilder beansRequireDefaultConstructor() {
 		super.beansRequireDefaultConstructor();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beansRequireSerializable(boolean value) {
+	public OpenApiSerializerBuilder beansRequireSerializable(boolean value) {
 		super.beansRequireSerializable(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beansRequireSerializable() {
+	public OpenApiSerializerBuilder beansRequireSerializable() {
 		super.beansRequireSerializable();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beansRequireSettersForGetters(boolean value) {
+	public OpenApiSerializerBuilder beansRequireSettersForGetters(boolean value) {
 		super.beansRequireSettersForGetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beansRequireSettersForGetters() {
+	public OpenApiSerializerBuilder beansRequireSettersForGetters() {
 		super.beansRequireSettersForGetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beansRequireSomeProperties(boolean value) {
+	public OpenApiSerializerBuilder beansRequireSomeProperties(boolean value) {
 		super.beansRequireSomeProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder beanTypePropertyName(String value) {
+	public OpenApiSerializerBuilder beanTypePropertyName(String value) {
 		super.beanTypePropertyName(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder debug() {
+	public OpenApiSerializerBuilder debug() {
 		super.debug();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> OpenApiPartSerializerBuilder example(Class<T> c, T o) {
+	public <T> OpenApiSerializerBuilder example(Class<T> c, T o) {
 		super.example(c, o);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
+	public OpenApiSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignoreInvocationExceptionsOnGetters() {
+	public OpenApiSerializerBuilder ignoreInvocationExceptionsOnGetters() {
 		super.ignoreInvocationExceptionsOnGetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
+	public OpenApiSerializerBuilder ignoreInvocationExceptionsOnSetters(boolean value) {
 		super.ignoreInvocationExceptionsOnSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignoreInvocationExceptionsOnSetters() {
+	public OpenApiSerializerBuilder ignoreInvocationExceptionsOnSetters() {
 		super.ignoreInvocationExceptionsOnSetters();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
+	public OpenApiSerializerBuilder ignorePropertiesWithoutSetters(boolean value) {
 		super.ignorePropertiesWithoutSetters(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
+	public OpenApiSerializerBuilder ignoreUnknownBeanProperties(boolean value) {
 		super.ignoreUnknownBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignoreUnknownBeanProperties() {
+	public OpenApiSerializerBuilder ignoreUnknownBeanProperties() {
 		super.ignoreUnknownBeanProperties();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
+	public OpenApiSerializerBuilder ignoreUnknownNullBeanProperties(boolean value) {
 		super.ignoreUnknownNullBeanProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> OpenApiPartSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public <T> OpenApiSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder implClasses(Map<String,Class<?>> values) {
+	public OpenApiSerializerBuilder implClasses(Map<String,Class<?>> values) {
 		super.implClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder locale(Locale value) {
+	public OpenApiSerializerBuilder locale(Locale value) {
 		super.locale(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder mediaType(MediaType value) {
+	public OpenApiSerializerBuilder mediaType(MediaType value) {
 		super.mediaType(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanClasses(boolean append, Object...values) {
+	public OpenApiSerializerBuilder notBeanClasses(boolean append, Object...values) {
 		super.notBeanClasses(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanClasses(Class<?>...values) {
+	public OpenApiSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanClasses(Object...values) {
+	public OpenApiSerializerBuilder notBeanClasses(Object...values) {
 		super.notBeanClasses(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanClassesRemove(Object...values) {
+	public OpenApiSerializerBuilder notBeanClassesRemove(Object...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanPackages(boolean append, Object...values) {
+	public OpenApiSerializerBuilder notBeanPackages(boolean append, Object...values) {
 		super.notBeanPackages(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanPackages(Object...values) {
+	public OpenApiSerializerBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanPackages(String...values) {
+	public OpenApiSerializerBuilder notBeanPackages(String...values) {
 		super.notBeanPackages(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder notBeanPackagesRemove(Object...values) {
+	public OpenApiSerializerBuilder notBeanPackagesRemove(Object...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder pojoSwaps(boolean append, Object...values) {
+	public OpenApiSerializerBuilder pojoSwaps(boolean append, Object...values) {
 		super.pojoSwaps(append, values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder pojoSwaps(Class<?>...values) {
+	public OpenApiSerializerBuilder pojoSwaps(Class<?>...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder pojoSwaps(Object...values) {
+	public OpenApiSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder pojoSwapsRemove(Object...values) {
+	public OpenApiSerializerBuilder pojoSwapsRemove(Object...values) {
 		super.pojoSwapsRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder sortProperties(boolean value) {
+	public OpenApiSerializerBuilder sortProperties(boolean value) {
 		super.sortProperties(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder sortProperties() {
+	public OpenApiSerializerBuilder sortProperties() {
 		super.sortProperties();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder timeZone(TimeZone value) {
+	public OpenApiSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder useEnumNames() {
+	public OpenApiSerializerBuilder useEnumNames() {
 		super.useEnumNames();
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder useInterfaceProxies(boolean value) {
+	public OpenApiSerializerBuilder useInterfaceProxies(boolean value) {
 		super.useInterfaceProxies(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder useJavaBeanIntrospector(boolean value) {
+	public OpenApiSerializerBuilder useJavaBeanIntrospector(boolean value) {
 		super.useJavaBeanIntrospector(value);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OpenApiPartSerializerBuilder useJavaBeanIntrospector() {
+	public OpenApiSerializerBuilder useJavaBeanIntrospector() {
 		super.useJavaBeanIntrospector();
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder set(String name, Object value) {
+	public OpenApiSerializerBuilder set(String name, Object value) {
 		super.set(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder set(boolean append, String name, Object value) {
+	public OpenApiSerializerBuilder set(boolean append, String name, Object value) {
 		super.set(append, name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder set(Map<String,Object> properties) {
+	public OpenApiSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder add(Map<String,Object> properties) {
+	public OpenApiSerializerBuilder add(Map<String,Object> properties) {
 		super.add(properties);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder addTo(String name, Object value) {
+	public OpenApiSerializerBuilder addTo(String name, Object value) {
 		super.addTo(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder addTo(String name, String key, Object value) {
+	public OpenApiSerializerBuilder addTo(String name, String key, Object value) {
 		super.addTo(name, key, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder removeFrom(String name, Object value) {
+	public OpenApiSerializerBuilder removeFrom(String name, Object value) {
 		super.removeFrom(name, value);
 		return this;
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiPartSerializerBuilder apply(PropertyStore copyFrom) {
+	public OpenApiSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
 		return this;
 	}

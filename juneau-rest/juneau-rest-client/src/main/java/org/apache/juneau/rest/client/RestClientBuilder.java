@@ -53,6 +53,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.client.mock.*;
@@ -215,6 +216,17 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
 	}
 
+	/**
+	 * Convenience method for specifying URL-Encoding as the transmission media type.
+	 *
+	 * <p>
+	 * Identical to calling <code>serializer(OpenApiSerializer.<jk>class</jk>).parser(OpenApiParser.<jk>class</jk>)</code>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder openapi() {
+		return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
+	}
 
 	/**
 	 * Creates an instance of an {@link HttpClient} to be used to handle all HTTP communications with the target server.
@@ -1134,7 +1146,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiPartParser}.
+	 * 	<br>The default value is {@link OpenApiParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partParser(Class<? extends HttpPartParser> value) {
@@ -1154,7 +1166,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiPartParser}.
+	 * 	<br>The default value is {@link OpenApiParser}.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partParser(HttpPartParser value) {
@@ -1174,7 +1186,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiPartSerializer}.
+	 * 	<br>The default value is {@link OpenApiSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partSerializer(Class<? extends HttpPartSerializer> value) {
@@ -1194,7 +1206,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this setting.
-	 * 	<br>The default value is {@link OpenApiPartSerializer}.
+	 * 	<br>The default value is {@link OpenApiSerializer}.
 	 * @return This object (for method chaining).
 	 */
 	public RestClientBuilder partSerializer(HttpPartSerializer value) {

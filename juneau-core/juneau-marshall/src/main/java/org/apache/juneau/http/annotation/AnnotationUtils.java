@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import org.apache.juneau.httppart.*;
-
 /**
  * Various reusable utility methods when working with annotations.
  */
@@ -284,57 +282,5 @@ public class AnnotationUtils {
 			if (i != -1)
 				return false;
 		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the part parser should be used on the specified part.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the part parser should be used on the specified part.
-	 */
-	public static boolean usePartParser(Body a) {
-		return
-			a.usePartParser()
-			|| a.partParser() != HttpPartParser.Null.class
-			|| ! empty(a.schema());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the part parser should be used on the specified part.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the part parser should be used on the specified part.
-	 */
-	public static boolean usePartParser(Response a) {
-		return
-			a.usePartParser()
-			|| a.partParser() != HttpPartParser.Null.class
-			|| ! empty(a.schema());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the part serializer should be used on the specified part.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the part serializer should be used on the specified part.
-	 */
-	public static boolean usePartSerializer(Body a) {
-		return
-			a.usePartSerializer()
-			|| a.partSerializer() != HttpPartSerializer.Null.class
-			|| ! empty(a.schema());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the part serializer should be used on the specified part.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the part serializer should be used on the specified part.
-	 */
-	public static boolean usePartSerializer(Response a) {
-		return
-			a.usePartSerializer()
-			|| a.partSerializer() != HttpPartSerializer.Null.class
-			|| ! empty(a.schema());
 	}
 }

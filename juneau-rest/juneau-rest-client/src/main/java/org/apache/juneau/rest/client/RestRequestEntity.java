@@ -18,6 +18,7 @@ import java.io.*;
 
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -28,6 +29,7 @@ import org.apache.juneau.utils.*;
 public final class RestRequestEntity extends BasicHttpEntity {
 	final Object output;
 	final Serializer serializer;
+	final HttpPartSchema schema;
 	byte[] outputBytes;
 
 	/**
@@ -35,10 +37,12 @@ public final class RestRequestEntity extends BasicHttpEntity {
 	 *
 	 * @param input The POJO to serialize.  Can also be a {@link Reader} or {@link InputStream}.
 	 * @param serializer The serializer to use to serialize this response.
+	 * @param schema The optional schema information about the serialized part.
 	 */
-	public RestRequestEntity(Object input, Serializer serializer) {
+	public RestRequestEntity(Object input, Serializer serializer, HttpPartSchema schema) {
 		this.output = input;
 		this.serializer = serializer;
+		this.schema = schema;
 		if (serializer != null && serializer.getResponseContentType() != null)
 			setContentType(new BasicHeader("Content-Type", serializer.getResponseContentType().toString()));
 	}
@@ -58,7 +62,8 @@ public final class RestRequestEntity extends BasicHttpEntity {
 					// If no serializer specified, just close the stream.
 					os.close();
 				} else {
-					SerializerSession session = serializer.createSession();
+					SerializerSessionArgs sArgs = new SerializerSessionArgs(null, null, null, null, null, schema, false, null, null);
+					SerializerSession session = serializer.createSession(sArgs);
 					try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
 						session.serialize(output, c);
 					}

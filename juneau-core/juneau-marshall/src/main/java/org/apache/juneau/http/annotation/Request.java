@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 
 /**
  * Request bean annotation.
@@ -146,7 +147,7 @@ public @interface Request {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiPartSerializer}.
+	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
 
@@ -154,7 +155,7 @@ public @interface Request {
 	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
 	 *
 	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
 	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
 }

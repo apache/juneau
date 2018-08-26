@@ -12,9 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
@@ -26,7 +28,7 @@ import org.apache.juneau.transform.*;
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class UonSerializerSession extends WriterSerializerSession {
+public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
 
 	private final UonSerializer ctx;
 	private final boolean plainTextParams;
@@ -52,7 +54,7 @@ public class UonSerializerSession extends WriterSerializerSession {
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UonSerializerSession", new ObjectMap()
-			);
+		);
 	}
 
 	/**
@@ -69,6 +71,10 @@ public class UonSerializerSession extends WriterSerializerSession {
 		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), plainTextParams, getUriResolver());
 		out.setWriter(w);
 		return w;
+	}
+
+	private final UonWriter getUonWriter(Writer out) throws Exception {
+		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), plainTextParams, getUriResolver());
 	}
 
 	@Override /* Serializer */
@@ -259,6 +265,33 @@ public class UonSerializerSession extends WriterSerializerSession {
 			out.append(')');
 
 		return out;
+	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+		try {
+			// Shortcut for simple types.
+			ClassMeta<?> cm = getClassMetaForObject(value);
+			if (cm != null) {
+				if (cm.isNumber() || cm.isBoolean())
+					return ClassUtils.toString(value);
+				if (cm.isString()) {
+					String s = ClassUtils.toString(value);
+					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
+						return s;
+				}
+			}
+			StringWriter w = new StringWriter();
+			serializeAnything(getUonWriter(w), value, getExpectedRootType(value), "root", null);
+			return w.toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+		return serialize(null, schema, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

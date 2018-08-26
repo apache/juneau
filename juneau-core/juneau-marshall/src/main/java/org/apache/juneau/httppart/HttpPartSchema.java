@@ -13,9 +13,9 @@
 package org.apache.juneau.httppart;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
 import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
+import static org.apache.juneau.httppart.HttpPartSchema.Type.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -25,7 +25,6 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.*;
 
@@ -53,7 +52,7 @@ public class HttpPartSchema {
 	// Predefined instances
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Reusable instance of {@link OpenApiPartSerializer}, all default settings. */
+	/** Reusable instance of this object, all default settings. */
 	public static final HttpPartSchema DEFAULT = HttpPartSchema.create().allowEmptyValue(true).build();
 
 	final String name;
@@ -61,7 +60,7 @@ public class HttpPartSchema {
 	final String _default;
 	final Set<String> _enum;
 	final Map<String,HttpPartSchema> properties;
-	final boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty, usePartSerializer, usePartParser;
+	final boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 	final CollectionFormat collectionFormat;
 	final Type type;
 	final Format format;
@@ -235,8 +234,6 @@ public class HttpPartSchema {
 		this.required = resolve(b.required);
 		this.uniqueItems = resolve(b.uniqueItems);
 		this.skipIfEmpty = resolve(b.skipIfEmpty);
-		this.usePartSerializer = resolve(b.usePartSerializer);
-		this.usePartParser = resolve(b.usePartParser);
 		this.collectionFormat = b.collectionFormat;
 		this.type = b.type;
 		this.format = b.format;
@@ -945,34 +942,6 @@ public class HttpPartSchema {
 	 */
 	public boolean isSkipIfEmpty() {
 		return skipIfEmpty;
-	}
-
-	/**
-	 * Returns the <code>usePartSerializer</code> field of this schema.
-	 *
-	 * <p>
-	 * This flag is only applicable for HTTP bodies.
-	 * It specifies whether the HTTP body should be serialized using normal Juneau serializers (e.g. {@link JsonSerializer}) or HTTP part serializers (e.g. {@link OpenApiPartSerializer}.
-	 *
-	 * @return The <code>usePartSerializer</code> field of this schema.
-	 * @see HttpPartSchemaBuilder#usePartSerializer(Boolean)
-	 */
-	public boolean isUsePartSerializer() {
-		return usePartSerializer;
-	}
-
-	/**
-	 * Returns the <code>usePartParser</code> field of this schema.
-	 *
-	 * <p>
-	 * This flag is only applicable for HTTP bodies.
-	 * It specifies whether the HTTP body should be parsed using normal Juneau parser (e.g. {@link JsonParser}) or HTTP part serializers (e.g. {@link OpenApiPartParser}.
-	 *
-	 * @return The <code>usePartParser</code> field of this schema.
-	 * @see HttpPartSchemaBuilder#usePartParser(Boolean)
-	 */
-	public boolean isUsePartParser() {
-		return usePartParser;
 	}
 
 	/**

@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -113,7 +114,7 @@ import org.apache.juneau.urlencoding.*;
  * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
  * </p>
  */
-public class UonSerializer extends WriterSerializer {
+public class UonSerializer extends WriterSerializer implements HttpPartSerializer {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -382,6 +383,26 @@ public class UonSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new UonSerializerSession(this, null, args);
+	}
+
+	@Override /* HttpPartSerializer */
+	public UonSerializerSession createPartSession(SerializerSessionArgs args) {
+		return new UonSerializerSession(this, null, args);
+	}
+
+	@Override /* HttpPartSerializer */
+	public UonSerializerSession createPartSession() {
+		return createPartSession(null);
+	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createPartSession().serialize(partType, schema, value);
+	}
+
+	@Override /* HttpPartSerializer */
+	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return createPartSession().serialize(null, schema, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ import org.apache.juneau.internal.*;
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class SimplePartSerializerSession implements HttpPartSerializerSession {
+public class SimplePartSerializerSession extends BaseHttpPartSerializerSession {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance

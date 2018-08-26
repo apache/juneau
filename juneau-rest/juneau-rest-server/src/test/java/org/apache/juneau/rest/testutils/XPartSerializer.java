@@ -18,10 +18,11 @@ import org.apache.juneau.serializer.*;
 /**
  * Test serializer.
  */
-public class XPartSerializer implements HttpPartSerializer {
+public class XPartSerializer extends BaseHttpPartSerializer {
+
 	@Override
-	public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
-		return new HttpPartSerializerSession() {
+	public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+		return new BaseHttpPartSerializerSession() {
 			@Override
 			public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 				return "x" + value + "x";
@@ -31,11 +32,6 @@ public class XPartSerializer implements HttpPartSerializer {
 
 	@Override
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createSession(null).serialize(partType, schema, value);
-	}
-
-	@Override
-	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-		return createSession(null).serialize(null, schema, value);
+		return createPartSession().serialize(partType, schema, value);
 	}
 }

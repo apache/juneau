@@ -23,7 +23,10 @@ import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -109,9 +112,9 @@ public class BodyAnnotationTest {
 		}
 
 		@RestMethod
-		public Object postA10(@Body Reader b, @Header("Content-Type") String ct) {
+		public String postA10(@Body Reader b, @Header("Content-Type") String ct) throws IOException {
 			assertEquals("application/x-www-form-urlencoded", ct);
-			return b;
+			return IOUtils.read(b);
 		}
 	}
 	private static MockRest a = MockRest.create(A.class);
@@ -170,20 +173,20 @@ public class BodyAnnotationTest {
 	}
 	@Test
 	public void a07_Reader() throws Exception {
-		Object o = a01.postA07(new StringReader("xxx"));
+		Object o = a01.postA07(new StringReader("'xxx'"));
 		assertObjectEquals("'xxx'", o);
 		assertClass(String.class, o);
 	}
 	@Test
 	public void a08_InputStream() throws Exception {
 		@SuppressWarnings("resource")
-		Object o = a01.postA08(new StringInputStream("xxx"));
+		Object o = a01.postA08(new StringInputStream("'xxx'"));
 		assertObjectEquals("'xxx'", o);
 		assertClass(String.class, o);
 	}
 	@Test
 	public void a09_HttpEntity() throws Exception {
-		Object o = a01.postA09(new StringEntity("xxx"));
+		Object o = a01.postA09(new StringEntity("'xxx'"));
 		assertObjectEquals("'xxx'", o);
 		assertClass(String.class, o);
 	}
@@ -198,46 +201,42 @@ public class BodyAnnotationTest {
 	// Basic tests - OpenAPI
 	//=================================================================================================================
 
-	@RestResource(parsers=JsonParser.class)
+	@RestResource(serializers=OpenApiSerializer.class,parsers=OpenApiParser.class,defaultAccept="text/openapi")
 	public static class B {
 		@RestMethod
 		public Object postB01(@Body int b, @Header("Content-Type") String ct) {
-			assertEquals("text/plain", ct);
+			assertEquals("text/openapi", ct);
 			return b;
 		}
 
 		@RestMethod
 		public Object postB02(@Body float b, @Header("Content-Type") String ct) {
-			assertEquals("text/plain", ct);
+			assertEquals("text/openapi", ct);
 			return b;
 		}
 
 		@RestMethod
-		@Response(schema=@Schema(type="object"))
-		public Object postB03(@Body(schema=@Schema(type="object")) Bean b, @Header("Content-Type") String ct) {
-			assertEquals("text/plain", ct);
-			return b;
+		public String postB03(@Body Bean b, @Header("Content-Type") String ct) {
+			assertEquals("text/openapi", ct);
+			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestMethod
-		@Response(schema=@Schema(type="array",items=@Items(type="object")))
-		public Object postB04(@Body(schema=@Schema(type="array",items=@Items(type="object"))) Bean[] b, @Header("Content-Type") String ct) {
-			assertEquals("text/plain", ct);
-			return b;
+		public Object postB04(@Body Bean[] b, @Header("Content-Type") String ct) {
+			assertEquals("text/openapi", ct);
+			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestMethod
-		@Response(schema=@Schema(type="array",items=@Items(type="object")))
-		public Object postB05(@Body(schema=@Schema(type="array",items=@Items(type="object"))) List<Bean> b, @Header("Content-Type") String ct) {
-			assertEquals("text/plain", ct);
-			return b;
+		public Object postB05(@Body List<Bean> b, @Header("Content-Type") String ct) {
+			assertEquals("text/openapi", ct);
+			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestMethod
-		@Response(schema=@Schema(type="object",format="uon"))
-		public Object postB06(@Body(schema=@Schema(type="object",format="uon")) Map<String,Bean> b, @Header("Content-Type") String ct) {
-			assertEquals("text/plain", ct);
-			return b;
+		public Object postB06(@Body Map<String,Bean> b, @Header("Content-Type") String ct) {
+			assertEquals("text/openapi", ct);
+			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestMethod
@@ -270,17 +269,17 @@ public class BodyAnnotationTest {
 	public static interface B01 {
 		String postB01(@Body int b);
 		String postB02(@Body float b);
-		String postB03(@Body(schema=@Schema(type="object")) Bean b);
-		String postB04(@Body(schema=@Schema(type="array",items=@Items(type="object"))) Bean[] b);
-		String postB05(@Body(schema=@Schema(type="array",items=@Items(type="object"))) List<Bean> b);
-		String postB06(@Body(schema=@Schema(type="object",format="uon")) Map<String,Bean> b);
+		String postB03(@Body Bean b);
+		String postB04(@Body Bean[] b);
+		String postB05(@Body List<Bean> b);
+		String postB06(@Body Map<String,Bean> b);
 		String postB07(@Body Reader b);
 		String postB08(@Body InputStream b);
 		String postB09(@Body HttpEntity b);
 		String postB10(@Body NameValuePairs b);
 	}
 
-	private static B01 b01 = RestClient.create().mockHttpConnection(b).build().getRemoteResource(B01.class);
+	private static B01 b01 = RestClient.create().openapi().mockHttpConnection(b).build().getRemoteResource(B01.class);
 
 	@Test
 	public void b01_int() throws Exception {
@@ -295,22 +294,22 @@ public class BodyAnnotationTest {
 	@Test
 	public void b03_Bean() throws Exception {
 		String o = b01.postB03(Bean.create());
-		assertEquals("(f=1)", o);
+		assertEquals("{f:1}", o);
 	}
 	@Test
 	public void b04_BeanArray() throws Exception {
 		String o = b01.postB04(new Bean[]{Bean.create()});
-		assertEquals("(f=1)", o);
+		assertEquals("[{f:1}]", o);
 	}
 	@Test
 	public void b05_ListOfBeans() throws Exception {
 		String o = b01.postB05(AList.create(Bean.create()));
-		assertEquals("(f=1)", o);
+		assertEquals("[{f:1}]", o);
 	}
 	@Test
 	public void b06_MapOfBeans() throws Exception {
 		String o = b01.postB06(AMap.create("k1",Bean.create()));
-		assertEquals("(k1=(f=1))", o);
+		assertEquals("{k1:{f:1}}", o);
 	}
 	@Test
 	public void b07_Reader() throws Exception {
@@ -397,10 +396,10 @@ public class BodyAnnotationTest {
 	public static interface C01 {
 		String postC01(@Body int b);
 		String postC02(@Body float b);
-		String postC03(@Body(schema=@Schema(type="object")) Bean b);
-		String postC04(@Body(schema=@Schema(type="array",items=@Items(type="object"))) Bean[] b);
-		String postC05(@Body(schema=@Schema(type="array",items=@Items(type="object"))) List<Bean> b);
-		String postC06(@Body(schema=@Schema(type="object",format="uon")) Map<String,Bean> b);
+		String postC03(@Body Bean b);
+		String postC04(@Body Bean[] b);
+		String postC05(@Body List<Bean> b);
+		String postC06(@Body Map<String,Bean> b);
 		String postC07(@Body Reader b);
 		String postC08(@Body InputStream b);
 		String postC09(@Body HttpEntity b);

@@ -20,7 +20,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -56,6 +55,7 @@ public class DefaultHandler implements ResponseHandler {
 		SerializerGroup g = res.getSerializers();
 		String accept = req.getHeaders().getString("Accept", "");
 		SerializerMatch sm = g.getSerializerMatch(accept);
+		HttpPartSchema schema = null;
 
 		Object o = res.getOutput();
 
@@ -97,8 +97,6 @@ public class DefaultHandler implements ResponseHandler {
 			}
 
 			ResponseBeanPropertyMeta bm = rm.getBodyMethod();
-			boolean usePartSerializer = rm.isUsePartSerializer();
-			HttpPartSchema schema = rm.getSchema();
 
 			if (bm != null) {
 				Method m = bm.getGetter();
@@ -113,28 +111,12 @@ public class DefaultHandler implements ResponseHandler {
 						return true;
 					}
 					o = m.invoke(o);
-					schema = rm.getSchema();
-					usePartSerializer |= schema.isUsePartSerializer();
 				} catch (Exception e) {
 					throw new InternalServerError(e, "Could not get body.");
 				}
 			}
 
-			if (usePartSerializer) {
-				if (res.getContentType() == null)
-					res.setContentType("text/plain");
-				HttpPartSerializer ps = firstNonNull(rm.getPartSerializer(), req.getPartSerializer());
-				if (ps != null) {
-					try (FinishablePrintWriter w = res.getNegotiatedWriter()) {
-						w.append(ps.serialize(BODY, schema, o));
-						w.flush();
-						w.finish();
-					} catch (SchemaValidationException | SerializeException e) {
-						throw new InternalServerError(e);
-					}
-					return true;
-				}
-			}
+			schema = rm.getSchema();
 		}
 
 		if (sm != null) {
@@ -151,12 +133,11 @@ public class DefaultHandler implements ResponseHandler {
 
 			try {
 				RequestProperties p = res.getProperties();
-				if (req.isPlainText()) {
+				if (req.isPlainText())
 					res.setContentType("text/plain");
-				}
 				p.append("mediaType", mediaType).append("characterEncoding", res.getCharacterEncoding());
 
-				SerializerSession session = s.createSession(new SerializerSessionArgs(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, req.isDebug() ? true : null, req.getUriContext(), req.isPlainText() ? true : null));
+				SerializerSession session = s.createSession(new SerializerSessionArgs(p, req.getJavaMethod(), req.getLocale(), req.getHeaders().getTimeZone(), mediaType, schema, req.isDebug() ? true : null, req.getUriContext(), req.isPlainText() ? true : null));
 
 				for (Map.Entry<String,String> h : session.getResponseHeaders().entrySet())
 					res.setHeader(h.getKey(), h.getValue());
@@ -185,15 +166,16 @@ public class DefaultHandler implements ResponseHandler {
 				throw new InternalServerError(e);
 			}
 			return true;
-
 		}
 
 		// Non-existent Accept or plain/text can just be serialized as-is.
-		if (isEmpty(accept) || accept.startsWith("text/plain")) {
+		if (o != null && (isEmpty(accept) || accept.startsWith("text/plain"))) {
+			String out = null;
+			if (isEmpty(res.getContentType()))
+				res.setContentType("text/plain");
+			out = req.getBeanSession().getClassMetaForObject(o).toString(o);
 			FinishablePrintWriter w = res.getNegotiatedWriter();
-			ClassMeta<?> cm = req.getBeanSession().getClassMetaForObject(o);
-			if (cm != null)
-				w.append(cm.toString(o));
+			w.append(out);
 			w.flush();
 			w.finish();
 			return true;

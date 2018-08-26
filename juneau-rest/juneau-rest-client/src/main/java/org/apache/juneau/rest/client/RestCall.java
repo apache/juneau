@@ -42,6 +42,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.serializer.*;
@@ -101,6 +102,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	private Parser parser;
 	private HttpPartSerializer partSerializer;
 	private HttpPartParser partParser;
+	private HttpPartSchema requestBodySchema, responseBodySchema;
 	private URIBuilder uriBuilder;
 	private NameValuePairs formData;
 
@@ -210,7 +212,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
@@ -221,7 +223,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (! isMulti) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				try {
-					uriBuilder.addParameter(name, serializer.createSession(null).serialize(QUERY, schema, value));
+					uriBuilder.addParameter(name, serializer.createPartSession().serialize(QUERY, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request query parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
@@ -331,7 +333,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
@@ -446,7 +448,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @return This object (for method chaining).
 	 * @throws RestCallException If variable could not be found in path.
 	 */
@@ -462,9 +464,9 @@ public final class RestCall extends BeanSession implements Closeable {
 			try {
 				String p = null;
 				if (name.equals("/*"))
-					p = path.replaceAll("\\/\\*$", serializer.createSession(null).serialize(PATH, schema, value));
+					p = path.replaceAll("\\/\\*$", serializer.createPartSession().serialize(PATH, schema, value));
 				else
-					p = path.replace(var, serializer.createSession(null).serialize(PATH, schema, value));
+					p = path.replace(var, serializer.createPartSession().serialize(PATH, schema, value));
 				uriBuilder.setPath(p);
 			} catch (SchemaValidationException e) {
 				throw new RestCallException(e, "Validation error on request path parameter ''{0}''=''{1}''", name, value);
@@ -521,6 +523,38 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
+	 * Specifies the part schema for the request body.
+	 *
+	 * <p>
+	 * This is only useful for schema-aware serializers such as {@link OpenApiSerializer}.
+	 *
+	 * @param value
+	 * 	The new part schema for the request body.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall requestBodySchema(HttpPartSchema value) {
+		this.requestBodySchema = value;
+		return this;
+	}
+
+	/**
+	 * Specifies the part schema for the response body.
+	 *
+	 * <p>
+	 * This is only useful for schema-aware parsers such as {@link OpenApiParser}.
+	 *
+	 * @param value
+	 * 	The new part schema for the response body.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public RestCall responseBodySchema(HttpPartSchema value) {
+		this.responseBodySchema = value;
+		return this;
+	}
+
+	/**
 	 * Sets the input for this REST call.
 	 *
 	 * @param input
@@ -543,37 +577,9 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
 	public RestCall body(Object input) throws RestCallException {
-		return body(input, null, null);
-	}
-
-	/**
-	 * Same as {@link #body(Object)} but allows you to specify a part serializer to use to serialize the body.
-	 *
-	 * @param input
-	 * 	The input to be sent to the REST resource (only valid for PUT and POST) requests. <br>
-	 * @param partSerializer
-	 * 	The part serializer to use to serialize the body of the request.
-	 * 	<br>If <jk>null</jk>, will use normal serializer.
-	 * @param schema
-	 * 	The schema information about the part being serialized.
-	 * @return This object (for method chaining).
-	 * @throws RestCallException
-	 */
-	public RestCall body(Object input, HttpPartSerializer partSerializer, HttpPartSchema schema) throws RestCallException {
-		try {
-			if (schema != null && schema.isUsePartSerializer())
-				partSerializer = this.partSerializer;
-			if (partSerializer != null)
-				this.input = new StringEntity(partSerializer.serialize(BODY, schema, input), TEXT_PLAIN);
-			else
-				this.input = input;
-			this.hasInput = true;
-			this.formData = null;
-		} catch (SchemaValidationException e) {
-			throw new RestCallException(e, "Validation error on request body.");
-		} catch (Exception e) {
-			throw new RestCallException(e, "Serialization error on request body.");
-		}
+		this.input = input;
+		this.hasInput = true;
+		this.formData = null;
 		return this;
 	}
 
@@ -624,7 +630,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * 	The schema object that defines the format of the output.
 	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
 	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Ignored if the part serializer is not a subclass of {@link OpenApiPartSerializer}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * @return This object (for method chaining).
 	 * @throws RestCallException
 	 */
@@ -635,7 +641,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (! isMulti) {
 			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
 				try {
-					request.setHeader(name, serializer.createSession(null).serialize(HEADER, schema, value));
+					request.setHeader(name, serializer.createPartSession().serialize(HEADER, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request header parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
@@ -643,7 +649,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				}
 		} else if (value instanceof NameValuePairs) {
 			for (NameValuePair p : (NameValuePairs)value)
-				header(p.getName(), p.getValue(), skipIfEmpty, SimpleUonPartSerializer.DEFAULT, schema);
+				header(p.getName(), p.getValue(), skipIfEmpty, serializer, schema);
 		} else if (value instanceof Map) {
 			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
 				header(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
@@ -1573,7 +1579,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				else if (input instanceof InputStream)
 					entity = new InputStreamEntity((InputStream)input, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (serializer != null)
-					entity = new RestRequestEntity(input, serializer);
+					entity = new RestRequestEntity(input, serializer, requestBodySchema);
 				else if (partSerializer != null)
 					entity = new StringEntity(partSerializer.serialize(null, input), getRequestContentType(TEXT_PLAIN));
 				else
@@ -1979,7 +1985,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		BeanContext bc = parser;
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
-		return getResponseInner(null, null, bc.getClassMeta(type));
+		return getResponseInner(bc.getClassMeta(type));
 	}
 
 	/**
@@ -2070,19 +2076,13 @@ public final class RestCall extends BeanSession implements Closeable {
 		BeanContext bc = parser;
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
-		return (T)getResponseInner(null, null, bc.getClassMeta(type, args));
+		return (T)getResponseInner(bc.getClassMeta(type, args));
 	}
 
 	/**
 	 * Same as {@link #getResponse(Type, Type...)} but allows you to specify a part parser to use for parsing the response.
 	 *
 	 * @param <T> The class type of the object to create.
-	 * @param partParser
-	 * 	The part parser.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param schema
-	 * 	The schema information about the body of the response.
-	 * 	<br>Can be <jk>null</jk>.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -2096,11 +2096,11 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws IOException If a connection error occurred.
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
-	public <T> T getResponseBody(HttpPartParser partParser, HttpPartSchema schema, Type type, Type...args) throws IOException, ParseException {
+	public <T> T getResponseBody(Type type, Type...args) throws IOException, ParseException {
 		BeanContext bc = parser;
 		if (bc == null)
 			bc = BeanContext.DEFAULT;
-		return (T)getResponseInner(partParser, schema, bc.getClassMeta(type, args));
+		return (T)getResponseInner(bc.getClassMeta(type, args));
 	}
 
 	/**
@@ -2164,13 +2164,10 @@ public final class RestCall extends BeanSession implements Closeable {
 		return getResponsePojoRest(ObjectMap.class);
 	}
 
-	<T> T getResponseInner(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> type) throws IOException, ParseException {
+	<T> T getResponseInner(ClassMeta<T> type) throws IOException, ParseException {
 		try {
 			if (response == null)
 				connect();
-
-			if (partParser == null)
-				partParser = this.partParser;
 
 			Class<?> ic = type.getInnerClass();
 
@@ -2183,22 +2180,19 @@ public final class RestCall extends BeanSession implements Closeable {
 
 			connect();
 			Header h = response.getFirstHeader("Content-Type");
-			MediaType mt = MediaType.forString(h == null ? null : h.getValue());
+			String ct = firstNonEmpty(h == null ? null : h.getValue(), "text/plain");
 
-			boolean usePartParser = isEmpty(mt)
-				|| mt.toString().equals("text/plain")
-				|| (schema != null && partParser != null && schema.isUsePartParser());
+			MediaType mt = MediaType.forString(ct);
 
-			if (usePartParser) {
+			if (parser == null || (mt.toString().equals("text/plain") && ! parser.canHandle(ct))) {
 				if (type.hasStringTransform())
 					return type.getStringTransform().transform(getResponseAsString());
-				if (partParser != null)
-					return partParser.createSession(null).parse(BODY, schema, getResponseAsString(), type);
 			}
 
 			if (parser != null) {
 				try (Closeable in = parser.isReaderParser() ? getReader() : getInputStream()) {
-					return parser.parse(in, type);
+					ParserSessionArgs pArgs = new ParserSessionArgs(this.getProperties(), null, response.getLocale(), null, mt, responseBodySchema, false, null);
+					return parser.createSession(pArgs).parse(in, type);
 				}
 			}
 
@@ -2241,6 +2235,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		try {
 			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final RestClient rc = this.client;
+			final HttpPartParser p = ObjectUtils.firstNonNull(partParser, rc.getPartParser());
 			return (T)Proxy.newProxyInstance(
 				c.getClassLoader(),
 				new Class[] { c },
@@ -2249,13 +2244,15 @@ public final class RestCall extends BeanSession implements Closeable {
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 						ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
 						if (pm != null) {
-							HttpPartParser pp = pm.getParser(rc.getPartParser());
+							HttpPartParser pp = pm.getParser(p);
 							HttpPartSchema schema = pm.getSchema();
 							String name = pm.getPartName();
 							ClassMeta<?> type = rc.getClassMeta(method.getGenericReturnType());
 							HttpPartType pt = pm.getPartType();
-							if (pt == RESPONSE_BODY)
-								return getResponseBody(pp, schema, type);
+							if (pt == RESPONSE_BODY) {
+								responseBodySchema(schema);
+								return getResponseBody(type);
+							}
 							if (pt == RESPONSE_HEADER)
 								return getResponseHeader(pp, schema, name, type);
 							if (pt == RESPONSE_STATUS)

@@ -20,6 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
@@ -121,7 +122,7 @@ public class LinkString implements Comparable<LinkString> {
 	public LinkString uri(String uri, Object...args) {
 		for (int i = 0; i < args.length; i++)
 			try {
-				args[i] = SimpleUonPartSerializer.DEFAULT.createSession().serialize(HttpPartType.PATH, null, args[i]);
+				args[i] = OpenApiSerializer.DEFAULT.createSession().serialize(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) {
 				throw new RuntimeException(e);
 			}

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.oapi;
 
 import static org.apache.juneau.httppart.HttpPartSchema.CollectionFormat.*;
 import static org.apache.juneau.httppart.HttpPartSchema.Format.*;
@@ -21,45 +21,19 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link OpenApiPartSerializer}.
+ * Session object that lives for the duration of a single use of {@link OpenApiSerializer}.
  *
  * <p>
  * This class is NOT thread safe.
  * It is typically discarded after one-time use although it can be reused within the same thread.
  */
-public class OpenApiPartSerializerSession extends UonPartSerializerSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final String PREFIX = "OpenApiPartSerializer.";
-
-	/**
-	 * Configuration property:  OpenAPI schema description.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"OpenApiPartSerializer.schema"</js>
-	 * 	<li><b>Data type:</b>  <code>HttpPartSchema</code>
-	 * 	<li><b>Default:</b>  <jk>false</jk>
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link OpenApiPartSerializerBuilder#schema(HttpPartSchema)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines the OpenAPI schema for this part serializer.
-	 */
-	public static final String OAPI_schema = PREFIX + "schema.o";
-
+public class OpenApiSerializerSession extends UonSerializerSession {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -82,7 +56,7 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	private final OpenApiPartSerializer ctx;
+	private final OpenApiSerializer ctx;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -93,8 +67,8 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 	 * @param args
 	 * 	Runtime session arguments.
 	 */
-	protected OpenApiPartSerializerSession(OpenApiPartSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
+	protected OpenApiSerializerSession(OpenApiSerializer ctx, SerializerSessionArgs args) {
+		super(ctx, false, args);
 		this.ctx = ctx;
 	}
 
@@ -102,18 +76,12 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 	// Entry point methods
 	//--------------------------------------------------------------------------------
 
-	/**
-	 * Convenience method for serializing a part.
-	 *
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part serializers use the schema information.
-	 * @param value The value being serialized.
-	 * @return The serialized value.
-	 * @throws SerializeException If a problem occurred while trying to serialize the input.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
+	@Override /* Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws Exception {
+		out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
+	}
+
+	@Override /* PartSerializer */
 	public String serialize(HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 		return serialize(null, schema, value);
 	}
@@ -121,7 +89,7 @@ public class OpenApiPartSerializerSession extends UonPartSerializerSession {
 	@Override /* PartSerializer */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
-		schema = ObjectUtils.firstNonNull(schema, ctx.getSchema(), DEFAULT_SCHEMA);
+		schema = ObjectUtils.firstNonNull(schema, DEFAULT_SCHEMA);
 		ClassMeta<?> type = getClassMetaForObject(value);
 		if (type == null)
 			type = object();

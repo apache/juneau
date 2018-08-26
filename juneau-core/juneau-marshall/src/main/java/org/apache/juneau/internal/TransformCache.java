@@ -134,15 +134,16 @@ public class TransformCache {
 				}
 			};
 		} else if (ic == String.class) {
-			if (oc.isEnum()) {
+			final Class<?> oc2 = hasPrimitiveWrapper(oc) ? getPrimitiveWrapper(oc) : oc;
+			if (oc2.isEnum()) {
 				t = new Transform<String,O>() {
 					@Override
 					public O transform(Object outer, String in) {
-						return (O)Enum.valueOf((Class<? extends Enum>)oc, in);
+						return (O)Enum.valueOf((Class<? extends Enum>)oc2, in);
 					}
 				};
 			} else {
-				final Method fromStringMethod = ClassUtils.findPublicFromStringMethod(oc);
+				final Method fromStringMethod = findPublicFromStringMethod(oc2);
 				if (fromStringMethod != null) {
 					t = new Transform<String,O>() {
 						@Override
@@ -159,9 +160,9 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			Method createMethod = ClassUtils.findPublicStaticCreateMethod(oc, ic, "create");
+			Method createMethod = findPublicStaticCreateMethod(oc, ic, "create");
 			if (createMethod == null)
-				createMethod = ClassUtils.findPublicStaticCreateMethod(oc, ic, "from" + ic.getSimpleName());
+				createMethod = findPublicStaticCreateMethod(oc, ic, "from" + ic.getSimpleName());
 			if (createMethod != null) {
 				final Method cm = createMethod;
 				t = new Transform<I,O>() {
@@ -175,9 +176,9 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final Constructor<?> c = ClassUtils.findPublicConstructor(oc, ic);
+				final Constructor<?> c = findPublicConstructor(oc, ic);
 				final boolean isMemberClass = oc.isMemberClass() && ! isStatic(oc);
-				if (c != null && ! ClassUtils.isDeprecated(c)) {
+				if (c != null && ! isDeprecated(c)) {
 					t = new Transform<I,O>() {
 						@Override
 						public O transform(Object outer, I in) {

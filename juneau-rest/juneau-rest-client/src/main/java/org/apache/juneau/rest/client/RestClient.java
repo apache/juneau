@@ -33,6 +33,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.remote.*;
@@ -238,7 +239,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.partParser.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartParser&gt;</code> or {@link HttpPartParser}.
-	 * 	<li><b>Default:</b>  {@link OpenApiPartParser};
+	 * 	<li><b>Default:</b>  {@link OpenApiParser};
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#partParser(Class)}
@@ -259,7 +260,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * <ul>
 	 * 	<li><b>Name:</b>  <js>"RestClient.partSerializer.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Class&lt;? <jk>implements</jk> HttpPartSerializer&gt;</code> or {@link HttpPartSerializer}.
-	 * 	<li><b>Default:</b>  {@link OpenApiPartSerializer};
+	 * 	<li><b>Default:</b>  {@link OpenApiSerializer};
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestClientBuilder#partSerializer(Class)}
@@ -519,8 +520,8 @@ public class RestClient extends BeanContext implements Closeable {
 		}
 
 		this.urlEncodingSerializer = new SerializerBuilder(ps).build(UrlEncodingSerializer.class);
-		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, OpenApiPartSerializer.class, true, ps);
-		this.partParser = getInstanceProperty(RESTCLIENT_partParser, HttpPartParser.class, OpenApiPartParser.class, true, ps);
+		this.partSerializer = getInstanceProperty(RESTCLIENT_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, true, ps);
+		this.partParser = getInstanceProperty(RESTCLIENT_partParser, HttpPartParser.class, OpenApiParser.class, true, ps);
 		this.executorService = getInstanceProperty(RESTCLIENT_executorService, ExecutorService.class, null);
 
 		RestCallInterceptor[] rci = getInstanceArrayProperty(RESTCLIENT_interceptors, RestCallInterceptor.class, new RestCallInterceptor[0]);
@@ -749,7 +750,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 */
 	public RestCall doFormPost(Object url, Object o) throws RestCallException {
 		return doCall("POST", url, true)
-			.body(o instanceof HttpEntity ? o : new RestRequestEntity(o, urlEncodingSerializer));
+			.body(o instanceof HttpEntity ? o : new RestRequestEntity(o, urlEncodingSerializer, null));
 	}
 
 	/**
@@ -1065,7 +1066,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 							RemoteMethodArg ba = rmm.getBodyArg();
 							if (ba != null)
-								rc.body(args[ba.getIndex()], ba.getSerializer(null), ba.getSchema());
+								rc.requestBodySchema(ba.getSchema()).body(args[ba.getIndex()]);
 
 							if (rmm.getRequestArgs().length > 0) {
 								for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
@@ -1087,7 +1088,7 @@ public class RestClient extends BeanContext implements Closeable {
 											else if (pt == HEADER)
 												rc.header(pn, val, sie, ps, schema);
 											else if (pt == HttpPartType.BODY)
-												rc.body(val, p.getSerializer(s), schema);
+												rc.requestBodySchema(schema).body(val);
 										}
 									}
 								}
@@ -1115,7 +1116,7 @@ public class RestClient extends BeanContext implements Closeable {
 									return returnCode < 400;
 								throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
 							} else {
-								Object v = rc.getResponseBody(rmr.getParser(), rmr.getSchema(), method.getGenericReturnType());
+								Object v = rc.responseBodySchema(rmr.getSchema()).getResponseBody(method.getGenericReturnType());
 								if (v == null && method.getReturnType().isPrimitive())
 									v = ClassUtils.getPrimitiveDefault(method.getReturnType());
 								return v;

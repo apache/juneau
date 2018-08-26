@@ -22,6 +22,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.oapi.*;
 
 /**
  * REST response annotation.
@@ -58,33 +59,17 @@ public @interface Response {
 	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
 	 *
 	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiPartParser}.
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
 	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
-
-	/**
-	 * Specifies whether a part parser should be used for parsing this value.
-	 *
-	 * <p>
-	 * If <jk>false</jk>, then it indicates that normal Juneau parsers (e.g. {@link JsonParser}) should be used for this part.
-	 */
-	public boolean usePartParser() default false;
 
 	/**
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiPartSerializer}.
+	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
-
-	/**
-	 * Specifies whether a part serializer should be used for serializing this value.
-	 *
-	 * <p>
-	 * If <jk>false</jk>, then it indicates that normal Juneau serializers (e.g. {@link JsonSerializer}) should be used for this part.
-	 */
-	public boolean usePartSerializer() default false;
 
 	/**
 	 * The HTTP response code.

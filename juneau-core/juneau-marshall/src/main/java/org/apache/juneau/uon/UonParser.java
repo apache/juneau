@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
+import java.lang.reflect.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -27,7 +30,7 @@ import org.apache.juneau.urlencoding.*;
  *
  * This parser uses a state machine, which makes it very fast and efficient.
  */
-public class UonParser extends ReaderParser {
+public class UonParser extends ReaderParser implements HttpPartParser {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
@@ -208,9 +211,48 @@ public class UonParser extends ReaderParser {
 		return new UonParserSession(this, createDefaultSessionArgs(), false);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Entry point methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Parser */
 	public UonParserSession createSession(ParserSessionArgs args) {
 		return new UonParserSession(this, args);
+	}
+
+	@Override /* HttpPartParser */
+	public UonParserSession createSession() {
+		return createSession(null);
+	}
+
+	@Override /* HttpPartParser */
+	public UonParserSession createPartSession(ParserSessionArgs args) {
+		return new UonParserSession(this, args);
+	}
+
+	@Override /* HttpPartParser */
+	public UonParserSession createPartSession() {
+		return createPartSession(null);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return createPartSession().parse(partType, schema, in, toType);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return createPartSession().parse(partType, schema, in, toType, toTypeArgs);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return createPartSession().parse(null, schema, in, toType);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return createPartSession().parse(null, schema, in, toType, toTypeArgs);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

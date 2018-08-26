@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.oapi.*;
 
 /**
  * REST response header annotation.
@@ -176,7 +177,7 @@ public @interface ResponseHeader {
 	 * Specifies the {@link HttpPartSerializer} class used for serializing values to strings.
 	 *
 	 * <p>
-	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiPartSerializer}.
+	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
 

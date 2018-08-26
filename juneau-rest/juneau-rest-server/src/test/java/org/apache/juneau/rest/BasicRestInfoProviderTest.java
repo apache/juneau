@@ -2196,7 +2196,7 @@ public class BasicRestInfoProviderTest {
 		@RestMethod(name=GET,path="/path/{foo}/responses/100")
 		public OE01x doFoo() {return null;}
 	}
-	@Response(code=100,usePartSerializer=true)
+	@Response(code=100)
 	public static class OE01x extends Foo {}
 
 	@Test

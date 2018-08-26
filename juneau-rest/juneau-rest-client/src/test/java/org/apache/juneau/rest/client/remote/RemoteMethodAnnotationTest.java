@@ -20,6 +20,7 @@ import org.apache.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -176,12 +177,12 @@ public class RemoteMethodAnnotationTest {
 	// Return types, part serialization
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@RestResource(serializers=OpenApiSerializer.class, parsers=OpenApiParser.class, defaultAccept="text/openapi")
 	public static class D {
 
 		@RestMethod(name="POST")
-		@Response(usePartSerializer=true)
-		public String d01(@Body(usePartParser=true) String body) {
+		@Response
+		public String d01(@Body String body) {
 			return body;
 		}
 	}
@@ -192,17 +193,17 @@ public class RemoteMethodAnnotationTest {
 	public static interface D01 {
 
 		@RemoteMethod(method="POST",path="d01")
-		@Response(usePartParser=true)
-		public String d01a(@Body(usePartSerializer=true) String foo);
+		@Response
+		public String d01a(@Body String foo);
 
 		@RemoteMethod(method="POST",path="d01")
-		public HttpResponse d01b(@Body(usePartSerializer=true) String foo);
+		public HttpResponse d01b(@Body String foo);
 
 		@RemoteMethod(method="POST",path="d01")
-		public Reader d01c(@Body(usePartSerializer=true) String foo);
+		public Reader d01c(@Body String foo);
 
 		@RemoteMethod(method="POST",path="d01")
-		public InputStream d01d(@Body(usePartSerializer=true) String foo);
+		public InputStream d01d(@Body String foo);
 	}
 
 	@Test

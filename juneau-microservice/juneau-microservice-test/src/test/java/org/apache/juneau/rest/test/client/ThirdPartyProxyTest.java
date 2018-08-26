@@ -65,7 +65,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 	public ThirdPartyProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = getCached(label, ThirdPartyProxy.class);
 		if (proxy == null) {
-			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonPartSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemoteResource(ThirdPartyProxy.class, null, serializer, parser);
+			this.proxy = getClient(label, serializer, parser).builder().partSerializer(UonSerializer.DEFAULT.builder().addBeanTypes().addRootType().build()).build().getRemoteResource(ThirdPartyProxy.class, null, serializer, parser);
 			cache(label, proxy);
 		}
 	}
@@ -1691,7 +1691,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@RemoteMethod(method="GET", path="/nameValuePairsHeader")
 		String nameValuePairsHeader(
-			@Header("*") NameValuePairs a
+			@Header(value="*", allowEmptyValue=true) NameValuePairs a
 		);
 
 		//--------------------------------------------------------------------------------
@@ -2604,10 +2604,10 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		}
 	}
 
-	public static class DummyPartSerializer implements HttpPartSerializer {
+	public static class DummyPartSerializer extends BaseHttpPartSerializer {
 		@Override
-		public HttpPartSerializerSession createSession(SerializerSessionArgs args) {
-			return new HttpPartSerializerSession() {
+		public HttpPartSerializerSession createPartSession(SerializerSessionArgs args) {
+			return new BaseHttpPartSerializerSession() {
 				@Override
 				public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 					return "dummy-"+value;
@@ -2617,12 +2617,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 		@Override
 		public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-			return createSession(null).serialize(partType, schema, value);
+			return createPartSession().serialize(partType, schema, value);
 		}
 
 		@Override
 		public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
-			return createSession(null).serialize(null, schema, value);
+			return createPartSession().serialize(null, schema, value);
 		}
 	}
 }

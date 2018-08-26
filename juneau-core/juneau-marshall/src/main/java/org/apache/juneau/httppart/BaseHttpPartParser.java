@@ -12,27 +12,27 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.serializer.*;
+import java.lang.reflect.*;
+
+import org.apache.juneau.parser.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link SimpleUonPartSerializer}.
- *
- * <p>
- * This class is NOT thread safe.
- * It is typically discarded after one-time use although it can be reused within the same thread.
+ * Base class for implementations of {@link HttpPartParser}
  */
-public class SimpleUonPartSerializerSession extends UonPartSerializerSession {
+public abstract class BaseHttpPartParser implements HttpPartParser {
 
-	/**
-	 * Create a new session using properties specified in the context.
-	 *
-	 * @param ctx
-	 * 	The context creating this session object.
-	 * 	The context contains all the configuration settings for this object.
-	 * @param args
-	 * 	Runtime session arguments.
-	 */
-	protected SimpleUonPartSerializerSession(UonPartSerializer ctx, SerializerSessionArgs args) {
-		super(ctx, args);
+	@Override /* HttpPartParser */
+	public HttpPartParserSession createPartSession() {
+		return createPartSession(null);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, toType);
+	}
+
+	@Override /* HttpPartParser */
+	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return parse(null, schema, in, toType, toTypeArgs);
 	}
 }

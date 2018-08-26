@@ -15,33 +15,25 @@ package org.apache.juneau.httppart;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Session object that lives for the duration of a single use of {@link SimplePartParser}.
- *
- * <p>
- * This class is NOT thread safe.
- * It is typically discarded after one-time use although it can be reused within the same thread.
+ * Base class for implementations of {@link HttpPartParserSession}
  */
-public class SimplePartParserSession extends BaseHttpPartParserSession {
+public abstract class BaseHttpPartParserSession implements HttpPartParserSession {
 
 	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-		return ClassUtils.fromString(toType.getInnerClass(), in);
+	public <T> T parse(HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, in, toType);
 	}
 
 	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return ClassUtils.fromString(toType, in);
+	public <T> T parse(HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return parse(null, in, toType);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override /* HttpPartParserSession */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
-		if (toType instanceof Class)
-			return (T)ClassUtils.fromString((Class<?>)toType, in);
-		return null;
+	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
+		return parse(null, in, toType, toTypeArgs);
 	}
 }

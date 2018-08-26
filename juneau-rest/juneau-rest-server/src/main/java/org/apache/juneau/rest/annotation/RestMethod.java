@@ -246,6 +246,17 @@ public @interface RestMethod {
 	Class<? extends RestConverter>[] converters() default {};
 
 	/**
+	 * Default <code>Accept</code> header.
+	 *
+	 * <p>
+	 * The default value for the <code>Accept</code> header if not specified on a request.
+	 *
+	 * <p>
+	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 */
+	String defaultAccept() default "";
+
+	/**
 	 * Default character encoding.
 	 *
 	 * <p>
@@ -264,6 +275,17 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	String defaultCharset() default "";
+
+	/**
+	 * Default <code>Content-Type</code> header.
+	 *
+	 * <p>
+	 * The default value for the <code>Content-Type</code> header if not specified on a request.
+	 *
+	 * <p>
+	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 */
+	String defaultContentType() default "";
 
 	/**
 	 * Specifies default values for form-data parameters.

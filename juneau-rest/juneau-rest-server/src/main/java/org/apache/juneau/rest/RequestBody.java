@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -52,7 +51,7 @@ public class RequestBody {
 	private int contentLength = 0;
 	private MediaType mediaType;
 	private Parser parser;
-	private HttpPartParser partParser;
+	private HttpPartSchema schema;
 
 	RequestBody(RestRequest req) {
 		this.req = req;
@@ -68,8 +67,8 @@ public class RequestBody {
 		return this;
 	}
 
-	RequestBody partParser(HttpPartParser partParser) {
-		this.partParser = partParser;
+	RequestBody schema(HttpPartSchema schema) {
+		this.schema = schema;
 		return this;
 	}
 
@@ -178,7 +177,7 @@ public class RequestBody {
 	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
 	 */
 	public <T> T asType(Class<T> type) throws BadRequest, UnsupportedMediaType, InternalServerError {
-		return getInner(null, null, getClassMeta(type));
+		return getInner(getClassMeta(type));
 	}
 
 	/**
@@ -226,34 +225,7 @@ public class RequestBody {
 	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
 	 */
 	public <T> T asType(Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {
-		return getInner(null, null, this.<T>getClassMeta(type, args));
-	}
-
-	/**
-	 * Same as {@link #asType(Type, Type...)} but allows you to specify a part parser and schema.
-	 *
-	 * @param partParser
-	 * 	The part-parser to use for parsing the body as a string value if none of the existing parsers match the media type.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param schema
-	 * 	The schema object that defines the format of the input.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the parser.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * @param type
-	 * 	The type of object to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @param <T> The class type to instantiate.
-	 * @return The input parsed to a POJO.
-	 * @throws BadRequest Thrown if input could not be parsed or fails schema validation.
-	 * @throws UnsupportedMediaType Thrown if the Content-Type header value is not supported by one of the parsers.
-	 * @throws InternalServerError Thrown if an {@link IOException} occurs.
-	 */
-	public <T> T asType(HttpPartParser partParser, HttpPartSchema schema, Type type, Type...args) throws BadRequest, UnsupportedMediaType, InternalServerError {
-		return getInner(partParser, schema, this.<T>getClassMeta(type, args));
+		return getInner(this.<T>getClassMeta(type, args));
 	}
 
 	/**
@@ -426,9 +398,9 @@ public class RequestBody {
 		return null;
 	}
 
-	private <T> T getInner(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
+	private <T> T getInner(ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
 		try {
-			return parse(partParser, schema, cm);
+			return parse(cm);
 		} catch (UnsupportedMediaType e) {
 			throw e;
 		} catch (SchemaValidationException e) {
@@ -443,7 +415,7 @@ public class RequestBody {
 	}
 
 	/* Workhorse method */
-	private <T> T parse(HttpPartParser partParser, HttpPartSchema schema, ClassMeta<T> cm) throws SchemaValidationException, ParseException, UnsupportedMediaType, IOException {
+	private <T> T parse(ClassMeta<T> cm) throws SchemaValidationException, ParseException, UnsupportedMediaType, IOException {
 
 		if (cm.isReader())
 			return (T)getReader();
@@ -462,7 +434,8 @@ public class RequestBody {
 			Parser p = pm.getParser();
 			MediaType mediaType = pm.getMediaType();
 			req.getProperties().append("mediaType", mediaType).append("characterEncoding", req.getCharacterEncoding());
-			ParserSession session = p.createSession(new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, req.isDebug() ? true : null, req.getContext().getResource()));
+			ParserSessionArgs pArgs = new ParserSessionArgs(req.getProperties(), req.getJavaMethod(), locale, timeZone, mediaType, schema, req.isDebug() ? true : null, req.getContext().getResource());
+			ParserSession session = p.createSession(pArgs);
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				T o = session.parse(in, cm);
 				if (schema != null)
@@ -477,18 +450,10 @@ public class RequestBody {
 		if (cm.hasInputStreamTransform())
 			return cm.getInputStreamTransform().transform(getInputStream());
 
-		if (partParser == null)
-			partParser = this.partParser;
-
 		MediaType mt = getMediaType();
-		if (isEmpty(mt) || mt.toString().startsWith("text/plain")) {
-			if (partParser != null) {
-				String in = asString();
-				return partParser.createSession(req.getParserSessionArgs()).parse(BODY, schema, isEmpty(in) ? null : in, cm);
-			}
-			if (cm.hasStringTransform())
-				return cm.getStringTransform().transform(asString());
-		}
+
+		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringTransform()) 
+			return cm.getStringTransform().transform(asString());
 
 		throw new UnsupportedMediaType(
 			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",

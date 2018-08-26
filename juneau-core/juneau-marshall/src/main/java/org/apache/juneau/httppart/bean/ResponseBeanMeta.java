@@ -116,14 +116,12 @@ public class ResponseBeanMeta {
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
-	private final boolean usePartSerializer;
 
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
 		this.partSerializer = newInstance(HttpPartSerializer.class, b.partSerializer, true, b.ps);
 		this.partParser = newInstance(HttpPartParser.class, b.partParser, true, b.ps);
-		this.usePartSerializer = b.usePartSerializer;
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = new LinkedHashMap<>();
@@ -154,7 +152,6 @@ public class ResponseBeanMeta {
 		Class<? extends HttpPartSerializer> partSerializer;
 		Class<? extends HttpPartParser> partParser;
 		HttpPartSchemaBuilder schema = HttpPartSchema.create();
-		boolean usePartSerializer;
 
 		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = new LinkedHashMap<>();
 		ResponseBeanPropertyMeta.Builder bodyMethod;
@@ -202,7 +199,6 @@ public class ResponseBeanMeta {
 					code = a.value()[0];
 				if (a.code().length > 0)
 					code = a.code()[0];
-				usePartSerializer = AnnotationUtils.usePartSerializer(a);
 				schema.apply(a.schema());
 			}
 			return this;
@@ -256,15 +252,6 @@ public class ResponseBeanMeta {
 	 */
 	public ResponseBeanPropertyMeta getStatusMethod() {
 		return statusMethod;
-	}
-
-	/**
-	 * Returns the flag for whether the part serializer should be used to serialize this response.
-	 *
-	 * @return The flag for whether the part serializer should be used to serialize this response.
-	 */
-	public boolean isUsePartSerializer() {
-		return usePartSerializer;
 	}
 
 	/**

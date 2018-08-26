@@ -44,7 +44,7 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null));
+		session = s1.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
@@ -52,7 +52,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null));
+		session = s2.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);
@@ -152,7 +152,7 @@ public class XmlContentTest {
 		t.f2 = null;
 
 		sw = new StringWriter();
-		session = s1.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null));
+		session = s1.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>", r);
@@ -160,7 +160,7 @@ public class XmlContentTest {
 		assertEqualObjects(t, t2);
 
 		sw = new StringWriter();
-		session = s2.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null));
+		session = s2.createSession(new SerializerSessionArgs(null, null, null, null, null, null, null, null, null));
 		session.serialize(t, sw);
 		r = sw.toString();
 		assertEquals("<A f1='f1'>_x0000_</A>\n", r);

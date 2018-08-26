@@ -24,7 +24,6 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.HttpPartSchema.*;
 import org.apache.juneau.httppart.HttpPartSchema.Type;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -35,7 +34,7 @@ public class HttpPartSchemaBuilder {
 	String name, _default;
 	Set<Integer> codes;
 	Set<String> _enum;
-	Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty, usePartSerializer, usePartParser;
+	Boolean allowEmptyValue, exclusiveMaximum, exclusiveMinimum, required, uniqueItems, skipIfEmpty;
 	CollectionFormat collectionFormat = CollectionFormat.NO_COLLECTION_FORMAT;
 	Type type = Type.NO_TYPE;
 	Format format = Format.NO_FORMAT;
@@ -124,10 +123,6 @@ public class HttpPartSchemaBuilder {
 	HttpPartSchemaBuilder apply(Body a) {
 		required(a.required());
 		allowEmptyValue(! a.required());
-		serializer(a.partSerializer());
-		parser(a.partParser());
-		usePartSerializer(AnnotationUtils.usePartSerializer(a));
-		usePartParser(AnnotationUtils.usePartParser(a));
 		apply(a.schema());
 		return this;
 	}
@@ -276,8 +271,6 @@ public class HttpPartSchemaBuilder {
 		allowEmptyValue(true);
 		serializer(a.partSerializer());
 		parser(a.partParser());
-		usePartSerializer(AnnotationUtils.usePartSerializer(a));
-		usePartParser(AnnotationUtils.usePartParser(a));
 		apply(a.schema());
 		return this;
 	}
@@ -1545,40 +1538,6 @@ public class HttpPartSchemaBuilder {
 	public HttpPartSchemaBuilder parser(Class<? extends HttpPartParser> value) {
 		if (value != null && value != HttpPartParser.Null.class)
 			parser = value;
-		return this;
-	}
-
-	/**
-	 * Identifies whether a part serializer should be used for serializing this part.
-	 *
-	 * <p>
-	 * This flag is only applicable for HTTP bodies.
-	 * It specifies whether the HTTP body should be serialized using normal Juneau serializers (e.g. {@link JsonSerializer}) or HTTP part serializers (e.g. {@link OpenApiPartSerializer}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public HttpPartSchemaBuilder usePartSerializer(Boolean value) {
-		usePartSerializer = resolve(value, usePartSerializer);
-		return this;
-	}
-
-	/**
-	 * Identifies whether a part parser should be used for parsing this part.
-	 *
-	 * <p>
-	 * This flag is only applicable for HTTP bodies.
-	 * It specifies whether the HTTP body should be parsed using normal Juneau parser (e.g. {@link JsonParser}) or HTTP part serializers (e.g. {@link OpenApiPartParser}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public HttpPartSchemaBuilder usePartParser(Boolean value) {
-		usePartParser = resolve(value, usePartParser);
 		return this;
 	}
 
