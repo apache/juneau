@@ -38,9 +38,9 @@ public class RdfTest {
 			.addRootProperty();
 		RdfParser p = RdfParser.create().xml().build();
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// Normal format - Sequence
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
 			+ "\n   <rdf:Description about='http://test/a'>"
@@ -65,9 +65,9 @@ public class RdfTest {
 		a2 = p.parse(rdfXml, A.class);
 		assertEqualObjects(a, a2);
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// Explicit sequence
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.SEQ);
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
@@ -93,9 +93,9 @@ public class RdfTest {
 		a2 = p.parse(rdfXml, A.class);
 		assertEqualObjects(a, a2);
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// Bag
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.BAG);
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
@@ -121,9 +121,9 @@ public class RdfTest {
 		a2 = p.parse(rdfXml, A.class);
 		assertEqualObjects(a, a2);
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// List
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.LIST);
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
@@ -151,9 +151,9 @@ public class RdfTest {
 		a2 = p.parse(rdfXml, A.class);
 		assertEqualObjects(a, a2);
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// Multi-properties
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.MULTI_VALUED);
 		expected =
 			"<rdf:RDF a='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
@@ -198,9 +198,9 @@ public class RdfTest {
 			.addRootProperty();
 		RdfParser p = RdfXmlParser.DEFAULT;
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// Normal format - Sequence
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 
 		expected =
 			"<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
@@ -268,9 +268,9 @@ public class RdfTest {
 		b2 = p.parse(rdfXml, B.class);
 		assertEqualObjects(b, b2, true);
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// Default is Bag - Should only affect DEFAULT properties.
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.BAG);
 		expected =
 			"<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
@@ -431,9 +431,9 @@ public class RdfTest {
 			.addRootProperty();
 		RdfParser p = RdfXmlParser.DEFAULT;
 
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		// Default on class is Bag - Should only affect DEFAULT properties.
-		//--------------------------------------------------------------------------------
+		//-------------------------------------------------------------------------------------------------------------
 		s.collectionFormat(RdfCollectionFormat.BAG);
 		expected =
 			"<rdf:RDF b='http://ns/' j='http://www.apache.org/juneau/' jp='http://www.apache.org/juneaubp/' rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"

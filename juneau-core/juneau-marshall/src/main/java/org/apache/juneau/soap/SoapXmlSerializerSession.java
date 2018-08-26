@@ -49,9 +49,9 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 		soapAction = getProperty(SOAPXML_SOAPAction, String.class, ctx.soapAction);
 	}
 
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws Exception {

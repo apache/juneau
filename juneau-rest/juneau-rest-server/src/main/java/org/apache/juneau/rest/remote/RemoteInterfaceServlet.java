@@ -54,9 +54,9 @@ public abstract class RemoteInterfaceServlet extends BasicRestServlet {
 
 	private final Map<String,RemoteInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
 
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the list of interfaces to their implementation objects.
@@ -69,9 +69,9 @@ public abstract class RemoteInterfaceServlet extends BasicRestServlet {
 	 */
 	protected abstract Map<Class<?>,Object> getServiceMap() throws Exception;
 
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 	// REST methods
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@RestMethod(
 		name=GET,
@@ -212,9 +212,9 @@ public abstract class RemoteInterfaceServlet extends BasicRestServlet {
 	}
 
 
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
-	//--------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private Map<String,RemoteInterfaceMethod> getMethods(String javaInterface) throws Exception {
 		return getInterfaceClass(javaInterface).getMethodsByPath();

@@ -98,11 +98,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	ServletContext servletContext;
 	RestContext parentContext;
 
-	//---------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 	// The following fields are meant to be modifiable.
 	// They should not be declared final.
 	// Read-only snapshots of these will be made in RestServletContext.
-	//---------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
 
 	RestContextProperties properties;
 	Config config;
