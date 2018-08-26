@@ -13,11 +13,12 @@
  ***************************************************************************************************************************/
  -->
 
-POJO Categories
+{updated} POJO Categories
 
 <p>
 	The following chart shows POJOs categorized into groups and whether they can be serialized or parsed:
 </p>
+<h5 class='figure'>General POJO serialization/parsing support</h5>
 <table class='styled w800' style='border-collapse:collapse'>
 	<tr><th>Group</th><th>Description</th><th>Examples</th><th>Can<br>serialize?</th><th>Can<br>parse?</th></tr>
 	<tr class='dark bb' style='background-color:lightyellow;'>
@@ -275,3 +276,70 @@ POJO Categories
 		(by setting these references to <jk>null</jk>), but it is not enabled by default since it introduces 
 		a moderate performance penalty. 
 </ul>
+
+<h5 class='topic' id='PojosConveribleToStrings'>POJOs convertible to/from Strings</h5>
+<p>
+	A separate category exists for POJOs that can be converted to and from Strings.
+	These are used in places such as: 
+</p>
+<ul class='spaced-list'>
+	<li>Serializing of POJOs to Strings in the REST client API when no serializers are registered.
+	<li>Parsing of POJOs from Strings in the REST server API for <js>"text/plain"</js> requests where
+	<js>"text/plain"</js> is not already mapped to an existing serializer.
+</ul>
+
+<p>
+	As a general rule, all POJOs are converted to Strings using the <code>toString()</code> method.
+	<br>However, there is one exception:
+</p>
+<ul class='spaced-list'>
+	<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getID()}
+</ul>
+
+<p>
+	POJOs are convertible from Strings using any of the following (matched in the specified order):
+</p>
+<ul class='spaced-list'>
+	<li>Any any of the following public static non-deprecated methods:
+	<ul>
+		<li><code>create(String)</code>
+		<li><code>fromString(String)</code>
+		<li><code>fromValue(String)</code>
+		<li><code>valueOf(String)</code>
+		<li><code>parse(String)</code>
+		<li><code>parseString(String)</code>
+		<li><code>forName(String)</code>
+		<li><code>forString(String)</code>
+	</ul>
+	<li>Has a public constructor that takes in a <code>String</code>.
+</ul>
+<p>
+	Exceptions exist for the following classes:
+</p>
+<ul class='spaced-list'>
+	<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getTimeZone(String)}
+	<li>{@link java.util.Locale} - Uses {@link java.util.Locale#forLanguageTag(String)} after replacing <js>'_'</js> with <js>'-'</js>.
+	<li>{@link java.lang.Boolean} - Blank and <js>"null"</js> are interpreted as null values.
+	<li>Primitives (except for <code><jk>void</jk>.<jk>class</jk></code>) - Uses the primitive wrapper classes for instantiating from Strings.
+</ul>
+
+<h5 class='topic' id='PojosConveribleToOtherTypes'>POJOs convertible to/from other types</h5>
+<p>
+	POJOs are also converted to various other types in places such as the Open-API serializers and parsers. 
+	<br>In this section, the type being converted to will be referred to as <code>X</code>.
+</p>
+<p>
+	POJOs are considered convertible from X if it has any of the following (matched in the specified order):
+</p>
+<ul class='spaced-list'>
+	<li>Any any of the following public static non-deprecated methods:
+	<ul>
+		<li><code>create(X)</code>
+		<li><code>from*(X)</code>
+	</ul>
+	<li>Has a public constructor that takes in an <code>X</code>.
+	<li>The X class has a public non-static no-arg non-deprecated method called <code>to*()</code>.
+</ul>
+<p>
+	POJOs are considered convertible from X if any of the reverse of above are true.
+</p>

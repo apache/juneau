@@ -16,7 +16,7 @@
 {new} OpenAPI Schema Part Parsing
 
 <p>
-	Parameters annotated with any of the following are parsed using the registered {@link oaj.httppart.OpenApiPartParser} and
+	Parameters annotated with any of the following are parsed using the registered {@link oaj.oapi.OpenApiParser} and
 	therefore support OpenAPI syntax and validation:
 </p>
 <ul class='doctree'>
@@ -24,7 +24,7 @@
 	<li class='ja'>{@link oaj.http.annotation.Query Query}
 	<li class='ja'>{@link oaj.http.annotation.FormData FormData}
 	<li class='ja'>{@link oaj.http.annotation.Path Path}
-	<li class='ja'>{@link oaj.http.annotation.Body Body} ({@link oaj.http.annotation.Body#usePartParser usePartParser} flag must be set)
+	<li class='ja'>{@link oaj.http.annotation.Body Body} (<code>Content-Type</code> must match <js>"text/openapi"</js>)
 </ul>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a query parameter can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -61,7 +61,8 @@
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testBody"</js>)	
 	<jk>public void</jk> testBody(
 		<ja>@Body</ja>(
-			usePartParser=<jk>true</jk>,
+			parsers=OpenApiParser.<jk>class</jk>,
+			defaultContentType=<js>"text/openapi"</js>,
 			schema=<ja>@Schema</ja>(
 				items=<ja>@Items</ja>(
 					collectionFormat=<js>"pipes"</js>,

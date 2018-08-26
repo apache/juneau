@@ -81,7 +81,7 @@
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link oaj.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link oaj.httppart.OpenApiPartSerializer} by default) or associated via the {@link oaj.http.annotation.Header#serializer() @Header(serializer)} annotation.
+		<code>RestClient</code> ({@link oaj.oapi.OpenApiSerializer} by default) or associated via the {@link oaj.http.annotation.Header#serializer() @Header(serializer)} annotation.
 </ul>
 
 <p>
@@ -92,10 +92,10 @@
 		<code>NameValuePairs</code> - Serialized as individual headers.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
 </ul>
 
 <p>

@@ -160,23 +160,7 @@
 		<jk>int</jk> postPets(...);
 	}
 </p>
-
 <p>
-	If your <code>RestClient</code> does not have a parser associated with it, then the {@link oaj.httppart.OpenApiPartParser OpenAPI part parser}
-	is used to parse the response.  
-	<br>If your <code>RestClient</code> does have a parser associated with it, then you can force it to use the part parser using the {@link oaj.http.annotation.Response#usePartParser() @Response(usePartParser)}
-	annotation on your method like so: 
-</p>
-<p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
-	<jk>public interface</jk> PetStore {
-		
-		<jc>// Force the part parser to be used for the response body.</jc>
-		<ja>@RemoteMethod</ja>
-		<ja>@Response</ja>(usePartParser=<jk>true</jk>)
-		String postPets(...);
-	}
-</p>
-<p>
-	The usage of <ja>@Response</ja> is described in detail below.
+	If your <code>RestClient</code> does not have a parser associated with it, then the value is converted directly from a String using
+	the rules defined in {@doc PojosConveribleToStrings}. 
 </p>

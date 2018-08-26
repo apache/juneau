@@ -24,26 +24,11 @@
 	<ul>
 		<li class='jf'>{@link oaj.http.annotation.Response#partParser() partParser} - Override the part parser.
 		<li class='jf'>{@link oaj.http.annotation.Response#schema() schema} - Swagger schema.
-		<li class='jf'>{@link oaj.http.annotation.Response#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing the response body.
 	</ul>
 </ul>
 <h5 class='topic'>On @RemoteMethod-annotated methods</h5>
 <p>
-	As shown previously, the <ja>@Response</ja> annotation can be added to your <ja>@RemoteMethod</ja>-annotated method directly
-	to specify whether the response body should use the OpenAPI part parser.
-</p>
-<p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
-	<jk>public interface</jk> PetStore {
-		
-		<jc>// Force the part parser to be used for the response body.</jc>
-		<ja>@RemoteMethod</ja>
-		<ja>@Response</ja>(usePartParser=<jk>true</jk>)
-		String postPet(...);
-	}
-</p>
-<p>
-	It can also be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
+	The annotation can be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
 </p>
 
 <h5 class='topic'>Response interfaces</h5>

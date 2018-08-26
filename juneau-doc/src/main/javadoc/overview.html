@@ -866,11 +866,7 @@
 			</ul>
 			<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer}
-				<ul>
-					<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer}
-					<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer}
-				</ul>
+				<li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer}
 				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}
 			</ul>
 			<li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}
@@ -1000,10 +996,7 @@
 			</ul>
 			<li class='jc'>{@link org.apache.juneau.uon.UonParser}
 			<ul>
-				<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser}
-				<ul>
-					<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser}
-				</ul>
+				<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser}
 				<li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}
 			</ul>
 			<li class='jc'>{@link org.apache.juneau.xml.XmlParser}
@@ -1112,7 +1105,7 @@
 	Object value = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
 
 	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
-	String output = OpenApiPartSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, value);
+	String output = OpenApiSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, schema, value);
 </p>
 <p>
 	The class hierarchy for the part serializers are:
@@ -1122,10 +1115,9 @@
 	<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer} - Serializes directly to strings.
-		<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer} - Serializes to UON notation.
+		<li class='jc'>{@link org.apache.juneau.uon.UonSerializer} - Serializes to UON notation.
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Serializes using Open-API schema rules.
-			<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer} - Serializes to UON notation for beans and maps only.
+			<li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer} - Serializes using Open-API schema rules.
 		</ul>
 	</ul>
 </ul>
@@ -1158,7 +1150,7 @@
 	String input = <js>"1,2,3|4,5,6|7,8,9"</js>;
 
 	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
-	<jk>long</jk>[][] value = OpenApiPartParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, schema, input, <jk>long</jk>[][].<jk>class</jk>);
+	<jk>long</jk>[][] value = OpenApiParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, schema, input, <jk>long</jk>[][].<jk>class</jk>);
 </p>
 <p>
 	The class hierarchy for the part serializers are:
@@ -1168,9 +1160,9 @@
 	<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser} - Parses directly from strings.
-		<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser} - Parses from UON notation.
+		<li class='jc'>{@link org.apache.juneau.uon.UonParser} - Parses from UON notation.
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Parses using Open-API schema rules.
+			<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser} - Parses using Open-API schema rules.
 		</ul>
 	</ul>
 </ul>
@@ -4009,6 +4001,7 @@
 <p>
 	The following chart shows POJOs categorized into groups and whether they can be serialized or parsed:
 </p>
+<h5 class='figure'>General POJO serialization/parsing support</h5>
 <table class='styled w800' style='border-collapse:collapse'>
 	<tr><th>Group</th><th>Description</th><th>Examples</th><th>Can<br>serialize?</th><th>Can<br>parse?</th></tr>
 	<tr class='dark bb' style='background-color:lightyellow;'>
@@ -4266,6 +4259,73 @@
 		(by setting these references to <jk>null</jk>), but it is not enabled by default since it introduces 
 		a moderate performance penalty. 
 </ul>
+
+<h5 class='topic' id='PojosConveribleToStrings'>POJOs convertible to/from Strings</h5>
+<p>
+	A separate category exists for POJOs that can be converted to and from Strings.
+	These are used in places such as: 
+</p>
+<ul class='spaced-list'>
+	<li>Serializing of POJOs to Strings in the REST client API when no serializers are registered.
+	<li>Parsing of POJOs from Strings in the REST server API for <js>"text/plain"</js> requests where
+	<js>"text/plain"</js> is not already mapped to an existing serializer.
+</ul>
+
+<p>
+	As a general rule, all POJOs are converted to Strings using the <code>toString()</code> method.
+	<br>However, there is one exception:
+</p>
+<ul class='spaced-list'>
+	<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getID()}
+</ul>
+
+<p>
+	POJOs are convertible from Strings using any of the following (matched in the specified order):
+</p>
+<ul class='spaced-list'>
+	<li>Any any of the following public static non-deprecated methods:
+	<ul>
+		<li><code>create(String)</code>
+		<li><code>fromString(String)</code>
+		<li><code>fromValue(String)</code>
+		<li><code>valueOf(String)</code>
+		<li><code>parse(String)</code>
+		<li><code>parseString(String)</code>
+		<li><code>forName(String)</code>
+		<li><code>forString(String)</code>
+	</ul>
+	<li>Has a public constructor that takes in a <code>String</code>.
+</ul>
+<p>
+	Exceptions exist for the following classes:
+</p>
+<ul class='spaced-list'>
+	<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getTimeZone(String)}
+	<li>{@link java.util.Locale} - Uses {@link java.util.Locale#forLanguageTag(String)} after replacing <js>'_'</js> with <js>'-'</js>.
+	<li>{@link java.lang.Boolean} - Blank and <js>"null"</js> are interpreted as null values.
+	<li>Primitives (except for <code><jk>void</jk>.<jk>class</jk></code>) - Uses the primitive wrapper classes for instantiating from Strings.
+</ul>
+
+<h5 class='topic' id='PojosConveribleToOtherTypes'>POJOs convertible to/from other types</h5>
+<p>
+	POJOs are also converted to various other types in places such as the Open-API serializers and parsers. 
+	<br>In this section, the type being converted to will be referred to as <code>X</code>.
+</p>
+<p>
+	POJOs are considered convertible from X if it has any of the following (matched in the specified order):
+</p>
+<ul class='spaced-list'>
+	<li>Any any of the following public static non-deprecated methods:
+	<ul>
+		<li><code>create(X)</code>
+		<li><code>from*(X)</code>
+	</ul>
+	<li>Has a public constructor that takes in an <code>X</code>.
+	<li>The X class has a public non-static no-arg non-deprecated method called <code>to*()</code>.
+</ul>
+<p>
+	POJOs are considered convertible from X if any of the reverse of above are true.
+</p>
 </div><!-- END: 2.18 - juneau-marshall.PojoCategories -->
 
 <!-- ==================================================================================================== -->
@@ -8582,8 +8642,8 @@
 	The relevant classes for using OpenAPI-based serialization are:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartSerializer} - Converts POJOs to strings.
-	<li class='jc'>{@link org.apache.juneau.httppart.OpenApiPartParser} - Converts strings to POJOs.
+	<li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer} - Converts POJOs to strings.
+	<li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser} - Converts strings to POJOs.
 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartSchema} - Defines the schema for your POJO.
 </ul>
 <p>
@@ -8707,11 +8767,11 @@
 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).build();
 
 	<jc>// Convert POJO to BASE64-encoded string.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart = s.serialize(schema, myPojo);
 	
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 </p>
 <p>
@@ -8726,7 +8786,7 @@
 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).minLength(100).build();
 
 	<jc>// Convert POJO to BASE64-encoded string.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart;
 	<jk>try</jk> {
 		httpPart = s.serialize(schema, myPojo);
@@ -8735,7 +8795,7 @@
 	}
 	
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	<jk>try</jk> {
 		myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException e) {
@@ -8755,7 +8815,7 @@
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Serializers' id='juneau-marshall.OpenApiDetails.Serializers'>2.25.2 - OpenAPI Serializers</a></h4>
 <div class='topic'><!-- START: 2.25.2 - juneau-marshall.OpenApiDetails.Serializers -->
 <p>
-	The {@link org.apache.juneau.httppart.OpenApiPartSerializer} class is used to convert POJOs to HTTP parts.
+	The {@link org.apache.juneau.oapi.OpenApiSerializer} class is used to convert POJOs to HTTP parts.
 </p>
 <p>
 	Later we'll describe how to use HTTP-Part annotations to define OpenAPI schemas for serialization and parsing
@@ -8817,7 +8877,7 @@
 	Long[][] input = ....
 	
 	<jc>// The serializer to use.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert POJO to a string.</jc>
 	<jk>try</jk> {
@@ -9032,7 +9092,7 @@
 	MyPojo input = ....
 	
 	<jc>// The serializer to use.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert POJO to a string.</jc>
 	<jk>try</jk> {
@@ -9091,7 +9151,7 @@
 	Then we serialize our bean:
 </p>
 <p class='bpcode w800'>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart = s.serialize(schema, <jk>new</jk> MyBean());
 </p>
 <p>
@@ -9194,7 +9254,7 @@
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Parsers' id='juneau-marshall.OpenApiDetails.Parsers'>2.25.3 - OpenAPI Parsers</a></h4>
 <div class='topic'><!-- START: 2.25.3 - juneau-marshall.OpenApiDetails.Parsers -->
 <p>
-	The {@link org.apache.juneau.httppart.OpenApiPartParser} class is used to convert HTTP parts back into POJOs.
+	The {@link org.apache.juneau.oapi.OpenApiParser} class is used to convert HTTP parts back into POJOs.
 </p>
 <p>
 	The following is the previous example of a schema that defines the format of a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
@@ -9227,7 +9287,7 @@
 	String input = <js>"1,2,3|4,5,6|7,8,9"</js>
 	
 	<jc>// The parser to use.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
@@ -9412,7 +9472,7 @@
 	String input = <js>"1,2,3|4,5,6|7,8,9"</js>
 	
 	<jc>// The parser to use.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
@@ -9473,7 +9533,7 @@
 		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	MyBean b = p.parse(schema, input, MyBean.<jk>class</jk>);
 </p>
 <p>
@@ -9503,7 +9563,7 @@
 		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	ObjectMap m = p.parse(schema, input, ObjectMap.<jk>class</jk>);
 </p>
 <h5 class='topic'>Other Notes:</h5>
@@ -15103,7 +15163,7 @@
 <h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.OpenApiSchemaPartParsing' id='juneau-rest-server.OpenApiSchemaPartParsing'>7.8 - OpenAPI Schema Part Parsing</a></h3>
 <div class='topic'><!-- START: 7.8 - juneau-rest-server.OpenApiSchemaPartParsing -->
 <p>
-	Parameters annotated with any of the following are parsed using the registered {@link org.apache.juneau.httppart.OpenApiPartParser} and
+	Parameters annotated with any of the following are parsed using the registered {@link org.apache.juneau.oapi.OpenApiParser} and
 	therefore support OpenAPI syntax and validation:
 </p>
 <ul class='doctree'>
@@ -15111,7 +15171,7 @@
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body} ({@link org.apache.juneau.http.annotation.Body#usePartParser usePartParser} flag must be set)
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body} (<code>Content-Type</code> must match <js>"text/openapi"</js>)
 </ul>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a query parameter can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -15148,7 +15208,8 @@
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testBody"</js>)	
 	<jk>public void</jk> testBody(
 		<ja>@Body</ja>(
-			usePartParser=<jk>true</jk>,
+			serializers=OpenApiSerializer.<jk>class</jk>,
+			defaultAccept=<js>"text/openapi"</js>,
 			schema=<ja>@Schema</ja>(
 				items=<ja>@Items</ja>(
 					collectionFormat=<js>"pipes"</js>,
@@ -15217,12 +15278,12 @@
 <h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.OpenApiSchemaPartSerializing' id='juneau-rest-server.OpenApiSchemaPartSerializing'>7.9 - OpenAPI Schema Part Serializing</a></h3>
 <div class='topic'><!-- START: 7.9 - juneau-rest-server.OpenApiSchemaPartSerializing -->
 <p>
-	Parameters annotated with any of the following are serialized using the registered {@link org.apache.juneau.httppart.OpenApiPartSerializer} and
+	Parameters annotated with any of the following are serialized using the registered {@link org.apache.juneau.oapi.OpenApiSerializer} and
 	therefore support OpenAPI syntax and validation:
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response} ({@link org.apache.juneau.http.annotation.Response#usePartSerializer usePartSerializer} flag must be set)
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response} (<code>Accept</code> must match <js>"text/openapi"</js>)
 </ul>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a response header can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -15257,7 +15318,8 @@
 	<ja>@RestMethod</ja>(method=<js>"GET"</js>, path=<js>"/testResponseBody"</js>)	
 	<jk>public void</jk> testResponseBody(
 		<ja>@Response</ja>(
-			usePartSerializer=<jk>true</jk>,
+			serializers=OpenApiSerialier.<jk>class</jk>,
+			defaultAccept=<js>"text/openapi"</js>,
 			schema=<ja>@Schema</ja>(
 				items=<ja>@Items</ja>(
 					collectionFormat=<js>"pipes"</js>,
@@ -15341,10 +15403,8 @@
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description} - Description.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#example() example} - Serialized example.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#examples() examples} - Serialized examples per media type.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partParser() partParser} - Override the part parser.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing body.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
@@ -15418,19 +15478,21 @@
 		Note that this also includes all enums.
 </ol>
 <p>
-	If the {@link org.apache.juneau.http.annotation.Body#usePartParser usePartParser} flag is set on the annotation,
-	then the body can be parsed using the registered {@link org.apache.juneau.httppart.HttpPartParser} which by default
-	is {@link org.apache.juneau.httppart.OpenApiPartParser}.
+	The {@link org.apache.juneau.oapi.OpenApiSerializer} class can be used to serialize HTTP bodies to OpenAPI-based output.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
 </p>
 <p class='bpcode w800'>
 	<jc>// Body is a pipe-delimited list of comma-delimited lists of longs.</jc>
-	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testBody"</js>)	
+	<ja>@RestMethod</ja>(
+		method=<js>"POST"</js>, 
+		path=<js>"/testBody"</js>,
+		serializers=OpenApiSerializers.<jk>class</jk>,
+		defaultAccept=<js>"text/openapi"</js>
+	)	
 	<jk>public void</jk> testBody(
 		<ja>@Body</ja>(
-			usePartParser=<jk>true</jk>,
 			schema=<ja>@Schema</ja>(
 				items=<ja>@Items</ja>(
 					collectionFormat=<js>"pipes"</js>,
@@ -15597,7 +15659,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -15851,7 +15913,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -16078,7 +16140,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -16243,7 +16305,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.httppart.OpenApiPartParser} which supports the standard Swagger-based rules for parsing.
+	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 
 <p>
@@ -16430,7 +16492,6 @@
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#headers() headers} - Swagger about headers added to response.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partSerializer() partSerializer} - Override the part serializer.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#value() value} - Free-form Swagger JSON.
 	</ul>
 </ul>
@@ -16708,9 +16769,7 @@
 <p>
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
 	matching the requesting <code>Accept</code> header.
-	<br>It is also possible to use OpenAPI part serialization for the body of the response using 
-	the {@link org.apache.juneau.http.annotation.Response#usePartSerializer() usePartSerializer} flag.
-	<br>The flag is needed to identify that we should use the part serializer instead of normal serializers for the POJO.
+	<br>The {@link org.apache.juneau.oapi.OpenApiSerializer} class can be used to serialize response bodies using OpenAPI rules.
 </p>
 <p>
 	The following examples show part-schema-based serialization of response bodies:
@@ -16721,7 +16780,8 @@
 
 		<jc>// Example 1 - String[] should be serialized using part serializer.</jc>
 		<ja>@Response</ja>(
-			usePartSerializer=<jk>true</jk>
+			serializers=OpenApiSerializer.<jk>class</jk>,
+			defaultAccept=<js>"text/openapi"</js>
 		)
 		<ja>@RestMethod</ja>
 		<jk>public</jk> String[] example1() {
@@ -16732,7 +16792,8 @@
 		<ja>@RestMethod</ja>
 		<jk>public void</jk> example2(
 			<ja>@Response</ja>(
-				usePartSerializer=<jk>true</jk>
+				serializers=OpenApiSerializer.<jk>class</jk>,
+				defaultAccept=<js>"text/openapi"</js>
 			) 
 			Value&lt;String[]&gt; body
 		) 
@@ -16742,32 +16803,20 @@
 	}
 </p>
 <p>
-	The <code>usePartSerializer</code> flag is assumed to be <jk>true</jk> if you specify <code>schema</code>
-	or <code>partSerializer</code> on the annotation.
+	The <code><ja>@Response</ja>(schema)</code> can be used to define the format of the output using OpenAPI-based rules.
 </p>
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>
 	<jk>public class</jk> ExampleResource {
 
-		<jc>// Example 1 - Part serializer used because schema is defined</jc>
 		<ja>@Response</ja>(
+			serializers=OpenApiSerializer.<jk>class</jk>,
+			defaultAccept=<js>"text/openapi"</js>,
 			schema=<ja>@Schema</ja>(collectionFormat=<js>"pipes"</js>)
 		)
 		<ja>@RestMethod</ja>
 		<jk>public</jk> String[] example1() {
 			<jk>return new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>};
-		}
-
-		<jc>// Example 2 - Part serializer used because partSerializer is defined</jc>
-		<ja>@RestMethod</ja>
-		<jk>public void</jk> example2(
-			<ja>@Response</ja>(
-				partSerializer=OpenApiPartSerializer.<jk>class</jk>
-			) 
-			Value&lt;String[]&gt; body
-		) 
-		{
-			body.set(<jk>new</jk> String[]{<js>"foo"</js>,<js>"bar"</js>});
 		}
 	}
 </p>
@@ -16904,7 +16953,7 @@
 		example=<js>"123"</js>
 	)
 	<jk>public class</jk> RateLimit {
-		<jc>// OpenApiPartSerializer knows to look for this method based on format/type.</jc>
+		<jc>// OpenApiSerializer knows to look for this method based on format/type.</jc>
 		<jk>public</jk> Integer toInteger() {
 			<jk>return</jk> 1000;
 		}
@@ -20310,25 +20359,9 @@ TODO(7.2.0)
 		<jk>int</jk> postPets(...);
 	}
 </p>
-
 <p>
-	If your <code>RestClient</code> does not have a parser associated with it, then the {@link org.apache.juneau.httppart.OpenApiPartParser OpenAPI part parser}
-	is used to parse the response.  
-	<br>If your <code>RestClient</code> does have a parser associated with it, then you can force it to use the part parser using the {@link org.apache.juneau.http.annotation.Response#usePartParser() @Response(usePartParser)}
-	annotation on your method like so: 
-</p>
-<p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
-	<jk>public interface</jk> PetStore {
-		
-		<jc>// Force the part parser to be used for the response body.</jc>
-		<ja>@RemoteMethod</ja>
-		<ja>@Response</ja>(usePartParser=<jk>true</jk>)
-		String postPets(...);
-	}
-</p>
-<p>
-	The usage of <ja>@Response</ja> is described in detail below.
+	If your <code>RestClient</code> does not have a parser associated with it, then the value is converted directly from a String using
+	the rules defined in {@doc PojosConveribleToStrings}. 
 </p>
 </div><!-- END: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 
@@ -20343,10 +20376,8 @@ TODO(7.2.0)
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
 	<ul>
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#partSerializer() partSerializer} - Override the part serializer defined on client.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
 	</ul>
 </ul>
 
@@ -20381,15 +20412,11 @@ TODO(7.2.0)
 		Any serializable POJO - Converted to output using the {@link org.apache.juneau.serializer.Serializer} registered with the <code>RestClient</code>.
 		<br><code>Content-Type</code> is set to that of the <code>Serializer</code>.
 	<li>
-		Any part serializable POJO - Converted to output using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
-		<br><code>Content-Type</code> is set to <js>"text/plain"</js>.
-	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
 		<br><code>Content-Type</code> is set to <js>"text/plain"</js>.
 	<li>
 		{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-		<br><code>Content-Type</code> is not set.
+		<br><code>Content-Type</code> is set to <js>"application/octet-stream"</js>.
 	<li>
 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
 		<br><code>Content-Type</code> is set to <js>"aplication/x-www-form-urlencoded"</js>.
@@ -20398,15 +20425,14 @@ TODO(7.2.0)
 </ul>
  
 <p>
-	OpenAPI schema based serialization can be used by specifying a value for the {@link org.apache.juneau.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation
-	or setting {@link org.apache.juneau.http.annotation.Body#usePartSerializer() @Body(usePartSerializer)} to <jk>true</jk>.
+	OpenAPI schema based serialization can be used by using the {@link org.apache.juneau.oapi.OpenApiSerializer} class.
 </p>
 
 <p class='bpcode w800'>
 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
 	String addCommaDelimitedPipeDelimitedInts(
 		<ja>@Body</ja>(
-			usePartSerializer=<jk>true</jk>,
+			serializer=OpenApiSerializer.<jk>class</jk>,
 			schema=<ja>@Schema</ja>(
 				type=<js>"array"</js>,
 				collectionFormat=<js>"pipes"</js>,
@@ -20425,17 +20451,13 @@ TODO(7.2.0)
 	);
 </p>
 <p>
-	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized using the registered
-	OpenAPI part serializer.
-</p>
-<p>
-	See the link below for information about supported data types in OpenAPI serialization.
+	See {@doc juneau-marshall.OpenApiDetails.Serializers} for information about supported data types in OpenAPI serialization.
 </p>
 
-<h5 class='section'>See Also:</h5>
-<ul>
-	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
-</ul>
+<p>
+	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized to a 
+	string using the rules defined in {@doc PojosConveribleToStrings}.
+</p>
 </div><!-- END: 9.1.3 - juneau-rest-client.RestProxies.Body -->
 
 <!-- ==================================================================================================== -->
@@ -20515,7 +20537,7 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
+		<code>RestClient</code> ({@link org.apache.juneau.oapi.OpenApiSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.FormData#serializer() @FormData(serializer)} annotation.
 </ul>
 <p>
 	Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
@@ -20529,10 +20551,10 @@ TODO(7.2.0)
 		<code>NameValuePairs</code> - Converted to a URL-encoded FORM post.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 	<li>
 		<code>CharSequence</code> - Used directly as am <js>"application/x-www-form-urlencoded"</js> entity.
 </ul>
@@ -20626,7 +20648,7 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Query#serializer() @Query(serializer)} annotation.
+		<code>RestClient</code> ({@link org.apache.juneau.oapi.OpenApiSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Query#serializer() @Query(serializer)} annotation.
 </ul>
 
 <p>
@@ -20639,10 +20661,10 @@ TODO(7.2.0)
 		<code>NameValuePairs</code> - Serialized as individual query parameters.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 	<li>
 		<code>CharSequence</code> - Serialized directly a query string.
 </ul>
@@ -20727,7 +20749,7 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Header#serializer() @Header(serializer)} annotation.
+		<code>RestClient</code> ({@link org.apache.juneau.oapi.OpenApiSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Header#serializer() @Header(serializer)} annotation.
 </ul>
 
 <p>
@@ -20738,10 +20760,10 @@ TODO(7.2.0)
 		<code>NameValuePairs</code> - Serialized as individual headers.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 </ul>
 
 <p>
@@ -20817,7 +20839,7 @@ TODO(7.2.0)
 <ul class='spaced-list'>
 	<li>
 		Any serializable POJO - Converted to a string using the {@link org.apache.juneau.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Path#serializer() @Path(serializer)} annotation.
+		<code>RestClient</code> ({@link org.apache.juneau.oapi.OpenApiSerializer} by default) or associated via the {@link org.apache.juneau.http.annotation.Path#serializer() @Path(serializer)} annotation.
 </ul>
 
 <p>
@@ -20828,10 +20850,10 @@ TODO(7.2.0)
 		<code>NameValuePairs</code> - Serialized as individual query parameters.
 	<li>
 		<code>Map</code> - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 	<li>
 		Bean - Converted to key-value pairs.
-			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.httppart.OpenApiPartSerializer} by default).
+			<br>Values serialized using the registered {@link org.apache.juneau.httppart.HttpPartSerializer} ({@link org.apache.juneau.oapi.OpenApiSerializer} by default).
 </ul>
 
 <p>
@@ -20978,26 +21000,11 @@ TODO(7.2.0)
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partParser() partParser} - Override the part parser.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema} - Swagger schema.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#usePartParser() usePartParser} - Use the HTTP-Part parser for parsing the response body.
 	</ul>
 </ul>
 <h5 class='topic'>On @RemoteMethod-annotated methods</h5>
 <p>
-	As shown previously, the <ja>@Response</ja> annotation can be added to your <ja>@RemoteMethod</ja>-annotated method directly
-	to specify whether the response body should use the OpenAPI part parser.
-</p>
-<p class='bpcode w800'>	
-	<ja>@RemoteResource</ja>
-	<jk>public interface</jk> PetStore {
-		
-		<jc>// Force the part parser to be used for the response body.</jc>
-		<ja>@RemoteMethod</ja>
-		<ja>@Response</ja>(usePartParser=<jk>true</jk>)
-		String postPet(...);
-	}
-</p>
-<p>
-	It can also be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
+	The annotation can be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
 </p>
 
 <h5 class='topic'>Response interfaces</h5>
@@ -24819,7 +24826,7 @@ TODO(7.2.0)
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='link'>{@doc juneau-rest-server.rRPC.ServerSide}
+	<li class='link'>{@doc juneau-rest-server.rRPC}
 </ul>
 </div><!-- END: 12.8 - juneau-examples-rest.SampleRemoteableServlet -->
 
@@ -31313,13 +31320,12 @@ TODO(7.2.0)
 				<li class='jc'>{@link org.apache.juneau.httppart.HttpPartType}
 				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.httppart.UonPartSerializer}
-					<li class='jc'>{@link org.apache.juneau.httppart.SimpleUonPartSerializer}
+					<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
 					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer}
 				</ul>
 				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.httppart.UonPartParser}
+					<li class='jc'>{@link org.apache.juneau.uon.UonParser}
 					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser}
 				</ul>
 			</ul>
@@ -31642,7 +31648,7 @@ TODO(7.2.0)
 		builder method {@link org.apache.juneau.rest.client.RestClientBuilder#query(String,Object)}.
 	<li>
 		API changes to replace <code>PartSerializer</code> with {@link org.apache.juneau.httppart.HttpPartSerializer}.
-		<br>The default value is now {@link org.apache.juneau.httppart.SimpleUonPartSerializer} which will
+		<br>The default value is now <code><del>SimpleUonPartSerializer</del></code> which will
 		serialize strings as plain-text and collections/arrays as comma-delimited lists.
 		<br>We decided to change the default behavior in favor of practicality over purity.
 	<li>
@@ -32115,6 +32121,19 @@ TODO(7.2.0)
 				<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_uriResolution REST_uriResolution}
 			</ul>
 		</ul>
+	<li>
+		New convenience annotations for specifying default <code>Accept</code> and <code>Content-Type</code> headers:
+		<ul class='doctree'>	
+			<li class='jc'>{@link org.apache.juneau.rest.annotation.RestResource}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.RestResource#defaultAccept defaultAccept}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.RestResource#defaultContentType defaultContentType}
+			</ul>	
+			<li class='jc'>{@link org.apache.juneau.rest.annotation.RestMethod}
+			<ul>
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultAccept defaultAccept}
+				<li class='jf'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultContentType defaultContentType}
+			</ul>	
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>

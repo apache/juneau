@@ -22,10 +22,8 @@
 <ul class='doctree'>
 	<li class='ja'>{@link oaj.http.annotation.Body Body}
 	<ul>
-		<li class='jf'>{@link oaj.http.annotation.Body#partSerializer() partSerializer} - Override the part serializer defined on client.
 		<li class='jf'>{@link oaj.http.annotation.Body#required() required} - Input validation.  Body must be present.
 		<li class='jf'>{@link oaj.http.annotation.Body#schema() schema} - Swagger schema.
-		<li class='jf'>{@link oaj.http.annotation.Body#usePartSerializer() usePartSerializer} - Use the HTTP-Part serializer for serializing the body.
 	</ul>
 </ul>
 
@@ -60,10 +58,6 @@
 		Any serializable POJO - Converted to output using the {@link oaj.serializer.Serializer} registered with the <code>RestClient</code>.
 		<br><code>Content-Type</code> is set to that of the <code>Serializer</code>.
 	<li>
-		Any part serializable POJO - Converted to output using the {@link oaj.httppart.HttpPartSerializer} registered with the
-		<code>RestClient</code> ({@link oaj.httppart.OpenApiPartSerializer} by default) or associated via the {@link oaj.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation.
-		<br><code>Content-Type</code> is set to <js>"text/plain"</js>.
-	<li>
 		{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
 		<br><code>Content-Type</code> is set to <js>"text/plain"</js>.
 	<li>
@@ -77,15 +71,14 @@
 </ul>
  
 <p>
-	OpenAPI schema based serialization can be used by specifying a value for the {@link oaj.http.annotation.Body#partSerializer() @Body(partSerializer)} annotation
-	or setting {@link oaj.http.annotation.Body#usePartSerializer() @Body(usePartSerializer)} to <jk>true</jk>.
+	OpenAPI schema based serialization can be used by using the {@link oaj.oapi.OpenApiSerializer} class.
 </p>
 
 <p class='bpcode w800'>
 	<ja>@RemoteMethod</ja>(path=<js>"/comma-delimited-pipe-delimited-ints"</js>)
 	String addCommaDelimitedPipeDelimitedInts(
 		<ja>@Body</ja>(
-			usePartSerializer=<jk>true</jk>,
+			serializer=OpenApiSerializer.<jk>class</jk>,
 			schema=<ja>@Schema</ja>(
 				type=<js>"array"</js>,
 				collectionFormat=<js>"pipes"</js>,
@@ -104,17 +97,12 @@
 	);
 </p>
 <p>
-	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized using the registered
-	OpenAPI part serializer.
+	See {@doc juneau-marshall.OpenApiDetails.Serializers} for information about supported data types in OpenAPI serialization.
 </p>
+
 <p>
-	See the link below for information about supported data types in OpenAPI serialization.
+	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized to a 
+	string using the rules defined in {@doc PojosConveribleToStrings}.
 </p>
-
-<h5 class='section'>See Also:</h5>
-<ul>
-	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
-</ul>
-
 
 

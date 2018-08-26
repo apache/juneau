@@ -38,7 +38,7 @@
 	String input = <js>"1,2,3|4,5,6|7,8,9"</js>;
 
 	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
-	<jk>long</jk>[][] value = OpenApiPartParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, schema, input, <jk>long</jk>[][].<jk>class</jk>);
+	<jk>long</jk>[][] value = OpenApiParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, schema, input, <jk>long</jk>[][].<jk>class</jk>);
 </p>
 <p>
 	The class hierarchy for the part serializers are:
@@ -48,9 +48,9 @@
 	<li class='jic'>{@link oaj.httppart.HttpPartParser}
 	<ul>
 		<li class='jc'>{@link oaj.httppart.SimplePartParser} - Parses directly from strings.
-		<li class='jc'>{@link oaj.httppart.UonPartParser} - Parses from UON notation.
+		<li class='jc'>{@link oaj.uon.UonParser} - Parses from UON notation.
 		<ul>
-			<li class='jc'>{@link oaj.httppart.OpenApiPartParser} - Parses using Open-API schema rules.
+			<li class='jc'>{@link oaj.oapi.OpenApiParser} - Parses using Open-API schema rules.
 		</ul>
 	</ul>
 </ul>

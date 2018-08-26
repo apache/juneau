@@ -114,11 +114,11 @@
 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).build();
 
 	<jc>// Convert POJO to BASE64-encoded string.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart = s.serialize(schema, myPojo);
 	
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 </p>
 <p>
@@ -133,7 +133,7 @@
 	HttpPartSchema schema = HttpPartSchema.<jsm>create</jsm>().type(<js>"string"</js>).format(<js>"byte"</js>).minLength(100).build();
 
 	<jc>// Convert POJO to BASE64-encoded string.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart;
 	<jk>try</jk> {
 		httpPart = s.serialize(schema, myPojo);
@@ -142,7 +142,7 @@
 	}
 	
 	<jc>// Convert BASE64-encoded string back into a POJO.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	<jk>try</jk> {
 		myPojo = p.parse(schema, httpPart, MyPojo.<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException e) {

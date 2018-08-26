@@ -22,7 +22,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces}
+ * 	<li class='link'>{@doc juneau-rest-server.rRPC}
  * </ul>
  */
 @Documented

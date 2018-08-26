@@ -13,10 +13,10 @@
  ***************************************************************************************************************************/
  -->
 
-{new} OpenAPI Parsers
+{todo} OpenAPI Parsers
 
 <p>
-	The {@link oaj.httppart.OpenApiPartParser} class is used to convert HTTP parts back into POJOs.
+	The {@link oaj.oapi.OpenApiParser} class is used to convert HTTP parts back into POJOs.
 </p>
 <p>
 	The following is the previous example of a schema that defines the format of a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
@@ -49,7 +49,7 @@
 	String input = <js>"1,2,3|4,5,6|7,8,9"</js>
 	
 	<jc>// The parser to use.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
@@ -234,7 +234,7 @@
 	String input = <js>"1,2,3|4,5,6|7,8,9"</js>
 	
 	<jc>// The parser to use.</jc>
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
@@ -295,7 +295,7 @@
 		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	MyBean b = p.parse(schema, input, MyBean.<jk>class</jk>);
 </p>
 <p>
@@ -325,7 +325,7 @@
 		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
-	HttpPartParser p = OpenApiPartParser.<jsf>DEFAULT</jsf>;
+	HttpPartParser p = OpenApiParser.<jsf>DEFAULT</jsf>;
 	ObjectMap m = p.parse(schema, input, ObjectMap.<jk>class</jk>);
 </p>
 <h5 class='topic'>Other Notes:</h5>

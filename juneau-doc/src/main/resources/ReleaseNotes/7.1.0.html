@@ -104,14 +104,14 @@
 				<li class='jc'>{@link oaj.httppart.HttpPartType}
 				<li class='jic'>{@link oaj.httppart.HttpPartSerializer}
 				<ul>
-					<li class='jc'>{@link oaj.httppart.UonPartSerializer}
-					<li class='jc'>{@link oaj.httppart.SimpleUonPartSerializer}
+					<li class='jc'><code><del>UonPartSerializer</del></code>
+					<li class='jc'><code><del>SimpleUonPartSerializer}
 					<li class='jc'>{@link oaj.httppart.SimplePartSerializer}
 				</ul>
 				<li class='jic'>{@link oaj.httppart.HttpPartParser}
 				<ul>
-					<li class='jc'>{@link oaj.httppart.UonPartParser}
-					<li class='jc'>{@link oaj.httppart.SimplePartParser}
+					<li class='jc'><code><del>UonPartParser</del></code>
+					<li class='jc'><code><del>SimplePartParser</del></code>
 				</ul>
 			</ul>
 		</ul>
@@ -433,7 +433,7 @@
 		builder method {@link oajrc.RestClientBuilder#query(String,Object)}.
 	<li>
 		API changes to replace <code>PartSerializer</code> with {@link oaj.httppart.HttpPartSerializer}.
-		<br>The default value is now {@link oaj.httppart.SimpleUonPartSerializer} which will
+		<br>The default value is now <code><del>SimpleUonPartSerializer</del></code> which will
 		serialize strings as plain-text and collections/arrays as comma-delimited lists.
 		<br>We decided to change the default behavior in favor of practicality over purity.
 	<li>

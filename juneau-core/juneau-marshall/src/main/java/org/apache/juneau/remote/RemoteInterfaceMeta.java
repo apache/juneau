@@ -27,7 +27,7 @@ import java.util.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-rest-server.RemoteInterfaces}
+ * 	<li class='link'>{@doc juneau-rest-server.rRPC}
  * </ul>
  */
 public class RemoteInterfaceMeta {

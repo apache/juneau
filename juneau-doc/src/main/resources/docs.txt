@@ -1,5 +1,7 @@
 DefaultRestSvlVariables = #DefaultRestSvlVariables, Default REST SVL Variables
 PojoCategories = #juneau-marshall.PojoCategories, POJO Categories
+PojosConveribleToStrings = #PojosConveribleToStrings, POJOs Convertible to/from Strings
+PojosConveribleToOtherTypes = #PojosConveribleToOtherTypes, POJOs Convertible to/from Other Types
 ConfigurableProperties = #juneau-marshall.ConfigurableProperties, Configurable Properties
 
 SwaggerIO.v2 = https://swagger.io/specification/v2

@@ -13,10 +13,10 @@
  ***************************************************************************************************************************/
  -->
 
-{new} OpenAPI Serializers
+{todo} OpenAPI Serializers
 
 <p>
-	The {@link oaj.httppart.OpenApiPartSerializer} class is used to convert POJOs to HTTP parts.
+	The {@link oaj.oapi.OpenApiSerializer} class is used to convert POJOs to HTTP parts.
 </p>
 <p>
 	Later we'll describe how to use HTTP-Part annotations to define OpenAPI schemas for serialization and parsing
@@ -78,7 +78,7 @@
 	Long[][] input = ....
 	
 	<jc>// The serializer to use.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert POJO to a string.</jc>
 	<jk>try</jk> {
@@ -293,7 +293,7 @@
 	MyPojo input = ....
 	
 	<jc>// The serializer to use.</jc>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert POJO to a string.</jc>
 	<jk>try</jk> {
@@ -352,7 +352,7 @@
 	Then we serialize our bean:
 </p>
 <p class='bpcode w800'>
-	HttpPartSerializer s = OpenApiPartSerializer.<jsf>DEFAULT</jsf>;
+	HttpPartSerializer s = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 	String httpPart = s.serialize(schema, <jk>new</jk> MyBean());
 </p>
 <p>
