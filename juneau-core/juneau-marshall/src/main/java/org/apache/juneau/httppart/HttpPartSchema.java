@@ -1312,16 +1312,40 @@ public class HttpPartSchema {
 
 	@Override
 	public String toString() {
-		return toString(new StringBuilder()).toString();
+		try {
+			ObjectMap m = new ObjectMap()
+				.appendSkipEmpty("name", name)
+				.appendSkipEmpty("type", type)
+				.appendSkipEmpty("format", format)
+				.appendSkipEmpty("codes", codes)
+				.appendSkipEmpty("default", _default)
+				.appendSkipEmpty("enum", _enum)
+				.appendSkipEmpty("properties", properties)
+				.appendSkipFalse("allowEmptyValue", allowEmptyValue)
+				.appendSkipFalse("exclusiveMaximum", exclusiveMaximum)
+				.appendSkipFalse("exclusiveMinimum", exclusiveMinimum)
+				.appendSkipFalse("required", required)
+				.appendSkipFalse("uniqueItems", uniqueItems)
+				.appendSkipFalse("skipIfEmpty", skipIfEmpty)
+				.appendIf(collectionFormat != CollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
+				.appendSkipEmpty("pattern", pattern)
+				.appendSkipNull("items", items)
+				.appendSkipNull("additionalProperties", additionalProperties)
+				.appendSkipMinusOne("maximum", maximum)
+				.appendSkipMinusOne("minimum", minimum)
+				.appendSkipMinusOne("multipleOf", multipleOf)
+				.appendSkipMinusOne("maxLength", maxLength)
+				.appendSkipMinusOne("minLength", minLength)
+				.appendSkipMinusOne("maxItems", maxItems)
+				.appendSkipMinusOne("minItems", minItems)
+				.appendSkipMinusOne("maxProperties", maxProperties)
+				.appendSkipMinusOne("minProperties", minProperties)
+				.append("parsedType", parsedType)
+			;
+			return m.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
-
-	private StringBuilder toString(StringBuilder sb) {
-		ObjectMap m = new ObjectMap();
-		m.appendSkipEmpty("name", name);
-		m.appendSkipEmpty("type", type);
-		m.appendSkipEmpty("format", format);
-		sb.append(m.toString());
-		return sb;
-	}
-
 }

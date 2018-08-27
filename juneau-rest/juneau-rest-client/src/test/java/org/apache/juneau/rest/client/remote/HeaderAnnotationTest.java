@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
@@ -141,5 +143,70 @@ public class HeaderAnnotationTest {
 	@Test
 	public void a09b_NameValuePairs() throws Exception {
 		assertEquals("{foo:'bar'}", a01.getA09b(new NameValuePairs().append("foo", "bar")));
+	}
+
+	//=================================================================================================================
+	// @Header(_default)
+	//=================================================================================================================
+
+	@RestResource
+	public static class B {
+		@RestMethod
+		public String get(@Header("*") ObjectMap m) {
+			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
+			return m.toString();
+		}
+	}
+	private static MockRest b = MockRest.create(B.class);
+
+	@RemoteResource
+	public static interface BR {
+		@RemoteMethod(path="/") String getB01(@Header(name="x",_default="foo") String b);
+		@RemoteMethod(path="/") String getB02(@Header(name="x",_default="foo",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String getB03(@Header(name="x",_default="") String b);
+		@RemoteMethod(path="/") String getB04(@Header(name="x",_default="",allowEmptyValue=true) String b);
+	}
+
+	private static BR br = RestClient.create().mockHttpConnection(b).build().getRemoteResource(BR.class);
+
+	@Test
+	public void b01a_default() throws Exception {
+		assertEquals("{x:'foo'}", br.getB01(null));
+	}
+	@Test
+	public void b01b_default_emptyString() throws Exception {
+		try {
+			br.getB01("");
+		} catch (Exception e) {
+			assertContains(e, "Empty value not allowed");
+		}
+	}
+	@Test
+	public void b02a_default_allowEmptyValue() throws Exception {
+		assertEquals("{x:'foo'}", br.getB02(null));
+	}
+	@Test
+	public void b02b_default_allowEmptyValue_emptyString() throws Exception {
+		assertEquals("{x:''}", br.getB02(""));
+	}
+	@Test
+	public void b03a_defaultIsBlank() throws Exception {
+		assertEquals("{x:''}", br.getB03(null));
+	}
+	@Test
+	public void b03b_defaultIsBlank_emptyString() throws Exception {
+		try {
+			br.getB03("");
+		} catch (Exception e) {
+			assertContains(e, "Empty value not allowed");
+		}
+	}
+	@Test
+	public void b04a_defaultIsBlank_allowEmptyValue() throws Exception {
+		assertEquals("{x:''}", br.getB04(null));
+	}
+	@Test
+	public void b04b_defaultIsBlank_allowEmptyValue_emptyString() throws Exception {
+		assertEquals("{x:''}", br.getB04(""));
 	}
 }

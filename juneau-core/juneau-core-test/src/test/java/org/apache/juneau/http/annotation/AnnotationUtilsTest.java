@@ -107,7 +107,7 @@ public class AnnotationUtilsTest {
 	public void testAllEmpty2() {
 		assertTrue(allEmpty(new String[0],new String[0]));
 		assertTrue(allEmpty(null,new String[0]));
-		assertTrue(allEmpty(null,new String[]{""}));
+		assertFalse(allEmpty(null,new String[]{""}));
 		assertFalse(allEmpty(null,new String[]{"x"}));
 	}
 

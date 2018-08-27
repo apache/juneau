@@ -65,7 +65,7 @@ public final class SerializedNameValuePair implements NameValuePair {
 	@Override /* NameValuePair */
 	public String getValue() {
 		try {
-			return serializer.createPartSession().serialize(HttpPartType.FORMDATA, schema, value);
+			return serializer.serialize(HttpPartType.FORMDATA, schema, value);
 		} catch (SchemaValidationException e) {
 			throw new FormattedRuntimeException(e, "Validation error on request form-data parameter ''{0}''=''{1}''", name, value);
 		} catch (SerializeException e) {

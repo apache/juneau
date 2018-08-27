@@ -27,6 +27,7 @@ import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transforms.*;
@@ -485,6 +486,21 @@ public class TestUtils {
 		for (String substring : substrings)
 			if (! contains(toString(value), substring))
 				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));
+	}
+
+	public static final void assertContains(Exception e, String...substrings) {
+		for (String substring : substrings) {
+			Throwable e2 = e;
+			boolean found = false;
+			while (e2 != null && ! found) {
+				found |= contains(e2.getMessage(), substring);
+				e2 = e2.getCause();
+			}
+			if (! found) {
+				e.printStackTrace();
+				throw new ComparisonFailure("Exception message did not contain expected substring.", toString(substring), StringUtils.getStackTrace(e));
+			}
+		}
 	}
 
 	/**

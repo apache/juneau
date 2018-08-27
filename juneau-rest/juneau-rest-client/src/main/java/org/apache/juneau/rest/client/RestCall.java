@@ -219,22 +219,34 @@ public final class RestCall extends BeanSession implements Closeable {
 	public RestCall query(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		if (serializer == null)
 			serializer = client.getPartSerializer();
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
-			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
+			if (canAdd(value, schema, skipIfEmpty))
 				try {
-					uriBuilder.addParameter(name, serializer.createPartSession().serialize(QUERY, schema, value));
+					uriBuilder.addParameter(name, serializer.serialize(QUERY, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request query parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
 					throw new RestCallException(e, "Serialization error on request query parameter ''{0}''", name);
 				}
 		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				query(p.getName(), p.getValue(), skipIfEmpty, serializer, schema);
+			for (NameValuePair p : (NameValuePairs)value) {
+				String n = p.getName();
+				String v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				if (canAdd(v, s, skipIfEmpty))
+					query(n, v, skipIfEmpty, serializer, s);
+			}
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				query(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet()) {
+				String n = p.getKey();
+				Object v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				if (canAdd(v, s, skipIfEmpty))
+					query(n, v, skipIfEmpty, serializer, s);
+			}
 		} else if (isBean(value)) {
 			return query(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else if (value instanceof Reader || value instanceof InputStream) {
@@ -342,17 +354,28 @@ public final class RestCall extends BeanSession implements Closeable {
 			formData = new NameValuePairs();
 		if (serializer == null)
 			serializer = client.getPartSerializer();
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
-			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
+			if (canAdd(value, schema, skipIfEmpty))
 				formData.add(new SerializedNameValuePair(name, value, serializer, schema));
 		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				if (p.getValue() != null && ! (isEmpty(p.getValue()) && skipIfEmpty))
+			for (NameValuePair p : (NameValuePairs)value) {
+				String n = p.getName();
+				String v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				if (canAdd(v, s, skipIfEmpty))
 					formData.add(p);
+			}
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				formData(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet()) {
+				String n = p.getKey();
+				Object v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				if (canAdd(v, s, skipIfEmpty))
+					formData(n, v, skipIfEmpty, serializer, s);
+			}
 		} else if (isBean(value)) {
 			return formData(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else if (value instanceof Reader || value instanceof InputStream) {
@@ -456,6 +479,8 @@ public final class RestCall extends BeanSession implements Closeable {
 		String path = uriBuilder.getPath();
 		if (serializer == null)
 			serializer = client.getPartSerializer();
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
 			String var = "{" + name + "}";
@@ -464,9 +489,9 @@ public final class RestCall extends BeanSession implements Closeable {
 			try {
 				String p = null;
 				if (name.equals("/*"))
-					p = path.replaceAll("\\/\\*$", serializer.createPartSession().serialize(PATH, schema, value));
+					p = path.replaceAll("\\/\\*$", serializer.serialize(PATH, schema, value));
 				else
-					p = path.replace(var, serializer.createPartSession().serialize(PATH, schema, value));
+					p = path.replace(var, serializer.serialize(PATH, schema, value));
 				uriBuilder.setPath(p);
 			} catch (SchemaValidationException e) {
 				throw new RestCallException(e, "Validation error on request path parameter ''{0}''=''{1}''", name, value);
@@ -474,11 +499,19 @@ public final class RestCall extends BeanSession implements Closeable {
 				throw new RestCallException(e, "Serialization error on request path parameter ''{0}''", name);
 			}
 		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				path(p.getName(), p.getValue(), serializer, schema);
+			for (NameValuePair p : (NameValuePairs)value) {
+				String n = p.getName();
+				String v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				path(n, v, serializer, s);
+			}
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				path(p.getKey(), p.getValue(), serializer, schema);
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet()) {
+				String n = p.getKey();
+				Object v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				path(n, v, serializer, s);
+			}
 		} else if (isBean(value)) {
 			return path(name, toBeanMap(value), serializer, schema);
 		} else if (value != null) {
@@ -637,22 +670,34 @@ public final class RestCall extends BeanSession implements Closeable {
 	public RestCall header(String name, Object value, boolean skipIfEmpty, HttpPartSerializer serializer, HttpPartSchema schema) throws RestCallException {
 		if (serializer == null)
 			serializer = client.getPartSerializer();
+		if (schema == null)
+			schema = HttpPartSchema.DEFAULT;
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof NameValuePairs;
 		if (! isMulti) {
-			if (value != null && ! (ObjectUtils.isEmpty(value) && skipIfEmpty))
+			if (canAdd(value, schema, skipIfEmpty))
 				try {
-					request.setHeader(name, serializer.createPartSession().serialize(HEADER, schema, value));
+					request.setHeader(name, serializer.serialize(HEADER, schema, value));
 				} catch (SchemaValidationException e) {
 					throw new RestCallException(e, "Validation error on request header parameter ''{0}''=''{1}''", name, value);
 				} catch (SerializeException e) {
 					throw new RestCallException(e, "Serialization error on request header parameter ''{0}''", name);
 				}
 		} else if (value instanceof NameValuePairs) {
-			for (NameValuePair p : (NameValuePairs)value)
-				header(p.getName(), p.getValue(), skipIfEmpty, serializer, schema);
+			for (NameValuePair p : (NameValuePairs)value) {
+				String n = p.getName();
+				String v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				if (canAdd(v, s, skipIfEmpty))
+					header(n, v, skipIfEmpty, serializer, s);
+			}
 		} else if (value instanceof Map) {
-			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet())
-				header(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
+			for (Map.Entry<String,Object> p : ((Map<String,Object>) value).entrySet()) {
+				String n = p.getKey();
+				Object v = p.getValue();
+				HttpPartSchema s = schema.getProperty(n);
+				if (canAdd(v, s, skipIfEmpty))
+					header(n, v, skipIfEmpty, serializer, s);
+			}
 		} else if (isBean(value)) {
 			return header(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else {
@@ -2344,5 +2389,28 @@ public final class RestCall extends BeanSession implements Closeable {
 	public RestCall debug() throws RestCallException {
 		header("Debug", true);
 		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Specifies that the following value can be added as an HTTP part.
+	 */
+	private boolean canAdd(Object value, HttpPartSchema schema, boolean skipIfEmpty) {
+		if (value != null) {
+			if (ObjectUtils.isEmpty(value) && skipIfEmpty)
+				return false;
+			return true;
+		}
+		if (schema == null)
+			return false;
+		String def = schema.getDefault();
+		if (def == null)
+			return false;
+		if (StringUtils.isEmpty(def) && skipIfEmpty)
+			return false;
+		return true;
 	}
 }

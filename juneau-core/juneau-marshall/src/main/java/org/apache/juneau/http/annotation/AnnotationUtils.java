@@ -246,14 +246,14 @@ public class AnnotationUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if all the specified strings are empty or null.
+	 * Returns <jk>true</jk> if all the specified string arrays are empty.
 	 *
 	 * @param strings The strings to test.
-	 * @return <jk>true</jk> if all the specified strings are empty or null.
+	 * @return <jk>true</jk> if all the specified string arrays are empty.
 	 */
 	protected static boolean allEmpty(String[]...strings) {
 		for (String[] s : strings)
-			if (s != null && s.length > 0 && ! allEmpty(s))
+			if (s != null && s.length > 0)
 				return false;
 		return true;
 	}

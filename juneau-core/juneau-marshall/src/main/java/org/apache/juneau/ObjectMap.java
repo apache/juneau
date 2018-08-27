@@ -328,6 +328,20 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Conditionally appends a value to this map.
+	 *
+	 * @param flag The boolean value that must be <jk>true</jk> in order to add this entry..
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object (for method chaining).
+	 */
+	public ObjectMap appendIf(boolean flag, String key, Object value) {
+		if (flag)
+			put(key, value);
+		return this;
+	}
+
+	/**
 	 * Convenience method for adding an entry to this map.
 	 *
 	 * <p>
@@ -367,24 +381,8 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 	 * @param value The value.
 	 * @return This object (for method chaining).
 	 */
-	public ObjectMap appendSkipMinusOne(String key, long value) {
-		if (value != -1)
-			append(key, value);
-		return this;
-	}
-
-	/**
-	 * Convenience method for adding an entry to this map.
-	 *
-	 * <p>
-	 * A no-op if the value is <code>-1</code>.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object (for method chaining).
-	 */
-	public ObjectMap appendSkipMinusOne(String key, int value) {
-		if (value != -1)
+	public ObjectMap appendSkipMinusOne(String key, Number value) {
+		if (value != null && value.intValue() != -1)
 			append(key, value);
 		return this;
 	}

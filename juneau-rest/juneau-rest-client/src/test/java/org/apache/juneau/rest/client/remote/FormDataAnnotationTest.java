@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -59,7 +60,7 @@ public class FormDataAnnotationTest {
 	private static MockRest a = MockRest.create(A.class);
 
 	@RemoteResource
-	public static interface A01 {
+	public static interface AR {
 		@RemoteMethod(path="a") String postA01(@FormData("x") int b);
 		@RemoteMethod(path="a") String postA02(@FormData("x") float b);
 		@RemoteMethod(path="a") String postA03a(@FormData("x") Bean b);
@@ -82,86 +83,150 @@ public class FormDataAnnotationTest {
 		@RemoteMethod(path="a") String postA09b(@FormData NameValuePairs b);
 	}
 
-	private static A01 a01 = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A01.class);
+	private static AR ar = RestClient.create().mockHttpConnection(a).build().getRemoteResource(AR.class);
 
 	@Test
 	public void a01_int() throws Exception {
-		assertEquals("{x:'1'}", a01.postA01(1));
+		assertEquals("{x:'1'}", ar.postA01(1));
 	}
 	@Test
 	public void a02_float() throws Exception {
-		assertEquals("{x:'1.0'}", a01.postA02(1));
+		assertEquals("{x:'1.0'}", ar.postA02(1));
 	}
 	@Test
 	public void a03a_Bean() throws Exception {
-		assertEquals("{x:'(f=1)'}", a01.postA03a(Bean.create()));
+		assertEquals("{x:'(f=1)'}", ar.postA03a(Bean.create()));
 	}
 	@Test
 	public void a03b_Bean() throws Exception {
-		assertEquals("{f:'1'}", a01.postA03b(Bean.create()));
+		assertEquals("{f:'1'}", ar.postA03b(Bean.create()));
 	}
 	@Test
 	public void a03c_Bean() throws Exception {
-		assertEquals("{f:'1'}", a01.postA03c(Bean.create()));
+		assertEquals("{f:'1'}", ar.postA03c(Bean.create()));
 	}
 	@Test
 	public void a04a_BeanArray() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", a01.postA04a(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'(f=1),(f=1)'}", ar.postA04a(new Bean[]{Bean.create(),Bean.create()}));
 	}
 	@Test
 	public void a04b_BeanArray() throws Exception {
-		assertEquals("{x:'@((f=1),(f=1))'}", a01.postA04b(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'@((f=1),(f=1))'}", ar.postA04b(new Bean[]{Bean.create(),Bean.create()}));
 	}
 	@Test
 	public void a05a_ListOfBeans() throws Exception {
-		assertEquals("{x:'(f=1),(f=1)'}", a01.postA05a(AList.create(Bean.create(),Bean.create())));
+		assertEquals("{x:'(f=1),(f=1)'}", ar.postA05a(AList.create(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a05b_ListOfBeans() throws Exception {
-		assertEquals("{x:'@((f=1),(f=1))'}", a01.postA05b(AList.create(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}", ar.postA05b(AList.create(Bean.create(),Bean.create())));
 	}
 	@Test
 	public void a06a_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", a01.postA06a(AMap.create("k1",Bean.create())));
+		assertEquals("{x:'(k1=(f=1))'}", ar.postA06a(AMap.create("k1",Bean.create())));
 	}
 	@Test
 	public void a06b_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.postA06b(AMap.create("k1",Bean.create())));
+		assertEquals("{k1:'(f=1)'}", ar.postA06b(AMap.create("k1",Bean.create())));
 	}
 	@Test
 	public void a06c_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.postA06c(AMap.create("k1",Bean.create())));
+		assertEquals("{k1:'(f=1)'}", ar.postA06c(AMap.create("k1",Bean.create())));
 	}
 	@Test
 	public void a06d_MapOfBeans() throws Exception {
-		assertEquals("{x:'(k1=(f=1))'}", a01.postA06d(AMap.create("k1",Bean.create())));
+		assertEquals("{x:'(k1=(f=1))'}", ar.postA06d(AMap.create("k1",Bean.create())));
 	}
 	@Test
 	public void a06e_MapOfBeans() throws Exception {
-		assertEquals("{k1:'(f=1)'}", a01.postA06e(AMap.create("k1",Bean.create())));
+		assertEquals("{k1:'(f=1)'}", ar.postA06e(AMap.create("k1",Bean.create())));
 	}
 	@Test
 	public void a07a_Reader() throws Exception {
-		assertEquals("{x:'1'}", a01.postA07a(new StringReader("x=1")));
+		assertEquals("{x:'1'}", ar.postA07a(new StringReader("x=1")));
 	}
 	@Test
 	public void a07b_Reader() throws Exception {
-		assertEquals("{x:'1'}", a01.postA07b(new StringReader("x=1")));
+		assertEquals("{x:'1'}", ar.postA07b(new StringReader("x=1")));
 	}
 	@Test
 	public void a08a_InputStream() throws Exception {
-		assertEquals("{x:'1'}", a01.postA08a(new StringInputStream("x=1")));
+		assertEquals("{x:'1'}", ar.postA08a(new StringInputStream("x=1")));
 	}
 	@Test
 	public void a08b_InputStream() throws Exception {
-		assertEquals("{x:'1'}", a01.postA08b(new StringInputStream("x=1")));
+		assertEquals("{x:'1'}", ar.postA08b(new StringInputStream("x=1")));
 	}
 	@Test
 	public void a09a_NameValuePairs() throws Exception {
-		assertEquals("{foo:'bar'}", a01.postA09a(new NameValuePairs().append("foo", "bar")));
+		assertEquals("{foo:'bar'}", ar.postA09a(new NameValuePairs().append("foo", "bar")));
 	}
 	@Test
 	public void a09b_NameValuePairs() throws Exception {
-		assertEquals("{foo:'bar'}", a01.postA09b(new NameValuePairs().append("foo", "bar")));
+		assertEquals("{foo:'bar'}", ar.postA09b(new NameValuePairs().append("foo", "bar")));
+	}
+
+	//=================================================================================================================
+	// @FormData(_default)
+	//=================================================================================================================
+
+	@RestResource
+	public static class B {
+		@RestMethod
+		public String post(@FormData("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest b = MockRest.create(B.class);
+
+	@RemoteResource
+	public static interface BR {
+		@RemoteMethod(path="/") String postB01(@FormData(name="x",_default="foo") String b);
+		@RemoteMethod(path="/") String postB02(@FormData(name="x",_default="foo",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String postB03(@FormData(name="x",_default="") String b);
+		@RemoteMethod(path="/") String postB04(@FormData(name="x",_default="",allowEmptyValue=true) String b);
+	}
+
+	private static BR br = RestClient.create().mockHttpConnection(b).build().getRemoteResource(BR.class);
+
+	@Test
+	public void b01a_default() throws Exception {
+		assertEquals("{x:'foo'}", br.postB01(null));
+	}
+	@Test
+	public void b01b_default_emptyString() throws Exception {
+		try {
+			br.postB01("");
+		} catch (Exception e) {
+			assertContains(e, "Empty value not allowed");
+		}
+	}
+	@Test
+	public void b02a_default_allowEmptyValue() throws Exception {
+		assertEquals("{x:'foo'}", br.postB02(null));
+	}
+	@Test
+	public void b02b_default_allowEmptyValue_emptyString() throws Exception {
+		assertEquals("{x:''}", br.postB02(""));
+	}
+	@Test
+	public void b03a_defaultIsBlank() throws Exception {
+		assertEquals("{x:''}", br.postB03(null));
+	}
+	@Test
+	public void b03b_defaultIsBlank_emptyString() throws Exception {
+		try {
+			br.postB03("");
+		} catch (Exception e) {
+			assertContains(e, "Empty value not allowed");
+		}
+	}
+	@Test
+	public void b04a_defaultIsBlank_allowEmptyValue() throws Exception {
+		assertEquals("{x:''}", br.postB04(null));
+	}
+	@Test
+	public void b04b_defaultIsBlank_allowEmptyValue_emptyString() throws Exception {
+		assertEquals("{x:''}", br.postB04(""));
 	}
 }

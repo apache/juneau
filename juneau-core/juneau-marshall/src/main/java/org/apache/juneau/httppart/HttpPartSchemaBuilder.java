@@ -136,7 +136,7 @@ public class HttpPartSchemaBuilder {
 		allowEmptyValue(a.allowEmptyValue());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
-		_default(joinnl(a._default()));
+		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
@@ -163,7 +163,7 @@ public class HttpPartSchemaBuilder {
 		format(a.format());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
-		_default(joinnl(a._default()));
+		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
@@ -190,7 +190,7 @@ public class HttpPartSchemaBuilder {
 		allowEmptyValue(a.allowEmptyValue());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
-		_default(joinnl(a._default()));
+		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
@@ -218,7 +218,7 @@ public class HttpPartSchemaBuilder {
 		allowEmptyValue(a.allowEmptyValue());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
-		_default(joinnl(a._default()));
+		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
@@ -280,7 +280,7 @@ public class HttpPartSchemaBuilder {
 		format(a.format());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
-		_default(joinnl(a._default()));
+		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
@@ -301,7 +301,7 @@ public class HttpPartSchemaBuilder {
 		format(a.format());
 		items(HttpPartSchema.toObjectMap(a.items()));
 		collectionFormat(a.collectionFormat());
-		_default(joinnl(a._default()));
+		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
@@ -322,7 +322,7 @@ public class HttpPartSchemaBuilder {
 		format(a.format());
 		items(a.items());
 		collectionFormat(a.collectionFormat());
-		_default(joinnl(a._default()));
+		_default(a._default().length == 0 ? null : joinnl(a._default()));
 		maximum(HttpPartSchema.toNumber(a.maximum()));
 		exclusiveMaximum(a.exclusiveMaximum());
 		minimum(HttpPartSchema.toNumber(a.minimum()));
@@ -819,11 +819,11 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk> or empty.
+	 * 	<br>Ignored if value is <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder _default(String value) {
-		if (isNotEmpty(value))
+		if (value != null)
 			this._default = value;
 		return this;
 	}
