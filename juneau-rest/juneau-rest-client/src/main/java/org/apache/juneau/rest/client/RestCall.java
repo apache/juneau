@@ -237,7 +237,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				query(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
 		} else if (isBean(value)) {
 			return query(name, toBeanMap(value), skipIfEmpty, serializer, schema);
-		} else if (value instanceof Reader) {
+		} else if (value instanceof Reader || value instanceof InputStream) {
 			try {
 				uriBuilder.setCustomQuery(read(value));
 			} catch (IOException e) {
@@ -355,7 +355,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				formData(p.getKey(), p.getValue(), skipIfEmpty, serializer, schema);
 		} else if (isBean(value)) {
 			return formData(name, toBeanMap(value), skipIfEmpty, serializer, schema);
-		} else if (value instanceof Reader) {
+		} else if (value instanceof Reader || value instanceof InputStream) {
 			contentType("application/x-www-form-urlencoded");
 			body(value);
 		} else if (value instanceof CharSequence) {

@@ -35,7 +35,7 @@ import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests the @RemoteResource annotation.
+ * Tests the @Body annotation.
  */
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
