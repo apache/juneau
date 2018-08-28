@@ -1071,24 +1071,27 @@ public class RestClient extends BeanContext implements Closeable {
 							if (rmm.getRequestArgs().length > 0) {
 								for (RemoteMethodBeanArg rmba : rmm.getRequestArgs()) {
 									RequestBeanMeta rbm = rmba.getMeta();
-									for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-										Object val = p.getGetter().invoke(args[rmba.getIndex()]);
-										HttpPartType pt = p.getPartType();
-										HttpPartSerializer ps = p.getSerializer(s);
-										String pn = p.getPartName();
-										HttpPartSchema schema = p.getSchema();
-										boolean sie = schema.isSkipIfEmpty();
-										if (pt == PATH)
-											rc.path(pn, val, p.getSerializer(s), schema);
-										else if (val != null) {
-											if (pt == QUERY)
-												rc.query(pn, val, sie, ps, schema);
-											else if (pt == FORMDATA)
-												rc.formData(pn, val, sie, ps, schema);
-											else if (pt == HEADER)
-												rc.header(pn, val, sie, ps, schema);
-											else if (pt == HttpPartType.BODY)
-												rc.requestBodySchema(schema).body(val);
+									Object bean = args[rmba.getIndex()];
+									if (bean != null) {
+										for (RequestBeanPropertyMeta p : rbm.getProperties()) {
+											Object val = p.getGetter().invoke(bean);
+											HttpPartType pt = p.getPartType();
+											HttpPartSerializer ps = p.getSerializer(s);
+											String pn = p.getPartName();
+											HttpPartSchema schema = p.getSchema();
+											boolean sie = schema.isSkipIfEmpty();
+											if (pt == PATH)
+												rc.path(pn, val, p.getSerializer(s), schema);
+											else if (val != null) {
+												if (pt == QUERY)
+													rc.query(pn, val, sie, ps, schema);
+												else if (pt == FORMDATA)
+													rc.formData(pn, val, sie, ps, schema);
+												else if (pt == HEADER)
+													rc.header(pn, val, sie, ps, schema);
+												else if (pt == HttpPartType.BODY)
+													rc.requestBodySchema(schema).body(val);
+											}
 										}
 									}
 								}

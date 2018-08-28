@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -20,7 +19,6 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.*;
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
@@ -55,60 +53,60 @@ public class BodyAnnotationTest {
 	// Basic tests - JSON
 	//=================================================================================================================
 
-	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class)
+	@RestResource(parsers=JsonParser.class)
 	public static class A {
 		@RestMethod
-		public Object postA01(@Body int b, @Header("Content-Type") String ct) {
+		public String postA01(@Body int b, @Header("Content-Type") String ct) {
 			assertEquals("application/json", ct);
-			return b;
+			return String.valueOf(b);
 		}
 
 		@RestMethod
-		public Object postA02(@Body float b, @Header("Content-Type") String ct) {
+		public String postA02(@Body float b, @Header("Content-Type") String ct) {
 			assertEquals("application/json", ct);
-			return b;
+			return String.valueOf(b);
 		}
 
 		@RestMethod
-		public Object postA03(@Body Bean b, @Header("Content-Type") String ct) {
+		public String postA03(@Body Bean b, @Header("Content-Type") String ct) {
 			assertEquals("application/json", ct);
-			return b;
+			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestMethod
-		public Object postA04(@Body Bean[] b, @Header("Content-Type") String ct) {
+		public String postA04(@Body Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("application/json", ct);
-			return b;
+			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestMethod
-		public Object postA05(@Body List<Bean> b, @Header("Content-Type") String ct) {
+		public String postA05(@Body List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json", ct);
-			return b;
+			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestMethod
-		public Object postA06(@Body Map<String,Bean> b, @Header("Content-Type") String ct) {
+		public String postA06(@Body Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json", ct);
-			return b;
+			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestMethod
-		public Object postA07(@Body Reader b, @Header("Content-Type") String ct) {
+		public String postA07(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("text/plain", ct);
-			return b;
+			return IOUtils.read(b);
 		}
 
 		@RestMethod
-		public Object postA08(@Body InputStream b, @Header("Content-Type") String ct) {
+		public String postA08(@Body InputStream b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("application/octet-stream", ct);
-			return b;
+			return IOUtils.read(b);
 		}
 
 		@RestMethod
-		public Object postA09(@Body Reader b, @Header("Content-Type") String ct) {
+		public String postA09(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertTrue(ct.startsWith("text/plain"));
-			return b;
+			return IOUtils.read(b);
 		}
 
 		@RestMethod
@@ -121,80 +119,60 @@ public class BodyAnnotationTest {
 
 	@RemoteResource
 	public static interface A01 {
-		Object postA01(@Body int b);
-		Object postA02(@Body float b);
-		Object postA03(@Body Bean b);
-		Object postA04(@Body Bean[] b);
-		Object postA05(@Body List<Bean> b);
-		Object postA06(@Body Map<String,Bean> b);
-		Object postA07(@Body Reader b);
-		Object postA08(@Body InputStream b);
-		Object postA09(@Body HttpEntity b);
-		Object postA10(@Body NameValuePairs b);
+		String postA01(@Body int b);
+		String postA02(@Body float b);
+		String postA03(@Body Bean b);
+		String postA04(@Body Bean[] b);
+		String postA05(@Body List<Bean> b);
+		String postA06(@Body Map<String,Bean> b);
+		String postA07(@Body Reader b);
+		String postA08(@Body InputStream b);
+		String postA09(@Body HttpEntity b);
+		String postA10(@Body NameValuePairs b);
 	}
 
-	private static A01 a01 = RestClient.create().mockHttpConnection(a).json().build().getRemoteResource(A01.class);
+	private static A01 a01 = RestClient.create().mockHttpConnection(a).serializer(JsonSerializer.class).build().getRemoteResource(A01.class);
 
 	@Test
 	public void a01_int() throws Exception {
-		Object o = a01.postA01(1);
-		assertObjectEquals("1", o);
-		assertClass(Integer.class, o);
+		assertEquals("1", a01.postA01(1));
 	}
 	@Test
 	public void a02_float() throws Exception {
-		Object o = a01.postA02(1f);
-		assertObjectEquals("1.0", o);
-		assertClass(Float.class, o);
+		assertEquals("1.0", a01.postA02(1f));
 	}
 	@Test
 	public void a03_Bean() throws Exception {
-		Object o = a01.postA03(Bean.create());
-		assertObjectEquals("{f:1}", o);
-		assertClass(ObjectMap.class, o);
+		assertEquals("{f:1}", a01.postA03(Bean.create()));
 	}
 	@Test
 	public void a04_BeanArray() throws Exception {
-		Object o = a01.postA04(new Bean[]{Bean.create()});
-		assertObjectEquals("[{f:1}]", o);
-		assertClass(ObjectList.class, o);
+		assertEquals("[{f:1}]", a01.postA04(new Bean[]{Bean.create()}));
 	}
 	@Test
 	public void a05_ListOfBeans() throws Exception {
-		Object o = a01.postA05(AList.create(Bean.create()));
-		assertObjectEquals("[{f:1}]", o);
-		assertClass(ObjectList.class, o);
+		assertEquals("[{f:1}]", a01.postA05(AList.create(Bean.create())));
 	}
 	@Test
 	public void a06_MapOfBeans() throws Exception {
-		Object o = a01.postA06(AMap.create("k1",Bean.create()));
-		assertObjectEquals("{k1:{f:1}}", o);
-		assertClass(ObjectMap.class, o);
+		assertEquals("{k1:{f:1}}", a01.postA06(AMap.create("k1",Bean.create())));
 	}
 	@Test
 	public void a07_Reader() throws Exception {
-		Object o = a01.postA07(new StringReader("'xxx'"));
-		assertObjectEquals("'xxx'", o);
-		assertClass(String.class, o);
+		assertEquals("xxx", a01.postA07(new StringReader("xxx")));
 	}
+	@SuppressWarnings("resource")
 	@Test
 	public void a08_InputStream() throws Exception {
-		@SuppressWarnings("resource")
-		Object o = a01.postA08(new StringInputStream("'xxx'"));
-		assertObjectEquals("'xxx'", o);
-		assertClass(String.class, o);
+		assertEquals("xxx", a01.postA08(new StringInputStream("xxx")));
 	}
 	@Test
 	public void a09_HttpEntity() throws Exception {
-		Object o = a01.postA09(new StringEntity("'xxx'"));
-		assertObjectEquals("'xxx'", o);
-		assertClass(String.class, o);
+		assertEquals("xxx", a01.postA09(new StringEntity("xxx")));
 	}
 	@Test
 	public void a10_NameValuePairs() throws Exception {
-		Object o = a01.postA10(new NameValuePairs().append("foo", "bar"));
-		assertObjectEquals("'foo=bar'", o);
-		assertClass(String.class, o);
+		assertEquals("foo=bar", a01.postA10(new NameValuePairs().append("foo", "bar")));
 	}
 
 	//=================================================================================================================

@@ -138,7 +138,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  */
 @Documented
-@Target(PARAMETER)
+@Target({PARAMETER,TYPE})
 @Retention(RUNTIME)
 @Inherited
 public @interface Request {
