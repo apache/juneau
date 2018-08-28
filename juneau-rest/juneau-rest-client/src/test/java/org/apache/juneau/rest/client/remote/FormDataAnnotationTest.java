@@ -26,6 +26,7 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -967,5 +968,65 @@ public class FormDataAnnotationTest {
 	public void h03_required_true() throws Exception {
 		assertEquals("{x:'1'}", hr.postH03("1"));
 		try { hr.postH03(null); fail(); } catch (Exception e) { assertContains(e, "Required value not provided."); }
+	}
+
+	//=================================================================================================================
+	// @FormData(skipIfEmpty)
+	//=================================================================================================================
+
+	@RestResource
+	public static class I {
+		@RestMethod
+		public String post(@FormData("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest i = MockRest.create(I.class);
+
+	@RemoteResource
+	public static interface IR {
+		@RemoteMethod(path="/") String postI01(@FormData(name="x",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String postI02(@FormData(name="x",allowEmptyValue=true,skipIfEmpty=false) String b);
+		@RemoteMethod(path="/") String postI03(@FormData(name="x",skipIfEmpty=true) String b);
+	}
+
+	private static IR ir = RestClient.create().mockHttpConnection(i).build().getRemoteResource(IR.class);
+
+	@Test
+	public void h01_skipIfEmpty_default() throws Exception {
+		assertEquals("{x:''}", ir.postI01(""));
+	}
+	@Test
+	public void h02_skipIfEmpty_false() throws Exception {
+		assertEquals("{x:''}", ir.postI02(""));
+	}
+	@Test
+	public void h03_skipIfEmpty_true() throws Exception {
+		assertEquals("{}", ir.postI03(""));
+	}
+
+	//=================================================================================================================
+	// @FormData(serializer)
+	//=================================================================================================================
+
+	@RestResource
+	public static class J {
+		@RestMethod
+		public String post(@FormData("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest j = MockRest.create(J.class);
+
+	@RemoteResource
+	public static interface JR {
+		@RemoteMethod(path="/") String postJ01(@FormData(name="x",serializer=XPartSerializer.class) String b);
+	}
+
+	private static JR jr = RestClient.create().mockHttpConnection(j).build().getRemoteResource(JR.class);
+
+	@Test
+	public void j01_serializer() throws Exception {
+		assertEquals("{x:'xXx'}", jr.postJ01("X"));
 	}
 }

@@ -25,6 +25,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -912,5 +913,67 @@ public class HeaderAnnotationTest {
 	public void h03_required_true() throws Exception {
 		assertEquals("{x:'1'}", hr.getH03("1"));
 		try { hr.getH03(null); fail(); } catch (Exception e) { assertContains(e, "Required value not provided."); }
+	}
+
+	//=================================================================================================================
+	// @Header(skipIfEmpty)
+	//=================================================================================================================
+
+	@RestResource
+	public static class I {
+		@RestMethod
+		public String get(@Header("*") ObjectMap m) {
+			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
+			return m.toString();
+		}
+	}
+	private static MockRest i = MockRest.create(I.class);
+
+	@RemoteResource
+	public static interface IR {
+		@RemoteMethod(path="/") String getI01(@Header(name="x",allowEmptyValue=true) String b);
+		@RemoteMethod(path="/") String getI02(@Header(name="x",allowEmptyValue=true,skipIfEmpty=false) String b);
+		@RemoteMethod(path="/") String getI03(@Header(name="x",skipIfEmpty=true) String b);
+	}
+
+	private static IR ir = RestClient.create().mockHttpConnection(i).build().getRemoteResource(IR.class);
+
+	@Test
+	public void h01_skipIfEmpty_default() throws Exception {
+		assertEquals("{x:''}", ir.getI01(""));
+	}
+	@Test
+	public void h02_skipIfEmpty_false() throws Exception {
+		assertEquals("{x:''}", ir.getI02(""));
+	}
+	@Test
+	public void h03_skipIfEmpty_true() throws Exception {
+		assertEquals("{}", ir.getI03(""));
+	}
+
+	//=================================================================================================================
+	// @Header(serializer)
+	//=================================================================================================================
+
+	@RestResource
+	public static class J {
+		@RestMethod
+		public String get(@Header("*") ObjectMap m) {
+			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
+			return m.toString();
+		}
+	}
+	private static MockRest j = MockRest.create(J.class);
+
+	@RemoteResource
+	public static interface JR {
+		@RemoteMethod(path="/") String getJ01(@Header(name="x",serializer=XPartSerializer.class) String b);
+	}
+
+	private static JR jr = RestClient.create().mockHttpConnection(j).build().getRemoteResource(JR.class);
+
+	@Test
+	public void j01_serializer() throws Exception {
+		assertEquals("{x:'xXx'}", jr.getJ01("X"));
 	}
 }

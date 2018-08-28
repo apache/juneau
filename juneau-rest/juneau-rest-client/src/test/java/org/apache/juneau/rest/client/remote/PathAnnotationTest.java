@@ -25,6 +25,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -814,5 +815,31 @@ public class PathAnnotationTest {
 	@Test
 	public void h01_required_default() throws Exception {
 		try { hr.getH01(null); fail(); } catch (Exception e) { assertContains(e, "Required value not provided."); }
+	}
+
+	//=================================================================================================================
+	// @Path(serializer)
+	//=================================================================================================================
+
+	@RestResource
+	public static class J {
+		@RestMethod(path="/{x}")
+		public String get(@Path("*") ObjectMap m) {
+			m.removeAll("/*","/**");
+			return m.toString();
+		}
+	}
+	private static MockRest j = MockRest.create(J.class);
+
+	@RemoteResource
+	public static interface JR {
+		@RemoteMethod(path="/{x}") String getJ01(@Path(name="x",serializer=XPartSerializer.class) String b);
+	}
+
+	private static JR jr = RestClient.create().mockHttpConnection(j).build().getRemoteResource(JR.class);
+
+	@Test
+	public void j01_serializer() throws Exception {
+		assertEquals("{x:'xXx'}", jr.getJ01("X"));
 	}
 }
