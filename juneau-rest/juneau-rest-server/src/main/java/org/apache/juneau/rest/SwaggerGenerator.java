@@ -942,12 +942,15 @@ final class SwaggerGenerator {
 			.appendSkipEmpty("format", a.format())
 			.appendSkipEmpty("items", merge(om.getObjectMap("items"), a.items()))
 			.appendSkipEmpty("maximum", a.maximum())
+			.appendSkipMinusOne("maxItems", a.maxItems())
 			.appendSkipMinusOne("maxLength", a.maxLength())
 			.appendSkipEmpty("minimum", a.minimum())
+			.appendSkipMinusOne("minItems", a.minItems())
 			.appendSkipMinusOne("minLength", a.minLength())
 			.appendSkipEmpty("multipleOf", a.multipleOf())
 			.appendSkipEmpty("pattern", a.pattern())
 			.appendSkipEmpty("type", a.type())
+			.appendSkipFalse("uniqueItems", a.uniqueItems())
 		;
 	}
 

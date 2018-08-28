@@ -16,6 +16,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -621,6 +622,88 @@ public @interface Path {
 	 * </ul>
 	 */
 	String pattern() default "";
+
+	/**
+	 * <mk>maxItems</mk> field of the {@doc SwaggerParameterObject}.
+	 *
+	 * <p>
+	 * An array or collection is valid if its size is less than, or equal to, the value of this keyword.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 */
+	long maxItems() default -1;
+
+	/**
+	 * <mk>minItems</mk> field of the {@doc SwaggerParameterObject}.
+	 *
+	 * <p>
+	 * An array or collection is valid if its size is greater than, or equal to, the value of this keyword.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 */
+	long minItems() default -1;
+
+	/**
+	 * <mk>uniqueItems</mk> field of the {@doc SwaggerParameterObject}.
+	 *
+	 * <p>
+	 * If <jk>true</jk> the input validates successfully if all of its elements are unique.
+	 *
+	 * <p>
+	 * If validation fails during serialization or parsing, the part serializer/parser will throw a {@link SchemaValidationException}.
+	 * <br>On the client-side, this gets converted to a <code>RestCallException</code> which is thrown before the connection is made.
+	 * <br>On the server-side, this gets converted to a <code>BadRequest</code> (400).
+	 *
+	 * <p>
+	 * If the parameter type is a subclass of {@link Set}, this validation is skipped (since a set can only contain unique items anyway).
+	 * <br>Otherwise, the collection or array is checked for duplicate items.
+	 *
+	 * <p>
+	 * Only allowed for the following types: <js>"array"</js>.
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 */
+	boolean uniqueItems() default false;
 
 	/**
 	 * <mk>enum</mk> field of the {@doc SwaggerParameterObject}.

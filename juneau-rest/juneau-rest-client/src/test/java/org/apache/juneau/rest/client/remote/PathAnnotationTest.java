@@ -577,4 +577,65 @@ public class PathAnnotationTest {
 		try { dr.getC16c((byte)10); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{x:'null'}", dr.getC16c(null));
 	}
+
+	//=================================================================================================================
+	// @Path(maxItems,minItems,uniqueItems)
+	//=================================================================================================================
+
+	@RestResource
+	public static class E {
+		@RestMethod(path="/{x}")
+		public String get(@Path("*") ObjectMap m) {
+			m.removeAll("/*","/**");
+			return m.toString();
+		}
+	}
+	private static MockRest e = MockRest.create(E.class);
+
+	@RemoteResource
+	public static interface ER {
+		@RemoteMethod(path="/{x}") String getE01(@Path(name="x",collectionFormat="pipes",minItems=1,maxItems=2) String...b);
+		@RemoteMethod(path="/{x}") String getE02(@Path(name="x",items=@Items(collectionFormat="pipes",minItems=1,maxItems=2)) String[]...b);
+		@RemoteMethod(path="/{x}") String getE03(@Path(name="x",collectionFormat="pipes",uniqueItems=false) String...b);
+		@RemoteMethod(path="/{x}") String getE04(@Path(name="x",items=@Items(collectionFormat="pipes",uniqueItems=false)) String[]...b);
+		@RemoteMethod(path="/{x}") String getE05(@Path(name="x",collectionFormat="pipes",uniqueItems=true) String...b);
+		@RemoteMethod(path="/{x}") String getE06(@Path(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
+	}
+
+	private static ER er = RestClient.create().mockHttpConnection(e).build().getRemoteResource(ER.class);
+
+	@Test
+	public void e01_minMax() throws Exception {
+		assertEquals("{x:'1'}", er.getE01("1"));
+		assertEquals("{x:'1|2'}", er.getE01("1","2"));
+		try { er.getE01(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
+		try { er.getE01("1","2","3"); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
+		assertEquals("{x:'null'}", er.getE01((String)null));
+	}
+	@Test
+	public void e02_minMax_items() throws Exception {
+		assertEquals("{x:'1'}", er.getE02(new String[]{"1"}));
+		assertEquals("{x:'1|2'}", er.getE02(new String[]{"1","2"}));
+		try { er.getE02(new String[]{}); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
+		try { er.getE02(new String[]{"1","2","3"}); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
+		assertEquals("{x:'null'}", er.getE02(new String[]{null}));
+	}
+	@Test
+	public void e03_uniqueItems_false() throws Exception {
+		assertEquals("{x:'1|1'}", er.getE03("1","1"));
+	}
+	@Test
+	public void e04_uniqueItems_items_false() throws Exception {
+		assertEquals("{x:'1|1'}", er.getE04(new String[]{"1","1"}));
+	}
+	@Test
+	public void e05_uniqueItems_true() throws Exception {
+		assertEquals("{x:'1|2'}", er.getE05("1","2"));
+		try { assertEquals("{x:'1|1'}", er.getE05("1","1")); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
+	}
+	@Test
+	public void e06_uniqueItems_items_true() throws Exception {
+		assertEquals("{x:'1|2'}", er.getE06(new String[]{"1","2"}));
+		try { assertEquals("{x:'1|1'}", er.getE06(new String[]{"1","1"})); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
+	}
 }

@@ -252,6 +252,9 @@ public class HttpPartSchemaBuilder {
 		maxLength(a.maxLength());
 		minLength(a.minLength());
 		pattern(a.pattern());
+		maxItems(a.maxItems());
+		minItems(a.minItems());
+		uniqueItems(a.uniqueItems());
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		parser(a.parser());
