@@ -19,7 +19,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.math.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -1121,43 +1123,43 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidMinimum(Number x) {
-		if (x instanceof Integer)
+		if (x instanceof Integer || x instanceof AtomicInteger)
 			return minimum == null || x.intValue() > minimum.intValue() || (x.intValue() == minimum.intValue() && (! exclusiveMinimum));
-		if (x instanceof Short)
+		if (x instanceof Short || x instanceof Byte)
 			return minimum == null || x.shortValue() > minimum.shortValue() || (x.intValue() == minimum.shortValue() && (! exclusiveMinimum));
-		if (x instanceof Long)
+		if (x instanceof Long || x instanceof AtomicLong || x instanceof BigInteger)
 			return minimum == null || x.longValue() > minimum.longValue() || (x.intValue() == minimum.longValue() && (! exclusiveMinimum));
 		if (x instanceof Float)
 			return minimum == null || x.floatValue() > minimum.floatValue() || (x.floatValue() == minimum.floatValue() && (! exclusiveMinimum));
-		if (x instanceof Double)
+		if (x instanceof Double || x instanceof BigDecimal)
 			return minimum == null || x.doubleValue() > minimum.doubleValue() || (x.doubleValue() == minimum.doubleValue() && (! exclusiveMinimum));
 		return true;
 	}
 
 	private boolean isValidMaximum(Number x) {
-		if (x instanceof Integer)
+		if (x instanceof Integer || x instanceof AtomicInteger)
 			return maximum == null || x.intValue() < maximum.intValue() || (x.intValue() == maximum.intValue() && (! exclusiveMaximum));
-		if (x instanceof Short)
+		if (x instanceof Short || x instanceof Byte)
 			return maximum == null || x.shortValue() < maximum.shortValue() || (x.intValue() == maximum.shortValue() && (! exclusiveMaximum));
-		if (x instanceof Long)
+		if (x instanceof Long || x instanceof AtomicLong || x instanceof BigInteger)
 			return maximum == null || x.longValue() < maximum.longValue() || (x.intValue() == maximum.longValue() && (! exclusiveMaximum));
 		if (x instanceof Float)
 			return maximum == null || x.floatValue() < maximum.floatValue() || (x.floatValue() == maximum.floatValue() && (! exclusiveMaximum));
-		if (x instanceof Double)
+		if (x instanceof Double || x instanceof BigDecimal)
 			return maximum == null || x.doubleValue() < maximum.doubleValue() || (x.doubleValue() == maximum.doubleValue() && (! exclusiveMaximum));
 		return true;
 	}
 
 	private boolean isValidMultipleOf(Number x) {
-		if (x instanceof Integer)
+		if (x instanceof Integer || x instanceof AtomicInteger)
 			return multipleOf == null || x.intValue() % multipleOf.intValue() == 0;
-		if (x instanceof Short)
+		if (x instanceof Short || x instanceof Byte)
 			return multipleOf == null || x.shortValue() % multipleOf.shortValue() == 0;
-		if (x instanceof Long)
+		if (x instanceof Long || x instanceof AtomicLong || x instanceof BigInteger)
 			return multipleOf == null || x.longValue() % multipleOf.longValue() == 0;
 		if (x instanceof Float)
 			return multipleOf == null || x.floatValue() % multipleOf.floatValue() == 0;
-		if (x instanceof Double)
+		if (x instanceof Double || x instanceof BigDecimal)
 			return multipleOf == null || x.doubleValue() % multipleOf.doubleValue() == 0;
 		return true;
 	}

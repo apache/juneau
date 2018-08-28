@@ -903,10 +903,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface G01_RemoteResource {
 
-		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{e}/{g}/{h}")
 		String normal(@Request G01_Bean rb);
 
-		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{e}/{f}/{g}/{h}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{e}/{g}/{h}")
 		String serialized(@Request(partSerializer=XSerializer.class) G01_Bean rb);
 	}
 
@@ -927,10 +927,6 @@ public class RequestBeanProxyTest {
 		public String getX4() {
 			return "";
 		}
-		@Path("f")
-		public String getX5() {
-			return null;
-		}
 		@Path("g")
 		public String getX6() {
 			return "true";
@@ -947,17 +943,17 @@ public class RequestBeanProxyTest {
 	@Test
 	public void g01a_pathSimpleValsPlainText() throws Exception {
 		String r = g01a.normal(new G01_Bean());
-		assertEquals("echoPath/a1/b1/c1//null/true/123", r);
+		assertEquals("echoPath/a1/b1/c1//true/123", r);
 	}
 	@Test
 	public void g01b_pathSimpleValsUon() throws Exception {
 		String r = g01b.normal(new G01_Bean());
-		assertEquals("echoPath/a1/b1/c1//null/'true'/'123'", r);
+		assertEquals("echoPath/a1/b1/c1//'true'/'123'", r);
 	}
 	@Test
 	public void g01c_pathSimpleValsX() throws Exception {
 		String r = g01b.serialized(new G01_Bean());
-		assertEquals("echoPath/xa1x/xb1x/xc1x/xx/NULL/xtruex/x123x", r);
+		assertEquals("echoPath/xa1x/xb1x/xc1x/xx/xtruex/x123x", r);
 	}
 
 	//=================================================================================================================
@@ -1071,10 +1067,10 @@ public class RequestBeanProxyTest {
 	@RemoteResource(path="/")
 	public static interface G04_RemoteResource {
 
-		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{d}/{f}/{g}/{h}")
 		String normal(@Request G04_Bean rb);
 
-		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{d}/{e}/{f}/{g}/{h}/{i}")
+		@RemoteMethod(method="GET", path="/echoPath/{a}/{b}/{c}/{d}/{f}/{g}/{h}")
 		String serialized(@Request(partSerializer=XSerializer.class) G04_Bean rb);
 	}
 
@@ -1095,10 +1091,6 @@ public class RequestBeanProxyTest {
 		public List<Object> getX3() {
 			return new AList<>();
 		}
-		@Path("e")
-		public List<Object> getX4() {
-			return null;
-		}
 		@Path("f")
 		public Object[] getX5() {
 			return new Object[]{"foo", "", "true", "123", "null", true, 123, null};
@@ -1111,10 +1103,6 @@ public class RequestBeanProxyTest {
 		public Object[] getX7() {
 			return new Object[]{};
 		}
-		@Path("i")
-		public Object[] getX8() {
-			return null;
-		}
 	}
 
 	static G04_RemoteResource g04a = RestClient.create().mockHttpConnection(g).build().getRemoteResource(G04_RemoteResource.class, null);
@@ -1123,17 +1111,17 @@ public class RequestBeanProxyTest {
 	@Test
 	public void g04a_path_collections_plainText() throws Exception {
 		String r = g04a.normal(new G04_Bean());
-		assertEquals("echoPath/foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null//null/foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null//null", r);
+		assertEquals("echoPath/foo,,true,123,null,true,123,null/foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null//foo,,true,123,null,true,123,null/foo||true|123|null|true|123|null/", r);
 	}
 	@Test
 	public void g04b_path_collections_uon() throws Exception {
 		String r = g04b.normal(new G04_Bean());
-		assertEquals("echoPath/@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()/null/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()/null", r);
+		assertEquals("echoPath/@(foo,'','true','123','null',true,123,null)/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()/@(foo,'','true','123','null',true,123,null)/foo||true|123|null|true|123|null/@()", r);
 	}
 	@Test
 	public void g04c_path_collections_x() throws Exception {
 		String r = g04b.serialized(new G04_Bean());
-		assertEquals("echoPath/fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null//NULL/fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null//NULL", r);
+		assertEquals("echoPath/fooXXtrueX123XnullXtrueX123Xnull/fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null//fooXXtrueX123XnullXtrueX123Xnull/foo||true|123|null|true|123|null/", r);
 	}
 
 	//=================================================================================================================

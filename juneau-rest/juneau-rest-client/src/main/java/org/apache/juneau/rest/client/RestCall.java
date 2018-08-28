@@ -2406,6 +2406,8 @@ public final class RestCall extends BeanSession implements Closeable {
 		}
 		if (schema == null)
 			return false;
+		if (schema.isRequired())
+			return true;
 		String def = schema.getDefault();
 		if (def == null)
 			return false;

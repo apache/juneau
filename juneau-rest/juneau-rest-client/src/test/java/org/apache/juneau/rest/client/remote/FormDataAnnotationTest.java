@@ -394,312 +394,312 @@ public class FormDataAnnotationTest {
 	public void d01a_int_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC01a(1));
 		assertEquals("{x:'10'}", dr.postC01a(10));
-		try { dr.postC01a(0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC01a(11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC01a(0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC01a(11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d01b_int_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC01b(1));
 		assertEquals("{x:'10'}", dr.postC01b(10));
-		try { dr.postC01b(0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC01b(11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC01b(0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC01b(11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d01c_int_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC01c(2));
 		assertEquals("{x:'9'}", dr.postC01c(9));
-		try { dr.postC01c(1); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC01c(10); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC01c(1); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC01c(10); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d02a_short_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC02a((short)1));
 		assertEquals("{x:'10'}", dr.postC02a((short)10));
-		try { dr.postC02a((short)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC02a((short)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC02a((short)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC02a((short)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d02b_short_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC02b((short)1));
 		assertEquals("{x:'10'}", dr.postC02b((short)10));
-		try { dr.postC02b((short)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC02b((short)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC02b((short)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC02b((short)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d02c_short_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC02c((short)2));
 		assertEquals("{x:'9'}", dr.postC02c((short)9));
-		try { dr.postC02c((short)1); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC02c((short)10); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC02c((short)1); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC02c((short)10); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d03a_long_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC03a(1l));
 		assertEquals("{x:'10'}", dr.postC03a(10l));
-		try { dr.postC03a(0l); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC03a(11l); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC03a(0l); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC03a(11l); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d03b_long_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC03b(1l));
 		assertEquals("{x:'10'}", dr.postC03b(10l));
-		try { dr.postC03b(0l); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC03b(11l); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC03b(0l); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC03b(11l); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d03c_long_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC03c(2l));
 		assertEquals("{x:'9'}", dr.postC03c(9l));
-		try { dr.postC03c(1l); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC03c(10l); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC03c(1l); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC03c(10l); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d04a_float_defaultExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC04a(1f));
 		assertEquals("{x:'10.0'}", dr.postC04a(10f));
-		try { dr.postC04a(0.9f); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC04a(10.1f); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC04a(0.9f); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC04a(10.1f); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d04b_float_notExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC04b(1f));
 		assertEquals("{x:'10.0'}", dr.postC04b(10f));
-		try { dr.postC04b(0.9f); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC04b(10.1f); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC04b(0.9f); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC04b(10.1f); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d04c_float_exclusive() throws Exception {
 		assertEquals("{x:'1.1'}", dr.postC04c(1.1f));
 		assertEquals("{x:'9.9'}", dr.postC04c(9.9f));
-		try { dr.postC04c(1f); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC04c(10f); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC04c(1f); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC04c(10f); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d05a_double_defaultExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC05a(1d));
 		assertEquals("{x:'10.0'}", dr.postC05a(10d));
-		try { dr.postC05a(0.9d); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC05a(10.1d); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC05a(0.9d); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC05a(10.1d); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d05b_double_notExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC05b(1d));
 		assertEquals("{x:'10.0'}", dr.postC05b(10d));
-		try { dr.postC05b(0.9d); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC05b(10.1d); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC05b(0.9d); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC05b(10.1d); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d05c_double_exclusive() throws Exception {
 		assertEquals("{x:'1.1'}", dr.postC05c(1.1d));
 		assertEquals("{x:'9.9'}", dr.postC05c(9.9d));
-		try { dr.postC05c(1d); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC05c(10d); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC05c(1d); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC05c(10d); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d06a_byte_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC06a((byte)1));
 		assertEquals("{x:'10'}", dr.postC06a((byte)10));
-		try { dr.postC06a((byte)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC06a((byte)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC06a((byte)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC06a((byte)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d06b_byte_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC06b((byte)1));
 		assertEquals("{x:'10'}", dr.postC06b((byte)10));
-		try { dr.postC06b((byte)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC06b((byte)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC06b((byte)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC06b((byte)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d06c_byte_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC06c((byte)2));
 		assertEquals("{x:'9'}", dr.postC06c((byte)9));
-		try { dr.postC06c((byte)1); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC06c((byte)10); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC06c((byte)1); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC06c((byte)10); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d07a_AtomicInteger_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC07a(new AtomicInteger(1)));
 		assertEquals("{x:'10'}", dr.postC07a(new AtomicInteger(10)));
-		try { dr.postC07a(new AtomicInteger(0)); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC07a(new AtomicInteger(11)); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC07a(new AtomicInteger(0)); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC07a(new AtomicInteger(11)); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d07b_AtomicInteger_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC07b(new AtomicInteger(1)));
 		assertEquals("{x:'10'}", dr.postC07b(new AtomicInteger(10)));
-		try { dr.postC07b(new AtomicInteger(0)); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC07b(new AtomicInteger(11)); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC07b(new AtomicInteger(0)); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC07b(new AtomicInteger(11)); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d07c_AtomicInteger_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC07c(new AtomicInteger(2)));
 		assertEquals("{x:'9'}", dr.postC07c(new AtomicInteger(9)));
-		try { dr.postC07c(new AtomicInteger(1)); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC07c(new AtomicInteger(10)); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC07c(new AtomicInteger(1)); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC07c(new AtomicInteger(10)); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d08a_BigDecimal_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC08a(new BigDecimal(1)));
 		assertEquals("{x:'10'}", dr.postC08a(new BigDecimal(10)));
-		try { dr.postC08a(new BigDecimal(0)); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC08a(new BigDecimal(11)); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC08a(new BigDecimal(0)); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC08a(new BigDecimal(11)); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d08b_BigDecimal_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC08b(new BigDecimal(1)));
 		assertEquals("{x:'10'}", dr.postC08b(new BigDecimal(10)));
-		try { dr.postC08b(new BigDecimal(0)); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC08b(new BigDecimal(11)); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC08b(new BigDecimal(0)); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC08b(new BigDecimal(11)); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d08cBigDecimal_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC08c(new BigDecimal(2)));
 		assertEquals("{x:'9'}", dr.postC08c(new BigDecimal(9)));
-		try { dr.postC08c(new BigDecimal(1)); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC08c(new BigDecimal(10)); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC08c(new BigDecimal(1)); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC08c(new BigDecimal(10)); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 	}
 	@Test
 	public void d11a_Integer_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC11a(1));
 		assertEquals("{x:'10'}", dr.postC11a(10));
-		try { dr.postC11a(0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC11a(11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC11a(0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC11a(11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC11a(null));
 	}
 	@Test
 	public void d11b_Integer_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC11b(1));
 		assertEquals("{x:'10'}", dr.postC11b(10));
-		try { dr.postC11b(0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC11b(11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC11b(0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC11b(11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC11b(null));
 	}
 	@Test
 	public void d11c_Integer_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC11c(2));
 		assertEquals("{x:'9'}", dr.postC11c(9));
-		try { dr.postC11c(1); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC11c(10); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC11c(1); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC11c(10); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC11c(null));
 	}
 	@Test
 	public void d12a_Short_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC12a((short)1));
 		assertEquals("{x:'10'}", dr.postC12a((short)10));
-		try { dr.postC12a((short)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC12a((short)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC12a((short)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC12a((short)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC12a(null));
 	}
 	@Test
 	public void d12b_Short_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC12b((short)1));
 		assertEquals("{x:'10'}", dr.postC12b((short)10));
-		try { dr.postC12b((short)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC12b((short)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC12b((short)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC12b((short)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC12b(null));
 	}
 	@Test
 	public void d12c_Short_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC12c((short)2));
 		assertEquals("{x:'9'}", dr.postC12c((short)9));
-		try { dr.postC12c((short)1); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC12c((short)10); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC12c((short)1); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC12c((short)10); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC12c(null));
 	}
 	@Test
 	public void d13a_Long_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC13a(1l));
 		assertEquals("{x:'10'}", dr.postC13a(10l));
-		try { dr.postC13a(0l); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC13a(11l); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC13a(0l); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC13a(11l); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC13a(null));
 	}
 	@Test
 	public void d13b_Long_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC13b(1l));
 		assertEquals("{x:'10'}", dr.postC13b(10l));
-		try { dr.postC13b(0l); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC13b(11l); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC13b(0l); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC13b(11l); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC13b(null));
 	}
 	@Test
 	public void d13c_Long_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC13c(2l));
 		assertEquals("{x:'9'}", dr.postC13c(9l));
-		try { dr.postC13c(1l); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC13c(10l); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC13c(1l); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC13c(10l); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC13c(null));
 	}
 	@Test
 	public void d14a_Float_defaultExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC14a(1f));
 		assertEquals("{x:'10.0'}", dr.postC14a(10f));
-		try { dr.postC14a(0.9f); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC14a(10.1f); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC14a(0.9f); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC14a(10.1f); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC14a(null));
 	}
 	@Test
 	public void d14b_Float_notExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC14b(1f));
 		assertEquals("{x:'10.0'}", dr.postC14b(10f));
-		try { dr.postC14b(0.9f); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC14b(10.1f); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC14b(0.9f); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC14b(10.1f); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC14b(null));
 	}
 	@Test
 	public void d14c_Float_exclusive() throws Exception {
 		assertEquals("{x:'1.1'}", dr.postC14c(1.1f));
 		assertEquals("{x:'9.9'}", dr.postC14c(9.9f));
-		try { dr.postC14c(1f); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC14c(10f); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC14c(1f); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC14c(10f); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC14c(null));
 	}
 	@Test
 	public void d15a_Double_defaultExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC15a(1d));
 		assertEquals("{x:'10.0'}", dr.postC15a(10d));
-		try { dr.postC15a(0.9d); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC15a(10.1d); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC15a(0.9d); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC15a(10.1d); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC15a(null));
 	}
 	@Test
 	public void d15b_Double_notExclusive() throws Exception {
 		assertEquals("{x:'1.0'}", dr.postC15b(1d));
 		assertEquals("{x:'10.0'}", dr.postC15b(10d));
-		try { dr.postC15b(0.9d); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC15b(10.1d); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC15b(0.9d); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC15b(10.1d); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC15b(null));
 	}
 	@Test
 	public void d15c_Double_exclusive() throws Exception {
 		assertEquals("{x:'1.1'}", dr.postC15c(1.1d));
 		assertEquals("{x:'9.9'}", dr.postC15c(9.9d));
-		try { dr.postC15c(1d); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC15c(10d); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC15c(1d); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC15c(10d); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC15c(null));
 	}
 	@Test
 	public void d16a_Byte_defaultExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC16a((byte)1));
 		assertEquals("{x:'10'}", dr.postC16a((byte)10));
-		try { dr.postC16a((byte)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC16a((byte)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC16a((byte)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC16a((byte)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC16a(null));
 	}
 	@Test
 	public void d16b_Byte_notExclusive() throws Exception {
 		assertEquals("{x:'1'}", dr.postC16b((byte)1));
 		assertEquals("{x:'10'}", dr.postC16b((byte)10));
-		try { dr.postC16b((byte)0); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC16b((byte)11); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC16b((byte)0); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC16b((byte)11); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC16b(null));
 	}
 	@Test
 	public void d16c_Byte_exclusive() throws Exception {
 		assertEquals("{x:'2'}", dr.postC16c((byte)2));
 		assertEquals("{x:'9'}", dr.postC16c((byte)9));
-		try { dr.postC16c((byte)1); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
-		try { dr.postC16c((byte)10); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
+		try { dr.postC16c((byte)1); fail(); } catch (Exception e) { assertContains(e, "Minimum value not met"); }
+		try { dr.postC16c((byte)10); fail(); } catch (Exception e) { assertContains(e, "Maximum value exceeded"); }
 		assertEquals("{}", dr.postC16c(null));
 	}
 
@@ -732,16 +732,16 @@ public class FormDataAnnotationTest {
 	public void e01_minMax() throws Exception {
 		assertEquals("{x:'1'}", er.postE01("1"));
 		assertEquals("{x:'1|2'}", er.postE01("1","2"));
-		try { er.postE01(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
-		try { er.postE01("1","2","3"); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
+		try { er.postE01(); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
+		try { er.postE01("1","2","3"); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
 		assertEquals("{x:'null'}", er.postE01((String)null));
 	}
 	@Test
 	public void e02_minMax_items() throws Exception {
 		assertEquals("{x:'1'}", er.postE02(new String[]{"1"}));
 		assertEquals("{x:'1|2'}", er.postE02(new String[]{"1","2"}));
-		try { er.postE02(new String[]{}); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
-		try { er.postE02(new String[]{"1","2","3"}); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
+		try { er.postE02(new String[]{}); fail(); } catch (Exception e) { assertContains(e, "Minimum number of items not met"); }
+		try { er.postE02(new String[]{"1","2","3"}); fail(); } catch (Exception e) { assertContains(e, "Maximum number of items exceeded"); }
 		assertEquals("{x:'null'}", er.postE02(new String[]{null}));
 	}
 	@Test
@@ -755,12 +755,12 @@ public class FormDataAnnotationTest {
 	@Test
 	public void e05_uniqueItems_true() throws Exception {
 		assertEquals("{x:'1|2'}", er.postE05("1","2"));
-		try { assertEquals("{x:'1|1'}", er.postE05("1","1")); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
+		try { er.postE05("1","1"); fail(); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
 	}
 	@Test
 	public void e06_uniqueItems_items_true() throws Exception {
 		assertEquals("{x:'1|2'}", er.postE06(new String[]{"1","2"}));
-		try { assertEquals("{x:'1|1'}", er.postE06(new String[]{"1","1"})); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
+		try { er.postE06(new String[]{"1","1"}); fail(); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
 	}
 
 	//=================================================================================================================
@@ -792,40 +792,40 @@ public class FormDataAnnotationTest {
 	public void f01_minMaxLength() throws Exception {
 		assertEquals("{x:'12'}", fr.postF01("12"));
 		assertEquals("{x:'123'}", fr.postF01("123"));
-		try { fr.postF01("1"); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
-		try { fr.postF01("1234"); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
+		try { fr.postF01("1"); fail(); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
+		try { fr.postF01("1234"); fail(); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
 		assertEquals("{}", fr.postF01(null));
 	}
 	@Test
 	public void f02_minMaxLength_items() throws Exception {
 		assertEquals("{x:'12|34'}", fr.postF02("12","34"));
 		assertEquals("{x:'123|456'}", fr.postF02("123","456"));
-		try { fr.postF02("1","2"); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
-		try { fr.postF02("1234","5678"); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
+		try { fr.postF02("1","2"); fail(); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
+		try { fr.postF02("1234","5678"); fail(); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
 		assertEquals("{x:'12|null'}", fr.postF02("12",null));
 	}
 	@Test
 	public void f03_enum() throws Exception {
 		assertEquals("{x:'foo'}", fr.postF03("foo"));
-		try { fr.postF03("bar"); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values"); }
+		try { fr.postF03("bar"); fail(); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values"); }
 		assertEquals("{}", fr.postF03(null));
 	}
 	@Test
 	public void f04_enum_items() throws Exception {
 		assertEquals("{x:'foo'}", fr.postF04("foo"));
-		try { fr.postF04("bar"); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values"); }
+		try { fr.postF04("bar"); fail(); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values"); }
 		assertEquals("{x:'null'}", fr.postF04((String)null));
 	}
 	@Test
 	public void f05_pattern() throws Exception {
 		assertEquals("{x:'foo123'}", fr.postF05("foo123"));
-		try { fr.postF05("bar"); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
+		try { fr.postF05("bar"); fail(); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
 		assertEquals("{}", fr.postF05(null));
 	}
 	@Test
 	public void f06_pattern_items() throws Exception {
 		assertEquals("{x:'foo123'}", fr.postF06("foo123"));
-		try { fr.postF06("foo"); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
+		try { fr.postF06("foo"); fail(); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
 		assertEquals("{x:'null'}", fr.postF06((String)null));
 	}
 
@@ -865,71 +865,107 @@ public class FormDataAnnotationTest {
 	@Test
 	public void g01_multipleOf_int() throws Exception {
 		assertEquals("{x:'4'}", gr.postG01(4));
-		try { gr.postG01(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG01(5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g02_multipleOf_short() throws Exception {
 		assertEquals("{x:'4'}", gr.postG02((short)4));
-		try { gr.postG02((short)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG02((short)5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g03_multipleOf_long() throws Exception {
 		assertEquals("{x:'4'}", gr.postG03(4));
-		try { gr.postG03(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG03(5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g04_multipleOf_float() throws Exception {
 		assertEquals("{x:'4.0'}", gr.postG04(4));
-		try { gr.postG04(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG04(5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g05_multipleOf_double() throws Exception {
 		assertEquals("{x:'4.0'}", gr.postG05(4));
-		try { gr.postG05(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG05(5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g06_multipleOf_byte() throws Exception {
 		assertEquals("{x:'4'}", gr.postG06((byte)4));
-		try { gr.postG06((byte)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG06((byte)5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g07_multipleOf_AtomicInteger() throws Exception {
 		assertEquals("{x:'4'}", gr.postG07(new AtomicInteger(4)));
-		try { gr.postG07(new AtomicInteger(5)); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG07(new AtomicInteger(5)); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g08_multipleOf_BigDecimal() throws Exception {
 		assertEquals("{x:'4'}", gr.postG08(new BigDecimal(4)));
-		try { gr.postG08(new BigDecimal(5)); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG08(new BigDecimal(5)); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g11_multipleOf_Integer() throws Exception {
 		assertEquals("{x:'4'}", gr.postG11(4));
-		try { gr.postG11(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG11(5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g12_multipleOf_Short() throws Exception {
 		assertEquals("{x:'4'}", gr.postG12((short)4));
-		try { gr.postG12((short)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG12((short)5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g13_multipleOf_Long() throws Exception {
 		assertEquals("{x:'4'}", gr.postG13(4l));
-		try { gr.postG13(5l); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG13(5l); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g14_multipleOf_Float() throws Exception {
 		assertEquals("{x:'4.0'}", gr.postG14(4f));
-		try { gr.postG14(5f); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG14(5f); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g15_multipleOf_Double() throws Exception {
 		assertEquals("{x:'4.0'}", gr.postG15(4d));
-		try { gr.postG15(5d); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG15(5d); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 	@Test
 	public void g16_multipleOf_Byte() throws Exception {
 		assertEquals("{x:'4'}", gr.postG16((byte)4));
-		try { gr.postG16((byte)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+		try { gr.postG16((byte)5); fail(); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+
+	//=================================================================================================================
+	// @FormData(required)
+	//=================================================================================================================
+
+	@RestResource
+	public static class H {
+		@RestMethod
+		public String post(@FormData("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest h = MockRest.create(H.class);
+
+	@RemoteResource
+	public static interface HR {
+		@RemoteMethod(path="/") String postH01(@FormData(name="x") String b);
+		@RemoteMethod(path="/") String postH02(@FormData(name="x",required=false) String b);
+		@RemoteMethod(path="/") String postH03(@FormData(name="x",required=true) String b);
+	}
+
+	private static HR hr = RestClient.create().mockHttpConnection(h).build().getRemoteResource(HR.class);
+
+	@Test
+	public void h01_required_default() throws Exception {
+		assertEquals("{}", hr.postH01(null));
+	}
+	@Test
+	public void h02_required_false() throws Exception {
+		assertEquals("{}", hr.postH02(null));
+	}
+	@Test
+	public void h03_required_true() throws Exception {
+		assertEquals("{x:'1'}", hr.postH03("1"));
+		try { hr.postH03(null); fail(); } catch (Exception e) { assertContains(e, "Required value not provided."); }
 	}
 }

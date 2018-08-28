@@ -263,6 +263,8 @@ public class HttpPartSchemaBuilder {
 		// Path remainder always allows empty value.
 		if (startsWith(name, '/'))
 			allowEmptyValue();
+		else
+			required(true);
 
 		return this;
 	}
