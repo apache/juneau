@@ -460,6 +460,7 @@ public @interface FormData {
 	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
 	 * 	<li>
 	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 			<br>Note: This is not supported by {@link OpenApiSerializer}.
 	 * 	<li>
 	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
 	 * </ul>

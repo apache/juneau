@@ -67,9 +67,9 @@ public class FormDataAnnotationTest {
 		@RemoteMethod(path="a") String postA03b(@FormData("*") Bean b);
 		@RemoteMethod(path="a") String postA03c(@FormData Bean b);
 		@RemoteMethod(path="a") String postA04a(@FormData("x") Bean[] b);
-		@RemoteMethod(path="a") String postA04b(@FormData(name="x",format="uon") Bean[] b);
+		@RemoteMethod(path="a") String postA04b(@FormData(name="x",collectionFormat="uon") Bean[] b);
 		@RemoteMethod(path="a") String postA05a(@FormData("x") List<Bean> b);
-		@RemoteMethod(path="a") String postA05b(@FormData(name="x",format="uon") List<Bean> b);
+		@RemoteMethod(path="a") String postA05b(@FormData(name="x",collectionFormat="uon") List<Bean> b);
 		@RemoteMethod(path="a") String postA06a(@FormData("x") Map<String,Bean> b);
 		@RemoteMethod(path="a") String postA06b(@FormData("*") Map<String,Bean> b);
 		@RemoteMethod(path="a") String postA06c(@FormData Map<String,Bean> b);
@@ -167,7 +167,7 @@ public class FormDataAnnotationTest {
 	}
 
 	//=================================================================================================================
-	// @FormData(_default)
+	// @FormData(_default/allowEmptyValue)
 	//=================================================================================================================
 
 	@RestResource
@@ -228,5 +228,101 @@ public class FormDataAnnotationTest {
 	@Test
 	public void b04b_defaultIsBlank_allowEmptyValue_emptyString() throws Exception {
 		assertEquals("{x:''}", br.postB04(""));
+	}
+
+	//=================================================================================================================
+	// @FormData(collectionFormat)
+	//=================================================================================================================
+
+	@RestResource
+	public static class C {
+		@RestMethod
+		public String postA(@FormData("*") ObjectMap m) {
+			return m.toString();
+		}
+		@RestMethod
+		public Reader postB(@Body Reader b) {
+			return b;
+		}
+	}
+	private static MockRest c = MockRest.create(C.class);
+
+	@RemoteResource
+	public static interface CR {
+		@RemoteMethod(path="/a") String postC01a(@FormData(name="x") String...b);
+		@RemoteMethod(path="/b") String postC01b(@FormData(name="x") String...b);
+		@RemoteMethod(path="/a") String postC02a(@FormData(name="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/b") String postC02b(@FormData(name="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/a") String postC03a(@FormData(name="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/b") String postC03b(@FormData(name="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/a") String postC04a(@FormData(name="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/b") String postC04b(@FormData(name="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/a") String postC05a(@FormData(name="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/b") String postC05b(@FormData(name="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/a") String postC06a(@FormData(name="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/b") String postC06b(@FormData(name="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/a") String postC07a(@FormData(name="x",collectionFormat="uon") String...b);
+		@RemoteMethod(path="/b") String postC07b(@FormData(name="x",collectionFormat="uon") String...b);
+	}
+
+	private static CR cr = RestClient.create().mockHttpConnection(c).build().getRemoteResource(CR.class);
+
+	@Test
+	public void c01a_default() throws Exception {
+		assertEquals("{x:'foo,bar'}", cr.postC01a("foo","bar"));
+	}
+	@Test
+	public void c01b_default_raw() throws Exception {
+		assertEquals("x=foo%2Cbar", cr.postC01b("foo","bar"));
+	}
+	@Test
+	public void c02a_csv() throws Exception {
+		assertEquals("{x:'foo,bar'}", cr.postC02a("foo","bar"));
+	}
+	@Test
+	public void c02b_csv_raw() throws Exception {
+		assertEquals("x=foo%2Cbar", cr.postC02b("foo","bar"));
+	}
+	@Test
+	public void c03a_ssv() throws Exception {
+		assertEquals("{x:'foo bar'}", cr.postC03a("foo","bar"));
+	}
+	@Test
+	public void c03b_ssv_raw() throws Exception {
+		assertEquals("x=foo+bar", cr.postC03b("foo","bar"));
+	}
+	@Test
+	public void c04a_tsv() throws Exception {
+		assertEquals("{x:'foo\\tbar'}", cr.postC04a("foo","bar"));
+	}
+	@Test
+	public void c04b_tsv_raw() throws Exception {
+		assertEquals("x=foo%09bar", cr.postC04b("foo","bar"));
+	}
+	@Test
+	public void c05a_pipes() throws Exception {
+		assertEquals("{x:'foo|bar'}", cr.postC05a("foo","bar"));
+	}
+	@Test
+	public void c05b_pipes_raw() throws Exception {
+		assertEquals("x=foo%7Cbar", cr.postC05b("foo","bar"));
+	}
+	@Test
+	public void c06a_multi() throws Exception {
+		// Not supported, but should be treated as csv.
+		assertEquals("{x:'foo,bar'}", cr.postC06a("foo","bar"));
+	}
+	@Test
+	public void c06b_multi_raw() throws Exception {
+		// Not supported, but should be treated as csv.
+		assertEquals("x=foo%2Cbar", cr.postC06b("foo","bar"));
+	}
+	@Test
+	public void c07a_uon() throws Exception {
+		assertEquals("{x:'@(foo,bar)'}", cr.postC07a("foo","bar"));
+	}
+	@Test
+	public void c07b_uon_raw() throws Exception {
+		assertEquals("x=%40%28foo%2Cbar%29", cr.postC07b("foo","bar"));
 	}
 }

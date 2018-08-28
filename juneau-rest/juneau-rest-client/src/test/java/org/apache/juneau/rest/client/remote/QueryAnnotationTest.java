@@ -21,6 +21,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -66,9 +67,9 @@ public class QueryAnnotationTest {
 		@RemoteMethod(path="a") String getA03b(@Query("*") Bean b);
 		@RemoteMethod(path="a") String getA03c(@Query Bean b);
 		@RemoteMethod(path="a") String getA04a(@Query("x") Bean[] b);
-		@RemoteMethod(path="a") String getA04b(@Query(name="x",format="uon") Bean[] b);
+		@RemoteMethod(path="a") String getA04b(@Query(name="x",collectionFormat="uon") Bean[] b);
 		@RemoteMethod(path="a") String getA05a(@Query("x") List<Bean> b);
-		@RemoteMethod(path="a") String getA05b(@Query(name="x",format="uon") List<Bean> b);
+		@RemoteMethod(path="a") String getA05b(@Query(name="x",collectionFormat="uon") List<Bean> b);
 		@RemoteMethod(path="a") String getA06a(@Query("x") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06b(@Query("*") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06c(@Query Map<String,Bean> b);
@@ -166,7 +167,7 @@ public class QueryAnnotationTest {
 	}
 
 	//=================================================================================================================
-	// @Query(_default)
+	// @Query(_default/allowEmptyValue)
 	//=================================================================================================================
 
 	@RestResource
@@ -227,5 +228,101 @@ public class QueryAnnotationTest {
 	@Test
 	public void b04b_defaultIsBlank_allowEmptyValue_emptyString() throws Exception {
 		assertEquals("{x:''}", br.getB04(""));
+	}
+
+	//=================================================================================================================
+	// @Query(collectionFormat)
+	//=================================================================================================================
+
+	@RestResource
+	public static class C {
+		@RestMethod
+		public String getA(@Query("*") ObjectMap m) {
+			return m.toString();
+		}
+		@RestMethod
+		public Reader getB(RestRequest req) {
+			return new StringReader(req.getQueryString());
+		}
+	}
+	private static MockRest c = MockRest.create(C.class);
+
+	@RemoteResource
+	public static interface CR {
+		@RemoteMethod(path="/a") String getC01a(@Query(name="x") String...b);
+		@RemoteMethod(path="/b") String getC01b(@Query(name="x") String...b);
+		@RemoteMethod(path="/a") String getC02a(@Query(name="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/b") String getC02b(@Query(name="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/a") String getC03a(@Query(name="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/b") String getC03b(@Query(name="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/a") String getC04a(@Query(name="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/b") String getC04b(@Query(name="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/a") String getC05a(@Query(name="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/b") String getC05b(@Query(name="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/a") String getC06a(@Query(name="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/b") String getC06b(@Query(name="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/a") String getC07a(@Query(name="x",collectionFormat="uon") String...b);
+		@RemoteMethod(path="/b") String getC07b(@Query(name="x",collectionFormat="uon") String...b);
+	}
+
+	private static CR cr = RestClient.create().mockHttpConnection(c).build().getRemoteResource(CR.class);
+
+	@Test
+	public void c01a_default() throws Exception {
+		assertEquals("{x:'foo,bar'}", cr.getC01a("foo","bar"));
+	}
+	@Test
+	public void c01b_default_raw() throws Exception {
+		assertEquals("x=foo%2Cbar", cr.getC01b("foo","bar"));
+	}
+	@Test
+	public void c02a_csv() throws Exception {
+		assertEquals("{x:'foo,bar'}", cr.getC02a("foo","bar"));
+	}
+	@Test
+	public void c02b_csv_raw() throws Exception {
+		assertEquals("x=foo%2Cbar", cr.getC02b("foo","bar"));
+	}
+	@Test
+	public void c03a_ssv() throws Exception {
+		assertEquals("{x:'foo bar'}", cr.getC03a("foo","bar"));
+	}
+	@Test
+	public void c03b_ssv_raw() throws Exception {
+		assertEquals("x=foo+bar", cr.getC03b("foo","bar"));
+	}
+	@Test
+	public void c04a_tsv() throws Exception {
+		assertEquals("{x:'foo\\tbar'}", cr.getC04a("foo","bar"));
+	}
+	@Test
+	public void c04b_tsv_raw() throws Exception {
+		assertEquals("x=foo%09bar", cr.getC04b("foo","bar"));
+	}
+	@Test
+	public void c05a_pipes() throws Exception {
+		assertEquals("{x:'foo|bar'}", cr.getC05a("foo","bar"));
+	}
+	@Test
+	public void c05b_pipes_raw() throws Exception {
+		assertEquals("x=foo%7Cbar", cr.getC05b("foo","bar"));
+	}
+	@Test
+	public void c06a_multi() throws Exception {
+		// Not supported, but should be treated as csv.
+		assertEquals("{x:'foo,bar'}", cr.getC06a("foo","bar"));
+	}
+	@Test
+	public void c06b_multi_raw() throws Exception {
+		// Not supported, but should be treated as csv.
+		assertEquals("x=foo%2Cbar", cr.getC06b("foo","bar"));
+	}
+	@Test
+	public void c07a_uon() throws Exception {
+		assertEquals("{x:'@(foo,bar)'}", cr.getC07a("foo","bar"));
+	}
+	@Test
+	public void c07b_uon_raw() throws Exception {
+		assertEquals("x=%40%28foo%2Cbar%29", cr.getC07b("foo","bar"));
 	}
 }

@@ -63,9 +63,9 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="a/{x}") String getA03b(@Path("*") Bean b);
 		@RemoteMethod(path="a/{x}") String getA03c(@Path Bean b);
 		@RemoteMethod(path="a/{x}") String getA04a(@Path("x") Bean[] b);
-		@RemoteMethod(path="a/{x}") String getA04b(@Path(name="x",format="uon") Bean[] b);
+		@RemoteMethod(path="a/{x}") String getA04b(@Path(name="x",collectionFormat="uon") Bean[] b);
 		@RemoteMethod(path="a/{x}") String getA05a(@Path("x") List<Bean> b);
-		@RemoteMethod(path="a/{x}") String getA05b(@Path(name="x",format="uon") List<Bean> b);
+		@RemoteMethod(path="a/{x}") String getA05b(@Path(name="x",collectionFormat="uon") List<Bean> b);
 		@RemoteMethod(path="a/{x}") String getA06a(@Path("x") Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getA06b(@Path("*") Map<String,Bean> b);
 		@RemoteMethod(path="a/{x}") String getA06c(@Path Map<String,Bean> b);
@@ -140,5 +140,62 @@ public class PathAnnotationTest {
 	@Test
 	public void a09b_NameValuePairs() throws Exception {
 		assertEquals("bar", a01.getA09b(new NameValuePairs().append("x", "bar")));
+	}
+
+
+	//=================================================================================================================
+	// @Query(collectionFormat)
+	//=================================================================================================================
+
+	@RestResource
+	public static class C {
+		@RestMethod(path="/a/{x}")
+		public String getA(@Path("x") Object x) {
+			return x.toString();
+		}
+	}
+	private static MockRest c = MockRest.create(C.class);
+
+	@RemoteResource
+	public static interface CR {
+		@RemoteMethod(path="/a/{x}") String getC01(@Path(name="x") String...b);
+		@RemoteMethod(path="/a/{x}") String getC02(@Path(name="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/a/{x}") String getC03(@Path(name="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/a/{x}") String getC04(@Path(name="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/a/{x}") String getC05(@Path(name="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/a/{x}") String getC06(@Path(name="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/a/{x}") String getC07(@Path(name="x",collectionFormat="uon") String...b);
+	}
+
+	private static CR cr = RestClient.create().mockHttpConnection(c).build().getRemoteResource(CR.class);
+
+	@Test
+	public void c01a_default() throws Exception {
+		assertEquals("foo,bar", cr.getC01("foo","bar"));
+	}
+	@Test
+	public void c02a_csv() throws Exception {
+		assertEquals("foo,bar", cr.getC02("foo","bar"));
+	}
+	@Test
+	public void c03a_ssv() throws Exception {
+		assertEquals("foo bar", cr.getC03("foo","bar"));
+	}
+	@Test
+	public void c04a_tsv() throws Exception {
+		assertEquals("foo\tbar", cr.getC04("foo","bar"));
+	}
+	@Test
+	public void c05a_pipes() throws Exception {
+		assertEquals("foo|bar", cr.getC05("foo","bar"));
+	}
+	@Test
+	public void c06a_multi() throws Exception {
+		// Not supported, but should be treated as csv.
+		assertEquals("foo,bar", cr.getC06("foo","bar"));
+	}
+	@Test
+	public void c07a_uon() throws Exception {
+		assertEquals("@(foo,bar)", cr.getC07("foo","bar"));
 	}
 }

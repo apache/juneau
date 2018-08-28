@@ -132,7 +132,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 			} else if (t == ARRAY) {
 
-				if (f == HttpPartSchema.Format.UON)
+				if (cf == HttpPartSchema.CollectionFormat.UON)
 					out = super.serialize(partType, null, toList(partType, type, value, schema));
 				else {
 					List<String> l = new ArrayList<>();

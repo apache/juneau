@@ -408,7 +408,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void d05_arrayType_collectionFormatUon() throws Exception {
-		HttpPartSchema ps = schema("array","uon").build();
+		HttpPartSchema ps = schema("array").collectionFormat("uon").build();
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new String[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new Object[]{"foo","bar","null",null}));
 		assertEquals("@(foo,bar,'null',null)", s.serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
@@ -958,7 +958,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void h04_objectType_2d_uon() throws Exception {
-		HttpPartSchema ps = schema("array","uon").items(schema("object")).build();
+		HttpPartSchema ps = schema("array").collectionFormat("uon").items(schema("object")).build();
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", s.serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", s.serialize(ps, AList.create(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", s.serialize(ps, new ObjectMap[]{new ObjectMap("{f1:'1',f2:2,f3:true}"),new ObjectMap("{f1:null,f2:null,f3:null}"),null}));
@@ -997,7 +997,7 @@ public class OpenApiPartSerializerTest {
 
 	@Test
 	public void h03_objectType_3d_uon() throws Exception {
-		HttpPartSchema ps = schema("array","uon").items(schema("array").items(schema("object"))).build();
+		HttpPartSchema ps = schema("array").collectionFormat("uon").items(schema("array").items(schema("object"))).build();
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", s.serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", s.serialize(ps, AList.create(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", s.serialize(ps, AList.create(AList.create(new H1("1",2,true),new H1("x",3,false)),AList.create(new H1(null,null,null),null),null)));

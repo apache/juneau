@@ -66,9 +66,9 @@ public class HeaderAnnotationTest {
 		@RemoteMethod(path="a") String getA03b(@Header("*") Bean b);
 		@RemoteMethod(path="a") String getA03c(@Header Bean b);
 		@RemoteMethod(path="a") String getA04a(@Header("x") Bean[] b);
-		@RemoteMethod(path="a") String getA04b(@Header(name="x",format="uon") Bean[] b);
+		@RemoteMethod(path="a") String getA04b(@Header(name="x",collectionFormat="uon") Bean[] b);
 		@RemoteMethod(path="a") String getA05a(@Header("x") List<Bean> b);
-		@RemoteMethod(path="a") String getA05b(@Header(name="x",format="uon") List<Bean> b);
+		@RemoteMethod(path="a") String getA05b(@Header(name="x",collectionFormat="uon") List<Bean> b);
 		@RemoteMethod(path="a") String getA06a(@Header("x") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06b(@Header("*") Map<String,Bean> b);
 		@RemoteMethod(path="a") String getA06c(@Header Map<String,Bean> b);
@@ -146,7 +146,7 @@ public class HeaderAnnotationTest {
 	}
 
 	//=================================================================================================================
-	// @Header(_default)
+	// @Header(_default/allowEmptyValue)
 	//=================================================================================================================
 
 	@RestResource
@@ -208,5 +208,62 @@ public class HeaderAnnotationTest {
 	@Test
 	public void b04b_defaultIsBlank_allowEmptyValue_emptyString() throws Exception {
 		assertEquals("{x:''}", br.getB04(""));
+	}
+
+	//=================================================================================================================
+	// @Header(collectionFormat)
+	//=================================================================================================================
+
+	@RestResource
+	public static class C {
+		@RestMethod
+		public String getA(@Header("*") ObjectMap m) {
+			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
+			return m.toString();
+		}
+	}
+	private static MockRest c = MockRest.create(C.class);
+
+	@RemoteResource
+	public static interface CR {
+		@RemoteMethod(path="/a") String getC01(@Header(name="x") String...b);
+		@RemoteMethod(path="/a") String getC02(@Header(name="x",collectionFormat="csv") String...b);
+		@RemoteMethod(path="/a") String getC03(@Header(name="x",collectionFormat="ssv") String...b);
+		@RemoteMethod(path="/a") String getC04(@Header(name="x",collectionFormat="tsv") String...b);
+		@RemoteMethod(path="/a") String getC05(@Header(name="x",collectionFormat="pipes") String...b);
+		@RemoteMethod(path="/a") String getC06(@Header(name="x",collectionFormat="multi") String...b);
+		@RemoteMethod(path="/a") String getC07(@Header(name="x",collectionFormat="uon") String...b);
+	}
+
+	private static CR cr = RestClient.create().mockHttpConnection(c).build().getRemoteResource(CR.class);
+
+	@Test
+	public void c01a_default() throws Exception {
+		assertEquals("{x:'foo,bar'}", cr.getC01("foo","bar"));
+	}
+	@Test
+	public void c02a_csv() throws Exception {
+		assertEquals("{x:'foo,bar'}", cr.getC02("foo","bar"));
+	}
+	@Test
+	public void c03a_ssv() throws Exception {
+		assertEquals("{x:'foo bar'}", cr.getC03("foo","bar"));
+	}
+	@Test
+	public void c04a_tsv() throws Exception {
+		assertEquals("{x:'foo\\tbar'}", cr.getC04("foo","bar"));
+	}
+	@Test
+	public void c05a_pipes() throws Exception {
+		assertEquals("{x:'foo|bar'}", cr.getC05("foo","bar"));
+	}
+	@Test
+	public void c06a_multi() throws Exception {
+		// Not supported, but should be treated as csv.
+		assertEquals("{x:'foo,bar'}", cr.getC06("foo","bar"));
+	}
+	@Test
+	public void c07a_uon() throws Exception {
+		assertEquals("{x:'@(foo,bar)'}", cr.getC07("foo","bar"));
 	}
 }
