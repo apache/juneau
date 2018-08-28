@@ -134,7 +134,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-marshall.ReadingContinuousStreams'>Reading Continuous Streams</a></p>
 		<li><p class='updated'><a class='doclink' href='#juneau-marshall.URIs'>URIs</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.JacksonComparison'>Comparison with Jackson</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-marshall.PojoCategories'>POJO Categories</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.JsonDetails'>JSON Details</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-marshall.JsonDetails.Methodology'>JSON Methodology</a></p>
@@ -188,8 +188,8 @@
 		<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails'>OpenAPI Details</a></p>
 		<ol>
 			<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Methodology'>OpenAPI Methodology</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a></p>
-			<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a></p>
+			<li><p class='todo'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.BestPractices'>Best Practices</a></p>
 	</ol>
@@ -3996,7 +3996,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-marshall.PojoCategories' id='juneau-marshall.PojoCategories'>2.18 - POJO Categories</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-marshall.PojoCategories' id='juneau-marshall.PojoCategories'>2.18 - POJO Categories</a></h3>
 <div class='topic'><!-- START: 2.18 - juneau-marshall.PojoCategories -->
 <p>
 	The following chart shows POJOs categorized into groups and whether they can be serialized or parsed:
@@ -8662,6 +8662,8 @@
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
 </ul>
 
 <!-- ==================================================================================================== -->
@@ -8812,7 +8814,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Serializers' id='juneau-marshall.OpenApiDetails.Serializers'>2.25.2 - OpenAPI Serializers</a></h4>
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Serializers' id='juneau-marshall.OpenApiDetails.Serializers'>2.25.2 - OpenAPI Serializers</a></h4>
 <div class='topic'><!-- START: 2.25.2 - juneau-marshall.OpenApiDetails.Serializers -->
 <p>
 	The {@link org.apache.juneau.oapi.OpenApiSerializer} class is used to convert POJOs to HTTP parts.
@@ -9251,7 +9253,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Parsers' id='juneau-marshall.OpenApiDetails.Parsers'>2.25.3 - OpenAPI Parsers</a></h4>
+<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Parsers' id='juneau-marshall.OpenApiDetails.Parsers'>2.25.3 - OpenAPI Parsers</a></h4>
 <div class='topic'><!-- START: 2.25.3 - juneau-marshall.OpenApiDetails.Parsers -->
 <p>
 	The {@link org.apache.juneau.oapi.OpenApiParser} class is used to convert HTTP parts back into POJOs.
@@ -15208,8 +15210,8 @@
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/testBody"</js>)	
 	<jk>public void</jk> testBody(
 		<ja>@Body</ja>(
-			serializers=OpenApiSerializer.<jk>class</jk>,
-			defaultAccept=<js>"text/openapi"</js>,
+			parsers=OpenApiParser.<jk>class</jk>,
+			defaultContentType=<js>"text/openapi"</js>,
 			schema=<ja>@Schema</ja>(
 				items=<ja>@Items</ja>(
 					collectionFormat=<js>"pipes"</js>,
@@ -16803,7 +16805,7 @@
 	}
 </p>
 <p>
-	The <code><ja>@Response</ja>(schema)</code> can be used to define the format of the output using OpenAPI-based rules.
+	The <code><ja>@Response</ja>(schema)</code> annotation can be used to define the format of the output using OpenAPI-based rules.
 </p>
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>
@@ -31320,13 +31322,14 @@ TODO(7.2.0)
 				<li class='jc'>{@link org.apache.juneau.httppart.HttpPartType}
 				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.uon.UonSerializer}
+					<li class='jc'><code><del>UonPartSerializer</del></code>
+					<li class='jc'><code><del>SimpleUonPartSerializer}
 					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer}
 				</ul>
 				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
 				<ul>
-					<li class='jc'>{@link org.apache.juneau.uon.UonParser}
-					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartParser}
+					<li class='jc'><code><del>UonPartParser</del></code>
+					<li class='jc'><code><del>SimplePartParser</del></code>
 				</ul>
 			</ul>
 		</ul>

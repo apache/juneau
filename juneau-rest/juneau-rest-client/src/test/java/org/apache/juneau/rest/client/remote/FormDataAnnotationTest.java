@@ -346,6 +346,7 @@ public class FormDataAnnotationTest {
 		@RemoteMethod(path="/") String postC01a(@FormData(name="x",minimum="1",maximum="10") int b);
 		@RemoteMethod(path="/") String postC01b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) int b);
 		@RemoteMethod(path="/") String postC01c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
+		@RemoteMethod(path="/") String postC01d(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) int b);
 		@RemoteMethod(path="/") String postC02a(@FormData(name="x",minimum="1",maximum="10") short b);
 		@RemoteMethod(path="/") String postC02b(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=false,exclusiveMaximum=false) short b);
 		@RemoteMethod(path="/") String postC02c(@FormData(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) short b);
@@ -760,5 +761,175 @@ public class FormDataAnnotationTest {
 	public void e06_uniqueItems_items_true() throws Exception {
 		assertEquals("{x:'1|2'}", er.postE06(new String[]{"1","2"}));
 		try { assertEquals("{x:'1|1'}", er.postE06(new String[]{"1","1"})); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
+	}
+
+	//=================================================================================================================
+	// @FormData(maxLength,minLength,enum,pattern)
+	//=================================================================================================================
+
+	@RestResource
+	public static class F {
+		@RestMethod
+		public String post(@FormData("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest f = MockRest.create(F.class);
+
+	@RemoteResource
+	public static interface FR {
+		@RemoteMethod(path="/") String postF01(@FormData(name="x",minLength=2,maxLength=3) String b);
+		@RemoteMethod(path="/") String postF02(@FormData(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
+		@RemoteMethod(path="/") String postF03(@FormData(name="x",_enum={"foo"}) String b);
+		@RemoteMethod(path="/") String postF04(@FormData(name="x",collectionFormat="pipes",items=@Items(_enum={"foo"})) String...b);
+		@RemoteMethod(path="/") String postF05(@FormData(name="x",pattern="foo\\d{1,3}") String b);
+		@RemoteMethod(path="/") String postF06(@FormData(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
+	}
+
+	private static FR fr = RestClient.create().mockHttpConnection(f).build().getRemoteResource(FR.class);
+
+	@Test
+	public void f01_minMaxLength() throws Exception {
+		assertEquals("{x:'12'}", fr.postF01("12"));
+		assertEquals("{x:'123'}", fr.postF01("123"));
+		try { fr.postF01("1"); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
+		try { fr.postF01("1234"); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
+		assertEquals("{}", fr.postF01(null));
+	}
+	@Test
+	public void f02_minMaxLength_items() throws Exception {
+		assertEquals("{x:'12|34'}", fr.postF02("12","34"));
+		assertEquals("{x:'123|456'}", fr.postF02("123","456"));
+		try { fr.postF02("1","2"); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
+		try { fr.postF02("1234","5678"); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
+		assertEquals("{x:'12|null'}", fr.postF02("12",null));
+	}
+	@Test
+	public void f03_enum() throws Exception {
+		assertEquals("{x:'foo'}", fr.postF03("foo"));
+		try { fr.postF03("bar"); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values"); }
+		assertEquals("{}", fr.postF03(null));
+	}
+	@Test
+	public void f04_enum_items() throws Exception {
+		assertEquals("{x:'foo'}", fr.postF04("foo"));
+		try { fr.postF04("bar"); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values"); }
+		assertEquals("{x:'null'}", fr.postF04((String)null));
+	}
+	@Test
+	public void f05_pattern() throws Exception {
+		assertEquals("{x:'foo123'}", fr.postF05("foo123"));
+		try { fr.postF05("bar"); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
+		assertEquals("{}", fr.postF05(null));
+	}
+	@Test
+	public void f06_pattern_items() throws Exception {
+		assertEquals("{x:'foo123'}", fr.postF06("foo123"));
+		try { fr.postF06("foo"); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
+		assertEquals("{x:'null'}", fr.postF06((String)null));
+	}
+
+	//=================================================================================================================
+	// @FormData(multipleOf)
+	//=================================================================================================================
+
+	@RestResource
+	public static class G {
+		@RestMethod
+		public String post(@FormData("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest g = MockRest.create(G.class);
+
+	@RemoteResource
+	public static interface GR {
+		@RemoteMethod(path="/") String postG01(@FormData(name="x",multipleOf="2") int b);
+		@RemoteMethod(path="/") String postG02(@FormData(name="x",multipleOf="2") short b);
+		@RemoteMethod(path="/") String postG03(@FormData(name="x",multipleOf="2") long b);
+		@RemoteMethod(path="/") String postG04(@FormData(name="x",multipleOf="2") float b);
+		@RemoteMethod(path="/") String postG05(@FormData(name="x",multipleOf="2") double b);
+		@RemoteMethod(path="/") String postG06(@FormData(name="x",multipleOf="2") byte b);
+		@RemoteMethod(path="/") String postG07(@FormData(name="x",multipleOf="2") AtomicInteger b);
+		@RemoteMethod(path="/") String postG08(@FormData(name="x",multipleOf="2") BigDecimal b);
+		@RemoteMethod(path="/") String postG11(@FormData(name="x",multipleOf="2") Integer b);
+		@RemoteMethod(path="/") String postG12(@FormData(name="x",multipleOf="2") Short b);
+		@RemoteMethod(path="/") String postG13(@FormData(name="x",multipleOf="2") Long b);
+		@RemoteMethod(path="/") String postG14(@FormData(name="x",multipleOf="2") Float b);
+		@RemoteMethod(path="/") String postG15(@FormData(name="x",multipleOf="2") Double b);
+		@RemoteMethod(path="/") String postG16(@FormData(name="x",multipleOf="2") Byte b);
+	}
+
+	private static GR gr = RestClient.create().mockHttpConnection(g).build().getRemoteResource(GR.class);
+
+	@Test
+	public void g01_multipleOf_int() throws Exception {
+		assertEquals("{x:'4'}", gr.postG01(4));
+		try { gr.postG01(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g02_multipleOf_short() throws Exception {
+		assertEquals("{x:'4'}", gr.postG02((short)4));
+		try { gr.postG02((short)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g03_multipleOf_long() throws Exception {
+		assertEquals("{x:'4'}", gr.postG03(4));
+		try { gr.postG03(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g04_multipleOf_float() throws Exception {
+		assertEquals("{x:'4.0'}", gr.postG04(4));
+		try { gr.postG04(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g05_multipleOf_double() throws Exception {
+		assertEquals("{x:'4.0'}", gr.postG05(4));
+		try { gr.postG05(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g06_multipleOf_byte() throws Exception {
+		assertEquals("{x:'4'}", gr.postG06((byte)4));
+		try { gr.postG06((byte)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g07_multipleOf_AtomicInteger() throws Exception {
+		assertEquals("{x:'4'}", gr.postG07(new AtomicInteger(4)));
+		try { gr.postG07(new AtomicInteger(5)); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g08_multipleOf_BigDecimal() throws Exception {
+		assertEquals("{x:'4'}", gr.postG08(new BigDecimal(4)));
+		try { gr.postG08(new BigDecimal(5)); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g11_multipleOf_Integer() throws Exception {
+		assertEquals("{x:'4'}", gr.postG11(4));
+		try { gr.postG11(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g12_multipleOf_Short() throws Exception {
+		assertEquals("{x:'4'}", gr.postG12((short)4));
+		try { gr.postG12((short)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g13_multipleOf_Long() throws Exception {
+		assertEquals("{x:'4'}", gr.postG13(4l));
+		try { gr.postG13(5l); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g14_multipleOf_Float() throws Exception {
+		assertEquals("{x:'4.0'}", gr.postG14(4f));
+		try { gr.postG14(5f); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g15_multipleOf_Double() throws Exception {
+		assertEquals("{x:'4.0'}", gr.postG15(4d));
+		try { gr.postG15(5d); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g16_multipleOf_Byte() throws Exception {
+		assertEquals("{x:'4'}", gr.postG16((byte)4));
+		try { gr.postG16((byte)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
 	}
 }

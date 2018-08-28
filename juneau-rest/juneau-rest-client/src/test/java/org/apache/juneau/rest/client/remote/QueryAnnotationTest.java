@@ -761,4 +761,174 @@ public class QueryAnnotationTest {
 		assertEquals("{x:'1|2'}", er.getE06(new String[]{"1","2"}));
 		try { assertEquals("{x:'1|1'}", er.getE06(new String[]{"1","1"})); } catch (Exception e) { assertContains(e, "Duplicate items not allowed"); }
 	}
+
+	//=================================================================================================================
+	// @Query(maxLength,minLength,enum)
+	//=================================================================================================================
+
+	@RestResource
+	public static class F {
+		@RestMethod
+		public String get(@Query("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest f = MockRest.create(F.class);
+
+	@RemoteResource
+	public static interface FR {
+		@RemoteMethod(path="/") String getF01(@Query(name="x",minLength=2,maxLength=3) String b);
+		@RemoteMethod(path="/") String getF02(@Query(name="x",collectionFormat="pipes",items=@Items(minLength=2,maxLength=3)) String...b);
+		@RemoteMethod(path="/") String getF03(@Query(name="x",_enum={"foo"}) String b);
+		@RemoteMethod(path="/") String getF04(@Query(name="x",collectionFormat="pipes",items=@Items(_enum={"foo"})) String...b);
+		@RemoteMethod(path="/") String getF05(@Query(name="x",pattern="foo\\d{1,3}") String b);
+		@RemoteMethod(path="/") String getF06(@Query(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
+	}
+
+	private static FR fr = RestClient.create().mockHttpConnection(f).build().getRemoteResource(FR.class);
+
+	@Test
+	public void f01_minMaxLength() throws Exception {
+		assertEquals("{x:'12'}", fr.getF01("12"));
+		assertEquals("{x:'123'}", fr.getF01("123"));
+		try { fr.getF01("1"); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
+		try { fr.getF01("1234"); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
+		assertEquals("{}", fr.getF01(null));
+	}
+	@Test
+	public void f02_minMaxLength_items() throws Exception {
+		assertEquals("{x:'12|34'}", fr.getF02("12","34"));
+		assertEquals("{x:'123|456'}", fr.getF02("123","456"));
+		try { fr.getF02("1","2"); } catch (Exception e) { assertContains(e, "Minimum length of value not met"); }
+		try { fr.getF02("1234","5678"); } catch (Exception e) { assertContains(e, "Maximum length of value exceeded"); }
+		assertEquals("{x:'12|null'}", fr.getF02("12",null));
+	}
+	@Test
+	public void f03_enum() throws Exception {
+		assertEquals("{x:'foo'}", fr.getF03("foo"));
+		try { fr.getF03("bar"); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values.  Must be one of the following: ['foo']"); }
+		assertEquals("{}", fr.getF03(null));
+	}
+	@Test
+	public void f04_enum_items() throws Exception {
+		assertEquals("{x:'foo'}", fr.getF04("foo"));
+		try { fr.getF04("bar"); } catch (Exception e) { assertContains(e, "Value does not match one of the expected values.  Must be one of the following: ['foo']"); }
+		assertEquals("{x:'null'}", fr.getF04((String)null));
+	}
+	@Test
+	public void f05_pattern() throws Exception {
+		assertEquals("{x:'foo123'}", fr.getF05("foo123"));
+		try { fr.getF05("bar"); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
+		assertEquals("{}", fr.getF05(null));
+	}
+	@Test
+	public void f06_pattern_items() throws Exception {
+		assertEquals("{x:'foo123'}", fr.getF06("foo123"));
+		try { fr.getF06("foo"); } catch (Exception e) { assertContains(e, "Value does not match expected pattern"); }
+		assertEquals("{x:'null'}", fr.getF06((String)null));
+	}
+
+	//=================================================================================================================
+	// @Query(multipleOf)
+	//=================================================================================================================
+
+	@RestResource
+	public static class G {
+		@RestMethod
+		public String get(@Query("*") ObjectMap m) {
+			return m.toString();
+		}
+	}
+	private static MockRest g = MockRest.create(G.class);
+
+	@RemoteResource
+	public static interface GR {
+		@RemoteMethod(path="/") String getG01(@Query(name="x",multipleOf="2") int b);
+		@RemoteMethod(path="/") String getG02(@Query(name="x",multipleOf="2") short b);
+		@RemoteMethod(path="/") String getG03(@Query(name="x",multipleOf="2") long b);
+		@RemoteMethod(path="/") String getG04(@Query(name="x",multipleOf="2") float b);
+		@RemoteMethod(path="/") String getG05(@Query(name="x",multipleOf="2") double b);
+		@RemoteMethod(path="/") String getG06(@Query(name="x",multipleOf="2") byte b);
+		@RemoteMethod(path="/") String getG07(@Query(name="x",multipleOf="2") AtomicInteger b);
+		@RemoteMethod(path="/") String getG08(@Query(name="x",multipleOf="2") BigDecimal b);
+		@RemoteMethod(path="/") String getG11(@Query(name="x",multipleOf="2") Integer b);
+		@RemoteMethod(path="/") String getG12(@Query(name="x",multipleOf="2") Short b);
+		@RemoteMethod(path="/") String getG13(@Query(name="x",multipleOf="2") Long b);
+		@RemoteMethod(path="/") String getG14(@Query(name="x",multipleOf="2") Float b);
+		@RemoteMethod(path="/") String getG15(@Query(name="x",multipleOf="2") Double b);
+		@RemoteMethod(path="/") String getG16(@Query(name="x",multipleOf="2") Byte b);
+	}
+
+	private static GR gr = RestClient.create().mockHttpConnection(g).build().getRemoteResource(GR.class);
+
+	@Test
+	public void g01_multipleOf_int() throws Exception {
+		assertEquals("{x:'4'}", gr.getG01(4));
+		try { gr.getG01(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g02_multipleOf_short() throws Exception {
+		assertEquals("{x:'4'}", gr.getG02((short)4));
+		try { gr.getG02((short)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g03_multipleOf_long() throws Exception {
+		assertEquals("{x:'4'}", gr.getG03(4));
+		try { gr.getG03(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g04_multipleOf_float() throws Exception {
+		assertEquals("{x:'4.0'}", gr.getG04(4));
+		try { gr.getG04(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g05_multipleOf_double() throws Exception {
+		assertEquals("{x:'4.0'}", gr.getG05(4));
+		try { gr.getG05(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g06_multipleOf_byte() throws Exception {
+		assertEquals("{x:'4'}", gr.getG06((byte)4));
+		try { gr.getG06((byte)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g07_multipleOf_AtomicInteger() throws Exception {
+		assertEquals("{x:'4'}", gr.getG07(new AtomicInteger(4)));
+		try { gr.getG07(new AtomicInteger(5)); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g08_multipleOf_BigDecimal() throws Exception {
+		assertEquals("{x:'4'}", gr.getG08(new BigDecimal(4)));
+		try { gr.getG08(new BigDecimal(5)); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g11_multipleOf_Integer() throws Exception {
+		assertEquals("{x:'4'}", gr.getG11(4));
+		try { gr.getG11(5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g12_multipleOf_Short() throws Exception {
+		assertEquals("{x:'4'}", gr.getG12((short)4));
+		try { gr.getG12((short)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g13_multipleOf_Long() throws Exception {
+		assertEquals("{x:'4'}", gr.getG13(4l));
+		try { gr.getG13(5l); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g14_multipleOf_Float() throws Exception {
+		assertEquals("{x:'4.0'}", gr.getG14(4f));
+		try { gr.getG14(5f); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g15_multipleOf_Double() throws Exception {
+		assertEquals("{x:'4.0'}", gr.getG15(4d));
+		try { gr.getG15(5d); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
+	@Test
+	public void g16_multipleOf_Byte() throws Exception {
+		assertEquals("{x:'4'}", gr.getG16((byte)4));
+		try { gr.getG16((byte)5); } catch (Exception e) { assertContains(e, "Multiple-of not met"); }
+	}
 }
