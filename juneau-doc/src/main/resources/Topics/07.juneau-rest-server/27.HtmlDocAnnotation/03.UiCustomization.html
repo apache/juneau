@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} UI Customization
+{updated} UI Customization
 
 <p>
 	The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
@@ -38,8 +38,47 @@
 	<br>Instead, it just uses the existing open-ended API for defining branding.
 </p>
 <p>
-	The Juneau icon shown is a result of the header annotation on the {@link oajr.BasicRestServlet} class:
+	The Juneau icon shown is a result of the header annotation on the {@link oajr.BasicRestConfig} class:
 </p>	
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		...
+		<jc>// HTML-page specific settings</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+	
+			<jc>// Default page header contents.</jc>
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @RestResource(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+			},
+	
+			<jc>// Default stylesheet to use for the page.
+			// Can be overridden from external config file.
+			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+	
+			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+			// Use it to add a favicon link to the page.</jc>
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+			},
+	
+			<jc>// No default page footer contents.
+			// Can be overridden from external config file.</jc>
+			footer=<js>"$C{REST/footer}"</js>
+		),
+	
+		<jc>// Optional external configuration file.</jc>
+		config=<js>"$S{juneau.configFile}"</js>,
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+		// By default, we define static files through the external configuration file.</jc>
+		staticFiles=<js>"$C{REST/staticFiles}"</js>
+	)
+	<jk>public interface</jk> BasicRestConfig {}
+</p>
 <p class='bpcode w800'>			
 	<ja>@RestResource</ja>(
 		...
@@ -47,19 +86,20 @@
 			header={
 				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
 				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
-				<js>"&lt;a href='http://juneau.apache.org'&gt;"</js>
-					+<js>"&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;"</js>
+				<js>"&lt;a href='http://my.project.org'&gt;"</js>
+					+<js>"&lt;img src='$U{servlet:/my-htdocs/my-project.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;"</js>
 				+<js>"&lt;/a&gt;"</js>
 			},
 			head={
 				<jc>// Browser tab icon.</jc>
-				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
+				<js>"&lt;link rel='icon' href='$U{servlet:/my-htdocs/my-project.png}'/&gt;"</js>
 			}
 		),
-		staticFiles={<js>"htdocs:htdocs"</js>}
+		staticFiles={<js>"my-htdocs:my-htdocs"</js>}
 	)
-	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet {...}
+	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {...}
 </p>
+
 <p>
 	The <js>"juneau.png"</js> image file is located in <code>org.apache.juneau.rest.htdocs</code> package and 
 	is served up via the <code>staticFiles</code> annotation (i.e. anything in the <code>org.apache.juneau.rest.htdocs</code> 
@@ -133,7 +173,11 @@
 		...
 	)
 	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet {...}
-	</p>
-	<p>
-		Note how the "User Interface" is open-ended to pretty much lets you do whatever you want.
-	</p>
+</p>
+<p>
+	Note how the "User Interface" is open-ended to pretty much lets you do whatever you want.
+</p>
+<h5 class='figure'>See Also:</h5>
+<ul>
+	<li class='doclink'>{@doc juneau-microservice-server.UiCustomization}
+</ul>

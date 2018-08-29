@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.doc.internal;
 
+import static org.apache.juneau.doc.internal.Console.*;
+
 import com.sun.tools.doclets.Taglet;
 import com.sun.javadoc.*;
 
@@ -107,7 +109,7 @@ public class DocTag implements Taglet {
 			}
 			DocStore.Link l = STORE.getLink(key);
 			if (l == null) {
-				System.err.println("Unknown doc tag '" + key + "'");
+				error("Unknown doc tag: {0}", key);
 				return tag.text();
 			}
 			href = l.href;
@@ -124,7 +126,7 @@ public class DocTag implements Taglet {
 			while (true) {
 				f = f.getParentFile();
 				if (f == null) {
-					System.err.println("Unknown doc tag href: " + tag.text());
+					error("Unknown doc tag href: {0}", tag.text());
 					return tag.text();
 				}
 				if (f.getName().equals("java"))

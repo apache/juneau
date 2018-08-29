@@ -13,10 +13,10 @@
  ***************************************************************************************************************************/
  -->
 
-{updated} rRPC
+{updated} restRPC
 
 <p>
-	The rRPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
+	The restRPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
 </p>
 
 <h5 class='topic'>Remote Interfaces</h5>
@@ -202,7 +202,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote
 </p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.1.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.1.png'>
 <p>
 	Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
 	<br>Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
@@ -212,7 +212,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook
 </p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.2.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.2.png'>
 <p>
 	Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
 	framework methods listed.
@@ -221,7 +221,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.AddressBook
 </p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.3.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.3.png'>
 <p>
 	Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
 	how this works.
@@ -275,12 +275,12 @@
 	<br>We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
 	<code>text/json</code> as well.
 </p>
-<img class='bordered w400' src='doc-files/juneau-rest-server.rRPC.4.png'>
+<img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.4.png'>
 <p>
 	When we execute the POST, we should see the following successful response whose body contains the returned 
 	<code>Person</code> bean serialized to JSON:
 </p>
-<img class='bordered w400' src='doc-files/juneau-rest-server.rRPC.5.png'>
+<img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.5.png'>
 <p>
 	From there, we could use the following code snippet to reconstruct the response object from JSON:
 </p>
@@ -307,7 +307,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
 </p>			
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.6.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.6.png'>
 <p>
 	Here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the 
 	returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
@@ -316,7 +316,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
 </p>			
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.7.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.7.png'>
 <p>
 	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
 	notation.
@@ -330,6 +330,6 @@
 	passing parameters in UON notation as URL-encoded form posts.
 </p>
 <h5 class='figure'>Sample form entry page</h5>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.8.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.8.png'>
 <h5 class='figure'>Sample form entry page results</h5>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.9.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.9.png'>

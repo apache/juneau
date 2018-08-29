@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.doc.internal;
 
+import static org.apache.juneau.doc.internal.Console.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
@@ -38,14 +40,13 @@ public class DocLinkTester {
 		try {
 			long startTime = System.currentTimeMillis();
 			File root = new File("../target/site/apidocs").getCanonicalFile();
-			System.out.println("Checking " + root);
+			info("Checking links in {0}", root);
 			process(root);
-			System.out.println("Checked "+links+" links in " + files + " files in " + directories + " directories in "+(System.currentTimeMillis()-startTime)+"ms");
+			info("Checked {0} links in {1} files in {2} directories in {3}ms", links, files, directories, System.currentTimeMillis()-startTime);
 			if (errors == 0)
-				System.out.println("No errors");
+				info("No link errors");
 			else {
-				System.out.flush();
-				System.err.println(errors + " errors");  // NOT DEBUG
+				Console.error(errors + " errors");  // NOT DEBUG
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,7 +117,6 @@ public class DocLinkTester {
 
 	private static void error(File f, String msg) {
 		errors++;
-		System.out.flush();
-		System.err.println("ERROR: " + f.getAbsolutePath() + ", " + msg);  // NOT DEBUG
+		Console.error("{0}: {1}", f.getAbsolutePath(), msg);
 	}
 }

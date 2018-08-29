@@ -188,8 +188,8 @@
 		<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails'>OpenAPI Details</a></p>
 		<ol>
 			<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Methodology'>OpenAPI Methodology</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Serializers'>OpenAPI Serializers</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-marshall.OpenApiDetails.Parsers'>OpenAPI Parsers</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-marshall.BestPractices'>Best Practices</a></p>
 	</ol>
@@ -297,7 +297,7 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedExceptions'>Predefined Exceptions</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.RestMethod.PredefinedHelperBeans'>Predefined Helper Beans</a></p>
 		</ol>
-		<li><p class='updated'><a class='doclink' href='#juneau-rest-server.rRPC'>rRPC</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-rest-server.restRPC'>restRPC</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartParsing'>OpenAPI Schema Part Parsing</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.OpenApiSchemaPartSerializing'>OpenAPI Schema Part Serializing</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations'>HTTP-Part Annotations</a></p>
@@ -338,7 +338,7 @@
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.Widgets'>Widgets</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>Predefined Widgets</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization'>UI Customization</a></p>
+			<li><p class='updated'><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization'>UI Customization</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets'>Stylesheets</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.DefaultHeaders'>Default Headers</a></p>
@@ -409,7 +409,7 @@
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-microservice-server.RestMicroservice.Extending'>Extending RestMicroservice</a></p>
 		</ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-server.UiCustomization'>UI Customization</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-server.UiCustomization'>UI Customization</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></p>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></p>
@@ -2629,12 +2629,13 @@
 		<jc>// Identify concrete type as a HashMap.</jc>
 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>)
 		<jk>public</jk> Map <jf>p1</jf>;
-			</p>
-			<p>
-				The {@link org.apache.juneau.annotation.BeanProperty#params() @BeanProperty(params)} annotation
-				is for bean properties of type map or collection.
-				<br>It's used to identify the class types of the contents of the bean property object when
-				the general parameter types are interfaces or abstract classes.
+	}
+</p>
+<p>
+	The {@link org.apache.juneau.annotation.BeanProperty#params() @BeanProperty(params)} annotation
+	is for bean properties of type map or collection.
+	<br>It's used to identify the class types of the contents of the bean property object when
+	the general parameter types are interfaces or abstract classes.
 </p>
 <p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
@@ -2670,10 +2671,10 @@
 
 	<jc>// Renders "{x1:{f1:1}}"</jc>
 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
-			</p>
-			<p>
-				The {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty(format)} 
-				annotation specifies a String format for converting a bean property value to a formatted string.
+</p>
+<p>
+	The {@link org.apache.juneau.annotation.BeanProperty#format() @BeanProperty(format)} 
+	annotation specifies a String format for converting a bean property value to a formatted string.
 </p>
 <p class='bpcode w800'>
 	<jc>// Serialize a float as a string with 2 decimal places.</jc>
@@ -3284,13 +3285,13 @@
 			{_type:<js>'baz'</js>}
 		]
 	}	 
-	</p>
-	<p>
-		Type names can be represented slightly differently in different languages.
-		<br>For example, the dictionary name is used as element names when serialized to XML.
-		<br>This allows the <code>typeName</code> annotation to be used as a shortcut for defining element names for 
-		beans.
-	</p>
+</p>
+<p>
+	Type names can be represented slightly differently in different languages.
+	<br>For example, the dictionary name is used as element names when serialized to XML.
+	<br>This allows the <code>typeName</code> annotation to be used as a shortcut for defining element names for 
+	beans.
+</p>
 <p>
 	When serialized as XML, the bean is rendered as:
 </p>
@@ -8814,7 +8815,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Serializers' id='juneau-marshall.OpenApiDetails.Serializers'>2.25.2 - OpenAPI Serializers</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Serializers' id='juneau-marshall.OpenApiDetails.Serializers'>2.25.2 - OpenAPI Serializers</a></h4>
 <div class='topic'><!-- START: 2.25.2 - juneau-marshall.OpenApiDetails.Serializers -->
 <p>
 	The {@link org.apache.juneau.oapi.OpenApiSerializer} class is used to convert POJOs to HTTP parts.
@@ -9253,7 +9254,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Parsers' id='juneau-marshall.OpenApiDetails.Parsers'>2.25.3 - OpenAPI Parsers</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-marshall.OpenApiDetails.Parsers' id='juneau-marshall.OpenApiDetails.Parsers'>2.25.3 - OpenAPI Parsers</a></h4>
 <div class='topic'><!-- START: 2.25.3 - juneau-marshall.OpenApiDetails.Parsers -->
 <p>
 	The {@link org.apache.juneau.oapi.OpenApiParser} class is used to convert HTTP parts back into POJOs.
@@ -13273,7 +13274,7 @@
 	<li class='jm'><code><jk>public</jk> T()</code>
 	<li class='jm'><code><jk>public</jk> T(RestContextBuilder)</code>
 </ul>
-	<p>
+<p>
 	The latter constructor can be used to get access to the {@link org.apache.juneau.rest.RestContextBuilder} object to make
 	any configurations to the resource before it's initialized.
 </p>
@@ -14838,10 +14839,10 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.rRPC' id='juneau-rest-server.rRPC'>7.7 - rRPC</a></h3>
-<div class='topic'><!-- START: 7.7 - juneau-rest-server.rRPC -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.restRPC' id='juneau-rest-server.restRPC'>7.7 - restRPC</a></h3>
+<div class='topic'><!-- START: 7.7 - juneau-rest-server.restRPC -->
 <p>
-	The rRPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
+	The restRPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
 </p>
 
 <h5 class='topic'>Remote Interfaces</h5>
@@ -15027,7 +15028,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote
 </p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.1.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.1.png'>
 <p>
 	Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
 	<br>Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
@@ -15037,7 +15038,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook
 </p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.2.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.2.png'>
 <p>
 	Since <code>AddressBook</code> extends from <code>LinkedList</code>, you may notice familiar collections
 	framework methods listed.
@@ -15046,7 +15047,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.AddressBook
 </p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.3.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.3.png'>
 <p>
 	Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
 	how this works.
@@ -15100,12 +15101,12 @@
 	<br>We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
 	<code>text/json</code> as well.
 </p>
-<img class='bordered w400' src='doc-files/juneau-rest-server.rRPC.4.png'>
+<img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.4.png'>
 <p>
 	When we execute the POST, we should see the following successful response whose body contains the returned 
 	<code>Person</code> bean serialized to JSON:
 </p>
-<img class='bordered w400' src='doc-files/juneau-rest-server.rRPC.5.png'>
+<img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.5.png'>
 <p>
 	From there, we could use the following code snippet to reconstruct the response object from JSON:
 </p>
@@ -15132,7 +15133,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
 </p>			
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.6.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.6.png'>
 <p>
 	Here we call the <code>findPerson(<jk>int</jk>)</code> method to retrieve a person and get the 
 	returned POJO (in this case as HTML since that's what's in the <code>Accept</code> header when calling from a 
@@ -15141,7 +15142,7 @@
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
 </p>			
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.7.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.7.png'>
 <p>
 	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
 	notation.
@@ -15155,10 +15156,10 @@
 	passing parameters in UON notation as URL-encoded form posts.
 </p>
 <h5 class='figure'>Sample form entry page</h5>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.8.png'>
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.8.png'>
 <h5 class='figure'>Sample form entry page results</h5>
-<img class='bordered w800' src='doc-files/juneau-rest-server.rRPC.9.png'>
-</div><!-- END: 7.7 - juneau-rest-server.rRPC -->
+<img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.9.png'>
+</div><!-- END: 7.7 - juneau-rest-server.restRPC -->
 
 <!-- ==================================================================================================== -->
 
@@ -18754,7 +18755,7 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>7.27.3 - UI Customization</a></h4>
+<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>7.27.3 - UI Customization</a></h4>
 <div class='topic'><!-- START: 7.27.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 <p>
 	The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
@@ -18779,8 +18780,47 @@ TODO(7.2.0)
 	<br>Instead, it just uses the existing open-ended API for defining branding.
 </p>
 <p>
-	The Juneau icon shown is a result of the header annotation on the {@link org.apache.juneau.rest.BasicRestServlet} class:
+	The Juneau icon shown is a result of the header annotation on the {@link org.apache.juneau.rest.BasicRestConfig} class:
 </p>	
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		...
+		<jc>// HTML-page specific settings</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+	
+			<jc>// Default page header contents.</jc>
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @RestResource(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+			},
+	
+			<jc>// Default stylesheet to use for the page.
+			// Can be overridden from external config file.
+			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+	
+			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+			// Use it to add a favicon link to the page.</jc>
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+			},
+	
+			<jc>// No default page footer contents.
+			// Can be overridden from external config file.</jc>
+			footer=<js>"$C{REST/footer}"</js>
+		),
+	
+		<jc>// Optional external configuration file.</jc>
+		config=<js>"$S{juneau.configFile}"</js>,
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+		// By default, we define static files through the external configuration file.</jc>
+		staticFiles=<js>"$C{REST/staticFiles}"</js>
+	)
+	<jk>public interface</jk> BasicRestConfig {}
+</p>
 <p class='bpcode w800'>			
 	<ja>@RestResource</ja>(
 		...
@@ -18788,19 +18828,20 @@ TODO(7.2.0)
 			header={
 				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
 				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>,
-				<js>"&lt;a href='http://juneau.apache.org'&gt;"</js>
-					+<js>"&lt;img src='$U{servlet:/htdocs/juneau.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;"</js>
+				<js>"&lt;a href='http://my.project.org'&gt;"</js>
+					+<js>"&lt;img src='$U{servlet:/my-htdocs/my-project.png}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;"</js>
 				+<js>"&lt;/a&gt;"</js>
 			},
 			head={
 				<jc>// Browser tab icon.</jc>
-				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/juneau.png}'/&gt;"</js>
+				<js>"&lt;link rel='icon' href='$U{servlet:/my-htdocs/my-project.png}'/&gt;"</js>
 			}
 		),
-		staticFiles={<js>"htdocs:htdocs"</js>}
+		staticFiles={<js>"my-htdocs:my-htdocs"</js>}
 	)
-	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet {...}
+	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {...}
 </p>
+
 <p>
 	The <js>"juneau.png"</js> image file is located in <code>org.apache.juneau.rest.htdocs</code> package and 
 	is served up via the <code>staticFiles</code> annotation (i.e. anything in the <code>org.apache.juneau.rest.htdocs</code> 
@@ -18874,10 +18915,14 @@ TODO(7.2.0)
 		...
 	)
 	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet {...}
-	</p>
-	<p>
-		Note how the "User Interface" is open-ended to pretty much lets you do whatever you want.
-	</p>
+</p>
+<p>
+	Note how the "User Interface" is open-ended to pretty much lets you do whatever you want.
+</p>
+<h5 class='figure'>See Also:</h5>
+<ul>
+	<li class='doclink'>{@doc juneau-microservice-server.UiCustomization}
+</ul>
 </div><!-- END: 7.27.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 
 <!-- ==================================================================================================== -->
@@ -20109,8 +20154,6 @@ TODO(7.2.0)
 		<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
 	</ul>
@@ -20992,25 +21035,18 @@ TODO(7.2.0)
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>9.1.9 - @Response</a></h4>
 <div class='topic'><!-- START: 9.1.9 - juneau-rest-client.RestProxies.Response -->
 <p>
-	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to either <ja>@RemoteMethod</ja>-annotated methods
-	or types returned by <ja>@RemoteMethod</ja>-annotated methods.
+	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteMethod</ja>-annotated methods.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partParser() partParser} - Override the part parser.
-		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#schema() schema} - Swagger schema.
 	</ul>
 </ul>
-<h5 class='topic'>On @RemoteMethod-annotated methods</h5>
 <p>
-	The annotation can be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
+	The <ja>@Response</ja> annotation can be used to define interfaces for retrieving response parts using a bean-like proxy.
 </p>
-
-<h5 class='topic'>Response interfaces</h5>
-<p>
-	The <ja>@Response</ja> annotation can also be used to define interfaces for retrieving response parts using a bean-like proxies.
-</p>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
 	<ja>@RemoteResource</ja>
 	<jk>public interface</jk> PetStore {
@@ -21052,6 +21088,9 @@ TODO(7.2.0)
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
 	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
 </ul>
+<p>
+	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
+</p>
 </div><!-- END: 9.1.9 - juneau-rest-client.RestProxies.Response -->
 </div><!-- END: 9.1 - juneau-rest-client.RestProxies -->
 
@@ -22529,9 +22568,117 @@ TODO(7.2.0)
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-server.UiCustomization' id='juneau-microservice-server.UiCustomization'>10.8 - UI Customization</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-server.UiCustomization' id='juneau-microservice-server.UiCustomization'>10.8 - UI Customization</a></h3>
 <div class='topic'><!-- START: 10.8 - juneau-microservice-server.UiCustomization -->
-TODO(7.2.0)
+<p>
+	The Microservice project contains a <code>files/htdocs</code> working directly folder with predefined stylesheets and
+	images.
+</p>
+<img style='width:200px' src='doc-files/juneau-microservice.UiCustomization.1.png'>
+<p>
+	These files can be used to tailor the look-and-feel of your microservice.
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/helloWorld
+</p>
+<img class='bordered w800' src='doc-files/juneau-rest-server.UiCustomization.1.png'>
+<p>
+	The REST configuration section of your microservice configuration file can be used to tailor the header and footer on the pages:
+</p>
+<p class='bpcode w800'>
+	<cc>#=======================================================================================================================
+	# REST settings
+	#=======================================================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
+	
+	<cc># Stylesheet to use for HTML views.</cc>
+	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+	
+	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+	
+	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
+	<ck>header</ck> = 
+		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;</cv>
+			<cv>&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;</cv>
+		<cv>&lt;/a&gt;</cv>
+	<ck>footer</ck> = 
+		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;</cv>
+			<cv>&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;</cv>
+		<cv>&lt;/a&gt;</cv>
+</p>
+<p>
+	The {@link org.apache.juneau.rest.BasicRestConfig} interface (which defines the default settings for {@link org.apache.juneau.rest.BasicRestServlet} 
+	pulls in this information using {@link org.apache.juneau.config.vars.ConfigVar $C} and {@link org.apache.juneau.rest.vars.UrlVar $U} variables:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		...
+		<jc>// HTML-page specific settings</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+	
+			<jc>// Default page header contents.</jc>
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @RestResource(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+			},
+	
+			<jc>// Default stylesheet to use for the page.
+			// Can be overridden from external config file.
+			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+	
+			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+			// Use it to add a favicon link to the page.</jc>
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+			},
+	
+			<jc>// No default page footer contents.
+			// Can be overridden from external config file.</jc>
+			footer=<js>"$C{REST/footer}"</js>
+		),
+	
+		<jc>// Optional external configuration file.</jc>
+		config=<js>"$S{juneau.configFile}"</js>,
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+		// By default, we define static files through the external configuration file.</jc>
+		staticFiles=<js>"$C{REST/staticFiles}"</js>
+	)
+	<jk>public interface</jk> BasicRestConfig {}
+</p>
+<p>
+	Note that the <code>files/htdocs</code> directory is mapped to <js>"servlet:/htdocs"</js> using the <code>staticFiles</code>
+	setting.  This allows those files to be served up through the servlet through the URL <js>"/[servlet-path]/htdocs"</js>
+</p>
+<p>
+	The theme files are externally accessible and can be modified to produce any look-and-feel you desire.
+	The microservice still works without the files directory.  An embedded <code>devops.css</code> is included in the jar as a default spreadsheet.
+</p>
+<p>
+	If you're testing out changes in the theme stylesheets, you may want to set the following system property that prevents caching of those files so 
+	that you don't need to restart the microservice each time a change is made:
+</p>
+<p class='bpcode w800'>
+	<cc>#=======================================================================================================================
+	# System properties
+	#-----------------------------------------------------------------------------------------------------------------------
+	# These are arbitrary system properties that are set during startup.
+	#=======================================================================================================================</cc>
+	<cs>[SystemProperties]</cs>
+	
+	<cc># Disable classpath resource caching.
+	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
+	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
+
+</p>
 </div><!-- END: 10.8 - juneau-microservice-server.UiCustomization -->
 </div><!-- END: 10 - juneau-microservice-server -->
 
@@ -24826,7 +24973,7 @@ TODO(7.2.0)
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='link'>{@doc juneau-rest-server.rRPC}
+	<li class='link'>{@doc juneau-rest-server.restRPC}
 </ul>
 </div><!-- END: 12.8 - juneau-examples-rest.SampleRemoteableServlet -->
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.doc.internal;
 
+import static org.apache.juneau.doc.internal.Console.*;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -21,6 +23,8 @@ import java.util.*;
  */
 public class DocGenerator {
 
+	static List<String> WARNINGS = new ArrayList<>();
+
 	/**
 	 * Entry point.
 	 *
@@ -29,6 +33,7 @@ public class DocGenerator {
 	public static void main(String[] args) {
 		if (args.length == 0 || args.length == 1 && args[0].equals("build"))
 			build();
+		printWarnings();
 	}
 
 
@@ -130,7 +135,7 @@ public class DocGenerator {
 
 			ds.save(new File("docs.txt"));
 
-			System.err.println("Generated target/overview.html in "+(System.currentTimeMillis()-startTime)+"ms");  // NOT DEBUG
+			info("Generated target/overview.html in {0}ms", System.currentTimeMillis()-startTime);
 
 			startTime = System.currentTimeMillis();
 			for (File f : new File("src/main/javadoc/doc-files").listFiles())
@@ -139,7 +144,8 @@ public class DocGenerator {
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
 			for (File f : releaseNotes.docFiles)
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
-			System.err.println("Copied doc-files in "+(System.currentTimeMillis()-startTime)+"ms");  // NOT DEBUG
+
+			info("Copied doc-files in {0}ms", System.currentTimeMillis()-startTime);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -216,13 +222,16 @@ public class DocGenerator {
 					tags = title.substring(1, title.indexOf('}'));
 					title = title.substring(tags.length()+2).trim();
 				}
+				if (s.contains("{@link org.apache.juneau."))
+					WARNINGS.add("Found {@link org.apache.juneau...} in file " + f.getAbsolutePath());
 				contents = s.substring(i).trim()
 					.replaceAll("oaj\\.", "org.apache.juneau.")
 					.replaceAll("oajr\\.", "org.apache.juneau.rest.")
 					.replaceAll("oajrc\\.", "org.apache.juneau.rest.client.")
 				;
 			} catch (Exception e) {
-				throw new RuntimeException("Problem with file " + f.getAbsolutePath());
+				WARNINGS.add("Problem with file " + f.getAbsolutePath() +", " + e.getMessage());
+				return;
 			}
 
 			for (File d : f.getParentFile().listFiles()) {
@@ -256,12 +265,12 @@ public class DocGenerator {
 		void reorder(int i) {
 			if (pageNumber != i) {
 				File f2 = new File(file.getParentFile(), String.format("%0"+num.length()+"d", i) + '.' + id + ".html");
-				System.err.println("Renaming "+file.getName()+" to "+f2.getName());
+				info("Renaming {0} to {1}", file.getName(), f2.getName());
 				file.renameTo(f2);
 			}
 			if (dir != null && dirNumber != i) {
 				File f2 = new File(file.getParentFile(), String.format("%0"+num.length()+"d", i) + '.' + id);
-				System.err.println("Renaming "+dir.getName()+" to "+f2.getName());
+				info("Renaming {0} to {1}", dir.getName(), f2.getName());
 				dir.renameTo(f2);
 			}
 		}
@@ -269,6 +278,16 @@ public class DocGenerator {
 		@Override
 		public int compareTo(PageFile o) {
 			return this.idWithNum.compareTo(o.idWithNum);
+		}
+	}
+
+	static void printWarnings() {
+		if (WARNINGS.isEmpty())
+			info("No DocGenerator warnings.");
+		else {
+			warning(WARNINGS.size()+" DocGenerator warnings:");
+			for (int i = 0; i < WARNINGS.size(); i++)
+				warning("["+(i+1)+"] " + WARNINGS.get(i));
 		}
 	}
 

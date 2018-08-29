@@ -46,7 +46,7 @@ import org.apache.juneau.rest.exception.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.rRPC}
+ * 	<li class='link'>{@doc juneau-rest-server.restRPC}
  * </ul>
  */
 @SuppressWarnings({"serial","javadoc"})
