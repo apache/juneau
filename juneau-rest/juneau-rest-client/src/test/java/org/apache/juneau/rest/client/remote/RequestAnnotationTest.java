@@ -23,6 +23,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -32,16 +33,6 @@ import org.junit.runners.*;
 @SuppressWarnings({"javadoc"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RequestAnnotationTest {
-
-	public static class Bean {
-		public int f;
-
-		public static Bean create() {
-			Bean b = new Bean();
-			b.f = 1;
-			return b;
-		}
-	}
 
 	//=================================================================================================================
 	// Basic tests
@@ -279,4 +270,59 @@ public class RequestAnnotationTest {
 	public void d02_annotationOnParameter_nullValue() throws Exception {
 		assertEquals("{body:'',header:null,query:null,path:'{x}'}", dr.post(null));
 	}
+
+	//=================================================================================================================
+	// @Request(partSerializer)
+	//=================================================================================================================
+
+	@RestResource
+	public static class E {
+		@RestMethod(path="/{x}")
+		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
+			ObjectMap m = new ObjectMap()
+				.append("body", IOUtils.read(r))
+				.append("header", h)
+				.append("query", q)
+				.append("path", p);
+			return m.toString();
+		}
+	}
+	private static MockRest e = MockRest.create(E.class);
+
+	@Request(partSerializer=XPartSerializer.class)
+	public static class ERequest {
+		@Body
+		public String getBody() {
+			return "foo";
+		}
+		@Header("X")
+		public String getHeader() {
+			return "x";
+		}
+		@Query("x")
+		public String getQuery() {
+			return "x";
+		}
+		@Path("x")
+		public String getPath() {
+			return "x";
+		}
+	}
+
+	@RemoteResource
+	public static interface ER {
+		@RemoteMethod(path="/{x}") String post(ERequest req);
+	}
+
+	private static ER er = RestClient.create().mockHttpConnection(e).build().getRemoteResource(ER.class);
+
+	@Test
+	public void e01_partSerializer() throws Exception {
+		assertEquals("{body:'foo',header:'xxx',query:'xxx',path:'xxx'}", er.post(new ERequest()));
+	}
+	@Test
+	public void a02_partSerializer_nullValue() throws Exception {
+		assertEquals("{body:'',header:null,query:null,path:'{x}'}", er.post(null));
+	}
+
 }

@@ -103,9 +103,7 @@ public class RemoteMethodMeta {
 				throw new RemoteMetadataException(m,
 					"Invalid value specified for @RemoteMethod(httpMethod) annotation.  Valid values are [DELTE,GET,POST,PUT].");
 
-			RemoteReturn rv = m.getReturnType() == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
-
-			methodReturn = new RemoteMethodReturn(m, rv);
+			methodReturn = new RemoteMethodReturn(m);
 
 			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncode(path) : (trimSlashes(parentPath) + '/' + urlEncode(path)));
 

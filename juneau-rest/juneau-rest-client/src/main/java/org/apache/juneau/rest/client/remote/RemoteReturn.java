@@ -23,6 +23,9 @@ public enum RemoteReturn {
 	/** HTTP status code */
 	STATUS,
 
+	/** Response bean */
+	BEAN,
+
 	/** Ignore (used for void methods) */
 	NONE;
 }

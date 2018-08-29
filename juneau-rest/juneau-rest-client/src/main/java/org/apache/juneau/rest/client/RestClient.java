@@ -1118,8 +1118,10 @@ public class RestClient extends BeanContext implements Closeable {
 								if (rt == Boolean.class || rt == boolean.class)
 									return returnCode < 400;
 								throw new RestCallException("Invalid return type on method annotated with @RemoteMethod(returns=HTTP_STATUS).  Only integer and booleans types are valid.");
+							} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
+								return rc.getResponse(rmr.getResponseBeanMeta());
 							} else {
-								Object v = rc.responseBodySchema(rmr.getSchema()).getResponseBody(method.getGenericReturnType());
+								Object v = rc.getResponseBody(method.getGenericReturnType());
 								if (v == null && method.getReturnType().isPrimitive())
 									v = ClassUtils.getPrimitiveDefault(method.getReturnType());
 								return v;

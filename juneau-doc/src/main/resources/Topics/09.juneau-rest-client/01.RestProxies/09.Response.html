@@ -16,25 +16,18 @@
 {new} @Response
 
 <p>
-	The {@link oaj.http.annotation.Response @Response} annotation can be applied to either <ja>@RemoteMethod</ja>-annotated methods
-	or types returned by <ja>@RemoteMethod</ja>-annotated methods.
+	The {@link oaj.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteMethod</ja>-annotated methods.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link oaj.http.annotation.Response Response}
 	<ul>
 		<li class='jf'>{@link oaj.http.annotation.Response#partParser() partParser} - Override the part parser.
-		<li class='jf'>{@link oaj.http.annotation.Response#schema() schema} - Swagger schema.
 	</ul>
 </ul>
-<h5 class='topic'>On @RemoteMethod-annotated methods</h5>
 <p>
-	The annotation can be used to provide schema information about the response body to provide OpenAPI schema based part parsing and validation.
+	The <ja>@Response</ja> annotation can be used to define interfaces for retrieving response parts using a bean-like proxy.
 </p>
-
-<h5 class='topic'>Response interfaces</h5>
-<p>
-	The <ja>@Response</ja> annotation can also be used to define interfaces for retrieving response parts using a bean-like proxies.
-</p>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>	
 	<ja>@RemoteResource</ja>
 	<jk>public interface</jk> PetStore {
@@ -76,3 +69,6 @@
 	<li class='ja'>{@link oaj.http.annotation.ResponseHeader ResponseHeader}
 	<li class='ja'>{@link oaj.http.annotation.ResponseStatus ResponseStatus}
 </ul>
+<p>
+	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
+</p>

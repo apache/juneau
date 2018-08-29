@@ -53,7 +53,7 @@ public class ResponseBeanPropertyMeta {
 
 	static class Builder {
 		HttpPartType partType;
-		HttpPartSchema schema;
+		HttpPartSchema schema = HttpPartSchema.DEFAULT;
 		String name;
 		Method getter;
 		PropertyStore ps = PropertyStore.DEFAULT;

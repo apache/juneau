@@ -14,63 +14,43 @@ package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 
-import java.lang.reflect.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 
 /**
- * Represents the metadata about the returned object of a method on a remote proxy interface.
+ * Represents the metadata about an {@link Response}-annotated return type on a method on a REST proxy class.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul class='doctree'>
  * 	<li class='link'>{@doc juneau-rest-client.RestProxies}
  * </ul>
  */
-public final class RemoteMethodReturn {
+public final class RemoteMethodBeanReturn {
 
-	private final Type returnType;
-	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
+	private final HttpPartParser parser;
 
-	RemoteMethodReturn(Method m) {
-		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
-		RemoteReturn rv = m.getReturnType() == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
-		this.returnType = m.getGenericReturnType();
-		if (hasAnnotation(Response.class, m)) {
-			this.meta = ResponseBeanMeta.create(m, PropertyStore.DEFAULT);
-			rv = RemoteReturn.BEAN;
-		} else {
-			this.meta = null;
-		}
-		this.returnValue = rv;
+	RemoteMethodBeanReturn(Class<? extends HttpPartParser> parser, ResponseBeanMeta meta) {
+		this.parser = newInstance(HttpPartParser.class, parser);
+		this.meta = meta;
 	}
 
 	/**
-	 * Returns schema information about the HTTP part.
+	 * Returns the parser to use for parsing parts on the response bean.
 	 *
-	 * @return Schema information about the HTTP part, or <jk>null</jk> if not found.
+	 * @return The parser to use for parsing parts on the response bean, or <jk>null</jk> if not defined.
 	 */
-	public ResponseBeanMeta getResponseBeanMeta() {
+	public HttpPartParser getParser() {
+		return parser;
+	}
+
+	/**
+	 * Returns metadata on the response bean.
+	 *
+	 * @return Metadata about the bean.
+	 */
+	public ResponseBeanMeta getMeta() {
 		return meta;
-	}
-
-	/**
-	 * Returns the class type of the method return.
-	 *
-	 * @return The class type of the method return.
-	 */
-	public Type getReturnType() {
-		return returnType;
-	}
-
-	/**
-	 * Specifies whether the return value is the body of the request or the HTTP status.
-	 *
-	 * @return The type of value returned.
-	 */
-	public RemoteReturn getReturnValue() {
-		return returnValue;
 	}
 }

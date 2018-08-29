@@ -32,6 +32,7 @@ import org.apache.http.client.config.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.*;
+import org.apache.http.conn.*;
 import org.apache.http.entity.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.*;
@@ -105,6 +106,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	private HttpPartSchema requestBodySchema, responseBodySchema;
 	private URIBuilder uriBuilder;
 	private NameValuePairs formData;
+	private boolean softClose = false;  // If true, don't consume response and set isClosed flag, but do call listeners.
 
 	/**
 	 * Constructs a REST call with the specified method name.
@@ -1688,9 +1690,7 @@ public final class RestCall extends BeanSession implements Closeable {
 
 		} catch (RestCallException e) {
 			isFailed = true;
-			try {
 			close();
-			} catch (RestCallException e2) { /* Ignore */ }
 			throw e;
 		} catch (Exception e) {
 			isFailed = true;
@@ -1835,7 +1835,26 @@ public final class RestCall extends BeanSession implements Closeable {
 			throw new RestCallException("Response was null");
 		if (response.getEntity() == null)  // HTTP 204 results in no content.
 			return null;
-		InputStream is = response.getEntity().getContent();
+
+		softClose();
+
+		InputStream is = new EofSensorInputStream(response.getEntity().getContent(), new EofSensorWatcher() {
+			@Override
+			public boolean eofDetected(InputStream wrapped) throws IOException {
+				RestCall.this.forceClose();
+				return true;
+			}
+			@Override
+			public boolean streamClosed(InputStream wrapped) throws IOException {
+				RestCall.this.forceClose();
+				return true;
+			}
+			@Override
+			public boolean streamAbort(InputStream wrapped) throws IOException {
+				RestCall.this.forceClose();
+				return true;
+			}
+		});
 
 		if (outputStreams.size() > 0) {
 			ByteArrayInOutStream baios = new ByteArrayInOutStream();
@@ -1864,9 +1883,8 @@ public final class RestCall extends BeanSession implements Closeable {
 			return read(r).toString();
 		} catch (IOException e) {
 			isFailed = true;
-			throw e;
-		} finally {
 			close();
+			throw e;
 		}
 	}
 
@@ -1893,9 +1911,8 @@ public final class RestCall extends BeanSession implements Closeable {
 			return h == null ? null : h.getValue();
 		} catch (IOException e) {
 			isFailed = true;
-			throw e;
-		} finally {
 			close();
+			throw e;
 		}
 	}
 
@@ -1938,9 +1955,8 @@ public final class RestCall extends BeanSession implements Closeable {
 			return partParser.parse(schema, hs, type, args);
 		} catch (IOException e) {
 			isFailed = true;
-			throw e;
-		} finally {
 			close();
+			throw e;
 		}
 	}
 
@@ -2216,8 +2232,10 @@ public final class RestCall extends BeanSession implements Closeable {
 
 			Class<?> ic = type.getInnerClass();
 
-			if (ic.equals(HttpResponse.class))
+			if (ic.equals(HttpResponse.class)) {
+				softClose();
 				return (T)response;
+			}
 			if (ic.equals(Reader.class))
 				return (T)getReader();
 			if (ic.equals(InputStream.class))
@@ -2252,14 +2270,10 @@ public final class RestCall extends BeanSession implements Closeable {
 				getResponseHeader("Content-Type"), parser == null ? null : parser.getMediaTypes()
 			);
 
-		} catch (ParseException e) {
+		} catch (ParseException | IOException e) {
 			isFailed = true;
-			throw e;
-		} catch (IOException e) {
-			isFailed = true;
-			throw e;
-		} finally {
 			close();
+			throw e;
 		}
 	}
 
@@ -2278,6 +2292,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	 */
 	public <T> T getResponse(final ResponseBeanMeta rbm) {
 		try {
+			softClose();
 			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final RestClient rc = this.client;
 			final HttpPartParser p = ObjectUtils.firstNonNull(partParser, rc.getPartParser());
@@ -2360,12 +2375,18 @@ public final class RestCall extends BeanSession implements Closeable {
 	 */
 	@Override /* Closeable */
 	public void close() throws RestCallException {
-		if (response != null)
+		if (response != null && ! softClose)
 			EntityUtils.consumeQuietly(response.getEntity());
-		isClosed = true;
+		if (! softClose)
+			isClosed = true;
 		if (! isFailed)
 			for (RestCallInterceptor r : interceptors)
 				r.onClose(this);
+	}
+
+	void forceClose() throws RestCallException {
+		softClose = false;
+		close();
 	}
 
 	/**
@@ -2388,6 +2409,20 @@ public final class RestCall extends BeanSession implements Closeable {
 	 */
 	public RestCall debug() throws RestCallException {
 		header("Debug", true);
+		return this;
+	}
+
+	/**
+	 * If called, the underlying response stream will not be closed when you call {@link #close()}.
+	 *
+	 * <p>
+	 * This is useful in cases where you want access to that stream after you've already cleaned up this object.
+	 * However, it is your responsibility to close that stream yourself.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RestCall softClose() {
+		this.softClose = true;
 		return this;
 	}
 

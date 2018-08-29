@@ -14,9 +14,11 @@ package org.apache.juneau.rest.client.remote;
 
 import static org.junit.Assert.*;
 
-import org.apache.juneau.*;
+import java.io.*;
+
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -47,22 +49,39 @@ public class ResponseAnnotationTest {
 	@RestResource
 	public static class A {
 		@RestMethod
-		public String postA(@FormData("*") ObjectMap m, @Header("Content-Type") String ct) {
-			assertEquals(ct, "application/x-www-form-urlencoded");
-			return m.toString();
+		public String get(RestResponse res) {
+			res.setHeader("X", "x");
+			res.setStatus(201);
+			return "foo";
 		}
 	}
 	private static MockRest a = MockRest.create(A.class);
 
+	@Response
+	public interface AResponse {
+
+		@ResponseBody
+		Reader getBody();
+
+		@ResponseHeader("X")
+		String getHeader();
+
+		@ResponseStatus
+		int getStatus();
+	}
+
 	@RemoteResource
 	public static interface AR {
-		@RemoteMethod(path="a") String postA01(@FormData("x") int b);
+		@RemoteMethod AResponse get();
 	}
 
 	private static AR ar = RestClient.create().mockHttpConnection(a).build().getRemoteResource(AR.class);
 
 	@Test
-	public void a01_int() throws Exception {
-		assertEquals("{x:'1'}", ar.postA01(1));
+	public void a01_basic() throws Exception {
+		AResponse r = ar.get();
+		assertEquals("foo", IOUtils.read(r.getBody()));
+		assertEquals("x", r.getHeader());
+		assertEquals(201, r.getStatus());
 	}
 }

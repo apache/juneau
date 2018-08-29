@@ -193,7 +193,6 @@ public class RemoteMethodAnnotationTest {
 	public static interface D01 {
 
 		@RemoteMethod(method="POST",path="d01")
-		@Response
 		public String d01a(@Body String foo);
 
 		@RemoteMethod(method="POST",path="d01")
