@@ -26,42 +26,9 @@ import org.apache.juneau.dto.html5.*;
  * Tooltips depend on the existence of the <code>tooltip</code> and <code>tooltiptext</code> styles that should be
  * present in the stylesheet for the document.
  *
- * <p>
- * The following examples shows how tooltips can be added to a menu item widget.
- *
- * <p class='bcode w800'>
- * <jk>public class</jk> MyFormMenuItem <jk>extends</jk> MenuItemWidget {
- *
- * 	<ja>@Override</ja>
- * 	<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
- * 		<jk>return</jk> <js>"myform"</js>;
- * 	}
- *
- * 	<ja>@Override</ja>
- * 	<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
- * 		<jk>return</jk> div(
- * 			<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/form"</js>).method(<jsf>POST</jsf>).children(
- * 				<jsm>table</jsm>(
- * 					<jsm>tr</jsm>(
- * 						<jsm>th</jsm>(<js>"Field 1:"</js>),
- * 						<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"field1"</js>).type(<js>"text"</js>)),
- * 						<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"This is field #1!"</js>, br(), <js>"(e.g. '"</js>, code(<js>"Foo"</js>), <js>"')"</js>))
- * 					),
- * 					<jsm>tr</jsm>(
- * 						<jsm>th</jsm>(<js>"Field 2:"</js>),
- * 						<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"field2"</js>).type(<js>"text"</js>)),
- * 						<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"This is field #2!"</js>, br(), <js>"(e.g. '"</js>, code(<js>"Bar"</js>), <js>"')"</js>))
- * 					)
- * 				)
- * 			)
- * 		);
- * 	}
- * }
- * </p>
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */
 public class Tooltip {

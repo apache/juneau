@@ -21,28 +21,9 @@ import org.apache.juneau.rest.*;
  * <p>
  * The variable it resolves is <js>"$W{PoweredByJuneau}"</js>.
  *
- * <p>
- * It produces a simple Apache Juneau icon floating on the right.
- * Typically it's used in the footer of the page, as shown below in the <code>AddressBookResource</code> from the examples:
- *
- * <p class='bcode w800'>
- * 	<ja>@RestResource</ja>(
- * 		path=<js>"/addressBook"</js>,
- * 		widgets={
- * 			PoweredByJuneau.<jk>class</jk>
- * 		},
- * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			footer=<js>"$W{PoweredByJuneau}"</js>
- * 		)
- * </p>
- *
- * <p>
- * It renders the following image:
- * <img class='bordered' src='doc-files/PoweredByJuneauWidget.png'>
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */
 public class PoweredByJuneau extends Widget {

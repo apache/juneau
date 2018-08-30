@@ -24,33 +24,9 @@ import org.apache.juneau.utils.*;
  * <p>
  * The variable it resolves is <js>"$W{ThemeMenuItem}"</js>.
  *
- * <p>
- * An example of this widget can be found in the <code>PetStoreResource</code> in the examples that provides
- * a drop-down menu item for rendering all other supported content types in plain text:
- * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(
- * 		name=<jsf>GET</jsf>,
- * 		path=<js>"/"</js>,
- * 		widgets={
- * 			ThemeMenuItem.<jk>class</jk>,
- * 		},
- * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			navlinks={
- * 				<js>"up: ..."</js>,
- * 				<js>"options: ..."</js>,
- * 				<js>"$W{QueryMenuItem}"</js>,
- * 				<js>"$W{ContentTypeMenuItem}"</js>,
- * 				<js>"$W{ThemeMenuItem}"</js>,
- * 				<js>"source: ..."</js>
- * 			}
- * 		)
- * 	)
- * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
- * </p>
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */
 public class ThemeMenuItem extends MenuItemWidget {

@@ -16,101 +16,10 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.
- *
- * <p>
- * Widgets are associated with resources through the following
- * <ul>
- * 	<li class='ja'>{@link HtmlDoc#widgets() @HtmlDoc.widgets}
- * 	<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
- * 	<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
- * </ul>
- *
- * <p>
- * Widgets allow you to add arbitrary HTML, CSS, and Javascript to the page.
- *
- * <p>
- * The HTML content returned by the {@link #getHtml(RestRequest)} method is added where the <js>"$W{...}"</js> is
- * referenced in the page.
- * The Javascript and stylesheet content is added to the header of the page.
- * They allow you to control the look and behavior of your widgets.
- *
- * <p>
- * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
- * and aside section of the page:
- *
- * <p class='bcode w800'>
- * 	<ja>@RestMethod</ja>(
- * 		widgets={
- * 			MyWidget.<jk>class</jk>
- * 		}
- * 		htmldoc=<ja>@HtmlDoc</ja>(
- * 			navlinks={
- * 				<js>"$W{MyWidget}"</js>
- * 			},
- * 			aside={
- * 				<js>"Check out this widget:  $W{MyWidget}"</js>
- * 			}
- * 		)
- * 	)
- * </p>
- *
- * <p>
- * The following shows an example of a widget that renders an image located in the <code>htdocs</code> static files
- * directory in your classpath (see {@link RestResource#staticFiles() @RestResource(staticFiles)}):
- * <p class='bcode w800'>
- * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
- *
- * 		<ja>@Override</ja>
- * 		<jk>public</jk> String getHtml(RestRequest req) <jk>throws</jk> Exception {
- * 			UriResolver r = req.getUriResolver();
- * 			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+r.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
- * 		}
- *
- * 		<ja>@Override</ja>
- * 		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
- * 			<jk>return</jk> <js>""</js>
- * 				+ <js>"\n function myalert(imageElement) {"</js>
- * 				+ <js>"\n 	alert('cool!');"</js>
- * 				+ <js>"\n }"</js>;
- * 		}
- *
- * 		<ja>@Override</ja>
- * 		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
- * 			<jk>return</jk> <js>""</js>
- * 				+ <js>"\n .myimage {"</js>
- * 				+ <js>"\n 	border: 10px solid red;"</js>
- * 				+ <js>"\n }"</js>;
- * 		}
- * 	}
- * </p>
- *
- * <p>
- * Note the {@link #getClasspathResourceAsString(String)} and {@link #getClasspathResourceAsString(String, Locale)} convenience methods
- * provided for quickly loading javascript and css files from the classpath or file system.
- * These are useful if your script or styles are complex and you want them loaded from files.
- *
- * <p>
- * <p class='bcode w800'>
- * 	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
- *
- * 		...
- *
- * 		<ja>@Override</ja>
- * 		<jk>public</jk> String getScript(RestRequest req) <jk>throws</jk> Exception {
- * 			<jk>return</jk> getResourceAsString(<js>"MyWidget.js"</js>);
- * 		}
- *
- * 		<ja>@Override</ja>
- * 		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
- * 			<jk>return</jk> getResourceAsString(<js>"MyWidget.css"</js>);
- * 		}
- * 	}
- * </p>
  *
  * <p>
  * Widgets must provide one of the following public constructors:

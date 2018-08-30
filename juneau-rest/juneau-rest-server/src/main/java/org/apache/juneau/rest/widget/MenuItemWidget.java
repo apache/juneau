@@ -24,42 +24,9 @@ import org.apache.juneau.serializer.*;
 /**
  * A subclass of widgets for rendering menu items with drop-down windows.
  *
- * <p>
- * Defines some simple CSS and Javascript for enabling drop-down menus in the nav section of the page (although
- * nothing keeps you from using it in an arbitrary location in the page).
- *
- * <p>
- * The script specifies a <js>"menuClick(element)"</js> function that toggles the visibility of the next sibling of the
- * element.
- *
- * <p>
- * Subclasses should implement the following two methods:
- * <ul>
- * 	<li class='jm'>{@link #getLabel(RestRequest)} - The menu item label.
- * 	<li class='jm'>{@link #getContent(RestRequest)} - The menu item content.
- * </ul>
- *
- * <p>
- * For example, to render a link that brings up a simple dialog in a div tag:
- * <p class='bcode w800'>
- * 	<ja>@Override</ja>
- * 	<jk>public</jk> String getLabel() {
- * 		<jk>return</jk> <js>"my-menu-item"</js>;
- * 	};
- *
- * 	<ja>@Override</ja>
- * 	<jk>public</jk> Div getLabel() {
- * 		<jk>return</jk> Html5Builder.<jsm>div</jsm>(<js>"Surprise!"</js>).style(<js>"color:red"</js>);
- * 	};
- * </p>
- *
- * <p>
- * The HTML content returned by the {@link #getHtml(RestRequest)} method is added where the <js>"$W{...}"</js> is
- * referenced in the page.
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */
 public abstract class MenuItemWidget extends Widget {
