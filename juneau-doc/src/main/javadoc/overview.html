@@ -420,6 +420,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.MethodExampleResource'>MethodExampleResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.UrlEncodedFormResource'>UrlEncodedFormResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.RequestEchoResource'>RequestEchoResource</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStoreResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.AddressBookResource'>AddressBookResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.SampleRemoteableServlet'>SampleRemoteInterfaceServlet</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.TempDirResource'>TempDirResource</a></p>
@@ -430,7 +431,6 @@
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.SqlQueryResource'>SqlQueryResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStoreResource</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#Security'>Security Best-Practices</a></p>
 	<ol>
@@ -24066,8 +24066,727 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AddressBookResource' id='juneau-examples-rest.AddressBookResource'>12.7 - AddressBookResource</a></h3>
-<div class='topic'><!-- START: 12.7 - juneau-examples-rest.AddressBookResource -->
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.7 - PetStoreResource</a></h3>
+<div class='topic'><!-- START: 12.7 - juneau-examples-rest.PetStoreResource -->
+<p>
+	The <code>PetStoreResource</code> class provides examples for creating a Swagger-based interface. 
+</p>
+
+<h5 class='figure'>PetStoreResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js><js>"/petstore"</js></js>,
+		title=<js><js>"Petstore application"</js></js>,
+		description= {
+			<js><js>"This is a sample server Petstore server based on the Petstore sample at Swagger.io."</js></js>,
+			<js>"You can find out more about Swagger at &lt;a class='link' href='http://swagger.io'&gt;http://swagger.io&lt;/a&gt;."</js>,
+		},
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				ThemeMenuItem.<jk>class</jk>,
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{ThemeMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/petstore/$R{servletClassSimple}.java"</js>
+			},
+			head={
+				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/cat.png}'/&gt;"</js>  <jc>// Add a cat icon to the page.</jc>
+			},
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
+				<js>"&lt;h2&gt;$R{methodSummary}&lt;/h2&gt;"</js>,
+				<js>"$C{PetStore/headerImage}"</js>
+			},
+			aside={
+				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;This page shows a standard nested REST resource.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;It shows how different properties can be rendered on the same bean in different views.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;It also shows examples of HtmlRender classes and <ja>@BeanProperty</ja>(format) annotations.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;It also shows how the Queryable converter and query widget can be used to create searchable interfaces.&lt;/p&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			}
+		),
+		properties= {
+			<jc>// Resolve recursive references when showing schema info in the swagger.</jc>
+			<ja>@Property</ja>(name=<jsf>SWAGGERUI_resolveRefsMaxDepth</jsf>, value=<js>"99"</js>)
+		},
+		swagger=<ja>@ResourceSwagger</ja>(<js>"$F{PetStoreResource.json}"</js>),
+		staticFiles={<js>"htdocs:htdocs"</js>}
+	)
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {
+	
+		<jk>private</jk> PetStore <jf>store</jf>;
+	
+		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		<jk>public void</jk> initDatabase(RestContextBuilder builder) <jk>throws</jk> Exception {
+			<jf>store</jf> = <jk>new</jk> PetStore().init();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/"</js>,
+			summary=<js>"Navigation page"</js>
+		)
+		<jk>public</jk> ResourceDescriptions getTopPage() {
+			<jk>return new</jk> ResourceDescriptions()
+				.append(<js>"pet"</js>, <js>"All pets in the store"</js>)
+				.append(<js>"store"</js>, <js>"Orders and inventory"</js>)
+				.append(<js>"user"</js>, <js>"Petstore users"</js>)
+			;
+		}
+	
+		<jc>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		// Pets
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</jc>
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/pet"</js>,
+			summary=<js>"All pets in the store"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				parameters={
+					Queryable.<jsf>SWAGGER_PARAMS</jsf>
+				}
+			),
+			bpx=<js>"Pet: tags"</js>,
+			htmldoc=<ja>@HtmlDoc</ja>(
+				widgets={
+					QueryMenuItem.<jk>class</jk>,
+					AddPetMenuItem.<jk>class</jk>
+				},
+				navlinks={
+					<js>"INHERIT"</js>,                <jc>// Inherit links from class.</jc>
+					<js>"[2]:$W{QueryMenuItem}"</js>,  <jc>// Insert QUERY link in position 2.</jc>
+					<js>"[3]:$W{AddPetMenuItem}"</js>  <jc>// Insert ADD link in position 3.</jc>
+				}
+			),
+			converters={Queryable.<jk>class</jk>}
+		)
+		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+			<jk>return</jk> <jf>store</jf>.getPets();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/pet/{petId}"</js>,
+			summary=<js>"Find pet by ID"</js>,
+			description=<js>"Returns a single pet"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[ { api_key:[] } ]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Pet getPet(
+				<ja>@Path</ja>(
+					name=<js>"petId"</js>, 
+					description=<js>"ID of pet to return"</js>, 
+					example=<js>"123"</js>
+				) 
+				<jk>long</jk> petId
+			) <jk>throws</jk> IdNotFound, NotAcceptable {
+	
+			<jk>return</jk> <jf>store</jf>.getPet(petId);
+		}
+	
+		<ja>@RestMethod</ja>(
+			summary=<js>"Add a new pet to the store"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[ { petstore_auth:['write:pets','read:pets'] } ]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Ok postPet(
+				<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) PetCreate pet
+			) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
+	
+			<jf>store</jf>.create(pet);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>PUT</jsf>,
+			path=<js>"/pet/{petId}"</js>,
+			summary=<js>"Update an existing pet"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[ { petstore_auth: ['write:pets','read:pets'] } ]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Ok updatePet(
+				<ja>@Body</ja>(description=<js>"Pet object that needs to be added to the store"</js>) PetUpdate pet
+			) <jk>throws</jk> IdNotFound, NotAcceptable, UnsupportedMediaType {
+	
+			<jf>store</jf>.update(pet);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/pet/{petId}/edit"</js>,
+			summary=<js>"Pet edit page"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[ { petstore_auth:['write:pets','read:pets'] } ]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Div editPetPage(
+				<ja>@Path</ja>(
+					name=<js>"petId"</js>, 
+					description=<js>"ID of pet to return"</js>, 
+					example=<js>"123"</js>
+				) 
+				<jk>long</jk> petId
+			) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
+	
+			Pet pet = getPet(petId);
+	
+			<jk>return</jk> <jsm>div</jsm>(
+				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/pet/"</js> + petId).method(<jsf>POST</jsf>).children(
+					<jsm>table</jsm>(
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"Id:"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"id"</js>).type(<js>"text"</js>).value(petId).readonly(<jk>true</jk>)),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The name of the pet."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"Name:"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"name"</js>).type(<js>"text"</js>).value(pet.getName())),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The name of the pet."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"Species:"</js>),
+							<jsm>td</jsm>(
+								<jsm>select</jsm>().name(<js>"species"</js>).children(
+									<jsm>option</jsm>(<js>"cat"</js>), <jsm>option</jsm>(<js>"dog"</js>), <jsm>option</jsm>(<js>"bird"</js>), <jsm>option</jsm>(<js>"fish"</js>), <jsm>option</jsm>(<js>"mouse"</js>), <jsm>option</jsm>(<js>"rabbit"</js>), <jsm>option</jsm>(<js>"snake"</js>)
+								).choose(pet.getSpecies())
+							),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The kind of animal."</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"Price:"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"price"</js>).type(<js>"number"</js>).placeholder(<js>"1.0"</js>).step(<js>"0.01"</js>).min(1).max(100).value(pet.getPrice())),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The price to charge for this pet."</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"Tags:"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"tags"</js>).type(<js>"text"</js>).value(Tag.<jsm>asString</jsm>(pet.getTags()))),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"Arbitrary textual tags (comma-delimited)."</js>, <jsm>br</jsm>(), <js>"e.g. 'fluffy,friendly'"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"Status:"</js>),
+							<jsm>td</jsm>(
+								<jsm>select</jsm>().name(<js>"status"</js>).children(
+									<jsm>option</jsm>(<js>"AVAILABLE"</js>), <jsm>option</jsm>(<js>"PENDING"</js>), <jsm>option</jsm>(<js>"SOLD"</js>)
+								).choose(pet.getStatus())
+							),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The current status of the animal."</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
+								<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>),
+								<jsm>button</jsm>(<js>"button"</js>,<js>"Cancel"</js>).onclick(<js>"window.location.href='/'"</js>),
+								<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>)
+							)
+						)
+					).style(<js>"white-space:nowrap"</js>)
+				)
+			);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/pet/findByStatus"</js>,
+			summary=<js>"Finds Pets by status"</js>,
+			description=<js>"Multiple status values can be provided with comma separated strings."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[{petstore_auth:['write:pets','read:pets']}]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
+				<ja>@Query</ja>(
+					name=<js>"status"</js>,
+					description=<js>"Status values that need to be considered for filter."</js>,
+					required=<jk>true</jk>,
+					type=<js>"array"</js>,
+					collectionFormat=<js>"csv"</js>,
+					items=<ja>@Items</ja>(
+						type=<js>"string"</js>,
+						_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
+						_default=<js>"AVAILABLE"</js>
+					),
+					example=<js>"AVALIABLE,PENDING"</js>
+				)
+				PetStatus[] status
+			) <jk>throws</jk> NotAcceptable {
+	
+			<jk>return</jk> <jf>store</jf>.getPetsByStatus(status);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/pet/findByTags"</js>,
+			summary=<js>"Finds Pets by tags"</js>,
+			description=<js>"Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"</js>
+				}
+			)
+		)
+		<ja>@Deprecated</ja>
+		<jk>public</jk> Collection&lt;Pet&gt; findPetsByTags(
+				<ja>@Query</ja>(
+					name=<js>"tags"</js>,
+					description=<js>"Tags to filter by"</js>,
+					required=<jk>true</jk>,
+					example=<js>"['tag1','tag2']"</js>
+				)
+				String[] tags
+			) <jk>throws</jk> InvalidTag, NotAcceptable {
+	
+			<jk>return</jk> <jf>store</jf>.getPetsByTags(tags);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>DELETE</jsf>,
+			path=<js>"/pet/{petId}"</js>,
+			summary=<js>"Deletes a pet"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Ok deletePet(
+				<ja>@Header</ja>(
+					name=<js>"api_key"</js>, 
+					description=<js>"Security API key"</js>, 
+					required=<jk>true</jk>, 
+					example=<js>"foobar"</js>
+				) 
+				String apiKey,
+				<ja>@Path</ja>(
+					name=<js>"petId"</js>, 
+					description=<js>"Pet id to delete"</js>, 
+					example=<js>"123"</js>
+				) 
+				<jk>long</jk> petId
+			) <jk>throws</jk> IdNotFound, NotAcceptable {
+	
+			<jf>store</jf>.removePet(petId);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>,
+			path=<js>"/pet/{petId}/uploadImage"</js>,
+			summary=<js>"Uploads an image"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"pet"</js>,
+				value={
+					<js>"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Ok uploadImage(
+				<ja>@Path</ja>(
+					name=<js>"petId"</js>, 
+					description=<js>"ID of pet to update"</js>, 
+					example=<js>"123"</js>
+				) 
+				<jk>long</jk> petId,
+				<ja>@FormData</ja>(
+					name=<js>"additionalMetadata"</js>, 
+					description=<js>"Additional data to pass to server"</js>, 
+					example=<js>"Foobar"</js>
+				) 
+				String additionalMetadata,
+				<ja>@FormData</ja>(
+					name=<js>"file"</js>, 
+					description=<js>"file to upload"</js>, 
+					required=<jk>true</jk>, 
+					type=<js>"file"</js>
+				) 
+				<jk>byte</jk>[] file
+			) <jk>throws</jk> NotAcceptable, UnsupportedMediaType {
+	
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<jc>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		// Orders
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</jc>
+	
+		<ja>@RestMethod</ja>(
+			summary=<js>"Store navigation page"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"store"</js>
+			)
+		)
+		<jk>public</jk> ResourceDescriptions getStore() {
+			<jk>return new</jk> ResourceDescriptions()
+				.append(<js>"store/order"</js>, <js>"Petstore orders"</js>)
+				.append(<js>"store/inventory"</js>, <js>"Petstore inventory"</js>)
+			;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/store/order"</js>,
+			summary=<js>"Petstore orders"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"store"</js>
+			),
+			htmldoc=<ja>@HtmlDoc</ja>(
+				widgets={
+					QueryMenuItem.<jk>class</jk>,
+					AddOrderMenuItem.<jk>class</jk>
+				},
+				navlinks={
+					<js>"INHERIT"</js>,                <jc>// Inherit links from class.</jc>
+					<js>"[2]:$W{QueryMenuItem}"</js>,  <jc>// Insert QUERY link in position 2.</jc>
+					<js>"[3]:$W{AddOrderMenuItem}"</js>  <jc>// Insert ADD link in position 3.</jc>
+				}
+			)
+		)
+		<jk>public</jk> Collection&lt;Order&gt; getOrders() <jk>throws</jk> NotAcceptable {
+			<jk>return</jk> <jf>store</jf>.getOrders();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/store/order/{orderId}"</js>,
+			summary=<js>"Find purchase order by ID"</js>,
+			description=<js>"Returns a purchase order by ID."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"store"</js>
+			)
+		)
+		<jk>public</jk> Order getOrder(
+				<ja>@Path</ja>(
+					name=<js>"orderId"</js>, 
+					description=<js>"ID of order to fetch"</js>, 
+					maximum=<js>"1000"</js>, 
+					minimum=<js>"101"</js>, 
+					example=<js>"123"</js>
+				) 
+				<jk>long</jk> orderId
+			) <jk>throws</jk> InvalidId, IdNotFound, NotAcceptable {
+	
+			<jk>if</jk> (orderId &lt; 101 || orderId &gt; 1000)
+				<jk>throw new</jk> InvalidId();
+			<jk>return</jk> <jf>store</jf>.getOrder(orderId);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>,
+			path=<js>"/store/order"</js>,
+			summary=<js>"Place an order for a pet"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"store"</js>
+			),
+			pojoSwaps={
+				DateSwap.<jsf>ISO8601D</jsf>.<jk>class</jk>
+			}
+		)
+		<jk>public</jk> Order placeOrder(
+				<ja>@FormData</ja>(
+					name=<js>"petId"</js>, 
+					description=<js>"Pet ID"</js>
+				) 
+				<jk>long</jk> petId,
+				<ja>@FormData</ja>(
+					name=<js>"shipDate"</js>, 
+					description=<js>"Ship date"</js>
+				) 
+				Date shipDate
+			) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
+	
+			CreateOrder co = <jk>new</jk> CreateOrder(petId, shipDate);
+			<jk>return</jk> <jf>store</jf>.create(co);
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>DELETE</jsf>,
+			path=<js>"/store/order/{orderId}"</js>,
+			summary=<js>"Delete purchase order by ID"</js>,
+			description= {
+				<js>"For valid response try integer IDs with positive integer value."</js>,
+				<js>"Negative or non-integer values will generate API errors."</js>
+			},
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"store"</js>
+			)
+		)
+		<jk>public</jk> Ok deletePurchaseOrder(
+				<ja>@Path</ja>(
+					name=<js>"orderId"</js>, 
+					description=<js>"ID of the order that needs to be deleted"</js>, 
+					minimum=<js>"1"</js>, 
+					example=<js>"5"</js>
+				) 
+				<jk>long</jk> orderId
+			) <jk>throws</jk> InvalidId, IdNotFound, NotAcceptable {
+	
+			<jk>if</jk> (orderId &lt; 0)
+				<jk>throw new</jk> InvalidId();
+			<jf>store</jf>.removeOrder(orderId);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/store/inventory"</js>,
+			summary=<js>"Returns pet inventories by status"</js>,
+			description=<js>"Returns a map of status codes to quantities"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"store"</js>,
+				responses={
+					<js>"200:{ 'x-example':{AVAILABLE:123} }"</js>,
+				},
+				value={
+					<js>"security:[ { api_key:[] } ]"</js>
+				}
+			)
+		)
+		<jk>public</jk> Map&lt;PetStatus,Integer&gt; getStoreInventory() <jk>throws</jk> NotAcceptable {
+			<jk>return</jk> <jf>store</jf>.getInventory();
+		}
+	
+		<jc>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		// Users
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</jc>
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/user"</js>,
+			summary=<js>"Petstore users"</js>,
+			bpx=<js>"User: email,password,phone"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> Collection&lt;User&gt; getUsers() <jk>throws</jk> NotAcceptable {
+			<jk>return</jk> <jf>store</jf>.getUsers();
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/user/{username}"</js>,
+			summary=<js>"Get user by user name"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> User getUser(
+				<ja>@Path</ja>(
+					name=<js>"username"</js>, 
+					description=<js>"The name that needs to be fetched. Use user1 for testing."</js>
+				) 
+				String username
+			) <jk>throws</jk> InvalidUsername, IdNotFound, NotAcceptable {
+	
+			<jk>return</jk> <jf>store</jf>.getUser(username);
+		}
+	
+		<ja>@RestMethod</ja>(
+			summary=<js>"Create user"</js>,
+			description=<js>"This can only be done by the logged in user."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> Ok postUser(
+				<ja>@Body</ja>(description=<js>"Created user object"</js>) User user
+			) <jk>throws</jk> InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
+	
+			<jf>store</jf>.add(user);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>POST</jsf>,
+			path=<js>"/user/createWithArray"</js>,
+			summary=<js>"Creates list of users with given input array"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> Ok createUsers(
+				<ja>@Body</ja>(description=<js>"List of user objects"</js>) User[] users
+			) <jk>throws</jk> InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
+	
+			<jk>for</jk> (User user : users)
+				<jf>store</jf>.add(user);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>PUT</jsf>,
+			path=<js>"/user/{username}"</js>,
+			summary=<js>"Update user"</js>,
+			description=<js>"This can only be done by the logged in user."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> Ok updateUser(
+				<ja>@Path</ja>(
+					name=<js>"username"</js>, 
+					description=<js>"Name that need to be updated"</js>
+				) 
+				String username,
+				<ja>@Body</ja>(
+					description=<js>"Updated user object"</js>
+				) 
+				User user
+			) <jk>throws</jk> InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType {
+	
+			<jf>store</jf>.update(user);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>DELETE</jsf>,
+			path=<js>"/user/{username}"</js>,
+			summary=<js>"Delete user"</js>,
+			description=<js>"This can only be done by the logged in user."</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> Ok deleteUser(
+				<ja>@Path</ja>(
+					name=<js>"username"</js>, 
+					description=<js>"The name that needs to be deleted"</js>
+				) 
+				String username
+			) <jk>throws</jk> InvalidUsername, IdNotFound, NotAcceptable {
+	
+			<jf>store</jf>.removeUser(username);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/user/login"</js>,
+			summary=<js>"Logs user into the system"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> Ok login(
+				<ja>@Query</ja>(
+					name=<js>"username"</js>, 
+					description=<js>"The username for login"</js>, 
+					required=<jk>true</jk>, 
+					example=<js>"myuser"</js>
+				) 
+				String username,
+				<ja>@Query</ja>(
+					name=<js>"password"</js>, 
+					description=<js>"The password for login in clear text"</js>, 
+					required=<jk>true</jk>, 
+					example=<js>"abc123"</js>
+				) 
+				String password,
+				<ja>@ResponseHeader</ja>(
+					name=<js>"X-Rate-Limit"</js>, 
+					type=<js>"integer"</js>, 
+					format=<js>"int32"</js>, 
+					description=<js>"Calls per hour allowed by the user."</js>, 
+					example=<js>"123"</js>
+				) 
+				Value&lt;Integer&gt; rateLimit,
+				Value&lt;ExpiresAfter&gt; expiresAfter,
+				RestRequest req,
+				RestResponse res
+			) <jk>throws</jk> InvalidLogin, NotAcceptable {
+	
+			<jk>if</jk> (! <jf>store</jf>.isValid(username, password))
+				<jk>throw new</jk> InvalidLogin();
+	
+			Date d = <jk>new</jk> Date(System.<jsm>currentTimeMillis</jsm>() + 30 * 60 * 1000);
+			req.getSession().setAttribute(<js>"login-expires"</js>, d);
+			rateLimit.set(1000);
+			expiresAfter.set(<jk>new</jk> ExpiresAfter(d));
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	
+		<ja>@ResponseHeader</ja>(
+			name=<js>"X-Expires-After"</js>, 
+			type=<js>"string"</js>, 
+			format=<js>"date-time"</js>, 
+			description=<js>"Date in UTC when token expires"</js>, 
+			example=<js>"2012-10-21"</js>
+		)
+		<jk>public static class</jk> ExpiresAfter {
+			<jk>private final</jk> Calendar c;
+			<jk>public</jk> ExpiresAfter(Date d) {
+				<jk>this</jk>.c = <jk>new</jk> GregorianCalendar();
+				c.setTime(d);
+			}
+			<jk>public</jk> Calendar toCalendar() {
+				<jk>return</jk> c;
+			}
+		}
+	
+		<ja>@RestMethod</ja>(
+			name=<jsf>GET</jsf>,
+			path=<js>"/user/logout"</js>,
+			summary=<js>"Logs out current logged in user session"</js>,
+			swagger=<ja>@MethodSwagger</ja>(
+				tags=<js>"user"</js>
+			)
+		)
+		<jk>public</jk> Ok logout(RestRequest req) <jk>throws</jk> NotAcceptable {
+			req.getSession().removeAttribute(<js>"login-expires"</js>);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+	}
+</p>
+<p>
+	Pointing a browser to the resource shows the following:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.1.png'>
+<p>
+	Clicking the <code>QUERY</code> link renders the following menu pop-up complete with tooltips:
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.2.png'>
+<p>
+	The <code>STYLES</code> menu item allows you to try out the other default look-and-feels:
+</p>
+<h5 class='figure'>Light look-and-feel</h5>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.3.png'>
+<h5 class='figure'>Dark look-and-feel</h5>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4.png'>
+</div><!-- END: 12.7 - juneau-examples-rest.PetStoreResource -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AddressBookResource' id='juneau-examples-rest.AddressBookResource'>12.8 - AddressBookResource</a></h3>
+<div class='topic'><!-- START: 12.8 - juneau-examples-rest.AddressBookResource -->
 <p>
 	The <l>AddressBookResource</l> class is a proof-of-concept class that shows a true RESTful API using the 
 	Juneau REST toolkit.  
@@ -25169,12 +25888,12 @@
 	The ability to overload methods is enabled through the 
 	<code><del>RestResource.allowMethodParam()</del></code> setting.
 </p>
-</div><!-- END: 12.7 - juneau-examples-rest.AddressBookResource -->
+</div><!-- END: 12.8 - juneau-examples-rest.AddressBookResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SampleRemoteableServlet' id='juneau-examples-rest.SampleRemoteableServlet'>12.8 - SampleRemoteInterfaceServlet</a></h3>
-<div class='topic'><!-- START: 12.8 - juneau-examples-rest.SampleRemoteableServlet -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SampleRemoteableServlet' id='juneau-examples-rest.SampleRemoteableServlet'>12.9 - SampleRemoteInterfaceServlet</a></h3>
+<div class='topic'><!-- START: 12.9 - juneau-examples-rest.SampleRemoteableServlet -->
 <p>	
 	The <l>SampleRemoteInterfaceServlet</l> class shows examples of the following:
 </p>
@@ -25189,12 +25908,12 @@
 <ul>
 	<li class='link'>{@doc juneau-rest-server.restRPC}
 </ul>
-</div><!-- END: 12.8 - juneau-examples-rest.SampleRemoteableServlet -->
+</div><!-- END: 12.9 - juneau-examples-rest.SampleRemoteableServlet -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.TempDirResource' id='juneau-examples-rest.TempDirResource'>12.9 - TempDirResource</a></h3>
-<div class='topic'><!-- START: 12.9 - juneau-examples-rest.TempDirResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.TempDirResource' id='juneau-examples-rest.TempDirResource'>12.10 - TempDirResource</a></h3>
+<div class='topic'><!-- START: 12.10 - juneau-examples-rest.TempDirResource -->
 <p>	
 	The <l>TempDirResource</l> class shows examples of the following:
 </p>
@@ -25329,12 +26048,12 @@
 		} 
 	}		
 </p>
-</div><!-- END: 12.9 - juneau-examples-rest.TempDirResource -->
+</div><!-- END: 12.10 - juneau-examples-rest.TempDirResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AtomFeedResource' id='juneau-examples-rest.AtomFeedResource'>12.10 - AtomFeedResource</a></h3>
-<div class='topic'><!-- START: 12.10 - juneau-examples-rest.AtomFeedResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AtomFeedResource' id='juneau-examples-rest.AtomFeedResource'>12.11 - AtomFeedResource</a></h3>
+<div class='topic'><!-- START: 12.11 - juneau-examples-rest.AtomFeedResource -->
 <p>	
 	The <l>AtomFeedResource</l> class shows examples of the following:
 </p>
@@ -25454,12 +26173,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.10 - juneau-examples-rest.AtomFeedResource -->
+</div><!-- END: 12.11 - juneau-examples-rest.AtomFeedResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.DockerRegistryResource' id='juneau-examples-rest.DockerRegistryResource'>12.11 - DockerRegistryResource</a></h3>
-<div class='topic'><!-- START: 12.11 - juneau-examples-rest.DockerRegistryResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.DockerRegistryResource' id='juneau-examples-rest.DockerRegistryResource'>12.12 - DockerRegistryResource</a></h3>
+<div class='topic'><!-- START: 12.12 - juneau-examples-rest.DockerRegistryResource -->
 <p>	
 	The <l>DockerRegistryResource</l> class shows examples of the following:
 </p>
@@ -25578,12 +26297,12 @@
 	<cs>[DockerRegistry]</cs>
 	<ck>url</ck> = <cv>http://clmdocker02.ratl.swg.usma.apache.org:5000/v1</cv>
 </p>
-</div><!-- END: 12.11 - juneau-examples-rest.DockerRegistryResource -->
+</div><!-- END: 12.12 - juneau-examples-rest.DockerRegistryResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PhotosResource' id='juneau-examples-rest.PhotosResource'>12.12 - PhotosResource</a></h3>
-<div class='topic'><!-- START: 12.12 - juneau-examples-rest.PhotosResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PhotosResource' id='juneau-examples-rest.PhotosResource'>12.13 - PhotosResource</a></h3>
+<div class='topic'><!-- START: 12.13 - juneau-examples-rest.PhotosResource -->
 <p>	
 	The <l>PhotosResource</l> class shows examples of the following:
 </p>
@@ -25755,12 +26474,12 @@
 		}
 	}
 </p>
-</div><!-- END: 12.12 - juneau-examples-rest.PhotosResource -->
+</div><!-- END: 12.13 - juneau-examples-rest.PhotosResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.JsonSchemaResource' id='juneau-examples-rest.JsonSchemaResource'>12.13 - JsonSchemaResource</a></h3>
-<div class='topic'><!-- START: 12.13 - juneau-examples-rest.JsonSchemaResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.JsonSchemaResource' id='juneau-examples-rest.JsonSchemaResource'>12.14 - JsonSchemaResource</a></h3>
+<div class='topic'><!-- START: 12.14 - juneau-examples-rest.JsonSchemaResource -->
 <p>	
 	The <l>JsonSchemaResource</l> class shows examples of the following:
 </p>
@@ -25857,12 +26576,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.13 - juneau-examples-rest.JsonSchemaResource -->
+</div><!-- END: 12.14 - juneau-examples-rest.JsonSchemaResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SqlQueryResource' id='juneau-examples-rest.SqlQueryResource'>12.14 - SqlQueryResource</a></h3>
-<div class='topic'><!-- START: 12.14 - juneau-examples-rest.SqlQueryResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SqlQueryResource' id='juneau-examples-rest.SqlQueryResource'>12.15 - SqlQueryResource</a></h3>
+<div class='topic'><!-- START: 12.15 - juneau-examples-rest.SqlQueryResource -->
 <p>	
 	The <l>SqlQueryResource</l> class shows examples of the following:
 </p>
@@ -26067,12 +26786,12 @@
 	<ck>allowTempUpdates</ck> = <cv>true</cv>
 	<ck>includeRowNums</ck> = <cv>true</cv>
 </p>
-</div><!-- END: 12.14 - juneau-examples-rest.SqlQueryResource -->
+</div><!-- END: 12.15 - juneau-examples-rest.SqlQueryResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>12.15 - ConfigResource</a></h3>
-<div class='topic'><!-- START: 12.15 - juneau-examples-rest.ConfigResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>12.16 - ConfigResource</a></h3>
+<div class='topic'><!-- START: 12.16 - juneau-examples-rest.ConfigResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
 	<br>It provides a REST interface for reading and altering the microservice config file.
@@ -26222,12 +26941,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.15 - juneau-examples-rest.ConfigResource -->
+</div><!-- END: 12.16 - juneau-examples-rest.ConfigResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>12.16 - LogsResource</a></h3>
-<div class='topic'><!-- START: 12.16 - juneau-examples-rest.LogsResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>12.17 - LogsResource</a></h3>
+<div class='topic'><!-- START: 12.17 - juneau-examples-rest.LogsResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
 	<br>It provides a REST interface for the log files generated by the microservice.
@@ -26239,245 +26958,7 @@
 	http://localhost:10000/logs
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.LogsResource.1.png'>
-</div><!-- END: 12.16 - juneau-examples-rest.LogsResource -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.17 - PetStoreResource</a></h3>
-<div class='topic'><!-- START: 12.17 - juneau-examples-rest.PetStoreResource -->
-<p>
-	The <code>PetStoreResource</code> class provides examples of the following: 
-</p>
-<ul	class='spaced-list'>
-	<li>
-		Summary and detail views of the same beans providing different levels of information.
-	<li>
-		The use of the {@link org.apache.juneau.html.HtmlRender} class.
-	<li>
-		The use of the {@link org.apache.juneau.annotation.BeanProperty#format @BeanProperty(format)} annotation.
-	<li>
-		The use of the {@link org.apache.juneau.rest.converters.Queryable} interface.
-</ul>
-
-<h5 class='figure'>PetStoreResource.java</h5>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		title=<js>"Pet Store"</js>,
-		description=<js>"An example of a typical REST resource where beans are rendered in summary and details views."</js>,
-		path=<js>"/petstore"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			widgets={
-				ContentTypeMenuItem.<jk>class</jk>,
-				StyleMenuItem.<jk>class</jk>,
-				PetStoreResource.AddPet.<jk>class</jk>
-			},
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"$W{ContentTypeMenuItem}"</js>,
-				<js>"$W{StyleMenuItem}"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>,
-				<js>"$W{AddPet}"</js>
-			},
-			aside={
-				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;This page shows a standard REST resource that renders bean summaries and details.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;It shows how different properties can be rendered on the same bean in different views.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;It also shows how the Queryable converter and query widget can be used to create searchable interfaces.&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			},
-			head={
-				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/cat.png}'/&gt;"</js>
-			}
-		),
-		staticFiles={<js>"htdocs:htdocs"</js>}
-	)
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {
-	
-		<jc>// Our database.</jc>
-		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
-	
-		<ja>@RestHook</ja>(INIT) 
-		<jk>public void</jk> initDatabase(RestContextBuilder builder) <jk>throws</jk> Exception {
-			<jc>// Load our database from a local JSON file.</jc>
-			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(
-				getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>
-			);
-		}
-	
-		<jc>// Exclude the 'breed' and 'getsAlongWith' properties from the beans.</jc>
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/"</js>,
-			summary=<js>"The complete list of pets in the store"</js>,
-			bpx=<js>"Pet: breed,getsAlongWith"</js>,
-			
-			<jc>// Add our converter for POJO query support.</jc>
-			converters=Queryable.<jk>class</jk>,
-			
-			<jc>// Add our menu items in the nav links.</jc>
-			htmldoc=<ja>@HtmlDoc</ja>(
-				
-				widgets={
-					QueryMenuItem.<jk>class</jk>,
-					ContentTypeMenuItem.<jk>class</jk>,
-					StyleMenuItem.<jk>class</jk>
-				},
-	
-				navlinks={
-					<js>"INHERIT"</js>,  <jc>// Inherit links from class.</jc>
-					<js>"[2]:$W{QueryMenuItem}"</js>  <jc>// Insert QUERY link in position 2.</jc>
-				}
-			)
-		)
-		<jk>public</jk> Collection&lt;Pet&gt; getPets() {
-			<jk>return</jk> <jf>petDB</jf>.values();
-		}
-	
-		<jc>// Shows all bean properties.</jc>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{id}"</js>, summary=<js>"Pet details"</js>)
-		<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"id"</js>) Integer id) {
-			<jk>return</jk> <jf>petDB</jf>.get(id);
-		}
-	
-		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> Redirect addPet(<ja>@Body</ja> Pet pet) <jk>throws</jk> Exception {
-			<jk>this</jk>.<jf>petDB</jf>.put(pet.<jf>id</jf>, pet);
-			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
-		}
-		
-		<jc>// Our bean class.</jc>
-		<jk>public static class</jk> Pet {
-	
-			<ja>@Html</ja>(link=<js>"servlet:/{id}"</js>)  <jc>// Creates a hyperlink in HTML view.</jc>
-			<ja>@NameProperty</ja>                <jc>// Links the parent key to this bean.</jc>
-			<jk>public int</jk> <jf>id</jf>;
-	
-			<jk>public</jk> String <jf>name</jf>;
-			<jk>public</jk> Kind <jf>kind</jf>;
-			<jk>public</jk> String <jf>breed</jf>;
-			<jk>public</jk> List&lt;Kind&gt; <jf>getsAlongWith</jf>;
-	
-			<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)  <jc>// Renders price in dollars.</jc>
-			<jk>public float</jk> <jf>price</jf>;
-	
-			<ja>@Swap</ja>(DateSwap.ISO8601D.<jk>class</jk>)  <jc>// Renders dates in ISO8601 format.</jc>
-			<jk>public</jk> Date <jf>birthDate</jf>;
-	
-			<jk>public int</jk> getAge() {
-				Calendar c = <jk>new</jk> GregorianCalendar();
-				c.setTime(<jf>birthDate</jf>);
-				<jk>return new</jk> GregorianCalendar().get(Calendar.<jsf>YEAR</jsf>) - c.get(Calendar.<jsf>YEAR</jsf>);
-			}</jk>
-		}
-	
-		<ja>@Html</ja>(render=KindRender.<jk>class</jk>)  <jc>// Render as an icon in HTML.</jc>
-		<jk>public static enum</jk> Kind {
-			<jsf>CAT</jsf>, <jsf>DOG</jsf>, <jsf>BIRD</jsf>, <jsf>FISH</jsf>, <jsf>MOUSE</jsf>, <jsf>RABBIT</jsf>, <jsf>SNAKE</jsf>
-		}
-	
-		<jk>public static class</jk> KindRender <jk>extends</jk> HtmlRender&lt;Kind&gt; {
-			<ja>@Override</ja>
-			<jk>public</jk> Object getContent(SerializerSession session, Kind value) {
-				<jk>return new</jk> Img().src(<js>"servlet:/htdocs/"</js>+value.toString().toLowerCase()+"<js>.png"</js>);
-			}
-			<ja>@Override</ja>
-			<jk>public</jk> String getStyle(SerializerSession session, Kind value) {
-				<jk>return</jk> <js>"background-color:#FDF2E9</js>";
-			}
-		}
-		
-		<jc>// Renders the "ADD" menu item.</jc>
-		<jk>public class</jk> AddPet <jk>extends</jk> MenuItemWidget {
-	
-			<ja>@Override</ja>
-			<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
-				<jk>return</jk> <js>"add"</js>;
-			}
-	
-			<ja>@Override</ja>
-			<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
-				<jk>return</jk> <jsm>div</jsm>(
-					<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<jsf>POST</jsf>).children(
-						<jsm>table</jsm>(
-							<jsm>tr</jsm>(
-								<jsm>th</jsm>(<js>"ID:"</js>),
-								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"id"</js>).type(<js>"number"</js>).value(<jsm>getNextAvailableId</jsm>())),
-								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"A unique identifer for the pet."</js>, <jsm>br</jsm>(), <js>"Must not conflict with existing IDs"</js>))
-							),
-							<jsm>tr</jsm>(
-								<jsm>th</jsm>(<js>"Name:"</js>),
-								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"name"</js>).type(<js>"text"</js>)),
-								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The name of the pet."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>)) 
-							),
-							<jsm>tr</jsm>(
-								<jsm>th</jsm>(<js>"Kind:"</js>),
-								<jsm>td</jsm>(
-									<jsm>select</jsm>().name(<js>"kind"</js>).children(
-										<jsm>option</jsm>(<js>"CAT"</js>), 
-										<jsm>option</jsm>(<js>"DOG"</js>), 
-										<jsm>option</jsm>(<js>"BIRD"</js>), 
-										<jsm>option</jsm>(<js>"FISH"</js>), 
-										<jsm>option</jsm>(<js>"MOUSE"</js>), 
-										<jsm>option</jsm>(<js>"RABBIT"</js>), 
-										<jsm>option</jsm>(<js>"SNAKE"</js>)
-									)
-								),
-								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The kind of animal."</js>)) 
-							),
-							<jsm>tr</jsm>(
-								<jsm>th</jsm>(<js>"Breed:"</js>),
-								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"breed"</js>).type(<js>"text"</js>)),
-								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The breed of animal."</js>, <jsm>br</jsm>(), <js>"Can be any arbitrary text"</js>)) 
-							),
-							<jsm>tr</jsm>(
-								<jsm>th</jsm>(<js>"Gets along with:"</js>),
-								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"getsAlongWith"</js>).type(<js>"text"</js>)),
-								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"A comma-delimited list of other animal types that this animal gets along with."</js>)) 
-							),
-							<jsm>tr</jsm>(
-								<jsm>th</jsm>(<js>"Price:"</js>),
-								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"price"</js>).type(<js>"number"</js>).placeholder(<js>"1.0"</js>).step(<js>"0.01"</js>).min(1).max(100)),
-								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The price to charge for this pet."</js>)) 
-							),
-							<jsm>tr</jsm>(
-								<jsm>th</jsm>(<js>"Birthdate:"</js>),
-								<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"birthDate"</js>).type(<js>"date"</js>)),
-								<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The pets birthday."</js>)) 
-							),
-							<jsm>tr</jsm>(
-								<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
-									<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>),
-									<jsm>button</jsm>(<js>""button"</js>, <js>"Cancel"</js>).onclick(<js>"window.location.href='/'"</js>),
-									<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>)
-								)
-							)
-						).style(<js>"white-space:nowrap"</js>)
-					)
-				);
-			}
-		}
-	}
-<p>
-	Pointing a browser to the resource shows the following:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/petstore
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.1.png'>
-<p>
-	Clicking the <code>QUERY</code> link renders the following menu pop-up complete with tooltips:
-</p>
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.2.png'>
-<p>
-	The <code>STYLES</code> menu item allows you to try out the other default look-and-feels:
-</p>
-<h5 class='figure'>Light look-and-feel</h5>
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.3.png'>
-<h5 class='figure'>Dark look-and-feel</h5>
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4.png'>
-</div><!-- END: 12.17 - juneau-examples-rest.PetStoreResource -->
+</div><!-- END: 12.17 - juneau-examples-rest.LogsResource -->
 </div><!-- END: 12 - juneau-examples-rest -->
 
 <!-- ==================================================================================================== -->

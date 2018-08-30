@@ -24,6 +24,10 @@ cd juneau-doc
 java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocLinkTester
 cd .. 
 
+rm -rf ../juneau-website/content/site/apidocs_preview
+mkdir ../juneau-website/content/site/apidocs_preview
+cp -r ./target/site/apidocs/* ../juneau-website/content/site/apidocs_preview
+
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'
 echo '*******************************************************************************'

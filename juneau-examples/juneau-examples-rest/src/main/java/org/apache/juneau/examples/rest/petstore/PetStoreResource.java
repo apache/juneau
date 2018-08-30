@@ -37,7 +37,7 @@ import org.apache.juneau.transforms.*;
 import org.apache.juneau.rest.converters.*;
 
 /**
- * Sample resource that shows how to generate ATOM feeds.
+ * Sample Petstore application.
  */
 @RestResource(
 	path="/petstore",
@@ -93,7 +93,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/",
 		summary="Navigation page"
 	)
@@ -110,7 +110,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/pet",
 		summary="All pets in the store",
 		swagger=@MethodSwagger(
@@ -138,7 +138,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/pet/{petId}",
 		summary="Find pet by ID",
 		description="Returns a single pet",
@@ -150,7 +150,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Pet getPet(
-			@Path(name="petId", description="ID of pet to return", example="123") long petId
+			@Path(
+				name="petId",
+				description="ID of pet to return",
+				example="123"
+			)
+			long petId
 		) throws IdNotFound, NotAcceptable {
 
 		return store.getPet(petId);
@@ -174,7 +179,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="PUT",
+		name=PUT,
 		path="/pet/{petId}",
 		summary="Update an existing pet",
 		swagger=@MethodSwagger(
@@ -193,7 +198,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/pet/{petId}/edit",
 		summary="Pet edit page",
 		swagger=@MethodSwagger(
@@ -204,7 +209,12 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Div editPetPage(
-			@Path(name="petId", description="ID of pet to return", example="123") long petId
+			@Path(
+				name="petId",
+				description="ID of pet to return",
+				example="123"
+			)
+			long petId
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 
 		Pet pet = getPet(petId);
@@ -263,7 +273,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/pet/findByStatus",
 		summary="Finds Pets by status",
 		description="Multiple status values can be provided with comma separated strings.",
@@ -295,7 +305,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/pet/findByTags",
 		summary="Finds Pets by tags",
 		description="Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
@@ -321,7 +331,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="DELETE",
+		name=DELETE,
 		path="/pet/{petId}",
 		summary="Deletes a pet",
 		swagger=@MethodSwagger(
@@ -332,8 +342,19 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok deletePet(
-			@Header(name="api_key", description="Security API key", required=true, example="foobar") String apiKey,
-			@Path(name="petId", description="Pet id to delete", example="123") long petId
+			@Header(
+				name="api_key",
+				description="Security API key",
+				required=true,
+				example="foobar"
+			)
+			String apiKey,
+			@Path(
+				name="petId",
+				description="Pet id to delete",
+				example="123"
+			)
+			long petId
 		) throws IdNotFound, NotAcceptable {
 
 		store.removePet(petId);
@@ -341,7 +362,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="POST",
+		name=POST,
 		path="/pet/{petId}/uploadImage",
 		summary="Uploads an image",
 		swagger=@MethodSwagger(
@@ -352,9 +373,25 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok uploadImage(
-			@Path(name="petId", description="ID of pet to update", example="123") long petId,
-			@FormData(name="additionalMetadata", description="Additional data to pass to server", example="Foobar") String additionalMetadata,
-			@FormData(name="file", description="file to upload", required=true, type="file") byte[] file
+			@Path(
+				name="petId",
+				description="ID of pet to update",
+				example="123"
+			)
+			long petId,
+			@FormData(
+				name="additionalMetadata",
+				description="Additional data to pass to server",
+				example="Foobar"
+			)
+			String additionalMetadata,
+			@FormData(
+				name="file",
+				description="file to upload",
+				required=true,
+				type="file"
+			)
+			byte[] file
 		) throws NotAcceptable, UnsupportedMediaType {
 
 		return OK;
@@ -378,7 +415,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/store/order",
 		summary="Petstore orders",
 		swagger=@MethodSwagger(
@@ -401,7 +438,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/store/order/{orderId}",
 		summary="Find purchase order by ID",
 		description="Returns a purchase order by ID.",
@@ -410,7 +447,14 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Order getOrder(
-			@Path(name="orderId", description="ID of order to fetch", maximum="1000", minimum="101", example="123") long orderId
+			@Path(
+				name="orderId",
+				description="ID of order to fetch",
+				maximum="1000",
+				minimum="101",
+				example="123"
+			)
+			long orderId
 		) throws InvalidId, IdNotFound, NotAcceptable {
 
 		if (orderId < 101 || orderId > 1000)
@@ -419,7 +463,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="POST",
+		name=POST,
 		path="/store/order",
 		summary="Place an order for a pet",
 		swagger=@MethodSwagger(
@@ -430,8 +474,16 @@ public class PetStoreResource extends BasicRestServletJena {
 		}
 	)
 	public Order placeOrder(
-			@FormData(name="petId", description="Pet ID") long petId,
-			@FormData(name="shipDate", description="Ship date") Date shipDate
+			@FormData(
+				name="petId",
+				description="Pet ID"
+			)
+			long petId,
+			@FormData(
+				name="shipDate",
+				description="Ship date"
+			)
+			Date shipDate
 		) throws IdConflict, NotAcceptable, UnsupportedMediaType {
 
 		CreateOrder co = new CreateOrder(petId, shipDate);
@@ -439,7 +491,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="DELETE",
+		name=DELETE,
 		path="/store/order/{orderId}",
 		summary="Delete purchase order by ID",
 		description= {
@@ -451,7 +503,13 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok deletePurchaseOrder(
-			@Path(name="orderId", description="ID of the order that needs to be deleted", minimum="1", example="5") long orderId
+			@Path(
+				name="orderId",
+				description="ID of the order that needs to be deleted",
+				minimum="1",
+				example="5"
+			)
+			long orderId
 		) throws InvalidId, IdNotFound, NotAcceptable {
 
 		if (orderId < 0)
@@ -461,7 +519,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/store/inventory",
 		summary="Returns pet inventories by status",
 		description="Returns a map of status codes to quantities",
@@ -484,7 +542,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/user",
 		summary="Petstore users",
 		bpx="User: email,password,phone",
@@ -497,7 +555,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/user/{username}",
 		summary="Get user by user name",
 		swagger=@MethodSwagger(
@@ -505,7 +563,11 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public User getUser(
-			@Path(name="username", description="The name that needs to be fetched. Use user1 for testing.") String username
+			@Path(
+				name="username",
+				description="The name that needs to be fetched. Use user1 for testing."
+			)
+			String username
 		) throws InvalidUsername, IdNotFound, NotAcceptable {
 
 		return store.getUser(username);
@@ -527,7 +589,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="POST",
+		name=POST,
 		path="/user/createWithArray",
 		summary="Creates list of users with given input array",
 		swagger=@MethodSwagger(
@@ -544,7 +606,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="PUT",
+		name=PUT,
 		path="/user/{username}",
 		summary="Update user",
 		description="This can only be done by the logged in user.",
@@ -553,8 +615,15 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok updateUser(
-			@Path(name="username", description="Name that need to be updated") String username,
-			@Body(description="Updated user object") User user
+			@Path(
+				name="username",
+				description="Name that need to be updated"
+			)
+			String username,
+			@Body(
+				description="Updated user object"
+			)
+			User user
 		) throws InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType {
 
 		store.update(user);
@@ -562,7 +631,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="DELETE",
+		name=DELETE,
 		path="/user/{username}",
 		summary="Delete user",
 		description="This can only be done by the logged in user.",
@@ -571,7 +640,11 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok deleteUser(
-			@Path(name="username", description="The name that needs to be deleted") String username
+			@Path(
+				name="username",
+				description="The name that needs to be deleted"
+			)
+			String username
 		) throws InvalidUsername, IdNotFound, NotAcceptable {
 
 		store.removeUser(username);
@@ -579,7 +652,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/user/login",
 		summary="Logs user into the system",
 		swagger=@MethodSwagger(
@@ -587,9 +660,28 @@ public class PetStoreResource extends BasicRestServletJena {
 		)
 	)
 	public Ok login(
-			@Query(name="username", description="The username for login", required=true, example="myuser") String username,
-			@Query(name="password", description="The password for login in clear text", required=true, example="abc123") String password,
-			@ResponseHeader(name="X-Rate-Limit", type="integer", format="int32", description="Calls per hour allowed by the user.", example="123") Value<Integer> rateLimit,
+			@Query(
+				name="username",
+				description="The username for login",
+				required=true,
+				example="myuser"
+			)
+			String username,
+			@Query(
+				name="password",
+				description="The password for login in clear text",
+				required=true,
+				example="abc123"
+			)
+			String password,
+			@ResponseHeader(
+				name="X-Rate-Limit",
+				type="integer",
+				format="int32",
+				description="Calls per hour allowed by the user.",
+				example="123"
+			)
+			Value<Integer> rateLimit,
 			Value<ExpiresAfter> expiresAfter,
 			RestRequest req,
 			RestResponse res
@@ -605,7 +697,13 @@ public class PetStoreResource extends BasicRestServletJena {
 		return OK;
 	}
 
-	@ResponseHeader(name="X-Expires-After", type="string", format="date-time", description="Date in UTC when token expires", example="2012-10-21")
+	@ResponseHeader(
+		name="X-Expires-After",
+		type="string",
+		format="date-time",
+		description="Date in UTC when token expires",
+		example="2012-10-21"
+	)
 	public static class ExpiresAfter {
 		private final Calendar c;
 		public ExpiresAfter(Date d) {
@@ -618,7 +716,7 @@ public class PetStoreResource extends BasicRestServletJena {
 	}
 
 	@RestMethod(
-		name="GET",
+		name=GET,
 		path="/user/logout",
 		summary="Logs out current logged in user session",
 		swagger=@MethodSwagger(
