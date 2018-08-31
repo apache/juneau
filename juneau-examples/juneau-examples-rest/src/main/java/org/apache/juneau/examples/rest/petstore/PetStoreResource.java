@@ -79,7 +79,46 @@ import org.apache.juneau.rest.converters.*;
 		// Resolve recursive references when showing schema info in the swagger.
 		@Property(name=SWAGGERUI_resolveRefsMaxDepth, value="99")
 	},
-	swagger=@ResourceSwagger("$F{PetStoreResource.json}"),
+	swagger=@ResourceSwagger(
+		version="1.0.0",
+		title="Swagger Petstore",
+		termsOfService="You are on your own.",
+		contact=@Contact(
+			name="Juneau Development Team",
+			email="dev@juneau.apache.org",
+			url="http://juneau.apache.org"
+		),
+		license=@License(
+			name="Apache 2.0",
+			url="http://www.apache.org/licenses/LICENSE-2.0.html"
+		),
+		externalDocs=@ExternalDocs(
+			description="Find out more about Juneau",
+			url="http://juneau.apache.org"
+		),
+		tags={
+			@Tag(
+				name="pet",
+				description="Everything about your Pets",
+				externalDocs=@ExternalDocs(
+					description="Find out more",
+					url="http://juneau.apache.org"
+				)
+			),
+			@Tag(
+				name="store",
+				description="Access to Petstore orders"
+			),
+			@Tag(
+				name="user",
+				description="Operations about user",
+				externalDocs=@ExternalDocs(
+					description="Find out more about our store",
+					url="http://juneau.apache.org"
+				)
+			)
+		}
+	),
 	staticFiles={"htdocs:htdocs"}
 )
 public class PetStoreResource extends BasicRestServletJena {
@@ -248,7 +287,7 @@ public class PetStoreResource extends BasicRestServletJena {
 					),
 					tr(
 						th("Tags:"),
-						td(input().name("tags").type("text").value(Tag.asString(pet.getTags()))),
+						td(input().name("tags").type("text").value(PetTag.asString(pet.getTags()))),
 						td(new Tooltip("(?)", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'"))
 					),
 					tr(

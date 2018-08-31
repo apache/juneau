@@ -21,8 +21,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.transform.*;
 
 @Bean(typeName="Tag", fluentSetters=true)
-@Swap(Tag.TagNameOnly.class)
-public class Tag {
+@Swap(PetTag.TagNameOnly.class)
+public class PetTag {
 	private long id;
 	private String name;
 
@@ -30,7 +30,7 @@ public class Tag {
 		return id;
 	}
 
-	public Tag id(long id) {
+	public PetTag id(long id) {
 		this.id = id;
 		return this;
 	}
@@ -39,21 +39,21 @@ public class Tag {
 		return name;
 	}
 
-	public Tag name(String name) {
+	public PetTag name(String name) {
 		this.name = name;
 		return this;
 	}
 
 	@Example
-	public static Tag example() {
-		return new Tag()
+	public static PetTag example() {
+		return new PetTag()
 			.id(123)
 			.name("MyTag");
 	}
 
-	public static class TagNameOnly extends PojoSwap<Tag,String> {
+	public static class TagNameOnly extends PojoSwap<PetTag,String> {
 		@Override
-		public String swap(BeanSession bs, Tag o) throws Exception {
+		public String swap(BeanSession bs, PetTag o) throws Exception {
 			return o.getName();
 		}
 		@Override
@@ -62,11 +62,11 @@ public class Tag {
 		}
 	}
 
-	public static String asString(List<Tag> tags) {
+	public static String asString(List<PetTag> tags) {
 		if (tags == null)
 			return "";
 		List<String> l = new ArrayList<>(tags.size());
-		for (Tag t : tags)
+		for (PetTag t : tags)
 			l.add(t.getName());
 		return StringUtils.join(l, ',');
 	}

@@ -41,7 +41,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
@@ -2989,7 +2988,6 @@ public final class RestContext extends BeanContext {
 	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
-	private final JsonSchemaGenerator jsonSchemaGenerator;
 	private final EncoderGroup encoders;
 	private final List<MediaType>
 		consumes,
@@ -3152,7 +3150,6 @@ public final class RestContext extends BeanContext {
 			parsers = ParserGroup.create().append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], true, resource, ps)).build();
 			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, true, resource, ps);
 			partParser = getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiParser.class, true, resource, ps);
-			jsonSchemaGenerator = new JsonSchemaGenerator(ps);
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
 
@@ -4244,17 +4241,6 @@ public final class RestContext extends BeanContext {
 	 */
 	public HttpPartParser getPartParser() {
 		return partParser;
-	}
-
-	/**
-	 * Returns the JSON-Schema serializer associated with this resource.
-	 *
-	 * @return
-	 * 	The JSON-Schema serializer associated with this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() {
-		return jsonSchemaGenerator;
 	}
 
 	/**

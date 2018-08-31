@@ -28,7 +28,7 @@ public class Pet {
 	private Species species;
 	private String name;
 	private List<String> photoUrls;
-	private List<Tag> tags;
+	private List<PetTag> tags;
 	private PetStatus status;
 
 	// This shows an example generated from a static method.
@@ -38,7 +38,7 @@ public class Pet {
 			.id(123)
 			.species(Species.example())
 			.name("Doggie")
-			.tags(Tag.example())
+			.tags(PetTag.example())
 			.status(PetStatus.AVAILABLE);
 	}
 
@@ -81,16 +81,16 @@ public class Pet {
 		return this;
 	}
 
-	public List<Tag> getTags() {
+	public List<PetTag> getTags() {
 		return tags;
 	}
 
-	public Pet tags(List<Tag> tags) {
+	public Pet tags(List<PetTag> tags) {
 		this.tags = tags;
 		return this;
 	}
 
-	public Pet tags(Tag...tags) {
+	public Pet tags(PetTag...tags) {
 		this.tags = Arrays.asList(tags);
 		return this;
 	}
@@ -113,7 +113,7 @@ public class Pet {
 
 	public boolean hasTag(String...tags) {
 		for (String tag : tags)
-			for (Tag t : this.tags)
+			for (PetTag t : this.tags)
 				if (t.getName().equals(tag))
 					return true;
 		return false;

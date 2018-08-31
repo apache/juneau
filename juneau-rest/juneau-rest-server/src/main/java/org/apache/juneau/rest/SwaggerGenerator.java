@@ -79,7 +79,7 @@ final class SwaggerGenerator {
 		this.ignoreTypes = ignoreTypes;
 		this.locale = req.getLocale();
 		this.context = req.getContext();
-		this.js = context.getJsonSchemaGenerator().createSession();
+		this.js = new JsonSchemaGenerator(req.getPropertyStore()).createSession();
 		this.c = context.getResource().getClass();
 		this.resource = context.getResource();
 		this.mb = context.getMessages();

@@ -384,6 +384,20 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
+	 * Returns the {@link PropertyStore} for this request.
+	 *
+	 * <p>
+	 * Consists of a read-only roll-up of all configuration properties defined on this method and class.
+	 *
+	 * @return
+	 * 	The property store for this request.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public PropertyStore getPropertyStore() {
+		return restJavaMethod == null ? PropertyStore.DEFAULT : restJavaMethod.propertyStore;
+	}
+
+	/**
 	 * Sets the charset to expect on the request body.
 	 */
 	@Override /* ServletRequest */

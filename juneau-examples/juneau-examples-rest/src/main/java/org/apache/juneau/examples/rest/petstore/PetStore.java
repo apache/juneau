@@ -30,7 +30,7 @@ public class PetStore {
 	IdMap<Long,Pet> petDb = IdMap.createLongMap(Pet.class);
 	IdMap<Long,Species> speciesDb = IdMap.createLongMap(Species.class);
 	IdMap<Long,Order> orderDb = IdMap.createLongMap(Order.class);
-	IdMap<Long,Tag> tagDb = IdMap.createLongMap(Tag.class);
+	IdMap<Long,PetTag> tagDb = IdMap.createLongMap(PetTag.class);
 	ConcurrentHashMap<String,User> userDb = new ConcurrentHashMap<>();
 
 	public PetStore init() throws Exception {
@@ -42,7 +42,7 @@ public class PetStore {
 		// Note that these must be loaded in the specified order to prevent IdNotFound exceptions.
 		for (Species s : parser.parse(getStream("Species.json"), Species[].class))
 			add(s);
-		for (Tag t : parser.parse(getStream("Tags.json"), Tag[].class))
+		for (PetTag t : parser.parse(getStream("Tags.json"), PetTag[].class))
 			add(t);
 
 		parser = parser.builder().pojoSwaps(new CategorySwap(), new TagSwap()).build();
@@ -91,15 +91,15 @@ public class PetStore {
 		return value;
 	}
 
-	public Tag getTag(long id) throws IdNotFound {
-		Tag value =  tagDb.get(id);
+	public PetTag getTag(long id) throws IdNotFound {
+		PetTag value =  tagDb.get(id);
 		if (value == null)
 			throw new IdNotFound(id, Pet.class);
 		return value;
 	}
 
-	public Tag getTag(String name) throws InvalidTag  {
-		for (Tag value : tagDb.values())
+	public PetTag getTag(String name) throws InvalidTag  {
+		for (PetTag value : tagDb.values())
 			if (value.getName().equals(name))
 				return value;
 		throw new InvalidTag();
@@ -132,7 +132,7 @@ public class PetStore {
 		return orderDb.values();
 	}
 
-	public Collection<Tag> getTags() {
+	public Collection<PetTag> getTags() {
 		return tagDb.values();
 	}
 
@@ -169,12 +169,12 @@ public class PetStore {
 		return value;
 	}
 
-	public Tag add(Tag value) throws IdConflict {
+	public PetTag add(PetTag value) throws IdConflict {
 		if (value.getId() == 0)
 			value.id(tagDb.nextId());
-		Tag old = tagDb.putIfAbsent(value.getId(), value);
+		PetTag old = tagDb.putIfAbsent(value.getId(), value);
 		if (old != null)
-			throw new IdConflict(value.getId(), Tag.class);
+			throw new IdConflict(value.getId(), PetTag.class);
 		return value;
 	}
 
@@ -221,20 +221,20 @@ public class PetStore {
 		return add(o);
 	}
 
-	private Tag[] getTags(String[] tags) {
+	private PetTag[] getTags(String[] tags) {
 		if (tags == null)
 			return null;
-		Tag[] l = new Tag[tags.length];
+		PetTag[] l = new PetTag[tags.length];
 		for (int i = 0; i < tags.length; i++)
 			l[i]= getOrCreateTag(tags[i]);
 		return l;
 	}
 
-	private Tag getOrCreateTag(String name) {
-		for (Tag t : tagDb.values())
+	private PetTag getOrCreateTag(String name) {
+		for (PetTag t : tagDb.values())
 			if (t.getName().equals(name))
 				return t;
-		return add(new Tag().name(name));
+		return add(new PetTag().name(name));
 	}
 
 	public Order update(Order value) throws IdNotFound {
@@ -244,11 +244,11 @@ public class PetStore {
 		return value;
 	}
 
-	public Tag update(Tag value) throws IdNotFound, InvalidTag {
+	public PetTag update(PetTag value) throws IdNotFound, InvalidTag {
 		assertValidTag(value.getName());
-		Tag old = tagDb.replace(value.getId(), value);
+		PetTag old = tagDb.replace(value.getId(), value);
 		if (old == null)
-			throw new IdNotFound(value.getId(), Tag.class);
+			throw new IdNotFound(value.getId(), PetTag.class);
 		return value;
 	}
 
@@ -335,13 +335,13 @@ public class PetStore {
 		}
 	}
 
-	public class TagSwap extends PojoSwap<Tag,String> {
+	public class TagSwap extends PojoSwap<PetTag,String> {
 		@Override
-		public String swap(BeanSession bs, Tag o) throws Exception {
+		public String swap(BeanSession bs, PetTag o) throws Exception {
 			return o.getName();
 		}
 		@Override
-		public Tag unswap(BeanSession bs, String o, ClassMeta<?> hint) throws Exception {
+		public PetTag unswap(BeanSession bs, String o, ClassMeta<?> hint) throws Exception {
 			return getTag(o);
 		}
 	}

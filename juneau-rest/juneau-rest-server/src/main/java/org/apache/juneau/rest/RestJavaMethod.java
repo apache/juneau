@@ -60,6 +60,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final Integer priority;
 	private final RestContext context;
 	final java.lang.reflect.Method method;
+	final PropertyStore propertyStore;
 	final SerializerGroup serializers;
 	final ParserGroup parsers;
 	final EncoderGroup encoders;
@@ -100,6 +101,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.partSerializer = b.partSerializer;
 		this.beanContext = b.beanContext;
 		this.properties = b.properties;
+		this.propertyStore = b.propertyStore;
 		this.defaultRequestHeaders = b.defaultRequestHeaders;
 		this.defaultQuery = b.defaultQuery;
 		this.defaultFormData = b.defaultFormData;
@@ -126,6 +128,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		HttpPartSerializer partSerializer;
 		BeanContext beanContext;
 		RestMethodProperties properties;
+		PropertyStore propertyStore;
 		Map<String,Object> defaultRequestHeaders, defaultQuery, defaultFormData;
 		long maxInput;
 		Integer priority;
@@ -229,15 +232,15 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
-				PropertyStore ps = context.getPropertyStore();
-				ps = ps.builder().set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps).build();
+				PropertyStoreBuilder psb = context.getPropertyStore().builder().set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
+				for (Property p1 : m.properties())
+					psb.set(p1.name(), p1.value());
+				for (String p1 : m.flags())
+					psb.set(p1, true);
+				this.propertyStore = psb.build();
 
 				if (sgb != null) {
-					sgb.apply(ps);
-					for (Property p1 : m.properties())
-						sgb.set(p1.name(), p1.value());
-					for (String p1 : m.flags())
-						sgb.set(p1, true);
+					sgb.apply(propertyStore);
 					if (m.bpi().length > 0) {
 						Map<String,String> bpiMap = new LinkedHashMap<>();
 						for (String s : m.bpi()) {
@@ -269,32 +272,19 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				}
 
 				if (pgb != null) {
-					pgb.apply(ps);
-					for (Property p1 : m.properties())
-						pgb.set(p1.name(), p1.value());
-					for (String p1 : m.flags())
-						pgb.set(p1, true);
+					pgb.apply(propertyStore);
 					pgb.beanFilters(mBeanFilters);
 					pgb.pojoSwaps(mPojoSwaps);
 				}
 
 				if (uepb != null) {
-					uepb.apply(ps);
-					for (Property p1 : m.properties())
-						uepb.set(p1.name(), p1.value());
-					for (String p1 : m.flags())
-						uepb.set(p1, true);
+					uepb.apply(propertyStore);
 					uepb.beanFilters(mBeanFilters);
 					uepb.pojoSwaps(mPojoSwaps);
 				}
 
 				if (bcb != null) {
-					bcb.apply(ps);
-					for (Property p1 : m.properties())
-						bcb.set(p1.name(), p1.value());
-					for (String p1 : m.flags())
-						bcb.set(p1, true);
-					bcb.beanFilters(mBeanFilters);
+					bcb.apply(propertyStore);
 					bcb.pojoSwaps(mPojoSwaps);
 				}
 

@@ -177,31 +177,7 @@ import org.apache.juneau.xmlschema.*;
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS"
 		}
-	),
-
-	// POJO swaps to apply to all serializers/parsers.
-	pojoSwaps={
-		// Use the SwaggerUI swap when rendering Swagger beans.
-		SwaggerUI.class
-	},
-
-	// Properties to apply to all serializers/parsers and REST-specific API objects.
-	properties={
-		// Add descriptions to the following types when not specified:
-		@Property(name=JSONSCHEMA_addDescriptionsTo, value="bean,collection,array,map,enum"),
-
-		// Add x-example to the following types:
-		@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
-
-		// Don't generate schema information on the Swagger bean itself or HTML beans.
-		@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger,org.apache.juneau.dto.html5.*")
-	},
-
-	// Shortcut for boolean properties.
-	flags={
-		// Use $ref references for bean definitions to reduce duplication in Swagger.
-		JSONSCHEMA_useBeanDefs
-	}
+	)
 )
 public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig {
 	private static final long serialVersionUID = 1L;
@@ -215,6 +191,7 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 	@RestMethod(name=OPTIONS, path="/*",
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource.",
+
 		htmldoc=@HtmlDoc(
 			// Override the nav links for the swagger page.
 			navlinks={
@@ -223,7 +200,32 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 			},
 			// Never show aside contents of page inherited from class.
 			aside="NONE"
-		)
+		),
+
+		// POJO swaps to apply to all serializers/parsers on this method.
+		pojoSwaps={
+			// Use the SwaggerUI swap when rendering Swagger beans.
+			// This is a per-media-type swap that only applies to text/html requests.
+			SwaggerUI.class
+		},
+
+		// Properties to apply to all serializers/parsers and REST-specific API objects on this method.
+		properties={
+			// Add descriptions to the following types when not specified:
+			@Property(name=JSONSCHEMA_addDescriptionsTo, value="bean,collection,array,map,enum"),
+
+			// Add x-example to the following types:
+			@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
+
+			// Don't generate schema information on the Swagger bean itself or HTML beans.
+			@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger,org.apache.juneau.dto.html5.*")
+		},
+
+		// Shortcut for boolean properties.
+		flags={
+			// Use $ref references for bean definitions to reduce duplication in Swagger.
+			JSONSCHEMA_useBeanDefs
+		}
 	)
 	public Swagger getOptions(RestRequest req) {
 		// Localized Swagger for this resource is available through the RestRequest object.
