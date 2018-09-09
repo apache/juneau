@@ -110,7 +110,7 @@ public class BeanTraverseSession extends BeanSession {
 		if (o == null)
 			return null;
 		Class<?> c = o.getClass();
-		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : getClassMeta(c);
+		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : ((o instanceof ClassMeta) ? (ClassMeta<?>)o : getClassMeta(c));
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
 		if (isDetectRecursions() || isDebug()) {
@@ -189,7 +189,7 @@ public class BeanTraverseSession extends BeanSession {
 		}
 
 		String toString(boolean simple) {
-			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']');
+			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
 			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
 			if (aType != aType.getSerializedClassMeta(null))

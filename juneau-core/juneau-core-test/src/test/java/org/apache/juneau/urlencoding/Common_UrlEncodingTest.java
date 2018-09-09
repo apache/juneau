@@ -278,10 +278,10 @@ public class Common_UrlEncodingTest {
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("[0]root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"));
-			assertTrue(msg.contains("->[1]r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2"));
-			assertTrue(msg.contains("->[2]r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3"));
-			assertTrue(msg.contains("->[3]r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"));
+			assertTrue(msg.contains("[0] root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"));
+			assertTrue(msg.contains("->[1] r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2"));
+			assertTrue(msg.contains("->[2] r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3"));
+			assertTrue(msg.contains("->[3] r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"));
 		}
 
 		s.ignoreRecursions();

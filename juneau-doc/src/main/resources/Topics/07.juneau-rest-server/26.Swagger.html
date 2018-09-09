@@ -57,8 +57,10 @@
 		 * <ja>@return</ja> A bean containing the contents for the OPTIONS page.
 		 */</jd>
 		<ja>@RestMethod</ja>(name=OPTIONS, path=<js>"/*"</js>,
+			
 			summary=<js>"Swagger documentation"</js>,
 			description=<js>"Swagger documentation for this resource."</js>,
+			
 			htmldoc=<ja>@HtmlDoc</ja>(
 				<jc>// Override the nav links for the swagger page.</jc>
 				navlinks={
@@ -67,7 +69,7 @@
 				},
 				<jc>// Never show aside contents of page inherited from class.</jc>
 				aside=<js>"NONE"</js>
-			)
+			),
 	
 			<jc>// POJO swaps to apply to all serializers/parsers.</jc>
 			pojoSwaps={
@@ -85,7 +87,7 @@
 				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addExamplesTo</jsf>, value=<js>"bean,collection,array,map"</js>),
 		
 				<jc>// Don't generate schema information on the Swagger bean itself or HTML beans.</jc>
-				<ja>@Property</ja>(name=<jsf>INFOPROVIDER_ignoreTypes</jsf>, value=<js>"Swagger,org.apache.juneau.dto.html5.*"</js>)
+				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value=<js>"Swagger,org.apache.juneau.dto.html5.*"</js>)
 			},
 		
 			<jc>// Shortcut for boolean properties.</jc>

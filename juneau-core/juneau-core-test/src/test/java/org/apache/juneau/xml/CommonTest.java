@@ -295,10 +295,10 @@ public class CommonTest {
 			fail("Exception expected!");
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
-			assertTrue(msg.contains("[0]<noname>:org.apache.juneau.xml.CommonTest$R1"));
-			assertTrue(msg.contains("->[1]r2:org.apache.juneau.xml.CommonTest$R2"));
-			assertTrue(msg.contains("->[2]r3:org.apache.juneau.xml.CommonTest$R3"));
-			assertTrue(msg.contains("->[3]r1:org.apache.juneau.xml.CommonTest$R1"));
+			assertTrue(msg.contains("[0] <noname>:org.apache.juneau.xml.CommonTest$R1"));
+			assertTrue(msg.contains("->[1] r2:org.apache.juneau.xml.CommonTest$R2"));
+			assertTrue(msg.contains("->[2] r3:org.apache.juneau.xml.CommonTest$R3"));
+			assertTrue(msg.contains("->[3] r1:org.apache.juneau.xml.CommonTest$R1"));
 		}
 
 		s.ignoreRecursions();

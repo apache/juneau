@@ -14,7 +14,6 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
-import static org.apache.juneau.rest.BasicRestInfoProvider.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.ui.*;
@@ -189,6 +188,7 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
 	@RestMethod(name=OPTIONS, path="/*",
+
 		summary="Swagger documentation",
 		description="Swagger documentation for this resource.",
 
@@ -218,7 +218,7 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 			@Property(name=JSONSCHEMA_addExamplesTo, value="bean,collection,array,map"),
 
 			// Don't generate schema information on the Swagger bean itself or HTML beans.
-			@Property(name=INFOPROVIDER_ignoreTypes, value="Swagger,org.apache.juneau.dto.html5.*")
+			@Property(name=JSONSCHEMA_ignoreTypes, value="Swagger,org.apache.juneau.dto.html5.*")
 		},
 
 		// Shortcut for boolean properties.

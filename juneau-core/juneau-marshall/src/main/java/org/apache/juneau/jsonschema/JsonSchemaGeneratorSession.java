@@ -94,6 +94,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private ObjectMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm) throws Exception {
 
+		if (ctx.isIgnoredType(eType))
+			return null;
+
 		ObjectMap out = new ObjectMap();
 
 		if (eType == null)

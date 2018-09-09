@@ -18,9 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -40,47 +38,11 @@ import org.apache.juneau.svl.*;
  */
 public class BasicRestInfoProvider implements RestInfoProvider {
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Configurable properties
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final String PREFIX = "BasicRestInfoProvider.";
-
-	/**
-	 * Configuration property:  Ignore types from schema definitions.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"BasicRestInfoProvider.ignoreTypes.s"</js>
-	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited)
-	 * 	<li><b>Default:</b>  <jk>null</jk>.
-	 * 	<li><b>Session property:</b>  <jk>false</jk>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
-	 * Swagger documentation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
-	 * 	<ja>@RestResource</ja>(
-	 * 			properties={
-	 * 				<ja>@Property</ja>(name=<jsf>INFOPROVIDER_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
-	 * 			}
-	 * 	<jk>public class</jk> MyResource {...}
-	 * </p>
-	 */
-	public static final String INFOPROVIDER_ignoreTypes = PREFIX + "ignoreTypes.s";
-
-
 	private final RestContext context;
 	private final String
 		siteName,
 		title,
 		description;
-	private final Set<Pattern> ignoreTypes;
 	private final ConcurrentHashMap<Locale,ConcurrentHashMap<Integer,Swagger>> swaggers = new ConcurrentHashMap<>();
 
 	/**
@@ -90,11 +52,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	 */
 	public BasicRestInfoProvider(RestContext context) {
 		this.context = context;
-
-		PropertyStore ps = context.getPropertyStore();
-		this.ignoreTypes = new LinkedHashSet<>();
-		for (String s : split(ps.getProperty(INFOPROVIDER_ignoreTypes, String.class, "")))
-			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
 
 		Builder b = new Builder(context);
 		this.siteName = b.siteName;
@@ -153,7 +110,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			return swagger;
 
 		// Wasn't cached...need to create one.
-		swagger = new SwaggerGenerator(req, ignoreTypes).getSwagger();
+		swagger = new SwaggerGenerator(req).getSwagger();
 
 		swaggers.get(locale).put(hashCode, swagger);
 

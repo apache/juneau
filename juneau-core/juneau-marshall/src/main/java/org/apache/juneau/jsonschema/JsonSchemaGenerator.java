@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -34,13 +37,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addDescriptionsTo.s"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addDescriptionsTo(String)}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#addDescriptionsTo(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -71,13 +74,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.addExamplesTo.s"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.addExamplesTo.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code>
 	 * 	<li><b>Default:</b>  Empty string.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#addExamplesTo(String)}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#addExamplesTo(String)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -114,13 +117,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.allowNestedDescriptions.b"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#allowNestedDescriptions()}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedDescriptions()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -135,13 +138,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.allowNestedExamples.b"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#allowNestedExamples()}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#allowNestedExamples()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -156,14 +159,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.beanDefMapper.o"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.beanDefMapper.o"</js>
 	 * 	<li><b>Data type:</b>  {@link BeanDefMapper}
 	 * 	<li><b>Default:</b>  {@link BasicBeanDefMapper}
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#beanDefMapper(Class)}
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#beanDefMapper(BeanDefMapper)}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#beanDefMapper(Class)}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#beanDefMapper(BeanDefMapper)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -182,13 +185,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.defaultSchema.smo"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.defaultSchema.smo"</js>
 	 * 	<li><b>Data type:</b>  <code>Map&lt;String,ObjectMap&gt;</code>
 	 * 	<li><b>Default:</b>  Empty map.
 	 * 	<li><b>Session property:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#defaultSchema(Class,ObjectMap)}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#defaultSchema(Class,ObjectMap)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -201,16 +204,44 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	public static final String JSONSCHEMA_defaultSchemas = PREFIX + "defaultSchemas.smo";
 
 	/**
+	 * Configuration property:  Ignore types from schema definitions.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.ignoreTypes.s"</js>
+	 * 	<li><b>Data type:</b>  <code>String</code> (comma-delimited)
+	 * 	<li><b>Default:</b>  <jk>null</jk>.
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
+	 * Swagger documentation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
+	 * 	<ja>@RestResource</ja>(
+	 * 			properties={
+	 * 				<ja>@Property</ja>(name=<jsf>INFOPROVIDER_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
+	 * 			}
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 */
+	public static final String JSONSCHEMA_ignoreTypes = PREFIX + "ignoreTypes.s";
+
+	/**
 	 * Configuration property:  Use bean definitions.
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaSerializer.useBeanDefs.o"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.useBeanDefs.o"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link JsonSchemaSerializerBuilder#useBeanDefs()}
+	 * 			<li class='jm'>{@link JsonSchemaGeneratorBuilder#useBeanDefs()}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -249,6 +280,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	private final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
 	private final Map<String,ObjectMap> defaultSchemas;
 	private final JsonSerializer jsonSerializer;
+	private final Set<Pattern> ignoreTypes;
 
 	/**
 	 * Constructor.
@@ -256,7 +288,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * @param ps Initialize with the specified config property store.
 	 */
 	public JsonSchemaGenerator(PropertyStore ps) {
-		super(ps);
+		super(ps.builder().set(BEANTRAVERSE_detectRecursions, true).set(BEANTRAVERSE_ignoreRecursions, true).build());
 
 		useBeanDefs = getBooleanProperty(JSONSCHEMA_useBeanDefs, false);
 		allowNestedExamples = getBooleanProperty(JSONSCHEMA_allowNestedExamples, false);
@@ -265,6 +297,12 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 		addExamplesTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addExamplesTo, null));
 		addDescriptionsTo = TypeCategory.parse(getStringProperty(JSONSCHEMA_addDescriptionsTo, null));
 		defaultSchemas = getMapProperty(JSONSCHEMA_defaultSchemas, ObjectMap.class);
+
+		Set<Pattern> ignoreTypes = new LinkedHashSet<>();
+		for (String s : split(ps.getProperty(JSONSCHEMA_ignoreTypes, String.class, "")))
+			ignoreTypes.add(Pattern.compile(s.replace(".", "\\.").replace("*", ".*")));
+		this.ignoreTypes = ignoreTypes;
+
 		jsonSerializer = new JsonSerializer(ps);
 	}
 
@@ -378,5 +416,22 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 */
 	protected final Map<String,ObjectMap> getDefaultSchemas() {
 		return defaultSchemas;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified type is ignored.
+	 *
+	 * <p>
+	 * The type is ignored if it's specified in the {@link #JSONSCHEMA_ignoreTypes} setting.
+	 * <br>Ignored types return <jk>null</jk> on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.
+	 *
+	 * @param cm The type to check.
+	 * @return <jk>true</jk> if the specified type is ignored.
+	 */
+	public boolean isIgnoredType(ClassMeta<?> cm) {
+		for (Pattern p : ignoreTypes)
+			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
+				return true;
+		return false;
 	}
 }

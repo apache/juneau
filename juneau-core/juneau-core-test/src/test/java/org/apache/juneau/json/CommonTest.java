@@ -285,10 +285,10 @@ public class CommonTest {
 		} catch (Exception e) {
 			String msg = e.getLocalizedMessage();
 			assertContains(msg,
-				"[0]root:org.apache.juneau.json.CommonTest$R1",
-				"->[1]r2:org.apache.juneau.json.CommonTest$R2",
-				"->[2]r3:org.apache.juneau.json.CommonTest$R3",
-				"->[3]r1:org.apache.juneau.json.CommonTest$R1"
+				"[0] root:org.apache.juneau.json.CommonTest$R1",
+				"->[1] r2:org.apache.juneau.json.CommonTest$R2",
+				"->[2] r3:org.apache.juneau.json.CommonTest$R3",
+				"->[3] r1:org.apache.juneau.json.CommonTest$R1"
 			);
 		}
 

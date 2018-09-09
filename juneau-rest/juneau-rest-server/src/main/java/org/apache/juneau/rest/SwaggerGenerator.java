@@ -20,7 +20,6 @@ import static org.apache.juneau.rest.util.AnnotationUtils.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
@@ -57,7 +56,6 @@ final class SwaggerGenerator {
 
 	private final RestRequest req;
 	private final VarResolverSession vr;
-	private final Set<Pattern> ignoreTypes;
 	private final BeanSession bs;
 	private final Locale locale;
 	private final RestContext context;
@@ -70,13 +68,11 @@ final class SwaggerGenerator {
 	/**
 	 * Constructor.
 	 * @param req
-	 * @param ignoreTypes
 	 *
 	 */
-	public SwaggerGenerator(RestRequest req, Set<Pattern> ignoreTypes) {
+	public SwaggerGenerator(RestRequest req) {
 		this.req = req;
 		this.vr = req.getVarResolverSession();
-		this.ignoreTypes = ignoreTypes;
 		this.locale = req.getLocale();
 		this.context = req.getContext();
 		this.js = new JsonSchemaGenerator(req.getPropertyStore()).createSession();
@@ -396,6 +392,11 @@ final class SwaggerGenerator {
 					if (! om.containsKey("schema"))
 						om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
 				}
+			} else if (m.getGenericReturnType() != void.class) {
+				ObjectMap om = responses.getObjectMap("200", true);
+				if (! om.containsKey("schema"))
+					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
+				addXExamples(sm, om, "ok", m.getGenericReturnType());
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
@@ -702,10 +703,6 @@ final class SwaggerGenerator {
 
 		if (schema.containsKey("type") || schema.containsKey("$ref"))
 			return schema;
-
-		for (Pattern p : ignoreTypes)
-			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
-				return null;
 
 		return fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
 	}
