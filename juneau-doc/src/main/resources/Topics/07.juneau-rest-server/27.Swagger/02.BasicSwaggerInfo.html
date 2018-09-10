@@ -1,0 +1,177 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Basic Swagger Info
+
+<p>
+	Let's look at the various parts of the <code>Petstore</code> application Swagger UI to see how they are defined.
+</p>
+<p>
+	The top part of the page shows general information about the REST interface:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.3.png'>
+<p>
+	The information is pulled from the {@link oajr.annotation.RestResource#swagger() @RestResource(swagger)} annotation.
+</p>
+<h5 class='figure'>org.apache.juneau.examples.rest.petstore.PetStoreResource</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/petstore"</js>,
+		title=<js>"Petstore application"</js>,
+		...
+		swagger=@ResourceSwagger(<js>"$F{PetStoreResource.json}"</js>),
+		...
+	)
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+</p>
+<p>
+	In this particular case, the Swagger is pulled in from a localized Swagger JSON file located in the 
+	<code>org.apache.juneau.examples.rest.petstore</code> package using the {@link oajr.vars.FileVar $F} variable.
+</p>
+<h5 class='figure'>PetStoreResource.json</h5>
+<p class='bpcode w800'>
+	{
+		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
+		<jok>"info"</jok>: {
+			<jok>"version"</jok>: <jov>"1.0.0"</jov>,
+			<jok>"title"</jok>: <jov>"Swagger Petstore"</jov>,
+			<jok>"termsOfService"</jok>: <jov>"You are on your own."</jov>,
+			<jok>"contact"</jok>: {
+				<jok>"name"</jok>: <jov>"Juneau Development Team"</jov>,
+				<jok>"email"</jok>: <jov>"dev@juneau.apache.org"</jov>,
+				<jok>"url"</jok>: <jov>"http://juneau.apache.org"</jov>
+			},
+			<jok>"license"</jok>: {
+				<jok>"name"</jok>: <jov>"Apache 2.0"</jov>,
+				<jok>"url"</jok>: <jov>"http://www.apache.org/licenses/LICENSE-2.0.html"</jov>
+			}
+		},
+		<jok>"externalDocs"</jok>: {
+			<jok>"description"</jok>: <jov>"Find out more about Juneau"</jov>,
+			<jok>"url"</jok>: <jov>"http://juneau.apache.org"</jov>
+		},
+		...
+	}
+</p>
+<p>
+	Note that the {@link oajr.vars.FileVar $F} variable allows for request-locale-sensitive name matching so that you can provide
+	localized Swagger information.
+</p>
+<p>
+	The {@link oajr.vars.FileVar $F} variable simply expands to a string to fill the {@link oajr.annotation.ResourceSwagger#value() @ResourceSwagger(value)}
+	annotation.  
+	You could equivalently embed JSON directly into your annotation like so:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/petstore"</js>,
+		title=<js>"Petstore application"</js>,
+		...
+		swagger=<ja>@ResourceSwagger</ja>(
+			<jc>// Raw Simplified JSON.</jc>
+			<jc>// Values are concatenated.
+			<js>"{"</js>,
+				<js>"swagger: '2.0',"</js>,
+				<js>"version: '1.0.0',"</js>,
+				...
+			<js>"}"</js>
+		),
+		...
+	)
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+</p>
+<p>
+	However, a more typical (and less error-prone) scenario is to define all of your Swagger as annotations:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/petstore"</js>,
+		title=<js>"Petstore application"</js>,
+		...
+		swagger=<ja>@ResourceSwagger</ja>(
+			version=<js>"1.0.0"</js>,
+			title=<js>"Swagger Petstore"</js>,
+			termsOfService=<js>"You are on your own."</js>,
+			contact=<ja>@Contact</ja>(
+				name=<js>"Juneau Development Team"</js>,
+				email=<js>"dev@juneau.apache.org"</js>,
+				url=<js>"http://juneau.apache.org"</js>
+			),
+			license=<ja>@License</ja>(
+				name=<js>"Apache 2.0"</js>,
+				url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
+			),
+			externalDocs=<ja>@ExternalDocs</ja>(
+				description=<js>"Find out more about Juneau"</js>,
+				url=<js>"http://juneau.apache.org"</js>
+			)
+		),
+		...
+	)
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+</p>
+<p>
+	All annotations support {@doc DefaultRestSvlVariables SVL variables}, so you could for example
+	pull localized strings from resource bundles using {@link oajr.vars.LocalizationVar $L} variables.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/petstore"</js>,
+		title=<js>"Petstore application"</js>,
+		messages=<js>"nls/MyMessages"</js>,
+		...
+		swagger=<ja>@ResourceSwagger</ja>(
+			version=<js>"1.0.0"</js>,
+			title=<js>"$L{myTitle}"</js>,
+			termsOfService=<js>"$L{myTermsOfService}"</js>,
+			contact=<ja>@Contact</ja>(
+				name=<js>"$L{myTeam}"</js>,
+				email=<js>"dev@juneau.apache.org"</js>,
+				url=<js>"http://juneau.apache.org"</js>
+			),
+			license=<ja>@License</ja>(
+				name=<js>"Apache 2.0"</js>,
+				url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
+			),
+			externalDocs=<ja>@ExternalDocs</ja>(
+				description=<js>"$L{myExternalDocsDescription}"</js>,
+				url=<js>"http://juneau.apache.org"</js>
+			)
+		),
+		...
+	)
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+</p>
+<p>
+	A third option is to define your Swagger information in your {@link oajr.annotation.RestResource#messages @RestResource(messages)} resource
+	bundle using predefined Swagger keywords:
+</p>
+<p class='bpcode w800'>
+	<mk>PetStoreResource.version</mk> = <mv>1.0.0</mv>
+	<mk>PetStoreResource.title</mk> = <mv>Swagger Petstore</mv>
+	<mk>PetStoreResource.termsOfService</mk> = <mv>You are on your own.</mv>
+	<mk>PetStoreResource.contact</mk> = <mv>{name:'Juneau Development Team', email:'dev@juneau.apache.org',...}</mv>
+	<mk>PetStoreResource.license</mk> = <mv>{name:'Apache 2.0',...}</mv>
+	<mk>PetStoreResource.externalDocs</mk> = <mv>{description:'Find out more about Juneau',...}</mv>
+</p>
+<p>
+	Information defined in multiple locations are merged into a single set of data.  
+	When the same information is provided in multiple locations, the following order-of-precedence is used:
+</p>
+<ol>
+	<li>Java annotations
+	<li>Resource bundle
+	<li>Swagger JSON file
+</ol>

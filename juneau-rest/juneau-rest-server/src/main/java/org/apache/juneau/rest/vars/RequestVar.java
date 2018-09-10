@@ -40,7 +40,6 @@ import org.apache.juneau.svl.*;
  * 	<li><js>"servletParentURI"</js> - Value returned by {@link UriContext#getRootRelativeServletPathParent()}
  * 	<li><js>"servletPath"</js> - See {@link RestRequest#getServletPath()}
  * 	<li><js>"servletURI"</js> - See {@link UriContext#getRootRelativeServletPath()}
- * 	<li><js>"siteName"</js> - See {@link RestRequest#getSiteName()}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>

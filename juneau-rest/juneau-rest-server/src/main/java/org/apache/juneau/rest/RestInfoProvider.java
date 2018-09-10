@@ -43,6 +43,12 @@ public interface RestInfoProvider {
 	/**
 	 * Returns the localized swagger for the REST resource.
 	 *
+	 * <p>
+	 * This object is made available through the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getSwagger()}
+	 * </ul>
+	 *
 	 * @param req The incoming HTTP request.
 	 * @return
 	 * 	A new {@link Swagger} instance.
@@ -56,6 +62,14 @@ public interface RestInfoProvider {
 	/**
 	 * Returns the localized site name of the REST resource.
 	 *
+	 * <p>
+	 * This object is made available through the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getSiteName()}
+	 * 	<li><code>$RI{siteName}</code> variable.
+	 * 	<li><code>$R{siteName}</code> variable.
+	 * </ul>
+	 *
 	 * @param req The current request.
 	 * @return The localized site name of the REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception
@@ -66,6 +80,14 @@ public interface RestInfoProvider {
 
 	/**
 	 * Returns the localized title of the REST resource.
+	 *
+	 * <p>
+	 * This object is made available through the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getResourceTitle()}
+	 * 	<li><code>$RI{title}</code> variable.
+	 * 	<li><code>$R{resourceTitle}</code> variable.
+	 * </ul>
 	 *
 	 * @param req The current request.
 	 * @return The localized title of the REST resource, or <jk>null</jk> if none was found.
@@ -78,6 +100,14 @@ public interface RestInfoProvider {
 	/**
 	 * Returns the localized description of the REST resource.
 	 *
+	 * <p>
+	 * This object is made available through the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getResourceDescription()}
+	 * 	<li><code>$RI{description}</code> variable.
+	 * 	<li><code>$R{resourceDescription}</code> variable.
+	 * </ul>
+	 *
 	 * @param req The current request.
 	 * @return The localized description of the REST resource, or <jk>null</jk> if none was found.
 	 * @throws Exception
@@ -88,6 +118,14 @@ public interface RestInfoProvider {
 
 	/**
 	 * Returns the localized summary of the specified java method.
+	 *
+	 * <p>
+	 * This object is made available through the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getMethodSummary()}
+	 * 	<li><code>$RI{methodSummary}</code> variable.
+	 * 	<li><code>$R{methodSummary}</code> variable.
+	 * </ul>
 	 *
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
@@ -100,6 +138,14 @@ public interface RestInfoProvider {
 
 	/**
 	 * Returns the localized description of the specified java method on this servlet.
+	 *
+	 * <p>
+	 * This object is made available through the following:
+	 * <ul>
+	 * 	<li class='jm'>{@link RestRequest#getMethodDescription()}
+	 * 	<li><code>$RI{methodDescription}</code> variable.
+	 * 	<li><code>$R{methodDescription}</code> variable.
+	 * </ul>
 	 *
 	 * @param method The Java method annotated with {@link RestMethod @RestMethod}.
 	 * @param req The current request.
