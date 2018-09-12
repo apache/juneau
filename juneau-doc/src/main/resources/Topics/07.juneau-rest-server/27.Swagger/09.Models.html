@@ -13,10 +13,97 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Models
+{new} Models
 
 <p>
-	TODO
+	The {@link oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} setting can be used to reduce the size of your
+	generated Swagger JSON files by creating model definitions for beans and referencing those definitions through <code>$ref</code> attributes.
 </p>
+<p>
+	By default, this flag is enabled when extending from {@link oajr.BasicRestServlet}:
+</p>
+<p class='bpcode w800'>
+	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+		
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+			...
+			flags={
+				<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
+				<jsf>JSONSCHEMA_useBeanDefs</jsf>
+			}
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {...}
+</p>
+<p>
+	In the Swagger UI, this causes bean definitions to show up in the Models section at the bottom of the page:
+</p>
+<h5 class='figure'>Models section</h5>
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.1.png'> 
+<h5 class='figure'>Models section with Order bean expanded</h5>
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.2.png'> 
+<p>
+	In the generated Swagger JSON, embedded schema information for beans will be replaced with references such as the one shown below for the <code>Order</code> bean:
+</p>
+<p class='bpcode w800'>
+	{
+		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
+		<jok>"paths"</jok>: {
+			<jok>"/store/order"</jok>: {
+				<jok>"get"</jok>: {
+					<jok>"operationId"</jok>: <jov>"getOrders"</jov>,
+					<jok>"summary"</jok>: <jov>"Petstore orders"</jov>,
+					<jok>"responses"</jok>: {
+						<jok>"200"</jok>: {
+							<jok>"description"</jok>: <jov>"OK"</jov>,
+							<jok>"schema"</jok>: {
+								<jok>"description"</jok>: <jov>"java.util.Collection&lt;org.apache.juneau.examples.rest.petstore.Order&gt;"</jov>,
+								<jok>"type"</jok>: <jov>"array"</jov>,
+								<jok>"items"</jok>: {
+									<jok>"$ref"</jok>: <jov>"#/definitions/Order"</jov>
+								}
+							},
+							...
+						...
+					...
+				...
+			...
+		},
+		<jok>"definitions"</jok>: {
+			<jok>"Order"</jok>: {
+				<jok>"type"</jok>: <jov>"object"</jov>,
+				<jok>"properties"</jok>: {
+					<jok>"id"</jok>: {
+						<jok>"type"</jok>: <jov>"integer"</jov>,
+						<jok>"format"</jok>: <jov>"int64"</jov>
+					},
+					<jok>"petId": {
+						<jok>"type"</jok>: <jov>"integer"</jov>,
+						<jok>"format"</jok>: <jov>"int64"</jov>
+					},
+					<jok>"shipDate"</jok>: {
+						<jok>"type"</jok>: <jov>"string"</jov>
+					},
+					<jok>"status"</jok>: {
+						<jok>"type"</jok>: <jov>"string"</jov>,
+						<jok>"enum"</jok>: [
+							<jov>"PLACED"</jov>,
+							<jov>"APPROVED"</jov>,
+							<jov>"DELIVERED"</jov>
+						]
+					}
+				},
+				<jok>"description"</jok>: <jov>"org.apache.juneau.examples.rest.petstore.Order"</jov>,
+				<jok>"example"</jok>: {
+					<jok>"id"</jok>: <jov>123</jov>,
+					<jok>"petId"</jok>: <jov>456</jov>,
+					<jok>"shipDate"</jok>: <jov>"2012-12-21"</jov>,
+					<jok>"status"</jok>: <jov>"APPROVED"</jov>
+				}
+			},
+		...
+	}
+</p>
+<p>
+	Note that this does not affect how the information is rendered for that bean in the Swagger UI:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.3.png'> 

@@ -322,6 +322,7 @@ juneau-rest-server.Swagger.ParameterExamples = #juneau-rest-server.Swagger.Param
 juneau-rest-server.Swagger.Parameters = #juneau-rest-server.Swagger.Parameters, Overview > juneau-rest-server > Swagger > Parameters
 juneau-rest-server.Swagger.ResponseExamples = #juneau-rest-server.Swagger.ResponseExamples, Overview > juneau-rest-server > Swagger > Response Examples
 juneau-rest-server.Swagger.Responses = #juneau-rest-server.Swagger.Responses, Overview > juneau-rest-server > Swagger > Responses
+juneau-rest-server.Swagger.Stylesheet = #juneau-rest-server.Swagger.Stylesheet, Overview > juneau-rest-server > Swagger > SwaggerUI.css
 juneau-rest-server.Swagger.Tags = #juneau-rest-server.Swagger.Tags, Overview > juneau-rest-server > Swagger > Tags
 juneau-rest-server.Transforms = #juneau-rest-server.Transforms, Overview > juneau-rest-server > Transforms
 juneau-rest-server.URIs = #juneau-rest-server.URIs, Overview > juneau-rest-server > URIs

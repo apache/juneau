@@ -296,7 +296,7 @@ public class PathAnnotationTest {
 			description={"a","b"},
 			type="string",
 			_enum="a,b",
-			example="'a'"
+			example="a"
 		)
 		public static class SA01 {
 			public SA01(String x) {}
@@ -338,7 +338,7 @@ public class PathAnnotationTest {
 			description={"a","b"},
 			type="string",
 			_enum="a,b",
-			example="'a'"
+			example="a"
 		)
 		public static class SA03 {
 			public SA03(String x) {}
@@ -381,8 +381,8 @@ public class PathAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 		assertObjectEquals("['a','b']", x.getEnum());
-		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'\\'a\\'','x-examples':{example:'/basic/sa01'}}", x);
+		assertEquals("a", x.getExample());
+		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/basic/a'}}", x);
 	}
 	@Test
 	public void sa02_Path_onPojo_api() throws Exception {
@@ -392,7 +392,7 @@ public class PathAnnotationTest {
 		assertEquals("string", x.getType());
 		assertObjectEquals("['a','b']", x.getEnum());
 		assertEquals("a", x.getExample());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/api/sa02'}}", x);
+		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/api/a'}}", x);
 	}
 	@Test
 	public void sa03_Path_onPojo_mixed() throws Exception {
@@ -401,8 +401,8 @@ public class PathAnnotationTest {
 		assertEquals("a\nb", x.getDescription());
 		assertEquals("string", x.getType());
 		assertObjectEquals("['a','b']", x.getEnum());
-		assertEquals("'a'", x.getExample());
-		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'\\'a\\'','x-examples':{example:'/mixed/sa03'}}", x);
+		assertEquals("a", x.getExample());
+		assertObjectEquals("{'in':'path',name:'P',type:'string',description:'a\\nb',required:true,'enum':['a','b'],'x-example':'a','x-examples':{example:'/mixed/a'}}", x);
 	}
 	@Test
 	public void sa04_Path_onPojo_value() throws Exception {

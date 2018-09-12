@@ -871,7 +871,7 @@ public @interface Query {
 	 * 		name=<js>"status"</js>,
 	 * 		type=<js>"array"</js>,
 	 * 		collectionFormat=<js>"csv"</js>,
-	 * 		example=<js>"AVALIABLE,PENDING"</js>
+	 * 		example=<js>"AVAILABLE,PENDING"</js>
 	 * 	)
 	 * 	PetStatus[] status
 	 * </p>

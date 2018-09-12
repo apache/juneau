@@ -29,7 +29,6 @@ import org.apache.juneau.http.annotation.Contact;
 import org.apache.juneau.http.annotation.Items;
 import org.apache.juneau.http.annotation.License;
 import org.apache.juneau.http.annotation.Tag;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
@@ -360,7 +359,10 @@ final class SwaggerGenerator {
 					if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 						param.put("required", true);
 
-					addXExamples(sm, param, in.toString(), mp.getType());
+					if (in == BODY)
+						addBodyExamples(sm, param, false, mp.getType());
+					else
+						addParamExample(sm, param, in, mp.getType());
 				}
 			}
 
@@ -396,7 +398,7 @@ final class SwaggerGenerator {
 				ObjectMap om = responses.getObjectMap("200", true);
 				if (! om.containsKey("schema"))
 					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
-				addXExamples(sm, om, "ok", m.getGenericReturnType());
+				addBodyExamples(sm, om, true, m.getGenericReturnType());
 			}
 
 			// Finally, look for @ResponseHeader parameters defined on method.
@@ -719,7 +721,7 @@ final class SwaggerGenerator {
 		return om;
 	}
 
-	private void addXExamples(RestJavaMethod sm, ObjectMap piri, String in, Type type) throws Exception {
+	private void addBodyExamples(RestJavaMethod sm, ObjectMap piri, boolean response, Type type) throws Exception {
 
 		String sex = piri.getString("x-example");
 
@@ -732,8 +734,6 @@ final class SwaggerGenerator {
 		if (isEmpty(sex))
 			return;
 
-		boolean isOk = "ok".equals(in), isBody = "body".equals(in);
-
 		Object example = null;
 		if (isJson(sex)) {
 			example = JsonParser.DEFAULT.parse(sex, type);
@@ -744,46 +744,61 @@ final class SwaggerGenerator {
 			}
 		}
 
-		String examplesKey = isOk ? "examples" : "x-examples";  // Parameters don't have an examples attribute.
+		String examplesKey = response ? "examples" : "x-examples";  // Parameters don't have an examples attribute.
 
 		ObjectMap examples = piri.getObjectMap(examplesKey);
 		if (examples == null)
 			examples = new ObjectMap();
 
-		if (isOk || isBody) {
-			List<MediaType> mediaTypes = isOk ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
+		List<MediaType> mediaTypes = response ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
 
-			for (MediaType mt : mediaTypes) {
-				if (mt != MediaType.HTML) {
-					Serializer s2 = sm.getSerializers().getSerializer(mt);
-					if (s2 != null) {
-						SerializerSessionArgs args = new SerializerSessionArgs(null, req.getJavaMethod(), req.getLocale(), null, mt, null, req.isDebug() ? true : null, req.getUriContext(), true);
-						try {
-							String eVal = s2.createSession(args).serializeToString(example);
-							examples.put(s2.getPrimaryMediaType().toString(), eVal);
-						} catch (Exception e) {
-							System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());  // NOT DEBUG
-						}
+		for (MediaType mt : mediaTypes) {
+			if (mt != MediaType.HTML) {
+				Serializer s2 = sm.getSerializers().getSerializer(mt);
+				if (s2 != null) {
+					SerializerSessionArgs args = new SerializerSessionArgs(null, req.getJavaMethod(), req.getLocale(), null, mt, null, req.isDebug() ? true : null, req.getUriContext(), true);
+					try {
+						String eVal = s2.createSession(args).serializeToString(example);
+						examples.put(s2.getPrimaryMediaType().toString(), eVal);
+					} catch (Exception e) {
+						System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());  // NOT DEBUG
 					}
 				}
 			}
-		} else {
-			String paramName = piri.getString("name");
-			String s = sm.partSerializer.createPartSession(req.getSerializerSessionArgs()).serialize(HttpPartType.valueOf(in.toUpperCase()), null, example);
-			if ("query".equals(in))
-				s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
-			else if ("formData".equals(in))
-				s = paramName + "=" + s;
-			else if ("header".equals(in))
-				s = paramName + ": " + s;
-			else if ("path".equals(in))
-				s = sm.getPathPattern().replace("{"+paramName+"}", urlEncodeLax(s));
- 			examples.put("example", s);
 		}
 
 		if (! examples.isEmpty())
 			piri.put(examplesKey, examples);
 	}
+
+	private void addParamExample(RestJavaMethod sm, ObjectMap piri, RestParamType in, Type type) throws Exception {
+
+		String s = piri.getString("x-example");
+
+		if (isEmpty(s))
+			return;
+
+		ObjectMap examples = piri.getObjectMap("x-examples");
+		if (examples == null)
+			examples = new ObjectMap();
+
+		String paramName = piri.getString("name");
+
+		if (in == QUERY)
+			s = "?" + urlEncodeLax(paramName) + "=" + urlEncodeLax(s);
+		else if (in == FORM_DATA)
+			s = paramName + "=" + s;
+		else if (in == HEADER)
+			s = paramName + ": " + s;
+		else if (in == PATH)
+			s = sm.getPathPattern().replace("{"+paramName+"}", urlEncodeLax(s));
+
+		examples.put("example", s);
+
+		if (! examples.isEmpty())
+			piri.put("x-examples", examples);
+	}
+
 
 	private ObjectMap resolveRef(ObjectMap m) {
 		if (m == null)

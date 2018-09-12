@@ -16,7 +16,90 @@
 {todo} Parameters
 
 <p>
-	TODO
+	Expanding operations shows you a list of parameters:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.2.png'> 
+<p>
+	The <code>parameters</code> annotation is a free-form Simple JSON field that allows you to add arbitrary
+	parameter information to your resource.
+	In this case, we pull from a common field defined in the {@link oajr.converters.Queryable} converter class:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> Queryable <jk>implements</jk> RestConverter {
+	
+		<jk>public static final</jk> String <jsf>SWAGGER_PARAMS</jsf>=<js>""</js>
+			+ <js>"{"</js>
+				+ <js>"in:'query',"</js>
+				+ <js>"name:'s',"</js>
+				+ <js>"description:'"</js>
+					+ <js>"Search.\n"</js>
+					+ <js>"Key/value pairs representing column names and search tokens.\n"</js>
+					+ <js>"\\'*\\' and \\'?\\' can be used as meta-characters in string fields.\n"</js>
+					+ <js>"\\'>\\', \\'>=\\', \\'<\\', and \\'<=\\' can be used as limits on numeric and date fields.\n"</js>
+					+ <js>"Date fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018)."</js>
+				+ <js>"',"</js>
+				+ <js>"type:'array',"</js>
+				+ <js>"collectionFormat:'csv',"</js>
+				+ <js>"x-examples:{example:'?s=Bill*,birthDate>2000'}"</js>
+			+ <js>"},"</js>
+			+ <js>"{"</js>
+				+ <js>"in:'query',"</js>
+				+ <js>"name:'v',"</js>
+				+ <js>"description:'"</js>
+					+ <js>"View.\n"</js>
+					+ <js>"Column names to display."</js>
+				+ <js>"',"</js>
+				+ <js>"type:'array',"</js>
+				+ <js>"collectionFormat:'csv',"</js>
+				+ <js>"x-examples:{example:'?v=name,birthDate'}"</js>
+			+ <js>"},"</js>
+			...
+		;
+	}
+</p>
+<p>
+	Note that this information could have also been defined in the Swagger JSON for the resource as well.
+</p>
+<p>
+	The Swagger can also be defined via annotations on parameters directly, as shown below:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		...
+	)
+	<jk>public</jk> Collection&lt;Pet&gt; getPets(
+			<ja>@Query</ja>(
+				name=<js>"s"</js>,
+				description={
+					<js>"Search."</js>,
+					<js>"Key/value pairs representing column names and search tokens."</js>,
+					<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
+					<js>"'>', '>=', '<', and '<=' can be used as limits on numeric and date fields."</js>,
+					<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
+				},
+				type=<js>"array"</js>,
+				collectionFormat=<js>"csv"</js>,
+				example=<js>"Bill*,birthDate>2000"</js>
+			) 
+			String[] s,
+			<ja>@Query</ja>(
+				name=<js>"v"</js>,
+				description={
+					<js>"View."</js>,
+					<js>"Column names to display."</js>
+				},
+				type=<js>"array"</js>,
+				collectionFormat=<js>"csv"</js>,
+				example=<js>"name,birthDate"</js>
+			) 
+			String[] v
+		) <jk>throws</jk> NotAcceptable {
+		...
+	}
+</p>
+<p>
+	<b>Note:</b>  The <code>type</code> and <code>collectionFormat</code> values above are optional and auto-detected based on the
+	parameter class type if omitted.
 </p>
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.1.png'> 
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.2.png'> 

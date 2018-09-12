@@ -338,12 +338,13 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.BasicRestServlet'>BasicRestServlet</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.BasicSwaggerInfo'>Basic Swagger Info</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Tags'>Tags</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Swagger.Operations'>Operations</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Operations'>Operations</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Swagger.Parameters'>Parameters</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Swagger.ParameterExamples'>Parameter Examples</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Swagger.Responses'>Responses</a></p>
 			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Swagger.ResponseExamples'>Response Examples</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Swagger.Models'>Models</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Models'>Models</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Stylesheet'>SwaggerUI.css</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation'>@HtmlDoc</a></p>
 		<ol>
@@ -18725,7 +18726,6 @@
 			}
 		}
 	],
-
 </p>
 <p>
 	The annotation-only approach is shown here:
@@ -18791,15 +18791,47 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.Operations' id='juneau-rest-server.Swagger.Operations'>7.27.4 - Operations</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.Operations' id='juneau-rest-server.Swagger.Operations'>7.27.4 - Operations</a></h4>
 <div class='topic'><!-- START: 7.27.4 - juneau-rest-server.Swagger.Operations -->
 <p>
-	TODO
+	<ja>@RestMethod</ja>-annotated methods automatically get rendered as Swagger operations:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.1.png'> 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.2.png'> 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.3.png'> 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.4.png'>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.1.png'>
+<p>
+	The following shows the annotations defined on the <code>GET /pet</code> operation:
+</p>
+<h5 class='figure'>PetStoreResource.getPets()</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/pet"</js>,
+		summary=<js>"All pets in the store"</js>,
+		swagger=<ja>@MethodSwagger</ja>(
+			tags=<js>"pet"</js>,
+			...
+		),
+		...
+	)
+	<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+		<jk>return</jk> <jsf>store</jsf>.getPets();
+	}
+</p> 
+<p>
+	Methods marked as deprecated will show up as deprecated in the Swagger UI:	
+</p>
+<h5 class='figure'>PetStoreResource.findPetsByTag()</h5>
+<p class='bpcode w800'>	
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/pet/findByTags"</js>,
+		summary=<js>"Finds Pets by tags"</js>,
+		...
+	)
+	<ja>@Deprecated</ja>
+	<jk>public</jk> Collection&lt;Pet&gt; findPetsByTags(...) {
+		...
+	}
+</p>
 </div><!-- END: 7.27.4 - juneau-rest-server.Swagger.Operations -->
 
 <!-- ==================================================================================================== -->
@@ -18807,7 +18839,90 @@
 <h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.Parameters' id='juneau-rest-server.Swagger.Parameters'>7.27.5 - Parameters</a></h4>
 <div class='topic'><!-- START: 7.27.5 - juneau-rest-server.Swagger.Parameters -->
 <p>
-	TODO
+	Expanding operations shows you a list of parameters:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.2.png'> 
+<p>
+	The <code>parameters</code> annotation is a free-form Simple JSON field that allows you to add arbitrary
+	parameter information to your resource.
+	In this case, we pull from a common field defined in the {@link org.apache.juneau.rest.converters.Queryable} converter class:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> Queryable <jk>implements</jk> RestConverter {
+	
+		<jk>public static final</jk> String <jsf>SWAGGER_PARAMS</jsf>=<js>""</js>
+			+ <js>"{"</js>
+				+ <js>"in:'query',"</js>
+				+ <js>"name:'s',"</js>
+				+ <js>"description:'"</js>
+					+ <js>"Search.\n"</js>
+					+ <js>"Key/value pairs representing column names and search tokens.\n"</js>
+					+ <js>"\\'*\\' and \\'?\\' can be used as meta-characters in string fields.\n"</js>
+					+ <js>"\\'>\\', \\'>=\\', \\'<\\', and \\'<=\\' can be used as limits on numeric and date fields.\n"</js>
+					+ <js>"Date fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018)."</js>
+				+ <js>"',"</js>
+				+ <js>"type:'array',"</js>
+				+ <js>"collectionFormat:'csv',"</js>
+				+ <js>"x-examples:{example:'?s=Bill*,birthDate>2000'}"</js>
+			+ <js>"},"</js>
+			+ <js>"{"</js>
+				+ <js>"in:'query',"</js>
+				+ <js>"name:'v',"</js>
+				+ <js>"description:'"</js>
+					+ <js>"View.\n"</js>
+					+ <js>"Column names to display."</js>
+				+ <js>"',"</js>
+				+ <js>"type:'array',"</js>
+				+ <js>"collectionFormat:'csv',"</js>
+				+ <js>"x-examples:{example:'?v=name,birthDate'}"</js>
+			+ <js>"},"</js>
+			...
+		;
+	}
+</p>
+<p>
+	Note that this information could have also been defined in the Swagger JSON for the resource as well.
+</p>
+<p>
+	The Swagger can also be defined via annotations on parameters directly, as shown below:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		...
+	)
+	<jk>public</jk> Collection&lt;Pet&gt; getPets(
+			<ja>@Query</ja>(
+				name=<js>"s"</js>,
+				description={
+					<js>"Search."</js>,
+					<js>"Key/value pairs representing column names and search tokens."</js>,
+					<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
+					<js>"'>', '>=', '<', and '<=' can be used as limits on numeric and date fields."</js>,
+					<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
+				},
+				type=<js>"array"</js>,
+				collectionFormat=<js>"csv"</js>,
+				example=<js>"Bill*,birthDate>2000"</js>
+			) 
+			String[] s,
+			<ja>@Query</ja>(
+				name=<js>"v"</js>,
+				description={
+					<js>"View."</js>,
+					<js>"Column names to display."</js>
+				},
+				type=<js>"array"</js>,
+				collectionFormat=<js>"csv"</js>,
+				example=<js>"name,birthDate"</js>
+			) 
+			String[] v
+		) <jk>throws</jk> NotAcceptable {
+		...
+	}
+</p>
+<p>
+	<b>Note:</b>  The <code>type</code> and <code>collectionFormat</code> values above are optional and auto-detected based on the
+	parameter class type if omitted.
 </p>
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.1.png'> 
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.2.png'> 
@@ -18831,6 +18946,7 @@
 <p>
 	TODO
 </p>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.3.png'> 
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.1.png'> 
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.2.png'> 
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.3.png'>
@@ -18847,14 +18963,115 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.Models' id='juneau-rest-server.Swagger.Models'>7.27.9 - Models</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.Models' id='juneau-rest-server.Swagger.Models'>7.27.9 - Models</a></h4>
 <div class='topic'><!-- START: 7.27.9 - juneau-rest-server.Swagger.Models -->
 <p>
-	TODO
+	The {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_useBeanDefs} setting can be used to reduce the size of your
+	generated Swagger JSON files by creating model definitions for beans and referencing those definitions through <code>$ref</code> attributes.
 </p>
+<p>
+	By default, this flag is enabled when extending from {@link org.apache.juneau.rest.BasicRestServlet}:
+</p>
+<p class='bpcode w800'>
+	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {
+		
+		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
+			...
+			flags={
+				<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
+				<jsf>JSONSCHEMA_useBeanDefs</jsf>
+			}
+		)
+		<jk>public</jk> Swagger getOptions(RestRequest req) {...}
+</p>
+<p>
+	In the Swagger UI, this causes bean definitions to show up in the Models section at the bottom of the page:
+</p>
+<h5 class='figure'>Models section</h5>
 <img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.1.png'> 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.2.png'>
+<h5 class='figure'>Models section with Order bean expanded</h5>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.2.png'> 
+<p>
+	In the generated Swagger JSON, embedded schema information for beans will be replaced with references such as the one shown below for the <code>Order</code> bean:
+</p>
+<p class='bpcode w800'>
+	{
+		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
+		<jok>"paths"</jok>: {
+			<jok>"/store/order"</jok>: {
+				<jok>"get"</jok>: {
+					<jok>"operationId"</jok>: <jov>"getOrders"</jov>,
+					<jok>"summary"</jok>: <jov>"Petstore orders"</jov>,
+					<jok>"responses"</jok>: {
+						<jok>"200"</jok>: {
+							<jok>"description"</jok>: <jov>"OK"</jov>,
+							<jok>"schema"</jok>: {
+								<jok>"description"</jok>: <jov>"java.util.Collection&lt;org.apache.juneau.examples.rest.petstore.Order&gt;"</jov>,
+								<jok>"type"</jok>: <jov>"array"</jov>,
+								<jok>"items"</jok>: {
+									<jok>"$ref"</jok>: <jov>"#/definitions/Order"</jov>
+								}
+							},
+							...
+						...
+					...
+				...
+			...
+		},
+		<jok>"definitions"</jok>: {
+			<jok>"Order"</jok>: {
+				<jok>"type"</jok>: <jov>"object"</jov>,
+				<jok>"properties"</jok>: {
+					<jok>"id"</jok>: {
+						<jok>"type"</jok>: <jov>"integer"</jov>,
+						<jok>"format"</jok>: <jov>"int64"</jov>
+					},
+					<jok>"petId": {
+						<jok>"type"</jok>: <jov>"integer"</jov>,
+						<jok>"format"</jok>: <jov>"int64"</jov>
+					},
+					<jok>"shipDate"</jok>: {
+						<jok>"type"</jok>: <jov>"string"</jov>
+					},
+					<jok>"status"</jok>: {
+						<jok>"type"</jok>: <jov>"string"</jov>,
+						<jok>"enum"</jok>: [
+							<jov>"PLACED"</jov>,
+							<jov>"APPROVED"</jov>,
+							<jov>"DELIVERED"</jov>
+						]
+					}
+				},
+				<jok>"description"</jok>: <jov>"org.apache.juneau.examples.rest.petstore.Order"</jov>,
+				<jok>"example"</jok>: {
+					<jok>"id"</jok>: <jov>123</jov>,
+					<jok>"petId"</jok>: <jov>456</jov>,
+					<jok>"shipDate"</jok>: <jov>"2012-12-21"</jov>,
+					<jok>"status"</jok>: <jov>"APPROVED"</jov>
+				}
+			},
+		...
+	}
+</p>
+<p>
+	Note that this does not affect how the information is rendered for that bean in the Swagger UI:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.3.png'>
 </div><!-- END: 7.27.9 - juneau-rest-server.Swagger.Models -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.Stylesheet' id='juneau-rest-server.Swagger.Stylesheet'>7.27.10 - SwaggerUI.css</a></h4>
+<div class='topic'><!-- START: 7.27.10 - juneau-rest-server.Swagger.Stylesheet -->
+<p>
+	The look-and-feel of the Swagger UI is controlled via a single CSS file:  <code>SwaggerUI.css</code>.
+</p>
+<p>
+	In the microservice template, this file is located in the <code>files/htdocs/styles</code> directory.
+	It's a simple straightforward file consisting of less than 350 lines.
+	<br>This file can be modified to change the look-and-feel of your Swagger UI.
+</p>
+</div><!-- END: 7.27.10 - juneau-rest-server.Swagger.Stylesheet -->
 </div><!-- END: 7.27 - juneau-rest-server.Swagger -->
 
 <!-- ==================================================================================================== -->

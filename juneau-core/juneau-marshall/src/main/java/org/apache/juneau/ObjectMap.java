@@ -1291,6 +1291,31 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 			remove(k);
 	}
 
+	/**
+	 * The opposite of {@link #removeAll(String...)}.
+	 *
+	 * <p>
+	 * Discards all keys from this map that aren't in the specified list.
+	 *
+	 * @param keys The keys to keep.
+	 * @return This map.
+	 */
+	public ObjectMap keepAll(String...keys) {
+		for (Iterator<String> i = keySet().iterator(); i.hasNext();) {
+			boolean remove = true;
+			String key = i.next();
+			for (String k : keys) {
+				if (k.equals(key)) {
+					remove = false;
+					break;
+				}
+			}
+			if (remove)
+				i.remove();
+		}
+		return this;
+	}
+
 	@Override /* Map */
 	public boolean containsKey(Object key) {
 		if (super.containsKey(key))

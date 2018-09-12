@@ -245,7 +245,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 				Td parameterValue = td(
 					div(pi.getDescription())._class("description"),
-					examples(s, pi.getSchema(), pi.getExamples())
+					examples(s, pi)
 				)._class("parameter-value");
 
 				parameters.child(tr(parameterKey, parameterValue));
@@ -267,7 +267,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 				Td codeValue = td(
 					div(ri.getDescription())._class("description"),
-					examples(s, ri.getSchema(), ri.getExamples()),
+					examples(s, ri),
 					headers(s, ri)
 				)._class("response-value");
 
@@ -304,28 +304,61 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		return headers;
 	}
 
-	private Div examples(Session s, SchemaInfo si, Map<String,?> examples) {
-		if (si == null && examples == null)
-			return null;
+	private Div examples(Session s, ParameterInfo pi) {
+		boolean isBody = "body".equals(pi.getIn());
 
-		int count = (si == null ? 0 : 1) + (examples == null ? 0 : examples.entrySet().size());
-		Select select = (Select)select().onchange("selectExample(this)")._class("example-select");
-		if (count < 2)
-			select.disabled(true);
-		Div div = div(select)._class("examples");
-
-		if (si != null) {
-			select.child(option("model","model"));
-			div.child(div(si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth))._class("model active").attr("data-name", "model"));
+		ObjectMap m = new ObjectMap();
+		if (isBody) {
+			SchemaInfo si = pi.getSchema();
+			if (si != null)
+				m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth));
+		} else {
+			ObjectMap om = pi
+				.copy()
+				.resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth)
+				.asMap()
+				.keepAll("format","pattern","collectionFormat","maximum","minimum","multipleOf","maxLength","minLength","maxItems","minItems","allowEmptyValue","exclusiveMaximum","exclusiveMinimum","uniqueItems","items","default","enum");
+			m.put("model", om.isEmpty() ? i("none") : om);
 		}
 
-		if (examples != null) {
-			for (Map.Entry<String,?> e : examples.entrySet()) {
-				String name = e.getKey();
-				String value = e.getValue().toString();
-				select.child(option(name, name));
-				div.child(div(value.replaceAll("\\n", "\n"))._class("example" + (si == null ? " active" : "")).attr("data-name", name));
-			}
+		Map<String,?> examples = pi.getExamples();
+		if (examples != null)
+			for (Map.Entry<String,?> e : examples.entrySet())
+				m.put(e.getKey(), e.getValue());
+
+		return examplesDiv(m);
+	}
+
+	private Div examples(Session s, ResponseInfo ri) {
+		SchemaInfo si = ri.getSchema();
+
+		ObjectMap m = new ObjectMap();
+		if (si != null) {
+			si = si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth);
+			m.put("model", si);
+		}
+
+		Map<String,?> examples = ri.getExamples();
+		if (examples != null)
+			for (Map.Entry<String,?> e : examples.entrySet())
+				m.put(e.getKey(), e.getValue());
+
+		return examplesDiv(m);
+	}
+
+	private Div examplesDiv(ObjectMap m) {
+		if (m.isEmpty())
+			return null;
+
+		Select select = (Select)select().disabled(m.size() < 2).onchange("selectExample(this)")._class("example-select");
+		Div div = div(select)._class("examples");
+
+		select.child(option("model","model"));
+		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
+
+		for (Map.Entry<String,Object> e : m.entrySet()) {
+			select.child(option(e.getKey(), e.getKey()));
+			div.child(div(e.getValue().toString().replaceAll("\\n", "\n"))._class("example").attr("data-name", e.getKey()));
 		}
 
 		return div;

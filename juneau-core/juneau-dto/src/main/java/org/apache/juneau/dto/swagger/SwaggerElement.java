@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
@@ -156,6 +157,21 @@ public abstract class SwaggerElement {
 			.appendIf(strict, "strict");
 		s.addAll(extraKeys());
 		return s;
+	}
+
+	/**
+	 * Returns a copy of this swagger element as a modifiable map.
+	 *
+	 * <p>
+	 * Each call produces a new map.
+	 *
+	 * @return A map containing all the values in this swagger element.
+	 */
+	public ObjectMap asMap() {
+		ObjectMap m = new ObjectMap();
+		for (String s : keySet())
+			m.put(s, get(s, Object.class));
+		return m;
 	}
 
 	@Override /* Object */
