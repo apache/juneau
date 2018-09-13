@@ -98,7 +98,7 @@ public class Textarea extends HtmlElementRawText {
 	 * @return This object (for method chaining).
 	 */
 	public final Textarea disabled(Object disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 

@@ -55,7 +55,7 @@ public class Select extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Select disabled(Object disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 
@@ -85,7 +85,7 @@ public class Select extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Select multiple(Object multiple) {
-		attr("multiple", multiple);
+		attr("multiple", deminimize(multiple, "multiple"));
 		return this;
 	}
 

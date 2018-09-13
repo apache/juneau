@@ -38,7 +38,7 @@ public class Optgroup extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Optgroup disabled(Object disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 

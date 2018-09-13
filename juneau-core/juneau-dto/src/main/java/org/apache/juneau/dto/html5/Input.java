@@ -96,7 +96,7 @@ public class Input extends HtmlElementVoid {
 	 * @return This object (for method chaining).
 	 */
 	public final Input checked(Object checked) {
-		attr("checked", checked);
+		attr("checked", deminimize(checked, "checked"));
 		return this;
 	}
 
@@ -126,7 +126,7 @@ public class Input extends HtmlElementVoid {
 	 * @return This object (for method chaining).
 	 */
 	public final Input disabled(Object disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 
@@ -332,7 +332,7 @@ public class Input extends HtmlElementVoid {
 	 * @return This object (for method chaining).
 	 */
 	public final Input multiple(Object multiple) {
-		attr("multiple", multiple);
+		attr("multiple", deminimize(multiple, "multiple"));
 		return this;
 	}
 

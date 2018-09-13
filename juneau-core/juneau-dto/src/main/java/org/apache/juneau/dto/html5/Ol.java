@@ -39,7 +39,7 @@ public class Ol extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Ol reversed(Object reversed) {
-		attr("reversed", reversed);
+		attr("reversed", deminimize(reversed, "reversed"));
 		return this;
 	}
 

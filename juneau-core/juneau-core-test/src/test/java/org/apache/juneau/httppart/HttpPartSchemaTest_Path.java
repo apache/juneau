@@ -369,7 +369,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B03a.class).build();
 		s.validateInput("12");
 		s.validateInput("123");
-		s.validateInput(null);
+		try {
+			s.validateInput(null);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("No value specified.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateInput("1");
 			fail();
@@ -476,7 +481,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B04a.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
-		s.validateInput(null);
+		try {
+			s.validateInput(null);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("No value specified.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateInput("Z");
 			fail();
@@ -493,7 +503,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B04b.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
-		s.validateInput(null);
+		try {
+			s.validateInput(null);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("No value specified.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateInput("Z");
 			fail();
@@ -510,7 +525,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, B04c.class).build();
 		s.validateInput("X");
 		s.validateInput("Y");
-		s.validateInput(null);
+		try {
+			s.validateInput(null);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("No value specified.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateInput("Z");
 			fail();
@@ -580,7 +600,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C01a.class).build();
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(100, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(null, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("Required value not provided.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateOutput(9, BeanContext.DEFAULT);
 			fail();
@@ -682,7 +707,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C02a.class).build();
 		s.validateOutput(11, BeanContext.DEFAULT);
 		s.validateOutput(99, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(null, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("Required value not provided.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateOutput(10, BeanContext.DEFAULT);
 			fail();
@@ -784,7 +814,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C03a.class).build();
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(100.1f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(null, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("Required value not provided.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateOutput(10f, BeanContext.DEFAULT);
 			fail();
@@ -886,7 +921,12 @@ public class HttpPartSchemaTest_Path {
 		HttpPartSchema s = HttpPartSchema.create().apply(Path.class, C04a.class).build();
 		s.validateOutput(10.2f, BeanContext.DEFAULT);
 		s.validateOutput(100f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(null, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("Required value not provided.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateOutput(10.1f, BeanContext.DEFAULT);
 			fail();
@@ -991,7 +1031,12 @@ public class HttpPartSchemaTest_Path {
 		s.validateOutput(20, BeanContext.DEFAULT);
 		s.validateOutput(10f, BeanContext.DEFAULT);
 		s.validateOutput(20f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(null, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("Required value not provided.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateOutput(11, BeanContext.DEFAULT);
 			fail();
@@ -1078,7 +1123,12 @@ public class HttpPartSchemaTest_Path {
 		s.validateOutput(0, BeanContext.DEFAULT);
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(20.2f, BeanContext.DEFAULT);
-		s.validateOutput(null, BeanContext.DEFAULT);
+		try {
+			s.validateOutput(null, BeanContext.DEFAULT);
+			fail();
+		} catch (SchemaValidationException e) {
+			assertEquals("Required value not provided.", e.getLocalizedMessage());
+		}
 		try {
 			s.validateOutput(10.2f, BeanContext.DEFAULT);
 			fail();

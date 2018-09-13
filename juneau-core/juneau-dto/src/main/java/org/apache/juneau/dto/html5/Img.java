@@ -88,7 +88,7 @@ public class Img extends HtmlElementVoid {
 	 * @return This object (for method chaining).
 	 */
 	public final Img ismap(Object ismap) {
-		attr("ismap", ismap);
+		attr("ismap", deminimize(ismap, "ismap"));
 		return this;
 	}
 

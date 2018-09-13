@@ -43,7 +43,7 @@ public class Audio extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Audio autoplay(Object autoplay) {
-		attr("autoplay", autoplay);
+		attr("autoplay", deminimize(autoplay, "autoplay"));
 		return this;
 	}
 
@@ -60,7 +60,7 @@ public class Audio extends HtmlElementContainer {
 	 * @return This object (for method chaining).
 	 */
 	public final Audio controls(Object controls) {
-		attr("controls", controls);
+		attr("controls", deminimize(controls, "controls"));
 		return this;
 	}
 

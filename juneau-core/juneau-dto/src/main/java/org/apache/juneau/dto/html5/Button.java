@@ -58,7 +58,7 @@ public class Button extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Button disabled(Object disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 

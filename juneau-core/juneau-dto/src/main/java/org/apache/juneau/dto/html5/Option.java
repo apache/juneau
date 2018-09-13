@@ -38,7 +38,7 @@ public class Option extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Option disabled(Object disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 
@@ -68,7 +68,7 @@ public class Option extends HtmlElementText {
 	 * @return This object (for method chaining).
 	 */
 	public final Option selected(Object selected) {
-		attr("selected", selected);
+		attr("selected", deminimize(selected, "selected"));
 		return this;
 	}
 

@@ -42,7 +42,7 @@ public class Script extends HtmlElementRawText {
 	 * @return This object (for method chaining).
 	 */
 	public final Script async(Object async) {
-		attr("async", async);
+		attr("async", deminimize(async, "async"));
 		return this;
 	}
 
@@ -87,7 +87,7 @@ public class Script extends HtmlElementRawText {
 	 * @return This object (for method chaining).
 	 */
 	public final Script defer(Object defer) {
-		attr("defer", defer);
+		attr("defer", deminimize(defer, "defer"));
 		return this;
 	}
 

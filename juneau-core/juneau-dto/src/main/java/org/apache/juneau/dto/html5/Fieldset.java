@@ -38,7 +38,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * @return This object (for method chaining).
 	 */
 	public final Fieldset disabled(Boolean disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 

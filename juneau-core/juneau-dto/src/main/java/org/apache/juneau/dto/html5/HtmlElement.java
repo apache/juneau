@@ -80,9 +80,13 @@ public abstract class HtmlElement {
 	public HtmlElement attr(String key, Object val) {
 		if (this.attrs == null)
 			this.attrs = new LinkedHashMap<>();
-		if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
-			val = StringUtils.toURI(val);
-		this.attrs.put(key, val);
+		if (val == null)
+			this.attrs.remove(key);
+		else {
+			if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
+				val = StringUtils.toURI(val);
+			this.attrs.put(key, val);
+		}
 		return this;
 	}
 
@@ -190,7 +194,7 @@ public abstract class HtmlElement {
 	 * @return This object (for method chaining).
 	 */
 	public HtmlElement hidden(Object hidden) {
-		attr("hidden", hidden);
+		attr("hidden", deminimize(hidden, "hidden"));
 		return this;
 	}
 
@@ -839,6 +843,22 @@ public abstract class HtmlElement {
 	public HtmlElement translate(Object translate) {
 		attr("translate", translate);
 		return this;
+	}
+
+	/**
+	 * If the specified attribute is a boolean, it gets converted to the attribute name if <jk>true</jk> or <jk>null</jk> if <jk>false</jk>.
+	 *
+	 * @param value The attribute value.
+	 * @param attr The attribute name.
+	 * @return The deminimized value, or the same value if the value wasn't a boolean.
+	 */
+	protected Object deminimize(Object value, String attr) {
+		if (value instanceof Boolean) {
+			if ((Boolean)value)
+				return attr;
+			return null;
+		}
+		return value;
 	}
 
 	@Override /* Object */

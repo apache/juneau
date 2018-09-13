@@ -68,7 +68,7 @@ public class Keygen extends HtmlElementVoid {
 	 * @return This object (for method chaining).
 	 */
 	public final Keygen disabled(Object disabled) {
-		attr("disabled", disabled);
+		attr("disabled", deminimize(disabled, "disabled"));
 		return this;
 	}
 
