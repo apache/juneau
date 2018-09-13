@@ -342,7 +342,7 @@
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Parameters'>Parameters</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.ParameterExamples'>Parameter Examples</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Responses'>Responses</a></p>
-			<li><p class='todo'><a class='doclink' href='#juneau-rest-server.Swagger.ResponseExamples'>Response Examples</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.ResponseExamples'>Response Examples</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Models'>Models</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.Swagger.Stylesheet'>SwaggerUI.css</a></p>
 		</ol>
@@ -19044,19 +19044,19 @@
 <p>
 	There are several options for defining examples for request bodies:
 </p>
-<ul>
+<ul class='spaced-list'>
 	<li>
 		{@link org.apache.juneau.http.annotation.Body#example() @Body(example)} annotation.
 	<li>
 		{@link org.apache.juneau.http.annotation.Body#examples() @Body(examples)} annotation.
 	<li>
-		Defining an <js>"x-example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+		Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
 	<li>
-		Defining an <js>"x-example"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
+		Defining an <js>"x-examples"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
 	<li>
 		Allowing Juneau to auto-generate a code example.
 </ul>
-<p class='w800'>
+<p>
 	When using {@link org.apache.juneau.http.annotation.Body#example() @Body(example)}, you specify a Simple JSON representation of your POJO.
 	The Swagger generator will then convert that JSON into a POJO using the registered serializers on the REST method to produce examples for all
  	supported language types.
@@ -19070,7 +19070,7 @@
 	)
 </p>
 
-<p class='w800'>
+<p>
 	The {@link org.apache.juneau.http.annotation.Body#examples() @Body(examples)} annotation allows you to specify raw output values per media type.
 	This field allows you to override the behavior and show examples for only specified media types or different examples for different media types.
 </p>
@@ -19102,27 +19102,27 @@
 						<jok>"$ref"</jok>: <jov>"#/definitions/PetCreate"</jov>
 					},
 					<jok>"x-examples"</jok>: {
-						<jok>"application/json"</jok>: <jov>"{\n\t\"name\": \"Doggie\",\n\t\"species\": \"Dog\",\n\t\"price\": 9.99,\n\t\"tags\": [\n\t\t\"friendly\",\n\t\t\"cute\"\n\t]\n}"</jov>,
-						<jok>"application/json+simple"</jok>: <jov>"{\n\tname: 'Doggie',\n\tspecies: 'Dog',\n\tprice: 9.99,\n\ttags: [\n\t\t'friendly',\n\t\t'cute'\n\t]\n}"</jov>,
-						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&gt;\n\t&lt;species&gt;Dog&lt;/species&gt;\n\t&lt;price&gt;9.99&lt;/price&gt;\n\t&lt;tags&gt;\n\t\t&lt;string&gt;friendly&lt;/string&gt;\n\t\t&lt;string&gt;cute&lt;/string&gt;\n\t&lt;/tags&gt;\n&lt;/object&gt;\n"</jov>,
-						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;name&lt;/td&gt;\n\t\t&lt;td&gt;Doggie&lt;/td&gt;\n\t&lt;/tr&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;species&lt;/td&gt;\n\t\t&lt;td&gt;Dog&lt;/td&gt;\n\t&lt;/tr&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;price&lt;/td&gt;\n\t\t&lt;td&gt;9.99&lt;/td&gt;\n\t&lt;/tr&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;tags&lt;/td&gt;\n\t\t&lt;td&gt;\n\t\t\t&lt;ul&gt;\n\t\t\t\t&lt;li&gt;friendly&lt;/li&gt;\n\t\t\t\t&lt;li&gt;cute&lt;/li&gt;\n\t\t\t&lt;/ul&gt;\n\t\t&lt;/td&gt;\n\t&lt;/tr&gt;\n&lt;/table&gt;\n"</jov>,
+						<jok>"application/json"</jok>: <jov>"{\n\t\"name\": \"Doggie\",\n\t\"species\": \"Dog\",\n\t\"price\": 9.99,\n\t\"tags\": [\n..."</jov>,
+						<jok>"application/json+simple"</jok>: <jov>"{\n\tname: 'Doggie',\n\tspecies: 'Dog',\n\tprice: 9.99,\n\ttags: [\n\t\t'friendly..."</jov>,
+						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&..."</jov>,
+						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;name&lt;/td&gt;\n\t\t&lt;td&gt;Doggie&lt;/t..."</jov>,
 						<jok>"text/uon"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
 						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"name=Doggie\n&species=Dog\n&price=9.99\n&tags=@(\n\tfriendly,\n\tcute\n)"</jov>,
 						<jok>"text/openapi"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
-						<jok>"octal/msgpack"</jok>: <jov>"84 A4 6E 61 6D 65 A6 44 6F 67 67 69 65 A7 73 70 65 63 69 65 73 A3 44 6F 67 A5 70 72 69 63 65 CA 41 1F D7 0A A4 74 61 67 73 92 A8 66 72 69 65 6E 64 6C 79 A4 63 75 74 65"</jov>,
+						<jok>"octal/msgpack"</jok>: <jov>"84 A4 6E 61 6D 65 A6 44 6F 67 67 69 65 A7 73 70 65 63 69 65 73 A3 44 6F 67 A5 70 72 69 63 6..."</jov>,
 						<jok>"text/plain"</jok>: <jov>"{name:'Doggie',species:'Dog',price:9.99,tags:['friendly','cute']}"</jov>,
-						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"http://www.apache.org/juneau/\"\n    xmlns:jp=\"http://www.apache.org/juneaubp/\" &gt; \n  &lt;rdf:Description rdf:nodeID=\"A0\"&gt;\n    &lt;rdf:_2&gt;cute&lt;/rdf:_2&gt;\n    &lt;rdf:_1&gt;friendly&lt;/rdf:_1&gt;\n    &lt;rdf:type rdf:resource=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq\"/&gt;\n  &lt;/rdf:Description&gt;\n  &lt;rdf:Description rdf:nodeID=\"A1\"&gt;\n    &lt;jp:name&gt;Doggie&lt;/jp:name&gt;\n    &lt;jp:species&gt;Dog&lt;/jp:species&gt;\n    &lt;jp:price&gt;9.99&lt;/jp:price&gt;\n    &lt;jp:tags rdf:nodeID=\"A0\"/&gt;\n  &lt;/rdf:Description&gt;\n&lt;/rdf:RDF&gt;\n"</jov>,
-						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache.org/juneau/&gt; .\n\n[]    jp:name \"Doggie\" ;\n      jp:price \"9.99\" ;\n      jp:species \"Dog\" ;\n      jp:tags [ a       &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq&gt; ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_1&gt;\n                        \"friendly\" ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_2&gt;\n                        \"cute\"\n              ] .\n"</jov>,
-						<jok>"text/n-triple"</jok>: <jov>"_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/name&gt; \"Doggie\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/species&gt; \"Dog\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/price&gt; \"9.99\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/tags&gt; _:A59722791X3aX165d321a2b4X3aXX2dX7fc9 .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fc9 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_2&gt; \"cute\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fc9 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_1&gt; \"friendly\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fc9 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq&gt; .\n"</jov>,
-						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache.org/juneau/&gt; .\n\n[]    jp:name \"Doggie\" ;\n      jp:price \"9.99\" ;\n      jp:species \"Dog\" ;\n      jp:tags [ a       &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq&gt; ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_1&gt;\n                        \"friendly\" ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_2&gt;\n                        \"cute\"\n              ] .\n"</jov>
+						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"ht..."</jov>,
+						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.a..."</jov>,
+						<jok>"text/n-triple"</jok>: <jov>"_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/name&gt; \"Doggie..."</jov>,
+						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apach..."</jov>
 					}
 				}
 			],
 </p>
-<p class='w800'>
+<p>
 	Another option is to define these directly in your resource Swagger JSON file, or via {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)}/{@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)}. 
 </p>
-<p class='w800'>
+<p>
 	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
 	<br>By default, the generated swagger uses to the {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
 	setting to automatically add examples to beans, collections, arrays, and maps:
@@ -19252,15 +19252,228 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.ResponseExamples' id='juneau-rest-server.Swagger.ResponseExamples'>7.27.8 - Response Examples</a></h4>
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.Swagger.ResponseExamples' id='juneau-rest-server.Swagger.ResponseExamples'>7.27.8 - Response Examples</a></h4>
 <div class='topic'><!-- START: 7.27.8 - juneau-rest-server.Swagger.ResponseExamples -->
 <p>
-	TODO
+	The <code>model</code> select box in the responses can be expanded to show examples:
+</p>
+<h5 class='figure'>PetStoreResource.getPet()</h5>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.1.png'> 
+<p>
+	Examples are provided for any supported <code>Accept</code> type based on the serializers defined on your
+	servlet/method.
+</p>
+<h5 class='figure'>application/json+simple</h5>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.2.png'> 
+<h5 class='figure'>text/uon</h5>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.3.png'> 
+<p>
+	Examples are pulled from the <code>examples</code> attribute in the response object of the generated Swagger JSON:
+</p>
+<p class='bpcode w800'>
+	<jok>"/pet/{petId}"</jok>: {
+		<jok>"get"</jok>: {
+			<jok>"operationId"</jok>: <jov>"getPet"</jov>,
+			<jok>"summary"</jok>: <jov>"Find pet by ID"</jov>,
+			<jok>"description"</jok>: <jov>"Returns a single pet"</jov>,
+			<jok>"responses"</jok>: {
+				<jok>"200"</jok>: {
+					<jok>"description"</jok>: <jov>"OK"</jov>,
+					<jok>"schema"</jok>: {
+						<jok>"$ref"</jok>: <jov>"#/definitions/Pet"</jov>
+					},
+					<jok>"examples"</jok>: {
+						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;id&lt;/td&gt;\n\t\t&lt;td&gt;\t\t\t&lt;a href=\"..."</jov>,
+						<jok>"text/html+schema"</jok>: <jov>"&lt;html&gt;\n\t&lt;head&gt;\n\t\t&lt;link rel='icon' href='$U{servlet:/htdocs/cat.png}'/&gt;..."</jov>,
+						<jok>"application/json"</jok>: <jov>"{\n\t\"id\": 123,\n\t\"species\": {\n\t\t\"name\": \"Dog\",\n\t\t\"id\": 123\n\t},\n\t\"name\..."</jov>,
+						<jok>"application/json+simple"</jok>: <jov>"{\n\tid: 123,\n\tspecies: {\n\t\tname: 'Dog',\n\t\tid: 123\n\t},\n\tname: 'Doggie',\n\..."</jov>,
+						<jok>"application/json+schema"</jok>: <jov>"{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"id\": {\n\t\t\t\"type\": \"inte..."</jov>,
+						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Pet&gt;\n\t&lt;id&gt;123&lt;/id&gt;\n\t&lt;spec..."</jov>,
+						<jok>"text/xml+schema"</jok>: <jov>"&lt;schema xmlns=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.apache.org/..."</jov>,
+						<jok>"text/uon"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\t\tn..."</jov>,
+						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"id=123\n&species=(\n\tname=Dog,\n\tid=123\n)\n&name=Doggie\n&tags=@(\n\t(\n\..."</jov>,
+						<jok>"text/openapi"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\..."</jov>,
+						<jok>"octal/msgpack"</jok>: <jov>"86 A2 69 64 7B A7 73 70 65 63 69 65 73 82 A4 6E 61 6D 65 A3 44 6F 67 A2 69 64 7B A4 6E 61 6D 65 ..."</jov>,
+						<jok>"text/xml+soap"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Envelope soap=\"http://www.w3.org/2003/05/..."</jov>,
+						<jok>"text/plain"</jok>: <jov>"{id:123,species:{name:'Dog',id:123},name:'Doggie',tags:[{name:'MyTag',id:123}],price:0.0,status:'AV..."</jov>,
+						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"http://..."</jov>,
+						<jok>"text/xml+rdf+abbrev"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"..."</jov>,
+						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache..."</jov>,
+						<jok>"text/n-triple"</jok>: <jov>"_:A720f0f4fX3aX165d4974933X3aXX2dX7f93 &lt;http://www.apache.org/juneaubp/name&gt; \"Dog\" .\n_:..."</jov>,
+						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache.org..."</jov>
+</p>
+<p>
+	There are several options for defining examples for response bodies:
+</p>
+<ul class='spaced-list'>
+	<li>
+		{@link org.apache.juneau.http.annotation.Response#example() @Response(example)} annotation.
+	<li>
+		{@link org.apache.juneau.http.annotation.Response#examples() @Response(examples)} annotation.
+	<li>
+		Defining an <js>"examples"</js> field in the inherited Swagger JSON response object (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+	<li>
+		Defining an <js>"examples"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
+	<li>
+		Allowing Juneau to auto-generate a code example.
+</ul>
+
+<p>
+	The {@link org.apache.juneau.http.annotation.Response#example @Response(example)} annotation can be used on either your <ja>@RestMethod</ja>-annotated
+	method or return class to define the example of the body.
+</p>	
+<p class='bpcode w800'>
+	<jc>// A JSON representation of a Pet object.</jc>
+	<ja>@Response</ja>(
+		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
+	)
+</p>
+<p>
+	This is a Simple JSON representation of the body that is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
+	supported language types.
+	These values are then used to automatically populate the <code>examples</code> field.
+</p>
+<p>
+	Direct per-media-type examples can also be defined using the {@link org.apache.juneau.http.annotation.Response#examples @Response(examples)} annotation:
+</p>
+<p class='bpcode w800'>
+	<jc>// A JSON representation of a PetCreate object.</jc>
+	<ja>@Response</ja>(
+		examples={
+			<js>"'application/json':'{name:\\'Doggie\\',species:\\'Dog\\'}',"</js>,
+			<js>"'text/uon':'(name:Doggie,species=Dog)'"</js>
+		}
+	)
 </p>
 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.1.png'> 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.2.png'> 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.3.png'>
+<p>
+	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
+	<br>By default, the generated swagger uses to the {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
+	setting to automatically add examples to beans, collections, arrays, and maps:
+</p>
+<p>
+	In particular, examples can be defined via static methods, fields, and annotations on the classes themselves.
+</p>
+<p class='bpcode w800'>
+	<jc>// Annotation on class.</jc>
+	<ja>@Example</ja>(<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
+	<jk>public class</jk> PetCreate {
+		...
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Annotation on static method.</jc>
+	<jk>public class</jk> PetCreate {
+		<ja>@Example</ja>
+		<jk>public static</jk> PetCreate <jsm>sample</jsm>() {
+			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+		}
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Static method with specific name 'example'.</jc>
+	<jk>public class</jk> PetCreate {
+		<jk>public static</jk> PetCreate <jsm>example</jsm>() {
+			<jk>return new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+		}
+	}
+</p>
+<p class='bpcode w800'>
+	<jc>// Static field.</jc>
+	<jk>public class</jk> PetCreate {
+		<ja>@Example</ja>
+		<jk>public static</jk> PetCreate <jsf>EXAMPLE</jsf> = <jk>new</jk> PetCreate(<js>"Doggie"</js>, 9.99f, <js>"Dog"</js>, <jk>new</jk> String[] {<js>"friendly"</js>,<js>"cute"</js>});
+	}
+</p>
+<p>
+	Examples can also be specified via generic properties as well using the {@link org.apache.juneau.BeanContext#BEAN_examples} property at either the class or method level.
+</p>
+<p class='bpcode w800'>
+	<jc>// Examples defined at class level.</jc>
+	<ja>@RestResource</ja>(
+		properties={
+			<ja>@Property</ja>(
+				name=<jsf>BEAN_examples</jsf>,
+				value=<js>"{'org.apache.juneau.examples.rest.petstore.PetCreate': {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
+			)
+		}
+	)
+</p>
+<p>
+	Response headers are also rendered in the Swagger UI:
+</p>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.4.png'> 
+<p>
+	These can be auto-generated from {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotations defined on either
+	method parameters or type classes.
+	<br>The example above shows one of each:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/user/login"</js>,
+		summary=<js>"Logs user into the system"</js>,
+		swagger=<ja>@MethodSwagger</ja>(
+			tags=<js>"user"</js>
+		)
+	)
+	<jk>public</jk> Ok login(
+			<ja>@Query</ja>(
+				name=<js>"username"</js>,
+				description=<js>"The username for login"</js>,
+				required=<jk>true</jk>,
+				example=<js>"myuser"</js>
+			)
+			String username,
+			<ja>@Query</ja>(
+				name=<js>"password"</js>,
+				description=<js>"The password for login in clear text"</js>,
+				required=<jk>true</jk>,
+				example=<js>"abc123"</js>
+			)
+			String password,
+			<ja>@ResponseHeader</ja>(
+				name=<js>"X-Rate-Limit"</js>,
+				type=<js>"integer"</js>,
+				format=<js>"int32"</js>,
+				description=<js>"Calls per hour allowed by the user."</js>,
+				example=<js>"123"</js>
+			)
+			Value&lt;Integer&gt; rateLimit,
+			Value&lt;ExpiresAfter&gt; expiresAfter,
+			RestRequest req,
+			RestResponse res
+		) <jk>throws</jk> InvalidLogin, NotAcceptable {
+
+		<jk>if</jk> (! <jf>store</jf>.isValid(username, password))
+			<jk>throw new</jk> InvalidLogin();
+
+		Date d = <jk>new</jk> Date(System.<jsm>currentTimeMillis</jsm>() + 30 * 60 * 1000);
+		req.getSession().setAttribute(<js>"login-expires"</js>, d);
+		rateLimit.set(1000);
+		expiresAfter.set(<jk>new</jk> ExpiresAfter(d));
+		<jk>return</jk> <jsf>OK</jsf>;
+	}
+</p>
+<p class='bpcode w800'>	
+	<ja>@ResponseHeader</ja>(
+		name=<js>"X-Expires-After"</js>,
+		type=<js>"string"</js>,
+		format=<js>"date-time"</js>,
+		description=<js>"Date in UTC when token expires"</js>,
+		example=<js>"2012-10-21"</js>
+	)
+	<jk>public static class</jk> ExpiresAfter {
+		<jk>private final</jk> Calendar <jf>c</jf>;
+		<jk>public</jk> ExpiresAfter(Date d) {
+			<jk>this</jk>.<jf>c</jf> = <jk>new</jk> GregorianCalendar();
+			<jf>c</jf>.setTime(d);
+		}
+		<jk>public</jk> Calendar toCalendar() {
+			<jk>return</jk> <jf>c</jf>;
+		}
+	}
+</p>
 </div><!-- END: 7.27.8 - juneau-rest-server.Swagger.ResponseExamples -->
 
 <!-- ==================================================================================================== -->
@@ -33618,6 +33831,9 @@
 	<li>
 		Fixed bug where Swagger {@link org.apache.juneau.dto.swagger.SchemaInfo#required(Object...)} was defined as a boolean
 		instead of a list of strings.
+	<li>
+		Boolean attributes are now handled correctly for HTML5.
+		<br>For example, calling <code><jk>new</jk> Select().disabled(<jk>true</jk>)</code> will produce <code>&lt;select disabled='disabled'&gt;</code>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-server</h5>

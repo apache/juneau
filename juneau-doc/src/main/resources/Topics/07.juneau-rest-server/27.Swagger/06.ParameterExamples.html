@@ -81,19 +81,19 @@
 <p>
 	There are several options for defining examples for request bodies:
 </p>
-<ul>
+<ul class='spaced-list'>
 	<li>
 		{@link oaj.http.annotation.Body#example() @Body(example)} annotation.
 	<li>
 		{@link oaj.http.annotation.Body#examples() @Body(examples)} annotation.
 	<li>
-		Defining an <js>"x-example"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+		Defining an <js>"x-examples"</js> field in the inherited Swagger JSON body field (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
 	<li>
-		Defining an <js>"x-example"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
+		Defining an <js>"x-examples"</js> field in the Swagger Schema Object for the body (including referenced <js>"$ref"</js> schemas).
 	<li>
 		Allowing Juneau to auto-generate a code example.
 </ul>
-<p class='w800'>
+<p>
 	When using {@link oaj.http.annotation.Body#example() @Body(example)}, you specify a Simple JSON representation of your POJO.
 	The Swagger generator will then convert that JSON into a POJO using the registered serializers on the REST method to produce examples for all
  	supported language types.
@@ -107,7 +107,7 @@
 	)
 </p>
 
-<p class='w800'>
+<p>
 	The {@link oaj.http.annotation.Body#examples() @Body(examples)} annotation allows you to specify raw output values per media type.
 	This field allows you to override the behavior and show examples for only specified media types or different examples for different media types.
 </p>
@@ -139,27 +139,27 @@
 						<jok>"$ref"</jok>: <jov>"#/definitions/PetCreate"</jov>
 					},
 					<jok>"x-examples"</jok>: {
-						<jok>"application/json"</jok>: <jov>"{\n\t\"name\": \"Doggie\",\n\t\"species\": \"Dog\",\n\t\"price\": 9.99,\n\t\"tags\": [\n\t\t\"friendly\",\n\t\t\"cute\"\n\t]\n}"</jov>,
-						<jok>"application/json+simple"</jok>: <jov>"{\n\tname: 'Doggie',\n\tspecies: 'Dog',\n\tprice: 9.99,\n\ttags: [\n\t\t'friendly',\n\t\t'cute'\n\t]\n}"</jov>,
-						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&gt;\n\t&lt;species&gt;Dog&lt;/species&gt;\n\t&lt;price&gt;9.99&lt;/price&gt;\n\t&lt;tags&gt;\n\t\t&lt;string&gt;friendly&lt;/string&gt;\n\t\t&lt;string&gt;cute&lt;/string&gt;\n\t&lt;/tags&gt;\n&lt;/object&gt;\n"</jov>,
-						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;name&lt;/td&gt;\n\t\t&lt;td&gt;Doggie&lt;/td&gt;\n\t&lt;/tr&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;species&lt;/td&gt;\n\t\t&lt;td&gt;Dog&lt;/td&gt;\n\t&lt;/tr&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;price&lt;/td&gt;\n\t\t&lt;td&gt;9.99&lt;/td&gt;\n\t&lt;/tr&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;tags&lt;/td&gt;\n\t\t&lt;td&gt;\n\t\t\t&lt;ul&gt;\n\t\t\t\t&lt;li&gt;friendly&lt;/li&gt;\n\t\t\t\t&lt;li&gt;cute&lt;/li&gt;\n\t\t\t&lt;/ul&gt;\n\t\t&lt;/td&gt;\n\t&lt;/tr&gt;\n&lt;/table&gt;\n"</jov>,
+						<jok>"application/json"</jok>: <jov>"{\n\t\"name\": \"Doggie\",\n\t\"species\": \"Dog\",\n\t\"price\": 9.99,\n\t\"tags\": [\n..."</jov>,
+						<jok>"application/json+simple"</jok>: <jov>"{\n\tname: 'Doggie',\n\tspecies: 'Dog',\n\tprice: 9.99,\n\ttags: [\n\t\t'friendly..."</jov>,
+						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&..."</jov>,
+						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;name&lt;/td&gt;\n\t\t&lt;td&gt;Doggie&lt;/t..."</jov>,
 						<jok>"text/uon"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
 						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"name=Doggie\n&species=Dog\n&price=9.99\n&tags=@(\n\tfriendly,\n\tcute\n)"</jov>,
 						<jok>"text/openapi"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
-						<jok>"octal/msgpack"</jok>: <jov>"84 A4 6E 61 6D 65 A6 44 6F 67 67 69 65 A7 73 70 65 63 69 65 73 A3 44 6F 67 A5 70 72 69 63 65 CA 41 1F D7 0A A4 74 61 67 73 92 A8 66 72 69 65 6E 64 6C 79 A4 63 75 74 65"</jov>,
+						<jok>"octal/msgpack"</jok>: <jov>"84 A4 6E 61 6D 65 A6 44 6F 67 67 69 65 A7 73 70 65 63 69 65 73 A3 44 6F 67 A5 70 72 69 63 6..."</jov>,
 						<jok>"text/plain"</jok>: <jov>"{name:'Doggie',species:'Dog',price:9.99,tags:['friendly','cute']}"</jov>,
-						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"http://www.apache.org/juneau/\"\n    xmlns:jp=\"http://www.apache.org/juneaubp/\" &gt; \n  &lt;rdf:Description rdf:nodeID=\"A0\"&gt;\n    &lt;rdf:_2&gt;cute&lt;/rdf:_2&gt;\n    &lt;rdf:_1&gt;friendly&lt;/rdf:_1&gt;\n    &lt;rdf:type rdf:resource=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq\"/&gt;\n  &lt;/rdf:Description&gt;\n  &lt;rdf:Description rdf:nodeID=\"A1\"&gt;\n    &lt;jp:name&gt;Doggie&lt;/jp:name&gt;\n    &lt;jp:species&gt;Dog&lt;/jp:species&gt;\n    &lt;jp:price&gt;9.99&lt;/jp:price&gt;\n    &lt;jp:tags rdf:nodeID=\"A0\"/&gt;\n  &lt;/rdf:Description&gt;\n&lt;/rdf:RDF&gt;\n"</jov>,
-						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache.org/juneau/&gt; .\n\n[]    jp:name \"Doggie\" ;\n      jp:price \"9.99\" ;\n      jp:species \"Dog\" ;\n      jp:tags [ a       &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq&gt; ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_1&gt;\n                        \"friendly\" ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_2&gt;\n                        \"cute\"\n              ] .\n"</jov>,
-						<jok>"text/n-triple"</jok>: <jov>"_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/name&gt; \"Doggie\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/species&gt; \"Dog\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/price&gt; \"9.99\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/tags&gt; _:A59722791X3aX165d321a2b4X3aXX2dX7fc9 .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fc9 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_2&gt; \"cute\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fc9 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_1&gt; \"friendly\" .\n_:A59722791X3aX165d321a2b4X3aXX2dX7fc9 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq&gt; .\n"</jov>,
-						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache.org/juneau/&gt; .\n\n[]    jp:name \"Doggie\" ;\n      jp:price \"9.99\" ;\n      jp:species \"Dog\" ;\n      jp:tags [ a       &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq&gt; ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_1&gt;\n                        \"friendly\" ;\n                &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#_2&gt;\n                        \"cute\"\n              ] .\n"</jov>
+						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"ht..."</jov>,
+						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.a..."</jov>,
+						<jok>"text/n-triple"</jok>: <jov>"_:A59722791X3aX165d321a2b4X3aXX2dX7fca &lt;http://www.apache.org/juneaubp/name&gt; \"Doggie..."</jov>,
+						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apach..."</jov>
 					}
 				}
 			],
 </p>
-<p class='w800'>
+<p>
 	Another option is to define these directly in your resource Swagger JSON file, or via {@link oajr.annotation.RestResource#swagger() @RestResource(swagger)}/{@link oajr.annotation.RestMethod#swagger() @RestMethod(swagger)}. 
 </p>
-<p class='w800'>
+<p>
 	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
 	<br>By default, the generated swagger uses to the {@link oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
 	setting to automatically add examples to beans, collections, arrays, and maps:

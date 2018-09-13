@@ -117,6 +117,10 @@ h2.topic { font-size: 14pt; }
 h3.topic { font-size: 13pt; }
 h4.topic { font-size: 12pt; }
 
+.topic p {
+	max-width: 800px;
+}
+
 h2.closed,
 h3.closed,
 h4.closed {

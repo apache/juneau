@@ -18,9 +18,69 @@
 <p>
 	The <code>model</code> select box in the responses can be expanded to show examples:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.1.png'> 
-<p class='w800'>
-	The {@link oaj.http.annotation.Response#example @Response(annotation)} annotation can be used on either your <ja>@RestMethod</ja>-annotated
+<h5 class='figure'>PetStoreResource.getPet()</h5>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.1.png'> 
+<p>
+	Examples are provided for any supported <code>Accept</code> type based on the serializers defined on your
+	servlet/method.
+</p>
+<h5 class='figure'>application/json+simple</h5>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.2.png'> 
+<h5 class='figure'>text/uon</h5>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.3.png'> 
+<p>
+	Examples are pulled from the <code>examples</code> attribute in the response object of the generated Swagger JSON:
+</p>
+<p class='bpcode w800'>
+	<jok>"/pet/{petId}"</jok>: {
+		<jok>"get"</jok>: {
+			<jok>"operationId"</jok>: <jov>"getPet"</jov>,
+			<jok>"summary"</jok>: <jov>"Find pet by ID"</jov>,
+			<jok>"description"</jok>: <jov>"Returns a single pet"</jov>,
+			<jok>"responses"</jok>: {
+				<jok>"200"</jok>: {
+					<jok>"description"</jok>: <jov>"OK"</jov>,
+					<jok>"schema"</jok>: {
+						<jok>"$ref"</jok>: <jov>"#/definitions/Pet"</jov>
+					},
+					<jok>"examples"</jok>: {
+						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;id&lt;/td&gt;\n\t\t&lt;td&gt;\t\t\t&lt;a href=\"..."</jov>,
+						<jok>"text/html+schema"</jok>: <jov>"&lt;html&gt;\n\t&lt;head&gt;\n\t\t&lt;link rel='icon' href='$U{servlet:/htdocs/cat.png}'/&gt;..."</jov>,
+						<jok>"application/json"</jok>: <jov>"{\n\t\"id\": 123,\n\t\"species\": {\n\t\t\"name\": \"Dog\",\n\t\t\"id\": 123\n\t},\n\t\"name\..."</jov>,
+						<jok>"application/json+simple"</jok>: <jov>"{\n\tid: 123,\n\tspecies: {\n\t\tname: 'Dog',\n\t\tid: 123\n\t},\n\tname: 'Doggie',\n\..."</jov>,
+						<jok>"application/json+schema"</jok>: <jov>"{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"id\": {\n\t\t\t\"type\": \"inte..."</jov>,
+						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Pet&gt;\n\t&lt;id&gt;123&lt;/id&gt;\n\t&lt;spec..."</jov>,
+						<jok>"text/xml+schema"</jok>: <jov>"&lt;schema xmlns=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.apache.org/..."</jov>,
+						<jok>"text/uon"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\t\tn..."</jov>,
+						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"id=123\n&species=(\n\tname=Dog,\n\tid=123\n)\n&name=Doggie\n&tags=@(\n\t(\n\..."</jov>,
+						<jok>"text/openapi"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\..."</jov>,
+						<jok>"octal/msgpack"</jok>: <jov>"86 A2 69 64 7B A7 73 70 65 63 69 65 73 82 A4 6E 61 6D 65 A3 44 6F 67 A2 69 64 7B A4 6E 61 6D 65 ..."</jov>,
+						<jok>"text/xml+soap"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Envelope soap=\"http://www.w3.org/2003/05/..."</jov>,
+						<jok>"text/plain"</jok>: <jov>"{id:123,species:{name:'Dog',id:123},name:'Doggie',tags:[{name:'MyTag',id:123}],price:0.0,status:'AV..."</jov>,
+						<jok>"text/xml+rdf"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"http://..."</jov>,
+						<jok>"text/xml+rdf+abbrev"</jok>: <jov>"&lt;rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"..."</jov>,
+						<jok>"text/turtle"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache..."</jov>,
+						<jok>"text/n-triple"</jok>: <jov>"_:A720f0f4fX3aX165d4974933X3aXX2dX7f93 &lt;http://www.apache.org/juneaubp/name&gt; \"Dog\" .\n_:..."</jov>,
+						<jok>"text/n3"</jok>: <jov>"@prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .\n@prefix j:       &lt;http://www.apache.org..."</jov>
+</p>
+<p>
+	There are several options for defining examples for response bodies:
+</p>
+<ul class='spaced-list'>
+	<li>
+		{@link oaj.http.annotation.Response#example() @Response(example)} annotation.
+	<li>
+		{@link oaj.http.annotation.Response#examples() @Response(examples)} annotation.
+	<li>
+		Defining an <js>"examples"</js> field in the inherited Swagger JSON response object (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
+	<li>
+		Defining an <js>"examples"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
+	<li>
+		Allowing Juneau to auto-generate a code example.
+</ul>
+
+<p>
+	The {@link oaj.http.annotation.Response#example @Response(example)} annotation can be used on either your <ja>@RestMethod</ja>-annotated
 	method or return class to define the example of the body.
 </p>	
 <p class='bpcode w800'>
@@ -32,32 +92,37 @@
 <p>
 	This is a Simple JSON representation of the body that is converted to a POJO and then serialized to all the registered serializers on the REST method to produce examples for all
 	supported language types.
-	These values are then used to automatically populate the {@link #examples} field.
+	These values are then used to automatically populate the <code>examples</code> field.
 </p>
-<h5 class='section'>Example:</h5>
 <p>
-There are several other options for defining this example:
-<ul class='spaced-list'>
-	<li>
-		Defining an <js>"x-example"</js> field in the inherited Swagger JSON response object (classpath file or <code><ja>@ResourceSwagger</ja>(value)</code>/<code><ja>@MethodSwagger</ja>(value)</code>).
-	<li>
-		Defining an <js>"x-example"</js> field in the Swagger Schema Object for the response object (including referenced <js>"$ref"</js> schemas).
-	<li>
-		Allowing Juneau to auto-generate a code example.
-</ul>
+	Direct per-media-type examples can also be defined using the {@link oaj.http.annotation.Response#examples @Response(examples)} annotation:
+</p>
+<p class='bpcode w800'>
+	<jc>// A JSON representation of a PetCreate object.</jc>
+	<ja>@Response</ja>(
+		examples={
+			<js>"'application/json':'{name:\\'Doggie\\',species:\\'Dog\\'}',"</js>,
+			<js>"'text/uon':'(name:Doggie,species=Dog)'"</js>
+		}
+	)
+</p>
+
 <p>
-The latter is important because Juneau also supports auto-generation of JSON-Schema from POJO classes using {@link JsonSchemaSerializer} which has several of it's own
-options for auto-detecting and calculation POJO examples.
+	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
+	<br>By default, the generated swagger uses to the {@link oaj.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
+	setting to automatically add examples to beans, collections, arrays, and maps:
+</p>
 <p>
-In particular, examples can be defined via static methods, fields, and annotations on the classes themselves.
-<p class='bcode w800'>
+	In particular, examples can be defined via static methods, fields, and annotations on the classes themselves.
+</p>
+<p class='bpcode w800'>
 	<jc>// Annotation on class.</jc>
 	<ja>@Example</ja>(<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>)
 	<jk>public class</jk> PetCreate {
 		...
 	}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Annotation on static method.</jc>
 	<jk>public class</jk> PetCreate {
 		<ja>@Example</ja>
@@ -66,7 +131,7 @@ In particular, examples can be defined via static methods, fields, and annotatio
 		}
 	}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Static method with specific name 'example'.</jc>
 	<jk>public class</jk> PetCreate {
 		<jk>public static</jk> PetCreate <jsm>example</jsm>() {
@@ -74,7 +139,7 @@ In particular, examples can be defined via static methods, fields, and annotatio
 		}
 	}
 </p>
-<p class='bcode w800'>
+<p class='bpcode w800'>
 	<jc>// Static field.</jc>
 	<jk>public class</jk> PetCreate {
 		<ja>@Example</ja>
@@ -82,8 +147,9 @@ In particular, examples can be defined via static methods, fields, and annotatio
 	}
 </p>
 <p>
-Examples can also be specified via generic properties as well using the {@link BeanContext#BEAN_examples} property at either the class or method level.
-<p class='bcode w800'>
+	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext#BEAN_examples} property at either the class or method level.
+</p>
+<p class='bpcode w800'>
 	<jc>// Examples defined at class level.</jc>
 	<ja>@RestResource</ja>(
 		properties={
@@ -94,82 +160,78 @@ Examples can also be specified via generic properties as well using the {@link B
 		}
 	)
 </p>
-<h5 class='section'>Used for:</h5>
-<ul class='spaced-list'>
-	<li>
-		Server-side generated Swagger documentation.
-</ul>
-<h5 class='section'>See also:</h5>
-<ul>
-	<li class='ja'>{@link Example}
-	<li class='jc'>{@link BeanContext}
-	<ul>
-		<li class='jf'>{@link BeanContext#BEAN_examples BEAN_examples}
-	</ul>
-	<li class='jc'>{@link JsonSchemaSerializer}
-	<ul>
-		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo}
-		<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples JSONSCHEMA_allowNestedExamples}
-	</ul>
-</ul>
-<h5 class='section'>Notes:</h5>
-<ul class='spaced-list'>
-	<li>
-		The format is any {@doc juneau-marshall.JsonDetails.SimplifiedJson} if the object can be converted to a POJO using {@link JsonParser#DEFAULT} or a simple String if the object
-		has a schema associated with it meancan be converted from a String.
-		<br>Multiple lines are concatenated with newlines.
-	<li>
-		The format of this object can also be a simple String if the body has a schema associated with it, meaning it's meant to be treated as an HTTP part.
-	<li>
-		Supports {@doc DefaultRestSvlVariables}
-		(e.g. <js>"$L{my.localized.variable}"</js>).
-</ul>
-
-Serialized examples of the body of a response.
 <p>
-This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object whose keys are media types and values are string representations of that value.
-<p>
-In general you won't need to populate this value directly since it will automatically be calculated based on the value provided in the {@link #example()} field.
-<br>However, this field allows you to override the behavior and show examples for only specified media types or different examples for different media types.
-<p class='bcode w800'>
-	<jc>// A JSON representation of a PetCreate object.</jc>
-	<ja>@Response</ja>(
-		examples={
-			<js>"'application/json':'{name:\\'Doggie\\',species:\\'Dog\\'}',"</js>,
-			<js>"'text/uon':'(name:Doggie,species=Dog)'"</js>
-		}
-	)
+	Response headers are also rendered in the Swagger UI:
 </p>
-<h5 class='section'>Used for:</h5>
-<ul class='spaced-list'>
-	<li>
-		Server-side generated Swagger documentation.
-</ul>
-<h5 class='section'>Notes:</h5>
-<ul class='spaced-list'>
-	<li>
-		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object with string keys (media type) and string values (example for that media type) .
-	<li>
-		The leading/trailing <code>{ }</code> characters are optional.
-	<li>
-		Multiple lines are concatenated with newlines so that you can format the value to be readable:
-	<li>
-		Supports {@doc DefaultRestSvlVariables}
-		(e.g. <js>"$L{my.localized.variable}"</js>).
-	<li>
-		Resolution of variables is delayed until request time and occurs before parsing.
-		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
-</ul>
+<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.4.png'> 
+<p>
+	These can be auto-generated from {@link oaj.http.annotation.ResponseHeader @ResponseHeader} annotations defined on either
+	method parameters or type classes.
+	<br>The example above shows one of each:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/user/login"</js>,
+		summary=<js>"Logs user into the system"</js>,
+		swagger=<ja>@MethodSwagger</ja>(
+			tags=<js>"user"</js>
+		)
+	)
+	<jk>public</jk> Ok login(
+			<ja>@Query</ja>(
+				name=<js>"username"</js>,
+				description=<js>"The username for login"</js>,
+				required=<jk>true</jk>,
+				example=<js>"myuser"</js>
+			)
+			String username,
+			<ja>@Query</ja>(
+				name=<js>"password"</js>,
+				description=<js>"The password for login in clear text"</js>,
+				required=<jk>true</jk>,
+				example=<js>"abc123"</js>
+			)
+			String password,
+			<ja>@ResponseHeader</ja>(
+				name=<js>"X-Rate-Limit"</js>,
+				type=<js>"integer"</js>,
+				format=<js>"int32"</js>,
+				description=<js>"Calls per hour allowed by the user."</js>,
+				example=<js>"123"</js>
+			)
+			Value&lt;Integer&gt; rateLimit,
+			Value&lt;ExpiresAfter&gt; expiresAfter,
+			RestRequest req,
+			RestResponse res
+		) <jk>throws</jk> InvalidLogin, NotAcceptable {
 
+		<jk>if</jk> (! <jf>store</jf>.isValid(username, password))
+			<jk>throw new</jk> InvalidLogin();
 
-
-
-
-
-
-
-
-
-
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.2.png'> 
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Responses.3.png'> 
+		Date d = <jk>new</jk> Date(System.<jsm>currentTimeMillis</jsm>() + 30 * 60 * 1000);
+		req.getSession().setAttribute(<js>"login-expires"</js>, d);
+		rateLimit.set(1000);
+		expiresAfter.set(<jk>new</jk> ExpiresAfter(d));
+		<jk>return</jk> <jsf>OK</jsf>;
+	}
+</p>
+<p class='bpcode w800'>	
+	<ja>@ResponseHeader</ja>(
+		name=<js>"X-Expires-After"</js>,
+		type=<js>"string"</js>,
+		format=<js>"date-time"</js>,
+		description=<js>"Date in UTC when token expires"</js>,
+		example=<js>"2012-10-21"</js>
+	)
+	<jk>public static class</jk> ExpiresAfter {
+		<jk>private final</jk> Calendar <jf>c</jf>;
+		<jk>public</jk> ExpiresAfter(Date d) {
+			<jk>this</jk>.<jf>c</jf> = <jk>new</jk> GregorianCalendar();
+			<jf>c</jf>.setTime(d);
+		}
+		<jk>public</jk> Calendar toCalendar() {
+			<jk>return</jk> <jf>c</jf>;
+		}
+	}
+</p>	
