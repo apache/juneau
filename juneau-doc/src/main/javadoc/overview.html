@@ -33249,7 +33249,7 @@
 				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
 				<ul>
 					<li class='jc'><code><del>UonPartSerializer</del></code>
-					<li class='jc'><code><del>SimpleUonPartSerializer}
+					<li class='jc'><code><del>SimpleUonPartSerializer</del></code>
 					<li class='jc'>{@link org.apache.juneau.httppart.SimplePartSerializer}
 				</ul>
 				<li class='jic'>{@link org.apache.juneau.httppart.HttpPartParser}
@@ -33607,8 +33607,16 @@
 <h3 class='topic' onclick='toggle(this)'><a href='#7.2.0' id='7.2.0'>7.2.0 (TBD)</a></h3>
 <div class='topic'><!-- START: 7.2.0 -->
 <p>
-	TBD
+	7.2.0 is a major release that introduces several significant new functionality:
 </p>
+<ul class='spaced-list'>
+	<li>OpenAPI part serializing and parsing with full support for OpenAPI validation of input and output in the REST servlet and client APIs.
+	<li>Swagger UI.
+	<li>New HTTP-Part annotations that are applicable to both the servlet and client APIs.
+	<li>Serverless servlet and client unit testing.
+	<li>Simplified UI customization.
+	<li>Marshalls that combines serializers and parsers into a single API.
+</ul>
 
 <h5 class='topic w800'>juneau-marshall</h5>
 <ul class='spaced-list'>
@@ -33839,6 +33847,8 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
+		Auto-generated {@doc juneau-rest-server.Swagger Swagger UI}.
+	<li>
 		Simplified {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)}
 		and {@link org.apache.juneau.rest.annotation.RestMethod#swagger() @RestMethod(swagger)} annotations.
 	<li>
@@ -34066,6 +34076,7 @@
 				<li class='jf'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultAccept defaultAccept}
 				<li class='jf'>{@link org.apache.juneau.rest.annotation.RestMethod#defaultContentType defaultContentType}
 			</ul>	
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-rest-client</h5>
