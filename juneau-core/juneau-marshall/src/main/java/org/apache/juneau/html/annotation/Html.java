@@ -41,7 +41,7 @@ public @interface Html {
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jc>// Produces &lt;a href='...'&gt;drive&lt;/a&gt; when serialized to HTML.</jc>
+	 * 	<jc>// Produces &lt;a href&#61;'...'&gt;drive&lt;/a&gt; when serialized to HTML.</jc>
 	 * 	<ja>@Html</ja>(anchorText=<js>"drive"</js>)
 	 * 	<ja>@URI</ja> <jc>// Treat property as a URL</jc>
 	 * 	<jk>public</jk> String getDrive() {...}

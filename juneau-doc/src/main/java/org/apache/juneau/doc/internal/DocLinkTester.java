@@ -90,7 +90,7 @@ public class DocLinkTester {
 		while (m.find()) {
 			String link = m.group(2);
 			String anchor = null;
-			if (link.startsWith("https://") || link.startsWith("http://") || link.startsWith("mailto:"))
+			if (link.startsWith("https://") || link.startsWith("http://") || link.startsWith("mailto:") || link.startsWith("javascript:") || link.startsWith("$"))
 				continue;
 			links++;
 			if (link.indexOf('?') != -1)
@@ -99,17 +99,17 @@ public class DocLinkTester {
 			if (link.indexOf('#') != -1) {
 				anchor = link.substring(link.lastIndexOf('#')+1);
 				link = link.substring(0, link.lastIndexOf('#'));
-				File f2 = link.isEmpty() ? f : new File(f.getParentFile().getAbsolutePath() + "/" + link);
-				if (! f2.exists()) {
-					error(f, "missingLink=["+link+"]");
-				} else if (anchor != null) {
-					if (f2.isFile()) {
-						boolean foundAnchor = hasAnchor(f2, anchor);
-						if (! foundAnchor)
-							error(f, "missingAnchor=["+link+"#"+anchor+"]");
-					} else {
-						error(f, "invalidAnchor=["+link+"#"+anchor+"]");
-					}
+			}
+			File f2 = link.isEmpty() ? f : new File(f.getParentFile().getAbsolutePath() + "/" + link);
+			if (! f2.exists()) {
+				error(f, "missingLink=["+link+"]");
+			} else if (anchor != null) {
+				if (f2.isFile()) {
+					boolean foundAnchor = hasAnchor(f2, anchor);
+					if (! foundAnchor)
+						error(f, "missingAnchor=["+link+"#"+anchor+"]");
+				} else {
+					error(f, "invalidAnchor=["+link+"#"+anchor+"]");
 				}
 			}
 		}

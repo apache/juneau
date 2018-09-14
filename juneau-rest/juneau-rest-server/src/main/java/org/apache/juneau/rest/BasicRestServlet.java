@@ -142,7 +142,6 @@ import org.apache.juneau.xmlschema.*;
  * <p>
  * This subclass also provides a default OPTIONS page by implementing a {@link #getOptions(RestRequest)} that returns a
  * POJO consisting of beans describing the class.
- * <img class='bordered' src='doc-files/OptionsPage.png'>
  *
  * <p>
  * The OPTIONS page can be modified or augmented by overriding this method and providing your own data.

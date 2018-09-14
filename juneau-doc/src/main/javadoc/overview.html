@@ -7712,7 +7712,7 @@
 <p class='bpcode w800'>
 	<jk>public class</jk> FileSpace {
 		<jc>// Add a hyperlink to this bean property.</jc>
-		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)
+		<ja>@Html</ja>(link&#61;<js>"servlet:/drive/{drive}"</js>)
 		public String getDrive() {...}
 	}			
 </p>
@@ -7721,7 +7721,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Produces &lt;a href='...'&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
+	<jc>// Produces &lt;a href&#61;'...'&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
 	<jk>public class</jk> FileSpace {
 		<jc>// Add a hyperlink to this bean property.</jc>
 		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>, anchorText=<js>"CLICK ME!"</js>)
@@ -10696,12 +10696,12 @@
 <p>
 	The <code>PetStore</code> example described later provides an example of auto-generated Swagger JSON:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/SwaggerUI.json.png'>
+<img class='bordered w900' src='doc-files/SwaggerUI.json.png'>
 <p>
 	Using {@link org.apache.juneau.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
 	when the request is asking for HTML:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/SwaggerUI.html.png'>
+<img class='bordered w900' src='doc-files/SwaggerUI.html.png'>
 
 <p>
 	The class itself is nothing more than a POJO swap that swaps out {@link org.apache.juneau.dto.swagger.Swagger} beans
@@ -18431,11 +18431,11 @@
 <p>
 	As described previously, the <code>PetStore</code> example provides an example of auto-generated Swagger JSON:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.1.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.1.png'>
 <p>
 	Using {@link org.apache.juneau.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.2.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.2.png'>
 
 <!-- ==================================================================================================== -->
 
@@ -18532,7 +18532,7 @@
 <p>
 	The top part of the page shows general information about the REST interface:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.3.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.3.png'>
 <p>
 	The information is pulled from the {@link org.apache.juneau.rest.annotation.RestResource#swagger() @RestResource(swagger)} annotation.
 </p>
@@ -18698,7 +18698,7 @@
 	<br>In the example below, the <code>pet</code> and <code>store</code> tag sections are collapsed
 	and the <code>user</code> section is not:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.4.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.4.png'>
 <p>
 	Tags are also defined in the <ja>@ResourceSwagger</ja> annotation
 </p>
@@ -18786,7 +18786,7 @@
 	as well as the <code>getOptions()</code> method inherited from <code>BaseRestServlet</code>, so these
 	show up at the top of the page:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.5.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.5.png'>
 </div><!-- END: 7.27.3 - juneau-rest-server.Swagger.Tags -->
 
 <!-- ==================================================================================================== -->
@@ -18796,7 +18796,7 @@
 <p>
 	<ja>@RestMethod</ja>-annotated methods automatically get rendered as Swagger operations:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.1.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Operations.1.png'>
 <p>
 	The following shows the annotations defined on the <code>GET /pet</code> operation:
 </p>
@@ -18841,7 +18841,7 @@
 <p>
 	Expanding operations shows you a list of parameters:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.2.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Operations.2.png'> 
 <p>
 	Parameter information can be defined in a couple of ways.  The typical way is through annotations on parameters
 	being passed to your <ja>@RestMethod</ja>-annotated method, like so:
@@ -18950,7 +18950,7 @@
 <p>
 	The parameter section contains information about the request body as well for PUT and POST methods, as shown here:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.2.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Parameters.2.png'> 
 <p>
 	The definition of this method is shown here:
 </p>
@@ -18981,7 +18981,7 @@
 <p>
 	The <code>model</code> select box in the parameters can be expanded to show examples:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.1.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Parameters.1.png'>
 <p>
 	The examples for query/form-data/path/header parameters can be defined using the <code>example</code> attribute on your annotated parameters as shown here:
 </p>
@@ -19033,14 +19033,14 @@
 <p>
 	Examples for request bodies includes all supported <code>Content-Type</code> values: 
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.3.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Parameters.3.png'> 
 <p>
 	These are based on the parsers registered on your servlet or method.
 </p>
 <p>
 	Selecting any of the content types shows you a representative example for the POJO:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Parameters.4.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Parameters.4.png'> 
 <p>
 	There are several options for defining examples for request bodies:
 </p>
@@ -19212,7 +19212,7 @@
 <p>
 	Under the input parameters are listed the possible responses for the resource:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Operations.3.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Operations.3.png'> 
 <p>
 	The <code>200</code> response is determined by the return type on the method, in this case a collection of <code>Pet</code> objects:
 </p>
@@ -19258,15 +19258,15 @@
 	The <code>model</code> select box in the responses can be expanded to show examples:
 </p>
 <h5 class='figure'>PetStoreResource.getPet()</h5>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.1.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.1.png'> 
 <p>
 	Examples are provided for any supported <code>Accept</code> type based on the serializers defined on your
 	servlet/method.
 </p>
 <h5 class='figure'>application/json+simple</h5>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.2.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.2.png'> 
 <h5 class='figure'>text/uon</h5>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.3.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.3.png'> 
 <p>
 	Examples are pulled from the <code>examples</code> attribute in the response object of the generated Swagger JSON:
 </p>
@@ -19402,7 +19402,7 @@
 <p>
 	Response headers are also rendered in the Swagger UI:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.4.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.ResponseExamples.4.png'> 
 <p>
 	These can be auto-generated from {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotations defined on either
 	method parameters or type classes.
@@ -19503,9 +19503,9 @@
 	In the Swagger UI, this causes bean definitions to show up in the Models section at the bottom of the page:
 </p>
 <h5 class='figure'>Models section</h5>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.1.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Models.1.png'> 
 <h5 class='figure'>Models section with Order bean expanded</h5>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.2.png'> 
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Models.2.png'> 
 <p>
 	In the generated Swagger JSON, embedded schema information for beans will be replaced with references such as the one shown below for the <code>Order</code> bean:
 </p>
@@ -19571,7 +19571,7 @@
 <p>
 	Note that this does not affect how the information is rendered for that bean in the Swagger UI:
 </p>
-<img class='bordered' style='width:900px' src='doc-files/juneau-rest-server.Swagger.Models.3.png'>
+<img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.Models.3.png'>
 </div><!-- END: 7.27.9 - juneau-rest-server.Swagger.Models -->
 
 <!-- ==================================================================================================== -->

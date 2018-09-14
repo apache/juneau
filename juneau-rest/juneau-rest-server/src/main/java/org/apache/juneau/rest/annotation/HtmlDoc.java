@@ -184,7 +184,7 @@ public @interface HtmlDoc {
 	 * 		htmldoc=<ja>@HtmlDoc</ja>(
 	 * 			head={
 	 * 				<jc>// Add a shortcut link in the browser tab</jc>
-	 * 				<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>,
+	 * 				<js>"&lt;link rel='icon' href&#61;'$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>,
 	 *
 	 * 				<jc>// Reload the page every 5 seconds </jc>
 	 * 				<js>"&lt;meta http-equiv='refresh' content='5'&gt;"</js>

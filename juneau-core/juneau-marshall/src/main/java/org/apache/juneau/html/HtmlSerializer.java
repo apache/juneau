@@ -518,7 +518,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Produces: &lt;a href='/myContext/myServlet/bar/baz'&gt;myServlet/bar/baz&lt;/a&gt;</jc>
+	 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/bar/baz'&gt;myServlet/bar/baz&lt;/a&gt;</jc>
 	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
 	 * 			</p>
 	 * 		<li class='jf'>{@link AnchorText#SERVLET_RELATIVE SERVLET_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a servlet-relative path.
@@ -539,7 +539,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Produces: &lt;a href='/myContext/myServlet/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
+	 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
 	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
 	 * 			</p>
 	 * 		<li class='jf'>{@link AnchorText#PATH_RELATIVE PATH_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a path-relative path.
@@ -560,7 +560,7 @@ public class HtmlSerializer extends XmlSerializer {
 	 * 		.uriContext(<js>"{authority:'http://localhost:10000',contextRoot:'/myContext',servletPath:'/myServlet',pathInfo:'/foo'}"</js>)
 	 * 		.build();
 	 *
-	 * 	<jc>// Produces: &lt;a href='/myContext/myServlet/foo/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
+	 * 	<jc>// Produces: &lt;a href&#61;'/myContext/myServlet/foo/bar/baz'&gt;bar/baz&lt;/a&gt;</jc>
 	 * 	String html = s1.serialize(<jk>new</jk> MyBean());
 	 * 			</p>
 	 * 	</ul>

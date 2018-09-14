@@ -112,6 +112,7 @@ h4.topic {
 	background-repeat: no-repeat;
 	background-position: left center;
 	cursor: zoom-out;
+	max-width: 1000px;
 }
 h2.topic { font-size: 14pt; }
 h3.topic { font-size: 13pt; }
@@ -222,6 +223,7 @@ div.contentContainer > div.block > p:first-child {
 	background: linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background: -moz-linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#DEE3E9) );
+	max-width: 900px;
 }
 
 /* Dark-colored background headers */
@@ -318,11 +320,11 @@ l {
 	font-size: 1.2em;
 }
 
-.spaced-list>li { padding:5px; }
-.footer .spaced-list ul { margin:0 }
+.spaced-list>li { padding:5px; max-width: 800px;}
+.footer .spaced-list ul { margin:0; max-width: 800px; }
 
 /* Documentation Tree */
-.doctree li {}
+.doctree li { max-width: 800px; }
 li.normal {
     list-style-image:none; 
 }
@@ -395,5 +397,8 @@ a.doclink {
 }
 .w800 {
 	width:800px !important;
+}
+.w900 {
+	width:900px !important;
 }
 

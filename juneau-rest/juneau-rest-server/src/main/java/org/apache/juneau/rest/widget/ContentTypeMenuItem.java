@@ -53,10 +53,6 @@ import org.apache.juneau.utils.*;
  * 	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
  * </p>
  *
- * <p>
- * It renders the following popup-box:
- * <br><img class='bordered' src='doc-files/ContentTypeMenuItem.png'>
- *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}

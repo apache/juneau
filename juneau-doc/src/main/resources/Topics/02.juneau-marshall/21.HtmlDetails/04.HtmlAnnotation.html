@@ -37,7 +37,7 @@
 <p class='bpcode w800'>
 	<jk>public class</jk> FileSpace {
 		<jc>// Add a hyperlink to this bean property.</jc>
-		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)
+		<ja>@Html</ja>(link&#61;<js>"servlet:/drive/{drive}"</js>)
 		public String getDrive() {...}
 	}			
 </p>
@@ -46,7 +46,7 @@
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jc>// Produces &lt;a href='...'&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
+	<jc>// Produces &lt;a href&#61;'...'&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
 	<jk>public class</jk> FileSpace {
 		<jc>// Add a hyperlink to this bean property.</jc>
 		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>, anchorText=<js>"CLICK ME!"</js>)

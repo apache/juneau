@@ -292,10 +292,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * </p>
 	 *
 	 * <p>
-	 * 	...to produce this list of links on the HTML page...
-	 * <img class='bordered' src='doc-files/HTML_LINKS.png'>
-	 *
-	 * <p>
 	 * A shortcut on <ja>@RestResource</ja> is also provided for this setting:
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestResource</ja>(
