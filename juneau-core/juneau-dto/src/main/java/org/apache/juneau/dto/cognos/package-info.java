@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 // XML namespaces used in this package
 @XmlSchema(prefix="cognos", namespace="http://developer.cognos.com/schemas/xmldata/1/")
+/**
+ * Cognos Data Transfer Objects
+ */
 package org.apache.juneau.dto.cognos;
 import org.apache.juneau.xml.annotation.*;
 
