@@ -179,6 +179,7 @@ ul.toc,
 	background: #dee3e9;
 	margin: 0px;
 	padding: 0px;
+	max-width: 900px;
 }
 
 ul.toc,
@@ -209,7 +210,7 @@ ul.toc div,
 
 p.toc2 {
     background-color: #dee3e950;
-    border-radius: 0px 15px 15px 0px;
+    border-radius: 0px 10px 10px 0px;
 }
 
 /* Linear gradients */
@@ -243,7 +244,7 @@ h5.toc {
 	color: #2C4557;
 	margin-bottom: 0px;
 	padding: 5px 30px;
-	border-radius: 15px 15px 15px 0px;
+	border-radius: 10px 10px 10px 0px;
 	text-decoration: none;
 	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
@@ -264,7 +265,7 @@ div.contentContainer > div.block > p:first-child {
 	margin-top: 0px;
 	margin-bottom: 0px;
 	padding: 5px 30px;
-	border-radius: 0px 0px 15px 15px;
+	border-radius: 10px;
 	text-decoration: none;
 }
 
@@ -277,7 +278,7 @@ body > p:first-child {
 	color: white;
 	margin-bottom: 0px;
 	padding: 5px 30px;
-	border-radius: 15px;
+	border-radius: 10px;
 	text-decoration: none;
 }
 
@@ -289,8 +290,15 @@ div.contentContainer > h2:first-of-type {
 	color: white;
 	margin-bottom: 0px;
 	padding: 5px 30px;
-	border-radius: 15px 15px 0px 0px;
+	border-radius: 10px;
 	text-decoration: none;
+}
+div.header > div.subTitle > div.block > h1.title {
+	padding: 0px;
+	border-radius: 0px;
+	background: none;
+	margin: 0px;
+	font-size: 1em;
 }
 
 /* Class titles */
@@ -301,7 +309,7 @@ h2.title {
 	margin-top: 0px;
 	margin-bottom: 0px;
 	padding: 5px 30px;
-	border-radius: 15px;
+	border-radius: 10px;
 	text-decoration: none;
 }
 

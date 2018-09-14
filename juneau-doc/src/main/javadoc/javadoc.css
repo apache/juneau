@@ -680,16 +680,17 @@ h5.section {
 
 h1.preview-title {
 	text-align:center;
-	padding:20px;
-	border-radius:15px;
+	padding:5px;
+	border-radius:10px;
 	color: red;
 	background-color:yellow;
 }
 
 h2.preview-section {
 	text-align:center;
-	padding:10px;
-	border-radius:15px;
+	padding:5px;
+	border-radius:10px;
+	font-size: 1.2em;
 }
 
 .new {
