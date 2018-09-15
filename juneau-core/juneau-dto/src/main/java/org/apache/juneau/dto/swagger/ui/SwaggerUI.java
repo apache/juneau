@@ -134,6 +134,9 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		Info info = s.swagger.getInfo();
 		if (info != null) {
 
+			if (info.hasDescription())
+				table.child(tr(th("Description:"),td(toBRL(info.getDescription()))));
+
 			if (info.hasVersion())
 				table.child(tr(th("Version:"),td(info.getVersion())));
 
@@ -179,7 +182,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 		return div()._class("tag-block-summary").children(
 			span(t.getName())._class("name"),
-			span(t.getDescription())._class("description"),
+			span(toBRL(t.getDescription()))._class("description"),
 			ed == null ? null : span(a(ed.getUrl(), ed.hasDescription() ? ed.getDescription() : ed.getUrl()))._class("extdocs")
 		).onclick("toggleTagBlock(this)");
 	}
@@ -225,7 +228,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		Div tableContainer = div()._class("table-container");
 
 		if (op.hasDescription())
-			tableContainer.child(div(op.getDescription())._class("op-block-description"));
+			tableContainer.child(div(toBRL(op.getDescription()))._class("op-block-description"));
 
 		if (op.hasParameters()) {
 			tableContainer.child(div(h4("Parameters")._class("title"))._class("op-block-section-header"));
@@ -244,7 +247,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				)._class("parameter-key");
 
 				Td parameterValue = td(
-					div(pi.getDescription())._class("description"),
+					div(toBRL(pi.getDescription()))._class("description"),
 					examples(s, pi)
 				)._class("parameter-value");
 
@@ -266,7 +269,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				Td code = td(e3.getKey())._class("response-key");
 
 				Td codeValue = td(
-					div(ri.getDescription())._class("description"),
+					div(toBRL(ri.getDescription()))._class("description"),
 					examples(s, ri),
 					headers(s, ri)
 				)._class("response-value");
@@ -295,7 +298,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			sectionTable.child(
 				tr(
 					td(name)._class("name"),
-					td(hi.getDescription())._class("description"),
+					td(toBRL(hi.getDescription()))._class("description"),
 					td(hi.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
 				)
 			);
@@ -389,10 +392,30 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			div(model)._class("op-block-contents")
 		);
 	}
+
 	private HtmlElement modelBlockSummary(String modelName, ObjectMap model) {
 		return div()._class("op-block-summary").children(
 			span(modelName)._class("method-button"),
-			model.containsKey("description") ? span(model.remove("description"))._class("summary") : null
+			model.containsKey("description") ? span(toBRL(model.remove("description").toString()))._class("summary") : null
 		).onclick("toggleOpBlock(this)");
 	}
+
+	/**
+	 * Replaces newlines with <br> elements.
+	 */
+	private static List<Object> toBRL(String s) {
+		if (s == null)
+			return null;
+		if (s.indexOf(',') == -1)
+			return Collections.<Object>singletonList(s);
+		List<Object> l = new ArrayList<>();
+		String[] sa = s.split("\n");
+		for (int i = 0; i < sa.length; i++) {
+			if (i > 0)
+				l.add(br());
+			l.add(sa[i]);
+		}
+		return l;
+	}
 }
+

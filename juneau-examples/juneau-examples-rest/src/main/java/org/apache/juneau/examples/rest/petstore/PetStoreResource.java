@@ -42,9 +42,9 @@ import org.apache.juneau.rest.converters.*;
 @RestResource(
 	path="/petstore",
 	title="Petstore application",
-	description= {
+	description={
 		"This is a sample server Petstore server based on the Petstore sample at Swagger.io.",
-		"You can find out more about Swagger at <a class='link' href='http://swagger.io'>http://swagger.io</a>.",
+		"You can find out more about Swagger at http://swagger.io.",
 	},
 	htmldoc=@HtmlDoc(
 		widgets={
