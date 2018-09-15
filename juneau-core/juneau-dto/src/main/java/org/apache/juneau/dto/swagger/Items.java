@@ -1159,12 +1159,13 @@ public class Items extends SwaggerElement {
 	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
 		if (o instanceof ObjectMap) {
 			ObjectMap om = (ObjectMap)o;
-			String ref = om.getString("$ref");
-			if (ref != null) {
-				if (refStack.contains(ref) || refStack.size() >= maxDepth)
+			Object ref = om.get("$ref");
+			if (ref instanceof CharSequence) {
+				String sref = ref.toString();
+				if (refStack.contains(sref) || refStack.size() >= maxDepth)
 					return o;
-				refStack.addLast(ref);
-				Object o2 = swagger.findRef(ref, Object.class);
+				refStack.addLast(sref);
+				Object o2 = swagger.findRef(sref, Object.class);
 				o2 = resolveRefs(o2, swagger, refStack, maxDepth);
 				refStack.removeLast();
 				return o2;

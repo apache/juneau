@@ -326,6 +326,9 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 			for (Map.Entry<String,?> e : examples.entrySet())
 				m.put(e.getKey(), e.getValue());
 
+		if (m.isEmpty())
+			return null;
+
 		return examplesDiv(m);
 	}
 
@@ -342,6 +345,9 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		if (examples != null)
 			for (Map.Entry<String,?> e : examples.entrySet())
 				m.put(e.getKey(), e.getValue());
+
+		if (m.isEmpty())
+			return null;
 
 		return examplesDiv(m);
 	}

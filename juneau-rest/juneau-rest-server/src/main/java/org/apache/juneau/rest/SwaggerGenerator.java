@@ -328,9 +328,9 @@ final class SwaggerGenerator {
 						param.append("name", mp.name);
 
 					if (in == BODY)
-						param.put("schema", getSchema(param.getObjectMap("schema", false), mp.getType()));
+						param.appendSkipEmpty("schema", getSchema(param.getObjectMap("schema"), mp.getType()));
 					else
-						mergePartSchema(param, getSchema(param.getObjectMap("schema", false), mp.getType()));
+						mergePartSchema(param, getSchema(param.getObjectMap("schema"), mp.getType()));
 
 					try {
 						if (mp.method != null) {
@@ -392,12 +392,12 @@ final class SwaggerGenerator {
 				for (String code : responses.keySet()) {
 					ObjectMap om = responses.getObjectMap(code);
 					if (! om.containsKey("schema"))
-						om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
+						om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
 				}
 			} else if (m.getGenericReturnType() != void.class) {
 				ObjectMap om = responses.getObjectMap("200", true);
 				if (! om.containsKey("schema"))
-					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), m.getGenericReturnType()));
+					om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
 				addBodyExamples(sm, om, true, m.getGenericReturnType());
 			}
 
@@ -426,7 +426,7 @@ final class SwaggerGenerator {
 						for (String code : responses.keySet()) {
 							ObjectMap om = responses.getObjectMap(code);
 							if (! om.containsKey("schema"))
-								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema", true), type));
+								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), type));
 						}
 					}
 				}
@@ -655,7 +655,7 @@ final class SwaggerGenerator {
 		ObjectMap om = newMap(new ObjectMap(), a.value(), location, locationArgs);
 		om.appendSkipEmpty("description", resolve(joinnl(a.description())));
 		om.appendSkipEmpty("url", resolve(a.url()));
-		return om.isEmpty() ? null : om;
+		return nullIfEmpty(om);
 	}
 
 	private ObjectMap toMap(Contact a, String location, Object...locationArgs) throws ParseException {
@@ -665,7 +665,7 @@ final class SwaggerGenerator {
 		om.appendSkipEmpty("name", resolve(a.name()));
 		om.appendSkipEmpty("url", resolve(a.url()));
 		om.appendSkipEmpty("email", resolve(a.email()));
-		return om.isEmpty() ? null : om;
+		return nullIfEmpty(om);
 	}
 
 	private ObjectMap toMap(License a, String location, Object...locationArgs) throws ParseException {
@@ -674,7 +674,7 @@ final class SwaggerGenerator {
 		ObjectMap om = newMap(new ObjectMap(), a.value(), location, locationArgs);
 		om.appendSkipEmpty("name", resolve(a.name()));
 		om.appendSkipEmpty("url", resolve(a.url()));
-		return om.isEmpty() ? null : om;
+		return nullIfEmpty(om);
 	}
 
 	private ObjectMap toMap(Tag a, String location, Object...locationArgs) throws ParseException {
@@ -682,7 +682,7 @@ final class SwaggerGenerator {
 		om.appendSkipEmpty("name", resolve(a.name()));
 		om.appendSkipEmpty("description", resolve(joinnl(a.description())));
 		om.appendSkipNull("externalDocs", merge(om.getObjectMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
-		return om.isEmpty() ? null : om;
+		return nullIfEmpty(om);
 	}
 
 	private ObjectList toList(Tag[] aa, String location, Object...locationArgs) throws ParseException {
@@ -691,7 +691,7 @@ final class SwaggerGenerator {
 		ObjectList ol = new ObjectList();
 		for (Tag a : aa)
 			ol.add(toMap(a, location, locationArgs));
-		return ol.isEmpty() ? null : ol;
+		return nullIfEmpty(ol);
 	}
 
 	private ObjectMap getSchema(ObjectMap schema, Type type) throws Exception {
@@ -706,7 +706,9 @@ final class SwaggerGenerator {
 		if (schema.containsKey("type") || schema.containsKey("$ref"))
 			return schema;
 
-		return fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
+		ObjectMap om = fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
+		
+		return nullIfEmpty(om);
 	}
 
 	/**
@@ -718,7 +720,7 @@ final class SwaggerGenerator {
 		om.appendSkipNull("xml", om.remove("x-xml"));
 		om.appendSkipNull("externalDocs", om.remove("x-externalDocs"));
 		om.appendSkipNull("example", om.remove("x-example"));
-		return om;
+		return nullIfEmpty(om);
 	}
 
 	private void addBodyExamples(RestJavaMethod sm, ObjectMap piri, boolean response, Type type) throws Exception {
@@ -1218,5 +1220,13 @@ final class SwaggerGenerator {
 		if (codes.isEmpty())
 			codes.add(def);
 		return codes;
+	}
+
+	private static ObjectMap nullIfEmpty(ObjectMap m) {
+		return (m == null || m.isEmpty() ? null : m);
+	}
+
+	private static ObjectList nullIfEmpty(ObjectList l) {
+		return (l == null || l.isEmpty() ? null : l);
 	}
 }
