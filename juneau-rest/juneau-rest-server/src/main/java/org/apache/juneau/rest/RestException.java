@@ -47,7 +47,7 @@ public class RestException extends RuntimeException {
 
 	private static String message(Throwable cause, String msg, Object...args) {
 		if (msg == null && cause != null)
-			return cause.getLocalizedMessage();
+			return firstNonEmpty(cause.getLocalizedMessage(), cause.getClass().getName());
 		return format(msg, args);
 	}
 
@@ -170,6 +170,6 @@ public class RestException extends RuntimeException {
 	// When serialized, just serialize the message itself.
 	@Override /* Object */
 	public String toString() {
-		return getLocalizedMessage();
+		return emptyIfNull(getLocalizedMessage());
 	}
 }

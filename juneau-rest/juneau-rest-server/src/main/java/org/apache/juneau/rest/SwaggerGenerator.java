@@ -387,12 +387,9 @@ final class SwaggerGenerator {
 					for (Integer code : getCodes(a, 200)) {
 						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 						merge(om, a);
+						if (! om.containsKey("schema"))
+							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
 					}
-				}
-				for (String code : responses.keySet()) {
-					ObjectMap om = responses.getObjectMap(code);
-					if (! om.containsKey("schema"))
-						om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
 				}
 			} else if (m.getGenericReturnType() != void.class) {
 				ObjectMap om = responses.getObjectMap("200", true);
