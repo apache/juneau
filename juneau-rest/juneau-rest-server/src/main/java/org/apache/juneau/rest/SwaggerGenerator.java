@@ -373,8 +373,10 @@ final class SwaggerGenerator {
 
 			for (Class<?> ec : m.getExceptionTypes()) {
 				if (hasAnnotation(Response.class, ec)) {
-					for (Response a : getAnnotationsParentFirst(Response.class, ec)) {
-						for (Integer code : getCodes(a, 500)) {
+					List<Response> la = getAnnotationsParentFirst(Response.class, ec);
+					Set<Integer> codes = getCodes(la, 500);
+					for (Response a : la) {
+						for (Integer code : codes) {
 							ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 							merge(om, a);
 						}
@@ -383,8 +385,10 @@ final class SwaggerGenerator {
 			}
 
 			if (hasAnnotation(Response.class, m)) {
-				for (Response a : getAnnotationsParentFirst(Response.class, m)) {
-					for (Integer code : getCodes(a, 200)) {
+				List<Response> la = getAnnotationsParentFirst(Response.class, m);
+				Set<Integer> codes = getCodes(la, 200);
+				for (Response a : la) {
+					for (Integer code : codes) {
 						ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 						merge(om, a);
 						if (! om.containsKey("schema"))
@@ -404,16 +408,20 @@ final class SwaggerGenerator {
 				RestParamType in = mp.getParamType();
 
 				if (in == RESPONSE_HEADER) {
-					for (ResponseHeader a : getAnnotationsParentFirst(ResponseHeader.class, mp.method, mp.index)) {
-						for (Integer code : getCodes(a, 200)) {
+					List<ResponseHeader> la = getAnnotationsParentFirst(ResponseHeader.class, mp.method, mp.index);
+					Set<Integer> codes = getCodes2(la, 200);
+					for (ResponseHeader a : la) {
+						for (Integer code : codes) {
 							ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(mp.name, true);
 							merge(header, a);
 						}
 					}
 
 				} else if (in == RESPONSE) {
-					for (Response a : getAnnotationsParentFirst(Response.class, mp.method, mp.index)) {
-						for (Integer code : getCodes(a, 200)) {
+					List<Response> la = getAnnotationsParentFirst(Response.class, mp.method, mp.index);
+					Set<Integer> codes = getCodes(la, 200);
+					for (Response a : la) {
+						for (Integer code : codes) {
 							ObjectMap response = responses.getObjectMap(String.valueOf(code), true);
 							merge(response, a);
 						}
@@ -1199,22 +1207,26 @@ final class SwaggerGenerator {
 		return StringUtils.joinnl(ss).trim();
 	}
 
-	private static Set<Integer> getCodes(Response r, Integer def) {
-		Set<Integer> codes = new LinkedHashSet<>();
-		for (int i : r.value())
-			codes.add(i);
-		for (int i : r.code())
-			codes.add(i);
-		if (codes.isEmpty())
+	private static Set<Integer> getCodes(List<Response> la, Integer def) {
+		Set<Integer> codes = new TreeSet<>();
+		for (Response a : la) {
+			for (int i : a.value())
+				codes.add(i);
+			for (int i : a.code())
+				codes.add(i);
+		}
+		if (codes.isEmpty() && def != null)
 			codes.add(def);
 		return codes;
 	}
 
-	private static Set<Integer> getCodes(ResponseHeader r, Integer def) {
-		Set<Integer> codes = new LinkedHashSet<>();
-		for (int i : r.code())
-			codes.add(i);
-		if (codes.isEmpty())
+	private static Set<Integer> getCodes2(List<ResponseHeader> la, Integer def) {
+		Set<Integer> codes = new TreeSet<>();
+		for (ResponseHeader a : la) {
+			for (int i : a.code())
+				codes.add(i);
+		}
+		if (codes.isEmpty() && def != null)
 			codes.add(def);
 		return codes;
 	}
