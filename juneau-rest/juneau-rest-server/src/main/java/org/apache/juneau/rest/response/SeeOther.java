@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.net.*;
 import java.text.*;
 
+import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -28,6 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * When received in response to a POST (or PUT/DELETE), the client should presume that the server has received the data and should issue a new GET request to the given URI.
  */
 @Response(code=CODE, description=MESSAGE)
+@BeanIgnore
 public class SeeOther extends HttpResponse {
 
 	/** HTTP status code */
@@ -92,7 +94,7 @@ public class SeeOther extends HttpResponse {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@ResponseHeader(name="Location")
+	@ResponseHeader(name="Location", description="Other location.")
 	public URI getLocation() {
 		return location;
 	}

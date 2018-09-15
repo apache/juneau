@@ -282,7 +282,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		if (! ri.hasHeaders())
 			return null;
 
-		Table sectionTable = table(tr(th("Name"),th("Description"),th("Type")))._class("section-table");
+		Table sectionTable = table(tr(th("Name"),th("Description"),th("Schema")))._class("section-table");
 
 		Div headers = div(
 			div("Headers:")._class("section-name"),
@@ -296,7 +296,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 				tr(
 					td(name)._class("name"),
 					td(hi.getDescription())._class("description"),
-					td(hi.getType())._class("type")
+					td(hi.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
 				)
 			);
 		}

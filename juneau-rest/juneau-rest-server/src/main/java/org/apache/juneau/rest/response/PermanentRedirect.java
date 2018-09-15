@@ -16,6 +16,7 @@ import static org.apache.juneau.rest.response.PermanentRedirect.*;
 
 import java.net.*;
 
+import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -26,6 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  */
 @Response(code=CODE, description=MESSAGE)
+@BeanIgnore
 public class PermanentRedirect extends HttpResponse {
 
 	/** HTTP status code */
@@ -67,7 +69,7 @@ public class PermanentRedirect extends HttpResponse {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@ResponseHeader(name="Location")
+	@ResponseHeader(name="Location", description="New location of resource.")
 	public URI getLocation() {
 		return location;
 	}

@@ -16,6 +16,7 @@ import static org.apache.juneau.rest.response.TemporaryRedirect.*;
 
 import java.net.*;
 
+import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -27,6 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * For example, a POST request should be repeated using another POST request.
  */
 @Response(code=CODE, description=MESSAGE)
+@BeanIgnore
 public class TemporaryRedirect extends HttpResponse {
 
 	/** HTTP status code */
@@ -68,7 +70,7 @@ public class TemporaryRedirect extends HttpResponse {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@ResponseHeader(name="Location")
+	@ResponseHeader(name="Location", description="Temporary location of resource.")
 	public URI getLocation() {
 		return location;
 	}

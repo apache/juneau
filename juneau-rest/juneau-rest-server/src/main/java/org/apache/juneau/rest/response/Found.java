@@ -16,6 +16,7 @@ import java.net.*;
 
 import static org.apache.juneau.rest.response.Found.*;
 
+import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -29,6 +30,7 @@ import org.apache.juneau.http.annotation.*;
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  */
 @Response(code=CODE, description=MESSAGE)
+@BeanIgnore
 public class Found extends HttpResponse {
 
 	/** HTTP status code */
@@ -70,7 +72,7 @@ public class Found extends HttpResponse {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@ResponseHeader(name="Location")
+	@ResponseHeader(name="Location", description="Location of resource.")
 	public URI getLocation() {
 		return location;
 	}

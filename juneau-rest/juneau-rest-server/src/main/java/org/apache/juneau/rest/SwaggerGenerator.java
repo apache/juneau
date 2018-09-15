@@ -379,6 +379,19 @@ final class SwaggerGenerator {
 						for (Integer code : codes) {
 							ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 							merge(om, a);
+							if (! om.containsKey("schema"))
+								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), ec));
+						}
+					}
+					for (Method ecm : getAllMethods(ec, true)) {
+						if (hasAnnotation(ResponseHeader.class, ecm)) {
+							ResponseHeader a = ecm.getAnnotation(ResponseHeader.class);
+							String ha = a.name();
+							for (Integer code : codes) {
+								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
+								merge(header, a);
+								mergePartSchema(header, getSchema(header, ecm.getGenericReturnType()));
+							}
 						}
 					}
 				}
@@ -393,6 +406,19 @@ final class SwaggerGenerator {
 						merge(om, a);
 						if (! om.containsKey("schema"))
 							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
+					}
+				}
+				if (hasAnnotation(Response.class, m.getReturnType())) {
+					for (Method ecm : getAllMethods(m.getReturnType(), true)) {
+						if (hasAnnotation(ResponseHeader.class, ecm)) {
+							ResponseHeader a = ecm.getAnnotation(ResponseHeader.class);
+							String ha = a.name();
+							for (Integer code : codes) {
+								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
+								merge(header, a);
+								mergePartSchema(header, getSchema(header, ecm.getGenericReturnType()));
+							}
+						}
 					}
 				}
 			} else if (m.getGenericReturnType() != void.class) {
@@ -414,6 +440,7 @@ final class SwaggerGenerator {
 						for (Integer code : codes) {
 							ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(mp.name, true);
 							merge(header, a);
+							mergePartSchema(header, getSchema(header, Value.getParameterType(mp.type)));
 						}
 					}
 

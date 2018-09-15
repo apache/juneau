@@ -16,6 +16,7 @@ import static org.apache.juneau.rest.response.MovedPermanently.*;
 
 import java.net.*;
 
+import org.apache.juneau.annotation.BeanIgnore;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -25,6 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * This and all future requests should be directed to the given URI.
  */
 @Response(code=CODE, description=MESSAGE)
+@BeanIgnore
 public class MovedPermanently extends HttpResponse {
 
 	/** HTTP status code */
@@ -66,7 +68,7 @@ public class MovedPermanently extends HttpResponse {
 	/**
 	 * @return <code>Location</code> header value.
 	 */
-	@ResponseHeader(name="Location")
+	@ResponseHeader(name="Location", description="New location of resource.")
 	public URI getLocation() {
 		return location;
 	}
