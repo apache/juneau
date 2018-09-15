@@ -510,6 +510,9 @@ public final class ClassMeta<T> implements Type {
 					setAccessible(f, false);
 					namePropertyMethod = new Setter.FieldSetter(f);
 				}
+			}
+
+			for (Field f : c.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Example.class)) {
 					if (! (isStatic(f) && isParentClass(innerClass, f.getType())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''", f);
@@ -532,6 +535,9 @@ public final class ClassMeta<T> implements Type {
 					setAccessible(m, false);
 					namePropertyMethod = new Setter.MethodSetter(m);
 				}
+			}
+
+			for (Method m : c.getDeclaredMethods()) {
 				if (m.isAnnotationPresent(Example.class)) {
 					if (! (isStatic(m) && hasFuzzyArgs(m, BeanSession.class) && isParentClass(innerClass, m.getReturnType())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''", m);

@@ -328,6 +328,30 @@ public class JsonSchemaGeneratorTest {
 	}
 
 	@Test
+	public void addExample_BEAN_exampleMethodOverridden_wDefault() throws Exception {
+		SimpleBeanWithExampleMethod2 b = new SimpleBeanWithExampleMethod2();
+		b.f1 = "baz";
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").example(SimpleBeanWithExampleMethod2.class, b).build().createSession();
+		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'baz'}}", s.getSchema(SimpleBeanWithExampleMethod2.class));
+	}
+
+	@Test
+	public void addExample_BEAN_exampleMethodOverridden_array2d() throws Exception {
+		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").build().createSession();
+		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}}}", s.getSchema(SimpleBeanWithExampleMethod2[][].class));
+	}
+
+	public static class SimpleBeanWithExampleMethod2 extends SimpleBeanWithExampleMethod {
+
+		@Example
+		public static SimpleBeanWithExampleMethod2 example2() {
+			SimpleBeanWithExampleMethod2 ex = new SimpleBeanWithExampleMethod2();
+			ex.f1 = "foobar";
+			return ex;
+		}
+	}
+
+	@Test
 	public void addExample_BEAN_exampleField() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("bean").build().createSession();
 		assertObjectEquals("{type:'object',properties:{f1:{type:'string'}},'x-example':{f1:'foobar'}}", s.getSchema(SimpleBeanWithExampleField.class));
