@@ -331,9 +331,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		String title = context.getMessages().findFirstString(req.getLocale(), "title");
 		if (title != null)
 			return vr.resolve(title);
-		Swagger s = getSwagger(req);
-		if (s != null && s.getInfo() != null && s.getInfo().hasTitle())
-			return s.getInfo().getTitle();
 		return null;
 	}
 
@@ -387,9 +384,6 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		String description = context.getMessages().findFirstString(req.getLocale(), "description");
 		if (description != null)
 			return vr.resolve(description);
-		Swagger s = getSwagger(req);
-		if (s != null && s.getInfo() != null && s.getInfo().hasDescription())
-			return s.getInfo().getDescription();
 		return null;
 	}
 

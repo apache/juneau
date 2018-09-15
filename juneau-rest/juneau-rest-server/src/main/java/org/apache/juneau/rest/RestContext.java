@@ -3136,6 +3136,7 @@ public final class RestContext extends BeanContext {
 					RestInfoVar.class,
 					SerializedRequestAttrVar.class,
 					ServletInitParamVar.class,
+					SwaggerVar.class,
 					UrlVar.class,
 					UrlEncodeVar.class,
 					WidgetVar.class
