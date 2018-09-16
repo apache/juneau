@@ -411,8 +411,14 @@ public final class HtmlParserSession extends XmlParserSession {
 			if (elementType == null)
 				elementType = object();
 
-			if (elementType.canCreateNewBean(l)) {
-				BeanMap m = newBeanMap(l, elementType.getInnerClass());
+			BuilderSwap<E,Object> builder = elementType.getBuilderSwap(this);
+
+			if (builder != null || elementType.canCreateNewBean(l)) {
+				BeanMap m =
+					builder != null
+					? toBeanMap(builder.create(this, elementType))
+					: newBeanMap(l, elementType.getInnerClass())
+				;
 				for (int i = 0; i < keys.size(); i++) {
 					tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
@@ -433,7 +439,13 @@ public final class HtmlParserSession extends XmlParserSession {
 						bpm.set(m, key, value);
 					}
 				}
-				l.add(m == null ? null : (E)m.getBean());
+				l.add(
+					m == null
+					? null
+					: builder != null
+						? builder.build(this, m.getBean(), elementType)
+						: (E)m.getBean()
+				);
 			} else {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l)

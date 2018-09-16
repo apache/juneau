@@ -119,7 +119,6 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 	//====================================================================================================
 
 	@Test
-	@Ignore
 	public void beanPropertyBuilder_collections() throws Exception {
 		// It's simply not possible to allow for expanded parameters with a builder-based approach
 		// since the value on the builder can only be set once.
@@ -262,5 +261,4 @@ public class RountTripBeansWithBuilders extends RoundTripTest {
 			return f9;
 		}
 	}
-
 }
