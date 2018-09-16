@@ -615,7 +615,9 @@ public class BeanSession extends Session {
 
 			// It's a bean being initialized with a Map
 			if (to.isBean() && value instanceof Map) {
-				if (value instanceof ObjectMap) {
+				BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)to.getBuilderSwap(this);
+
+				if (value instanceof ObjectMap && builder == null) {
 					ObjectMap m2 = (ObjectMap)value;
 					String typeName = m2.getString(getBeanTypePropertyName(to));
 					if (typeName != null) {
@@ -623,6 +625,11 @@ public class BeanSession extends Session {
 						if (cm != null && isParentClass(to.innerClass, cm.innerClass))
 							return (T)m2.cast(cm);
 					}
+				}
+				if (builder != null) {
+					BeanMap m = toBeanMap(builder.create(this, to));
+					m.load((Map<?,?>) value);
+					return builder.build(this, m.getBean(), to);
 				}
 				return newBeanMap(tc).load((Map<?,?>) value).getBean();
 			}
@@ -1507,7 +1514,7 @@ public class BeanSession extends Session {
 
 	/**
 	 * HTTP part schema of object being serialized or parsed.
-	 * 
+	 *
 	 * @return HTTP part schema of object being serialized or parsed, or <jk>null</jk> if not specified.
 	 */
 	public final HttpPartSchema getSchema() {

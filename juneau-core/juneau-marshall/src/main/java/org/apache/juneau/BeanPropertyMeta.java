@@ -631,7 +631,7 @@ public final class BeanPropertyMeta {
 
 			try {
 
-				Object r = beanContext.isBeanMapPutReturnsOldValue() || isMap || isCollection ? get(m, pName) : null;
+				Object r = (beanContext.isBeanMapPutReturnsOldValue() || isMap || isCollection) && (getter != null || field != null) ? get(m, pName) : null;
 				Class<?> propertyClass = rawTypeMeta.getInnerClass();
 
 				if (value == null && (isMap || isCollection)) {
