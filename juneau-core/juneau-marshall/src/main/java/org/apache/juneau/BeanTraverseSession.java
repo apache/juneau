@@ -175,7 +175,7 @@ public class BeanTraverseSession extends BeanSession {
 		super.addWarning(msg, args);
 	}
 
-	private static final class StackElement {
+	private final class StackElement {
 		final int depth;
 		final String name;
 		final Object o;
@@ -192,8 +192,8 @@ public class BeanTraverseSession extends BeanSession {
 			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
 			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
-			if (aType != aType.getSerializedClassMeta(null))
-				sb.append('/').append(aType.getSerializedClassMeta(null).toString(simple));
+			if (aType != aType.getSerializedClassMeta(BeanTraverseSession.this))
+				sb.append('/').append(aType.getSerializedClassMeta(BeanTraverseSession.this).toString(simple));
 			return sb.toString();
 		}
 	}

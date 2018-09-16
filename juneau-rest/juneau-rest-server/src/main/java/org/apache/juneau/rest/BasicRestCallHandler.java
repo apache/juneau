@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -311,6 +312,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 			String msg = '[' + Integer.toHexString(e.hashCode()) + '.' + e2.getStatus() + '.' + e2.getOccurrence() + "] HTTP " + req.getMethod() + " " + e2.getStatus() + " " + req.getRequestURI() + (qs == null ? "" : "?" + qs);
 			System.err.println(msg);  // NOT DEBUG
 			e.printStackTrace(System.err);
+			logger.log(Level.SEVERE, e, e.getLocalizedMessage());
 		}
 
 		logger.onError(req, res, e2);

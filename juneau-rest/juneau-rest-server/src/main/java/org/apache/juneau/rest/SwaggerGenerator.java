@@ -58,7 +58,7 @@ final class SwaggerGenerator {
 	private final BeanSession bs;
 	private final Locale locale;
 	private final RestContext context;
-	private final JsonParser jp = JsonParser.DEFAULT;
+	private final JsonParser jp = JsonParser.create().ignoreUnknownBeanProperties().build();
 	private final JsonSchemaGeneratorSession js;
 	private final Class<?> c;
 	private final Object resource;
@@ -739,7 +739,7 @@ final class SwaggerGenerator {
 			return schema;
 
 		ObjectMap om = fixSwaggerExtensions(schema.appendAll(js.getSchema(cm)));
-		
+
 		return nullIfEmpty(om);
 	}
 
@@ -770,7 +770,7 @@ final class SwaggerGenerator {
 
 		Object example = null;
 		if (isJson(sex)) {
-			example = JsonParser.DEFAULT.parse(sex, type);
+			example = jp.parse(sex, type);
 		} else {
 			ClassMeta<?> cm = js.getClassMeta(type);
 			if (cm.hasStringTransform()) {

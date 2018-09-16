@@ -2301,6 +2301,7 @@ public class BasicRestInfoProviderTest {
 		}
 	}
 
+	@Bean(sort=true)
 	public static class P01 {
 		private int f1;
 
