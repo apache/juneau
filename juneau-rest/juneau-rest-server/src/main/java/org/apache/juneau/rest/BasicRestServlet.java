@@ -223,7 +223,10 @@ public abstract class BasicRestServlet extends RestServlet implements BasicRestC
 		// Shortcut for boolean properties.
 		flags={
 			// Use $ref references for bean definitions to reduce duplication in Swagger.
-			JSONSCHEMA_useBeanDefs
+			JSONSCHEMA_useBeanDefs,
+
+			// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
+			BEAN_ignoreUnknownBeanProperties
 		}
 	)
 	public Swagger getOptions(RestRequest req) {

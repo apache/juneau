@@ -2286,4 +2286,52 @@ public class BasicRestInfoProviderTest {
 	public static class Foo {
 		public int id;
 	}
+
+	//=================================================================================================================
+	// Example bean with getter-only property.
+	//=================================================================================================================
+
+	@RestResource
+	public static class P extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@RestMethod(name=GET,path="/")
+		public P01 doFoo(@Body P01 body) {
+			return null;
+		}
+	}
+
+	public static class P01 {
+		private int f1;
+
+		public P01 setF1(int f1) {
+			this.f1 = f1;
+			return this;
+		}
+
+		public int getF1() {
+			return f1;
+		}
+
+		public int getF2() {
+			return 2;
+		}
+
+		@Example
+		public static P01 example() {
+			return new P01().setF1(1);
+		}
+	}
+
+	static MockRest p = MockRest.create(P.class);
+
+	@Test
+	public void p01_bodyWithReadOnlyProperty() throws Exception {
+		Swagger s = JsonParser.DEFAULT.parse(p.options("/").accept("application/json").execute().getBodyAsString(), Swagger.class);
+		Operation o = s.getOperation("/", "get");
+		ParameterInfo pi = o.getParameter("body", null);
+		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", pi.getExamples().get("application/json+simple"));
+		ResponseInfo ri = o.getResponse("200");
+		assertEquals("{\n\tf1: 1,\n\tf2: 2\n}", ri.getExamples().get("application/json+simple"));
+	}
 }
