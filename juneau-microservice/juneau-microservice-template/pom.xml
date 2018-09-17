@@ -51,6 +51,14 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<!-- Needed to prevent mvn release:prepare from blowing up. -->
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
