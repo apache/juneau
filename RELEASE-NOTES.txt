@@ -11,6 +11,20 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 7.2.0
+
+** Bug
+    * [JUNEAU-83] - Cannot subclass RestClient and RestClientBuilder
+    * [JUNEAU-82] - Config and Logs resource pages should have configurable look-and-feel.
+
+** New Feature
+    * [JUNEAU-60] - @RestMethod paramater annotation to populate a pojo using RequestBean format
+
+** Improvement
+    * [JUNEAU-81] - Update Jetty to 9.4.9
+    * [JUNEAU-84] - Upgrade to Jetty 9.4.12
+
+
 Release Notes - Juneau - Version 7.1.0
 
 ** Bug
