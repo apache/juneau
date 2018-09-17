@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice</artifactId>
-		<version>7.2.0</version>
+		<version>7.2.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-microservice-test</artifactId>
