@@ -311,23 +311,28 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		boolean isBody = "body".equals(pi.getIn());
 
 		ObjectMap m = new ObjectMap();
-		if (isBody) {
-			SchemaInfo si = pi.getSchema();
-			if (si != null)
-				m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth));
-		} else {
-			ObjectMap om = pi
-				.copy()
-				.resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth)
-				.asMap()
-				.keepAll("format","pattern","collectionFormat","maximum","minimum","multipleOf","maxLength","minLength","maxItems","minItems","allowEmptyValue","exclusiveMaximum","exclusiveMinimum","uniqueItems","items","default","enum");
-			m.put("model", om.isEmpty() ? i("none") : om);
-		}
 
-		Map<String,?> examples = pi.getExamples();
-		if (examples != null)
-			for (Map.Entry<String,?> e : examples.entrySet())
-				m.put(e.getKey(), e.getValue());
+		try {
+			if (isBody) {
+				SchemaInfo si = pi.getSchema();
+				if (si != null)
+					m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth));
+			} else {
+				ObjectMap om = pi
+					.copy()
+					.resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth)
+					.asMap()
+					.keepAll("format","pattern","collectionFormat","maximum","minimum","multipleOf","maxLength","minLength","maxItems","minItems","allowEmptyValue","exclusiveMaximum","exclusiveMinimum","uniqueItems","items","default","enum");
+				m.put("model", om.isEmpty() ? i("none") : om);
+			}
+
+			Map<String,?> examples = pi.getExamples();
+			if (examples != null)
+				for (Map.Entry<String,?> e : examples.entrySet())
+					m.put(e.getKey(), e.getValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		if (m.isEmpty())
 			return null;
@@ -339,15 +344,19 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		SchemaInfo si = ri.getSchema();
 
 		ObjectMap m = new ObjectMap();
-		if (si != null) {
-			si = si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth);
-			m.put("model", si);
-		}
+		try {
+			if (si != null) {
+				si = si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth);
+				m.put("model", si);
+			}
 
-		Map<String,?> examples = ri.getExamples();
-		if (examples != null)
-			for (Map.Entry<String,?> e : examples.entrySet())
-				m.put(e.getKey(), e.getValue());
+			Map<String,?> examples = ri.getExamples();
+			if (examples != null)
+				for (Map.Entry<String,?> e : examples.entrySet())
+					m.put(e.getKey(), e.getValue());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		if (m.isEmpty())
 			return null;
