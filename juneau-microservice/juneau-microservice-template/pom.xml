@@ -28,7 +28,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice</artifactId>
-		<version>7.2.1-SNAPSHOT</version>
+		<version>7.2.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-microservice-template</artifactId>
@@ -36,7 +36,7 @@
 	<description>A template project developers use to start with to create a microservice.</description>
 	
 	<properties>
-		<juneau.version>7.2.1-SNAPSHOT</juneau.version>
+		<juneau.version>7.2.0-SNAPSHOT</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -50,13 +50,6 @@
 	
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
