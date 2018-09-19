@@ -1793,7 +1793,9 @@ public class BasicRestInfoProviderTest {
 		public OA01x doFoo() { return null;}
 	}
 	@Response(code=100)
-	public static class OA01x {}
+	public static class OA01x {
+		public String foo;
+	}
 
 	@Test
 	public void oa01a_responses_100_description_default() throws Exception {
@@ -1893,7 +1895,9 @@ public class BasicRestInfoProviderTest {
 		public OB01x doFoo() {return null;}
 	}
 	@Response(code=100)
-	public static class OB01x {}
+	public static class OB01x {
+		public String foo;
+	}
 
 	@Test
 	public void ob01a_responses_100_headers_default() throws Exception {
@@ -1997,7 +2001,9 @@ public class BasicRestInfoProviderTest {
 		public OC01x doFoo() {return null;}
 	}
 	@Response(code=100)
-	public static class OC01x {}
+	public static class OC01x {
+		public String foo;
+	}
 
 	@Test
 	public void oc01a_responses_100_example_default() throws Exception {
@@ -2045,7 +2051,9 @@ public class BasicRestInfoProviderTest {
 		public OC04x doFoo() {return null;}
 	}
 	@Response(code=100,example="{foo:'d'}")
-	public static class OC04x {}
+	public static class OC04x {
+		public String foo;
+	}
 
 	@Test
 	public void oc04a_response_100_example_swaggerOnAnnotation() throws Exception {
@@ -2069,7 +2077,9 @@ public class BasicRestInfoProviderTest {
 		public OC05x doFoo() {return null;}
 	}
 	@Response(code=100,example="{foo:'$L{foo}'}")
-	public static class OC05x {}
+	public static class OC05x {
+		public String foo;
+	}
 
 	@Test
 	public void oc05a_response_100_example_swaggerOnAnnotation_localized() throws Exception {
@@ -2097,7 +2107,9 @@ public class BasicRestInfoProviderTest {
 		public OD01x doFoo() {return null;}
 	}
 	@Response(code=100)
-	public static class OD01x {}
+	public static class OD01x {
+		public String foo;
+	}
 
 	@Test
 	public void od01a_responses_100_examples_default() throws Exception {

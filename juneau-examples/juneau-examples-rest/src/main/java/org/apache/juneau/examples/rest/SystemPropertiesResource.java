@@ -14,6 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import java.util.*;
 import java.util.Map;
@@ -77,6 +78,7 @@ import org.apache.juneau.rest.widget.*;
 	// Properties that get applied to all serializers and parsers.
 	properties={
 		// Use single quotes.
+		@Property(name=WSERIALIZER_quoteChar, value="'")
 	},
 
 	// Support GZIP encoding on Accept-Encoding header.
@@ -97,14 +99,21 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		summary="Show all system properties",
 		description="Returns all system properties defined in the JVM.",
 		swagger=@MethodSwagger(
-			responses={
-				"200: {description:'Returns a map of key/value pairs.', x-example:{key1:'val1',key2:'val2'}}"
-			}
+			// Additional swagger...
 		)
 	)
 	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Response(
+		description="Returns a map of key/value pairs.",
+		example="{key1:'val1',key2:'val2'}"
+	)
 	public Map get(
-			@Query(name="sort", description="Sort results alphabetically", _default="false", example="true") boolean sort
+			@Query(
+				name="sort",
+				description="Sort results alphabetically",
+				_default="false",
+				example="true"
+			) boolean sort
 		) throws NotAcceptable {
 
 		if (sort)
@@ -117,13 +126,18 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		summary="Get system property",
 		description="Returns the value of the specified system property.",
 		swagger=@MethodSwagger(
-			responses={
-				"200: {description:'The system property value, or null if not found'}"
-			}
+			// Additional method-level swagger info here.
 		)
 	)
+	@Response(
+		description="The system property value, or null if not found."
+	)
 	public String getSystemProperty(
-			@Path(name="propertyName", description="The system property name.", example="PATH") String propertyName
+			@Path(
+				name="propertyName",
+				description="The system property name.",
+				example="PATH"
+			) String propertyName
 		) throws NotAcceptable {
 
 		return System.getProperty(propertyName);
@@ -136,12 +150,17 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public SeeOtherRoot setSystemProperty(
-			@Path(name="propertyName", description="The system property name") String propertyName,
-			@Body(description="The new system property value") String value
+			@Path(
+				name="propertyName",
+				description="The system property name"
+			) String propertyName,
+			@Body(
+				description="The new system property value"
+			) String value
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 
 		System.setProperty(propertyName, value);
-		return SeeOtherRoot.INSTANCE;
+		return SeeOtherRoot.INSTANCE;  // Do a 303 redirect to the servlet root.
 	}
 
 	@RestMethod(
@@ -150,11 +169,14 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public SeeOtherRoot post(
-			@Body(description="The new system property values", example="{key1:'val1',key2:123}") java.util.Properties newProperties
+			@Body(
+				description="The new system property values",
+				example="{key1:'val1',key2:123}"
+			) java.util.Properties newProperties
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 
 		System.setProperties(newProperties);
-		return SeeOtherRoot.INSTANCE;
+		return SeeOtherRoot.INSTANCE;  // Do a 303 redirect to the servlet root.
 	}
 
 	@RestMethod(
@@ -164,11 +186,15 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		guards=AdminGuard.class
 	)
 	public SeeOtherRoot deleteSystemProperty(
-			@Path(name="propertyName", description="The system property name", example="PATH") String propertyName
+			@Path(
+				name="propertyName",
+				description="The system property name",
+				example="PATH"
+			) String propertyName
 		) throws UserNotAdminException, NotAcceptable {
 
 		System.clearProperty(propertyName);
-		return SeeOtherRoot.INSTANCE;
+		return SeeOtherRoot.INSTANCE;  // Do a 303 redirect to the servlet root.
 	}
 
 	@RestMethod(
@@ -211,7 +237,7 @@ public class SystemPropertiesResource extends BasicRestServlet {
 		) throws UserNotAdminException, NotAcceptable, UnsupportedMediaType {
 
 		System.setProperty(name, value);
-		return SeeOtherRoot.INSTANCE;
+		return SeeOtherRoot.INSTANCE;  // Do a 303 redirect to the servlet root.
 	}
 
 
@@ -227,5 +253,4 @@ public class SystemPropertiesResource extends BasicRestServlet {
 			super("User is not an administrator");
 		}
 	}
-
 }

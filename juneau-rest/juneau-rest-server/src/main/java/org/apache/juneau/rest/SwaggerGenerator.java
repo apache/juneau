@@ -406,6 +406,7 @@ final class SwaggerGenerator {
 						merge(om, a);
 						if (! om.containsKey("schema"))
 							om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), m.getGenericReturnType()));
+						addBodyExamples(sm, om, true, m.getGenericReturnType());
 					}
 				}
 				if (hasAnnotation(Response.class, m.getReturnType())) {

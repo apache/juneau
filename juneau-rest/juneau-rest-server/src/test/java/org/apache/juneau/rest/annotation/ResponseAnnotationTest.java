@@ -489,7 +489,9 @@ public class ResponseAnnotationTest {
 			example="'a'",
 			examples=" {foo:'a'} "
 		)
-		public static class SA01 {}
+		public static class SA01 {
+			public SA01(String x){}
+		}
 		@RestMethod
 		public void sa01a(Value<SA01> r) {}
 		@RestMethod
@@ -504,7 +506,9 @@ public class ResponseAnnotationTest {
 				"examples:{foo:'a'}"
 			}
 		)
-		public static class SA02 {}
+		public static class SA02 {
+			public SA02(String x){}
+		}
 		@RestMethod
 		public void sa02a(Value<SA02> r) {}
 		@RestMethod
@@ -524,7 +528,9 @@ public class ResponseAnnotationTest {
 			example="'a'",
 			examples=" {foo:'a'} "
 		)
-		public static class SA03 {}
+		public static class SA03 {
+			public SA03(String x){}
+		}
 		@RestMethod
 		public void sa03a(Value<SA03> r) {}
 		@RestMethod
@@ -730,14 +736,18 @@ public class ResponseAnnotationTest {
 	public static class SC {
 
 		@Response(example="{f1:'a'}")
-		public static class SC01 {}
+		public static class SC01 {
+			public String f1;
+		}
 		@RestMethod
 		public void sc01a(Value<SC01> r) {}
 		@RestMethod
 		public SC01 sc01b() {return null;}
 
 		@Response(examples={" foo:'b' "})
-		public static class SC02 {}
+		public static class SC02 {
+			public SC02(String x){}
+		}
 		@RestMethod
 		public void sc02a(Value<SC02> r) {}
 		@RestMethod
