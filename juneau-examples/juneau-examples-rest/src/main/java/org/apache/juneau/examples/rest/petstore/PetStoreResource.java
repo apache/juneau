@@ -264,12 +264,12 @@ public class PetStoreResource extends BasicRestServletJena {
 					tr(
 						th("Id:"),
 						td(input().name("id").type("text").value(petId).readonly(true)),
-						td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'"))
+						td(new Tooltip("&#x2753;", "The name of the pet.", br(), "e.g. 'Fluffy'"))
 					),
 					tr(
 						th("Name:"),
 						td(input().name("name").type("text").value(pet.getName())),
-						td(new Tooltip("(?)", "The name of the pet.", br(), "e.g. 'Fluffy'"))
+						td(new Tooltip("&#x2753;", "The name of the pet.", br(), "e.g. 'Fluffy'"))
 					),
 					tr(
 						th("Species:"),
@@ -278,17 +278,17 @@ public class PetStoreResource extends BasicRestServletJena {
 								option("cat"), option("dog"), option("bird"), option("fish"), option("mouse"), option("rabbit"), option("snake")
 							).choose(pet.getSpecies())
 						),
-						td(new Tooltip("(?)", "The kind of animal."))
+						td(new Tooltip("&#x2753;", "The kind of animal."))
 					),
 					tr(
 						th("Price:"),
 						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100).value(pet.getPrice())),
-						td(new Tooltip("(?)", "The price to charge for this pet."))
+						td(new Tooltip("&#x2753;", "The price to charge for this pet."))
 					),
 					tr(
 						th("Tags:"),
 						td(input().name("tags").type("text").value(PetTag.asString(pet.getTags()))),
-						td(new Tooltip("(?)", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'"))
+						td(new Tooltip("&#x2753;", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'"))
 					),
 					tr(
 						th("Status:"),
@@ -297,7 +297,7 @@ public class PetStoreResource extends BasicRestServletJena {
 								option("AVAILABLE"), option("PENDING"), option("SOLD")
 							).choose(pet.getStatus())
 						),
-						td(new Tooltip("(?)", "The current status of the animal."))
+						td(new Tooltip("&#x2753;", "The current status of the animal."))
 					),
 					tr(
 						td().colspan(2).style("text-align:right").children(

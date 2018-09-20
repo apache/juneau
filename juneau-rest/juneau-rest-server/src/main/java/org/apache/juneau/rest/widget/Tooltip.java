@@ -33,7 +33,7 @@ import org.apache.juneau.dto.html5.*;
  */
 public class Tooltip {
 
-	private final String display;
+	private final HtmlText display;
 	private final List<Object> content;
 
    /**
@@ -41,13 +41,14 @@ public class Tooltip {
     *
     * @param display
     * 	The normal display text.
-    * 	This is what gets rendered normally.
+    * 	<br>This is what gets rendered normally.
+    * 	<br>The format is raw HTML and can contain markup.
     * @param content
     * 	The hover contents.
-    * 	Typically a list of strings, but can also include any HTML5 beans as well.
+    * 	<br>Typically a list of strings, but can also include any HTML5 beans as well.
     */
    public Tooltip(String display, Object...content) {
-   	this.display = display;
+   	this.display = new HtmlText(display);
    	this.content = new ArrayList<>(Arrays.asList(content));
    }
 

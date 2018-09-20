@@ -10,55 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.dto.html5;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
-import static org.apache.juneau.http.HttpMethodName.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
- * Menu item for adding a Pet.
+ * An object that gets serialized as raw XML by the XML and HTML serializers.
+ *
+ * <p>
+ * Can be used to serialize text containing markup without escaping the markup.
+ * For example:
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	HtmlText t = <jk>new</jk> HtmlText(<js>"&lt;span&gt;&amp;#2753;&lt;/span&gt;"</js>);
+ * </p>
+ *
+ *
  */
-public class AddOrderMenuItem extends MenuItemWidget {
+@Xml(format=XMLTEXT)
+public class HtmlText {
+	private final String text;
 
-	@Override /* MenuItemWidget */
-	public String getLabel(RestRequest req) throws Exception {
-		return "add";
+	/**
+	 * Constructor.
+	 *
+	 * @param text Raw text.
+	 */
+	public HtmlText(String text) {
+		this.text = text;
 	}
 
-	@Override /* MenuItemWidget */
-	public String getBeforeShowScript(RestRequest req) throws Exception {
-		return loadScript("AddOrderMenuItem_beforeShow.js");
-	}
-
-	@Override /* Widget */
-	public Object getContent(RestRequest req) throws Exception {
-
-		return div(
-			form().id("form").action("servlet:/store/order").method(POST).children(
-				table(
-					tr(
-						th("Pet:"),
-						td(
-							select().id("addPet_names").name("petId")
-						),
-						td(new Tooltip("&#x2753;", "The pet to purchase."))
-					),
-					tr(
-						th("Ship date:"),
-						td(input().name("shipDate").type("date")),
-						td(new Tooltip("&#x2753;", "The requested ship date."))
-					),
-					tr(
-						td().colspan(2).style("text-align:right").children(
-							button("reset", "Reset"),
-							button("submit", "Submit")
-						)
-					)
-				).style("white-space:nowrap")
-			)
-		);
+	@Override
+	public String toString() {
+		return text;
 	}
 }

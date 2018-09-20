@@ -426,7 +426,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (sType.isUri() || (pMeta != null && pMeta.isUri())) {
 				out.textUri(o);
 			} else if (sType.isCharSequence() || sType.isChar()) {
-				if (format == XMLTEXT)
+				if (isXmlText(format, sType))
 					out.append(o);
 				else
 					out.text(o, preserveWhitespace);
@@ -454,7 +454,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			} else if (sType.isReader() || sType.isInputStream()) {
 				IOUtils.pipe(o, out);
 			} else {
-				if (format == XMLTEXT)
+				if (isXmlText(format, sType))
 					out.append(toString(o));
 				else
 					out.text(toString(o));
@@ -482,6 +482,15 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		return rc;
+	}
+
+	private boolean isXmlText(XmlFormat format, ClassMeta<?> sType) {
+		if (format == XMLTEXT)
+			return true;
+		XmlClassMeta xcm = sType.getExtendedMeta(XmlClassMeta.class);
+		if (xcm == null)
+			return false;
+		return xcm.getFormat() == XMLTEXT;
 	}
 
 	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
