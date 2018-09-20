@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.testutils.TestUtils.*;
-import static org.junit.Assert.*;
 
 import org.apache.juneau.annotation.*;
 import org.junit.*;
@@ -205,22 +204,22 @@ public class PojoExamplesTest {
 		try {
 			bs.getClassMeta(F1.class);
 		} catch (Exception e) {
-			assertEquals("@Example used on invalid method 'org.apache.juneau.PojoExamplesTest$F1.example(String)'", e.getMessage());
+			assertContains(e.getMessage(), "@Example used on invalid method 'org.apache.juneau.PojoExamplesTest$F1.example(String)'");
 		}
 		try {
 			bs.getClassMeta(F2.class);
 		} catch (Exception e) {
-			assertEquals("@Example used on invalid method 'org.apache.juneau.PojoExamplesTest$F2.example()'", e.getMessage());
+			assertContains(e.getMessage(), "@Example used on invalid method 'org.apache.juneau.PojoExamplesTest$F2.example()'");
 		}
 		try {
 			bs.getClassMeta(F3.class);
 		} catch (Exception e) {
-			assertEquals("@Example used on invalid field 'public static java.lang.String org.apache.juneau.PojoExamplesTest$F3.F3'", e.getMessage());
+			assertContains(e.getMessage(), "@Example used on invalid field 'public static java.lang.String org.apache.juneau.PojoExamplesTest$F3.F3'");
 		}
 		try {
 			bs.getClassMeta(F4.class);
 		} catch (Exception e) {
-			assertEquals("@Example used on invalid field 'public org.apache.juneau.PojoExamplesTest$F4 org.apache.juneau.PojoExamplesTest$F4.f4'", e.getMessage());
+			assertContains(e.getMessage(), "@Example used on invalid field 'public org.apache.juneau.PojoExamplesTest$F4 org.apache.juneau.PojoExamplesTest$F4.f4'");
 		}
 	}
 

@@ -151,6 +151,8 @@ public final class ClassMeta<T> implements Type {
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 		this.innerClass = innerClass;
 		this.beanContext = beanContext;
+		this.extMeta = new MetadataMap();
+		String notABeanReason = null;
 
 		wLock.lock();
 		try {
@@ -178,11 +180,10 @@ public final class ClassMeta<T> implements Type {
 			this.beanFilter = beanFilter;
 			this.pojoSwaps = builder.pojoSwaps.isEmpty() ? null : builder.pojoSwaps.toArray(new PojoSwap[builder.pojoSwaps.size()]);
 			this.builderSwap = builder.builderSwap;
-			this.extMeta = new MetadataMap();
 			this.keyType = builder.keyType;
 			this.valueType = builder.valueType;
 			this.elementType = builder.elementType;
-			this.notABeanReason = builder.notABeanReason;
+			notABeanReason = builder.notABeanReason;
 			this.beanMeta = builder.beanMeta;
 			this.initException = builder.initException;
 			this.typePropertyName = builder.typePropertyName;
@@ -202,7 +203,11 @@ public final class ClassMeta<T> implements Type {
 			this.readerTransform = builder.readerTransform;
 			this.inputStreamTransform = builder.inputStreamTransform;
 			this.stringTransform = builder.stringTransform;
+		} catch (ClassMetaRuntimeException e) {
+			notABeanReason = e.getMessage();
+			throw e;
 		} finally {
+			this.notABeanReason = notABeanReason;
 			wLock.unlock();
 		}
 	}
@@ -274,6 +279,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
 		this.innerClass = (Class<T>) Object[].class;
+		this.extMeta = new MetadataMap();
 		this.args = args;
 		this.implClass = null;
 		this.childPojoSwaps = null;
@@ -308,7 +314,6 @@ public final class ClassMeta<T> implements Type {
 		this.pojoSwaps = null;
 		this.builderSwap = null;
 		this.beanFilter = null;
-		this.extMeta = new MetadataMap();
 		this.initException = null;
 		this.beanRegistry = null;
 		this.exampleMethod = null;
@@ -500,13 +505,13 @@ public final class ClassMeta<T> implements Type {
 			for (Field f : getAllFields(c, true)) {
 				if (f.isAnnotationPresent(ParentProperty.class)) {
 					if (isStatic(f))
-						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''", f);
+						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
 					setAccessible(f, false);
 					parentPropertyMethod = new Setter.FieldSetter(f);
 				}
 				if (f.isAnnotationPresent(NameProperty.class)) {
 					if (isStatic(f))
-						throw new ClassMetaRuntimeException("@NameProperty used on invalid field ''{0}''", f);
+						throw new ClassMetaRuntimeException("@NameProperty used on invalid field ''{0}''.  Must be static.", f);
 					setAccessible(f, false);
 					namePropertyMethod = new Setter.FieldSetter(f);
 				}
@@ -515,7 +520,7 @@ public final class ClassMeta<T> implements Type {
 			for (Field f : c.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Example.class)) {
 					if (! (isStatic(f) && isParentClass(innerClass, f.getType())))
-						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''", f);
+						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
 					setAccessible(f, false);
 					exampleField = f;
 				}
@@ -525,13 +530,13 @@ public final class ClassMeta<T> implements Type {
 			for (Method m : getAllMethods(c, true)) {
 				if (m.isAnnotationPresent(ParentProperty.class)) {
 					if (isStatic(m) || ! hasNumArgs(m, 1))
-						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''", m);
+						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					setAccessible(m, false);
 					parentPropertyMethod = new Setter.MethodSetter(m);
 				}
 				if (m.isAnnotationPresent(NameProperty.class)) {
 					if (isStatic(m) || ! hasNumArgs(m, 1))
-						throw new ClassMetaRuntimeException("@NameProperty used on invalid method ''{0}''", m);
+						throw new ClassMetaRuntimeException("@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					setAccessible(m, false);
 					namePropertyMethod = new Setter.MethodSetter(m);
 				}
@@ -540,7 +545,7 @@ public final class ClassMeta<T> implements Type {
 			for (Method m : c.getDeclaredMethods()) {
 				if (m.isAnnotationPresent(Example.class)) {
 					if (! (isStatic(m) && hasFuzzyArgs(m, BeanSession.class) && isParentClass(innerClass, m.getReturnType())))
-						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''", m);
+						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
 					setAccessible(m, false);
 					exampleMethod = m;
 				}
