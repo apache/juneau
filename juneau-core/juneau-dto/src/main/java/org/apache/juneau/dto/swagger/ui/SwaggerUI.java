@@ -368,14 +368,20 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 		if (m.isEmpty())
 			return null;
 
-		Select select = (Select)select().disabled(m.size() < 2).onchange("selectExample(this)")._class("example-select");
+		Select select = null;
+		if (m.size() > 1) {
+			select = (Select)select().onchange("selectExample(this)")._class("example-select");
+		}
+
 		Div div = div(select)._class("examples");
 
-		select.child(option("model","model"));
+		if (select != null)
+			select.child(option("model","model"));
 		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
 
 		for (Map.Entry<String,Object> e : m.entrySet()) {
-			select.child(option(e.getKey(), e.getKey()));
+			if (select != null)
+				select.child(option(e.getKey(), e.getKey()));
 			div.child(div(e.getValue().toString().replaceAll("\\n", "\n"))._class("example").attr("data-name", e.getKey()));
 		}
 

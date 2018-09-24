@@ -276,7 +276,7 @@ td.parameter-value, td.response-value {
     overflow-wrap: break-word;
     font-family: monospace;
     font-weight: 400;
-    color: #fff;
+    color: limegreen;
 	display: none;
 	max-width: 800px;
 	max-height: 800px;

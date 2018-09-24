@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 /**
  * Various useful static methods for creating HTML elements.
  *
@@ -1586,8 +1588,8 @@ public class HtmlBuilder {
 	 * @param text The child text node.
 	 * @return The new element.
 	 */
-	public static final Script script(String type, String text) {
-		return script().type(type).text(text);
+	public static final Script script(String type, String...text) {
+		return script().type(type).text(joinnl(text));
 	}
 
 	/**
@@ -1724,6 +1726,18 @@ public class HtmlBuilder {
 	 */
 	public static final Style style(Object text) {
 		return style().text(text);
+	}
+
+	/**
+	 * Creates a {@link Style} element with the specified inner text.
+	 *
+	 * @param text
+	 * 	The contents of the style element.
+	 * 	<br>Values will be concatenated with newlines.
+	 * @return The new element.
+	 */
+	public static final Style style(String...text) {
+		return style().text(joinnl(text));
 	}
 
 	/**
