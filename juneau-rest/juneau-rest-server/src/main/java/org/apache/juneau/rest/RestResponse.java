@@ -433,7 +433,8 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	public PrintWriter getDirectWriter(String contentType) throws IOException {
 		setContentType(contentType);
-		setHeader("x-content-type-options", "nosniff");
+		setHeader("X-Content-Type-Options", "nosniff");
+		setHeader("Content-Encoding", "identity");
 		return getWriter();
 	}
 
