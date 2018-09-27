@@ -32,6 +32,7 @@ import org.apache.juneau.http.annotation.Tag;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
@@ -509,7 +510,7 @@ final class SwaggerGenerator {
 //			if (! omSwagger.isEmpty())
 //				assertNoEmpties(omSwagger);
 //		} catch (SwaggerException e1) {
-//			System.err.println(omSwagger.toString(SimpleJsonSerializer.DEFAULT_LAX_READABLE));
+//			System.err.println(omSwagger.toString(SimpleJsonSerializer.DEFAULT_READABLE));
 //			throw e1;
 //		}
 

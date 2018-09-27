@@ -1137,7 +1137,7 @@ public class JsonSchemaGeneratorTest {
 		assertObjectEquals("{type:'foo',format:'bar',properties:{f1:{type:'integer',format:'int32'}},description:'baz','x-example':{f1:123}}", s.getSchema(A1.class));
 	}
 
-	@JsonSchema(type="foo",format="bar",description="baz",example="{f1:123}")
+	@Schema(type="foo",format="bar",description="baz",example="{f1:123}")
 	public static class A1 {
 		public int f1;
 	}
@@ -1149,7 +1149,7 @@ public class JsonSchemaGeneratorTest {
 	}
 
 	public static class A2 {
-		@JsonSchema(type="foo",format="bar",description="baz",example="123")
+		@Schema(type="foo",format="bar",description="baz",example="123")
 		public int f1;
 	}
 
@@ -1160,7 +1160,7 @@ public class JsonSchemaGeneratorTest {
 	}
 
 	public static class A3 {
-		@JsonSchema(type="foo",format="bar",description="baz",example="123")
+		@Schema(type="foo",format="bar",description="baz",example="123")
 		public int getF1() {
 			return 123;
 		}
@@ -1177,7 +1177,7 @@ public class JsonSchemaGeneratorTest {
 			return 123;
 		}
 
-		@JsonSchema(type="foo",format="bar",description="baz",example="123")
+		@Schema(type="foo",format="bar",description="baz",example="123")
 		public void setF1(int f1) {}
 	}
 
@@ -1195,6 +1195,6 @@ public class JsonSchemaGeneratorTest {
 		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(SimpleBean[][].class));
 	}
 
-	@JsonSchema(type="foo",format="bar",description="baz",example="123")
+	@Schema(type="foo",format="bar",description="baz",example="123")
 	public static class SwapWithAnnotation extends PojoSwap<SimpleBean,Integer> {}
 }

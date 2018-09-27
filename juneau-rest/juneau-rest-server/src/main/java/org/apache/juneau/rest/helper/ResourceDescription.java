@@ -15,6 +15,7 @@ package org.apache.juneau.rest.helper;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
 
 /**
  * Shortcut label for child resources.

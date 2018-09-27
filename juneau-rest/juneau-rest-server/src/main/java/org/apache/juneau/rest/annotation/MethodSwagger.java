@@ -301,7 +301,7 @@ public @interface MethodSwagger {
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The format is a {@link JsonSerializer#DEFAULT_LAX Simple-JSON} object.
+	 * 		The format is a {@link SimpleJsonSerializer#DEFAULT Simple-JSON} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * 		<br>Comments and whitespace are ignored.
 	 * 		<br>The leading and trailing <js>'{'</js>/<js>'}'</js> characters are optional.

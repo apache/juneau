@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import org.apache.juneau.jsonschema.annotation.*;
+
 /**
  * Various reusable utility methods when working with annotations.
  */

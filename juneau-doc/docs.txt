@@ -257,6 +257,7 @@ juneau-rest-server.HelloWorldExample = #juneau-rest-server.HelloWorldExample, Ov
 juneau-rest-server.HtmlDocAnnotation = #juneau-rest-server.HtmlDocAnnotation, Overview > juneau-rest-server > @HtmlDoc
 juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets = #juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets, Overview > juneau-rest-server > @HtmlDoc > Predefined Widgets
 juneau-rest-server.HtmlDocAnnotation.Stylesheets = #juneau-rest-server.HtmlDocAnnotation.Stylesheets, Overview > juneau-rest-server > @HtmlDoc > Stylesheets
+juneau-rest-server.HtmlDocAnnotation.UIvsDI = #juneau-rest-server.HtmlDocAnnotation.UIvsDI, Overview > juneau-rest-server > @HtmlDoc > User Interfaces (UI) vs. Developer Interfaces (DI)
 juneau-rest-server.HtmlDocAnnotation.UiCustomization = #juneau-rest-server.HtmlDocAnnotation.UiCustomization, Overview > juneau-rest-server > @HtmlDoc > UI Customization
 juneau-rest-server.HtmlDocAnnotation.Widgets = #juneau-rest-server.HtmlDocAnnotation.Widgets, Overview > juneau-rest-server > @HtmlDoc > Widgets
 juneau-rest-server.HttpPartAnnotations = #juneau-rest-server.HttpPartAnnotations, Overview > juneau-rest-server > HTTP-Part Annotations

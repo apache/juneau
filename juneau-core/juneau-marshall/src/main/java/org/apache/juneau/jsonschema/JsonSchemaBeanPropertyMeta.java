@@ -12,13 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Metadata on bean properties specific to the JSON-Schema pulled from the {@link JsonSchema @JsonSchema} annotation
+ * Metadata on bean properties specific to the JSON-Schema pulled from the {@link Schema @Schema} annotation
  * on the bean property.
  */
 public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
@@ -40,11 +42,11 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 		super(bpm);
 
 		if (bpm.getField() != null)
-			findInfo(bpm.getField().getAnnotation(JsonSchema.class));
+			findInfo(bpm.getField().getAnnotation(Schema.class));
 		if (bpm.getGetter() != null)
-			findInfo(bpm.getGetter().getAnnotation(JsonSchema.class));
+			findInfo(bpm.getGetter().getAnnotation(Schema.class));
 		if (bpm.getSetter() != null)
-			findInfo(bpm.getSetter().getAnnotation(JsonSchema.class));
+			findInfo(bpm.getSetter().getAnnotation(Schema.class));
 	}
 
 	private JsonSchemaBeanPropertyMeta() {
@@ -55,18 +57,18 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 		this.example = null;
 	}
 
-	private void findInfo(JsonSchema js) {
+	private void findInfo(Schema js) {
 		if (js == null)
 			return;
 		if (! js.type().isEmpty())
 			type = js.type();
 		if (! js.format().isEmpty())
 			format = js.format();
-		if (! js.description().isEmpty())
-			description = js.description();
-		if (! js.example().isEmpty()) {
+		if (js.description().length > 0)
+			description = joinnl(js.description());
+		if (js.example().length > 0) {
 			try {
-				example = JsonParser.DEFAULT.parse(js.example(), Object.class);
+				example = JsonParser.DEFAULT.parse(joinnl(js.example()), Object.class);
 			} catch (ParseException e) {
 				throw new BeanRuntimeException(e);
 			}
@@ -74,7 +76,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#type() @JsonSchema(type)} annotation defined on the class.
+	 * Returns the {@link Schema#type() @Schema(type)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -83,7 +85,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#format() @JsonSchema(format)} annotation defined on the class.
+	 * Returns the {@link Schema#format() @Schema(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -92,7 +94,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#description() @JsonSchema(description)} annotation defined on the class.
+	 * Returns the {@link Schema#description() @Schema(description)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -101,7 +103,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#example() @JsonSchema(example)} annotation defined on the class.
+	 * Returns the {@link Schema#example() @Schema(example)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */

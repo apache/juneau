@@ -349,6 +349,7 @@
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation'>@HtmlDoc</a></p>
 		<ol>
+			<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.UIvsDI'>User Interfaces (UI) vs. Developer Interfaces (DI)</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.Widgets'>Widgets</a></p>
 			<li><p class='new'><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>Predefined Widgets</a></p>
 			<li><p class='updated'><a class='doclink' href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization'>UI Customization</a></p>
@@ -19719,8 +19720,54 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Widgets' id='juneau-rest-server.HtmlDocAnnotation.Widgets'>7.28.1 - Widgets</a></h4>
-<div class='topic'><!-- START: 7.28.1 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UIvsDI' id='juneau-rest-server.HtmlDocAnnotation.UIvsDI'>7.28.1 - User Interfaces (UI) vs. Developer Interfaces (DI)</a></h4>
+<div class='topic'><!-- START: 7.28.1 - juneau-rest-server.HtmlDocAnnotation.UIvsDI -->
+<p>
+	An important distinction needs to be made about the HTML representations produced by the REST
+	API.  These should not be considered User Interfaces, but rather Developer Interfaces.
+</p>
+<p>
+	UIs should hide the end-user from the underlying architecture.
+	The audience generally consists of non-technical people not interested in how the UI works.  
+</p>
+<p>
+	DIs, on the other hand, should NOT hide the end-user from the underlying architecture.  
+	Instead, it's a thin veneer over the REST interface with the following goals:
+</p>
+<ul class='spaced-list'>
+	<li>Make it easy for the developer to explore and understand the REST API.
+	<li>Make it easy for the developer to debug the REST API using simple tools (hopefully just a browser).
+</ul>		
+<p>
+	As a result, the following guidelines are recommended: 
+</p>		
+<ul class='spaced-list'>
+	<li>
+		Use titles/descriptions/asides to describe why the REST interface exists.
+		A developer knowing little about it should be able to access it with a browser and quickly 
+		understand what it is and how to use it.
+	<li>
+		Don't hide the raw data!  
+		The HTML view should simply be considered an easier-to-read representation of the data normally 
+		rendered in JSON or some other format.
+	<li>
+		Limit your use of Javascript!  
+		You can use it sparingly if you want to implement something simple like a pull-down menu to 
+		simplify some debug task, but remember that your audience cares more about interacting with your 
+		service programmatically using REST.  
+		Remember that the HTML is just icing on the cake.
+	<li>
+		Don't use it to implement a Web 2.0 interface!  
+		If you want a Web 2.0 UI, implement it separately ON TOP OF this REST interface.
+		The architecture is flexible enough that you could in theory pull in and use jQuery, React, 
+		Angular, or any number of sophisticated Javascript UI frameworks.  Resist the urge to do so.
+</ul>
+</div><!-- END: 7.28.1 - juneau-rest-server.HtmlDocAnnotation.UIvsDI -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Widgets' id='juneau-rest-server.HtmlDocAnnotation.Widgets'>7.28.2 - Widgets</a></h4>
+<div class='topic'><!-- START: 7.28.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
 <p>
 	The {@link org.apache.juneau.rest.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
 	to HTML pages.
@@ -19835,12 +19882,12 @@
 <ul>
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
 </ul>
-</div><!-- END: 7.28.1 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
+</div><!-- END: 7.28.2 - juneau-rest-server.HtmlDocAnnotation.Widgets -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets' id='juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>7.28.2 - Predefined Widgets</a></h4>
-<div class='topic'><!-- START: 7.28.2 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets' id='juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets'>7.28.3 - Predefined Widgets</a></h4>
+<div class='topic'><!-- START: 7.28.3 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
 <p>
 	The {@link org.apache.juneau.rest.widget} package contains predefined reusable widgets.
 </p>
@@ -20078,12 +20125,12 @@
 		}
 	}
 </p>
-</div><!-- END: 7.28.2 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
+</div><!-- END: 7.28.3 - juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>7.28.3 - UI Customization</a></h4>
-<div class='topic'><!-- START: 7.28.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
+<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.UiCustomization' id='juneau-rest-server.HtmlDocAnnotation.UiCustomization'>7.28.4 - UI Customization</a></h4>
+<div class='topic'><!-- START: 7.28.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 <p>
 	The HTML views of POJOs can somewhat be considered a rudimentary User Interface.
 	In reality, a better term for them would be a Developer Interface as they're meant to be used 
@@ -20228,12 +20275,12 @@
 <ul>
 	<li class='link'>{@doc juneau-microservice-server.UiCustomization}
 </ul>
-</div><!-- END: 7.28.3 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
+</div><!-- END: 7.28.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets' id='juneau-rest-server.HtmlDocAnnotation.Stylesheets'>7.28.4 - Stylesheets</a></h4>
-<div class='topic'><!-- START: 7.28.4 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HtmlDocAnnotation.Stylesheets' id='juneau-rest-server.HtmlDocAnnotation.Stylesheets'>7.28.5 - Stylesheets</a></h4>
+<div class='topic'><!-- START: 7.28.5 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
 <p>
 	The sample root page renders in the default "devops" look-and-feel:
 </p>
@@ -20343,7 +20390,7 @@
 		}
 	}
 </p>
-</div><!-- END: 7.28.4 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
+</div><!-- END: 7.28.5 - juneau-rest-server.HtmlDocAnnotation.Stylesheets -->
 </div><!-- END: 7.28 - juneau-rest-server.HtmlDocAnnotation -->
 
 <!-- ==================================================================================================== -->
@@ -28286,7 +28333,7 @@
 <li><p><a class='doclink' href='#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
 <li><p><a class='doclink' href='#7.0.1'>7.0.1 (Dec 24, 2017)</a></p>
 <li><p><a class='doclink' href='#7.1.0'>7.1.0 (Mar 08, 2018)</a></p>
-<li><p><a class='doclink' href='#7.2.0'>7.2.0 (TBD)</a></p>
+<li><p><a class='doclink' href='#7.2.0'>7.2.0 (Sept 25, 2018)</a></p>
 
 	</ul>
 
@@ -33609,10 +33656,10 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#7.2.0' id='7.2.0'>7.2.0 (TBD)</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#7.2.0' id='7.2.0'>7.2.0 (Sept 25, 2018)</a></h3>
 <div class='topic'><!-- START: 7.2.0 -->
 <p>
-	7.2.0 is a major release that introduces several significant new functionality:
+	7.2.0 is a major release that introduces several significant new features:
 </p>
 <ul class='spaced-list'>
 	<li>OpenAPI part serializing and parsing with full support for OpenAPI validation of input and output in the REST servlet and client APIs.

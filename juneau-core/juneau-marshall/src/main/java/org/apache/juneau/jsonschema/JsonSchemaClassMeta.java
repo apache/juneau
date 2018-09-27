@@ -21,12 +21,12 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Metadata on classes specific to the JSON-Schema serializer and pulled from the {@link JsonSchema @JsonSchema} annotation on
+ * Metadata on classes specific to the JSON-Schema serializer and pulled from the {@link Schema @Schema} annotation on
  * the class.
  */
 public class JsonSchemaClassMeta extends ClassMetaExtended {
 
-	private final JsonSchema jsonSchema;
+	private final Schema jsonSchema;
 	private final String type, format, description;
 	private Object example;
 
@@ -37,13 +37,13 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	 */
 	public JsonSchemaClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.jsonSchema = ClassUtils.getAnnotation(JsonSchema.class, getInnerClass());
+		this.jsonSchema = ClassUtils.getAnnotation(Schema.class, getInnerClass());
 		if (jsonSchema != null) {
 			type = nullIfEmpty(jsonSchema.type());
 			format = nullIfEmpty(jsonSchema.format());
-			description = nullIfEmpty(jsonSchema.description());
+			description = nullIfEmpty(joinnl(jsonSchema.description()));
 			try {
-				example = jsonSchema.example().isEmpty() ? null : JsonParser.DEFAULT.parse(jsonSchema.example(), Object.class);
+				example = jsonSchema.example().length == 0 ? null : JsonParser.DEFAULT.parse(joinnl(jsonSchema.example()), Object.class);
 			} catch (ParseException e) {
 				throw new BeanRuntimeException(e);
 			}
@@ -55,16 +55,16 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema @JsonSchema} annotation defined on the class.
+	 * Returns the {@link Schema @Schema} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
-	protected JsonSchema getAnnotation() {
+	protected Schema getAnnotation() {
 		return jsonSchema;
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#type() @JsonSchema(type)} annotation defined on the class.
+	 * Returns the {@link Schema#type() @Schema(type)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -73,7 +73,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#format() @JsonSchema(format)} annotation defined on the class.
+	 * Returns the {@link Schema#format() @Schema(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -82,7 +82,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#description() @JsonSchema(description)} annotation defined on the class.
+	 * Returns the {@link Schema#description() @Schema(description)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
@@ -91,7 +91,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	}
 
 	/**
-	 * Returns the {@link JsonSchema#example() @JsonSchema(example)} annotation defined on the class.
+	 * Returns the {@link Schema#example() @Schema(example)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */

@@ -132,7 +132,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		}
 
 		JsonSchemaClassMeta jscm = null;
-		if (pojoSwap != null && pojoSwap.getClass().getAnnotation(JsonSchema.class) != null)
+		if (pojoSwap != null && pojoSwap.getClass().getAnnotation(Schema.class) != null)
 			jscm = getClassMeta(pojoSwap.getClass()).getExtendedMeta(JsonSchemaClassMeta.class);
 		if (jscm == null)
 			jscm = sType.getExtendedMeta(JsonSchemaClassMeta.class);

@@ -20,6 +20,7 @@ import static org.apache.juneau.http.annotation.AnnotationUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
+import org.apache.juneau.jsonschema.annotation.*;
 import org.junit.*;
 import org.junit.runners.*;
 
