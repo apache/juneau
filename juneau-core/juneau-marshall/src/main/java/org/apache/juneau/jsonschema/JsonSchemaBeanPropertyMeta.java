@@ -41,8 +41,8 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
 		super(bpm);
 
-		if (bpm.getField() != null)
-			findInfo(bpm.getField().getAnnotation(Schema.class));
+		if (bpm.getInnerField() != null)
+			findInfo(bpm.getInnerField().getAnnotation(Schema.class));
 		if (bpm.getGetter() != null)
 			findInfo(bpm.getGetter().getAnnotation(Schema.class));
 		if (bpm.getSetter() != null)

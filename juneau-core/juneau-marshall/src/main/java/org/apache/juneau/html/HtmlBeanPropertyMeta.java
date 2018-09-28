@@ -41,8 +41,8 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	public HtmlBeanPropertyMeta(BeanPropertyMeta bpm) throws Exception {
 		super(bpm);
 		Builder b = new Builder();
-		if (bpm.getField() != null)
-			b.findHtmlInfo(bpm.getField().getAnnotation(Html.class));
+		if (bpm.getInnerField() != null)
+			b.findHtmlInfo(bpm.getInnerField().getAnnotation(Html.class));
 		if (bpm.getGetter() != null)
 			b.findHtmlInfo(bpm.getGetter().getAnnotation(Html.class));
 		if (bpm.getSetter() != null)

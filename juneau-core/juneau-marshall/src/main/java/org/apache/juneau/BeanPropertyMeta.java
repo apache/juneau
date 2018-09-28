@@ -50,6 +50,7 @@ public final class BeanPropertyMeta {
 
 	private final String name;                                // The name of the property.
 	private final Field field;                                // The bean property field (if it has one).
+	private final Field innerField;                                // The bean property field (if it has one).
 	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
 	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
 	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
@@ -86,7 +87,7 @@ public final class BeanPropertyMeta {
 		BeanMeta<?> beanMeta;
 		BeanContext beanContext;
 		String name;
-		Field field;
+		Field field, innerField;
 		Method getter, setter, extraKeys;
 		boolean isConstructorArg, isUri, isDyna, isDynaGetterMap;
 		ClassMeta<?> rawTypeMeta, typeMeta;
@@ -172,16 +173,16 @@ public final class BeanPropertyMeta {
 			canRead |= (field != null || getter != null);
 			canWrite |= (field != null || setter != null);
 
-			if (field != null) {
-				BeanProperty p = field.getAnnotation(BeanProperty.class);
-				rawTypeMeta = f.resolveClassMeta(p, field.getGenericType(), typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || field.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+			if (innerField != null) {
+				BeanProperty p = innerField.getAnnotation(BeanProperty.class);
+				rawTypeMeta = f.resolveClassMeta(p, innerField.getGenericType(), typeVarImpls);
+				isUri |= (rawTypeMeta.isUri() || innerField.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
 				if (p != null) {
 					if (! p.properties().isEmpty())
 						properties = split(p.properties());
 					bdClasses.addAll(Arrays.asList(p.beanDictionary()));
 				}
-				Swap s = field.getAnnotation(Swap.class);
+				Swap s = innerField.getAnnotation(Swap.class);
 				if (s != null) {
 					swap = getPropertyPojoSwap(s);
 				}
@@ -260,12 +261,12 @@ public final class BeanPropertyMeta {
 						return false;
 				}
 			}
-			if (field != null) {
+			if (innerField != null) {
 				if (isDyna) {
-					if (! isParentClass(Map.class, field.getType()))
+					if (! isParentClass(Map.class, innerField.getType()))
 						return false;
 				} else {
-					if (! isParentClass(field.getType(), c))
+					if (! isParentClass(innerField.getType(), c))
 						return false;
 				}
 			}
@@ -333,6 +334,12 @@ public final class BeanPropertyMeta {
 		BeanPropertyMeta.Builder setField(Field field) {
 			setAccessible(field, false);
 			this.field = field;
+			this.innerField = field;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setInnerField(Field innerField) {
+			this.innerField = field;
 			return this;
 		}
 
@@ -356,6 +363,7 @@ public final class BeanPropertyMeta {
 	 */
 	protected BeanPropertyMeta(BeanPropertyMeta.Builder b) {
 		this.field = b.field;
+		this.innerField = b.innerField;
 		this.getter = b.getter;
 		this.setter = b.setter;
 		this.extraKeys = b.extraKeys;
@@ -421,6 +429,15 @@ public final class BeanPropertyMeta {
 	 */
 	public Field getField() {
 		return field;
+	}
+
+	/**
+	 * Returns the field for this property even if the field is private.
+	 *
+	 * @return The field for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
+	 */
+	public Field getInnerField() {
+		return innerField;
 	}
 
 	/**

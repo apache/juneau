@@ -347,6 +347,9 @@ public class BeanMeta<T> {
 				for (Iterator<BeanPropertyMeta.Builder> i = normalProps.values().iterator(); i.hasNext();) {
 					BeanPropertyMeta.Builder p = i.next();
 					try {
+						if (p.field == null)
+							p.setInnerField(findInnerBeanField(c, stopClass, p.name));
+
 						if (p.validate(ctx, beanRegistry, typeVarImpls)) {
 
 							if (p.getter != null)
@@ -719,6 +722,20 @@ public class BeanMeta<T> {
 			}
 		}
 		return l;
+	}
+
+	static final Field findInnerBeanField(Class<?> c, Class<?> stopClass, String name) {
+		for (Class<?> c2 : findClasses(c, stopClass)) {
+			for (Field f : c2.getDeclaredFields()) {
+				if (isAny(f, STATIC, TRANSIENT))
+					continue;
+				if (f.isAnnotationPresent(BeanIgnore.class))
+					continue;
+				if (f.getName().equals(name))
+					return f;
+			}
+		}
+		return null;
 	}
 
 	private static List<Class<?>> findClasses(Class<?> c, Class<?> stopClass) {

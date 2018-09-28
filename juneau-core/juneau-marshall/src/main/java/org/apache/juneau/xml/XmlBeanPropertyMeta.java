@@ -40,8 +40,8 @@ public class XmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 	public XmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		super(bpm);
 
-		if (bpm.getField() != null)
-			findXmlInfo(bpm.getField().getAnnotation(Xml.class));
+		if (bpm.getInnerField() != null)
+			findXmlInfo(bpm.getInnerField().getAnnotation(Xml.class));
 		if (bpm.getGetter() != null)
 			findXmlInfo(bpm.getGetter().getAnnotation(Xml.class));
 		if (bpm.getSetter() != null)
