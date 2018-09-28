@@ -182,6 +182,22 @@ public @interface BeanProperty {
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
 	 * 	}
 	 * </p>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property like so:
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>)
+	 * 		<jk>private</jk> Map <jf>p1</jf>;
+	 *
+	 * 		<jk>public</jk> Map getP1() {
+	 * 			<jk>return</jk> <jf>p1</jf>;
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
 	Class<?> type() default Object.class;
 
@@ -196,6 +212,22 @@ public @interface BeanProperty {
 	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
 	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
 	 * 		<jk>public</jk> Map <jf>p1</jf>;
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property like so:
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<ja>@BeanProperty</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
+	 * 		<jk>private</jk> Map <jf>p1</jf>;
+	 *
+	 * 		<jk>public</jk> Map getP1() {
+	 * 			<jk>return</jk> <jf>p1</jf>;
+	 * 		}
 	 * 	}
 	 * </p>
 	 */
@@ -230,6 +262,22 @@ public @interface BeanProperty {
 	 * 	<jc>// Renders "{x1:{f1:1}}"</jc>
 	 * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
 	 * </p>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property like so:
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<ja>@BeanProperty</ja>(properties=<js>"f1"</js>)
+	 * 		<jk>private</jk> MyChildClass <jf>x1</jf>;
+	 *
+	 * 		<jk>public</jk> MyChildClass getX1() {
+	 * 			<jk>return</jk> <jf>x1</jf>;
+	 * 		}
+	 * 	}
+	 * </p>
 	 */
 	String properties() default "";
 
@@ -243,6 +291,9 @@ public @interface BeanProperty {
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property.
 	 */
 	Class<?>[] beanDictionary() default {};
 
@@ -260,6 +311,22 @@ public @interface BeanProperty {
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
 	 * 	<jk>public float</jk> <jf>price</jf>;
+	 * </p>
+	 *
+	 * <p>
+	 * This annotation can also be used on private fields of a property like so:
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<ja>@BeanProperty</ja>(format=<js>"$%.2f"</js>)
+	 * 		<jk>private float</jk> <jf>price</jf>;
+	 *
+	 * 		<jk>public float</jk> gePrice() {
+	 * 			<jk>return</jk> <jf>price</jf>;
+	 * 		}
+	 * 	}
 	 * </p>
 	 */
 	String format() default "";

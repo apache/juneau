@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.internal.DateUtils.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -412,5 +414,88 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			x.f1 = this.f2;
 			return x;
 		}
+	}
+
+
+	//====================================================================================================
+	// Transforms on private fields.
+	//====================================================================================================
+
+	public static class F1 {
+
+		@Swap(CalendarSwap.ISO8601DTL.class)
+		private Calendar c;
+
+		public void setC(Calendar c) {
+			this.c = c;
+		}
+
+		public Calendar getC() {
+			return c;
+		}
+
+		public static F1 create() {
+			F1 x = new F1();
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			return x;
+		}
+	}
+
+	@Test
+	public void testSwapOnPrivateField() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonParser p = JsonParser.DEFAULT;
+
+		F1 x = F1.create();
+		String r = null;
+
+		r = s.serialize(x);
+		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+
+		x = p.parse(r, F1.class);
+		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x);
+
+		x = roundTrip(x, F1.class);
+	}
+
+	public static class F2a {
+
+		@Swap(CalendarSwap.ISO8601DTL.class)
+		protected Calendar c;
+
+	}
+
+	public static class F2 extends F2a {
+
+		public void setC(Calendar c) {
+			this.c = c;
+		}
+
+		public Calendar getC() {
+			return c;
+		}
+
+		public static F2 create() {
+			F2 x = new F2();
+			x.setC(parseISO8601Calendar("2018-12-12T05:12:00"));
+			return x;
+		}
+	}
+
+	@Test
+	public void testSwapOnPrivateField_Inherited() throws Exception {
+		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
+		JsonParser p = JsonParser.DEFAULT;
+
+		F2 x = F2.create();
+		String r = null;
+
+		r = s.serialize(x);
+		assertEquals("{c:'2018-12-12T05:12:00'}", r);
+
+		x = p.parse(r, F2.class);
+		assertObjectEquals("{c:'2018-12-12T05:12:00'}", x);
+
+		x = roundTrip(x, F2.class);
 	}
 }

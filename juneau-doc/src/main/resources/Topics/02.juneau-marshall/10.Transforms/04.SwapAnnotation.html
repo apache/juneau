@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-@Swap Annotation
+{updated} @Swap Annotation
 
 <p>
 	{@link oaj.annotation.Swap @Swap} can be used to associate a swap class using an 
@@ -67,9 +67,39 @@
 </p>
 <p>
 	The <ja>@Swap</ja> annotation can also be used on getters and setters as well to apply a swap
-	to individual property values
+	to individual property values:
 </p>
 <p class='bpcode w800'>
-	<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
-	<jk>public</jk> MyPojo getMyPojo();
+	<jk>public class</jk> MyBean {
+		<jk>private</jk> MyPojo <jf>myPojo</jf>;
+	
+		<jc>// Swap applied to bean property.	
+		<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
+		<jk>public</jk> MyPojo getMyPojo() {
+			<jk>return</jk> <jf>myPojo</jf>;
+		}
+	}
 </p>
+<p>
+	When applied to bean properties, the swap annotation need only be applied to either the getter, setter, or field.
+</p>
+<p>
+	The swap annotation can also be applied to the private field of a bean property, like so:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+
+		<ja>@BeanProperty</ja>(swap=MyPojoSwap.<jk>class</jk>)
+		<jk>private</jk> MyPojo <jf>myPojo</jf>;
+	
+		<jk>public</jk> MyPojo getMyPojo() {
+			<jk>return</jk> <jf>myPojo</jf>;
+		}
+		
+		<jk>public</jk> MyBean setMyPojo(MyPojo myPojo) {
+			<jk>this</jk>.<jf>myPojo</jf> = myPojo;
+			<jk>return this</jk>;
+		}
+	}
+</p>
+

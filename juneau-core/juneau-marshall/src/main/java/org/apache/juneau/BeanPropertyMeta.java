@@ -175,8 +175,12 @@ public final class BeanPropertyMeta {
 
 			if (innerField != null) {
 				BeanProperty p = innerField.getAnnotation(BeanProperty.class);
-				rawTypeMeta = f.resolveClassMeta(p, innerField.getGenericType(), typeVarImpls);
-				isUri |= (rawTypeMeta.isUri() || innerField.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				if (field != null || p != null) {
+					// Only use field type if it's a bean property or has @BeanProperty annotation.
+					// Otherwise, we want to infer the type from the getter or setter.
+					rawTypeMeta = f.resolveClassMeta(p, innerField.getGenericType(), typeVarImpls);
+					isUri |= (rawTypeMeta.isUri() || innerField.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+				}
 				if (p != null) {
 					if (! p.properties().isEmpty())
 						properties = split(p.properties());
@@ -261,12 +265,12 @@ public final class BeanPropertyMeta {
 						return false;
 				}
 			}
-			if (innerField != null) {
+			if (field != null) {
 				if (isDyna) {
-					if (! isParentClass(Map.class, innerField.getType()))
+					if (! isParentClass(Map.class, field.getType()))
 						return false;
 				} else {
-					if (! isParentClass(innerField.getType(), c))
+					if (! isParentClass(field.getType(), c))
 						return false;
 				}
 			}
@@ -339,7 +343,7 @@ public final class BeanPropertyMeta {
 		}
 
 		BeanPropertyMeta.Builder setInnerField(Field innerField) {
-			this.innerField = field;
+			this.innerField = innerField;
 			return this;
 		}
 

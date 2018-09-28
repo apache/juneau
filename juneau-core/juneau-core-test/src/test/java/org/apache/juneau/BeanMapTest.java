@@ -604,6 +604,10 @@ public class BeanMapTest {
 		m.put("m4", "[{a:'a',i:1}]");
 		assertEquals("java.util.LinkedList", m.get("m4").getClass().getName());
 		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("m4")).get(0).getClass().getName());
+
+		m.put("m5", "[{a:'a',i:1}]");
+		assertEquals("java.util.LinkedList", m.get("m5").getClass().getName());
+		assertEquals("org.apache.juneau.BeanMapTest$G", ((List)m.get("m5")).get(0).getClass().getName());
 	}
 
 	public static class G {
@@ -640,6 +644,11 @@ public class BeanMapTest {
 		@BeanProperty(type=LinkedList.class,params={G.class})
 		public List<G> getM4() { return m4; }
 		public void setM4(List<G> m4) { this.m4 = m4; }
+
+		@BeanProperty(type=LinkedList.class,params={G.class})
+		private List<G> m5;
+		public List<G> getM5() { return m5; }
+		public void setM5(List<G> m5) { this.m5 = m5; }
 	}
 
 	//====================================================================================================
