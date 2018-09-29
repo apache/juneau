@@ -12,13 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.parser.*;
 
 /**
  * Metadata on classes specific to the JSON-Schema serializer and pulled from the {@link Schema @Schema} annotation on
@@ -26,32 +22,18 @@ import org.apache.juneau.parser.*;
  */
 public class JsonSchemaClassMeta extends ClassMetaExtended {
 
-	private final Schema jsonSchema;
-	private final String type, format, description;
-	private Object example;
+	private final ObjectMap schema;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param cm The class that this annotation is defined on.
+	 * @throws Exception If invalid <ja>@Schema</ja> definition was encountered.
 	 */
-	public JsonSchemaClassMeta(ClassMeta<?> cm) {
+	public JsonSchemaClassMeta(ClassMeta<?> cm) throws Exception {
 		super(cm);
-		this.jsonSchema = ClassUtils.getAnnotation(Schema.class, getInnerClass());
-		if (jsonSchema != null) {
-			type = nullIfEmpty(jsonSchema.type());
-			format = nullIfEmpty(jsonSchema.format());
-			description = nullIfEmpty(joinnl(jsonSchema.description()));
-			try {
-				example = jsonSchema.example().length == 0 ? null : JsonParser.DEFAULT.parse(joinnl(jsonSchema.example()), Object.class);
-			} catch (ParseException e) {
-				throw new BeanRuntimeException(e);
-			}
-		} else {
-			type = null;
-			format = null;
-			description = null;
-		}
+		Schema s = ClassUtils.getAnnotation(Schema.class, getInnerClass());
+		schema = s == null ? ObjectMap.EMPTY_MAP : SchemaUtils.asMap(s);
 	}
 
 	/**
@@ -59,43 +41,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
-	protected Schema getAnnotation() {
-		return jsonSchema;
-	}
-
-	/**
-	 * Returns the {@link Schema#type() @Schema(type)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected String getType() {
-		return type;
-	}
-
-	/**
-	 * Returns the {@link Schema#format() @Schema(format)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected String getFormat() {
-		return format;
-	}
-
-	/**
-	 * Returns the {@link Schema#description() @Schema(description)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Returns the {@link Schema#example() @Schema(example)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected Object getExample() {
-		return example;
+	protected ObjectMap getSchema() {
+		return schema;
 	}
 }

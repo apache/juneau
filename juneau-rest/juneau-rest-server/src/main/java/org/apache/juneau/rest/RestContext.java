@@ -3215,8 +3215,8 @@ public final class RestContext extends BeanContext {
 				_destroyMethodParams = new ArrayList<>();
 
 			for (java.lang.reflect.Method method : resourceClass.getMethods()) {
-				if (method.isAnnotationPresent(RestMethod.class)) {
-					RestMethod a = method.getAnnotation(RestMethod.class);
+				RestMethod a = ClassUtils.getAnnotation(RestMethod.class, method);
+				if (a != null) {
 					methodsFound.add(method.getName() + "," + a.name() + "," + a.path());
 					try {
 						if (! isPublic(method))

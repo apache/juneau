@@ -10,21 +10,67 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.annotation;
+package org.apache.juneau.jsonschema.annotation;
 
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.oapi.*;
+
 /**
  * Swagger items annotation.
  *
  * <p>
- * This class is essentially identical to {@link Items} except it's used for defining items of items.
+ * A limited subset of JSON-Schema's items object.
  *
  * <p>
- * Since annotations cannot be nested, we're forced to create a separate annotation for it.
- * <br>If you want to nest items further, you have to define them free-form using {@link #items()} as free-form JSON.
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@RestResource</ja>-annotated classes.
+ * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Items have a specific set of enumerated string values</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		type=<js>"array"</js>,
+ * 		collectionFormat=<js>"csv"</js>,
+ * 		items=<ja>@Items</ja>(
+ * 			type=<js>"string"</js>,
+ * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
+ * 			_default=<js>"AVAILABLE"</js>
+ *		)
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Same but defined free-form</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		type=<js>"array"</js>,
+ * 		collectionFormat=<js>"csv"</js>,
+ * 		items=<ja>@Items</ja>({
+ * 			<js>"type:'string',"</js>,
+ * 			<js>"enum:'AVAILABLE,PENDING,SOLD',"</js>,
+ * 			<js>"default:'AVAILABLE'"</js>
+ *		})
+ * 	)
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// An array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		type=<js>"array"</js>,
+ * 		collectionFormat=<js>"csv"</js>,
+ * 		items=<ja>@Items</ja>(
+ * 			type=<js>"array"</js>,
+ * 			items=<ja>@SubItems</ja>(
+ * 				type=<js>"integer"</js>,
+ * 				minimum=<js>"0"</js>,
+ * 				maximum=<js>"63"</js>
+ * 			)
+ *		)
+ * 	)
+ * </p>
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -34,7 +80,7 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RUNTIME)
-public @interface SubItems {
+public @interface Items {
 
 	/**
 	 * <mk>type</mk> field of the {@doc SwaggerItemsObject}.
@@ -279,12 +325,8 @@ public @interface SubItems {
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
-	 *
-	 * <p>
-	 * This is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} object.
-	 * <br>It must be declared free-form because it's not possible to nest annotations in Java.
 	 */
-	String[] items() default {};
+	SubItems items() default @SubItems;
 
 	/**
 	 * Free-form value for the {@doc SwaggerItemsObject}.

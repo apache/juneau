@@ -12,10 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 
@@ -30,8 +29,7 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	 */
 	public static final JsonSchemaBeanPropertyMeta DEFAULT = new JsonSchemaBeanPropertyMeta();
 
-	private String type, format, description;
-	private Object example;
+	private final ObjectMap schema;
 
 	/**
 	 * Constructor.
@@ -41,73 +39,34 @@ public class JsonSchemaBeanPropertyMeta extends BeanPropertyMetaExtended {
 	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
 		super(bpm);
 
-		if (bpm.getInnerField() != null)
-			findInfo(bpm.getInnerField().getAnnotation(Schema.class));
-		if (bpm.getGetter() != null)
-			findInfo(bpm.getGetter().getAnnotation(Schema.class));
-		if (bpm.getSetter() != null)
-			findInfo(bpm.getSetter().getAnnotation(Schema.class));
+		this.schema = new ObjectMap();
+
+		Field field = bpm.getInnerField();
+		Method getter = bpm.getGetter(), setter = bpm.getSetter();
+
+		try {
+			if (field != null)
+				schema.appendAll(SchemaUtils.asMap(field.getAnnotation(Schema.class)));
+			if (getter != null)
+				schema.appendAll(SchemaUtils.asMap(getter.getAnnotation(Schema.class)));
+			if (setter != null)
+				schema.appendAll(SchemaUtils.asMap(setter.getAnnotation(Schema.class)));
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private JsonSchemaBeanPropertyMeta() {
 		super(null);
-		this.type = null;
-		this.format = null;
-		this.description = null;
-		this.example = null;
-	}
-
-	private void findInfo(Schema js) {
-		if (js == null)
-			return;
-		if (! js.type().isEmpty())
-			type = js.type();
-		if (! js.format().isEmpty())
-			format = js.format();
-		if (js.description().length > 0)
-			description = joinnl(js.description());
-		if (js.example().length > 0) {
-			try {
-				example = JsonParser.DEFAULT.parse(joinnl(js.example()), Object.class);
-			} catch (ParseException e) {
-				throw new BeanRuntimeException(e);
-			}
-		}
+		this.schema = ObjectMap.EMPTY_MAP;
 	}
 
 	/**
-	 * Returns the {@link Schema#type() @Schema(type)} annotation defined on the class.
+	 * Returns the schema information gathered from all the {@link Schema @Schema} annotations on the bean property.
 	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 * @return The schema information as a generic map.  Never <jk>null</jk>.
 	 */
-	protected String getType() {
-		return type;
-	}
-
-	/**
-	 * Returns the {@link Schema#format() @Schema(format)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected String getFormat() {
-		return format;
-	}
-
-	/**
-	 * Returns the {@link Schema#description() @Schema(description)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Returns the {@link Schema#example() @Schema(example)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected Object getExample() {
-		return example;
+	protected ObjectMap getSchema() {
+		return schema;
 	}
 }

@@ -1128,66 +1128,225 @@ public final class ClassUtils {
 		return isParentClass(c, m.getReturnType());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Method annotations.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns the specified annotation on the specified method.
+	 * Returns all annotations of the specified type defined on the specified method.
 	 *
-	 * <p>
-	 * Similar to {@link Method#getAnnotation(Class)}, but searches up the parent hierarchy for the annotation
-	 * defined on parent classes and interfaces.
-	 *
-	 * <p>
-	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child methods.
-	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method
-	 * (i.e. the same name and arguments).
-	 *
-	 * @param a The annotation to search for.
-	 * @param m The method to search.
-	 * @return The annotation, or <jk>null</jk> if it wasn't found.
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param m
+	 * 	The method to find the annotation on.
+	 * @param searchParentMethods
+	 * 	If <jk>true</jk>, searches methods with the same signature on the parent classes or interfaces.
+	 * @param searchReturnType
+	 * 	If <jk>true</jk>, searches the return type on the method for the specified annotation.
+	 * @param parentFirst
+	 * 	If <jk>true</jk>, returns the results in parent-to-child order.
+	 * @return
+	 * 	A list of all matching annotations found, or an empty list if none found.
 	 */
-	public static <T extends Annotation> T getMethodAnnotation(Class<T> a, Method m) {
-		return getMethodAnnotation(a, m.getDeclaringClass(), m);
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m, boolean searchParentMethods, boolean searchReturnType, boolean parentFirst) {
+		List<T> l = new ArrayList<>();
+		List<Method> methods = searchParentMethods ? findMatchingMethods(m) : Collections.singletonList(m);
+		for (Method m2 : methods)
+			for (Annotation a2 :  m2.getAnnotations())
+				if (a.isInstance(a2))
+					l.add((T)a2);
+		if (searchReturnType) {
+			Type t = m.getGenericReturnType();
+			if (Value.isType(t))
+				appendAnnotations(a, Value.getParameterType(t), l);
+			else
+				appendAnnotations(a, t, l);
+		}
+		if (parentFirst)
+			Collections.reverse(l);
+		return l;
 	}
 
 	/**
-	 * Returns the specified annotation on the specified method.
+	 * Shortcut for calling <code>getAnnotations(a, m, <jk>true</jk>, <jk>true</jk>, <jk>false</jk>);</code>
 	 *
 	 * <p>
-	 * Similar to {@link Method#getAnnotation(Class)}, but searches up the parent hierarchy for the annotation defined
-	 * on parent classes and interfaces.
+	 * Annotations are ordered method first, then return class, then return superclasses.
 	 *
-	 * <p>
-	 * Normally, annotations defined on methods of parent classes and interfaces are not inherited by the child methods.
-	 * This utility method gets around that limitation by searching the class hierarchy for the "same" method
-	 * (i.e. the same name and arguments).
-	 *
-	 * @param a The annotation to search for.
-	 * @param c
-	 * 	The child class to start searching from.
-	 * 	Note that it can be a descendant class of the actual declaring class of the method passed in.
-	 * 	This allows you to find annotations on methods overridden by the method passed in.
-	 * @param method The method to search.
-	 * @return The annotation, or <jk>null</jk> if it wasn't found.
+	 * @param a The annotation to look for.
+	 * @param m The method being inspected.
+	 * @return All instances of the annotation with the
 	 */
-	public static <T extends Annotation> T getMethodAnnotation(Class<T> a, Class<?> c, Method method) {
-		for (Method m : c.getDeclaredMethods()) {
-			if (isSameMethod(method, m)) {
-				T t = m.getAnnotation(a);
-				if (t != null)
-					return t;
-			}
-		}
-		Class<?> pc = c.getSuperclass();
-		if (pc != null) {
-			T t = getMethodAnnotation(a, pc, method);
-			if (t != null)
-				return t;
-		}
-		for (Class<?> ic : c.getInterfaces()) {
-			T t = getMethodAnnotation(a, ic, method);
-			if (t != null)
-				return t;
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m) {
+		return getAnnotations(a, m, true, true, false);
+	}
+
+	/**
+	 * Shortcut for calling <code>getAnnotations(a, m, <jk>true</jk>, <jk>true</jk>, <jk>true</jk>);</code>
+	 *
+	 * @param a The annotation to look for.
+	 * @param m The method being inspected.
+	 * @return All instances of the annotation with the
+	 */
+	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Method m) {
+		return getAnnotations(a, m, true, true, true);
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on the specified method.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param m
+	 * 	The method to find the annotation on.
+	 * @param searchParentMethods
+	 * 	If <jk>true</jk>, searches methods with the same signature on the parent classes or interfaces.
+	 * 	<br>The search is performed in child-to-parent order.
+	 * @param searchReturnType
+	 * 	If <jk>true</jk>, searches the return type on the method for the specified annotation.
+	 * @return
+	 * 	The annotation if found, or <jk>null</jk> if not.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m, boolean searchParentMethods, boolean searchReturnType) {
+		List<Method> methods = searchParentMethods ? findMatchingMethods(m) : Collections.singletonList(m);
+		for (Method m2 : methods)
+			for (Annotation a2 :  m2.getAnnotations())
+				if (a.isInstance(a2))
+					return (T)a2;
+		if (searchReturnType) {
+			Type t = m.getGenericReturnType();
+			if (Value.isType(t))
+				return getAnnotation(a, Value.getParameterType(t));
+			return getAnnotation(a, t);
 		}
 		return null;
+	}
+
+	/**
+	 * Shortcut for calling <code>getAnnotation(a, m, true, true);
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param m
+	 * 	The method to find the annotation on.
+	 * @return
+	 * 	The annotation if found, or <jk>null</jk> if not.
+	 */
+	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m) {
+		return getAnnotation(a, m, true, true);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Method argument annotations.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns all annotations of the specified type defined on the specified method argument.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param m
+	 * 	The method containing the argument to find the annotation on.
+	 * @param index
+	 * 	The argument index position.
+	 * @param searchParentMethods
+	 * 	If <jk>true</jk>, searches methods with the same signature on the parent classes or interfaces.
+	 * @param searchArgType
+	 * 	If <jk>true</jk>, searches the argument type for the specified annotation.
+	 * @param parentFirst
+	 * 	If <jk>true</jk>, returns the results in parent-to-child order.
+	 * @return
+	 * 	A list of all matching annotations found, or an empty list if none found.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m, int index, boolean searchParentMethods, boolean searchArgType, boolean parentFirst) {
+		List<T> l = new ArrayList<>();
+		List<Method> methods = searchParentMethods ? findMatchingMethods(m) : Collections.singletonList(m);
+		for (Method m2 : methods)
+			for (Annotation a2 :  m2.getParameterAnnotations()[index])
+				if (a.isInstance(a2))
+					l.add((T)a2);
+		if (searchArgType) {
+			Type t = m.getGenericParameterTypes()[index];
+			if (Value.isType(t))
+				appendAnnotations(a, Value.getParameterType(t), l);
+			else
+				appendAnnotations(a, t, l);
+		}
+		if (parentFirst)
+			Collections.reverse(l);
+		return l;
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on the specified method argument.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param m
+	 * 	The method containing the argument to find the annotation on.
+	 * @param index
+	 * 	The argument index position.
+	 * @param searchParentMethods
+	 * 	If <jk>true</jk>, searches methods with the same signature on the parent classes or interfaces.
+	 * 	<br>The search is performed in child-to-parent order.
+	 * @param searchArgType
+	 * 	If <jk>true</jk>, searches the argument type for the specified annotation.
+	 * @return
+	 * 	The annotation if found, or <jk>null</jk> if not.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m, int index, boolean searchParentMethods, boolean searchArgType) {
+		List<Method> methods = searchParentMethods ? findMatchingMethods(m) : Collections.singletonList(m);
+		for (Method m2 : methods)
+			for (Annotation a2 :  m2.getParameterAnnotations()[index])
+				if (a.isInstance(a2))
+					return (T)a2;
+		if (searchArgType) {
+			Type t = m.getGenericParameterTypes()[index];
+			if (Value.isType(t))
+				return getAnnotation(a, Value.getParameterType(t));
+			return getAnnotation(a, t);
+		}
+		return null;
+	}
+
+	/**
+	 * Shortcut for calling <code>getAnnotation(a, m, index, <jk>true</jk>, <jk>true</jk>);</code>
+	 *
+	 * @param a The annotation to check for.
+	 * @param m The method containing the parameter to check.
+	 * @param index The parameter index.
+	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
+	 */
+	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m, int index) {
+		return getAnnotation(a, m, index, true, true);
+	}
+
+	/**
+	 * Shortcut for calling <code>getAnnotations(a, m, index, <jk>true</jk>, <jk>true</jk>, <jk>false</jk>);</code>
+	 *
+	 * @param a The annotation to look for.
+	 * @param m The method containing the parameter.
+	 * @param index The parameter index.
+	 * @return All instances of the annotation with the
+	 */
+	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m, int index) {
+		return getAnnotations(a, m, index, true, true, false);
+	}
+
+	/**
+	 * Shortcut for calling <code>getAnnotations(a, m, index, <jk>true</jk>, <jk>true</jk>, <jk>true</jk>);</code>
+	 *
+	 * @param a The annotation to look for.
+	 * @param m The method containing the parameter.
+	 * @param index The parameter index.
+	 * @return All instances of the annotation with the
+	 */
+	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Method m, int index) {
+		return getAnnotations(a, m, index, true, true, true);
 	}
 
 	/**
@@ -1195,7 +1354,9 @@ public final class ClassUtils {
 	 * superclasses and interfaces.
 	 *
 	 * @param m The method to find matches against.
-	 * @return All matching methods including the input method itself.
+	 * @return
+	 * 	All matching methods including the input method itself.
+	 * 	Methods are ordered from child-to-parent order.
 	 */
 	public static List<Method> findMatchingMethods(Method m) {
 		return findMatchingMethods(new ArrayList<Method>(), m);
@@ -2254,123 +2415,6 @@ public final class ClassUtils {
 	 */
 	public static boolean hasAnnotation(Class<? extends Annotation> a, Type t) {
 		return getAnnotation(a, t) != null;
-	}
-
-	/**
-	 * Returns the specified annotation if it exists on the specified parameter or parameter type class.
-	 *
-	 * @param a The annotation to check for.
-	 * @param m The method containing the parameter to check.
-	 * @param index The parameter index.
-	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m, int index) {
-		for (Annotation a2 :  m.getParameterAnnotations()[index])
-			if (a.isInstance(a2))
-				return (T)a2;
-		Type t = m.getGenericParameterTypes()[index];
-		if (Value.isType(t))
-			return getAnnotation(a, Value.getParameterType(t));
-		return getAnnotation(a, t);
-	}
-
-	/**
-	 * Returns all annotations defined on the specified parameter and parameter type.
-	 *
-	 * <p>
-	 * Annotations are ordered parameter first, then class, then superclasses.
-	 *
-	 * @param a The annotation to look for.
-	 * @param m The method containing the parameter.
-	 * @param index The parameter index.
-	 * @return All instances of the annotation with the
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m, int index) {
-		List<T> l = new ArrayList<>();
-		for (Annotation a2 :  m.getParameterAnnotations()[index])
-			if (a.isInstance(a2))
-				l.add((T)a2);
-		Type t = m.getGenericParameterTypes()[index];
-		if (Value.isType(t))
-			appendAnnotations(a, Value.getParameterType(t), l);
-		else
-			appendAnnotations(a, t, l);
-		return l;
-	}
-
-	/**
-	 * Returns all annotations defined on the specified parameter and parameter type.
-	 *
-	 * <p>
-	 * Annotations are ordered parameter superclasses first, then class, then parameter.
-	 *
-	 * @param a The annotation to look for.
-	 * @param m The method containing the parameter.
-	 * @param index The parameter index.
-	 * @return All instances of the annotation with the
-	 */
-	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Method m, int index) {
-		List<T> l = getAnnotations(a, m, index);
-		Collections.reverse(l);
-		return l;
-	}
-
-	/**
-	 * Returns all annotations defined on the specified method and return type.
-	 *
-	 * <p>
-	 * Annotations are ordered method first, then return class, then return superclasses.
-	 *
-	 * @param a The annotation to look for.
-	 * @param m The method being inspected.
-	 * @return All instances of the annotation with the
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends Annotation> List<T> getAnnotations(Class<T> a, Method m) {
-		List<T> l = new ArrayList<>();
-		for (Method m2 : findMatchingMethods(m))
-			for (Annotation a2 :  m2.getAnnotations())
-				if (a.isInstance(a2))
-					l.add((T)a2);
-		Type t = m.getGenericReturnType();
-		if (Value.isType(t))
-			appendAnnotations(a, Value.getParameterType(t), l);
-		else
-			appendAnnotations(a, t, l);
-		return l;
-	}
-
-	/**
-	 * Returns all annotations defined on the specified method and return type.
-	 *
-	 * <p>
-	 * Annotations are ordered return superclass first, then return class, then method.
-	 *
-	 * @param a The annotation to look for.
-	 * @param m The method being inspected.
-	 * @return All instances of the annotation with the
-	 */
-	public static <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a, Method m) {
-		List<T> l = getAnnotations(a, m);
-		Collections.reverse(l);
-		return l;
-	}
-
-	/**
-	 * Returns the specified annotation if it exists on the specified method or return type class.
-	 *
-	 * @param a The annotation to check for.
-	 * @param m The method to check.
-	 * @return <jk>true</jk> if the {@link #getAnnotation(Class, Method, int)} returns a value.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends Annotation> T getAnnotation(Class<T> a, Method m) {
-		for (Annotation a2 :  m.getAnnotations())
-			if (a.isInstance(a2))
-				return (T)a2;
-		return getAnnotation(a, m.getGenericReturnType());
 	}
 
 	/**

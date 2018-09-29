@@ -1134,7 +1134,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void jsonSchema_onclass() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().build().createSession();
-		assertObjectEquals("{type:'foo',format:'bar',properties:{f1:{type:'integer',format:'int32'}},description:'baz','x-example':{f1:123}}", s.getSchema(A1.class));
+		assertObjectEquals("{description:'baz',format:'bar',type:'foo','x-example':'{f1:123}',properties:{f1:{type:'integer',format:'int32'}}}", s.getSchema(A1.class));
 	}
 
 	@Schema(type="foo",format="bar",description="baz",example="{f1:123}")
@@ -1145,7 +1145,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void jsonSchema_onbeanfield() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().build().createSession();
-		assertObjectEquals("{type:'object',properties:{f1:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(A2.class));
+		assertObjectEquals("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(A2.class));
 	}
 
 	public static class A2 {
@@ -1156,7 +1156,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void jsonSchema_onbeangetter() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().build().createSession();
-		assertObjectEquals("{type:'object',properties:{f1:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(A3.class));
+		assertObjectEquals("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(A3.class));
 	}
 
 	public static class A3 {
@@ -1169,7 +1169,7 @@ public class JsonSchemaGeneratorTest {
 
 	public void jsonSchema_onbeansetter() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().build().createSession();
-		assertObjectEquals("{type:'object',properties:{f1:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(A4.class));
+		assertObjectEquals("{type:'object',properties:{f1:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(A4.class));
 	}
 
 	public static class A4 {
@@ -1190,9 +1190,9 @@ public class JsonSchemaGeneratorTest {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder()
 			.pojoSwaps(SwapWithAnnotation.class)
 			.build().createSession();
-		assertObjectEquals("{type:'foo',format:'bar',description:'baz','x-example':123}", s.getSchema(SimpleBean.class));
-		assertObjectEquals("{type:'array',items:{type:'foo',format:'bar',description:'baz','x-example':123}}", s.getSchema(BeanList.class));
-		assertObjectEquals("{type:'array',items:{type:'array',items:{type:'foo',format:'bar',description:'baz','x-example':123}}}", s.getSchema(SimpleBean[][].class));
+		assertObjectEquals("{description:'baz',format:'bar',type:'foo','x-example':'123'}", s.getSchema(SimpleBean.class));
+		assertObjectEquals("{type:'array',items:{description:'baz',format:'bar',type:'foo','x-example':'123'}}", s.getSchema(BeanList.class));
+		assertObjectEquals("{type:'array',items:{type:'array',items:{description:'baz',format:'bar',type:'foo','x-example':'123'}}}", s.getSchema(SimpleBean[][].class));
 	}
 
 	@Schema(type="foo",format="bar",description="baz",example="123")

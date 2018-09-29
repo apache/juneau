@@ -602,11 +602,11 @@ public class BeanMeta<T> {
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
 					continue;
 
-				BeanIgnore bi = getMethodAnnotation(BeanIgnore.class, c, m);
+				BeanIgnore bi = getAnnotation(BeanIgnore.class, m);
 				if (bi != null)
 					continue;
 
-				BeanProperty bp = getMethodAnnotation(BeanProperty.class, c, m);
+				BeanProperty bp = getAnnotation(BeanProperty.class, m);
 				if (! (v.isVisible(m) || bp != null))
 					continue;
 

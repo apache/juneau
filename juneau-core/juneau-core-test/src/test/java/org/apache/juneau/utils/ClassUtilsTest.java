@@ -164,10 +164,10 @@ public class ClassUtilsTest {
 	//====================================================================================================
 	@Test
 	public void getMethodAnnotations() throws Exception {
-		assertEquals("a1", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a1")).value());
-		assertEquals("a2b", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a2")).value());
-		assertEquals("a3", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a3", CharSequence.class)).value());
-		assertEquals("a4", getMethodAnnotation(TestAnnotation.class, CI3.class.getMethod("a4")).value());
+		assertEquals("a1", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a1")).value());
+		assertEquals("a2b", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a2")).value());
+		assertEquals("a3", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a3", CharSequence.class)).value());
+		assertEquals("a4", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a4")).value());
 	}
 
 	public static interface CI1 {

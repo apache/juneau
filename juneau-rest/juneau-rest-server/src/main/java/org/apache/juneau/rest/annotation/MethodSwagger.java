@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
 
 /**
  * Extended annotation for {@link RestMethod#swagger() RestMethod.swagger()}.

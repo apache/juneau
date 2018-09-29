@@ -193,7 +193,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty p = getMethodAnnotation(BeanProperty.class, getter);
+				BeanProperty p = getAnnotation(BeanProperty.class, getter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -209,7 +209,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty p = getMethodAnnotation(BeanProperty.class, setter);
+				BeanProperty p = getAnnotation(BeanProperty.class, setter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -1063,15 +1063,15 @@ public final class BeanPropertyMeta {
 			appendAnnotations(a, field.getType(), l);
 		}
 		if (getter != null) {
-			addIfNotNull(l, getMethodAnnotation(a, getter));
+			addIfNotNull(l, getAnnotation(a, getter));
 			appendAnnotations(a, getter.getReturnType(), l);
 		}
 		if (setter != null) {
-			addIfNotNull(l, getMethodAnnotation(a, setter));
+			addIfNotNull(l, getAnnotation(a, setter));
 			appendAnnotations(a, setter.getReturnType(), l);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, getMethodAnnotation(a, extraKeys));
+			addIfNotNull(l, getAnnotation(a, extraKeys));
 			appendAnnotations(a, extraKeys.getReturnType(), l);
 		}
 
@@ -1089,16 +1089,16 @@ public final class BeanPropertyMeta {
 	 * @param a The annotation to search for.
 	 * @return The annotation, or <jk>null</jk> if it wasn't found.
 	 */
-	public <A extends Annotation> A getAnnotation(Class<A> a) {
+	public <A extends Annotation> A findAnnotation(Class<A> a) {
 		A t = null;
 		if (field != null)
 			t = field.getAnnotation(a);
 		if (t == null && getter != null)
-			t = getMethodAnnotation(a, getter);
+			t = getAnnotation(a, getter);
 		if (t == null && setter != null)
-			t = getMethodAnnotation(a, setter);
+			t = getAnnotation(a, setter);
 		if (t == null && extraKeys != null)
-			t = getMethodAnnotation(a, extraKeys);
+			t = getAnnotation(a, extraKeys);
 		if (t == null)
 			t = ClassUtils.getAnnotation(a, typeMeta.getInnerClass());
 		return t;
