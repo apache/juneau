@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
  * <br>The contents of the request passed into the constructor are immediately converted to read-only strings.
  *
  * <p>
- * Instances of this class can be built using {@link ReaderResourceBuilder}.
+ * Instances of this class can be built using {@link Builder}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -46,17 +46,12 @@ import org.apache.juneau.svl.*;
 public class ReaderResource implements Writable {
 
 	private final MediaType mediaType;
-	private final String[] contents;
+	private final Object[] contents;
 	private final VarResolverSession varSession;
 	private final Map<String,Object> headers;
 
-	/**
-	 * Creates a new instance of a {@link ReaderResourceBuilder}
-	 *
-	 * @return A new instance of a {@link ReaderResourceBuilder}
-	 */
-	public static ReaderResourceBuilder create() {
-		return new ReaderResourceBuilder();
+	ReaderResource(Builder b) throws IOException {
+		this(b.mediaType, b.headers, b.varResolver, b.cached, b.contents.toArray());
 	}
 
 	/**
@@ -65,6 +60,9 @@ public class ReaderResource implements Writable {
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
 	 * @param varSession Optional variable resolver for resolving variables in the string.
+	 * @param cached
+	 * 	Identifies if this resource is cached in memory.
+	 * 	<br>If <jk>true</jk>, the contents will be loaded into a String for fast retrieval.
 	 * @param contents
 	 * 	The resource contents.
 	 * 	<br>If multiple contents are specified, the results will be concatenated.
@@ -77,29 +75,152 @@ public class ReaderResource implements Writable {
 	 * 	</ul>
 	 * @throws IOException
 	 */
-	public ReaderResource(MediaType mediaType, Map<String,Object> headers, VarResolverSession varSession, Object...contents) throws IOException {
+	public ReaderResource(MediaType mediaType, Map<String,Object> headers, VarResolverSession varSession, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 		this.varSession = varSession;
-
 		this.headers = immutableMap(headers);
+		this.contents = cached ? new Object[]{read(contents)} : contents;
+	}
 
-		this.contents = new String[contents.length];
-		for (int i = 0; i < contents.length; i++) {
-			Object c = contents[i];
-			if (c == null)
-				this.contents[i] = "";
-			else if (c instanceof InputStream)
-				this.contents[i] = read((InputStream)c);
-			else if (c instanceof File)
-				this.contents[i] = read((File)c);
-			else if (c instanceof Reader)
-				this.contents[i] = read((Reader)c);
-			else if (c instanceof CharSequence)
-				this.contents[i] = ((CharSequence)c).toString();
-			else
-				throw new IOException("Invalid class type passed to ReaderResource: " + c.getClass().getName());
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new instance of a {@link Builder} for this class.
+	 *
+	 * @return A new instance of a {@link Builder}.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Builder class for constructing {@link ReaderResource} objects.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.ReaderResource}
+	 * </ul>
+	 */
+	public static class Builder {
+
+		ArrayList<Object> contents = new ArrayList<>();
+		MediaType mediaType;
+		VarResolverSession varResolver;
+		Map<String,Object> headers = new LinkedHashMap<>();
+		boolean cached;
+
+		/**
+		 * Specifies the resource media type string.
+		 *
+		 * @param mediaType The resource media type string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mediaType(String mediaType) {
+			this.mediaType = MediaType.forString(mediaType);
+			return this;
+		}
+
+		/**
+		 * Specifies the resource media type string.
+		 *
+		 * @param mediaType The resource media type string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mediaType(MediaType mediaType) {
+			this.mediaType = mediaType;
+			return this;
+		}
+
+		/**
+		 * Specifies the contents for this resource.
+		 *
+		 * <p>
+		 * This method can be called multiple times to add more content.
+		 *
+		 * @param contents
+		 * 	The resource contents.
+		 * 	<br>If multiple contents are specified, the results will be concatenated.
+		 * 	<br>Contents can be any of the following:
+		 * 	<ul>
+		 * 		<li><code>InputStream</code>
+		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
+		 * 		<li><code>File</code>
+		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder contents(Object...contents) {
+			this.contents.addAll(Arrays.asList(contents));
+			return this;
+		}
+
+		/**
+		 * Specifies an HTTP response header value.
+		 *
+		 * @param name The HTTP header name.
+		 * @param value
+		 * 	The HTTP header value.
+		 * 	<br>Will be converted to a <code>String</code> using {@link Object#toString()}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder header(String name, Object value) {
+			this.headers.put(name, value);
+			return this;
+		}
+
+		/**
+		 * Specifies HTTP response header values.
+		 *
+		 * @param headers
+		 * 	The HTTP headers.
+		 * 	<br>Values will be converted to <code>Strings</code> using {@link Object#toString()}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder headers(Map<String,Object> headers) {
+			this.headers.putAll(headers);
+			return this;
+		}
+
+		/**
+		 * Specifies the variable resolver to use for this resource.
+		 *
+		 * @param varResolver The variable resolver.
+		 * @return This object (for method chaining).
+		 */
+		public Builder varResolver(VarResolverSession varResolver) {
+			this.varResolver = varResolver;
+			return this;
+		}
+
+		/**
+		 * Specifies that this resource is intended to be cached.
+		 *
+		 * <p>
+		 * This will trigger the contents to be loaded into a String for fast serializing.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cached() {
+			this.cached = true;
+			return this;
+		}
+
+		/**
+		 * Create a new {@link ReaderResource} using values in this builder.
+		 *
+		 * @return A new immutable {@link ReaderResource} object.
+		 * @throws IOException
+		 */
+		public ReaderResource build() throws IOException {
+			return new ReaderResource(this);
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Get the HTTP response headers.
@@ -117,11 +238,13 @@ public class ReaderResource implements Writable {
 	@ResponseBody
 	@Override /* Writeable */
 	public Writer writeTo(Writer w) throws IOException {
-		for (String s : contents) {
-			if (varSession != null)
-				varSession.resolveTo(s, w);
-			else
-				w.write(s);
+		for (Object o : contents) {
+			if (o != null) {
+				if (varSession == null)
+					pipe(o, w);
+				else
+					varSession.resolveTo(read(o), w);
+			}
 		}
 		return w;
 	}
@@ -134,15 +257,13 @@ public class ReaderResource implements Writable {
 
 	@Override /* Object */
 	public String toString() {
-		if (contents.length == 1 && varSession == null)
-			return contents[0];
-		StringWriter sw = new StringWriter();
-		for (String s : contents) {
-			if (varSession != null)
-				return varSession.resolve(s);
-			sw.write(s);
+		try {
+			if (contents.length == 1 && varSession == null)
+				return read(contents[0]);
+			return writeTo(new StringWriter()).toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		return sw.toString();
 	}
 
 	/**
@@ -161,5 +282,17 @@ public class ReaderResource implements Writable {
 		else if ("json".equals(subType) || "javascript".equals(subType) || "css".equals(subType))
 			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 		return s;
+	}
+
+	/**
+	 * Returns the contents of this resource.
+	 *
+	 * @return The contents of this resource.
+	 */
+	public Reader getContents() {
+		if (contents.length == 1 && varSession == null && contents[0] instanceof Reader) {
+			return (Reader)contents[0];
+		}
+		return new StringReader(toString());
 	}
 }

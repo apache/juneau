@@ -518,7 +518,7 @@ public final class RestContext extends BeanContext {
 	 * 	<ul>
 	 * 		<li class='jm'>{@link RestRequest#getClasspathReaderResource(String) getClasspathReaderResource(String)}
 	 * 		<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean) getClasspathReaderResource(String,boolean)}
-	 * 		<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType) getClasspathReaderResource(String,boolean,MediaType)}
+	 * 		<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType,boolean) getClasspathReaderResource(String,boolean,MediaType,boolean)}
 	 * 	</ul>
 	 * </ul>
 	 *
@@ -1470,7 +1470,7 @@ public final class RestContext extends BeanContext {
 	 * Used for specifying the content type on file resources retrieved through the following methods:
 	 * <ul>
 	 * 	<li class='jm'>{@link RestContext#resolveStaticFile(String) RestContext.resolveStaticFile(String)}
-	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType)}
+	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean,MediaType,boolean)}
 	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String,boolean)}
 	 * 	<li class='jm'>{@link RestRequest#getClasspathReaderResource(String)}
 	 * </ul>
@@ -3573,7 +3573,7 @@ public final class RestContext extends BeanContext {
 								String name = (i == -1 ? p2 : p2.substring(i+1));
 								String mediaType = mimetypesFileTypeMap.getContentType(name);
 								Map<String,Object> responseHeaders = sfm.responseHeaders != null ? sfm.responseHeaders : staticFileResponseHeaders;
-								sr = new StreamResource(MediaType.forString(mediaType), responseHeaders, is);
+								sr = new StreamResource(MediaType.forString(mediaType), responseHeaders, true, is);
 								break;
 							}
 						}

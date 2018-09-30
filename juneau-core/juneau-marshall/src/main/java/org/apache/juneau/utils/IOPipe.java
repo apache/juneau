@@ -47,12 +47,10 @@ public class IOPipe {
 		assertFieldNotNull(input, "input");
 		assertFieldNotNull(output, "output");
 
-		if (input instanceof CharSequence)
-			this.input = new StringReader(input.toString());
-		else if (input instanceof InputStream || input instanceof Reader)
+		if (input instanceof InputStream || input instanceof Reader || input instanceof File || input instanceof byte[] || input instanceof CharSequence || input == null)
 			this.input = input;
 		else
-			illegalArg("Invalid input class type.  Must be one of the following:  InputStream, Reader, CharSequence");
+			illegalArg("Invalid input class type.  Must be one of the following:  InputStream, Reader, CharSequence, byte[], File");
 
 		if (output instanceof OutputStream || output instanceof Writer)
 			this.output = output;
@@ -165,22 +163,41 @@ public class IOPipe {
 		int c = 0;
 
 		try {
-			if (input instanceof InputStream && output instanceof OutputStream && lineProcessor == null) {
-				InputStream in = (InputStream)input;
+			if (input == null)
+				return 0;
+
+			if ((input instanceof InputStream || input instanceof byte[]) && output instanceof OutputStream && lineProcessor == null) {
 				OutputStream out = (OutputStream)output;
-				byte[] b = new byte[buffSize];
-				int i;
-				while ((i = in.read(b)) > 0) {
-					c += i;
-					out.write(b, 0, i);
+				if (input instanceof InputStream) {
+					InputStream in = (InputStream)input;
+					byte[] b = new byte[buffSize];
+					int i;
+					while ((i = in.read(b)) > 0) {
+						c += i;
+						out.write(b, 0, i);
+					}
+				} else {
+					byte[] b = (byte[])input;
+					out.write(b);
+					c = b.length;
 				}
 				out.flush();
 			} else {
-				Reader in = (input instanceof Reader ? (Reader)input : new InputStreamReader((InputStream)input, UTF8));
+				@SuppressWarnings("resource")
 				Writer out = (output instanceof Writer ? (Writer)output : new OutputStreamWriter((OutputStream)output, UTF8));
-				output = out;
-				input = in;
+				closeIn |= input instanceof File;
 				if (byLines || lineProcessor != null) {
+					Reader in = null;
+					if (input instanceof Reader)
+						in = (Reader)input;
+					else if (input instanceof InputStream)
+						in = new InputStreamReader((InputStream)input, UTF8);
+					else if (input instanceof File)
+						in = new FileReader((File)input);
+					else if (input instanceof byte[])
+						in = new StringReader(new String((byte[])input, "UTF8"));
+					else if (input instanceof CharSequence)
+						in = new StringReader(input.toString());
 					try (Scanner s = new Scanner(in)) {
 						while (s.hasNextLine()) {
 							String l = s.nextLine();
@@ -195,11 +212,25 @@ public class IOPipe {
 						}
 					}
 				} else {
-					int i;
-					char[] b = new char[buffSize];
-					while ((i = in.read(b)) > 0) {
-						c += i;
-						out.write(b, 0, i);
+					if (input instanceof InputStream)
+						input = new InputStreamReader((InputStream)input, UTF8);
+					else if (input instanceof File)
+						input = new FileReader((File)input);
+					else if (input instanceof byte[])
+						input = new String((byte[])input, UTF8);
+
+					if (input instanceof Reader) {
+						Reader in = (Reader)input;
+						int i;
+						char[] b = new char[buffSize];
+						while ((i = in.read(b)) > 0) {
+							c += i;
+							out.write(b, 0, i);
+						}
+					} else {
+						String s = input.toString();
+						out.write(s);
+						c = s.length();
 					}
 				}
 				out.flush();

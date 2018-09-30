@@ -51,6 +51,18 @@ public class SeeOther extends HttpResponse {
 	}
 
 	/**
+	 * Constructor with no redirect.
+	 * <p>
+	 * Used for end-to-end interfaces.
+	 *
+	 * @param message Message to send as the response.
+	 */
+	public SeeOther(String message) {
+		super(message);
+		this.location = null;
+	}
+
+	/**
 	 * Constructor using custom message.
 	 *
 	 * @param message Message to send as the response.

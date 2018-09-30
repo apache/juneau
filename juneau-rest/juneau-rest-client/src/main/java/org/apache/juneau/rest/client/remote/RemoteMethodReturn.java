@@ -36,14 +36,15 @@ public final class RemoteMethodReturn {
 
 	RemoteMethodReturn(Method m) {
 		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
-		RemoteReturn rv = m.getReturnType() == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
-		this.returnType = m.getGenericReturnType();
-		if (hasAnnotation(Response.class, m)) {
+		Class<?> rt = m.getReturnType();
+		RemoteReturn rv = rt == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
+		if (hasAnnotation(Response.class, rt) && rt.isInterface()) {
 			this.meta = ResponseBeanMeta.create(m, PropertyStore.DEFAULT);
 			rv = RemoteReturn.BEAN;
 		} else {
 			this.meta = null;
 		}
+		this.returnType = m.getGenericReturnType();
 		this.returnValue = rv;
 	}
 

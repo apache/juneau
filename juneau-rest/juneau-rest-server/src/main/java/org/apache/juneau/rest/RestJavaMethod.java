@@ -141,7 +141,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 			try {
 
-				RestMethod m = method.getAnnotation(RestMethod.class);
+				RestMethod m = getAnnotation(RestMethod.class, method);
 				if (m == null)
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 

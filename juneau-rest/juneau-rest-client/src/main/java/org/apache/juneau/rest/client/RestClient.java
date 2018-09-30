@@ -1121,7 +1121,7 @@ public class RestClient extends BeanContext implements Closeable {
 							} else if (rmr.getReturnValue() == RemoteReturn.BEAN) {
 								return rc.getResponse(rmr.getResponseBeanMeta());
 							} else {
-								Object v = rc.getResponseBody(method.getGenericReturnType());
+								Object v = rc.getResponseBody(rmr.getReturnType());
 								if (v == null && method.getReturnType().isPrimitive())
 									v = ClassUtils.getPrimitiveDefault(method.getReturnType());
 								return v;

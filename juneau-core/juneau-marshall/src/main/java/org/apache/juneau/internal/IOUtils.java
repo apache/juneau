@@ -41,21 +41,6 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Reads the contents of a file into a string.
-	 *
-	 * @param in The file to read using default character encoding.
-	 * @return The contents of the reader as a string, or <jk>null</jk> if file does not exist.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	public static String read(File in) throws IOException {
-		if (in == null || ! in.exists())
-			return null;
-		try (Reader r = FileReaderBuilder.create(in).build()) {
-			return read(r, 0, 1024);
-		}
-	}
-
-	/**
 	 * Reads the specified object to a <code>String</code>.
 	 *
 	 * <p>
@@ -68,53 +53,54 @@ public final class IOUtils {
 	 * 	<li><code><jk>byte</jk>[]</code>
 	 * </ul>
 	 *
-	 * @param o The object to read.
+	 * @param in The object to read.
 	 * @return The object serialized to a string, or <jk>null</jk> if it wasn't a supported type.
 	 * @throws IOException
 	 */
-	public static String read(Object o) throws IOException {
-		if (o instanceof CharSequence)
-			return o.toString();
-		if (o instanceof File)
-			return read((File)o);
-		if (o instanceof Reader)
-			return read((Reader)o);
-		if (o instanceof InputStream)
-			return read((InputStream)o);
-		if (o instanceof byte[])
-			return read(new ByteArrayInputStream((byte[])o));
-		return null;
+	public static String read(Object in) throws IOException {
+		if (in == null)
+			return null;
+		if (in instanceof CharSequence)
+			return in.toString();
+		if (in instanceof File)
+			return read((File)in);
+		if (in instanceof Reader)
+			return read((Reader)in);
+		if (in instanceof InputStream)
+			return read((InputStream)in);
+		if (in instanceof byte[])
+			return read(new ByteArrayInputStream((byte[])in));
+		throw new IOException("Cannot convert object of type '"+in.getClass().getName()+"' to a String.");
 	}
 
 	/**
-	 * Writes the contents of the specified <code>Reader</code> to the specified file.
+	 * Same as {@link #read(Object)} but appends all the input into a single String.
 	 *
-	 * @param out The file to write the output to.
-	 * @param in The reader to pipe from.
-	 * @return The number of characters written to the file.
+	 * @param in The objects to read.
+	 * @return The objects serialized to a string, never <jk>null</jk>.
 	 * @throws IOException
 	 */
-	public static int write(File out, Reader in) throws IOException {
-		assertFieldNotNull(out, "out");
-		assertFieldNotNull(in, "in");
-		try (Writer w = FileWriterBuilder.create(out).build()) {
-			return IOPipe.create(in, w).run();
-		}
+	public static String read(Object...in) throws IOException {
+		if (in.length == 1)
+			return read(in[0]);
+		StringWriter sw = new StringWriter();
+		for (Object o : in)
+			sw.write(emptyIfNull(read(o)));
+		return sw.toString();
 	}
 
 	/**
-	 * Writes the contents of the specified <code>InputStream</code> to the specified file.
+	 * Reads the contents of a file into a string.
 	 *
-	 * @param out The file to write the output to.
-	 * @param in The input stream to pipe from.
-	 * @return The number of characters written to the file.
-	 * @throws IOException
+	 * @param in The file to read using default character encoding.
+	 * @return The contents of the reader as a string, or <jk>null</jk> if file does not exist.
+	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	public static int write(File out, InputStream in) throws IOException {
-		assertFieldNotNull(out, "out");
-		assertFieldNotNull(in, "in");
-		try (OutputStream os = new FileOutputStream(out)) {
-			return IOPipe.create(in, os).run();
+	public static String read(File in) throws IOException {
+		if (in == null || ! in.exists())
+			return null;
+		try (Reader r = FileReaderBuilder.create(in).build()) {
+			return read(r, 0, 1024);
 		}
 	}
 
@@ -157,48 +143,6 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Read the specified input stream into a byte array and closes the stream.
-	 *
-	 * @param in The input stream.
-	 * @param bufferSize The expected size of the buffer.
-	 * @return The contents of the stream as a byte array.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static byte[] readBytes(InputStream in, int bufferSize) throws IOException {
-		if (in == null)
-			return null;
-		ByteArrayOutputStream buff = new ByteArrayOutputStream(bufferSize);
-		int nRead;
-		byte[] b = new byte[Math.min(bufferSize, 8192)];
-
-		try {
-			while ((nRead = in.read(b, 0, b.length)) != -1)
-				buff.write(b, 0, nRead);
-			buff.flush();
-
-			return buff.toByteArray();
-		} finally {
-			in.close();
-		}
-	}
-
-	/**
-	 * Reads a raw stream of bytes from the specified file.
-	 *
-	 * @param f The file to read.
-	 * @return A byte array containing the contents of the file.
-	 * @throws IOException
-	 */
-	public static byte[] readBytes(File f) throws IOException {
-		if (f == null || ! (f.exists() && f.canRead()))
-			return null;
-
-		try (FileInputStream fis = new FileInputStream(f)) {
-			return readBytes(fis, (int)f.length());
-		}
-	}
-
-	/**
 	 * Reads the specified input into a {@link String} until the end of the input is reached.
 	 *
 	 * <p>
@@ -217,6 +161,8 @@ public final class IOUtils {
 	public static String read(Reader in, int length, int bufferSize) throws IOException {
 		if (in == null)
 			return null;
+		if (bufferSize == 0)
+			bufferSize = 1024;
 		length = (length <= 0 ? bufferSize : length);
 		StringBuilder sb = new StringBuilder(length); // Assume they're ASCII characters.
 		try {
@@ -231,21 +177,178 @@ public final class IOUtils {
 	}
 
 	/**
-	 * Pipes the contents of the specified reader into the writer.
-	 *
-	 * <p>
-	 * The reader is closed, the writer is not.
+	 * Read the specified object into a byte array.
 	 *
 	 * @param in
-	 * 	The reader to pipe from.
-	 * @param out
-	 * 	The writer to pipe to.
+	 * 	The object to read into a byte array.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @param buffSize
+	 * 	The buffer size to use.
+	 * @return The contents of the stream as a byte array.
+	 * @throws IOException Thrown by underlying stream or if object is not a supported type.
+	 */
+	public static byte[] readBytes(Object in, int buffSize) throws IOException {
+		if (in == null)
+			return new byte[0];
+		if (in instanceof byte[])
+			return (byte[])in;
+		if (in instanceof CharSequence)
+			return in.toString().getBytes(UTF8);
+		if (in instanceof InputStream)
+			return readBytes((InputStream)in, buffSize);
+		if (in instanceof Reader)
+			return read((Reader)in, 0, buffSize).getBytes(UTF8);
+		if (in instanceof File)
+			return readBytes((File)in, buffSize);
+		throw new IOException("Cannot convert object of type '"+in.getClass().getName()+"' to a byte array.");
+	}
+
+	/**
+	 * Read the specified input stream into a byte array.
+	 *
+	 * @param in
+	 * 	The stream to read into a byte array.
+	 * @return The contents of the stream as a byte array.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static byte[] readBytes(InputStream in) throws IOException {
+		return readBytes(in, 1024);
+	}
+
+	/**
+	 * Read the specified input stream into a byte array.
+	 *
+	 * @param in
+	 * 	The stream to read into a byte array.
+	 * @param buffSize
+	 * 	The buffer size to use.
+	 * @return The contents of the stream as a byte array.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static byte[] readBytes(InputStream in, int buffSize) throws IOException {
+		if (buffSize == 0)
+			buffSize = 1024;
+        try (final ByteArrayOutputStream buff = new ByteArrayOutputStream(buffSize)) {
+			int nRead;
+			byte[] b = new byte[buffSize];
+			while ((nRead = in.read(b, 0, b.length)) != -1)
+				buff.write(b, 0, nRead);
+			buff.flush();
+			return buff.toByteArray();
+        }
+	}
+
+	/**
+	 * Read the specified file into a byte array.
+	 *
+	 * @param in
+	 * 	The file to read into a byte array.
+	 * @return The contents of the file as a byte array.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static byte[] readBytes(File in) throws IOException {
+		return readBytes(in, 1024);
+	}
+
+	/**
+	 * Read the specified file into a byte array.
+	 *
+	 * @param in
+	 * 	The file to read into a byte array.
+	 * @param buffSize
+	 * 	The buffer size to use.
+	 * @return The contents of the file as a byte array.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static byte[] readBytes(File in, int buffSize) throws IOException {
+		if (buffSize == 0)
+			buffSize = 1024;
+		if (! (in.exists() && in.canRead()))
+			return new byte[0];
+		buffSize = Math.min((int)in.length(), buffSize);
+		try (FileInputStream fis = new FileInputStream(in)) {
+			return readBytes(fis, buffSize);
+		}
+	}
+
+	/**
+	 * Shortcut for calling <code>readBytes(in, 1024);</code>
+	 *
+	 * @param in
+	 * 	The object to read into a byte array.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @return The contents of the stream as a byte array.
+	 * @throws IOException Thrown by underlying stream or if object is not a supported type.
+	 */
+	public static byte[] readBytes(Object in) throws IOException {
+		return readBytes(in, 1024);
+	}
+
+	/**
+	 * Same as {@link #readBytes(Object)} but appends all the input into a single byte array.
+	 *
+	 * @param in The objects to read.
+	 * @return The objects serialized to a byte array, never <jk>null</jk>.
 	 * @throws IOException
 	 */
-	public static void pipe(Reader in, Writer out) throws IOException {
+	public static byte[] readBytes(Object...in) throws IOException {
+		if (in.length == 1)
+			return readBytes(in[0]);
+        try (final ByteArrayOutputStream buff = new ByteArrayOutputStream(1024)) {
+			for (Object o : in) {
+				byte[] bo = readBytes(o);
+				if (bo != null)
+					buff.write(bo);
+			}
+			buff.flush();
+			return buff.toByteArray();
+        }
+	}
+
+	/**
+	 * Writes the contents of the specified <code>Reader</code> to the specified file.
+	 *
+	 * @param out The file to write the output to.
+	 * @param in The reader to pipe from.
+	 * @return The number of characters written to the file.
+	 * @throws IOException
+	 */
+	public static int write(File out, Reader in) throws IOException {
 		assertFieldNotNull(out, "out");
 		assertFieldNotNull(in, "in");
-		IOPipe.create(in, out).run();
+		try (Writer w = FileWriterBuilder.create(out).build()) {
+			return IOPipe.create(in, w).run();
+		}
+	}
+
+	/**
+	 * Writes the contents of the specified <code>InputStream</code> to the specified file.
+	 *
+	 * @param out The file to write the output to.
+	 * @param in The input stream to pipe from.
+	 * @return The number of characters written to the file.
+	 * @throws IOException
+	 */
+	public static int write(File out, InputStream in) throws IOException {
+		assertFieldNotNull(out, "out");
+		assertFieldNotNull(in, "in");
+		try (OutputStream os = new FileOutputStream(out)) {
+			return IOPipe.create(in, os).run();
+		}
 	}
 
 	/**
@@ -262,24 +365,6 @@ public final class IOUtils {
 	 * @throws IOException
 	 */
 	public static void pipe(Object in, Writer out) throws IOException {
-		pipe(toReader(in), out);
-	}
-
-	/**
-	 * Pipes the contents of the specified streams.
-	 *
-	 * <p>
-	 * The input stream is closed, the output stream is not.
-	 *
-	 * @param in
-	 * 	The reader to pipe from.
-	 * @param out
-	 * 	The writer to pipe to.
-	 * @throws IOException
-	 */
-	public static void pipe(InputStream in, OutputStream out) throws IOException {
-		assertFieldNotNull(out, "out");
-		assertFieldNotNull(in, "in");
 		IOPipe.create(in, out).run();
 	}
 
@@ -297,7 +382,7 @@ public final class IOUtils {
 	 * @throws IOException
 	 */
 	public static void pipe(Object in, OutputStream out) throws IOException {
-		pipe(toInputStream(in), out);
+		IOPipe.create(in, out).run();
 	}
 
 	/**

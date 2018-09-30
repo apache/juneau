@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
+import java.nio.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -33,7 +34,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>The contents of the request passed into the constructor are immediately converted to read-only byte arrays.
  *
  * <p>
- * Instances of this class can be built using {@link StreamResourceBuilder}.
+ * Instances of this class can be built using {@link Builder}.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
@@ -44,16 +45,11 @@ import org.apache.juneau.http.annotation.*;
 public class StreamResource implements Streamable {
 
 	private final MediaType mediaType;
-	private final byte[][] contents;
+	private final Object[] contents;
 	private final Map<String,Object> headers;
 
-	/**
-	 * Creates a new instance of a {@link StreamResourceBuilder}
-	 *
-	 * @return A new instance of a {@link StreamResourceBuilder}
-	 */
-	public static StreamResourceBuilder create() {
-		return new StreamResourceBuilder();
+	StreamResource(Builder b) throws IOException {
+		this(b.mediaType, b.headers, b.cached, b.contents.toArray());
 	}
 
 	/**
@@ -61,6 +57,9 @@ public class StreamResource implements Streamable {
 	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
+	 * @param cached
+	 * 	Identifies if this stream resource is cached in memory.
+	 * 	<br>If <jk>true</jk>, the contents will be loaded into a byte array for fast retrieval.
 	 * @param contents
 	 * 	The resource contents.
 	 * 	<br>If multiple contents are specified, the results will be concatenated.
@@ -74,28 +73,133 @@ public class StreamResource implements Streamable {
 	 * 	</ul>
 	 * @throws IOException
 	 */
-	public StreamResource(MediaType mediaType, Map<String,Object> headers, Object...contents) throws IOException {
+	public StreamResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
-
 		this.headers = immutableMap(headers);
+		this.contents = cached ? new Object[]{readBytes(contents)} : contents;
+	}
 
-		this.contents = new byte[contents.length][];
-		for (int i = 0; i < contents.length; i++) {
-			Object c = contents[i];
-			if (c == null)
-				this.contents[i] = new byte[0];
-			else if (c instanceof byte[])
-				this.contents[i] = (byte[])c;
-			else if (c instanceof InputStream)
-				this.contents[i] = readBytes((InputStream)c, 1024);
-			else if (c instanceof File)
-				this.contents[i] = readBytes((File)c);
-			else if (c instanceof Reader)
-				this.contents[i] = read((Reader)c).getBytes(UTF8);
-			else if (c instanceof CharSequence)
-				this.contents[i] = ((CharSequence)c).toString().getBytes(UTF8);
-			else
-				throw new IOException("Invalid class type passed to StreamResource: " + c.getClass().getName());
+	//-----------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new instance of a {@link Builder} for this class.
+	 *
+	 * @return A new instance of a {@link Builder}.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Builder class for constructing {@link StreamResource} objects.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.StreamResource}
+	 * </ul>
+	 */
+	public static class Builder {
+		ArrayList<Object> contents = new ArrayList<>();
+		MediaType mediaType;
+		Map<String,Object> headers = new LinkedHashMap<>();
+		boolean cached;
+
+		/**
+		 * Specifies the resource media type string.
+		 *
+		 * @param mediaType The resource media type string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mediaType(String mediaType) {
+			this.mediaType = MediaType.forString(mediaType);
+			return this;
+		}
+
+		/**
+		 * Specifies the resource media type string.
+		 *
+		 * @param mediaType The resource media type string.
+		 * @return This object (for method chaining).
+		 */
+		public Builder mediaType(MediaType mediaType) {
+			this.mediaType = mediaType;
+			return this;
+		}
+
+		/**
+		 * Specifies the contents for this resource.
+		 *
+		 * <p>
+		 * This method can be called multiple times to add more content.
+		 *
+		 * @param contents
+		 * 	The resource contents.
+		 * 	<br>If multiple contents are specified, the results will be concatenated.
+		 * 	<br>Contents can be any of the following:
+		 * 	<ul>
+		 * 		<li><code><jk>byte</jk>[]</code>
+		 * 		<li><code>InputStream</code>
+		 * 		<li><code>Reader</code> - Converted to UTF-8 bytes.
+		 * 		<li><code>File</code>
+		 * 		<li><code>CharSequence</code> - Converted to UTF-8 bytes.
+		 * 	</ul>
+		 * @return This object (for method chaining).
+		 */
+		public Builder contents(Object...contents) {
+			this.contents.addAll(Arrays.asList(contents));
+			return this;
+		}
+
+		/**
+		 * Specifies an HTTP response header value.
+		 *
+		 * @param name The HTTP header name.
+		 * @param value
+		 * 	The HTTP header value.
+		 * 	<br>Will be converted to a <code>String</code> using {@link Object#toString()}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder header(String name, Object value) {
+			this.headers.put(name, value);
+			return this;
+		}
+
+		/**
+		 * Specifies HTTP response header values.
+		 *
+		 * @param headers
+		 * 	The HTTP headers.
+		 * 	<br>Values will be converted to <code>Strings</code> using {@link Object#toString()}.
+		 * @return This object (for method chaining).
+		 */
+		public Builder headers(Map<String,Object> headers) {
+			this.headers.putAll(headers);
+			return this;
+		}
+
+		/**
+		 * Specifies that this resource is intended to be cached.
+		 *
+		 * <p>
+		 * This will trigger the contents to be loaded into a byte array for fast serializing.
+		 *
+		 * @return This object (for method chaining).
+		 */
+		public Builder cached() {
+			this.cached = true;
+			return this;
+		}
+
+		/**
+		 * Create a new {@link StreamResource} using values in this builder.
+		 *
+		 * @return A new immutable {@link StreamResource} object.
+		 * @throws IOException
+		 */
+		public StreamResource build() throws IOException {
+			return new StreamResource(this);
 		}
 	}
 
@@ -115,8 +219,8 @@ public class StreamResource implements Streamable {
 	@ResponseBody
 	@Override /* Streamable */
 	public void streamTo(OutputStream os) throws IOException {
-		for (byte[] b : contents)
-			os.write(b);
+		for (Object c : contents)
+			pipe(c, os);
 		os.flush();
 	}
 
@@ -124,5 +228,49 @@ public class StreamResource implements Streamable {
 	@Override /* Streamable */
 	public MediaType getMediaType() {
 		return mediaType;
+	}
+
+	/**
+	 * Returns the contents of this stream resource.
+	 *
+	 * @return The contents of this stream resource.
+	 * @throws IOException
+	 */
+	public InputStream getContents() throws IOException {
+		if (contents.length == 1) {
+			Object c = contents[0];
+			if (c != null) {
+				if (c instanceof byte[])
+					return new ByteArrayInputStream((byte[])c);
+				else if (c instanceof InputStream)
+					return (InputStream)c;
+				else if (c instanceof File)
+					return new FileInputStream((File)c);
+				else if (c instanceof CharSequence)
+					return new ByteArrayInputStream((((CharSequence)c).toString().getBytes(UTF8)));
+			}
+		}
+		byte[][] bc = new byte[contents.length][];
+		int c = 0;
+		for (int i = 0; i < contents.length; i++) {
+			Object o = contents[i];
+			if (o == null)
+				bc[i] = new byte[0];
+			else if (o instanceof byte[])
+				bc[i] = (byte[])o;
+			else if (o instanceof InputStream)
+				bc[i] = readBytes((InputStream)o, 1024);
+			else if (o instanceof Reader)
+				bc[i] = read((Reader)o).getBytes(UTF8);
+			else if (o instanceof File)
+				bc[i] = readBytes((File)o);
+			else if (o instanceof CharSequence)
+				bc[i] = ((CharSequence)o).toString().getBytes(UTF8);
+			c += bc[i].length;
+		}
+		ByteBuffer bb = ByteBuffer.allocate(c);
+		for (byte[] b : bc)
+			bb.put(b);
+		return new ByteArrayInputStream(bb.array());
 	}
 }

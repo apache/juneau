@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.http.HttpStatus.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -2243,6 +2244,7 @@ public final class RestCall extends BeanSession implements Closeable {
 
 			connect();
 			Header h = response.getFirstHeader("Content-Type");
+			int sc = response.getStatusLine().getStatusCode();
 			String ct = firstNonEmpty(h == null ? null : h.getValue(), "text/plain");
 
 			MediaType mt = MediaType.forString(ct);
@@ -2254,6 +2256,21 @@ public final class RestCall extends BeanSession implements Closeable {
 
 			if (parser != null) {
 				try (Closeable in = parser.isReaderParser() ? getReader() : getInputStream()) {
+
+					// HttpClient automatically ignores the content body for certain HTTP status codes.
+					// So instantiate the object anyway if it has a no-arg constructor.
+					// This allows a remote resource method to return a NoContent object for example.
+					if (in == null && (sc < SC_OK || sc == SC_NO_CONTENT || sc == SC_NOT_MODIFIED || sc == SC_RESET_CONTENT)) {
+						Constructor<T> c = ClassUtils.findNoArgConstructor(type.getInnerClass(), Visibility.PUBLIC);
+						if (c != null) {
+							try {
+								return c.newInstance();
+							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+								throw new ParseException(e);
+							}
+						}
+					}
+
 					ParserSessionArgs pArgs = new ParserSessionArgs(this.getProperties(), null, response.getLocale(), null, mt, responseBodySchema, false, null);
 					return parser.createSession(pArgs).parse(in, type);
 				}
