@@ -309,6 +309,23 @@ public final class ArrayUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified array contains the specified integer
+	 *
+	 * @param element The element to check for.
+	 * @param array The array to check.
+	 * @return
+	 * 	<jk>true</jk> if the specified array contains the specified element,
+	 * 	<jk>false</jk> if the array or element is <jk>null</jk>.
+	 */
+	public static boolean contains(int element, int[] array) {
+		if (array != null)
+			for (int i : array)
+				if (element == i)
+					return true;
+		return false;
+	}
+
+	/**
 	 * Returns the index position of the element in the specified array using the {@link Object#equals(Object)} method.
 	 *
 	 * @param element The element to check for.

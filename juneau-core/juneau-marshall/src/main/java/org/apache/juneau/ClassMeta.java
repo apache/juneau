@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
@@ -2208,5 +2209,25 @@ public final class ClassMeta<T> implements Type {
 			toTransforms.put(c, t);
 		}
 		return t == TransformCache.NULL ? null : t;
+	}
+
+	/**
+	 * Shortcut for calling <code>getInnerClass().getAnnotation(a) != <jk>null</jk></code>.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the inner class has the annotation.
+	 */
+	public boolean hasAnnotation(Class<? extends Annotation> a) {
+		return getAnnotation(a) != null;
+	}
+
+	/**
+	 * Shortcut for calling <code>getInnerClass().getAnnotation(a)</code>.
+	 *
+	 * @param a The annotation to retrieve.
+	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> a) {
+		return this.innerClass.getAnnotation(a);
 	}
 }

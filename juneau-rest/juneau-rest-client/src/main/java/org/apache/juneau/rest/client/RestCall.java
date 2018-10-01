@@ -28,6 +28,7 @@ import java.util.logging.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.entity.*;
@@ -41,6 +42,7 @@ import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -1598,6 +1600,10 @@ public final class RestCall extends BeanSession implements Closeable {
 	 * @throws RestCallException If an exception or <code>400+</code> HTTP status code occurred during the connection attempt.
 	 */
 	public RestCall connect() throws RestCallException {
+		return connect(null);
+	}
+
+	private RestCall connect(ClassMeta<?> bodyType) throws RestCallException {
 
 		if (isConnected)
 			return this;
@@ -1673,11 +1679,17 @@ public final class RestCall extends BeanSession implements Closeable {
 			StatusLine sl = response.getStatusLine();
 			String method = request.getMethod();
 			sc = sl.getStatusCode(); // Read it again in case it was changed by one of the interceptors.
-			if (sc >= 400 && ! ignoreErrors)
+
+			int[] expected = new int[0];
+			if (bodyType != null && bodyType.hasAnnotation(Response.class))
+				expected = bodyType.getAnnotation(Response.class).code();
+
+			if (sc >= 400 && ! ignoreErrors && ! ArrayUtils.contains(sc, expected)) {
 				throw new RestCallException(sc, sl.getReasonPhrase(), method, request.getURI(), getResponseAsString())
 					.setServerException(response.getFirstHeader("Exception-Name"), response.getFirstHeader("Exception-Message"), response.getFirstHeader("Exception-Trace"))
 					.setHttpResponse(response);
-			if ((sc == 307 || sc == 302) && allowRedirectsOnPosts && method.equalsIgnoreCase("POST")) {
+			}
+			if ((sc == 307 || sc == 302) && allowRedirectsOnPosts && method.equalsIgnoreCase("POST") && ! ArrayUtils.contains(sc, expected)) {
 				if (redirectOnPostsTries-- < 1)
 					throw new RestCallException(sc, "Maximum number of redirects occurred.  Location header: " + response.getFirstHeader("Location"), method, request.getURI(), getResponseAsString());
 				Header h = response.getFirstHeader("Location");
@@ -2229,7 +2241,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	<T> T getResponseInner(ClassMeta<T> type) throws IOException, ParseException {
 		try {
 			if (response == null)
-				connect();
+				connect(type);
 
 			Class<?> ic = type.getInnerClass();
 
@@ -2255,7 +2267,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				return (T)StreamResource.create().headers(headers).mediaType(mediaType).contents(getInputStream()).build();
 			}
 
-			connect();
+			connect(type);
 			Header h = response.getFirstHeader("Content-Type");
 			int sc = response.getStatusLine().getStatusCode();
 			String ct = firstNonEmpty(h == null ? null : h.getValue(), "text/plain");

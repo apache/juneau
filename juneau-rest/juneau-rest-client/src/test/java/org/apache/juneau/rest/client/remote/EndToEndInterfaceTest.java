@@ -24,8 +24,10 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.response.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -1269,82 +1271,371 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Throwables returned by method instead of thrown.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RemoteResource
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	public static interface IF {
+		@RemoteMethod @RestMethod BadRequest badRequest();
+		@RemoteMethod @RestMethod Conflict conflict();
+		@RemoteMethod @RestMethod ExpectationFailed expectationFailed();
+		@RemoteMethod @RestMethod FailedDependency failedDependency();
+		@RemoteMethod @RestMethod Forbidden forbidden();
+		@RemoteMethod @RestMethod Gone gone();
+		@RemoteMethod @RestMethod HttpVersionNotSupported httpVersionNotSupported();
+		@RemoteMethod @RestMethod InsufficientStorage insufficientStorage();
+		@RemoteMethod @RestMethod InternalServerError internalServerError();
+		@RemoteMethod @RestMethod LengthRequired lengthRequired();
+		@RemoteMethod @RestMethod Locked locked();
+		@RemoteMethod @RestMethod LoopDetected loopDetected();
+		@RemoteMethod @RestMethod MethodNotAllowed methodNotAllowed();
+		@RemoteMethod @RestMethod MisdirectedRequest misdirectedRequest();
+		@RemoteMethod @RestMethod NetworkAuthenticationRequired networkAuthenticationRequired();
+		@RemoteMethod @RestMethod NotAcceptable notAcceptable();
+		@RemoteMethod @RestMethod NotExtended notExtended();
+		@RemoteMethod @RestMethod NotFound notFound();
+		@RemoteMethod @RestMethod NotImplemented notImplemented();
+		@RemoteMethod @RestMethod PayloadTooLarge payloadTooLarge();
+		@RemoteMethod @RestMethod PreconditionFailed preconditionFailed();
+		@RemoteMethod @RestMethod PreconditionRequired preconditionRequired();
+		@RemoteMethod @RestMethod RangeNotSatisfiable rangeNotSatisfiable();
+		@RemoteMethod @RestMethod RequestHeaderFieldsTooLarge requestHeaderFieldsTooLarge();
+		@RemoteMethod @RestMethod ServiceUnavailable serviceUnavailable();
+		@RemoteMethod @RestMethod TooManyRequests tooManyRequests();
+		@RemoteMethod @RestMethod Unauthorized unauthorized();
+		@RemoteMethod @RestMethod UnavailableForLegalReasons unavailableForLegalReasons();
+		@RemoteMethod @RestMethod UnprocessableEntity unprocessableEntity();
+		@RemoteMethod @RestMethod UnsupportedMediaType unsupportedMediaType();
+		@RemoteMethod @RestMethod UpgradeRequired upgradeRequired();
+		@RemoteMethod @RestMethod UriTooLong uriTooLong();
+		@RemoteMethod @RestMethod VariantAlsoNegotiates variantAlsoNegotiates();
+	}
+
+	public static class F implements IF {
+		@Override
+		public BadRequest badRequest() {
+			return new BadRequest("foo");
+		}
+		@Override
+		public Conflict conflict() {
+			return new Conflict("foo");
+		}
+		@Override
+		public ExpectationFailed expectationFailed() {
+			return new ExpectationFailed("foo");
+		}
+		@Override
+		public FailedDependency failedDependency() {
+			return new FailedDependency("foo");
+		}
+		@Override
+		public Forbidden forbidden() {
+			return new Forbidden("foo");
+		}
+		@Override
+		public Gone gone() {
+			return new Gone("foo");
+		}
+		@Override
+		public HttpVersionNotSupported httpVersionNotSupported() {
+			return new HttpVersionNotSupported("foo");
+		}
+		@Override
+		public InsufficientStorage insufficientStorage() {
+			return new InsufficientStorage("foo");
+		}
+		@Override
+		public InternalServerError internalServerError() {
+			return new InternalServerError("foo");
+		}
+		@Override
+		public LengthRequired lengthRequired() {
+			return new LengthRequired("foo");
+		}
+		@Override
+		public Locked locked() {
+			return new Locked("foo");
+		}
+		@Override
+		public LoopDetected loopDetected() {
+			return new LoopDetected("foo");
+		}
+		@Override
+		public MethodNotAllowed methodNotAllowed() {
+			return new MethodNotAllowed("foo");
+		}
+		@Override
+		public MisdirectedRequest misdirectedRequest() {
+			return new MisdirectedRequest("foo");
+		}
+		@Override
+		public NetworkAuthenticationRequired networkAuthenticationRequired() {
+			return new NetworkAuthenticationRequired("foo");
+		}
+		@Override
+		public NotAcceptable notAcceptable() {
+			return new NotAcceptable("foo");
+		}
+		@Override
+		public NotExtended notExtended() {
+			return new NotExtended("foo");
+		}
+		@Override
+		public NotFound notFound() {
+			return new NotFound("foo");
+		}
+		@Override
+		public NotImplemented notImplemented() {
+			return new NotImplemented("foo");
+		}
+		@Override
+		public PayloadTooLarge payloadTooLarge() {
+			return new PayloadTooLarge("foo");
+		}
+		@Override
+		public PreconditionFailed preconditionFailed() {
+			return new PreconditionFailed("foo");
+		}
+		@Override
+		public PreconditionRequired preconditionRequired() {
+			return new PreconditionRequired("foo");
+		}
+		@Override
+		public RangeNotSatisfiable rangeNotSatisfiable() {
+			return new RangeNotSatisfiable("foo");
+		}
+		@Override
+		public RequestHeaderFieldsTooLarge requestHeaderFieldsTooLarge() {
+			return new RequestHeaderFieldsTooLarge("foo");
+		}
+		@Override
+		public ServiceUnavailable serviceUnavailable() {
+			return new ServiceUnavailable("foo");
+		}
+		@Override
+		public TooManyRequests tooManyRequests() {
+			return new TooManyRequests("foo");
+		}
+		@Override
+		public Unauthorized unauthorized() {
+			return new Unauthorized("foo");
+		}
+		@Override
+		public UnavailableForLegalReasons unavailableForLegalReasons() {
+			return new UnavailableForLegalReasons("foo");
+		}
+		@Override
+		public UnprocessableEntity unprocessableEntity() {
+			return new UnprocessableEntity("foo");
+		}
+		@Override
+		public UnsupportedMediaType unsupportedMediaType() {
+			return new UnsupportedMediaType("foo");
+		}
+		@Override
+		public UpgradeRequired upgradeRequired() {
+			return new UpgradeRequired("foo");
+		}
+		@Override
+		public UriTooLong uriTooLong() {
+			return new UriTooLong("foo");
+		}
+		@Override
+		public VariantAlsoNegotiates variantAlsoNegotiates() {
+			return new VariantAlsoNegotiates("foo");
+		}
+	}
+
+	private static IF ifa = RestClient.create().json().mockHttpConnection(MockRest.create(F.class)).build().getRemoteResource(IF.class);
+
+	@Test
+	public void fa01_badRequest() {
+		assertEquals("foo", ifa.badRequest().getMessage());
+	}
+	@Test
+	public void fa02_conflict() {
+		assertEquals("foo", ifa.conflict().getMessage());
+	}
+	@Test
+	public void fa03_expectationFailed() {
+		assertEquals("foo", ifa.expectationFailed().getMessage());
+	}
+	@Test
+	public void fa04_failedDependency() {
+		assertEquals("foo", ifa.failedDependency().getMessage());
+	}
+	@Test
+	public void fa05_forbidden() {
+		assertEquals("foo", ifa.forbidden().getMessage());
+	}
+	@Test
+	public void fa06_gone() {
+		assertEquals("foo", ifa.gone().getMessage());
+	}
+	@Test
+	public void fa07_httpVersionNotSupported() {
+		assertEquals("foo", ifa.httpVersionNotSupported().getMessage());
+	}
+	@Test
+	public void fa08_insufficientStorage() {
+		assertEquals("foo", ifa.insufficientStorage().getMessage());
+	}
+	@Test
+	public void fa09_internalServerError() {
+		assertEquals("foo", ifa.internalServerError().getMessage());
+	}
+	@Test
+	public void fa10_lengthRequired() {
+		assertEquals("foo", ifa.lengthRequired().getMessage());
+	}
+	@Test
+	public void fa11_locked() {
+		assertEquals("foo", ifa.locked().getMessage());
+	}
+	@Test
+	public void fa12_loopDetected() {
+		assertEquals("foo", ifa.loopDetected().getMessage());
+	}
+	@Test
+	public void fa13_methodNotAllowed() {
+		assertEquals("foo", ifa.methodNotAllowed().getMessage());
+	}
+	@Test
+	public void fa14_misdirectedRequest() {
+		assertEquals("foo", ifa.misdirectedRequest().getMessage());
+	}
+	@Test
+	public void fa15_networkAuthenticationRequired() {
+		assertEquals("foo", ifa.networkAuthenticationRequired().getMessage());
+	}
+	@Test
+	public void fa16_notAcceptable() {
+		assertEquals("foo", ifa.notAcceptable().getMessage());
+	}
+	@Test
+	public void fa17_notExtended() {
+		assertEquals("foo", ifa.notExtended().getMessage());
+	}
+	@Test
+	public void fa18_notFound() {
+		assertEquals("foo", ifa.notFound().getMessage());
+	}
+	@Test
+	public void fa19_notImplemented() {
+		assertEquals("foo", ifa.notImplemented().getMessage());
+	}
+	@Test
+	public void fa20_payloadTooLarge() {
+		assertEquals("foo", ifa.payloadTooLarge().getMessage());
+	}
+	@Test
+	public void fa21_preconditionFailed() {
+		assertEquals("foo", ifa.preconditionFailed().getMessage());
+	}
+	@Test
+	public void fa22_preconditionRequired() {
+		assertEquals("foo", ifa.preconditionRequired().getMessage());
+	}
+	@Test
+	public void fa23_rangeNotSatisfiable() {
+		assertEquals("foo", ifa.rangeNotSatisfiable().getMessage());
+	}
+	@Test
+	public void fa24_requestHeaderFieldsTooLarge() {
+		assertEquals("foo", ifa.requestHeaderFieldsTooLarge().getMessage());
+	}
+	@Test
+	public void fa25_serviceUnavailable() {
+		assertEquals("foo", ifa.serviceUnavailable().getMessage());
+	}
+	@Test
+	public void fa26_tooManyRequests() {
+		assertEquals("foo", ifa.tooManyRequests().getMessage());
+	}
+	@Test
+	public void fa27_unauthorized() {
+		assertEquals("foo", ifa.unauthorized().getMessage());
+	}
+	@Test
+	public void fa28_unavailableForLegalReasons() {
+		assertEquals("foo", ifa.unavailableForLegalReasons().getMessage());
+	}
+	@Test
+	public void fa29_unprocessableEntity() {
+		assertEquals("foo", ifa.unprocessableEntity().getMessage());
+	}
+	@Test
+	public void fa30_unsupportedMediaType() {
+		assertEquals("foo", ifa.unsupportedMediaType().getMessage());
+	}
+	@Test
+	public void fa31_upgradeRequired() {
+		assertEquals("foo", ifa.upgradeRequired().getMessage());
+	}
+	@Test
+	public void fa32_uriTooLong() {
+		assertEquals("foo", ifa.uriTooLong().getMessage());
+	}
+	@Test
+	public void fa33_variantAlsoNegotiates() {
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Reader/InputStream return types.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RemoteResource
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	public static interface IG {
+		@RemoteMethod @RestMethod Reader reader();
+		@RemoteMethod @RestMethod InputStream inputStream();
+	}
+
+	public static class G implements IG {
+		@Override
+		public Reader reader() {
+			return new StringReader("foo");
+		}
+		@Override
+		public InputStream inputStream() {
+			return new StringInputStream("foo");
+		}
+	}
+
+	private static IG ig = RestClient.create().json().mockHttpConnection(MockRest.create(G.class)).build().getRemoteResource(IG.class);
+
+	@Test
+	public void g01_reader() throws Exception {
+		assertEquals("foo", IOUtils.read(ig.reader()));
+	}
+	@Test
+	public void g02_inputStream() throws Exception {
+		assertEquals("foo", IOUtils.read(ig.inputStream()));
+	}
+
 	//=================================================================================================================
 	// Helper responses
 	//=================================================================================================================
 
-//	BadRequest.java
-//	Conflict.java
-//	ExpectationFailed.java
-//	FailedDependency.java
-//	Forbidden.java
-//	Gone.java
-//	HttpVersionNotSupported.java
-//	InsufficientStorage.java
-//	InternalServerError.java
-//	LengthRequired.java
-//	Locked.java
-//	LoopDetected.java
-//	MethodNotAllowed.java
-//	MisdirectedRequest.java
-//	NetworkAuthenticationRequired.java
-//	NotAcceptable.java
-//	NotExtended.java
-//	NotFound.java
-//	NotImplemented.java
-//	PayloadTooLarge.java
-//	PreconditionFailed.java
-//	PreconditionRequired.java
-//	RangeNotSatisfiable.java
-//	RequestHeaderFieldsTooLarge.java
-//	ServiceUnavailable.java
-//	TooManyRequests.java
-//	Unauthorized.java
-//	UnavailableForLegalReasons.java
-//	UnprocessableEntity.java
-//	UnsupportedMediaType.java
-//	UpgradeRequired.java
-//	UriTooLong.java
-//	VariantAlsoNegotiates.java
+	@RemoteResource
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	public static interface IH {
+		@RemoteMethod @RestMethod SeeOtherRoot seeOtherRoot();
+	}
 
+	public static class H implements IH {
+		@Override
+		public SeeOtherRoot seeOtherRoot() {
+			return SeeOtherRoot.INSTANCE;
+		}
+	}
 
-//	@RemoteResource
-//	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
-//	public static interface ID {
-//
-//		@RemoteMethod
-//		@RestMethod
-//		public BeanDescription beanDescription();
-//
-//		@RemoteMethod
-//		@RestMethod
-//		public ChildResourceDescriptions beanDescription();
+	private static IH ih = RestClient.create().json().disableRedirectHandling().mockHttpConnection(MockRest.create(H.class)).build().getRemoteResource(IH.class);
 
-		//		BeanDescription.java
-//		ChildResourceDescriptions.java
-//		ResourceDescription.java
-//		ResourceDescriptions.java
-//		SeeOtherRoot.java
-		// ReaderResource
-		// StreamResource
-//	}
-//
-//	public static class D implements ID {
-//
-//	}
-//
-//	private static ID id = RestClient.create().json().disableRedirectHandling().mockHttpConnection(MockRest.create(D.class)).build().getRemoteResource(ID.class);
-//
-//	@Test
-//	public void d01_helperResponses_Ok() throws Exception {
-//		assertEquals("OK", ic.ok().toString());
-//	}
-
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// TODO
-	//-----------------------------------------------------------------------------------------------------------------
-	// Object return type.
-	// Reader/InputStream return type.
-
+	@Test
+	public void h01_seeOtherRoot() throws Exception {
+		assertEquals("See Other", ih.seeOtherRoot().toString());
+	}
 }

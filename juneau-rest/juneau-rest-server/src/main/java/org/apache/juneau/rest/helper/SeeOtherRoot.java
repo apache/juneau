@@ -34,4 +34,15 @@ public class SeeOtherRoot extends SeeOther {
 	public SeeOtherRoot() {
 		super(URI.create("servlet:/"));
 	}
+
+	/**
+	 * Constructor with no redirect.
+	 * <p>
+	 * Used for end-to-end interfaces.
+	 *
+	 * @param message Message to send as the response.
+	 */
+	public SeeOtherRoot(String message) {
+		super(message);
+	}
 }
