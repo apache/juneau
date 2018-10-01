@@ -218,7 +218,7 @@ final class SwaggerGenerator {
 				continue;
 
 			Method m = sm.method;
-			RestMethod rm = m.getAnnotation(RestMethod.class);
+			RestMethod rm = getAnnotation(RestMethod.class, m);
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
