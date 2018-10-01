@@ -48,6 +48,16 @@ public class BadRequest extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public BadRequest(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public BadRequest() {
 		this((Throwable)null, MESSAGE);

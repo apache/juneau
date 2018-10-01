@@ -2241,6 +2241,19 @@ public final class RestCall extends BeanSession implements Closeable {
 				return (T)getReader();
 			if (ic.equals(InputStream.class))
 				return (T)getInputStream();
+			if (type.isType(ReaderResource.class) || type.isType(StreamResource.class)) {
+				String mediaType = null;
+				ObjectMap headers = new ObjectMap();
+				for (Header h : response.getAllHeaders()) {
+					if (h.getName().equalsIgnoreCase("Content-Type"))
+						mediaType = h.getValue();
+					else
+						headers.put(h.getName(), h.getValue());
+				}
+				if (type.isType(ReaderResource.class))
+					return (T)ReaderResource.create().headers(headers).mediaType(mediaType).contents(getReader()).build();
+				return (T)StreamResource.create().headers(headers).mediaType(mediaType).contents(getInputStream()).build();
+			}
 
 			connect();
 			Header h = response.getFirstHeader("Content-Type");

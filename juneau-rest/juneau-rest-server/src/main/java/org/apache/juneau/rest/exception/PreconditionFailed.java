@@ -57,6 +57,16 @@ public class PreconditionFailed extends RestException {
 	 * Constructor.
 	 *
 	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public PreconditionFailed(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PreconditionFailed(String msg, Object...args) {

@@ -19,7 +19,6 @@ import java.io.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;

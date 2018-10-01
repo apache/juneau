@@ -48,6 +48,16 @@ public class LengthRequired extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public LengthRequired(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public LengthRequired() {
 		this((Throwable)null, MESSAGE);

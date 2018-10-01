@@ -49,6 +49,16 @@ public class PreconditionRequired extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public PreconditionRequired(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public PreconditionRequired() {
 		this((Throwable)null, MESSAGE);

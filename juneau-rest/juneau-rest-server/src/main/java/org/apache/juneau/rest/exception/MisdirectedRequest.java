@@ -48,6 +48,16 @@ public class MisdirectedRequest extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public MisdirectedRequest(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public MisdirectedRequest() {
 		this((Throwable)null, MESSAGE);

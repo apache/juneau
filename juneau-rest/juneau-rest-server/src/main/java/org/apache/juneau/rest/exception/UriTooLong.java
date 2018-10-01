@@ -49,6 +49,16 @@ public class UriTooLong extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public UriTooLong(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public UriTooLong() {
 		this((Throwable)null, MESSAGE);

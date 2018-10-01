@@ -48,6 +48,16 @@ public class InternalServerError extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public InternalServerError(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public InternalServerError() {
 		this((Throwable)null, MESSAGE);

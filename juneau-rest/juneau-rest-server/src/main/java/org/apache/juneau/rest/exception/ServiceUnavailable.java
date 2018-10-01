@@ -49,6 +49,16 @@ public class ServiceUnavailable extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public ServiceUnavailable(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public ServiceUnavailable() {
 		this((Throwable)null, MESSAGE);

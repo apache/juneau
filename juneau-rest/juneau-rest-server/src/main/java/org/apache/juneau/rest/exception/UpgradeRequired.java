@@ -48,6 +48,16 @@ public class UpgradeRequired extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public UpgradeRequired(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public UpgradeRequired() {
 		this((Throwable)null, MESSAGE);

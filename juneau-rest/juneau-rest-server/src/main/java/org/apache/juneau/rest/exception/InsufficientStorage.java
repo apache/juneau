@@ -48,6 +48,16 @@ public class InsufficientStorage extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public InsufficientStorage(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public InsufficientStorage() {
 		this((Throwable)null, MESSAGE);

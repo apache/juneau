@@ -48,6 +48,16 @@ public class ExpectationFailed extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public ExpectationFailed(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public ExpectationFailed() {
 		this((Throwable)null, MESSAGE);

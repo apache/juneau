@@ -48,6 +48,16 @@ public class UnprocessableEntity extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public UnprocessableEntity(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public UnprocessableEntity() {
 		this((Throwable)null, MESSAGE);

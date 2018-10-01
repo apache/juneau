@@ -24,9 +24,9 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.RestContext.*;
 import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 

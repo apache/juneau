@@ -151,27 +151,35 @@ public final class RestCallException extends IOException {
 	 * or a public constructor that takes in a simple string message.
 	 *
 	 * @param cl The classloader to use to resolve the throwable class name.
+	 * @param throwables The possible throwables.
 	 * @throws Throwable If the throwable could be reconstructed.
 	 */
-	protected void throwServerException(ClassLoader cl) throws Throwable {
+	protected void throwServerException(ClassLoader cl, Class<?>...throwables) throws Throwable {
 		if (serverExceptionName != null) {
-			Throwable t = null;
+			for (Class<?> t : throwables)
+				if (t.getName().endsWith(serverExceptionName))
+					doThrow(t, serverExceptionMessage);
 			try {
-				Class<?> exceptionClass = cl.loadClass(serverExceptionName);
-				Constructor<?> c = findPublicConstructor(exceptionClass, String.class);
-				if (c != null)
-					t = (Throwable)c.newInstance(serverExceptionMessage);
-				if (t == null) {
-					c = findPublicConstructor(exceptionClass);
-					if (c != null)
-						t = (Throwable)c.newInstance();
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-			if (t != null)
-				throw t;
+				Class<?> t = cl.loadClass(serverExceptionName);
+				if (isParentClass(RuntimeException.class, t) || isParentClass(Error.class, t))
+					doThrow(t, serverExceptionMessage);
+			} catch (ClassNotFoundException e2) { /* Ignore */ }
 		}
+	}
+
+	private void doThrow(Class<?> t, String msg) throws Throwable {
+		Constructor<?> c = null;
+		if (msg != null) {
+			c = findPublicConstructor(t, String.class);
+			if (c != null)
+				throw (Throwable)c.newInstance(msg);
+			c = findPublicConstructor(t, Object.class);
+			if (c != null)
+				throw (Throwable)c.newInstance(msg);
+		}
+		c = findPublicConstructor(t);
+		if (c != null)
+			throw (Throwable)c.newInstance();
 	}
 
 	/**

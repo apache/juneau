@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 

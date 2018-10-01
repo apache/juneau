@@ -48,6 +48,16 @@ public class LoopDetected extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public LoopDetected(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public LoopDetected() {
 		this((Throwable)null, MESSAGE);

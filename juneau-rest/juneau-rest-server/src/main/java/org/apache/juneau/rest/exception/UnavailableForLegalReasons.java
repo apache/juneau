@@ -48,6 +48,16 @@ public class UnavailableForLegalReasons extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public UnavailableForLegalReasons(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public UnavailableForLegalReasons() {
 		this((Throwable)null, MESSAGE);

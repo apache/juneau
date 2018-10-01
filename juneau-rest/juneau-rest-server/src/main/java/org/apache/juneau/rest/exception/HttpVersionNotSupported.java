@@ -48,6 +48,16 @@ public class HttpVersionNotSupported extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public HttpVersionNotSupported(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public HttpVersionNotSupported() {
 		this((Throwable)null, MESSAGE);

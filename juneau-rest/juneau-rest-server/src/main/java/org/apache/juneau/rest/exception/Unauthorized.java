@@ -51,6 +51,16 @@ public class Unauthorized extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public Unauthorized(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public Unauthorized() {
 		this((Throwable)null, MESSAGE);

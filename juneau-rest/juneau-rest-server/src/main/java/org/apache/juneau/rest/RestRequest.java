@@ -1346,7 +1346,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		String s = context.getClasspathResourceAsString(name, getLocale());
 		if (s == null)
 			return null;
-		ReaderResource.Builder b = ReaderResource.create().mediaType(mediaType).contents(s);
+		ResolvingReaderResource.Builder b = ResolvingReaderResource.create().mediaType(mediaType).contents(s);
 		if (resolveVars)
 			b.varResolver(getVarResolverSession());
 		if (cached)

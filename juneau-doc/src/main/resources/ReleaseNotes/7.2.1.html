@@ -28,3 +28,12 @@
 		This is inline with behavior on JPA-annotated beans.
 		These include:  <ja>@Swap</ja>, <ja>@Html</ja>, <ja>@Xml</ja>, <ja>@BeanProperty</ja>.
 </ul>
+
+<h5 class='topic w800'>juneau-rest-server</h5>
+<ul class='spaced-list'>
+	<li>
+		The <code>ReaderResource</code> and <code>StreamResource</code> classes have been moved to the <code>org.apache.juneau.http</code>
+		package in <code>juneau-marshall</code>.  This allows them to be used as return types in remote REST interfaces.
+		<br>A new {@link oajr.helper.ResolvingReaderResource} class has been added that includes the variable-resolving support since
+		this relies on the <code>juneau-svl</code> package.
+</ul>

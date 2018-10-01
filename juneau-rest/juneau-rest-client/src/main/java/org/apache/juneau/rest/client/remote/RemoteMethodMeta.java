@@ -44,6 +44,7 @@ public class RemoteMethodMeta {
 	private final RemoteMethodArg bodyArg;
 	private final RemoteMethodReturn methodReturn;
 	private final Method method;
+	private final Class<?>[] exceptions;
 
 	/**
 	 * Constructor.
@@ -67,6 +68,7 @@ public class RemoteMethodMeta {
 		this.otherArgs = b.otherArgs.toArray(new RemoteMethodArg[b.otherArgs.size()]);
 		this.bodyArg = b.bodyArg;
 		this.methodReturn = b.methodReturn;
+		this.exceptions = m.getExceptionTypes();
 	}
 
 	private static final class Builder {
@@ -249,5 +251,14 @@ public class RemoteMethodMeta {
 	 */
 	public Method getJavaMethod() {
 		return method;
+	}
+
+	/**
+	 * Returns the exceptions thrown by this method.
+	 *
+	 * @return The exceptions thrown by this method.  Never <jk>null</jk>.
+	 */
+	public Class<?>[] getExceptions() {
+		return exceptions;
 	}
 }

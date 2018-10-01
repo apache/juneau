@@ -48,6 +48,16 @@ public class PayloadTooLarge extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public PayloadTooLarge(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public PayloadTooLarge() {
 		this((Throwable)null, MESSAGE);

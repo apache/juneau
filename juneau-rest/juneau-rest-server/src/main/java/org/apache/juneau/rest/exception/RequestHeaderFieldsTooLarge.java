@@ -48,6 +48,16 @@ public class RequestHeaderFieldsTooLarge extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public RequestHeaderFieldsTooLarge(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public RequestHeaderFieldsTooLarge() {
 		this((Throwable)null, MESSAGE);

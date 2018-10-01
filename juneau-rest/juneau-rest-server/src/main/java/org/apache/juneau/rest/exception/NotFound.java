@@ -49,6 +49,16 @@ public class NotFound extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public NotFound(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public NotFound() {
 		this((Throwable)null, MESSAGE);

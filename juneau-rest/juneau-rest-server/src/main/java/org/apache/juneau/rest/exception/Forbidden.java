@@ -49,6 +49,16 @@ public class Forbidden extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public Forbidden(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public Forbidden() {
 		this((Throwable)null, MESSAGE);

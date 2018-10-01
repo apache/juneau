@@ -48,6 +48,16 @@ public class VariantAlsoNegotiates extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public VariantAlsoNegotiates(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public VariantAlsoNegotiates() {
 		this((Throwable)null, MESSAGE);

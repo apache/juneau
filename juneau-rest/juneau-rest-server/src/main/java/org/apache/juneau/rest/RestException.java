@@ -35,6 +35,7 @@ public class RestException extends RuntimeException {
 
 	/**
 	 * Constructor.
+	 *
 	 * @param cause The cause of this exception.
 	 * @param status The HTTP status code.
 	 * @param msg The status message.
@@ -43,6 +44,15 @@ public class RestException extends RuntimeException {
 	public RestException(Throwable cause, int status, String msg, Object...args) {
 		super(message(cause, msg, args), cause);
 		this.status = status;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param msg The status message.
+	 */
+	public RestException(String msg) {
+		super(msg, null);
 	}
 
 	private static String message(Throwable cause, String msg, Object...args) {
@@ -139,13 +149,26 @@ public class RestException extends RuntimeException {
 		return i;
 	}
 
-	RestException setOccurrence(int occurrence) {
+	/**
+	 * Set the occurrence count on this exception.
+	 *
+	 * @param occurrence The number of times this exception has occurred.
+	 * @return This object (for method chaining).
+	 */
+	protected RestException setOccurrence(int occurrence) {
 		this.occurrence = occurrence;
 		return this;
 	}
 
-	void setStatus(int status) {
+	/**
+	 * Set the status code on this exception.
+	 *
+	 * @param status The status code.
+	 * @return This object (for method chaining).
+	 */
+	protected RestException setStatus(int status) {
 		this.status = status;
+		return this;
 	}
 
 	/**

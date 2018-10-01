@@ -48,6 +48,16 @@ public class FailedDependency extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public FailedDependency(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public FailedDependency() {
 		this((Throwable)null, MESSAGE);

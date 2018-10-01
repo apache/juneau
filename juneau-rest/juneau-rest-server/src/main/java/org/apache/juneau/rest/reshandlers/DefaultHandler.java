@@ -65,6 +65,12 @@ public class DefaultHandler implements ResponseHandler {
 
 		if (rm != null) {
 
+			boolean isThrowable = rm.getClassMeta().isType(Throwable.class);
+			if (isThrowable) {
+				res.setHeader("Exception-Name", rm.getClassMeta().getName());
+				res.setHeader("Exception-Message", ((Throwable)o).getMessage());
+			}
+
 			ResponseBeanPropertyMeta stm = rm.getStatusMethod();
 			if (stm != null) {
 				try {

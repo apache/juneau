@@ -48,6 +48,16 @@ public class Conflict extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public Conflict(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public Conflict() {
 		this((Throwable)null, MESSAGE);

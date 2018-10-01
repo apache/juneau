@@ -49,6 +49,16 @@ public class NetworkAuthenticationRequired extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public NetworkAuthenticationRequired(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public NetworkAuthenticationRequired() {
 		this((Throwable)null, MESSAGE);

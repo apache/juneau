@@ -48,6 +48,16 @@ public class NotAcceptable extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public NotAcceptable(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public NotAcceptable() {
 		this((Throwable)null, MESSAGE);

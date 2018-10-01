@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.helper;
+package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -19,9 +19,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Represents the contents of a text file with convenience methods for resolving SVL variables and adding
@@ -46,12 +44,19 @@ import org.apache.juneau.svl.*;
 public class ReaderResource implements Writable {
 
 	private final MediaType mediaType;
-	private final Object[] contents;
-	private final VarResolverSession varSession;
 	private final Map<String,Object> headers;
 
-	ReaderResource(Builder b) throws IOException {
-		this(b.mediaType, b.headers, b.varResolver, b.cached, b.contents.toArray());
+	@SuppressWarnings("javadoc")
+	protected final Object[] contents;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param b Builder containing values to initialize this object with.
+	 * @throws IOException
+	 */
+	protected ReaderResource(Builder b) throws IOException {
+		this(b.mediaType, b.headers, b.cached, b.contents.toArray());
 	}
 
 	/**
@@ -59,7 +64,6 @@ public class ReaderResource implements Writable {
 	 *
 	 * @param mediaType The resource media type.
 	 * @param headers The HTTP response headers for this streamed resource.
-	 * @param varSession Optional variable resolver for resolving variables in the string.
 	 * @param cached
 	 * 	Identifies if this resource is cached in memory.
 	 * 	<br>If <jk>true</jk>, the contents will be loaded into a String for fast retrieval.
@@ -75,9 +79,8 @@ public class ReaderResource implements Writable {
 	 * 	</ul>
 	 * @throws IOException
 	 */
-	public ReaderResource(MediaType mediaType, Map<String,Object> headers, VarResolverSession varSession, boolean cached, Object...contents) throws IOException {
+	public ReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
-		this.varSession = varSession;
 		this.headers = immutableMap(headers);
 		this.contents = cached ? new Object[]{read(contents)} : contents;
 	}
@@ -103,13 +106,13 @@ public class ReaderResource implements Writable {
 	 * 	<li class='link'>{@doc juneau-rest-server.RestMethod.ReaderResource}
 	 * </ul>
 	 */
+	@SuppressWarnings("javadoc")
 	public static class Builder {
 
-		ArrayList<Object> contents = new ArrayList<>();
-		MediaType mediaType;
-		VarResolverSession varResolver;
-		Map<String,Object> headers = new LinkedHashMap<>();
-		boolean cached;
+		public ArrayList<Object> contents = new ArrayList<>();
+		public MediaType mediaType;
+		public Map<String,Object> headers = new LinkedHashMap<>();
+		public boolean cached;
 
 		/**
 		 * Specifies the resource media type string.
@@ -184,17 +187,6 @@ public class ReaderResource implements Writable {
 		}
 
 		/**
-		 * Specifies the variable resolver to use for this resource.
-		 *
-		 * @param varResolver The variable resolver.
-		 * @return This object (for method chaining).
-		 */
-		public Builder varResolver(VarResolverSession varResolver) {
-			this.varResolver = varResolver;
-			return this;
-		}
-
-		/**
 		 * Specifies that this resource is intended to be cached.
 		 *
 		 * <p>
@@ -238,14 +230,8 @@ public class ReaderResource implements Writable {
 	@ResponseBody
 	@Override /* Writeable */
 	public Writer writeTo(Writer w) throws IOException {
-		for (Object o : contents) {
-			if (o != null) {
-				if (varSession == null)
-					pipe(o, w);
-				else
-					varSession.resolveTo(read(o), w);
-			}
-		}
+		for (Object o : contents)
+			pipe(o, w);
 		return w;
 	}
 
@@ -258,7 +244,7 @@ public class ReaderResource implements Writable {
 	@Override /* Object */
 	public String toString() {
 		try {
-			if (contents.length == 1 && varSession == null)
+			if (contents.length == 1)
 				return read(contents[0]);
 			return writeTo(new StringWriter()).toString();
 		} catch (IOException e) {
@@ -290,7 +276,7 @@ public class ReaderResource implements Writable {
 	 * @return The contents of this resource.
 	 */
 	public Reader getContents() {
-		if (contents.length == 1 && varSession == null && contents[0] instanceof Reader) {
+		if (contents.length == 1 && contents[0] instanceof Reader) {
 			return (Reader)contents[0];
 		}
 		return new StringReader(toString());

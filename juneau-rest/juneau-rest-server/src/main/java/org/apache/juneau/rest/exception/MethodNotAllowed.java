@@ -48,6 +48,16 @@ public class MethodNotAllowed extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public MethodNotAllowed(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public MethodNotAllowed() {
 		this((Throwable)null, MESSAGE);

@@ -1129,7 +1129,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 						} catch (RestCallException e) {
 							// Try to throw original exception if possible.
-							e.throwServerException(interfaceClass.getClassLoader());
+							e.throwServerException(interfaceClass.getClassLoader(), rmm.getExceptions());
 							throw new RuntimeException(e);
 						} catch (Exception e) {
 							throw new RuntimeException(e);
@@ -1248,7 +1248,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 						} catch (RestCallException e) {
 							// Try to throw original exception if possible.
-							e.throwServerException(interfaceClass.getClassLoader());
+							e.throwServerException(interfaceClass.getClassLoader(), method.getExceptionTypes());
 							throw new RuntimeException(e);
 						} catch (Exception e) {
 							throw new RuntimeException(e);

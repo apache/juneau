@@ -49,6 +49,16 @@ public class UnsupportedMediaType extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public UnsupportedMediaType(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public UnsupportedMediaType() {
 		this((Throwable)null, MESSAGE);

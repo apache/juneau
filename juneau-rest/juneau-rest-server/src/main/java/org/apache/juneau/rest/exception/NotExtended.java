@@ -48,6 +48,16 @@ public class NotExtended extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public NotExtended(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public NotExtended() {
 		this((Throwable)null, MESSAGE);

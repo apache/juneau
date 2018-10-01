@@ -51,7 +51,7 @@ public class ReaderResourceTest {
 
 		@RestMethod
 		public ReaderResource a04(RestRequest req) throws Exception {
-			return ReaderResource.create().varResolver(req.getVarResolverSession()).contents("$RQ{foo}").build();
+			return ResolvingReaderResource.create().varResolver(req.getVarResolverSession()).contents("$RQ{foo}").build();
 		}
 
 		@RestMethod

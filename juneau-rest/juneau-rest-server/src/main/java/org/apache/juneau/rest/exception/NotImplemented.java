@@ -49,6 +49,16 @@ public class NotImplemented extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public NotImplemented(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public NotImplemented() {
 		this((Throwable)null, MESSAGE);

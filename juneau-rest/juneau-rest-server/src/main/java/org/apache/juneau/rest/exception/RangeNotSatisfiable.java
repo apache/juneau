@@ -49,6 +49,16 @@ public class RangeNotSatisfiable extends RestException {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 */
+	public RangeNotSatisfiable(String msg) {
+		super(msg);
+		setStatus(CODE);
+	}
+
+	/**
+	 * Constructor.
 	 */
 	public RangeNotSatisfiable() {
 		this((Throwable)null, MESSAGE);
