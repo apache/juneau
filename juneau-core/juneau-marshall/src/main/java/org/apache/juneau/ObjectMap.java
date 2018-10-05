@@ -1270,6 +1270,74 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		return t;
 	}
 
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,String.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public String removeString(String key) {
+		return removeString(key, null);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,def,String.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public String removeString(String key, String def) {
+		return removeWithDefault(key, def, String.class);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Integer.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer removeInt(String key) {
+		return removeInt(key, null);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,def,Integer.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer removeInt(String key, Integer def) {
+		return removeWithDefault(key, def, Integer.class);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Boolean.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean removeBoolean(String key) {
+		return removeBoolean(key, null);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,def,Boolean.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean removeBoolean(String key, Boolean def) {
+		return removeWithDefault(key, def, Boolean.class);
+	}
 
 	/**
 	 * Convenience method for removing several keys at once.
