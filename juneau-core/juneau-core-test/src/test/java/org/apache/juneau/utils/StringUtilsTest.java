@@ -901,4 +901,89 @@ public class StringUtilsTest {
 		assertTrue(getMatchPattern("*a*").matcher("aaa").matches());
 		assertFalse(getMatchPattern("*b*").matcher("aaa").matches());
 	}
+
+	//====================================================================================================
+	// getDuration(String)
+	//====================================================================================================
+	@Test
+	public void testGetDuration() throws Exception {
+		assertEquals(-1, getDuration(null));
+		assertEquals(-1, getDuration(""));
+		assertEquals(-1, getDuration(" "));
+		assertEquals(1, getDuration("1"));
+		assertEquals(10, getDuration("10"));
+		assertEquals(10, getDuration("10"));
+
+		long
+			s = 1000,
+			m = s * 60,
+			h = m * 60,
+			d = h * 24,
+			w = d * 7;
+
+		assertEquals(10*s, getDuration("10s"));
+		assertEquals(10*s, getDuration("10 s"));
+		assertEquals(10*s, getDuration("  10  s  "));
+		assertEquals(10*s, getDuration("10sec"));
+		assertEquals(10*s, getDuration("10 sec"));
+		assertEquals(10*s, getDuration("  10  sec  "));
+		assertEquals(10*s, getDuration("10seconds"));
+		assertEquals(10*s, getDuration("10 seconds"));
+		assertEquals(10*s, getDuration("  10  seconds  "));
+		assertEquals(10*s, getDuration("10S"));
+		assertEquals(10*s, getDuration("10 S"));
+		assertEquals(10*s, getDuration("  10  S  "));
+
+		assertEquals(10*m, getDuration("10m"));
+		assertEquals(10*m, getDuration("10 m"));
+		assertEquals(10*m, getDuration("  10  m  "));
+		assertEquals(10*m, getDuration("10min"));
+		assertEquals(10*m, getDuration("10 min"));
+		assertEquals(10*m, getDuration("  10  min  "));
+		assertEquals(10*m, getDuration("10minutes"));
+		assertEquals(10*m, getDuration("10 minutes"));
+		assertEquals(10*m, getDuration("  10  minutes  "));
+		assertEquals(10*m, getDuration("10M"));
+		assertEquals(10*m, getDuration("10 M"));
+		assertEquals(10*m, getDuration("  10  M  "));
+
+		assertEquals(10*h, getDuration("10h"));
+		assertEquals(10*h, getDuration("10 h"));
+		assertEquals(10*h, getDuration("  10  h  "));
+		assertEquals(10*h, getDuration("10hour"));
+		assertEquals(10*h, getDuration("10 hour"));
+		assertEquals(10*h, getDuration("  10  hour  "));
+		assertEquals(10*h, getDuration("10hours"));
+		assertEquals(10*h, getDuration("10 hours"));
+		assertEquals(10*h, getDuration("  10  hours  "));
+		assertEquals(10*h, getDuration("10H"));
+		assertEquals(10*h, getDuration("10 H"));
+		assertEquals(10*h, getDuration("  10  H  "));
+
+		assertEquals(10*d, getDuration("10d"));
+		assertEquals(10*d, getDuration("10 d"));
+		assertEquals(10*d, getDuration("  10  d  "));
+		assertEquals(10*d, getDuration("10day"));
+		assertEquals(10*d, getDuration("10 day"));
+		assertEquals(10*d, getDuration("  10  day  "));
+		assertEquals(10*d, getDuration("10days"));
+		assertEquals(10*d, getDuration("10 days"));
+		assertEquals(10*d, getDuration("  10  days  "));
+		assertEquals(10*d, getDuration("10D"));
+		assertEquals(10*d, getDuration("10 D"));
+		assertEquals(10*d, getDuration("  10  D  "));
+
+		assertEquals(10*w, getDuration("10w"));
+		assertEquals(10*w, getDuration("10 w"));
+		assertEquals(10*w, getDuration("  10  w  "));
+		assertEquals(10*w, getDuration("10week"));
+		assertEquals(10*w, getDuration("10 week"));
+		assertEquals(10*w, getDuration("  10  week  "));
+		assertEquals(10*w, getDuration("10weeks"));
+		assertEquals(10*w, getDuration("10 weeks"));
+		assertEquals(10*w, getDuration("  10  weeks  "));
+		assertEquals(10*w, getDuration("10W"));
+		assertEquals(10*w, getDuration("10 W"));
+		assertEquals(10*w, getDuration("  10  W  "));
+	}
 }

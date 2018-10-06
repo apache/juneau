@@ -2512,4 +2512,65 @@ public final class StringUtils {
 	public static String toLowerCase(String s) {
 		return s == null ? null : s.toLowerCase();
 	}
+
+	/**
+	 * Parses a duration string.
+	 *
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"1000"</js> - 1000 milliseconds.
+	 * 	<li><js>"10s"</js> - 10 seconds.
+	 * 	<li><js>"10 sec"</js> - 10 seconds.
+	 * 	<li><js>"10 seconds"</js> - 10 seconds.
+	 * </ul>
+	 *
+	 * <p>
+	 * Use any of the following suffixes:
+	 * <ul>
+	 * 	<li>None (time in milliseconds).
+	 * 	<li><js>"s"</js>/<js>"sec"</js>/<js>"second"</js>/<js>"seconds"</js>
+	 * 	<li><js>"m"</js>/<js>"min"</js>/<js>"minutes"</js>/<js>"seconds"</js>
+	 * 	<li><js>"h"</js>/<js>"hour"</js>/<js>"hours"</js>
+	 * 	<li><js>"d"</js>/<js>"day"</js>/<js>"days"</js>
+	 * 	<li><js>"w"</js>/<js>"week"</js>/<js>"weeks"</js>
+	 * </ul>
+	 *
+	 * <p>
+	 * Suffixes are case-insensitive.
+	 * <br>Whitespace is ignored.
+	 *
+	 * @param s The string to parse.
+	 * @return
+	 * 	The time in milliseconds, or <code>-1</code> if the string is empty or <jk>null</jk>.
+	 */
+	public static long getDuration(String s) {
+		s = trim(s);
+		if (isEmpty(s))
+			return -1;
+		int i;
+		for (i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c < '0' || c > '9')
+				break;
+		}
+		long l;
+		if (i == s.length())
+			l = Long.parseLong(s);
+		else {
+			l = Long.parseLong(s.substring(0, i).trim());
+			String r = s.substring(i).trim().toLowerCase();
+			if (r.startsWith("s"))
+				l *= 1000;
+			else if (r.startsWith("m"))
+				l *= 1000 * 60;
+			else if (r.startsWith("h"))
+				l *= 1000 * 60 * 60;
+			else if (r.startsWith("d"))
+				l *= 1000 * 60 * 60 * 24;
+			else if (r.startsWith("w"))
+				l *= 1000 * 60 * 60 * 24 * 7;
+		}
+		return l;
+	}
 }
