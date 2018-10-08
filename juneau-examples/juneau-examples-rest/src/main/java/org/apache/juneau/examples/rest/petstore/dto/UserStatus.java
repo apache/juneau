@@ -10,13 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
+package org.apache.juneau.examples.rest.petstore.dto;
 
-[
-	{id:101, name:'friendly'},
-	{id:102, name:'special'},
-	{id:103, name:'intelligent'},
-	{id:104, name:'mean'},
-	{id:105, name:'easy to care for'},
-	{id:106, name:'smells nice'},
-	{id:107, name:'loyal'}
-]
+import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.serializer.*;
+
+@Html(render=UserStatus.UserStatusRender.class)
+public enum UserStatus {
+	ACTIVE, INACTIVE;
+
+	public static class UserStatusRender extends HtmlRender<UserStatus> {
+		@Override /* HtmlRender */
+		public String getStyle(SerializerSession session, UserStatus value) {
+			switch(value) {
+				case ACTIVE:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;";
+				case INACTIVE:  return "background-color:#888;text-align:center;vertical-align:middle;";
+				default:  return "";
+			}
+		}
+	}
+}

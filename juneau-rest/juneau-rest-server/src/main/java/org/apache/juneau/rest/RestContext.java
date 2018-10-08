@@ -3042,6 +3042,9 @@ public final class RestContext extends BeanContext {
 	private final ClasspathResourceManager staticResourceManager;
 	private final ConcurrentHashMap<Integer,AtomicInteger> stackTraceHashes = new ConcurrentHashMap<>();
 
+	private final ThreadLocal<RestRequest> req = new ThreadLocal<>();
+	private final ThreadLocal<RestResponse> res = new ThreadLocal<>();
+
 	/**
 	 * Constructor.
 	 *
@@ -4762,5 +4765,40 @@ public final class RestContext extends BeanContext {
 	@Override /* BeanContextBuilder */
 	public BeanSessionArgs createDefaultSessionArgs() {
 		throw new NoSuchMethodError();
+	}
+
+	/**
+	 * Returns the HTTP request object for the current request.
+	 *
+	 * @return The HTTP request object, or <jk>null</jk> if it hasn't been created.
+	 */
+	public RestRequest getRequest() {
+		return req.get();
+	}
+
+	void setRequest(RestRequest req) {
+		this.req.set(req);
+	}
+
+	/**
+	 * Returns the HTTP response object for the current request.
+	 *
+	 * @return The HTTP response object, or <jk>null</jk> if it hasn't been created.
+	 */
+	public RestResponse getResponse() {
+		return res.get();
+	}
+
+	void setResponse(RestResponse res) {
+		this.res.set(res);
+	}
+
+	/**
+	 * Clear any request state information on this context.
+	 * This should always be called in a finally block in the RestServlet.
+	 */
+	void clearState() {
+		req.remove();
+		res.remove();
 	}
 }

@@ -107,7 +107,7 @@ public class RemoteMethodMeta {
 
 			methodReturn = new RemoteMethodReturn(m);
 
-			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncode(path) : (trimSlashes(parentPath) + '/' + urlEncode(path)));
+			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
 
 			for (int i = 0; i < m.getParameterTypes().length; i++) {
 				RemoteMethodArg rma = RemoteMethodArg.create(m, i);

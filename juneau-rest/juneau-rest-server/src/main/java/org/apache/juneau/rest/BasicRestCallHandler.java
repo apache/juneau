@@ -141,6 +141,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 			req = createRequest(r1);
 			RestResponse res = createResponse(req, r2);
+			context.setRequest(req);
+			context.setResponse(res);
 			String method = req.getMethod();
 			String methodUC = method.toUpperCase(Locale.ENGLISH);
 

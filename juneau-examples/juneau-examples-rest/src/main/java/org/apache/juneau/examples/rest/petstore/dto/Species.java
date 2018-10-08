@@ -10,64 +10,26 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.dto;
 
-import java.util.*;
+import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.Html;
+import org.apache.juneau.serializer.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.transform.*;
+@Html(render=Species.SpeciesRender.class)
+public enum Species {
 
-@Bean(typeName="Tag", fluentSetters=true)
-@Swap(PetTag.TagNameOnly.class)
-public class PetTag {
-	private long id;
-	private String name;
+	BIRD, CAT, DOG, FISH, MOUSE, RABBIT, SNAKE;
 
-	public long getId() {
-		return id;
-	}
-
-	public PetTag id(long id) {
-		this.id = id;
-		return this;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public PetTag name(String name) {
-		this.name = name;
-		return this;
-	}
-
-	@Example
-	public static PetTag example() {
-		return new PetTag()
-			.id(123)
-			.name("MyTag");
-	}
-
-	public static class TagNameOnly extends PojoSwap<PetTag,String> {
+	public static class SpeciesRender extends HtmlRender<Species> {
 		@Override
-		public String swap(BeanSession bs, PetTag o) throws Exception {
-			return o.getName();
+		public Object getContent(SerializerSession session, Species value) {
+			return new Img().src("servlet:/htdocs/"+value.name().toLowerCase()+".png");
 		}
 		@Override
-		public MediaType[] forMediaTypes() {
-			return new MediaType[] { MediaType.HTML };
+		public String getStyle(SerializerSession session, Species value) {
+			return "background-color:#FDF2E9";
 		}
-	}
-
-	public static String asString(List<PetTag> tags) {
-		if (tags == null)
-			return "";
-		List<String> l = new ArrayList<>(tags.size());
-		for (PetTag t : tags)
-			l.add(t.getName());
-		return StringUtils.join(l, ',');
 	}
 }

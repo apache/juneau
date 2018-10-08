@@ -125,6 +125,18 @@ public final class DateUtils {
 	}
 
 	/**
+	 * Parses an ISO8601 string and converts it to a {@link Date}.
+	 *
+	 * @param s The string to parse.
+	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
+	 */
+	public static Date parseISO8601(String s) {
+		if (isEmpty(s))
+			return null;
+		return DatatypeConverter.parseDateTime(toValidISO8601DT(s)).getTime();
+	}
+
+	/**
 	 * Formats the given date according to the RFC 1123 pattern.
 	 *
 	 * @param date The date to format.

@@ -414,7 +414,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 */
 	@Override /* ServletResponse */
 	public PrintWriter getWriter() throws IOException {
-		return getWriter(true);
+		return getWriter(true, false);
 	}
 
 	/**
@@ -435,7 +435,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		setContentType(contentType);
 		setHeader("X-Content-Type-Options", "nosniff");
 		setHeader("Content-Encoding", "identity");
-		return getWriter();
+		return getWriter(true, true);
 	}
 
 	/**
@@ -448,11 +448,11 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * @throws IOException
 	 */
 	public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException {
-		return getWriter(false);
+		return getWriter(false, false);
 	}
 
 	@SuppressWarnings("resource")
-	private FinishablePrintWriter getWriter(boolean raw) throws NotAcceptable, IOException {
+	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {
 		if (w != null)
 			return w;
 
@@ -462,7 +462,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 
 		try {
 			OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());
-			w = new FinishablePrintWriter(out, getCharacterEncoding());
+			w = new FinishablePrintWriter(out, getCharacterEncoding(), autoflush);
 			return w;
 		} catch (UnsupportedEncodingException e) {
 			String ce = getCharacterEncoding();

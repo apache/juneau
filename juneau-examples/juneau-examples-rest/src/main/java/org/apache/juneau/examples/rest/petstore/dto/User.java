@@ -10,27 +10,65 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.dto;
+
+import static javax.persistence.EnumType.*;
+
+import javax.persistence.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
 
 @Bean(typeName="User", fluentSetters=true, properties="username,firstName,lastName,email,password,phone,userStatus")
+@Entity(name="PetstoreUser")
 public class User {
-	private String username, firstName, lastName, email, password, phone;
+
+	@Id
+	@Column(length=8)
+	@Schema(description="Username.", minLength=3, maxLength=8)
+	@Html(link="servlet:/user/{username}")
+	private String username;
+
+	@Column(length=50)
+	@Schema(description="First name.", maxLength=50)
+	private String firstName;
+
+	@Column(length=50)
+	@Schema(description="First name.", maxLength=50)
+	private String lastName;
+
+	@Column(length=50)
+	@Schema(description="First name.", maxLength=50, pattern="\\S+\\@\\S+")
+	private String email;
+
+	@Column(length=8)
+	@Schema(description="Password.", minLength=3, maxLength=8, pattern="[\\w\\d]{3,8}")
+	private String password;
+
+	@Column
+	@Schema(description="Phone number.", minLength=12, maxLength=12, pattern="\\d{3}\\-\\d{3}\\-\\d{4}")
+	private String phone;
+
+	@Column
+	@Enumerated(STRING)
 	private UserStatus userStatus;
 
-	// This shows an example provided as a static field.
-	@Example
-	public static User EXAMPLE = new User()
-		.username("billy")
-		.firstName("Billy")
-		.lastName("Bob")
-		.email("billy@apache.org")
-		.userStatus(UserStatus.ACTIVE)
-		.phone("111-222-3333");
+	public User apply(User c) {
+		this.username = c.getUsername();
+		this.firstName = c.getFirstName();
+		this.lastName = c.getLastName();
+		this.email = c.getEmail();
+		this.password = c.getPassword();
+		this.phone = c.getPhone();
+		this.userStatus = c.getUserStatus();
+		return this;
+	}
 
-	@Html(link="servlet:/user/{username}")
+	//-----------------------------------------------------------------------------------------------------------------
+	// Bean properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	public String getUsername() {
 		return username;
 	}
@@ -93,4 +131,21 @@ public class User {
 		this.userStatus = userStatus;
 		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * This shows an example generated from a static method.
+	 */
+	@Example
+	public static User EXAMPLE = new User()
+		.username("billy")
+		.firstName("Billy")
+		.lastName("Bob")
+		.email("billy@apache.org")
+		.userStatus(UserStatus.ACTIVE)
+		.phone("111-222-3333");
+
 }

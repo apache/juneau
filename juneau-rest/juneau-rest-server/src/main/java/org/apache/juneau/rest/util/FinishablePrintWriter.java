@@ -28,10 +28,11 @@ public class FinishablePrintWriter extends PrintWriter implements Finishable {
 	 *
 	 * @param out The wrapped output stream.
 	 * @param characterEncoding The character encoding of the output stream.
+	 * @param autoFlush Automatically flush after every println.
 	 * @throws IOException
 	 */
-	public FinishablePrintWriter(OutputStream out, String characterEncoding) throws IOException {
-		super(new OutputStreamWriter(out, characterEncoding));
+	public FinishablePrintWriter(OutputStream out, String characterEncoding, boolean autoFlush) throws IOException {
+		super(new OutputStreamWriter(out, characterEncoding), autoFlush);
 		f = (out instanceof Finishable ? (Finishable)out : null);
 	}
 

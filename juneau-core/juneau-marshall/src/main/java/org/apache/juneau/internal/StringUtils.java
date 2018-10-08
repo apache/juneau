@@ -1882,7 +1882,7 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Same as {@link #urlEncode(String)} except only excapes characters that absolutely need to be escaped.
+	 * Same as {@link #urlEncode(String)} except only escapes characters that absolutely need to be escaped.
 	 *
 	 * @param s The string to escape.
 	 * @return The encoded string, or <jk>null</jk> if input is <jk>null</jk>.

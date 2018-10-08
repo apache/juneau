@@ -10,9 +10,25 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
+package org.apache.juneau.examples.rest.petstore.dto;
 
-[
-	{username:'mariewatson',firstName:'Marie',lastName:'Watson',email:'marie.watson@fakemail.com',password:'123456',phone:'444-555-7777',userStatus:'ACTIVE'},
-	{username:'danielvaughn',firstName:'Daniel',lastName:'Vaughn',email:'daniel.vaughn@test.com',password:'123456',phone:'666-777-3333',userStatus:'ACTIVE'},
-	{username:'brendafuller',firstName:'Brenda',lastName:'Fuller',email:'brenda.fuller@example.com',password:'123456',phone:'777-888-3333',userStatus:'INACTIVE'}
-]
+import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.serializer.*;
+
+@Html(render=OrderStatus.OrderStatusRender.class)
+public enum OrderStatus {
+	PLACED, APPROVED, DELIVERED;
+
+	public static class OrderStatusRender extends HtmlRender<OrderStatus> {
+		@Override /* HtmlRender */
+		public String getStyle(SerializerSession session, OrderStatus value) {
+			switch(value) {
+				case PLACED:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;";
+				case APPROVED:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;";
+				case DELIVERED:  return "background-color:#777;text-align:center;vertical-align:middle;";
+				default:  return "background-color:#888;text-align:center;vertical-align:middle;";
+			}
+		}
+	}
+}

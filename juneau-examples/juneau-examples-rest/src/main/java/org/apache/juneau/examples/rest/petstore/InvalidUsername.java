@@ -26,6 +26,6 @@ public class InvalidUsername extends BadRequest {
 	 * Constructor.
 	 */
 	public InvalidUsername() {
-		super("Invalid username provided.  Must be 8 or more characters or digits.");
+		super("Invalid username provided.  Must be between 3 and 8 characters or digits.");
 	}
 }

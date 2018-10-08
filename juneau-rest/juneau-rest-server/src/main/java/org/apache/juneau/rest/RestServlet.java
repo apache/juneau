@@ -42,7 +42,6 @@ public abstract class RestServlet extends HttpServlet {
 	private boolean isInitialized = false;
 	private Exception initException;
 
-
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
@@ -148,6 +147,8 @@ public abstract class RestServlet extends HttpServlet {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		} catch (Throwable e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
+		} finally {
+			context.clearState();
 		}
 	}
 
@@ -204,6 +205,24 @@ public abstract class RestServlet extends HttpServlet {
 			if (cause != null)
 				cause.printStackTrace();
 		}
+	}
+
+	/**
+	 * Returns the current HTTP request.
+	 *
+	 * @return The current HTTP request, or <jk>null</jk> if it wasn't created.
+	 */
+	public RestRequest getRequest() {
+		return context.getRequest();
+	}
+
+	/**
+	 * Returns the current HTTP response.
+	 *
+	 * @return The current HTTP response, or <jk>null</jk> if it wasn't created.
+	 */
+	public RestResponse getResponse() {
+		return context.getResponse();
 	}
 
 	@Override /* GenericServlet */

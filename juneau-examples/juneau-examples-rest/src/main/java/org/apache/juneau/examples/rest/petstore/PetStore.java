@@ -12,348 +12,233 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore;
 
-import java.io.*;
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.examples.rest.petstore.dto.*;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.client.remote.*;
+import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.response.*;
 
 /**
- * Pet store database application.
+ * Defines the interface for both the server-side and client-side pet store application.
  */
-public class PetStore {
+@RemoteResource(path="/petstore")
+public interface PetStore {
 
-	// Our "databases".
-	IdMap<Long,Pet> petDb = IdMap.createLongMap(Pet.class);
-	IdMap<Long,Species> speciesDb = IdMap.createLongMap(Species.class);
-	IdMap<Long,Order> orderDb = IdMap.createLongMap(Order.class);
-	IdMap<Long,PetTag> tagDb = IdMap.createLongMap(PetTag.class);
-	ConcurrentHashMap<String,User> userDb = new ConcurrentHashMap<>();
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// Pets
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public PetStore init() throws Exception {
+	@RemoteMethod(method=GET, path="/pet")
+	public Collection<Pet> getPets() throws NotAcceptable;
 
-		// Load our databases from local JSON files.
+	@RemoteMethod(path="/pet/{petId}") /* method inferred from method name */
+	public Pet getPet(
+		@Path(
+			name="petId",
+			description="ID of pet to return",
+			example="123"
+		)
+		long petId
+	) throws IdNotFound, NotAcceptable;
 
-		JsonParser parser = JsonParser.create().build();
+	@RemoteMethod /* method and path inferred from method name */
+	public long postPet(
+		@Body(
+			description="Pet object to add to the store"
+		) CreatePet pet
+	) throws IdConflict, NotAcceptable, UnsupportedMediaType;
 
-		// Note that these must be loaded in the specified order to prevent IdNotFound exceptions.
-		for (Species s : parser.parse(getStream("Species.json"), Species[].class))
-			add(s);
-		for (PetTag t : parser.parse(getStream("Tags.json"), PetTag[].class))
-			add(t);
+	@RemoteMethod(method=PUT, path="/pet/{petId}")
+	public Ok updatePet(
+		@Body(
+			description="Pet object that needs to be added to the store"
+		) UpdatePet pet
+	) throws IdNotFound, NotAcceptable, UnsupportedMediaType;
 
-		parser = parser.builder().pojoSwaps(new CategorySwap(), new TagSwap()).build();
-		for (Pet p : parser.parse(getStream("Pets.json"), Pet[].class))
-			add(p);
+	@RemoteMethod(method=GET, path="/pet/findByStatus")
+	public Collection<Pet> findPetsByStatus(
+		@Query(
+			name="status",
+			description="Status values that need to be considered for filter.",
+			required=true,
+			type="array",
+			collectionFormat="csv",
+			items=@Items(
+				type="string",
+				_enum="AVAILABLE,PENDING,SOLD",
+				_default="AVAILABLE"
+			),
+			example="AVALIABLE,PENDING"
+		)
+		PetStatus[] status
+	) throws NotAcceptable;
 
-		parser = parser.builder().pojoSwaps(new PetSwap()).build();
-		for (Order o : parser.parse(getStream("Orders.json"), Order[].class))
-			add(o);
+	@RemoteMethod(method=GET, path="/pet/findByTags")
+	@Deprecated
+	public Collection<Pet> findPetsByTags(
+		@Query(
+			name="tags",
+			description="Tags to filter by",
+			required=true,
+			example="['tag1','tag2']"
+		)
+		String[] tags
+	) throws InvalidTag, NotAcceptable;
 
-		for (User u : parser.parse(getStream("Users.json"), User[].class))
-			add(u);
+	@RemoteMethod(method=DELETE, path="/pet/{petId}")
+	public Ok deletePet(
+		@Header(
+			name="api_key",
+			description="Security API key",
+			required=true,
+			example="foobar"
+		)
+		String apiKey,
+		@Path(
+			name="petId",
+			description="Pet id to delete",
+			example="123"
+		)
+		long petId
+	) throws IdNotFound, NotAcceptable;
 
-		return this;
-	}
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// Orders
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private InputStream getStream(String fileName) {
-		return getClass().getResourceAsStream(fileName);
-	}
+	@RemoteMethod(method=GET, path="/store/order")
+	public Collection<Order> getOrders() throws NotAcceptable;
 
-	public Pet getPet(long id) throws IdNotFound {
-		Pet value = petDb.get(id);
-		if (value == null)
-			throw new IdNotFound(id, Pet.class);
-		return value;
-	}
+	@RemoteMethod(method=GET, path="/store/order/{orderId}")
+	public Order getOrder(
+		@Path(
+			name="orderId",
+			description="ID of order to fetch",
+			maximum="1000",
+			minimum="1",
+			example="123"
+		)
+		long orderId
+	) throws InvalidId, IdNotFound, NotAcceptable;
 
-	public Species getSpecies(long id) throws IdNotFound {
-		Species value = speciesDb.get(id);
-		if (value == null)
-			throw new IdNotFound(id, Pet.class);
-		return value;
-	}
+	@RemoteMethod(method=POST, path="/store/order")
+	public long placeOrder(
+		@FormData(
+			name="petId",
+			description="Pet ID"
+		)
+		long petId,
+		@FormData(
+			name="username",
+			description="The username of the user creating the order"
+		)
+		String username
+	) throws IdConflict, NotAcceptable, UnsupportedMediaType;
 
-	public Species getSpecies(String name) throws IdNotFound {
-		for (Species value : speciesDb.values())
-			if (value.getName().equals(name))
-				return value;
-		throw new InvalidSpecies();
-	}
+	@RemoteMethod(method=DELETE, path="/store/order/{orderId}")
+	public Ok deleteOrder(
+		@Path(
+			name="orderId",
+			description="ID of the order that needs to be deleted",
+			minimum="1",
+			example="5"
+		)
+		long orderId
+	) throws InvalidId, IdNotFound, NotAcceptable;
 
-	public Order getOrder(long id) throws IdNotFound {
-		Order value = orderDb.get(id);
-		if (value == null)
-			throw new IdNotFound(id, Pet.class);
-		return value;
-	}
+	@RemoteMethod(method=GET, path="/store/inventory")
+	public Map<PetStatus,Integer> getStoreInventory() throws NotAcceptable;
 
-	public PetTag getTag(long id) throws IdNotFound {
-		PetTag value =  tagDb.get(id);
-		if (value == null)
-			throw new IdNotFound(id, Pet.class);
-		return value;
-	}
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// Users
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public PetTag getTag(String name) throws InvalidTag  {
-		for (PetTag value : tagDb.values())
-			if (value.getName().equals(name))
-				return value;
-		throw new InvalidTag();
-	}
+	@RemoteMethod(method=GET, path="/user")
+	public Collection<User> getUsers() throws NotAcceptable;
 
-	public User getUser(String username) throws InvalidUsername, IdNotFound  {
-		assertValidUsername(username);
-		for (User user : userDb.values())
-			if (user.getUsername().equals(username))
-				return user;
-		throw new IdNotFound(username, User.class);
-	}
+	@RemoteMethod(method=GET, path="/user/{username}")
+	public User getUser(
+		@Path(
+			name="username",
+			description="The name that needs to be fetched. Use user1 for testing."
+		)
+		String username
+	) throws InvalidUsername, IdNotFound, NotAcceptable;
 
-	public boolean isValid(String username, String password) {
-		for (User user : userDb.values())
-			if (user.getUsername().equals(username))
-				return user.getPassword().equals(password);
-		return false;
-	}
+	@RemoteMethod
+	public Ok postUser(
+		@Body(
+			description="Created user object"
+		)
+		User user
+	) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType;
 
-	public Collection<Pet> getPets() {
-		return petDb.values();
-	}
+	@RemoteMethod(method=POST, path="/user/createWithArray")
+	public Ok createUsers(
+		@Body(
+			description="List of user objects"
+		)
+		User[] users
+	) throws InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType;
 
-	public Collection<Species> getCategories() {
-		return speciesDb.values();
-	}
+	@RemoteMethod(method=PUT, path="/user/{username}")
+	public Ok updateUser(
+		@Path(
+			name="username",
+			description="Name that need to be updated"
+		)
+		String username,
+		@Body(
+			description="Updated user object"
+		)
+		User user
+	) throws InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType;
 
-	public Collection<Order> getOrders() {
-		return orderDb.values();
-	}
+	@RemoteMethod(method=DELETE, path="/user/{username}")
+	public Ok deleteUser(
+		@Path(
+			name="username",
+			description="The name that needs to be deleted"
+		)
+		String username
+	) throws InvalidUsername, IdNotFound, NotAcceptable;
 
-	public Collection<PetTag> getTags() {
-		return tagDb.values();
-	}
+	@RemoteMethod(method=GET, path="/user/login")
+	public Ok login(
+		@Query(
+			name="username",
+			description="The username for login",
+			required=true,
+			example="myuser"
+		)
+		String username,
+		@Query(
+			name="password",
+			description="The password for login in clear text",
+			required=true,
+			example="abc123"
+		)
+		String password,
+		@ResponseHeader(
+			name="X-Rate-Limit",
+			type="integer",
+			format="int32",
+			description="Calls per hour allowed by the user.",
+			example="123"
+		)
+		Value<Integer> rateLimit,
+		Value<ExpiresAfter> expiresAfter,
+		RestRequest req,
+		RestResponse res
+	) throws InvalidLogin, NotAcceptable;
 
-	public Collection<User> getUsers() {
-		return userDb.values();
-	}
-
-	public Pet add(Pet value) throws IdConflict {
-		if (value.getId() == 0)
-			value.id(petDb.nextId());
-		else
-			petDb.lbId(value.getId());
-		Pet old = petDb.putIfAbsent(value.getId(), value);
-		if (old != null)
-			throw new IdConflict(value.getId(), Pet.class);
-		return value;
-	}
-
-	public Species add(Species value) throws IdConflict {
-		if (value.getId() == 0)
-			value.id(speciesDb.nextId());
-		Species old = speciesDb.putIfAbsent(value.getId(), value);
-		if (old != null)
-			throw new IdConflict(value.getId(), Species.class);
-		return value;
-	}
-
-	public Order add(Order value) throws IdConflict {
-		if (value.getId() == 0)
-			value.id(orderDb.nextId());
-		Order old = orderDb.putIfAbsent(value.getId(), value);
-		if (old != null)
-			throw new IdConflict(value.getId(), Order.class);
-		return value;
-	}
-
-	public PetTag add(PetTag value) throws IdConflict {
-		if (value.getId() == 0)
-			value.id(tagDb.nextId());
-		PetTag old = tagDb.putIfAbsent(value.getId(), value);
-		if (old != null)
-			throw new IdConflict(value.getId(), PetTag.class);
-		return value;
-	}
-
-	public User add(User value) throws IdConflict, InvalidUsername {
-		assertValidUsername(value.getUsername());
-		User old = userDb.putIfAbsent(value.getUsername(), value);
-		if (old != null)
-			throw new IdConflict(value.getUsername(), User.class);
-		return value;
-	}
-
-	public Pet create(PetCreate pc) {
-		Pet p = new Pet();
-		p.name(pc.getName());
-		p.price(pc.getPrice());
-		p.species(getSpecies(pc.getSpecies()));
-		p.tags(getTags(pc.getTags()));
-		p.status(PetStatus.AVAILABLE);
-		return add(p);
-	}
-
-	public Pet update(PetUpdate pu) throws IdNotFound {
-		Pet p = petDb.get(pu.getId());
-		if (p == null)
-			throw new IdNotFound(pu.getId(), Pet.class);
-		p.name(pu.getName());
-		p.price(pu.getPrice());
-		p.species(getSpecies(pu.getSpecies()));
-		p.tags(getTags(pu.getTags()));
-		p.status(pu.getStatus());
-		return p;
-	}
-
-	public Pet update(Pet pet) {
-		petDb.put(pet.getId(), pet);
-		return pet;
-	}
-
-	public Order create(CreateOrder c) {
-		Order o = new Order();
-		o.petId(c.getPetId());
-		o.shipDate(c.getShipDate());
-		o.status(OrderStatus.PLACED);
-		return add(o);
-	}
-
-	private PetTag[] getTags(String[] tags) {
-		if (tags == null)
-			return null;
-		PetTag[] l = new PetTag[tags.length];
-		for (int i = 0; i < tags.length; i++)
-			l[i]= getOrCreateTag(tags[i]);
-		return l;
-	}
-
-	private PetTag getOrCreateTag(String name) {
-		for (PetTag t : tagDb.values())
-			if (t.getName().equals(name))
-				return t;
-		return add(new PetTag().name(name));
-	}
-
-	public Order update(Order value) throws IdNotFound {
-		Order old = orderDb.replace(value.getId(), value);
-		if (old == null)
-			throw new IdNotFound(value.getId(), Order.class);
-		return value;
-	}
-
-	public PetTag update(PetTag value) throws IdNotFound, InvalidTag {
-		assertValidTag(value.getName());
-		PetTag old = tagDb.replace(value.getId(), value);
-		if (old == null)
-			throw new IdNotFound(value.getId(), PetTag.class);
-		return value;
-	}
-
-	public User update(User value) throws IdNotFound, InvalidUsername {
-		assertValidUsername(value.getUsername());
-		User old = userDb.replace(value.getUsername(), value);
-		if (old == null)
-			throw new IdNotFound(value.getUsername(), User.class);
-		return value;
-	}
-
-	public void removePet(long id) throws IdNotFound {
-		petDb.remove(getPet(id).getId());
-	}
-
-	public void removeCategory(long id) throws IdNotFound {
-		speciesDb.remove(getSpecies(id).getId());
-	}
-
-	public void removeOrder(long id) throws IdNotFound {
-		orderDb.remove(getOrder(id).getId());
-	}
-
-	public void removeTag(long id) throws IdNotFound {
-		tagDb.remove(getTag(id).getId());
-	}
-
-	public void removeUser(String username) throws IdNotFound {
-		userDb.remove(getUser(username).getUsername());
-	}
-
-	private void assertValidUsername(String username) throws InvalidUsername {
-		if (username == null || ! username.matches("[\\w\\d]{8,}"))
-			throw new InvalidUsername();
-	}
-
-	private void assertValidTag(String tag) throws InvalidTag {
-		if (tag == null || ! tag.matches("[\\w\\d]{1,8}"))
-			throw new InvalidTag();
-	}
-
-	public Collection<Pet> getPetsByStatus(PetStatus[] status) {
-		List<Pet> list = new ArrayList<>();
-		for (Pet p : petDb.values())
-			if (p.hasStatus(status))
-				list.add(p);
-		return list;
-	}
-
-	public Collection<Pet> getPetsByTags(String[] tags) throws InvalidTag {
-		for (String tag : tags)
-			assertValidTag(tag);
-		List<Pet> list = new ArrayList<>();
-		for (Pet p : petDb.values())
-			if (p.hasTag(tags))
-				list.add(p);
-		return list;
-	}
-
-	public Map<PetStatus,Integer> getInventory() {
-		Map<PetStatus,Integer> m = new LinkedHashMap<>();
-		for (Pet p : petDb.values()) {
-			PetStatus ps = p.getStatus();
-			if (! m.containsKey(ps))
-				m.put(ps, 1);
-			else
-				m.put(ps, m.get(ps) + 1);
-		}
-		return m;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper beans
-	//-----------------------------------------------------------------------------------------------------------------
-
-	public class CategorySwap extends PojoSwap<Species,String> {
-		@Override
-		public String swap(BeanSession bs, Species o) throws Exception {
-			return o.getName();
-		}
-		@Override
-		public Species unswap(BeanSession bs, String o, ClassMeta<?> hint) throws Exception {
-			return getSpecies(o);
-		}
-	}
-
-	public class TagSwap extends PojoSwap<PetTag,String> {
-		@Override
-		public String swap(BeanSession bs, PetTag o) throws Exception {
-			return o.getName();
-		}
-		@Override
-		public PetTag unswap(BeanSession bs, String o, ClassMeta<?> hint) throws Exception {
-			return getTag(o);
-		}
-	}
-
-	public class PetSwap extends PojoSwap<Pet,Long> {
-		@Override
-		public Long swap(BeanSession bs, Pet o) throws Exception {
-			return o.getId();
-		}
-		@Override
-		public Pet unswap(BeanSession bs, Long o, ClassMeta<?> hint) throws Exception {
-			return petDb.get(o);
-		}
-	}
+	@RemoteMethod(method=GET, path="/user/logout")
+	public Ok logout() throws NotAcceptable;
 }

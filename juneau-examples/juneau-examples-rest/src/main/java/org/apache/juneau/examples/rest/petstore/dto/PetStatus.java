@@ -10,24 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.dto;
 
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 
-@Html(render=OrderStatus.OrderStatusRender.class)
-public enum OrderStatus {
-	PLACED, APPROVED, DELIVERED;
+@Html(render=PetStatus.PetStatusRender.class)
+public enum PetStatus {
+	AVAILABLE, PENDING, SOLD, UNKNOWN;
 
-	public static class OrderStatusRender extends HtmlRender<OrderStatus> {
+	public static class PetStatusRender extends HtmlRender<PetStatus> {
 		@Override /* HtmlRender */
-		public String getStyle(SerializerSession session, OrderStatus value) {
+		public String getStyle(SerializerSession session, PetStatus value) {
 			switch(value) {
-				case PLACED:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;";
-				case APPROVED:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;";
-				case DELIVERED:  return "background-color:#777;text-align:center;vertical-align:middle;";
-				default:  return "background-color:#888;text-align:center;vertical-align:middle;";
+				case AVAILABLE:  return "background-color:#5cb85c;text-align:center;vertical-align:middle;";
+				case PENDING:  return "background-color:#f0ad4e;text-align:center;vertical-align:middle;";
+				case SOLD:  return "background-color:#888;text-align:center;vertical-align:middle;";
+				default:  return "background-color:#777;text-align:center;vertical-align:middle;";
 			}
 		}
 	}

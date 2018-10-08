@@ -10,35 +10,65 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
-
-import java.util.*;
+package org.apache.juneau.examples.rest.petstore.dto;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Bean for creating {@link Order} objects.
+ * Also serves as the superclass for the {@link Order} object.
  */
+@Bean(fluentSetters=true, properties="petId,username")
 public class CreateOrder {
-	private final long petId;
-	private final Date shipDate;
 
-	@BeanConstructor(properties="petId,shipDate")
-	public CreateOrder(long petId, Date shipDate) {
+	private long petId;
+	private String username;
+
+	/**
+	 * Optional constructor.
+	 */
+	@BeanConstructor(properties="petId,username")
+	public CreateOrder(long petId, String username) {
 		this.petId = petId;
-		this.shipDate = shipDate;
+		this.username = username;
 	}
 
-	public static CreateOrder example() {
-		return new CreateOrder(123, StringUtils.parseIsoDate("2012-12-21"));
-	}
+	/**
+	 * Constructor needed by JPA.
+	 */
+	public CreateOrder() {}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Bean properties
+	//-----------------------------------------------------------------------------------------------------------------
 
 	public long getPetId() {
 		return petId;
 	}
 
-	public Date getShipDate() {
-		return shipDate;
+	public CreateOrder petId(long value) {
+		this.petId = value;
+		return this;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public CreateOrder username(String value) {
+		this.username = value;
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Used to populate Swagger examples.
+	 * Example is inferred from the method name.
+	 */
+	public static CreateOrder example() {
+		return new CreateOrder(123, "sampleuser");
 	}
 }

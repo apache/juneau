@@ -10,45 +10,89 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.dto;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.jsonschema.annotation.*;
 
 /**
  * Bean for creating {@link Pet} objects.
  */
-public class PetCreate {
+@Bean(fluentSetters=true, properties="name,price,species,tags")
+public class CreatePet {
 
-	private final String name;
-	private final float price;
-	private final String species;
-	private final String[] tags;
+	@Schema(description="Pet name.", minLength=3, maxLength=50)
+	private String name;
 
-	@BeanConstructor(properties="name,price,species,tags")
-	public PetCreate(String name, float price, String species, String[] tags) {
+	@Schema(description="Price of pet.", maximum="999.99")
+	private float price;
+
+	@Schema(description="Pet species.")
+	private Species species;
+
+	@Schema(description="Pet attributes.", example="friendly,smart")
+	private String[] tags;
+
+	/**
+	 * Constructor.
+	 */
+	public CreatePet(String name, float price, Species species, String[] tags) {
 		this.name = name;
 		this.price = price;
 		this.species = species;
 		this.tags = tags;
 	}
 
-	public static PetCreate example() {
-		return new PetCreate("Doggie", 9.99f, "Dog", new String[] {"friendly","cute"});
-	}
+	/**
+	 * Empty constructor.
+	 */
+	public CreatePet() {}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Bean properties
+	//-----------------------------------------------------------------------------------------------------------------
 
 	public String getName() {
 		return name;
+	}
+
+	public CreatePet name(String value) {
+		this.name = value;
+		return this;
 	}
 
 	public float getPrice() {
 		return price;
 	}
 
-	public String getSpecies() {
+	public CreatePet price(float value) {
+		this.price = value;
+		return this;
+	}
+
+	public Species getSpecies() {
 		return species;
+	}
+
+	public CreatePet species(Species value) {
+		this.species = value;
+		return this;
 	}
 
 	public String[] getTags() {
 		return tags;
+	}
+
+	public CreatePet tags(String...value) {
+		this.tags = value;
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static CreatePet example() {
+		return new CreatePet("Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"});
 	}
 }
