@@ -199,6 +199,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 			r1.setAttribute("Exception", e);
 			r1.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
 			handleError(r1, r2, e);
+		} finally {
+			context.clearState();
 		}
 
 		context.finishCall(r1, r2);

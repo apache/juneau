@@ -24,6 +24,12 @@ import org.apache.juneau.internal.*;
  * Encapsulates arguments for basic search/view/sort/position/limit functionality.
  */
 public class SearchArgs {
+
+	/**
+	 * Default search args.
+	 */
+	public static SearchArgs DEFAULT = SearchArgs.builder().build();
+
 	private final Map<String,String> search;
 	private final List<String> view;
 	private final Map<String,Boolean> sort;

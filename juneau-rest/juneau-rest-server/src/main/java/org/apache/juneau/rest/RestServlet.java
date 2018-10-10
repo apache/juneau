@@ -39,20 +39,18 @@ public abstract class RestServlet extends HttpServlet {
 
 	private RestContextBuilder builder;
 	private volatile RestContext context;
-	private boolean isInitialized = false;
-	private Exception initException;
+	private volatile Exception initException;
+	private boolean isInitialized = false;  // Should not be volatile.
 
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
+			if (context != null)
+				return;
 			builder = RestContext.create(servletConfig, this.getClass(), null).init(this);
 			super.init(servletConfig);
-			if (! isInitialized) {
-				builder.servletContext(this.getServletContext());
-				context = builder.build();
-				isInitialized = true;
-			}
-			context.postInit();
+			builder.servletContext(this.getServletContext());
+			setContext(builder.build());
 			context.postInitChildFirst();
 		} catch (RestException e) {
 			// Thrown RestExceptions are simply caught and re-thrown on subsequent calls to service().
@@ -70,8 +68,6 @@ public abstract class RestServlet extends HttpServlet {
 			initException = new Exception(e);
 			log(SEVERE, e, "Servlet init error on class ''{0}''", getClass().getName());
 			throw new ServletException(e);
-		} finally {
-			isInitialized = true;
 		}
 	}
 
@@ -83,13 +79,17 @@ public abstract class RestServlet extends HttpServlet {
 		super.init(servletConfig);
 	}
 
-	/*
+	/**
 	 * Sets the context object for this servlet.
-	 * Used when subclasses of RestServlet are attached as child resources.
+	 *
+	 * @param context
+	 * @throws ServletException
 	 */
-	synchronized void setContext(RestContext context) {
+	public synchronized void setContext(RestContext context) throws ServletException {
 		this.builder = context.builder;
 		this.context = context;
+		isInitialized = true;
+		context.postInit();
 	}
 
 	@Override /* GenericServlet */
@@ -131,15 +131,17 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Servlet */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
 		try {
-			if (initException != null) {
-				if (initException instanceof RestException)
-					throw (RestException)initException;
-				throw new InternalServerError(initException);
+			// To avoid checking the volatile field context on every call, use the non-volatile isInitialized field as a first-check check.
+			if (! isInitialized) {
+				if (initException != null) {
+					if (initException instanceof RestException)
+						throw (RestException)initException;
+					throw new InternalServerError(initException);
+				}
+				if (context == null)
+					throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
+				isInitialized = true;
 			}
-			if (context == null)
-				throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", getClass().getName());
-			if (! isInitialized)
-				throw new InternalServerError("Servlet {0} has not been initialized", getClass().getName());
 
 			context.getCallHandler().service(r1, r2);
 
@@ -147,8 +149,6 @@ public abstract class RestServlet extends HttpServlet {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		} catch (Throwable e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
-		} finally {
-			context.clearState();
 		}
 	}
 
@@ -213,6 +213,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The current HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
 	public RestRequest getRequest() {
+		if (context == null) 
+			return null;
 		return context.getRequest();
 	}
 
@@ -222,6 +224,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The current HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
 	public RestResponse getResponse() {
+		if (context == null) 
+			return null;
 		return context.getResponse();
 	}
 

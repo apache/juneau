@@ -61,8 +61,17 @@ public class MockRest implements MockHttpConnection {
 	private final RestContext rc;
 
 	private MockRest(Class<?> c, boolean debug) throws Exception {
-		if (! CONTEXTS.containsKey(c))
-			CONTEXTS.put(c, RestContext.create(c.newInstance()).logger(debug ? BasicRestLogger.class : NoOpRestLogger.class).build().postInit().postInitChildFirst());
+		if (! CONTEXTS.containsKey(c)) {
+			Object r = c.newInstance();
+			RestContext rc = RestContext.create(r).logger(debug ? BasicRestLogger.class : NoOpRestLogger.class).build();
+			if (r instanceof RestServlet) {
+				((RestServlet)r).setContext(rc);
+			} else {
+				rc.postInit();
+			}
+			rc.postInitChildFirst();
+			CONTEXTS.put(c, rc);
+		}
 		rc = CONTEXTS.get(c);
 	}
 

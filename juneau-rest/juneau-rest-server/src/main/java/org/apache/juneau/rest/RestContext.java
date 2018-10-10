@@ -4777,6 +4777,9 @@ public final class RestContext extends BeanContext {
 	}
 
 	void setRequest(RestRequest req) {
+		// Must be careful not to bleed thread-locals.
+		if (this.req.get() != null)
+			throw new RuntimeException("Thread-local request object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.req.set(req);
 	}
 
@@ -4790,6 +4793,9 @@ public final class RestContext extends BeanContext {
 	}
 
 	void setResponse(RestResponse res) {
+		// Must be careful not to bleed thread-locals.
+		if (this.res.get() != null)
+			throw new RuntimeException("Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.res.set(res);
 	}
 
@@ -4800,5 +4806,11 @@ public final class RestContext extends BeanContext {
 	void clearState() {
 		req.remove();
 		res.remove();
+	}
+
+	@Override
+	public String toString() {
+		Object r = getResource();
+		return "RestContext: hashCode=["+System.identityHashCode(this)+"], resource=["+(r == null ? null : r.getClass()+","+System.identityHashCode(r))+"]";
 	}
 }
