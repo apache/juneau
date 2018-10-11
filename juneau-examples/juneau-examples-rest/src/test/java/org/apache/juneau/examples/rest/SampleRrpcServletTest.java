@@ -22,7 +22,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.transforms.*;
 import org.junit.*;
 
-public class SampleRemoteInterfaceServletTest extends RestTestcase {
+public class SampleRrpcServletTest extends RestTestcase {
 
 	static RestClient[] clients;
 
@@ -60,7 +60,7 @@ public class SampleRemoteInterfaceServletTest extends RestTestcase {
 	@Test
 	public void testBasic() throws Exception {
 		for (RestClient client : clients) {
-			IAddressBook ab = client.getRemoteInterface(IAddressBook.class, path);
+			IAddressBook ab = client.getRrpcInterface(IAddressBook.class, path);
 			Person p = ab.createPerson(
 				new CreatePerson("Test Person",
 					AddressBook.toCalendar("Aug 1, 1999"),

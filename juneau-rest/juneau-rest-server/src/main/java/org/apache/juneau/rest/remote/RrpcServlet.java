@@ -50,7 +50,7 @@ import org.apache.juneau.rest.exception.*;
  * </ul>
  */
 @SuppressWarnings({"serial","javadoc"})
-public abstract class RemoteInterfaceServlet extends BasicRestServlet {
+public abstract class RrpcServlet extends BasicRestServlet {
 
 	private final Map<String,RemoteInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
 

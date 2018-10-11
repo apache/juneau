@@ -274,7 +274,7 @@ public class AddressBookResourceTest extends RestTestcase {
 
 			List<Person> people;
 
-			IAddressBook ab = client.getRemoteInterface(IAddressBook.class, "/addressBook/proxy");
+			IAddressBook ab = client.getRrpcInterface(IAddressBook.class, "/addressBook/proxy");
 
 			// Reinitialize the resource
 			ab.init();

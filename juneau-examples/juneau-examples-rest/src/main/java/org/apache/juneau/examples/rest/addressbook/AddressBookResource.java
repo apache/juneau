@@ -350,10 +350,10 @@ public class AddressBookResource extends BasicRestServletJena {
 	}
 
 	/**
-	 * [PROXY /*]
+	 * [RRPC /*]
 	 * Return a proxy interface to IAddressBook.
 	 */
-	@RestMethod(name=PROXY, path="/proxy/*")
+	@RestMethod(name=RRPC, path="/proxy/*")
 	public IAddressBook getProxy() {
 		return addressBook;
 	}

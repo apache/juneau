@@ -130,7 +130,7 @@ AddressBookResource
 <p class='bpcode w800'>
 	<jd>/** 
 	* Interface used to help illustrate proxy interfaces. 
-	* See {<ja>@link</ja> SampleRemoteInterfaceServlet}. 
+	* See {<ja>@link</ja> SampleRrpcServlet}. 
 	*/</jd> 
 	<jk>public interface</jk> IAddressBook { 
 	
@@ -684,10 +684,10 @@ AddressBookResource
 		} 
 		
 		<jd>/**
-		 * [PROXY /*]
+		 * [RRPC /*]
 		 * Return a proxy interface to IAddressBook.
 		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/proxy/*"</js>)
+		<ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>, path=<js>"/proxy/*"</js>)
 		<jk>public</jk> IAddressBook getProxy() {
 			<jk>return</jk> <jf>addressBook</jf>;
 		}

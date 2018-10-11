@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-restRPC
+{updated} restRPC
 
 <p>
 	The restRPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
@@ -71,9 +71,9 @@ restRPC
 <ul class='doctree'>
 	<li class='jc'>{@link oajrc.RestClient}
 	<ul>
-		<li class='jm'>{@link oajrc.RestClient#getRemoteInterface(Class) getRemoteInterface(Class)}
-		<li class='jm'>{@link oajrc.RestClient#getRemoteInterface(Class,Object) getRemoteInterface(Class,Object)}
-		<li class='jm'>{@link oajrc.RestClient#getRemoteInterface(Class,Object,Serializer,Parser) getRemoteInterface(Class,Object,Serializer,Parser)}
+		<li class='jm'>{@link oajrc.RestClient#getRrpcInterface(Class) getRrpcInterface(Class)}
+		<li class='jm'>{@link oajrc.RestClient#getRrpcInterface(Class,Object) getRrpcInterface(Class,Object)}
+		<li class='jm'>{@link oajrc.RestClient#getRrpcInterface(Class,Object,Serializer,Parser) getRrpcInterface(Class,Object,Serializer,Parser)}
 	</ul>
 </ul>
 <p>
@@ -93,7 +93,7 @@ restRPC
 		.build();
 	
 	<jc>// Create a proxy interface.</jc>
-	IAddressBook ab = client.getRemoteInterface(IAddressBook.<jk>class</jk>);
+	IAddressBook ab = client.getRrpcInterface(IAddressBook.<jk>class</jk>);
 	
 	<jc>// Invoke a method on the server side and get the returned result.</jc>
 	Person p = ab.createPerson(
@@ -140,9 +140,9 @@ restRPC
 </p>
 <ol class='spaced-list'>
 	<li>
-		Extending from {@link oajr.remote.RemoteInterfaceServlet}.
+		Extending from {@link oajr.remote.RrpcServlet}.
 	<li>
-		Using a <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> annotation on a Java method.
+		Using a <code><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</code> annotation on a Java method.
 </ol>
 <p>
 	In either case, the proxy communications layer is pure REST.
@@ -152,21 +152,21 @@ restRPC
 	a browser with no coding involved.
 </p>
 
-<h5 class='topic'>RemoteInterfaceServlet</h5>
+<h5 class='topic'>RrpcServlet</h5>
 <p>
-	The {@link oajr.remote.RemoteInterfaceServlet} class is a simple specialized servlet with an abstract 
+	The {@link oajr.remote.RrpcServlet} class is a simple specialized servlet with an abstract 
 	<code>getServiceMap()</code> method to define the server-side POJOs:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		path=<js>"/remote"</js>
 	)
-	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
+	<jk>public class</jk> SampleRrpcServlet <jk>extends</jk> RrpcServlet {
 	
 		<jc>// Our server-side POJO.</jc>
 		<jk>private</jk> AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
 	
-		<ja>@Override</ja> <jc>/* RemoteInterfaceServlet */</jc>
+		<ja>@Override</ja> <jc>/* RrpcServlet */</jc>
 		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
 			Map&lt;Class&lt;?&gt;,Object&gt; m = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
 	
@@ -180,22 +180,22 @@ restRPC
 	}
 </p>
 
-<h5 class='topic'>@RestMethod(name=PROXY)</h5>
+<h5 class='topic'>@RestMethod(name=RRPC)</h5>
 <p>
-	The <code><ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>)</code> approach is easier if you only have a single 
+	The <code><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</code> approach is easier if you only have a single 
 	interface you want to expose.  
 	<br>You simply define a Java method whose return type is an interface, and return the implementation of that 
 	interface:
 </p>
 <p class='bpcode w800'>
 	<jc>// Our exposed interface.</jc>
-	<ja>@RestMethod</ja>(name=<jsf>PROXY</jsf>, path=<js>"/addressbookproxy/*"</js>)
+	<ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>, path=<js>"/addressbookproxy/*"</js>)
 	<jk>public</jk> IAddressBook getProxy() {
 		<jk>return</jk> addressBook;
 	}
 </p>
 
-<h5 class='topic'>RemoteInterfaceServlet in a browser</h5>
+<h5 class='topic'>RrpcServlet in a browser</h5>
 <p>
 	If you point your browser to the servlet above, you get a list of available interfaces:
 </p>
@@ -299,7 +299,7 @@ restRPC
 		<jc>// Allow us to use method=POST from a browser.</jc>
 		allowedMethodParams=<js>"*"</js>
 	)
-	<jk>public class</jk> SampleRemoteInterfaceServlet <jk>extends</jk> RemoteInterfaceServlet {
+	<jk>public class</jk> SampleRrpcServlet <jk>extends</jk> RrpcServlet {
 </p>
 <p>
 	For example, to invoke the <code>getPeople()</code> method on our bean:

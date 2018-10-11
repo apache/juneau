@@ -1145,8 +1145,8 @@ public class RestClient extends BeanContext implements Closeable {
 	 * Create a new Remote Interface against a {@link RemoteInterface @RemoteInterface}-annotated class.
 	 *
 	 * <p>
-	 * Remote interfaces are interfaces exposed on the server side using either the <code>RemoteInterfaceServlet</code>
-	 * or <code>PROXY</code> REST methods.
+	 * Remote interfaces are interfaces exposed on the server side using either the <code>RrpcServlet</code>
+	 * or <code>RRPC</code> REST methods.
 	 *
 	 * <p>
 	 * The URL to the REST interface is based on the following values:
@@ -1180,23 +1180,23 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
 	 */
-	public <T> T getRemoteInterface(final Class<T> interfaceClass) {
-		return getRemoteInterface(interfaceClass, null);
+	public <T> T getRrpcInterface(final Class<T> interfaceClass) {
+		return getRrpcInterface(interfaceClass, null);
 	}
 
 	/**
-	 * Same as {@link #getRemoteInterface(Class)} except explicitly specifies the URL of the REST interface.
+	 * Same as {@link #getRrpcInterface(Class)} except explicitly specifies the URL of the REST interface.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemoteInterface(final Class<T> interfaceClass, final Object restUrl) {
-		return getRemoteInterface(interfaceClass, restUrl, serializer, parser);
+	public <T> T getRrpcInterface(final Class<T> interfaceClass, final Object restUrl) {
+		return getRrpcInterface(interfaceClass, restUrl, serializer, parser);
 	}
 
 	/**
-	 * Same as {@link #getRemoteInterface(Class, Object)} but allows you to override the serializer and parser used.
+	 * Same as {@link #getRrpcInterface(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param restUrl The URL of the REST interface.
@@ -1205,7 +1205,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemoteInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {
 			RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, asString(restUrl));

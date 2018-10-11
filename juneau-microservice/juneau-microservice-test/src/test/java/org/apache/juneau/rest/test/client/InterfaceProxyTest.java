@@ -240,7 +240,7 @@ public class InterfaceProxyTest {
 		//====================================================================================================
 		// Test that Q-values are being resolved correctly.
 		//====================================================================================================
-		@RestMethod(name=PROXY, path="/proxy/*")
+		@RestMethod(name=RRPC, path="/proxy/*")
 		public InterfaceProxy getProxy() {
 			return new InterfaceProxy() {
 
@@ -945,7 +945,7 @@ public class InterfaceProxyTest {
 	public InterfaceProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
-			proxy = RestClient.create().mockHttpConnection(interfaceProxyResource).serializer(serializer).parser(parser).build().getRemoteInterface(InterfaceProxy.class, "/proxy");
+			proxy = RestClient.create().mockHttpConnection(interfaceProxyResource).serializer(serializer).parser(parser).build().getRrpcInterface(InterfaceProxy.class, "/proxy");
 			cache.put(label, proxy);
 		}
 	}

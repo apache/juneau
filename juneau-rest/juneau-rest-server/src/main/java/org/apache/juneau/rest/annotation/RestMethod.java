@@ -532,7 +532,7 @@ public @interface RestMethod {
 	 * 		as <js>"POST"</js>.
 	 * 		<br>Otherwise, defaults to <js>"GET"</js>.
 	 * 	<li>
-	 * 		<js>"PROXY"</js>
+	 * 		<js>"RRPC"</js>
 	 * 		- Remote-proxy interface.
 	 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
 	 * 		{@link RemoteInterface @RemoteInterface} annotation) to be used as a remote proxy using

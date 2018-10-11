@@ -3227,10 +3227,10 @@ public final class RestContext extends BeanContext {
 						RestJavaMethod sm = new RestJavaMethod(resource, method, this);
 						String httpMethod = sm.getHttpMethod();
 
-						// PROXY is a special case where a method returns an interface that we
+						// RRPC is a special case where a method returns an interface that we
 						// can perform REST calls against.
 						// We override the CallMethod.invoke() method to insert our logic.
-						if ("PROXY".equals(httpMethod)) {
+						if ("RRPC".equals(httpMethod)) {
 
 							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(method.getGenericReturnType());
 							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
@@ -4779,7 +4779,7 @@ public final class RestContext extends BeanContext {
 	void setRequest(RestRequest req) {
 		// Must be careful not to bleed thread-locals.
 		if (this.req.get() != null)
-			throw new RuntimeException("Thread-local request object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
+			System.err.println("WARNING:  Thread-local request object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.req.set(req);
 	}
 
@@ -4795,7 +4795,7 @@ public final class RestContext extends BeanContext {
 	void setResponse(RestResponse res) {
 		// Must be careful not to bleed thread-locals.
 		if (this.res.get() != null)
-			throw new RuntimeException("Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
+			System.err.println("WARNING:  Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.res.set(res);
 	}
 

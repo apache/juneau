@@ -36,4 +36,16 @@
 		package in <code>juneau-marshall</code>.  This allows them to be used as return types in remote REST interfaces.
 		<br>A new {@link oajr.helper.ResolvingReaderResource} class has been added that includes the variable-resolving support since
 		this relies on the <code>juneau-svl</code> package.
+	<li>
+		The <code>RemoteInterfaceServlet</code> class has been renamed to {@link oajr.remote.RrpcServlet}.
+	<li>
+		<code><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</code> has been changed to <code><ja>@RestMethod</ja>(name=<js>"RRPC"</js>)</code>.
+</ul>
+
+<h5 class='topic w800'>juneau-rest-client</h5>
+<ul class='spaced-list'>
+	<li>
+		The <code>RestClient.getRemoteInterface()</code> method has been renamed to {@link oajrc.RestClient#getRrpcInterface(Class)}.
+	<li>
+		Fixed a bug where <code><ja>@RemoteMethod</ja>(path)</code> values containing '/' characters were erroneously being encoded.
 </ul>

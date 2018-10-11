@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.remote.*;
 
 /**
- * Class showing the functionality of the RemoteInterfaceServlet class.
+ * Class showing the functionality of the RrpcServlet class.
  */
 @SuppressWarnings("serial")
 @RestResource(
@@ -46,16 +46,16 @@ import org.apache.juneau.rest.remote.*;
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
 )
-public class SampleRemoteInterfaceServlet extends RemoteInterfaceServlet {
+public class SampleRrpcServlet extends RrpcServlet {
 
 	private final AddressBook addressBook;
 
-	public SampleRemoteInterfaceServlet() {
+	public SampleRrpcServlet() {
 		addressBook = new AddressBook();
 		addressBook.init();
 	}
 
-	@Override /* RemoteInterfaceServlet */
+	@Override /* RrpcServlet */
 	protected Map<Class<?>,Object> getServiceMap() throws Exception {
 		Map<Class<?>,Object> m = new LinkedHashMap<>();
 

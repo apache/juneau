@@ -46,8 +46,8 @@ public final class HttpMethodName {
 	/** {@doc RFC2616.section9#sec9.9 CONNECT} */
 	public static final String CONNECT = "CONNECT";
 
-	/** Special case for a REST method that implements a proxy interface. */
-	public static final String PROXY = "PROXY";
+	/** Special case for a REST method that implements a REST-RPC interface. */
+	public static final String RRPC = "RRPC";
 
 	/** A non-standard value. */
 	public static final String OTHER = "OTHER";

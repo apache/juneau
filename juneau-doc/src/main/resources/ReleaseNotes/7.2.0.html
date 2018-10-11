@@ -60,7 +60,7 @@
 		<ul class='doctree'>
 			<li class='ja'>{@link oaj.remote.RemoteInterface} 
 				- Used for remote proxy interfaces served up through 
-				{@link oajr.remote.RemoteInterfaceServlet} or REST <js>"PROXY"</js> methods.
+				<code><del>RemoteInterfaceServlet</del></code> or REST <js>"PROXY"</js> methods.
 				<br>Defaults to <js>"POST"</js> with method signatures as paths.
 			<li class='ja'>{@link oajrc.remote.RemoteResource} 
 				- Used for 3rd-party REST interfaces.
@@ -265,9 +265,9 @@
 	<li>
 		Fixed bug where incorrect media type was being set on responses (e.g. <code>text/html+schema</code> instead of <code>text/html</code> for schema documents).
 	<li>
-		The <code>RemoteableServlet</code> class has been moved and renamed to {@link oajr.remote.RemoteInterfaceServlet}.
+		The <code>RemoteableServlet</code> class has been moved and renamed to <code><del>RemoteInterfaceServlet</del></code>.
 	<li>
-		{@link oajr.remote.RemoteInterfaceServlet} now provides a form page for invoking remote interface methods in a browser.
+		<code><del>RemoteInterfaceServlet</del></code> now provides a form page for invoking remote interface methods in a browser.
 	<li>
 		Newlines were being stripped from <code><ja>@HtmlDoc</ja>(script)</code> when serialized which could cause script lines to become commented out.
 	<li>
