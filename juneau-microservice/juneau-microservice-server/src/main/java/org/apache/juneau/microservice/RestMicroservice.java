@@ -146,7 +146,7 @@ public class RestMicroservice extends Microservice {
 			@Override /* Thread */
 			public void run() {
 				try {
-					if (server.isStopping() || server.isStopped())
+					if (server == null || server.isStopping() || server.isStopped())
 						return;
 					onStopServer();
 					out(mb2, "StoppingServer");
