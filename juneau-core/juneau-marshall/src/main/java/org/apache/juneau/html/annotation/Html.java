@@ -57,6 +57,18 @@ public @interface Html {
 	HtmlFormat format() default HtmlFormat.HTML;
 
 	/**
+	 * @deprecated - Use format=HtmlFormat.PLAINTEXT.
+	 */
+	@Deprecated
+	boolean asPlainText() default false;
+
+	/**
+	 * @deprecated - Use format=HtmlFormat.XML.
+	 */
+	@Deprecated
+	boolean asXml() default false;
+
+	/**
 	 * Adds a hyperlink to a bean property when rendered as HTML.
 	 *
 	 * <p>

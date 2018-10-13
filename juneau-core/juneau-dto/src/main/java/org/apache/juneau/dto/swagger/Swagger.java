@@ -1429,4 +1429,13 @@ public class Swagger extends SwaggerElement {
 			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, c.getName());
 		}
 	}
+
+	/**
+	 * @deprecated Use {@link #definition(String, ObjectMap)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public Swagger definition(String name, SchemaInfo schema) {
+		return this;
+	}
 }

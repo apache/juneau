@@ -165,4 +165,10 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 				.append("addBeanTypes", addBeanTypes)
 			);
 	}
+
+	/**
+	 * @deprecated Use {@link #MSGPACK_addBeanTypes}.
+	 */
+	@Deprecated
+	public static final String MSGPACK_addBeanTypeProperties = MSGPACK_addBeanTypes;
 }

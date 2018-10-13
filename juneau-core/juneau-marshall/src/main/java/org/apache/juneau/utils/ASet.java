@@ -26,8 +26,11 @@ import java.util.*;
  *
  * @param <T> The entry type.
  */
-@SuppressWarnings({"serial","unchecked"})
+@SuppressWarnings({"unchecked"})
 public final class ASet<T> extends LinkedHashSet<T> {
+
+	// TODO - Change to 1L in 8.0
+	private static final long serialVersionUID = -7789361749029840633L;
 
 	/**
 	 * Convenience method for creating a list of objects.

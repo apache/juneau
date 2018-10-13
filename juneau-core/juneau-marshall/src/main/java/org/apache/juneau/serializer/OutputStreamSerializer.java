@@ -166,4 +166,13 @@ public abstract class OutputStreamSerializer extends Serializer {
 				.append("binaryFormat", binaryFormat)
 			);
 	}
+
+	/**
+	 * @deprecated No replacement.
+	 */
+	@SuppressWarnings({ "javadoc", "unused" })
+	@Deprecated
+	public final String serializeToHex(Object o) throws SerializeException {
+		return null;
+	}
 }

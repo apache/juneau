@@ -93,7 +93,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 		try {
 			return (T)unswapMethod.invoke(f);
 		} catch (Exception e) {
-			throw new ParseException(e);
+			throw new ParseException((Throwable)e);
 		}
 	}
 }

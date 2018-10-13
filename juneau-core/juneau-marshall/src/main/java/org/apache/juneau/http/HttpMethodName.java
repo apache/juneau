@@ -51,4 +51,10 @@ public final class HttpMethodName {
 
 	/** A non-standard value. */
 	public static final String OTHER = "OTHER";
+	
+	/**
+	 * @deprecated Use {@link #RRPC}
+	 */
+	@Deprecated
+	public static final String PROXY = "RRPC";
 }

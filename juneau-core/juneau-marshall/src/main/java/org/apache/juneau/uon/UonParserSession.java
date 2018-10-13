@@ -135,7 +135,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ParseException(e);
+			throw new ParseException((Throwable)e);
 		}
 	}
 

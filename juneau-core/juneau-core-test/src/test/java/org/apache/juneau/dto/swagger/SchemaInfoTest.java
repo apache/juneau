@@ -682,7 +682,7 @@ public class SchemaInfoTest {
 		assertObjectEquals("{}", t.getAdditionalProperties());
 		assertInstanceOf(SchemaInfo.class, t.getAdditionalProperties());
 
-		t.setAdditionalProperties(null);
+		t.setAdditionalProperties((SchemaInfo)null);
 		assertNull(t.getAdditionalProperties());
 	}
 

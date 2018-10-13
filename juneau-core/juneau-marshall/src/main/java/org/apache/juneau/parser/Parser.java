@@ -902,4 +902,16 @@ public abstract class Parser extends BeanContext {
 	protected final Class<? extends ParserListener> getListenerClass() {
 		return listener;
 	}
+	
+	/**
+	 * @deprecated Not used.
+	 */
+	@Deprecated
+	public static final String PARSER_fileCharset = PREFIX + "fileCharset.s";
+	
+	/**
+	 * @deprecated Not used.
+	 */
+	@Deprecated
+	public static final String PARSER_inputStreamCharset = PREFIX + "inputStreamCharset.s";
 }

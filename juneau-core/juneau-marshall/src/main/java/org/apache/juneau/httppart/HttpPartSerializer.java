@@ -97,4 +97,11 @@ public interface HttpPartSerializer {
 	 * @throws SchemaValidationException If the output fails schema validation.
 	 */
 	public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException ;
+
+	/**
+	 * @deprecated Use {@link #serialize(HttpPartType, HttpPartSchema, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public String serialize(HttpPartType type, Object value);
 }

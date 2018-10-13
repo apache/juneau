@@ -676,4 +676,32 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
+
+	/**
+	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
+	 */
+	@Override
+	@Deprecated
+	public UrlEncodingSerializerBuilder abridged(boolean value) {
+		return this;
+	}
+
+	/**
+	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
+	 */
+	@Override
+	@Deprecated
+	public UrlEncodingSerializerBuilder abridged() {
+		return this;
+	}
+
+	/**
+	 * @deprecated {@link #addBeanTypes(boolean)}
+	 */
+	@Override
+	@Deprecated
+	public UrlEncodingSerializerBuilder addBeanTypeProperties(boolean value) {
+		this.addBeanTypes(value);
+		return this;
+	}
 }

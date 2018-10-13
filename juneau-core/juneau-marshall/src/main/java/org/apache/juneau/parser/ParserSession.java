@@ -147,7 +147,10 @@ public abstract class ParserSession extends BeanSession {
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
-	public abstract ParserPipe createPipe(Object input);
+	// TODO - Make abstract in 8.0
+	public ParserPipe createPipe(Object input) { 
+		return null;
+	}
 
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.

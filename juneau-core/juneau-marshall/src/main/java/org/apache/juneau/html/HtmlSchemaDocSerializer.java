@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
 
@@ -97,5 +98,14 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 	JsonSchemaGenerator getGenerator() {
 		return generator;
+	}
+
+	/**
+	 * @deprecated Use {@link #HtmlSchemaDocSerializer(PropertyStore, String, String...)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public HtmlSchemaDocSerializer(PropertyStore ps, String produces, String...accept) {
+		this(ps, produces, StringUtils.join(accept, ','));
 	}
 }

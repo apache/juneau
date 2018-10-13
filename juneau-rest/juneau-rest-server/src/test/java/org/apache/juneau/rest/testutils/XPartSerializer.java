@@ -34,4 +34,9 @@ public class XPartSerializer extends BaseHttpPartSerializer {
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 		return createPartSession().serialize(partType, schema, value);
 	}
+
+	@Override
+	public String serialize(HttpPartType type, Object value) {
+		return null;
+	}
 }

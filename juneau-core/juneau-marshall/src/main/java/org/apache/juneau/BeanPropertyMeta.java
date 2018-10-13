@@ -193,7 +193,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty p = getAnnotation(BeanProperty.class, getter);
+				BeanProperty p = ClassUtils.getAnnotation(BeanProperty.class, getter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -209,7 +209,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty p = getAnnotation(BeanProperty.class, setter);
+				BeanProperty p = ClassUtils.getAnnotation(BeanProperty.class, setter);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -1063,15 +1063,15 @@ public final class BeanPropertyMeta {
 			appendAnnotations(a, field.getType(), l);
 		}
 		if (getter != null) {
-			addIfNotNull(l, getAnnotation(a, getter));
+			addIfNotNull(l, ClassUtils.getAnnotation(a, getter));
 			appendAnnotations(a, getter.getReturnType(), l);
 		}
 		if (setter != null) {
-			addIfNotNull(l, getAnnotation(a, setter));
+			addIfNotNull(l, ClassUtils.getAnnotation(a, setter));
 			appendAnnotations(a, setter.getReturnType(), l);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, getAnnotation(a, extraKeys));
+			addIfNotNull(l, ClassUtils.getAnnotation(a, extraKeys));
 			appendAnnotations(a, extraKeys.getReturnType(), l);
 		}
 
@@ -1094,11 +1094,11 @@ public final class BeanPropertyMeta {
 		if (field != null)
 			t = field.getAnnotation(a);
 		if (t == null && getter != null)
-			t = getAnnotation(a, getter);
+			t = ClassUtils.getAnnotation(a, getter);
 		if (t == null && setter != null)
-			t = getAnnotation(a, setter);
+			t = ClassUtils.getAnnotation(a, setter);
 		if (t == null && extraKeys != null)
-			t = getAnnotation(a, extraKeys);
+			t = ClassUtils.getAnnotation(a, extraKeys);
 		if (t == null)
 			t = ClassUtils.getAnnotation(a, typeMeta.getInnerClass());
 		return t;
@@ -1140,7 +1140,7 @@ public final class BeanPropertyMeta {
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ParseException(e);
+			throw new ParseException((Throwable)e);
 		}
 	}
 
@@ -1190,5 +1190,14 @@ public final class BeanPropertyMeta {
 	 */
 	public boolean canWrite() {
 		return canWrite;
+	}
+
+	/**
+	 * @deprecated Use {@link #findAnnotation(Class)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <A extends Annotation> A getAnnotation(Class<A> a) {
+		return findAnnotation(a);
 	}
 }

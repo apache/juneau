@@ -340,4 +340,14 @@ public class ConfigBuilder extends ContextBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
+
+	/**
+	 * @deprecated Use {@link #binaryFormat(BinaryFormat)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public ConfigBuilder binaryFormat(String value) {
+		return set(CONFIG_binaryFormat, value);
+	}
+
 }

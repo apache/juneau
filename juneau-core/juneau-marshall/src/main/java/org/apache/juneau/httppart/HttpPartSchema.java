@@ -434,7 +434,7 @@ public class HttpPartSchema {
 			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
-			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t"));
+			throw new ContextRuntimeException("Schema specification errors: \n\t" + join(errors, "\n\t"), new Object[0]);
 	}
 
 	/**

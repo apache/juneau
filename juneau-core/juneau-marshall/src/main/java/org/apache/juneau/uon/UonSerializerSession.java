@@ -332,4 +332,13 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	protected final ParamFormat getParamFormat() {
 		return ctx.getParamFormat();
 	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public final boolean isAddBeanTypeProperties() {
+		return isAddBeanTypes();
+	}
 }

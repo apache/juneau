@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
+
+import org.apache.juneau.internal.*;
 
 /**
  * Defines class/field/method visibilities.
@@ -117,7 +117,7 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! setAccessible(x, true))
+			if (! ClassUtils.setAccessible(x, true))
 				return null;
 		return x;
 	}
@@ -137,7 +137,7 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! setAccessible(x, true))
+			if (! ClassUtils.setAccessible(x, true))
 				return null;
 		return x;
 	}
@@ -157,9 +157,35 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! setAccessible(x, true))
+			if (! ClassUtils.setAccessible(x, true))
 				return null;
 		return x;
 	}
 
+	/**
+	 * @deprecated Use {@link ClassUtils#setAccessible(Constructor, boolean)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public static boolean setAccessible(Constructor<?> x) {
+		return ClassUtils.setAccessible(x, true);
+	}
+
+	/**
+	 * @deprecated Use {@link ClassUtils#setAccessible(Method, boolean)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public static boolean setAccessible(Method x) {
+		return ClassUtils.setAccessible(x, true);
+	}
+
+	/**
+	 * @deprecated Use {@link ClassUtils#setAccessible(Field, boolean)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public static boolean setAccessible(Field x) {
+		return ClassUtils.setAccessible(x, true);
+	}
 }

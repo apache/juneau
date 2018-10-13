@@ -26,8 +26,11 @@ import java.util.*;
  *
  * @param <T> The entry type.
  */
-@SuppressWarnings({"serial","unchecked"})
+@SuppressWarnings({"unchecked"})
 public final class AList<T> extends LinkedList<T> {
+
+	// TODO - Change to 1L in 8.0
+	private static final long serialVersionUID = 2165760898071759212L;
 
 	/**
 	 * Convenience method for creating a list of objects.

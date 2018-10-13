@@ -28,9 +28,11 @@ import org.apache.juneau.http.annotation.*;
  * Generally associated with <code>RestServlets</code> using the <code>responseHandlers</code> annotation so that
  * REST methods can easily create ZIP file responses by simply returning instances of this class.
  */
-@SuppressWarnings("serial")
 @Response
 public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements Streamable {
+
+	// TODO - Change to 1L in 8.0
+	private static final long serialVersionUID = 2694299794576160344L;
 
 	/**
 	 * The name of the zip file.

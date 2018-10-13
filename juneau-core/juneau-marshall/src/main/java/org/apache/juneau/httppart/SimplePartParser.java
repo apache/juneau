@@ -14,6 +14,7 @@ package org.apache.juneau.httppart;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -66,5 +67,14 @@ public class SimplePartParser extends BaseHttpPartParser {
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
 		return createPartSession().parse(partType, schema, in, toType, toTypeArgs);
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@Override
+	@Deprecated
+	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException {
+		return null;
 	}
 }

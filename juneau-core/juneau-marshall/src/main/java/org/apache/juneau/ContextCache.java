@@ -103,7 +103,7 @@ public class ContextCache {
 		CacheEntry ce = m.get(hashCode);
 
 		if (ce != null && USE_DEEP_MATCHING && ! ce.ps.equals(ps))
-			throw new ContextRuntimeException("Property store hashcode mismatch!");
+			throw new ContextRuntimeException("Property store hashcode mismatch!", new Object[0]);
 
 		logCache(c, ce != null);
 

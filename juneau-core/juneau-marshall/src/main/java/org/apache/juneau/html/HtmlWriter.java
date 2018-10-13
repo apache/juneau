@@ -343,4 +343,14 @@ public class HtmlWriter extends XmlWriter {
 		super.append(c);
 		return this;
 	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@Override
+	@Deprecated
+	public HtmlWriter attrUri(String name, Object value) throws IOException {
+		super.attrUri((String)null, name, value);
+		return this;
+	}
 }

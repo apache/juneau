@@ -1099,4 +1099,61 @@ public abstract class Serializer extends BeanTraverseContext {
 				.append("listener", listener)
 			);
 	}
+
+	/**
+	 * @deprecated Use {@link #SERIALIZER_addRootType}.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_abridged = SERIALIZER_addRootType;
+
+	/**
+	 * @deprecated Use {@link #SERIALIZER_addBeanTypes}.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_addBeanTypeProperties = SERIALIZER_addBeanTypes;
+
+	/**
+	 * @deprecated Use {@link BeanTraverseContext#BEANTRAVERSE_detectRecursions}.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_detectRecursions = BeanTraverseContext.BEANTRAVERSE_detectRecursions;
+
+	/**
+	 * @deprecated Use {@link BeanTraverseContext#BEANTRAVERSE_ignoreRecursions}.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_ignoreRecursions = BeanTraverseContext.BEANTRAVERSE_ignoreRecursions;
+
+	/**
+	 * @deprecated Use {@link BeanTraverseContext#BEANTRAVERSE_initialDepth}.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_initialDepth = BeanTraverseContext.BEANTRAVERSE_initialDepth;
+
+	/**
+	 * @deprecated Use {@link BeanTraverseContext#BEANTRAVERSE_maxDepth}.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_maxDepth = BeanTraverseContext.BEANTRAVERSE_maxDepth;
+
+	/**
+	 * @deprecated Use {@link BeanTraverseContext#BEANTRAVERSE_maxDepth}.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_maxIndent = BeanTraverseContext.BEANTRAVERSE_maxDepth;
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@Deprecated
+	public static final String SERIALIZER_quoteChar = PREFIX + "quoteChar.s";
+
+	/**
+	 * @deprecated Use {@link #getMediaTypeRanges()}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public final MediaType[] getMediaTypes() {
+		return null;
+	}
 }

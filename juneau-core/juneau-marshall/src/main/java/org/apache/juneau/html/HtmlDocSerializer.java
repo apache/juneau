@@ -13,6 +13,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -528,7 +529,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @param ps The property store containing all the settings for this object.
 	 */
 	public HtmlDocSerializer(PropertyStore ps) {
-		this(ps, "text/html", null);
+		this(ps, "text/html", (String)null);
 	}
 
 	/**
@@ -740,4 +741,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				.append("noResultsMessage", noResultsMessage)
 			);
 	}
+
+	/**
+	 * @deprecated Use {@link #HtmlDocSerializer(PropertyStore, String, String)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public HtmlDocSerializer(PropertyStore ps, String produces, String...accept) {
+		this(ps, produces, StringUtils.join(accept, ","));
+	}
+
 }

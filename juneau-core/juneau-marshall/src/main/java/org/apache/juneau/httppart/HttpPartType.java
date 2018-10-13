@@ -42,5 +42,11 @@ public enum HttpPartType {
 	RESPONSE_STATUS,
 
 	/** A non-standard field */
-	OTHER;
+	OTHER,
+
+	/**
+	 * @deprecated Use {@link #FORMDATA}.
+	 */
+	@Deprecated
+	FORM_DATA;
 }

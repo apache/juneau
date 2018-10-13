@@ -401,7 +401,7 @@ public class SwaggerTest {
 		Swagger t = new Swagger();
 
 		t.definition("a", new ObjectMap().append("type","a1"));
-		t.definition("b", null);
+		t.definition("b", (ObjectMap)null);
 		t.definition(null, new ObjectMap().append("type", "c1"));
 
 		assertObjectEquals("{a:{type:'a1'},b:null,null:{type:'c1'}}", t.getDefinitions());

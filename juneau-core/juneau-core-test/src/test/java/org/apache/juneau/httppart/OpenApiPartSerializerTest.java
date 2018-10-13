@@ -1091,95 +1091,95 @@ public class OpenApiPartSerializerTest {
 	public void i01a_noSchemaTests_Integer() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
 		for (Integer v : AList.create(new Integer(1), Integer.MAX_VALUE, Integer.MIN_VALUE))
-			assertEquals(valueOf(v), s.serialize(null, v));
+			assertEquals(valueOf(v), s.serialize((HttpPartSchema)null, v));
 	}
 	@Test
 	public void i01b_noSchemaTests_IntegerArray() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("1,2147483647,-2147483648", s.serialize(null, new Integer[]{new Integer(1), Integer.MAX_VALUE, Integer.MIN_VALUE}));
+		assertEquals("1,2147483647,-2147483648", s.serialize((HttpPartSchema)null, new Integer[]{new Integer(1), Integer.MAX_VALUE, Integer.MIN_VALUE}));
 	}
 
 	@Test
 	public void i02a_noSchemaTests_Short() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
 		for (Short v : AList.create(new Short((short)1), Short.MAX_VALUE, Short.MIN_VALUE))
-			assertEquals(valueOf(v), s.serialize(null, v));
+			assertEquals(valueOf(v), s.serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i02b_noSchemaTests_ShortArray() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("1,32767,-32768,null", s.serialize(null, new Short[]{new Short((short)1), Short.MAX_VALUE, Short.MIN_VALUE, null}));
+		assertEquals("1,32767,-32768,null", s.serialize((HttpPartSchema)null, new Short[]{new Short((short)1), Short.MAX_VALUE, Short.MIN_VALUE, null}));
 	}
 
 	@Test
 	public void i03a_noSchemaTests_Long() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
 		for (Long v : AList.create(new Long(1), Long.MAX_VALUE, Long.MIN_VALUE))
-			assertEquals(valueOf(v), s.serialize(null, v));
+			assertEquals(valueOf(v), s.serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i03b_noSchemaTests_LongArray() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("1,9223372036854775807,-9223372036854775808,null", s.serialize(null, new Long[]{new Long(1), Long.MAX_VALUE, Long.MIN_VALUE, null}));
+		assertEquals("1,9223372036854775807,-9223372036854775808,null", s.serialize((HttpPartSchema)null, new Long[]{new Long(1), Long.MAX_VALUE, Long.MIN_VALUE, null}));
 	}
 
 	@Test
 	public void i04a_noSchemaTests_Float() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
 		for (Float v : AList.create(new Float(1f), Float.MAX_VALUE, Float.MIN_VALUE))
-			assertEquals(valueOf(v), s.serialize(null, v));
+			assertEquals(valueOf(v), s.serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i04b_noSchemaTests_FloatArray() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("1.0,3.4028235E38,1.4E-45", s.serialize(null, new Float[]{new Float(1f), Float.MAX_VALUE, Float.MIN_VALUE}));
+		assertEquals("1.0,3.4028235E38,1.4E-45", s.serialize((HttpPartSchema)null, new Float[]{new Float(1f), Float.MAX_VALUE, Float.MIN_VALUE}));
 	}
 
 	@Test
 	public void i05a_noSchemaTests_Double() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
 		for (Double v : AList.create(new Double(1d), Double.MAX_VALUE, Double.MIN_VALUE))
-			assertEquals(valueOf(v), s.serialize(null, v));
+			assertEquals(valueOf(v), s.serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i05b_noSchemaTests_DoubleArray() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("1.0,1.7976931348623157E308,4.9E-324", s.serialize(null, new Double[]{new Double(1), Double.MAX_VALUE, Double.MIN_VALUE}));
+		assertEquals("1.0,1.7976931348623157E308,4.9E-324", s.serialize((HttpPartSchema)null, new Double[]{new Double(1), Double.MAX_VALUE, Double.MIN_VALUE}));
 	}
 
 	@Test
 	public void i06a_noSchemaTests_Boolean() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
 		for (Boolean v : AList.create(Boolean.TRUE, Boolean.FALSE))
-			assertEquals(valueOf(v), s.serialize(null, v));
+			assertEquals(valueOf(v), s.serialize((HttpPartSchema)null, v));
 	}
 
 	@Test
 	public void i06b_noSchemaTests_BooleanArray() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("true,false,null", s.serialize(null, new Boolean[]{Boolean.TRUE, Boolean.FALSE, null}));
+		assertEquals("true,false,null", s.serialize((HttpPartSchema)null, new Boolean[]{Boolean.TRUE, Boolean.FALSE, null}));
 	}
 
 	@Test
 	public void i07_noSchemaTests_Null() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("null", s.serialize(null, null));
+		assertEquals("null", s.serialize((HttpPartSchema)null, null));
 	}
 
 	@Test
 	public void i08a_noSchemaTests_String() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
 		for (String v : AList.create("foo", "", null))
-			assertEquals(valueOf(v), s.serialize(null, v));
+			assertEquals(valueOf(v), s.serialize((HttpPartSchema)null, v));
 	}
 	@Test
 	public void i08b_noSchemaTests_StringArray() throws Exception {
 		HttpPartSerializer s = OpenApiSerializer.DEFAULT;
-		assertEquals("foo,,null", s.serialize(null, new String[]{"foo", "", null}));
+		assertEquals("foo,,null", s.serialize((HttpPartSchema)null, new String[]{"foo", "", null}));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

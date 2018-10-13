@@ -64,4 +64,109 @@ public interface HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	public void writeTo(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void body(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception;
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasStyle(HtmlDocSerializerSession session);
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasScript(HtmlDocSerializerSession session);
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasHeader(HtmlDocSerializerSession session);
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasNav(HtmlDocSerializerSession session);
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasAside(HtmlDocSerializerSession session);
+
+	/**
+	 * @deprecated Use {@link #writeTo(HtmlDocSerializerSession, HtmlWriter, Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean hasFooter(HtmlDocSerializerSession session);
 }

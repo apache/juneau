@@ -290,4 +290,13 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 				.append("decodeChars", decodeChars)
 			);
 	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@Override
+	@Deprecated
+	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException {
+		return null;
+	}
 }

@@ -1154,6 +1154,11 @@ public class RequestBeanProxyTest {
 		public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 			return createPartSession().serialize(null, schema, value);
 		}
+
+		@Override
+		public String serialize(HttpPartType type, Object value) {
+			return null;
+		}
 	}
 
 	public static class ListSerializer extends BaseHttpPartSerializer {
@@ -1181,6 +1186,11 @@ public class RequestBeanProxyTest {
 		@Override
 		public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 			return createPartSession().serialize(null, schema, value);
+		}
+
+		@Override
+		public String serialize(HttpPartType type, Object value) {
+			return null;
 		}
 	}
 }

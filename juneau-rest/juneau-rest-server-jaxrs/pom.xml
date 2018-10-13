@@ -16,7 +16,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
@@ -92,6 +92,58 @@
 						<include>**/*Test.class</include>
 					</includes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
+				<version>0.13.0</version>
+				<configuration>
+					<skip>true</skip>
+					<oldVersion>
+						<dependency>
+							<groupId>org.apache.juneau</groupId>
+							<artifactId>${project.artifactId}</artifactId>
+							<version>${juneau.compare.version}</version>
+							<type>jar</type>
+						</dependency>
+					</oldVersion>
+					<newVersion>
+						<file>
+							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+						</file>
+					</newVersion>
+					<parameter>
+						<onlyModified>true</onlyModified>
+						<accessModifier>public</accessModifier>
+						<excludes>
+						</excludes>
+						<ignoreMissingClasses>true</ignoreMissingClasses>
+						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
+						<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
+						<breakBuildIfCausedByExclusion>false</breakBuildIfCausedByExclusion>
+						<breakBuildBasedOnSemanticVersioning>true</breakBuildBasedOnSemanticVersioning>
+						<overrideCompatibilityChangeParameters>
+							<overrideCompatibilityChangeParameter>
+								<binaryCompatible>true</binaryCompatible>
+								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
+								<sourceCompatible>true</sourceCompatible>
+							</overrideCompatibilityChangeParameter>
+							<overrideCompatibilityChangeParameter>
+								<binaryCompatible>true</binaryCompatible>
+								<compatibilityChange>FIELD_REMOVED_IN_SUPERCLASS</compatibilityChange>
+								<sourceCompatible>true</sourceCompatible>
+							</overrideCompatibilityChangeParameter>
+						</overrideCompatibilityChangeParameters>
+					</parameter>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>cmp</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

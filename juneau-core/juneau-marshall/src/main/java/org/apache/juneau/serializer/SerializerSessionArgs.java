@@ -72,7 +72,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * @param useWhitespace
 	 * 	Override the use-whitespace flag on the serializer.
 	 */
-	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug, UriContext uriContext, Boolean 	useWhitespace) {
+	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug, UriContext uriContext, Boolean useWhitespace) {
 		super(properties, locale, timeZone, mediaType, schema, debug);
 		this.javaMethod = javaMethod;
 		this.uriContext = uriContext;
@@ -146,5 +146,14 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	public SerializerSessionArgs properties(ObjectMap properties) {
 		super.properties(properties);
 		return this;
+	}
+
+	/**
+	 * @deprecated Use {@link #SerializerSessionArgs(ObjectMap, Method, Locale, TimeZone, MediaType, HttpPartSchema, Boolean, UriContext, Boolean)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
+		this(properties, javaMethod, locale, timeZone, mediaType, null, null, uriContext, false);
 	}
 }

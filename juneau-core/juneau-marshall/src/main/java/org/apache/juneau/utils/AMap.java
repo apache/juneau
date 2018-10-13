@@ -28,8 +28,10 @@ import java.util.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-@SuppressWarnings("serial")
 public final class AMap<K,V> extends LinkedHashMap<K,V> {
+
+	// TODO - Change to 1L in 8.0
+	private static final long serialVersionUID = 7344180601810042208L;
 
 	/**
 	 * Creates an empty map.

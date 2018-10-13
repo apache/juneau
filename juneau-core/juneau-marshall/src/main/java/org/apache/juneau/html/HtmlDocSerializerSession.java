@@ -121,7 +121,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
-	protected final Set<String> getStyle() {
+	// TODO - Make protected in 8.0.
+	public final Set<String> getStyle() {
 		return style;
 	}
 
@@ -132,7 +133,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
-	protected final Set<String> getStylesheet() {
+	// TODO - Make protected in 8.0.
+	public final Set<String> getStylesheet() {
 		return stylesheet;
 	}
 
@@ -143,7 +145,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
-	protected final Set<String> getScript() {
+	// TODO - Make protected in 8.0.
+	public final Set<String> getScript() {
 		return script;
 	}
 
@@ -154,7 +157,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
-	protected final String[] getNavlinks() {
+	// TODO - Make protected in 8.0.
+	public final String[] getNavlinks() {
 		return navlinks;
 	}
 
@@ -165,7 +169,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
-	protected final String[] getHead() {
+	// TODO - Make protected in 8.0.
+	public final String[] getHead() {
 		return head;
 	}
 
@@ -176,7 +181,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
-	protected final String[] getHeader() {
+	// TODO - Make protected in 8.0.
+	public final String[] getHeader() {
 		return header;
 	}
 
@@ -187,7 +193,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
-	protected final String[] getNav() {
+	// TODO - Make protected in 8.0.
+	public final String[] getNav() {
 		return nav;
 	}
 
@@ -198,7 +205,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
-	protected final String[] getAside() {
+	// TODO - Make protected in 8.0.
+	public final String[] getAside() {
 		return aside;
 	}
 
@@ -209,7 +217,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
-	protected final String[] getFooter() {
+	// TODO - Make protected in 8.0.
+	public final String[] getFooter() {
 		return footer;
 	}
 
@@ -220,7 +229,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
-	protected final String getNoResultsMessage() {
+	// TODO - Make protected in 8.0.
+	public final String getNoResultsMessage() {
 		return ctx.getNoResultsMessage();
 	}
 
@@ -231,7 +241,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
 	 */
-	protected final boolean isNowrap() {
+	// TODO - Make protected in 8.0.
+	public final boolean isNowrap() {
 		return ctx.isNowrap();
 	}
 
@@ -242,7 +253,17 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */
-	protected final HtmlDocTemplate getTemplate() {
+	// TODO - Make protected in 8.0.
+	public final HtmlDocTemplate getTemplate() {
 		return ctx.getTemplate();
+	}
+
+	/**
+	 * @deprecated No replacement.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public final boolean isNoWrap() {
+		return false;
 	}
 }

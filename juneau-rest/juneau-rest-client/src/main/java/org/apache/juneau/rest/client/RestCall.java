@@ -1635,7 +1635,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				else if (serializer != null)
 					entity = new RestRequestEntity(input, serializer, requestBodySchema);
 				else if (partSerializer != null)
-					entity = new StringEntity(partSerializer.serialize(null, input), getRequestContentType(TEXT_PLAIN));
+					entity = new StringEntity(partSerializer.serialize((HttpPartSchema)null, input), getRequestContentType(TEXT_PLAIN));
 				else
 					entity = new StringEntity(getBeanContext().getClassMetaForObject(input).toString(input), getRequestContentType(TEXT_PLAIN));
 
@@ -2291,7 +2291,7 @@ public final class RestCall extends BeanSession implements Closeable {
 							try {
 								return c.newInstance();
 							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-								throw new ParseException(e);
+								throw new ParseException((Throwable)e);
 							}
 						}
 					}

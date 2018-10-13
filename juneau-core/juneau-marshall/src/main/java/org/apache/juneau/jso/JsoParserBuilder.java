@@ -492,4 +492,22 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@Override
+	@Deprecated
+	public JsoParserBuilder fileCharset(String value) {
+		return this;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@Override
+	@Deprecated
+	public JsoParserBuilder inputStreamCharset(String value) {
+		return this;
+	}
 }

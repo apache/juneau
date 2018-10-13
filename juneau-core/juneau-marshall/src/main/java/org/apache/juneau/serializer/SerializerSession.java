@@ -613,7 +613,8 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
 	 */
-	public final boolean isUseWhitespace() {
+	// TODO - Make final in 8.0
+	public boolean isUseWhitespace() {
 		return useWhitespace;
 	}
 

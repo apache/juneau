@@ -56,4 +56,25 @@ public class ParserListener {
 	public void onError(ParserSession session, Throwable t, String msg) {
 		// Do something with this information.
 	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <T> void onUnknownBeanProperty(ParserSession session, ParserPipe pipe, String propertyName, Class<T> beanClass, T bean, int line, int col) {
+		onError(session, pipe, null,
+			format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at line {2} column {3}",
+				propertyName, beanClass, line, col)
+		);
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void onError(ParserSession session, ParserPipe pipe, Throwable t, String msg) {
+		// Do something with this information.
+	}
 }

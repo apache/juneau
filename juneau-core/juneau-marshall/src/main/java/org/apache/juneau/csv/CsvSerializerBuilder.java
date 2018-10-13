@@ -611,4 +611,32 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
+
+	/**
+	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
+	 */
+	@Override
+	@Deprecated
+	public CsvSerializerBuilder abridged(boolean value) {
+		return this;
+	}
+
+	/**
+	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
+	 */
+	@Override
+	@Deprecated
+	public CsvSerializerBuilder abridged() {
+		return this;
+	}
+
+	/**
+	 * @deprecated {@link #addBeanTypes(boolean)}
+	 */
+	@Override
+	@Deprecated
+	public CsvSerializerBuilder addBeanTypeProperties(boolean value) {
+		this.addBeanTypes(value);
+		return this;
+	}
 }

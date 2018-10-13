@@ -42,7 +42,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
 		String[] head = session.getHead();
 		for (int i = 0; i < head.length; i++)
@@ -68,7 +70,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
 		int i = 0;
 		for (String s : session.getStylesheet())
@@ -89,7 +93,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		int i = 0;
 		for (String s : session.getScript())
 			w.sIf(i++ > 0).append(3, s).append('\n'); // Must always append a newline even if whitespace disabled!
@@ -103,7 +109,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void body(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void body(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 
 		if (hasHeader(session)) {
 			w.sTag(2, "header").nl(2);
@@ -146,7 +154,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void header(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		// Write the title of the page.
 		String[] header = session.getHeader();
 		for (int i = 0; i < header.length; i++)
@@ -161,7 +171,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] links = session.getNavLinks();
 		if (links.length > 0 && ! ArrayUtils.contains("NONE", links)) {
 			w.sTag(3, "ol").nl(3);
@@ -198,7 +210,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] aside = session.getAside();
 		for (int i = 0; i < aside.length; i++)
 			w.sIf(i > 0).appendln(4, aside[i]);
@@ -212,7 +226,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
 		// <div class='outerdata'><div class='data' id='data'>...</div></div>
 		w.oTag(4, "div").attr("class","outerdata").append('>').nl(4);
@@ -242,7 +258,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	// TODO - Make protected in 8.0.
+	@Override
+	public void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] footer = session.getFooter();
 		for (int i = 0; i < footer.length; i++)
 			w.sIf(i > 0).appendln(3, footer[i]);
@@ -254,7 +272,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
-	protected boolean hasStyle(HtmlDocSerializerSession session) {
+	// TODO - Make protected in 8.0.
+	@Override
+	public boolean hasStyle(HtmlDocSerializerSession session) {
 		return true;
 	}
 
@@ -264,7 +284,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
-	protected boolean hasScript(HtmlDocSerializerSession session) {
+	// TODO - Make protected in 8.0.
+	@Override
+	public boolean hasScript(HtmlDocSerializerSession session) {
 		return true;
 	}
 
@@ -275,7 +297,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
-	protected boolean hasHeader(HtmlDocSerializerSession session) {
+	// TODO - Make protected in 8.0.
+	@Override
+	public boolean hasHeader(HtmlDocSerializerSession session) {
 		return session.getHeader().length > 0;
 	}
 
@@ -286,7 +310,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
-	protected boolean hasNav(HtmlDocSerializerSession session) {
+	// TODO - Make protected in 8.0.
+	@Override
+	public boolean hasNav(HtmlDocSerializerSession session) {
 		return session.getNav().length > 0 || session.getNavLinks().length > 0;
 	}
 
@@ -297,7 +323,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
-	protected boolean hasAside(HtmlDocSerializerSession session) {
+	// TODO - Make protected in 8.0.
+	@Override
+	public boolean hasAside(HtmlDocSerializerSession session) {
 		return session.getAside().length > 0;
 	}
 
@@ -308,7 +336,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @param session The current serializer session.
 	 * @return A boolean flag.
 	 */
-	protected boolean hasFooter(HtmlDocSerializerSession session) {
+	// TODO - Make protected in 8.0.
+	@Override
+	public boolean hasFooter(HtmlDocSerializerSession session) {
 		return session.getFooter().length > 0;
 	}
 

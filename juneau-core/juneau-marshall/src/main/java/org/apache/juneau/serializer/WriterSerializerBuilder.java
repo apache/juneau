@@ -61,6 +61,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is <code>100</code>.
 	 * @return This object (for method chaining).
 	 */
+	@Override
 	public WriterSerializerBuilder maxIndent(int value) {
 		return set(WSERIALIZER_maxIndent, value);
 	}
@@ -81,6 +82,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 * 	<br>The default is <js>'"'</js>.
 	 * @return This object (for method chaining).
 	 */
+	@Override
 	public WriterSerializerBuilder quoteChar(char value) {
 		return set(WSERIALIZER_quoteChar, value);
 	}
@@ -98,6 +100,7 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 *
 	 * @return This object (for method chaining).
 	 */
+	@Override
 	public WriterSerializerBuilder sq() {
 		return quoteChar('\'');
 	}

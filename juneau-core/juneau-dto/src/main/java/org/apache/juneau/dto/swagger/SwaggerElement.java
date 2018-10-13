@@ -178,4 +178,15 @@ public abstract class SwaggerElement {
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);
 	}
+	
+	/**
+	 * @deprecated Use {@link #get(String)}
+	 */
+	@Deprecated
+	@SuppressWarnings("javadoc")
+	public Map<String,Object> getExtraProperties() {
+		if (extra == null)
+			extra = new LinkedHashMap<>();
+		return extra;
+	}
 }

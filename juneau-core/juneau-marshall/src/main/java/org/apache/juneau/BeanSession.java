@@ -281,7 +281,8 @@ public class BeanSession extends Session {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
-	protected final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
+	// TODO - Make protected in 8.0.
+	public final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
 		if (to == null)
 			to = (ClassMeta<T>)object();
 
@@ -730,7 +731,8 @@ public class BeanSession extends Session {
 	 * @param list The contents to populate the array with.
 	 * @return A new object or primitive array.
 	 */
-	protected final Object toArray(ClassMeta<?> type, Collection<?> list) {
+	// TODO - Make protected in 8.0.
+	public final Object toArray(ClassMeta<?> type, Collection<?> list) {
 		if (list == null)
 			return null;
 		ClassMeta<?> componentType = type.isArgs() ? object() : type.getElementType();
@@ -1009,7 +1011,8 @@ public class BeanSession extends Session {
 	 * @param classes The array of classes to get class metas for.
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
-	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
+	// TODO - Make protected in 8.0.
+	public final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
 		assertFieldNotNull(classes, "classes");
 		ClassMeta[] cm = new ClassMeta<?>[classes.length];
 		for (int i = 0; i < classes.length; i++)
@@ -1048,7 +1051,8 @@ public class BeanSession extends Session {
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
-	protected final BeanRegistry getBeanRegistry() {
+	// TODO - Make protected in 8.0.
+	public final BeanRegistry getBeanRegistry() {
 		return ctx.getBeanRegistry();
 	}
 
@@ -1126,7 +1130,8 @@ public class BeanSession extends Session {
 	 *
 	 * @return A new or previously returned string builder.
 	 */
-	protected final StringBuilder getStringBuilder() {
+	// TODO - Make protected in 8.0.
+	public final StringBuilder getStringBuilder() {
 		if (sbStack.isEmpty())
 			return new StringBuilder();
 		return sbStack.pop();
@@ -1137,7 +1142,8 @@ public class BeanSession extends Session {
 	 *
 	 * @param sb The string builder to return to the pool.  No-op if <jk>null</jk>.
 	 */
-	protected final void returnStringBuilder(StringBuilder sb) {
+	// TODO - Make protected in 8.0.
+	public final void returnStringBuilder(StringBuilder sb) {
 		if (sb == null)
 			return;
 		sb.setLength(0);
@@ -1276,7 +1282,8 @@ public class BeanSession extends Session {
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	protected final boolean isIgnoreUnknownBeanProperties() {
+	// TODO - Make protected in 8.0.
+	public final boolean isIgnoreUnknownBeanProperties() {
 		return ctx.isIgnoreUnknownBeanProperties();
 	}
 
@@ -1458,7 +1465,8 @@ public class BeanSession extends Session {
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	protected final boolean isDebug() {
+	// TODO - Make protected in 8.0.
+	public final boolean isDebug() {
 		return debug;
 	}
 

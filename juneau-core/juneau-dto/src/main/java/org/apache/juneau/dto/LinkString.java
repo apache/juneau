@@ -154,4 +154,31 @@ public class LinkString implements Comparable<LinkString> {
 	public int hashCode() {
 		return super.hashCode();
 	}
+	
+	/**
+	 * @deprecated Use {@link #getUri()}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public String getHref() {
+		return getUri().toString();
+	}
+	
+	/**
+	 * @deprecated Use {@link #name(String)}.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public LinkString setName(String name) {
+		return name(name);
+	}
+	
+	/**
+	 * @deprecated Use {@link #uri(String,Object...)}.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public LinkString setHref(String href, Object...args) {
+		return uri(href, args);
+	}
 }

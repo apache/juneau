@@ -79,4 +79,14 @@ public final class BeanRuntimeException extends FormattedRuntimeException {
 			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
 		return null;
 	}
+
+	/**
+	 * @deprecated
+	 */
+	@Override /* Throwable */
+	@Deprecated
+	public synchronized BeanRuntimeException initCause(Throwable cause) {
+		super.initCause(cause);
+		return this;
+	}
 }
