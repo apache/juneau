@@ -99,7 +99,6 @@
 				<artifactId>japicmp-maven-plugin</artifactId>
 				<version>0.13.0</version>
 				<configuration>
-					<skip>true</skip>
 					<oldVersion>
 						<dependency>
 							<groupId>org.apache.juneau</groupId>

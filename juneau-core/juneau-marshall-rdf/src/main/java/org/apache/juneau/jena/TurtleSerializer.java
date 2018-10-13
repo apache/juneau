@@ -55,7 +55,7 @@ public class TurtleSerializer extends RdfSerializer {
 			ps.builder()
 				.set(RDF_language, LANG_TURTLE)
 				.build(),
-			"text/turtle", null
+			"text/turtle", (String)null
 		);
 	}
 }

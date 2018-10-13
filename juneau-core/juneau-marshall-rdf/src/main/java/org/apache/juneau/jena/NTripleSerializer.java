@@ -55,7 +55,7 @@ public class NTripleSerializer extends RdfSerializer {
 			ps.builder()
 				.set(RDF_language, LANG_NTRIPLE)
 				.build(),
-			"text/n-triple", null
+			"text/n-triple", (String)null
 		);
 	}
 }

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -247,7 +248,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	The property store containing all the settings for this object.
 	 */
 	public RdfSerializer(PropertyStore ps) {
-		this(ps, "text/xml+rdf", null);
+		this(ps, "text/xml+rdf", (String)null);
 	}
 
 
@@ -412,5 +413,105 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 				.append("namespaces", namespaces)
 				.append("addBeanTypes", addBeanTypes)
 			);
+	}
+
+	/**
+	 * @deprecated Use {@link RdfXmlSerializer#DEFAULT}
+	 */
+	@Deprecated
+	public static final RdfSerializer DEFAULT_XML = new Xml(PropertyStore.DEFAULT);
+
+	/**
+	 * @deprecated Use {@link RdfXmlAbbrevSerializer#DEFAULT}
+	 */
+	@Deprecated
+	public static final RdfSerializer DEFAULT_XMLABBREV = new XmlAbbrev(PropertyStore.DEFAULT);
+
+	/**
+	 * @deprecated Use {@link TurtleSerializer#DEFAULT}
+	 */
+	@Deprecated
+	public static final RdfSerializer DEFAULT_TURTLE = new Turtle(PropertyStore.DEFAULT);
+
+	/**
+	 * @deprecated Use {@link NTripleSerializer#DEFAULT}
+	 */
+	@Deprecated
+	public static final RdfSerializer DEFAULT_NTRIPLE = new NTriple(PropertyStore.DEFAULT);
+
+	/**
+	 * @deprecated Use {@link N3Serializer#DEFAULT}
+	 */
+	@Deprecated
+	public static final RdfSerializer DEFAULT_N3 = new N3(PropertyStore.DEFAULT);
+
+	/**
+	 * @deprecated Use {@link RdfXmlSerializer#DEFAULT}
+	 */
+	@Deprecated
+	@SuppressWarnings("javadoc")
+	public static class Xml extends RdfXmlSerializer {
+		public Xml(PropertyStore ps) {
+			super(ps);
+		}
+	}
+
+	/**
+	 * @deprecated Use {@link RdfXmlAbbrevSerializer#DEFAULT}
+	 */
+	@Deprecated
+	@SuppressWarnings("javadoc")
+	public static class XmlAbbrev extends RdfXmlAbbrevSerializer {
+		public XmlAbbrev(PropertyStore ps) {
+			super(ps);
+		}
+	}
+
+	/**
+	 * @deprecated Use {@link NTripleSerializer#DEFAULT}
+	 */
+	@Deprecated
+	@SuppressWarnings("javadoc")
+	public static class NTriple extends NTripleSerializer {
+		public NTriple(PropertyStore ps) {
+			super(ps);
+		}
+	}
+
+	/**
+	 * @deprecated Use {@link TurtleSerializer#DEFAULT}
+	 */
+	@Deprecated
+	@SuppressWarnings("javadoc")
+	public static class Turtle extends TurtleSerializer {
+		public Turtle(PropertyStore ps) {
+			super(ps);
+		}
+	}
+
+	/**
+	 * @deprecated Use {@link N3Serializer#DEFAULT}
+	 */
+	@Deprecated
+	@SuppressWarnings("javadoc")
+	public static class N3 extends N3Serializer {
+		public N3(PropertyStore ps) {
+			super(ps);
+		}
+	}
+
+	/**
+	 * @deprecated Use {@link #RDF_addBeanTypes}.
+	 */
+	@Deprecated
+	public static final String RDF_addBeanTypeProperties = RDF_addBeanTypes;
+
+	/**
+	 * @deprecated Use {@link #RdfSerializer(PropertyStore, String, String)}.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RdfSerializer(PropertyStore ps, String produces, String...accept) {
+		this(ps, produces, StringUtils.join(accept, ","));
 	}
 }

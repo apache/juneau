@@ -55,7 +55,7 @@ public class N3Serializer extends RdfSerializer {
 			ps.builder()
 				.set(RDF_language, LANG_N3)
 				.build(),
-			"text/n3", null
+			"text/n3", (String)null
 		);
 	}
 }

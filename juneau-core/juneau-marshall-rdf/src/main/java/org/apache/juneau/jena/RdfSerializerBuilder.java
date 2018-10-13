@@ -985,4 +985,32 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
+
+	/**
+	 * @deprecated Use {@link #addRootProperty(boolean)}
+	 */
+	@Override
+	@Deprecated
+	public RdfSerializerBuilder abridged(boolean value) {
+		return this;
+	}
+
+	/**
+	 * @deprecated Use {@link #addRootProperty()}
+	 */
+	@Override
+	@Deprecated
+	public RdfSerializerBuilder abridged() {
+		return this;
+	}
+
+	/**
+	 * @deprecated Use {@link #addBeanTypes(boolean)}
+	 */
+	@Override
+	@Deprecated
+	public RdfSerializerBuilder addBeanTypeProperties(boolean value) {
+		super.addBeanTypes(value);
+		return this;
+	}
 }
