@@ -91,4 +91,13 @@ public final class RestRequestEntity extends BasicHttpEntity {
 		}
 		return new ByteArrayInputStream(outputBytes);
 	}
+
+	/**
+	 * @deprecated Use {@link #RestRequestEntity(Object, Serializer, HttpPartSchema)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestRequestEntity(Object input, Serializer serializer) {
+		this(input, serializer, null);
+	}
 }

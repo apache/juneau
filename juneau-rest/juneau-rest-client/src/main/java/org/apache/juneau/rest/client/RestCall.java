@@ -2492,4 +2492,58 @@ public final class RestCall extends BeanSession implements Closeable {
 			return false;
 		return true;
 	}
+
+	/**
+	 * @deprecated Use {@link #run()}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public int execute() throws RestCallException {
+		return run();
+	}
+
+	/**
+	 * @deprecated Use {@link #formData(String, Object, boolean, HttpPartSerializer, HttpPartSchema))}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestCall formData(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
+		return formData(name, value, skipIfEmpty, partSerializer, null);
+	}
+
+	/**
+	 * @deprecated Use {@link #header(String, Object, boolean, HttpPartSerializer, HttpPartSchema)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestCall header(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
+		return header(name, value, skipIfEmpty, partSerializer, null);
+	}
+
+	/**
+	 * @deprecated Use {@link #body(Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestCall input(final Object input) throws RestCallException {
+		return body(input);
+	}
+
+	/**
+	 * @deprecated Use {@link #path(String, Object, HttpPartSerializer, HttpPartSchema)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestCall path(String name, Object value, HttpPartSerializer partSerializer) throws RestCallException {
+		return path(name, value, partSerializer, null);
+	}
+
+	/**
+	 * @deprecated Use {@link #query(String, Object, boolean, HttpPartSerializer, HttpPartSchema)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestCall query(String name, Object value, boolean skipIfEmpty, HttpPartSerializer partSerializer) throws RestCallException {
+		return query(name, value, skipIfEmpty, partSerializer, null);
+	}
 }

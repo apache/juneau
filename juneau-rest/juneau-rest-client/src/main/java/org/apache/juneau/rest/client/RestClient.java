@@ -1341,4 +1341,31 @@ public class RestClient extends BeanContext implements Closeable {
 			}
 		}
 	}
+
+	/**
+	 * @deprecated Use {@link #getRemoteResource(Class)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <T> T getRemoteableProxy(final Class<T> interfaceClass) {
+		return getRemoteResource(interfaceClass, null);
+	}
+
+	/**
+	 * @deprecated Use {@link #getRemoteResource(Class,Object)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object restUrl) {
+		return getRemoteResource(interfaceClass, restUrl, serializer, parser);
+	}
+
+	/**
+	 * @deprecated Use {@link #getRemoteResource(Class,Object,Serializer,Parser)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public <T> T getRemoteableProxy(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
+		return getRemoteResource(interfaceClass, restUrl, serializer, parser);
+	}
 }
