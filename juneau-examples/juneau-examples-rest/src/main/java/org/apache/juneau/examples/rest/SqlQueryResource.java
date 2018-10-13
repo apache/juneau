@@ -102,7 +102,7 @@ public class SqlQueryResource extends BasicRestServlet {
 
 		return div(
 			script("text/javascript",
-				"\n	// Quick and dirty function to allow tabs in textarea."
+				new String[]{"\n	// Quick and dirty function to allow tabs in textarea."
 				+"\n	function checkTab(e) {"
 				+"\n		if (e.keyCode == 9) {"
 				+"\n			var t = e.target;"
@@ -116,7 +116,7 @@ public class SqlQueryResource extends BasicRestServlet {
 				+"\n		var doc = b.contentDocument || b.contentWindow.document;"
 				+"\n		var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];"
 				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
-				+"\n	}"
+				+"\n	}"}
 			),
 			form("servlet:/").method(POST).target("buf").children(
 				table(

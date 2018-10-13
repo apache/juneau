@@ -60,6 +60,7 @@ public class CodeFormatterResource extends BasicRestServlet {
 	public Div get(RestRequest req) {
 		return div(
 			script("text/javascript",
+				new String[]{
 				"\n	// Quick and dirty function to allow tabs in textarea."
 				+"\n	function checkTab(e) {"
 				+"\n		if (e.keyCode == 9) {"
@@ -74,7 +75,7 @@ public class CodeFormatterResource extends BasicRestServlet {
 				+"\n		var doc = b.contentDocument || b.contentWindow.document;"
 				+"\n		var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];"
 				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
-				+"\n	}"
+				+"\n	}"}
 			),
 			form("form").action("codeFormatter").method(POST).target("buff").children(
 				table(

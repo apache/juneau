@@ -99,7 +99,6 @@
 				<artifactId>japicmp-maven-plugin</artifactId>
 				<version>0.13.0</version>
 				<configuration>
-					<skip>true</skip>
 					<oldVersion>
 						<dependency>
 							<groupId>org.apache.juneau</groupId>
@@ -117,6 +116,7 @@
 						<onlyModified>true</onlyModified>
 						<accessModifier>public</accessModifier>
 						<excludes>
+							<exclude>org.apache.juneau.dto.swagger.SchemaInfo</exclude>
 						</excludes>
 						<ignoreMissingClasses>true</ignoreMissingClasses>
 						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>

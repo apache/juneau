@@ -389,7 +389,7 @@ public class OperationTest {
 		Operation t = new Operation();
 
 		t.response("1", responseInfo("foo"));
-		t.response(null, responseInfo("bar"));
+		t.response((String)null, responseInfo("bar"));
 		t.response("2", null);
 		assertObjectEquals("{'1':{description:'foo'},null:{description:'bar'},'2':null}", t.getResponses());
 	}

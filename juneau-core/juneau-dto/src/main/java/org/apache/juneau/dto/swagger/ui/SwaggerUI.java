@@ -99,7 +99,7 @@ public class SwaggerUI extends PojoSwap<Swagger,Div> {
 
 		Div outer = div(
 			style(css),
-			script("text/javascript", RESOURCES.getString("SwaggerUI.js")),
+			script("text/javascript", new String[]{RESOURCES.getString("SwaggerUI.js")}),
 			header(s)
 		)._class("swagger-ui");
 

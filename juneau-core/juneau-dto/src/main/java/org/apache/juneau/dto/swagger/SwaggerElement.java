@@ -34,7 +34,9 @@ public abstract class SwaggerElement {
 	private boolean strict;
 	private Map<String,Object> extra;
 
-	SwaggerElement() {}
+	// TODO - Make package-protected in 8.0
+	@SuppressWarnings("javadoc")
+	public SwaggerElement() {}
 
 	SwaggerElement(SwaggerElement copyFrom) {
 		this.strict = copyFrom.strict;
@@ -178,7 +180,7 @@ public abstract class SwaggerElement {
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);
 	}
-	
+
 	/**
 	 * @deprecated Use {@link #get(String)}
 	 */

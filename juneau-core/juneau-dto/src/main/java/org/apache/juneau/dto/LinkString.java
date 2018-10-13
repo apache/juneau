@@ -154,7 +154,7 @@ public class LinkString implements Comparable<LinkString> {
 	public int hashCode() {
 		return super.hashCode();
 	}
-	
+
 	/**
 	 * @deprecated Use {@link #getUri()}
 	 */
@@ -163,7 +163,7 @@ public class LinkString implements Comparable<LinkString> {
 	public String getHref() {
 		return getUri().toString();
 	}
-	
+
 	/**
 	 * @deprecated Use {@link #name(String)}.
 	 */
@@ -172,7 +172,7 @@ public class LinkString implements Comparable<LinkString> {
 	public LinkString setName(String name) {
 		return name(name);
 	}
-	
+
 	/**
 	 * @deprecated Use {@link #uri(String,Object...)}.
 	 */
@@ -180,5 +180,14 @@ public class LinkString implements Comparable<LinkString> {
 	@Deprecated
 	public LinkString setHref(String href, Object...args) {
 		return uri(href, args);
+	}
+
+	/**
+	 * @deprecated Use {@link #uri(String,Object...)}.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public LinkString setHref(String href) {
+		return uri(href);
 	}
 }

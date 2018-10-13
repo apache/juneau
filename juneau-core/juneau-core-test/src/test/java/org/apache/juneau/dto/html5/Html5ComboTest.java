@@ -1935,7 +1935,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				new ComboInput<Script>(
 					"Script",
 					Script.class,
-					script("text/javascript", "\n\talert('hello world!');\n"),
+					script("text/javascript", new String[]{"\n\talert('hello world!');\n"}),
 					/* Json */		"{_type:'script',a:{type:'text/javascript'},c:'\\n\\talert(\\'hello world!\\');\\n'}",
 					/* JsonT */		"{t:'script',a:{type:'text/javascript'},c:'\\n\\talert(\\'hello world!\\');\\n'}",
 					/* JsonR */		"{\n\t_type: 'script',\n\ta: {\n\t\ttype: 'text/javascript'\n\t},\n\tc: '\\n\\talert(\\'hello world!\\');\\n'\n}",
