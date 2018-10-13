@@ -17,7 +17,8 @@ import static org.junit.Assert.*;
 import java.io.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;

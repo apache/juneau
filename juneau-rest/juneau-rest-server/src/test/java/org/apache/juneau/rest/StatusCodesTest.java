@@ -16,7 +16,10 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;

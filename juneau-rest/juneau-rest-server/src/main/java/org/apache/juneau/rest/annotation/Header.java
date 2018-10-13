@@ -10,34 +10,49 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.microservice.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.testutils.pojos.*;
+import java.lang.annotation.*;
+
+import org.apache.juneau.httppart.*;
 
 /**
- * JUnit automated testcase resource.
+ * @deprecated Use {@link org.apache.juneau.http.annotation.Header}
  */
-@RestResource(
-	path="/testLargePojos"
-)
-public class LargePojosResource extends BasicRestServletJena {
-	private static final long serialVersionUID = 1L;
+@Deprecated
+@Documented
+@Target(PARAMETER)
+@Retention(RUNTIME)
+@Inherited
+public @interface Header {
 
-	//====================================================================================================
-	// Test how long it takes to serialize/parse various content types.
-	//====================================================================================================
-	@RestMethod(name=GET, path="/")
-	public LargePojo testGet() {
-		return LargePojo.create();
-	}
+	/**
+	 * The default value for this header if it's not present in the request.
+	 */
+	String def() default "";
 
-	@RestMethod(name=PUT, path="/")
-	public String testPut(@Body LargePojo in) {
-		return "ok";
-	}
+	/**
+	 * HTTP header name.
+	 */
+	String name() default "";
+
+	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing values from strings.
+	 *
+	 * <p>
+	 * The default value for this parser is inherited from the servlet/method which defaults to {@link UonPartParser}.
+	 * <br>You can use {@link SimplePartParser} to parse POJOs that are directly convertible from <code>Strings</code>.
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+
+	/**
+	 * A synonym for {@link #name()}.
+	 *
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+	String value() default "";
 }

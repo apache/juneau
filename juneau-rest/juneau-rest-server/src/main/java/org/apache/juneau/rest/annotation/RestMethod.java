@@ -19,7 +19,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.remote.*;
 
 /**
@@ -550,6 +549,13 @@ public @interface RestMethod {
 	String name() default "";
 
 	/**
+	 * REST method name.
+	 *
+	 * Synonym for {@link #name()}.
+	 */
+	String method() default "";
+
+	/**
 	 * Parsers.
 	 *
 	 * <p>
@@ -592,7 +598,7 @@ public @interface RestMethod {
 	 * pattern is not found.
 	 *
 	 * <p>
-	 * The path can contain variables that get resolved to {@link Path @Path} parameters.
+	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters.
 	 *
 	 * <h5 class='figure'>Examples:</h5>
 	 * <p class='bcode w800'>
@@ -641,7 +647,7 @@ public @interface RestMethod {
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='ja'>{@link Path}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	 * </ul>
 	 */
 	String path() default "";

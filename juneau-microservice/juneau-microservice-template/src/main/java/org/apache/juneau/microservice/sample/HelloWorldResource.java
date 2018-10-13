@@ -33,7 +33,7 @@ public class HelloWorldResource extends BasicRestServlet {
 	 * GET request handler.
 	 * @return The string "Hello world!"
 	 */
-	@RestMethod(name=GET, path="/*")
+	@RestMethod(method=GET, path="/*")
 	public String sayHello() {
 		return "Hello world!";
 	}

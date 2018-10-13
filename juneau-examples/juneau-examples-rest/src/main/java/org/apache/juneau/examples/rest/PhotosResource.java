@@ -24,6 +24,8 @@ import javax.imageio.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;

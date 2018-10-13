@@ -19,7 +19,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;

@@ -10,49 +10,72 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.rest.annotation2;
 
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.*;
+import static org.apache.juneau.http.HttpMethodName.*;
+
+import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.json.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests related to @HasFormData annotation.
+ * Tests inheritance of annotations from interfaces.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings("javadoc")
-public class HasFormDataAnnotationTest {
+public class AnnotationInheritanceTest {
 
 	//=================================================================================================================
-	// Simple tests
+	// @Body on parameter
 	//=================================================================================================================
 
-	@RestResource
-	public static class A {
-		@RestMethod
-		public String post(RestRequest req, @HasFormData("p1") boolean p1, @HasFormData("p2") Boolean p2) throws Exception {
-			RequestFormData f = req.getFormData();
-			return "p1=["+p1+","+f.containsKey("p1")+"],p2=["+p2+","+f.containsKey("p2")+"]";
+	@RestResource(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
+	public static interface IA {
+		@RestMethod(name=PUT, path="/a01")
+		public String a01(@Body String b);
+
+		@RestMethod(name=GET, path="/a02")
+		public String a02(@Query("foo") String b);
+
+		@RestMethod(name=GET, path="/a03")
+		public String a03(@Header("foo") String b);
+	}
+
+	public static class A implements IA {
+
+		@Override
+		public String a01(String b) {
+			return b;
 		}
 
+		@Override
+		public String a02(String b) {
+			return b;
+		}
+
+		@Override
+		public String a03(String b) {
+			return b;
+		}
 	}
-	static MockRest a = MockRest.create(A.class);
+
+	private static MockRest a = MockRest.create(A.class);
 
 	@Test
-	public void a01_post() throws Exception {
-		a.post("", "p1=p1&p2=2").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("", "p1&p2").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("", "p1=&p2=").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("", null).execute().assertBody("p1=[false,false],p2=[false,false]");
-		a.post("", "p1").execute().assertBody("p1=[true,true],p2=[false,false]");
-		a.post("", "p1=").execute().assertBody("p1=[true,true],p2=[false,false]");
-		a.post("", "p2").execute().assertBody("p1=[false,false],p2=[true,true]");
-		a.post("", "p2=").execute().assertBody("p1=[false,false],p2=[true,true]");
-		a.post("", "p1=foo&p2").execute().assertBody("p1=[true,true],p2=[true,true]");
-		a.post("", "p1&p2=1").execute().assertBody("p1=[true,true],p2=[true,true]");
-		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("", "p1="+x+"&p2=1").execute().assertBody("p1=[true,true],p2=[true,true]");
+	public void a01_inherited_Body() throws Exception {
+		a.put("/a01", "'foo'").json().execute().assertBody("'foo'");
+	}
+	@Test
+	public void a02_inherited_Query() throws Exception {
+		a.get("/a02").query("foo", "bar").json().execute().assertBody("'bar'");
+	}
+	@Test
+	public void a03_inherited_Header() throws Exception {
+		a.get("/a03").header("foo", "bar").json().execute().assertBody("'bar'");
 	}
 }

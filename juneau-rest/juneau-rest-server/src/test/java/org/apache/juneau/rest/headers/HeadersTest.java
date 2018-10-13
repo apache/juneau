@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

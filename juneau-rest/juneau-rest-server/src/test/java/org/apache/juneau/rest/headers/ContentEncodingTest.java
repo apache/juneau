@@ -16,7 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;

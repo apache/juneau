@@ -10,11 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.annotation;
+package org.apache.juneau.rest.annotation2;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;

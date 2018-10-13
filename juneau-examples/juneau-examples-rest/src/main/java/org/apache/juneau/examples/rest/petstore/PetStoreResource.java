@@ -25,6 +25,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.FormData;
+import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.microservice.*;

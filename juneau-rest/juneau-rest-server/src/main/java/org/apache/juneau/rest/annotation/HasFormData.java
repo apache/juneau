@@ -10,34 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.test;
+package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.http.HttpMethodName.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.microservice.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.testutils.pojos.*;
+import java.lang.annotation.*;
 
 /**
- * JUnit automated testcase resource.
+ * @deprecated Use {@link org.apache.juneau.http.annotation.HasFormData}
  */
-@RestResource(
-	path="/testLargePojos"
-)
-public class LargePojosResource extends BasicRestServletJena {
-	private static final long serialVersionUID = 1L;
+@Deprecated
+@Documented
+@Target(PARAMETER)
+@Retention(RUNTIME)
+@Inherited
+public @interface HasFormData {
 
-	//====================================================================================================
-	// Test how long it takes to serialize/parse various content types.
-	//====================================================================================================
-	@RestMethod(name=GET, path="/")
-	public LargePojo testGet() {
-		return LargePojo.create();
-	}
+	/**
+	 * FORM parameter name.
+	 */
+	String name() default "";
 
-	@RestMethod(name=PUT, path="/")
-	public String testPut(@Body LargePojo in) {
-		return "ok";
-	}
+	/**
+	 * A synonym for {@link #name()}.
+	 *
+	 * <p>
+	 * Allows you to use shortened notation if you're only specifying the name.
+	 */
+	String value() default "";
 }

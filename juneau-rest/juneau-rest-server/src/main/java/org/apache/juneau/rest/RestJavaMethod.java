@@ -33,6 +33,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.FormData;
+import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -201,7 +205,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				if (isEmpty(p))
 					p = HttpUtils.detectHttpPath(method, true);
 
-				httpMethod = m.name().toUpperCase(Locale.ENGLISH);
+				httpMethod = emptyIfNull(firstNonEmpty(m.name(), m.method())).toUpperCase(Locale.ENGLISH);
 				if (httpMethod.isEmpty())
 					httpMethod = HttpUtils.detectHttpMethod(method, true, "GET");
 				if ("METHOD".equals(httpMethod))

@@ -16,6 +16,7 @@ import static org.apache.juneau.BeanContext.*;
 
 import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;

@@ -23,7 +23,11 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.FormData;
+import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

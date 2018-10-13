@@ -37,6 +37,14 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.FormData;
+import org.apache.juneau.http.annotation.HasFormData;
+import org.apache.juneau.http.annotation.HasQuery;
+import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
@@ -3219,7 +3227,7 @@ public final class RestContext extends BeanContext {
 			for (java.lang.reflect.Method method : resourceClass.getMethods()) {
 				RestMethod a = ClassUtils.getAnnotation(RestMethod.class, method);
 				if (a != null) {
-					methodsFound.add(method.getName() + "," + a.name() + "," + a.path());
+					methodsFound.add(method.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + a.path());
 					try {
 						if (! isPublic(method))
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), method.getName());
