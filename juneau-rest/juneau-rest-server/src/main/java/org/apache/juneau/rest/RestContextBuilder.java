@@ -38,7 +38,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -2469,5 +2469,32 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* ServletConfig */
 	public String getServletName() {
 		return inner.getServletName();
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestContextBuilder(ServletConfig config, Class<?> resourceClass) throws ServletException {
+		this(config, resourceClass, null);
+	}
+
+	/**
+	 * @deprecated Use {@link #uriContext(String)}.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestContextBuilder contextPath(String value) {
+		return uriContext(value);
+	}
+
+	/**
+	 * @deprecated Use {@link #paramResolvers(RestMethodParam...)}.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestContextBuilder paramResolvers(RestParam...values) {
+		return this;
 	}
 }

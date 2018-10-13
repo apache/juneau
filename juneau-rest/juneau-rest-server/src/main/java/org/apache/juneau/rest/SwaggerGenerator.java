@@ -41,7 +41,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;

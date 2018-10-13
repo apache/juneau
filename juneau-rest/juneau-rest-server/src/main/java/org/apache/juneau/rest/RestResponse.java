@@ -14,6 +14,9 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
+import org.apache.juneau.rest.util.FinishablePrintWriter;
+import org.apache.juneau.rest.util.FinishableServletOutputStream;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -28,7 +31,6 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -566,5 +568,14 @@ public final class RestResponse extends HttpServletResponseWrapper {
 		if (os != null)
 			os.flush();
 		super.flushBuffer();
+	}
+
+	/**
+	 * @deprecated No replacement.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public HttpPartSerializer getPartSerializer() {
+		return null;
 	}
 }

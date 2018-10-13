@@ -36,6 +36,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -58,7 +59,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.reshandlers.*;
-import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -3083,7 +3083,8 @@ public final class RestContext extends BeanContext {
 	 * @param builder The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
-	RestContext(RestContextBuilder builder) throws Exception {
+	// TODO - Make package-protected in 8.0
+	public RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
 
 		RestException _initException = null;
@@ -3313,7 +3314,7 @@ public final class RestContext extends BeanContext {
 							if (! _preCallMethods.containsKey(sig)) {
 								setAccessible(m, false);
 								_preCallMethods.put(sig, m);
-								_preCallMethodParams.add(findParams(m, null, true));
+								_preCallMethodParams.add(findParams(m, true));
 							}
 							break;
 						}
@@ -3321,7 +3322,7 @@ public final class RestContext extends BeanContext {
 							if (! _postCallMethods.containsKey(sig)) {
 								setAccessible(m, false);
 								_postCallMethods.put(sig, m);
-								_postCallMethodParams.add(findParams(m, null, true));
+								_postCallMethodParams.add(findParams(m, true));
 							}
 							break;
 						}
@@ -3565,7 +3566,8 @@ public final class RestContext extends BeanContext {
 	 * @throws NotFound Invalid path.
 	 * @throws IOException
 	 */
-	protected StaticFile resolveStaticFile(String pathInfo) throws NotFound, IOException {
+	// TODO - Make protected in 8.0
+	public StaticFile resolveStaticFile(String pathInfo) throws NotFound, IOException {
 		if (! staticFilesCache.containsKey(pathInfo)) {
 			String p = urlDecode(trimSlashes(pathInfo));
 			if (p.indexOf("..") != -1)
@@ -4561,12 +4563,11 @@ public final class RestContext extends BeanContext {
 	 * Finds the {@link RestMethodParam} instances to handle resolving objects on the calls to the specified Java method.
 	 *
 	 * @param method The Java method being called.
-	 * @param pathPattern The parsed URL path pattern.
 	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	protected RestMethodParam[] findParams(Method method, UrlPathPattern pathPattern, boolean isPreOrPost) throws ServletException {
+	protected RestMethodParam[] findParams(Method method, boolean isPreOrPost) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
 		RestMethodParam[] rp = new RestMethodParam[pt.length];
@@ -4820,5 +4821,29 @@ public final class RestContext extends BeanContext {
 	public String toString() {
 		Object r = getResource();
 		return "RestContext: hashCode=["+System.identityHashCode(this)+"], resource=["+(r == null ? null : r.getClass()+","+System.identityHashCode(r))+"]";
+	}
+
+	/**
+	 * @deprecated Use {@link #REST_uriContext}
+	 */
+	@Deprecated
+	public static final String REST_contextPath = REST_uriContext;
+
+	/**
+	 * @deprecated Use {@link #getUriContext()}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public String getContextPath() {
+		return getUriContext();
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestParam[] getRestParams(Method method) {
+		return null;
 	}
 }

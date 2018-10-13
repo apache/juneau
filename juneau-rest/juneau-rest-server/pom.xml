@@ -117,7 +117,7 @@
 				<artifactId>japicmp-maven-plugin</artifactId>
 				<version>0.13.0</version>
 				<configuration>
-					<skip>true</skip>
+					<skip>false</skip>
 					<oldVersion>
 						<dependency>
 							<groupId>org.apache.juneau</groupId>
@@ -135,6 +135,16 @@
 						<onlyModified>true</onlyModified>
 						<accessModifier>public</accessModifier>
 						<excludes>
+							<exclude>org.apache.juneau.rest.response.DefaultHandler</exclude>
+							<exclude>org.apache.juneau.rest.response.InputStreamHandler</exclude>
+							<exclude>org.apache.juneau.rest.response.ReaderHandler</exclude>
+							<exclude>org.apache.juneau.rest.response.RedirectHandler</exclude>
+							<exclude>org.apache.juneau.rest.response.StreamableHandler</exclude>
+							<exclude>org.apache.juneau.rest.response.WritableHandler</exclude>
+							<exclude>org.apache.juneau.rest.response.ZipFileListFileHandler</exclude>
+							<exclude>org.apache.juneau.rest.ResponseHandler</exclude>
+							<exclude>org.apache.juneau.rest.RestCallHandler</exclude>
+							<exclude>org.apache.juneau.rest.RestException</exclude>
 						</excludes>
 						<ignoreMissingClasses>true</ignoreMissingClasses>
 						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
@@ -150,6 +160,11 @@
 							<overrideCompatibilityChangeParameter>
 								<binaryCompatible>true</binaryCompatible>
 								<compatibilityChange>FIELD_REMOVED_IN_SUPERCLASS</compatibilityChange>
+								<sourceCompatible>true</sourceCompatible>
+							</overrideCompatibilityChangeParameter>
+							<overrideCompatibilityChangeParameter>
+								<binaryCompatible>true</binaryCompatible>
+								<compatibilityChange>METHOD_RETURN_TYPE_CHANGED</compatibilityChange>
 								<sourceCompatible>true</sourceCompatible>
 							</overrideCompatibilityChangeParameter>
 						</overrideCompatibilityChangeParameters>

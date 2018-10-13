@@ -195,4 +195,17 @@ public class RestException extends RuntimeException {
 	public String toString() {
 		return emptyIfNull(getLocalizedMessage());
 	}
+
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public RestException(int status, Throwable cause) {
+		this(cause, status);
+	}
+
+	@Override
+	@Deprecated
+	public synchronized RestException initCause(Throwable cause) {
+		super.initCause(cause);
+		return this;
+	}
 }

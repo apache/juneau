@@ -24,6 +24,7 @@ import javax.servlet.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 

@@ -12,75 +12,68 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import java.io.*;
+
+import javax.servlet.*;
+
+import org.apache.juneau.encoders.*;
+
 /**
- * Represents the possible parameter types as defined by the Swagger 2.0 specification.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
- * </ul>
+ * @deprecated Use {@link org.apache.juneau.rest.util.FinishableServletOutputStream}
  */
-public enum RestParamType {
+@Deprecated
+public class FinishableServletOutputStream extends ServletOutputStream implements Finishable {
 
-	/** Path variable */
-	PATH("path"),
+	final OutputStream os;
+	final ServletOutputStream sos;
+	final Finishable f;
 
-	/** Header value */
-	HEADER("header"),
+	FinishableServletOutputStream(OutputStream os) {
+		this.os = os;
+		this.sos = (os instanceof ServletOutputStream ? (ServletOutputStream)os : null);
+		this.f = (os instanceof Finishable ? (Finishable)os : null);
+	}
 
-	/** Form data entry */
-	FORM_DATA("formData"),
+	@Override /* OutputStream */
+	public final void write(byte[] b, int off, int len) throws IOException {
+		os.write(b, off, len);
+	}
 
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	FORMDATA("formData"),
+	@Override /* OutputStream */
+	public final void write(int b) throws IOException {
+		os.write(b);
+	}
 
-	/** Query parameter */
-	QUERY("query"),
+	@Override /* OutputStream */
+	public final void flush() throws IOException {
+		os.flush();
+	}
 
-	/** Request body */
-	BODY("body"),
+	@Override /* OutputStream */
+	public final void close() throws IOException {
+		os.close();
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// The following are additional parameter types not defined in Swagger
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* ServletOutputStream */
+	public boolean isReady() {
+		return sos == null ? true : sos.isReady();
+	}
 
-	/** Response value */
-	RESPONSE("response"),
-
-	/** Response value */
-	RESPONSE_BODY("responseBody"),
-
-	/** Response header value */
-	RESPONSE_HEADER("responseHeader"),
-
-	/** Response status value */
-	RESPONSE_STATUS("responseStatus"),
-
-	/** Not a standard Swagger-defined field */
-	OTHER("other");
-
-	private final String value;
-
-	private RestParamType(String value) {
-		this.value = value;
+	@Override /* ServletOutputStream */
+	public void setWriteListener(WriteListener arg0) {
+		if (sos != null)
+			sos.setWriteListener(arg0);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this type is any in the specified list.
+	 * Calls {@link Finishable#finish()} on the underlying output stream.
 	 *
-	 * @param t The list to check against.
-	 * @return <jk>true</jk> if this type is any in the specified list.
+	 * <p>
+	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
 	 */
-	public boolean isAny(RestParamType...t) {
-		for (RestParamType tt : t)
-			if (this == tt)
-				return true;
-		return false;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return value;
+	@Override /* Finishable */
+	public void finish() throws IOException {
+		if (f != null)
+			f.finish();
 	}
 }

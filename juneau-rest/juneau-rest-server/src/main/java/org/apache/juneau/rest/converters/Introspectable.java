@@ -72,10 +72,10 @@ public final class Introspectable implements RestConverter {
 				o = swap.swap(bs, o);
 			return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);
 		} catch (Exception e) {
-			return new InternalServerError(
+			return new InternalServerError(e,
 				"Error occurred trying to invoke method: {0}",
 				e.getLocalizedMessage()
-			).initCause(e);
+			);
 		}
 	}
 }

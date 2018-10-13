@@ -44,7 +44,8 @@ import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.util.RestUtils;
+import org.apache.juneau.rest.util.UrlPathPattern;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -390,7 +391,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes())))
 					: parsers.getSupportedMediaTypes();
 
-				methodParams = context.findParams(method, pathPattern, false);
+				methodParams = context.findParams(method, false);
 
 				if (hasAnnotation(Response.class, method))
 					responseMeta = ResponseBeanMeta.create(method, serializers.getPropertyStore());

@@ -10,77 +10,53 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.widget;
+
+import org.apache.juneau.*;
+import org.apache.juneau.rest.*;
 
 /**
- * Represents the possible parameter types as defined by the Swagger 2.0 specification.
- *
+ * Widget that places a powered-by-Apache message on the page.
+ * 
+ * <p>
+ * The variable it resolves is <js>"$W{PoweredByApache}"</js>.
+ * 
+ * <p>
+ * It produces a simple Apache icon floating on the right.
+ * Typically it's used in the footer of the page, as shown below in the <code>RootResources</code> from the examples:
+ * 
+ * <p class='bcode'>
+ * 	<ja>@RestResource</ja>(
+ * 		path=<js>"/"</js>,
+ * 		title=<js>"Root resources"</js>,
+ * 		description=<js>"Example of a router resource page."</js>,
+ * 		widgets={
+ * 			PoweredByApache.<jk>class</jk>
+ * 		},
+ * 		htmldoc=<ja>@HtmlDoc</ja>(
+ * 			footer=<js>"$W{PoweredByApache}"</js>
+ * 		)
+ * </p>
+ * 
+ * <p>
+ * It renders the following image:
+ * <img class='bordered' src='doc-files/PoweredByApacheWidget.png'>
+ * 
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.Swagger}
+ * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
  * </ul>
  */
-public enum RestParamType {
-
-	/** Path variable */
-	PATH("path"),
-
-	/** Header value */
-	HEADER("header"),
-
-	/** Form data entry */
-	FORM_DATA("formData"),
-
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	FORMDATA("formData"),
-
-	/** Query parameter */
-	QUERY("query"),
-
-	/** Request body */
-	BODY("body"),
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// The following are additional parameter types not defined in Swagger
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Response value */
-	RESPONSE("response"),
-
-	/** Response value */
-	RESPONSE_BODY("responseBody"),
-
-	/** Response header value */
-	RESPONSE_HEADER("responseHeader"),
-
-	/** Response status value */
-	RESPONSE_STATUS("responseStatus"),
-
-	/** Not a standard Swagger-defined field */
-	OTHER("other");
-
-	private final String value;
-
-	private RestParamType(String value) {
-		this.value = value;
-	}
+public class PoweredByApache extends Widget {
 
 	/**
-	 * Returns <jk>true</jk> if this type is any in the specified list.
-	 *
-	 * @param t The list to check against.
-	 * @return <jk>true</jk> if this type is any in the specified list.
+	 * Returns an Apache image tag hyperlinked to <js>"http://apache.org"</js>
 	 */
-	public boolean isAny(RestParamType...t) {
-		for (RestParamType tt : t)
-			if (this == tt)
-				return true;
-		return false;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return value;
+	@Override /* Widget */
+	public String getHtml(RestRequest req) throws Exception {
+		UriResolver r = req.getUriResolver();
+		return "<a href='http://apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/asf.png")+"'>";
 	}
 }
+
+

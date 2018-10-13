@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
@@ -409,5 +410,158 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (ss.length == 0)
 			return "";
 		return StringUtils.joinnl(ss).trim();
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public Contact getContact(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public License getLicense(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public String getTermsOfService(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public String getVersion(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public List<MediaType> getConsumes(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public List<MediaType> getProduces(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public List<Tag> getTags(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public ExternalDocumentation getExternalDocs(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public List<MediaType> getMethodConsumes(Method method, RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public ExternalDocumentation getMethodExternalDocs(Method method, RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public String getMethodOperationId(Method method, RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public List<ParameterInfo> getMethodParameters(Method method, RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public List<MediaType> getMethodProduces(Method method, RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public Map<Integer,ResponseInfo> getMethodResponses(Method method, RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public List<String> getMethodTags(Method method, RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public Swagger getSwaggerFromFile(RestRequest req) throws Exception {
+		return null;
+	}
+
+	/**
+	 * @deprecated Unused.
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public boolean isDeprecated(Method method, RestRequest req) throws Exception {
+		return false;
 	}
 }

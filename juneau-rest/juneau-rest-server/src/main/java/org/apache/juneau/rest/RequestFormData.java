@@ -620,4 +620,57 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
 		return req.getBeanSession().getClassMeta(type);
 	}
+
+	/**
+	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, String, Class)}
+	 */
+	@SuppressWarnings({ "unused", "javadoc" })
+	@Deprecated
+	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
+		return get(parser, null, name, type);
+	}
+
+	/**
+	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, Object, Class)}
+	 */
+	@SuppressWarnings({ "unused", "javadoc" })
+	@Deprecated
+	public <T> T get(HttpPartParser parser, String name, T def, Class<T> type) throws ParseException {
+		return get(parser, null, name, def, type);
+	}
+
+	/**
+	 * @deprecated Use {@link #getAll(HttpPartParser, HttpPartSchema, String, Type, Type...)}
+	 */
+	@SuppressWarnings({ "unused", "javadoc" })
+	@Deprecated
+	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
+		return get(parser, null, name, type, args);
+	}
+
+	/**
+	 * @deprecated Use {@link #getAll(HttpPartParser, HttpPartSchema, String, Class)}
+	 */
+	@SuppressWarnings({ "unused", "javadoc" })
+	@Deprecated
+	public <T> T getAll(HttpPartParser parser, String name, Class<T> type) throws ParseException {
+		return getAll(parser, null, name, type);
+	}
+
+	/**
+	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, String, Class)}
+	 */
+	@SuppressWarnings({ "unused", "javadoc" })
+	@Deprecated
+	public <T> T getAll(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
+		return getAll(parser, null, name, type, args);
+	}
+	
+	/**
+	 * @deprecated Unused.
+	 */
+	@Deprecated
+	public RequestFormData() {
+		this(null, null);
+	}
 }

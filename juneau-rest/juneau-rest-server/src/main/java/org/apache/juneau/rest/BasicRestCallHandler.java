@@ -24,10 +24,10 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.rest.RestContext.*;
 import org.apache.juneau.rest.exception.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.rest.vars.*;
 
 /**
@@ -336,5 +336,32 @@ public class BasicRestCallHandler implements RestCallHandler {
 		Map<String,Object> m = new HashMap<>();
 		m.put(RequestVar.SESSION_req, req);
 		return m;
+	}
+
+	/**
+	 * @deprecated Use {@link #handleError(HttpServletRequest, HttpServletResponse, Throwable)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public synchronized void handleError(HttpServletRequest req, HttpServletResponse res, RestException e) throws IOException {
+		handleError(req, res, (Throwable)e);
+	}
+
+	/**
+	 * @deprecated Use {@link #handleResponse(HttpServletRequest, HttpServletResponse)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public void handleResponse(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
+		handleResponse(req, res);
+	}
+
+	/**
+	 * @deprecated Use {@link #handleError(HttpServletRequest, HttpServletResponse, Throwable)}
+	 */
+	@SuppressWarnings({ "javadoc", "unused" })
+	@Deprecated
+	public void renderError(HttpServletRequest req, HttpServletResponse res, RestException e) throws IOException {
+		return;
 	}
 }

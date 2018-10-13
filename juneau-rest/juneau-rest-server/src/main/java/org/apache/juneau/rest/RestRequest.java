@@ -36,6 +36,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.ReaderResource;
+import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
@@ -53,6 +55,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -1719,8 +1722,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		return new Locale(lang, country);
 	}
 
-
 	void setJavaMethod(Method method) {
 		this.javaMethod = method;
+	}
+
+	/**
+	 * @deprecated Use {@Link #getClasspathReaderResource(String, boolean, MediaType, boolean)}
+	 */
+	@SuppressWarnings("javadoc")
+	@Deprecated
+	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars, MediaType mediaType) throws IOException {
+		return getClasspathReaderResource(name, resolveVars, mediaType, false);
 	}
 }
