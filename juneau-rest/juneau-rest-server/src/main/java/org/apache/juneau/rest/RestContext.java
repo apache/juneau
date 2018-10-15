@@ -68,7 +68,7 @@ import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.*;
+import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 /**
  * Contains all the configuration on a REST resource and the entry points for handling REST calls.

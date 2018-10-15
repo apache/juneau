@@ -26,7 +26,6 @@ import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.*;
 
 /**
  * Subclass of {@link RestServlet} with default serializers and parsers defined.
@@ -62,7 +61,7 @@ import org.apache.juneau.xmlschema.*;
  * 	<tr>
  * 		<td class='code'>text/xml+schema</td>
  * 		<td class='code'>text/xml</td>
- * 		<td>{@link XmlSchemaDocSerializer}</td>
+ * 		<td>{@link org.apache.juneau.xmlschema.XmlSchemaDocSerializer}</td>
  * 	</tr>
  * 	<tr>
  * 		<td class='code'>text/html</td>

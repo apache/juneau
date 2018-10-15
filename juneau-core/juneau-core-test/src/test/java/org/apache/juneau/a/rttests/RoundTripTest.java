@@ -29,7 +29,7 @@ import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.*;
+import org.apache.juneau.xmlschema.XmlSchemaSerializer;
 import org.junit.runner.*;
 import org.junit.runners.*;
 

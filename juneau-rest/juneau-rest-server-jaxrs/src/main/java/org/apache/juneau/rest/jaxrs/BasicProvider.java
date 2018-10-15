@@ -22,7 +22,7 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xmlschema.*;
+import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 /**
  * JAX-RS provider for the same serialize/parse support provided by the {@link BasicRestServlet} class.

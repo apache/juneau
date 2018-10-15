@@ -110,12 +110,6 @@
 						<excludes>
 							<exclude>org.apache.juneau.internal</exclude>
 							<exclude>org.apache.juneau.yaml.proto</exclude>
-							<exclude>org.apache.juneau.xml.XmlSchemaDocSerializer</exclude>
-							<exclude>org.apache.juneau.xml.XmlSchemaDocSerializerSession</exclude>
-							<exclude>org.apache.juneau.xml.XmlSchemaSerializer</exclude>
-							<exclude>org.apache.juneau.xml.XmlSchemaSerializerBuilder</exclude>
-							<exclude>org.apache.juneau.xml.XmlParseException</exclude>
-							<exclude>org.apache.juneau.xml.XmlSchemaSerializerSession</exclude>
 						</excludes>
 						<ignoreMissingClasses>true</ignoreMissingClasses>
 						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
