@@ -20,13 +20,15 @@ import org.junit.*;
 
 public class TurtleTest {
 
+	private static String EOL = System.getProperty("line.separator");
+
 	CharMarshall m = Turtle.DEFAULT;
 
 	String r = ""
-		+ "@prefix jp:      <http://www.apache.org/juneaubp/> .\n"
-		+ "@prefix j:       <http://www.apache.org/juneau/> .\n"
-		+ "\n"
-		+ "[]    j:value \"foo\" .\n";
+		+ "@prefix jp:      <http://www.apache.org/juneaubp/> ." + EOL
+		+ "@prefix j:       <http://www.apache.org/juneau/> ." + EOL
+		+ EOL
+		+ "[]    j:value \"foo\" ." + EOL;
 
 	@Test
 	public void write1() throws Exception {
