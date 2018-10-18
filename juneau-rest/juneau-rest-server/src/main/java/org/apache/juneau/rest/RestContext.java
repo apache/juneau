@@ -4567,6 +4567,7 @@ public final class RestContext extends BeanContext {
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
+	@SuppressWarnings("deprecation")
 	protected RestMethodParam[] findParams(Method method, boolean isPreOrPost) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
@@ -4583,27 +4584,27 @@ public final class RestContext extends BeanContext {
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
 			}
 
-			if (hasAnnotation(Header.class, method, i)) {
+			if (hasAnnotation(Header.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Header.class, method, i)) {
 				rp[i] = new RestParamDefaults.HeaderObject(method, i, ps);
-			} else if (hasAnnotation(Query.class, method, i)) {
+			} else if (hasAnnotation(Query.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Query.class, method, i)) {
 				rp[i] = new RestParamDefaults.QueryObject(method, i, ps);
-			} else if (hasAnnotation(FormData.class, method, i)) {
+			} else if (hasAnnotation(FormData.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.FormData.class, method, i)) {
 				rp[i] = new RestParamDefaults.FormDataObject(method, i, ps);
-			} else if (hasAnnotation(Path.class, method, i)) {
+			} else if (hasAnnotation(Path.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Path.class, method, i)) {
 				rp[i] = new RestParamDefaults.PathObject(method, i, ps);
-			} else if (hasAnnotation(Body.class, method, i)) {
+			} else if (hasAnnotation(Body.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Body.class, method, i)) {
 				rp[i] = new RestParamDefaults.BodyObject(method, i, ps);
 			} else if (hasAnnotation(Request.class, method, i)) {
 				rp[i] = new RestParamDefaults.RequestObject(method, i, ps);
-			} else if (hasAnnotation(Response.class, method, i)) {
+			} else if (hasAnnotation(Response.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Response.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseObject(method, i, ps);
 			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, i, ps);
 			} else if (hasAnnotation(ResponseStatus.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseStatusObject(method, t);
-			} else if (hasAnnotation(HasFormData.class, method, i)) {
+			} else if (hasAnnotation(HasFormData.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.HasFormData.class, method, i)) {
 				rp[i] = new RestParamDefaults.HasFormDataObject(method, i);
-			} else if (hasAnnotation(HasQuery.class, method, i)) {
+			} else if (hasAnnotation(HasQuery.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.HasQuery.class, method, i)) {
 				rp[i] = new RestParamDefaults.HasQueryObject(method, i);
 			} else if (hasAnnotation(org.apache.juneau.rest.annotation.Method.class, method, i)) {
 				rp[i] = new RestParamDefaults.MethodObject(method, t);

@@ -95,6 +95,7 @@ public class HttpPartSchemaBuilder {
 	 * @param a The annotation to apply.
 	 * @return This object (for method chaining).
 	 */
+	@SuppressWarnings("deprecation")
 	public HttpPartSchemaBuilder apply(Annotation a) {
 		if (a instanceof Body)
 			apply((Body)a);
@@ -106,6 +107,16 @@ public class HttpPartSchemaBuilder {
 			apply((Query)a);
 		else if (a instanceof Path)
 			apply((Path)a);
+		else if (a instanceof org.apache.juneau.remoteable.Body)
+			apply((org.apache.juneau.remoteable.Body)a);
+		else if (a instanceof org.apache.juneau.remoteable.Header)
+			apply((org.apache.juneau.remoteable.Header)a);
+		else if (a instanceof org.apache.juneau.remoteable.FormData)
+			apply((org.apache.juneau.remoteable.FormData)a);
+		else if (a instanceof org.apache.juneau.remoteable.Query)
+			apply((org.apache.juneau.remoteable.Query)a);
+		else if (a instanceof org.apache.juneau.remoteable.Path)
+			apply((org.apache.juneau.remoteable.Path)a);
 		else if (a instanceof Response)
 			apply((Response)a);
 		else if (a instanceof ResponseHeader)
@@ -125,6 +136,11 @@ public class HttpPartSchemaBuilder {
 		required(a.required());
 		allowEmptyValue(! a.required());
 		apply(a.schema());
+		return this;
+	}
+
+	@SuppressWarnings("deprecation")
+	HttpPartSchemaBuilder apply(org.apache.juneau.remoteable.Body a) {
 		return this;
 	}
 
@@ -152,6 +168,15 @@ public class HttpPartSchemaBuilder {
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		skipIfEmpty(a.skipIfEmpty());
 		parser(a.parser());
+		serializer(a.serializer());
+		return this;
+	}
+
+	@SuppressWarnings("deprecation")
+	HttpPartSchemaBuilder apply(org.apache.juneau.remoteable.Header a) {
+		name(a.value());
+		name(a.name());
+		skipIfEmpty(a.skipIfEmpty());
 		serializer(a.serializer());
 		return this;
 	}
@@ -210,6 +235,15 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
+	@SuppressWarnings("deprecation")
+	HttpPartSchemaBuilder apply(org.apache.juneau.remoteable.FormData a) {
+		name(a.value());
+		name(a.name());
+		skipIfEmpty(a.skipIfEmpty());
+		serializer(a.serializer());
+		return this;
+	}
+
 	HttpPartSchemaBuilder apply(Query a) {
 		name(a.value());
 		name(a.name());
@@ -238,6 +272,15 @@ public class HttpPartSchemaBuilder {
 		return this;
 	}
 
+	@SuppressWarnings("deprecation")
+	HttpPartSchemaBuilder apply(org.apache.juneau.remoteable.Query a) {
+		name(a.value());
+		name(a.name());
+		skipIfEmpty(a.skipIfEmpty());
+		serializer(a.serializer());
+		return this;
+	}
+
 	HttpPartSchemaBuilder apply(Path a) {
 		name(a.value());
 		name(a.name());
@@ -259,6 +302,21 @@ public class HttpPartSchemaBuilder {
 		_enum(HttpPartSchema.toSet(a._enum()));
 		multipleOf(HttpPartSchema.toNumber(a.multipleOf()));
 		parser(a.parser());
+		serializer(a.serializer());
+
+		// Path remainder always allows empty value.
+		if (startsWith(name, '/'))
+			allowEmptyValue();
+		else
+			required(true);
+
+		return this;
+	}
+
+	@SuppressWarnings("deprecation")
+	HttpPartSchemaBuilder apply(org.apache.juneau.remoteable.Path a) {
+		name(a.value());
+		name(a.name());
 		serializer(a.serializer());
 
 		// Path remainder always allows empty value.

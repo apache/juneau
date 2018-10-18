@@ -190,18 +190,29 @@ class RestParamDefaults {
 	// Annotated retrievers
 	//-------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("deprecation")
 	static final class PathObject extends RestMethodParam {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
 		protected PathObject(Method m, int i, PropertyStore ps) {
 			super(PATH, m, i, getName(m, i));
+			org.apache.juneau.rest.annotation.Path old = getAnnotation(org.apache.juneau.rest.annotation.Path.class, m, i);
 			this.schema = HttpPartSchema.create(Path.class, m, i);
-			this.partParser = createPartParser(schema.getParser(), ps);
+			if (old != null)
+				this.partParser = createPartParser(old.parser(), ps);
+			else
+				this.partParser = createPartParser(schema.getParser(), ps);
 		}
 
 		private static String getName(Method m, int i) {
 			for (Path h : getAnnotations(Path.class, m, i)) {
+				if (! h.name().isEmpty())
+					return h.name();
+				if (! h.value().isEmpty())
+					return h.value();
+			}
+			for (org.apache.juneau.rest.annotation.Path h : getAnnotations(org.apache.juneau.rest.annotation.Path.class, m, i)) {
 				if (! h.name().isEmpty())
 					return h.name();
 				if (! h.value().isEmpty())
@@ -230,6 +241,7 @@ class RestParamDefaults {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	static final class HeaderObject extends RestMethodParam {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
@@ -237,11 +249,21 @@ class RestParamDefaults {
 		protected HeaderObject(Method m, int i, PropertyStore ps) {
 			super(HEADER, m, i, getName(m, i));
 			this.schema = HttpPartSchema.create(Header.class, m, i);
-			this.partParser = createPartParser(schema.getParser(), ps);
+			org.apache.juneau.rest.annotation.Header old = getAnnotation(org.apache.juneau.rest.annotation.Header.class, m, i);
+			if (old != null)
+				this.partParser = createPartParser(old.parser(), ps);
+			else
+				this.partParser = createPartParser(schema.getParser(), ps);
 		}
 
 		private static String getName(Method m, int i) {
 			for (Header h : getAnnotations(Header.class, m, i)) {
+				if (! h.name().isEmpty())
+					return h.name();
+				if (! h.value().isEmpty())
+					return h.value();
+			}
+			for (org.apache.juneau.rest.annotation.Header h : getAnnotations(org.apache.juneau.rest.annotation.Header.class, m, i)) {
 				if (! h.name().isEmpty())
 					return h.name();
 				if (! h.value().isEmpty())
@@ -377,6 +399,7 @@ class RestParamDefaults {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	static final class FormDataObject extends RestMethodParam {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
@@ -385,8 +408,14 @@ class RestParamDefaults {
 		protected FormDataObject(Method m, int i, PropertyStore ps) {
 			super(FORM_DATA, m, i, getName(m, i));
 			this.schema = HttpPartSchema.create(FormData.class, m, i);
-			this.partParser = createPartParser(schema.getParser(), ps);
-			this.multiPart = schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			org.apache.juneau.rest.annotation.FormData old = getAnnotation(org.apache.juneau.rest.annotation.FormData.class, m, i);
+			if (old != null) {
+				this.partParser = createPartParser(old.parser(), ps);
+				this.multiPart = old.multipart();
+			} else {
+				this.partParser = createPartParser(schema.getParser(), ps);
+				this.multiPart = schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			}
 
 			if (multiPart && ! isCollection(type))
 				throw new InternalServerError("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", method);
@@ -394,6 +423,12 @@ class RestParamDefaults {
 
 		private static String getName(Method m, int i) {
 			for (FormData h : getAnnotations(FormData.class, m, i)) {
+				if (! h.name().isEmpty())
+					return h.name();
+				if (! h.value().isEmpty())
+					return h.value();
+			}
+			for (org.apache.juneau.rest.annotation.FormData h : getAnnotations(org.apache.juneau.rest.annotation.FormData.class, m, i)) {
 				if (! h.name().isEmpty())
 					return h.name();
 				if (! h.value().isEmpty())
@@ -410,6 +445,7 @@ class RestParamDefaults {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	static final class QueryObject extends RestMethodParam {
 		private final boolean multiPart;
 		private final HttpPartParser partParser;
@@ -418,8 +454,14 @@ class RestParamDefaults {
 		protected QueryObject(Method m, int i, PropertyStore ps) {
 			super(QUERY, m, i, getName(m, i));
 			this.schema = HttpPartSchema.create(Query.class, m, i);
-			this.partParser = createPartParser(schema.getParser(), ps);
-			this.multiPart = schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			org.apache.juneau.rest.annotation.Query old = getAnnotation(org.apache.juneau.rest.annotation.Query.class, m, i);
+			if (old != null) {
+				this.partParser = createPartParser(old.parser(), ps);
+				this.multiPart = old.multipart();
+			} else {
+				this.partParser = createPartParser(schema.getParser(), ps);
+				this.multiPart = schema.getCollectionFormat() == HttpPartSchema.CollectionFormat.MULTI;
+			}
 
 			if (multiPart && ! isCollection(type))
 				throw new InternalServerError("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", method);
@@ -427,6 +469,12 @@ class RestParamDefaults {
 
 		private static String getName(Method m, int i) {
 			for (Query h : getAnnotations(Query.class, m, i)) {
+				if (! h.name().isEmpty())
+					return h.name();
+				if (! h.value().isEmpty())
+					return h.value();
+			}
+			for (org.apache.juneau.rest.annotation.Query h : getAnnotations(org.apache.juneau.rest.annotation.Query.class, m, i)) {
 				if (! h.name().isEmpty())
 					return h.name();
 				if (! h.value().isEmpty())
@@ -443,6 +491,7 @@ class RestParamDefaults {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	static final class HasFormDataObject extends RestMethodParam {
 
 		protected HasFormDataObject(Method m, int i) throws ServletException {
@@ -458,6 +507,12 @@ class RestParamDefaults {
 				if (! h.value().isEmpty())
 					return h.value();
 			}
+			for (org.apache.juneau.rest.annotation.HasFormData h : getAnnotations(org.apache.juneau.rest.annotation.HasFormData.class, m, i)) {
+				if (! h.name().isEmpty())
+					return h.name();
+				if (! h.value().isEmpty())
+					return h.value();
+			}
 			throw new InternalServerError("@HasFormData used without name or value on method ''{0}'' parameter ''{1}''.", m, i);
 		}
 
@@ -468,6 +523,7 @@ class RestParamDefaults {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	static final class HasQueryObject extends RestMethodParam {
 
 		protected HasQueryObject(Method m, int i) throws ServletException {
@@ -478,6 +534,12 @@ class RestParamDefaults {
 
 		private static String getName(Method m, int i) {
 			for (HasQuery h : getAnnotations(HasQuery.class, m, i)) {
+				if (! h.name().isEmpty())
+					return h.name();
+				if (! h.value().isEmpty())
+					return h.value();
+			}
+			for (org.apache.juneau.rest.annotation.HasQuery h : getAnnotations(org.apache.juneau.rest.annotation.HasQuery.class, m, i)) {
 				if (! h.name().isEmpty())
 					return h.name();
 				if (! h.value().isEmpty())
