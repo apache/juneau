@@ -16,10 +16,10 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.util.*;
 
+import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.exception.*;

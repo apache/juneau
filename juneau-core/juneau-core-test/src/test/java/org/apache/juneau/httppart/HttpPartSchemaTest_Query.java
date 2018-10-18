@@ -19,7 +19,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.jsonschema.annotation.Items;
+import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
 
 /**
  * Extended annotation for {@link RestResource#swagger() @RestResource(swagger)}.

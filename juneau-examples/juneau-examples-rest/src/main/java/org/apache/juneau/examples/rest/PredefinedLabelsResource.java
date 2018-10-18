@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.examples.addressbook.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.helper.*;

@@ -21,10 +21,12 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.jsonschema.annotation.Schema;
+import org.apache.juneau.jsonschema.annotation.Items;
+import org.apache.juneau.jsonschema.annotation.SubItems;
 import org.apache.juneau.httppart.HttpPartSchema.*;
 import org.apache.juneau.httppart.HttpPartSchema.Type;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**

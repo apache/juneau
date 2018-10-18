@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import org.apache.juneau.jsonschema.annotation.*;
-
 /**
  * Various reusable utility methods when working with annotations.
  */
@@ -113,7 +111,7 @@ public class AnnotationUtils {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(Schema a) {
+	public static boolean empty(org.apache.juneau.jsonschema.annotation.Schema a) {
 		if (a == null)
 			return true;
 		return
@@ -132,7 +130,42 @@ public class AnnotationUtils {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(ExternalDocs a) {
+	@Deprecated
+	public static boolean empty(org.apache.juneau.http.annotation.Schema a) {
+		if (a == null)
+			return true;
+		return
+			allEmpty(a.value(), a.description(), a._default(), a._enum(), a.allOf(), a.properties(), a.additionalProperties(), a.xml(), a.example(), a.examples())
+			&& allEmpty(a.$ref(), a.format(), a.title(), a.multipleOf(), a.maximum(), a.minimum(), a.pattern(), a.type(), a.discriminator())
+			&& allMinusOne(a.maxProperties(), a.minProperties())
+			&& allFalse(a.ignore(), a.exclusiveMaximum(), a.exclusiveMinimum(), a.readOnly(), a.required(), a.uniqueItems())
+			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			&& empty(a.items())
+			&& empty(a.externalDocs());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(org.apache.juneau.jsonschema.annotation.ExternalDocs a) {
+		if (a == null)
+			return true;
+		return
+			allEmpty(a.value(), a.description())
+			&& allEmpty(a.url());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	@Deprecated
+	public static boolean empty(org.apache.juneau.http.annotation.ExternalDocs a) {
 		if (a == null)
 			return true;
 		return
@@ -189,7 +222,7 @@ public class AnnotationUtils {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(Items a) {
+	public static boolean empty(org.apache.juneau.jsonschema.annotation.Items a) {
 		if (a == null)
 			return true;
 		return
@@ -206,7 +239,42 @@ public class AnnotationUtils {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(SubItems a) {
+	@Deprecated
+	public static boolean empty(org.apache.juneau.http.annotation.Items a) {
+		if (a == null)
+			return true;
+		return
+			allEmpty(a.value(), a._default(), a._enum())
+			&& allEmpty(a.type(), a.format(), a.collectionFormat(), a.pattern(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
+			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
+			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems())
+			&& empty(a.items());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(org.apache.juneau.jsonschema.annotation.SubItems a) {
+		if (a == null)
+			return true;
+		return
+			allEmpty(a.value(), a._default(), a._enum(), a.items())
+			&& allEmpty(a.type(), a.format(), a.collectionFormat(), a.pattern(), a.$ref(), a.maximum(), a.minimum(), a.multipleOf())
+			&& allFalse(a.exclusiveMaximum(), a.exclusiveMinimum(), a.uniqueItems())
+			&& allMinusOne(a.maxLength(), a.minLength(), a.maxItems(), a.minItems());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	@Deprecated
+	public static boolean empty(org.apache.juneau.http.annotation.SubItems a) {
 		if (a == null)
 			return true;
 		return

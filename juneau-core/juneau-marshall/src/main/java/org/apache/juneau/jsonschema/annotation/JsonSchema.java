@@ -10,50 +10,43 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.util;
+package org.apache.juneau.jsonschema.annotation;
 
-import java.io.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-import org.apache.juneau.encoders.*;
+import java.lang.annotation.*;
 
 /**
- * A wrapped {@link PrintWriter} with an added <code>finish()</code> method.
+ * @deprecated Use {@link Schema}
  */
-public class FinishablePrintWriter extends PrintWriter implements Finishable {
-
-	final Finishable f;
+@Documented
+@Target({TYPE,METHOD,FIELD})
+@Retention(RUNTIME)
+@Inherited
+@Deprecated
+public @interface JsonSchema {
 
 	/**
-	 * Constructor.
-	 *
-	 * @param out The wrapped output stream.
-	 * @param characterEncoding The character encoding of the output stream.
-	 * @param autoFlush Automatically flush after every println.
-	 * @throws IOException
+	 * Defines the type for the class or property.
 	 */
-	public FinishablePrintWriter(OutputStream out, String characterEncoding, boolean autoFlush) throws IOException {
-		super(new OutputStreamWriter(out, characterEncoding), autoFlush);
-		f = (out instanceof Finishable ? (Finishable)out : null);
-	}
+	String type() default "";
 
 	/**
-	 * @deprecated Use {@link #FinishablePrintWriter(OutputStream, String, boolean)}
+	 * Defines the format for the class or property.
 	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public FinishablePrintWriter(OutputStream out, String characterEncoding) throws IOException {
-		this(out, characterEncoding, false);
-	}
+	String format() default "";
 
 	/**
-	 * Calls {@link Finishable#finish()} on the underlying output stream.
+	 * Defines the description for the class or property.
+	 */
+	String description() default "";
+
+	/**
+	 * Defines the example for the class or property.
 	 *
 	 * <p>
-	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
+	 * The format of the value is Lax-JSON.
 	 */
-	@Override /* Finishable */
-	public void finish() throws IOException {
-		if (f != null)
-			f.finish();
-	}
+	String example() default "";
 }

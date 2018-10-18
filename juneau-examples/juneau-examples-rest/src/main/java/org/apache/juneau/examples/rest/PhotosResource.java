@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import java.awt.image.*;
 import java.io.*;
 import java.net.*;
@@ -26,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

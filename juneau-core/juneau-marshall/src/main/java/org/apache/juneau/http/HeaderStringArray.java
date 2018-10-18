@@ -14,7 +14,7 @@ package org.apache.juneau.http;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.jsonschema.annotation.Items;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.

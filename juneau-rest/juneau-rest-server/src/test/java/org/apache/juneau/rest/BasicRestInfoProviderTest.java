@@ -21,7 +21,8 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
+import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

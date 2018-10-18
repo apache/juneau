@@ -20,13 +20,13 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 import java.sql.*;
 import java.util.*;
 
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;

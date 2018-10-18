@@ -127,6 +127,16 @@
 								<compatibilityChange>FIELD_REMOVED_IN_SUPERCLASS</compatibilityChange>
 								<sourceCompatible>true</sourceCompatible>
 							</overrideCompatibilityChangeParameter>
+							<overrideCompatibilityChangeParameter>
+								<binaryCompatible>true</binaryCompatible>
+								<compatibilityChange>METHOD_RETURN_TYPE_CHANGED</compatibilityChange>
+								<sourceCompatible>true</sourceCompatible>
+							</overrideCompatibilityChangeParameter>
+							<overrideCompatibilityChangeParameter>
+								<binaryCompatible>true</binaryCompatible>
+								<compatibilityChange>FIELD_TYPE_CHANGED</compatibilityChange>
+								<sourceCompatible>true</sourceCompatible>
+							</overrideCompatibilityChangeParameter>
 						</overrideCompatibilityChangeParameters>
 					</parameter>
 				</configuration>

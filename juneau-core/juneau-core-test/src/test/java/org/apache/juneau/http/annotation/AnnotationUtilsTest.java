@@ -17,10 +17,13 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.http.annotation.AnnotationUtils.*;
 
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
+import org.apache.juneau.jsonschema.annotation.Schema;
+import org.apache.juneau.jsonschema.annotation.SubItems;
+import org.apache.juneau.jsonschema.annotation.Items;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.jsonschema.annotation.*;
 import org.junit.*;
 import org.junit.runners.*;
 

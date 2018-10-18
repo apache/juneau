@@ -14,6 +14,7 @@ package org.apache.juneau.rest.helper;
 
 import static org.apache.juneau.internal.IOUtils.*;
 
+import org.apache.juneau.http.ReaderResource;
 import java.io.*;
 import java.util.*;
 

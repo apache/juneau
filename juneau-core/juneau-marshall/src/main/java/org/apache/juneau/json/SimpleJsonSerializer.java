@@ -43,10 +43,10 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Default serializer, single quotes, {@link #JSON_simpleMode simple mode}. */
-	public static final SimpleJsonSerializer DEFAULT = new SimpleJsonSerializer(PropertyStore.DEFAULT);
+	public static final JsonSerializer DEFAULT = new SimpleJsonSerializer(PropertyStore.DEFAULT);
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final SimpleJsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
+	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses

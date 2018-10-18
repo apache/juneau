@@ -17,8 +17,8 @@ import static org.apache.juneau.serializer.Serializer.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;

@@ -15,10 +15,10 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.FormData;
-import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 

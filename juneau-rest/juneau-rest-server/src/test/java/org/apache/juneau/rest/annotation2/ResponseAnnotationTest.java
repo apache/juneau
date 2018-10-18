@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;

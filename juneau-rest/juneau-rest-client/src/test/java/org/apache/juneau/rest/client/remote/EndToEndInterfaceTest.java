@@ -17,7 +17,8 @@ import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.*;
+import org.apache.juneau.http.ReaderResource;
+import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
