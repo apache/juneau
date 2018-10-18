@@ -1727,7 +1727,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	/**
-	 * @deprecated Use {@Link #getClasspathReaderResource(String, boolean, MediaType, boolean)}
+	 * @deprecated Use {@link #getClasspathReaderResource(String, boolean, MediaType, boolean)}
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated

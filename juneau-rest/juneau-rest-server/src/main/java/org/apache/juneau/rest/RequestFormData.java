@@ -631,7 +631,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	}
 
 	/**
-	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, Object, Class)}
+	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, String, Object, Class)}
 	 */
 	@SuppressWarnings({ "unused", "javadoc" })
 	@Deprecated
@@ -665,7 +665,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	public <T> T getAll(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
 		return getAll(parser, null, name, type, args);
 	}
-	
+
 	/**
 	 * @deprecated Unused.
 	 */

@@ -19,9 +19,8 @@ import java.io.*;
 import java.lang.annotation.*;
 
 /**
- * @deprecated Use {@link org.apache.juneau.client.remote.RemoteMethod}
+ * @deprecated Use <code>org.apache.juneau.client.remote.RemoteMethod</code>
  */
-@SuppressWarnings("javadoc")
 @Deprecated
 @Documented
 @Target(METHOD)

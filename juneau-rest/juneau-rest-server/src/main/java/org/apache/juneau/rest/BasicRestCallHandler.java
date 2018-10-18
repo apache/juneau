@@ -348,7 +348,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 	}
 
 	/**
-	 * @deprecated Use {@link #handleResponse(HttpServletRequest, HttpServletResponse)}
+	 * @deprecated Use {@link #handleResponse(RestRequest, RestResponse)}
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated

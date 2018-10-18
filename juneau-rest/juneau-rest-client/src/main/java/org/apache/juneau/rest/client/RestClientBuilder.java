@@ -3091,7 +3091,7 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	/**
-	 * @deprecated Use {@link #maxDepth(boolean)}
+	 * @deprecated Use {@link #maxIndent(int)}
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated

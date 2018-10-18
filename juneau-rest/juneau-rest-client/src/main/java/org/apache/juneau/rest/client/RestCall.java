@@ -2503,7 +2503,7 @@ public final class RestCall extends BeanSession implements Closeable {
 	}
 
 	/**
-	 * @deprecated Use {@link #formData(String, Object, boolean, HttpPartSerializer, HttpPartSchema))}
+	 * @deprecated Use {@link #formData(String, Object, boolean, HttpPartSerializer, HttpPartSchema)}
 	 */
 	@SuppressWarnings("javadoc")
 	@Deprecated

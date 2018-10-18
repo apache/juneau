@@ -121,7 +121,7 @@ public class PlainTextSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * @deprecated Use {@link #ParserSessionArgs(ObjectMap, Method, Locale, TimeZone, MediaType, HttpPartSchema, Boolean, Object)}
+	 * @deprecated Use {@link SerializerSessionArgs#SerializerSessionArgs(ObjectMap, Method, Locale, TimeZone, MediaType, HttpPartSchema, Boolean, UriContext, Boolean)}
 	 */
 	@Deprecated
 	@SuppressWarnings("javadoc")

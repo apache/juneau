@@ -17,14 +17,14 @@ import org.apache.juneau.rest.*;
 
 /**
  * Widget that places a powered-by-Apache message on the page.
- * 
+ *
  * <p>
  * The variable it resolves is <js>"$W{PoweredByApache}"</js>.
- * 
+ *
  * <p>
  * It produces a simple Apache icon floating on the right.
  * Typically it's used in the footer of the page, as shown below in the <code>RootResources</code> from the examples:
- * 
+ *
  * <p class='bcode'>
  * 	<ja>@RestResource</ja>(
  * 		path=<js>"/"</js>,
@@ -37,14 +37,14 @@ import org.apache.juneau.rest.*;
  * 			footer=<js>"$W{PoweredByApache}"</js>
  * 		)
  * </p>
- * 
+ *
  * <p>
  * It renders the following image:
  * <img class='bordered' src='doc-files/PoweredByApacheWidget.png'>
- * 
+ *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-rest-server.Widgets">Overview &gt; juneau-rest-server &gt; Widgets</a>
+ * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.PredefinedWidgets}
  * </ul>
  */
 public class PoweredByApache extends Widget {
