@@ -1,0 +1,125 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Dual-purpose (end-to-end) interfaces
+
+<p>
+	
+</p>
+
+
+@RemoteResource(path="/petstore")
+public interface PetStore {
+
+	@RemoteMethod(method=GET, path="/pet")
+	public Collection<Pet> getPets() throws NotAcceptable;
+
+	@RemoteMethod(path="/pet/{petId}") /* method inferred from method name */
+	public Pet getPet(
+		@Path(
+			name="petId",
+			description="ID of pet to return",
+			example="123"
+		)
+		long petId
+	) throws IdNotFound, NotAcceptable;
+
+	
+	
+	
+public class PetStoreResource extends BasicRestServletJena implements PetStore {
+	private static final long serialVersionUID = 1L;
+
+	private PetStoreService store;
+
+
+	@Override /* PetStore */
+	@RestMethod(
+		name=GET,
+		path="/pet",
+		summary="All pets in the store",
+		swagger=@MethodSwagger(
+			tags="pet",
+			parameters={
+				Queryable.SWAGGER_PARAMS
+			}
+		),
+		bpx="Pet: tags",
+		htmldoc=@HtmlDoc(
+			widgets={
+				QueryMenuItem.class,
+				AddPetMenuItem.class
+			},
+			navlinks={
+				"INHERIT",                // Inherit links from class.
+				"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
+				"[3]:$W{AddPetMenuItem}"  // Insert ADD link in position 3.
+			}
+		),
+		converters={Queryable.class}
+	)
+	public Collection<Pet> getPets() throws NotAcceptable {
+		return store.getPets();
+	}
+
+	@Override /* PetStore */
+	@RestMethod(
+		name=GET,
+		path="/pet/{petId}",
+		summary="Find pet by ID",
+		description="Returns a single pet",
+		swagger=@MethodSwagger(
+			tags="pet",
+			value={
+				"security:[ { api_key:[] } ]"
+			}
+		)
+	)
+	public Pet getPet(long petId) throws IdNotFound, NotAcceptable {
+		return store.getPet(petId);
+	}
+	
+	
+		try (RestClient rc = RestClient.create().json().rootUrl("http://localhost:10000").build()) {
+			PetStore ps = rc.getRemoteResource(PetStore.class);
+
+			for (Pet x : ps.getPets()) {
+				ps.deletePet("apiKey", x.getId());
+				w.println(format("Deleted pet:  id={0}", x.getId()));
+			}
+			for (Order x : ps.getOrders()) {
+				ps.deleteOrder(x.getId());
+				w.println(format("Deleted order:  id={0}", x.getId()));
+			}
+			for (User x : ps.getUsers()) {
+				ps.deleteUser(x.getUsername());
+				w.println(format("Deleted user:  username={0}", x.getUsername()));
+			}
+			for (CreatePet x : parser.parse(getStream("init/Pets.json"), CreatePet[].class)) {
+				long id = ps.postPet(x);
+				w.println(format("Created pet:  id={0}, name={1}", id, x.getName()));
+			}
+			for (Order x : parser.parse(getStream("init/Orders.json"), Order[].class)) {
+				long id = ps.placeOrder(x.getPetId(), x.getUsername());
+				w.println(format("Created order:  id={0}", id));
+			}
+			for (User x: parser.parse(getStream("init/Users.json"), User[].class)) {
+				ps.postUser(x);
+				w.println(format("Created user:  username={0}", x.getUsername()));
+			}
+		}
+	
+	
+	
