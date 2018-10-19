@@ -22,18 +22,27 @@ import javax.persistence.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Pet store database application.
+ * <p>
+ * Uses JPA persistence to store and retrieve PetStore DTOs.
+ * JPA beans are defined in <code>META-INF/persistence.xml</code>.
  */
-public class PetStoreService {
+public class PetStoreService extends AbstractPersistenceService {
 
-	private final EntityManagerFactory entityManagerFactory;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Initialization methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
-	public PetStoreService() {
-		entityManagerFactory = Persistence.createEntityManagerFactory("test");
-	}
-
+	/**
+	 * Initialize the petstore database using JPA.
+	 *
+	 * @param w Console output.
+	 * @return This object (for method chaining).
+	 * @throws Exception
+	 */
 	public PetStoreService initDirect(PrintWriter w) throws Exception {
 
 		EntityManager em = getEntityManager();
@@ -76,6 +85,13 @@ public class PetStoreService {
 		return this;
 	}
 
+	/**
+	 * Initialize the petstore database by using a remote resource interface against our REST.
+	 *
+	 * @param w Console output.
+	 * @return This object (for method chaining).
+	 * @throws Exception
+	 */
 	public PetStoreService initViaRest(PrintWriter w) throws Exception {
 		JsonParser parser = JsonParser.create().ignoreUnknownBeanProperties().build();
 
@@ -111,6 +127,9 @@ public class PetStoreService {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Service methods.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	public Pet getPet(long id) throws IdNotFound {
 		return find(Pet.class, id);
@@ -126,15 +145,15 @@ public class PetStoreService {
 	}
 
 	public List<Pet> getPets() {
-		return query("select X from Pet X", Pet.class);
+		return query("select X from Pet X", Pet.class, (SearchArgs)null);
 	}
 
 	public List<Order> getOrders() {
-		return query("select X from PetstoreOrder X", Order.class);
+		return query("select X from PetstoreOrder X", Order.class, (SearchArgs)null);
 	}
 
 	public List<User> getUsers() {
-		return query("select X from PetstoreUser X", User.class);
+		return query("select X from PetstoreUser X", User.class, (SearchArgs)null);
 	}
 
 	public Pet create(CreatePet c) {
@@ -150,28 +169,34 @@ public class PetStoreService {
 	}
 
 	public Pet update(UpdatePet u) throws IdNotFound {
-		return merge(getPet(u.getId()).apply(u));
+		EntityManager em = getEntityManager();
+		return merge(em, find(em, Pet.class, u.getId()).apply(u));
 	}
 
 	public Order update(Order o) throws IdNotFound {
-		return merge(getOrder(o.getId()).apply(o));
+		EntityManager em = getEntityManager();
+		return merge(em, find(em, Order.class, o.getId()).apply(o));
 	}
 
 	public User update(User u) throws IdNotFound, InvalidUsername {
 		assertValidUsername(u.getUsername());
-		return merge(getUser(u.getUsername()).apply(u));
+		EntityManager em = getEntityManager();
+		return merge(em, find(em, User.class, u.getUsername()).apply(u));
 	}
 
 	public void removePet(long id) throws IdNotFound {
-		remove(getPet(id));
+		EntityManager em = getEntityManager();
+		remove(em, find(em, Pet.class, id));
 	}
 
 	public void removeOrder(long id) throws IdNotFound {
-		remove(getOrder(id));
+		EntityManager em = getEntityManager();
+		remove(em, find(em, Order.class, id));
 	}
 
 	public void removeUser(String username) throws IdNotFound {
-		remove(getUser(username));
+		EntityManager em = getEntityManager();
+		remove(em, find(em, User.class, username));
 	}
 
 	public Collection<Pet> getPetsByStatus(PetStatus[] status) {
@@ -211,46 +236,6 @@ public class PetStoreService {
 	private void assertValidUsername(String username) throws InvalidUsername {
 		if (username == null || ! username.matches("[\\w\\d]{3,8}"))
 			throw new InvalidUsername();
-	}
-
-	private EntityManager getEntityManager() {
-		return entityManagerFactory.createEntityManager();
-	}
-
-	private <T> T merge(T t) {
-		EntityManager em = getEntityManager();
-		try {
-			EntityTransaction et = em.getTransaction();
-			et.begin();
-			t = em.merge(t);
-			et.commit();
-			return t;
-		} finally {
-			em.close();
-		}
-	}
-
-	private <T> void remove(T t) {
-		EntityManager em = getEntityManager();
-		try {
-			EntityTransaction et = em.getTransaction();
-			et.begin();
-			em.remove(t);
-			et.commit();
-		} finally {
-			em.close();
-		}
-	}
-
-	private <T> List<T> query(String query, Class<T> t) {
-		return getEntityManager().createQuery(query, t).getResultList();
-	}
-
-	private <T> T find(Class<T> t, Object id) throws IdNotFound {
-		T o = getEntityManager().find(t, id);
-		if (o == null)
-			throw new IdNotFound(id, t);
-		return o;
 	}
 
 	private InputStream getStream(String fileName) {

@@ -384,6 +384,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-client.RestProxies.Path'>@Path</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-client.RestProxies.Request'>@Request</a></p>
 			<li><p class=''><a class='doclink' href='#juneau-rest-client.RestProxies.Response'>@Response</a></p>
+			<li><p class='new'><a class='doclink' href='#juneau-rest-client.RestProxies.DualPurposeInterfaces'>Dual-purpose (end-to-end) interfaces</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.SSL'>SSL Support</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.Authentication'>Authentication</a></p>
@@ -22452,6 +22453,106 @@
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
 </p>
 </div><!-- END: 9.1.9 - juneau-rest-client.RestProxies.Response -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.DualPurposeInterfaces' id='juneau-rest-client.RestProxies.DualPurposeInterfaces'>9.1.10 - Dual-purpose (end-to-end) interfaces</a></h4>
+<div class='topic'><!-- START: 9.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
+<p>
+	A common coding practice is to use the same Java interface to define both your server and client side REST interfaces.
+	The advantage to this approach is that changes that you make to your REST interface can be reflected in both places
+	at the same time, reducing the chances for compatibility mistakes.
+</p>
+<p>
+	What makes this possible is that method-level annotations such as <ja>@RestMethod</ja> and parameter-level annotations
+	such as <ja>@Query</ja> are inherited from parent classes.  
+	This normally isn't possible, but the framework will spider up the parent hierarchy of classes to find method and parameter level
+	annotations defined on overridden methods.
+</p>
+<p>
+	The general approach is to define your {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource}-annotated interface first.
+	The following example is pulled from the PetStore app:
+</p>
+<p class='bpcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
+	
+		<ja>@RemoteMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/pet"</js>)
+		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable;
+	
+		<ja>@RemoteMethod</ja>(method=<jsf>DELETE</jsf>, path=<js>"/pet/{petId}"</js>)
+		<jk>public</jk> Ok deletePet(
+			<ja>@Header</ja>(
+				name=<js>"api_key"</js>,
+				description=<js>"Security API key"</js>,
+				required=<jk>true</jk>,
+				example=<js>"foobar"</js>
+			)
+			String apiKey,
+			<ja>@Path</ja>(
+				name=<js>"petId"</js>,
+				description=<js>"Pet id to delete"</js>,
+				example=<js>"123"</js>
+			)
+			<jk>long</jk> petId
+		) <jk>throws</jk> IdNotFound, NotAcceptable;
+		
+		...
+</p>
+<p>
+	Next you define the implementation of your interface as a normal Juneau REST resource:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/petstore"</js>,
+		title=<js>"Petstore application"</js>,
+		...
+	)
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	
+		...
+	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
+		<ja>@RestMethod</ja>(
+			name=<jsm>GET</jsm>,
+			path=<js>"/pet"</js>,
+			summary=<js>"All pets in the store"</js>,
+			...
+		)
+		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+			<jk>return</jk> <jsf>store</jsf>.getPets();
+		}
+	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
+		<ja>@RestMethod</ja>(
+			name=<jsf>DELETE</jsf>,
+			path=<js>"/pet/{petId}"</js>,
+			summary=<js>"Deletes a pet"</js>,
+			...
+		)
+		<jk>public</jk> Ok deletePet(String apiKey, long petId) <jk>throws</jk> IdNotFound, NotAcceptable {
+			<jsf>store</jsf>.removePet(petId);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+</p>
+<p>
+	Then use the interface as a remote resource like so:
+</p>
+<p class='bpcode w800'>
+	<jk>try</jk> (RestClient rc = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build()) {
+		PetStore ps = rc.getRemoteResource(PetStore.<jk>class</jk>);
+
+		<jk>for</jk> (Pet x : ps.getPets()) {
+			ps.deletePet(<js>"my-special-key"</js>, x.getId());
+			System.<jsf>err</jsf>.println(<js>"Deleted pet:  id="</js> + x.getId());
+		}
+	}
+</p>	
+<p>
+	In the example above, we chose to add the <ja>@RestMethod</ja> annotation to the implementation class.  
+	However, they could have been added to the interface instead.
+</p>
+</div><!-- END: 9.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
 </div><!-- END: 9.1 - juneau-rest-client.RestProxies -->
 
 <!-- ==================================================================================================== -->
@@ -34308,6 +34409,10 @@
 
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
+	<li>
+		Method-level annotations (e.g. <ja>@RestMethod</ja>) and parameter-level annotations (e.g. <ja>@Query</ja>) are now inheritable
+		from parent classes and interfaces. 
+		<br>This allows you to define {@doc juneau-rest-client.RestProxies.DualPurposeInterfaces}.
 	<li>
 		The <code>ReaderResource</code> and <code>StreamResource</code> classes have been moved to the <code>org.apache.juneau.http</code>
 		package in <code>juneau-marshall</code>.  This allows them to be used as return types in remote REST interfaces.

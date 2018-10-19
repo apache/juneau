@@ -16,110 +16,100 @@
 {new} Dual-purpose (end-to-end) interfaces
 
 <p>
-	
+	A common coding practice is to use the same Java interface to define both your server and client side REST interfaces.
+	The advantage to this approach is that changes that you make to your REST interface can be reflected in both places
+	at the same time, reducing the chances for compatibility mistakes.
 </p>
-
-
-@RemoteResource(path="/petstore")
-public interface PetStore {
-
-	@RemoteMethod(method=GET, path="/pet")
-	public Collection<Pet> getPets() throws NotAcceptable;
-
-	@RemoteMethod(path="/pet/{petId}") /* method inferred from method name */
-	public Pet getPet(
-		@Path(
-			name="petId",
-			description="ID of pet to return",
-			example="123"
-		)
-		long petId
-	) throws IdNotFound, NotAcceptable;
-
+<p>
+	What makes this possible is that method-level annotations such as <ja>@RestMethod</ja> and parameter-level annotations
+	such as <ja>@Query</ja> are inherited from parent classes.  
+	This normally isn't possible, but the framework will spider up the parent hierarchy of classes to find method and parameter level
+	annotations defined on overridden methods.
+</p>
+<p>
+	The general approach is to define your {@link oajr.client.remote.RemoteResource @RemoteResource}-annotated interface first.
+	The following example is pulled from the PetStore app:
+</p>
+<p class='bpcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
 	
+		<ja>@RemoteMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/pet"</js>)
+		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable;
 	
-	
-public class PetStoreResource extends BasicRestServletJena implements PetStore {
-	private static final long serialVersionUID = 1L;
-
-	private PetStoreService store;
-
-
-	@Override /* PetStore */
-	@RestMethod(
-		name=GET,
-		path="/pet",
-		summary="All pets in the store",
-		swagger=@MethodSwagger(
-			tags="pet",
-			parameters={
-				Queryable.SWAGGER_PARAMS
-			}
-		),
-		bpx="Pet: tags",
-		htmldoc=@HtmlDoc(
-			widgets={
-				QueryMenuItem.class,
-				AddPetMenuItem.class
-			},
-			navlinks={
-				"INHERIT",                // Inherit links from class.
-				"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
-				"[3]:$W{AddPetMenuItem}"  // Insert ADD link in position 3.
-			}
-		),
-		converters={Queryable.class}
+		<ja>@RemoteMethod</ja>(method=<jsf>DELETE</jsf>, path=<js>"/pet/{petId}"</js>)
+		<jk>public</jk> Ok deletePet(
+			<ja>@Header</ja>(
+				name=<js>"api_key"</js>,
+				description=<js>"Security API key"</js>,
+				required=<jk>true</jk>,
+				example=<js>"foobar"</js>
+			)
+			String apiKey,
+			<ja>@Path</ja>(
+				name=<js>"petId"</js>,
+				description=<js>"Pet id to delete"</js>,
+				example=<js>"123"</js>
+			)
+			<jk>long</jk> petId
+		) <jk>throws</jk> IdNotFound, NotAcceptable;
+		
+		...
+</p>
+<p>
+	Next you define the implementation of your interface as a normal Juneau REST resource:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/petstore"</js>,
+		title=<js>"Petstore application"</js>,
+		...
 	)
-	public Collection<Pet> getPets() throws NotAcceptable {
-		return store.getPets();
-	}
-
-	@Override /* PetStore */
-	@RestMethod(
-		name=GET,
-		path="/pet/{petId}",
-		summary="Find pet by ID",
-		description="Returns a single pet",
-		swagger=@MethodSwagger(
-			tags="pet",
-			value={
-				"security:[ { api_key:[] } ]"
-			}
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	
+		...
+	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
+		<ja>@RestMethod</ja>(
+			name=<jsm>GET</jsm>,
+			path=<js>"/pet"</js>,
+			summary=<js>"All pets in the store"</js>,
+			...
 		)
-	)
-	public Pet getPet(long petId) throws IdNotFound, NotAcceptable {
-		return store.getPet(petId);
-	}
-	
-	
-		try (RestClient rc = RestClient.create().json().rootUrl("http://localhost:10000").build()) {
-			PetStore ps = rc.getRemoteResource(PetStore.class);
-
-			for (Pet x : ps.getPets()) {
-				ps.deletePet("apiKey", x.getId());
-				w.println(format("Deleted pet:  id={0}", x.getId()));
-			}
-			for (Order x : ps.getOrders()) {
-				ps.deleteOrder(x.getId());
-				w.println(format("Deleted order:  id={0}", x.getId()));
-			}
-			for (User x : ps.getUsers()) {
-				ps.deleteUser(x.getUsername());
-				w.println(format("Deleted user:  username={0}", x.getUsername()));
-			}
-			for (CreatePet x : parser.parse(getStream("init/Pets.json"), CreatePet[].class)) {
-				long id = ps.postPet(x);
-				w.println(format("Created pet:  id={0}, name={1}", id, x.getName()));
-			}
-			for (Order x : parser.parse(getStream("init/Orders.json"), Order[].class)) {
-				long id = ps.placeOrder(x.getPetId(), x.getUsername());
-				w.println(format("Created order:  id={0}", id));
-			}
-			for (User x: parser.parse(getStream("init/Users.json"), User[].class)) {
-				ps.postUser(x);
-				w.println(format("Created user:  username={0}", x.getUsername()));
-			}
+		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+			<jk>return</jk> <jsf>store</jsf>.getPets();
 		}
 	
-	
-	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
+		<ja>@RestMethod</ja>(
+			name=<jsf>DELETE</jsf>,
+			path=<js>"/pet/{petId}"</js>,
+			summary=<js>"Deletes a pet"</js>,
+			...
+		)
+		<jk>public</jk> Ok deletePet(String apiKey, long petId) <jk>throws</jk> IdNotFound, NotAcceptable {
+			<jsf>store</jsf>.removePet(petId);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+</p>
+<p>
+	Then use the interface as a remote resource like so:
+</p>
+<p class='bpcode w800'>
+	<jk>try</jk> (RestClient rc = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build()) {
+		PetStore ps = rc.getRemoteResource(PetStore.<jk>class</jk>);
+
+		<jk>for</jk> (Pet x : ps.getPets()) {
+			ps.deletePet(<js>"my-special-key"</js>, x.getId());
+			System.<jsf>err</jsf>.println(<js>"Deleted pet:  id="</js> + x.getId());
+		}
+	}
+</p>	
+<p>
+	In the example above, we chose to add the <ja>@RestMethod</ja> annotation to the implementation class.  
+	However, they could have been added to the interface instead.
+</p>
+<p>
+	Note how we didn't need to use the <ja>@Header</ja> and <ja>@Path</ja> annotations in our implementation since
+	the annotations were inherited from the interface.
+</p>

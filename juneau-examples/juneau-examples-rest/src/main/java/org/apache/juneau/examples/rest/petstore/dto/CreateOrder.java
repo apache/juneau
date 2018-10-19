@@ -16,7 +16,6 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Bean for creating {@link Order} objects.
- * Also serves as the superclass for the {@link Order} object.
  */
 @Bean(fluentSetters=true, properties="petId,username")
 public class CreateOrder {

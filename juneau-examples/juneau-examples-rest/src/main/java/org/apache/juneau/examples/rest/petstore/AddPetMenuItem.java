@@ -42,7 +42,7 @@ public class AddPetMenuItem extends MenuItemWidget {
 						th("Species:"),
 						td(
 							select().name("species").children(
-								option("cat"), option("dog"), option("bird"), option("fish"), option("mouse"), option("rabbit"), option("snake")
+								option("CAT"), option("DOG"), option("BIRD"), option("FISH"), option("MOUSE"), option("RABBIT"), option("SNAKE")
 							)
 						),
 						td(new Tooltip("&#x2753;", "The kind of animal."))

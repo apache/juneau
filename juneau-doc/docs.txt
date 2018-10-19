@@ -228,6 +228,7 @@ juneau-rest-client.PipingOutput = #juneau-rest-client.PipingOutput, Overview > j
 juneau-rest-client.ResponsePatterns = #juneau-rest-client.ResponsePatterns, Overview > juneau-rest-client > Using Response Patterns
 juneau-rest-client.RestProxies = #juneau-rest-client.RestProxies, Overview > juneau-rest-client > REST Proxies
 juneau-rest-client.RestProxies.Body = #juneau-rest-client.RestProxies.Body, Overview > juneau-rest-client > REST Proxies > @Body
+juneau-rest-client.RestProxies.DualPurposeInterfaces = #juneau-rest-client.RestProxies.DualPurposeInterfaces, Overview > juneau-rest-client > REST Proxies > Dual-purpose (end-to-end) interfaces
 juneau-rest-client.RestProxies.FormData = #juneau-rest-client.RestProxies.FormData, Overview > juneau-rest-client > REST Proxies > @FormData
 juneau-rest-client.RestProxies.Header = #juneau-rest-client.RestProxies.Header, Overview > juneau-rest-client > REST Proxies > @Header
 juneau-rest-client.RestProxies.Path = #juneau-rest-client.RestProxies.Path, Overview > juneau-rest-client > REST Proxies > @Path
