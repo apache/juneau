@@ -59,6 +59,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.reshandlers.*;
+import org.apache.juneau.rest.util.UrlPathPattern;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
@@ -3314,7 +3315,7 @@ public final class RestContext extends BeanContext {
 							if (! _preCallMethods.containsKey(sig)) {
 								setAccessible(m, false);
 								_preCallMethods.put(sig, m);
-								_preCallMethodParams.add(findParams(m, true));
+								_preCallMethodParams.add(findParams(m, true, null));
 							}
 							break;
 						}
@@ -3322,7 +3323,7 @@ public final class RestContext extends BeanContext {
 							if (! _postCallMethods.containsKey(sig)) {
 								setAccessible(m, false);
 								_postCallMethods.put(sig, m);
-								_postCallMethodParams.add(findParams(m, true));
+								_postCallMethodParams.add(findParams(m, true, null));
 							}
 							break;
 						}
@@ -4564,11 +4565,12 @@ public final class RestContext extends BeanContext {
 	 *
 	 * @param method The Java method being called.
 	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
+	 * @param pathPattern
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
 	@SuppressWarnings("deprecation")
-	protected RestMethodParam[] findParams(Method method, boolean isPreOrPost) throws ServletException {
+	protected RestMethodParam[] findParams(Method method, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
 		RestMethodParam[] rp = new RestMethodParam[pt.length];
@@ -4591,7 +4593,7 @@ public final class RestContext extends BeanContext {
 			} else if (hasAnnotation(FormData.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.FormData.class, method, i)) {
 				rp[i] = new RestParamDefaults.FormDataObject(method, i, ps);
 			} else if (hasAnnotation(Path.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Path.class, method, i)) {
-				rp[i] = new RestParamDefaults.PathObject(method, i, ps);
+				rp[i] = new RestParamDefaults.PathObject(method, i, ps, pathPattern);
 			} else if (hasAnnotation(Body.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Body.class, method, i)) {
 				rp[i] = new RestParamDefaults.BodyObject(method, i, ps);
 			} else if (hasAnnotation(Request.class, method, i)) {

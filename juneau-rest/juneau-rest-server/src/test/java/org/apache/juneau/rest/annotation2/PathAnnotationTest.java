@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.rest.*;
@@ -279,6 +280,56 @@ public class PathAnnotationTest {
 	public void d01_uuid() throws Exception {
 		UUID uuid = UUID.randomUUID();
 		d.get("/uuid/" + uuid).execute().assertBody(uuid.toString());
+	}
+
+	//=================================================================================================================
+	// @Path annotation without name.
+	//=================================================================================================================
+
+	@RestResource
+	public static class E  {
+		@RestMethod(name=GET, path="/x/{foo}/{bar}")
+		public Object normal1(@Path String foo, @Path String bar) {
+			return new ObjectMap().append("m","normal1").append("foo", foo).append("bar", bar);
+		}
+		@RestMethod(name=GET, path="/x/{foo}/x/{bar}/x")
+		public Object normal2(@Path String foo, @Path String bar) {
+			return new ObjectMap().append("m","normal2").append("foo", foo).append("bar", bar);
+		}
+		@RestMethod(name=GET, path="/y/{0}/{1}")
+		public Object numbers1(@Path String foo, @Path String bar) {
+			return new ObjectMap().append("m","numbers1").append("0", foo).append("1", bar);
+		}
+		@RestMethod(name=GET, path="/y/{0}/y/{1}/y")
+		public Object numbers2(@Path String foo, @Path String bar) {
+			return new ObjectMap().append("m","numbers2").append("0", foo).append("1", bar);
+		}
+		@RestMethod(name=GET, path="/z/{1}/z/{0}/z")
+		public Object numbers3(@Path String foo, @Path String bar) {
+			return new ObjectMap().append("m","numbers3").append("0", foo).append("1", bar);
+		}
+	}
+	static MockRest e = MockRest.create(E.class);
+
+	@Test
+	public void e01_normal1() throws Exception {
+		e.get("/x/x1/x2").execute().assertBody("{m:'normal1',foo:'x1',bar:'x2'}");
+	}
+	@Test
+	public void e02_normal2() throws Exception {
+		e.get("/x/x1/x/x2/x").execute().assertBody("{m:'normal2',foo:'x1',bar:'x2'}");
+	}
+	@Test
+	public void e03_numbers1() throws Exception {
+		e.get("/y/y1/y2").execute().assertBody("{m:'numbers1','0':'y1','1':'y2'}");
+	}
+	@Test
+	public void e04_numbers2() throws Exception {
+		e.get("/y/y1/y/y2/y").execute().assertBody("{m:'numbers2','0':'y1','1':'y2'}");
+	}
+	@Test
+	public void e05_numbers3() throws Exception {
+		e.get("/z/z1/z/z2/z").execute().assertBody("{m:'numbers3','0':'z2','1':'z1'}");
 	}
 
 	//=================================================================================================================

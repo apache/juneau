@@ -42,6 +42,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.util.UrlPathPattern;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
@@ -195,8 +196,8 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected PathObject(Method m, int i, PropertyStore ps) {
-			super(PATH, m, i, getName(m, i));
+		protected PathObject(Method m, int i, PropertyStore ps, UrlPathPattern pathPattern) {
+			super(PATH, m, i, getName(m, i, pathPattern));
 			org.apache.juneau.rest.annotation.Path old = getAnnotation(org.apache.juneau.rest.annotation.Path.class, m, i);
 			this.schema = HttpPartSchema.create(Path.class, m, i);
 			if (old != null)
@@ -205,7 +206,7 @@ class RestParamDefaults {
 				this.partParser = createPartParser(schema.getParser(), ps);
 		}
 
-		private static String getName(Method m, int i) {
+		private static String getName(Method m, int i, UrlPathPattern pathPattern) {
 			for (Path h : getAnnotations(Path.class, m, i)) {
 				if (! h.name().isEmpty())
 					return h.name();
@@ -217,6 +218,25 @@ class RestParamDefaults {
 					return h.name();
 				if (! h.value().isEmpty())
 					return h.value();
+			}
+			if (pathPattern != null) {
+				int idx = 0;
+
+				for (int j = 0; j < i; j++)
+					if (getAnnotation(Path.class, m, i) != null || getAnnotation(org.apache.juneau.rest.annotation.Path.class, m, i) != null)
+						idx++;
+
+				String[] vars = pathPattern.getVars();
+				if (vars.length <= idx)
+					throw new InternalServerError("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", m);
+
+				// Check for {#} variables.
+				String idxs = String.valueOf(idx);
+				for (int j = 0; j < vars.length; j++)
+					if (StringUtils.isNumeric(vars[j]) && vars[j].equals(idxs))
+						return vars[j];
+
+				return pathPattern.getVars()[idx];
 			}
 			throw new InternalServerError("@Path used without name or value on method ''{0}'' parameter ''{1}''.", m, i);
 		}

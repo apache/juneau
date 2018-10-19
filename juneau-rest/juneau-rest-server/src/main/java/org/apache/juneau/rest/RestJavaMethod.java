@@ -391,7 +391,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes())))
 					: parsers.getSupportedMediaTypes();
 
-				methodParams = context.findParams(method, false);
+				methodParams = context.findParams(method, false, pathPattern);
 
 				if (hasAnnotation(Response.class, method))
 					responseMeta = ResponseBeanMeta.create(method, serializers.getPropertyStore());
