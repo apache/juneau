@@ -59,20 +59,13 @@ import org.apache.juneau.rest.widget.*;
 	children={
 		HelloWorldResource.class,
 		PetStoreResource.class,
-		SystemPropertiesResource.class,
-		MethodExampleResource.class,
-		RequestEchoResource.class,
 		AddressBookResource.class,
 		SampleRrpcServlet.class,
 		DtoExamples.class,
 		PhotosResource.class,
 		SqlQueryResource.class,
-		CodeFormatterResource.class,
-		UrlEncodedFormResource.class,
-		TempDirResource.class,
 		ConfigResource.class,
 		LogsResource.class,
-		DockerRegistryResource.class,
 		DebugResource.class,
 		ShutdownResource.class
 	}

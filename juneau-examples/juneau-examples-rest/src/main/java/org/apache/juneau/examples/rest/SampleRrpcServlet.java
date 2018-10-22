@@ -27,7 +27,7 @@ import org.apache.juneau.rest.remote.*;
 @SuppressWarnings("serial")
 @RestResource(
 	path="/remote",
-	title="Remote Interface Service Proxy API",
+	title="Sample RRPC API",
 	description="Sample class showing how to use remote interface proxies.",
 	htmldoc=@HtmlDoc(
 		navlinks={

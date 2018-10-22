@@ -431,16 +431,11 @@
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.RootResources'>RootResources</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.HelloWorldResource'>HelloWorldResource</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.SystemPropertiesResource'>SystemPropertiesResource</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.MethodExampleResource'>MethodExampleResource</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.UrlEncodedFormResource'>UrlEncodedFormResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.RequestEchoResource'>RequestEchoResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStoreResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.AddressBookResource'>AddressBookResource</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.SampleRemoteableServlet'>SampleRrpcServlet</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.TempDirResource'>TempDirResource</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-examples-rest.SampleRrpcServlet'>SampleRrpcServlet</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.AtomFeedResource'>AtomFeedResource</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.DockerRegistryResource'>DockerRegistryResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.PhotosResource'>PhotosResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.JsonSchemaResource'>JsonSchemaResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.SqlQueryResource'>SqlQueryResource</a></p>
@@ -13263,21 +13258,16 @@
 		description=<js>"Example of a router resource page."</js>,
 		children={
 			HelloWorldResource.<jk>class</jk>,
-			MethodExampleResource.<jk>class</jk>,
+			PetStoreResource.<jk>class</jk>,
 			RequestEchoResource.<jk>class</jk>,
-			TempDirResource.<jk>class</jk>,
 			AddressBookResource.<jk>class</jk>,
 			SampleRrpcServlet.<jk>class</jk>,
 			PhotosResource.<jk>class</jk>,
-			AtomFeedResource.<jk>class</jk>,
-			JsonSchemaResource.<jk>class</jk>,
+			DtoExamples.<jk>class</jk>,
 			SqlQueryResource.<jk>class</jk>,
-			CodeFormatterResource.<jk>class</jk>,
-			UrlEncodedFormResource.<jk>class</jk>,
-			SourceResource.<jk>class</jk>,
 			ConfigResource.<jk>class</jk>,
 			LogsResource.<jk>class</jk>,
-			DockerRegistryResource.<jk>class</jk>,
+			DebugResource.<jk>class</jk>,
 			ShutdownResource.<jk>class</jk>
 		}
 	)
@@ -14813,20 +14803,14 @@
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			PetStoreResource.<jk>class</jk>,
-			SystemPropertiesResource.<jk>class</jk>,
-			MethodExampleResource.<jk>class</jk>,
 			RequestEchoResource.<jk>class</jk>,
 			AddressBookResource.<jk>class</jk>,
 			SampleRrpcServlet.<jk>class</jk>,
 			DtoExamples.<jk>class</jk>,
 			PhotosResource.<jk>class</jk>,
 			SqlQueryResource.<jk>class</jk>,
-			CodeFormatterResource.<jk>class</jk>,
-			UrlEncodedFormResource.<jk>class</jk>,
-			TempDirResource.<jk>class</jk>,
 			ConfigResource.<jk>class</jk>,
 			LogsResource.<jk>class</jk>,
-			DockerRegistryResource.<jk>class</jk>,
 			DebugResource.<jk>class</jk>,
 			ShutdownResource.<jk>class</jk>
 		}
@@ -17054,9 +17038,8 @@
 <div class='topic'><!-- START: 7.11 - juneau-rest-server.HandlingFormPosts -->
 <p>
 	The best way to handle a form post is usually by using an input bean.
-	<br>The samples include a <l>UrlEncodedFormResource</l> class that takes in URL-Encoded form post of the 
+	<br>The following is a class that takes in URL-Encoded form post of the 
 	form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
-	<br>The code is shown here:
 </p>
 <p class='bpcode w800'>				
 	<ja>@RestResource</ja>(
@@ -17114,8 +17097,7 @@
 	<br>However, it can be done in conjunction with the Apache Commons File Upload library.
 </p>	
 <p>
-	The samples include a <l>TempDirResource</l> class that uses the File Upload library to allow files to 
-	be uploaded as multipart form posts.
+	The following is an example that uses the File Upload library to allow files to be uploaded as multipart form posts.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -22552,6 +22534,10 @@
 	In the example above, we chose to add the <ja>@RestMethod</ja> annotation to the implementation class.  
 	However, they could have been added to the interface instead.
 </p>
+<p>
+	Note how we didn't need to use the <ja>@Header</ja> and <ja>@Path</ja> annotations in our implementation since
+	the annotations were inherited from the interface.
+</p>
 </div><!-- END: 9.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
 </div><!-- END: 9.1 - juneau-rest-client.RestProxies -->
 
@@ -24316,22 +24302,13 @@
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			PetStoreResource.<jk>class</jk>,
-			SystemPropertiesResource.<jk>class</jk>,
-			MethodExampleResource.<jk>class</jk>,
 			RequestEchoResource.<jk>class</jk>,
-			TempDirResource.<jk>class</jk>,
-			AddressBookResource.<jk>class</jk>,
 			SampleRrpcServlet.<jk>class</jk>,
 			PhotosResource.<jk>class</jk>,
-			AtomFeedResource.<jk>class</jk>,
-			JsonSchemaResource.<jk>class</jk>,
+			DtoExamples.<jk>class</jk>,
 			SqlQueryResource.<jk>class</jk>,
-			CodeFormatterResource.<jk>class</jk>,
-			UrlEncodedFormResource.<jk>class</jk>,
 			ConfigResource.<jk>class</jk>,
 			LogsResource.<jk>class</jk>,
-			DockerRegistryResource.<jk>class</jk>,
-			PredefinedLabelsResource.<jk>class</jk>,
 			DebugResource.<jk>class</jk>,
 			ShutdownResource.<jk>class</jk>
 		}
@@ -24444,741 +24421,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SystemPropertiesResource' id='juneau-examples-rest.SystemPropertiesResource'>12.3 - SystemPropertiesResource</a></h3>
-<div class='topic'><!-- START: 12.3 - juneau-examples-rest.SystemPropertiesResource -->
-<p>
-	The <l>SystemProperties</l> class is a resource that shows off a typical REST design pattern
-	of GET/PUT/POST/DELETE commands for modifying the JVM system properties.
-	<br>It demonstrates several capabilities including:
-</p>
-<ul class='spaced-list'>
-	<li>
-		Using the {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc} annotation to customize the HTML view.
-	<li>
-		Defining Swagger documentation through annotations.
-	<li>
-		Using Guards to limit access to certain methods.
-	<li>
-		Creating form entry pages using HTML5 beans.
-</ul>
-
-<h5 class='figure'>SystemPropertiesResource.java</h5>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		path=<js>"/systemProperties"</js>,
-	
-		<jc>// Title and description that show up on HTML rendition page.</jc>
-		<jc>// Also used in Swagger doc.</jc>
-		title=<js>"System properties resource"</js>,
-		description=<js>"REST interface for performing CRUD operations on system properties."</js>,
-	
-		htmldoc=<ja>@HtmlDoc</ja>(
-			
-			<jc>// Widget used for content-type and styles pull-down menus.	</jc>	
-			widgets={
-				ContentTypeMenuItem.<jk>class</jk>,
-				StyleMenuItem.<jk>class</jk>
-			},
-	
-			<jc>// Links on the HTML rendition page.</jc>
-			<jc>// "request:/..." URIs are relative to the request URI.</jc>
-			<jc>// "servlet:/..." URIs are relative to the servlet URI.</jc>
-			<jc>// "$C{...}" variables are pulled from the config file.</jc>
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"form: servlet:/formPage"</js>,
-				<js>"$W{ContentTypeMenuItem}"</js>,
-				<js>"$W{StyleMenuItem}"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-			},
-	
-			<jc>// Custom page text in aside section.</jc>
-			aside={
-				<js>"&lt;div style='max-width:800px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;Shows standard GET/PUT/POST/DELETE operations and use of Swagger annotations.&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			},
-				
-			<jc>// Custom CSS styles applied to HTML view.</jc>
-			style={
-				<js>"aside {display:table-caption} "</js>,
-				<js>"aside p {margin: 0px 20px;}"</js>
-			}
-		),
-			
-		<jc>// Properties that get applied to all serializers and parsers.</jc>
-		properties={
-			<jc>// Use single quotes.</jc>
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
-		},
-	
-		<jc>// Support GZIP encoding on Accept-Encoding header.</jc>
-		encoders=GzipEncoder.<jk>class</jk>,
-	
-		swagger={
-			<js>"contact:{name:'John Smith',email:'john@smith.com'},"</js>,
-			<js>"license:{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'},"</js>,
-			<js>"version:'2.0',"</js>,
-			<js>"termsOfService:'You are on your own.',"</js>,
-			<js>"tags:[{name:'Java',description:'Java utility'}],"</js>,
-			<js>"externalDocs:{description:'Home page',url:'http://juneau.apache.org'}"</js>
-		}
-	)
-	<jk>public class</jk> SystemPropertiesResource <jk>extends</jk> BasicRestServlet {
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>, path=<js>"/"</js>,
-			summary=<js>"Show all system properties"</js>,
-			description=<js>"Returns all system properties defined in the JVM."</js>,
-			swagger={
-				<js>"parameters:["</js>,
-					<js>"{name:'sort',in:'query',description:'Sort results alphabetically',default:'false'}"</js>,
-				<js>"],"</js>,
-				<js>"responses:{"</js>,
-					<js>"200: {description:'Returns a map of key/value pairs.'}"</js>,
-				<js>"}"</js>
-			}
-		)
-		<jk>public</jk> Map getSystemProperties(<ja>@Query</ja>(<js>"sort"</js>) <jk>boolean</jk> sort) <jk>throws</jk> Throwable {
-			<jk>if</jk> (sort)
-				<jk>return new</jk> TreeMap(System.<jsm>getProperties</jsm>());
-			<jk>return</jk> System.<jsm>getProperties</jsm>();
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>, path=<js>"/{propertyName}"</js>,
-			summary=<js>"Get system property"</js>,
-			description=<js>"Returns the value of the specified system property."</js>,
-			swagger={
-				<js>"parameters:["</js>,
-					<js>"{name:'propertyName',in:'path',description:'The system property name.'}"</js>,
-				<js>"],"</js>,
-				<js>"responses:{"</js>,
-					<js>"200: {description:'The system property value, or null if not found.'}"</js>,
-				<js>"}"</js>
-			}
-		)
-		<jk>public</jk> String getSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName) <jk>throws</jk> Throwable {
-			<jk>return</jk> System.<jsm>getProperty</jsm>(propertyName);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>,
-			summary=<js>"Replace system property"</js>,
-			description=<js>"Sets a new value for the specified system property."</js>,
-			guards=AdminGuard.<jk>class</jk>,
-			swagger={
-				<js>"parameters:["</js>,
-					<js>"{name:'propertyName',in:'path',description:'The system property name.'},"</js>,
-					<js>"{in:'body',description:'The new system property value.'}"</js>,
-				<js>"],"</js>,
-				<js>"responses:{"</js>,
-					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
-					<js>"403: {description:'User is not an admin.'}"</js>,
-				<js>"}"</js>
-			}
-		)
-		<jk>public</jk> Redirect setSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName, <ja>@Body</ja> String value) {
-			System.<jsm>setProperty</jsm>(propertyName, value);
-			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>POST</jsf>, path=<js>"/"</js>,
-			summary=<js>"Add an entire set of system properties"</js>,
-			description=<js>"Takes in a map of key/value pairs and creates a set of new system properties."</js>,
-			guards=AdminGuard.<jk>class</jk>,
-			swagger={
-				<js>"parameters:["</js>,
-					<js>"{name:'propertyName',in:'path',description:'The system property name.'},"</js>,
-					<js>"{in:'body',description:'The new system property values.',schema:{example:{key1:'val1',key2:123}}}"</js>,
-				<js>"],"</js>,
-				<js>"responses:{"</js>,
-					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
-					<js>"403: {description:'User is not an admin.'}"</js>,
-				<js>"}"</js>
-			}
-		)
-		<jk>public</jk> Redirect setSystemProperties(<ja>@Body</ja> java.util.Properties newProperties) {
-			System.<jsm>setProperties</jsm>(newProperties);
-			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>DELETE</jsf>, path=<js>"/{propertyName}"</js>,
-			summary=<js>"Delete system property"</js>,
-			description=<js>"Deletes the specified system property."</js>,
-			guards=AdminGuard.<jk>class</jk>,
-			swagger={
-				<js>"parameters:["</js>,
-					<js>"{name:'propertyName',in:'path',description:'The system property name.'}"</js>,
-				<js>"],"</js>,
-				<js>"responses:{"</js>,
-					<js>"302: {headers:{Location:{description:'The root URL of this resource.'}}},"</js>,
-					<js>"403: {description:'User is not an admin.'}"</js>,
-				<js>"}"</js>
-			}
-		)
-		<jk>public</jk> Redirect deleteSystemProperty(<ja>@Path</ja>(<js>"propertyName"</js>) String propertyName) {
-			System.<jsm>clearProperty</jsm>(propertyName);
-			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>, path=<js>"/formPage"</js>,
-			summary=<js>"Form entry page"</js>,
-			description=<js>"A form post page for setting a single system property value"</js>,
-			guards=AdminGuard.<jk>class</jk>,
-			htmldoc=<ja>@HtmlDoc</ja>(
-				aside={
-					<js>"&lt;div class='text'&gt;"</js>,
-					<js>"	&lt;p&gt;Shows how HTML5 beans can be used to quickly create arbitrary HTML.&lt;/p&gt;"</js>,
-					<js>"&lt;/div&gt;"</js>
-				}
-			)
-		)
-		<jk>public</jk> Form getFormPage() {
-			<jk>return</jk> <jsm>form</jsm>().method(<jsf>POST</jsf>).action(<js>"servlet:/formPagePost"</js>).children(
-				<jsm>table</jsm>(
-					<jsm>tr</jsm>(
-						<jsm>th</jsm>(<js>"Set system property"</js>).colspan(2)
-					),
-					<jsm>tr</jsm>(
-						<jsm>td</jsm>(<js>"Name: "</js>), <jsm>td</jsm>(<jsm>input</jsm>(<js>"text"</js>).name(<js>"name"</js>))
-					),
-					<jsm>tr</jsm>(
-						<jsm>td</jsm>(<js>"Value: "</js>), <jsm>td</jsm>(<jsm>input</jsm>(<js>"text"</js>).name(<js>"value"</js>))
-					)
-				),
-				<jsm>button</jsm>(<js>"submit"</js>,<js>"Click me!"</js>).style(<js>"float:right"</js>)
-			);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>POST</jsf>, path=<js>"/formPagePost"</js>,
-			description=<js>"Accepts a simple form post of a system property name/value pair."</js>,
-			guards=AdminGuard.<jk>class</jk>
-		)
-		<jk>public</jk> Redirect formPagePost(<ja>@FormData</ja>(<js>"name"</js>) String name, <ja>@FormData</ja>(<js>"value"</js>) String value) {
-			System.<jsm>setProperty</jsm>(name, value);
-			<jk>return new</jk> Redirect(<js>"servlet:/"</js>);
-		}
-	}
-</p>
-<p>
-	Pointing a browser to the resource shows the following:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/systemProperties
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.1.png'>
-<p>
-	Clicking the <code>OPTIONS</code> link shows you the generated Swagger:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/systemProperties?method=OPTIONS
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.2.png'>
-<p>
-	Clicking the <code>FORM</code> link shows you the generated form entry page:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/systemProperties/formPage
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.SystemPropertiesResource.3.png'>
-</div><!-- END: 12.3 - juneau-examples-rest.SystemPropertiesResource -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.MethodExampleResource' id='juneau-examples-rest.MethodExampleResource'>12.4 - MethodExampleResource</a></h3>
-<div class='topic'><!-- START: 12.4 - juneau-examples-rest.MethodExampleResource -->
-<p>
-	The <l>MethodExampleResource</l> class provides examples of the following:
-</p>
-<ul class='spaced-list'>
-	<li>
-		Using the various Java method parameter annotations to retrieve request attributes, parameters, etc.
-	<li>
-		Using the annotation programmatic equivalents on the {@link org.apache.juneau.rest.RestRequest} object.
-	<li>
-		Setting response POJOs by either returning them or using the 
-		{@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
-</ul>
-<p>
-	The resource is provided to show how various HTTP entities (e.g. parameters, headers) can be accessed
-	as either annotated Java parameters, or through methods on the <l>RestRequest</l> object.
-</p>
-
-<h5 class='figure'>MethodExampleResource.java</h5>
-<p class='bpcode w800'>				
-	<jd>/** 
-	* Sample REST resource that shows how to define REST methods and OPTIONS pages 
-	*/</jd> 
-	<ja>@RestResource</ja>( 
-		path=<js>"/methodExample"</js>, 
-		messages=<js>"nls/MethodExampleResource"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: servlet:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-			},
-			aside={
-				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;Shows the different methods for retrieving HTTP query/form-data parameters, headers, and path variables.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;Each method is functionally equivalent but demonstrate different ways to accomplish the same tasks.&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			}
-		)
-	) 
-	<jk>public class</jk> MethodExampleResource <jk>extends</jk> BasicRestServlet { 
-		
-		<jk>private static final</jk> UUID <jsf>SAMPLE_UUID</jsf> = UUID.<jsm>fromString</jsm>(<js>"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</js>);
-		<jk>private static final</jk> String <jsf>SAMPLE_UUID_STRING</jsf> = <js>"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"</js>;
-	
-		<jd>/** Example GET request that redirects to our example method */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> ResourceDescription[] doExample() <jk>throws</jk> Exception {
-			<jk>return new</jk> ResourceDescription[] {
-				<jk>new</jk> ResourceDescription(
-					<js>"example1/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
-					<js>"Example 1 - Annotated method attributes."</js>
-				),
-				<jk>new</jk> ResourceDescription(
-					<js>"example2/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
-					<js>"Example 2 - Low-level RestRequest/RestResponse objects."</js>
-				),
-				<jk>new</jk> ResourceDescription(
-					<js>"example3/foo/123/"</js>+<jsf>SAMPLE_UUID</jsf>+<js>"/path-remainder?q1=456&amp;q2=bar"</js>, 
-					<js>"Example 3 - Intermediate-level APIs."</js>
-				)
-			};
-		}
-		
-		<jd>/** 
-		 * Methodology #1 - GET request using annotated attributes.
-		 * This approach uses annotated parameters for retrieving input.
-		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example1/{p1}/{p2}/{p3}/*"</js>)
-		<jk>public</jk> String example1(
-				<ja>@Method</ja> String method,                  <jc>// HTTP method.</jc>
-				<ja>@Path</ja>(<js>"p1"</js>) String p1,                        <jc>// Path variables.</jc>
-				<ja>@Path</ja>(<js>"p2"</js>) <jk>int</jk> p2,
-				<ja>@Path</ja>(<js>"p3"</js>) UUID p3,
-				<ja>@Query</ja>(<js>"q1"</js>) <jk>int</jk> q1,                    <jc>// Query parameters.</jc>
-				<ja>@Query</ja>(<js>"q2"</js>) String q2,
-				<ja>@Query</ja>(<js>"q3"</js>) UUID q3,
-				<ja>@Path</ja>(<js>"/*"</js>) String remainder,        <jc>// Path remainder after pattern match.</jc>
-				<ja>@Header</ja>(<js>"Accept-Language"</js>) String lang, <jc>// Headers.</jc>
-				<ja>@Header</ja>(<js>"Accept"</js>) String accept,
-				<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> doNotTrack
-			) {
-	
-			<jc>// Send back a simple Map response</jc>
-			<jk>return new</jk> AMap&lt;String,Object&gt;()
-				.append(<js>"method"</js>, method)
-				.append(<js>"path-p1"</js>, p1)
-				.append(<js>"path-p2"</js>, p2)
-				.append(<js>"path-p3"</js>, p3)
-				.append(<js>"remainder"</js>, remainder)
-				.append(<js>"query-q1"</js>, q1)
-				.append(<js>"query-q2"</js>, q2)
-				.append(<js>"query-q3"</js>, q3)
-				.append(<js>"header-lang"</js>, lang)
-				.append(<js>"header-accept"</js>, accept)
-				.append(<js>"header-doNotTrack"</js>, doNotTrack);
-		}
-
-		<jd>/** 
-		 * Methodology #2 - GET request using methods on RestRequest and RestResponse.
-		 * This approach uses low-level request/response objects to perform the same as above.
-		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example2/{p1}/{p2}/{p3}/*"</js>)
-		<jk>public</jk> void example2(
-				RestRequest req,          <jc>// A direct subclass of HttpServletRequest.</jc>
-				RestResponse res          <jc>// A direct subclass of HttpServletResponse.</jc>
-			) {
-			
-			<jc>// HTTP method.</jc>
-			String method = req.getMethod();
-	
-			<jc>// Path variables.</jc>
-			RequestPathMatch path = req.getPathMatch();
-			String p1 = path.get(<js>"p1"</js>, String.<jk>class</jk>);
-			<jk>int</jk> p2 = path.get(<js>"p2"</js>, <jk>int</jk>.<jk>class</jk>);
-			UUID p3 = path.get(<js>"p3"</js>, UUID.<jk>class</jk>);
-	
-			<jc>// Query parameters.</jc>
-			RequestQuery query = req.getQuery();
-			<jk>int</jk> q1 = query.get(<js>"q1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-			String q2 = query.get(<js>"q2"</js>, String.<jk>class</jk>);
-			UUID q3 = query.get(<js>"q3"</js>, UUID.<jk>class</jk>);
-	
-			<jc>// Path remainder after pattern match.</jc>
-			String remainder = req.getPathMatch().getRemainder();
-	
-			<jc>// Headers.</jc>
-			String lang = req.getHeader(<js>"Accept-Language"</js>);
-			String accept = req.getHeader(<js>"Accept"</js>);
-			<jk>int</jk> doNotTrack = req.getHeaders().get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
-	
-			<jc>// Send back a simple Map response</jc>
-			Map&lt;String,Object&gt; m = <jk>new</jk> AMap&lt;String,Object&gt;()
-				.append(<js>"method"</js>, method)
-				.append(<js>"path-p1"</js>, p1)
-				.append(<js>"path-p2"</js>, p2)
-				.append(<js>"path-p3"</js>, p3)
-				.append(<js>"remainder"</js>, remainder)
-				.append(<js>"query-q1"</js>, q1)
-				.append(<js>"query-q2"</js>, q2)
-				.append(<js>"query-q3"</js>, q3)
-				.append(<js>"header-lang"</js>, lang)
-				.append(<js>"header-accept"</js>, accept)
-				.append(<js>"header-doNotTrack"</js>, doNotTrack);
-			res.setOutput(m);  <jc>// Use setOutput(Object) just to be different.</jc>
-		}
-
-		<jd>/** 
-		 * Methodology #3 - GET request using special objects.
-		 * This approach uses intermediate-level APIs.
-		 * The framework recognizes the parameter types and knows how to resolve them.
-		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/example3/{p1}/{p2}/{p3}/*"</js>)
-		<jk>public</jk> String example3(
-				HttpMethod method,           <jc>// HTTP method.</jc>
-				RequestPathMatch path,       <jc>// Path variables.</jc>
-				RequestQuery query,          <jc>// Query parameters.</jc>
-				RequestHeaders headers,      <jc>// Headers.</jc>
-				AcceptLanguage lang,         <jc>// Specific header classes.</jc>
-				Accept accept
-			) {
-			
-			<jc>// Path variables.</jc>
-			String p1 = path.get(<js>"p1"</js>, String.<jk>class</jk>);
-			<jk>int</jk> p2 = path.get(<js>"p2"</js>, <jk>int</jk>.<jk>class</jk>);
-			UUID p3 = path.get(<js>"p3"</js>, UUID.<jk>class</jk>);
-	
-			<jc>// Query parameters.</jc>
-			<jk>int</jk> q1 = query.get(<js>"q1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-			String q2 = query.get(<js>"q2"</js>, String.<jk>class</jk>);
-			UUID q3 = query.get(<js>"q3"</js>, UUID.<jk>class</jk>);
-	
-			<jc>// Path remainder after pattern match.</jc>
-			String remainder = path.getRemainder();
-	
-			<jc>// Headers.</jc>
-			int doNotTrack = headers.get(<js>"DNT"</js>, <jk>int</jk>.<jk>class</jk>);
-	
-			<jc>// Send back a simple Map response</jc>
-			<jk>return new</jk> AMap&lt;String,Object&gt;()
-				.append(<js>"method"</js>, method)
-				.append(<js>"path-p1"</js>, p1)
-				.append(<js>"path-p2"</js>, p2)
-				.append(<js>"path-p3"</js>, p3)
-				.append(<js>"remainder"</js>, remainder)
-				.append(<js>"query-q1"</js>, q1)
-				.append(<js>"query-q2"</js>, q2)
-				.append(<js>"query-q3"</js>, q3)
-				.append(<js>"header-lang"</js>, lang)
-				.append(<js>"header-accept"</js>, accept)
-				.append(<js>"header-doNotTrack"</js>, doNotTrack);
-		}
-	}
-</p>
-<p>
-	The class consists of 4 methods:
-</p>	
-<ul class='doctree'>
-	<li class='jm'>
-		<l>doExample()</l>
-		<br>The root page. 
-	<li class='jm'>
-		<l>example1()</l>
-		<br>Shows how to use the following annotations:
-		<ul>
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Path @Path}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Query @Query}
-			<li class='ja'>{@link org.apache.juneau.http.annotation.Header @Header}
-			<li class='ja'>{@link org.apache.juneau.rest.annotation.Method @Method}
-		</ul>
-		Method returns a POJO to be serialized as the output.
-	<li class='jm'>
-		<l>example2()</l>
-		<br>Identical to <l>doGetExample1()</l> but shows how to use the 
-		{@link org.apache.juneau.rest.RestRequest} and {@link org.apache.juneau.rest.RestResponse} objects:
-		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getPathMatch()}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getQuery()}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getFormData()}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getHeaders()}
-			<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMethod()}
-			<li class='jm'>{@link org.apache.juneau.rest.RequestPath#getRemainder()}
-		</ul>
-		Method sets the POJO to be serialized using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
-	<li class='jm'>
-		<l>example3()</l>
-		<br>Identical to <l>doGetExample1()</l> but uses automatically resolved parameters based on class type.
-		<br>Juneau automatically recognizes specific class types such as common header types and automatically
-		resolves them to objects for you.  
-		<br>See {@doc juneau-rest-server.RestMethod @RestMethod} for the list of all automatically support parameter types, and 
-		{@link org.apache.juneau.rest.annotation.RestResource#paramResolvers() @RestResource(paramResolvers)}
-		for defining your own custom parameter type resolvers. 
-</ul>
-<p>
-	There's a lot going on in this method.  
-	<br>Notice how you're able to access URL attributes, parameters, headers, and content as parsed POJOs.  
-	<br>All the input parsing is already done by the toolkit.  
-	<br>You simply work with the resulting POJOs.
-</p>
-<p>
-	As you might notice, using annotations typically results in fewer lines of code and are therefore usually 
-	preferred over the API approach, but both are equally valid.
-</p>	
-<p>
-	When you visit this page through the router page, you can see the top level page:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/methodExample
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.1.png'>
-<p>
-	Clicking the first link on the page results in this page:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/methodExample/example1/foo/123/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee/path-remainder?q1=456&amp;q2=bar		
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.2.png'>
-<p>
-	Notice how the conversion to POJOs is automatically done for us, even for non-standard POJOs such as UUID.
-</p>
-
-<h5 class='topic'>Self-documenting design through Swagger OPTIONS pages</h5>
-<p>
-	One of the main features of Juneau is that it produces OPTIONS pages for self-documenting design (i.e. REST 
-	interfaces that document themselves).
-</p>
-<p>
-	Much of the information populated on the OPTIONS page is determined through reflection.
-	<br>This basic information can be augmented with information defined through:
-</p>
-<ul class='spaced-list'>
-	<li>
-		Annotations - An example of this was shown in the <code>SystemPropertiesResource</code> example above.
-		<br>Localized strings can be pulled from resource bundles using the <code>$L</code> localization variable.
-	<li>
-		Resource bundle properties - See <code>MethodExampleResource.properties</code> in the source.
-	<li>
-		Swagger JSON files with the same name and location as the resource class (e.g. 
-		<code>MethodExampleResource.json</code>).
-		<br>Localized versions are defined by appending the locale to the file name (e.g. 
-		<code>MethodExampleResource_ja_JP.json</code>);
-</ul>
-<p>
-	OPTIONS pages are simply serialized {@link org.apache.juneau.dto.swagger.Swagger} DTO beans.
-	<br>Localized versions of these beans are retrieved using the 
-	{@link org.apache.juneau.rest.RestRequest#getSwagger()} method.
-</p>
-<p>
-	To define an OPTIONS request handler, the {@link org.apache.juneau.rest.BasicRestServlet} class defines 
-	the following Java method:
-</p>
-
-<h5 class='figure'>BasicRestServlet.java</h5>
-<p class='bpcode w800'>
-	<jd>/** OPTIONS request handler */</jd>
-	<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
-	<jk>public</jk> Swagger getOptions(RestRequest req) {
-		<jk>return</jk> req.getSwagger();
-	}			
-</p>
-<p>
-	The <l>OPTIONS</l> link that you see on the HTML version of the page is created 
-	through a property defined by the {@link org.apache.juneau.html.HtmlDocSerializer} class
-	and specified on the resource class annotation:
-</p>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			}
-		)
-	)
-</p>
-<p>
-	This simply creates a link that's the same URL as the resource URL appended with <l>"?method=OPTIONS"</l>, 
-	which is a shorthand way that the framework provides of defining overloaded GET requests.
-	<br>Links using relative or absolute URLs can be defined this way.
-</p>
-<p>
-	Clicking the <l>options</l> link on the page presents you with information about how to use this resource:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/methodExample/?method=OPTIONS
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.MethodExampleResource.3.png'>
-<p>
-	This page (like any other) can also be rendered in JSON or XML by using the <l>&amp;Accept</l> URL parameter.
-</p>
-</div><!-- END: 12.4 - juneau-examples-rest.MethodExampleResource -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.UrlEncodedFormResource' id='juneau-examples-rest.UrlEncodedFormResource'>12.5 - UrlEncodedFormResource</a></h3>
-<div class='topic'><!-- START: 12.5 - juneau-examples-rest.UrlEncodedFormResource -->
-<p>
-	The <l>UrlEncodedFormResource</l> class provides examples of the following:
-</p>
-<ul class='spaced-list'>
-	<li>
-		How to use form entry beans to process form POSTs.
-	<li>
-		How to use the {@link org.apache.juneau.rest.RestRequest#getClasspathReaderResource(String)} method to 
-		serve up static files with embedded string variables.
-</ul>
-<p>
-	The class is shown below:
-</p>
-
-<h5 class='figure'>UrlEncodedFormResource.java</h5>
-<p class='bpcode w800'>
-	<jd>/** 
-	* Sample REST resource for loading URL-Encoded form posts into POJOs. 
-	*/</jd> 
-	<ja>@RestResource</ja>( 
-		path=<js>"/urlEncodedForm"</js>, 
-		messages=<js>"nls/UrlEncodedFormResource"</js>
-		title=<js>"URL-Encoded form example"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			widgets={ 
-				StyleMenuItem.<jk>class</jk> 
-			},
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"$W{StyleMenuItem}"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-			},
-			aside={
-				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;Shows how to process a FORM POST body into a bean using the &lt;code&gt;@Body&lt;/code&gt; annotation.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;Submitting the form post will simply echo the bean back on the response.&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			}
-		)
-	) 
-	<jk>public class</jk> UrlEncodedFormResource <jk>extends</jk> BasicRestServlet { 
-		
-		<jd>/** GET request handler */</jd>
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>, 
-			path=<js>"/"</js>,
-			htmldoc=<ja>@HtmlDoc</ja>(
-				script={
-					<js>"// Load results from IFrame into this document."</js>,
-					<js>"function loadResults(buff) {"</js>,
-					<js>"	var doc = buff.contentDocument || buff.contentWindow.document;"</js>,
-					<js>"	var buffBody = doc.getElementById('data');"</js>,
-					<js>"	document.getElementById('results').innerHTML = buffBody.innerHTML;"</js>,
-					<js>"}"</js>
-				}
-			)
-		)
-		<jk>public</jk> Div doGet(RestRequest req) {
-			<jk>return</jk> <jsm>div</jsm>(
-				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/"</js>).method(<jsf>POST</jsf>).target(<js>"buff"</js>).children(
-					<jsm>table</jsm>(
-						<jsm>tr</jsm>(
-							<jsm>th</jsm>(req.getMessage(<js>"aString"</js>)),
-							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aString"</js>).type(<js>"text"</js>))
-						),
-						<jsm>tr</jsm>(
-							<jsm>th</jsm>(req.getMessage(<js>"aNumber"</js>)),
-							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aNumber"</js>).type(<js>"number"</js>))
-						),
-						<jsm>tr</jsm>(
-							<jsm>th</jsm>(req.getMessage(<js>"aDate"</js>)),
-							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"aDate"</js>).type(<js>"datetime"</js>), <js>" (ISO8601, e.g. "</js>, <jsm>code</jsm>(<js>"2001-07-04T15:30:45Z"</js>), <js>" )"</js>)
-						),
-						<jsm>tr</jsm>(
-							<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
-								<jsm>button</jsm>(<js>"submit"</js>, req.getMessage(<js>"submit"</js>))
-							)
-						)
-					)
-				),
-				<jsm>br</jsm>(),
-				<jsm>div</jsm>().id(<js>"results"</js>),
-				<jsm>iframe</jsm>().name(<js>"buff"</js>).style(<js>"display:none"</js>).onload(<js>"parent.loadResults(this)"</js>)
-			);
-		}
-	
-		<jd>/** POST request handler */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>POST</jsf>, path="/")
-		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) <jk>throws</jk> Exception {
-			<jc>// Just mirror back the request</jc>
-			<jk>return</jk> input;
-		}
-	
-		<jk>public static class</jk> FormInputBean {
-			<jk>public</jk> String <jf>aString</jf>;
-			<jk>public int</jk> <jf>aNumber</jf>;
-			<ja>@Swap</ja>(CalendarSwap.<jsf>ISO8601DT</jsf>.<jk>class</jk>)
-			<jk>public</jk> Calendar <jf>aDate</jf>;
-		}
-	}
-</p>
-<p>
-	The localized messages are pulled from the resource bundle:
-</p>
-
-<h5 class='figure'>UrlEncodedFormResource.properties</h5>
-<p class='bpcode w800'>
-	<cc>#--------------------------------------------------------------------------------
-	# UrlEncodedFormResource labels
-	#--------------------------------------------------------------------------------</cc>
-	<ck>aString</ck> = <cv>A String:</cv>
-	<ck>aNumber</ck> = <cv>A Number:</cv>
-	<ck>aDate</ck> = <cv>A Date:</cv>
-	<ck>submit</ck> = <cv>submit</cv>		
-</p>
-<p>
-	The <l>$R</l> variables are request string variables.  
-	<br>In this case, <l>$R{resourceTitle}</l> and <l>$R{resourceDescription}</l> resolve to the values returned by 
-	{@link org.apache.juneau.rest.RestRequest#getResourceTitle()} and 
-	{@link org.apache.juneau.rest.RestRequest#getResourceDescription()}.
-</p>
-<p>
-	Pointing a browser to the resource shows the following:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/urlEncodedForm
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.UrlEncodedFormResource.1.png'>
-<p>
-	Entering some values and clicking <l>submit</l> causes the form bean to be populated
-	and returned back as a POJO response:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/urlEncodedForm
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.UrlEncodedFormResource.2.png'>
-
-<h5 class='toc'>Additional Information</h5>
-<ul class='toc'>
-	<li class='jm'>
-		{@link org.apache.juneau.rest.RestContextBuilder#vars(Class[])} 
-		- Servlet and request variables.
-	<li class='jm'>
-		{@link org.apache.juneau.rest.RestCallHandler#getSessionObjects(RestRequest)} 
-		- Var resolver session objects.
-</ul>
-</div><!-- END: 12.5 - juneau-examples-rest.UrlEncodedFormResource -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.RequestEchoResource' id='juneau-examples-rest.RequestEchoResource'>12.6 - RequestEchoResource</a></h3>
-<div class='topic'><!-- START: 12.6 - juneau-examples-rest.RequestEchoResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.RequestEchoResource' id='juneau-examples-rest.RequestEchoResource'>12.3 - RequestEchoResource</a></h3>
+<div class='topic'><!-- START: 12.3 - juneau-examples-rest.RequestEchoResource -->
 <p>
 	The <l>RequestEchoResource</l> class shows how existing complex POJOs can be serialized to a variety of 
 	content types.
@@ -25309,12 +24553,12 @@
 	This gives you an idea of what kinds of POJO models can be serialized, since you are serializing a regular 
 	old <l>HttpServletRequest</l> object.
 </p>
-</div><!-- END: 12.6 - juneau-examples-rest.RequestEchoResource -->
+</div><!-- END: 12.3 - juneau-examples-rest.RequestEchoResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.7 - PetStoreResource</a></h3>
-<div class='topic'><!-- START: 12.7 - juneau-examples-rest.PetStoreResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.4 - PetStoreResource</a></h3>
+<div class='topic'><!-- START: 12.4 - juneau-examples-rest.PetStoreResource -->
 <p>
 	The <code>PetStoreResource</code> class provides examples for creating a Swagger-based interface. 
 </p>
@@ -26028,12 +25272,12 @@
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.3.png'>
 <h5 class='figure'>Dark look-and-feel</h5>
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4.png'>
-</div><!-- END: 12.7 - juneau-examples-rest.PetStoreResource -->
+</div><!-- END: 12.4 - juneau-examples-rest.PetStoreResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AddressBookResource' id='juneau-examples-rest.AddressBookResource'>12.8 - AddressBookResource</a></h3>
-<div class='topic'><!-- START: 12.8 - juneau-examples-rest.AddressBookResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AddressBookResource' id='juneau-examples-rest.AddressBookResource'>12.5 - AddressBookResource</a></h3>
+<div class='topic'><!-- START: 12.5 - juneau-examples-rest.AddressBookResource -->
 <p>
 	The <l>AddressBookResource</l> class is a proof-of-concept class that shows a true RESTful API using the 
 	Juneau REST toolkit.  
@@ -27135,12 +26379,12 @@
 	The ability to overload methods is enabled through the 
 	<code><del>RestResource.allowMethodParam()</del></code> setting.
 </p>
-</div><!-- END: 12.8 - juneau-examples-rest.AddressBookResource -->
+</div><!-- END: 12.5 - juneau-examples-rest.AddressBookResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SampleRemoteableServlet' id='juneau-examples-rest.SampleRemoteableServlet'>12.9 - SampleRrpcServlet</a></h3>
-<div class='topic'><!-- START: 12.9 - juneau-examples-rest.SampleRemoteableServlet -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SampleRrpcServlet' id='juneau-examples-rest.SampleRrpcServlet'>12.6 - SampleRrpcServlet</a></h3>
+<div class='topic'><!-- START: 12.6 - juneau-examples-rest.SampleRrpcServlet -->
 <p>	
 	The <l>SampleRrpcServlet</l> class shows examples of the following:
 </p>
@@ -27155,152 +26399,12 @@
 <ul>
 	<li class='link'>{@doc juneau-rest-server.restRPC}
 </ul>
-</div><!-- END: 12.9 - juneau-examples-rest.SampleRemoteableServlet -->
+</div><!-- END: 12.6 - juneau-examples-rest.SampleRrpcServlet -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.TempDirResource' id='juneau-examples-rest.TempDirResource'>12.10 - TempDirResource</a></h3>
-<div class='topic'><!-- START: 12.10 - juneau-examples-rest.TempDirResource -->
-<p>	
-	The <l>TempDirResource</l> class shows examples of the following:
-</p>
-<ul class='spaced-list'>
-	<li>
-		Extending the {@link org.apache.juneau.microservice.resources.DirectoryResource} class.
-	<li>
-		Using the Apache <l>ServletFileUpload</l> class to handle multi-part form posts.
-	<li>
-		Using a system property string variable.
-	<li>
-		Using {@link org.apache.juneau.rest.RestMatcher RestMatchers}.
-</ul>
-<p>
-	Pointing a browser to the resource shows the following:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/tempDir
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.TempDirResource.1.png'>
-<p>
-	Pointing a browser to the <l>upload</l> link shows a form entry page:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/tempDir/upload
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.TempDirResource.2.png'>
-<p>
-	Submitting a file redirects to the top-level page:
-</p>	
-<p class='bpcode w800'>
-	http://localhost:10000/tempDir
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.TempDirResource.3.png'>
-
-<h5 class='figure'>TempDirResource.java</h5>
-<p class='bpcode w800'>
-	<jd>/** 
-	* Sample resource that extends DirectoryResource to open up the temp directory as a REST resource. 
-	*/</jd> 
-	<ja>@RestResource</ja>( 
-		path=<js>"/tempDir"</js>,
-		title=<js>"Temp Directory View Service"</js>,
-		description=<js>"View and download files in the '$R{rootDir}' directory."</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			widgets={
-				ContentTypeMenuItem.<jk>class</jk>,
-				StyleMenuItem.<jk>class</jk>
-			},
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"upload: servlet:/upload"</js>,
-				<js>"$W{ContentTypeMenuItem}"</js>,
-				<js>"$W{StyleMenuItem}"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-			},
-			aside={
-				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;Shows how to use the predefined DirectoryResource class.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;Also shows how to use HTML5 beans to create a form entry page.&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			}
-		),
-		properties={
-			<ja>@Property</ja>(name=<js>"rootDir"</js>, value=<js>"$C{TempDirResource/dir,$S{java.io.tmpdir}}"</js>),
-			<ja>@Property</ja>(name=<js>"allowViews"</js>, value=<js>"true"</js>),
-			<ja>@Property</ja>(name=<js>"allowDeletes"</js>, value=<js>"true"</js>),
-			<ja>@Property</ja>(name=<js>"allowPuts"</js>, value=<js>"false"</js>)
-		}
-	) 
-	<jk>public class</jk> TempDirResource <jk>extends</jk> DirectoryResource { 
-	
-		<ja>@Override</ja> <jc>/* DirectoryResource */</jc>
-		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> init(RestContextBuilder b) <jk>throws</jk> Exception { 
-			<jk>super</jk>.<jk>init</jk>(b);
-			File rootDir = getRootDir();
-			<jk>if</jk> (! rootDir.exists()) {
-				rootDir.mkdirs();
-				
-				<jc>// Make some dummy files.</jc>
-				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"A.txt"</js>));
-				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"B.txt"</js>));
-				FileUtils.<jsm>touch</jsm>(<jk>new</jk> File(rootDir, <js>"C.txt"</js>));
-			}
-		}
-		
-		<jd>/**
-		 * [GET /upload] - Display the form entry page for uploading a file to the temp directory.
-		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/upload"</js>)
-		<jk>public</jk> Form getUploadForm() {
-			<jk>return</jk>
-				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/upload"</js>).method(<jsf>POST</jsf>).enctype(<js>"multipart/form-data"</js>)
-				.children(
-					<jsm>input</jsm>().name(<js>"contents"</js>).type(<js>"file"</js>),
-					<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>)
-				)
-			;
-		}
-		
-		<jd>/** 
-		* [POST /upload] - Upload a file as a multipart form post. 
-		* Shows how to use the Apache Commons ServletFileUpload class for handling multi-part form posts. 
-		*/</jd> 
-		<ja>@RestMethod</ja>(
-			name=<jsf>POST</jsf>, 
-			path=<js>"/upload"</js>, 
-			matchers=TempDirResource.MultipartFormDataMatcher.<jk>class</jk>
-		) 
-		<jk>public</jk> Redirect uploadFile(RestRequest req) <jk>throws</jk> Exception { 
-			ServletFileUpload upload = <jk>new</jk> ServletFileUpload(); 
-			FileItemIterator iter = upload.getItemIterator(req); 
-			<jk>while</jk> (iter.hasNext()) { 
-				FileItemStream item = iter.next(); 
-				<jk>if</jk> (item.getFieldName().equals(<js>"contents"</js>)) {
-					File f = <jk>new</jk> File(getRootDir(), item.getName()); 
-					IOPipe.<jsm>create</jsm>(item.openStream(), <jk>new</jk> FileOutputStream(f)).closeOut().run(); 
-				} 
-			} 
-			<jk>return new</jk> Redirect(); <jc>// Redirect to the servlet root.</jc> 
-		} 
-		
-		<jd>/** Causes a 404 if POST isn't multipart/form-data */</jd> 
-		<jk>public static class</jk> MultipartFormDataMatcher <jk>extends</jk> RestMatcher { 
-			<ja>@Override</ja> <jc>/* RestMatcher */</jc> 
-			<jk>public boolean</jk> matches(RestRequest req) { 
-				String contentType = req.getContentType(); 
-				<jk>return</jk> contentType != <jk>null</jk> &amp;&amp; contentType.startsWith(<js>"multipart/form-data"</js>); 
-			} 
-		} 
-	}		
-</p>
-</div><!-- END: 12.10 - juneau-examples-rest.TempDirResource -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AtomFeedResource' id='juneau-examples-rest.AtomFeedResource'>12.11 - AtomFeedResource</a></h3>
-<div class='topic'><!-- START: 12.11 - juneau-examples-rest.AtomFeedResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.AtomFeedResource' id='juneau-examples-rest.AtomFeedResource'>12.7 - AtomFeedResource</a></h3>
+<div class='topic'><!-- START: 12.7 - juneau-examples-rest.AtomFeedResource -->
 <p>	
 	The <l>AtomFeedResource</l> class shows examples of the following:
 </p>
@@ -27420,136 +26524,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.11 - juneau-examples-rest.AtomFeedResource -->
+</div><!-- END: 12.7 - juneau-examples-rest.AtomFeedResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.DockerRegistryResource' id='juneau-examples-rest.DockerRegistryResource'>12.12 - DockerRegistryResource</a></h3>
-<div class='topic'><!-- START: 12.12 - juneau-examples-rest.DockerRegistryResource -->
-<p>	
-	The <l>DockerRegistryResource</l> class shows examples of the following:
-</p>
-<ul class='spaced-list'>
-	<li>
-		Accessing a docker registry REST API as POJOs using {@link org.apache.juneau.rest.client.RestClient}.
-	<li>
-		Using the {@link org.apache.juneau.rest.helper.ResourceDescription} class to implement a top-level 
-		'router' page.
-	<li>
-		Using the {@link org.apache.juneau.rest.RestContext#getConfig()} method to access external 
-		configuration file values.
-</ul>
-<p>
-	Pointing a browser to the resource shows the following:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/docker
-</p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.DockerRegistryResource.1.png'>
-<h5 class='figure'>DockerRegistryResource.java</h5>
-<p class='bpcode w800'>
-	<jd>/** 
-	* Sample resource that shows how to mirror query results from a Docker registry. 
-	*/</jd> 
-	<ja>@RestResource</ja>( 
-		path=<js>"/docker"</js>,
-		title=<js>"Sample Docker resource"</js>,
-		description=<js>"Docker registry explorer"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-			},
-			<jc>// Pull in aside contents from file.</jc>
-			aside=<js>"$F{resources/DockerRegistryResourceAside.html}"</js>
-		)
-	) 
-	<jk>public class</jk> DockerRegistryResource <jk>extends</jk> BasicRestServlet { 
-		<jc>// Get registry URL from examples.cfg file.</jc>
-		<jk>private</jk> String <jf>registryUrl</jf>;
-	
-		<jk>private</jk> RestClient <jf>rc</jf>;
-	
-		<jd>/**
-		 * Initializes the registry URL and rest client.
-		 * 
-		 * @param builder The resource config.
-		 * @throws Exception
-		 */</jd>
-		<ja>@RestHook</ja>(<jsf>INIT</jsf>) 
-		<jk>public void</jk> initRegistry(RestContextBuilder builder) <jk>throws</jk> Exception {
-			Config cf = builder.getConfig();
-			<jf>registryUrl</jf> = cf.getString(<js>"DockerRegistry/url"</js>);
-			<jf>rc</jf> = RestClient.<jsm>create</jsm>().build();
-		}
-	
-		<ja>@Override</ja> <jc>/* Servlet */</jc>
-		<jk>public synchronized void</jk> destroy() {
-			<jf>rc</jf>.closeQuietly();
-			<jk>super</jk>.destroy();
-		}
-	
-		<jd>/** [GET /] - Show child resources. */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>)
-		<jk>public</jk> ResourceDescription[] getChildren(RestRequest req) {
-			<jk>return new</jk> ResourceDescription[] {
-				<jk>new</jk> ResourceDescription(<js>"search"</js>, <js>"Search Registry"</js>)
-			};
-		}
-	
-		<jd>/**
-		 * PUT request handler.
-		 * Replaces the feed with the specified content, and then mirrors it as the response.
-		 */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/search"</js>)
-		<jk>public</jk> QueryResults query(<ja>@Query</ja>(<js>"q"</js>) String q) <jk>throws</jk> Exception {
-			String url = <jf>registryUrl</jf> + <js>"/search"</js> + (q == <jk>null</jk> ? <js>""</js> : <js>"?q="</js> + q);
-			<jk>synchronized</jk>(<jf>rc</jf>) {
-				<jk>return</jk> rc.doGet(url).getResponse(QueryResults.<jk>class</jk>);
-			}
-		}
-		
-		<jk>public static class</jk> QueryResults { 
-			<jk>public int</jk> <jf>num_results</jf>; 
-			<jk>public</jk> String <jf>query</jf>; 
-			<jk>public</jk> List&lt;DockerImage&gt; <jf>results</jf>; 
-		} 
-		
-		<jk>public static class</jk> DockerImage { 
-			<jk>public</jk> String <jf>name</jf>, <jf>description</jf>; 
-		} 
-	} 		
-</p>
-<p>
-	In this example, we're pulling the aside message from an external file:
-</p>
-<h5 class='figure'>resources/DockerRegistryResourceAside.html</h5>
-<p class='bpcode w800'>
-	<xt>&lt;div</xt> <xa>style</xa>=<xs>'min-width:200px'</xs> <xa>class</xa>=<xs>'text'</xs><xt>&gt;</xt>
-		<xt>&lt;p&gt;</xt>REST API for searching Docker registries.<xt>&lt;/p&gt;</xt>
-		<xt>&lt;p&gt;</xt>To use, you must first specify the Docker registry URL in the <xt>&lt;code&gt;</xt>[Docker]<xt>&lt;/code&gt;</xt> section of the config file.<xt>&lt;/p&gt;</xt>
-	<xt>&lt;/div&gt;	</xt>	
-</p>	
-
-<p>
-	The Docker registry URL is specified in the <l>examples.cfg</l> file:
-</p>
-
-<h5 class='figure'>examples.cfg</h5>
-<p class='bpcode w800'>
-	<cc>#================================================================================
-	# DockerRegistryResource properties
-	#================================================================================</cc>
-	<cs>[DockerRegistry]</cs>
-	<ck>url</ck> = <cv>http://clmdocker02.ratl.swg.usma.apache.org:5000/v1</cv>
-</p>
-</div><!-- END: 12.12 - juneau-examples-rest.DockerRegistryResource -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PhotosResource' id='juneau-examples-rest.PhotosResource'>12.13 - PhotosResource</a></h3>
-<div class='topic'><!-- START: 12.13 - juneau-examples-rest.PhotosResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PhotosResource' id='juneau-examples-rest.PhotosResource'>12.8 - PhotosResource</a></h3>
+<div class='topic'><!-- START: 12.8 - juneau-examples-rest.PhotosResource -->
 <p>	
 	The <l>PhotosResource</l> class shows examples of the following:
 </p>
@@ -27721,12 +26701,12 @@
 		}
 	}
 </p>
-</div><!-- END: 12.13 - juneau-examples-rest.PhotosResource -->
+</div><!-- END: 12.8 - juneau-examples-rest.PhotosResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.JsonSchemaResource' id='juneau-examples-rest.JsonSchemaResource'>12.14 - JsonSchemaResource</a></h3>
-<div class='topic'><!-- START: 12.14 - juneau-examples-rest.JsonSchemaResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.JsonSchemaResource' id='juneau-examples-rest.JsonSchemaResource'>12.9 - JsonSchemaResource</a></h3>
+<div class='topic'><!-- START: 12.9 - juneau-examples-rest.JsonSchemaResource -->
 <p>	
 	The <l>JsonSchemaResource</l> class shows examples of the following:
 </p>
@@ -27823,12 +26803,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.14 - juneau-examples-rest.JsonSchemaResource -->
+</div><!-- END: 12.9 - juneau-examples-rest.JsonSchemaResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SqlQueryResource' id='juneau-examples-rest.SqlQueryResource'>12.15 - SqlQueryResource</a></h3>
-<div class='topic'><!-- START: 12.15 - juneau-examples-rest.SqlQueryResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SqlQueryResource' id='juneau-examples-rest.SqlQueryResource'>12.10 - SqlQueryResource</a></h3>
+<div class='topic'><!-- START: 12.10 - juneau-examples-rest.SqlQueryResource -->
 <p>	
 	The <l>SqlQueryResource</l> class shows examples of the following:
 </p>
@@ -28033,12 +27013,12 @@
 	<ck>allowTempUpdates</ck> = <cv>true</cv>
 	<ck>includeRowNums</ck> = <cv>true</cv>
 </p>
-</div><!-- END: 12.15 - juneau-examples-rest.SqlQueryResource -->
+</div><!-- END: 12.10 - juneau-examples-rest.SqlQueryResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>12.16 - ConfigResource</a></h3>
-<div class='topic'><!-- START: 12.16 - juneau-examples-rest.ConfigResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>12.11 - ConfigResource</a></h3>
+<div class='topic'><!-- START: 12.11 - juneau-examples-rest.ConfigResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
 	<br>It provides a REST interface for reading and altering the microservice config file.
@@ -28188,12 +27168,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.16 - juneau-examples-rest.ConfigResource -->
+</div><!-- END: 12.11 - juneau-examples-rest.ConfigResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>12.17 - LogsResource</a></h3>
-<div class='topic'><!-- START: 12.17 - juneau-examples-rest.LogsResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>12.12 - LogsResource</a></h3>
+<div class='topic'><!-- START: 12.12 - juneau-examples-rest.LogsResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
 	<br>It provides a REST interface for the log files generated by the microservice.
@@ -28205,7 +27185,7 @@
 	http://localhost:10000/logs
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.LogsResource.1.png'>
-</div><!-- END: 12.17 - juneau-examples-rest.LogsResource -->
+</div><!-- END: 12.12 - juneau-examples-rest.LogsResource -->
 </div><!-- END: 12 - juneau-examples-rest -->
 
 <!-- ==================================================================================================== -->
