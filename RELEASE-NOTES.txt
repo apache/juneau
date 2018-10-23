@@ -11,6 +11,14 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 7.2.1
+
+** Bug
+    * [JUNEAU-85] - Don't break compatibility with 7.1.0
+    * [JUNEAU-86] - Avoid NPE stopping RestMicroservice
+    * [JUNEAU-87] - Tests should not use hard-wired line-endings.
+
+
 Release Notes - Juneau - Version 7.2.0
 
 ** Bug

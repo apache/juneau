@@ -1129,6 +1129,17 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Tests two strings for non-equality, but gracefully handles nulls.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are not equal.
+	 */
+	public static boolean isNotEquals(String s1, String s2) {
+		return ! isEquals(s1, s2);
+	}
+
+	/**
 	 * Shortcut for calling <code>base64Encode(in.getBytes(<js>"UTF-8"</js>))</code>
 	 *
 	 * @param in The input string to convert.
