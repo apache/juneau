@@ -45,6 +45,7 @@ import java.lang.annotation.*;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
+@Deprecated
 public @interface Parameter {
 
 	/**

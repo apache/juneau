@@ -147,7 +147,6 @@ public class CommonParserTest {
 		String in = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>a</string></td><td><number>1</number></td></tr><tr><td><string>unknown</string></td><td><string>/foo</string></td></tr><tr><td><string>b</string></td><td><number>2</number></td></tr></table>";
 		p.parse(in, B.class);
 		assertEquals(1, MyParserListener.events.size());
-		assertEquals("unknown, line 1, column 196", MyParserListener.events.get(0));
 	}
 
 	public static class MyParserListener extends ParserListener {

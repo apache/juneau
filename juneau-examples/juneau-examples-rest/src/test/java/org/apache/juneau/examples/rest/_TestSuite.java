@@ -24,10 +24,8 @@ import org.junit.runners.Suite.*;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	AddressBookResourceTest.class,
 	RootResourcesTest.class,
-	RootContentTest.class,
-	SampleRrpcServletTest.class
+	RootContentTest.class
 })
 public class _TestSuite {
 

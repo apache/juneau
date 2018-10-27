@@ -198,10 +198,10 @@ public @interface MethodSwagger {
 	 * 		description=<js>"This is my method."</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			parameters={
-	 * 				<ja>@Parameter</ja>(in=<js>"path"</js>, name=<js>"a"</js>, description=<js>"The 'a' attribute"</js>),
-	 * 				<ja>@Parameter</ja>(in=<js>"query"</js>, name=<js>"b"</js>, description=<js>"The 'b' parameter"</js>, required=<jk>true</jk>),
-	 * 				<ja>@Parameter</ja>(in=<js>"body"</js>, description=<js>"The HTTP content"</js>),
-	 * 				<ja>@Parameter</ja>(in=<js>"header"</js>, name=<js>"D"</js>, description=<js>"The 'D' header"</js>),
+	 * 				<js>"{in:'path, name:'a', description:'The \\'a\\' attribute'},"</js>,
+	 * 				<js>"{in:'query', name:'b', description:'The \\'b\\' parameter', required:true},"</js>,
+	 * 				<js>"{in:'body', description:'The HTTP content'},"</js>,
+	 * 				<js>"{in:'header', name:'D', description:'The \\'D\\' header'}"</js>
 	 * 			}
 	 * 		)
 	 * 	)
@@ -209,6 +209,9 @@ public @interface MethodSwagger {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} array consisting of the concatenated individual strings.
+	 * 		<br>The leading and trailing <js>'['</js> and <js>']'</js> characters are optional.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -230,14 +233,8 @@ public @interface MethodSwagger {
 	 * 		name=<jsf>GET</jsf>, path=<js>"/"</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			responses={
-	 * 				<ja>@Response</ja>(200),
-	 * 				<ja>@Response</ja>(
-	 * 					value=302,
-	 * 					description=<js>"Thing wasn't found here"</js>,
-	 * 					headers={
-	 * 						<ja>@Parameter</ja>(name=<js>"Location"</js>, description=<js>"The place to find the thing"</js>)
-	 * 					}
-	 * 				)
+					<js>"200:{ description:'Okay' },"</js>,
+					<js>"302:{ description:'Thing wasn't found here', headers={Location:{description:'The place to find the thing.'}}}"</js>
 	 * 			}
 	 * 		)
 	 * 	)
@@ -245,6 +242,9 @@ public @interface MethodSwagger {
 	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a {@doc juneau-marshall.JsonDetails.SimplifiedJson} objc consisting of the concatenated individual strings.
+	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
