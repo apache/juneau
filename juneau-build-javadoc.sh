@@ -11,8 +11,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. ~/.profile
-set -e
+. juneau-env.sh
 
 cd juneau-doc
 java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocGenerator
@@ -24,9 +23,10 @@ cd juneau-doc
 java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocLinkTester
 cd .. 
 
-rm -rf ../juneau-website/content/site/apidocs_preview
-mkdir ../juneau-website/content/site/apidocs_preview
-cp -r ./target/site/apidocs/* ../juneau-website/content/site/apidocs_preview
+rm -rf ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
+mkdir ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
+cp -r ./target/site/apidocs/* ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
+find ../juneau-website/content/site/apidocs-$JUNEAU_VERSION -type f -name '*.html' -exec sed -i '' s/-SNAPSHOT// {} +
 
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'

@@ -11,8 +11,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. ~/.profile
-set -e
+. juneau-env.sh
 mvn clean install
 
 echo '*******************************************************************************'

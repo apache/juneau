@@ -39,6 +39,9 @@
 		<httpclient.version>4.5.6</httpclient.version>
 		<jetty.version>9.4.12.v20180830</jetty.version>
 		<juneau.compare.version>7.2.0</juneau.compare.version>
+		<javadoc.juneau.version>7.2.1</javadoc.juneau.version>
+		<juneauVersion>7.2.1</juneauVersion>
+		<juneauVersionNext>7.2.1</juneauVersionNext>
 	</properties>
 
 	<dependencyManagement>
@@ -174,6 +177,8 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>2.10.4</version>
 					<configuration>
+						<additionalJOption>-J-DjuneauVersion=${juneauVersion}</additionalJOption>
+						<additionalJOption>-J-DjuneauVersionNext=${juneauVersionNext}</additionalJOption>
 						<show>protected</show>
 						<windowtitle>${project.name} ${project.version}</windowtitle>
 						<author>true</author>
@@ -193,7 +198,19 @@
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
-						<taglet>org.apache.juneau.doc.internal.DocTag</taglet>
+						<taglets>
+							<taglet>
+								<tagletClass>org.apache.juneau.doc.internal.DocTag</tagletClass>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+							</taglet>
+							<taglet>
+								<tagletClass>org.apache.juneau.doc.internal.PropertyTag</tagletClass>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+							</taglet>
+							
+							<!--org.apache.juneau.doc.internal.DocTag</taglet-->
+							<!-- taglet>org.apache.juneau.doc.internal.PropertyTag</taglet-->
+						</taglets>
 						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 					</configuration>
 					<executions>

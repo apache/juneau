@@ -698,18 +698,18 @@
 </table>
 
 <p>
-	The current version of Juneau is <code>7.2.0</code>.
+	The current version of Juneau is <code>{@property juneauVersion}</code>.
 	The easiest way to pull in the library is through the following maven dependency:
 </p>
 <p class='bpcode w800'>
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-all<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 <p>
-	If you would like to work with the bleeding-edge code, you can access the <code>7.2.0-SNAPSHOT</code>
+	If you would like to work with the bleeding-edge code, you can access the <code>{@property juneauVersionNext}-SNAPSHOT</code>
 	version through the following repository:
 </p>
 <p class='bpcode w800'>
@@ -739,18 +739,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-marshall<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-marshall-7.2.0.jar 
+	juneau-marshall-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.marshall_7.2.0.jar 
+	org.apache.juneau.marshall_{@property juneauVersion}.jar 
 </p>	
 
 <p>
@@ -9661,16 +9661,16 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-marshall-rdf<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-marshall-rdf-7.2.0.jar 
+	juneau-marshall-rdf-{@property juneauVersion}.jar 
 </p>	
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.marshall.rdf_7.2.0.jar 
+	org.apache.juneau.marshall.rdf_{@property juneauVersion}.jar 
 </p>	
 <p>
 	The <code>juneau-marshall-rdf</code> library provides additional serializers and parsers for RDF.
@@ -10276,16 +10276,16 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-dto<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-dto-7.2.0.jar 
+	juneau-dto-{@property juneauVersion}.jar 
 </p>	
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.dto_7.2.0.jar 
+	org.apache.juneau.dto_{@property juneauVersion}.jar 
 </p>	
 <p>
 	The <code>juneau-dto</code> library contains several predefined POJOs for generating commonly-used document types.
@@ -10801,18 +10801,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-svl<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-svl-7.2.0.jar 
+	juneau-svl-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.svl_7.2.0.jar 
+	org.apache.juneau.svl_{@property juneauVersion}.jar 
 </p>
 
 <!-- ==================================================================================================== -->
@@ -11134,18 +11134,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-config<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-config-7.2.0.jar 
+	juneau-config-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.config_7.2.0.jar 
+	org.apache.juneau.config_{@property juneauVersion}.jar 
 </p>
 
 <!-- ==================================================================================================== -->
@@ -12667,18 +12667,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-server<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-rest-server-7.2.0.jar 
+	juneau-rest-server-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.rest.server_7.2.0.jar 
+	org.apache.juneau.rest.server_{@property juneauVersion}.jar 
 </p>	
 
 <p>
@@ -13255,9 +13255,6 @@
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			PetStoreResource.<jk>class</jk>,
-			RequestEchoResource.<jk>class</jk>,
-			AddressBookResource.<jk>class</jk>,
-			SampleRrpcServlet.<jk>class</jk>,
 			PhotosResource.<jk>class</jk>,
 			DtoExamples.<jk>class</jk>,
 			SqlQueryResource.<jk>class</jk>,
@@ -14799,9 +14796,6 @@
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			PetStoreResource.<jk>class</jk>,
-			RequestEchoResource.<jk>class</jk>,
-			AddressBookResource.<jk>class</jk>,
-			SampleRrpcServlet.<jk>class</jk>,
 			DtoExamples.<jk>class</jk>,
 			PhotosResource.<jk>class</jk>,
 			SqlQueryResource.<jk>class</jk>,
@@ -21177,18 +21171,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-server-jaxrs<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-rest-server-jaxrs-7.2.0.jar 
+	juneau-rest-server-jaxrs-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.rest.server_7.2.0.jar 
+	org.apache.juneau.rest.server_{@property juneauVersion}.jar 
 </p>	
 
 <p>
@@ -21274,18 +21268,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-rest-client<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-rest-client-7.2.0.jar 
+	juneau-rest-client-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.rest.client_7.2.0.jar 
+	org.apache.juneau.rest.client_{@property juneauVersion}.jar 
 </p>	
 
 <p>
@@ -23274,18 +23268,18 @@
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		<xt>&lt;artifactId&gt;</xt>juneau-microservice-server<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>7.2.0<xt>&lt;/version&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-microservice-server-7.2.0.jar 
+	juneau-microservice-server-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.microservice.server_7.2.0.jar 
+	org.apache.juneau.microservice.server_{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>Microservice Starter Project</h5>
@@ -24129,7 +24123,7 @@
 <div class='topic'><!-- START: 11 - juneau-examples-core -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
-	juneau-examples-core-7.2.0.zip 
+	juneau-examples-core-{@property juneauVersion}.zip 
 </p>	
 
 <p>
@@ -24137,12 +24131,12 @@
 </p>
 <p>
 	The project project can be loaded into your workspace by importing the 
-	<code>juneau-examples-core-7.2.0.zip</code> file. 
+	<code>juneau-examples-core-{@property juneauVersion}.zip</code> file. 
 </p>
 
 <h5 class='topic'>juneau-examples-core install instructions</h5>
 <p>
-	Download the <code>juneau-examples-core-7.2.0.zip</code> file from the downloads page
+	Download the <code>juneau-examples-core-{@property juneauVersion}.zip</code> file from the downloads page
 	(located in the binaries) and import it into your workspace as an existing project:
 </p>
 <img class='bordered' src='doc-files/juneau-examples-core.1.png' style='width:512px'>
@@ -24167,7 +24161,7 @@
 <div class='topic'><!-- START: 12 - juneau-examples-rest -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
-	juneau-examples-rest-7.2.0.zip 
+	juneau-examples-rest-{@property juneauVersion}.zip 
 </p>	
 
 <p>
@@ -24181,7 +24175,7 @@
 
 <h5 class='topic'>juneau-examples-rest install instructions</h5>
 <p>
-	Download the <code>juneau-examples-rest-7.2.0.zip</code> file from the downloads page
+	Download the <code>juneau-examples-rest-{@property juneauVersion}.zip</code> file from the downloads page
 	(located in the binaries) and import it into your workspace as an existing project:
 </p>
 <img class='bordered' src='doc-files/juneau-examples-rest.1.png' style='width:524px'>
@@ -26150,7 +26144,7 @@
 <li><p><a class='doclink' href='#7.0.0'>7.0.0 (Oct 25, 2017)</a></p>
 <li><p><a class='doclink' href='#7.0.1'>7.0.1 (Dec 24, 2017)</a></p>
 <li><p><a class='doclink' href='#7.1.0'>7.1.0 (Mar 08, 2018)</a></p>
-<li><p><a class='doclink' href='#7.2.0'>7.2.0 (Sept 25, 2018)</a></p>
+<li><p><a class='doclink' href='#7.2.0'>7.2.1 (Sept 25, 2018)</a></p>
 <li><p><a class='doclink' href='#7.2.1'>7.2.1 (Oct 23, 2018)</a></p>
 
 	</ul>
@@ -31474,10 +31468,10 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#7.2.0' id='7.2.0'>7.2.0 (Sept 25, 2018)</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#7.2.0' id='7.2.0'>7.2.1 (Sept 25, 2018)</a></h3>
 <div class='topic'><!-- START: 7.2.0 -->
 <p>
-	7.2.0 is a major release that introduces several significant new features:
+	7.2.1 is a major release that introduces several significant new features:
 </p>
 <ul class='spaced-list'>
 	<li>OpenAPI part serializing and parsing with full support for OpenAPI validation of input and output in the REST servlet and client APIs.
