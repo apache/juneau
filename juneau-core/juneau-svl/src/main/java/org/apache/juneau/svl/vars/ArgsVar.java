@@ -83,7 +83,7 @@ public class ArgsVar extends DefaultingVar {
 				int i = s.indexOf(' ');
 				args = new Args(i == -1 ? "" : s.substring(i+1));
 			} else {
-				args = new Args(System.getProperty("juneau.args"));
+				args = new Args(System.getProperty("juneau.args", ""));
 			}
 		}
 	}
