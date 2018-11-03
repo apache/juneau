@@ -10,24 +10,21 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest;
+package org.apache.juneau.examples.rest.dto;
 
-import org.apache.juneau.jsonschema.annotation.ExternalDocs;
-import org.apache.juneau.dto.*;
-import org.apache.juneau.examples.rest.petstore.dto.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.*;
+import static org.apache.juneau.serializer.WriterSerializer.*;
+
+import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 
 /**
- * Sample REST resource for rendering predefined label beans.
+ * Sample REST resource showing how to implement a nested "router" resource page.
  */
 @RestResource(
-	path="/predefinedLabels",
-	title="Predefined Label Beans",
-	description="Shows examples of predefined label beans",
+	path="/dto",
+	title="DTO examples",
+	description="Example serialization of predefined Data Transfer Objects.",
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
@@ -35,41 +32,29 @@ import org.apache.juneau.rest.widget.*;
 		},
 		navlinks={
 			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
+			"options: ?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+		},
+		aside={
+			"<div style='max-width:400px' class='text'>",
+			"	<p>This is an example of a nested 'router' page that serves as a jumping-off point to other child resources.</p>",
+			"</div>"
 		}
 	),
-	swagger=@ResourceSwagger(
-		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
-		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
-		version="2.0",
-		termsOfService="You are on your own.",
-		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
-	)
+	properties={
+		// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+		// String comparisons.
+		// You can apply any of the Serializer/Parser/BeanContext settings this way.
+		@Property(name=WSERIALIZER_quoteChar, value="'")
+	},
+	children={
+		AtomFeedResource.class,
+		JsonSchemaResource.class,
+		PredefinedLabelsResource.class,
+	}
 )
-public class PredefinedLabelsResource extends BasicRestServlet {
+public class DtoExamples extends BasicRestServletJenaGroup {
 	private static final long serialVersionUID = 1L;
-
-	@RestMethod
-	public ResourceDescriptions get() throws Exception {
-		return new ResourceDescriptions()
-			.append("beanDescription", "BeanDescription")
-			.append("htmlLinks", "HtmlLink")
-		;
-	}
-
-	@RestMethod
-	public BeanDescription getBeanDescription() throws Exception {
-		return new BeanDescription(Pet.class);
-	}
-
-	@RestMethod
-	public LinkString[] getHtmlLinks() throws Exception {
-		return new LinkString[] {
-			new LinkString("apache", "http://apache.org"),
-			new LinkString("juneau", "http://juneau.apache.org")
-		};
-	}
 }

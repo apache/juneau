@@ -10,29 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest;
-
-import static org.apache.juneau.BeanContext.*;
+package org.apache.juneau.examples.rest.dto;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
-import org.apache.juneau.dto.jsonschema.*;
+import org.apache.juneau.dto.*;
+import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.widget.*;
 
 /**
- * Sample resource that shows how to serialize JSON-Schema documents.
+ * Sample REST resource for rendering predefined label beans.
  */
 @RestResource(
-	path="/jsonSchema",
-	messages="nls/JsonSchemaResource",
-	title="Sample JSON-Schema document",
-	description="Sample resource that shows how to generate JSON-Schema documents",
-	properties={
-		@Property(name=BEAN_examples, value="{'org.apache.juneau.dto.jsonschema.Schema': $F{JsonSchemaResource_example.json}}")
-	},
+	path="/predefinedLabels",
+	title="Predefined Label Beans",
+	description="Shows examples of predefined label beans",
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
@@ -44,11 +39,6 @@ import org.apache.juneau.rest.widget.*;
 			"$W{ContentTypeMenuItem}",
 			"$W{ThemeMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
-		},
-		aside={
-			"<div style='min-width:200px' class='text'>",
-			"	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>",
-			"</div>"
 		}
 	),
 	swagger=@ResourceSwagger(
@@ -59,46 +49,27 @@ import org.apache.juneau.rest.widget.*;
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
 )
-public class JsonSchemaResource extends BasicRestServletJena {
+public class PredefinedLabelsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	private JsonSchema schema;     // The schema document
-
-	@Override /* Servlet */
-	public void init() {
-
-		try {
-			schema = new JsonSchema()
-				.setId("http://example.com/sample-schema#")
-				.setSchemaVersionUri("http://json-schema.org/draft-04/schema#")
-				.setTitle("Example Schema")
-				.setType(JsonType.OBJECT)
-				.addProperties(
-					new JsonSchemaProperty("firstName", JsonType.STRING),
-					new JsonSchemaProperty("lastName", JsonType.STRING),
-					new JsonSchemaProperty("age", JsonType.INTEGER)
-						.setDescription("Age in years")
-						.setMinimum(0)
-				)
-				.addRequired("firstName", "lastName");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	@RestMethod
+	public ResourceDescriptions get() throws Exception {
+		return new ResourceDescriptions()
+			.append("beanDescription", "BeanDescription")
+			.append("htmlLinks", "HtmlLink")
+		;
 	}
 
-	@RestMethod(
-		summary="Get the JSON-Schema document"
-	)
-	public JsonSchema get() throws Exception {
-		return schema;
+	@RestMethod
+	public BeanDescription getBeanDescription() throws Exception {
+		return new BeanDescription(Pet.class);
 	}
 
-	@RestMethod(
-		summary="Overwrite the JSON-Schema document",
-		description="Replaces the schema document with the specified content, and then mirrors it as the response."
-	)
-	public JsonSchema put(@Body JsonSchema schema) throws Exception {
-		this.schema = schema;
-		return schema;
+	@RestMethod
+	public LinkString[] getHtmlLinks() throws Exception {
+		return new LinkString[] {
+			new LinkString("apache", "http://apache.org"),
+			new LinkString("juneau", "http://juneau.apache.org")
+		};
 	}
 }

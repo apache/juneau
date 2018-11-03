@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.dto.swagger.ui.SwaggerUI.*;
@@ -24,6 +24,7 @@ import java.util.Map;
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.examples.rest.petstore.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.FormData;
@@ -77,6 +78,9 @@ import org.apache.juneau.rest.converters.*;
 			"	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>",
 			"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
 			"</div>"
+		},
+		style={
+			"body { background-image: url('/petstore/photos/cat'); background-size: cover; background-attachment: fixed; }"
 		}
 	),
 	properties= {
@@ -123,7 +127,11 @@ import org.apache.juneau.rest.converters.*;
 			)
 		}
 	),
-	staticFiles={"htdocs:htdocs"}
+	staticFiles={"htdocs:htdocs"},
+	children={
+		SqlQueryResource.class,
+		PhotosResource.class
+	}
 )
 public class PetStoreResource extends BasicRestServletJena implements PetStore {
 	private static final long serialVersionUID = 1L;
@@ -145,6 +153,8 @@ public class PetStoreResource extends BasicRestServletJena implements PetStore {
 			.append("pet", "All pets in the store")
 			.append("store", "Orders and inventory")
 			.append("user", "Petstore users")
+			.append("photos", "Photos service")
+			.append("sql", "SQL query service")
 		;
 	}
 

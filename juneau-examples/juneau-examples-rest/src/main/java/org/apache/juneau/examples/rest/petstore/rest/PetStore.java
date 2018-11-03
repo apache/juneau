@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.*;
+import org.apache.juneau.examples.rest.petstore.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;

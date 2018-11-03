@@ -38,7 +38,7 @@ import org.apache.juneau.utils.*;
  */
 public abstract class Widget {
 
-	private final ClasspathResourceManager rm = new ClasspathResourceManager(getClass());
+	private final ClasspathResourceManager rm = new ClasspathResourceManager(getClass(), ClasspathResourceFinderRecursive.INSTANCE, false);
 
 	/**
 	 * The widget key.

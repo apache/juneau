@@ -20,6 +20,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import org.apache.juneau.examples.rest.petstore.dto.*;
+import org.apache.juneau.examples.rest.petstore.rest.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.utils.*;
@@ -51,7 +52,7 @@ public class PetStoreService extends AbstractPersistenceService {
 
 		et.begin();
 
-		for (Pet x : em.createQuery("select X from Pet X", Pet.class).getResultList()) {
+		for (Pet x : em.createQuery("select X from PetstorePet X", Pet.class).getResultList()) {
 			em.remove(x);
 			w.println(format("Deleted pet:  id={0}", x.getId()));
 		}
@@ -145,7 +146,7 @@ public class PetStoreService extends AbstractPersistenceService {
 	}
 
 	public List<Pet> getPets() {
-		return query("select X from Pet X", Pet.class, (SearchArgs)null);
+		return query("select X from PetstorePet X", Pet.class, (SearchArgs)null);
 	}
 
 	public List<Order> getOrders() {
@@ -201,14 +202,14 @@ public class PetStoreService extends AbstractPersistenceService {
 
 	public Collection<Pet> getPetsByStatus(PetStatus[] status) {
 		return getEntityManager()
-			.createQuery("select X from Pet X where X.status in :status", Pet.class)
+			.createQuery("select X from PetstorePet X where X.status in :status", Pet.class)
 			.setParameter("status", status)
 			.getResultList();
 	}
 
 	public Collection<Pet> getPetsByTags(String[] tags) throws InvalidTag {
 		return getEntityManager()
-			.createQuery("select X from Pet X where X.tags in :tags", Pet.class)
+			.createQuery("select X from PetstorePet X where X.tags in :tags", Pet.class)
 			.setParameter("tags", tags)
 			.getResultList();
 	}

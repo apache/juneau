@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
@@ -19,41 +19,34 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.widget.*;
 
 /**
- * Menu item for adding a Pet.
+ * Menu item for uploading a Photo.
  */
-public class AddOrderMenuItem extends MenuItemWidget {
+public class UploadPhotoMenuItem extends MenuItemWidget {
 
 	@Override /* MenuItemWidget */
 	public String getLabel(RestRequest req) throws Exception {
-		return "add";
-	}
-
-	@Override /* MenuItemWidget */
-	public String getBeforeShowScript(RestRequest req) throws Exception {
-		return loadScript("AddOrderMenuItem_beforeShow.js");
+		return "upload";
 	}
 
 	@Override /* Widget */
 	public Object getContent(RestRequest req) throws Exception {
-
 		return div(
-			form().id("form").action("servlet:/store/order").method(POST).children(
+			form().id("form").action("servlet:/upload").method(POST).enctype("multipart/form-data").children(
 				table(
 					tr(
-						th("Pet:"),
-						td(
-							select().id("addPet_names").name("petId")
-						),
-						td(new Tooltip("&#x2753;", "The pet to purchase."))
+						th("ID:"),
+						td(input().name("id").type("text")),
+						td(new Tooltip("&#x2753;", "The unique identifier of the photo.", br(), "e.g. 'Fluffy'"))
 					),
 					tr(
-						th("Ship date:"),
-						td(input().name("shipDate").type("date")),
-						td(new Tooltip("&#x2753;", "The requested ship date."))
+						th("File:"),
+						td(input().name("file").type("file").accept("image/*")),
+						td(new Tooltip("&#x2753;", "The image file."))
 					),
 					tr(
 						td().colspan(2).style("text-align:right").children(
 							button("reset", "Reset"),
+							button("button","Cancel").onclick("window.location.href='/'"),
 							button("submit", "Submit")
 						)
 					)

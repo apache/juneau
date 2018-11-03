@@ -198,7 +198,7 @@ public @interface MethodSwagger {
 	 * 		description=<js>"This is my method."</js>,
 	 * 		swagger=<ja>@MethodSwagger</ja>(
 	 * 			parameters={
-	 * 				<js>"{in:'path, name:'a', description:'The \\'a\\' attribute'},"</js>,
+	 * 				<js>"{in:'path', name:'a', description:'The \\'a\\' attribute'},"</js>,
 	 * 				<js>"{in:'query', name:'b', description:'The \\'b\\' parameter', required:true},"</js>,
 	 * 				<js>"{in:'body', description:'The HTTP content'},"</js>,
 	 * 				<js>"{in:'header', name:'D', description:'The \\'D\\' header'}"</js>

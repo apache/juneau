@@ -10,27 +10,35 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest;
+package org.apache.juneau.examples.rest.petstore.rest;
 
 import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
+import org.apache.juneau.jsonschema.annotation.Schema;
 import java.awt.image.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.Map;
 
 import javax.imageio.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.Response;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
+import org.apache.juneau.rest.helper.*;
+import org.apache.juneau.rest.matchers.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -45,6 +53,7 @@ import org.apache.juneau.serializer.*;
 		navlinks={
 			"up: request:/..",
 			"options: servlet:/?method=OPTIONS",
+			"$W{UploadPhotoMenuItem}",
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 		},
 		aside={
@@ -52,6 +61,9 @@ import org.apache.juneau.serializer.*;
 			"	<p>Shows an example of using custom serializers and parsers to create REST interfaces over binary resources.</p>",
 			"	<p>In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a <code>TreeMap</code>).</p>",
 			"</div>"
+		},
+		widgets={
+			UploadPhotoMenuItem.class
 		}
 	),
 	properties={
@@ -74,7 +86,7 @@ public class PhotosResource extends BasicRestServlet {
 
 	@Override /* Servlet */
 	public void init() {
-		try (InputStream is = getClass().getResourceAsStream("averycutecat.jpg")) {
+		try (InputStream is = getClass().getResourceAsStream("photos/cat.jpg")) {
 			BufferedImage image = ImageIO.read(is);
 			Photo photo = new Photo("cat", image);
 			photos.put(photo.id, photo);
@@ -98,14 +110,29 @@ public class PhotosResource extends BasicRestServlet {
 		}
 	}
 
-	/** GET request handler for list of all photos */
-	@RestMethod(name=GET, path="/", summary="Show the list of all currently loaded photos")
+	//-----------------------------------------------------------------------------------------------------------------
+	// REST methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@RestMethod(
+		name=GET,
+		path="/",
+		summary="Show the list of all currently loaded photos"
+	)
 	public Collection<Photo> getAllPhotos() throws Exception {
 		return photos.values();
 	}
 
-	/** GET request handler for single photo */
-	@RestMethod(name=GET, path="/{id}", serializers=ImageSerializer.class, summary="Get a photo by ID")
+	@RestMethod(
+		name=GET,
+		path="/{id}",
+		serializers=ImageSerializer.class,
+		summary="Get a photo by ID",
+		description="Shows how to use a custom serializer to serialize a BufferedImage object to a stream."
+	)
+	@Response(
+		schema=@Schema(type="file")
+	)
 	public BufferedImage getPhoto(@Path("id") String id) throws NotFound {
 		Photo p = photos.get(id);
 		if (p == null)
@@ -113,29 +140,90 @@ public class PhotosResource extends BasicRestServlet {
 		return p.image;
 	}
 
-	/** PUT request handler */
-	@RestMethod(name=PUT, path="/{id}", parsers=ImageParser.class, summary="Add or overwrite a photo")
-	public String addPhoto(@Path("id") String id, @Body BufferedImage image) throws Exception {
+	@RestMethod(
+		name=PUT,
+		path="/{id}",
+		parsers=ImageParser.class,
+		summary="Add or overwrite a photo",
+		description="Shows how to use a custom parser to parse a stream into a BufferedImage object."
+	)
+	public String addPhoto(
+			@Path("id") String id,
+			@Body(
+				description="Binary contents of image.",
+				schema=@Schema(type="file")
+			)
+			BufferedImage image
+		) throws Exception {
 		photos.put(id, new Photo(id, image));
 		return "OK";
 	}
 
-	/** POST request handler */
-	@RestMethod(name=POST, path="/", parsers=ImageParser.class, summary="Add a photo")
-	public Photo setPhoto(@Body BufferedImage image) throws Exception {
+	@RestMethod(
+		name=POST,
+		path="/",
+		parsers=ImageParser.class,
+		summary="Add a photo",
+		description="Shows how to use a custom parser to parse a stream into a BufferedImage object."
+	)
+	public Photo setPhoto(
+			@Body(
+				description="Binary contents of image.",
+				schema=@Schema(type="file")
+			)
+			BufferedImage image
+		) throws Exception {
 		Photo p = new Photo(UUID.randomUUID().toString(), image);
 		photos.put(p.id, p);
 		return p;
 	}
 
-	/** DELETE request handler */
-	@RestMethod(name=DELETE, path="/{id}", summary="Delete a photo by ID")
+	@RestMethod(
+		name=POST,
+		path="/upload",
+		matchers=MultipartFormDataMatcher.class,
+		summary="Upload a photo from a multipart form post",
+		description="Shows how to parse a multipart form post containing a binary field.",
+		swagger=@MethodSwagger(
+			parameters={
+				"{in:'formData', name:'id', description:'Unique identifier to assign to image.', type:'string', required:false},",
+				"{in:'formData', name:'file', description:'The binary contents of the image file.', type:'file', required:true}"
+			}
+		)
+	)
+    public SeeOtherRoot uploadFile(RestRequest req) throws Exception {
+       MultipartConfigElement multipartConfigElement = new MultipartConfigElement((String)null);
+       req.setAttribute("org.eclipse.jetty.multipartConfig", multipartConfigElement);
+       String id = UUID.randomUUID().toString();
+       BufferedImage img = null;
+       for (Part part : req.getParts()) {
+    	   switch (part.getName()) {
+    		   case "id":
+    			   id = IOUtils.read(part.getInputStream());
+    			   break;
+    		   case "file":
+    			   img = ImageIO.read(part.getInputStream());
+    	   }
+       }
+       addPhoto(id, img);
+       return new SeeOtherRoot(); // Redirect to the servlet root.
+    }
+
+	@RestMethod(
+		name=DELETE,
+		path="/{id}",
+		summary="Delete a photo by ID"
+	)
 	public String deletePhoto(@Path("id") String id) throws NotFound {
 		Photo p = photos.remove(id);
 		if (p == null)
 			throw new NotFound("Photo not found");
 		return "OK";
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Custom serializers and parsers.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Serializer for converting images to byte streams */
 	public static class ImageSerializer extends OutputStreamSerializer {

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 [
-	{species:'CAT', name:'Mr. Frisky', price:39.99, tags:['friendly'], status:'AVAILABLE'},
+	{species:'CAT', name:'Mr. Frisky', price:39.99, tags:['friendly'], status:'AVAILABLE', photo:'/petstore/photos/cat'},
 	{species:'DOG', name:'Kibbles', price:99.99, tags:['loyal'], status:'AVAILABLE'},
 	{species:'RABBIT', name:'Hoppy', price:49.99, tags:['friendly','smells nice'], status:'AVAILABLE'},
 	{species:'RABBIT', name:'Hoppy 2', price:49.99, status:'AVAILABLE'},

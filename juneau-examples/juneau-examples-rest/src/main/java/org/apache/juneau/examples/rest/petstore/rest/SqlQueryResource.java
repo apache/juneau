@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest;
+package org.apache.juneau.examples.rest.petstore.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
@@ -36,8 +36,7 @@ import org.apache.juneau.rest.widget.*;
  * Sample resource that shows how Juneau can serialize ResultSets.
  */
 @RestResource(
-	path="/sqlQuery",
-	messages="nls/SqlQueryResource",
+	path="/sql",
 	title="SQL query service",
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
 	htmldoc=@HtmlDoc(
@@ -52,8 +51,15 @@ import org.apache.juneau.rest.widget.*;
 		},
 		aside={
 			"<div style='min-width:200px' class='text'>",
-			"	<p>An example of a REST interface over a relational database.</p>",
-			"	<p><a class='link' href='?sql=select+*+from sys.systables'>try me</a></p>",
+			"	<p>An example of a REST interface over a relational database that serializes ResultSet objects.</p>",
+			"	<p>Specify one or more queries delimited by semicolons.</p>",
+			"	<h5>Examples:</h5>",
+			"	<ul>",
+			"		<li><a class='link' href='?sql=select+*+from+sys.systables'>Tables</a>",
+			"		<li><a class='link' href='?sql=select+*+from+PetstorePet'>Pets</a>",
+			"		<li><a class='link' href='?sql=select+*+from+PetstoreOrder'>Orders</a>",
+			"		<li><a class='link' href='?sql=select+*+from+PetstoreUser'>Users</a>",
+			"	</ul>",
 			"</div>"
 		}
 	),

@@ -18,7 +18,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 /**
  * Bean for creating {@link Pet} objects.
  */
-@Bean(fluentSetters=true, properties="name,price,species,tags")
+@Bean(fluentSetters=true, properties="name,price,species,tags,photo")
 public class CreatePet {
 
 	@Schema(description="Pet name.", minLength=3, maxLength=50)
@@ -33,14 +33,19 @@ public class CreatePet {
 	@Schema(description="Pet attributes.", example="friendly,smart")
 	private String[] tags;
 
+	@Schema(description="Photo URL.")
+	@URI
+	private String photo;
+
 	/**
 	 * Constructor.
 	 */
-	public CreatePet(String name, float price, Species species, String[] tags) {
+	public CreatePet(String name, float price, Species species, String[] tags, String photo) {
 		this.name = name;
 		this.price = price;
 		this.species = species;
 		this.tags = tags;
+		this.photo = photo;
 	}
 
 	/**
@@ -88,11 +93,20 @@ public class CreatePet {
 		return this;
 	}
 
+	public String getPhoto() {
+		return photo;
+	}
+
+	public CreatePet photo(String photo) {
+		this.photo = photo;
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static CreatePet example() {
-		return new CreatePet("Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"});
+		return new CreatePet("Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"}, null);
 	}
 }

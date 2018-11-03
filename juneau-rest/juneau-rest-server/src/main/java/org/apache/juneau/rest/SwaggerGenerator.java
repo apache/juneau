@@ -336,11 +336,6 @@ final class SwaggerGenerator {
 					if (in != BODY)
 						param.append("name", mp.name);
 
-					if (in == BODY)
-						param.appendSkipEmpty("schema", getSchema(param.getObjectMap("schema"), mp.getType()));
-					else
-						mergePartSchema(param, getSchema(param.getObjectMap("schema"), mp.getType()));
-
 					try {
 						if (mp.method != null) {
 							if (in == BODY) {
@@ -368,10 +363,13 @@ final class SwaggerGenerator {
 					if ((in == BODY || in == PATH) && ! param.containsKeyNotEmpty("required"))
 						param.put("required", true);
 
-					if (in == BODY)
+					if (in == BODY) {
+						param.appendSkipEmpty("schema", getSchema(param.getObjectMap("schema"), mp.getType()));
 						addBodyExamples(sm, param, false, mp.getType());
-					else
+					} else {
+						mergePartSchema(param, getSchema(param.getObjectMap("schema"), mp.getType()));
 						addParamExample(sm, param, in, mp.getType());
+					}
 				}
 			}
 

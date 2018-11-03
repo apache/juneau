@@ -179,7 +179,7 @@ public final class BeanPropertyMeta {
 					// Only use field type if it's a bean property or has @BeanProperty annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
 					rawTypeMeta = f.resolveClassMeta(p, innerField.getGenericType(), typeVarImpls);
-					isUri |= (rawTypeMeta.isUri() || innerField.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
+					isUri |= (rawTypeMeta.isUri());
 				}
 				if (p != null) {
 					if (! p.properties().isEmpty())
@@ -190,6 +190,7 @@ public final class BeanPropertyMeta {
 				if (s != null) {
 					swap = getPropertyPojoSwap(s);
 				}
+				isUri |= innerField.isAnnotationPresent(org.apache.juneau.annotation.URI.class);
 			}
 
 			if (getter != null) {

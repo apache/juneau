@@ -27,8 +27,8 @@ import org.apache.juneau.serializer.*;
 /**
  * Pet bean.
  */
-@Bean(typeName="Pet", fluentSetters=true, properties="id,species,name,tags,price,status")
-@Entity
+@Bean(typeName="Pet", fluentSetters=true, properties="id,species,name,tags,price,status,photo")
+@Entity(name="PetstorePet")
 public class Pet {
 
 	@Column @Id @GeneratedValue
@@ -57,11 +57,17 @@ public class Pet {
 	@Schema(description="Pet species.")
 	private PetStatus status;
 
+	@Column
+	@Schema(description="Photo URL.")
+	@URI
+	private String photo;
+
 	public Pet apply(CreatePet x) {
 		this.name = x.getName();
 		this.price = x.getPrice();
 		this.species = x.getSpecies();
 		this.tags = x.getTags() == null ? null : Arrays.asList(x.getTags());
+		this.photo = x.getPhoto();
 		return this;
 	}
 
@@ -72,6 +78,7 @@ public class Pet {
 		this.species = x.getSpecies();
 		this.tags = Arrays.asList(x.getTags());
 		this.status = x.getStatus();
+		this.photo = x.getPhoto();
 		return this;
 	}
 
@@ -135,6 +142,15 @@ public class Pet {
 
 	public Pet status(PetStatus status) {
 		this.status = status;
+		return this;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public Pet photo(String photo) {
+		this.photo = photo;
 		return this;
 	}
 

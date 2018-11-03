@@ -18,7 +18,7 @@ import org.apache.juneau.jsonschema.annotation.*;
 /**
  * Bean for updating {@link Pet} objects.
  */
-@Bean(fluentSetters=true, properties="id,name,price,species,tags,status")
+@Bean(fluentSetters=true, properties="id,name,price,species,tags,photo,status")
 public class UpdatePet extends CreatePet {
 
 	@Schema(description="Pet identifier.", minimum="1")
@@ -30,8 +30,8 @@ public class UpdatePet extends CreatePet {
 	/**
 	 * Constructor.
 	 */
-	public UpdatePet(long id, String name, float price, Species species, String[] tags, PetStatus status) {
-		super(name, price, species, tags);
+	public UpdatePet(long id, String name, float price, Species species, String[] tags, PetStatus status, String photo) {
+		super(name, price, species, tags, photo);
 		this.id = id;
 		this.status = status;
 	}
@@ -87,11 +87,17 @@ public class UpdatePet extends CreatePet {
 		return this;
 	}
 
+	@Override
+	public UpdatePet photo(String value) {
+		super.photo(value);
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static UpdatePet example() {
-		return new UpdatePet(123, "Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"}, PetStatus.SOLD);
+		return new UpdatePet(123, "Doggie", 9.99f, Species.DOG, new String[]{"smart","friendly"}, PetStatus.SOLD, null);
 	}
 }

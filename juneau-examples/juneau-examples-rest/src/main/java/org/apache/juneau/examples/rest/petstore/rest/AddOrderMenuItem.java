@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.petstore;
+package org.apache.juneau.examples.rest.petstore.rest;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.http.HttpMethodName.*;
@@ -21,46 +21,39 @@ import org.apache.juneau.rest.widget.*;
 /**
  * Menu item for adding a Pet.
  */
-public class AddPetMenuItem extends MenuItemWidget {
+public class AddOrderMenuItem extends MenuItemWidget {
 
 	@Override /* MenuItemWidget */
 	public String getLabel(RestRequest req) throws Exception {
 		return "add";
 	}
 
+	@Override /* MenuItemWidget */
+	public String getBeforeShowScript(RestRequest req) throws Exception {
+		return loadScript("AddOrderMenuItem_beforeShow.js");
+	}
+
 	@Override /* Widget */
 	public Object getContent(RestRequest req) throws Exception {
+
 		return div(
-			form().id("form").action("servlet:/pet").method(POST).children(
+			form().id("form").action("servlet:/store/order").method(POST).children(
 				table(
 					tr(
-						th("Name:"),
-						td(input().name("name").type("text")),
-						td(new Tooltip("&#x2753;", "The name of the pet.", br(), "e.g. 'Fluffy'"))
-					),
-					tr(
-						th("Species:"),
+						th("Pet:"),
 						td(
-							select().name("species").children(
-								option("CAT"), option("DOG"), option("BIRD"), option("FISH"), option("MOUSE"), option("RABBIT"), option("SNAKE")
-							)
+							select().id("addPet_names").name("petId")
 						),
-						td(new Tooltip("&#x2753;", "The kind of animal."))
+						td(new Tooltip("&#x2753;", "The pet to purchase."))
 					),
 					tr(
-						th("Price:"),
-						td(input().name("price").type("number").placeholder("1.0").step("0.01").min(1).max(100).value(9.99)),
-						td(new Tooltip("&#x2753;", "The price to charge for this pet."))
-					),
-					tr(
-						th("Tags:"),
-						td(input().name("tags").type("text")),
-						td(new Tooltip("&#x2753;", "Arbitrary textual tags (comma-delimited).", br(), "e.g. 'fluffy,friendly'"))
+						th("Ship date:"),
+						td(input().name("shipDate").type("date")),
+						td(new Tooltip("&#x2753;", "The requested ship date."))
 					),
 					tr(
 						td().colspan(2).style("text-align:right").children(
 							button("reset", "Reset"),
-							button("button","Cancel").onclick("window.location.href='/'"),
 							button("submit", "Submit")
 						)
 					)
