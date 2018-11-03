@@ -66,10 +66,27 @@
 			<version>${httpclient.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server</artifactId>
+			<version>${version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.0.9.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.0.9.Final</version>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -107,7 +124,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
+				<!--version>2.4.3</version-->
 				<configuration>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
 					<minimizeJar>false</minimizeJar>
@@ -151,6 +168,25 @@
 									<classifier>samples</classifier>
 								</artifact>
 							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>juneau-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>juneau-examples-rest-${version}</finalName>
+							<descriptors>
+								<descriptor>src/assembly/bin.xml</descriptor>
+							</descriptors>
 						</configuration>
 					</execution>
 				</executions>
