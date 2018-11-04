@@ -79,7 +79,7 @@ import org.apache.juneau.rest.converters.*;
 			"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
 			"</div>"
 		},
-		stylesheet="servlet:/htdocs/themes/dark.css"
+		stylesheet="servlet:/htdocs/themes/dark.css"  // Use dark theme by default.
 	),
 	properties= {
 		// Resolve recursive references when showing schema info in the swagger.
@@ -125,7 +125,7 @@ import org.apache.juneau.rest.converters.*;
 			)
 		}
 	),
-	staticFiles={"htdocs:htdocs"},
+	staticFiles={"htdocs:htdocs"},  // Expose static files in htdocs subpackage.
 	children={
 		SqlQueryResource.class,
 		PhotosResource.class
@@ -147,8 +147,13 @@ public class PetStoreResource extends BasicRestServletJena implements PetStore {
 		summary="Navigation page",
 		htmldoc=@HtmlDoc(
 			style={
-				"INHERIT",
-				"body { background-image: url('/petstore/photos/cat'); background-color: black; background-size: cover; background-attachment: fixed; }"
+				"INHERIT",  // Flag for inheriting resource-level CSS.
+				"body { ",
+					"background-image: url('petstore/htdocs/background.jpg'); ",
+					"background-color: black; ",
+					"background-size: cover; ",
+					"background-attachment: fixed; ",
+				"}"
 			}
 		)
 	)

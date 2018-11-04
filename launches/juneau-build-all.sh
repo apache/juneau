@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. juneau-env.sh
+. launches/juneau-env.sh
 mvn clean install
 . juneau-build-javadoc.sh
 

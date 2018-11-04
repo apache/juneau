@@ -43,11 +43,11 @@
 	</script>
 </head>
 <body>
-<h1 class='title'>Apache Juneau 7.2.1 Documentation</h1>
-<h1 class='preview-title'>Apache Juneau 7.2.1 Documentation Preview</h1>
+<h1 class='title'>Apache Juneau {@property juneauVersion} Documentation</h1>
+<h1 class='preview-title'>Apache Juneau {@property juneauVersion} Documentation Preview</h1>
 <h2 class='preview-section todo'>Documentation in progress</h2>
-<h2 class='preview-section new'>New documentation in 7.2.1</h2>
-<h2 class='preview-section updated'>Updated documentation in 7.2.1</h2>
+<h2 class='preview-section new'>New documentation in {@property juneauVersion}</h2>
+<h2 class='preview-section updated'>Updated documentation in {@property juneauVersion}</h2>
 
 <script type='text/javascript'>
 	function toggle(x) {
@@ -431,7 +431,7 @@
 	<ol>
 		<li><p class='updated'><a class='doclink' href='#juneau-examples-rest.RootResources'>RootResources</a></p>
 		<li><p class='updated'><a class='doclink' href='#juneau-examples-rest.HelloWorldResource'>HelloWorldResource</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStoreResource</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStore</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-examples-rest.DtoExamples'>DtoExamples</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.PhotosResource'>PhotosResource</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.SqlQueryResource'>SqlQueryResource</a></p>
@@ -24412,10 +24412,24 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.3 - PetStoreResource</a></h3>
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.3 - PetStore</a></h3>
 <div class='topic'><!-- START: 12.3 - juneau-examples-rest.PetStoreResource -->
 <p>
-	The <code>PetStoreResource</code> class provides examples for creating a Swagger-based interface. 
+	The <code>PetStore</code> application is an functional application meant to demonstrate the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Creating a Juneau-based REST interface on top of JPA beans.
+	<li>
+		Creating sophisticated Swagger UI using only annotations.
+</ul>
+<p>
+	When you click the <l>petstore</l> link on the home page of the examples app, you should see this page:
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.1b.png'>
+
+<p>
+	The contents of this page is primarily defined via annotations defined on the <l>PetStoreResource</l> class:
 </p>
 
 <h5 class='figure'>PetStoreResource.java</h5>
@@ -24454,17 +24468,86 @@
 				<js>"	&lt;p&gt;It also shows examples of HtmlRender classes and <ja>@BeanProperty</ja>(format) annotations.&lt;/p&gt;"</js>,
 				<js>"	&lt;p&gt;It also shows how the Queryable converter and query widget can be used to create searchable interfaces.&lt;/p&gt;"</js>,
 				<js>"&lt;/div&gt;"</js>
-			}
+			},
+			stylesheet=<js>"servlet:/htdocs/themes/dark.css"</js>  <jc>// Use dark theme by default.</jc>
 		),
-		properties= {
-			<jc>// Resolve recursive references when showing schema info in the swagger.</jc>
-			<ja>@Property</ja>(name=<jsf>SWAGGERUI_resolveRefsMaxDepth</jsf>, value=<js>"99"</js>)
-		},
-		swagger=<ja>@ResourceSwagger</ja>(<js>"$F{PetStoreResource.json}"</js>),
-		staticFiles={<js>"htdocs:htdocs"</js>}
+		...
+		staticFiles={<js>"htdocs:htdocs"</js>},  <jc>// Expose static files in htdocs subpackage.</jc>  
+		children={
+			SqlQueryResource.<jk>class</jk>,
+			PhotosResource.<jk>class</jk>
+		}
 	)
 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {
-	
+</p>
+<p>
+	The inner contents of the page are generated from this method which is used to define a jumping-off
+	page for the application:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/"</js>,
+		summary=<js>"Navigation page"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			style={
+				<js>"INHERIT"</js>,  <jc>// Flag for inheriting resource-level CSS.</jc>
+				<js>"body { "</js>,
+					<js>"background-image: url('petstore/htdocs/background.jpg'); "</js>,
+					<js>"background-color: black; "</js>,
+					<js>"background-size: cover; "</js>,
+					<js>"background-attachment: fixed; "</js>,
+				<js>"}"</js>
+			}
+		)
+	)
+	<jk>public</jk> ResourceDescriptions getTopPage() {
+		<jk>return new</jk> ResourceDescriptions()
+			.append(<js>"pet"</js>, <js>"All pets in the store"</js>)
+			.append(<js>"store"</js>, <js>"Orders and inventory"</js>)
+			.append(<js>"user"</js>, <js>"Petstore users"</js>)
+			.append(<js>"photos"</js>, <js>"Photos service"</js>)
+			.append(<js>"sql"</js>, <js>"SQL query service"</js>)
+		;
+	}
+</p>
+<p>
+	Note how we used the <ja>@HtmlDoc</ja> annotation to add some CSS to our page
+	that renders our background image.  
+</p>
+<p>
+	The {@link org.apache.juneau.rest.helper.ResourceDescriptions} class used above is a convenience class for creating
+	hyperlinks to child resources. 
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p class='bpcode w800'>	
 		<jk>private</jk> PetStore <jf>store</jf>;
 	
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)

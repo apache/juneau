@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. juneau-env.sh
+. launches/juneau-env.sh
 
 cd juneau-doc
 java -cp juneau-doc.jar org.apache.juneau.doc.internal.DocGenerator
