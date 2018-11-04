@@ -13,4 +13,4 @@
 
 . ~/.profile
 set -e
-export JUNEAU_VERSION=7.2.1
+export JUNEAU_VERSION=7.2.2

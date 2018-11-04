@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-HelloWorldResource
+{updated} HelloWorldResource
 
 <p>
 	The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
@@ -40,7 +40,7 @@ HelloWorldResource
 	<jk>public class</jk> HelloWorldResource <jk>implements</jk> BasicRestConfig { 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>) 
 		<jk>public</jk> String sayHello() { 
 			<jk>return</jk> <js>"Hello world!"</js>; 
 		} 
@@ -48,7 +48,7 @@ HelloWorldResource
 </p>
 <p>
 	Notice that in this case we're not extending from {@link oajr.RestServlet}.  
-	<br>We are however implementing {@link oajr.BasicRestConfig} which is a no-op
+	We are however implementing {@link oajr.BasicRestConfig} which is a no-op
 	interface that defines a default <ja>@RestResource</ja> annotation with all the serializers, parsers, 
 	and configuration defined on the {@link oajr.BasicRestServlet} class.
 </p>

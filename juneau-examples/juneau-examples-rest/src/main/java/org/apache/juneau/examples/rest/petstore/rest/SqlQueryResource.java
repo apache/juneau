@@ -61,7 +61,8 @@ import org.apache.juneau.rest.widget.*;
 			"		<li><a class='link' href='?sql=select+*+from+PetstoreUser'>Users</a>",
 			"	</ul>",
 			"</div>"
-		}
+		},
+		stylesheet="servlet:/htdocs/themes/dark.css"
 	),
 	swagger=@ResourceSwagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),

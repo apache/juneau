@@ -316,7 +316,7 @@
 			<li><p class=''><a class='doclink' href='#juneau-rest-server.HttpPartAnnotations.ResponseStatus'>@ResponseStatus</a></p>
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingFormPosts'>Handling Form Posts</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-rest-server.HandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-rest-server.HandlingMultiPartFormPosts'>Handling Multi-Part Form Posts</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Serializers'>Serializers</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Parsers'>Parsers</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server.Properties'>Properties</a></p>
@@ -427,14 +427,14 @@
 		<li><p class=''><a class='doclink' href='#juneau-microservice-server.UiCustomization'>UI Customization</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></p>
-	<li><p class='toc2 '><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></p>
+	<li><p class='toc2 updated'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></p>
 	<ol>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.RootResources'>RootResources</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.HelloWorldResource'>HelloWorldResource</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStoreResource</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-examples-rest.RootResources'>RootResources</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-examples-rest.HelloWorldResource'>HelloWorldResource</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.PetStoreResource'>PetStoreResource</a></p>
 		<li><p class='new'><a class='doclink' href='#juneau-examples-rest.DtoExamples'>DtoExamples</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.PhotosResource'>PhotosResource</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-examples-rest.SqlQueryResource'>SqlQueryResource</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.PhotosResource'>PhotosResource</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest.SqlQueryResource'>SqlQueryResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
 	</ol>
@@ -17078,7 +17078,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-server.HandlingMultiPartFormPosts' id='juneau-rest-server.HandlingMultiPartFormPosts'>7.12 - Handling Multi-Part Form Posts</a></h3>
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server.HandlingMultiPartFormPosts' id='juneau-rest-server.HandlingMultiPartFormPosts'>7.12 - Handling Multi-Part Form Posts</a></h3>
 <div class='topic'><!-- START: 7.12 - juneau-rest-server.HandlingMultiPartFormPosts -->
 <p>
 	The Juneau framework does not natively support multipart form posts.  
@@ -24157,7 +24157,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>12 - juneau-examples-rest</a></h2>
+<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>12 - juneau-examples-rest</a></h2>
 <div class='topic'><!-- START: 12 - juneau-examples-rest -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
@@ -24186,7 +24186,7 @@
 <p>
 	Once loaded, you should see the following project structure:
 </p>
-<img class='bordered' src='doc-files/juneau-examples-rest.3.png' style='width:412px'>
+<img class='bordered' src='doc-files/juneau-examples-rest.3.png' style='width:325px'>
 <p>
 	The microservice can be started from the <code>juneau-examples-rest.launch</code> file.
 	It will start up the microservice on port 10000 which you can then view through a browser:
@@ -24198,7 +24198,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.RootResources' id='juneau-examples-rest.RootResources'>12.1 - RootResources</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.RootResources' id='juneau-examples-rest.RootResources'>12.1 - RootResources</a></h3>
 <div class='topic'><!-- START: 12.1 - juneau-examples-rest.RootResources -->
 <p>
 	The <l>RootResources</l> class is the main page for the REST microservice.
@@ -24216,6 +24216,15 @@
 				<ul>
 					<li class='jac'>
 						{@link org.apache.juneau.rest.BasicRestServletGroup} - Specialized subclass for grouping other resources.
+						<ul>
+							<li class='jac'>
+								{@link org.apache.juneau.microservice.BasicRestServletJenaGroup} - Group resource with added RDF support.
+								<ul>
+									<li class='jc'>
+										<code>RootResources</code>
+								</ul>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</li>
@@ -24233,10 +24242,10 @@
 	The <l>RootResources</l> class can also be defined as a servlet in a <l>web.xml</l> file:
 </p>
 <p class='bpcode w800'>
-	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>'2.3'</xs><xt>&gt;</xt>
+	<xt>&lt;web-app</xt> <xa>version</xa>=<xs>'3.0'</xs><xt>&gt;</xt>
 		<xt>&lt;servlet&gt;</xt>
 			<xt>&lt;servlet-name&gt;</xt>RootResources<xt>&lt;/servlet-name&gt;</xt>
-			<xt>&lt;servlet-class&gt;</xt>org.apache.juneau.rest.samples.RootResources<xt>&lt;/servlet-class&gt;</xt>
+			<xt>&lt;servlet-class&gt;</xt>org.apache.juneau.examples.rest.RootResources<xt>&lt;/servlet-class&gt;</xt>
 		<xt>&lt;/servlet&gt;</xt>
 		<xt>&lt;servlet-mapping&gt;</xt>
 			<xt>&lt;servlet-name&gt;</xt>RootResources<xt>&lt;/servlet-name&gt;</xt>
@@ -24259,7 +24268,6 @@
 		description=<js>"Example of a router resource page."</js>,
 		htmldoc=<ja>@HtmlDoc</ja>(
 			widgets={
-				PoweredByApache.<jk>class</jk>,
 				ContentTypeMenuItem.<jk>class</jk>,
 				StyleMenuItem.<jk>class</jk>
 			},
@@ -24278,23 +24286,18 @@
 				"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
 				<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
 				<js>"&lt;/div&gt;"</js>
-			},
-			footer=<js>"$W{PoweredByApache}"</js>
+			}
 		),
 		properties={
 			<jc>// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
 			// String comparisons.
 			// You can apply any of the Serializer/Parser/BeanContext settings this way.</jc>
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
+			<ja>@Property</ja>(name=<jsf>WSERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
 		},
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			PetStoreResource.<jk>class</jk>,
-			RequestEchoResource.<jk>class</jk>,
-			SampleRrpcServlet.<jk>class</jk>,
-			PhotosResource.<jk>class</jk>,
 			DtoExamples.<jk>class</jk>,
-			SqlQueryResource.<jk>class</jk>,
 			ConfigResource.<jk>class</jk>,
 			LogsResource.<jk>class</jk>,
 			DebugResource.<jk>class</jk>,
@@ -24307,16 +24310,12 @@
 </p>
 <p>
 	The <l>children</l> annotation defines the child resources of this router resource.
-	<br>These are resources whose paths are direct decendents to the parent resource.			
+	These are resources whose paths are direct descendants to the parent resource.			
 </p>
 <p>
 	Child resources must be annotated with the {@link org.apache.juneau.rest.annotation.RestResource#path() @RestResource(path)} annotation to 
 	identify the subpath of the child.
-	<br>Children CAN extend from {@link org.apache.juneau.rest.BasicRestServlet}, but it is not a requirement.
-</p>
-<p>
-	Child resources can also be defined programmatically by using the 
-	{@link org.apache.juneau.rest.RestContextBuilder#children(Class[])} method.
+	Children CAN extend from {@link org.apache.juneau.rest.BasicRestServlet} but it is not a requirement.
 </p>
 <p>
 	Note that these router pages can be arbitrarily nested deep.  
@@ -24324,23 +24323,27 @@
 </p>
 <p>
 	Let's step back and describe what's going on here:
-	<br>During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the 
+</p>
+<p>
+	During servlet initialization of the <l>RootResources</l> object, the toolkit looks for the 
 	<l>@RestResource(children)</l> annotation.  
-	<br>If it finds it, it instantiates instances of each class and recursively performs servlet initialization 
+	If it finds it, it instantiates instances of each class and recursively performs servlet initialization 
 	on them.  
-	<br>It then associates the child resource with the parent by the name specified by the 
+	It then associates the child resource with the parent by the name specified by the 
 	<l>@RestResource(path)</l> annotation on the child class.  
-	<br>When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet 
+</p>
+<p>
+	When a request for the child URL (<l>/helloWorld</l>) is received, the <l>RootResources</l> servlet 
 	gets the request and sees that the URL remainder matches one of its child resources.  
-	<br>It then forwards the request to the child resource for processing.  
-	<br>The request passed to the child resource is the same as if the child resource had been deployed 
+	It then forwards the request to the child resource for processing.  
+	The request passed to the child resource is the same as if the child resource had been deployed 
 	independently (e.g. path-info, resource-URI, and so forth).
 </p>
 </div><!-- END: 12.1 - juneau-examples-rest.RootResources -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.HelloWorldResource' id='juneau-examples-rest.HelloWorldResource'>12.2 - HelloWorldResource</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.HelloWorldResource' id='juneau-examples-rest.HelloWorldResource'>12.2 - HelloWorldResource</a></h3>
 <div class='topic'><!-- START: 12.2 - juneau-examples-rest.HelloWorldResource -->
 <p>
 	The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
@@ -24367,7 +24370,7 @@
 	<jk>public class</jk> HelloWorldResource <jk>implements</jk> BasicRestConfig { 
 		
 		<jd>/** GET request handler */</jd> 
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>) 
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>) 
 		<jk>public</jk> String sayHello() { 
 			<jk>return</jk> <js>"Hello world!"</js>; 
 		} 
@@ -24375,7 +24378,7 @@
 </p>
 <p>
 	Notice that in this case we're not extending from {@link org.apache.juneau.rest.RestServlet}.  
-	<br>We are however implementing {@link org.apache.juneau.rest.BasicRestConfig} which is a no-op
+	We are however implementing {@link org.apache.juneau.rest.BasicRestConfig} which is a no-op
 	interface that defines a default <ja>@RestResource</ja> annotation with all the serializers, parsers, 
 	and configuration defined on the {@link org.apache.juneau.rest.BasicRestServlet} class.
 </p>
@@ -24409,7 +24412,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.3 - PetStoreResource</a></h3>
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.3 - PetStoreResource</a></h3>
 <div class='topic'><!-- START: 12.3 - juneau-examples-rest.PetStoreResource -->
 <p>
 	The <code>PetStoreResource</code> class provides examples for creating a Swagger-based interface. 
@@ -25352,7 +25355,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.PhotosResource' id='juneau-examples-rest.PhotosResource'>12.5 - PhotosResource</a></h3>
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest.PhotosResource' id='juneau-examples-rest.PhotosResource'>12.5 - PhotosResource</a></h3>
 <div class='topic'><!-- START: 12.5 - juneau-examples-rest.PhotosResource -->
 <p>	
 	The <l>PhotosResource</l> class shows examples of the following:
@@ -25529,7 +25532,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.SqlQueryResource' id='juneau-examples-rest.SqlQueryResource'>12.6 - SqlQueryResource</a></h3>
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest.SqlQueryResource' id='juneau-examples-rest.SqlQueryResource'>12.6 - SqlQueryResource</a></h3>
 <div class='topic'><!-- START: 12.6 - juneau-examples-rest.SqlQueryResource -->
 <p>	
 	The <l>SqlQueryResource</l> class shows examples of the following:

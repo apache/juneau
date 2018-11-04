@@ -238,7 +238,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
-				PropertyStoreBuilder psb = context.getPropertyStore().builder().set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
+				PropertyStoreBuilder psb = PropertyStore.create().add(properties).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
 				for (Property p1 : m.properties())
 					psb.set(p1.name(), p1.value());
 				for (String p1 : m.flags())

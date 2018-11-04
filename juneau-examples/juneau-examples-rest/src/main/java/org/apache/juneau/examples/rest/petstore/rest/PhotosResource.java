@@ -64,7 +64,8 @@ import org.apache.juneau.serializer.*;
 		},
 		widgets={
 			UploadPhotoMenuItem.class
-		}
+		},
+		stylesheet="servlet:/htdocs/themes/dark.css"
 	),
 	properties={
 		// Make the anchor text on URLs be just the path relative to the servlet.

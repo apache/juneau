@@ -79,9 +79,7 @@ import org.apache.juneau.rest.converters.*;
 			"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
 			"</div>"
 		},
-		style={
-			"body { background-image: url('/petstore/photos/cat'); background-size: cover; background-attachment: fixed; }"
-		}
+		stylesheet="servlet:/htdocs/themes/dark.css"
 	),
 	properties= {
 		// Resolve recursive references when showing schema info in the swagger.
@@ -146,7 +144,13 @@ public class PetStoreResource extends BasicRestServletJena implements PetStore {
 	@RestMethod(
 		name=GET,
 		path="/",
-		summary="Navigation page"
+		summary="Navigation page",
+		htmldoc=@HtmlDoc(
+			style={
+				"INHERIT",
+				"body { background-image: url('/petstore/photos/cat'); background-color: black; background-size: cover; background-attachment: fixed; }"
+			}
+		)
 	)
 	public ResourceDescriptions getTopPage() {
 		return new ResourceDescriptions()
