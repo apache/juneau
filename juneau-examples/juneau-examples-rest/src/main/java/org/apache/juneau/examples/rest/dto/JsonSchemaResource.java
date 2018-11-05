@@ -43,7 +43,7 @@ import org.apache.juneau.rest.widget.*;
 			"options: servlet:/?method=OPTIONS",
 			"$W{ContentTypeMenuItem}",
 			"$W{ThemeMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
 		},
 		aside={
 			"<div style='min-width:200px' class='text'>",
