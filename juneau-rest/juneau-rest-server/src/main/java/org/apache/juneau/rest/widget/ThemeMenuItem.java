@@ -37,10 +37,7 @@ public class ThemeMenuItem extends MenuItemWidget {
 	public String getLabel(RestRequest req) {
 		return "themes";
 	}
-	/**
-	 * Looks at the supported media types from the request and constructs a list of hyperlinks to render the data
-	 * as plain-text.
-	 */
+
 	@Override /* MenuItemWidget */
 	public Div getContent(RestRequest req) throws Exception {
 		Div div = div();
