@@ -27,6 +27,7 @@ import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Query;
+import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
@@ -105,26 +106,31 @@ public class SqlQueryResource extends BasicRestServlet {
 		summary="Display the query entry page"
 	)
 	public Div get(
-			@Query(name="sql", description="Text to prepopulate the SQL query field with.", example="select * from sys.systables") String sql
+			@Query(
+				name="sql",
+				description="Text to prepopulate the SQL query field with.",
+				example="select * from sys.systables"
+			)
+			String sql
 		) {
 
 		return div(
 			script("text/javascript",
-				new String[]{"\n	// Quick and dirty function to allow tabs in textarea."
-				+"\n	function checkTab(e) {"
-				+"\n		if (e.keyCode == 9) {"
-				+"\n			var t = e.target;"
-				+"\n			var ss = t.selectionStart, se = t.selectionEnd;"
-				+"\n			t.value = t.value.slice(0,ss).concat('\\t').concat(t.value.slice(ss,t.value.length));"
-				+"\n			e.preventDefault();"
-				+"\n		}"
-				+"\n	}"
-				+"\n	// Load results from IFrame into this document."
-				+"\n	function loadResults(b) {"
-				+"\n		var doc = b.contentDocument || b.contentWindow.document;"
-				+"\n		var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];"
-				+"\n		document.getElementById('results').innerHTML = data.innerHTML;"
-				+"\n	}"}
+				"// Quick and dirty function to allow tabs in textarea.",
+				"function checkTab(e) {",
+				"	if (e.keyCode == 9) {",
+				"		var t = e.target;",
+				"		var ss = t.selectionStart, se = t.selectionEnd;",
+				"		t.value = t.value.slice(0,ss).concat('\\t').concat(t.value.slice(ss,t.value.length));",
+				"		e.preventDefault();",
+				"	}",
+				"}",
+				"// Load results from IFrame into this document.",
+				"function loadResults(b) {",
+				"	var doc = b.contentDocument || b.contentWindow.document;",
+				"	var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];",
+				"	document.getElementById('results').innerHTML = data.innerHTML;",
+				"}"
 			),
 			form("servlet:/").method(POST).target("buf").children(
 				table(
@@ -149,15 +155,17 @@ public class SqlQueryResource extends BasicRestServlet {
 	}
 
 	@RestMethod(
-		summary="Execute one or more queries",
-		swagger=@MethodSwagger(
-			responses={
-				"200:{ description:'Query results.\nEach entry in the array is a result of one query.\nEach result can be a result set (for queries) or update count (for updates).', 'x-example':[[{col1:'val1'},{col2:'val2'},{col3:'val3'}],123]}"
-			}
-		)
+		summary="Execute one or more queries"
+	)
+	@Response(
+		description="Query results.\nEach entry in the array is a result of one query.\nEach result can be a result set (for queries) or update count (for updates)."
 	)
 	public List<Object> post(
-			@Body(description="Query input", example="{sql:'select * from sys.systables',pos:1,limit:100}") PostInput in
+			@Body(
+				description="Query input",
+				example="{sql:'select * from sys.systables',pos:1,limit:100}"
+			)
+			PostInput in
 		) throws BadRequest {
 
 		List<Object> results = new LinkedList<>();

@@ -224,7 +224,7 @@ public class PetStoreResource extends BasicRestServletJena implements PetStore {
 				Queryable.SWAGGER_PARAMS
 			}
 		),
-		bpx="Pet: tags",
+		bpx="Pet: tags,photo",
 		htmldoc=@HtmlDoc(
 			widgets={
 				QueryMenuItem.class,

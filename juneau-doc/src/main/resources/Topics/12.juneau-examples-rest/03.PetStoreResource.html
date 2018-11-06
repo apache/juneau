@@ -27,7 +27,10 @@
 <p>
 	When you click the <l>petstore</l> link on the home page of the examples app, you should see this page:
 </p>
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.1a.png'>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.1.png'>
 
 <p>
 	The contents of this page is primarily defined via annotations defined on the <l>PetStoreResource</l> class:
@@ -66,7 +69,7 @@
 				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
 				<js>"	&lt;p&gt;This page shows a standard nested REST resource.&lt;/p&gt;"</js>,
 				<js>"	&lt;p&gt;It shows how different properties can be rendered on the same bean in different views.&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;It also shows examples of HtmlRender classes and <ja>@BeanProperty</ja>(format) annotations.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.&lt;/p&gt;"</js>,
 				<js>"	&lt;p&gt;It also shows how the Queryable converter and query widget can be used to create searchable interfaces.&lt;/p&gt;"</js>,
 				<js>"&lt;/div&gt;"</js>
 			},
@@ -85,6 +88,7 @@
 	The inner contents of the page are generated from this method which is used to define a jumping-off
 	page for the application:
 </p>
+<h5 class='figure'>PetStoreResource.java</h5>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(
 		name=<jsf>GET</jsf>,
@@ -120,59 +124,331 @@
 	The {@link oajr.helper.ResourceDescriptions} class used above is a convenience class for creating
 	hyperlinks to child resources. 
 </p>
+<p>
+	The application itself is defined in 3 packages:
+</p>
+<ul class='doctree'>
+	<li class='jp'><code>org.apache.juneau.rest.examples.rest.petstore</code>
+		<br>Defines the service for storing and retrieving Petstore data.
+		<br><img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2a.png'>
+	<li class='jp'><code>org.apache.juneau.rest.examples.rest.petstore.dto</code>
+		<br>Data transfer objects.
+		<br>These are JPA beans that are used both to store data in our database and are serialized
+		directly by our REST interface.
+		<br><img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2b.png'>
+	<li class='jp'><code>org.apache.juneau.rest.examples.rest.petstore.rest</code>
+		<br>The classes used for our REST interface.
+		<br><img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2c.png'>
+</ul>
+<p>
+	We also define some static files in the <code>org.apache.juneau.rest.examples.rest.petstore</code> package:
+</p>
+<img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2d.png'>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<p class='bpcode w800'>	
-		<jk>private</jk> PetStore <jf>store</jf>;
+<p>
+	The <l>PetStoreService</l> class is a pretty-straightforward service for storing and retrieving JPA beans:
+</p>
+<h5 class='figure'>PetStoreService.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> PetStoreService <jk>extends</jk> AbstractPersistenceService {
+	
+		<jk>public</jk> Pet getPet(<jk>long</jk> id) <jk>throws</jk> IdNotFound {
+			<jk>return</jk> find(Pet.<jk>class</jk>, id);
+		}
+	
+		<jk>public</jk> List&lt;Pet&gt; getPets() {
+			<jk>return</jk> query(<js>"select X from PetstorePet X"</js>, Pet.<jk>class</jk>, (SearchArgs)<jk>null</jk>);
+		}
+	
+		<jk>public</jk> Pet create(CreatePet c) {
+			<jk>return</jk> merge(new Pet().status(PetStatus.<jsf>AVAILABLE</jsf>).apply(c));
+		}
+	
+		<jk>public</jk> Pet update(UpdatePet u) <jk>throws</jk> IdNotFound {
+			EntityManager em = getEntityManager();
+			<jk>return</jk> merge(em, find(em, Pet.<jk>class</jk>, u.getId()).apply(u));
+		}
+	
+		<jk>public void</jk> removePet(<jk>long</jk> id) <jk>throws</jk> IdNotFound {
+			EntityManager em = getEntityManager();
+			remove(em, find(em, Pet.<jk>class</jk>, id));
+		}
+	
+		...
+	}
+</p>
+<p>
+	The DTOs are simply beans that combine both JPA and Juneau bean annotations:
+</p>
+<h5 class='figure'>Pet.java</h5>
+<p class='bpcode w800'>
+	<ja>@Bean</ja>(typeName=<js>"Pet"</js>, fluentSetters=<jk>true</jk>, properties=<js>"id,species,name,tags,price,status,photo"</js>)
+	<ja>@Entity</ja>(name=<js>"PetstorePet"</js>)
+	<jk>public class</jk> Pet {
+	
+		<ja>@Column @Id @GeneratedValue</ja>
+		<ja>@Schema</ja>(description=<js>"Unique identifier for this pet."</js>)
+		<ja>@Html</ja>(link=<js>"servlet:/pet/{id}"</js>)
+		<jk>private long</jk> <jf>id</jf>;
+	
+		<ja>@Column</ja>(length=50)
+		<ja>@Schema</ja>(description=<js>"Pet name."</js>, minLength=3, maxLength=50)
+		<jk>private</jk> String <jf>name</jf>;
+		
+		...
+	
+		<jk>public long</jk> getId() {
+			<jk>return</jk> <jf>id</jf>;
+		}
+	
+		<jk>public</jk> Pet id(<jk>long</jk> id) {
+			<jk>this</jk>.<jf>id</jf> = id;
+			<jk>return this</jk>;
+		}
+	
+		<jk>public</jk> String getName() {
+			<jk>return</jk> <jf>name</jf>;
+		}
+	
+		<jk>public</jk> Pet name(String name) {
+			<jk>this</jk>.<jf>name</jf> = name;
+			<jk>return this</jk>;
+		}
+		
+		...
+	}
+</p>
+<p>
+	The beans are found by JPA by adding them to the JPA persistence file. 
+</p>
+<h5 class='figure'>META-INF/persistence.xml</h5>
+<p class='bpcode w800'>
+	<xt>&lt;persistence&gt;</xt>
+		<xt>&lt;persistence-unit</xt> <xa>name</xa>=<xs>"test"</xs> <xa>transaction-type</xa>=<xs>"RESOURCE_LOCAL"</xs>&gt;</xt>
+			<xt>&lt;class&gt;</xt>org.apache.juneau.examples.rest.petstore.dto.Pet<xt>&lt;/class&gt;</xt>
+			<xt>&lt;class&gt;</xt>org.apache.juneau.examples.rest.petstore.dto.Order<xt>&lt;/class&gt;</xt>
+			<xt>&lt;class&gt;</xt>org.apache.juneau.examples.rest.petstore.dto.User<xt>&lt;/class&gt;</xt>
+			<xt>&lt;properties&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"javax.persistence.jdbc.driver"</xs> <xa>value</xa>=<xs>"org.apache.derby.jdbc.EmbeddedDriver"</xs> <xt>/&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"javax.persistence.jdbc.url"</xs> <xa>value</xa>=<xs>"jdbc:derby:target/derby/testDB;create=true"</xs> <xt>/&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"javax.persistence.jdbc.user"</xs> <xa>value</xa>=<xs>""</xs> <xt>/&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"javax.persistence.jdbc.password"</xs> <xa>value</xa>=<xs>""</xs> <xt>/&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"hibernate.dialect"</xs> <xa>value</xa>=<xs>"org.hibernate.dialect.DerbyDialect"</xs> <xt>/&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"hibernate.hbm2ddl.auto"</xs> <xa>value</xa>=<xs>"create-drop"</xs> <xt>/&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"show_sql"</xs> <xa>value</xa>=<xs>"true"</xs> <xt>/&gt;</xt>
+				<xt>&lt;property</xt> <xa>name</xa>=<xs>"hibernate.temp.use_jdbc_metadata_defaults"</xs> <xa>value</xa>=<xs>"false"</xs> <xt>/&gt;</xt>
+			<xt>&lt;/properties&gt;</xt>
+		<xt>&lt;/persistence-unit&gt;</xt>
+	<xt>&lt;/persistence&gt;</xt>
+</p>
+<p>
+	The Petstore service is instantiated in our REST interface using a hook.
+	Note that a real-world scenario would likely use some other means such as injection.
+</p>
+<h5 class='figure'>PetStoreResource.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	
+		<jk>private</jk> PetStoreService <jf>store</jf>;
 	
 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		<jk>public void</jk> initDatabase(RestContextBuilder builder) <jk>throws</jk> Exception {
-			<jf>store</jf> = <jk>new</jk> PetStore().init();
+		<jk>public void</jk> startup(RestContextBuilder builder) <jk>throws</jk> Exception {
+			<jf>store</jf> = <jk>new</jk> PetStoreService();
 		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/"</js>,
-			summary=<js>"Navigation page"</js>
-		)
-		<jk>public</jk> ResourceDescriptions getTopPage() {
-			<jk>return new</jk> ResourceDescriptions()
-				.append(<js>"pet"</js>, <js>"All pets in the store"</js>)
-				.append(<js>"store"</js>, <js>"Orders and inventory"</js>)
-				.append(<js>"user"</js>, <js>"Petstore users"</js>)
-			;
+		
+		...
+</p>
+<p>
+	The Petstore database is empty by default.
+	The <l>INIT</l> link brings you to a page to initialize the contents of the database
+	from sample data:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/init
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.3a.png'>
+<p>
+	You can try loading the Petstore database using direct JPA or via REST calls through a client-side proxy.
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.3b.png'>
+<p>
+	The initialize page is rendered using the following methods in our <l>PetStoreResource</l> class.
+	Note that we're using HTML5 beans to render the contents of the page, and 
+	the use of a direct unbuffered writer allowing for the creation
+	of a console-like window in an iframe.
+</p>
+<h5 class='figure'>PetStoreResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		summary=<js>"Initialize database form entry page"</js>
+	)
+	<jk>public</jk> Div getInit() {
+		<jk>return</jk> <jsm>div</jsm>(
+			<jsm>form</jsm>(<js>"servlet:/init"</js>).method(<jsf>POST</jsf>).target(<js>"buf"</js>).children(
+				<jsm>table</jsm>(
+					<jsm>tr</jsm>(
+						<jsm>th</jsm>(<js>"Initialize petstore database:"</js>),
+						<jsm>td</jsm>(<jsm>input</jsm>(<js>"radio"</js>).name(<js>"init-method"</js>).value(<js>"direct"</js>).checked(<jk>true</jk>), <js>"direct"</js>, <jsm>input</jsm>(<js>"radio"</js>).name(<js>"init-method"</js>).value(<js>"rest"</js>), <js>"rest"</js>),
+						<jsm>td</jsm>(<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>).style(<js>"float:right"</js>).onclick(<js>"scrolling=true"</js>))
+					)
+				)
+			),
+			<jsm>br</jsm>(),
+			<jsm>iframe</jsm>().id(<js>"buf"</js>).name(<js>"buf"</js>).style(<js>"width:800px;height:600px;"</js>).onload(<js>"window.parent.scrolling=false;"</js>),
+			<jsm>script</jsm>(<js>"text/javascript"</js>,
+				<js>"var scrolling = false;"</js>,
+				<js>"function scroll() { if (scrolling) { document.getElementById('buf').contentWindow.scrollBy(0,50); } setTimeout('scroll()',200); } "</js>,
+				<js>"scroll();"</js>
+			)
+		);
+	}
+
+	<ja>@RestMethod</ja>(
+		summary=<js>"Initialize database"</js>
+	)
+	<jk>public void</jk> postInit(
+		<ja>@FormData</ja>(<js>"init-method"</js>) String initMethod,
+		RestResponse res
+	) <jk>throws</jk> Exception {
+		res.setHeader(<js>"Content-Encoding"</js>, <js>"identity"</js>);
+		<jk>if</jk> (<js>"direct"</js>.equals(initMethod))
+			<jf>store</jf>.initDirect(res.getDirectWriter(<js>"text/plain"</js>));
+		<jk>else</jk>
+			<jf>store</jf>.initViaRest(res.getDirectWriter(<js>"text/plain"</js>));
+	}
+</p>
+<p>
+	The direct initialization uses direct JPA to store beans in the database.
+	The following code in <l>PetStoreService</l> reads and parses DTOs from our init JSON files (e.g. <js>"init/Pets.json"</js>)
+	and stores them using the JPA <l>EntityManager</l> class.
+</p>
+<h5 class='figure'>PetStoreService.java</h5>
+<p class='bpcode w800'>
+	<jk>public</jk> PetStoreService initDirect(PrintWriter w) <jk>throws</jk> Exception {
+
+		EntityManager em = getEntityManager();
+		EntityTransaction et = em.getTransaction();
+		JsonParser parser = JsonParser.<jsm>create</jsm>().build();
+
+		et.begin();
+
+		<jk>for</jk> (Pet x : em.createQuery(<js>"select X from PetstorePet X"</js>, Pet.<jk>class</jk>).getResultList()) {
+			em.remove(x);
+			w.println(<jsm>format</jsm>(<js>"Deleted pet:  id={0}"</js>, x.getId()));
 		}
+		...
+
+		et.commit();
+		et.begin();
+
+		<jk>for</jk> (Pet x : parser.parse(getStream(<js>"init/Pets.json"</js>), Pet[].<jk>class</jk>)) {
+			x = em.merge(x);
+			w.println(<jsm>format</jsm>(<js>"Created pet:  id={0}, name={1}"</js>, x.getId(), x.getName()));
+		}
+		...
+
+		et.commit();
+
+		<jk>return this</jk>;
+	}
+
+	<jk>private</jk> InputStream getStream(String fileName) {
+		<jk>return</jk> getClass().getResourceAsStream(fileName);
+	}
+</p>
+<p>
+	The REST initialization uses a REST proxy interface to delete and store values in the database:
 	
-		<jc>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		// Pets
-		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</jc>
+</p>
+<h5 class='figure'>PetStoreService.java</h5>
+<p class='bpcode w800'>
+	<jk>public</jk> PetStoreService initViaRest(PrintWriter w) <jk>throws</jk> Exception {
+		JsonParser parser = JsonParser.<jsm>create</jsm>().ignoreUnknownBeanProperties().build();
+
+		<jk>try</jk> (RestClient rc = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build()) {
+			PetStore ps = rc.getRemoteResource(PetStore.<jk>class</jk>);
+
+			<jk>for</jk> (Pet x : ps.getPets()) {
+				ps.deletePet(<js>"apiKey"</js>, x.getId());
+				w.println(<jsm>format</jsm>(<js>"Deleted pet:  id={0}"</js>, x.getId()));
+			}
+			...
+			<jk>for</jk> (CreatePet x : parser.parse(getStream(<js>"init/Pets.json"</js>), CreatePet[].<jk>class</jk>)) {
+				<jk>long</jk> id = ps.postPet(x);
+				w.println(<jsm>format</jsm>(<js>"Created pet:  id={0}, name={1}"</js>, id, x.getName()));
+			}
+			...
+		}
+
+		<jk>return this</jk>;
+	}
+</p>
+<p>
+	The <l>PetStore</l> class is an interface annotated with <ja>@RemoteResource</ja> and <ja>@RemoteMethod</ja>
+	annotations defining how to communicate with our REST interface: 
+</p>
+<h5 class='figure'>PetStore.java</h5>
+<p class='bpcode w800'>
+	<ja>@RemoteResource</ja>(path=<js>"/petstore"</js>)
+	<jk>public interface</jk> PetStore {
 	
+		<ja>@RemoteMethod</ja>(method=<jsf>GET</jsf>, path=<js>"/pet"</js>)
+		<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable;
+	
+		<ja>@RemoteMethod</ja>(path=<js>"/pet/{petId}"</js>) <jc>/* method inferred from method name */</jc>
+		<jk>public</jk> Pet getPet(
+			<ja>@Path</ja>(
+				name=<js>"petId"</js>,
+				description=<js>"ID of pet to return"</js>,
+				example=<js>"123"</js>
+			)
+			<jk>long</jk> petId
+		) <jk>throws</jk> IdNotFound, NotAcceptable;
+	
+		<ja>@RemoteMethod</ja> <jc>/* method and path inferred from method name */</jc>
+		<jk>public long</jk> postPet(
+			<ja>@Body</ja>(
+				description=<js>"Pet object to add to the store"</js>
+			) CreatePet pet
+		) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType;
+	
+		<ja>@RemoteMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/pet/{petId}"</js>)
+		<jk>public</jk> Ok updatePet(
+			<ja>@Body</ja>(
+				description=<js>"Pet object that needs to be added to the store"</js>
+			) UpdatePet pet
+		) <jk>throws</jk> IdNotFound, NotAcceptable, UnsupportedMediaType;
+	
+		<ja>@RemoteMethod</ja>(method=<jsf>DELETE</jsf>, path=<js>"/pet/{petId}"</js>)
+		<jk>public</jk> Ok deletePet(
+			<ja>@Header</ja>(
+				name=<js>"api_key"</js>,
+				description=<js>"Security API key"</js>,
+				required=<jk>true</jk>,
+				example=<js>"foobar"</js>
+			)
+			String apiKey,
+			<ja>@Path</ja>(
+				name=<js>"petId"</js>,
+				description=<js>"Pet id to delete"</js>,
+				example=<js>"123"</js>
+			)
+			<jk>long</jk> petId
+		) <jk>throws</jk> IdNotFound, NotAcceptable;
+		
+		...
+	}
+</p>
+<p>
+	Note that this is the same interface used to define our server-side REST implementation!
+	The annotations defined on the method parameters used for client-side proxies are also
+	inherited by and used for our server-side implementation class.
+</p>
+<h5 class='figure'>PetStoreResource.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
 			name=<jsf>GET</jsf>,
 			path=<js>"/pet"</js>,
@@ -183,7 +459,7 @@
 					Queryable.<jsf>SWAGGER_PARAMS</jsf>
 				}
 			),
-			bpx=<js>"Pet: tags"</js>,
+			bpx=<js>"Pet: tags,photo"</js>,
 			htmldoc=<ja>@HtmlDoc</ja>(
 				widgets={
 					QueryMenuItem.<jk>class</jk>,
@@ -201,6 +477,7 @@
 			<jk>return</jk> <jf>store</jf>.getPets();
 		}
 	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
 			name=<jsf>GET</jsf>,
 			path=<js>"/pet/{petId}"</js>,
@@ -213,18 +490,11 @@
 				}
 			)
 		)
-		<jk>public</jk> Pet getPet(
-				<ja>@Path</ja>(
-					name=<js>"petId"</js>, 
-					description=<js>"ID of pet to return"</js>, 
-					example=<js>"123"</js>
-				) 
-				<jk>long</jk> petId
-			) <jk>throws</jk> IdNotFound, NotAcceptable {
-	
+		<jk>public</jk> Pet getPet(<jk>long</jk> petId) <jk>throws</jk> IdNotFound, NotAcceptable {
 			<jk>return</jk> <jf>store</jf>.getPet(petId);
 		}
 	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
 			summary=<js>"Add a new pet to the store"</js>,
 			swagger=<ja>@MethodSwagger</ja>(
@@ -234,14 +504,11 @@
 				}
 			)
 		)
-		<jk>public</jk> Ok postPet(
-				<ja>@Body</ja>(description=<js>"Pet object to add to the store"</js>) PetCreate pet
-			) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
-	
-			<jf>store</jf>.create(pet);
-			<jk>return</jk> <jsf>OK</jsf>;
+		<jk>public long</jk> postPet(CreatePet pet) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
+			<jk>return</jk> <jf>store</jf>.create(pet).getId();
 		}
 	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
 			name=<jsf>PUT</jsf>,
 			path=<js>"/pet/{petId}"</js>,
@@ -253,76 +520,351 @@
 				}
 			)
 		)
-		<jk>public</jk> Ok updatePet(
-				<ja>@Body</ja>(description=<js>"Pet object that needs to be added to the store"</js>) PetUpdate pet
-			) <jk>throws</jk> IdNotFound, NotAcceptable, UnsupportedMediaType {
-	
+		<jk>public</jk> Ok updatePet(UpdatePet pet) <jk>throws</jk> IdNotFound, NotAcceptable, UnsupportedMediaType {
 			<jf>store</jf>.update(pet);
 			<jk>return</jk> <jsf>OK</jsf>;
 		}
 	
+		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/pet/{petId}/edit"</js>,
-			summary=<js>"Pet edit page"</js>,
+			name=<jsf>DELETE</jsf>,
+			path="/pet/{petId}",
+			summary="Deletes a pet",
 			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"pet"</js>,
+				tags="pet",
 				value={
-					<js>"security:[ { petstore_auth:['write:pets','read:pets'] } ]"</js>
+					"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
 				}
 			)
 		)
-		<jk>public</jk> Div editPetPage(
-				<ja>@Path</ja>(
-					name=<js>"petId"</js>, 
-					description=<js>"ID of pet to return"</js>, 
-					example=<js>"123"</js>
-				) 
-				<jk>long</jk> petId
-			) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
+		<jk>public</jk> Ok deletePet(String apiKey, <jk>long</jk> petId) <jk>throws</jk> IdNotFound, NotAcceptable {
+			<jf>store</jf>.removePet(petId);
+			<jk>return</jk> <jsf>OK</jsf>;
+		}
+		...
+	}
+</p>
+<p>
+	The advantage to using a common interface for both your server-side and client-side APIs is that you
+	have less of a chance of a mismatch between the server and client side definitions.
+</p>
+<p>	
+	Now that we've initialized the contents of our database, we can start exploring the REST interface.
+	We can start by click the <l>pet</l> link on the home page which takes you to a summary page of <l>Pet</l>
+	objects:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4a.png'>
+
+<p>
+	Clicking on one of the ID links takes you to a details page:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet/1
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4b.png'>
+<p>
+	You'll notice the details page shows <l>tags</l> and <l>photo</l> fields not shown on the summary page.
+	This was accomplished with the <code>bpx=<js>"Pet: tags,photo"</js></code> annotation on the <l>getPets()</l>
+	method which excludes those two properties from the view. 
+	This is a common way of defining summary and details views for POJOs.
+</p>
+<p>
+	The hyperlinks and special rendering for <l>Pet</l> objects is done through <ja>@Html</ja> annotations
+	and {@link oaj.html.HtmlRender} objects.
+</p>
+<h5 class='figure'>Pet.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> Pet {
 	
-			Pet pet = getPet(petId);
+		<ja>@Html</ja>(link=<js>"servlet:/pet/{id}"</js>)
+		<jk>private long</jk> <jf>id</jf>;
 	
+		<ja>@Html</ja>(render=PriceRender.<jk>class</jk>)
+		<jk>private float</jk> <jf>price</jf>;
+	
+		<jk>private</jk> Species <jf>species</jf>;
+	
+		<jk>private</jk> PetStatus <jf>status</jf>;
+		
+		...
+
+		<jk>public static final class</jk> PriceRender <jk>extends</jk> HtmlRender&lt;Float&gt; {
+			<ja>@Override</ja> <jc>/* HtmlRender */</jc>
+			<jk>public</jk> Object getContent(SerializerSession session, Float value) {
+				<jk>return</jk> value == <jk>null</jk> ? <jk>null</jk> : String.<jsm>format</jsm>(<js>"$%.2f"</js>, value);
+			}
+		}
+		
+		...
+</p>
+
+<h5 class='figure'>Species.java</h5>
+<p class='bpcode w800'>
+	<ja>@Html</ja>(render=Species.SpeciesRender.<jk>class</jk>)
+	<jk>public enum</jk> Species {
+	
+		<jsf>BIRD</jsf>, <jsf>CAT</jsf>, <jsf>DOG</jsf>, <jsf>FISH</jsf>, <jsf>MOUSE</jsf>, <jsf>RABBIT</jsf>, <jsf>SNAKE</jsf>;
+	
+		<jk>public static class</jk> SpeciesRender <jk>extends</jk> HtmlRender&lt;Species&gt; {
+			<ja>@Override</ja> <jc>/* HtmlRender */</jc>
+			<jk>public</jk> Object getContent(SerializerSession session, Species value) {
+				<jk>return new</jk> Img().src(<js>"servlet:/htdocs/"</js>+value.name().toLowerCase()+<js>".png"</js>);
+			}
+			<ja>@Override</ja> <jc>/* HtmlRender */</jc>
+			<jk>public</jk> String getStyle(SerializerSession session, Species value) {
+				<jk>return</jk> <js>"background-color:#FDF2E9"</js>;
+			}
+		}
+	}
+</p>
+
+<h5 class='figure'>PetStatus.java</h5>
+<p class='bpcode w800'>
+	<ja>@Html</ja>(render=PetStatus.PetStatusRender.<jk>class</jk>)
+	<jk>public enum</jk> PetStatus {
+		
+		<jsf>AVAILABLE</jsf>, <jsf>PENDING</jsf>, <jsf>SOLD</jsf>, <jsf>UNKNOWN</jsf>;
+	
+		<jk>public static class</jk> PetStatusRender <jk>extends</jk> HtmlRender&lt;PetStatus&gt; {
+			<ja>@Override</ja> <jc>/* HtmlRender */</jc>
+			<jk>public</jk> String getStyle(SerializerSession session, PetStatus value) {
+				<jk>switch</jk>(value) {
+					<jk>case</jk> <jsf>AVAILABLE</jsf>:  <jk>return</jk> <js>"background-color:#5cb85c;text-align:center;vertical-align:middle;"</js>;
+					<jk>case</jk> <jsf>PENDING</jsf>:  <jk>return</jk> <js>"background-color:#f0ad4e;text-align:center;vertical-align:middle;"</js>;
+					<jk>case</jk> <jsf>SOLD</jsf>:  <jk>return</jk> <js>"background-color:#888;text-align:center;vertical-align:middle;"</js>;
+					<jk>default</jk>:  <jk>return</jk> <js>"background-color:#777;text-align:center;vertical-align:middle;"</js>;
+				}
+			}
+		}
+	}
+</p>
+<p>
+	The <l>CONTENT-TYPE</l> menu items gives a shorthand way of showing our POJOs in any of the supported
+	serialization languages:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet/1
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.5a.png'>
+<p>
+	For example, selecting <l>APPLICATION/JSON+SIMPLE</l> shows us simplified JSON:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet?plainText=true&Accept=application%2Fjson%2Bsimple
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.5b.png'>
+<p>
+	The <l>THEME</l> menu items allows you to quickly change the stylesheet used on the page:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet/1
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.6a.png'>
+<p>
+	For example, selecting <l>LIGHT</l> shows us the page rendered using the light look-and-feel:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet?stylesheet=htdocs%2Fthemes%2Flight.css
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.6b.png'>
+<p>
+	Both the <l>CONTENT-TYPE</l> and <l>THEMES</l> menu items are implemented as widgets and
+	associated with the page contents through the use of <l>$W</l> variables in the navigation links:
+</p>
+<h5 class='figure'>PetStoreResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				ThemeMenuItem.<jk>class</jk>,
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"init: servlet:/init"</js>,
+				<js>"$W{ContentTypeMenuItem}"</js>,
+				<js>"$W{ThemeMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/petstore/$R{servletClassSimple}.java"</js>
+			},
+			...
+		),
+		...
+</p>
+<p>
+	The implementation of a menu item contains methods for retrieving the label and HTML5 content of the menu item.
+</p>
+<h5 class='figure'>ContentTypeMenuItem.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> ContentTypeMenuItem <jk>extends</jk> MenuItemWidget {
+	
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> String getLabel(RestRequest req) {
+			<jk>return</jk> <js>"content-type"</js>;
+		}
+	
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> Div getContent(RestRequest req) {
+			Div div = <jsm>div</jsm>();
+			Set&lt;MediaType&gt; l = <jk>new</jk> TreeSet<>();
+			<jk>for</jk> (Serializer s : req.getSerializers().getSerializers())
+				l.add(s.getPrimaryMediaType());
+			<jk>for</jk> (MediaType mt : l) {
+				URI uri = req.getUri(<jk>true</jk>, <jk>new</jk> AMap&lt;String,String&gt;().append(<js>"plainText"</js>,<js>"true"</js>).append(<js>"Accept"</js>,mt.toString()));
+				div.children(<jsm>a</jsm>(uri, mt), <jsm>br</jsm>());
+			}
+			<jk>return</jk> div;
+		}
+	}
+</p>
+
+<h5 class='figure'>ThemeMenuItem.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> ThemeMenuItem <jk>extends</jk> MenuItemWidget {
+	
+		<jk>private static final</jk> String[] <jsf>BUILT_IN_STYLES</jsf> = {<js>"devops"</js>, <js>"light"</js>, <js>"original"</js>, <js>"dark"</js>};
+	
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getLabel(RestRequest req) {
+			<jk>return</jk> "themes";
+		}
+		
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> Div getContent(RestRequest req) <jk>throws</jk> Exception {
+			Div div = <jsm>div</jsm>();
+			<jk>for</jk> (String s : <jsf>BUILT_IN_STYLES</jsf>) {
+				java.net.URI uri = req.getUri(<jk>true</jk>, <jk>new</jk> AMap&lt;String,String&gt;().append(<js>"stylesheet"</js>, <js>"htdocs/themes/"</js>+s+<js>".css"</js>));
+				div.children(<jsm>a</jsm>(uri, s), <jsm>br</jsm>());
+			}
+			<jk>return</jk> div;
+		}
+	}
+</p>
+<p>
+	The <l>QUERY</l> menu item shows off the capabilities of the {@link oajr.converters.Queryable} converter.
+</p>
+
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet
+</p>		
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.7a.png'>
+<p>
+	The converter will take the POJOs to be serialized and filter them based on the provided query/view/sort/paging attributes:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet?s=name%3DHoppy*&v=species%2Cname&o=name&p=0&l=20
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.7b.png'>
+<p>
+	The <l>ADD</l> menu item is a custom menu item created for the petstore app for adding pets through the 
+	web interface.
+</p>
+
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/pet
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.8a.png'>
+
+<p>
+	Both the <l>QUERY</l> and <l>ADD</l> menu items are only applicable for this page, and so are defined
+	on the <l>getPets()</l> method: 
+</p>
+
+<h5 class='figure'>PetStoreResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@Override</ja> <jc>/* PetStore */</jc>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/pet"</js>,
+		summary=<js>"All pets in the store"</js>,
+		swagger=<ja>@MethodSwagger</ja>(
+			tags=<js>"pet"</js>,
+			parameters={
+				Queryable.<jsf>SWAGGER_PARAMS</jsf>
+			}
+		),
+		bpx=<js>"Pet: tags,photo"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				QueryMenuItem.<jk>class</jk>,
+				AddPetMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"INHERIT"</js>,                <jc>// Inherit links from class.</jc>
+				<js>"[2]:$W{QueryMenuItem}"</js>,  <jc>// Insert QUERY link in position 2.</jc>
+				<js>"[3]:$W{AddPetMenuItem}"</js>  <jc>// Insert ADD link in position 3.</jc>
+			}
+		),
+		converters={Queryable.<jk>class</jk>}
+	)
+	<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+		<jk>return</jk> <jf>store</jf>.getPets();
+	}
+</p>
+
+<h5 class='figure'>QueryMenuItem.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> QueryMenuItem <jk>extends</jk> MenuItemWidget {
+	
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> String getStyle(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return super</jk>.getStyle(req)
+				+ <js>"\n"</js>
+				+ <jsm>loadStyle</jsm>(<js>"QueryMenuItem.css"</js>);
+		}
+	
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <js>"query"</js>;
+		}
+	
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> String getContent(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <jsm>loadHtml</jsm>(<js>"QueryMenuItem.html"</js>);
+		}
+	}
+</p>
+
+<h5 class='figure'>AddPetMenuItem.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> AddPetMenuItem <jk>extends</jk> MenuItemWidget {
+	
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <js>"add"</js>;
+		}
+	
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
 			<jk>return</jk> <jsm>div</jsm>(
-				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/pet/"</js> + petId).method(<jsf>POST</jsf>).children(
+				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/pet"</js>).method(<jsf>POST</jsf>).children(
 					<jsm>table</jsm>(
 						<jsm>tr</jsm>(
-							<jsm>th</jsm>(<js>"Id:"</js>),
-							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"id"</js>).type(<js>"text"</js>).value(petId).readonly(<jk>true</jk>)),
-							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The name of the pet."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>))
-						),
-						<jsm>tr</jsm>(
 							<jsm>th</jsm>(<js>"Name:"</js>),
-							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"name"</js>).type(<js>"text"</js>).value(pet.getName())),
-							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The name of the pet."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>))
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"name"</js>).type(<js>"text"</js>)),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"&amp;#x2753;"</js>, <js>"The name of the pet."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>))
 						),
 						<jsm>tr</jsm>(
 							<jsm>th</jsm>(<js>"Species:"</js>),
 							<jsm>td</jsm>(
 								<jsm>select</jsm>().name(<js>"species"</js>).children(
-									<jsm>option</jsm>(<js>"cat"</js>), <jsm>option</jsm>(<js>"dog"</js>), <jsm>option</jsm>(<js>"bird"</js>), <jsm>option</jsm>(<js>"fish"</js>), <jsm>option</jsm>(<js>"mouse"</js>), <jsm>option</jsm>(<js>"rabbit"</js>), <jsm>option</jsm>(<js>"snake"</js>)
-								).choose(pet.getSpecies())
+									<jsm>option</jsm>(<js>"CAT"</js>), <jsm>option</jsm>(<js>"DOG"</js>), <jsm>option</jsm>(<js>"BIRD"</js>), <jsm>option</jsm>(<js>"FISH"</js>), <jsm>option</jsm>(<js>"MOUSE"</js>), <jsm>option</jsm>(<js>"RABBIT"</js>), <jsm>option</jsm>(<js>"SNAKE"</js>)
+								)
 							),
-							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The kind of animal."</js>))
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"&amp;#x2753;"</js>, <js>"The kind of animal."</js>))
 						),
 						<jsm>tr</jsm>(
 							<jsm>th</jsm>(<js>"Price:"</js>),
-							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"price"</js>).type(<js>"number"</js>).placeholder(<js>"1.0"</js>).step(<js>"0.01"</js>).min(1).max(100).value(pet.getPrice())),
-							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The price to charge for this pet."</js>))
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"price"</js>).type(<js>"number"</js>).placeholder(<js>"1.0"</js>).step(<js>"0.01"</js>).min(1).max(100).value(9.99)),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"&amp;#x2753;"</js>, <js>"The price to charge for this pet."</js>))
 						),
 						<jsm>tr</jsm>(
 							<jsm>th</jsm>(<js>"Tags:"</js>),
-							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"tags"</js>).type(<js>"text"</js>).value(Tag.<jsm>asString</jsm>(pet.getTags()))),
-							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"Arbitrary textual tags (comma-delimited)."</js>, <jsm>br</jsm>(), <js>"e.g. 'fluffy,friendly'"</js>))
-						),
-						<jsm>tr</jsm>(
-							<jsm>th</jsm>(<js>"Status:"</js>),
-							<jsm>td</jsm>(
-								<jsm>select</jsm>().name(<js>"status"</js>).children(
-									<jsm>option</jsm>(<js>"AVAILABLE"</js>), <jsm>option</jsm>(<js>"PENDING"</js>), <jsm>option</jsm>(<js>"SOLD"</js>)
-								).choose(pet.getStatus())
-							),
-							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"The current status of the animal."</js>))
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"tags"</js>).type(<js>"text"</js>)),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"&amp;#x2753;"</js>, <js>"Arbitrary textual tags (comma-delimited)."</js>, <jsm>br</jsm>(), <js>"e.g. 'fluffy,friendly'"</js>))
 						),
 						<jsm>tr</jsm>(
 							<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
@@ -335,479 +877,533 @@
 				)
 			);
 		}
+	}
+</p>
+<p>
+	The <l>OPTIONS</l> menu items takes you to the auto-generated Swagger UI for the application:
+</p>
+<p class='bpcode w900'>
+	http://localhost:10000/petstore/pet?method=OPTIONS
+</p>			
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9a.png'>
+<p>
+	Since we've defined tags on our annotations, the pet-related operations are all grouped under the <l>pet</l> tag:
+</p>
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9b.png'>
+<p>
+	Information for all HTTP parts is automatically generated:
+</p>
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9h.png'>
+<p>
+	The schema models for POJO models is available in the <l>Responses</l> section of an operation:
+</p>
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9c.png'>
+<p>
+	Auto-generated examples are available for all supported languages:
+</p>
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9d.png'>
+<p>
+	For example, <l>application/json+simple</l>:
+</p>
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9e.png'>
+<p>
+	Examples can be derived in a number of ways.  In our case, we've defined a static method on our <l>Pet</l>
+	class annotated with <ja>@Example</ja>:
+</p>
+<h5 class='figure'>Pet.java</h5>
+<p class='bpcode w800'>
+	<ja>@Example</ja>
+	<jk>public static</jk> Pet example() {
+		<jk>return new</jk> Pet()
+			.id(123)
+			.species(Species.<jsf>DOG</jsf>)
+			.name(<js>"Doggie"</js>)
+			.tags(<js>"friendly"</js>,<js>"smart"</js>)
+			.status(PetStatus.<jsf>AVAILABLE</jsf>);
+	}
+</p>
+<p>
+	Similar functionality exists for request bodies as well:
+</p>
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9f.png'>
+<p>
+	At the bottom of the page is a listing of the POJO models in the app:
+</p>
+<img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9g.png'>
+
+<p>
+	The <l>PhotosResource</l> class provides capabilities for uploading and viewing image files.
+	It demonstrates the capabilities of defining your own custom serializers and parsers and using
+	multi-part form posts to upload binary data.
+</p>
+
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/photos
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.10a.png'>
+
+<p>
+	The <l>PhotoResource</l> 'database' is simply a map of keys to <l>Photo</l> beans and uses the Java-provided
+	<l>BufferedImage</l> class for representing images.
+</p>
+
+<h5 class='figure'>PhotosResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/photos"</js>,
+		...
+	)
+	<jk>public class</jk> PhotosResource <jk>extends</jk> BasicRestServlet {
 	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/pet/findByStatus"</js>,
-			summary=<js>"Finds Pets by status"</js>,
-			description=<js>"Multiple status values can be provided with comma separated strings."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"pet"</js>,
-				value={
-					<js>"security:[{petstore_auth:['write:pets','read:pets']}]"</js>
-				}
-			)
-		)
-		<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
-				<ja>@Query</ja>(
-					name=<js>"status"</js>,
-					description=<js>"Status values that need to be considered for filter."</js>,
-					required=<jk>true</jk>,
-					type=<js>"array"</js>,
-					collectionFormat=<js>"csv"</js>,
-					items=<ja>@Items</ja>(
-						type=<js>"string"</js>,
-						_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
-						_default=<js>"AVAILABLE"</js>
-					),
-					example=<js>"AVALIABLE,PENDING"</js>
-				)
-				PetStatus[] status
-			) <jk>throws</jk> NotAcceptable {
+		<jd>/** Our cache of photos */</jd>
+		<jk>private</jk> Map&lt;String,Photo&gt; <jf>photos</jf> = <jk>new</jk> TreeMap<>();
 	
-			<jk>return</jk> <jf>store</jf>.getPetsByStatus(status);
-		}
+		<jd>/** Our bean class for storing photos */</jd>
+		<jk>public static class</jk> Photo {
+			String <jf>id</jf>;
+			BufferedImage <jf>image</jf>;
 	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/pet/findByTags"</js>,
-			summary=<js>"Finds Pets by tags"</js>,
-			description=<js>"Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"pet"</js>,
-				value={
-					<js>"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"</js>
-				}
-			)
-		)
-		<ja>@Deprecated</ja>
-		<jk>public</jk> Collection&lt;Pet&gt; findPetsByTags(
-				<ja>@Query</ja>(
-					name=<js>"tags"</js>,
-					description=<js>"Tags to filter by"</js>,
-					required=<jk>true</jk>,
-					example=<js>"['tag1','tag2']"</js>
-				)
-				String[] tags
-			) <jk>throws</jk> InvalidTag, NotAcceptable {
-	
-			<jk>return</jk> <jf>store</jf>.getPetsByTags(tags);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>DELETE</jsf>,
-			path=<js>"/pet/{petId}"</js>,
-			summary=<js>"Deletes a pet"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"pet"</js>,
-				value={
-					<js>"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"</js>
-				}
-			)
-		)
-		<jk>public</jk> Ok deletePet(
-				<ja>@Header</ja>(
-					name=<js>"api_key"</js>, 
-					description=<js>"Security API key"</js>, 
-					required=<jk>true</jk>, 
-					example=<js>"foobar"</js>
-				) 
-				String apiKey,
-				<ja>@Path</ja>(
-					name=<js>"petId"</js>, 
-					description=<js>"Pet id to delete"</js>, 
-					example=<js>"123"</js>
-				) 
-				<jk>long</jk> petId
-			) <jk>throws</jk> IdNotFound, NotAcceptable {
-	
-			<jf>store</jf>.removePet(petId);
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>POST</jsf>,
-			path=<js>"/pet/{petId}/uploadImage"</js>,
-			summary=<js>"Uploads an image"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"pet"</js>,
-				value={
-					<js>"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"</js>
-				}
-			)
-		)
-		<jk>public</jk> Ok uploadImage(
-				<ja>@Path</ja>(
-					name=<js>"petId"</js>, 
-					description=<js>"ID of pet to update"</js>, 
-					example=<js>"123"</js>
-				) 
-				<jk>long</jk> petId,
-				<ja>@FormData</ja>(
-					name=<js>"additionalMetadata"</js>, 
-					description=<js>"Additional data to pass to server"</js>, 
-					example=<js>"Foobar"</js>
-				) 
-				String additionalMetadata,
-				<ja>@FormData</ja>(
-					name=<js>"file"</js>, 
-					description=<js>"file to upload"</js>, 
-					required=<jk>true</jk>, 
-					type=<js>"file"</js>
-				) 
-				<jk>byte</jk>[] file
-			) <jk>throws</jk> NotAcceptable, UnsupportedMediaType {
-	
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<jc>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		// Orders
-		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</jc>
-	
-		<ja>@RestMethod</ja>(
-			summary=<js>"Store navigation page"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"store"</js>
-			)
-		)
-		<jk>public</jk> ResourceDescriptions getStore() {
-			<jk>return new</jk> ResourceDescriptions()
-				.append(<js>"store/order"</js>, <js>"Petstore orders"</js>)
-				.append(<js>"store/inventory"</js>, <js>"Petstore inventory"</js>)
-			;
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/store/order"</js>,
-			summary=<js>"Petstore orders"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"store"</js>
-			),
-			htmldoc=<ja>@HtmlDoc</ja>(
-				widgets={
-					QueryMenuItem.<jk>class</jk>,
-					AddOrderMenuItem.<jk>class</jk>
-				},
-				navlinks={
-					<js>"INHERIT"</js>,                <jc>// Inherit links from class.</jc>
-					<js>"[2]:$W{QueryMenuItem}"</js>,  <jc>// Insert QUERY link in position 2.</jc>
-					<js>"[3]:$W{AddOrderMenuItem}"</js>  <jc>// Insert ADD link in position 3.</jc>
-				}
-			)
-		)
-		<jk>public</jk> Collection&lt;Order&gt; getOrders() <jk>throws</jk> NotAcceptable {
-			<jk>return</jk> <jf>store</jf>.getOrders();
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/store/order/{orderId}"</js>,
-			summary=<js>"Find purchase order by ID"</js>,
-			description=<js>"Returns a purchase order by ID."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"store"</js>
-			)
-		)
-		<jk>public</jk> Order getOrder(
-				<ja>@Path</ja>(
-					name=<js>"orderId"</js>, 
-					description=<js>"ID of order to fetch"</js>, 
-					maximum=<js>"1000"</js>, 
-					minimum=<js>"101"</js>, 
-					example=<js>"123"</js>
-				) 
-				<jk>long</jk> orderId
-			) <jk>throws</jk> InvalidId, IdNotFound, NotAcceptable {
-	
-			<jk>if</jk> (orderId &lt; 101 || orderId &gt; 1000)
-				<jk>throw new</jk> InvalidId();
-			<jk>return</jk> <jf>store</jf>.getOrder(orderId);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>POST</jsf>,
-			path=<js>"/store/order"</js>,
-			summary=<js>"Place an order for a pet"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"store"</js>
-			),
-			pojoSwaps={
-				DateSwap.<jsf>ISO8601D</jsf>.<jk>class</jk>
+			Photo(String id, BufferedImage image) {
+				<jk>this</jk>.<jf>id</jf> = id;
+				<jk>this</jk>.<jf>image</jf> = image;
 			}
-		)
-		<jk>public</jk> Order placeOrder(
-				<ja>@FormData</ja>(
-					name=<js>"petId"</js>, 
-					description=<js>"Pet ID"</js>
-				) 
-				<jk>long</jk> petId,
-				<ja>@FormData</ja>(
-					name=<js>"shipDate"</js>, 
-					description=<js>"Ship date"</js>
-				) 
-				Date shipDate
-			) <jk>throws</jk> IdConflict, NotAcceptable, UnsupportedMediaType {
 	
-			CreateOrder co = <jk>new</jk> CreateOrder(petId, shipDate);
-			<jk>return</jk> <jf>store</jf>.create(co);
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>DELETE</jsf>,
-			path=<js>"/store/order/{orderId}"</js>,
-			summary=<js>"Delete purchase order by ID"</js>,
-			description= {
-				<js>"For valid response try integer IDs with positive integer value."</js>,
-				<js>"Negative or non-integer values will generate API errors."</js>
-			},
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"store"</js>
-			)
-		)
-		<jk>public</jk> Ok deletePurchaseOrder(
-				<ja>@Path</ja>(
-					name=<js>"orderId"</js>, 
-					description=<js>"ID of the order that needs to be deleted"</js>, 
-					minimum=<js>"1"</js>, 
-					example=<js>"5"</js>
-				) 
-				<jk>long</jk> orderId
-			) <jk>throws</jk> InvalidId, IdNotFound, NotAcceptable {
-	
-			<jk>if</jk> (orderId &lt; 0)
-				<jk>throw new</jk> InvalidId();
-			<jf>store</jf>.removeOrder(orderId);
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/store/inventory"</js>,
-			summary=<js>"Returns pet inventories by status"</js>,
-			description=<js>"Returns a map of status codes to quantities"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"store"</js>,
-				responses={
-					<js>"200:{ 'x-example':{AVAILABLE:123} }"</js>,
-				},
-				value={
-					<js>"security:[ { api_key:[] } ]"</js>
-				}
-			)
-		)
-		<jk>public</jk> Map&lt;PetStatus,Integer&gt; getStoreInventory() <jk>throws</jk> NotAcceptable {
-			<jk>return</jk> <jf>store</jf>.getInventory();
-		}
-	
-		<jc>//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-		// Users
-		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</jc>
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/user"</js>,
-			summary=<js>"Petstore users"</js>,
-			bpx=<js>"User: email,password,phone"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> Collection&lt;User&gt; getUsers() <jk>throws</jk> NotAcceptable {
-			<jk>return</jk> <jf>store</jf>.getUsers();
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/user/{username}"</js>,
-			summary=<js>"Get user by user name"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> User getUser(
-				<ja>@Path</ja>(
-					name=<js>"username"</js>, 
-					description=<js>"The name that needs to be fetched. Use user1 for testing."</js>
-				) 
-				String username
-			) <jk>throws</jk> InvalidUsername, IdNotFound, NotAcceptable {
-	
-			<jk>return</jk> <jf>store</jf>.getUser(username);
-		}
-	
-		<ja>@RestMethod</ja>(
-			summary=<js>"Create user"</js>,
-			description=<js>"This can only be done by the logged in user."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> Ok postUser(
-				<ja>@Body</ja>(description=<js>"Created user object"</js>) User user
-			) <jk>throws</jk> InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
-	
-			<jf>store</jf>.add(user);
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>POST</jsf>,
-			path=<js>"/user/createWithArray"</js>,
-			summary=<js>"Creates list of users with given input array"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> Ok createUsers(
-				<ja>@Body</ja>(description=<js>"List of user objects"</js>) User[] users
-			) <jk>throws</jk> InvalidUsername, IdConflict, NotAcceptable, UnsupportedMediaType {
-	
-			<jk>for</jk> (User user : users)
-				<jf>store</jf>.add(user);
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>PUT</jsf>,
-			path=<js>"/user/{username}"</js>,
-			summary=<js>"Update user"</js>,
-			description=<js>"This can only be done by the logged in user."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> Ok updateUser(
-				<ja>@Path</ja>(
-					name=<js>"username"</js>, 
-					description=<js>"Name that need to be updated"</js>
-				) 
-				String username,
-				<ja>@Body</ja>(
-					description=<js>"Updated user object"</js>
-				) 
-				User user
-			) <jk>throws</jk> InvalidUsername, IdNotFound, NotAcceptable, UnsupportedMediaType {
-	
-			<jf>store</jf>.update(user);
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>DELETE</jsf>,
-			path=<js>"/user/{username}"</js>,
-			summary=<js>"Delete user"</js>,
-			description=<js>"This can only be done by the logged in user."</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> Ok deleteUser(
-				<ja>@Path</ja>(
-					name=<js>"username"</js>, 
-					description=<js>"The name that needs to be deleted"</js>
-				) 
-				String username
-			) <jk>throws</jk> InvalidUsername, IdNotFound, NotAcceptable {
-	
-			<jf>store</jf>.removeUser(username);
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/user/login"</js>,
-			summary=<js>"Logs user into the system"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> Ok login(
-				<ja>@Query</ja>(
-					name=<js>"username"</js>, 
-					description=<js>"The username for login"</js>, 
-					required=<jk>true</jk>, 
-					example=<js>"myuser"</js>
-				) 
-				String username,
-				<ja>@Query</ja>(
-					name=<js>"password"</js>, 
-					description=<js>"The password for login in clear text"</js>, 
-					required=<jk>true</jk>, 
-					example=<js>"abc123"</js>
-				) 
-				String password,
-				<ja>@ResponseHeader</ja>(
-					name=<js>"X-Rate-Limit"</js>, 
-					type=<js>"integer"</js>, 
-					format=<js>"int32"</js>, 
-					description=<js>"Calls per hour allowed by the user."</js>, 
-					example=<js>"123"</js>
-				) 
-				Value&lt;Integer&gt; rateLimit,
-				Value&lt;ExpiresAfter&gt; expiresAfter,
-				RestRequest req,
-				RestResponse res
-			) <jk>throws</jk> InvalidLogin, NotAcceptable {
-	
-			<jk>if</jk> (! <jf>store</jf>.isValid(username, password))
-				<jk>throw new</jk> InvalidLogin();
-	
-			Date d = <jk>new</jk> Date(System.<jsm>currentTimeMillis</jsm>() + 30 * 60 * 1000);
-			req.getSession().setAttribute(<js>"login-expires"</js>, d);
-			rateLimit.set(1000);
-			expiresAfter.set(<jk>new</jk> ExpiresAfter(d));
-			<jk>return</jk> <jsf>OK</jsf>;
-		}
-	
-		<ja>@ResponseHeader</ja>(
-			name=<js>"X-Expires-After"</js>, 
-			type=<js>"string"</js>, 
-			format=<js>"date-time"</js>, 
-			description=<js>"Date in UTC when token expires"</js>, 
-			example=<js>"2012-10-21"</js>
-		)
-		<jk>public static class</jk> ExpiresAfter {
-			<jk>private final</jk> Calendar c;
-			<jk>public</jk> ExpiresAfter(Date d) {
-				<jk>this</jk>.c = <jk>new</jk> GregorianCalendar();
-				c.setTime(d);
-			}
-			<jk>public</jk> Calendar toCalendar() {
-				<jk>return</jk> c;
+			<jk>public</jk> URI getURI() <jk>throws</jk> URISyntaxException {
+				<jk>return new</jk> URI(<js>"servlet:/"</js> + id);
 			}
 		}
-	
-		<ja>@RestMethod</ja>(
-			name=<jsf>GET</jsf>,
-			path=<js>"/user/logout"</js>,
-			summary=<js>"Logs out current logged in user session"</js>,
-			swagger=<ja>@MethodSwagger</ja>(
-				tags=<js>"user"</js>
-			)
-		)
-		<jk>public</jk> Ok logout(RestRequest req) <jk>throws</jk> NotAcceptable {
-			req.getSession().removeAttribute(<js>"login-expires"</js>);
-			<jk>return</jk> <jsf>OK</jsf>;
+</p>
+
+<p>
+	The contents of the home page simply renders our collection of photo beans:
+</p>
+<h5 class='figure'>PhotosResource.java</h5>
+<p class='bpcode w800'>	
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/"</js>,
+		summary=<js>"Show the list of all currently loaded photos"</js>
+	)
+	<jk>public</jk> Collection&lt;Photo&gt; getAllPhotos() <jk>throws</jk> Exception {
+		<jk>return</jk> <jf>photos</jf>.values();
+	}
+</p>
+
+<p>
+	Clicking on one of the hyperlinks renders the stored image for us:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/photos/cat
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.10b.png'>
+
+<p>
+	The method for retrieving images simply returns a <l>BufferedImage</l> file:
+</p>
+<h5 class='figure'>PhotosResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>GET</jsf>,
+		path=<js>"/{id}"</js>,
+		serializers=ImageSerializer.<jk>class</jk>,
+		summary=<js>"Get a photo by ID"</js>,
+		description=<js>"Shows how to use a custom serializer to serialize a BufferedImage object to a stream."</js>
+	)
+	<ja>@Response</ja>(
+		schema=<ja>@Schema</ja>(type=<js>"file"</js>)
+	)
+	<jk>public</jk> BufferedImage getPhoto(<ja>@Path</ja>(<js>"id"</js>) String id) <jk>throws</jk> NotFound {
+		Photo p = <jf>photos</jf>.get(id);
+		<jk>if</jk> (p == <jk>null</jk>)
+			<jk>throw new</jk> NotFound(<js>"Photo not found"</js>);
+		<jk>return</jk> p.<jf>image</jf>;
+	}
+</p>
+
+<p>
+	The <l>BufferedImage</l> object is converted to a stream using a custom {@link oaj.serializer.OutputStreamSerializer}:
+</p>
+<h5 class='figure'>PhotosResource.java</h5>
+<p class='bpcode w800'>
+	<jd>/** Serializer for converting images to byte streams */</jd>
+	<jk>public static class</jk> ImageSerializer <jk>extends</jk> OutputStreamSerializer {
+
+		<jk>public</jk> ImageSerializer(PropertyStore ps) {
+			<jk>super</jk>(ps, <jk>null</jk>, <js>"image/png,image/jpeg"</js>);
+		}
+
+		<ja>@Override</ja> <jc>/* Serializer */</jc>
+		<jk>public</jk> OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+			<jk>return new</jk> OutputStreamSerializerSession(args) {
+
+				<ja>@Override</ja> <jc>/* SerializerSession */</jc>
+				<jk>protected void</jk> doSerialize(SerializerPipe out, Object o) <jk>throws</jk> Exception {
+					RenderedImage image = (RenderedImage)o;
+					String mediaType = getProperty(<js>"mediaType"</js>, String.<jk>class</jk>, (String)<jk>null</jk>);
+					ImageIO.<jsm>write</jsm>(image, mediaType.substring(mediaType.indexOf(<js>'/'</js>)+1), out.getOutputStream());
+				}
+			};
 		}
 	}
 </p>
 <p>
-	Pointing a browser to the resource shows the following:
+	Likewise, the body of requests can also be instances of <l>BufferedImage</l>:
+</p>
+<h5 class='figure'>PhotosResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>PUT</jsf>,
+		path=<js>"/{id}"</js>,
+		parsers=ImageParser.<jf>class</jf>,
+		summary=<js>"Add or overwrite a photo"</js>,
+		description=<js>"Shows how to use a custom parser to parse a stream into a BufferedImage object."</js>
+	)
+	<jk>public</jk> String addPhoto(
+			<ja>@Path</ja>(<js>"id"</js>) String id,
+			<ja>@Body</ja>(
+				description=<js>"Binary contents of image."</js>,
+				schema=<ja>@Schema</ja>(type=<js>"file"</js>)
+			)
+			BufferedImage image
+		) <jk>throws</jk> Exception {
+		<jf>photos</jf>.put(id, <jk>new</jk> Photo(id, image));
+		<jk>return</jk> <js>"OK"</js>;
+	}
+</p>
+<p>
+	The <l>BufferedImage</l> object is created from a stream using a custom {@link oaj.parser.InputStreamParser}:
+</p>
+
+<h5 class='figure'>PhotosResource.java</h5>
+<p class='bpcode w800'>
+	<jd>/** Parser for converting byte streams to images */</jd>
+	<jk>public static class</jk> ImageParser <jk>extends</jk> InputStreamParser {
+
+		<jk>public</jk> ImageParser(PropertyStore ps) {
+			<jk>super</jk>(ps, <js>"image/png"</js>, <js>"image/jpeg"</js>);
+		}
+
+		<ja>@Override</ja> <jc>/* Parser */</jc>
+		<jk>public</jk> InputStreamParserSession createSession(<jk>final</jk> ParserSessionArgs args) {
+			<jk>return new</jk> InputStreamParserSession(args) {
+
+				<ja>@Override</ja> <jc>/* ParserSession */</jc>
+				<jk>protected</jk> &lt;T&gt; T doParse(ParserPipe pipe, ClassMeta&lt;T&gt; type) <jk>throws</jk> Exception {
+					<jk>return</jk> (T)ImageIO.read(pipe.getInputStream());
+				}
+			};
+		}
+	}
+</p>
+<p>
+	A custom menu item is provided for uploading new images:
 </p>
 <p class='bpcode w800'>
-	http://localhost:10000/petstore
+	http://localhost:10000/petstore/photos
 </p>			
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.1.png'>
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.10c.png'>
+
 <p>
-	Clicking the <code>QUERY</code> link renders the following menu pop-up complete with tooltips:
+	The menu item is defined as a <l>MenuItemWidget</l>:
 </p>
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.2.png'>
+
+<h5 class='figure'>UploadPhotoMenuItem.java</h5>
+<p class='bpcode w800'>
+	<jk>public class</jk> UploadPhotoMenuItem <jk>extends</jk> MenuItemWidget {
+	
+		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
+		<jk>public</jk> String getLabel(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <js>"upload"</js>;
+		}
+	
+		<ja>@Override</ja> <jc>/* Widget */</jc>
+		<jk>public</jk> Object getContent(RestRequest req) <jk>throws</jk> Exception {
+			<jk>return</jk> <jsm>div</jsm>(
+				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/upload"</js>).method(<jsf>POST</jsf>).enctype(<js>"multipart/form-data"</js>).children(
+					<jsm>table</jsm>(
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"ID:"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"id"</js>).type(<js>"text"</js>)),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"&amp;#x2753;"</js>, <js>"The unique identifier of the photo."</js>, <jsm>br</jsm>(), <js>"e.g. 'Fluffy'"</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>th</jsm>(<js>"File:"</js>),
+							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"file"</js>).type(<js>"file"</js>).accept(<js>"image/*"</js>)),
+							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"&amp;#x2753;"</js>, <js>"The image file."</js>))
+						),
+						<jsm>tr</jsm>(
+							<jsm>td</jsm>().colspan(2).style(<js>"text-align:right"</js>).children(
+								<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>),
+								<jsm>button</jsm>(<js>"button"</js>,<js>"Cancel"</js>).onclick(<js>"window.location.href='/'"</js>),
+								<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>)
+							)
+						)
+					).style(<js>"white-space:nowrap"</js>)
+				)
+			);
+		}
+	}
+</p>
 <p>
-	The <code>STYLES</code> menu item allows you to try out the other default look-and-feels:
+	The menu item then submits multi-part form posts to the following method:
 </p>
-<h5 class='figure'>Light look-and-feel</h5>
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.3.png'>
-<h5 class='figure'>Dark look-and-feel</h5>
-<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.4.png'>
+<h5 class='figure'>PhotosResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		name=<jsf>POST</jsf>,
+		path=<js>"/upload"</js>,
+		matchers=MultipartFormDataMatcher.<jk>class</jk>,
+		summary=<js>"Upload a photo from a multipart form post"</js>,
+		description=<js>"Shows how to parse a multipart form post containing a binary field."</js>,
+		swagger=<ja>@MethodSwagger</ja>(
+			parameters={
+				<js>"{in:'formData', name:'id', description:'Unique identifier to assign to image.', type:'string', required:false},"</js>,
+				<js>"{in:'formData', name:'file', description:'The binary contents of the image file.', type:'file', required:true}"</js>
+			}
+		)
+	)
+	<jk>public</jk> SeeOtherRoot uploadFile(RestRequest req) <jk>throws</jk> Exception {
+    	
+		<jc>// Required for Jetty.</jc>
+		MultipartConfigElement mce = <jk>new</jk> MultipartConfigElement((String)<jk>null</jk>);
+		req.setAttribute(<js>"org.eclipse.jetty.multipartConfig"</js>, mce);  
+       
+		String id = UUID.<jsm>randomUUID</jsm>().toString();
+		BufferedImage img = <jk>null</jk>;
+		<jk>for</jk> (Part part : req.getParts()) {
+			<jk>switch</jk> (part.getName()) {
+				<jk>case</jk> <js>"id"</js>:
+					id = IOUtils.<jsm>read</jsm>(part.getInputStream());
+					<jk>break</jk>;
+				<jk>case</jk> <js>"file"</js>:
+					img = ImageIO.<jsm>read</jsm>(part.getInputStream());
+			}
+		}
+		addPhoto(id, img);
+		<jk>return new</jk> SeeOtherRoot(); <jc>// Redirect to the servlet root.</jc>
+	}
+</p>
+<p>
+	The <l>SqlQueryResource</l> class is a simple utility for performing raw SQL queries against our Derby database:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/sql
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.11a.png'>
+<p>
+	For example, viewing all of the <l>Pet</l> objects in the database:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/petstore/sql?sql=select+*+from+PetstorePet
+</p>			
+<img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.11b.png'>
+
+<p>
+	The <l>SqlQueryResource</l> is implemented as a single class with database connection information:
+</p>
+
+<h5 class='figure'>SqlQueryResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/sql"</js>,
+		title=<js>"SQL query service"</js>,
+		description=<js>"Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ThemeMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"up: request:/.."</js>,
+				<js>"options: servlet:/?method=OPTIONS"</js>,
+				<js>"$W{ThemeMenuItem}"</js>,
+				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+			},
+			aside={
+				<js>"&lt;div style='min-width:200px' class='text'&gt;"</js>,
+				<js>"	&lt;p&gt;An example of a REST interface over a relational database that serializes ResultSet objects.&lt;/p&gt;"</js>,
+				<js>"	&lt;p&gt;Specify one or more queries delimited by semicolons.&lt;/p&gt;"</js>,
+				<js>"	&lt;h5&gt;Examples:&lt;/h5&gt;"</js>,
+				<js>"	&lt;ul&gt;"</js>,
+				<js>"		&lt;li&gt;&lt;a class='link' href='?sql=select+*+from+sys.systables'&gt;Tables&lt;/a&gt;"</js>,
+				<js>"		&lt;li&gt;&lt;a class='link' href='?sql=select+*+from+PetstorePet'&gt;Pets&lt;/a&gt;"</js>,
+				<js>"		&lt;li&gt;&lt;a class='link' href='?sql=select+*+from+PetstoreOrder'&gt;Orders&lt;/a&gt;"</js>,
+				<js>"		&lt;li&gt;&lt;a class='link' href='?sql=select+*+from+PetstoreUser'&gt;Users&lt;/a&gt;"</js>,
+				<js>"	&lt;/ul&gt;"</js>,
+				<js>"&lt;/div&gt;"</js>
+			},
+			stylesheet=<js>"servlet:/htdocs/themes/dark.css"</js>
+		),
+		swagger=<ja>@ResourceSwagger</ja>(
+			contact=<ja>@Contact</ja>(name=<js>"Juneau Developer"</js>,email=<js>"dev@juneau.apache.org"</js>),
+			license=<ja>@License</ja>(name=<js>"Apache 2.0"</js>,url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>),
+			version=<js>"2.0"</js>,
+			termsOfService=<js>"You are on your own."</js>,
+			externalDocs=<ja>@ExternalDocs</ja>(description=<js>"Apache Juneau"</js>,url=<js>"http://juneau.apache.org"</js>)
+		)
+	)
+	<jk>public class</jk> SqlQueryResource <jk>extends</jk> BasicRestServlet {
+
+		<jk>private</jk> String <jf>driver</jf>, <jf>connectionUrl</jf>;
+		<jk>private boolean</jk> <jf>allowUpdates</jf>, <jf>allowTempUpdates</jf>, <jf>includeRowNums</jf>;
+
+		...
+</p>
+<p>
+	The connection information is pulled from the <l>examples.cfg</l> file using an init hook:
+</p>
+<h5 class='figure'>SqlQueryResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	<jk>public void</jk> initConnection(RestContextBuilder builder) <jk>throws</jk> Exception {
+		Config cf = builder.getConfig();
+
+		<jf>driver</jf> = cf.getString(<js>"SqlQueryResource/driver"</js>);
+		<jf>connectionUrl</jf> = cf.getString(<js>"SqlQueryResource/connectionUrl"</js>);
+		<jf>allowUpdates</jf> = cf.getBoolean(<js>"SqlQueryResource/allowUpdates"</js>, <jk>false</jk>);
+		<jf>allowTempUpdates</jf> = cf.getBoolean(<js>"SqlQueryResource/allowTempUpdates"</js>, <jk>false</jk>);
+		<jf>includeRowNums</jf> = cf.getBoolean(<js>"SqlQueryResource/includeRowNums"</js>, <jk>false</jk>);
+
+		<jk>try</jk> {
+			Class.<jsm>forName</jsm>(<jf>driver</jf>).newInstance();
+		} <jk>catch</jk> (Exception e) {
+			<jk>throw new</jk> RuntimeException(e);
+		}
+	}
+</p>
+<p>
+	The query entry page is rendered using HTML5 beans:
+</p>
+<h5 class='figure'>SqlQueryResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		summary=<js>"Display the query entry page"</js>
+	)
+	<jk>public</jk> Div get(
+			<ja>@Query</ja>(
+				name=<js>"sql"</js>, 
+				description=<js>"Text to prepopulate the SQL query field with."</js>, 
+				example=<js>"select * from sys.systables"</js>
+			) 
+			String sql
+		) {
+
+		<jk>return</jk> <jsm>div</jsm>(
+			<jsm>script</jsm>(<js>"text/javascript"</js>,
+				<js>"// Quick and dirty function to allow tabs in textarea."</js>,
+				<js>"function checkTab(e) {"</js>,
+				<js>"	if (e.keyCode == 9) {"</js>,
+				<js>"		var t = e.target;"</js>,
+				<js>"		var ss = t.selectionStart, se = t.selectionEnd;"</js>,
+				<js>"		t.value = t.value.slice(0,ss).concat('\\t').concat(t.value.slice(ss,t.value.length));"</js>,
+				<js>"		e.preventDefault();"</js>,
+				<js>"	}"</js>,
+				<js>"}"</js>,
+				<js>"// Load results from IFrame into this document."</js>,
+				<js>"function loadResults(b) {"</js>,
+				<js>"	var doc = b.contentDocument || b.contentWindow.document;"</js>,
+				<js>"	var data = doc.getElementById('data') || doc.getElementsByTagName('body')[0];"</js>,
+				<js>"	document.getElementById('results').innerHTML = data.innerHTML;"</js>,
+				<js>"}"</js>
+			),
+			<jsm>form</jsm>(<js>"servlet:/"</js>).method(<jsf>POST</jsf>).target(<js>"buf"</js>).children(
+				<jsm>table</jsm>(
+					<jsm>tr</jsm>(
+						<jsm>th</jsm>(<js>"Position (1-10000):"</js>).style(<js>"white-space:nowrap"</js>),
+						<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"pos"</js>).type(<js>"number"</js>).value(1)),
+						<jsm>th</jsm>(<js>"Limit (1-10000):"</js>).style(<js>"white-space:nowrap"</js>),
+						<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"limit"</js>).type(<js>"number"</js>).value(100)),
+						<jsm>td</jsm>(button(<js>"submit"</js>, <js>"Submit"</js>), <jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>))
+					),
+					<jsm>tr</jsm>(
+						<jsm>td</jsm>().colspan(5).children(
+							<jsm>textarea</jsm>().name(<js>"sql"</js>).text(sql == <jk>null</jk> ? " " : sql).style(<js>"width:100%;height:200px;font-family:Courier;font-size:9pt;"</js>).onkeydown(<js>"checkTab(event)"</js>)
+						)
+					)
+				)
+			),
+			<jsm>br</jsm>(),
+			<jsm>div</jsm>().id(<js>"results"</js>),
+			<jsm>iframe</jsm>().name(<js>"buf"</js>).style(<js>"display:none"</js>).onload(<js>"parent.loadResults(this)"</js>)
+		);
+	}
+</p>
+<p>
+	The form then submits its results to the following method using a form input bean:
+</p>
+<h5 class='figure'>SqlQueryResource.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		summary=<js>"Execute one or more queries"</js>
+	)
+	<ja>@Response</ja>(
+		description=<js>"Query results.\nEach entry in the array is a result of one query.\nEach result can be a result set (for queries) or update count (for updates)."</js>
+	)
+	<jk>public</jk> List&lt;Object&gt; post(
+			<ja>@Body</ja>(
+				description=<js>"Query input"</js>,
+				example=<js>"{sql:'select * from sys.systables',pos:1,limit:100}"</js>
+			)
+			PostInput in
+		) <jk>throws</jk> BadRequest {
+
+		List&lt;Object&gt; results = <jk>new</jk> LinkedList<>();
+
+		<jc>// Don't try to submit empty input.</jc>
+		<jk>if</jk> (isEmpty(in.<jf>sql</jf>))
+			<jk>return</jk> results;
+
+		<jk>if</jk> (in.<jf>pos</jf> < 1 || in.<jf>pos</jf> > 10000)
+			<jk>throw new</jk> BadRequest(<js>"Invalid value for position.  Must be between 1-10000"</js>);
+		<jk>if</jk> (in.<jf>limit</jf> < 1 || in.<jf>limit</jf> > 10000)
+			<jk>throw new</jk> BadRequest(<js>"Invalid value for limit.  Must be between 1-10000"</js>);
+
+		String sql = <jk>null</jk>;
+
+		<jc>// Create a connection and statement.
+		// If these fails, let the exception filter up as a 500 error.</jc>
+		<jk>try</jk> (Connection c = DriverManager.<jsm>getConnection</jsm>(connectionUrl)) {
+			c.setAutoCommit(<jk>false</jk>);
+			<jk>try</jk> (Statement st = c.createStatement()) {
+				<jk>for</jk> (String s : in.<jf>sql</jf>.split(<js>";"</js>)) {
+					sql = s.trim();
+					<jk>if</jk> (! sql.isEmpty()) {
+						Object o = <jk>null</jk>;
+						<jk>if</jk> (<jf>allowUpdates</jf> || (<jf>allowTempUpdates</jf> && ! sql.matches(<js>"(?:i)commit.*"</js>))) {
+							<jk>if</jk> (st.execute(sql)) {
+								<jk>try</jk> (ResultSet rs = st.getResultSet()) {
+									o = <jk>new</jk> ResultSetList(rs, in.<jf>pos</jf>, in.<jf>limit</jf>, <jf>includeRowNums</jf>);
+								}
+							} <jk>else</jk> {
+								o = st.getUpdateCount();
+							}
+						} <jk>else</jk> {
+							<jk>try</jk> (ResultSet rs = st.executeQuery(sql)) {
+								o = <jk>new</jk> ResultSetList(rs, in.<jf>pos</jf>, in.<jf>limit</jf>, <jf>includeRowNums</jf>);
+							}
+						}
+						results.add(o);
+					}
+				}
+			}
+			<jk>if</jk> (<jf>allowUpdates</jf>)
+				c.commit();
+			<jk>else if</jk> (<jf>allowTempUpdates</jf>)
+				c.rollback();
+		} <jk>catch</jk> (SQLException e) {
+			<jk>throw new</jk> BadRequest(e, <js>"Invalid query:  {0}"</js>, sql);
+		}
+
+		<jk>return</jk> results;
+	}
+
+	<jk>public static class</jk> PostInput {
+		<jk>public</jk> String <jf>sql</jf> = <js>""</js>;
+		<jk>public int</jk> <jf>pos</jf> = 1, <jf>limit</jf> = 100;
+	}
+</p>
+<p>
+	Note that we could have also used <ja>@FormData</ja> parameters as well.
+</p>
+
+
+
