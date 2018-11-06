@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Handling Multi-Part Form Posts
+{updated} Handling Multi-Part Form Posts
 
 <p>
 	The Juneau framework does not natively support multipart form posts.  
-	<br>However, it can be done in conjunction with the Apache Commons File Upload library.
+	<br>However, it can be done in conjunction with the Apache Commons File Upload library or through the Servlet 3.0 API directly.
 </p>	
 <p>
 	The following is an example that uses the File Upload library to allow files to be uploaded as multipart form posts.
@@ -57,3 +57,33 @@
 			}
 		}
 </p>
+<p>
+	The following shows using the <l>HttpServletRequest.getParts()</l> method to retrieve multi-part form posts when using Jetty.
+	This example is pulled from the PetStore application.
+</p>
+<p class='bpcode w800'>
+	<ja>@RestMethod</ja>(
+		...
+	)
+	<jk>public</jk> SeeOtherRoot uploadFile(RestRequest req) <jk>throws</jk> Exception {
+    	
+		<jc>// Required for Jetty.</jc>
+		MultipartConfigElement mce = <jk>new</jk> MultipartConfigElement((String)<jk>null</jk>);
+		req.setAttribute(<js>"org.eclipse.jetty.multipartConfig"</js>, mce);  
+       
+		String id = UUID.<jsm>randomUUID</jsm>().toString();
+		BufferedImage img = <jk>null</jk>;
+		<jk>for</jk> (Part part : req.getParts()) {
+			<jk>switch</jk> (part.getName()) {
+				<jk>case</jk> <js>"id"</js>:
+					id = IOUtils.<jsm>read</jsm>(part.getInputStream());
+					<jk>break</jk>;
+				<jk>case</jk> <js>"file"</js>:
+					img = ImageIO.<jsm>read</jsm>(part.getInputStream());
+			}
+		}
+		addPhoto(id, img);
+		<jk>return new</jk> SeeOtherRoot(); <jc>// Redirect to the servlet root.</jc>
+	}
+</p>
+

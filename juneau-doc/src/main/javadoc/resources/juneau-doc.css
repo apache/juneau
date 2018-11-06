@@ -410,3 +410,9 @@ a.doclink {
 	width:900px !important;
 }
 
+hr {
+	text-align: left;
+	margin-left: 0;
+	max-width: 900px;
+}
+

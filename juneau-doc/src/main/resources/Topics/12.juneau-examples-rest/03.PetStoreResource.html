@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} PetStore
+{new} PetStore
 
 <p>
 	The <code>PetStore</code> application is an functional application meant to demonstrate the following:
@@ -124,6 +124,7 @@
 	The {@link oajr.helper.ResourceDescriptions} class used above is a convenience class for creating
 	hyperlinks to child resources. 
 </p>
+<hr>
 <p>
 	The application itself is defined in 3 packages:
 </p>
@@ -144,7 +145,7 @@
 	We also define some static files in the <code>org.apache.juneau.rest.examples.rest.petstore</code> package:
 </p>
 <img class='bordered' style='width:250px' src='doc-files/juneau-examples-rest.PetStoreResource.2d.png'>
-
+<hr>
 <p>
 	The <l>PetStoreService</l> class is a pretty-straightforward service for storing and retrieving JPA beans:
 </p>
@@ -258,6 +259,7 @@
 		
 		...
 </p>
+<hr>
 <p>
 	The Petstore database is empty by default.
 	The <l>INIT</l> link brings you to a page to initialize the contents of the database
@@ -528,12 +530,12 @@
 		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
 			name=<jsf>DELETE</jsf>,
-			path="/pet/{petId}",
-			summary="Deletes a pet",
+			path=<js>"/pet/{petId}"</js>,
+			summary=<js>"Deletes a pet"</js>,
 			swagger=<ja>@MethodSwagger</ja>(
-				tags="pet",
+				tags=<js>"pet"</js>,
 				value={
-					"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"
+					<js>"security:[ { petstore_auth:[ 'write:pets','read:pets' ] } ]"</js>
 				}
 			)
 		)
@@ -548,6 +550,7 @@
 	The advantage to using a common interface for both your server-side and client-side APIs is that you
 	have less of a chance of a mismatch between the server and client side definitions.
 </p>
+<hr>
 <p>	
 	Now that we've initialized the contents of our database, we can start exploring the REST interface.
 	We can start by click the <l>pet</l> link on the home page which takes you to a summary page of <l>Pet</l>
@@ -656,6 +659,9 @@
 	http://localhost:10000/petstore/pet?plainText=true&Accept=application%2Fjson%2Bsimple
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.5b.png'>
+<p>
+	Note that we're using the convenience feature for specifying an <code>Accept</code> header via a query parameter.
+</p>
 <p>
 	The <l>THEME</l> menu items allows you to quickly change the stylesheet used on the page:
 </p>
@@ -879,6 +885,7 @@
 		}
 	}
 </p>
+<hr>
 <p>
 	The <l>OPTIONS</l> menu items takes you to the auto-generated Swagger UI for the application:
 </p>
@@ -930,7 +937,7 @@
 	At the bottom of the page is a listing of the POJO models in the app:
 </p>
 <img class='bordered w900' src='doc-files/juneau-examples-rest.PetStoreResource.9g.png'>
-
+<hr>
 <p>
 	The <l>PhotosResource</l> class provides capabilities for uploading and viewing image files.
 	It demonstrates the capabilities of defining your own custom serializers and parsers and using
@@ -1148,41 +1155,7 @@
 	The menu item then submits multi-part form posts to the following method:
 </p>
 <h5 class='figure'>PhotosResource.java</h5>
-<p class='bpcode w800'>
-	<ja>@RestMethod</ja>(
-		name=<jsf>POST</jsf>,
-		path=<js>"/upload"</js>,
-		matchers=MultipartFormDataMatcher.<jk>class</jk>,
-		summary=<js>"Upload a photo from a multipart form post"</js>,
-		description=<js>"Shows how to parse a multipart form post containing a binary field."</js>,
-		swagger=<ja>@MethodSwagger</ja>(
-			parameters={
-				<js>"{in:'formData', name:'id', description:'Unique identifier to assign to image.', type:'string', required:false},"</js>,
-				<js>"{in:'formData', name:'file', description:'The binary contents of the image file.', type:'file', required:true}"</js>
-			}
-		)
-	)
-	<jk>public</jk> SeeOtherRoot uploadFile(RestRequest req) <jk>throws</jk> Exception {
-    	
-		<jc>// Required for Jetty.</jc>
-		MultipartConfigElement mce = <jk>new</jk> MultipartConfigElement((String)<jk>null</jk>);
-		req.setAttribute(<js>"org.eclipse.jetty.multipartConfig"</js>, mce);  
-       
-		String id = UUID.<jsm>randomUUID</jsm>().toString();
-		BufferedImage img = <jk>null</jk>;
-		<jk>for</jk> (Part part : req.getParts()) {
-			<jk>switch</jk> (part.getName()) {
-				<jk>case</jk> <js>"id"</js>:
-					id = IOUtils.<jsm>read</jsm>(part.getInputStream());
-					<jk>break</jk>;
-				<jk>case</jk> <js>"file"</js>:
-					img = ImageIO.<jsm>read</jsm>(part.getInputStream());
-			}
-		}
-		addPhoto(id, img);
-		<jk>return new</jk> SeeOtherRoot(); <jc>// Redirect to the servlet root.</jc>
-	}
-</p>
+<hr>
 <p>
 	The <l>SqlQueryResource</l> class is a simple utility for performing raw SQL queries against our Derby database:
 </p>
