@@ -927,8 +927,10 @@ public abstract class Microservice implements ConfigEventListener {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	protected void out(MessageBundle mb, String messageKey, Object...args) {
+		String msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
-			getConsoleWriter().println(mb.getString(messageKey, args));
+			getConsoleWriter().println(msg);
+		log(Level.INFO, msg);
 	}
 
 	/**
@@ -942,7 +944,21 @@ public abstract class Microservice implements ConfigEventListener {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	protected void err(MessageBundle mb, String messageKey, Object...args) {
+		String msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
 			System.err.println(mb.getString(messageKey, args));  // NOT DEBUG
+		log(Level.SEVERE, msg);
+	}
+
+	/**
+	 * Logs a message to the log file.
+	 *
+	 * @param level
+	 * @param message The message text.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	protected void log(Level level, String message, Object...args) {
+		String msg = args.length == 0 ? message : MessageFormat.format(message, args);
+		getLogger().log(level, msg);
 	}
 }
