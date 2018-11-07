@@ -37,6 +37,12 @@ Juneau provides out of the box JSON support, reading and writing JSON structures
 - `JsonSimpleExample` - How to use the JsonSerializer and JsonParser to convert POJOs to String and then strings back to POJOs
 - `JsonConfigurationExample` - How to create JsonParser and Seralizer with different properties set.
 
+## XML Examples
+
+Juneau provides out of the box XML support, reading and writing XML structures into Plain Old Java Objects (POJOs)
+
+- `XmlComplexExample` - How to use the XmlSerializer and XmlParser to convert complex POJOs to String and then strings back to complex POJOs
+
 ## RDF Examples
 
 Juneau provides RDF support assuming Apache Jena is on the classpath.  First, you need to add Jena to the classpath.
