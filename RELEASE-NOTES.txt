@@ -11,6 +11,15 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+
+Release Notes - Juneau - Version 7.2.2
+
+** Bug
+    * [JUNEAU-88] - AddressBookResourceTest fails with org.apache.juneau.rest.client.RestCallException: Software caused connection abort: recv failed
+    * [JUNEAU-89] - errors in juneau-examples-rest
+    * [JUNEAU-90] - Could not instantiate class  org.apache.juneau.svl.Var
+    
+
 Release Notes - Juneau - Version 7.2.1
 
 ** Bug
