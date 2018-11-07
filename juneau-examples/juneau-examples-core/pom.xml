@@ -20,7 +20,7 @@
 	<parent>
 		<artifactId>juneau-examples</artifactId>
 		<groupId>org.apache.juneau</groupId>
-		<version>7.2.2-SNAPSHOT</version>
+		<version>7.2.2</version>
 	</parent>
 
 	<artifactId>juneau-examples-core</artifactId>
