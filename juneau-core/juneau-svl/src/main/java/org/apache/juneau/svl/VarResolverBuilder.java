@@ -71,7 +71,7 @@ public class VarResolverBuilder {
 	 * 	<li>{@link IfVar}
 	 * 	<li>{@link CoalesceVar}
 	 * 	<li>{@link PatternMatchVar}
-	 *  <li>{@link PatternReplaceVar}
+	 * 	<li>{@link PatternReplaceVar}
 	 * 	<li>{@link UpperCaseVar}
 	 * 	<li>{@link LowerCaseVar}
 	 * 	<li>{@link NotEmptyVar}
