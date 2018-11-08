@@ -120,11 +120,4 @@ public interface HttpPartParser {
 	 * @throws SchemaValidationException If the input fails schema validation.
 	 */
 	public <T> T parse(HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException;
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T parse(HttpPartType partType, String in, ClassMeta<T> type) throws ParseException;
 }

@@ -492,22 +492,4 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@Override
-	@Deprecated
-	public MsgPackParserBuilder fileCharset(String value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@Override
-	@Deprecated
-	public MsgPackParserBuilder inputStreamCharset(String value) {
-		return this;
-	}
 }

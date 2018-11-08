@@ -2095,13 +2095,4 @@ public class HtmlBuilder {
 	public static final Wbr wbr() {
 		return new Wbr();
 	}
-
-	/**
-	 * @deprecated Use {@link #script(String, String...)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public static final Script script(String type, String text) {
-		return script(type, new String[]{text});
-	}
 }

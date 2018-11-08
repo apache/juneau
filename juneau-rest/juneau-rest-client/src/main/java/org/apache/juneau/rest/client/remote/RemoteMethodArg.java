@@ -107,7 +107,6 @@ public final class RemoteMethodArg {
 		return schema;
 	}
 
-	@SuppressWarnings("deprecation")
 	static RemoteMethodArg create(Method m, int i) {
 		if (hasAnnotation(Header.class, m, i)) {
 			return new RemoteMethodArg(i, HEADER, HttpPartSchema.create(Header.class, m, i));
@@ -119,16 +118,6 @@ public final class RemoteMethodArg {
 			return new RemoteMethodArg(i, PATH, HttpPartSchema.create(Path.class, m, i));
 		} else if (hasAnnotation(Body.class, m, i)) {
 			return new RemoteMethodArg(i, BODY, HttpPartSchema.create(Body.class, m, i));
-		} else if (hasAnnotation(org.apache.juneau.remoteable.Header.class, m, i)) {
-			return new RemoteMethodArg(i, HEADER, HttpPartSchema.create(org.apache.juneau.remoteable.Header.class, m, i));
-		} else if (hasAnnotation(org.apache.juneau.remoteable.Query.class, m, i)) {
-			return new RemoteMethodArg(i, QUERY, HttpPartSchema.create(org.apache.juneau.remoteable.Query.class, m, i));
-		} else if (hasAnnotation(org.apache.juneau.remoteable.FormData.class, m, i)) {
-			return new RemoteMethodArg(i, FORMDATA, HttpPartSchema.create(org.apache.juneau.remoteable.FormData.class, m, i));
-		} else if (hasAnnotation(org.apache.juneau.remoteable.Path.class, m, i)) {
-			return new RemoteMethodArg(i, PATH, HttpPartSchema.create(org.apache.juneau.remoteable.Path.class, m, i));
-		} else if (hasAnnotation(org.apache.juneau.remoteable.Body.class, m, i)) {
-			return new RemoteMethodArg(i, BODY, HttpPartSchema.create(org.apache.juneau.remoteable.Body.class, m, i));
 		}
 		return null;
 	}

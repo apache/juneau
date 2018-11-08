@@ -47,16 +47,6 @@ public final class RestCallException extends IOException {
 	/**
 	 * Constructor.
 	 *
-	 * @param msg The message.
-	 */
-	// TODO - Remove in 8.0
-	public RestCallException(String msg) {
-		this(msg, new Object[0]);
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
@@ -254,15 +244,5 @@ public final class RestCallException extends IOException {
 		if (cause != null)
 			return cause.getMessage();
 		return def;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@Override
-	@Deprecated
-	public synchronized RestCallException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
 	}
 }

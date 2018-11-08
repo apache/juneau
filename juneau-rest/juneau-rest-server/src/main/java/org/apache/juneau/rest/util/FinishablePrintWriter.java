@@ -37,15 +37,6 @@ public class FinishablePrintWriter extends PrintWriter implements Finishable {
 	}
 
 	/**
-	 * @deprecated Use {@link #FinishablePrintWriter(OutputStream, String, boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public FinishablePrintWriter(OutputStream out, String characterEncoding) throws IOException {
-		this(out, characterEncoding, false);
-	}
-
-	/**
 	 * Calls {@link Finishable#finish()} on the underlying output stream.
 	 *
 	 * <p>

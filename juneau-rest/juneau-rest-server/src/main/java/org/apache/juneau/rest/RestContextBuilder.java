@@ -2470,31 +2470,4 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public String getServletName() {
 		return inner.getServletName();
 	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public RestContextBuilder(ServletConfig config, Class<?> resourceClass) throws ServletException {
-		this(config, resourceClass, null);
-	}
-
-	/**
-	 * @deprecated Use {@link #uriContext(String)}.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public RestContextBuilder contextPath(String value) {
-		return uriContext(value);
-	}
-
-	/**
-	 * @deprecated Use {@link #paramResolvers(RestMethodParam...)}.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public RestContextBuilder paramResolvers(RestParam...values) {
-		return this;
-	}
 }

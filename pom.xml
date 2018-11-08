@@ -38,10 +38,10 @@
 		<servlet.version>3.1.0</servlet.version>
 		<httpclient.version>4.5.6</httpclient.version>
 		<jetty.version>9.4.12.v20180830</jetty.version>
-		<juneau.compare.version>7.2.0</juneau.compare.version>
-		<javadoc.juneau.version>7.2.1</javadoc.juneau.version>
-		<juneauVersion>7.2.2</juneauVersion>
-		<juneauVersionNext>7.2.3</juneauVersionNext>
+		<juneau.compare.version>8.0.0</juneau.compare.version>
+		<javadoc.juneau.version>8.0.0</javadoc.juneau.version>
+		<juneauVersion>8.0.0</juneauVersion>
+		<juneauVersionNext>8.0.1</juneauVersionNext>
 	</properties>
 
 	<dependencyManagement>

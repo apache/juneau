@@ -86,7 +86,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!--plugin>
 				<groupId>com.github.siom79.japicmp</groupId>
 				<artifactId>japicmp-maven-plugin</artifactId>
 				<version>0.13.0</version>
@@ -148,7 +148,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 		</plugins>
 	</build>
 </project>

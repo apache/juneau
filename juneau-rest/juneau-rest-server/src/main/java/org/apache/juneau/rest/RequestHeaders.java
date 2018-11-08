@@ -971,31 +971,4 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
 		return req.getBeanSession().getClassMeta(type);
 	}
-
-	/**
-	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, String, Class)}
-	 */
-	@SuppressWarnings({ "javadoc", "unused" })
-	@Deprecated
-	public <T> T get(HttpPartParser parser, String name, Class<T> type) throws ParseException {
-		return get(parser, null, name, type);
-	}
-
-	/**
-	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, String, Object, Class)}
-	 */
-	@SuppressWarnings({ "javadoc", "unused" })
-	@Deprecated
-	public <T> T get(HttpPartParser parser, String name, T def, Class<T> type) throws ParseException {
-		return get(parser, null, name, def, type);
-	}
-
-	/**
-	 * @deprecated Use {@link #get(HttpPartParser, HttpPartSchema, String, Type, Type...)}
-	 */
-	@SuppressWarnings({ "javadoc", "unused" })
-	@Deprecated
-	public <T> T get(HttpPartParser parser, String name, Type type, Type...args) throws ParseException {
-		return get(parser, null, name, type, args);
-	}
 }

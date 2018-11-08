@@ -141,7 +141,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		List<MediaType> supportedAcceptTypes, supportedContentTypes;
 		ResponseBeanMeta responseMeta;
 
-		@SuppressWarnings("deprecation")
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 
@@ -366,18 +365,6 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 							FormData f = (FormData)a;
 							if (f._default().length > 0)
 								defaultFormData.put(firstNonEmpty(f.name(), f.value()), parseAnything(joinnl(f._default())));
-						} else if (a instanceof org.apache.juneau.rest.annotation.Header) {
-							org.apache.juneau.rest.annotation.Header h = (org.apache.juneau.rest.annotation.Header)a;
-							if (h.def().length() > 0)
-								defaultRequestHeaders.put(firstNonEmpty(h.name(), h.value()), h.def());
-						} else if (a instanceof org.apache.juneau.rest.annotation.Query) {
-							org.apache.juneau.rest.annotation.Query q = (org.apache.juneau.rest.annotation.Query)a;
-							if (q.def().length() > 0)
-								defaultQuery.put(firstNonEmpty(q.name(), q.value()), q.def());
-						} else if (a instanceof org.apache.juneau.rest.annotation.FormData) {
-							org.apache.juneau.rest.annotation.FormData f = (org.apache.juneau.rest.annotation.FormData)a;
-							if (f.def().length() > 0)
-								defaultFormData.put(firstNonEmpty(f.name(), f.value()), f.def());
 						}
 					}
 				}

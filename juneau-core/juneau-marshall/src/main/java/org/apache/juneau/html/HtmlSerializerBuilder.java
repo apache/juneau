@@ -792,32 +792,4 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public HtmlSerializerBuilder abridged(boolean value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public HtmlSerializerBuilder abridged() {
-		return this;
-	}
-
-	/**
-	 * @deprecated {@link #addBeanTypes(boolean)}
-	 */
-	@Override
-	@Deprecated
-	public HtmlSerializerBuilder addBeanTypeProperties(boolean value) {
-		this.addBeanTypes(value);
-		return this;
-	}
 }

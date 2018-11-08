@@ -1030,32 +1030,4 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-
-	/**
-	 * @deprecated No replacement
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public SerializerGroupBuilder abridged(boolean value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated No replacement
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public SerializerGroupBuilder abridged() {
-		return this;
-	}
-
-	/**
-	 * @deprecated {@link #addBeanTypes(boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public SerializerGroupBuilder addBeanTypeProperties(boolean value) {
-		this.addBeanTypes(value);
-		return this;
-	}
 }

@@ -624,7 +624,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 			c.setTimeZone(in.getTimeZone());
 			return c;
 		} catch (Exception e) {
-			throw new ParseException((Throwable)e);
+			throw new ParseException(e);
 		}
 	}
 
@@ -636,7 +636,7 @@ public class CalendarSwap extends StringSwap<Calendar> {
 			c.setTime(in);
 			return c;
 		} catch (Exception e) {
-			throw new ParseException((Throwable)e);
+			throw new ParseException(e);
 		}
 	}
 }

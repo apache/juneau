@@ -1725,13 +1725,4 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	void setJavaMethod(Method method) {
 		this.javaMethod = method;
 	}
-
-	/**
-	 * @deprecated Use {@link #getClasspathReaderResource(String, boolean, MediaType, boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ReaderResource getClasspathReaderResource(String name, boolean resolveVars, MediaType mediaType) throws IOException {
-		return getClasspathReaderResource(name, resolveVars, mediaType, false);
-	}
 }

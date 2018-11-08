@@ -30,8 +30,7 @@ import java.util.*;
  */
 public final class AMap<K,V> extends LinkedHashMap<K,V> {
 
-	// TODO - Change to 1L in 8.0
-	private static final long serialVersionUID = 7344180601810042208L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates an empty map.

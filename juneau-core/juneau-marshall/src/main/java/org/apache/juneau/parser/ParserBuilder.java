@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.parser.Parser.*;
 
-import java.nio.charset.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -615,41 +614,5 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* Context */
 	public Parser build() {
 		return null;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParserBuilder fileCharset(String value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParserBuilder fileCharset(Charset value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParserBuilder inputStreamCharset(String value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParserBuilder inputStreamCharset(Charset value) {
-		return this;
 	}
 }

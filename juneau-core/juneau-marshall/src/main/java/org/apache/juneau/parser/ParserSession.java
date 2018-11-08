@@ -147,8 +147,7 @@ public abstract class ParserSession extends BeanSession {
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
-	// TODO - Make abstract in 8.0
-	public ParserPipe createPipe(Object input) { 
+	protected ParserPipe createPipe(Object input) {
 		return null;
 	}
 

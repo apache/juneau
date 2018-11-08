@@ -31,8 +31,7 @@ import org.apache.juneau.http.annotation.*;
 @Response
 public class ZipFileList extends LinkedList<ZipFileList.ZipFileEntry> implements Streamable {
 
-	// TODO - Change to 1L in 8.0
-	private static final long serialVersionUID = 2694299794576160344L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The name of the zip file.

@@ -851,8 +851,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if <code><b>key</b></code> and <code><b>value</b></code> column headers are added to tables.
 	 */
-	// TODO - Make protected in 8.0.
-	public final boolean isAddKeyValueTableHeaders() {
+	protected final boolean isAddKeyValueTableHeaders() {
 		return ctx.isAddKeyValueTableHeaders();
 	}
 
@@ -890,14 +889,5 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	protected final AnchorText getUriAnchorText() {
 		return ctx.getUriAnchorText();
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public final boolean isAddBeanTypeProperties() {
-		return false;
 	}
 }

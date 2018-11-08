@@ -3084,8 +3084,7 @@ public final class RestContext extends BeanContext {
 	 * @param builder The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
-	// TODO - Make package-protected in 8.0
-	public RestContext(RestContextBuilder builder) throws Exception {
+	RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
 
 		RestException _initException = null;
@@ -3567,8 +3566,7 @@ public final class RestContext extends BeanContext {
 	 * @throws NotFound Invalid path.
 	 * @throws IOException
 	 */
-	// TODO - Make protected in 8.0
-	public StaticFile resolveStaticFile(String pathInfo) throws NotFound, IOException {
+	protected StaticFile resolveStaticFile(String pathInfo) throws NotFound, IOException {
 		if (! staticFilesCache.containsKey(pathInfo)) {
 			String p = urlDecode(trimSlashes(pathInfo));
 			if (p.indexOf("..") != -1)
@@ -4569,7 +4567,6 @@ public final class RestContext extends BeanContext {
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	@SuppressWarnings("deprecation")
 	protected RestMethodParam[] findParams(Method method, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
 
 		Type[] pt = method.getGenericParameterTypes();
@@ -4586,27 +4583,27 @@ public final class RestContext extends BeanContext {
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
 			}
 
-			if (hasAnnotation(Header.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Header.class, method, i)) {
+			if (hasAnnotation(Header.class, method, i)) {
 				rp[i] = new RestParamDefaults.HeaderObject(method, i, ps);
-			} else if (hasAnnotation(Query.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Query.class, method, i)) {
+			} else if (hasAnnotation(Query.class, method, i)) {
 				rp[i] = new RestParamDefaults.QueryObject(method, i, ps);
-			} else if (hasAnnotation(FormData.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.FormData.class, method, i)) {
+			} else if (hasAnnotation(FormData.class, method, i)) {
 				rp[i] = new RestParamDefaults.FormDataObject(method, i, ps);
-			} else if (hasAnnotation(Path.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Path.class, method, i)) {
+			} else if (hasAnnotation(Path.class, method, i)) {
 				rp[i] = new RestParamDefaults.PathObject(method, i, ps, pathPattern);
-			} else if (hasAnnotation(Body.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Body.class, method, i)) {
+			} else if (hasAnnotation(Body.class, method, i)) {
 				rp[i] = new RestParamDefaults.BodyObject(method, i, ps);
 			} else if (hasAnnotation(Request.class, method, i)) {
 				rp[i] = new RestParamDefaults.RequestObject(method, i, ps);
-			} else if (hasAnnotation(Response.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.Response.class, method, i)) {
+			} else if (hasAnnotation(Response.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseObject(method, i, ps);
 			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, i, ps);
 			} else if (hasAnnotation(ResponseStatus.class, method, i)) {
 				rp[i] = new RestParamDefaults.ResponseStatusObject(method, t);
-			} else if (hasAnnotation(HasFormData.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.HasFormData.class, method, i)) {
+			} else if (hasAnnotation(HasFormData.class, method, i)) {
 				rp[i] = new RestParamDefaults.HasFormDataObject(method, i);
-			} else if (hasAnnotation(HasQuery.class, method, i) || hasAnnotation(org.apache.juneau.rest.annotation.HasQuery.class, method, i)) {
+			} else if (hasAnnotation(HasQuery.class, method, i)) {
 				rp[i] = new RestParamDefaults.HasQueryObject(method, i);
 			} else if (hasAnnotation(org.apache.juneau.rest.annotation.Method.class, method, i)) {
 				rp[i] = new RestParamDefaults.MethodObject(method, t);
@@ -4824,29 +4821,5 @@ public final class RestContext extends BeanContext {
 	public String toString() {
 		Object r = getResource();
 		return "RestContext: hashCode=["+System.identityHashCode(this)+"], resource=["+(r == null ? null : r.getClass()+","+System.identityHashCode(r))+"]";
-	}
-
-	/**
-	 * @deprecated Use {@link #REST_uriContext}
-	 */
-	@Deprecated
-	public static final String REST_contextPath = REST_uriContext;
-
-	/**
-	 * @deprecated Use {@link #getUriContext()}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public String getContextPath() {
-		return getUriContext();
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public RestParam[] getRestParams(Method method) {
-		return null;
 	}
 }

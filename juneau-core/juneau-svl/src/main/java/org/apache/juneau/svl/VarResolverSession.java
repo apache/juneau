@@ -419,13 +419,4 @@ public class VarResolverSession {
 	protected Var getVar(String name) {
 		return this.context.getVarMap().get(name);
 	}
-
-	/**
-	 * @deprecated Use {@link #getSessionObject(Class, String, boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T getSessionObject(Class<T> c, String name) {
-		return getSessionObject(c, name, false);
-	}
 }

@@ -687,32 +687,4 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public UonSerializerBuilder abridged(boolean value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public UonSerializerBuilder abridged() {
-		return this;
-	}
-
-	/**
-	 * @deprecated {@link #addBeanTypes(boolean)}
-	 */
-	@Override
-	@Deprecated
-	public UonSerializerBuilder addBeanTypeProperties(boolean value) {
-		this.addBeanTypes(value);
-		return this;
-	}
 }

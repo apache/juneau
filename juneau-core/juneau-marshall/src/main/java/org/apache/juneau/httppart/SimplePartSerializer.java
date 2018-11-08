@@ -43,17 +43,4 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 		return createPartSession().serialize(partType, schema, value);
 	}
-
-	/**
-	 * @deprecated Use {@link #serialize(HttpPartType, HttpPartSchema, Object)}
-	 */
-	@Override
-	@Deprecated
-	public String serialize(HttpPartType type, Object value) {
-		try {
-			return serialize(type, null, value);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 }

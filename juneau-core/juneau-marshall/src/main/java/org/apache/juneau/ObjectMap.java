@@ -586,7 +586,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ParseException((Throwable)e);
+			throw new ParseException(e);
 		}
 	}
 

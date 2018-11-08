@@ -1141,7 +1141,7 @@ public final class BeanPropertyMeta {
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ParseException((Throwable)e);
+			throw new ParseException(e);
 		}
 	}
 
@@ -1191,14 +1191,5 @@ public final class BeanPropertyMeta {
 	 */
 	public boolean canWrite() {
 		return canWrite;
-	}
-
-	/**
-	 * @deprecated Use {@link #findAnnotation(Class)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <A extends Annotation> A getAnnotation(Class<A> a) {
-		return findAnnotation(a);
 	}
 }

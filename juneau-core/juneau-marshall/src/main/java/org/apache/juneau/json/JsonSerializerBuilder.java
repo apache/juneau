@@ -706,32 +706,4 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public JsonSerializerBuilder abridged(boolean value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public JsonSerializerBuilder abridged() {
-		return this;
-	}
-
-	/**
-	 * @deprecated {@link #addBeanTypes(boolean)}
-	 */
-	@Override
-	@Deprecated
-	public JsonSerializerBuilder addBeanTypeProperties(boolean value) {
-		this.addBeanTypes(value);
-		return this;
-	}
 }

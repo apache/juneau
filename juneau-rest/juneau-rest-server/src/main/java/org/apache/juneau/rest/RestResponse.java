@@ -569,13 +569,4 @@ public final class RestResponse extends HttpServletResponseWrapper {
 			os.flush();
 		super.flushBuffer();
 	}
-
-	/**
-	 * @deprecated No replacement.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public HttpPartSerializer getPartSerializer() {
-		return null;
-	}
 }

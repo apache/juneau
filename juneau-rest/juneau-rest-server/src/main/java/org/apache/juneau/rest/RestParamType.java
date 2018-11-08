@@ -31,10 +31,6 @@ public enum RestParamType {
 	/** Form data entry */
 	FORM_DATA("formData"),
 
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	FORMDATA("formData"),
-
 	/** Query parameter */
 	QUERY("query"),
 

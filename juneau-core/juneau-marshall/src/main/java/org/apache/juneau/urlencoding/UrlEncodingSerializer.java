@@ -13,7 +13,6 @@
 package org.apache.juneau.urlencoding;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 
@@ -350,14 +349,5 @@ public class UrlEncodingSerializer extends UonSerializer {
 			.append("UrlEncodingSerializer", new ObjectMap()
 				.append("expandedParams", expandedParams)
 			);
-	}
-
-	/**
-	 * @deprecated Use {@link #UrlEncodingSerializer(PropertyStore, String, String)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public UrlEncodingSerializer(PropertyStore ps, String produces, String...accept) {
-		this(ps, produces, StringUtils.join(accept, ","));
 	}
 }

@@ -43,10 +43,4 @@ public enum HttpPartType {
 
 	/** A non-standard field */
 	OTHER,
-
-	/**
-	 * @deprecated Use {@link #FORMDATA}.
-	 */
-	@Deprecated
-	FORM_DATA;
 }

@@ -14,7 +14,6 @@ package org.apache.juneau.uon;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -453,34 +452,5 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 				.append("addBeanTypes", addBeanTypes)
 				.append("paramFormat", paramFormat)
 			);
-	}
-
-	/**
-	 * @deprecated Use {@link #UON_addBeanTypes}.
-	 */
-	@Deprecated
-	public static final String UON_addBeanTypeProperties = UON_addBeanTypes;
-
-
-	/**
-	 * @deprecated Use {@link #UonSerializer(PropertyStore, String, String)}.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public UonSerializer(PropertyStore ps, String produces, String...accept) {
-		this(ps, produces, StringUtils.join(accept, ","));
-	}
-
-	/**
-	 * @deprecated Use {@link #serialize(HttpPartType, HttpPartSchema, Object)}
-	 */
-	@Override
-	@Deprecated
-	public String serialize(HttpPartType type, Object value) {
-		try {
-			return serialize(type, null, value);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

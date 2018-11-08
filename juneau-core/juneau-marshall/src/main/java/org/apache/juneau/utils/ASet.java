@@ -29,8 +29,7 @@ import java.util.*;
 @SuppressWarnings({"unchecked"})
 public final class ASet<T> extends LinkedHashSet<T> {
 
-	// TODO - Change to 1L in 8.0
-	private static final long serialVersionUID = -7789361749029840633L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Convenience method for creating a list of objects.

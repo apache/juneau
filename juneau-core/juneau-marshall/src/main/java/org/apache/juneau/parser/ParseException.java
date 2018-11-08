@@ -133,41 +133,4 @@ public class ParseException extends FormattedException {
 			t = (ParseException)t.getCause();
 		return t;
 	}
-
-	/**
-	 * @deprecated Use {@link #ParseException(ParserSession, String, Object[])}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParseException(ObjectMap location, String message, Object...args) {
-		super(getMessage(null, message, args));
-	}
-
-	/**
-	 * @deprecated Use {@link #ParseException(ParserSession, Exception)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParseException(ObjectMap location, Exception causedBy) {
-		super(causedBy, getMessage(null, causedBy.getMessage()));
-	}
-
-	/**
-	 * @deprecated Use {@link #ParseException(ParserSession, Exception)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParseException(Exception causedBy) {
-		super(causedBy, getMessage(null, causedBy.getMessage()));
-	}
-
-	/**
-	 * @deprecated Use {@link #ParseException(ParserSession, Exception)}
-	 */
-	@Override
-	@Deprecated
-	public synchronized ParseException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
-	}
 }

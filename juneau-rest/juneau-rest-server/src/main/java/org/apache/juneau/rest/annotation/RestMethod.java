@@ -843,10 +843,4 @@ public @interface RestMethod {
 	 * </ul>
 	 */
 	MethodSwagger swagger() default @MethodSwagger;
-	
-	/**
-	 * @deprecated Use {@link Inherit} on annotations.
-	 */
-	@Deprecated
-	String inherit() default "";
 }

@@ -473,22 +473,4 @@ public final class MsgPackInputStream extends ParserInputStream {
 		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
 		return l;
 	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParserPipe getPipe() {
-		return null;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@Override
-	@Deprecated
-	public int read() throws IOException {
-		return super.read();
-	}
 }

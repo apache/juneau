@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
@@ -803,19 +802,4 @@ public class HtmlSerializer extends XmlSerializer {
 				.append("addBeanTypes", addBeanTypes)
 			);
 	}
-
-	/**
-	 * @deprecated Use {@link HtmlSerializer#HtmlSerializer(PropertyStore, String, String...)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public HtmlSerializer(PropertyStore ps, String produces, String...accept) {
-		this(ps, produces, StringUtils.join(accept, ','));
-	}
-	
-	/**
-	 * @deprecated {@link #HTML_addBeanTypes}.
-	 */
-	@Deprecated
-	public static final String HTML_addBeanTypeProperties = HTML_addBeanTypes;
 }

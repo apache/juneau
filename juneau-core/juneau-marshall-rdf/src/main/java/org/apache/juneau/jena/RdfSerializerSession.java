@@ -520,13 +520,4 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	protected final RdfCollectionFormat getCollectionFormat() {
 		return ctx.getCollectionFormat();
 	}
-
-	/**
-	 * @deprecated Not used.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public final boolean isAddBeanTypeProperties() {
-		return isAddBeanTypes();
-	}
 }

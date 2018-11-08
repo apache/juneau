@@ -90,13 +90,4 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 		super.add(new SerializedNameValuePair(name, value, serializer, schema));
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link #append(String, Object, HttpPartSerializer, HttpPartSchema)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public NameValuePairs append(String name, Object value, HttpPartSerializer partSerializer) {
-		return append(name, value, partSerializer, null);
-	}
 }

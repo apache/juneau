@@ -161,31 +161,4 @@ public enum Visibility {
 				return null;
 		return x;
 	}
-
-	/**
-	 * @deprecated Use {@link ClassUtils#setAccessible(Constructor, boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public static boolean setAccessible(Constructor<?> x) {
-		return ClassUtils.setAccessible(x, true);
-	}
-
-	/**
-	 * @deprecated Use {@link ClassUtils#setAccessible(Method, boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public static boolean setAccessible(Method x) {
-		return ClassUtils.setAccessible(x, true);
-	}
-
-	/**
-	 * @deprecated Use {@link ClassUtils#setAccessible(Field, boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public static boolean setAccessible(Field x) {
-		return ClassUtils.setAccessible(x, true);
-	}
 }

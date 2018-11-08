@@ -13,7 +13,6 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -76,14 +75,5 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlStrippedDocSerializerSession(this, args);
-	}
-
-	/**
-	 * @deprecated Use {@link #HtmlStrippedDocSerializer(PropertyStore, String, String)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public HtmlStrippedDocSerializer(PropertyStore ps, String produces, String...accept) {
-		this(ps, produces, StringUtils.join(accept, ','));
 	}
 }

@@ -1200,13 +1200,4 @@ public class Operation extends SwaggerElement {
 			.appendIf(security != null, "security");
 		return new MultiSet<>(s, super.keySet());
 	}
-
-	/**
-	 * @deprecated Use {@link #response(String, ResponseInfo)}
-	 */
-	@Deprecated
-	@SuppressWarnings("javadoc")
-	public Operation response(Integer statusCode, ResponseInfo response) {
-		return response(statusCode.toString(), response);
-	}
 }

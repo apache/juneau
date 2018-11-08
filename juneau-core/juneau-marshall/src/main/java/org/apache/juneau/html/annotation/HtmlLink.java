@@ -50,10 +50,4 @@ public @interface HtmlLink {
 	 * The bean property whose value becomes the url in the hyperlink.
 	 */
 	String uriProperty() default "uri";
-
-	/**
-	 * @deprecated - Use {@link #uriProperty()}.
-	 */
-	@Deprecated
-	String hrefProperty() default "uri";
 }

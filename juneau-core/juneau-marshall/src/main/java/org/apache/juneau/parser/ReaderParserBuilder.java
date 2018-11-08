@@ -62,7 +62,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
-	@Override
 	public ReaderParserBuilder fileCharset(String value) {
 		return set(RPARSER_fileCharset, value);
 	}
@@ -83,7 +82,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
 	 * @return This object (for method chaining).
 	 */
-	@Override
 	public ReaderParserBuilder fileCharset(Charset value) {
 		return set(RPARSER_fileCharset, value);
 	}
@@ -104,7 +102,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
-	@Override
 	public ReaderParserBuilder inputStreamCharset(String value) {
 		return set(RPARSER_inputStreamCharset, value);
 	}
@@ -125,7 +122,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 * 	<br>The default value is <js>"UTF-8"</js>.
 	 * @return This object (for method chaining).
 	 */
-	@Override
 	public ReaderParserBuilder inputStreamCharset(Charset value) {
 		return set(RPARSER_inputStreamCharset, value);
 	}

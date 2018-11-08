@@ -64,7 +64,7 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 		} catch (Error e) {
 			throw new ParseException(e.getLocalizedMessage());
 		} catch (XMLStreamException e) {
-			throw new ParseException((Throwable)e);
+			throw new ParseException(e);
 		}
 	}
 

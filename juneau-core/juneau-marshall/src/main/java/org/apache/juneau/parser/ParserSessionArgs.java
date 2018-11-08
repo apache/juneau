@@ -120,13 +120,4 @@ public final class ParserSessionArgs extends BeanSessionArgs {
 		super.properties(properties);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link #ParserSessionArgs(ObjectMap, Method, Locale, TimeZone, MediaType, HttpPartSchema, Boolean, Object)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ParserSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, Object outer) {
-		this(properties, javaMethod, locale, timeZone, mediaType, null, null, outer);
-	}
 }

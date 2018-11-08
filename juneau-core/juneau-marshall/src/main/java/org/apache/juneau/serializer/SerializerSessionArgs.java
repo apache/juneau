@@ -147,13 +147,4 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 		super.properties(properties);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link #SerializerSessionArgs(ObjectMap, Method, Locale, TimeZone, MediaType, HttpPartSchema, Boolean, UriContext, Boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, UriContext uriContext) {
-		this(properties, javaMethod, locale, timeZone, mediaType, null, null, uriContext, false);
-	}
 }

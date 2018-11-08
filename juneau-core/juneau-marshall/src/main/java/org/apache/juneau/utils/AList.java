@@ -29,8 +29,7 @@ import java.util.*;
 @SuppressWarnings({"unchecked"})
 public final class AList<T> extends LinkedList<T> {
 
-	// TODO - Change to 1L in 8.0
-	private static final long serialVersionUID = 2165760898071759212L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Convenience method for creating a list of objects.

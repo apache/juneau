@@ -1573,13 +1573,4 @@ public class SchemaInfo extends SwaggerElement {
 
 		return this;
 	}
-	
-	/**
-	 * @deprecated Use {@link #setAdditionalProperties(SchemaInfo)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public SchemaInfo setAdditionalProperties(Map<String,Object> value) {
-		return this;
-	}
 }

@@ -337,31 +337,4 @@ public class BasicRestCallHandler implements RestCallHandler {
 		m.put(RequestVar.SESSION_req, req);
 		return m;
 	}
-
-	/**
-	 * @deprecated Use {@link #handleError(HttpServletRequest, HttpServletResponse, Throwable)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public synchronized void handleError(HttpServletRequest req, HttpServletResponse res, RestException e) throws IOException {
-		handleError(req, res, (Throwable)e);
-	}
-
-	/**
-	 * @deprecated Use {@link #handleResponse(RestRequest, RestResponse)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public void handleResponse(RestRequest req, RestResponse res, Object output) throws IOException, RestException {
-		handleResponse(req, res);
-	}
-
-	/**
-	 * @deprecated Use {@link #handleError(HttpServletRequest, HttpServletResponse, Throwable)}
-	 */
-	@SuppressWarnings({ "javadoc", "unused" })
-	@Deprecated
-	public void renderError(HttpServletRequest req, HttpServletResponse res, RestException e) throws IOException {
-		return;
-	}
 }

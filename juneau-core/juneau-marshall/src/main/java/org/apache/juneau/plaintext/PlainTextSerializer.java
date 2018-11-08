@@ -12,13 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
-import java.lang.reflect.*;
-import java.util.*;
-
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -118,14 +112,5 @@ public class PlainTextSerializer extends WriterSerializer {
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new PlainTextSerializerSession(this, args);
-	}
-
-	/**
-	 * @deprecated Use {@link SerializerSessionArgs#SerializerSessionArgs(ObjectMap, Method, Locale, TimeZone, MediaType, HttpPartSchema, Boolean, UriContext, Boolean)}
-	 */
-	@Deprecated
-	@SuppressWarnings("javadoc")
-	public PlainTextSerializer(PropertyStore ps, String produces, String...accept) {
-		super(ps, produces, StringUtils.join(accept, ','));
 	}
 }

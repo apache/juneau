@@ -611,7 +611,7 @@ public final class ClassMeta<T> implements Type {
 									return fSwapConstructor.newInstance(f);
 								return super.unswap(session, f, hint);
 							} catch (Exception e) {
-								throw new ParseException((Throwable)e);
+								throw new ParseException(e);
 							}
 						}
 					}
@@ -2229,23 +2229,5 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public <A extends Annotation> A getAnnotation(Class<A> a) {
 		return this.innerClass.getAnnotation(a);
-	}
-
-	/**
-	 * @deprecated No replacement.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public Map<String,Method> getRemoteableMethods() {
-		return null;
-	}
-	
-	/**
-	 * @deprecated No replacement.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public boolean isRemoteable() {
-		return false;
 	}
 }

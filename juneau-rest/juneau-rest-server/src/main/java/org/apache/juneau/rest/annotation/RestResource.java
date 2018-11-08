@@ -1070,10 +1070,4 @@ public @interface RestResource {
 	 * </ul>
 	 */
 	String debug() default "";
-	
-	/**
-	 * @deprecated Use {@link #uriContext()}
-	 */
-	@Deprecated
-	String contextPath() default "";
 }

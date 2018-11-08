@@ -2624,10 +2624,5 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		public String serialize(HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 			return createPartSession().serialize(null, schema, value);
 		}
-
-		@Override
-		public String serialize(HttpPartType type, Object value) {
-			return null;
-		}
 	}
 }

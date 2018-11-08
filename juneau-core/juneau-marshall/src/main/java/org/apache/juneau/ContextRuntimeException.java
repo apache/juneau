@@ -50,23 +50,4 @@ public final class ContextRuntimeException extends FormattedRuntimeException {
 	public ContextRuntimeException(Throwable cause) {
 		this(cause, null);
 	}
-
-	/**
-	 * @deprecated Use {@link #ContextRuntimeException(String, Object...)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ContextRuntimeException(String message) {
-		super(message);
-	}
-
-	/**
-	 * @deprecated {@link #ContextRuntimeException(Throwable)}
-	 */
-	@Deprecated
-	@Override /* Throwable */
-	public synchronized ContextRuntimeException initCause(Throwable cause) {
-		super.initCause(cause);
-		return this;
-	}
 }

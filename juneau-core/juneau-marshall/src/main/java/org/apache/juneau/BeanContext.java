@@ -2685,8 +2685,7 @@ public class BeanContext extends Context {
 	 * @param c The class.
 	 * @return The properties to include for the specified class, or <jk>null</jk> if it's not defined for the class.
 	 */
-	// TODO - make protected in 8.0.
-	public String[] getIncludeProperties(Class<?> c) {
+	protected String[] getIncludeProperties(Class<?> c) {
 		if (includeProperties.isEmpty())
 			return null;
 		String[] s = null;
@@ -2707,9 +2706,8 @@ public class BeanContext extends Context {
 	 *
 	 * @param c The class.
 	 * @return The properties to exclude for the specified class, or <jk>null</jk> if it's not defined for the class.
-	 * TODO - make protected in 8.0.
 	 */
-	public String[] getExcludeProperties(Class<?> c) {
+	protected String[] getExcludeProperties(Class<?> c) {
 		if (excludeProperties.isEmpty())
 			return null;
 		String[] s = null;

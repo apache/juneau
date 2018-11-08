@@ -13,7 +13,6 @@
 package org.apache.juneau.xml;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xmlschema.XmlSchemaSerializer;
@@ -643,20 +642,5 @@ public class XmlSerializer extends WriterSerializer {
 				.append("namespaces", namespaces)
 				.append("addBeanTypes", addBeanTypes)
 			);
-	}
-
-	/**
-	 * @deprecated Use {@link #XML_addBeanTypes}
-	 */
-	@Deprecated
-	public static final String XML_addBeanTypeProperties = XML_addBeanTypes;
-
-	/**
-	 * @deprecated Use {@link #XmlSerializer(PropertyStore, String, String)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public XmlSerializer(PropertyStore ps, String produces, String...accept) {
-		this(ps, produces, StringUtils.join(accept, ","));
 	}
 }

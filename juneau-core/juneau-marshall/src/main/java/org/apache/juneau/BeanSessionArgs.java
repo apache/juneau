@@ -127,16 +127,4 @@ public class BeanSessionArgs extends SessionArgs {
 		super.properties(properties);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link #BeanSessionArgs(ObjectMap, Locale, TimeZone, MediaType, HttpPartSchema, Boolean)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public BeanSessionArgs(ObjectMap properties, Locale locale, TimeZone timeZone, MediaType mediaType) {
-		super(properties);
-		this.locale = locale;
-		this.timeZone = timeZone;
-		this.mediaType = mediaType;
-	}
 }

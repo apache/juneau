@@ -817,32 +817,4 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public JsonSchemaSerializerBuilder abridged(boolean value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public JsonSchemaSerializerBuilder abridged() {
-		return this;
-	}
-
-	/**
-	 * @deprecated {@link #addBeanTypes(boolean)}
-	 */
-	@Override
-	@Deprecated
-	public JsonSchemaSerializerBuilder addBeanTypeProperties(boolean value) {
-		this.addBeanTypes(value);
-		return this;
-	}
 }

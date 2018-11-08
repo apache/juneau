@@ -611,31 +611,4 @@ public class PlainTextSerializerBuilder extends WriterSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public PlainTextSerializerBuilder abridged(boolean value) {
-		return this;
-	}
-
-	/**
-	 * @deprecated Use {@link Serializer#SERIALIZER_addRootType}.
-	 */
-	@Override
-	@Deprecated
-	public PlainTextSerializerBuilder abridged() {
-		return this;
-	}
-
-	/**
-	 * @deprecated Use {@link #addBeanTypeProperties(boolean)}.
-	 */
-	@Override
-	@Deprecated
-	public PlainTextSerializerBuilder addBeanTypeProperties(boolean value) {
-		return addBeanTypes(value);
-	}
 }

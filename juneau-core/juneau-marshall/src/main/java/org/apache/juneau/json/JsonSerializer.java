@@ -15,7 +15,6 @@ package org.apache.juneau.json;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -259,18 +258,6 @@ public class JsonSerializer extends WriterSerializer {
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT_READABLE = new Readable(PropertyStore.DEFAULT);
 
-	/** @deprecated Use {@link SimpleJsonSerializer#DEFAULT} */
-	@Deprecated
-	public static final JsonSerializer DEFAULT_LAX = new SimpleJsonSerializer(PropertyStore.DEFAULT);
-
-	/** @deprecated Use {@link SimpleJsonSerializer#DEFAULT_READABLE} */
-	@Deprecated
-	public static final JsonSerializer DEFAULT_LAX_READABLE = new SimpleJsonSerializer.Readable(PropertyStore.DEFAULT);
-
-	/** @deprecated Use {@link SimpleJsonSerializer#DEFAULT_READABLE} */
-	@Deprecated
-	public static final JsonSerializer DEFAULT_LAX_READABLE_SAFE = new SimpleJsonSerializer.ReadableSafe(PropertyStore.DEFAULT);
-
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined subclasses
@@ -287,68 +274,6 @@ public class JsonSerializer extends WriterSerializer {
 		public Readable(PropertyStore ps) {
 			super(
 				ps.builder().set(SERIALIZER_useWhitespace, true).build()
-			);
-		}
-	}
-
-	/** @deprecated Use {@link SimpleJsonSerializer} */
-	@Deprecated
-	public static class Simple extends JsonSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public Simple(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.build(),
-				"application/json",
-				"application/json+simple,text/json+simple"
-			);
-		}
-	}
-
-	/** @deprecated Use {@link SimpleJsonSerializer.Readable} */
-	@Deprecated
-	public static class SimpleReadable extends JsonSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public SimpleReadable(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
-					.build()
-			);
-		}
-	}
-
-	/** @deprecated Use {@link SimpleJsonSerializer.Readable} */
-	@Deprecated
-	public static class SimpleReadableSafe extends JsonSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param ps The property store containing all the settings for this object.
-		 */
-		public SimpleReadableSafe(PropertyStore ps) {
-			super(
-				ps.builder()
-					.set(JSON_simpleMode, true)
-					.set(WSERIALIZER_quoteChar, '\'')
-					.set(SERIALIZER_useWhitespace, true)
-					.set(BEANTRAVERSE_detectRecursions, true)
-					.build()
 			);
 		}
 	}
@@ -522,20 +447,4 @@ public class JsonSerializer extends WriterSerializer {
 				.append("addBeanTypes", addBeanTypes)
 			);
 	}
-
-	/**
-	 * @deprecated Use {@link #JsonSerializer(PropertyStore, String, String)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public JsonSerializer(PropertyStore ps, String produces, String...accept) {
-		this(ps, produces, StringUtils.join(accept, ','));
-	}
-	
-	/**
-	 * @deprecated Use {@link #JSON_addBeanTypes}
-	 */
-	@Deprecated
-	public static final String JSON_addBeanTypeProperties = JSON_addBeanTypes;
-	
 }

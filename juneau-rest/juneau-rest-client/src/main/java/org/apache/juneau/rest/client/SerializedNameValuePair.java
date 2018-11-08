@@ -72,13 +72,4 @@ public final class SerializedNameValuePair implements NameValuePair {
 			throw new FormattedRuntimeException(e, "Serialization error on request form-data parameter ''{0}''", name);
 		}
 	}
-
-	/**
-	 * @deprecated Use {@link #SerializedNameValuePair(String, Object, HttpPartSerializer, HttpPartSchema)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public SerializedNameValuePair(String name, Object value, HttpPartSerializer serializer) {
-		this(name, value, serializer, null);
-	}
 }

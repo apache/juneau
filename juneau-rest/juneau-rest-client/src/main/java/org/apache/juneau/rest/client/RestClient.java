@@ -1260,33 +1260,6 @@ public class RestClient extends BeanContext implements Closeable {
 		}
 	}
 
-	/**
-	 * @deprecated Use {@link #getRrpcInterface(Class)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T getRemoteInterface(final Class<T> interfaceClass) {
-		return getRrpcInterface(interfaceClass, null);
-	}
-
-	/**
-	 * @deprecated Use {@link #getRrpcInterface(Class,Object)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T getRemoteInterface(final Class<T> interfaceClass, final Object restUrl) {
-		return getRrpcInterface(interfaceClass, restUrl, serializer, parser);
-	}
-
-	/**
-	 * @deprecated Use {@link #getRrpcInterface(Class,Object,Serializer,Parser)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T getRemoteInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
-		return getRrpcInterface(interfaceClass, restUrl, serializer, parser);
-	}
-
 	static final String getName(String name1, String name2, BeanPropertyMeta pMeta) {
 		String n = name1.isEmpty() ? name2 : name1;
 		ClassMeta<?> cm = pMeta.getClassMeta();
@@ -1366,32 +1339,5 @@ public class RestClient extends BeanContext implements Closeable {
 				System.err.println("Creation stack traces can be displayed by setting the system property 'org.apache.juneau.rest.client.RestClient.trackLifecycle' to true.");  // NOT DEBUG
 			}
 		}
-	}
-
-	/**
-	 * @deprecated Use {@link #getRemoteResource(Class)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass) {
-		return getRemoteResource(interfaceClass, null);
-	}
-
-	/**
-	 * @deprecated Use {@link #getRemoteResource(Class,Object)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass, final Object restUrl) {
-		return getRemoteResource(interfaceClass, restUrl, serializer, parser);
-	}
-
-	/**
-	 * @deprecated Use {@link #getRemoteResource(Class,Object,Serializer,Parser)}
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public <T> T getRemoteableProxy(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
-		return getRemoteResource(interfaceClass, restUrl, serializer, parser);
 	}
 }

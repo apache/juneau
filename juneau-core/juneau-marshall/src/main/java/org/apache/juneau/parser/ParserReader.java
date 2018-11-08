@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import java.io.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -406,41 +405,5 @@ public class ParserReader extends Reader implements Positionable {
 	@Override /* Positionable */
 	public Position getPosition() {
 		return new Position(line, column);
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public final int getLine() {
-		return line;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public final int getColumn() {
-		return column;
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public ObjectMap getLocation(ParserSession session) {
-		return session.getLastLocation().append("line", getLine()).append("column", getColumn());
-	}
-
-	/**
-	 * @deprecated Unused.
-	 */
-	@SuppressWarnings("javadoc")
-	@Deprecated
-	public final ParserPipe getPipe() {
-		return null;
 	}
 }
