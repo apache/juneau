@@ -15,7 +15,7 @@ package org.apache.juneau.svl.vars;
 import org.apache.juneau.svl.*;
 
 /**
- * Upper-case variable resolver.
+ * Lower-case variable resolver.
  *
  * <p>
  * The format for this var is <js>"$LC{stringValue}"</js>.
