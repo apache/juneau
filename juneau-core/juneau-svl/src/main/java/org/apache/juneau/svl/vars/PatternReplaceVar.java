@@ -17,8 +17,37 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import org.apache.juneau.svl.*;
 
 /**
- * TODO
+ * A transformational variable resolver that replaces matched patterns with given characters.
+ *
+ * <p>
+ * The format for this var is:
+ * <ul>
+ * 	<li><js>"$PR{stringArg, pattern, replace}"</js>
+ * </ul>
+ *
+ * <p>
+ * The pattern can be any string optionally containing <js>'*'</js> or <js>'?'</js> representing any or one character
+ * respectively.
  * 
+ * The replace can contain matched regex sub classes like \$1, \$2 ..
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Create a variable resolver that resolves system properties and $SW vars.</jc>
+ * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(PatternReplaceVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
+ *
+ * 	<jc>// Use it!</jc>
+ * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Java version=$PR{$S{java.version}, (_([0-9]+)), \\ build=\\$2}"</js>));
+ * </p>
+ *
+ * <p>
+ * Since this is a {@link MultipartVar}, any variables contained in the result will be recursively resolved.
+ * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'>{@doc juneau-svl.SvlVariables}
+ * </ul>
  */
 public class PatternReplaceVar extends MultipartVar {
 
