@@ -368,9 +368,10 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
 	 */
+	@SuppressWarnings("rawtypes")
 	public Set<Class<?>> getClassSetProperty(String key) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_SET : p.asSet(Class.class);
+		return p == null ? Collections.EMPTY_SET : (Set)p.asSet(Class.class);
 	}
 
 	/**
@@ -380,9 +381,10 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashSet</code>, or an empty set if it doesn't exist.
 	 */
+	@SuppressWarnings("rawtypes")
 	public <T> Set<Class<T>> getClassSetProperty(String key, Class<T> eType) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_SET : p.asSet(Class.class);
+		return p == null ? Collections.EMPTY_SET : (Set)p.asSet(Class.class);
 	}
 
 	/**
@@ -416,9 +418,10 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
 	 */
+	@SuppressWarnings("rawtypes")
 	public List<Class<?>> getClassListProperty(String key) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_LIST : p.asList(Class.class);
+		return p == null ? Collections.EMPTY_LIST : (List)p.asList(Class.class);
 	}
 
 	/**
@@ -428,9 +431,10 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>ArrayList</code>, or an empty list if it doesn't exist.
 	 */
+	@SuppressWarnings("rawtypes")
 	public <T> List<Class<T>> getClassListProperty(String key, Class<T> eType) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_LIST : p.asList(Class.class);
+		return p == null ? Collections.EMPTY_LIST : (List)p.asList(Class.class);
 	}
 
 	/**
@@ -451,9 +455,10 @@ public final class PropertyStore {
 	 * @param key The property name.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
 	 */
+	@SuppressWarnings("rawtypes")
 	public Map<String,Class<?>> getClassMapProperty(String key) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_MAP : p.asMap(Class.class);
+		return p == null ? Collections.EMPTY_MAP : (Map)p.asMap(Class.class);
 	}
 
 	/**
@@ -463,9 +468,10 @@ public final class PropertyStore {
 	 * @param eType The class type of the elements in the property.
 	 * @return The property value as an unmodifiable <code>LinkedHashMap</code>, or an empty map if it doesn't exist.
 	 */
+	@SuppressWarnings("rawtypes")
 	public <T> Map<String,Class<T>> getClassMapProperty(String key, Class<T> eType) {
 		Property p = findProperty(key);
-		return p == null ? Collections.EMPTY_MAP : p.asMap(Class.class);
+		return p == null ? Collections.EMPTY_MAP : (Map)p.asMap(Class.class);
 	}
 
 	/**

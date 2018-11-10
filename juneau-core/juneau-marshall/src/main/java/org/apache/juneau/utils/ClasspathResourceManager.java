@@ -42,8 +42,13 @@ public final class ClasspathResourceManager {
 		this.baseClass = baseClass;
 		this.resourceFinder = resourceFinder;
 		this.useCache = useCache;
-		this.byteCache = useCache ? new ConcurrentHashMap<ResourceKey,byte[]>() : null;
-		this.stringCache = useCache ? new ConcurrentHashMap<ResourceKey,String>() : null;
+		if (useCache) {
+			this.byteCache = new ConcurrentHashMap<>();
+			this.stringCache = new ConcurrentHashMap<>();
+		} else {
+			this.byteCache = null;
+			this.stringCache = null;
+		}
 	}
 
 	/**

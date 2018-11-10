@@ -183,7 +183,8 @@ public final class DateUtils {
 				new ThreadLocal<SoftReference<Map<String,SimpleDateFormat>>>() {
 			@Override
 			protected SoftReference<Map<String,SimpleDateFormat>> initialValue() {
-				return new SoftReference<Map<String,SimpleDateFormat>>(new HashMap<String,SimpleDateFormat>());
+				Map<String,SimpleDateFormat> m = new HashMap<>();
+				return new SoftReference<>(m);
 			}
 		};
 

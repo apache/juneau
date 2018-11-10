@@ -385,7 +385,10 @@ public class BeanMeta<T> {
 
 				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
-				properties = sortProperties ? new TreeMap<String,BeanPropertyMeta>() : new LinkedHashMap<String,BeanPropertyMeta>();
+				if (sortProperties)
+					properties = new TreeMap<>();
+				else
+					properties = new LinkedHashMap<>();
 
 				if (beanFilter != null && beanFilter.getTypeName() != null)
 					dictionaryName = beanFilter.getTypeName();

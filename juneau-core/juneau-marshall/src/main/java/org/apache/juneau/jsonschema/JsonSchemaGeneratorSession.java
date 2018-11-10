@@ -53,7 +53,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	protected JsonSchemaGeneratorSession(JsonSchemaGenerator ctx, BeanSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		defs = isUseBeanDefs() ? new TreeMap<String,ObjectMap>() : null;
+		if (isUseBeanDefs())
+			defs = new TreeMap<>();
+		else
+			defs = null;
 	}
 
 	/**

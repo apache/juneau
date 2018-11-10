@@ -85,49 +85,70 @@ public class Swagger extends SwaggerElement {
 		this.consumes = newList(copyFrom.consumes);
 		this.produces = newList(copyFrom.produces);
 
-		this.tags = copyFrom.tags == null ? null : new ArrayList<Tag>();
-		if (copyFrom.tags != null)
+		if (copyFrom.tags == null) {
+			this.tags = null;
+		} else {
+			this.tags = new ArrayList<>();
 			for (Tag t : copyFrom.tags)
 				this.tags.add(t.copy());
+		}
 
-		this.security = copyFrom.security == null ? null : new ArrayList<Map<String,List<String>>>();
-		if (copyFrom.security != null)
+		if (copyFrom.security == null) {
+			this.security = null;
+		} else {
+			this.security = new ArrayList<>();
 			for (Map<String,List<String>> m : copyFrom.security) {
 				Map<String,List<String>> m2 = new LinkedHashMap<>();
 				for (Map.Entry<String,List<String>> e : m.entrySet())
 					m2.put(e.getKey(), newList(e.getValue()));
 				this.security.add(m2);
 			}
+		}
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
-		this.definitions = copyFrom.definitions == null ? null : new LinkedHashMap<String,ObjectMap>();
-		if (copyFrom.definitions != null)
+		if (copyFrom.definitions == null) {
+			this.definitions = null;
+		} else {
+			this.definitions = new LinkedHashMap<>();
 			for (Map.Entry<String,ObjectMap> e : copyFrom.definitions.entrySet())
 				this.definitions.put(e.getKey(), new ObjectMap(e.getValue()));
+		}
 
-		this.parameters = copyFrom.parameters == null ? null : new LinkedHashMap<String,ParameterInfo>();
-		if (copyFrom.parameters != null)
+		if (copyFrom.parameters == null) {
+			this.parameters = null;
+		} else {
+			this.parameters = new LinkedHashMap<>();
 			for (Map.Entry<String,ParameterInfo> e : copyFrom.parameters.entrySet())
 				this.parameters.put(e.getKey(), e.getValue().copy());
+		}
 
-		this.responses = copyFrom.responses == null ? null : new LinkedHashMap<String,ResponseInfo>();
-		if (copyFrom.responses != null)
+		if (copyFrom.responses == null) {
+			this.responses = null;
+		} else {
+			this.responses = new LinkedHashMap<>();
 			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
 				this.responses.put(e.getKey(), e.getValue().copy());
+		}
 
-		this.securityDefinitions = copyFrom.securityDefinitions == null ? null : new LinkedHashMap<String,SecurityScheme>();
-		if (copyFrom.securityDefinitions != null)
+		if (copyFrom.securityDefinitions == null) {
+			this.securityDefinitions = null;
+		} else {
+			this.securityDefinitions = new LinkedHashMap<>();
 			for (Map.Entry<String,SecurityScheme> e : copyFrom.securityDefinitions.entrySet())
 				this.securityDefinitions.put(e.getKey(), e.getValue().copy());
+		}
 
-		this.paths = copyFrom.paths == null ? null : new LinkedHashMap<String,OperationMap>();
-		if (copyFrom.paths != null)
+		if (copyFrom.paths == null) {
+			this.paths = null;
+		} else {
+			this.paths = new LinkedHashMap<>();
 			for (Map.Entry<String,OperationMap> e : copyFrom.paths.entrySet()) {
 				OperationMap m = new OperationMap();
 				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
 					m.put(e2.getKey(), e2.getValue().copy());
 				this.paths.put(e.getKey(), m);
 			}
+		}
 	}
 
 	/**

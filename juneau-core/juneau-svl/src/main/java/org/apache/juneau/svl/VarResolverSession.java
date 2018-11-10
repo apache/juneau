@@ -57,7 +57,10 @@ public class VarResolverSession {
 	 */
 	public VarResolverSession(VarResolverContext context, Map<String,Object> sessionObjects) {
 		this.context = context;
-		this.sessionObjects = sessionObjects != null ? sessionObjects : new HashMap<String,Object>();
+		if (sessionObjects != null)
+			this.sessionObjects = sessionObjects;
+		else
+			this.sessionObjects = new HashMap<>();
 	}
 
 	/**

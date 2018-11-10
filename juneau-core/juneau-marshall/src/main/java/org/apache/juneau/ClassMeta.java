@@ -384,8 +384,13 @@ public final class ClassMeta<T> implements Type {
 
 			this.implClass = implClass;
 			this.childPojoSwaps = childPojoSwaps;
-			this.childSwapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
-			this.childUnswapMap = childPojoSwaps == null ? null : new ConcurrentHashMap<Class<?>,PojoSwap<?,?>>();
+			if (childPojoSwaps == null) {
+				this.childSwapMap = null;
+				this.childUnswapMap = null;
+			} else {
+				this.childSwapMap = new ConcurrentHashMap<>();
+				this.childUnswapMap = new ConcurrentHashMap<>();
+			}
 
 			Class<T> c = innerClass;
 			if (c.isPrimitive()) {

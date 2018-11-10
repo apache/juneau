@@ -170,13 +170,18 @@ public class Operation extends SwaggerElement {
 		this.consumes = newList(copyFrom.consumes);
 		this.produces = newList(copyFrom.produces);
 
-		this.parameters = copyFrom.parameters == null ? null : new ArrayList<ParameterInfo>();
-		if (copyFrom.parameters != null)
+		if (copyFrom.parameters == null) {
+			this.parameters = null;
+		} else {
+			this.parameters = new ArrayList<>();
 			for (ParameterInfo p : copyFrom.parameters)
 				this.parameters.add(p.copy());
+		}
 
-		this.security = copyFrom.security == null ? null : new ArrayList<Map<String,List<String>>>();
-		if (copyFrom.security != null) {
+		if (copyFrom.security == null) {
+			this.security = null;
+		} else {
+			this.security = new ArrayList<>();
 			for (Map<String,List<String>> m : copyFrom.security) {
 				Map<String,List<String>> m2 = new LinkedHashMap<>();
 				for (Map.Entry<String,List<String>> e : m.entrySet())
@@ -185,10 +190,13 @@ public class Operation extends SwaggerElement {
 			}
 		}
 
-		this.responses = copyFrom.responses == null ? null : new LinkedHashMap<String,ResponseInfo>();
-		if (copyFrom.responses != null)
+		if (copyFrom.responses == null) {
+			this.responses = null;
+		} else {
+			this.responses = new LinkedHashMap<>();
 			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
 				this.responses.put(e.getKey(), e.getValue().copy());
+		}
 	}
 
 	/**

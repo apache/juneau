@@ -96,9 +96,10 @@ public class SecurityScheme extends SwaggerElement {
 		this.authorizationUrl = copyFrom.authorizationUrl;
 		this.tokenUrl = copyFrom.tokenUrl;
 
-		this.scopes = copyFrom.scopes == null ? null : new LinkedHashMap<String,String>();
-		if (copyFrom.scopes != null)
-			this.scopes.putAll(copyFrom.scopes);
+		if (copyFrom.scopes == null)
+			this.scopes = null;
+		else
+			this.scopes = new LinkedHashMap<>(copyFrom.scopes);
 	}
 
 	/**

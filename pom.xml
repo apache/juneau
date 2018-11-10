@@ -42,6 +42,8 @@
 		<javadoc.juneau.version>8.0.0</javadoc.juneau.version>
 		<juneauVersion>8.0.0</juneauVersion>
 		<juneauVersionNext>8.0.1</juneauVersionNext>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencyManagement>
@@ -195,7 +197,7 @@
 						<excludePackageNames>*proto*:*samples*:*examples*:*test*:org.apache.juneau.doc.internal</excludePackageNames>
 						<linksource>true</linksource>
 						<links>
-							<link>http://docs.oracle.com/javase/7/docs/api/</link>
+							<link>http://docs.oracle.com/javase/8/docs/api/</link>
 							<link>http://docs.oracle.com/javaee/5/api/</link>
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>

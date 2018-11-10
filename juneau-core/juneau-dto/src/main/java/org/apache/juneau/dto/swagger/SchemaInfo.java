@@ -140,10 +140,13 @@ public class SchemaInfo extends SwaggerElement {
 		this.allOf = newList(copyFrom.allOf);
 		this.required = newList(copyFrom.required);
 
-		this.properties = copyFrom.properties == null ? null : new LinkedHashMap<String,SchemaInfo>();
-		if (copyFrom.properties != null)
+		if (copyFrom.properties == null) {
+			this.properties = null;
+		} else {
+			this.properties = new LinkedHashMap<>();
 			for (Map.Entry<String,SchemaInfo> e : copyFrom.properties.entrySet())
 				this.properties.put(e.getKey(), e.getValue().copy());
+		}
 
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
 	}

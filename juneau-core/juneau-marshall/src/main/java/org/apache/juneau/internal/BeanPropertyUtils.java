@@ -90,7 +90,9 @@ public final class BeanPropertyUtils {
 		if (values == null)
 			return appendTo;
 		try {
-			List<T> l = appendTo == null ? new ArrayList<T>() : appendTo;
+			List<T> l = appendTo;
+			if (appendTo == null)
+				l = new ArrayList<>();
 			for (Object o : values) {
 				if (o != null) {
 					if (isObjectList(o, false)) {
@@ -130,7 +132,9 @@ public final class BeanPropertyUtils {
 		if (values == null)
 			return appendTo;
 		try {
-			Map<K,V> m = appendTo == null ? new LinkedHashMap<K,V>() : appendTo;
+			Map<K,V> m = appendTo;
+			if (m == null)
+				m = new LinkedHashMap<>();
 			for (Object o : values) {
 				if (o != null) {
 					if (isObjectMap(o, false)) {

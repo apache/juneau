@@ -165,9 +165,10 @@ public class ParameterInfo extends SwaggerElement {
 		this._enum = newList(copyFrom._enum);
 		this.example = copyFrom.example;
 
-		this.examples = copyFrom.examples == null ? null : new LinkedHashMap<String,String>();
-		if (copyFrom.examples != null)
-			this.examples.putAll(copyFrom.examples);
+		if (copyFrom.examples == null)
+			this.examples = null;
+		else
+			this.examples = new LinkedHashMap<>(copyFrom.examples);
 	}
 
 	/**

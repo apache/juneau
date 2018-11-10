@@ -281,7 +281,9 @@ public final class RestUtils {
 	 */
 	public static Map<String,String[]> parseQuery(Object qs, Map<String,String[]> map) throws Exception {
 
-		Map<String,String[]> m = map == null ? new TreeMap<String,String[]>() : map;
+		Map<String,String[]> m = map;
+		if (m == null)
+			m = new TreeMap<>();
 
 		if (qs == null || ((qs instanceof CharSequence) && isEmpty(qs)))
 			return m;

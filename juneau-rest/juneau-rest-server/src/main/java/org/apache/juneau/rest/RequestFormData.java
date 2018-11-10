@@ -595,7 +595,11 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @return A JSON string containing the contents of the form-data parameters.
 	 */
 	public String toString(boolean sorted) {
-		Map<String,Object> m = (sorted ? new TreeMap<String,Object>() : new LinkedHashMap<String,Object>());
+		Map<String,Object> m = null;
+		if (sorted)
+			m = new TreeMap<>();
+		else
+			m = new LinkedHashMap<>();
 		for (Map.Entry<String,String[]> e : this.entrySet()) {
 			String[] v = e.getValue();
 			if (v != null)
