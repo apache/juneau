@@ -12,12 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.serializer.WriterSerializer.*;
+
+import javax.inject.*;
 
 import org.apache.juneau.examples.rest.dto.*;
 import org.apache.juneau.examples.rest.petstore.rest.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.resources.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -71,4 +75,36 @@ public class RootResources extends BasicRestServletJenaGroup {
 	// It allows you to remove the Jena prerequisite.
 
 	private static final long serialVersionUID = 1L;
+
+	private RestResourceResolver resolver;
+
+	/**
+	 * Constructor used when using Jetty.
+	 */
+	public RootResources() {
+		this(null);
+	}
+
+	/**
+	 * Used when constructed via Spring.
+	 *
+	 * @param resolver The bean resolver for child resources.
+	 */
+	@Inject
+	public RootResources(RestResourceResolver resolver) {
+		this.resolver = resolver;
+	}
+
+	/**
+	 * Used when constructed via Spring.
+	 * <p>
+	 * Sets the resource resolver passed in through the constructor.
+	 *
+	 * @param config
+	 * @throws Exception
+	 */
+	@RestHook(INIT)
+	public void init(RestContextBuilder config) throws Exception {
+		config.resourceResolver(resolver);
+	}
 }

@@ -22,6 +22,7 @@
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.apache.juneau</groupId>
@@ -30,20 +31,82 @@
 	<version>${version}</version>
 	<description>Sample code packaged as a microservice.</description>
 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>org.apache.juneau.examples.rest.spring-boot-starter-parent</artifactId>
+		<version>${springframework.version}</version>
+		<relativePath />
+	</parent>
+
 	<properties>
 		<encoding>UTF-8</encoding>
-		
-		<!-- Java 8 required because Jetty requires it. -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<derby.version>10.10.2.0</derby.version>
+		<springframework.version>2.0.1.RELEASE</springframework.version>
+		<javax.inject.version>1</javax.inject.version>
+		<juneau.version>${version}</juneau.version>
+		<jena.version>2.7.1</jena.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>org.apache.juneau.examples.rest.spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>org.apache.juneau.examples.rest.spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>org.apache.juneau.examples.rest.spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>org.apache.juneau.examples.rest.spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>${javax.inject.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-all</artifactId>
+			<version>${juneau.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-marshall-rdf</artifactId>
+			<version>${juneau.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>${jena.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-server</artifactId>
-			<version>${version}</version>
+			<version>${juneau.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
@@ -51,42 +114,20 @@
 			<version>${jena.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>${fileupload.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>${httpclient.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server</artifactId>
-			<version>${version}</version>
+			<version>${juneau.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.0.9.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.0.9.Final</version>
-        </dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -161,36 +202,46 @@
 							<goal>attach-artifact</goal>
 						</goals>
 						<configuration>
-							<artifacts>
-								<artifact>
-									<file>examples.cfg</file>
-									<type>cfg</type>
-									<classifier>samples</classifier>
-								</artifact>
-							</artifacts>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources</directory>
+									<includes>
+										<include>**/version.txt</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>org.apache.juneau.examples.rest.spring-boot-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>juneau-assembly</id>
-						<phase>package</phase>
 						<goals>
-							<goal>single</goal>
+							<goal>build-info</goal>
 						</goals>
 						<configuration>
-							<finalName>juneau-examples-rest-${version}</finalName>
-							<descriptors>
-								<descriptor>src/assembly/bin.xml</descriptor>
-							</descriptors>
+							<additionalProperties>
+								<encoding.source>${project.build.sourceEncoding}</encoding.source>
+								<encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>
+								<java.source>${maven.compiler.source}</java.source>
+								<java.target>${maven.compiler.target}</java.target>
+							</additionalProperties>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
+	
 </project>

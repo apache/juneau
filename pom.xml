@@ -157,8 +157,8 @@
 						<exclude>**/docs.txt</exclude>
 						
 						<!-- Files needed by Heroku as-is -->
-						<exclude>app.json</exclude>						
-						<exclude>Procfile</exclude>						
+						<exclude>**/app.json</exclude>						
+						<exclude>**/Procfile</exclude>						
 					</excludes>
 					<consoleOutput>true</consoleOutput>
 					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->
@@ -191,7 +191,7 @@
 						<windowtitle>${project.name} ${project.version}</windowtitle>
 						<author>true</author>
 						<linksource>true</linksource>
-						<source>1.7</source>
+						<source>1.8</source>
 						<bootclasspath>${sun.boot.class.path}</bootclasspath>
 						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
 						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
@@ -238,12 +238,11 @@
 					</executions>
 				</plugin>
 
-				<!-- Forces all modules to compile at Java 6. -->
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
+						<source>1.8</source>
+						<target>1.8</target>
 					</configuration>
 				</plugin>
 
