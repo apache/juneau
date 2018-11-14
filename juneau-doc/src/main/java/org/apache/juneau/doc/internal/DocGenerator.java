@@ -53,7 +53,8 @@ public class DocGenerator {
 
 			ReleaseNotes releaseNotes = new ReleaseNotes(new File("src/main/resources/ReleaseNotes"));
 
-			StringBuilder toc = new StringBuilder(), contents = new StringBuilder();
+			StringBuilder toc = new StringBuilder("<ol class='toc'>\n"), contents = new StringBuilder();
+
 			for (PageFile pf1 : topics.pageFiles) {
 				toc
 					.append("\t<li><p class='toc2 ").append(pf1.tags).append("'><a class='doclink' href='#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
@@ -115,7 +116,7 @@ public class DocGenerator {
 					.append("</div>").append("<!-- END: ").append(pf1.fullNumber).append(" - ").append(pf1.fullId).append(" -->\n");
 			}
 
-			StringBuilder tocRn = new StringBuilder(), rn = new StringBuilder();
+			StringBuilder tocRn = new StringBuilder("<ul class='toc'>\n"), rn = new StringBuilder();
 
 			for (ReleaseFile rf : releaseNotes.releaseFiles) {
 				tocRn
@@ -129,7 +130,10 @@ public class DocGenerator {
 					.append("</div>").append("<!-- END: ").append(rf.version).append(" -->\n");
 			}
 
-			template = template.replace("<!--{TOC-CONTENTS}-->", toc.toString()).replace("<!--{CONTENTS}-->", contents.toString()).replace("<!--{TOC-RELEASE-NOTES}-->", tocRn).replace("<!--{RELEASE-NOTES}-->", rn);
+			toc.append("</ol>\n");
+			tocRn.append("</ul>\n");
+
+			template = template.replace("{TOC-CONTENTS}", toc.toString()).replace("{CONTENTS}", contents.toString()).replace("{TOC-RELEASE-NOTES}", tocRn).replace("{RELEASE-NOTES}", rn);
 
 			IOUtils.writeFile("src/main/javadoc/overview.html", template);
 
@@ -144,6 +148,8 @@ public class DocGenerator {
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
 			for (File f : releaseNotes.docFiles)
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
+
+			IOUtils.writeFile("src/main/javadoc/resources/toc.txt", toc.toString());
 
 			info("Copied doc-files in {0}ms", System.currentTimeMillis()-startTime);
 
