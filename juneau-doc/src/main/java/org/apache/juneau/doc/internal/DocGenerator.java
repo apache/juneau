@@ -60,7 +60,7 @@ public class DocGenerator {
 
 			DocStore ds = new DocStore(new File("docs/docs.txt"));
 
-			File top = new File("src/main/resources/Topics");
+			File top = new File("docs/Topics");
 
 			reorder(top);
 
