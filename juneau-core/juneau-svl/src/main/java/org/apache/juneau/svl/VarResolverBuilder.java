@@ -72,9 +72,12 @@ public class VarResolverBuilder {
 	 * 	<li>{@link CoalesceVar}
 	 * 	<li>{@link PatternMatchVar}
 	 * 	<li>{@link PatternReplaceVar}
+	 * 	<li>{@link PatternExtractVar}
 	 * 	<li>{@link UpperCaseVar}
 	 * 	<li>{@link LowerCaseVar}
 	 * 	<li>{@link NotEmptyVar}
+	 * 	<li>{@link LenVar}
+	 * 	<li>{@link SubstringVar}
 	 * </ul>
 	 *
 	 * @return This object (for method chaining).
@@ -90,9 +93,12 @@ public class VarResolverBuilder {
 			CoalesceVar.class,
 			PatternMatchVar.class,
 			PatternReplaceVar.class,
+			PatternExtractVar.class,
 			UpperCaseVar.class,
 			LowerCaseVar.class,
-			NotEmptyVar.class);
+			NotEmptyVar.class,
+			LenVar.class,
+			SubstringVar.class);
 	}
 
 	/**
