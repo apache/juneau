@@ -26,7 +26,7 @@ import java.util.Map;
 public class DocTag implements Taglet {
 
 	private static final String NAME = "doc";
-	private static final DocStore STORE = new DocStore(new File("../../../juneau-doc/docs.txt"));
+	private static final DocStore STORE = new DocStore(new File("resources/docs.txt"));
 
 	@Override
 	public String getName() {

@@ -56,9 +56,9 @@ public class DocGenerator {
 		try {
 			long startTime = System.currentTimeMillis();
 
-			String template = IOUtils.readFile("src/main/resources/overview-template.html");
+			String template = IOUtils.readFile("docs/overview.html");
 
-			DocStore ds = new DocStore(new File("src/main/resources/docs.txt"));
+			DocStore ds = new DocStore(new File("docs/docs.txt"));
 
 			File top = new File("src/main/resources/Topics");
 
@@ -66,7 +66,7 @@ public class DocGenerator {
 
 			Topics topics = new Topics(top);
 
-			ReleaseNotes releaseNotes = new ReleaseNotes(new File("src/main/resources/ReleaseNotes"));
+			ReleaseNotes releaseNotes = new ReleaseNotes(new File("docs/ReleaseNotes"));
 
 			StringBuilder toc = new StringBuilder("<ol class='toc'>\n"), contents = new StringBuilder();
 
@@ -170,7 +170,7 @@ public class DocGenerator {
 			String toc2 = new StringBuilder().append("<!--").append(COPYRIGHT).append("\n-->\n").append(toc).toString();
 			IOUtils.writeFile("src/main/javadoc/resources/fragments/toc.html", toc2);
 
-			for (File f : new File("docs/fragments").listFiles())
+			for (File f : new File("docs/Fragments").listFiles())
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/resources/fragments", f.getName()));
 
 			info("Copied doc-files in {0}ms", System.currentTimeMillis()-startTime);
@@ -281,7 +281,6 @@ public class DocGenerator {
 					}
 				}
 			}
-
 		}
 
 		public String getPageDirName(File f) {
