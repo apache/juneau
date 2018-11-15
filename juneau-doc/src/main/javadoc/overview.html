@@ -66,20 +66,7 @@
 		}
 	}
 </script>
-<p>
-	Apache Juneau&trade; is a single cohesive Java ecosystem consisting of the following parts:
-</p>
-<ul class='spaced-list'>
-	<li><b>juneau-marshall</b> - A universal toolkit for marshalling POJOs to a wide variety of content types using a common framework with no external library dependencies.
-	<li><b>juneau-dto</b> - A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
-	<li><b>juneau-svl</b> - A simple yet powerful variable replacement language API.
-	<li><b>juneau-config</b> - A sophisticated configuration file API.
-	<li><b>juneau-rest-server</b> - A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as 
-		one or more top-level servlets in any Servlet 3.1.0+ container.
-	<li><b>juneau-rest-client</b> - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-	<li><b>juneau-microservice</b> - A REST microservice API that combines all the features above with a simple configurable Jetty server for 
-		creating lightweight standalone REST interfaces that start up in milliseconds.
-</ul>
+{@fragment about.html}
 
 <a href='#TOC' id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 <ol class='toc'>
@@ -32442,8 +32429,29 @@
 <h3 class='topic' onclick='toggle(this)'><a href='#8.0.0' id='8.0.0'>8.0.0 (TBD)</a></h3>
 <div class='topic'><!-- START: 8.0.0 -->
 <p>
-	TBD
+	This release primarily cleans up deprecated APIs from the 7.2.0 release.
 </p>
+
+<h5 class='topic w800'>juneau-svl</h5>
+<ul class='spaced-list'>
+	<li>
+		New SVL variables:
+		<ul class='doctree'>
+			<li class='jc'>{@link SubstringVar}
+			<li class='jc'>{@link PatternExtractVar}
+			<li class='jc'>{@link PatternReplaceVar}
+			<li class='jc'>{@link LenVar}
+		</ul>
+</ul>
+
+<h5 class='topic w800'>juneau-examples-rest</h5>
+<ul class='spaced-list'>
+	<li>
+		New <code>org.apache.juneau.examples.rest.spring</code> package with code showing how to use Juneau REST
+		with Spring Boot. 
+	<li>
+		New <code>app.json</code> and <code>Procfile</code> files for deploying examples into Heroku.
+</ul>
 </div><!-- END: 8.0.0 -->
 
 </div>

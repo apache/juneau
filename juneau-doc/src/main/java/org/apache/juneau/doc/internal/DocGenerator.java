@@ -25,6 +25,21 @@ public class DocGenerator {
 
 	static List<String> WARNINGS = new ArrayList<>();
 
+	static final String COPYRIGHT = ""
+		+ "\n/***************************************************************************************************************************"
+		+ "\n * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file"
+		+ "\n * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file"
+		+ "\n * to you under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance"
+		+ "\n * with the License.  You may obtain a copy of the License at"
+		+ "\n *  "
+		+ "\n *  http://www.apache.org/licenses/LICENSE-2.0"
+		+ "\n *  "
+		+ "\n * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an"
+		+ "\n * \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the"
+		+ "\n * specific language governing permissions and limitations under the License."
+		+ "\n ***************************************************************************************************************************/"
+	;
+
 	/**
 	 * Entry point.
 	 *
@@ -57,7 +72,7 @@ public class DocGenerator {
 
 			for (PageFile pf1 : topics.pageFiles) {
 				toc
-					.append("\t<li><p class='toc2 ").append(pf1.tags).append("'><a class='doclink' href='#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
+					.append("\t<li><p class='toc2 ").append(pf1.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
 				ds
 					.addLink(pf1.fullId, "#" + pf1.fullId, "Overview > " + pf1.title);
 				contents
@@ -74,7 +89,7 @@ public class DocGenerator {
 					for (PageFile pf2 : pf1.pageFiles) {
 
 						toc
-							.append("\t\t<li><p class='").append(pf2.tags).append("'><a class='doclink' href='#").append(pf2.fullId).append("'>").append(pf2.title).append("</a></p>\n");
+							.append("\t\t<li><p class='").append(pf2.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf2.fullId).append("'>").append(pf2.title).append("</a></p>\n");
 						ds
 							.addLink(pf2.fullId, "#" + pf2.fullId, "Overview > " + pf1.title + " > " + pf2.title);
 						contents
@@ -90,7 +105,7 @@ public class DocGenerator {
 							for (PageFile pf3 : pf2.pageFiles) {
 
 								toc
-									.append("\t\t\t<li><p class='").append(pf3.tags).append("'><a class='doclink' href='#").append(pf3.fullId).append("'>").append(pf3.title).append("</a></p>\n");
+									.append("\t\t\t<li><p class='").append(pf3.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf3.fullId).append("'>").append(pf3.title).append("</a></p>\n");
 								ds
 									.addLink(pf3.fullId, "#" + pf3.fullId, "Overview > " + pf1.title + " > " + pf2.title + " > " + pf3.title);
 								contents
@@ -133,23 +148,30 @@ public class DocGenerator {
 			toc.append("</ol>\n");
 			tocRn.append("</ul>\n");
 
-			template = template.replace("{TOC-CONTENTS}", toc.toString()).replace("{CONTENTS}", contents.toString()).replace("{TOC-RELEASE-NOTES}", tocRn).replace("{RELEASE-NOTES}", rn);
+			template = template.replace("{TOC-CONTENTS}", toc.toString().replace("{OVERVIEW_URL}","")).replace("{CONTENTS}", contents.toString()).replace("{TOC-RELEASE-NOTES}", tocRn).replace("{RELEASE-NOTES}", rn);
 
 			IOUtils.writeFile("src/main/javadoc/overview.html", template);
 
-			ds.save(new File("docs.txt"));
+			ds.save(new File("src/main/javadoc/resources/docs.txt"));
 
 			info("Generated target/overview.html in {0}ms", System.currentTimeMillis()-startTime);
 
 			startTime = System.currentTimeMillis();
 			for (File f : new File("src/main/javadoc/doc-files").listFiles())
 				Files.delete(f.toPath());
+			for (File f : new File("src/main/javadoc/resources/fragments").listFiles())
+				Files.delete(f.toPath());
+
 			for (File f : topics.docFiles)
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
 			for (File f : releaseNotes.docFiles)
 				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
 
-			IOUtils.writeFile("src/main/javadoc/resources/toc.txt", toc.toString());
+			String toc2 = new StringBuilder().append("<!--").append(COPYRIGHT).append("\n-->\n").append(toc).toString();
+			IOUtils.writeFile("src/main/javadoc/resources/fragments/toc.html", toc2);
+
+			for (File f : new File("docs/fragments").listFiles())
+				Files.copy(f.toPath(), Paths.get("src/main/javadoc/resources/fragments", f.getName()));
 
 			info("Copied doc-files in {0}ms", System.currentTimeMillis()-startTime);
 

@@ -90,7 +90,7 @@ public class DocLinkTester {
 		while (m.find()) {
 			String link = m.group(2);
 			String anchor = null;
-			if (link.startsWith("https://") || link.startsWith("http://") || link.startsWith("mailto:") || link.startsWith("javascript:") || link.startsWith("$"))
+			if (link.startsWith("https://") || link.startsWith("http://") || link.startsWith("mailto:") || link.startsWith("javascript:") || link.startsWith("$") || link.startsWith("{OVERVIEW_URL}"))
 				continue;
 			links++;
 			if (link.indexOf('?') != -1)
