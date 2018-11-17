@@ -10829,9 +10829,13 @@
 		<li class='jc'>{@link org.apache.juneau.svl.vars.SwitchVar} - <code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.CoalesceVar} - <code>$CO{arg1[,arg2...]}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code> 
+		<li class='jc'>{@link org.apache.juneau.svl.vars.PatternReplaceVar} - <code>$PR{arg,pattern,replace}</code> 
+		<li class='jc'>{@link org.apache.juneau.svl.vars.PatternExtractVar} - <code>$PE{arg,pattern,groupIndex}</code> 
 		<li class='jc'>{@link org.apache.juneau.svl.vars.NotEmptyVar} - <code>$NE{arg}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.UpperCaseVar} - <code>$UC{arg}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
+		<li class='jc'>{@link org.apache.juneau.svl.vars.LenVar} - <code>$LN{arg[,delimiter]}</code>
+		<li class='jc'>{@link org.apache.juneau.svl.vars.SubstringVar} - <code>$ST{arg,start[,end]}</code>
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -10912,7 +10916,7 @@
 		<th>Module</th><th>Class</th><th>Pattern</th>
 	</tr>
 	<tr class='dark'>
-		<td rowspan='11' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
+		<td rowspan='15' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
 		<td>{@link org.apache.juneau.svl.vars.EnvVariablesVar}</td>
 		<td class='code'>$E{key[,default]}</td>
 	</tr>
@@ -10945,6 +10949,14 @@
 		<td class='code'>$PM{arg,pattern}</td>
 	</tr>
 	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.PatternReplaceVar}</td>
+		<td class='code'>$PR{arg,pattern,replace}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.PatternExtractVar}</td>
+		<td class='code'>$PE{arg,pattern,groupdIndex}</td>
+	</tr>
+	<tr class='dark'>
 		<td>{@link org.apache.juneau.svl.vars.NotEmptyVar}</td>
 		<td class='code'>$NE{arg}</td>
 	</tr>
@@ -10955,6 +10967,14 @@
 	<tr class='dark'>
 		<td>{@link org.apache.juneau.svl.vars.LowerCaseVar}</td>
 		<td class='code'>$LC{arg}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.LenVar}</td>
+		<td class='code'>$LN{arg[,delimiter]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.SubstingVar}</td>
+		<td class='code'>$ST{arg,start[,end]}</td>
 	</tr>
 	<tr class='light dd'>
 		<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-config</td>
