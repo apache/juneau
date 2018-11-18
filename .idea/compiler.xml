@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="juneau-all" />
+        <module name="juneau-config" />
+        <module name="juneau-core-test" />
+        <module name="juneau-doc" />
+        <module name="juneau-dto" />
+        <module name="juneau-examples-core" />
+        <module name="juneau-examples-rest" />
+        <module name="juneau-marshall" />
+        <module name="juneau-marshall-rdf" />
+        <module name="juneau-microservice-server" />
+        <module name="juneau-microservice-template" />
+        <module name="juneau-microservice-test" />
+        <module name="juneau-rest-client" />
+        <module name="juneau-rest-server" />
+        <module name="juneau-rest-server-jaxrs" />
+        <module name="juneau-svl" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
