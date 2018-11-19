@@ -13,25 +13,46 @@
  * specific language governing permissions and limitations under the License.                                              *
  ***************************************************************************************************************************
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-
-	<parent>
-		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau</artifactId>
-		<version>8.0.0-SNAPSHOT</version>
-	</parent>
-
-	<artifactId>juneau-examples</artifactId>
-	<packaging>pom</packaging>
-	<name>Apache Juneau - Examples</name>
-	<description>Apache Juneau Examples</description>
-
-	<modules>
-		<module>juneau-examples-core</module>
-		<module>juneau-examples-rest</module>
-		<module>juneau-examples-rest-springboot</module>
-	</modules>
-
-</project>
+<!--
+	This assembly is used to create the template zip file that developers use to import into Eclipse to start their
+	own projects.
+ -->
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
+	<id>bin</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<baseDirectory>/</baseDirectory>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>${basedir}/../juneau-examples-rest</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>src/main/**</include>
+				<include>files/**</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>src/main/**</include>
+				<include>.settings/**</include>
+				<include>.project</include>
+				<include>*.launch</include>
+				<include>*.cfg</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}/build-overlay</directory>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+		</fileSet>
+	</fileSets>
+	
+</assembly>

@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-SVL Variables
+{updated} SVL Variables
 
 <p>
 	Variables are defined through the {@link oaj.svl.Var} API.
@@ -73,7 +73,7 @@ SVL Variables
 		<th>Module</th><th>Class</th><th>Pattern</th>
 	</tr>
 	<tr class='dark'>
-		<td rowspan='11' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
+		<td rowspan='15' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
 		<td>{@link oaj.svl.vars.EnvVariablesVar}</td>
 		<td class='code'>$E{key[,default]}</td>
 	</tr>
@@ -106,6 +106,14 @@ SVL Variables
 		<td class='code'>$PM{arg,pattern}</td>
 	</tr>
 	<tr class='dark'>
+		<td>{@link oaj.svl.vars.PatternReplaceVar}</td>
+		<td class='code'>$PR{arg,pattern,replace}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.PatternExtractVar}</td>
+		<td class='code'>$PE{arg,pattern,groupdIndex}</td>
+	</tr>
+	<tr class='dark'>
 		<td>{@link oaj.svl.vars.NotEmptyVar}</td>
 		<td class='code'>$NE{arg}</td>
 	</tr>
@@ -117,13 +125,21 @@ SVL Variables
 		<td>{@link oaj.svl.vars.LowerCaseVar}</td>
 		<td class='code'>$LC{arg}</td>
 	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.LenVar}</td>
+		<td class='code'>$LN{arg[,delimiter]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link oaj.svl.vars.SubstringVar}</td>
+		<td class='code'>$ST{arg,start[,end]}</td>
+	</tr>
 	<tr class='light dd'>
 		<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-config</td>
 		<td>{@link oaj.config.vars.ConfigVar}</td>
 		<td class='code'>$C{key[,default]}</td>
 	</tr>
 	<tr class='dark'>
-		<td rowspan='14' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest-server</td>
+		<td rowspan='15' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest-server</td>
 		<td>{@link oajr.vars.FileVar}</td>
 		<td class='code'>$F{path[,default]}}</td>
 	</tr>

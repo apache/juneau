@@ -10,31 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.spring;
+package org.apache.juneau.svl.vars;
 
-import org.apache.juneau.rest.*;
-import org.springframework.context.ApplicationContext;
+import static org.junit.Assert.*;
 
-/**
- * Implementation of a {@link RestResourceResolver} for resolving REST resources using Spring.
- */
-public class SpringRestResourceResolver extends BasicRestResourceResolver {
+import org.apache.juneau.svl.*;
+import org.junit.*;
 
-	private ApplicationContext appContext;
+public class LenVarTest {
 
-	public SpringRestResourceResolver(ApplicationContext appContext) {
-		this.appContext = appContext;
-	}
+	//====================================================================================================
+	// test - Basic tests
+	//====================================================================================================
+	@Test
+	public void test() throws Exception {
+		VarResolver vr = new VarResolverBuilder().vars(LenVar.class, SystemPropertiesVar.class).build();
 
-	@Override
-	public Object resolve(Object parent, Class<?> type, RestContextBuilder builder) throws Exception {
-		try {
-			Object o = appContext.getBean(type);
-			if (o != null)
-				return o;
-		} catch(Exception e) {
-			// Ignore
-		}
-		return super.resolve(parent, type, builder);
+		System.setProperty("LenVarTest.test", "foo bar");
+		System.setProperty("LenVarTest.test2", "1.2.3.4.5");
+
+		// $LN{stringArg} examples
+		assertEquals("1", vr.resolve("$LN{J}"));
+		assertEquals("len=7", vr.resolve("len=$LN{$S{LenVarTest.test}}"));
+		
+		// $LN{stringArg, delimiter} examples
+		assertEquals("5", vr.resolve("$LN{$S{LenVarTest.test2},.}"));
+
+		
 	}
 }

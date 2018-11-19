@@ -66,20 +66,7 @@
 		}
 	}
 </script>
-<p>
-	Apache Juneau&trade; is a single cohesive Java ecosystem consisting of the following parts:
-</p>
-<ul class='spaced-list'>
-	<li><b>juneau-marshall</b> - A universal toolkit for marshalling POJOs to a wide variety of content types using a common framework with no external library dependencies.
-	<li><b>juneau-dto</b> - A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
-	<li><b>juneau-svl</b> - A simple yet powerful variable replacement language API.
-	<li><b>juneau-config</b> - A sophisticated configuration file API.
-	<li><b>juneau-rest-server</b> - A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as 
-		one or more top-level servlets in any Servlet 3.1.0+ container.
-	<li><b>juneau-rest-client</b> - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-	<li><b>juneau-microservice</b> - A REST microservice API that combines all the features above with a simple configurable Jetty server for 
-		creating lightweight standalone REST interfaces that start up in milliseconds.
-</ul>
+{@fragment about.html}
 
 <a href='#TOC' id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 <ol class='toc'>
@@ -217,7 +204,7 @@
 	<li><p class='toc2 '><a class='doclink' href='#juneau-svl'>juneau-svl</a></p>
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-svl.SimpleVarLanguage'>Simple Variable Language</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-svl.SvlVariables'>SVL Variables</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-svl.SvlVariables'>SVL Variables</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-svl.VarResolvers'>VarResolvers and VarResolverSessions</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-svl.OtherNotes'>Other Notes</a></p>
 	</ol>
@@ -442,7 +429,6 @@
 		<li><p class=''><a class='doclink' href='#Security.juneau-svl'>juneau-svl</a></p>
 		<li><p class=''><a class='doclink' href='#Security.juneau-rest-server'>juneau-rest-server</a></p>
 	</ol>
-
 </ol>
 
 
@@ -10843,9 +10829,13 @@
 		<li class='jc'>{@link org.apache.juneau.svl.vars.SwitchVar} - <code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.CoalesceVar} - <code>$CO{arg1[,arg2...]}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.PatternMatchVar} - <code>$PM{arg,pattern}</code> 
+		<li class='jc'>{@link org.apache.juneau.svl.vars.PatternReplaceVar} - <code>$PR{arg,pattern,replace}</code> 
+		<li class='jc'>{@link org.apache.juneau.svl.vars.PatternExtractVar} - <code>$PE{arg,pattern,groupIndex}</code> 
 		<li class='jc'>{@link org.apache.juneau.svl.vars.NotEmptyVar} - <code>$NE{arg}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.UpperCaseVar} - <code>$UC{arg}</code>
 		<li class='jc'>{@link org.apache.juneau.svl.vars.LowerCaseVar} - <code>$LC{arg}</code>
+		<li class='jc'>{@link org.apache.juneau.svl.vars.LenVar} - <code>$LN{arg[,delimiter]}</code>
+		<li class='jc'>{@link org.apache.juneau.svl.vars.SubstringVar} - <code>$ST{arg,start[,end]}</code>
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -10866,7 +10856,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-svl.SvlVariables' id='juneau-svl.SvlVariables'>5.2 - SVL Variables</a></h3>
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-svl.SvlVariables' id='juneau-svl.SvlVariables'>5.2 - SVL Variables</a></h3>
 <div class='topic'><!-- START: 5.2 - juneau-svl.SvlVariables -->
 <p>
 	Variables are defined through the {@link org.apache.juneau.svl.Var} API.
@@ -10926,7 +10916,7 @@
 		<th>Module</th><th>Class</th><th>Pattern</th>
 	</tr>
 	<tr class='dark'>
-		<td rowspan='11' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
+		<td rowspan='15' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-svl</td>
 		<td>{@link org.apache.juneau.svl.vars.EnvVariablesVar}</td>
 		<td class='code'>$E{key[,default]}</td>
 	</tr>
@@ -10959,6 +10949,14 @@
 		<td class='code'>$PM{arg,pattern}</td>
 	</tr>
 	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.PatternReplaceVar}</td>
+		<td class='code'>$PR{arg,pattern,replace}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.PatternExtractVar}</td>
+		<td class='code'>$PE{arg,pattern,groupdIndex}</td>
+	</tr>
+	<tr class='dark'>
 		<td>{@link org.apache.juneau.svl.vars.NotEmptyVar}</td>
 		<td class='code'>$NE{arg}</td>
 	</tr>
@@ -10970,13 +10968,21 @@
 		<td>{@link org.apache.juneau.svl.vars.LowerCaseVar}</td>
 		<td class='code'>$LC{arg}</td>
 	</tr>
+	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.LenVar}</td>
+		<td class='code'>$LN{arg[,delimiter]}</td>
+	</tr>
+	<tr class='dark'>
+		<td>{@link org.apache.juneau.svl.vars.SubstringVar}</td>
+		<td class='code'>$ST{arg,start[,end]}</td>
+	</tr>
 	<tr class='light dd'>
 		<td rowspan='1' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-config</td>
 		<td>{@link org.apache.juneau.config.vars.ConfigVar}</td>
 		<td class='code'>$C{key[,default]}</td>
 	</tr>
 	<tr class='dark'>
-		<td rowspan='14' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest-server</td>
+		<td rowspan='15' style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest-server</td>
 		<td>{@link org.apache.juneau.rest.vars.FileVar}</td>
 		<td class='code'>$F{path[,default]}}</td>
 	</tr>
@@ -26366,7 +26372,7 @@
 	
 	<h5 class='toc'>Release Notes</h5>
 	<ul class='toc'>
-	<li><p><a class='doclink' href='#5.0.0.0'>5.0.0.0 (Jun 11, 2012)</a></p>
+<li><p><a class='doclink' href='#5.0.0.0'>5.0.0.0 (Jun 11, 2012)</a></p>
 <li><p><a class='doclink' href='#5.0.0.1'>5.0.0.1 (Jun 14, 2012)</a></p>
 <li><p><a class='doclink' href='#5.0.0.2'>5.0.0.2 (Sept 28, 2012)</a></p>
 <li><p><a class='doclink' href='#5.0.0.3'>5.0.0.3 (Oct 3, 2012)</a></p>
@@ -26440,8 +26446,7 @@
 <li><p><a class='doclink' href='#7.2.1'>7.2.1 (Oct 23, 2018)</a></p>
 <li><p><a class='doclink' href='#7.2.2'>7.2.2 (Nov 7, 2018)</a></p>
 <li><p><a class='doclink' href='#8.0.0'>8.0.0 (TBD)</a></p>
-
-	</ul>
+</ul>
 
 	
 <!-- ==================================================================================================== -->
@@ -32444,8 +32449,29 @@
 <h3 class='topic' onclick='toggle(this)'><a href='#8.0.0' id='8.0.0'>8.0.0 (TBD)</a></h3>
 <div class='topic'><!-- START: 8.0.0 -->
 <p>
-	TBD
+	This release primarily cleans up deprecated APIs from the 7.2.0 release.
 </p>
+
+<h5 class='topic w800'>juneau-svl</h5>
+<ul class='spaced-list'>
+	<li>
+		New SVL variables:
+		<ul class='doctree'>
+			<li class='jc'>{@link org.apache.juneau.svl.vars.SubstringVar}
+			<li class='jc'>{@link org.apache.juneau.svl.vars.PatternExtractVar}
+			<li class='jc'>{@link org.apache.juneau.svl.vars.PatternReplaceVar}
+			<li class='jc'>{@link org.apache.juneau.svl.vars.LenVar}
+		</ul>
+</ul>
+
+<h5 class='topic w800'>juneau-examples-rest</h5>
+<ul class='spaced-list'>
+	<li>
+		New <code>org.apache.juneau.examples.rest.spring</code> package with code showing how to use Juneau REST
+		with Spring Boot. 
+	<li>
+		New <code>app.json</code> and <code>Procfile</code> files for deploying examples into Heroku.
+</ul>
 </div><!-- END: 8.0.0 -->
 
 </div>

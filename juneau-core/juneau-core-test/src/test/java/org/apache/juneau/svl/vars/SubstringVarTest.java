@@ -10,43 +10,37 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.spring;
+package org.apache.juneau.svl.vars;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.*;
-import org.springframework.context.*;
-import org.springframework.context.annotation.*;
-import org.springframework.stereotype.*;
+import static org.junit.Assert.*;
 
-/**
- * Entry point for Examples REST application when deployed as a Spring Boot application.
- */
-@SpringBootApplication
-@Controller
-@Import({AppConfiguration.class, AppServletConfiguration.class})
-public class App {
+import org.apache.juneau.svl.*;
+import org.junit.*;
 
-	public static int counter = 0;
-	private static volatile ConfigurableApplicationContext context;
+public class SubstringVarTest {
 
-	public static void main(String[] args) {
-		if (System.getProperty("juneau.configFile") == null)
-			System.setProperty("juneau.configFile", "examples.cfg");
-		try {
-			context = SpringApplication.run(App.class, args);
-			if (context == null)
-				System.exit(2); // Probably port in use?
-			AppConfiguration.setAppContext(context);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	//====================================================================================================
+	// test - Basic tests
+	//====================================================================================================
+	@Test
+	public void test() throws Exception {
+		VarResolver vr = new VarResolverBuilder().vars(SubstringVar.class, SystemPropertiesVar.class).build();
 
-	public static void start() {
-		main(new String[0]);
-	}
+		System.setProperty("SubstringVarTest.test", "foo bar");
 
-	public static void stop() {
-		context.stop();
+		// $ST{stringArg, start} examples
+		// Notice that -start also works here
+		assertEquals("o bar", vr.resolve("$ST{$S{SubstringVarTest.test},2}"));
+		assertEquals("", vr.resolve("$ST{$S{SubstringVarTest.test},24}"));
+		assertEquals("foo bar", vr.resolve("$ST{$S{SubstringVarTest.test},0}"));
+		assertEquals("", vr.resolve("$ST{$S{SubstringVarTest.test},-24}"));
+		assertEquals("bar", vr.resolve("$ST{$S{SubstringVarTest.test},-3}"));
+		assertEquals("foo bar", vr.resolve("$ST{$S{SubstringVarTest.test},-7}"));
+		
+		// $ST{stringArg, start, end}
+		assertEquals("foo bar", vr.resolve("$ST{$S{SubstringVarTest.test},0,7}"));
+		assertEquals("oo", vr.resolve("$ST{$S{SubstringVarTest.test},1,3}"));
+		assertEquals("", vr.resolve("$ST{$S{SubstringVarTest.test},-2, 2}"));
+		
 	}
 }

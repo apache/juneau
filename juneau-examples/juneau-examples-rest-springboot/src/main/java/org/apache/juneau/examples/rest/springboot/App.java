@@ -10,33 +10,43 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.spring;
+package org.apache.juneau.examples.rest.springboot;
 
-import org.apache.juneau.rest.RestResourceResolver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.context.*;
+import org.springframework.context.annotation.*;
+import org.springframework.stereotype.*;
 
 /**
- * Spring configuration for Spring beans.
+ * Entry point for Examples REST application when deployed as a Spring Boot application.
  */
-@Configuration
-public abstract class AppConfiguration {
+@SpringBootApplication
+@Controller
+@Import({AppConfiguration.class, AppServletConfiguration.class})
+public class App {
 
-	@Autowired
-	private static volatile ApplicationContext appContext;
+	public static int counter = 0;
+	private static volatile ConfigurableApplicationContext context;
 
-	public static ApplicationContext getAppContext() {
-		return appContext;
+	public static void main(String[] args) {
+		if (System.getProperty("juneau.configFile") == null)
+			System.setProperty("juneau.configFile", "examples.cfg");
+		try {
+			context = SpringApplication.run(App.class, args);
+			if (context == null)
+				System.exit(2); // Probably port in use?
+			AppConfiguration.setAppContext(context);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static void setAppContext(ApplicationContext appContext) {
-		AppConfiguration.appContext = appContext;
+	public static void start() {
+		main(new String[0]);
 	}
 
-	@Bean
-	public RestResourceResolver restResourceResolver(ApplicationContext appContext) {
-		return new SpringRestResourceResolver(appContext);
+	public static void stop() {
+		context.stop();
 	}
 }

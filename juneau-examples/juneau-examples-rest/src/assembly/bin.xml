@@ -37,8 +37,8 @@
 				<include>.settings/**</include>
 				<include>files/**</include>
 				<include>.project</include>
-				<include>juneau-examples-rest.launch</include>
-				<include>examples.cfg</include>
+				<include>*.launch</include>
+				<include>*.cfg</include>
 			</includes>
 		</fileSet>
 		<fileSet>
