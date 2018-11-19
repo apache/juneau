@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.springboot;
 
+import static org.apache.juneau.internal.SystemUtils.*;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.context.*;
@@ -30,13 +32,13 @@ public class App {
 	private static volatile ConfigurableApplicationContext context;
 
 	public static void main(String[] args) {
-		if (System.getProperty("juneau.configFile") == null)
-			System.setProperty("juneau.configFile", "examples.cfg");
 		try {
+			setProperty("juneau.configFile", "examples.cfg", false);
 			context = SpringApplication.run(App.class, args);
 			if (context == null)
 				System.exit(2); // Probably port in use?
 			AppConfiguration.setAppContext(context);
+			setProperty("juneau.serverPort", context.getEnvironment().getProperty("server.port"), false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

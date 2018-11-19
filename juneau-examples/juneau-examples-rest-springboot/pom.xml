@@ -29,15 +29,10 @@
 
 	<properties>
 		<encoding>UTF-8</encoding>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 
-		<!-- Java 8 required because Jetty requires it. -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<springframework.version>2.0.1.RELEASE</springframework.version>
 	</properties>
 
 
@@ -102,17 +97,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>apache.releases.https</id>
-			<name>Apache Release Distribution Repository</name>
-			<url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>apache.snapshots.https</id>
-			<name>Apache Development Snapshot Repository</name>
-			<url>https://repository.apache.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 </project>

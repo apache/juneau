@@ -96,7 +96,9 @@ public class PetStoreService extends AbstractPersistenceService {
 	public PetStoreService initViaRest(PrintWriter w) throws Exception {
 		JsonParser parser = JsonParser.create().ignoreUnknownBeanProperties().build();
 
-		try (RestClient rc = RestClient.create().json().rootUrl("http://localhost:10000").build()) {
+		String port = System.getProperty("juneau.serverPort", "8000");
+
+		try (RestClient rc = RestClient.create().json().rootUrl("http://localhost:" + port).build()) {
 			PetStore ps = rc.getRemoteResource(PetStore.class);
 
 			for (Pet x : ps.getPets()) {

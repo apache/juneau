@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.SystemUtils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -296,7 +298,7 @@ public class RestMicroservice extends Microservice {
 
 		int[] ports = cf.getObjectWithDefault("Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class), int[].class);
 		int availablePort = findOpenPort(ports);
-		System.setProperty("availablePort", String.valueOf(availablePort));
+		setProperty("availablePort", availablePort, false);
 
 		if (jettyXml == null)
 			jettyXml = cf.getString("Jetty/config", mf.getString("Jetty-Config", null));
@@ -326,6 +328,8 @@ public class RestMicroservice extends Microservice {
 
 		XmlConfiguration config = new XmlConfiguration(new ByteArrayInputStream(xmlConfig.getBytes()));
 		server = (Server)config.configure();
+
+		setProperty("juneau.serverPort", availablePort, false);
 
 		return server;
 	}

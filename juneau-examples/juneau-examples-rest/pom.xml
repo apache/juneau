@@ -29,17 +29,10 @@
 
 	<properties>
 		<encoding>UTF-8</encoding>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<derby.version>10.10.2.0</derby.version>
-		<hibernate.version>5.0.9.Final</hibernate.version>
 
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 
-		<!-- Java 8 required because Jetty requires it. -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<javax.inject.version>1</javax.inject.version>
 	</properties>
 
 
@@ -77,6 +70,11 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>xml-apis</groupId>
+		    <artifactId>xml-apis</artifactId>
+		    <version>${xml.apis.version}</version>
 		</dependency>
 
 		<dependency>

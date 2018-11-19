@@ -39,13 +39,14 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<derby.version>10.10.2.0</derby.version>
-		<springframework.version>2.0.1.RELEASE</springframework.version>
+		<derby.version>${derby.version}</derby.version>
+		<springframework.version>${springframework.version}</springframework.version>
 		<javax.inject.version>1</javax.inject.version>
 		<juneau.version>${version}</juneau.version>
-		<jena.version>2.7.1</jena.version>
-		<junit.version>4.11</junit.version>
-		<hibernate.version>5.0.9.Final</hibernate.version>
+		<jena.version>${jena.version}</jena.version>
+		<junit.version>${junit.version}</junit.version>
+		<hibernate.version>${hibernate.version}</hibernate.version>
+		<xml.apis.version>${xml.apis.version}</xml.apis.version>
 	</properties>
 
 	<dependencies>
@@ -95,6 +96,11 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>\${hibernate.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>xml-apis</groupId>
+		    <artifactId>xml-apis</artifactId>
+		    <version>\${xml.apis.version}</version>
 		</dependency>
 		
 		<!-- Optional RDF support -->
