@@ -423,7 +423,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
 	</ol>
-	<li><p class='toc2 todo'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></p>
+	<li><p class='toc2 new'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></p>
 	<ol>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.Classes'>Classes</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.DeployingToHeroku'>Deploying to Heroku</a></p>
@@ -26215,15 +26215,34 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>13 - juneau-examples-rest-springboot</a></h2>
+<h2 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>13 - juneau-examples-rest-springboot</a></h2>
 <div class='topic'><!-- START: 13 - juneau-examples-rest-springboot -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
-	juneau-examples-rest-springboot-{@property juneauVersion}.bin.zip 
+	juneau-examples-rest-springboot-{@property juneauVersion}.zip 
 </p>	
 
 <p>
-	TODO
+	The <code>juneau-examples-rest-springboot</code> class contains the same examples as <code>juneau-examples-rest</code>
+	but also includes the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		A starter class for invoking the examples using Spring Boot.
+	<li>
+		A resource resolver for resolving REST resources as injectable beans.
+	<li>
+		A POM that extends from <code>spring-boot-starter-parent</code> that allows you to build a fully-shaded executable jar.
+	<li>
+		Configuration files for deploying the microservice to Heroku.
+</ul>
+
+<p>
+	The microservice app can be imported into Eclipse just like <code>juneau-examples-rest</code>.
+</p>
+<p>
+	The microservice can be started from the <code>juneau-examples-rest-springboot.launch</code> file. 
+	It will start up the microservice on port 5000 which you can then view through a browser.
 </p>
 
 <!-- ==================================================================================================== -->
