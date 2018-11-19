@@ -10,31 +10,35 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.springboot;
+package org.apache.juneau.microservice.springboot.config;
 
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.RestResourceResolver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * Implementation of a {@link RestResourceResolver} for resolving REST resources using Spring.
+ * Spring configuration for Spring beans.
  */
-public class SpringRestResourceResolver extends BasicRestResourceResolver {
+@Configuration
+@ImportAutoConfiguration(classes = {AppServletConfiguration.class, SpringRestResourceResolver.class})
+public class AppConfiguration {
 
-	private ApplicationContext appContext;
+	/*@Autowired
+	private static volatile ApplicationContext appContext;
 
-	public SpringRestResourceResolver(ApplicationContext appContext) {
-		this.appContext = appContext;
+	public static ApplicationContext getAppContext() {
+		return appContext;
 	}
 
-	@Override
-	public Object resolve(Object parent, Class<?> type, RestContextBuilder builder) throws Exception {
-		try {
-			Object o = appContext.getBean(type);
-			if (o != null)
-				return o;
-		} catch(Exception e) {
-			// Ignore
-		}
-		return super.resolve(parent, type, builder);
+	public static void setAppContext(ApplicationContext appContext) {
+		AppConfiguration.appContext = appContext;
 	}
+
+	@Bean
+	public RestResourceResolver restResourceResolver(ApplicationContext appContext) {
+		return new SpringRestResourceResolver(appContext);
+	}*/
 }

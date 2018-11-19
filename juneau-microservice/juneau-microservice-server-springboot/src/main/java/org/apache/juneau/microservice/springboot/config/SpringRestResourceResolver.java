@@ -10,33 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.springboot;
+package org.apache.juneau.microservice.springboot.config;
 
-import org.apache.juneau.rest.RestResourceResolver;
+import org.apache.juneau.rest.BasicRestResourceResolver;
+import org.apache.juneau.rest.RestContextBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Spring configuration for Spring beans.
+ * Implementation of a {@link org.apache.juneau.rest.RestResourceResolver} for resolving REST resources using Spring.
  */
 @Configuration
-public abstract class AppConfiguration {
+public class SpringRestResourceResolver extends BasicRestResourceResolver {
 
-	@Autowired
-	private static volatile ApplicationContext appContext;
+    @Autowired
+    private ApplicationContext appContext;
 
-	public static ApplicationContext getAppContext() {
-		return appContext;
-	}
-
-	public static void setAppContext(ApplicationContext appContext) {
-		AppConfiguration.appContext = appContext;
-	}
-
-	@Bean
-	public RestResourceResolver restResourceResolver(ApplicationContext appContext) {
-		return new SpringRestResourceResolver(appContext);
-	}
+    @Override
+    public Object resolve(Object parent, Class<?> type, RestContextBuilder builder) throws Exception {
+        try {
+            Object o = appContext.getBean(type);
+            if (o != null)
+                return o;
+        } catch (Exception e) {
+            // Ignore
+        }
+        return super.resolve(parent, type, builder);
+    }
 }
