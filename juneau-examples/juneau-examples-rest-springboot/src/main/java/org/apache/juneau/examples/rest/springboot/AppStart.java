@@ -26,7 +26,7 @@ import org.springframework.stereotype.Controller;
 @SpringBootApplication
 @EnabledJuneauIntegration(rootResources = RootResources.class)
 @Controller
-public class App {
+public class AppStart {
 
     public static int counter = 0;
     private static volatile ConfigurableApplicationContext context;
@@ -35,10 +35,10 @@ public class App {
         if (System.getProperty("juneau.configFile") == null)
             System.setProperty("juneau.configFile", "examples.cfg");
         try {
-            context = SpringApplication.run(App.class, args);
+            context = SpringApplication.run(AppStart.class, args);
             if (context == null)
                 System.exit(2); // Probably port in use?
-            AppConfiguration.setAppContext(context);
+//            AppConfiguration.setAppContext(context);
         } catch (Exception e) {
             e.printStackTrace();
         }
