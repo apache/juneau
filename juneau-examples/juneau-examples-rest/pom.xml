@@ -31,7 +31,7 @@
 		<encoding>UTF-8</encoding>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<derby.version>10.10.2.0</derby.version>
-		<fileupload.version>1.3.1</fileupload.version>
+		<hibernate.version>5.0.9.Final</hibernate.version>
 
 		<!-- Skip javadoc generation since we generate them in the aggregate pom -->
 		<maven.javadoc.skip>true</maven.javadoc.skip>
@@ -39,12 +39,12 @@
 		<!-- Java 8 required because Jetty requires it. -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<springframework.version>2.0.1.RELEASE</springframework.version>
 		<javax.inject.version>1</javax.inject.version>
 	</properties>
 
 
 	<dependencies>
+		<!-- Juneau dependencies -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-server</artifactId>
@@ -55,79 +55,42 @@
 			<artifactId>jena-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>${fileupload.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Needed for JPA persistence of PetStore beans -->		
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>${derby.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.0.9.Final</version>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.0.9.Final</version>
+			<version>${hibernate.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-			<version>${springframework.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>nz.net.ultraq.thymeleaf</groupId>
-					<artifactId>thymeleaf-layout-dialect</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<version>${springframework.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<scope>compile</scope>
 			<version>${javax.inject.version}</version>
+		</dependency>
+
+		<!-- Other -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -218,6 +181,9 @@
 
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<escapeString>\</escapeString>
+				</configuration>
 				<executions>
 					<execution>
 						<id>juneau-assembly</id>

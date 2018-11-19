@@ -10,43 +10,40 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.spring;
+package org.apache.juneau.examples.rest.springboot;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.*;
-import org.springframework.context.*;
+import org.apache.juneau.examples.rest.*;
+import org.apache.juneau.rest.*;
+import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
-import org.springframework.stereotype.*;
+import org.springframework.web.filter.*;
 
 /**
- * Entry point for Examples REST application when deployed as a Spring Boot application.
+ * Spring configuration for servlets.
  */
-@SpringBootApplication
-@Controller
-@Import({AppConfiguration.class, AppServletConfiguration.class})
-public class App {
+@Configuration
+public class AppServletConfiguration {
 
-	public static int counter = 0;
-	private static volatile ConfigurableApplicationContext context;
+	private static final String CONTEXT_ROOT = "";
 
-	public static void main(String[] args) {
-		if (System.getProperty("juneau.configFile") == null)
-			System.setProperty("juneau.configFile", "examples.cfg");
-		try {
-			context = SpringApplication.run(App.class, args);
-			if (context == null)
-				System.exit(2); // Probably port in use?
-			AppConfiguration.setAppContext(context);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@Bean
+	public RootResources root(RestResourceResolver resolver) {
+		return new RootResources(resolver);
 	}
 
-	public static void start() {
-		main(new String[0]);
+	@Bean
+	public ServletRegistrationBean<RootResources> rootRegistration(RootResources root) {
+		return new ServletRegistrationBean<>(root, CONTEXT_ROOT, CONTEXT_ROOT+"/", CONTEXT_ROOT+"/*");
 	}
 
-	public static void stop() {
-		context.stop();
+	/**
+	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
+	 * body to be consumed.  So disable it.
+	 */
+	@Bean
+	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
+	    FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
+	    registration.setEnabled(false);
+	    return registration;
 	}
 }

@@ -10,40 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.spring;
+package org.apache.juneau.examples.rest.springboot;
 
-import org.apache.juneau.examples.rest.*;
 import org.apache.juneau.rest.*;
-import org.springframework.boot.web.servlet.*;
-import org.springframework.context.annotation.*;
-import org.springframework.web.filter.*;
+import org.springframework.context.ApplicationContext;
 
 /**
- * Spring configuration for servlets.
+ * Implementation of a {@link RestResourceResolver} for resolving REST resources using Spring.
  */
-@Configuration
-public class AppServletConfiguration {
+public class SpringRestResourceResolver extends BasicRestResourceResolver {
 
-	private static final String CONTEXT_ROOT = "";
+	private ApplicationContext appContext;
 
-	@Bean
-	public RootResources root(RestResourceResolver resolver) {
-		return new RootResources(resolver);
+	public SpringRestResourceResolver(ApplicationContext appContext) {
+		this.appContext = appContext;
 	}
 
-	@Bean
-	public ServletRegistrationBean<RootResources> rootRegistration(RootResources root) {
-		return new ServletRegistrationBean<>(root, CONTEXT_ROOT, CONTEXT_ROOT+"/", CONTEXT_ROOT+"/*");
-	}
-
-	/**
-	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
-	 * body to be consumed.  So disable it.
-	 */
-	@Bean
-	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
-	    FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
-	    registration.setEnabled(false);
-	    return registration;
+	@Override
+	public Object resolve(Object parent, Class<?> type, RestContextBuilder builder) throws Exception {
+		try {
+			Object o = appContext.getBean(type);
+			if (o != null)
+				return o;
+		} catch(Exception e) {
+			// Ignore
+		}
+		return super.resolve(parent, type, builder);
 	}
 }

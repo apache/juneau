@@ -44,7 +44,6 @@
 		<javax.inject.version>1</javax.inject.version>
 		<juneau.version>${version}</juneau.version>
 		<jena.version>2.7.1</jena.version>
-		<junit.version>4.11</junit.version>
 		<hibernate.version>5.0.9.Final</hibernate.version>
 	</properties>
 
@@ -74,6 +73,18 @@
 			<scope>test</scope>
 		</dependency>
 				
+		<!-- Spring Boot dependencies-->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
+			<version>\${springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -96,6 +107,11 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>\${hibernate.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>xml-apis</groupId>
+		    <artifactId>xml-apis</artifactId>
+		    <version>1.4.01</version>
+		</dependency>
 		
 		<!-- Optional RDF support -->
 		<dependency>
@@ -114,15 +130,7 @@
 			<artifactId>jena-core</artifactId>
 			<version>\${jena.version}</version>
 		</dependency>
-
-		<!-- Other -->		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-			<version>\${junit.version}</version>
-		</dependency>
-
+		
 	</dependencies>
 
 	<build>
