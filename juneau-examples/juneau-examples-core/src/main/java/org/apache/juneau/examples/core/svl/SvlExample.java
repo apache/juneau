@@ -48,6 +48,15 @@ public class SvlExample {
 		// $UC{arg} uppercase $LC{arg} lowecase
 		System.out.println(vr.resolve("$LC{JAVA_HOME} $UC{$E{JAVA_HOME}}"));
 		
+		// $LN{arg[,delimiter]} length var example
+		System.out.println(vr.resolve("parts = $LN{$S{os.version},.}, charcount = $LN{$S{os.version}}"));
+		
+		// $ST{arg,start[,end]} substring var example
+		System.out.println(vr.resolve("version = $ST{$S{java.version}, 0, 3}"));
+		
+		// $PE{arg,start[,end]} pattern extractor var example
+		System.out.println(vr.resolve("update = $PE{$S{java.version},_([0-9]+),1}"));
+		
 		/*
 		 *  See all supported variable types at,
 		 *  http://juneau.apache.org/site/apidocs-7.2.1/overview-summary.html#juneau-svl
