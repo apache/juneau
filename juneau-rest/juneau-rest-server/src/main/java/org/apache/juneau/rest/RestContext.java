@@ -3866,8 +3866,7 @@ public final class RestContext extends BeanContext {
 	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
 	 *
 	 * <p>
-	 * If path is not specified, returns <js>"/"</js>.
-	 * <br>Path always starts with <js>"/"</js>.
+	 * If path is not specified, returns <js>""</js>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

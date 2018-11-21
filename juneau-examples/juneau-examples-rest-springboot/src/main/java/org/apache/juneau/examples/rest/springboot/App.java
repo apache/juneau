@@ -28,7 +28,6 @@ import org.springframework.stereotype.*;
 @Import({AppConfiguration.class, AppServletConfiguration.class})
 public class App {
 
-	public static int counter = 0;
 	private static volatile ConfigurableApplicationContext context;
 
 	public static void main(String[] args) {

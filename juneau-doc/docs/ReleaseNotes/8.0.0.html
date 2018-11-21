@@ -31,6 +31,24 @@
 		</ul>
 </ul>
 
+<h5 class='topic w800'>juneau-server</h5>
+<ul class='spaced-list'>
+	<li>
+		New methods on {@link oajr.RestServlet}:
+		<ul class='doctree'>
+			<li class='jm'>{@link oajr.RestServlet#setRestResourceResolver(RestResourceResolver) setRestResourceResolver(RestResourceResolver)}
+			<li class='jm'>{@link oajr.RestServlet#getPath() getPath()}
+		</ul>
+</ul>
+
+<h5 class='topic w800'>juneau-microservice-server</h5>
+<ul class='spaced-list'>
+	<li>
+		If the microservice cannot find a config file in the home directory with the same name as the jar and
+		the <js>"juneau.configFile"</js> system property is not found, it will try to find any file in the home
+		directory that ends with <js>".cfg"</js>.
+</ul>
+
 <h5 class='topic w800'>juneau-examples-rest</h5>
 <ul class='spaced-list'>
 	<li>

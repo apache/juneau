@@ -575,6 +575,15 @@ public abstract class Microservice implements ConfigEventListener {
 			}
 
 			if (cfPath == null) {
+				for (File f : new File(".").listFiles()) {
+					if (f.getName().endsWith(".cfg")) {
+						cfPath = f.getName();
+						break;
+					}
+				}
+			}
+
+			if (cfPath == null) {
 				cf = cfb.build();
 			} else {
 				cf = cfb.name(cfPath).varResolver(createVarResolver().build()).build();

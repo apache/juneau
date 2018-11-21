@@ -13,8 +13,44 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Classes
+{new} Classes
 
 <p>
-	TODO
+	The <code>juneau-examples-rest-springboot</code> project contains the same classes as found in <code>juneau-examples-rest</code>
+	with the inclusion of a <code>org.apache.juneau.examples.rest.springboot</code> package containing the following:
 </p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest-springboot.Classes.png'>
+<p>
+	The <code>App</code> class is used to invoke our application using Spring:
+</p>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<ja>@Import</ja>({AppConfiguration.<jk>class</jk>, AppServletConfiguration.<jk>class</jk>})
+	<jk>public class</jk> App {
+	
+		<jk>private static volatile</jk> ConfigurableApplicationContext <jsf>context</jsf>;
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>try</jk> {
+				<jsm>setProperty</jsm>(<js>"juneau.configFile"</js>, <js>"examples.cfg"</js>, <jk>false</jk>);
+				<jsf>context</jsf> = SpringApplication.<jsm>run</jsm>(App.<jk>class</jk>, args);
+				<jk>if</jk> (<jsf>context</jsf> == <jk>null</jk>)
+					System.<jsm>exit</jsm>(2); <jc>// Probably port in use?</jc>
+				AppConfiguration.<jsm>setAppContext</jsm>(context);
+				<jsm>setProperty</jsm>(<js>"juneau.serverPort"</js>, <jsf>context</jsf>.getEnvironment().getProperty(<js>"server.port"</js>), <jk>false</jk>);
+			} <jk>catch</jk> (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	
+		<jk>public static void</jk> start() {
+			<jsm>main</jsm>(<jk>new</jk> String[0]);
+		}
+	
+		<jk>public static void</jk> stop() {
+			<jsf>context</jsf>.stop();
+		}
+	}
+</p>
+

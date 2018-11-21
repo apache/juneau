@@ -28,12 +28,12 @@ public class AppServletConfiguration {
 
 	@Bean
 	public RootResources root(RestResourceResolver resolver) {
-		return new RootResources(resolver);
+		return (RootResources)new RootResources().setRestResourceResolver(resolver);
 	}
 
 	@Bean
 	public ServletRegistrationBean<RootResources> rootRegistration(RootResources root) {
-		return new ServletRegistrationBean<>(root, CONTEXT_ROOT, CONTEXT_ROOT+"/", CONTEXT_ROOT+"/*");
+		return new ServletRegistrationBean<>(root, CONTEXT_ROOT, CONTEXT_ROOT+"/", CONTEXT_ROOT+"/"+root.getPath());
 	}
 
 	/**

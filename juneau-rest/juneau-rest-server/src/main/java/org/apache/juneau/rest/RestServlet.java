@@ -23,6 +23,8 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.juneau.internal.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 
 /**
@@ -41,13 +43,18 @@ public abstract class RestServlet extends HttpServlet {
 	private volatile RestContext context;
 	private volatile Exception initException;
 	private boolean isInitialized = false;  // Should not be volatile.
+	private volatile RestResourceResolver resourceResolver;
+
 
 	@Override /* Servlet */
 	public final synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
 			if (context != null)
 				return;
-			builder = RestContext.create(servletConfig, this.getClass(), null).init(this);
+			builder = RestContext.create(servletConfig, this.getClass(), null);
+			if (resourceResolver != null)
+				builder.resourceResolver(resourceResolver);
+			builder.init(this);
 			super.init(servletConfig);
 			builder.servletContext(this.getServletContext());
 			setContext(builder.build());
@@ -90,6 +97,34 @@ public abstract class RestServlet extends HttpServlet {
 		this.context = context;
 		isInitialized = true;
 		context.postInit();
+	}
+
+	/**
+	 * Sets the resource resolver to use for this servlet and all child servlets.
+	 * <p>
+	 * This method can be called immediately following object construction, but must be called before {@link #init(ServletConfig)} is called.
+	 * Otherwise calling this method will have no effect.
+	 *
+	 * @param resourceResolver The resolver instance.  Can be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public synchronized RestServlet setRestResourceResolver(RestResourceResolver resourceResolver) {
+		this.resourceResolver = resourceResolver;
+		return this;
+	}
+
+	/**
+	 * Returns the path defined on this servlet if it's defined via {@link RestResource#path()}.
+	 *
+	 * @return The path defined on this servlet, or an empty string if not specified.
+	 */
+	public synchronized String getPath() {
+		if (context != null)
+			return context.getPath();
+		for (RestResource rr : ClassUtils.getAnnotations(RestResource.class, this.getClass()))
+			if (! rr.path().isEmpty())
+				return trimSlashes(rr.path());
+		return "";
 	}
 
 	@Override /* GenericServlet */
@@ -213,7 +248,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The current HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
 	public RestRequest getRequest() {
-		if (context == null) 
+		if (context == null)
 			return null;
 		return context.getRequest();
 	}
@@ -224,7 +259,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @return The current HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
 	public RestResponse getResponse() {
-		if (context == null) 
+		if (context == null)
 			return null;
 		return context.getResponse();
 	}
@@ -238,7 +273,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	/**
 	 * Convenience method for calling <code>getContext().getProperties();</code>
-	 * 
+	 *
 	 * @return The resource properties as an {@link RestContextProperties}.
 	 * @see RestContext#getProperties()
 	 */
