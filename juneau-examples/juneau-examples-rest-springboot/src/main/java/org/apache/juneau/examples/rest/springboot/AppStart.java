@@ -14,11 +14,12 @@ package org.apache.juneau.examples.rest.springboot;
 
 import org.apache.juneau.examples.rest.RootResources;
 import org.apache.juneau.microservice.springboot.annotations.EnabledJuneauIntegration;
-import org.apache.juneau.microservice.springboot.config.AppConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
@@ -26,10 +27,16 @@ import org.springframework.stereotype.Controller;
 @SpringBootApplication
 @EnabledJuneauIntegration(rootResources = RootResources.class)
 @Controller
+@RestController
 public class AppStart {
 
     public static int counter = 0;
     private static volatile ConfigurableApplicationContext context;
+
+    @GetMapping(value = "/status")
+    public String status() {
+        return "ok";
+    }
 
     public static void main(String[] args) {
         if (System.getProperty("juneau.configFile") == null)
@@ -38,7 +45,6 @@ public class AppStart {
             context = SpringApplication.run(AppStart.class, args);
             if (context == null)
                 System.exit(2); // Probably port in use?
-//            AppConfiguration.setAppContext(context);
         } catch (Exception e) {
             e.printStackTrace();
         }
