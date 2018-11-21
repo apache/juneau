@@ -1,0 +1,342 @@
+/*
+ ***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+ * with the License.  You may obtain a copy of the License at                                                              *
+ *                                                                                                                         *
+ *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+ *                                                                                                                         *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+ * specific language governing permissions and limitations under the License.                                              *
+ ***************************************************************************************************************************
+*/
+
+.swagger-ui {	
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Header key-value pairs
+ ----------------------------------------------------------------------------------------------------------*/
+
+.swagger-ui table.header {
+    margin-bottom: 15px;
+	width: 95%;
+	border: none;
+}
+
+.swagger-ui table.header * {
+	vertical-align: middle;
+}
+
+.swagger-ui table.header th {
+    font-weight: bold;
+    padding: 5px 10px;
+    text-align: left;
+    white-space: nowrap;
+	border: none;
+	border-radius: 3px;
+}
+
+.swagger-ui table.header td {
+	padding: 5px 10px;
+    text-align: left;
+    vertical-align: middle;
+	border: none;
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Method buttons (e.g GET/PUT/... buttons)                                                                
+ ----------------------------------------------------------------------------------------------------------*/
+.method-button {
+  	display: inline-block;
+    font-weight: bold;
+    min-width: 60px;
+    padding: 6px 15px;
+    text-align: center;
+    border-radius: 3px;
+    text-shadow: 0 1px 0 rgba(0,0,0,.1);
+    color: #fff;
+}
+.get .method-button        { background: rgb(97,175,254); }
+.put .method-button        { background: rgb(252,161,48); }
+.post .method-button       { background: rgb(73,204,144); }
+.delete .method-button     { background: rgb(249,62,62); }
+.options .method-button    { background: rgb(153,102,255); }
+.deprecated .method-button { background: rgb(170,170,170); }
+.model .method-button      { background: rgb(150,150,150); min-width: 120px;}
+.other .method-button      { background: rgb(230,230,0); }
+
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Tag block                                                                                                -
+ - Encapsulates one or more op-blocks.
+ ----------------------------------------------------------------------------------------------------------*/
+
+.tag-block {
+	min-width: 800px;
+}
+
+.tag-block-summary {
+	margin: 10px 0px;
+	padding: 5px 0px;
+    align-items: center;
+    cursor: pointer;
+	border-bottom: 1px solid rgba(59,65,81,.2);
+	user-select: none;
+	transition: all .2s;
+}
+.tag-block-summary:hover {
+	background-color: rgba(59,65,81,.1);
+}
+
+.tag-block-summary .name {
+	font-size: 18px;
+	padding: 0px 20px;
+}
+.tag-block-summary .description {
+	font-size: 14px;
+	padding: 0px 20px;
+}
+.tag-block-summary .extdocs {
+	float: right;
+	font-size: 14px;
+	padding: 0px 20px;
+}
+
+.tag-block-open .tag-block-contents { display: block; }
+.tag-block-closed .tag-block-contents { display: none; }
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Op block                                                                                          
+ - Encapsulates a single http-method + http-path
+ ----------------------------------------------------------------------------------------------------------*/
+
+.op-block {
+	margin-bottom: 10px;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.op-block.get        { background: rgba(97,175,254,.1); border: 1px solid rgb(97,175,254); }
+.op-block.put        { background: rgba(252,161,48,.1); border: 1px solid rgb(252,161,48); }
+.op-block.post       { background: rgba(73,204,144,.1); border: 1px solid rgb(73,204,144); }
+.op-block.options    { background: rgba(153,102,255,.1); border: 1px solid rgb(153,102,255); }
+.op-block.delete     { background: rgba(249,62,62,.1); border: 1px solid rgb(249,62,62); }
+.op-block.deprecated { background: rgba(170,170,170,.1); border: 1px solid rgb(170,170,170); }
+.op-block.model      { background: rgba(0,0,0,.05); border: 1px solid rgb(170,170,170); }
+.op-block.other      { background: rgba(230,230,0,0.1); border: 1px solid rgb(230,230,0); }
+
+.op-block-summary {	
+	padding: 5px;
+    cursor: pointer;
+	user-select: none;
+}
+
+.op-block-summary .path {
+	font-size: 14px;
+	word-break: break-all;
+    font-family: monospace;
+    font-weight: bold;
+    padding:10px;
+}
+
+.op-block.deprecated .op-block-summary .path { color: #8f9199; text-decoration: line-through;}
+.op-block.deprecated .op-block-summary .description { color: #8f9199 }
+
+.op-block-summary .summary {
+    font-size: 14px;
+    padding: 10px;
+}
+
+.op-block-description {
+    font-size: 14px;
+    padding: 10px;
+}
+
+
+.op-block-open .op-block-contents { display: block; }
+.op-block-closed .op-block-contents { display: none; }
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Op block section header                                                                                               -
+ - 'Parameters' and 'Responses' subsections in an op-block
+ ----------------------------------------------------------------------------------------------------------*/
+
+.op-block-section-header {
+    padding: 8px 15px;
+    background: hsla(0,0%,100%,.3);
+    box-shadow: 1px 2px 3px rgba(0,0,0,.3);
+    margin: 10px;
+    border-radius: 4px;
+}
+
+.op-block-section-header .title {
+    font-size: 14px;
+    margin: 0px;
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Parameters and Responses sections
+ ----------------------------------------------------------------------------------------------------------*/
+
+table.parameters, table.responses {
+    border-collapse: collapse;
+    margin: 20px;
+	width: 95%;
+	border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+th.parameter-key, th.response-key {
+	font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+	border: none;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+	background-color: inherit;
+}
+
+td.parameter-key, td.response-key {
+	font-size: 12px;
+    padding: 10px;
+    text-align: left;
+	border: none;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+	background-color: inherit;
+}
+
+td.parameter-value, td.response-value {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Parameter name
+ ----------------------------------------------------------------------------------------------------------*/
+
+.parameter-key .in {
+	font-size: 12px;
+    font-family: monospace;
+    font-weight: bold;
+    font-style: italic;
+    color: gray;
+}
+
+.parameter-key .name {
+	font-size: 14px;
+}
+
+.parameter-key .name.required {
+    font-weight: bold;
+}
+
+.parameter-key .requiredlabel {
+	font-size: 10px;
+    color: rgba(255,0,0,.6);    
+    font-weight: bold;
+}
+
+.parameter-key .type {
+    font-size: 12px;
+    padding: 5px 0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Examples
+ ----------------------------------------------------------------------------------------------------------*/
+ 
+.op-block-contents .example-select {
+    margin: 10px 0 5px 0;
+	border-width: 1px;
+	font-weight:bold;
+    padding: 5px 40px 5px 10px;
+    border: 1px solid #41444e;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.25);
+    background: hsla(0,0%,100%,.3);
+}
+
+.op-block-contents .example-select:disabled {
+    color: rgba(0,0,0,.50);
+    border: 1px solid rgba(0,0,0,.50);
+}
+
+.op-block-contents .example {
+    margin: 0;
+    padding: 5px 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    hyphens: auto;
+    border-radius: 4px;
+    background: #41444e;
+    overflow-wrap: break-word;
+    font-family: monospace;
+    font-weight: 400;
+    color: limegreen;
+	display: none;
+	max-width: 800px;
+	max-height: 800px;
+	text-overflow: auto;
+	overflow: auto;
+}
+
+.op-block-contents .example.active {
+	display:block;
+}
+
+.op-block-contents .model {
+	display: none;
+}
+
+.op-block-contents .model.active {
+	display:block;
+}
+
+/*-----------------------------------------------------------------------------------------------------------
+ - Headers
+ ----------------------------------------------------------------------------------------------------------*/
+
+.section {
+    font-weight: bold;
+    padding: 5px 0;
+    text-align: left;
+}
+
+.headers .name {
+    padding: 5px 0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+div.headers {
+	margin: 20px 0px;
+}
+
+.headers .type {
+    padding: 5px 0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.section-name {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 20px;
+    font-weight: bold;
+    padding: 5px 0;
+    text-align: left;
+}
+
+.section-table {
+/*	display: inline-block;*/
+}
+
+.responses .section-table td {
+	padding: 5px 20px 5px 0px;
+	text-align: left;
+    border-bottom: 1px solid rgba(59,65,81,.2);
+}

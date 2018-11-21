@@ -68,4 +68,28 @@ public class SystemUtils {
 		String s = getFirstString(null, keys);
 		return s == null ? def : Integer.parseInt(s);
 	}
+
+	/**
+	 * Convenience method for setting a system property value.
+	 *
+	 * @param key The system property key.
+	 * @param value The system property value.
+	 * @param overwrite Overwrite the previous value if it exists.
+	 */
+	public static void setProperty(String key, Object value, boolean overwrite) {
+		if (value != null) {
+			if (System.getProperty(key) == null || overwrite)
+				System.setProperty(key, StringUtils.asString(value));
+		}
+	}
+
+	/**
+	 * Convenience method for setting a system property value.
+	 *
+	 * @param key The system property key.
+	 * @param value The system property value.
+	 */
+	public static void setProperty(String key, Object value) {
+		setProperty(key, value, true);
+	}
 }

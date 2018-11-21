@@ -14,8 +14,6 @@ package org.apache.juneau.svl.vars;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
-import java.util.regex.*;
-
 import org.apache.juneau.svl.*;
 
 /**
@@ -29,7 +27,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <p>
- * 
+ *
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -65,8 +63,8 @@ public class SubstringVar extends MultipartVar {
 	public String resolve(VarResolverSession session, String[] args) {
 		if (args.length > 3)
 			illegalArg("Invalid number of arguments passed to $ST var.  Must have 1 or 2 arguments.");
-		
-		
+
+
 		String stringArg = args[0];
 		String result = "";
 		if (args.length == 2) {
@@ -76,7 +74,7 @@ public class SubstringVar extends MultipartVar {
 			if (start < 0 && -start <= stringArg.length())
 				result = stringArg.substring(stringArg.length() + start);
 		}
-		else if (args.length == 3) { 
+		else if (args.length == 3) {
 			int start = Integer.parseInt(args[1]);
 			int end = Integer.parseInt(args[2]);
 			if (start >= 0 && start < stringArg.length() && end >= 0 && end <= stringArg.length() && start < end)

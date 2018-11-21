@@ -423,6 +423,11 @@
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
 	</ol>
+	<li><p class='toc2 new'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></p>
+	<ol>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.Classes'>Classes</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.DeployingToHeroku'>Deploying to Heroku</a></p>
+	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#Security'>Security Best-Practices</a></p>
 	<ol>
 		<li><p class=''><a class='doclink' href='#Security.juneau-marshall'>juneau-marshall</a></p>
@@ -26210,8 +26215,59 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#Security' id='Security'>13 - Security Best-Practices</a></h2>
-<div class='topic'><!-- START: 13 - Security -->
+<h2 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>13 - juneau-examples-rest-springboot</a></h2>
+<div class='topic'><!-- START: 13 - juneau-examples-rest-springboot -->
+<h5 class='figure'>Archive File</h5>
+<p class='bpcode w500'>
+	juneau-examples-rest-springboot-{@property juneauVersion}.zip 
+</p>	
+
+<p>
+	The <code>juneau-examples-rest-springboot</code> class contains the same examples as <code>juneau-examples-rest</code>
+	but also includes the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		A starter class for invoking the examples using Spring Boot.
+	<li>
+		A resource resolver for resolving REST resources as injectable beans.
+	<li>
+		A POM that extends from <code>spring-boot-starter-parent</code> that allows you to build a fully-shaded executable jar.
+	<li>
+		Configuration files for deploying the microservice to Heroku.
+</ul>
+
+<p>
+	The microservice app can be imported into Eclipse just like <code>juneau-examples-rest</code>.
+</p>
+<p>
+	The microservice can be started from the <code>juneau-examples-rest-springboot.launch</code> file. 
+	It will start up the microservice on port 5000 which you can then view through a browser.
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.Classes' id='juneau-examples-rest-springboot.Classes'>13.1 - Classes</a></h3>
+<div class='topic'><!-- START: 13.1 - juneau-examples-rest-springboot.Classes -->
+<p>
+	TODO
+</p>
+</div><!-- END: 13.1 - juneau-examples-rest-springboot.Classes -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.DeployingToHeroku' id='juneau-examples-rest-springboot.DeployingToHeroku'>13.2 - Deploying to Heroku</a></h3>
+<div class='topic'><!-- START: 13.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
+<p>
+	TODO
+</p>
+</div><!-- END: 13.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
+</div><!-- END: 13 - juneau-examples-rest-springboot -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic ' onclick='toggle(this)'><a href='#Security' id='Security'>14 - Security Best-Practices</a></h2>
+<div class='topic'><!-- START: 14 - Security -->
 <p>
 	Security is always an ongoing concern in any library.  
 	If you discover any security vulnerabilities in this code, please refer to the instructions found here:
@@ -26222,8 +26278,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-marshall' id='Security.juneau-marshall'>13.1 - juneau-marshall</a></h3>
-<div class='topic'><!-- START: 13.1 - Security.juneau-marshall -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-marshall' id='Security.juneau-marshall'>14.1 - juneau-marshall</a></h3>
+<div class='topic'><!-- START: 14.1 - Security.juneau-marshall -->
 <h5 class='topic'>Demarshalling vulnerabilities</h5>
 <p>
 	One common security vulnerability is the ability to create arbitrary Java object instances through crafted
@@ -26296,12 +26352,12 @@
 	<li>The RDF parsers rely on Apache Jena 2.7.1.  
 		As of <code>7.0.1</code>, no known security vulnerabilities exist that affect Juneau at this time.
 </ul>
-</div><!-- END: 13.1 - Security.juneau-marshall -->
+</div><!-- END: 14.1 - Security.juneau-marshall -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-svl' id='Security.juneau-svl'>13.2 - juneau-svl</a></h3>
-<div class='topic'><!-- START: 13.2 - Security.juneau-svl -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-svl' id='Security.juneau-svl'>14.2 - juneau-svl</a></h3>
+<div class='topic'><!-- START: 14.2 - Security.juneau-svl -->
 <p>
 	Care must be used when defining new {@link org.apache.juneau.svl.Var Vars} using the SVL API since mistakes 
 	could potentially expose system properties, environment variables, or even file system files.
@@ -26346,12 +26402,12 @@
 	{@link org.apache.juneau.svl.Var#allowNested()} and {@link org.apache.juneau.svl.Var#allowRecurse()} 
 	methods to prevent recursive handling of variables.
 </p>
-</div><!-- END: 13.2 - Security.juneau-svl -->
+</div><!-- END: 14.2 - Security.juneau-svl -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-rest-server' id='Security.juneau-rest-server'>13.3 - juneau-rest-server</a></h3>
-<div class='topic'><!-- START: 13.3 - Security.juneau-rest-server -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-rest-server' id='Security.juneau-rest-server'>14.3 - juneau-rest-server</a></h3>
+<div class='topic'><!-- START: 14.3 - Security.juneau-rest-server -->
 <p>
 	Denial of service attacks can be alleviated through the {@link org.apache.juneau.rest.annotation.RestResource#maxInput() maxInput()}
 	setting.  Arbitrarily-large input will trigger an exception before causing out-of-memory errors.
@@ -26363,8 +26419,8 @@
 	becomes an issue.  However, this is NOT true of the RDF parsers that use an intermediate DOM.  If parsing 
 	RDF, you may want to consider lowering the max-input value above.
 </p>
-</div><!-- END: 13.3 - Security.juneau-rest-server -->
-</div><!-- END: 13 - Security -->
+</div><!-- END: 14.3 - Security.juneau-rest-server -->
+</div><!-- END: 14 - Security -->
 
 
 <h2 class='topic' onclick='toggle(this)'><a href='#ReleaseNotes' id='ReleaseNotes'>Release Notes</a></h2>

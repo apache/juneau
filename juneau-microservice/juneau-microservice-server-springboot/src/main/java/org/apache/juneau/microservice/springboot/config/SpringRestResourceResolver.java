@@ -38,4 +38,5 @@ public class SpringRestResourceResolver extends BasicRestResourceResolver {
         }
         return super.resolve(parent, type, builder);
     }
+
 }

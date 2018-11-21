@@ -34,7 +34,6 @@
 			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>src/main/**</include>
-				<include>files/**</include>
 			</includes>
 		</fileSet>
 		<fileSet>
@@ -42,6 +41,7 @@
 			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>src/main/**</include>
+				<include>files/**</include>
 				<include>.settings/**</include>
 				<include>.project</include>
 				<include>*.launch</include>
