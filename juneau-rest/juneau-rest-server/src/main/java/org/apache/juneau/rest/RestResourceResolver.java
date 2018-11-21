@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import org.apache.juneau.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -40,7 +41,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
  * </ul>
  */
-public interface RestResourceResolver {
+public interface RestResourceResolver extends ResourceResolver {
 
 	/**
 	 * Represents no RestResourceResolver.
@@ -64,8 +65,9 @@ public interface RestResourceResolver {
 	 * 	The parent resource (i.e. the instance whose class has the {@link RestResource#children() @RestResource(children)} annotation.
 	 * @param c The class to resolve.
 	 * @param builder The initialization configuration for the resource.
+	 * @param args Optional arguments to pass to constructor
 	 * @return The instance of that class.
 	 * @throws Exception If class could not be resolved.
 	 */
-	Object resolve(Object parent, Class<?> c, RestContextBuilder builder) throws Exception;
+	<T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object...args) throws Exception;
 }

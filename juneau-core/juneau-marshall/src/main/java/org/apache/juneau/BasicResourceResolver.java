@@ -10,37 +10,21 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Denotes the default resolver for child resources.
- *
- * The default implementation simply instantiates the class using one of the following constructors:
- * <ul>
- * 	<li><code><jk>public</jk> T(RestContextBuilder)</code>
- * 	<li><code><jk>public</jk> T()</code>
- * </ul>
- *
- * <p>
- * The former constructor can be used to get access to the {@link RestContextBuilder} object to get access to the
- * config file and initialization information or make programmatic modifications to the resource before
- * full initialization.
- *
- * <p>
- * Child classes can also be defined as inner-classes of the parent resource class.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
- * </ul>
+ * Basic implementation of a resource resolver.
  */
-public class BasicRestResourceResolver extends FuzzyResourceResolver implements RestResourceResolver {
+public class BasicResourceResolver implements ResourceResolver {
 
-	@Override /* RestResourceResolver */
-	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object...args) {
-		return resolve(parent, c, ArrayUtils.append(args, builder));
+	@Override /* ResourceResolver */
+	public <T> T resolve(Object parent, Class<T> c, Object...args) {
+		try {
+			return ClassUtils.newInstanceFromOuter(parent, c, c, false, args);
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e, c, "Could not instantiate resource class");
+		}
 	}
 }

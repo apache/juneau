@@ -39,6 +39,9 @@
 			<li class='jm'>{@link oajr.RestServlet#setRestResourceResolver(RestResourceResolver) setRestResourceResolver(RestResourceResolver)}
 			<li class='jm'>{@link oajr.RestServlet#getPath() getPath()}
 		</ul>
+	<li>
+		The registered resource resolver is now used to instantiate objects of classes defined via <ja>@RestResource</ja>.
+		<br>This allows for any of those instance to be injectable beans.
 </ul>
 
 <h5 class='topic w800'>juneau-microservice-server</h5>

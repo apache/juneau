@@ -280,7 +280,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		// We want to do that here so that we can update the script/style properties while they're still modifiable.
 		HtmlDocBuilder hdb = getHtmlDocBuilder();
 		PropertyStore ps = getPropertyStore();
-		Widget[] widgets = ps.getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0], true, ps, resource);
+		Widget[] widgets = ps.getInstanceArrayProperty(REST_widgets, Widget.class, new Widget[0], ResourceResolver.FUZZY, ps, resource);
 		for (Widget w : widgets) {
 			hdb.script("INHERIT", "$W{"+w.getName()+".script}");
 			hdb.style("INHERIT", "$W{"+w.getName()+".style}");

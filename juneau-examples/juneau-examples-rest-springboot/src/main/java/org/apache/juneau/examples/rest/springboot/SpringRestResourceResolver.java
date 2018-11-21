@@ -27,12 +27,12 @@ public class SpringRestResourceResolver extends BasicRestResourceResolver {
 	}
 
 	@Override
-	public Object resolve(Object parent, Class<?> type, RestContextBuilder builder) throws Exception {
+	public <T> T resolve(Object parent, Class<T> type, RestContextBuilder builder, Object...args) {
 		try {
-			Object o = appContext.getBean(type);
+			T o = appContext.getBean(type);
 			if (o != null)
 				return o;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			// Ignore
 		}
 		return super.resolve(parent, type, builder);

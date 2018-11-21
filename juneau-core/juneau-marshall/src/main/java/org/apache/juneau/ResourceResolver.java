@@ -10,37 +10,38 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+package org.apache.juneau;
 
 /**
- * Denotes the default resolver for child resources.
- *
- * The default implementation simply instantiates the class using one of the following constructors:
- * <ul>
- * 	<li><code><jk>public</jk> T(RestContextBuilder)</code>
- * 	<li><code><jk>public</jk> T()</code>
- * </ul>
- *
- * <p>
- * The former constructor can be used to get access to the {@link RestContextBuilder} object to get access to the
- * config file and initialization information or make programmatic modifications to the resource before
- * full initialization.
- *
- * <p>
- * Child classes can also be defined as inner-classes of the parent resource class.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.ResourceResolvers}
- * </ul>
+ * Class used to resolve {@link Class} objects to instances.
  */
-public class BasicRestResourceResolver extends FuzzyResourceResolver implements RestResourceResolver {
+public interface ResourceResolver {
+	
+	/**
+	 * Look for constructors where the arguments passed in must match exactly.
+	 */
+	public static final ResourceResolver BASIC = new BasicResourceResolver();
 
-	@Override /* RestResourceResolver */
-	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object...args) {
-		return resolve(parent, c, ArrayUtils.append(args, builder));
-	}
+	/**
+	 * Look for constructors where arguments may or may not exist in any order.
+	 */
+	public static final ResourceResolver FUZZY = new FuzzyResourceResolver();
+
+	/**
+	 * Resolves the specified class to a resource object.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own custom resolution.
+	 *
+	 * <p>
+	 * The default implementation simply creates a new class instance using {@link Class#newInstance()}.
+	 *
+	 * @param parent
+	 * 	The parent resource.
+	 * @param c The class to resolve.
+	 * @param builder The initialization configuration for the resource.
+	 * @param args Optional arguments to pass to constructor
+	 * @return The instance of that class.
+	 */
+	<T> T resolve(Object parent, Class<T> c, Object...args);
 }
