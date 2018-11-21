@@ -22,8 +22,15 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -32,7 +39,7 @@ import java.util.Map;
  * Spring configuration for servlets.
  */
 @Configuration
-public class AppServletConfiguration {
+public class AppServletConfiguration  implements WebApplicationInitializer {
 
     private static final String CONTEXT_ROOT = "";
 
@@ -64,7 +71,7 @@ public class AppServletConfiguration {
 
     @Bean
     public ServletRegistrationBean<BasicRestServletJenaGroup> rootRegistration(BasicRestServletJenaGroup root) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return new ServletRegistrationBean<>(root, CONTEXT_ROOT, CONTEXT_ROOT + "/", CONTEXT_ROOT + "/*");
+        return new ServletRegistrationBean<>(root, CONTEXT_ROOT + "/*");
     }
 
     /**
@@ -76,5 +83,18 @@ public class AppServletConfiguration {
         FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
         registration.setEnabled(false);
         return registration;
+    }
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        AnnotationConfigWebApplicationContext ctx
+                = new AnnotationConfigWebApplicationContext();
+        ctx.register(WebMvcConfigurer.class);
+        ctx.setServletContext(servletContext);
+
+        ServletRegistration.Dynamic servlet = servletContext.addServlet(
+                "dispatcherExample", new DispatcherServlet(ctx));
+        servlet.setLoadOnStartup(1);
+
     }
 }
