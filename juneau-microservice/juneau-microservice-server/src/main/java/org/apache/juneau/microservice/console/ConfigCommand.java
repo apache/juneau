@@ -53,12 +53,12 @@ public class ConfigCommand extends ConsoleCommand {
 			String key = args.getArg(2);
 			if (args.getArg(1).equals("get")) {
 				String val = conf.getString(key);
-				if(val == null)
+				if (val == null)
 					out.println(mb.getString("KeyNotFound", key));
 				else
 					out.println(val);
 			}
-			else if(args.getArg(1).equals("set")) {
+			else if (args.getArg(1).equals("set")) {
 				if(args.size() < 3) {
 					out.println(mb.getString("InvalidArguments"));
 				}
