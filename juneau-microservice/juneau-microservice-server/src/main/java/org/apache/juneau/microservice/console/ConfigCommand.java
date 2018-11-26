@@ -50,25 +50,33 @@ public class ConfigCommand extends ConsoleCommand {
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
 		Config conf = Microservice.getInstance().getConfig();
 		if (args.size() > 2) {
+			String option = args.getArg(1);
 			String key = args.getArg(2);
-			if (args.getArg(1).equals("get")) {
-				String val = conf.getString(key);
-				if (val == null)
-					out.println(mb.getString("KeyNotFound", key));
-				else
-					out.println(val);
-			}
-			else if (args.getArg(1).equals("set")) {
-				if(args.size() < 3) {
-					out.println(mb.getString("InvalidArguments"));
+			if (option.equals("get")) {
+				// config get <key>
+				if (args.size() == 3) {
+					String val = conf.getString(key);
+					if (val != null)
+						out.println(val);
+					else
+						out.println(mb.getString("KeyNotFound", key));	
+				} else {
+					out.println(mb.getString("TooManyArguments"));
 				}
-				else {
+			} else if (option.equals("set")) {
+				// config set <key> <value>
+				if (args.size() == 4) {
 					conf.set(key, args.getArg(3));
 					out.println(mb.getString("ConfigSet"));
+				} else if (args.size() < 4) {
+					out.println(mb.getString("InvalidArguments"));
+				} else {
+					out.println(mb.getString("TooManyArguments"));
 				}
+			} else {
+				out.println(mb.getString("InvalidArguments"));
 			}
-		}
-		else {
+		} else {
 			out.println(mb.getString("InvalidArguments"));
 		}
 		return false;
