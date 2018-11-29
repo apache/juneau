@@ -10,33 +10,38 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.springboot.config;
-
-import org.apache.juneau.rest.BasicRestResourceResolver;
-import org.apache.juneau.rest.RestContextBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
+package org.apache.juneau;
 
 /**
- * Implementation of a {@link org.apache.juneau.rest.RestResourceResolver} for resolving REST resources using Spring.
+ * Class used to resolve {@link Class} objects to instances.
  */
-@Configuration
-public class SpringRestResourceResolver extends BasicRestResourceResolver {
+public interface ResourceResolver {
+	
+	/**
+	 * Look for constructors where the arguments passed in must match exactly.
+	 */
+	public static final ResourceResolver BASIC = new BasicResourceResolver();
 
-    @Autowired
-    private ApplicationContext appContext;
+	/**
+	 * Look for constructors where arguments may or may not exist in any order.
+	 */
+	public static final ResourceResolver FUZZY = new FuzzyResourceResolver();
 
-    @Override
-    public Object resolve(Object parent, Class<?> type, RestContextBuilder builder) throws Exception {
-        try {
-            Object o = appContext.getBean(type);
-            if (o != null)
-                return o;
-        } catch (Exception e) {
-            // Ignore
-        }
-        return super.resolve(parent, type, builder);
-    }
-
+	/**
+	 * Resolves the specified class to a resource object.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own custom resolution.
+	 *
+	 * <p>
+	 * The default implementation simply creates a new class instance using {@link Class#newInstance()}.
+	 *
+	 * @param parent
+	 * 	The parent resource.
+	 * @param c The class to resolve.
+	 * @param builder The initialization configuration for the resource.
+	 * @param args Optional arguments to pass to constructor
+	 * @return The instance of that class.
+	 */
+	<T> T resolve(Object parent, Class<T> c, Object...args);
 }

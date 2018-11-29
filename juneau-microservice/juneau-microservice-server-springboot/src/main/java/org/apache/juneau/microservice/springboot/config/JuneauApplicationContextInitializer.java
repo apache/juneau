@@ -12,33 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.springboot.config;
 
-import org.apache.juneau.rest.RestResourceResolver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.apache.juneau.microservice.springboot.annotations.EnabledJuneauIntegration;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * Spring configuration for Spring beans.
- */
-@Configuration
-@ImportAutoConfiguration(classes = {AppServletConfiguration.class, SpringRestResourceResolver.class})
-public class AppConfiguration {
+public class JuneauApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-	/*@Autowired
-	private static volatile ApplicationContext appContext;
+    private Class appClass;
 
-	public static ApplicationContext getAppContext() {
-		return appContext;
-	}
+    public JuneauApplicationContextInitializer(Class appClass) {
+        this.appClass = appClass;
+    }
 
-	public static void setAppContext(ApplicationContext appContext) {
-		AppConfiguration.appContext = appContext;
-	}
-
-	@Bean
-	public RestResourceResolver restResourceResolver(ApplicationContext appContext) {
-		return new SpringRestResourceResolver(appContext);
-	}*/
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        applicationContext.addBeanFactoryPostProcessor(new ServletConfiguration((EnabledJuneauIntegration) appClass.getAnnotation(EnabledJuneauIntegration.class)));
+    }
 }

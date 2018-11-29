@@ -3095,6 +3095,7 @@ public final class RestContext extends BeanContext {
 			this.resource = builder.resource;
 			this.builder = builder;
 			this.parentContext = builder.parentContext;
+			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? BasicRestResourceResolver.class : parentContext.resourceResolver, ResourceResolver.FUZZY, this);
 
 			PropertyStore ps = getPropertyStore().builder().add(builder.properties).build();
 			Class<?> resourceClass = resource.getClass();
@@ -3114,12 +3115,12 @@ public final class RestContext extends BeanContext {
 			maxInput = getLongProperty(REST_maxInput, 100_000_000l);
 			clientVersionHeader = getStringProperty(REST_clientVersionHeader, "X-Client-Version");
 
-			converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], true, this);
-			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], true, this);
-			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], true, this);
+			converters = getInstanceArrayProperty(REST_converters, resource, RestConverter.class, new RestConverter[0], resourceResolver, this);
+			guards = getInstanceArrayProperty(REST_guards, resource, RestGuard.class, new RestGuard[0], resourceResolver, this);
+			responseHandlers = getInstanceArrayProperty(REST_responseHandlers, resource, ResponseHandler.class, new ResponseHandler[0], resourceResolver, this);
 
 			Map<Class<?>,RestMethodParam> _paramResolvers = new HashMap<>();
-			for (RestMethodParam rp : getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, new RestMethodParam[0], true, this))
+			for (RestMethodParam rp : getInstanceArrayProperty(REST_paramResolvers, RestMethodParam.class, new RestMethodParam[0], resourceResolver, this))
 				_paramResolvers.put(rp.forClass(), rp);
 			paramResolvers = unmodifiableMap(_paramResolvers);
 
@@ -3130,7 +3131,7 @@ public final class RestContext extends BeanContext {
 			defaultResponseHeaders = getMapProperty(REST_defaultResponseHeaders, Object.class);
 			staticFileResponseHeaders = getMapProperty(REST_staticFileResponseHeaders, Object.class);
 
-			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, true, this);
+			logger = getInstanceProperty(REST_logger, resource, RestLogger.class, NoOpRestLogger.class, resourceResolver, this);
 			if (debug)
 				logger.setLevel(Level.FINE);
 
@@ -3158,18 +3159,18 @@ public final class RestContext extends BeanContext {
 			config = builder.config.resolving(this.varResolver.createSession());
 
 			properties = builder.properties;
-			serializers = SerializerGroup.create().append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], true, resource, ps)).build();
-			parsers = ParserGroup.create().append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], true, resource, ps)).build();
-			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, true, resource, ps);
-			partParser = getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiParser.class, true, resource, ps);
-			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], true, resource, ps)).build();
+			serializers = SerializerGroup.create().append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], resourceResolver, resource, ps)).build();
+			parsers = ParserGroup.create().append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], resourceResolver, resource, ps)).build();
+			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, resourceResolver, resource, ps);
+			partParser = getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiParser.class, resourceResolver, resource, ps);
+			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], resourceResolver, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
 
 			mimetypesFileTypeMap = new ExtendedMimetypesFileTypeMap();
 			for (String mimeType : getArrayProperty(REST_mimeTypes, String.class))
 				mimetypesFileTypeMap.addMimeTypes(mimeType);
 
-			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class, true, this);
+			ClasspathResourceFinder rf = getInstanceProperty(REST_classpathResourceFinder, ClasspathResourceFinder.class, ClasspathResourceFinderBasic.class, resourceResolver, this);
 			useClasspathResourceCaching = getProperty(REST_useClasspathResourceCaching, boolean.class, true);
 			staticResourceManager = new ClasspathResourceManager(resourceClass, rf, useClasspathResourceCaching);
 
@@ -3196,7 +3197,7 @@ public final class RestContext extends BeanContext {
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
 			Map<String,Widget> _widgets = new LinkedHashMap<>();
-			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], true, ps))
+			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], resourceResolver, ps))
 				_widgets.put(w.getName(), w);
 			this.widgets = unmodifiableMap(_widgets);
 
@@ -3398,7 +3399,6 @@ public final class RestContext extends BeanContext {
 			this.callRouters = unmodifiableMap(_callRouters);
 
 			// Initialize our child resources.
-			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? BasicRestResourceResolver.class : parentContext.resourceResolver, true, this);
 			for (Object o : getArrayProperty(REST_children, Object.class)) {
 				String path = null;
 				Object r = null;
@@ -3438,8 +3438,8 @@ public final class RestContext extends BeanContext {
 				childResources.put(path, rc2);
 			}
 
-			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, BasicRestCallHandler.class, true, this);
-			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, BasicRestInfoProvider.class, true, this);
+			callHandler = getInstanceProperty(REST_callHandler, resource, RestCallHandler.class, BasicRestCallHandler.class, resourceResolver, this);
+			infoProvider = getInstanceProperty(REST_infoProvider, resource, RestInfoProvider.class, BasicRestInfoProvider.class, resourceResolver, this);
 
 		} catch (RestException e) {
 			_initException = e;
@@ -3866,8 +3866,7 @@ public final class RestContext extends BeanContext {
 	 * {@link RestContextBuilder#path(String)} method concatenated with those on all parent classes.
 	 *
 	 * <p>
-	 * If path is not specified, returns <js>"/"</js>.
-	 * <br>Path always starts with <js>"/"</js>.
+	 * If path is not specified, returns <js>""</js>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
