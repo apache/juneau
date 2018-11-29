@@ -73,6 +73,18 @@ public class ConfigCommand extends ConsoleCommand {
 				} else {
 					out.println(mb.getString("TooManyArguments"));
 				}
+			} else if (option.equals("remove")) {
+				// config remove <key>
+				if (args.size() == 3) {
+					if (conf.getString(key) != null) {
+						conf.remove(key);
+						out.println(mb.getString("ConfigRemove", key));
+					} else {
+						out.println(mb.getString("KeyNotFound", key));
+					}
+				} else {
+					out.println(mb.getString("TooManyArguments"));
+				}
 			} else {
 				out.println(mb.getString("InvalidArguments"));
 			}
