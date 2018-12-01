@@ -10,31 +10,22 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.springboot;
+package org.apache.juneau.microservice.springboot.config;
 
-import org.apache.juneau.rest.*;
-import org.springframework.context.ApplicationContext;
+import org.apache.juneau.microservice.springboot.annotations.EnabledJuneauIntegration;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * Implementation of a {@link RestResourceResolver} for resolving REST resources using Spring.
- */
-public class SpringRestResourceResolver extends BasicRestResourceResolver {
+public class JuneauApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-	private ApplicationContext appContext;
+    private Class appClass;
 
-	public SpringRestResourceResolver(ApplicationContext appContext) {
-		this.appContext = appContext;
-	}
+    public JuneauApplicationContextInitializer(Class appClass) {
+        this.appClass = appClass;
+    }
 
-	@Override
-	public <T> T resolve(Object parent, Class<T> type, RestContextBuilder builder, Object...args) {
-		try {
-			T o = appContext.getBean(type);
-			if (o != null)
-				return o;
-		} catch (Exception e) {
-			// Ignore
-		}
-		return super.resolve(parent, type, builder);
-	}
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        applicationContext.addBeanFactoryPostProcessor(new ServletConfiguration((EnabledJuneauIntegration) appClass.getAnnotation(EnabledJuneauIntegration.class)));
+    }
 }

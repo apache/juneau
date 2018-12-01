@@ -20,13 +20,15 @@
 
     <parent>
         <groupId>org.apache.juneau</groupId>
-        <artifactId>juneau-examples</artifactId>
+        <artifactId>juneau-microservice</artifactId>
         <version>8.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>juneau-examples-rest-springboot</artifactId>
-    <name>Apache Juneau REST Examples using Spring Boot</name>
-    <description>Sample code deployed using Spring Boot.</description>
+    <artifactId>juneau-microservice-server-springboot</artifactId>
+    <name>Apache Juneau Microservice Server - Spring Boot</name>
+    <description>API for creating standalone executable jars that can be used to start lightweight configurable REST
+        interfaces.
+    </description>
 
     <properties>
         <encoding>UTF-8</encoding>
@@ -43,16 +45,9 @@
 
 
     <dependencies>
-        <!-- Juneau dependencies -->
         <dependency>
             <groupId>org.apache.juneau</groupId>
-            <artifactId>juneau-examples-rest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.juneau</groupId>
-            <artifactId>juneau-microservice-server-springboot</artifactId>
+            <artifactId>juneau-microservice-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -88,34 +83,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <escapeString>\</escapeString>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>juneau-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>juneau-examples-rest-springboot-${project.version}</finalName>
-                            <descriptors>
-                                <descriptor>src/assembly/bin.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -132,5 +99,4 @@
             <url>https://repository.apache.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
 </project>

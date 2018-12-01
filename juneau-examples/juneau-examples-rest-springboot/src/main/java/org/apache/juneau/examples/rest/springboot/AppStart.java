@@ -12,42 +12,49 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.springboot;
 
-import static org.apache.juneau.internal.SystemUtils.*;
-
+import org.apache.juneau.examples.rest.RootResources;
+import org.apache.juneau.microservice.springboot.annotations.EnabledJuneauIntegration;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.*;
-import org.springframework.context.*;
-import org.springframework.context.annotation.*;
-import org.springframework.stereotype.*;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
  */
 @SpringBootApplication
+@EnabledJuneauIntegration(rootResources = RootResources.class)
 @Controller
-@Import({AppConfiguration.class, AppServletConfiguration.class})
-public class App {
+@RestController
+public class AppStart {
 
-	private static volatile ConfigurableApplicationContext context;
+    public static int counter = 0;
+    private static volatile ConfigurableApplicationContext context;
 
-	public static void main(String[] args) {
-		try {
-			setProperty("juneau.configFile", "examples.cfg", false);
-			context = SpringApplication.run(App.class, args);
-			if (context == null)
-				System.exit(2); // Probably port in use?
-			AppConfiguration.setAppContext(context);
-			setProperty("juneau.serverPort", context.getEnvironment().getProperty("server.port"), false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @GetMapping(value = "/status")
+    public String status() {
+        return "ok";
+    }
 
-	public static void start() {
-		main(new String[0]);
-	}
+    public static void main(String[] args) {
+        if (System.getProperty("juneau.configFile") == null)
+            System.setProperty("juneau.configFile", "examples.cfg");
+        try {
+            context = SpringApplication.run(AppStart.class, args);
+            if (context == null)
+                System.exit(2); // Probably port in use?
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public static void stop() {
-		context.stop();
-	}
+    public static void start() {
+        main(new String[0]);
+    }
+
+    public static void stop() {
+        context.stop();
+    }
 }

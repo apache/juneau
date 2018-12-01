@@ -10,40 +10,21 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.springboot;
+package org.apache.juneau.microservice.springboot.annotations;
 
-import org.apache.juneau.examples.rest.*;
-import org.apache.juneau.rest.*;
-import org.springframework.boot.web.servlet.*;
-import org.springframework.context.annotation.*;
-import org.springframework.web.filter.*;
+import org.apache.juneau.microservice.BasicRestServletJenaGroup;
+import org.apache.juneau.microservice.springboot.config.AppConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.stereotype.Component;
 
-/**
- * Spring configuration for servlets.
- */
-@Configuration
-public class AppServletConfiguration {
+import java.lang.annotation.*;
 
-	private static final String CONTEXT_ROOT = "";
-
-	@Bean
-	public RootResources root(RestResourceResolver resolver) {
-		return (RootResources)new RootResources().setRestResourceResolver(resolver);
-	}
-
-	@Bean
-	public ServletRegistrationBean<RootResources> rootRegistration(RootResources root) {
-		return new ServletRegistrationBean<>(root, CONTEXT_ROOT, CONTEXT_ROOT+"/", CONTEXT_ROOT+"/"+root.getPath());
-	}
-
-	/**
-	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
-	 * body to be consumed.  So disable it.
-	 */
-	@Bean
-	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
-	    FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
-	    registration.setEnabled(false);
-	    return registration;
-	}
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@Component
+@ImportAutoConfiguration(classes = AppConfiguration.class)
+public @interface EnabledJuneauIntegration {
+    Class<? extends BasicRestServletJenaGroup> rootResources();
 }
