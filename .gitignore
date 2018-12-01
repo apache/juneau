@@ -3,3 +3,4 @@ target
 derby.log
 .idea/
 *.iml
+**/.settings
