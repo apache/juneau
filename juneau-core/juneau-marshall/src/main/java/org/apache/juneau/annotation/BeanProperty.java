@@ -31,7 +31,7 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({FIELD,METHOD})
+@Target({FIELD,METHOD,PARAMETER})
 @Retention(RUNTIME)
 @Inherited
 public @interface BeanProperty {
