@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.springboot.annotations;
 
-import org.apache.juneau.microservice.BasicRestServletJenaGroup;
-import org.apache.juneau.microservice.springboot.config.AppConfiguration;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.apache.juneau.rest.RestServlet;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
@@ -24,7 +22,6 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Component
-@ImportAutoConfiguration(classes = AppConfiguration.class)
 public @interface EnabledJuneauIntegration {
-    Class<? extends BasicRestServletJenaGroup> rootResources();
+    Class<? extends RestServlet>[] rootResources();
 }
