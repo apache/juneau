@@ -55,9 +55,47 @@ public @interface BeanConstructor {
 
 	/**
 	 * The names of the properties of the constructor arguments.
-	 *
 	 * <p>
-	 * The number of properties listed must match the number of arguments in the constructor.
-	 */
+	 *	The {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation is used to 
+	 *	map constructor arguments to property names on bean with read-only properties.
+	 * 	<br>Since method parameter names are lost during compilation, this annotation essentially redefines 
+	 *	them so that they are available at runtime.
+	 *	</p>
+	 * 	<p>
+	 *	The definition of a read-only bean is a bean with properties with only getters, like shown below:
+	 *	</p>	
+	 *	<p class='bpcode w800'>
+	 *		<jc>// Our read-only bean.</jc>
+	 *		<jk>public class</jk> Person {
+	 *			<jk>private final</jk> String <jf>name</jf>;
+	 *			<jk>private final int</jk> <jf>age</jf>;
+	 *
+	 *			<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>)
+	 *			<jk>public</jk> Person(String name, <jk>int</jk> age) {
+	 *				<jk>this</jk>.<jf>name</jf> = name;
+	 *				<jk>this</jk>.<jf>age</jf> = age;
+	 *			}
+	 *
+	 *			<jc>// Read only properties.</jc>
+	 *			<jc>// Getters, but no setters.</jc>
+	 *
+	 *			<jk>public</jk> String getName() {
+	 *				<jk>return</jk> <jf>name</jf>;
+	 *			}
+	 *
+	 *			<jk>public int</jk> getAge() {
+	 *				<jk>return</jk> <jf>age</jf>;
+	 *			}
+	 *		}			
+	 *	</p>
+	 *	<p class='bpcode w800'>
+	 *		<jc>// Parsing into a read-only bean.</jc>
+	 *		String json = <js>"{name:'John Smith',age:45}"</js>;
+	 *		Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json);
+	 *		String name = p.getName();  <jc>// "John Smith"</jc>
+	 *		<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
+	 *	</p>
+	*/
+	
 	String properties() default "";
 }
