@@ -137,10 +137,10 @@ public class ConfigFileStoreTest {
 		ConfigFileStore.DEFAULT.write("foo.cfg", "foo", null);
 		assertFalse(ConfigFileStore.DEFAULT.exists("foo.cfg"));
 
-		IOUtils.write(new File("Foo.cfg"), new StringReader("xxx"));
-		assertTrue(ConfigFileStore.DEFAULT.exists("foo.cfg"));
-		new File("Foo.cfg").delete();
-		assertFalse(ConfigFileStore.DEFAULT.exists("foo.cfg"));
+		IOUtils.write(new File("Foox.cfg"), new StringReader("xxx"));
+		assertTrue(ConfigFileStore.DEFAULT.exists("Foox.cfg"));
+		new File("Foox.cfg").delete();
+		assertFalse(ConfigFileStore.DEFAULT.exists("Foox.cfg"));
 	}
 
 	private void assertFileExists(String name) {
