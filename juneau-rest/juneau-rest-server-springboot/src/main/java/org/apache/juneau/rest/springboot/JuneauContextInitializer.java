@@ -10,51 +10,36 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.springboot;
+package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.examples.rest.RootResources;
-import org.apache.juneau.rest.springboot.annotations.*;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.apache.juneau.rest.springboot.annotations.JuneauIntegration;
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Entry point for Examples REST application when deployed as a Spring Boot application.
+ * Spring Boot context initializer for Juneau REST resources.
+ *
+ * <p>
+ * Looks for the {@link JuneauIntegration} annotation on the Spring application class to automatically
+ * register Juneau REST resources.
  */
-@SpringBootApplication
-@EnabledJuneauIntegration(rootResources = RootResources.class)
-@Controller
-@RestController
-public class AppStart {
+public class JuneauContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    public static int counter = 0;
-    private static volatile ConfigurableApplicationContext context;
+    private final Class<?> appClass;
 
-    @GetMapping(value = "/status")
-    public String status() {
-        return "ok";
+    /**
+     * Constructor.
+     *
+     * @param appClass The Spring application class.
+     */
+    public JuneauContextInitializer(Class<?> appClass) {
+        this.appClass = appClass;
     }
 
-    public static void main(String[] args) {
-        if (System.getProperty("juneau.configFile") == null)
-            System.setProperty("juneau.configFile", "examples.cfg");
-        try {
-            context = SpringApplication.run(AppStart.class, args);
-            if (context == null)
-                System.exit(2); // Probably port in use?
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void start() {
-        main(new String[0]);
-    }
-
-    public static void stop() {
-        context.stop();
+    @Override /* ApplicationContextInitializer */
+    public void initialize(ConfigurableApplicationContext ctx) {
+    	ctx.addBeanFactoryPostProcessor(
+        	new JuneauIntegrationPostProcessor(ctx, appClass)
+        );
     }
 }

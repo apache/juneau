@@ -12,63 +12,60 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.rest.RestServlet;
-import org.apache.juneau.rest.annotation.RestResource;
-import org.apache.juneau.rest.springboot.annotations.EnabledJuneauIntegration;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.springboot.annotations.JuneauIntegration;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.*;
 
 import javax.servlet.Servlet;
 
-public class ServletConfiguration implements BeanDefinitionRegistryPostProcessor {
+/**
+ * Processes the {@link JuneauIntegration} annotation on the Spring application class.
+ */
+public class JuneauIntegrationPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
-    private EnabledJuneauIntegration annotation = null;
+    private final ConfigurableApplicationContext ctx;
+    private final Class<?> appClass;
 
-    public ServletConfiguration(EnabledJuneauIntegration annotation) {
-        this.annotation = annotation;
+    /**
+     * Constructor.
+     *
+     * @param ctx The spring application context.
+     * @param appClass The spring application class.
+     */
+    public JuneauIntegrationPostProcessor(ConfigurableApplicationContext ctx, Class<?> appClass) {
+        this.appClass = appClass;
+        this.ctx = ctx;
     }
 
-    @Override
+    @Override /* BeanDefinitionRegistryPostProcessor */
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
 
-        if (annotation.rootResources() == null) {
-            return;
+    	JuneauIntegration a = appClass.getAnnotation(JuneauIntegration.class);
+
+    	if (a == null || a.rootResources().length == 0)
+    		return;
+
+    	RestResourceResolver rrr = new SpringRestResourceResolver(ctx);
+
+    	for (Class<? extends RestServlet> c : a.rootResources()) {
+			try {
+	            RestServlet rs = c.newInstance().setRestResourceResolver(rrr);
+		        ServletRegistrationBean<Servlet> reg = new ServletRegistrationBean<>(rs, '/' + rs.getPath());
+		        registry.registerBeanDefinition(reg.getServletName(), new RootBeanDefinition(ServletRegistrationBean.class, () -> reg));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
         }
-
-        for (Class clazz : annotation.rootResources()) {
-
-            RestServlet restServlet = createServlet(clazz);
-            RestResource restResource = restServlet.getClass().getAnnotation(RestResource.class);
-            registerServlet(registry, restServlet, restResource);
-        }
-
     }
 
-    private void registerServlet(BeanDefinitionRegistry registry, Servlet restServlet, RestResource restResource) {
-        ServletRegistrationBean registration = new ServletRegistrationBean(restServlet, restResource.path());
-        registry.registerBeanDefinition(registration.getServletName(), new RootBeanDefinition(ServletRegistrationBean.class,
-                () -> registration));
-
-    }
-
-    private RestServlet createServlet(Class clazz) {
-        try {
-            return (RestServlet) clazz.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
+    @Override /* BeanDefinitionRegistryPostProcessor */
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-
+    	// No-op
     }
 }

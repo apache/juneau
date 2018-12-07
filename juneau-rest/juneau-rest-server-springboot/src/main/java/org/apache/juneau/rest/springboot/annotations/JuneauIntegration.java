@@ -10,22 +10,25 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.springboot;
+package org.apache.juneau.rest.springboot.annotations;
 
-import org.apache.juneau.rest.springboot.annotations.EnabledJuneauIntegration;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.apache.juneau.rest.RestServlet;
+import org.springframework.stereotype.Component;
 
-public class JuneauApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+import java.lang.annotation.*;
 
-    private Class appClass;
+/**
+ * Added to Spring application classes to denote Juneau REST resource classes to deploy as servlets.
+ */
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@Component
+public @interface JuneauIntegration {
 
-    public JuneauApplicationContextInitializer(Class appClass) {
-        this.appClass = appClass;
-    }
-
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
-        applicationContext.addBeanFactoryPostProcessor(new ServletConfiguration((EnabledJuneauIntegration) appClass.getAnnotation(EnabledJuneauIntegration.class)));
-    }
+	/**
+	 * Specifies one or more implementations of {@link RestServlet} to deploy as servlets.
+	 */
+	Class<? extends RestServlet>[] rootResources();
 }

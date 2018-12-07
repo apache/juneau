@@ -39,7 +39,7 @@ import org.springframework.context.ApplicationContext;
  *
  * 		<ja>@Bean</ja>
  * 		<jk>public</jk> RootRest root(RestResourceResolver resolver) {
- * 			<jk>return new</jk> RootRest(resolver);
+ * 			<jk>return new</jk> RootRest().setRestResourceResolver(resolver);
  * 		}
  *
  * 		<ja>@Bean</ja>
@@ -50,22 +50,22 @@ import org.springframework.context.ApplicationContext;
  */
 public class SpringRestResourceResolver extends BasicRestResourceResolver {
 
-	private ApplicationContext applicationContext;
+	private ApplicationContext ctx;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param applicationContext The spring application context object.
+	 * @param ctx The spring application context object.
 	 */
-	public SpringRestResourceResolver(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
+	public SpringRestResourceResolver(ApplicationContext ctx) {
+		this.ctx = ctx;
 	}
 
 	@Override /* RestResourceResolver */
 	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object...args) {
 		T resource = null;
 		try {
-			resource = applicationContext.getBean(c);
+			resource = ctx.getBean(c);
 		} catch (Exception e) { /* Ignore */ }
 		if (resource == null)
 			resource = super.resolve(parent, c, builder);

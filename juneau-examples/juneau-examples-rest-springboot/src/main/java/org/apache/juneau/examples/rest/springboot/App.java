@@ -10,18 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.springboot.annotations;
+package org.apache.juneau.examples.rest.springboot;
 
-import org.apache.juneau.rest.RestServlet;
-import org.springframework.stereotype.Component;
+import org.apache.juneau.examples.rest.RootResources;
+import org.apache.juneau.rest.springboot.*;
+import org.apache.juneau.rest.springboot.annotations.*;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.*;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.annotation.*;
+/**
+ * Entry point for Examples REST application when deployed as a Spring Boot application.
+ */
+@SpringBootApplication
+@JuneauIntegration(rootResources = RootResources.class)
+@Controller
+@RestController
+public class App {
 
-@Target({ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@Component
-public @interface EnabledJuneauIntegration {
-    Class<? extends RestServlet>[] rootResources();
+	private static volatile ConfigurableApplicationContext ctx;
+
+	public static void main(String[] args) {
+		ctx = new SpringApplicationBuilder(App.class)
+			.initializers(new JuneauContextInitializer(App.class))
+			.run(args);
+	}
+
+	public static void start() {
+		main(new String[0]);
+	}
+
+	public static void stop() {
+		ctx.stop();
+	}
 }
