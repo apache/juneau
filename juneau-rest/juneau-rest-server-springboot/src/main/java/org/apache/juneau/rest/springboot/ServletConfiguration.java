@@ -10,11 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.springboot.config;
+package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.microservice.springboot.annotations.EnabledJuneauIntegration;
 import org.apache.juneau.rest.RestServlet;
 import org.apache.juneau.rest.annotation.RestResource;
+import org.apache.juneau.rest.springboot.annotations.EnabledJuneauIntegration;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

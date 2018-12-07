@@ -10,9 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.springboot.config;
+package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.microservice.springboot.annotations.EnabledJuneauIntegration;
+import org.apache.juneau.rest.springboot.annotations.EnabledJuneauIntegration;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 

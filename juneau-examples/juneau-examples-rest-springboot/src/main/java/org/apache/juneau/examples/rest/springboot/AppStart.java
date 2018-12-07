@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest.springboot;
 
 import org.apache.juneau.examples.rest.RootResources;
-import org.apache.juneau.microservice.springboot.annotations.EnabledJuneauIntegration;
+import org.apache.juneau.rest.springboot.annotations.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
