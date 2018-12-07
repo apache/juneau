@@ -107,7 +107,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 	),
 
 	// Optional external configuration file.
-	config="$S{juneau.configFile}",
+	config="$S{juneau.configFile,SYSTEM_DEFAULT}",
 
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"

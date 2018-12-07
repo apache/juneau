@@ -259,27 +259,31 @@ public class ConfigFileStore extends ConfigStore {
 			return "";
 
 		if (isWritable(p)) {
-			try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
-				try (FileLock lock = fc.lock()) {
-					String currentContents = "";
-					if (exists) {
-						ByteBuffer buf = ByteBuffer.allocate(1024);
-						StringBuilder sb = new StringBuilder();
-						while (fc.read(buf) != -1) {
-							sb.append(charset.decode((ByteBuffer)(buf.flip())));
-							buf.clear();
+			if (newContents == null)
+				Files.delete(p);
+			else {
+				try (FileChannel fc = FileChannel.open(p, READ, WRITE, CREATE)) {
+					try (FileLock lock = fc.lock()) {
+						String currentContents = "";
+						if (exists) {
+							ByteBuffer buf = ByteBuffer.allocate(1024);
+							StringBuilder sb = new StringBuilder();
+							while (fc.read(buf) != -1) {
+								sb.append(charset.decode((ByteBuffer)(buf.flip())));
+								buf.clear();
+							}
+							currentContents = sb.toString();
 						}
-						currentContents = sb.toString();
+						if (expectedContents != null && ! isEquals(currentContents, expectedContents)) {
+							if (currentContents == null)
+								cache.remove(name);
+							else
+								cache.put(name, currentContents);
+							return currentContents;
+						}
+						fc.position(0);
+						fc.write(charset.encode(newContents));
 					}
-					if (expectedContents != null && ! isEquals(currentContents, expectedContents)) {
-						if (currentContents == null)
-							cache.remove(name);
-						else
-							cache.put(name, currentContents);
-						return currentContents;
-					}
-					fc.position(0);
-					fc.write(charset.encode(newContents));
 				}
 			}
 		}
@@ -290,6 +294,11 @@ public class ConfigFileStore extends ConfigStore {
 			cache.remove(name);  // Invalidate the cache.
 
 		return null;
+	}
+
+	@Override /* ConfigStore */
+	public synchronized boolean exists(String name) {
+		return Files.exists(dir.toPath().resolve(name));
 	}
 
 	private synchronized boolean isWritable(Path p) {

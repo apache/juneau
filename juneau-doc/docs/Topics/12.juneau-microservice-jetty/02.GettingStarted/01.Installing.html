@@ -1,0 +1,226 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Installing in Eclipse
+
+<p>
+	Follow these instructions to create a new template project in Eclipse.
+</p>		
+<ol class='spaced-list'>
+	<li>
+		Download the latest microservice-project zip file (e.g. <l>my-microservice.zip</l>).
+	<li>
+		In your Eclipse workspace, go to <b>File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</b> 
+		and select the zip file and click <b>Finish</b>.
+		<br><br>
+		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.1.png' style='width:549px'>
+	<li>
+		In your workspace, you should now see the following project:
+		<br><br>
+		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.2.png' style='width:299px'>
+</ol>
+<p>
+	The important elements in this project are:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<l>RootResources.java</l> - The top-level REST resource. 
+		<br>This class routes HTTP requests to child resources:
+		<br><br>
+		<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/"</js>,
+		title=<js>"My Microservice"</js>,
+		description=<js>"Top-level resources page"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
+		),
+		children={
+			HelloWorldResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			LogsResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
+		<jc>// No code</jc>
+	}
+		</p>
+	<li>
+		<l>my-microservice.cfg</l> - The external configuration file. 
+		<br>Contains various useful settings.
+		<br>Can be used for your own resource configurations.
+		<br><br>
+		<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# Basic configuration file for REST microservices
+	# Subprojects can use this as a starting point.
+	#=======================================================================================================================</cc>
+	
+	<cc># What to do when the config file is saved.
+	# Possible values:
+	# 	NOTHING - Don't do anything. (default)
+	#	RESTART_SERVER - Restart the Jetty server.
+	#	RESTART_SERVICE - Shutdown and exit with code '3'.</cc>
+	<ck>saveConfigAction</ck> = <cv>RESTART_SERVER</cv>
+	
+	<cc>#=======================================================================================================================
+	# Jetty settings
+	#=======================================================================================================================</cc>
+	<cs>[Jetty]</cs>
+	
+	<cc># Path of the jetty.xml file used to configure the Jetty server.</cc>
+	<ck>config</ck> = <cv>jetty.xml</cv>
+	
+	<cc># Resolve Juneau variables in the jetty.xml file.</cc>
+	<ck>resolveVars</ck> = <cv>true</cv>
+	
+	<cc># Port to use for the jetty server.
+	# You can specify multiple ports.  The first available will be used.  '0' indicates to try a random port.
+	# The resulting available port gets set as the system property "availablePort" which can be referenced in the 
+	# jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).</cc>
+	<ck>port</ck> = <cv>10000,0,0,0</cv>
+	
+	<cc>#=======================================================================================================================
+	# REST settings
+	#=======================================================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<cc># Stylesheet to use for HTML views.
+	# The default options are:
+	#  - servlet:/styles/juneau.css
+	#  - servlet:/styles/devops.css
+	# Other stylesheets can be referenced relative to the servlet package or working directory.</cc>
+	<ck>stylesheet</ck> = <cv>servlet:/styles/devops.css</cv>
+	
+	<cc>#=======================================================================================================================
+	# Console settings
+	#=======================================================================================================================</cc>
+	<cs>[Console]</cs>
+	
+	<ck>enabled</ck> = <cv>true</cv>
+	
+	<cc># List of available console commands.
+	# These are classes that implements ConsoleCommand that allow you to submit commands to the microservice via
+	# the console.
+	# When listed here, the implementations must provide a no-arg constructor.
+	# They can also be provided dynamically by overriding the Microservice.createConsoleCommands() method.</cc>
+	<ck>commands</ck> = 
+		<cv>org.apache.juneau.microservice.console.ExitCommand,
+		org.apache.juneau.microservice.console.RestartCommand,
+		org.apache.juneau.microservice.console.HelpCommand</cv>
+		
+	<cc>#=======================================================================================================================
+	# Logger settings
+	#-----------------------------------------------------------------------------------------------------------------------
+	# See FileHandler Java class for details.
+	#=======================================================================================================================</cc>
+	<cs>[Logging]</cs>
+
+	...
+	
+	<cc>#=======================================================================================================================
+	# System properties
+	#-----------------------------------------------------------------------------------------------------------------------
+	# These are arbitrary system properties that are set during startup.
+	#=======================================================================================================================</cc>
+	<cs>[SystemProperties]</cs>
+	
+	<cc># Configure Jetty for StdErrLog Logging
+	# org.eclipse.jetty.util.log.class = org.eclipse.jetty.util.log.StrErrLog</cc>
+	
+	<cc># Configure Jetty to log using java-util logging</cc>
+	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.JettyLogger</cv>
+	
+	<cc># Jetty logging level
+	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
+	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN
+	
+	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>					
+	</p>
+	<li>
+		<l>jetty.xml</l> - The Jetty configuration file. 
+		<br>A bare-bones config file that can be extended to use any Jetty features.
+		<br><br>
+		<p class='bcode w800'>
+	<xt>&lt;Configure</xt> <xa>id</xa>=<xs>"ExampleServer"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.Server"</xs>&gt;</xt>
+	
+		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"connectors"</xs><xt>&gt;</xt>
+			<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Connector"</xs><xt>&gt;</xt>
+				<xt>&lt;Item&gt;</xt>
+					<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.ServerConnector"</xs><xt>&gt;</xt>
+						<xt>&lt;Arg&gt;</xt>
+							<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"ExampleServer"</xs><xt>/&gt;</xt>
+						<xt>&lt;/Arg&gt;</xt>
+						<xt>&lt;Set</xt> <xa>name</xa>=<xs>"port"</xs><xt>&gt;</xt>$S{availablePort,8080}<xt>&lt;/Set&gt;</xt>
+					<xt>&lt;/New&gt;</xt>
+				<xt>&lt;/Item&gt;</xt>
+			<xt>&lt;/Array&gt;</xt>
+		<xt>&lt;/Set&gt;</xt>
+	
+		<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
+			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"contextPath"</xs><xt>&gt;/&lt;/Set&gt;</xt>
+			<xt>&lt;Call</xt> <xa>name</xa>=<xs>"addServlet"</xs><xt>&gt;</xt>
+				<xt>&lt;Arg&gt;</xt>org.apache.juneau.microservice.sample.RootResources<xt>&lt;/Arg&gt;</xt>
+				<xt>&lt;Arg&gt;</xt>/*<xt>&lt;/Arg&gt;</xt>
+			<xt>&lt;/Call&gt;</xt>
+			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"sessionHandler"</xs><xt>&gt;</xt>
+				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.session.SessionHandler"</xs><xt>/&gt;</xt>
+			<xt>&lt;/Set&gt;</xt>
+		<xt>&lt;/New&gt;</xt>
+	
+		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handler"</xs><xt>&gt;</xt>
+			<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.handler.HandlerCollection"</xs><xt>&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handlers"</xs><xt>&gt;</xt>
+					<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Handler"</xs><xt>&gt;</xt>
+						<xt>&lt;Item&gt;</xt>
+							<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"context"</xs><xt>/&gt;</xt>
+						<xt>&lt;/Item&gt;</xt>
+						<xt>&lt;Item&gt;</xt>
+							<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.handler.DefaultHandler"</xs><xt>/&gt;</xt>
+						<xt>&lt;/Item&gt;</xt>
+					<xt>&lt;/Array&gt;</xt>
+				<xt>&lt;/Set&gt;</xt>
+			<xt>&lt;/New&gt;</xt>
+		<xt>&lt;/Set&gt;</xt>
+	
+		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"requestLog"</xs><xt>&gt;</xt>
+			<xt>&lt;New</xt> <xa>id</xa>=<xs>"RequestLogImpl"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.NCSARequestLog"</xs><xt>&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filename"</xs><xt>&gt;&lt;Property</xt> <xa>name</xa>=<xs>"jetty.logs"</xs> <xa>default</xa>=<xs>"$C{Logging/logDir,logs}"</xs><xt>/&gt;</xt>/jetty-requests.log<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filenameDateFormat</xs><xt>"&gt;</xt>yyyy_MM_dd<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogTimeZone"</xs><xt>&gt;</xt>GMT<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"retainDays"</xs><xt>&gt;</xt>90<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"append"</xs><xt>&gt;</xt>false<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogLatency"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
+			<xt>&lt;/New&gt;</xt>
+		<xt>&lt;/Set&gt;</xt>
+	
+	    <xt>&lt;Get</xt> <xa>name</xa>=<xs>"ThreadPool"</xs><xt>&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"minThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>10<xt>&lt;/Set&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"maxThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>100<xt>&lt;/Set&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"idleTimeout"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>60000<xt>&lt;/Set&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"detailedDump"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
+	    <xt>&lt;/Get&gt;</xt>
+	<xt>&lt;/Configure&gt;</xt>
+		</p>
+</ul>
+<p>
+	At this point, you're ready to start the microservice from your workspace.
+</p>

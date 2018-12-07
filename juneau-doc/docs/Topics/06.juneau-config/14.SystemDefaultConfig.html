@@ -1,0 +1,62 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} System Default Config
+
+<p>
+	Each JVM has a system default config.  This is a configuration file that serves as the default
+	configuration for the system.  It's accessed using the following static methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oaj.config.Config}
+	<ul>
+		<li class='jm'>{@link oaj.config.Config#getSystemDefault() getSystemDefault()}
+		<li class='jm'>{@link oaj.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
+	</ul>
+</ul>
+<p>
+	If you do not specify a system default config, one will be automatically searched for.
+	The search is done in the following order:
+</p>
+<ol class='spaced-list'>
+	<li>
+		If the system property <js>"juneau.configFile"</js> is set, we search for this file in first the home
+		directory and then the classpath.
+	<li>
+		In the home directory:
+		<ol>
+			<li><code>&lt;jar-name&gt;.cfg</code>
+			<li>Any file that end with <code>.cfg</code>.  First one matched alphabetically is used.
+		</ol>
+	<li>
+		In the context classpath (i.e. inside the jar itself):
+		<ol>
+			<li><code>&lt;jar-name&gt;.cfg</code>
+			<li><code>juneau.cfg</code>
+			<li><code>default.cfg</code>
+		</ol>
+</ol>
+<p>
+	Later in the section on REST resources, we describe how to associate configurations with REST resources
+	using the {@link oajr.annotation.RestResource#config() @RestResource(config)} annotation.
+	The system default configuration can be referenced with the keyword <code>SYSTEM_DEFAULT</code> like so:
+</p>
+<p class='bpcode w800'>
+	<jc>// Always use system default.</jc>
+	<ja>@RestResource</ja>(config=<js>"SYSTEM_DEFAULT"</js>)
+
+	<jc>// Use system property if set or the system default if not.</jc>
+	<ja>@RestResource</ja>(config=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>)
+</p>

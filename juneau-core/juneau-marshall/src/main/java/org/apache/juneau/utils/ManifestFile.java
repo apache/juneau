@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.jar.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Utility class for working with Jar manifest files.
@@ -80,8 +81,42 @@ public class ManifestFile extends ObjectMap {
 		}
 	}
 
+	/**
+	 * Create an instance of this class loaded from the contents of a reader.
+	 *
+	 * <p>
+	 * Note that the input must end in a newline to pick up the last line!
+	 *
+	 * @param r The manifest file contents.
+	 * @throws IOException If a problem occurred while trying to read the manifest file.
+	 */
+	public ManifestFile(Reader r) throws IOException {
+		load(new Manifest(IOUtils.toInputStream(r)));
+	}
+
+	/**
+	 * Create an instance of this class loaded from the contents of an input stream.
+	 *
+	 * <p>
+	 * Note that the input must end in a newline to pick up the last line!
+	 *
+	 * @param is The manifest file contents.
+	 * @throws IOException If a problem occurred while trying to read the manifest file.
+	 */
+	public ManifestFile(InputStream is) throws IOException {
+		load(new Manifest(is));
+	}
+
 	private void load(Manifest mf) {
 		for (Map.Entry<Object,Object> e : mf.getMainAttributes().entrySet())
 			put(e.getKey().toString(), e.getValue().toString());
+	}
+
+	@Override /* Object */
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String,Object> e : entrySet())
+			sb.append(e.getKey()).append(": ").append(e.getValue());
+		return sb.toString();
 	}
 }

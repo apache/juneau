@@ -36,7 +36,7 @@ import org.apache.juneau.serializer.*;
  */
 public class TestMicroservice {
 
-	static RestMicroservice microservice;
+	static JettyMicroservice microservice;
 	static URI microserviceURI;
 
 	// Reusable HTTP clients that get created and shut down with the microservice.
@@ -53,11 +53,15 @@ public class TestMicroservice {
 			return false;
 		try {
 			Locale.setDefault(Locale.US);
-			microservice = new RestMicroservice()
-				.setConfig("juneau-microservice-test.cfg", false)
-				.setManifestContents(
-					"Test-Entry: test-value"
-				);
+			microservice = JettyMicroservice
+				.create()
+				.configName("juneau-microservice-test.cfg")
+				.manifest(
+					new StringReader("Test-Entry: test-value\n")
+				)
+				.servlet(Root.class)
+				.build()
+			;
 			microserviceURI = microservice.start().getURI();
 			DEFAULT_CLIENT = client().json().build();
 			DEFAULT_CLIENT_DEBUG = client().json().debug().build();

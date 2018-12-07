@@ -1,0 +1,129 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Config File API
+
+<p>
+	There are 3 primary ways of getting access to the config file.
+</p>
+<ul class='doctree'>
+	<li class='jm'>{@link oaj.microservice.Microservice#getConfig()} 
+		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
+	<li class='jm'>{@link oajr.RestContext#getConfig()} 
+		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
+		<h5 class='figure'>Example usage:</h5>
+		<p class='bcode w800'>
+	<cc>#-------------------------------</cc>
+	<cc># Properties for MyHelloResource </cc>
+	<cc>#-------------------------------</cc>
+	<cs>[MyHelloResource]</cs>
+	<ck>greeting</ck> = <cv>Hello world!</cv> 
+				</p>
+				<p class='bcode w800'>
+	<ja>@RestResource</ja>(...)
+	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
+		<jc>// Access config file when initializing fields.</jc>
+		<jk>private</jk> String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
+		
+		<jc>// Or access config file in servlet init method.</jc>
+		<ja>@Override</ja> <jc>/* Servlet */</jc>
+		<jk>public void</jk> init() {
+			String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
+		}
+	}		
+		</p>
+		<p>
+			Additional user-defined variables can be defined at this level by adding a  
+			{@link oajr.annotation.HookEvent#INIT} hook method
+			and using the {@link oajr.RestContextBuilder#vars(Class...)} method.
+		</p>
+	<li class='jm'>
+		{@link oajr.RestRequest#getConfig()} 
+		- An instance method to access it from inside a REST method.
+		<br>Any {@doc DefaultRestSvlVariables initialization-time or request-time variables} can be used.
+		
+		<h5 class='figure'>Example usage:</h5>
+		<p class='bcode w800'>
+	<cc>#-----------------------------</cc>
+	<cc># Contents of microservice.cfg </cc>
+	<cc>#-----------------------------</cc>
+	<cs>[MyHelloResource]</cs>
+	<ck>greeting</ck> = <cv>Hello $RP{person}!</cv> 
+	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$RP{person}}</cv> 
+				</p>
+				<p class='bcode w800'>
+	<cc>#---------------------------------</cc>
+	<cc># Contents of MyHelloResource.java </cc>
+	<cc>#---------------------------------</cc>
+	<ja>@RestResource</ja>(
+		path=<js>"/hello"</js>,
+		messages=<js>"nls/Messages"</js>,
+		...
+	)
+	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
+
+		<jd>/** Standard hello message. */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{person}"</js>)
+		<jk>public</jk> String sayHello(RestRequest req) {
+			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/greeting"</js>);
+		}
+
+		<jd>/** Hello message in users language. */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/localized/{person}"</js>)
+		<jk>public</jk> String sayLocalizedHello(RestRequest req) {
+			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/localizedGreeting"</js>);
+		}
+	}		
+		</p>
+		<p class='bcode w800'>
+	<cc>#---------------------------------------</cc>
+	<cc># Contents of nls/Messages_en.properties </cc>
+	<cc>#---------------------------------------</cc>
+	<ck>MyHelloResource.HelloMessage</ck> = <cv>Hello {0}!</cv> 
+		</p>
+		<p>
+			Additional user-defined variables can be defined at this level by overriding the 
+			{@link oajr.RestContextBuilder#vars(Class...)} method.
+		</p>
+</ul>
+<p>
+	That <l>sayLocalizedHello()</l> example might need some explanation since there's a lot going on there.
+	<br>Here's what happens when an HTTP call is made to <l>GET /hello/localized/Bob</l>:
+</p>
+<ol class='spaced-list'>
+	<li>
+		The HTTP call matches the <l>/hello</l> path on the <l>MyHelloResource</l> class.
+	<li>
+		The HTTP call matches the <l>/localized/{person}</l> path on the <l>sayLocalizedHello()</l> method.
+	<li>
+		The request attribute <l>person</l> gets assigned the value <l>"Bob"</l>.
+	<li>
+		The call to <l>req.getConfig().getString("MyHelloResource/localizedGreeting")</l> 
+		finds the value <l>"$L{HelloMessage,$RP{person}}"</l>.
+	<li>
+		The arguments in the <l>$L{}</l> variable get resolved, resulting in <l>"$L{HelloMessage,Bob}"</l>.
+	<li>
+		The <l>$L{}</l> variable gets resolved to the message <l>"Hello {0}!"</l> in the localized properties 
+		file of the servlet based on the <l>Accept-Language</l> header on the request.
+	<li>
+		The arguments get replaced in the message resulting in <l>"Hello Bob!"</l>. 
+	<li>
+		The resulting message <l>"Hello Bob!"</l> is returned as a POJO to be serialized to whatever content 
+		type was specified on the <l>Accept</l> header on the request.
+</ol>
+<p>
+	This particular example is needlessly complex, but it gives an idea of how variables can be used 
+	recursively to produce sophisticated results
+</p>

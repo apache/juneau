@@ -29,8 +29,9 @@
 	<description>Apache Juneau Microservice APIs</description>
 
 	<modules>
-		<module>juneau-microservice-server</module>
-		<module>juneau-microservice-template</module>
+		<module>juneau-microservice-core</module>
+		<module>juneau-microservice-jetty</module>
+		<module>juneau-microservice-jetty-template</module>
 		<module>juneau-microservice-test</module>
 		<module>juneau-microservice-server-springboot</module>
 	</modules>

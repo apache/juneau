@@ -31,6 +31,7 @@
 	<modules>
 		<module>juneau-examples-core</module>
 		<module>juneau-examples-rest</module>
+		<module>juneau-examples-rest-jetty</module>
 		<module>juneau-examples-rest-springboot</module>
 	</modules>
 

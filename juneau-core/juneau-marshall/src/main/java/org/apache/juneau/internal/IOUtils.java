@@ -80,7 +80,7 @@ public final class IOUtils {
 	 * @return The objects serialized to a string, never <jk>null</jk>.
 	 * @throws IOException
 	 */
-	public static String read(Object...in) throws IOException {
+	public static String readAll(Object...in) throws IOException {
 		if (in.length == 1)
 			return read(in[0]);
 		StringWriter sw = new StringWriter();
@@ -671,5 +671,39 @@ public final class IOUtils {
 	 */
 	public static void write(String path, String contents) throws IOException {
 		write(new File(path), new StringReader(contents));
+	}
+
+	/**
+	 * Loads a text file from either the file system or classpath.
+	 *
+	 * @param name The file name.
+	 * @param paths The paths to search.
+	 * @return The file contents, or <jk>null</jk> if not found.
+	 * @throws IOException
+	 */
+	public static String loadSystemResourceAsString(String name, String...paths) throws IOException {
+		for (String path : paths) {
+			File p = new File(path);
+			if (p.exists()) {
+	 			File f = new File(p, name);
+	 			if (f.exists() && f.canRead())
+	 				return read(f);
+			}
+		}
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		if (cl == null)
+			cl = ClassLoader.getSystemClassLoader();
+		for (String path : paths) {
+			String n = ".".equals(path) ? name : path + '/' + name;
+			try (InputStream is = cl.getResourceAsStream(n)) {
+				if (is != null)
+					return read(is);
+			}
+			try (InputStream is = ClassLoader.getSystemResourceAsStream(n)) {
+				if (is != null)
+					return read(is);
+			}
+		}
+		return null;
 	}
 }

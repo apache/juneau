@@ -143,11 +143,16 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				if (! r.config().isEmpty())
 					configPath = r.config();
 			String cf = vr.resolve(configPath);
-			ConfigBuilder cb = Config.create().varResolver(vr);
-			if (! cf.isEmpty())
-				cb.name(cf);
-
-			this.config = cb.build();
+			
+			if ("SYSTEM_DEFAULT".equals(cf)) 
+				this.config = Config.getSystemDefault();
+			
+			if (this.config == null) {
+				ConfigBuilder cb = Config.create().varResolver(vr);
+				if (! cf.isEmpty())
+					cb.name(cf);
+				this.config = cb.build();
+			}
 
 			// Add our config file to the variable resolver.
 			varResolverBuilder.contextObject(ConfigVar.SESSION_config, config);

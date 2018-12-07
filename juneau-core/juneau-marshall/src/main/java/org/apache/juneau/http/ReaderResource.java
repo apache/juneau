@@ -82,7 +82,7 @@ public class ReaderResource implements Writable {
 	public ReaderResource(MediaType mediaType, Map<String,Object> headers, boolean cached, Object...contents) throws IOException {
 		this.mediaType = mediaType;
 		this.headers = immutableMap(headers);
-		this.contents = cached ? new Object[]{read(contents)} : contents;
+		this.contents = cached ? new Object[]{readAll(contents)} : contents;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,30 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Manifest API
+
+<p>
+	The {@link oaj.microservice.Microservice#getManifest()} method is a static method that
+	can be used to retrieve the manifest file as a {@link oaj.utils.ManifestFile}.  
+</p>
+<p class='bpcode w800'>
+	<jc>// Get Main-Class from manifest file.</jc>
+	String mainClass = Microservice.<jsm>getInstance</jsm>().getManifest().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
+</p>
+<p>
+	The {@link oaj.utils.ManifestFile} class extends {@link oaj.ObjectMap},
+	making it possible to retrieve entries as a wide variety of object types such as java primitives, arrays, collections, 
+	maps, or even POJOs serialized as JSON.
+</p>

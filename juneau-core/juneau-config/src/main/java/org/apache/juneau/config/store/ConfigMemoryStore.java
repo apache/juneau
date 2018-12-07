@@ -86,10 +86,17 @@ public class ConfigMemoryStore extends ConfigStore {
 		return null;
 	}
 
+	@Override /* ConfigStore */
+	public synchronized boolean exists(String name) {
+		return cache.containsKey(name);
+	}
 
 	@Override /* ConfigStore */
 	public synchronized ConfigMemoryStore update(String name, String newContents) {
-		cache.put(name, newContents);
+		if (newContents == null)
+			cache.remove(name);
+		else
+			cache.put(name, newContents);
 		super.update(name, newContents);  // Trigger any listeners.
 		return this;
 	}

@@ -19,6 +19,36 @@
 	This release primarily cleans up deprecated APIs from the 7.2.0 release.
 </p>
 
+<p>
+	The project structures of the REST, Microservice, and Examples have been modified to fit new Spring Boot
+	integration support.
+	The structure is now as follows:
+</p>
+<ul>
+	<li><code>juneau-rest</code>
+	<ul>
+		<li><code>juneau-rest-client</code>
+		<li><code>juneau-rest-server</code>
+		<li><code>juneau-rest-server-jaxrs</code>
+		<li><code>juneau-rest-server-rdf</code>
+		<li><b><code>juneau-rest-server-springboot</code></b> - New Spring Boot integration support classes. 
+	</ul>
+	<li><code>juneau-microservice</code>
+	<ul>
+		<li><b><code>juneau-microservice-core</code></b> - New.  Contains base {@link oaj.microservice.Microservice} class.
+		<li><b><code>juneau-microservice-jetty</code></b> - New.  Contains new {@link oaj.microservice.JettyMicroservice} class.
+		<li><b><code>juneau-microservice-jetty-template</code></b> - New.  Template starter project for Jetty-based microservices.
+		<li><b><code>juneau-microservice-springboot-template</code></b> - New.  Template starter project for Spring-Boot-based microservices.
+	</ul>
+	<li><code>juneau-<examples/code>
+	<ul>
+		<li><code>juneau-core</code>
+		<li><b><code>juneau-microservice-rest</code></b> - Now contains only servlet example classes.  No Jetty configuration.
+		<li><b><code>juneau-microservice-rest-jetty</code></b> - Servlet examples deployed using Jetty.
+		<li><b><code>juneau-microservice-rest-springboot</code></b> - Servlet examples deployed using Spring Boot.
+	</ul>
+</ul>
+
 <h5 class='topic w800'>juneau-svl</h5>
 <ul class='spaced-list'>
 	<li>
@@ -29,6 +59,32 @@
 			<li class='jc'>{@link oaj.svl.vars.PatternReplaceVar}
 			<li class='jc'>{@link oaj.svl.vars.LenVar}
 		</ul>
+</ul>
+
+<h5 class='topic w800'>juneau-config</h5>
+<ul class='spaced-list'>
+	<li>
+		New methods for setting a system default configuration:
+		<ul class='doctree'>
+			<li class='jc'>{@link oaj.config.Config}
+			<ul>
+				<li class='jm'>{@link oaj.config.Config#getSystemDefault() getSystemDefault()}
+				<li class='jm'>{@link oaj.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
+			</ul>
+		</ul>
+	<li>
+		New classpath store.
+		<ul class='doctree'>
+			<li class='jc'>{@link oaj.config.store.ConfigClasspathStore}
+		</ul>
+	<li>
+		New API method:
+		<ul class='doctree'>
+			<li class='jc'>{@link oaj.config.ConfigStore}
+			<ul>
+				<li class='jm'>{@link oaj.config.ConfigStore#exists(String) exists(String)}
+			</ul>
+			
 </ul>
 
 <h5 class='topic w800'>juneau-server</h5>
@@ -44,12 +100,26 @@
 		<br>This allows for any of those instance to be injectable beans.
 </ul>
 
-<h5 class='topic w800'>juneau-microservice-server</h5>
+<h5 class='topic w800'>juneau-microservice-core</h5>
 <ul class='spaced-list'>
+	<li>
+		New project that consist of just the core {@link oaj.microservice.Microservice} class and console support.
+	<li>
+		The Microservice API has been revamped to use a builder-based approach to creating microservices.
+		<br>The new API is considerably more flexible in design and allows for the configuration and external
+		files to be located in either the home directory or inside the jar classpath.
 	<li>
 		If the microservice cannot find a config file in the home directory with the same name as the jar and
 		the <js>"juneau.configFile"</js> system property is not found, it will try to find any file in the home
 		directory that ends with <js>".cfg"</js>.
+	<li>
+		New {@link oaj.microservice.MicroserviceListener} API for defining lifecycle event listeners.
+</ul>
+
+<h5 class='topic w800'>juneau-microservice-jetty</h5>
+<ul class='spaced-list'>
+	<li>
+		New {@link oaj.microservice.JettyMicroservice} class replaces the previous <code>RestMicroservice</code>.
 </ul>
 
 <h5 class='topic w800'>juneau-examples-rest</h5>

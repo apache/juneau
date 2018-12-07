@@ -192,6 +192,17 @@ public final class Args extends ObjectMap {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the named argument exists.
+	 *
+	 * @param name The argument name.
+	 * @return <jk>true</jk> if the named argument exists.
+	 */
+	public boolean hasArg(String name) {
+		ObjectList l = (ObjectList)get(name);
+		return l != null;
+	}
+
+	/**
 	 * Returns the optional argument value, or blank if the optional argument was not specified.
 	 *
 	 * <p>

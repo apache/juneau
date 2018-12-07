@@ -21,7 +21,7 @@ import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.test.client.*;
 
 @RestResource(
-	path="/",
+	path="/*",
 	children={
 		DebugResource.class,
 		LogsResource.class,

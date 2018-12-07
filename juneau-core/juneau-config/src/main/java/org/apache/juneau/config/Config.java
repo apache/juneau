@@ -45,6 +45,94 @@ import org.apache.juneau.svl.*;
  */
 public final class Config extends Context implements ConfigEventListener, Writable {
 
+	private static volatile Config SYSTEM_DEFAULT = findSystemDefault();
+
+	/**
+	 * Sets a system default configuration.
+	 *
+	 * @param systemDefault The new system default configuration.
+	 */
+	public synchronized static void setSystemDefault(Config systemDefault) {
+		SYSTEM_DEFAULT = systemDefault;
+	}
+
+	/**
+	 * Returns the system default configuration.
+	 *
+	 * @return The system default configuration, or <jk>null</jk> if it doesn't exist.
+	 */
+	public synchronized static Config getSystemDefault() {
+		return SYSTEM_DEFAULT;
+	}
+
+	private synchronized static Config findSystemDefault() {
+
+		for (String n : getCandidateSystemDefaultConfigNames()) {
+			Config config = find(n);
+			if (config != null)
+				return config;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the list of candidate system default configuration file names.
+	 *
+	 * <p>
+	 * If the <js>"juneau.configFile"</js> system property is set, returns a singleton of that value.
+	 * <br>Otherwise, returns a list consisting of the following values:
+	 * <ol>
+	 * 	<li>File with same name as jar file but with <js>".cfg"</js> extension.  (e.g. <js>"myjar.cfg"</js>)
+	 * 	<li>Any file ending in <js>".cfg"</js> in the home directory (names ordered alphabetically).
+	 * 	<li><js>"juneau.cfg"</js>
+	 * 	<li><js>"default.cfg"</js>
+	 * </ol>
+	 * <p>
+	 *
+	 * @return
+	 * 	A list of candidate file names.
+	 * 	<br>The returned list is modifiable.
+	 * 	<br>Each call constructs a new list.
+	 */
+	public synchronized static List<String> getCandidateSystemDefaultConfigNames() {
+		List<String> l = new ArrayList<>();
+
+		String s = System.getProperty("juneau.configFile");
+		if (s != null) {
+			l.add(s);
+			return l;
+		}
+
+		String cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
+		if (cmd.endsWith(".jar") && ! cmd.contains("surefirebooter")) {
+			cmd = cmd.replaceAll(".*?([^\\\\\\/]+)\\.jar$", "$1");
+			l.add(cmd + ".cfg");
+			cmd = cmd.replaceAll("[\\.\\_].*$", "");  // Try also without version in jar name.
+			l.add(cmd + ".cfg");
+		}
+
+		Set<File> files = new TreeSet<>(Arrays.asList(new File(".").listFiles()));
+		for (File f : files)
+			if (f.getName().endsWith(".cfg"))
+				l.add(f.getName());
+
+		l.add("juneau.cfg");
+		l.add("default.cfg");
+
+		return l;
+	}
+
+	private synchronized static Config find(String name) {
+		if (name == null)
+			return null;
+		if (ConfigFileStore.DEFAULT.exists(name))
+			return Config.create(name).store(ConfigFileStore.DEFAULT).build();
+		if (ConfigClasspathStore.DEFAULT.exists(name))
+			return Config.create(name).store(ConfigClasspathStore.DEFAULT).build();
+		return null;
+	}
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Configurable properties
 	//-------------------------------------------------------------------------------------------------------------------
@@ -374,6 +462,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return new Config(this, varSession);
 	}
 
+	/**
+	 * Returns the name associated with this config (usually a file name).
+	 *
+	 * @return The name associated with this config, or <jk>null</jk> if it has no name.
+	 */
+	public String getName() {
+		return name;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Workhorse getters
@@ -1110,6 +1206,52 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		assertFieldNotNull(type, "type");
 		T t = parse(getString(key), parser, type, args);
 		return (t == null ? def : t);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link ObjectMap}.
+	 *
+	 * @param key The key.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 * @throws ParseException
+	 */
+	public ObjectMap getObjectMap(String key) throws ParseException {
+		return getObject(key, ObjectMap.class);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link ObjectMap}.
+	 *
+	 * @param key The key.
+	 * @param def The default value.
+	 * @return The value, or the default value if the section or key does not exist.
+	 * @throws ParseException
+	 */
+	public ObjectMap getObjectMap(String key, ObjectMap def) throws ParseException {
+		return getObjectWithDefault(key, def, ObjectMap.class);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link ObjectList}.
+	 *
+	 * @param key The key.
+	 * @return The value, or <jk>null</jk> if the section or key does not exist.
+	 * @throws ParseException
+	 */
+	public ObjectList getObjectList(String key) throws ParseException {
+		return getObject(key, ObjectList.class);
+	}
+
+	/**
+	 * Convenience method for returning a config entry as an {@link ObjectList}.
+	 *
+	 * @param key The key.
+	 * @param def The default value.
+	 * @return The value, or the default value if the section or key does not exist.
+	 * @throws ParseException
+	 */
+	public ObjectList getObjectList(String key, ObjectList def) throws ParseException {
+		return getObjectWithDefault(key, def, ObjectList.class);
 	}
 
 	/**

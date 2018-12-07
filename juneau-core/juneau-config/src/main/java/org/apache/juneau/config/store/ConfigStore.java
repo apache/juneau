@@ -69,6 +69,14 @@ public abstract class ConfigStore extends Context implements Closeable {
 	public abstract String write(String name, String expectedContents, String newContents) throws IOException;
 
 	/**
+	 * Checks whether the configuration with the specified name exists in this store.
+	 *
+	 * @param name The config name.
+	 * @return <jk>true</jk> if the configuration with the specified name exists in this store.
+	 */
+	public abstract boolean exists(String name);
+
+	/**
 	 * Registers a new listener on this store.
 	 *
 	 * @param name The configuration name to listen for.

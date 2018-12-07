@@ -247,6 +247,7 @@
 		</ol>
 		<li><p class=''><a class='doclink' href='#juneau-config.ReadOnlyConfigs'>Read-only Configs</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-config.ClosingConfigs'>Closing Configs</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-config.SystemDefaultConfig'>System Default Config</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></p>
 	<ol>
@@ -358,6 +359,10 @@
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server-jaxrs.BaseProvider'>Juneau JAX-RS Provider</a></p>
 	</ol>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></p>
+	<ol>
+		<li><p class='todo'><a class='doclink' href='#juneau-rest-server-springboot.TODO'>TODO</a></p>
+	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.RestProxies'>REST Proxies</a></p>
@@ -388,33 +393,59 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.UnitTesting'>Serverless Unit Testing</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.Other'>Other Useful Methods</a></p>
 	</ol>
-	<li><p class='toc2 '><a class='doclink' href='#juneau-microservice-server'>juneau-microservice-server</a></p>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-server</a></p>
 	<ol>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.Introduction'>Microservice Introduction</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.GettingStarted'>Getting Started</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.Introduction'>Microservice Introduction</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted'>Getting Started</a></p>
 		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-server.GettingStarted.Installing'>Installing in Eclipse</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-server.GettingStarted.Running'>Running in Eclipse</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-server.GettingStarted.Building'>Building and Running from Command-Line</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted.Installing'>Installing in Eclipse</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted.Running'>Running in Eclipse</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted.Building'>Building and Running from Command-Line</a></p>
 		</ol>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.Manifest'>Manifest File</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.Manifest'>Manifest File</a></p>
 		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-server.Manifest.ManifestApi'>Manifest API</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-core.Manifest.ManifestApi'>Manifest API</a></p>
 		</ol>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.Config'>Config</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.Config'>Config</a></p>
 		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-server.Config.ConfigApi'>Config File API</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-core.Config.ConfigApi'>Config File API</a></p>
 		</ol>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.ResourceClasses'>Resource Classes</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.PredefinedResourceClasses'>Predefined Resource Classes</a></p>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.RestMicroservice'>RestMicroservice</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.ResourceClasses'>Resource Classes</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.PredefinedResourceClasses'>Predefined Resource Classes</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.RestMicroservice'>RestMicroservice</a></p>
 		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-server.RestMicroservice.Extending'>Extending RestMicroservice</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-core.RestMicroservice.Extending'>Extending RestMicroservice</a></p>
 		</ol>
-		<li><p class=''><a class='doclink' href='#juneau-microservice-server.UiCustomization'>UI Customization</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-core.UiCustomization'>UI Customization</a></p>
 	</ol>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-server</a></p>
+	<ol>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.Introduction'>Microservice Introduction</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.GettingStarted'>Getting Started</a></p>
+		<ol>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.GettingStarted.Installing'>Installing in Eclipse</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.GettingStarted.Running'>Running in Eclipse</a></p>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.GettingStarted.Building'>Building and Running from Command-Line</a></p>
+		</ol>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.Manifest'>Manifest File</a></p>
+		<ol>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.Manifest.ManifestApi'>Manifest API</a></p>
+		</ol>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.Config'>Config</a></p>
+		<ol>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.Config.ConfigApi'>Config File API</a></p>
+		</ol>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.ResourceClasses'>Resource Classes</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.PredefinedResourceClasses'>Predefined Resource Classes</a></p>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.RestMicroservice'>RestMicroservice</a></p>
+		<ol>
+			<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.RestMicroservice.Extending'>Extending RestMicroservice</a></p>
+		</ol>
+		<li><p class=''><a class='doclink' href='#juneau-microservice-jetty.UiCustomization'>UI Customization</a></p>
+	</ol>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-jetty-template'>juneau-microservice-server</a></p>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></p>
-	<li><p class='toc2 updated'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></p>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></p>
 	<ol>
 		<li><p class='updated'><a class='doclink' href='#juneau-examples-rest.RootResources'>RootResources</a></p>
 		<li><p class='updated'><a class='doclink' href='#juneau-examples-rest.HelloWorldResource'>HelloWorldResource</a></p>
@@ -423,9 +454,14 @@
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
 	</ol>
-	<li><p class='toc2 new'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></p>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest</a></p>
 	<ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.Classes'>Classes</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-examples-rest-jetty.Classes'>Classes</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-jetty.DeployingToHeroku'>Deploying to Heroku</a></p>
+	</ol>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></p>
+	<ol>
+		<li><p class='new'><a class='doclink' href='#juneau-examples-rest-springboot.Classes'>Classes</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.DeployingToHeroku'>Deploying to Heroku</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#Security'>Security Best-Practices</a></p>
@@ -2726,7 +2762,7 @@
 		<jk>private final</jk> String <jf>name</jf>;
 		<jk>private final int</jk> <jf>age</jf>;
 
-		<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>)
+		<ja>@BeanConstructor</ja>(properties=<js>"name,age"</js>})
 		<jk>public</jk> Person(String name, <jk>int</jk> age) {
 			<jk>this</jk>.<jf>name</jf> = name;
 			<jk>this</jk>.<jf>age</jf> = age;
@@ -12665,6 +12701,57 @@
 	c.close();
 </p>
 </div><!-- END: 6.13 - juneau-config.ClosingConfigs -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-config.SystemDefaultConfig' id='juneau-config.SystemDefaultConfig'>6.14 - System Default Config</a></h3>
+<div class='topic'><!-- START: 6.14 - juneau-config.SystemDefaultConfig -->
+<p>
+	Each JVM has a system default config.  This is a configuration file that serves as the default
+	configuration for the system.  It's accessed using the following static methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.config.Config}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.config.Config#getSystemDefault() getSystemDefault()}
+		<li class='jm'>{@link org.apache.juneau.config.Config#setSystemDefault(Config) setSystemDefault(Config)}
+	</ul>
+</ul>
+<p>
+	If you do not specify a system default config, one will be automatically searched for.
+	The search is done in the following order:
+</p>
+<ol class='spaced-list'>
+	<li>
+		If the system property <js>"juneau.configFile"</js> is set, we search for this file in first the home
+		directory and then the classpath.
+	<li>
+		In the home directory:
+		<ol>
+			<li><code>&lt;jar-name&gt;.cfg</code>
+			<li>Any file that end with <code>.cfg</code>.  First one matched alphabetically is used.
+		</ol>
+	<li>
+		In the context classpath (i.e. inside the jar itself):
+		<ol>
+			<li><code>&lt;jar-name&gt;.cfg</code>
+			<li><code>juneau.cfg</code>
+			<li><code>default.cfg</code>
+		</ol>
+</ol>
+<p>
+	Later in the section on REST resources, we describe how to associate configurations with REST resources
+	using the {@link org.apache.juneau.rest.annotation.RestResource#config() @RestResource(config)} annotation.
+	The system default configuration can be referenced with the keyword <code>SYSTEM_DEFAULT</code> like so:
+</p>
+<p class='bpcode w800'>
+	<jc>// Always use system default.</jc>
+	<ja>@RestResource</ja>(config=<js>"SYSTEM_DEFAULT"</js>)
+
+	<jc>// Use system property if set or the system default if not.</jc>
+	<ja>@RestResource</ja>(config=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>)
+</p>
+</div><!-- END: 6.14 - juneau-config.SystemDefaultConfig -->
 </div><!-- END: 6 - juneau-config -->
 
 <!-- ==================================================================================================== -->
@@ -21299,8 +21386,46 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>9 - juneau-rest-client</a></h2>
-<div class='topic'><!-- START: 9 - juneau-rest-client -->
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server-springboot' id='juneau-rest-server-springboot'>9 - juneau-rest-server-springboot</a></h2>
+<div class='topic'><!-- START: 9 - juneau-rest-server-springboot -->
+<h5 class='figure'>Maven Dependency</h5>
+<p class='bpcode w500'>
+	<xt>&lt;dependency&gt;</xt>
+		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		<xt>&lt;artifactId&gt;</xt>juneau-rest-server-springboot<xt>&lt;/artifactId&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+	<xt>&lt;/dependency&gt;</xt>
+</p>	
+
+<h5 class='figure'>Java Library</h5>
+<p class='bpcode w500'>
+	juneau-rest-server-springboot-{@property juneauVersion}.jar 
+</p>	
+
+<h5 class='figure'>OSGi Module</h5>
+<p class='bpcode w500'>
+	org.apache.juneau.rest.springboot_{@property juneauVersion}.jar 
+</p>	
+
+<p>
+	The <code>juneau-rest-server-springboot</code> library provides classes to make it easy to deploy Juneau
+	REST resources within the Spring Boot framework.
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.TODO' id='juneau-rest-server-springboot.TODO'>9.1 - TODO</a></h3>
+<div class='topic'><!-- START: 9.1 - juneau-rest-server-springboot.TODO -->
+<p>
+	TODO
+</p>
+</div><!-- END: 9.1 - juneau-rest-server-springboot.TODO -->
+</div><!-- END: 9 - juneau-rest-server-springboot -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client' id='juneau-rest-client'>10 - juneau-rest-client</a></h2>
+<div class='topic'><!-- START: 10 - juneau-rest-client -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
 	<xt>&lt;dependency&gt;</xt>
@@ -21488,8 +21613,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>9.1 - REST Proxies</a></h3>
-<div class='topic'><!-- START: 9.1 - juneau-rest-client.RestProxies -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies' id='juneau-rest-client.RestProxies'>10.1 - REST Proxies</a></h3>
+<div class='topic'><!-- START: 10.1 - juneau-rest-client.RestProxies -->
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
 	<br>This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
@@ -21566,8 +21691,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteResource' id='juneau-rest-client.RestProxies.RemoteResource'>9.1.1 - @RemoteResource</a></h4>
-<div class='topic'><!-- START: 9.1.1 - juneau-rest-client.RestProxies.RemoteResource -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteResource' id='juneau-rest-client.RestProxies.RemoteResource'>10.1.1 - @RemoteResource</a></h4>
+<div class='topic'><!-- START: 10.1.1 - juneau-rest-client.RestProxies.RemoteResource -->
 <p>
 	The {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource} annotation is used on your interface class
 	to identify it as a REST proxy interface.
@@ -21622,12 +21747,12 @@
 	RestClient client = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000/petstore"</js>).build();	
 	PetStore p = client.getRemoteResource(PetStore.<jk>class</jk>);
 </p>
-</div><!-- END: 9.1.1 - juneau-rest-client.RestProxies.RemoteResource -->
+</div><!-- END: 10.1.1 - juneau-rest-client.RestProxies.RemoteResource -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteMethod' id='juneau-rest-client.RestProxies.RemoteMethod'>9.1.2 - @RemoteMethod</a></h4>
-<div class='topic'><!-- START: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.RemoteMethod' id='juneau-rest-client.RestProxies.RemoteMethod'>10.1.2 - @RemoteMethod</a></h4>
+<div class='topic'><!-- START: 10.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 <p>
 	The {@link org.apache.juneau.rest.client.remote.RemoteMethod @RemoteMethod} annotation is applied to methods
 	of <ja>@RemoteResource</ja>-annotated interfaces to identify REST endpoints.
@@ -21777,12 +21902,12 @@
 	If your <code>RestClient</code> does not have a parser associated with it, then the value is converted directly from a String using
 	the rules defined in {@doc PojosConveribleToStrings}. 
 </p>
-</div><!-- END: 9.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
+</div><!-- END: 10.1.2 - juneau-rest-client.RestProxies.RemoteMethod -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Body' id='juneau-rest-client.RestProxies.Body'>9.1.3 - @Body</a></h4>
-<div class='topic'><!-- START: 9.1.3 - juneau-rest-client.RestProxies.Body -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Body' id='juneau-rest-client.RestProxies.Body'>10.1.3 - @Body</a></h4>
+<div class='topic'><!-- START: 10.1.3 - juneau-rest-client.RestProxies.Body -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are the HTTP body of the request.
@@ -21872,12 +21997,12 @@
 	If your <code>RestClient</code> class does not have a serializer associated with it, the body will automatically be serialized to a 
 	string using the rules defined in {@doc PojosConveribleToStrings}.
 </p>
-</div><!-- END: 9.1.3 - juneau-rest-client.RestProxies.Body -->
+</div><!-- END: 10.1.3 - juneau-rest-client.RestProxies.Body -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.FormData' id='juneau-rest-client.RestProxies.FormData'>9.1.4 - @FormData</a></h4>
-<div class='topic'><!-- START: 9.1.4 - juneau-rest-client.RestProxies.FormData -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.FormData' id='juneau-rest-client.RestProxies.FormData'>10.1.4 - @FormData</a></h4>
+<div class='topic'><!-- START: 10.1.4 - juneau-rest-client.RestProxies.FormData -->
 <p>
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are form-data parameters on the request.
@@ -21980,12 +22105,12 @@
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.4 - juneau-rest-client.RestProxies.FormData -->
+</div><!-- END: 10.1.4 - juneau-rest-client.RestProxies.FormData -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Query' id='juneau-rest-client.RestProxies.Query'>9.1.5 - @Query</a></h4>
-<div class='topic'><!-- START: 9.1.5 - juneau-rest-client.RestProxies.Query -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Query' id='juneau-rest-client.RestProxies.Query'>10.1.5 - @Query</a></h4>
+<div class='topic'><!-- START: 10.1.5 - juneau-rest-client.RestProxies.Query -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Query @Query} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are query parameters on the request.
@@ -22091,12 +22216,12 @@
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.5 - juneau-rest-client.RestProxies.Query -->
+</div><!-- END: 10.1.5 - juneau-rest-client.RestProxies.Query -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Header' id='juneau-rest-client.RestProxies.Header'>9.1.6 - @Header</a></h4>
-<div class='topic'><!-- START: 9.1.6 - juneau-rest-client.RestProxies.Header -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Header' id='juneau-rest-client.RestProxies.Header'>10.1.6 - @Header</a></h4>
+<div class='topic'><!-- START: 10.1.6 - juneau-rest-client.RestProxies.Header -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are header parameters on the request.
@@ -22188,12 +22313,12 @@
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.6 - juneau-rest-client.RestProxies.Header -->
+</div><!-- END: 10.1.6 - juneau-rest-client.RestProxies.Header -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Path' id='juneau-rest-client.RestProxies.Path'>9.1.7 - @Path</a></h4>
-<div class='topic'><!-- START: 9.1.7 - juneau-rest-client.RestProxies.Path -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Path' id='juneau-rest-client.RestProxies.Path'>10.1.7 - @Path</a></h4>
+<div class='topic'><!-- START: 10.1.7 - juneau-rest-client.RestProxies.Path -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation can be applied to arguments of <ja>@RemoteMethod</ja>-annotated methods
 	to denote that they are path parameters on the request.
@@ -22278,12 +22403,12 @@
 <ul>
 	<li class='link'>{@doc juneau-marshall.OpenApiDetails.Serializers}
 </ul>
-</div><!-- END: 9.1.7 - juneau-rest-client.RestProxies.Path -->
+</div><!-- END: 10.1.7 - juneau-rest-client.RestProxies.Path -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Request' id='juneau-rest-client.RestProxies.Request'>9.1.8 - @Request</a></h4>
-<div class='topic'><!-- START: 9.1.8 - juneau-rest-client.RestProxies.Request -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Request' id='juneau-rest-client.RestProxies.Request'>10.1.8 - @Request</a></h4>
+<div class='topic'><!-- START: 10.1.8 - juneau-rest-client.RestProxies.Request -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Request @Request} annotation can be applied to a type of a <ja>@RemoteMethod</ja>-annotated method 
 	to identify it as a bean for setting HTTP parts through a bean-like interface.
@@ -22397,12 +22522,12 @@
 	 	}
 	}
 </p>
-</div><!-- END: 9.1.8 - juneau-rest-client.RestProxies.Request -->
+</div><!-- END: 10.1.8 - juneau-rest-client.RestProxies.Request -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>9.1.9 - @Response</a></h4>
-<div class='topic'><!-- START: 9.1.9 - juneau-rest-client.RestProxies.Response -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.Response' id='juneau-rest-client.RestProxies.Response'>10.1.9 - @Response</a></h4>
+<div class='topic'><!-- START: 10.1.9 - juneau-rest-client.RestProxies.Response -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteMethod</ja>-annotated methods.
 </p>
@@ -22460,12 +22585,12 @@
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
 </p>
-</div><!-- END: 9.1.9 - juneau-rest-client.RestProxies.Response -->
+</div><!-- END: 10.1.9 - juneau-rest-client.RestProxies.Response -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.DualPurposeInterfaces' id='juneau-rest-client.RestProxies.DualPurposeInterfaces'>9.1.10 - Dual-purpose (end-to-end) interfaces</a></h4>
-<div class='topic'><!-- START: 9.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
+<h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-client.RestProxies.DualPurposeInterfaces' id='juneau-rest-client.RestProxies.DualPurposeInterfaces'>10.1.10 - Dual-purpose (end-to-end) interfaces</a></h4>
+<div class='topic'><!-- START: 10.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
 <p>
 	A common coding practice is to use the same Java interface to define both your server and client side REST interfaces.
 	The advantage to this approach is that changes that you make to your REST interface can be reflected in both places
@@ -22564,13 +22689,13 @@
 	Note how we didn't need to use the <ja>@Header</ja> and <ja>@Path</ja> annotations in our implementation since
 	the annotations were inherited from the interface.
 </p>
-</div><!-- END: 9.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
-</div><!-- END: 9.1 - juneau-rest-client.RestProxies -->
+</div><!-- END: 10.1.10 - juneau-rest-client.RestProxies.DualPurposeInterfaces -->
+</div><!-- END: 10.1 - juneau-rest-client.RestProxies -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.SSL' id='juneau-rest-client.SSL'>9.2 - SSL Support</a></h3>
-<div class='topic'><!-- START: 9.2 - juneau-rest-client.SSL -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.SSL' id='juneau-rest-client.SSL'>10.2 - SSL Support</a></h3>
+<div class='topic'><!-- START: 10.2 - juneau-rest-client.SSL -->
 <p>
 	The simplest way to enable SSL support in the client is to use the 
 	{@link org.apache.juneau.rest.client.RestClientBuilder#enableLaxSSL()} method.
@@ -22604,12 +22729,12 @@
 <p>
 	SSL support can also be enabled by passing in your own connection manager using {@link org.apache.juneau.rest.client.RestClientBuilder#httpClientConnectionManager(HttpClientConnectionManager)}.
 </p>
-</div><!-- END: 9.2 - juneau-rest-client.SSL -->
+</div><!-- END: 10.2 - juneau-rest-client.SSL -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>9.3 - Authentication</a></h3>
-<div class='topic'><!-- START: 9.3 - juneau-rest-client.Authentication -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication' id='juneau-rest-client.Authentication'>10.3 - Authentication</a></h3>
+<div class='topic'><!-- START: 10.3 - juneau-rest-client.Authentication -->
 <p>
 	The Juneau REST client itself does not implement any support for authentication.  
 	Instead, it delegates it to the underlying Apache HTTP Client interface.
@@ -22620,8 +22745,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.BASIC' id='juneau-rest-client.Authentication.BASIC'>9.3.1 - BASIC Authentication</a></h4>
-<div class='topic'><!-- START: 9.3.1 - juneau-rest-client.Authentication.BASIC -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.BASIC' id='juneau-rest-client.Authentication.BASIC'>10.3.1 - BASIC Authentication</a></h4>
+<div class='topic'><!-- START: 10.3.1 - juneau-rest-client.Authentication.BASIC -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#basicAuth(String,int,String,String)} method 
 	can be used to quickly enable BASIC authentication support.
@@ -22645,12 +22770,12 @@
 	p.setCredentials(scope, up);
 	builder.setDefaultCredentialsProvider(p);
 </p>
-</div><!-- END: 9.3.1 - juneau-rest-client.Authentication.BASIC -->
+</div><!-- END: 10.3.1 - juneau-rest-client.Authentication.BASIC -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.FORM' id='juneau-rest-client.Authentication.FORM'>9.3.2 - FORM-based Authentication</a></h4>
-<div class='topic'><!-- START: 9.3.2 - juneau-rest-client.Authentication.FORM -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.FORM' id='juneau-rest-client.Authentication.FORM'>10.3.2 - FORM-based Authentication</a></h4>
+<div class='topic'><!-- START: 10.3.2 - juneau-rest-client.Authentication.FORM -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder} class does not itself provide FORM-based 
 	authentication since there is no standard way of providing such support. 
@@ -22734,12 +22859,12 @@
 		}
 	}
 </p>
-</div><!-- END: 9.3.2 - juneau-rest-client.Authentication.FORM -->
+</div><!-- END: 10.3.2 - juneau-rest-client.Authentication.FORM -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.OIDC' id='juneau-rest-client.Authentication.OIDC'>9.3.3 - OIDC Authentication</a></h4>
-<div class='topic'><!-- START: 9.3.3 - juneau-rest-client.Authentication.OIDC -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Authentication.OIDC' id='juneau-rest-client.Authentication.OIDC'>10.3.3 - OIDC Authentication</a></h4>
+<div class='topic'><!-- START: 10.3.3 - juneau-rest-client.Authentication.OIDC -->
 <p>
 	The following example shows how the <code>JazzRestClient</code> class provides OIDC authentication 
 	support.
@@ -22862,13 +22987,13 @@
 		}
 	}
 </p>
-</div><!-- END: 9.3.3 - juneau-rest-client.Authentication.OIDC -->
-</div><!-- END: 9.3 - juneau-rest-client.Authentication -->
+</div><!-- END: 10.3.3 - juneau-rest-client.Authentication.OIDC -->
+</div><!-- END: 10.3 - juneau-rest-client.Authentication -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.ResponsePatterns' id='juneau-rest-client.ResponsePatterns'>9.4 - Using Response Patterns</a></h3>
-<div class='topic'><!-- START: 9.4 - juneau-rest-client.ResponsePatterns -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.ResponsePatterns' id='juneau-rest-client.ResponsePatterns'>10.4 - Using Response Patterns</a></h3>
+<div class='topic'><!-- START: 10.4 - juneau-rest-client.ResponsePatterns -->
 <p>
 	One issue with REST (and HTTP in general) is that the HTTP response code must be set as a header before the 
 	body of the request is sent.  
@@ -22958,12 +23083,12 @@
 	use {@link org.apache.juneau.rest.client.RestCall#getCapturedResponse()} since this method will not absorb 
 	the response for those other methods.
 </p>
-</div><!-- END: 9.4 - juneau-rest-client.ResponsePatterns -->
+</div><!-- END: 10.4 - juneau-rest-client.ResponsePatterns -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.PipingOutput' id='juneau-rest-client.PipingOutput'>9.5 - Piping Response Output</a></h3>
-<div class='topic'><!-- START: 9.5 - juneau-rest-client.PipingOutput -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.PipingOutput' id='juneau-rest-client.PipingOutput'>10.5 - Piping Response Output</a></h3>
+<div class='topic'><!-- START: 10.5 - juneau-rest-client.PipingOutput -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestCall} class provides various convenience <code>pipeTo()</code> 
 	methods to pipe output to output streams and writers.
@@ -22981,12 +23106,12 @@
 	<jc>// Pipe output from REST call to System.out in real-time.</jc>
 	restClient.doPost(<jsf>URL</jsf>).byLines().pipeTo(<jk>new</jk> PrintWriter(System.<jk>out</jk>)).run();
 </p>
-</div><!-- END: 9.5 - juneau-rest-client.PipingOutput -->
+</div><!-- END: 10.5 - juneau-rest-client.PipingOutput -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Debugging' id='juneau-rest-client.Debugging'>9.6 - Debugging</a></h3>
-<div class='topic'><!-- START: 9.6 - juneau-rest-client.Debugging -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Debugging' id='juneau-rest-client.Debugging'>10.6 - Debugging</a></h3>
+<div class='topic'><!-- START: 10.6 - juneau-rest-client.Debugging -->
 <p>
 	Use the {@link org.apache.juneau.rest.client.RestClientBuilder#debug()} method to enable logging for HTTP requests
 	made from the client.
@@ -23040,12 +23165,12 @@
 	{"foo":"bar","baz":123}
 	=== END ========================================================================
 </p>
-</div><!-- END: 9.6 - juneau-rest-client.Debugging -->
+</div><!-- END: 10.6 - juneau-rest-client.Debugging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Logging' id='juneau-rest-client.Logging'>9.7 - Logging</a></h3>
-<div class='topic'><!-- START: 9.7 - juneau-rest-client.Logging -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Logging' id='juneau-rest-client.Logging'>10.7 - Logging</a></h3>
+<div class='topic'><!-- START: 10.7 - juneau-rest-client.Logging -->
 <p>
 	Use the {@link org.apache.juneau.rest.client.RestClientBuilder#logTo(Level,Logger)} and 
 	{@link org.apache.juneau.rest.client.RestCall#logTo(Level,Logger)} methods to log HTTP calls.
@@ -23064,12 +23189,12 @@
 	Customized logging can be handled by sub-classing the {@link org.apache.juneau.rest.client.RestCallLogger} 
 	class and using the  {@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} method.
 </p>
-</div><!-- END: 9.7 - juneau-rest-client.Logging -->
+</div><!-- END: 10.7 - juneau-rest-client.Logging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Interceptors' id='juneau-rest-client.Interceptors'>9.8 - Interceptors</a></h3>
-<div class='topic'><!-- START: 9.8 - juneau-rest-client.Interceptors -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Interceptors' id='juneau-rest-client.Interceptors'>10.8 - Interceptors</a></h3>
+<div class='topic'><!-- START: 10.8 - juneau-rest-client.Interceptors -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#interceptors(RestCallInterceptor...)} and 
 	{@link org.apache.juneau.rest.client.RestCall#interceptor(RestCallInterceptor)} methods can be used to 
@@ -23168,12 +23293,12 @@
 		}
 	}
 </p>
-</div><!-- END: 9.8 - juneau-rest-client.Interceptors -->
+</div><!-- END: 10.8 - juneau-rest-client.Interceptors -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.UnitTesting' id='juneau-rest-client.UnitTesting'>9.9 - Serverless Unit Testing</a></h3>
-<div class='topic'><!-- START: 9.9 - juneau-rest-client.UnitTesting -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.UnitTesting' id='juneau-rest-client.UnitTesting'>10.9 - Serverless Unit Testing</a></h3>
+<div class='topic'><!-- START: 10.9 - juneau-rest-client.UnitTesting -->
 <p>
 	The {@link org.apache.juneau.rest.mock.MockRest} class is used for performing serverless unit testing of REST interfaces.
 </p>
@@ -23252,12 +23377,12 @@
 		<jsm>assertEquals</jsm>(123, r.echoQuery(123));
 	}
 </p>
-</div><!-- END: 9.9 - juneau-rest-client.UnitTesting -->
+</div><!-- END: 10.9 - juneau-rest-client.UnitTesting -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Other' id='juneau-rest-client.Other'>9.10 - Other Useful Methods</a></h3>
-<div class='topic'><!-- START: 9.10 - juneau-rest-client.Other -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-rest-client.Other' id='juneau-rest-client.Other'>10.10 - Other Useful Methods</a></h3>
+<div class='topic'><!-- START: 10.10 - juneau-rest-client.Other -->
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#rootUrl(Object)} method can be used to specify a 
 	root URL on all requests so that you don't have to use absolute paths on individual calls.
@@ -23294,13 +23419,13 @@
 		.retryable(180, 10000, RetryOn.<jsf>DEFAULT</jsf>)
 		.run();
 </p>
-</div><!-- END: 9.10 - juneau-rest-client.Other -->
-</div><!-- END: 9 - juneau-rest-client -->
+</div><!-- END: 10.10 - juneau-rest-client.Other -->
+</div><!-- END: 10 - juneau-rest-client -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server' id='juneau-microservice-server'>10 - juneau-microservice-server</a></h2>
-<div class='topic'><!-- START: 10 - juneau-microservice-server -->
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-server</a></h2>
+<div class='topic'><!-- START: 11 - juneau-microservice-core -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
 	<xt>&lt;dependency&gt;</xt>
@@ -23332,8 +23457,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.Introduction' id='juneau-microservice-server.Introduction'>10.1 - Microservice Introduction</a></h3>
-<div class='topic'><!-- START: 10.1 - juneau-microservice-server.Introduction -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.Introduction' id='juneau-microservice-core.Introduction'>11.1 - Microservice Introduction</a></h3>
+<div class='topic'><!-- START: 11.1 - juneau-microservice-core.Introduction -->
 <p>
 	The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
 	Eclipse Jetty Servlet Container.  
@@ -23373,12 +23498,12 @@
 				other features such as logging.  
 		</ul>
 </ul>
-</div><!-- END: 10.1 - juneau-microservice-server.Introduction -->
+</div><!-- END: 11.1 - juneau-microservice-core.Introduction -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.GettingStarted' id='juneau-microservice-server.GettingStarted'>10.2 - Getting Started</a></h3>
-<div class='topic'><!-- START: 10.2 - juneau-microservice-server.GettingStarted -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted' id='juneau-microservice-core.GettingStarted'>11.2 - Getting Started</a></h3>
+<div class='topic'><!-- START: 11.2 - juneau-microservice-core.GettingStarted -->
 <p>
 	The <l>my-microservice.zip</l> file is a zipped eclipse project that includes everything you 
 	need to create a REST microservice in an Eclipse workspace.
@@ -23386,8 +23511,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.GettingStarted.Installing' id='juneau-microservice-server.GettingStarted.Installing'>10.2.1 - Installing in Eclipse</a></h4>
-<div class='topic'><!-- START: 10.2.1 - juneau-microservice-server.GettingStarted.Installing -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted.Installing' id='juneau-microservice-core.GettingStarted.Installing'>11.2.1 - Installing in Eclipse</a></h4>
+<div class='topic'><!-- START: 11.2.1 - juneau-microservice-core.GettingStarted.Installing -->
 <p>
 	Follow these instructions to create a new template project in Eclipse.
 </p>		
@@ -23597,12 +23722,12 @@
 <p>
 	At this point, you're ready to start the microservice from your workspace.
 </p>
-</div><!-- END: 10.2.1 - juneau-microservice-server.GettingStarted.Installing -->
+</div><!-- END: 11.2.1 - juneau-microservice-core.GettingStarted.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.GettingStarted.Running' id='juneau-microservice-server.GettingStarted.Running'>10.2.2 - Running in Eclipse</a></h4>
-<div class='topic'><!-- START: 10.2.2 - juneau-microservice-server.GettingStarted.Running -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted.Running' id='juneau-microservice-core.GettingStarted.Running'>11.2.2 - Running in Eclipse</a></h4>
+<div class='topic'><!-- START: 11.2.2 - juneau-microservice-core.GettingStarted.Running -->
 <p>
 	The <l>my-microservice.launch</l> file is already provided to allow you to quickly start
 	your new microservice.
@@ -23634,12 +23759,12 @@
 	You have started a REST interface on port 10000.
 	<br>You can enter the command <code>exit</code> to shut it down.
 </p>
-</div><!-- END: 10.2.2 - juneau-microservice-server.GettingStarted.Running -->
+</div><!-- END: 11.2.2 - juneau-microservice-core.GettingStarted.Running -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.GettingStarted.Building' id='juneau-microservice-server.GettingStarted.Building'>10.2.3 - Building and Running from Command-Line</a></h4>
-<div class='topic'><!-- START: 10.2.3 - juneau-microservice-server.GettingStarted.Building -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted.Building' id='juneau-microservice-core.GettingStarted.Building'>11.2.3 - Building and Running from Command-Line</a></h4>
+<div class='topic'><!-- START: 11.2.3 - juneau-microservice-core.GettingStarted.Building -->
 <p>
 	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
 	as an executable uber-jar.
@@ -23682,13 +23807,13 @@
 	If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, 
 	then this microservice is already running elsewhere and so it cannot bind to port 10000.
 </p>
-</div><!-- END: 10.2.3 - juneau-microservice-server.GettingStarted.Building -->
-</div><!-- END: 10.2 - juneau-microservice-server.GettingStarted -->
+</div><!-- END: 11.2.3 - juneau-microservice-core.GettingStarted.Building -->
+</div><!-- END: 11.2 - juneau-microservice-core.GettingStarted -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.Manifest' id='juneau-microservice-server.Manifest'>10.3 - Manifest File</a></h3>
-<div class='topic'><!-- START: 10.3 - juneau-microservice-server.Manifest -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.Manifest' id='juneau-microservice-core.Manifest'>11.3 - Manifest File</a></h3>
+<div class='topic'><!-- START: 11.3 - juneau-microservice-core.Manifest -->
 <p>
 	The generated <l>META-INF/MANIFEST.MF</l> file is used to describe the microservice. 
 	<br>If you open it, you'll see the following:
@@ -23712,8 +23837,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.Manifest.ManifestApi' id='juneau-microservice-server.Manifest.ManifestApi'>10.3.1 - Manifest API</a></h4>
-<div class='topic'><!-- START: 10.3.1 - juneau-microservice-server.Manifest.ManifestApi -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.Manifest.ManifestApi' id='juneau-microservice-core.Manifest.ManifestApi'>11.3.1 - Manifest API</a></h4>
+<div class='topic'><!-- START: 11.3.1 - juneau-microservice-core.Manifest.ManifestApi -->
 <p>
 	The {@link org.apache.juneau.microservice.Microservice#getManifest()} method is a static method that
 	can be used to retrieve the manifest file as a {@link org.apache.juneau.utils.ManifestFile}.  
@@ -23727,13 +23852,13 @@
 	making it possible to retrieve entries as a wide variety of object types such as java primitives, arrays, collections, 
 	maps, or even POJOs serialized as JSON.
 </p>
-</div><!-- END: 10.3.1 - juneau-microservice-server.Manifest.ManifestApi -->
-</div><!-- END: 10.3 - juneau-microservice-server.Manifest -->
+</div><!-- END: 11.3.1 - juneau-microservice-core.Manifest.ManifestApi -->
+</div><!-- END: 11.3 - juneau-microservice-core.Manifest -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.Config' id='juneau-microservice-server.Config'>10.4 - Config</a></h3>
-<div class='topic'><!-- START: 10.4 - juneau-microservice-server.Config -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.Config' id='juneau-microservice-core.Config'>11.4 - Config</a></h3>
+<div class='topic'><!-- START: 11.4 - juneau-microservice-core.Config -->
 <p>
 	The microservice config file is an external INI-style configuration file that is used to configure
 	your microservice.
@@ -23745,8 +23870,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.Config.ConfigApi' id='juneau-microservice-server.Config.ConfigApi'>10.4.1 - Config File API</a></h4>
-<div class='topic'><!-- START: 10.4.1 - juneau-microservice-server.Config.ConfigApi -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.Config.ConfigApi' id='juneau-microservice-core.Config.ConfigApi'>11.4.1 - Config File API</a></h4>
+<div class='topic'><!-- START: 11.4.1 - juneau-microservice-core.Config.ConfigApi -->
 <p>
 	There are 3 primary ways of getting access to the config file.
 </p>
@@ -23859,13 +23984,13 @@
 	This particular example is needlessly complex, but it gives an idea of how variables can be used 
 	recursively to produce sophisticated results
 </p>
-</div><!-- END: 10.4.1 - juneau-microservice-server.Config.ConfigApi -->
-</div><!-- END: 10.4 - juneau-microservice-server.Config -->
+</div><!-- END: 11.4.1 - juneau-microservice-core.Config.ConfigApi -->
+</div><!-- END: 11.4 - juneau-microservice-core.Config -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.ResourceClasses' id='juneau-microservice-server.ResourceClasses'>10.5 - Resource Classes</a></h3>
-<div class='topic'><!-- START: 10.5 - juneau-microservice-server.ResourceClasses -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.ResourceClasses' id='juneau-microservice-core.ResourceClasses'>11.5 - Resource Classes</a></h3>
+<div class='topic'><!-- START: 11.5 - juneau-microservice-core.ResourceClasses -->
 <p>
 	Now let's take a look at the resource classes themselves.  
 	<br>The top-level page...
@@ -23934,12 +24059,12 @@
 		}
 	}		
 </p>
-</div><!-- END: 10.5 - juneau-microservice-server.ResourceClasses -->
+</div><!-- END: 11.5 - juneau-microservice-core.ResourceClasses -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.PredefinedResourceClasses' id='juneau-microservice-server.PredefinedResourceClasses'>10.6 - Predefined Resource Classes</a></h3>
-<div class='topic'><!-- START: 10.6 - juneau-microservice-server.PredefinedResourceClasses -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.PredefinedResourceClasses' id='juneau-microservice-core.PredefinedResourceClasses'>11.6 - Predefined Resource Classes</a></h3>
+<div class='topic'><!-- START: 11.6 - juneau-microservice-core.PredefinedResourceClasses -->
 <p>
 	The following predefined resource classes are also provided for easy inclusion into your microservice:
 </p>
@@ -23955,12 +24080,12 @@
 	<li class='jc'>{@link org.apache.juneau.microservice.resources.ShutdownResource}
 		- Shutdown and/or restart the JVM.
 </ul>
-</div><!-- END: 10.6 - juneau-microservice-server.PredefinedResourceClasses -->
+</div><!-- END: 11.6 - juneau-microservice-core.PredefinedResourceClasses -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.RestMicroservice' id='juneau-microservice-server.RestMicroservice'>10.7 - RestMicroservice</a></h3>
-<div class='topic'><!-- START: 10.7 - juneau-microservice-server.RestMicroservice -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.RestMicroservice' id='juneau-microservice-core.RestMicroservice'>11.7 - RestMicroservice</a></h3>
+<div class='topic'><!-- START: 11.7 - juneau-microservice-core.RestMicroservice -->
 <p>
 	The {@link org.apache.juneau.microservice.RestMicroservice} class is the main application entry-point for REST 
 	microservices. 
@@ -23987,8 +24112,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.RestMicroservice.Extending' id='juneau-microservice-server.RestMicroservice.Extending'>10.7.1 - Extending RestMicroservice</a></h4>
-<div class='topic'><!-- START: 10.7.1 - juneau-microservice-server.RestMicroservice.Extending -->
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.RestMicroservice.Extending' id='juneau-microservice-core.RestMicroservice.Extending'>11.7.1 - Extending RestMicroservice</a></h4>
+<div class='topic'><!-- START: 11.7.1 - juneau-microservice-core.RestMicroservice.Extending -->
 <p>
 	This example shows how the {@link org.apache.juneau.microservice.RestMicroservice} class
 	can be extended to implement lifecycle listener methods or override existing methods.
@@ -24036,13 +24161,13 @@
 	<li class='jac'>{@link org.apache.juneau.microservice.Microservice}
 	<li class='jc'>{@link org.apache.juneau.microservice.RestMicroservice}
 </ul>
-</div><!-- END: 10.7.1 - juneau-microservice-server.RestMicroservice.Extending -->
-</div><!-- END: 10.7 - juneau-microservice-server.RestMicroservice -->
+</div><!-- END: 11.7.1 - juneau-microservice-core.RestMicroservice.Extending -->
+</div><!-- END: 11.7 - juneau-microservice-core.RestMicroservice -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-server.UiCustomization' id='juneau-microservice-server.UiCustomization'>10.8 - UI Customization</a></h3>
-<div class='topic'><!-- START: 10.8 - juneau-microservice-server.UiCustomization -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.UiCustomization' id='juneau-microservice-core.UiCustomization'>11.8 - UI Customization</a></h3>
+<div class='topic'><!-- START: 11.8 - juneau-microservice-core.UiCustomization -->
 <p>
 	The Microservice project contains a <code>files/htdocs</code> working directly folder with predefined stylesheets and
 	images.
@@ -24152,13 +24277,905 @@
 	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
 
 </p>
-</div><!-- END: 10.8 - juneau-microservice-server.UiCustomization -->
-</div><!-- END: 10 - juneau-microservice-server -->
+</div><!-- END: 11.8 - juneau-microservice-core.UiCustomization -->
+</div><!-- END: 11 - juneau-microservice-core -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-core' id='juneau-examples-core'>11 - juneau-examples-core</a></h2>
-<div class='topic'><!-- START: 11 - juneau-examples-core -->
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-jetty' id='juneau-microservice-jetty'>12 - juneau-microservice-server</a></h2>
+<div class='topic'><!-- START: 12 - juneau-microservice-jetty -->
+<h5 class='figure'>Maven Dependency</h5>
+<p class='bpcode w500'>
+	<xt>&lt;dependency&gt;</xt>
+		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		<xt>&lt;artifactId&gt;</xt>juneau-microservice-server<xt>&lt;/artifactId&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+	<xt>&lt;/dependency&gt;</xt>
+</p>	
+
+<h5 class='figure'>Java Library</h5>
+<p class='bpcode w500'>
+	juneau-microservice-server-{@property juneauVersion}.jar 
+</p>	
+
+<h5 class='figure'>OSGi Module</h5>
+<p class='bpcode w500'>
+	org.apache.juneau.microservice.server_{@property juneauVersion}.jar 
+</p>	
+
+<h5 class='figure'>Microservice Starter Project</h5>
+<p class='bpcode w500'>
+	my-microservice.zip 
+</p>	
+
+<p>
+	Juneau Microservice is an API for creating stand-alone executable jars that can be used to 
+	start lightweight configurable REST interfaces with all the power of the Juneau REST server and client APIs.
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.Introduction' id='juneau-microservice-jetty.Introduction'>12.1 - Microservice Introduction</a></h3>
+<div class='topic'><!-- START: 12.1 - juneau-microservice-jetty.Introduction -->
+<p>
+	The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
+	Eclipse Jetty Servlet Container.  
+	<br>It includes all libraries needed to execute in a Java 1.7+ environment.
+</p>
+<p>
+	Features include:
+</p>
+<ul class='spaced-list'>
+	<li>
+		An out-of-the-box zipped Eclipse project to get started quickly.
+	<li>
+		Packaged as a simple executable jar and configuration file.
+	<li>
+		All the power of the Juneau ecosystem for defining REST servlets and clients with the ability to 
+		serialize and parse POJOs as HTML, JSON, XML, RDF, URL-Encoding, and others.
+	<li>
+		An extensible API that allows you to hook into various lifecycle events.
+	<li>
+		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
+		file properties.
+	<li>
+		Predefined REST resources for configuring microservice and accessing log files.
+</ul>
+<p>
+	The <code>juneau-microservice-server</code> library consists of the following classes:
+</p>
+<ul class='doctree'>
+	<li class='jac'>
+		{@link org.apache.juneau.microservice.Microservice} 
+		- Defines basic lifecycle methods for microservices in general.
+		<ul>
+			<li class='jc'>
+				{@link org.apache.juneau.microservice.RestMicroservice}
+				- Defines additional lifecycle methods for REST microservices.
+				<br>Starts up an externally-configured Jetty server, registers servlets, and sets up 
+				other features such as logging.  
+		</ul>
+</ul>
+</div><!-- END: 12.1 - juneau-microservice-jetty.Introduction -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.GettingStarted' id='juneau-microservice-jetty.GettingStarted'>12.2 - Getting Started</a></h3>
+<div class='topic'><!-- START: 12.2 - juneau-microservice-jetty.GettingStarted -->
+<p>
+	The <l>my-microservice.zip</l> file is a zipped eclipse project that includes everything you 
+	need to create a REST microservice in an Eclipse workspace.
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.GettingStarted.Installing' id='juneau-microservice-jetty.GettingStarted.Installing'>12.2.1 - Installing in Eclipse</a></h4>
+<div class='topic'><!-- START: 12.2.1 - juneau-microservice-jetty.GettingStarted.Installing -->
+<p>
+	Follow these instructions to create a new template project in Eclipse.
+</p>		
+<ol class='spaced-list'>
+	<li>
+		Download the latest microservice-project zip file (e.g. <l>my-microservice.zip</l>).
+	<li>
+		In your Eclipse workspace, go to <b>File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</b> 
+		and select the zip file and click <b>Finish</b>.
+		<br><br>
+		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.1.png' style='width:549px'>
+	<li>
+		In your workspace, you should now see the following project:
+		<br><br>
+		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.2.png' style='width:299px'>
+</ol>
+<p>
+	The important elements in this project are:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<l>RootResources.java</l> - The top-level REST resource. 
+		<br>This class routes HTTP requests to child resources:
+		<br><br>
+		<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/"</js>,
+		title=<js>"My Microservice"</js>,
+		description=<js>"Top-level resources page"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
+		),
+		children={
+			HelloWorldResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			LogsResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
+		<jc>// No code</jc>
+	}
+		</p>
+	<li>
+		<l>my-microservice.cfg</l> - The external configuration file. 
+		<br>Contains various useful settings.
+		<br>Can be used for your own resource configurations.
+		<br><br>
+		<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# Basic configuration file for REST microservices
+	# Subprojects can use this as a starting point.
+	#=======================================================================================================================</cc>
+	
+	<cc># What to do when the config file is saved.
+	# Possible values:
+	# 	NOTHING - Don't do anything. (default)
+	#	RESTART_SERVER - Restart the Jetty server.
+	#	RESTART_SERVICE - Shutdown and exit with code '3'.</cc>
+	<ck>saveConfigAction</ck> = <cv>RESTART_SERVER</cv>
+	
+	<cc>#=======================================================================================================================
+	# Jetty settings
+	#=======================================================================================================================</cc>
+	<cs>[Jetty]</cs>
+	
+	<cc># Path of the jetty.xml file used to configure the Jetty server.</cc>
+	<ck>config</ck> = <cv>jetty.xml</cv>
+	
+	<cc># Resolve Juneau variables in the jetty.xml file.</cc>
+	<ck>resolveVars</ck> = <cv>true</cv>
+	
+	<cc># Port to use for the jetty server.
+	# You can specify multiple ports.  The first available will be used.  '0' indicates to try a random port.
+	# The resulting available port gets set as the system property "availablePort" which can be referenced in the 
+	# jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).</cc>
+	<ck>port</ck> = <cv>10000,0,0,0</cv>
+	
+	<cc>#=======================================================================================================================
+	# REST settings
+	#=======================================================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<cc># Stylesheet to use for HTML views.
+	# The default options are:
+	#  - servlet:/styles/juneau.css
+	#  - servlet:/styles/devops.css
+	# Other stylesheets can be referenced relative to the servlet package or working directory.</cc>
+	<ck>stylesheet</ck> = <cv>servlet:/styles/devops.css</cv>
+	
+	<cc>#=======================================================================================================================
+	# Console settings
+	#=======================================================================================================================</cc>
+	<cs>[Console]</cs>
+	
+	<ck>enabled</ck> = <cv>true</cv>
+	
+	<cc># List of available console commands.
+	# These are classes that implements ConsoleCommand that allow you to submit commands to the microservice via
+	# the console.
+	# When listed here, the implementations must provide a no-arg constructor.
+	# They can also be provided dynamically by overriding the Microservice.createConsoleCommands() method.</cc>
+	<ck>commands</ck> = 
+		<cv>org.apache.juneau.microservice.console.ExitCommand,
+		org.apache.juneau.microservice.console.RestartCommand,
+		org.apache.juneau.microservice.console.HelpCommand</cv>
+		
+	<cc>#=======================================================================================================================
+	# Logger settings
+	#-----------------------------------------------------------------------------------------------------------------------
+	# See FileHandler Java class for details.
+	#=======================================================================================================================</cc>
+	<cs>[Logging]</cs>
+
+	...
+	
+	<cc>#=======================================================================================================================
+	# System properties
+	#-----------------------------------------------------------------------------------------------------------------------
+	# These are arbitrary system properties that are set during startup.
+	#=======================================================================================================================</cc>
+	<cs>[SystemProperties]</cs>
+	
+	<cc># Configure Jetty for StdErrLog Logging
+	# org.eclipse.jetty.util.log.class = org.eclipse.jetty.util.log.StrErrLog</cc>
+	
+	<cc># Configure Jetty to log using java-util logging</cc>
+	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.JettyLogger</cv>
+	
+	<cc># Jetty logging level
+	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
+	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN
+	
+	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>					
+	</p>
+	<li>
+		<l>jetty.xml</l> - The Jetty configuration file. 
+		<br>A bare-bones config file that can be extended to use any Jetty features.
+		<br><br>
+		<p class='bcode w800'>
+	<xt>&lt;Configure</xt> <xa>id</xa>=<xs>"ExampleServer"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.Server"</xs>&gt;</xt>
+	
+		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"connectors"</xs><xt>&gt;</xt>
+			<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Connector"</xs><xt>&gt;</xt>
+				<xt>&lt;Item&gt;</xt>
+					<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.ServerConnector"</xs><xt>&gt;</xt>
+						<xt>&lt;Arg&gt;</xt>
+							<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"ExampleServer"</xs><xt>/&gt;</xt>
+						<xt>&lt;/Arg&gt;</xt>
+						<xt>&lt;Set</xt> <xa>name</xa>=<xs>"port"</xs><xt>&gt;</xt>$S{availablePort,8080}<xt>&lt;/Set&gt;</xt>
+					<xt>&lt;/New&gt;</xt>
+				<xt>&lt;/Item&gt;</xt>
+			<xt>&lt;/Array&gt;</xt>
+		<xt>&lt;/Set&gt;</xt>
+	
+		<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
+			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"contextPath"</xs><xt>&gt;/&lt;/Set&gt;</xt>
+			<xt>&lt;Call</xt> <xa>name</xa>=<xs>"addServlet"</xs><xt>&gt;</xt>
+				<xt>&lt;Arg&gt;</xt>org.apache.juneau.microservice.sample.RootResources<xt>&lt;/Arg&gt;</xt>
+				<xt>&lt;Arg&gt;</xt>/*<xt>&lt;/Arg&gt;</xt>
+			<xt>&lt;/Call&gt;</xt>
+			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"sessionHandler"</xs><xt>&gt;</xt>
+				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.session.SessionHandler"</xs><xt>/&gt;</xt>
+			<xt>&lt;/Set&gt;</xt>
+		<xt>&lt;/New&gt;</xt>
+	
+		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handler"</xs><xt>&gt;</xt>
+			<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.handler.HandlerCollection"</xs><xt>&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handlers"</xs><xt>&gt;</xt>
+					<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Handler"</xs><xt>&gt;</xt>
+						<xt>&lt;Item&gt;</xt>
+							<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"context"</xs><xt>/&gt;</xt>
+						<xt>&lt;/Item&gt;</xt>
+						<xt>&lt;Item&gt;</xt>
+							<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.handler.DefaultHandler"</xs><xt>/&gt;</xt>
+						<xt>&lt;/Item&gt;</xt>
+					<xt>&lt;/Array&gt;</xt>
+				<xt>&lt;/Set&gt;</xt>
+			<xt>&lt;/New&gt;</xt>
+		<xt>&lt;/Set&gt;</xt>
+	
+		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"requestLog"</xs><xt>&gt;</xt>
+			<xt>&lt;New</xt> <xa>id</xa>=<xs>"RequestLogImpl"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.NCSARequestLog"</xs><xt>&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filename"</xs><xt>&gt;&lt;Property</xt> <xa>name</xa>=<xs>"jetty.logs"</xs> <xa>default</xa>=<xs>"$C{Logging/logDir,logs}"</xs><xt>/&gt;</xt>/jetty-requests.log<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filenameDateFormat</xs><xt>"&gt;</xt>yyyy_MM_dd<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogTimeZone"</xs><xt>&gt;</xt>GMT<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"retainDays"</xs><xt>&gt;</xt>90<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"append"</xs><xt>&gt;</xt>false<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogLatency"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
+			<xt>&lt;/New&gt;</xt>
+		<xt>&lt;/Set&gt;</xt>
+	
+	    <xt>&lt;Get</xt> <xa>name</xa>=<xs>"ThreadPool"</xs><xt>&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"minThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>10<xt>&lt;/Set&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"maxThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>100<xt>&lt;/Set&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"idleTimeout"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>60000<xt>&lt;/Set&gt;</xt>
+	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"detailedDump"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
+	    <xt>&lt;/Get&gt;</xt>
+	<xt>&lt;/Configure&gt;</xt>
+		</p>
+</ul>
+<p>
+	At this point, you're ready to start the microservice from your workspace.
+</p>
+</div><!-- END: 12.2.1 - juneau-microservice-jetty.GettingStarted.Installing -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.GettingStarted.Running' id='juneau-microservice-jetty.GettingStarted.Running'>12.2.2 - Running in Eclipse</a></h4>
+<div class='topic'><!-- START: 12.2.2 - juneau-microservice-jetty.GettingStarted.Running -->
+<p>
+	The <l>my-microservice.launch</l> file is already provided to allow you to quickly start
+	your new microservice.
+</p>
+<p>
+	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-microservice</b> and click <b>Run</b>.
+	<br>In your console view, you should see the following output:
+</p>
+<p class='bpcode w800'>
+	Running class 'RestMicroservice' using config file 'my-microservice.cfg'.
+	Server started on port 10000
+	
+	List of available commands:
+		exit -- Shut down service
+		restart -- Restarts service
+		help -- Commands help
+	
+	> 			
+</p>
+<p>
+	Now open your browser and point to <l>http://localhost:10000</l>.  
+	You should see the following:
+</p>
+<p class='bpcode w400'>
+	http://localhost:10000
+</p>			
+<img class='bordered w400' src='doc-files/juneau-microservice-server.Running.1.png'>
+<p>
+	You have started a REST interface on port 10000.
+	<br>You can enter the command <code>exit</code> to shut it down.
+</p>
+</div><!-- END: 12.2.2 - juneau-microservice-jetty.GettingStarted.Running -->
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.GettingStarted.Building' id='juneau-microservice-jetty.GettingStarted.Building'>12.2.3 - Building and Running from Command-Line</a></h4>
+<div class='topic'><!-- START: 12.2.3 - juneau-microservice-jetty.GettingStarted.Building -->
+<p>
+	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
+	as an executable uber-jar.
+</p>
+<p>
+	The easiest way to build your microservice is to run the following from the project root.
+</p>
+<p class='bpcode w800'>
+	mvn clean install
+</p>
+<p>
+	Your <code>target</code> directory should now contain the following files:
+</p>
+<ul>
+	<li><code>my-microservice-1.0.jar</code>
+	<li><code>my-microservice.cfg</code>
+	<li><code>jetty.xml</code>
+</ul>
+<p>
+	To start from a command line, run the following command from inside your <code>target</code> directory:
+</p>
+<p class='bpcode w800'>
+	java -jar my-microservice-1.0.jar
+</p>
+<p>
+	You should see the following console output:
+</p>
+<p class='bpcode w800'>
+	Running class 'RestMicroservice' using config file 'my-microservice.cfg'.
+	Server started on port 10000
+	
+	List of available commands:
+		exit -- Shut down service
+		restart -- Restarts service
+		help -- Commands help
+	
+	> 			
+</p>
+<p>
+	If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, 
+	then this microservice is already running elsewhere and so it cannot bind to port 10000.
+</p>
+</div><!-- END: 12.2.3 - juneau-microservice-jetty.GettingStarted.Building -->
+</div><!-- END: 12.2 - juneau-microservice-jetty.GettingStarted -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.Manifest' id='juneau-microservice-jetty.Manifest'>12.3 - Manifest File</a></h3>
+<div class='topic'><!-- START: 12.3 - juneau-microservice-jetty.Manifest -->
+<p>
+	The generated <l>META-INF/MANIFEST.MF</l> file is used to describe the microservice. 
+	<br>If you open it, you'll see the following:
+</p>
+<p class='bpcode w800'>
+	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.RestMicroservice</mv>
+	<mk>Main-ConfigFile</mk>: <mv>my-microservice.cfg</mv>
+<p>
+ 	The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
+ 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.RestMicroservice</l>.
+ 	<br>However, it is possible to extend this class or implement your own microservice, in which case you'll need
+ 	to modify this value to point to the new class.
+</p>
+<p>
+	The <mk>Main-ConfigFile</mk> entry points to the location of an external configuration file for our microservice.
+</p>		
+<p>
+	In addition to these predefined manifest entries, you can add your own particular entries to the manifest file
+	and access them through the Manifest API described next. 
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.Manifest.ManifestApi' id='juneau-microservice-jetty.Manifest.ManifestApi'>12.3.1 - Manifest API</a></h4>
+<div class='topic'><!-- START: 12.3.1 - juneau-microservice-jetty.Manifest.ManifestApi -->
+<p>
+	The {@link org.apache.juneau.microservice.Microservice#getManifest()} method is a static method that
+	can be used to retrieve the manifest file as a {@link org.apache.juneau.utils.ManifestFile}.  
+</p>
+<p class='bpcode w800'>
+	<jc>// Get Main-Class from manifest file.</jc>
+	String mainClass = Microservice.<jsm>getInstance</jsm>().getManifest().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
+</p>
+<p>
+	The {@link org.apache.juneau.utils.ManifestFile} class extends {@link org.apache.juneau.ObjectMap},
+	making it possible to retrieve entries as a wide variety of object types such as java primitives, arrays, collections, 
+	maps, or even POJOs serialized as JSON.
+</p>
+</div><!-- END: 12.3.1 - juneau-microservice-jetty.Manifest.ManifestApi -->
+</div><!-- END: 12.3 - juneau-microservice-jetty.Manifest -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.Config' id='juneau-microservice-jetty.Config'>12.4 - Config</a></h3>
+<div class='topic'><!-- START: 12.4 - juneau-microservice-jetty.Config -->
+<p>
+	The microservice config file is an external INI-style configuration file that is used to configure
+	your microservice.
+</p>
+<h5 class='section'>See Also:</h5>
+<ul class='doctree'>
+	<li class='link'>{@doc juneau-config}
+</ul>
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.Config.ConfigApi' id='juneau-microservice-jetty.Config.ConfigApi'>12.4.1 - Config File API</a></h4>
+<div class='topic'><!-- START: 12.4.1 - juneau-microservice-jetty.Config.ConfigApi -->
+<p>
+	There are 3 primary ways of getting access to the config file.
+</p>
+<ul class='doctree'>
+	<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig()} 
+		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
+	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfig()} 
+		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
+		<h5 class='figure'>Example usage:</h5>
+		<p class='bcode w800'>
+	<cc>#-------------------------------</cc>
+	<cc># Properties for MyHelloResource </cc>
+	<cc>#-------------------------------</cc>
+	<cs>[MyHelloResource]</cs>
+	<ck>greeting</ck> = <cv>Hello world!</cv> 
+				</p>
+				<p class='bcode w800'>
+	<ja>@RestResource</ja>(...)
+	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
+		<jc>// Access config file when initializing fields.</jc>
+		<jk>private</jk> String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
+		
+		<jc>// Or access config file in servlet init method.</jc>
+		<ja>@Override</ja> <jc>/* Servlet */</jc>
+		<jk>public void</jk> init() {
+			String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
+		}
+	}		
+		</p>
+		<p>
+			Additional user-defined variables can be defined at this level by adding a  
+			{@link org.apache.juneau.rest.annotation.HookEvent#INIT} hook method
+			and using the {@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
+		</p>
+	<li class='jm'>
+		{@link org.apache.juneau.rest.RestRequest#getConfig()} 
+		- An instance method to access it from inside a REST method.
+		<br>Any {@doc DefaultRestSvlVariables initialization-time or request-time variables} can be used.
+		
+		<h5 class='figure'>Example usage:</h5>
+		<p class='bcode w800'>
+	<cc>#-----------------------------</cc>
+	<cc># Contents of microservice.cfg </cc>
+	<cc>#-----------------------------</cc>
+	<cs>[MyHelloResource]</cs>
+	<ck>greeting</ck> = <cv>Hello $RP{person}!</cv> 
+	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$RP{person}}</cv> 
+				</p>
+				<p class='bcode w800'>
+	<cc>#---------------------------------</cc>
+	<cc># Contents of MyHelloResource.java </cc>
+	<cc>#---------------------------------</cc>
+	<ja>@RestResource</ja>(
+		path=<js>"/hello"</js>,
+		messages=<js>"nls/Messages"</js>,
+		...
+	)
+	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
+
+		<jd>/** Standard hello message. */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{person}"</js>)
+		<jk>public</jk> String sayHello(RestRequest req) {
+			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/greeting"</js>);
+		}
+
+		<jd>/** Hello message in users language. */</jd>
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/localized/{person}"</js>)
+		<jk>public</jk> String sayLocalizedHello(RestRequest req) {
+			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/localizedGreeting"</js>);
+		}
+	}		
+		</p>
+		<p class='bcode w800'>
+	<cc>#---------------------------------------</cc>
+	<cc># Contents of nls/Messages_en.properties </cc>
+	<cc>#---------------------------------------</cc>
+	<ck>MyHelloResource.HelloMessage</ck> = <cv>Hello {0}!</cv> 
+		</p>
+		<p>
+			Additional user-defined variables can be defined at this level by overriding the 
+			{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
+		</p>
+</ul>
+<p>
+	That <l>sayLocalizedHello()</l> example might need some explanation since there's a lot going on there.
+	<br>Here's what happens when an HTTP call is made to <l>GET /hello/localized/Bob</l>:
+</p>
+<ol class='spaced-list'>
+	<li>
+		The HTTP call matches the <l>/hello</l> path on the <l>MyHelloResource</l> class.
+	<li>
+		The HTTP call matches the <l>/localized/{person}</l> path on the <l>sayLocalizedHello()</l> method.
+	<li>
+		The request attribute <l>person</l> gets assigned the value <l>"Bob"</l>.
+	<li>
+		The call to <l>req.getConfig().getString("MyHelloResource/localizedGreeting")</l> 
+		finds the value <l>"$L{HelloMessage,$RP{person}}"</l>.
+	<li>
+		The arguments in the <l>$L{}</l> variable get resolved, resulting in <l>"$L{HelloMessage,Bob}"</l>.
+	<li>
+		The <l>$L{}</l> variable gets resolved to the message <l>"Hello {0}!"</l> in the localized properties 
+		file of the servlet based on the <l>Accept-Language</l> header on the request.
+	<li>
+		The arguments get replaced in the message resulting in <l>"Hello Bob!"</l>. 
+	<li>
+		The resulting message <l>"Hello Bob!"</l> is returned as a POJO to be serialized to whatever content 
+		type was specified on the <l>Accept</l> header on the request.
+</ol>
+<p>
+	This particular example is needlessly complex, but it gives an idea of how variables can be used 
+	recursively to produce sophisticated results
+</p>
+</div><!-- END: 12.4.1 - juneau-microservice-jetty.Config.ConfigApi -->
+</div><!-- END: 12.4 - juneau-microservice-jetty.Config -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.ResourceClasses' id='juneau-microservice-jetty.ResourceClasses'>12.5 - Resource Classes</a></h3>
+<div class='topic'><!-- START: 12.5 - juneau-microservice-jetty.ResourceClasses -->
+<p>
+	Now let's take a look at the resource classes themselves.  
+	<br>The top-level page...
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000
+</p>			
+<img class='bordered w800' src='doc-files/juneau-microservice-server.Running.1.png'>
+<p>
+	...is generated by this class...
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/"</js>,
+		title=<js>"My Microservice"</js>,
+		description=<js>"Top-level resources page"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			navlinks={
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
+		),
+		children={
+			HelloWorldResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			LogsResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
+		<jc>// No code! </jc>
+	}
+</p>
+<ul class='spaced-list'>
+	<li>
+		The </l>title</l> and <l>description</l> annotations define the titles on the page.
+		<br>These can be globalized using <l>$L{...}</l> variables, or by defining specially-named properties in the 
+		properties file for the resource.
+	<li>
+		In this case, the <l>path</l> annotation defines the context root of your application since it was 
+		not specified in the manifest or config file.
+		<br>Therefore, this resource is mapped to <l>http://localhost:10000</l>.
+	<li>
+		The <l>children</l> annotation make up the list of child resources.
+		<br>These child resources can be anything that extends from <l>Servlet</l>, although usually
+		they will be subclasses of {@link org.apache.juneau.rest.BasicRestServlet} or other resource groups.
+</ul>
+<p>
+	If you click the <l>helloWorld</l> link in your application, you'll get a simple hello world message:
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/helloWorld
+</p>			
+<img class='bordered w800' src='doc-files/juneau-microservice-server.ResourceClasses.1.png'>
+<p>
+	...which is generated by this class...
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/helloWorld"</js>,
+		title=<js>"Hello World example"</js>,
+		description=<js>"Simplest possible REST resource"</js>
+	)
+	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+	
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
+		<jk>public</jk> String sayHello() {
+			<jk>return</jk> <js>"Hello world!"</js>;
+		}
+	}		
+</p>
+</div><!-- END: 12.5 - juneau-microservice-jetty.ResourceClasses -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.PredefinedResourceClasses' id='juneau-microservice-jetty.PredefinedResourceClasses'>12.6 - Predefined Resource Classes</a></h3>
+<div class='topic'><!-- START: 12.6 - juneau-microservice-jetty.PredefinedResourceClasses -->
+<p>
+	The following predefined resource classes are also provided for easy inclusion into your microservice:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.resources.ConfigResource}
+		- View and modify the external INI config file.
+	<li class='jc'>{@link org.apache.juneau.microservice.resources.DirectoryResource}
+		- View and modify file system directories.
+	<li class='jc'>{@link org.apache.juneau.microservice.resources.LogsResource}
+		- View and control generated log files.
+	<li class='jc'>{@link org.apache.juneau.microservice.resources.SampleRootResource}
+		- A sample root resource class to get started from.
+	<li class='jc'>{@link org.apache.juneau.microservice.resources.ShutdownResource}
+		- Shutdown and/or restart the JVM.
+</ul>
+</div><!-- END: 12.6 - juneau-microservice-jetty.PredefinedResourceClasses -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.RestMicroservice' id='juneau-microservice-jetty.RestMicroservice'>12.7 - RestMicroservice</a></h3>
+<div class='topic'><!-- START: 12.7 - juneau-microservice-jetty.RestMicroservice -->
+<p>
+	The {@link org.apache.juneau.microservice.RestMicroservice} class is the main application entry-point for REST 
+	microservices. 
+</p>
+<p>
+	The class hierarchy is:
+</p>
+<ul class='doctree'>
+	<li class='jac'>
+		{@link org.apache.juneau.microservice.Microservice} 
+		- Abstract class that defines simple start/stop methods and access to the manifest file, config file, and 
+		arguments.
+		<ul>
+			<li class='jc'>
+				{@link org.apache.juneau.microservice.RestMicroservice} 
+				- Specialized microservice for starting up REST interfaces using Jetty and specifying REST servlets
+				through the manifest file or config file.
+		</ul>
+	</li>
+</ul>
+<p>
+	Refer to the Javadocs for these class for more information.
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.RestMicroservice.Extending' id='juneau-microservice-jetty.RestMicroservice.Extending'>12.7.1 - Extending RestMicroservice</a></h4>
+<div class='topic'><!-- START: 12.7.1 - juneau-microservice-jetty.RestMicroservice.Extending -->
+<p>
+	This example shows how the {@link org.apache.juneau.microservice.RestMicroservice} class
+	can be extended to implement lifecycle listener methods or override existing methods.
+	<br>We'll create a new class <l>com.foo.SampleCustomRestMicroservice</l>.
+</p>
+<p>
+	First, the manifest file needs to be modified to point to our new microservice:
+</p>
+<p class='bpcode w800'>
+	<mk>Main-Class:</mk> com.foo.SampleCustomRestMicroservice
+</p>
+<p>
+	Then we define the following class:
+</p>
+<p class='bpcode w800'>
+	<jd>/**
+	 * Sample subclass of a RestMicroservice that provides customized behavior.
+	 * This class must be specified in the Main-Class entry in the manifest file and optionally
+	 * 	a Main-ConfigFile entry.
+	 */</jd>
+	<jk>public class</jk> SampleCustomRestMicroservice <jk>extends</jk> RestMicroservice {
+	
+		<jd>/**
+		 * Must implement a main method and call start()!
+		 */</jd>
+		<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
+			<jk>new</jk> SampleCustomRestMicroservice(args).start().join();
+		}
+	
+		<jd>/**
+		 * Must implement a constructor!
+		 * 
+		 * <ja>@param</ja> args Command line arguments. 
+		 * <ja>@throws</ja> Exception 
+		 */</jd>
+		<jk>public</jk> SampleCustomRestMicroservice(String[] args) <jk>throws</jk> Exception {
+			<jk>super</jk>(args);
+		}
+</p>
+<p>
+	The microservice APIs provide several useful methods that can be used or extended.
+</p>
+<h5 class='section'>See Also:</h5>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.microservice.Microservice}
+	<li class='jc'>{@link org.apache.juneau.microservice.RestMicroservice}
+</ul>
+</div><!-- END: 12.7.1 - juneau-microservice-jetty.RestMicroservice.Extending -->
+</div><!-- END: 12.7 - juneau-microservice-jetty.RestMicroservice -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-jetty.UiCustomization' id='juneau-microservice-jetty.UiCustomization'>12.8 - UI Customization</a></h3>
+<div class='topic'><!-- START: 12.8 - juneau-microservice-jetty.UiCustomization -->
+<p>
+	The Microservice project contains a <code>files/htdocs</code> working directly folder with predefined stylesheets and
+	images.
+</p>
+<img style='width:200px' src='doc-files/juneau-microservice.UiCustomization.1.png'>
+<p>
+	These files can be used to tailor the look-and-feel of your microservice.
+</p>
+<p class='bpcode w800'>
+	http://localhost:10000/helloWorld
+</p>
+<img class='bordered w800' src='doc-files/juneau-rest-server.UiCustomization.1.png'>
+<p>
+	The REST configuration section of your microservice configuration file can be used to tailor the header and footer on the pages:
+</p>
+<p class='bpcode w800'>
+	<cc>#=======================================================================================================================
+	# REST settings
+	#=======================================================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
+	
+	<cc># Stylesheet to use for HTML views.</cc>
+	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+	
+	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+	
+	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
+	<ck>header</ck> = 
+		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;</cv>
+			<cv>&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;</cv>
+		<cv>&lt;/a&gt;</cv>
+	<ck>footer</ck> = 
+		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;</cv>
+			<cv>&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;</cv>
+		<cv>&lt;/a&gt;</cv>
+</p>
+<p>
+	The {@link org.apache.juneau.rest.BasicRestConfig} interface (which defines the default settings for {@link org.apache.juneau.rest.BasicRestServlet} 
+	pulls in this information using {@link org.apache.juneau.config.vars.ConfigVar $C} and {@link org.apache.juneau.rest.vars.UrlVar $U} variables:
+</p>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		...
+		<jc>// HTML-page specific settings</jc>
+		htmldoc=<ja>@HtmlDoc</ja>(
+	
+			<jc>// Default page header contents.</jc>
+			header={
+				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @RestResource(title)</jc>
+				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
+				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+			},
+	
+			<jc>// Default stylesheet to use for the page.
+			// Can be overridden from external config file.
+			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+	
+			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+			// Use it to add a favicon link to the page.</jc>
+			head={
+				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+			},
+	
+			<jc>// No default page footer contents.
+			// Can be overridden from external config file.</jc>
+			footer=<js>"$C{REST/footer}"</js>
+		),
+	
+		<jc>// Optional external configuration file.</jc>
+		config=<js>"$S{juneau.configFile}"</js>,
+	
+		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
+		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
+		// By default, we define static files through the external configuration file.</jc>
+		staticFiles=<js>"$C{REST/staticFiles}"</js>
+	)
+	<jk>public interface</jk> BasicRestConfig {}
+</p>
+<p>
+	Note that the <code>files/htdocs</code> directory is mapped to <js>"servlet:/htdocs"</js> using the <code>staticFiles</code>
+	setting.  This allows those files to be served up through the servlet through the URL <js>"/[servlet-path]/htdocs"</js>
+</p>
+<p>
+	The theme files are externally accessible and can be modified to produce any look-and-feel you desire.
+	The microservice still works without the files directory.  An embedded <code>devops.css</code> is included in the jar as a default spreadsheet.
+</p>
+<p>
+	If you're testing out changes in the theme stylesheets, you may want to set the following system property that prevents caching of those files so 
+	that you don't need to restart the microservice each time a change is made:
+</p>
+<p class='bpcode w800'>
+	<cc>#=======================================================================================================================
+	# System properties
+	#-----------------------------------------------------------------------------------------------------------------------
+	# These are arbitrary system properties that are set during startup.
+	#=======================================================================================================================</cc>
+	<cs>[SystemProperties]</cs>
+	
+	<cc># Disable classpath resource caching.
+	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
+	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
+
+</p>
+</div><!-- END: 12.8 - juneau-microservice-jetty.UiCustomization -->
+</div><!-- END: 12 - juneau-microservice-jetty -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template' id='juneau-microservice-jetty-template'>13 - juneau-microservice-server</a></h2>
+<div class='topic'><!-- START: 13 - juneau-microservice-jetty-template -->
+<h5 class='figure'>Maven Dependency</h5>
+<p class='bpcode w500'>
+	<xt>&lt;dependency&gt;</xt>
+		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		<xt>&lt;artifactId&gt;</xt>juneau-microservice-server<xt>&lt;/artifactId&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+	<xt>&lt;/dependency&gt;</xt>
+</p>	
+
+<h5 class='figure'>Java Library</h5>
+<p class='bpcode w500'>
+	juneau-microservice-server-{@property juneauVersion}.jar 
+</p>	
+
+<h5 class='figure'>OSGi Module</h5>
+<p class='bpcode w500'>
+	org.apache.juneau.microservice.server_{@property juneauVersion}.jar 
+</p>	
+
+<h5 class='figure'>Microservice Starter Project</h5>
+<p class='bpcode w500'>
+	my-microservice.zip 
+</p>	
+
+<p>
+	Juneau Microservice is an API for creating stand-alone executable jars that can be used to 
+	start lightweight configurable REST interfaces with all the power of the Juneau REST server and client APIs.
+</p>
+</div><!-- END: 13 - juneau-microservice-jetty-template -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-core' id='juneau-examples-core'>14 - juneau-examples-core</a></h2>
+<div class='topic'><!-- START: 14 - juneau-examples-core -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
 	juneau-examples-core-{@property juneauVersion}.zip 
@@ -24191,12 +25208,12 @@
 	The Core library samples are currently a work-in-progress so there's not much here yet.
 	This section will be updated as new code is added.
 </p>
-</div><!-- END: 11 - juneau-examples-core -->
+</div><!-- END: 14 - juneau-examples-core -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>12 - juneau-examples-rest</a></h2>
-<div class='topic'><!-- START: 12 - juneau-examples-rest -->
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>15 - juneau-examples-rest</a></h2>
+<div class='topic'><!-- START: 15 - juneau-examples-rest -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
 	juneau-examples-rest-{@property juneauVersion}.zip 
@@ -24236,8 +25253,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.RootResources' id='juneau-examples-rest.RootResources'>12.1 - RootResources</a></h3>
-<div class='topic'><!-- START: 12.1 - juneau-examples-rest.RootResources -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.RootResources' id='juneau-examples-rest.RootResources'>15.1 - RootResources</a></h3>
+<div class='topic'><!-- START: 15.1 - juneau-examples-rest.RootResources -->
 <p>
 	The <l>RootResources</l> class is the main page for the REST microservice.
 	It serves as the jumping-off point for the other resources.
@@ -24377,12 +25394,12 @@
 	The request passed to the child resource is the same as if the child resource had been deployed 
 	independently (e.g. path-info, resource-URI, and so forth).
 </p>
-</div><!-- END: 12.1 - juneau-examples-rest.RootResources -->
+</div><!-- END: 15.1 - juneau-examples-rest.RootResources -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.HelloWorldResource' id='juneau-examples-rest.HelloWorldResource'>12.2 - HelloWorldResource</a></h3>
-<div class='topic'><!-- START: 12.2 - juneau-examples-rest.HelloWorldResource -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.HelloWorldResource' id='juneau-examples-rest.HelloWorldResource'>15.2 - HelloWorldResource</a></h3>
+<div class='topic'><!-- START: 15.2 - juneau-examples-rest.HelloWorldResource -->
 <p>
 	The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
 </p>
@@ -24446,12 +25463,12 @@
 	http://localhost:10000/helloWorld?Accept=text/json&amp;plainText=true
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.HelloWorldResource.2.png'>
-</div><!-- END: 12.2 - juneau-examples-rest.HelloWorldResource -->
+</div><!-- END: 15.2 - juneau-examples-rest.HelloWorldResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>12.3 - PetStore</a></h3>
-<div class='topic'><!-- START: 12.3 - juneau-examples-rest.PetStoreResource -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>15.3 - PetStore</a></h3>
+<div class='topic'><!-- START: 15.3 - juneau-examples-rest.PetStoreResource -->
 <p>
 	The <code>PetStore</code> application is an functional application meant to demonstrate the following:
 </p>
@@ -25814,12 +26831,12 @@
 <p>
 	Note that we could have also used <ja>@FormData</ja> parameters as well.
 </p>
-</div><!-- END: 12.3 - juneau-examples-rest.PetStoreResource -->
+</div><!-- END: 15.3 - juneau-examples-rest.PetStoreResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.DtoExamples' id='juneau-examples-rest.DtoExamples'>12.4 - DtoExamples</a></h3>
-<div class='topic'><!-- START: 12.4 - juneau-examples-rest.DtoExamples -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.DtoExamples' id='juneau-examples-rest.DtoExamples'>15.4 - DtoExamples</a></h3>
+<div class='topic'><!-- START: 15.4 - juneau-examples-rest.DtoExamples -->
 <p>
 	The <l>DtoExamples</l> resource is a resource group for demonstrating various DTO examples.
 </p>
@@ -26038,12 +27055,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.4 - juneau-examples-rest.DtoExamples -->
+</div><!-- END: 15.4 - juneau-examples-rest.DtoExamples -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>12.5 - ConfigResource</a></h3>
-<div class='topic'><!-- START: 12.5 - juneau-examples-rest.ConfigResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>15.5 - ConfigResource</a></h3>
+<div class='topic'><!-- START: 15.5 - juneau-examples-rest.ConfigResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
 	<br>It provides a REST interface for reading and altering the microservice config file.
@@ -26193,12 +27210,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 12.5 - juneau-examples-rest.ConfigResource -->
+</div><!-- END: 15.5 - juneau-examples-rest.ConfigResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>12.6 - LogsResource</a></h3>
-<div class='topic'><!-- START: 12.6 - juneau-examples-rest.LogsResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>15.6 - LogsResource</a></h3>
+<div class='topic'><!-- START: 15.6 - juneau-examples-rest.LogsResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
 	<br>It provides a REST interface for the log files generated by the microservice.
@@ -26210,13 +27227,108 @@
 	http://localhost:10000/logs
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.LogsResource.1.png'>
-</div><!-- END: 12.6 - juneau-examples-rest.LogsResource -->
-</div><!-- END: 12 - juneau-examples-rest -->
+</div><!-- END: 15.6 - juneau-examples-rest.LogsResource -->
+</div><!-- END: 15 - juneau-examples-rest -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>13 - juneau-examples-rest-springboot</a></h2>
-<div class='topic'><!-- START: 13 - juneau-examples-rest-springboot -->
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>16 - juneau-examples-rest</a></h2>
+<div class='topic'><!-- START: 16 - juneau-examples-rest-jetty -->
+<h5 class='figure'>Archive File</h5>
+<p class='bpcode w500'>
+	juneau-examples-rest-{@property juneauVersion}.zip 
+</p>	
+
+<p>
+	The <code>juneau-examples-rest</code> project includes everything you need to start the Samples REST 
+	microservice in an Eclipse workspace.
+</p>
+<p>
+	This project is packaged as a Juneau Microservice project that allows REST resources to be started
+	using embedded Jetty.
+</p>	
+
+<h5 class='topic'>juneau-examples-rest install instructions</h5>
+<p>
+	Download the <code>juneau-examples-rest-{@property juneauVersion}.zip</code> file from the downloads page
+	(located in the binaries) and import it into your workspace as an existing project:
+</p>
+<img class='bordered' src='doc-files/juneau-examples-rest.1.png' style='width:524px'>
+<p>
+	Select the archive file and import the project:
+</p>
+<img class='bordered' src='doc-files/juneau-examples-rest.2.png' style='width:523px'>
+<p>
+	Once loaded, you should see the following project structure:
+</p>
+<img class='bordered' src='doc-files/juneau-examples-rest.3.png' style='width:325px'>
+<p>
+	The microservice can be started from the <code>juneau-examples-rest.launch</code> file.
+	It will start up the microservice on port 10000 which you can then view through a browser:
+</p>
+<p class='bpcode w400'>
+	http://localhost:10000
+</p>			
+<img class='bordered w400' src='doc-files/juneau-examples-rest.4.png'>
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.Classes' id='juneau-examples-rest-jetty.Classes'>16.1 - Classes</a></h3>
+<div class='topic'><!-- START: 16.1 - juneau-examples-rest-jetty.Classes -->
+<p>
+	The <code>juneau-examples-rest-springboot</code> project contains the same classes as found in <code>juneau-examples-rest</code>
+	with the inclusion of a <code>org.apache.juneau.examples.rest.springboot</code> package containing the following:
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest-springboot.Classes.png'>
+<p>
+	The <code>App</code> class is used to invoke our application using Spring:
+</p>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<ja>@Import</ja>({AppConfiguration.<jk>class</jk>, AppServletConfiguration.<jk>class</jk>})
+	<jk>public class</jk> App {
+	
+		<jk>private static volatile</jk> ConfigurableApplicationContext <jsf>context</jsf>;
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>try</jk> {
+				<jsm>setProperty</jsm>(<js>"juneau.configFile"</js>, <js>"examples.cfg"</js>, <jk>false</jk>);
+				<jsf>context</jsf> = SpringApplication.<jsm>run</jsm>(App.<jk>class</jk>, args);
+				<jk>if</jk> (<jsf>context</jsf> == <jk>null</jk>)
+					System.<jsm>exit</jsm>(2); <jc>// Probably port in use?</jc>
+				AppConfiguration.<jsm>setAppContext</jsm>(context);
+				<jsm>setProperty</jsm>(<js>"juneau.serverPort"</js>, <jsf>context</jsf>.getEnvironment().getProperty(<js>"server.port"</js>), <jk>false</jk>);
+			} <jk>catch</jk> (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	
+		<jk>public static void</jk> start() {
+			<jsm>main</jsm>(<jk>new</jk> String[0]);
+		}
+	
+		<jk>public static void</jk> stop() {
+			<jsf>context</jsf>.stop();
+		}
+	}
+</p>
+</div><!-- END: 16.1 - juneau-examples-rest-jetty.Classes -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.DeployingToHeroku' id='juneau-examples-rest-jetty.DeployingToHeroku'>16.2 - Deploying to Heroku</a></h3>
+<div class='topic'><!-- START: 16.2 - juneau-examples-rest-jetty.DeployingToHeroku -->
+<p>
+	TODO
+</p>
+</div><!-- END: 16.2 - juneau-examples-rest-jetty.DeployingToHeroku -->
+</div><!-- END: 16 - juneau-examples-rest-jetty -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>17 - juneau-examples-rest-springboot</a></h2>
+<div class='topic'><!-- START: 17 - juneau-examples-rest-springboot -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
 	juneau-examples-rest-springboot-{@property juneauVersion}.zip 
@@ -26244,30 +27356,68 @@
 	The microservice can be started from the <code>juneau-examples-rest-springboot.launch</code> file. 
 	It will start up the microservice on port 5000 which you can then view through a browser.
 </p>
+<p>
+	The Spring Boot examples app has identical functionality to the normal examples app except for console command support.
+</p>
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.Classes' id='juneau-examples-rest-springboot.Classes'>13.1 - Classes</a></h3>
-<div class='topic'><!-- START: 13.1 - juneau-examples-rest-springboot.Classes -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.Classes' id='juneau-examples-rest-springboot.Classes'>17.1 - Classes</a></h3>
+<div class='topic'><!-- START: 17.1 - juneau-examples-rest-springboot.Classes -->
+<p>
+	The <code>juneau-examples-rest-springboot</code> project contains the same classes as found in <code>juneau-examples-rest</code>
+	with the inclusion of a <code>org.apache.juneau.examples.rest.springboot</code> package containing the following:
+</p>
+<img class='bordered w800' src='doc-files/juneau-examples-rest-springboot.Classes.png'>
+<p>
+	The <code>App</code> class is used to invoke our application using Spring:
+</p>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<ja>@Import</ja>({AppConfiguration.<jk>class</jk>, AppServletConfiguration.<jk>class</jk>})
+	<jk>public class</jk> App {
+	
+		<jk>private static volatile</jk> ConfigurableApplicationContext <jsf>context</jsf>;
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>try</jk> {
+				<jsm>setProperty</jsm>(<js>"juneau.configFile"</js>, <js>"examples.cfg"</js>, <jk>false</jk>);
+				<jsf>context</jsf> = SpringApplication.<jsm>run</jsm>(App.<jk>class</jk>, args);
+				<jk>if</jk> (<jsf>context</jsf> == <jk>null</jk>)
+					System.<jsm>exit</jsm>(2); <jc>// Probably port in use?</jc>
+				AppConfiguration.<jsm>setAppContext</jsm>(context);
+				<jsm>setProperty</jsm>(<js>"juneau.serverPort"</js>, <jsf>context</jsf>.getEnvironment().getProperty(<js>"server.port"</js>), <jk>false</jk>);
+			} <jk>catch</jk> (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	
+		<jk>public static void</jk> start() {
+			<jsm>main</jsm>(<jk>new</jk> String[0]);
+		}
+	
+		<jk>public static void</jk> stop() {
+			<jsf>context</jsf>.stop();
+		}
+	}
+</p>
+</div><!-- END: 17.1 - juneau-examples-rest-springboot.Classes -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.DeployingToHeroku' id='juneau-examples-rest-springboot.DeployingToHeroku'>17.2 - Deploying to Heroku</a></h3>
+<div class='topic'><!-- START: 17.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
 <p>
 	TODO
 </p>
-</div><!-- END: 13.1 - juneau-examples-rest-springboot.Classes -->
+</div><!-- END: 17.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
+</div><!-- END: 17 - juneau-examples-rest-springboot -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.DeployingToHeroku' id='juneau-examples-rest-springboot.DeployingToHeroku'>13.2 - Deploying to Heroku</a></h3>
-<div class='topic'><!-- START: 13.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
-<p>
-	TODO
-</p>
-</div><!-- END: 13.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
-</div><!-- END: 13 - juneau-examples-rest-springboot -->
-
-<!-- ==================================================================================================== -->
-
-<h2 class='topic ' onclick='toggle(this)'><a href='#Security' id='Security'>14 - Security Best-Practices</a></h2>
-<div class='topic'><!-- START: 14 - Security -->
+<h2 class='topic ' onclick='toggle(this)'><a href='#Security' id='Security'>18 - Security Best-Practices</a></h2>
+<div class='topic'><!-- START: 18 - Security -->
 <p>
 	Security is always an ongoing concern in any library.  
 	If you discover any security vulnerabilities in this code, please refer to the instructions found here:
@@ -26278,8 +27428,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-marshall' id='Security.juneau-marshall'>14.1 - juneau-marshall</a></h3>
-<div class='topic'><!-- START: 14.1 - Security.juneau-marshall -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-marshall' id='Security.juneau-marshall'>18.1 - juneau-marshall</a></h3>
+<div class='topic'><!-- START: 18.1 - Security.juneau-marshall -->
 <h5 class='topic'>Demarshalling vulnerabilities</h5>
 <p>
 	One common security vulnerability is the ability to create arbitrary Java object instances through crafted
@@ -26352,12 +27502,12 @@
 	<li>The RDF parsers rely on Apache Jena 2.7.1.  
 		As of <code>7.0.1</code>, no known security vulnerabilities exist that affect Juneau at this time.
 </ul>
-</div><!-- END: 14.1 - Security.juneau-marshall -->
+</div><!-- END: 18.1 - Security.juneau-marshall -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-svl' id='Security.juneau-svl'>14.2 - juneau-svl</a></h3>
-<div class='topic'><!-- START: 14.2 - Security.juneau-svl -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-svl' id='Security.juneau-svl'>18.2 - juneau-svl</a></h3>
+<div class='topic'><!-- START: 18.2 - Security.juneau-svl -->
 <p>
 	Care must be used when defining new {@link org.apache.juneau.svl.Var Vars} using the SVL API since mistakes 
 	could potentially expose system properties, environment variables, or even file system files.
@@ -26402,12 +27552,12 @@
 	{@link org.apache.juneau.svl.Var#allowNested()} and {@link org.apache.juneau.svl.Var#allowRecurse()} 
 	methods to prevent recursive handling of variables.
 </p>
-</div><!-- END: 14.2 - Security.juneau-svl -->
+</div><!-- END: 18.2 - Security.juneau-svl -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-rest-server' id='Security.juneau-rest-server'>14.3 - juneau-rest-server</a></h3>
-<div class='topic'><!-- START: 14.3 - Security.juneau-rest-server -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-rest-server' id='Security.juneau-rest-server'>18.3 - juneau-rest-server</a></h3>
+<div class='topic'><!-- START: 18.3 - Security.juneau-rest-server -->
 <p>
 	Denial of service attacks can be alleviated through the {@link org.apache.juneau.rest.annotation.RestResource#maxInput() maxInput()}
 	setting.  Arbitrarily-large input will trigger an exception before causing out-of-memory errors.
@@ -26419,8 +27569,8 @@
 	becomes an issue.  However, this is NOT true of the RDF parsers that use an intermediate DOM.  If parsing 
 	RDF, you may want to consider lowering the max-input value above.
 </p>
-</div><!-- END: 14.3 - Security.juneau-rest-server -->
-</div><!-- END: 14 - Security -->
+</div><!-- END: 18.3 - Security.juneau-rest-server -->
+</div><!-- END: 18 - Security -->
 
 
 <h2 class='topic' onclick='toggle(this)'><a href='#ReleaseNotes' id='ReleaseNotes'>Release Notes</a></h2>
@@ -32518,6 +33668,27 @@
 			<li class='jc'>{@link org.apache.juneau.svl.vars.PatternReplaceVar}
 			<li class='jc'>{@link org.apache.juneau.svl.vars.LenVar}
 		</ul>
+</ul>
+
+<h5 class='topic w800'>juneau-server</h5>
+<ul class='spaced-list'>
+	<li>
+		New methods on {@link org.apache.juneau.rest.RestServlet}:
+		<ul class='doctree'>
+			<li class='jm'>{@link org.apache.juneau.rest.RestServlet#setRestResourceResolver(RestResourceResolver) setRestResourceResolver(RestResourceResolver)}
+			<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getPath() getPath()}
+		</ul>
+	<li>
+		The registered resource resolver is now used to instantiate objects of classes defined via <ja>@RestResource</ja>.
+		<br>This allows for any of those instance to be injectable beans.
+</ul>
+
+<h5 class='topic w800'>juneau-microservice-server</h5>
+<ul class='spaced-list'>
+	<li>
+		If the microservice cannot find a config file in the home directory with the same name as the jar and
+		the <js>"juneau.configFile"</js> system property is not found, it will try to find any file in the home
+		directory that ends with <js>".cfg"</js>.
 </ul>
 
 <h5 class='topic w800'>juneau-examples-rest</h5>

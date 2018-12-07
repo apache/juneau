@@ -1,0 +1,47 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  As 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{todo} juneau-examples-rest-springboot
+
+<h5 class='figure'>Archive File</h5>
+<p class='bpcode w500'>
+	juneau-examples-rest-springboot-{@property juneauVersion}.zip 
+</p>	
+
+<p>
+	The <code>juneau-examples-rest-springboot</code> class contains the same examples as <code>juneau-examples-rest</code>
+	but also includes the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		A starter class for invoking the examples using Spring Boot.
+	<li>
+		A resource resolver for resolving REST resources as injectable beans.
+	<li>
+		A POM that extends from <code>spring-boot-starter-parent</code> that allows you to build a fully-shaded executable jar.
+	<li>
+		Configuration files for deploying the microservice to Heroku.
+</ul>
+
+<p>
+	The microservice app can be imported into Eclipse just like <code>juneau-examples-rest</code>.
+</p>
+<p>
+	The microservice can be started from the <code>juneau-examples-rest-springboot.launch</code> file. 
+	It will start up the microservice on port 5000 which you can then view through a browser.
+</p>
+<p>
+	The Spring Boot examples app has identical functionality to the normal examples app except for console command support.
+</p>

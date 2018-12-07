@@ -24,7 +24,6 @@ import java.util.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remote.*;

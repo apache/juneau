@@ -212,6 +212,9 @@ public @interface RestResource {
 	 * 	<li>
 	 * 		Supports {@doc DefaultRestSvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Use the keyword <code>SYSTEM_DEFAULT</code> to refer to the system default configuration
+	 * 		returned by the {@link Config#getSystemDefault()}.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
