@@ -20377,7 +20377,7 @@
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='link'>{@doc juneau-microservice-server.UiCustomization}
+	<li class='link'>{@doc juneau-microservice.UiCustomization}
 </ul>
 </div><!-- END: 7.28.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 
@@ -23645,7 +23645,7 @@
 	# org.eclipse.jetty.util.log.class = org.eclipse.jetty.util.log.StrErrLog</cc>
 	
 	<cc># Configure Jetty to log using java-util logging</cc>
-	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.JettyLogger</cv>
+	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.jetty.JettyLogger</cv>
 	
 	<cc># Jetty logging level
 	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
@@ -23819,11 +23819,11 @@
 	<br>If you open it, you'll see the following:
 </p>
 <p class='bpcode w800'>
-	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.RestMicroservice</mv>
+	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.jetty.RestMicroservice</mv>
 	<mk>Main-ConfigFile</mk>: <mv>my-microservice.cfg</mv>
 <p>
  	The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
- 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.RestMicroservice</l>.
+ 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.jetty.RestMicroservice</l>.
  	<br>However, it is possible to extend this class or implement your own microservice, in which case you'll need
  	to modify this value to point to the new class.
 </p>
@@ -24300,7 +24300,7 @@
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.microservice.server_{@property juneauVersion}.jar 
+	org.apache.juneau.microservice.jetty.server_{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>Microservice Starter Project</h5>
@@ -24503,7 +24503,7 @@
 	# org.eclipse.jetty.util.log.class = org.eclipse.jetty.util.log.StrErrLog</cc>
 	
 	<cc># Configure Jetty to log using java-util logging</cc>
-	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.JettyLogger</cv>
+	<ck>org.eclipse.jetty.util.log.class</ck> = <cv>org.apache.juneau.microservice.jetty.JettyLogger</cv>
 	
 	<cc># Jetty logging level
 	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
@@ -24677,11 +24677,11 @@
 	<br>If you open it, you'll see the following:
 </p>
 <p class='bpcode w800'>
-	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.RestMicroservice</mv>
+	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.jetty.RestMicroservice</mv>
 	<mk>Main-ConfigFile</mk>: <mv>my-microservice.cfg</mv>
 <p>
  	The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
- 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.RestMicroservice</l>.
+ 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.jetty.RestMicroservice</l>.
  	<br>However, it is possible to extend this class or implement your own microservice, in which case you'll need
  	to modify this value to point to the new class.
 </p>
@@ -25158,7 +25158,7 @@
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.microservice.server_{@property juneauVersion}.jar 
+	org.apache.juneau.microservice.jetty.server_{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>Microservice Starter Project</h5>
@@ -30402,7 +30402,7 @@
 	<li>Completely revamped API.
 	<li>New {@link org.apache.juneau.microservice.Microservice} class that serves as a generic
 		interface for microservices and their lifecycles.
-	<li>New {@link org.apache.juneau.microservice.RestMicroservice} class that implements a microservice
+	<li>New <code><del>RestMicroservice</del></code> class that implements a microservice
 		consisting of a REST interface.
 		<ul>
 			<li>REST resources and configuration settings can be defined through either manifest files
@@ -31218,10 +31218,10 @@
 <ul class='spaced-list'>
 	<li><js>"REST/port"</js> configuration setting can now be a comma-limited list of port numbers to try.
 		<br>You can also specify one or more <code>0</code>s to try a random port.
-	<li>Methods added to {@link org.apache.juneau.microservice.RestMicroservice} class:
+	<li>Methods added to <code><del>RestMicroservice</del></code> class:
 	<ul>
-		<li>{@link org.apache.juneau.microservice.RestMicroservice#getPort()}
-		<li>{@link org.apache.juneau.microservice.RestMicroservice#getURI()}
+		<li><code><del>getPort()</del></code>
+		<li><code><del>getURI()</del></code>
 		<li>Override methods added from {@link org.apache.juneau.microservice.Microservice} class for easier method chaining.
 	</ul>
 </ul>
@@ -32314,16 +32314,16 @@
 		for maximum flexibility instead of the hodge-podge of support in the config file.
 		<br>Top-level servlets should now be defined in the provided <code>jetty.xml</code> file.
 	<li>
-		New methods on {@link org.apache.juneau.microservice.RestMicroservice}:
+		New methods on <code><del>RestMicroservice</del></code>:
 		<ul>
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#addServlet(Servlet,String) addServlet(Servlet,String)}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#addServletAttribute(String,Object) addServletAttribute(String,Object)}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getServer() getServer()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getInstance() getInstance()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getPort() getPort()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getContextPath() getContextPath()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getProtocol() getProtocol()}
-			<li>{@link org.apache.juneau.microservice.RestMicroservice#getHostName() getHostName()}
+			<li><code><del>addServlet(Servlet,String)</del></code>
+			<li><code><del>addServletAttribute(String,Object)</del></code>
+			<li><code><del>getServer()</del></code>
+			<li><code><del>getInstance()</del></code>
+			<li><code><del>getPort()</del></code>
+			<li><code><del>getContextPath()</del></code>
+			<li><code><del>getProtocol()</del></code>
+			<li><code><del>getHostName()</del></code>
 		</ul>
 	<li>
 		New methods on {@link org.apache.juneau.microservice.Microservice}:
@@ -32512,7 +32512,7 @@
 			<li>New methods on {@link org.apache.juneau.microservice.Microservice}
 				<ul>
 					<li>{@link org.apache.juneau.microservice.Microservice#startConsole() startConsole()}
-					<li>{@link org.apache.juneau.microservice.Microservice#createConsoleCommands() createConsoleCommands()}
+					<li><code><del>createConsoleCommands()</del></code>
 					<li>{@link org.apache.juneau.microservice.Microservice#getConsoleReader() getConsoleReader()}
 					<li>{@link org.apache.juneau.microservice.Microservice#getConsoleWriter() getConsoleWriter()}
 				</ul>	
@@ -33675,7 +33675,7 @@
 	<li><code>juneau-microservice</code>
 	<ul>
 		<li><b><code>juneau-microservice-core</code></b> - New.  Contains base {@link org.apache.juneau.microservice.Microservice} class.
-		<li><b><code>juneau-microservice-jetty</code></b> - New.  Contains new {@link org.apache.juneau.microservice.JettyMicroservice} class.
+		<li><b><code>juneau-microservice-jetty</code></b> - New.  Contains new {@link org.apache.juneau.microservice.jetty.JettyMicroservice} class.
 		<li><b><code>juneau-microservice-jetty-template</code></b> - New.  Template starter project for Jetty-based microservices.
 		<li><b><code>juneau-microservice-springboot-template</code></b> - New.  Template starter project for Spring-Boot-based microservices.
 	</ul>
@@ -33719,9 +33719,9 @@
 	<li>
 		New API method:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.config.ConfigStore}
+			<li class='jc'>{@link org.apache.juneau.config.store.ConfigStore}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.config.ConfigStore#exists(String) exists(String)}
+				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#exists(String) exists(String)}
 			</ul>
 			
 </ul>
@@ -33758,7 +33758,7 @@
 <h5 class='topic w800'>juneau-microservice-jetty</h5>
 <ul class='spaced-list'>
 	<li>
-		New {@link org.apache.juneau.microservice.JettyMicroservice} class replaces the previous <code>RestMicroservice</code>.
+		New {@link org.apache.juneau.microservice.jetty.JettyMicroservice} class replaces the previous <code>RestMicroservice</code>.
 </ul>
 
 <h5 class='topic w800'>juneau-examples-rest</h5>

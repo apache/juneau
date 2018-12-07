@@ -16,7 +16,7 @@ package org.apache.juneau;
  * Class used to resolve {@link Class} objects to instances.
  */
 public interface ResourceResolver {
-	
+
 	/**
 	 * Look for constructors where the arguments passed in must match exactly.
 	 */
@@ -39,7 +39,6 @@ public interface ResourceResolver {
 	 * @param parent
 	 * 	The parent resource.
 	 * @param c The class to resolve.
-	 * @param builder The initialization configuration for the resource.
 	 * @param args Optional arguments to pass to constructor
 	 * @return The instance of that class.
 	 */

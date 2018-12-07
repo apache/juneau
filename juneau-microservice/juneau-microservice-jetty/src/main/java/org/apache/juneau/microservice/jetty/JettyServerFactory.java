@@ -22,13 +22,7 @@ public interface JettyServerFactory {
 	/**
 	 * Create a new initialized Jetty server.
 	 *
-	 * @param config The microservice INI file.
-	 * @param manifestFile The microservice. manifest file.
-	 * @param varResolver The microservice variable resolver.
-	 * @param logger The microservice logger.
-	 * @param ports Requested ports to use.  Can be <jk>null</jk>.
-	 * @param jettyXml The contents of the <code>jetty.xml</code> file.
-	 * @param resolveVars Whether we should resolve SVL variables in the <code>jetty.xml</code> file.
+	 * @param jettyXml The contents of the jetty.xml file.
 	 * @return A newly-created but not-yet-started server.
 	 * @throws Exception
 	 */

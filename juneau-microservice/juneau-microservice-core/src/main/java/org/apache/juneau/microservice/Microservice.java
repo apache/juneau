@@ -728,7 +728,7 @@ public class Microservice implements ConfigEventListener {
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected void out(MessageBundle mb, String messageKey, Object...args) {
+	public void out(MessageBundle mb, String messageKey, Object...args) {
 		String msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
 			getConsoleWriter().println(msg);
@@ -745,7 +745,7 @@ public class Microservice implements ConfigEventListener {
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected void err(MessageBundle mb, String messageKey, Object...args) {
+	public void err(MessageBundle mb, String messageKey, Object...args) {
 		String msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
 			System.err.println(mb.getString(messageKey, args));  // NOT DEBUG

@@ -36,7 +36,7 @@
 	<li><code>juneau-microservice</code>
 	<ul>
 		<li><b><code>juneau-microservice-core</code></b> - New.  Contains base {@link oaj.microservice.Microservice} class.
-		<li><b><code>juneau-microservice-jetty</code></b> - New.  Contains new {@link oaj.microservice.JettyMicroservice} class.
+		<li><b><code>juneau-microservice-jetty</code></b> - New.  Contains new {@link oaj.microservice.jetty.JettyMicroservice} class.
 		<li><b><code>juneau-microservice-jetty-template</code></b> - New.  Template starter project for Jetty-based microservices.
 		<li><b><code>juneau-microservice-springboot-template</code></b> - New.  Template starter project for Spring-Boot-based microservices.
 	</ul>
@@ -80,9 +80,9 @@
 	<li>
 		New API method:
 		<ul class='doctree'>
-			<li class='jc'>{@link oaj.config.ConfigStore}
+			<li class='jc'>{@link oaj.config.store.ConfigStore}
 			<ul>
-				<li class='jm'>{@link oaj.config.ConfigStore#exists(String) exists(String)}
+				<li class='jm'>{@link oaj.config.store.ConfigStore#exists(String) exists(String)}
 			</ul>
 			
 </ul>
@@ -119,7 +119,7 @@
 <h5 class='topic w800'>juneau-microservice-jetty</h5>
 <ul class='spaced-list'>
 	<li>
-		New {@link oaj.microservice.JettyMicroservice} class replaces the previous <code>RestMicroservice</code>.
+		New {@link oaj.microservice.jetty.JettyMicroservice} class replaces the previous <code>RestMicroservice</code>.
 </ul>
 
 <h5 class='topic w800'>juneau-examples-rest</h5>
