@@ -25,7 +25,7 @@ import org.apache.http.conn.ssl.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
@@ -68,7 +68,7 @@ public class TestMicroservice {
 			DEFAULT_CLIENT_PLAINTEXT = client().plainText().build();
 			return true;
 		} catch (Throwable e) {
-			System.err.println(e); // NOT DEBUG
+			e.printStackTrace(); // NOT DEBUG
 			return false;
 		}
 	}

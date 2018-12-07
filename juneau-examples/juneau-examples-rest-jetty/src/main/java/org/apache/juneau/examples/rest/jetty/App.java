@@ -13,7 +13,7 @@
 package org.apache.juneau.examples.rest.jetty;
 
 import org.apache.juneau.examples.rest.*;
-import org.apache.juneau.microservice.*;
+import org.apache.juneau.microservice.jetty.*;
 
 /**
  * An example of an extended REST microservice.

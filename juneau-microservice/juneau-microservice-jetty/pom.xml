@@ -92,7 +92,7 @@
 						<onlyModified>true</onlyModified>
 						<accessModifier>public</accessModifier>
 						<excludes>
-							<exclude>org.apache.juneau.microservice.resources</exclude>
+							<exclude>org.apache.juneau.microservice.jetty.resources</exclude>
 						</excludes>
 						<ignoreMissingClasses>true</ignoreMissingClasses>
 						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>

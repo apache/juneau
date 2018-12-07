@@ -39,7 +39,7 @@ import org.apache.juneau.utils.*;
  * For example, the {@link HelpCommand} is used to provide help on other commands.
  *
  * <p class='bcode w800'>
- * 	Running class 'RestMicroservice' using config file 'examples.cfg'.
+ * 	Running class 'JettyMicroservice' using config file 'examples.cfg'.
  * 	Server started on port 10000
  *
  * 	List of available commands:

@@ -172,7 +172,6 @@ public class MicroserviceBuilder {
 		else
 			throw new RuntimeException("Invalid type passed to MicroserviceBuilder.manifest(Object).  Type=["+value.getClass().getName()+"]");
 
-		System.err.println("ManifestFile=\n" + this.manifest);
 		return this;
 	}
 

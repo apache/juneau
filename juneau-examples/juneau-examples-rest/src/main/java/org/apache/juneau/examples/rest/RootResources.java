@@ -16,6 +16,7 @@ import static org.apache.juneau.serializer.WriterSerializer.*;
 
 import org.apache.juneau.examples.rest.dto.*;
 import org.apache.juneau.examples.rest.petstore.rest.*;
+import org.apache.juneau.microservice.jetty.resources.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;

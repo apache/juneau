@@ -163,15 +163,15 @@ public class DocGenerator {
 				Files.delete(f.toPath());
 
 			for (File f : topics.docFiles)
-				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
+				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()), StandardCopyOption.REPLACE_EXISTING);
 			for (File f : releaseNotes.docFiles)
-				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()));
+				Files.copy(f.toPath(), Paths.get("src/main/javadoc/doc-files", f.getName()), StandardCopyOption.REPLACE_EXISTING);
 
 			String toc2 = new StringBuilder().append("<!--").append(COPYRIGHT).append("\n-->\n").append(toc).toString();
 			IOUtils.writeFile("src/main/javadoc/resources/fragments/toc.html", toc2);
 
 			for (File f : new File("docs/Fragments").listFiles())
-				Files.copy(f.toPath(), Paths.get("src/main/javadoc/resources/fragments", f.getName()));
+				Files.copy(f.toPath(), Paths.get("src/main/javadoc/resources/fragments", f.getName()), StandardCopyOption.REPLACE_EXISTING);
 
 			info("Copied doc-files in {0}ms", System.currentTimeMillis()-startTime);
 

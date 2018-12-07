@@ -20,11 +20,11 @@
 	<br>If you open it, you'll see the following:
 </p>
 <p class='bpcode w800'>
-	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.RestMicroservice</mv>
+	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.jetty.RestMicroservice</mv>
 	<mk>Main-ConfigFile</mk>: <mv>my-microservice.cfg</mv>
 <p>
  	The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
- 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.RestMicroservice</l>.
+ 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.jetty.RestMicroservice</l>.
  	<br>However, it is possible to extend this class or implement your own microservice, in which case you'll need
  	to modify this value to point to the new class.
 </p>

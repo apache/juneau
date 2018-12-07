@@ -85,7 +85,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.apache.juneau.microservice.RestMicroservice
+							<mainClass>org.apache.juneau.microservice.springboot.App
 							</mainClass>
 						</manifest>
 						<manifestEntries>
