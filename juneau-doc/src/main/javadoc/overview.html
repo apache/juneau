@@ -361,8 +361,7 @@
 	</ol>
 	<li><p class='toc2 new'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></p>
 	<ol>
-		<li><p class='new'><a class='doclink' href='#juneau-rest-server-springboot.Classes'>Classes</a></p>
-		<li><p class='new'><a class='doclink' href='#juneau-rest-server-springboot.SpringRestResourceResolver'>SpringRestResourceResolver</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server-springboot.Overview'>Overview</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
 	<ol>
@@ -21415,78 +21414,64 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.Classes' id='juneau-rest-server-springboot.Classes'>9.1 - Classes</a></h3>
-<div class='topic'><!-- START: 9.1 - juneau-rest-server-springboot.Classes -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.Overview' id='juneau-rest-server-springboot.Overview'>9.1 - Overview</a></h3>
+<div class='topic'><!-- START: 9.1 - juneau-rest-server-springboot.Overview -->
 <p>
-	TODO
+	The Juneau integration component for Spring Boot consists of the following classes:
 </p>
-</div><!-- END: 9.1 - juneau-rest-server-springboot.Classes -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.SpringRestResourceResolver' id='juneau-rest-server-springboot.SpringRestResourceResolver'>9.2 - SpringRestResourceResolver</a></h3>
-<div class='topic'><!-- START: 9.2 - juneau-rest-server-springboot.SpringRestResourceResolver -->
+<ul class='doctree'>
+	<li class='ja'>{@link org.apache.juneau.rest.springboot.annotation.JuneauRest}
+	<li class='jc'>{@link org.apache.juneau.rest.springboot.JuneauRestInitializer}
+	<li class='jc'>{@link org.apache.juneau.rest.springboot.SpringRestResourceResolver}
+</ul>
 <p>
-	The {@link org.apache.juneau.rest.springboot.SpringRestResourceResolver} class 
-	
-	
- * Implementation of a {@link RestResourceResolver} for resolving resource classes using Spring.
- *
- * <p>
- * Used for resolving resource classes defined via {@link RestResource#children()}.
- *
- * <p>
- * A typical usage pattern for registering a Juneau REST resource class is shown below:
- *
- * <p class='bpcode w800'>
- * 	<ja>@Configuration</ja>
- * 	<jk>public class</jk> MySpringConfiguration {
- *
- * 		<ja>@AutoWired</ja>
- * 		<jk>private static volatile</jk> ApplicationContext <jsf>appContext</jsf>;
- *
- * 		<ja>@Bean</ja>
- * 		<jk>public</jk> RestResourceResolver restResourceResolver(ApplicationContext appContext) {
- * 			<jk>return new</jk> SpringRestResourceResolver(appContext);
- * 		}
- *
- * 		<ja>@Bean</ja>
- * 		<jk>public</jk> RootRest root(RestResourceResolver resolver) {
- * 			<jk>return new</jk> RootRest().setRestResourceResolver(resolver);
- * 		}
- *
- * 		<ja>@Bean</ja>
- * 		<jk>public</jk> ServletRegistrationBean rootRegistration(RootRest root) {
- * 			<jk>return new</jk> ServletRegistrationBean(root, <jsf>CONTEXT_ROOT</jsf>, <jsf>CONTEXT_ROOT</jsf>+<js>"/"</js>, <jsf>CONTEXT_ROOT</jsf>+<js>"/*"</js>);
- * 		}
- * </p>
-	
+	A typical Spring Boot application can use the {@link org.apache.juneau.rest.springboot.JuneauRestInitializer} to find
+	and register Juneau REST servlets using the {@link org.apache.juneau.rest.springboot.annotation.JuneauRest} annotation.
 </p>
-public class SpringRestResourceResolver extends BasicRestResourceResolver {
-
-	private ApplicationContext applicationContext;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param applicationContext The spring application context object.
-	 */
-	public SpringRestResourceResolver(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<jk>public class</jk> App {
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+				.run(args);
+		}
+	
+		<jd>/** Our root resource */</jd>
+		<ja>@Bean @JuneauRest</ja>
+		<jk>public</jk> RootResource getRootResource() {
+			<jk>return new</jk> RootResource();  <jc>// A subclass of RestServlet.</jc>
+		}
 	}
-
-	@Override /* RestResourceResolver */
-	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object...args) {
-		T resource = null;
-		try {
-			resource = applicationContext.getBean(c);
-		} catch (Exception e) { /* Ignore */ }
-		if (resource == null)
-			resource = super.resolve(parent, c, builder);
-		return resource;
+</p>
+<p>
+	The initializer will search for Spring beans annotated with the <ja>@JuneauRest</ja> annotation identifying it
+	as a top-level servlet to be deployed in the Spring Boot web container.
+</p>
+<p>
+	Another option is to use the <ja>@JuneauRest</ja> annotation on your Spring Boot source class like so:  
+</p>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<ja>@JuneauRest</ja>(servlets=RootResource.<jk>class</jk>)
+	<jk>public class</jk> App {
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+				.run(args);
+		}
 	}
-}
-</div><!-- END: 9.2 - juneau-rest-server-springboot.SpringRestResourceResolver -->
+</p>
+<p>
+	The root servlets are given an instance of {@link org.apache.juneau.rest.springboot.SpringRestResourceResolver} which allows
+	for child resources to be defined as injectable Spring beans.  
+</p>
+</div><!-- END: 9.1 - juneau-rest-server-springboot.Overview -->
 </div><!-- END: 9 - juneau-rest-server-springboot -->
 
 <!-- ==================================================================================================== -->

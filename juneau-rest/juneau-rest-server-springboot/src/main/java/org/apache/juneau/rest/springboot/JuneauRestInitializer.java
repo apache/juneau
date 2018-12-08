@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.rest.springboot.annotations.JuneauRest;
+import org.apache.juneau.rest.springboot.annotation.*;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -20,26 +20,23 @@ import org.springframework.context.ConfigurableApplicationContext;
  * Spring Boot context initializer for Juneau REST resources.
  *
  * <p>
- * Looks for the {@link JuneauRest} annotation on the Spring application class to automatically
- * register Juneau REST resources.
+ * Looks for the {@link JuneauRest} annotation on the Spring application class to automatically register Juneau REST resources.
  */
 public class JuneauRestInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private final Class<?> appClass;
+	private final Class<?> appClass;
 
-    /**
-     * Constructor.
-     *
-     * @param appClass The Spring application class.
-     */
-    public JuneauRestInitializer(Class<?> appClass) {
-        this.appClass = appClass;
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param appClass The Spring application class.
+	 */
+	public JuneauRestInitializer(Class<?> appClass) {
+		this.appClass = appClass;
+	}
 
-    @Override /* ApplicationContextInitializer */
-    public void initialize(ConfigurableApplicationContext ctx) {
-    	ctx.addBeanFactoryPostProcessor(
-        	new JuneauRestPostProcessor(ctx, appClass)
-        );
-    }
+	@Override /* ApplicationContextInitializer */
+	public void initialize(ConfigurableApplicationContext ctx) {
+		ctx.addBeanFactoryPostProcessor(new JuneauRestPostProcessor(ctx, appClass));
+	}
 }

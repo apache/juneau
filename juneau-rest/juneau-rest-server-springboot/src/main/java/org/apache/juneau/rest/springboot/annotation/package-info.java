@@ -14,5 +14,5 @@
 /**
  * Spring Boot Integration Annotations
  */
-package org.apache.juneau.rest.springboot.annotations;
+package org.apache.juneau.rest.springboot.annotation;
 

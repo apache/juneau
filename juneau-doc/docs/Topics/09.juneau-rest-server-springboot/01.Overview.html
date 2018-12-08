@@ -1,0 +1,75 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Overview
+
+<p>
+	The Juneau integration component for Spring Boot consists of the following classes:
+</p>
+<ul class='doctree'>
+	<li class='ja'>{@link oajr.springboot.annotation.JuneauRest}
+	<li class='jc'>{@link oajr.springboot.JuneauRestInitializer}
+	<li class='jc'>{@link oajr.springboot.SpringRestResourceResolver}
+</ul>
+<p>
+	A typical Spring Boot application can use the {@link oajr.springboot.JuneauRestInitializer} to find
+	and register Juneau REST servlets via the {@link oajr.springboot.annotation.JuneauRest} annotation.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<jk>public class</jk> App {
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+				.run(args);
+		}
+	
+		<jd>/** Our root resource */</jd>
+		<ja>@Bean @JuneauRest</ja>
+		<jk>public</jk> RootResource getRootResource() {
+			<jk>return new</jk> RootResource();  <jc>// A subclass of RestServlet.</jc>
+		}
+	}
+</p>
+<p>
+	The initializer will search for Spring beans annotated with the <ja>@JuneauRest</ja> annotation identifying it
+	as a top-level servlet to be deployed in the Spring Boot web container.
+</p>
+<p>
+	Another option is to use the <ja>@JuneauRest</ja> annotation on your Spring Boot source class like so:  
+</p>
+<p class='bpcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<ja>@JuneauRest</ja>(servlets=RootResource.<jk>class</jk>)
+	<jk>public class</jk> App {
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+				.run(args);
+		}
+	}
+</p>
+<p>
+	The root servlets are given an instance of {@link oajr.springboot.SpringRestResourceResolver} which allows
+	for child resources to be defined as injectable Spring beans.  
+</p>
+
+
+
