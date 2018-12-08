@@ -54,5 +54,15 @@ HTML5.dom = https://www.w3.org/TR/html5/dom.html
 
 GFM = https://help.github.com/articles/github-flavored-markdown, GFM syntax
 
+Source.juneau-config = https://github.com/apache/juneau/blob/master/juneau-core/juneau-config, Source
+Source.juneau-dto = https://github.com/apache/juneau/blob/master/juneau-core/juneau-dto, Source
+Source.juneau-marshall = https://github.com/apache/juneau/blob/master/juneau-core/juneau-dto, Source
+Source.juneau-marshall-rdf = https://github.com/apache/juneau/blob/master/juneau-core/juneau-dto, Source
+Source.juneau- = https://github.com/apache/juneau/blob/master/juneau-core/juneau-dto, Source
+
+
+Source.juneau-examples-core = https://github.com/apache/juneau/blob/master/juneau-examples/juneau-examples-core, Source
+
 this = package-summary.html
 package-summary.html = package-summary.html
+

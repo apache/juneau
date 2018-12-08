@@ -239,6 +239,10 @@
 								<tagletClass>org.apache.juneau.doc.internal.FragmentTag</tagletClass>
 								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 							</taglet>
+							<taglet>
+								<tagletClass>org.apache.juneau.doc.internal.SourceTag</tagletClass>
+								<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+							</taglet>
 							
 							<!--org.apache.juneau.doc.internal.DocTag</taglet-->
 							<!-- taglet>org.apache.juneau.doc.internal.PropertyTag</taglet-->
