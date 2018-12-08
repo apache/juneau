@@ -393,9 +393,9 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.UnitTesting'>Serverless Unit Testing</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.Other'>Other Useful Methods</a></p>
 	</ol>
-	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-server</a></p>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></p>
 	<ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.Introduction'>Microservice Introduction</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.Overview'>Microservice Overview</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.GettingStarted'>Getting Started</a></p>
 		<ol>
 			<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted.Installing'>Installing in Eclipse</a></p>
@@ -418,7 +418,7 @@
 		</ol>
 		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.UiCustomization'>UI Customization</a></p>
 	</ol>
-	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-server</a></p>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></p>
 	<ol>
 		<li><p class='todo'><a class='doclink' href='#juneau-microservice-jetty.Introduction'>Microservice Introduction</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-microservice-jetty.GettingStarted'>Getting Started</a></p>
@@ -445,6 +445,9 @@
 	</ol>
 	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-jetty-template'>juneau-microservice-jetty-template</a></p>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></p>
+	<ol>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-core.Examples'>Examples</a></p>
+	</ol>
 	<li><p class='toc2 todo'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></p>
 	<ol>
 		<li><p class='updated'><a class='doclink' href='#juneau-examples-rest.RootResources'>RootResources</a></p>
@@ -23476,41 +23479,36 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-server</a></h2>
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-core</a></h2>
 <div class='topic'><!-- START: 11 - juneau-microservice-core -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
 	<xt>&lt;dependency&gt;</xt>
 		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
-		<xt>&lt;artifactId&gt;</xt>juneau-microservice-server<xt>&lt;/artifactId&gt;</xt>
+		<xt>&lt;artifactId&gt;</xt>juneau-microservice-core<xt>&lt;/artifactId&gt;</xt>
 		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
 	<xt>&lt;/dependency&gt;</xt>
 </p>	
 
 <h5 class='figure'>Java Library</h5>
 <p class='bpcode w500'>
-	juneau-microservice-server-{@property juneauVersion}.jar 
+	juneau-microservice-core-{@property juneauVersion}.jar 
 </p>	
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.microservice.server_{@property juneauVersion}.jar 
-</p>	
-
-<h5 class='figure'>Microservice Starter Project</h5>
-<p class='bpcode w500'>
-	my-microservice.zip 
+	org.apache.juneau.microservice.core_{@property juneauVersion}.jar 
 </p>	
 
 <p>
-	Juneau Microservice is an API for creating stand-alone executable jars that can be used to 
-	start lightweight configurable REST interfaces with all the power of the Juneau REST server and client APIs.
+	Juneau Microservice is an API for creating stand-alone executable jars with automatic support for
+	Juneau configurations and console commands.
 </p>
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.Introduction' id='juneau-microservice-core.Introduction'>11.1 - Microservice Introduction</a></h3>
-<div class='topic'><!-- START: 11.1 - juneau-microservice-core.Introduction -->
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.Overview' id='juneau-microservice-core.Overview'>11.1 - Microservice Overview</a></h3>
+<div class='topic'><!-- START: 11.1 - juneau-microservice-core.Overview -->
 <p>
 	The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
 	Eclipse Jetty Servlet Container.  
@@ -23550,7 +23548,7 @@
 				other features such as logging.  
 		</ul>
 </ul>
-</div><!-- END: 11.1 - juneau-microservice-core.Introduction -->
+</div><!-- END: 11.1 - juneau-microservice-core.Overview -->
 
 <!-- ==================================================================================================== -->
 
@@ -24334,7 +24332,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-jetty' id='juneau-microservice-jetty'>12 - juneau-microservice-server</a></h2>
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-jetty' id='juneau-microservice-jetty'>12 - juneau-microservice-jetty</a></h2>
 <div class='topic'><!-- START: 12 - juneau-microservice-jetty -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -25260,6 +25258,15 @@
 	The Core library samples are currently a work-in-progress so there's not much here yet.
 	This section will be updated as new code is added.
 </p>
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-core.Examples' id='juneau-examples-core.Examples'>14.1 - Examples</a></h3>
+<div class='topic'><!-- START: 14.1 - juneau-examples-core.Examples -->
+<p>
+	TODO
+</p>
+</div><!-- END: 14.1 - juneau-examples-core.Examples -->
 </div><!-- END: 14 - juneau-examples-core -->
 
 <!-- ==================================================================================================== -->
