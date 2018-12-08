@@ -359,9 +359,10 @@
 	<ol>
 		<li><p class=''><a class='doclink' href='#juneau-rest-server-jaxrs.BaseProvider'>Juneau JAX-RS Provider</a></p>
 	</ol>
-	<li><p class='toc2 todo'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></p>
+	<li><p class='toc2 new'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></p>
 	<ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-server-springboot.TODO'>TODO</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server-springboot.Classes'>Classes</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-server-springboot.SpringRestResourceResolver'>SpringRestResourceResolver</a></p>
 	</ol>
 	<li><p class='toc2 '><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></p>
 	<ol>
@@ -454,7 +455,7 @@
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.ConfigResource'>ConfigResource</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-examples-rest.LogsResource'>LogsResource</a></p>
 	</ol>
-	<li><p class='toc2 todo'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest</a></p>
+	<li><p class='toc2 todo'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest-jetty</a></p>
 	<ol>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-jetty.Classes'>Classes</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-jetty.DeployingToHeroku'>Deploying to Heroku</a></p>
@@ -21386,7 +21387,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server-springboot' id='juneau-rest-server-springboot'>9 - juneau-rest-server-springboot</a></h2>
+<h2 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server-springboot' id='juneau-rest-server-springboot'>9 - juneau-rest-server-springboot</a></h2>
 <div class='topic'><!-- START: 9 - juneau-rest-server-springboot -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -21404,22 +21405,88 @@
 
 <h5 class='figure'>OSGi Module</h5>
 <p class='bpcode w500'>
-	org.apache.juneau.rest.springboot_{@property juneauVersion}.jar 
+	org.apache.juneau.rest.server.springboot_{@property juneauVersion}.jar 
 </p>	
 
 <p>
-	The <code>juneau-rest-server-springboot</code> library provides classes to make it easy to deploy Juneau
-	REST resources within the Spring Boot framework.
+	The <code>juneau-rest-server-springboot</code> library provides classes to make it easy to integrate
+	Juneau REST resources with Spring and Spring Boot.
 </p>
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.TODO' id='juneau-rest-server-springboot.TODO'>9.1 - TODO</a></h3>
-<div class='topic'><!-- START: 9.1 - juneau-rest-server-springboot.TODO -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.Classes' id='juneau-rest-server-springboot.Classes'>9.1 - Classes</a></h3>
+<div class='topic'><!-- START: 9.1 - juneau-rest-server-springboot.Classes -->
 <p>
 	TODO
 </p>
-</div><!-- END: 9.1 - juneau-rest-server-springboot.TODO -->
+</div><!-- END: 9.1 - juneau-rest-server-springboot.Classes -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.SpringRestResourceResolver' id='juneau-rest-server-springboot.SpringRestResourceResolver'>9.2 - SpringRestResourceResolver</a></h3>
+<div class='topic'><!-- START: 9.2 - juneau-rest-server-springboot.SpringRestResourceResolver -->
+<p>
+	The {@link org.apache.juneau.rest.springboot.SpringRestResourceResolver} class 
+	
+	
+ * Implementation of a {@link RestResourceResolver} for resolving resource classes using Spring.
+ *
+ * <p>
+ * Used for resolving resource classes defined via {@link RestResource#children()}.
+ *
+ * <p>
+ * A typical usage pattern for registering a Juneau REST resource class is shown below:
+ *
+ * <p class='bpcode w800'>
+ * 	<ja>@Configuration</ja>
+ * 	<jk>public class</jk> MySpringConfiguration {
+ *
+ * 		<ja>@AutoWired</ja>
+ * 		<jk>private static volatile</jk> ApplicationContext <jsf>appContext</jsf>;
+ *
+ * 		<ja>@Bean</ja>
+ * 		<jk>public</jk> RestResourceResolver restResourceResolver(ApplicationContext appContext) {
+ * 			<jk>return new</jk> SpringRestResourceResolver(appContext);
+ * 		}
+ *
+ * 		<ja>@Bean</ja>
+ * 		<jk>public</jk> RootRest root(RestResourceResolver resolver) {
+ * 			<jk>return new</jk> RootRest().setRestResourceResolver(resolver);
+ * 		}
+ *
+ * 		<ja>@Bean</ja>
+ * 		<jk>public</jk> ServletRegistrationBean rootRegistration(RootRest root) {
+ * 			<jk>return new</jk> ServletRegistrationBean(root, <jsf>CONTEXT_ROOT</jsf>, <jsf>CONTEXT_ROOT</jsf>+<js>"/"</js>, <jsf>CONTEXT_ROOT</jsf>+<js>"/*"</js>);
+ * 		}
+ * </p>
+	
+</p>
+public class SpringRestResourceResolver extends BasicRestResourceResolver {
+
+	private ApplicationContext applicationContext;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param applicationContext The spring application context object.
+	 */
+	public SpringRestResourceResolver(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
+
+	@Override /* RestResourceResolver */
+	public <T> T resolve(Object parent, Class<T> c, RestContextBuilder builder, Object...args) {
+		T resource = null;
+		try {
+			resource = applicationContext.getBean(c);
+		} catch (Exception e) { /* Ignore */ }
+		if (resource == null)
+			resource = super.resolve(parent, c, builder);
+		return resource;
+	}
+}
+</div><!-- END: 9.2 - juneau-rest-server-springboot.SpringRestResourceResolver -->
 </div><!-- END: 9 - juneau-rest-server-springboot -->
 
 <!-- ==================================================================================================== -->
@@ -27232,7 +27299,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>16 - juneau-examples-rest</a></h2>
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>16 - juneau-examples-rest-jetty</a></h2>
 <div class='topic'><!-- START: 16 - juneau-examples-rest-jetty -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>

@@ -10,25 +10,36 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.springboot.annotations;
+package org.apache.juneau.rest.springboot;
 
-import org.apache.juneau.rest.RestServlet;
-import org.springframework.stereotype.Component;
-
-import java.lang.annotation.*;
+import org.apache.juneau.rest.springboot.annotations.JuneauRest;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * Added to Spring application classes to denote Juneau REST resource classes to deploy as servlets.
+ * Spring Boot context initializer for Juneau REST resources.
+ *
+ * <p>
+ * Looks for the {@link JuneauRest} annotation on the Spring application class to automatically
+ * register Juneau REST resources.
  */
-@Target({ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@Component
-public @interface JuneauIntegration {
+public class JuneauRestInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-	/**
-	 * Specifies one or more implementations of {@link RestServlet} to deploy as servlets.
-	 */
-	Class<? extends RestServlet>[] rootResources();
+    private final Class<?> appClass;
+
+    /**
+     * Constructor.
+     *
+     * @param appClass The Spring application class.
+     */
+    public JuneauRestInitializer(Class<?> appClass) {
+        this.appClass = appClass;
+    }
+
+    @Override /* ApplicationContextInitializer */
+    public void initialize(ConfigurableApplicationContext ctx) {
+    	ctx.addBeanFactoryPostProcessor(
+        	new JuneauRestPostProcessor(ctx, appClass)
+        );
+    }
 }

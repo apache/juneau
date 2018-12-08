@@ -17,32 +17,27 @@ import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.springboot.annotations.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.*;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
  */
 @SpringBootApplication
-@JuneauIntegration(rootResources = RootResources.class)
 @Controller
-@RestController
 public class App {
 
-	private static volatile ConfigurableApplicationContext ctx;
-
 	public static void main(String[] args) {
-		ctx = new SpringApplicationBuilder(App.class)
-			.initializers(new JuneauContextInitializer(App.class))
+		new SpringApplicationBuilder(App.class)
+			.initializers(new JuneauRestInitializer(App.class))
 			.run(args);
 	}
 
-	public static void start() {
-		main(new String[0]);
-	}
-
-	public static void stop() {
-		ctx.stop();
+	/**
+	 * Our root resource.
+	 */
+	@Bean @JuneauRest
+	public RootResources getRootResources() {
+		return new RootResources();
 	}
 }

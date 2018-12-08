@@ -13,24 +13,28 @@
 package org.apache.juneau.rest.springboot;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.springboot.annotations.JuneauIntegration;
+import org.apache.juneau.rest.springboot.annotations.JuneauRest;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.*;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.*;
+import org.springframework.core.type.*;
+
+import java.util.*;
 
 import javax.servlet.Servlet;
 
 /**
- * Processes the {@link JuneauIntegration} annotation on the Spring application class.
+ * Processes the {@link JuneauRest} annotation on the Spring application class and <ja>@Bean</ja> methods.
  */
-public class JuneauIntegrationPostProcessor implements BeanDefinitionRegistryPostProcessor {
+public class JuneauRestPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
-    private final ConfigurableApplicationContext ctx;
     private final Class<?> appClass;
+    private final RestResourceResolver restResourceResolver;
+    private BeanDefinitionRegistry registry;
 
     /**
      * Constructor.
@@ -38,34 +42,52 @@ public class JuneauIntegrationPostProcessor implements BeanDefinitionRegistryPos
      * @param ctx The spring application context.
      * @param appClass The spring application class.
      */
-    public JuneauIntegrationPostProcessor(ConfigurableApplicationContext ctx, Class<?> appClass) {
+    public JuneauRestPostProcessor(ConfigurableApplicationContext ctx, Class<?> appClass) {
         this.appClass = appClass;
-        this.ctx = ctx;
+        this.restResourceResolver = new SpringRestResourceResolver(ctx);
     }
 
     @Override /* BeanDefinitionRegistryPostProcessor */
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
-
-    	JuneauIntegration a = appClass.getAnnotation(JuneauIntegration.class);
-
-    	if (a == null || a.rootResources().length == 0)
-    		return;
-
-    	RestResourceResolver rrr = new SpringRestResourceResolver(ctx);
-
-    	for (Class<? extends RestServlet> c : a.rootResources()) {
-			try {
-	            RestServlet rs = c.newInstance().setRestResourceResolver(rrr);
-		        ServletRegistrationBean<Servlet> reg = new ServletRegistrationBean<>(rs, '/' + rs.getPath());
-		        registry.registerBeanDefinition(reg.getServletName(), new RootBeanDefinition(ServletRegistrationBean.class, () -> reg));
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-        }
+    	this.registry = registry;
     }
 
     @Override /* BeanDefinitionRegistryPostProcessor */
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-    	// No-op
+    	try {
+			Map<String,RestServlet> m = new LinkedHashMap<>();
+
+        	// @JuneauRest on App class.
+        	if (appClass != null) {
+            	JuneauRest a = appClass.getAnnotation(JuneauRest.class);
+    			if (a != null)
+    				for (Class<? extends RestServlet> c : a.servlets())
+    					m.put(c.getName(), c.newInstance());
+        	}
+
+        	// @JuneauRest on classes.
+			for (Map.Entry<String,Object> e : beanFactory.getBeansWithAnnotation(JuneauRest.class).entrySet())
+				if (e.getValue() instanceof RestServlet)
+					m.put(e.getKey(), (RestServlet)e.getValue());
+
+			// @JuneauRest on @Bean method.
+			for (String beanName : beanFactory.getBeanNamesForType(RestServlet.class)) {
+				BeanDefinition bd = beanFactory.getBeanDefinition(beanName);
+		        if (bd.getSource() instanceof AnnotatedTypeMetadata) {
+		        	AnnotatedTypeMetadata metadata = (AnnotatedTypeMetadata)bd.getSource();
+		        	if (metadata.isAnnotated(JuneauRest.class.getName()))
+		        		m.put(beanName, (RestServlet)beanFactory.getBean(beanName));
+		        }
+			}
+
+			for (RestServlet rs : m.values()) {
+				rs.setRestResourceResolver(restResourceResolver);
+		        ServletRegistrationBean<Servlet> reg = new ServletRegistrationBean<>(rs, '/' + rs.getPath());
+		        registry.registerBeanDefinition(reg.getServletName(), new RootBeanDefinition(ServletRegistrationBean.class, () -> reg));
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
     }
 }
