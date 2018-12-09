@@ -1,0 +1,100 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Console Commands
+
+<p>
+	The Microservice API provides support for simple console commands.
+</p>
+<p class='bpcode w800'>
+	<jk>public static void</jk> main(String[] args) {
+		Microservice
+			.<jsm>create</jsm>() 
+			.args(args)
+			.build()
+			.start()
+			.startConsole()    <jc>// Start console.</jc>
+			.join()
+		;
+	}
+</p>
+<p>
+	When started, the console renders the following output:
+</p>
+<p class='bpcode w800'>
+	Running class 'Microservice' using config file 'my-microservice.cfg'.
+	
+	List of available commands:
+		exit -- Shut down service
+		restart -- Restarts service
+		help -- Commands help
+	
+	> 			
+</p>
+<p>
+	The builder methods for controlling the console are as follows:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oaj.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleEnabled(boolean) consoleEnabled(boolean)} 
+		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
+		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleCommands(Class...) consoleCommands(Class...)} 
+		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} 
+	</ul>
+</ul>
+<p>
+	By default, the supported commands are pulled from the configuration file:
+</p>
+<p class='bpcode w800'>
+	<cc>#=======================================================================================================================
+	# Console settings
+	#=======================================================================================================================</cc>
+	<cs>[Console]</cs>
+	
+	<ck>enabled = <cv>true</cv>
+	
+	<cc># List of available console commands.
+	# These are classes that implements ConsoleCommand that allow you to submit commands to the microservice via
+	# the console.
+	# When listed here, the implementations must provide a no-arg constructor.
+	# They can also be provided dynamically by overriding the Microservice.createConsoleCommands() method.</cc>
+	<ck>commands</ck> = 
+		<cv>org.apache.juneau.microservice.console.ExitCommand,
+		org.apache.juneau.microservice.console.RestartCommand,
+		org.apache.juneau.microservice.console.HelpCommand</cv>
+</p>
+<p>
+	New commands can be added by adding them to the configuration file, or programmatically using the {@link oaj.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
+	builder method.
+</p>
+<p>
+	The API for defining console commands is shown below: 
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link oaj.microservice.console.ConsoleCommand}
+	<ul>
+		<li class='jm'>{@link oaj.microservice.console.ConsoleCommand#execute(Scanner,PrintWriter,Args) execute(Scanner,PrintWriter,Args)} 
+		<li class='jm'>{@link oaj.microservice.console.ConsoleCommand#getDescription() getDescription()} 
+		<li class='jm'>{@link oaj.microservice.console.ConsoleCommand#getExamples() getExamples()} 
+		<li class='jm'>{@link oaj.microservice.console.ConsoleCommand#getInfo() getInfo()} 
+		<li class='jm'>{@link oaj.microservice.console.ConsoleCommand#getName() getName()} 
+		<li class='jm'>{@link oaj.microservice.console.ConsoleCommand#getSynopsis() getSynopsis()} 
+	</ul>
+</ul>
+<p>
+	By default, the console input and output are taken from {@link java.lang.System.in} and {@link java.lang.System.out}.
+	These can be overridden using the {@link oaj.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} method.
+</p>

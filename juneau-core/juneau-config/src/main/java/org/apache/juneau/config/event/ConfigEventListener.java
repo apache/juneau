@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.event;
 
-import java.util.*;
-
 /**
  * Listener that can be used to listen for change events in config maps.
  */
@@ -24,5 +22,5 @@ public interface ConfigEventListener {
 	 *
 	 * @param events The change events.
 	 */
-	void onConfigChange(List<ConfigEvent> events);
+	void onConfigChange(ConfigEvents events);
 }

@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
  * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<js>class</js>);
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $A{1}"</js>));
+ * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $ARGS{1}"</js>));
  * </p>
  *
  * <p>

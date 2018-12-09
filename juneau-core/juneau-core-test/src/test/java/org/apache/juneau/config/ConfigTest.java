@@ -1423,7 +1423,7 @@ public class ConfigTest {
 		cf.addListener(
 			new ConfigEventListener() {
 				@Override
-				public void onConfigChange(List<ConfigEvent> events) {
+				public void onConfigChange(ConfigEvents events) {
 					for (ConfigEvent ce : events) {
 						String key = (ce.getSection().equals("") ? "" : (ce.getSection() + '/')) + ce.getKey();
 						if (ce.getType() == ConfigEventType.REMOVE_ENTRY) {

@@ -10,34 +10,42 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice;
+package org.apache.juneau.config.event;
 
-import org.apache.juneau.config.event.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.util.*;
 
 /**
- * Listener class for microservice lifecycle events.
+ * Represents a list of {@link ConfigEvent} objects.
  */
-public interface MicroserviceListener {
+public class ConfigEvents extends ArrayList<ConfigEvent> {
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Called at the beginning of the {@link Microservice#start()} call.
+	 * Returns <jk>true</jk> if the specified section was modified in this list of events.
 	 *
-	 * @param microservice Reference to microservice.
+	 * @param name The section name.
+	 * @return <jk>true</jk> if the specified section was modified in this list of events.
 	 */
-	void onStart(Microservice microservice);
+	public boolean isSectionModified(String name) {
+		for (ConfigEvent ce : this)
+			if (isEquals(name, ce.getSection()))
+				return true;
+		return false;
+	}
 
 	/**
-	 * Called at the end of the {@link Microservice#stop()} call.
+	 * Returns <jk>true</jk> if the specified key was modified in this list of events.
 	 *
-	 * @param microservice Reference to microservice.
+	 * @param section The section name.
+	 * @param key The key name.
+	 * @return <jk>true</jk> if the specified key was modified in this list of events.
 	 */
-	void onStop(Microservice microservice);
-
-	/**
-	 * Called if one or more changes occur in the config file.
-	 *
-	 * @param microservice Reference to microservice.
-	 * @param events The list of changes in the config file.
-	 */
-	void onConfigChange(Microservice microservice, ConfigEvents events);
+	public boolean isKeyModified(String section, String key) {
+		for (ConfigEvent ce : this)
+			if (isEquals(section, ce.getSection()) && isEquals(key, ce.getKey()))
+				return true;
+		return false;
+	}
 }

@@ -393,30 +393,18 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.UnitTesting'>Serverless Unit Testing</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.Other'>Other Useful Methods</a></p>
 	</ol>
-	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></p>
+	<li><p class='toc2 new'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></p>
 	<ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.Overview'>Microservice Overview</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.GettingStarted'>Getting Started</a></p>
-		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted.Installing'>Installing in Eclipse</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted.Running'>Running in Eclipse</a></p>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-core.GettingStarted.Building'>Building and Running from Command-Line</a></p>
-		</ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.Manifest'>Manifest File</a></p>
-		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-core.Manifest.ManifestApi'>Manifest API</a></p>
-		</ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.Config'>Config</a></p>
-		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-core.Config.ConfigApi'>Config File API</a></p>
-		</ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.ResourceClasses'>Resource Classes</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.PredefinedResourceClasses'>Predefined Resource Classes</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.RestMicroservice'>RestMicroservice</a></p>
-		<ol>
-			<li><p class=''><a class='doclink' href='#juneau-microservice-core.RestMicroservice.Extending'>Extending RestMicroservice</a></p>
-		</ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-microservice-core.UiCustomization'>UI Customization</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.Overview'>Microservice Overview</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.LifecycleMethods'>Lifecycle Methods</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.Args'>Args</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.Manifest'>Manifest</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.Config'>Config</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.SystemProperties'>System properties</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.VarResolver'>VarResolver</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.ConsoleCommands'>Console Commands</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.Logging'>Logging</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-microservice-core.Listeners'>Listeners</a></p>
 	</ol>
 	<li><p class='toc2 todo'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></p>
 	<ol>
@@ -21474,6 +21462,10 @@
 	The root servlets are given an instance of {@link org.apache.juneau.rest.springboot.SpringRestResourceResolver} which allows
 	for child resources to be defined as injectable Spring beans.  
 </p>
+<p>
+	 The {@doc juneau-examples-rest-springboot} section describes how the Examples REST application is deployed
+	 using Spring Boot and quickly deployable as an online application using Heroku.
+</p>
 </div><!-- END: 9.1 - juneau-rest-server-springboot.Overview -->
 </div><!-- END: 9 - juneau-rest-server-springboot -->
 
@@ -23479,7 +23471,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-core</a></h2>
+<h2 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core' id='juneau-microservice-core'>11 - juneau-microservice-core</a></h2>
 <div class='topic'><!-- START: 11 - juneau-microservice-core -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -23507,183 +23499,466 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.Overview' id='juneau-microservice-core.Overview'>11.1 - Microservice Overview</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.Overview' id='juneau-microservice-core.Overview'>11.1 - Microservice Overview</a></h3>
 <div class='topic'><!-- START: 11.1 - juneau-microservice-core.Overview -->
 <p>
-	The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
-	Eclipse Jetty Servlet Container.  
-	<br>It includes all libraries needed to execute in a Java 1.7+ environment.
+	The Microservice API consists of a base class for defining executable microservices.
 </p>
 <p>
 	Features include:
 </p>
 <ul class='spaced-list'>
 	<li>
-		An out-of-the-box zipped Eclipse project to get started quickly.
-	<li>
-		Packaged as a simple executable jar and configuration file.
-	<li>
-		All the power of the Juneau ecosystem for defining REST servlets and clients with the ability to 
-		serialize and parse POJOs as HTML, JSON, XML, RDF, URL-Encoding, and others.
+		A builder-based API for defining and starting microservices.
 	<li>
 		An extensible API that allows you to hook into various lifecycle events.
 	<li>
 		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
 		file properties.
-	<li>
-		Predefined REST resources for configuring microservice and accessing log files.
 </ul>
 <p>
-	The <code>juneau-microservice-server</code> library consists of the following classes:
+	The Microservice API consists of the following packages and classes:
 </p>
 <ul class='doctree'>
-	<li class='jac'>
-		{@link org.apache.juneau.microservice.Microservice} 
-		- Defines basic lifecycle methods for microservices in general.
+	<li class='jp'>{@link org.apache.juneau.microservice}
 		<ul>
-			<li class='jc'>
-				{@link org.apache.juneau.microservice.RestMicroservice}
-				- Defines additional lifecycle methods for REST microservices.
-				<br>Starts up an externally-configured Jetty server, registers servlets, and sets up 
-				other features such as logging.  
+			<li class='jc'>{@link org.apache.juneau.microservice.Microservice} - The base microservice class.
+			<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder} - Builder for the microservice class.
+			<li class='jic'>{@link org.apache.juneau.microservice.MicroserviceListener} - Interface for hooking into lifecyle events of the microservice.
 		</ul>
+	<li class='jp'>{@link org.apache.juneau.microservice.console}
+		<ul>
+			<li class='jac'>{@link org.apache.juneau.microservice.console.ConsoleCommand} - Abstract class for defining console commands.
+		</ul>
+</ul>
+<p>
+	By itself the Microservice API doesn't provided much functionality, but it does provide the basis for the {@doc juneau-microservice-jetty Jetty Microservice} described later.
+</p> 
+<p>
+	The most-basic creation of a microservice from an entry-point method is shown below:
+</p>	
+<p class='bpcode w800'>
+	<jk>public class</jk> App {
+		<jk>public static void</jk> main(String[] args) {
+			Microservice
+				.<jsm>create</jsm>()   <jc>// Create builder.</jc>
+				.args(args) <jc>// Pass in args.</jc>
+				.build()    <jc>// Create microservice.</jc>
+				.start()    <jc>// Start microservice.</jc>
+			;
+		}
+	}
+</p>
+<p>
+	The classes consist of the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#args(String...) args(String...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#config(Config) config(Config)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#configName(String) configName(String)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#consoleEnabled(boolean) consoleEnabled(boolean)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#listener(MicroserviceListener) listener(MicroserviceListener)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#logConfig(LogConfig) logConfig(LogConfig)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#logger(Logger)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#manifest(Object)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#varContext(String, Object) varContext(String,Object)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#vars(Class...) vars(Class...)} 
+	</ul>
+	<li class='jc'>{@link org.apache.juneau.microservice.Microservice}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#init() init()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#start() start()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#startConsole() startConsole()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#join() join()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#stop() stop()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#stopConsole() stopConsole()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#exit() exit()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#kill() kill()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getArgs() getArgs()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig() getConfig()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getLogger() getLogger()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getManifest() getManifest()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getVarResolver() getVarResolver()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#log(Level,String,Object...) log(Level,String,Object...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#out(MessageBundle,String,Object...) out(MessageBundle,String,Object...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#err(MessageBundle,String,Object...) err(MessageBundle,String,Object...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#onConfigChange(List) onConfigChange(List)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#executeCommand(Args,Scanner,PrintWriter) executeCommand(Args,Scanner,PrintWriter)} 
+	</ul>
+	<li class='jic'>{@link org.apache.juneau.microservice.MicroserviceListener}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onConfigChange(Microservice,List) onConfigChange(Microservice,List)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onStart(Microservice) onStart(Microservice)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onStop(Microservice) onStop(Microservice)} 
+	</ul>
 </ul>
 </div><!-- END: 11.1 - juneau-microservice-core.Overview -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted' id='juneau-microservice-core.GettingStarted'>11.2 - Getting Started</a></h3>
-<div class='topic'><!-- START: 11.2 - juneau-microservice-core.GettingStarted -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.LifecycleMethods' id='juneau-microservice-core.LifecycleMethods'>11.2 - Lifecycle Methods</a></h3>
+<div class='topic'><!-- START: 11.2 - juneau-microservice-core.LifecycleMethods -->
 <p>
-	The <l>my-microservice.zip</l> file is a zipped eclipse project that includes everything you 
-	need to create a REST microservice in an Eclipse workspace.
+	The lifecycle methods of the {@link org.apache.juneau.microservice.Microservice} class consists of the following:
 </p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.Microservice}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#start() start()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#startConsole() startConsole()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#join() join()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#stop() stop()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#stopConsole() stopConsole()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#exit() exit()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#kill() kill()} 
+	</ul>
+</ul>
+<p>
+	A typical implementation of an app with lifecycle methods might look like the following:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> App {
+	
+		<jk>private static final</jk> Microservice <jsf>MICROSERVICE</jsf>;
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jsf>MICROSERVICE</jsf> = Microservice
+				.<jsm>create</jsm>()          <jc>// Create builder.</jc>
+				.args(args)        <jc>// Pass in args.</jc>
+				.build()           <jc>// Create microservice.</jc>
+				.start()           <jc>// Start microservice.</jc>
+				.startConsole()    <jc>// Start console.</jc>
+				.join()            <jc>// Join thread.</jc>
+			;
+		}
+		
+		<jk>public static void</jk> restart() {
+			<jsf>MICROSERVICE</jsf>.stop().start();
+		}
+		
+		<jk>public static void</jk> exit() {
+			<jsf>MICROSERVICE</jsf>.exit();
+		}
+	}
+</p>
+<p>
+	If your application consists of a single microservice, you can use the {@link org.apache.juneau.microservice.Microservice#getInstance()} method
+	from anywhere in your code:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> App {
+	
+		<jk>public static void</jk> main(String[] args) {
+			Microservice
+				.<jsm>create</jsm>()          <jc>// Create builder.</jc>
+				.args(args)        <jc>// Pass in args.</jc>
+				.build()           <jc>// Create microservice.</jc>
+				.start()           <jc>// Start microservice.</jc>
+				.startConsole()    <jc>// Start console.</jc>
+				.join()            <jc>// Join thread.</jc>
+			;
+		}
+		
+		<jk>public static void</jk> restart() {
+			Microservice.<jsm>getInstance</jsm>().stop().start();
+		}
+		
+		<jk>public static void</jk> exit() {
+			Microservice.<jsm>getInstance</jsm>().exit();
+		}
+	}
+</p>
+<p>
+	The {@link org.apache.juneau.microservice.Microservice#startConsole()} and {@link org.apache.juneau.microservice.Microservice#stopConsole()} control
+	the lifecycle of the console commands.  
+	Typically you'll want to control these separately from the app so that you can easily restart your application
+	from the console without affecting the console itself.
+</p>
+<p>
+	The lifecycle methods on the {@link org.apache.juneau.microservice.Microservice} class are purposely left non-final so that 
+	subclasses can override them to provide customized behavior.  
+</p>
+</div><!-- END: 11.2 - juneau-microservice-core.LifecycleMethods -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted.Installing' id='juneau-microservice-core.GettingStarted.Installing'>11.2.1 - Installing in Eclipse</a></h4>
-<div class='topic'><!-- START: 11.2.1 - juneau-microservice-core.GettingStarted.Installing -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.Args' id='juneau-microservice-core.Args'>11.3 - Args</a></h3>
+<div class='topic'><!-- START: 11.3 - juneau-microservice-core.Args -->
 <p>
-	Follow these instructions to create a new template project in Eclipse.
-</p>		
+	Command-line arguments can be associated with a microservice using the {@link org.apache.juneau.microservice.MicroserviceBuilder#args(String...)} method.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jk>public static void</jk> main(String[] args) {
+		Microservice
+			.<jsm>create</jsm>()          <jc>// Create builder.</jc>
+			.args(args)        <jc>// Pass in args.</jc>
+			.build()           <jc>// Create microservice.</jc>
+			.start()           <jc>// Start microservice.</jc>
+			.join()            <jc>// Join thread.</jc>
+		;
+	}
+</p>
+<p>
+	When specified, the arguments can be retrieved using the {@link org.apache.juneau.microservice.Microservice#getArgs()} method which provides
+	an API for easily accessing command-line arguments using common notation:
+</p>
+<p class='bpcode w800'>
+	Args a = Microservice.<jsm>getInstance</jsm>().getArgs();
+	
+	<jc>// One main argument</jc>
+	<jc>// a1</jc>
+	String a1 = a.getArg(0); <jc>// "a1"</jc>
+	String a2 = a.getArg(1); <jc>// null</jc>
+
+	<jc>// Two main arguments</jc>
+	<jc>// a1 a2</jc>
+	String a1 = a.getArg(0); <jc>// "a1"</jc>
+	String a2 = a.getArg(1); <jc>// "a2"</jc>
+
+	<jc>// One main argument and one optional argument with no value</jc>
+	<jc>// a1 -a2</jc>
+	String a1 = a.getArg(0);
+	<jk>boolean</jk> hasA2 = a.hasArg(<js>"a2"</js>); <jc>// true</jc>
+	<jk>boolean</jk> hasA3 = a.hasArg(<js>"a3"</js>); <jc>// false</jc>
+
+	<jc>// One main argument and one optional argument with one value</jc>
+	<jc>// a1 -a2 v2</jc>
+	String a1 = a.getArg(0);
+	String a2 = a.getArg(<js>"a2"</js>); <jc>// "v2"</jc>
+	String a3 = a.getArg(<js>"a3"</js>); <jc>// null</jc>
+
+	<jc>// One main argument and one optional argument with two values</jc>
+	<jc>// a1 -a2 v2a v2b</jc>
+	String a1 = a.getArg(0);
+	List&lt;String&gt; a2 = a.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
+	List&lt;String&gt; a3 = a.getArgs(<js>"a3"</js>); <jc>// Empty list</jc>
+
+	<jc>// Same as previous, except specify optional argument name multiple times</jc>
+	<jc>// a1 -a2 v2a -a2 v2b</jc>
+	String a1 = a.getArg(0);
+	List&lt;String&gt; a2 = a.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
+</p>
+<p>
+	Specifying the command-line arguments also makes them available through {@link org.apache.juneau.svl.vars.ArgsVar $A} SVL variables.
+	These can be used in the configuration file and throughout various Juneau annotations.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// $A used in variable resolver.</jc>
+	VarResolver vr = Microservice.<jsm>getInstance</jsm>().getVarResolver();
+ 	System.<jsf>out</jsf>.println(vr.resolve(<js>"Arg #1 is set to $A{1}"</js>));
+</p>
+<p class='bpcode w800'>
+	<jc>// $A used in annotation.</jc>
+	<ja>@RestResource</ja>(
+		title=<js>"$A{title}"</js>,
+		...
+	)
+</p>
+</div><!-- END: 11.3 - juneau-microservice-core.Args -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.Manifest' id='juneau-microservice-core.Manifest'>11.4 - Manifest</a></h3>
+<div class='topic'><!-- START: 11.4 - juneau-microservice-core.Manifest -->
+<p>
+	The {@link org.apache.juneau.microservice.MicroserviceBuilder#manifest(Object)} method can be used to specify the contents or location of of the main 
+	manifest file of the executable jar.
+</p>
+<p>
+	If you do not specify the location/contents of the manifest file, the microservice will attempt to resolve it through the following methods:
+</p>
 <ol class='spaced-list'>
 	<li>
-		Download the latest microservice-project zip file (e.g. <l>my-microservice.zip</l>).
+		Looking on the file system for a file at <js>"META-INF/MANIFEST.MF"</js>.
+		This is primarily to allow for running microservices from within eclipse workspaces where the manifest file
+		is located in the project root.
 	<li>
-		In your Eclipse workspace, go to <b>File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</b> 
-		and select the zip file and click <b>Finish</b>.
-		<br><br>
-		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.1.png' style='width:549px'>
-	<li>
-		In your workspace, you should now see the following project:
-		<br><br>
-		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.2.png' style='width:299px'>
+		Using the class loader for this class to find the file at the URL <js>"META-INF/MANIFEST.MF"</js>.
 </ol>
 <p>
-	The important elements in this project are:
+	If you do manually specify the manifest file, you can pass in any of the following types:
+</p>		
+<ul>
+	<li>{@link org.apache.juneau.utils.ManifestFile} - A pre-parsed manifest file.
+	<li>{@link java.util.jar.Manifest} - A pre-parsed manifest file.
+	<li>{@link java.io.Reader} - Containing the raw contents of the manifest. 
+	<li>{@link java.io.InputStream} - Containing the raw contents of the manifest.
+	<li>{@link java.io.File} - File containing the raw contents of the manifest.
+	<li>{@link java.lang.String} - Path to file containing the raw contents of the manifest.
+	<li>{@link java.lang.Class} - Finds and loads the manifest file of the jar file that the specified class is contained within.
+</ul>
+<p>
+	The manifest file can be retrieved using the the {@link org.apache.juneau.microservice.Microservice#getManifest()} method which 
+	provides an API for accessing manifest file entries.
+	<br>This method returns an instance of {@link org.apache.juneau.utils.ManifestFile} which extends from {@link org.apache.juneau.ObjectMap} allowing
+	you to retrieve entries as any data types supported by that class.
 </p>
-<ul class='spaced-list'>
-	<li>
-		<l>RootResources.java</l> - The top-level REST resource. 
-		<br>This class routes HTTP requests to child resources:
-		<br><br>
-		<p class='bcode w800'>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	ManifestFile mf = Microservice.<jsm>getInstance</jsm>().getManifest();
+	
+	String mainClass = mf.getString(<js>"Main-Class"</js>);
+	<jk>int</jk> myInt = mf.getInt(<js>"My-Int"</js>, 123);
+	<jk>boolean</jk> myBoolean = mf.getBoolean(<js>"My-Boolean"</js>);
+</p>
+<p>
+	The manifest is also used for the {@link org.apache.juneau.svl.vars.ManifestFileVar $MF} SVL variable.
+</p>
+<h5 class='figure'>Examples:</h5>
+<p class='bpcode w800'>
+	<jc>// $MF used in variable resolver.</jc>
+	VarResolver vr = Microservice.<jsm>getInstance</jsm>().getVarResolver();
+ 	System.<jsf>out</jsf>.println(vr.resolve(<js>"The main class is $MF{Main-Class}"</js>));
+</p>
+<p class='bpcode w800'>
+	<jc>// $MF used in annotation.</jc>
 	<ja>@RestResource</ja>(
-		path=<js>"/"</js>,
-		title=<js>"My Microservice"</js>,
-		description=<js>"Top-level resources page"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			widgets={
-				ContentTypeMenuItem.<jk>class</jk>,
-				StyleMenuItem.<jk>class</jk>
-			},
-			navlinks={
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			}
-		),
-		children={
-			HelloWorldResource.<jk>class</jk>,
-			ConfigResource.<jk>class</jk>,
-			LogsResource.<jk>class</jk>
-		}
+		title=<js>"$MF{Application-Title}"</js>,
+		...
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
-		<jc>// No code</jc>
-	}
-		</p>
-	<li>
-		<l>my-microservice.cfg</l> - The external configuration file. 
-		<br>Contains various useful settings.
-		<br>Can be used for your own resource configurations.
-		<br><br>
-		<p class='bcode w800'>
-	<cc>#=======================================================================================================================
-	# Basic configuration file for REST microservices
-	# Subprojects can use this as a starting point.
-	#=======================================================================================================================</cc>
-	
-	<cc># What to do when the config file is saved.
-	# Possible values:
-	# 	NOTHING - Don't do anything. (default)
-	#	RESTART_SERVER - Restart the Jetty server.
-	#	RESTART_SERVICE - Shutdown and exit with code '3'.</cc>
-	<ck>saveConfigAction</ck> = <cv>RESTART_SERVER</cv>
-	
-	<cc>#=======================================================================================================================
-	# Jetty settings
-	#=======================================================================================================================</cc>
-	<cs>[Jetty]</cs>
-	
-	<cc># Path of the jetty.xml file used to configure the Jetty server.</cc>
-	<ck>config</ck> = <cv>jetty.xml</cv>
-	
-	<cc># Resolve Juneau variables in the jetty.xml file.</cc>
-	<ck>resolveVars</ck> = <cv>true</cv>
-	
-	<cc># Port to use for the jetty server.
-	# You can specify multiple ports.  The first available will be used.  '0' indicates to try a random port.
-	# The resulting available port gets set as the system property "availablePort" which can be referenced in the 
-	# jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).</cc>
-	<ck>port</ck> = <cv>10000,0,0,0</cv>
-	
-	<cc>#=======================================================================================================================
-	# REST settings
-	#=======================================================================================================================</cc>
-	<cs>[REST]</cs>
-	
-	<cc># Stylesheet to use for HTML views.
-	# The default options are:
-	#  - servlet:/styles/juneau.css
-	#  - servlet:/styles/devops.css
-	# Other stylesheets can be referenced relative to the servlet package or working directory.</cc>
-	<ck>stylesheet</ck> = <cv>servlet:/styles/devops.css</cv>
-	
-	<cc>#=======================================================================================================================
-	# Console settings
-	#=======================================================================================================================</cc>
-	<cs>[Console]</cs>
-	
-	<ck>enabled</ck> = <cv>true</cv>
-	
-	<cc># List of available console commands.
-	# These are classes that implements ConsoleCommand that allow you to submit commands to the microservice via
-	# the console.
-	# When listed here, the implementations must provide a no-arg constructor.
-	# They can also be provided dynamically by overriding the Microservice.createConsoleCommands() method.</cc>
-	<ck>commands</ck> = 
-		<cv>org.apache.juneau.microservice.console.ExitCommand,
-		org.apache.juneau.microservice.console.RestartCommand,
-		org.apache.juneau.microservice.console.HelpCommand</cv>
-		
-	<cc>#=======================================================================================================================
-	# Logger settings
-	#-----------------------------------------------------------------------------------------------------------------------
-	# See FileHandler Java class for details.
-	#=======================================================================================================================</cc>
-	<cs>[Logging]</cs>
+</p>
+</div><!-- END: 11.4 - juneau-microservice-core.Manifest -->
 
-	...
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.Config' id='juneau-microservice-core.Config'>11.5 - Config</a></h3>
+<div class='topic'><!-- START: 11.5 - juneau-microservice-core.Config -->
+<p>
+	The following methods can be used to define the configuration for your microservice using the powerful Config API:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#config(Config) config(Config)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#configName(String) configName(String)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} 
+	</ul>
+</ul>
+<p>
+	If you do not specify any of this information, we attempt to resolve it through the following methods:
+</p>
+<ol class='spaced-list'>
+	<li>
+		Resolve file first in working directory, then in classpath, using the following names:
+		<ol>
+			<li>
+				The <js>"configFile"</js> argument in the command line arguments passed in through the constructor.
+			<li>
+				The value of the <code>Main-Config</code> entry in the manifest file.
+			<li>
+				A config file in the same location and with the same name as the executable jar file.
+				(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
+		</ol>
+	<li>
+		Resolve any <js>"*.cfg"</js> file that can be found in the working directory.
+	<li>
+		Resolve any of the following files in the classpath:  <js>"juneau.cfg"</js>, <js>"system.cfg"</js>
+</ol>
+<p>
+	If no configuration file is found, and empty in-memory configuration is used.
+</p>
+<p>
+	The {@link org.apache.juneau.microservice.MicroserviceBuilder#configName(String) configName(String)} method allows you to explicitly specify the name
+	of the external configuration file location for your microservice.
+</p>
+<p class='bpcode w800'>
+	Microservice
+		.<jsm>create</jsm>()     
+		.config(<js>"my-files/MyMicroservice.cfg"</js>) 
+		.build()
+		.start()
+	;
+</p>
+<p>
+	By default, we try to find the file on the file system and then the classpath.
+	If located on the file system, then the configuration is writeable and the microservice can automatically 
+	listen for and react to changes in the configuration file on the file system.
+	If located on the classpath, then the configuration can still react to modifications made to it through
+	the Config API, but the changes cannot be persisted since the location prevents the file from being modified.
+</p>
+
+<p>
+	The {@link org.apache.juneau.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} method can be used to explicitly
+	specify a configuration store.
+	This can include your own custom configuration store, such as one that's implemented in a relational database.
+</p>
+<p class='bpcode w800'>
+	Microservice
+		.<jsm>create</jsm>()     
+		.configStore(<jk>new</jk> MyConfigSqlStore()) 
+		.configName(<js>"MyConfig"</js>) 
+		.build()
+		.start()
+	;
+</p>
+<p>
+	The {@link org.apache.juneau.microservice.MicroserviceBuilder#config(Config) config(Config)} method can be used to explicitly specify a {@link org.apache.juneau.config.Config} 
+	file as the microservice configuration.  When this method is used, the above two methods are bypassed entirely.
+</p>
+<p class='bpcode w800'>
+	Config config = <jsm>getMyOwnConfig</jsm>();
+
+	Microservice
+		.<jsm>create</jsm>()     
+		.config(config) 
+		.build()
+		.start()
+	;
+</p>
+<p>
+	Once the configuration is resolved, it is made as the system default configuration available through the {@link org.apache.juneau.config.Config#getSystemDefault()}.
+	<br>This in turn allows it to be used by REST resources that reference the system default configuration via the <js>"SYSTEM_DEFAULT"</js> such as those
+	implementing the {@link org.apache.juneau.rest.BasicRestConfig} interface.
+<p>
+<h5 class='figure'>BasicRestConfig.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		config=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
+		...
+	)
+</p>
+<p>
+	The {@link org.apache.juneau.microservice.Microservice#getConfig()} method can be used to get access to the configuration.
+</p>
+<p class='bpcode w800'>
+	Config c = Microservice.<jsm>getInstance</jsm>().getConfig();
 	
+	File logDir = c.getObject(<js>"Logging/logDir"</js>, File.<jk>class</jk>);
+	boolean append = c.getBoolean(<js>"Logging/append"</js>);
+	String format = c.getString(<js>"Logging/format"</js>, <js>"[{date} {level}] {msg}%n"</js>);
+	long limit = c.getLong(<js>"Logging/limit"</js>);
+	Map&lt;String,Level&gt; levels = c.getObject(<js>"Logging/levels"</js>, Map.<jk>class</jk>, String.<jk>class</jk>, Level.<jk>class</jk>);
+</p>	
+<p>
+	Changes to the configuration file can trigger notifications that can be used to restart your microservice or make various other
+	on-the-fly changes.  
+	This can be accomplished by either overriding the {@link org.apache.juneau.microservice.Microservice#onConfigChange(List)} or implementing
+	a listener and using the {@link org.apache.juneau.microservice.MicroserviceListener#onConfigChange(Microservice,List)} methods.
+	These will be described in detail later.
+</p>
+
+<h5 class='section'>See Also:</h5>
+<ul class='doctree'>
+	<li class='link'>{@doc juneau-config}
+</ul>
+</div><!-- END: 11.5 - juneau-microservice-core.Config -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.SystemProperties' id='juneau-microservice-core.SystemProperties'>11.6 - System properties</a></h3>
+<div class='topic'><!-- START: 11.6 - juneau-microservice-core.SystemProperties -->
+<p>
+	As a convenience, the <code>SystemProperties</code> section of your configuration file can be used to define system
+	properties to set during initialization of your microservice:
+</p>
+<p class='bpcode w800'>
 	<cc>#=======================================================================================================================
 	# System properties
 	#-----------------------------------------------------------------------------------------------------------------------
@@ -23699,152 +23974,84 @@
 	
 	<cc># Jetty logging level
 	# Possible values:  ALL, DEBUG, INFO, WARN, OFF</cc>
-	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN
+	<ck>org.eclipse.jetty.LEVEL</ck> = <cv>WARN</cv>
 	
-	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>					
-	</p>
-	<li>
-		<l>jetty.xml</l> - The Jetty configuration file. 
-		<br>A bare-bones config file that can be extended to use any Jetty features.
-		<br><br>
-		<p class='bcode w800'>
-	<xt>&lt;Configure</xt> <xa>id</xa>=<xs>"ExampleServer"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.Server"</xs>&gt;</xt>
-	
-		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"connectors"</xs><xt>&gt;</xt>
-			<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Connector"</xs><xt>&gt;</xt>
-				<xt>&lt;Item&gt;</xt>
-					<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.ServerConnector"</xs><xt>&gt;</xt>
-						<xt>&lt;Arg&gt;</xt>
-							<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"ExampleServer"</xs><xt>/&gt;</xt>
-						<xt>&lt;/Arg&gt;</xt>
-						<xt>&lt;Set</xt> <xa>name</xa>=<xs>"port"</xs><xt>&gt;</xt>$S{availablePort,8080}<xt>&lt;/Set&gt;</xt>
-					<xt>&lt;/New&gt;</xt>
-				<xt>&lt;/Item&gt;</xt>
-			<xt>&lt;/Array&gt;</xt>
-		<xt>&lt;/Set&gt;</xt>
-	
-		<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
-			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"contextPath"</xs><xt>&gt;/&lt;/Set&gt;</xt>
-			<xt>&lt;Call</xt> <xa>name</xa>=<xs>"addServlet"</xs><xt>&gt;</xt>
-				<xt>&lt;Arg&gt;</xt>org.apache.juneau.microservice.sample.RootResources<xt>&lt;/Arg&gt;</xt>
-				<xt>&lt;Arg&gt;</xt>/*<xt>&lt;/Arg&gt;</xt>
-			<xt>&lt;/Call&gt;</xt>
-			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"sessionHandler"</xs><xt>&gt;</xt>
-				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.session.SessionHandler"</xs><xt>/&gt;</xt>
-			<xt>&lt;/Set&gt;</xt>
-		<xt>&lt;/New&gt;</xt>
-	
-		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handler"</xs><xt>&gt;</xt>
-			<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.handler.HandlerCollection"</xs><xt>&gt;</xt>
-				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"handlers"</xs><xt>&gt;</xt>
-					<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Handler"</xs><xt>&gt;</xt>
-						<xt>&lt;Item&gt;</xt>
-							<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"context"</xs><xt>/&gt;</xt>
-						<xt>&lt;/Item&gt;</xt>
-						<xt>&lt;Item&gt;</xt>
-							<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.handler.DefaultHandler"</xs><xt>/&gt;</xt>
-						<xt>&lt;/Item&gt;</xt>
-					<xt>&lt;/Array&gt;</xt>
-				<xt>&lt;/Set&gt;</xt>
-			<xt>&lt;/New&gt;</xt>
-		<xt>&lt;/Set&gt;</xt>
-	
-		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"requestLog"</xs><xt>&gt;</xt>
-			<xt>&lt;New</xt> <xa>id</xa>=<xs>"RequestLogImpl"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.NCSARequestLog"</xs><xt>&gt;</xt>
-				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filename"</xs><xt>&gt;&lt;Property</xt> <xa>name</xa>=<xs>"jetty.logs"</xs> <xa>default</xa>=<xs>"$C{Logging/logDir,logs}"</xs><xt>/&gt;</xt>/jetty-requests.log<xt>&lt;/Set&gt;</xt>
-				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filenameDateFormat</xs><xt>"&gt;</xt>yyyy_MM_dd<xt>&lt;/Set&gt;</xt>
-				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogTimeZone"</xs><xt>&gt;</xt>GMT<xt>&lt;/Set&gt;</xt>
-				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"retainDays"</xs><xt>&gt;</xt>90<xt>&lt;/Set&gt;</xt>
-				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"append"</xs><xt>&gt;</xt>false<xt>&lt;/Set&gt;</xt>
-				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogLatency"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
-			<xt>&lt;/New&gt;</xt>
-		<xt>&lt;/Set&gt;</xt>
-	
-	    <xt>&lt;Get</xt> <xa>name</xa>=<xs>"ThreadPool"</xs><xt>&gt;</xt>
-	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"minThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>10<xt>&lt;/Set&gt;</xt>
-	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"maxThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>100<xt>&lt;/Set&gt;</xt>
-	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"idleTimeout"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>60000<xt>&lt;/Set&gt;</xt>
-	        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"detailedDump"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
-	    <xt>&lt;/Get&gt;</xt>
-	<xt>&lt;/Configure&gt;</xt>
-		</p>
+	<ck>derby.stream.error.file</ck> = <cv>$C{Logging/logDir}/derby-errors.log</cv>
+</p>
+</div><!-- END: 11.6 - juneau-microservice-core.SystemProperties -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.VarResolver' id='juneau-microservice-core.VarResolver'>11.7 - VarResolver</a></h3>
+<div class='topic'><!-- START: 11.7 - juneau-microservice-core.VarResolver -->
+<p>
+	The Microservice API incorporates the {@doc juneau-svl Simple Variable Resolver} API.
+</p>
+<p>
+	The variable resolver can be augmented through the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#vars(Class) vars(Class...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#varContext(String, Object) varContext(String,Object)} 
+	</ul>
 </ul>
 <p>
-	At this point, you're ready to start the microservice from your workspace.
-</p>
-</div><!-- END: 11.2.1 - juneau-microservice-core.GettingStarted.Installing -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted.Running' id='juneau-microservice-core.GettingStarted.Running'>11.2.2 - Running in Eclipse</a></h4>
-<div class='topic'><!-- START: 11.2.2 - juneau-microservice-core.GettingStarted.Running -->
-<p>
-	The <l>my-microservice.launch</l> file is already provided to allow you to quickly start
-	your new microservice.
-</p>
-<p>
-	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-microservice</b> and click <b>Run</b>.
-	<br>In your console view, you should see the following output:
+	A typical usage pattern is shown below:
 </p>
 <p class='bpcode w800'>
-	Running class 'RestMicroservice' using config file 'my-microservice.cfg'.
-	Server started on port 10000
-	
-	List of available commands:
-		exit -- Shut down service
-		restart -- Restarts service
-		help -- Commands help
-	
-	> 			
+	<jc>// $A used in variable resolver.</jc>
+	VarResolver vr = Microservice.<jsm>getInstance</jsm>().getVarResolver();
+ 	System.<jsf>out</jsf>.println(vr.resolve(<js>"Main class is set to $MF{Main-Class, unknown}"</js>));
 </p>
 <p>
-	Now open your browser and point to <l>http://localhost:10000</l>.  
-	You should see the following:
-</p>
-<p class='bpcode w400'>
-	http://localhost:10000
-</p>			
-<img class='bordered w400' src='doc-files/juneau-microservice-server.Running.1.png'>
-<p>
-	You have started a REST interface on port 10000.
-	<br>You can enter the command <code>exit</code> to shut it down.
-</p>
-</div><!-- END: 11.2.2 - juneau-microservice-core.GettingStarted.Running -->
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.GettingStarted.Building' id='juneau-microservice-core.GettingStarted.Building'>11.2.3 - Building and Running from Command-Line</a></h4>
-<div class='topic'><!-- START: 11.2.3 - juneau-microservice-core.GettingStarted.Building -->
-<p>
-	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
-	as an executable uber-jar.
+	The variable resolver becomes much more powerful when used in REST resource annotations which will be
+	described latter in {@doc juneau-microservice-jetty}
 </p>
 <p>
-	The easiest way to build your microservice is to run the following from the project root.
-</p>
-<p class='bpcode w800'>
-	mvn clean install
-</p>
-<p>
-	Your <code>target</code> directory should now contain the following files:
+	By default, support for the following variables are provided:
 </p>
 <ul>
-	<li><code>my-microservice-1.0.jar</code>
-	<li><code>my-microservice.cfg</code>
-	<li><code>jetty.xml</code>
+	<li><code>$S{key[,default]}</code> - {@link org.apache.juneau.svl.vars.SystemPropertiesVar}
+	<li><code>$E{key[,default]}</code> - {@link org.apache.juneau.svl.vars.EnvVariablesVar}
+	<li><code>$A{key[,default]}</code> - {@link org.apache.juneau.svl.vars.ArgsVar}
+	<li><code>$C{key[,default]}</code> - {@link org.apache.juneau.config.vars.ConfigVar}
+	<li><code>$MF{key[,default]}</code> - {@link org.apache.juneau.svl.vars.ManifestFileVar}
+	<li><code>$IF{arg,then[,else]}</code> - {@link org.apache.juneau.svl.vars.IfVar}
+	<li><code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code> - {@link org.apache.juneau.svl.vars.SwitchVar}
+	<li><code>$CO{arg[,arg2...]}</code> - {@link org.apache.juneau.svl.vars.CoalesceVar}
+	<li><code>$PM{arg,pattern}</code> - {@link org.apache.juneau.svl.vars.PatternMatchVar}
+	<li><code>$UC{arg}</code> - {@link org.apache.juneau.svl.vars.UpperCaseVar}
+	<li><code>$LC{arg}</code> - {@link org.apache.juneau.svl.vars.LowerCaseVar}
+	<li><code>$NE{arg}</code> - {@link org.apache.juneau.svl.vars.NotEmptyVar}
 </ul>
+</div><!-- END: 11.7 - juneau-microservice-core.VarResolver -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.ConsoleCommands' id='juneau-microservice-core.ConsoleCommands'>11.8 - Console Commands</a></h3>
+<div class='topic'><!-- START: 11.8 - juneau-microservice-core.ConsoleCommands -->
 <p>
-	To start from a command line, run the following command from inside your <code>target</code> directory:
+	The Microservice API provides support for simple console commands.
 </p>
 <p class='bpcode w800'>
-	java -jar my-microservice-1.0.jar
+	<jk>public static void</jk> main(String[] args) {
+		Microservice
+			.<jsm>create</jsm>() 
+			.args(args)
+			.build()
+			.start()
+			.startConsole()    <jc>// Start console.</jc>
+			.join()
+		;
+	}
 </p>
 <p>
-	You should see the following console output:
+	When started, the console renders the following output:
 </p>
 <p class='bpcode w800'>
-	Running class 'RestMicroservice' using config file 'my-microservice.cfg'.
-	Server started on port 10000
+	Running class 'Microservice' using config file 'my-microservice.cfg'.
 	
 	List of available commands:
 		exit -- Shut down service
@@ -23854,480 +24061,264 @@
 	> 			
 </p>
 <p>
-	If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, 
-	then this microservice is already running elsewhere and so it cannot bind to port 10000.
-</p>
-</div><!-- END: 11.2.3 - juneau-microservice-core.GettingStarted.Building -->
-</div><!-- END: 11.2 - juneau-microservice-core.GettingStarted -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.Manifest' id='juneau-microservice-core.Manifest'>11.3 - Manifest File</a></h3>
-<div class='topic'><!-- START: 11.3 - juneau-microservice-core.Manifest -->
-<p>
-	The generated <l>META-INF/MANIFEST.MF</l> file is used to describe the microservice. 
-	<br>If you open it, you'll see the following:
-</p>
-<p class='bpcode w800'>
-	<mk>Main-Class</mk>: <mv>org.apache.juneau.microservice.jetty.RestMicroservice</mv>
-	<mk>Main-ConfigFile</mk>: <mv>my-microservice.cfg</mv>
-<p>
- 	The <mk>Main-Class</mk> entry is the standard manifest entry describing the entry point for the executable jar.
- 	<br>In most cases, this value will always be <l>org.apache.juneau.microservice.jetty.RestMicroservice</l>.
- 	<br>However, it is possible to extend this class or implement your own microservice, in which case you'll need
- 	to modify this value to point to the new class.
-</p>
-<p>
-	The <mk>Main-ConfigFile</mk> entry points to the location of an external configuration file for our microservice.
-</p>		
-<p>
-	In addition to these predefined manifest entries, you can add your own particular entries to the manifest file
-	and access them through the Manifest API described next. 
-</p>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.Manifest.ManifestApi' id='juneau-microservice-core.Manifest.ManifestApi'>11.3.1 - Manifest API</a></h4>
-<div class='topic'><!-- START: 11.3.1 - juneau-microservice-core.Manifest.ManifestApi -->
-<p>
-	The {@link org.apache.juneau.microservice.Microservice#getManifest()} method is a static method that
-	can be used to retrieve the manifest file as a {@link org.apache.juneau.utils.ManifestFile}.  
-</p>
-<p class='bpcode w800'>
-	<jc>// Get Main-Class from manifest file.</jc>
-	String mainClass = Microservice.<jsm>getInstance</jsm>().getManifest().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
-</p>
-<p>
-	The {@link org.apache.juneau.utils.ManifestFile} class extends {@link org.apache.juneau.ObjectMap},
-	making it possible to retrieve entries as a wide variety of object types such as java primitives, arrays, collections, 
-	maps, or even POJOs serialized as JSON.
-</p>
-</div><!-- END: 11.3.1 - juneau-microservice-core.Manifest.ManifestApi -->
-</div><!-- END: 11.3 - juneau-microservice-core.Manifest -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.Config' id='juneau-microservice-core.Config'>11.4 - Config</a></h3>
-<div class='topic'><!-- START: 11.4 - juneau-microservice-core.Config -->
-<p>
-	The microservice config file is an external INI-style configuration file that is used to configure
-	your microservice.
-</p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
-	<li class='link'>{@doc juneau-config}
-</ul>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.Config.ConfigApi' id='juneau-microservice-core.Config.ConfigApi'>11.4.1 - Config File API</a></h4>
-<div class='topic'><!-- START: 11.4.1 - juneau-microservice-core.Config.ConfigApi -->
-<p>
-	There are 3 primary ways of getting access to the config file.
+	The builder methods for controlling the console are as follows:
 </p>
 <ul class='doctree'>
-	<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getConfig()} 
-		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
-	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getConfig()} 
-		<br>Any {@doc DefaultRestSvlVariables initialization-time variables} can be used.
-		<h5 class='figure'>Example usage:</h5>
-		<p class='bcode w800'>
-	<cc>#-------------------------------</cc>
-	<cc># Properties for MyHelloResource </cc>
-	<cc>#-------------------------------</cc>
-	<cs>[MyHelloResource]</cs>
-	<ck>greeting</ck> = <cv>Hello world!</cv> 
-				</p>
-				<p class='bcode w800'>
-	<ja>@RestResource</ja>(...)
-	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
-		<jc>// Access config file when initializing fields.</jc>
-		<jk>private</jk> String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
-		
-		<jc>// Or access config file in servlet init method.</jc>
-		<ja>@Override</ja> <jc>/* Servlet */</jc>
-		<jk>public void</jk> init() {
-			String greeting = getConfig().getString(<js>"MyHelloResource/greeting"</js>); 
-		}
-	}		
-		</p>
-		<p>
-			Additional user-defined variables can be defined at this level by adding a  
-			{@link org.apache.juneau.rest.annotation.HookEvent#INIT} hook method
-			and using the {@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
-		</p>
-	<li class='jm'>
-		{@link org.apache.juneau.rest.RestRequest#getConfig()} 
-		- An instance method to access it from inside a REST method.
-		<br>Any {@doc DefaultRestSvlVariables initialization-time or request-time variables} can be used.
-		
-		<h5 class='figure'>Example usage:</h5>
-		<p class='bcode w800'>
-	<cc>#-----------------------------</cc>
-	<cc># Contents of microservice.cfg </cc>
-	<cc>#-----------------------------</cc>
-	<cs>[MyHelloResource]</cs>
-	<ck>greeting</ck> = <cv>Hello $RP{person}!</cv> 
-	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$RP{person}}</cv> 
-				</p>
-				<p class='bcode w800'>
-	<cc>#---------------------------------</cc>
-	<cc># Contents of MyHelloResource.java </cc>
-	<cc>#---------------------------------</cc>
-	<ja>@RestResource</ja>(
-		path=<js>"/hello"</js>,
-		messages=<js>"nls/Messages"</js>,
-		...
-	)
-	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
-
-		<jd>/** Standard hello message. */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/{person}"</js>)
-		<jk>public</jk> String sayHello(RestRequest req) {
-			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/greeting"</js>);
-		}
-
-		<jd>/** Hello message in users language. */</jd>
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/localized/{person}"</js>)
-		<jk>public</jk> String sayLocalizedHello(RestRequest req) {
-			<jk>return</jk> req.getConfig().getString(<js>"MyHelloResource/localizedGreeting"</js>);
-		}
-	}		
-		</p>
-		<p class='bcode w800'>
-	<cc>#---------------------------------------</cc>
-	<cc># Contents of nls/Messages_en.properties </cc>
-	<cc>#---------------------------------------</cc>
-	<ck>MyHelloResource.HelloMessage</ck> = <cv>Hello {0}!</cv> 
-		</p>
-		<p>
-			Additional user-defined variables can be defined at this level by overriding the 
-			{@link org.apache.juneau.rest.RestContextBuilder#vars(Class...)} method.
-		</p>
+	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#consoleEnabled(boolean) consoleEnabled(boolean)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#consoleCommands(Class...) consoleCommands(Class...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} 
+	</ul>
 </ul>
 <p>
-	That <l>sayLocalizedHello()</l> example might need some explanation since there's a lot going on there.
-	<br>Here's what happens when an HTTP call is made to <l>GET /hello/localized/Bob</l>:
+	By default, the supported commands are pulled from the configuration file:
 </p>
-<ol class='spaced-list'>
-	<li>
-		The HTTP call matches the <l>/hello</l> path on the <l>MyHelloResource</l> class.
-	<li>
-		The HTTP call matches the <l>/localized/{person}</l> path on the <l>sayLocalizedHello()</l> method.
-	<li>
-		The request attribute <l>person</l> gets assigned the value <l>"Bob"</l>.
-	<li>
-		The call to <l>req.getConfig().getString("MyHelloResource/localizedGreeting")</l> 
-		finds the value <l>"$L{HelloMessage,$RP{person}}"</l>.
-	<li>
-		The arguments in the <l>$L{}</l> variable get resolved, resulting in <l>"$L{HelloMessage,Bob}"</l>.
-	<li>
-		The <l>$L{}</l> variable gets resolved to the message <l>"Hello {0}!"</l> in the localized properties 
-		file of the servlet based on the <l>Accept-Language</l> header on the request.
-	<li>
-		The arguments get replaced in the message resulting in <l>"Hello Bob!"</l>. 
-	<li>
-		The resulting message <l>"Hello Bob!"</l> is returned as a POJO to be serialized to whatever content 
-		type was specified on the <l>Accept</l> header on the request.
-</ol>
+<p class='bpcode w800'>
+	<cc>#=======================================================================================================================
+	# Console settings
+	#=======================================================================================================================</cc>
+	<cs>[Console]</cs>
+	
+	<ck>enabled = <cv>true</cv>
+	
+	<cc># List of available console commands.
+	# These are classes that implements ConsoleCommand that allow you to submit commands to the microservice via
+	# the console.
+	# When listed here, the implementations must provide a no-arg constructor.
+	# They can also be provided dynamically by overriding the Microservice.createConsoleCommands() method.</cc>
+	<ck>commands</ck> = 
+		<cv>org.apache.juneau.microservice.console.ExitCommand,
+		org.apache.juneau.microservice.console.RestartCommand,
+		org.apache.juneau.microservice.console.HelpCommand</cv>
+</p>
 <p>
-	This particular example is needlessly complex, but it gives an idea of how variables can be used 
-	recursively to produce sophisticated results
+	New commands can be added by adding them to the configuration file, or programmatically using the {@link org.apache.juneau.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
+	builder method.
 </p>
-</div><!-- END: 11.4.1 - juneau-microservice-core.Config.ConfigApi -->
-</div><!-- END: 11.4 - juneau-microservice-core.Config -->
+<p>
+	The API for defining console commands is shown below: 
+</p>
+<ul class='doctree'>
+	<li class='jac'>{@link org.apache.juneau.microservice.console.ConsoleCommand}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.console.ConsoleCommand#execute(Scanner,PrintWriter,Args) execute(Scanner,PrintWriter,Args)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.console.ConsoleCommand#getDescription() getDescription()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.console.ConsoleCommand#getExamples() getExamples()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.console.ConsoleCommand#getInfo() getInfo()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.console.ConsoleCommand#getName() getName()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.console.ConsoleCommand#getSynopsis() getSynopsis()} 
+	</ul>
+</ul>
+<p>
+	By default, the console input and output are taken from {@link java.lang.System.in} and {@link java.lang.System.out}.
+	These can be overridden using the {@link org.apache.juneau.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} method.
+</p>
+</div><!-- END: 11.8 - juneau-microservice-core.ConsoleCommands -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.ResourceClasses' id='juneau-microservice-core.ResourceClasses'>11.5 - Resource Classes</a></h3>
-<div class='topic'><!-- START: 11.5 - juneau-microservice-core.ResourceClasses -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.Logging' id='juneau-microservice-core.Logging'>11.9 - Logging</a></h3>
+<div class='topic'><!-- START: 11.9 - juneau-microservice-core.Logging -->
 <p>
-	Now let's take a look at the resource classes themselves.  
-	<br>The top-level page...
+	The Microservice API provides build-in but configurable and overridable support for logging.
+</p>
+<p>
+	The method for configuring logging is as follows:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#logConfig(LogConfig) logConfig(LogConfig)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#logger(Logger) logger(Logger)} 
+	</ul>
+</ul>
+<p>
+	If not specified, the logging configuration is pulled in from the configuration file:
 </p>
 <p class='bpcode w800'>
-	http://localhost:10000
-</p>			
-<img class='bordered w800' src='doc-files/juneau-microservice-server.Running.1.png'>
+	<jc>#=======================================================================================================================
+	# Logger settings
+	#-----------------------------------------------------------------------------------------------------------------------
+	# See FileHandler Java class for details.
+	#=======================================================================================================================</jc>
+	<cs>[Logging]</cs>
+	
+	<jc># The directory where to create the log file.
+	# Default is "."</jc>
+	<ck>logDir</ck> = <cv>logs</cv>
+	
+	<jc># The name of the log file to create for the main logger.
+	# The logDir and logFile make up the pattern that's passed to the FileHandler
+	# constructor.
+	# If value is not specified, then logging to a file will not be set up.</jc>
+	<ck>logFile</ck> = <cv>microservice.%g.log</cv>
+	
+	<jc># Whether to append to the existing log file or create a new one.</jc>
+	<ck>append</ck> = <cv>false</cv>
+	
+	<jc># The SimpleDateFormat format to use for dates.</jc>
+	<ck>dateFormat</ck> = <cv>yyyy.MM.dd hh:mm:ss</cv>
+	
+	<jc># The log message format.
+	# The value can contain any of the following variables:
+	# 	{date} - The date, formatted per dateFormat.
+	#	{class} - The class name.
+	#	{method} - The method name.
+	#	{logger} - The logger name.
+	#	{level} - The log level name.
+	#	{msg} - The log message.
+	#	{threadid} - The thread ID.
+	#	{exception} - The localized exception message.</jc>
+	<ck>format</ck> = <cv>[{date} {level}] {msg}%n</cv>
+	
+	<jc># The maximum log file size.
+	# Suffixes available for numbers.
+	# See Config.getInt(String,int) for details.</jc>
+	<ck>limit</ck> = <cv>1M</cv>
+	
+	<jc># Max number of log files.</jc>
+	<ck>count</ck> = <cv>5</cv>
+	
+	<jc># Default log levels.
+	# Format is lax-JSON.
+	# Keys are logger names.
+	# Values are serialized Level POJOs (SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST)</jc>
+	<ck>levels</ck> = 
+		<cv>{ 
+			'': 'WARNING', 
+			org.apache.juneau: 'WARNING', 
+			org.eclipse.jetty: 'WARNING' 
+		}</cv>
+	
+	<jc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
+	# Useful for preventing log files from filling up with duplicate stack traces.</jc>
+	<ck>useStackTraceHashes</ck> = <cv>true</cv>
+	
+	<jc># The default level for the console logger.
+	# Values are serialized Level POJOs (SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST)</jc>
+	<ck>consoleLevel</ck> = <cv>WARNING</cv>
+	
+	<jc># The default level for the file logger.
+	# Values are serialized Level POJOs (SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST)</jc>
+	<ck>fileLevel</ck> = <cv>INFO</cv>
+</p>
 <p>
-	...is generated by this class...
+	The logging configuration can also be defined programmatically through the following API:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.LogConfig}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#create() create()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#append() append()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#consoleLevel(Level) consoleLevel(Level)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#count(int) count(int)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#fileLevel(Level) fileLevel(Level)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#formatter(Formatter) formatter(Formatter)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#level(String,Level) level(String,Level)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#levels(Map) levels(Map)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#limit(int) limit(int)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#logDir(String) logDir(String)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#logFile(String) logFile(String)} 
+	</ul>
+</ul>
+<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		path=<js>"/"</js>,
-		title=<js>"My Microservice"</js>,
-		description=<js>"Top-level resources page"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			}
-		),
-		children={
-			HelloWorldResource.<jk>class</jk>,
-			ConfigResource.<jk>class</jk>,
-			LogsResource.<jk>class</jk>
-		}
-	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
-		<jc>// No code! </jc>
+	<jk>public static void</jk> main(String[] args) {
+		
+		LogConfig logConfig = LogConfig
+			.<jsm>create</jsm>()
+			.append(<jk>true</jk>)
+			.consoleLevel(<jsf>FINE</jsf>)
+			.level(<js>"org.mylogger"</js>, <jsf>FINER</jsf>)
+			.logDir(<js>"my-log-files"</js>);
+		
+		Microservice
+			.<jsm>create</jsm>() 
+			.args(args)
+			.logConfig(logConfig)
+			.build()
+			.start()
+			.join()
+		;
 	}
 </p>
-<ul class='spaced-list'>
-	<li>
-		The </l>title</l> and <l>description</l> annotations define the titles on the page.
-		<br>These can be globalized using <l>$L{...}</l> variables, or by defining specially-named properties in the 
-		properties file for the resource.
-	<li>
-		In this case, the <l>path</l> annotation defines the context root of your application since it was 
-		not specified in the manifest or config file.
-		<br>Therefore, this resource is mapped to <l>http://localhost:10000</l>.
-	<li>
-		The <l>children</l> annotation make up the list of child resources.
-		<br>These child resources can be anything that extends from <l>Servlet</l>, although usually
-		they will be subclasses of {@link org.apache.juneau.rest.BasicRestServlet} or other resource groups.
+<p>
+	If you wish to bypass the default logging configuration entirely, you can pass in your own logger via
+	the {@link org.apache.juneau.microservice.MicroserviceBuilder#logger(Logger)} method. 
+</p>
+<p>
+	In addition to configuring the built-in Java logging framework, the following convenience methods are also
+	provided on the {@link org.apache.juneau.microservice.Microservice} class for logging.
+</p>
+
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.microservice.Microservice}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getLogger() getLogger()} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#out(MessageBundle,String,Object...) out(MessageBundle,String,Object...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#err(MessageBundle,String,Object...) err(MessageBundle,String,Object...)} 
+	</ul>
 </ul>
-<p>
-	If you click the <l>helloWorld</l> link in your application, you'll get a simple hello world message:
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/helloWorld
-</p>			
-<img class='bordered w800' src='doc-files/juneau-microservice-server.ResourceClasses.1.png'>
-<p>
-	...which is generated by this class...
-</p>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		path=<js>"/helloWorld"</js>,
-		title=<js>"Hello World example"</js>,
-		description=<js>"Simplest possible REST resource"</js>
-	)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
-	
-		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/*"</js>)
-		<jk>public</jk> String sayHello() {
-			<jk>return</jk> <js>"Hello world!"</js>;
-		}
-	}		
-</p>
-</div><!-- END: 11.5 - juneau-microservice-core.ResourceClasses -->
+</div><!-- END: 11.9 - juneau-microservice-core.Logging -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.PredefinedResourceClasses' id='juneau-microservice-core.PredefinedResourceClasses'>11.6 - Predefined Resource Classes</a></h3>
-<div class='topic'><!-- START: 11.6 - juneau-microservice-core.PredefinedResourceClasses -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-core.Listeners' id='juneau-microservice-core.Listeners'>11.10 - Listeners</a></h3>
+<div class='topic'><!-- START: 11.10 - juneau-microservice-core.Listeners -->
 <p>
-	The following predefined resource classes are also provided for easy inclusion into your microservice:
+	As mentioned previously, the lifecycle methods for the {@link org.apache.juneau.microservice.Microservice} class are explicitly
+	defined as non-final so that they can be overridden by subclasses.
+</p>
+<p>
+	In addition to this support, an interface for defining event listeners for your microservice:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.microservice.resources.ConfigResource}
-		- View and modify the external INI config file.
-	<li class='jc'>{@link org.apache.juneau.microservice.resources.DirectoryResource}
-		- View and modify file system directories.
-	<li class='jc'>{@link org.apache.juneau.microservice.resources.LogsResource}
-		- View and control generated log files.
-	<li class='jc'>{@link org.apache.juneau.microservice.resources.SampleRootResource}
-		- A sample root resource class to get started from.
-	<li class='jc'>{@link org.apache.juneau.microservice.resources.ShutdownResource}
-		- Shutdown and/or restart the JVM.
-</ul>
-</div><!-- END: 11.6 - juneau-microservice-core.PredefinedResourceClasses -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.RestMicroservice' id='juneau-microservice-core.RestMicroservice'>11.7 - RestMicroservice</a></h3>
-<div class='topic'><!-- START: 11.7 - juneau-microservice-core.RestMicroservice -->
-<p>
-	The {@link org.apache.juneau.microservice.RestMicroservice} class is the main application entry-point for REST 
-	microservices. 
-</p>
-<p>
-	The class hierarchy is:
-</p>
-<ul class='doctree'>
-	<li class='jac'>
-		{@link org.apache.juneau.microservice.Microservice} 
-		- Abstract class that defines simple start/stop methods and access to the manifest file, config file, and 
-		arguments.
-		<ul>
-			<li class='jc'>
-				{@link org.apache.juneau.microservice.RestMicroservice} 
-				- Specialized microservice for starting up REST interfaces using Jetty and specifying REST servlets
-				through the manifest file or config file.
-		</ul>
-	</li>
+	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#listener(MicroserviceListener) listener(MicroserviceListener)} 
+	</ul>
+	<li class='jic'>{@link org.apache.juneau.microservice.MicroserviceListener}
+	<ul>
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onStart(Microservice) onStart(Microservice)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onStop(Microservice) onStop(Microservice)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents) onConfigChange(Microservice,ConfigEvents)} 
+	</ul>
+	<li class='jac'>{@link org.apache.juneau.microservice.BasicMicroserviceListener}
 </ul>
 <p>
-	Refer to the Javadocs for these class for more information.
-</p>
-
-<!-- ==================================================================================================== -->
-
-<h4 class='topic ' onclick='toggle(this)'><a href='#juneau-microservice-core.RestMicroservice.Extending' id='juneau-microservice-core.RestMicroservice.Extending'>11.7.1 - Extending RestMicroservice</a></h4>
-<div class='topic'><!-- START: 11.7.1 - juneau-microservice-core.RestMicroservice.Extending -->
-<p>
-	This example shows how the {@link org.apache.juneau.microservice.RestMicroservice} class
-	can be extended to implement lifecycle listener methods or override existing methods.
-	<br>We'll create a new class <l>com.foo.SampleCustomRestMicroservice</l>.
-</p>
-<p>
-	First, the manifest file needs to be modified to point to our new microservice:
+	This listener API can be used for listening for and reacting to configuration changes on the file system.
 </p>
 <p class='bpcode w800'>
-	<mk>Main-Class:</mk> com.foo.SampleCustomRestMicroservice
-</p>
-<p>
-	Then we define the following class:
-</p>
-<p class='bpcode w800'>
-	<jd>/**
-	 * Sample subclass of a RestMicroservice that provides customized behavior.
-	 * This class must be specified in the Main-Class entry in the manifest file and optionally
-	 * 	a Main-ConfigFile entry.
-	 */</jd>
-	<jk>public class</jk> SampleCustomRestMicroservice <jk>extends</jk> RestMicroservice {
+	<jk>public class</jk> MyMicroserviceListener <jk>extends</jk> BasicMicroserviceListener {
 	
-		<jd>/**
-		 * Must implement a main method and call start()!
-		 */</jd>
-		<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
-			<jk>new</jk> SampleCustomRestMicroservice(args).start().join();
+		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
+		<jk>public void</jk> onConfigChange(Microservice microservice, ConfigEvents events) {
+			
+			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
+			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
+				microservice.stop().start();
 		}
+	}
+</p>
+<p>
+	Note that the {@link org.apache.juneau.microservice.Microservice#onConfigChange(ConfigEvents)} method can also be overridden
+	to react to configuration changes as well:
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyMicroservice <jk>extends</jk> Microservice {
 	
-		<jd>/**
-		 * Must implement a constructor!
-		 * 
-		 * <ja>@param</ja> args Command line arguments. 
-		 * <ja>@throws</ja> Exception 
-		 */</jd>
-		<jk>public</jk> SampleCustomRestMicroservice(String[] args) <jk>throws</jk> Exception {
-			<jk>super</jk>(args);
+		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
+		<jk>public void</jk> onConfigChange(ConfigEvents events) {
+			
+			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
+			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
+				<jk>this</jk>.stop().start();
 		}
+	}
 </p>
-<p>
-	The microservice APIs provide several useful methods that can be used or extended.
-</p>
-<h5 class='section'>See Also:</h5>
-<ul class='doctree'>
-	<li class='jac'>{@link org.apache.juneau.microservice.Microservice}
-	<li class='jc'>{@link org.apache.juneau.microservice.RestMicroservice}
-</ul>
-</div><!-- END: 11.7.1 - juneau-microservice-core.RestMicroservice.Extending -->
-</div><!-- END: 11.7 - juneau-microservice-core.RestMicroservice -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-core.UiCustomization' id='juneau-microservice-core.UiCustomization'>11.8 - UI Customization</a></h3>
-<div class='topic'><!-- START: 11.8 - juneau-microservice-core.UiCustomization -->
-<p>
-	The Microservice project contains a <code>files/htdocs</code> working directly folder with predefined stylesheets and
-	images.
-</p>
-<img style='width:200px' src='doc-files/juneau-microservice.UiCustomization.1.png'>
-<p>
-	These files can be used to tailor the look-and-feel of your microservice.
-</p>
-<p class='bpcode w800'>
-	http://localhost:10000/helloWorld
-</p>
-<img class='bordered w800' src='doc-files/juneau-rest-server.UiCustomization.1.png'>
-<p>
-	The REST configuration section of your microservice configuration file can be used to tailor the header and footer on the pages:
-</p>
-<p class='bpcode w800'>
-	<cc>#=======================================================================================================================
-	# REST settings
-	#=======================================================================================================================</cc>
-	<cs>[REST]</cs>
-	
-	<ck>staticFiles</ck> = <cv>htdocs:files/htdocs</cv>
-	
-	<cc># Stylesheet to use for HTML views.</cc>
-	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
-	
-	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
-	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
-	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
-	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
-	
-	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
-	<ck>header</ck> = 
-		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;</cv>
-			<cv>&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;</cv>
-		<cv>&lt;/a&gt;</cv>
-	<ck>footer</ck> = 
-		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;</cv>
-			<cv>&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;</cv>
-		<cv>&lt;/a&gt;</cv>
-</p>
-<p>
-	The {@link org.apache.juneau.rest.BasicRestConfig} interface (which defines the default settings for {@link org.apache.juneau.rest.BasicRestServlet} 
-	pulls in this information using {@link org.apache.juneau.config.vars.ConfigVar $C} and {@link org.apache.juneau.rest.vars.UrlVar $U} variables:
-</p>
-<p class='bpcode w800'>
-	<ja>@RestResource</ja>(
-		...
-		<jc>// HTML-page specific settings</jc>
-		htmldoc=<ja>@HtmlDoc</ja>(
-	
-			<jc>// Default page header contents.</jc>
-			header={
-				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,  <jc>// Use @RestResource(title)</jc>
-				<js>"&lt;h2&gt;$R{methodSummary,resourceDescription}&lt;/h2&gt;"</js>, <jc>// Use either @RestMethod(summary) or @RestResource(description)</jc>
-				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
-			},
-	
-			<jc>// Default stylesheet to use for the page.
-			// Can be overridden from external config file.
-			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
-			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
-	
-			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
-			// Use it to add a favicon link to the page.</jc>
-			head={
-				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
-			},
-	
-			<jc>// No default page footer contents.
-			// Can be overridden from external config file.</jc>
-			footer=<js>"$C{REST/footer}"</js>
-		),
-	
-		<jc>// Optional external configuration file.</jc>
-		config=<js>"$S{juneau.configFile}"</js>,
-	
-		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
-		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
-		// By default, we define static files through the external configuration file.</jc>
-		staticFiles=<js>"$C{REST/staticFiles}"</js>
-	)
-	<jk>public interface</jk> BasicRestConfig {}
-</p>
-<p>
-	Note that the <code>files/htdocs</code> directory is mapped to <js>"servlet:/htdocs"</js> using the <code>staticFiles</code>
-	setting.  This allows those files to be served up through the servlet through the URL <js>"/[servlet-path]/htdocs"</js>
-</p>
-<p>
-	The theme files are externally accessible and can be modified to produce any look-and-feel you desire.
-	The microservice still works without the files directory.  An embedded <code>devops.css</code> is included in the jar as a default spreadsheet.
-</p>
-<p>
-	If you're testing out changes in the theme stylesheets, you may want to set the following system property that prevents caching of those files so 
-	that you don't need to restart the microservice each time a change is made:
-</p>
-<p class='bpcode w800'>
-	<cc>#=======================================================================================================================
-	# System properties
-	#-----------------------------------------------------------------------------------------------------------------------
-	# These are arbitrary system properties that are set during startup.
-	#=======================================================================================================================</cc>
-	<cs>[SystemProperties]</cs>
-	
-	<cc># Disable classpath resource caching.
-	# Useful if you're attached using a debugger and you're modifying classpath resources while running.</cc>
-	<ck>RestContext.useClasspathResourceCaching.b</ck> = <cv>false</cv>
-
-</p>
-</div><!-- END: 11.8 - juneau-microservice-core.UiCustomization -->
+</div><!-- END: 11.10 - juneau-microservice-core.Listeners -->
 </div><!-- END: 11 - juneau-microservice-core -->
 
 <!-- ==================================================================================================== -->

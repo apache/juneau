@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import java.util.*;
-
 import org.apache.juneau.config.event.*;
 
 /**
@@ -28,5 +26,5 @@ public class BasicMicroserviceListener implements MicroserviceListener {
 	public void onStop(Microservice microservice) {}
 
 	@Override /* MicroserviceListener */
-	public void onConfigChange(Microservice microservice, List<ConfigEvent> events) {}
+	public void onConfigChange(Microservice microservice, ConfigEvents events) {}
 }

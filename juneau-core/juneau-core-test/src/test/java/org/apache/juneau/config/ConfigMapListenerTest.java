@@ -40,7 +40,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(foo = baz)']", events);
 			}
 		};
@@ -67,7 +67,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(foo = baz)']", events);
 			}
 		};
@@ -96,7 +96,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(k = vb)','SET(k1 = v1b)']", events);
 			}
 		};
@@ -122,7 +122,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(k^* = kb # C)','SET(k1^* = k1b # C1)']", events);
 			}
 		};
@@ -154,7 +154,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(k^* = kb # Cb)','SET(k1^* = k1b # Cb1)']", events);
 			}
 		};
@@ -187,7 +187,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']", events);
 			}
 		};
@@ -219,7 +219,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)']", events);
 			}
 		};
@@ -249,7 +249,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(k3 = v3)']", events);
 			}
 		};
@@ -284,7 +284,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(k3 = v3)']", events);
 			}
 		};
@@ -329,7 +329,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['REMOVE_ENTRY(k)','REMOVE_ENTRY(S1/k1)','REMOVE_ENTRY(S2/k2)']", events);
 			}
 		};
@@ -360,7 +360,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals("['SET(k = v # cv)','SET(k1 = v1 # cv1)','SET(k2 = v2 # cv2)']", events);
 			}
 		};
@@ -406,7 +406,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals(eventList.poll(), events);
 			}
 		};
@@ -444,7 +444,7 @@ public class ConfigMapListenerTest {
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
-			public void check(List<ConfigEvent> events) throws Exception {
+			public void check(ConfigEvents events) throws Exception {
 				assertObjectEquals(eventList.poll(), events);
 			}
 		};
@@ -491,7 +491,7 @@ public class ConfigMapListenerTest {
 
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
-				public void check(List<ConfigEvent> events) throws Exception {
+				public void check(ConfigEvents events) throws Exception {
 					assertObjectEquals(eventList.poll(), events);
 				}
 			};
@@ -537,7 +537,7 @@ public class ConfigMapListenerTest {
 
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
-				public void check(List<ConfigEvent> events) throws Exception {
+				public void check(ConfigEvents events) throws Exception {
 					assertObjectEquals(eventList.poll(), events);
 				}
 			};
@@ -578,7 +578,7 @@ public class ConfigMapListenerTest {
 		}
 
 		@Override
-		public void onConfigChange(List<ConfigEvent> events) {
+		public void onConfigChange(ConfigEvents events) {
 			try {
 				check(events);
 			} catch (Exception e) {
@@ -588,7 +588,7 @@ public class ConfigMapListenerTest {
 				latch.countDown();
 		}
 
-		public void check(List<ConfigEvent> events) throws Exception {
+		public void check(ConfigEvents events) throws Exception {
 		}
 	}
 

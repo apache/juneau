@@ -765,7 +765,7 @@ public class Microservice implements ConfigEventListener {
 	}
 
 	@Override /* ConfigChangeListener */
-	public void onConfigChange(List<ConfigEvent> events) {
+	public void onConfigChange(ConfigEvents events) {
 		listener.onConfigChange(this, events);
 	}
 }

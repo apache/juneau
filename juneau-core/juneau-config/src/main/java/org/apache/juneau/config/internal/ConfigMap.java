@@ -37,7 +37,7 @@ public class ConfigMap implements ConfigStoreListener {
 	private final static AsciiSet MOD_CHARS = AsciiSet.create("#$%&*+^@~");
 
 	// Changes that have been applied since the last load.
-	private final List<ConfigEvent> changes = Collections.synchronizedList(new ArrayList<ConfigEvent>());
+	private final List<ConfigEvent> changes = Collections.synchronizedList(new ConfigEvents());
 
 	// Registered listeners listening for changes during saves or reloads.
 	private final Set<ConfigEventListener> listeners = Collections.synchronizedSet(new HashSet<ConfigEventListener>());
@@ -492,7 +492,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 	@Override /* ConfigStoreListener */
 	public void onChange(String newContents) {
-		List<ConfigEvent> changes = null;
+		ConfigEvents changes = null;
 		writeLock();
 		try {
 			if (! StringUtils.isEquals(contents, newContents)) {
@@ -642,13 +642,13 @@ public class ConfigMap implements ConfigStoreListener {
 		return true;
 	}
 
-	private void signal(List<ConfigEvent> changes) {
+	private void signal(ConfigEvents changes) {
 		for (ConfigEventListener l : listeners)
 			l.onConfigChange(changes);
 	}
 
-	private List<ConfigEvent> findDiffs(String updatedContents) {
-		List<ConfigEvent> changes = new ArrayList<>();
+	private ConfigEvents findDiffs(String updatedContents) {
+		ConfigEvents changes = new ConfigEvents();
 		ConfigMap newMap = new ConfigMap(updatedContents);
 		for (ConfigSection ns : newMap.oentries.values()) {
 			ConfigSection s = oentries.get(ns.name);

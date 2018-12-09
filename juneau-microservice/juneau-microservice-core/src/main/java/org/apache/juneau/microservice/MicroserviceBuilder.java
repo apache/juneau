@@ -224,23 +224,27 @@ public class MicroserviceBuilder {
 	 * Specifies the config name for initializing this microservice.
 	 *
 	 * <p>
-	 * By default, we use a {@link ConfigFileStore} store for configuration files.
-	 * If the store is not overridden, then the config name represents the path of the configuration file relative to the
-	 * JVM working directory.
-	 *
-	 * <p>
 	 * If you do not specify the config file location, we attempt to resolve it through the following methods:
 	 * <ol class='spaced-list'>
 	 * 	<li>
-	 * 		The <js>"configFile"</js> argument in the command line arguments passed in through the constructor.
+	 * 		Resolve file first in working directory, then in classpath, using the following names:
+	 * 		<ul>
+	 * 			<li>
+	 * 				The <js>"configFile"</js> argument in the command line arguments passed in through the constructor.
+	 * 			<li>
+	 * 				The value of the <code>Main-Config</code> entry in the manifest file.
+	 * 			<li>
+	 * 				A config file in the same location and with the same name as the executable jar file.
+	 * 				(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
+	 * 		</ul>
 	 * 	<li>
-	 * 		The value of the <code>Main-Config</code> entry in the manifest file.
+	 * 		Resolve any <js>"*.cfg"</js> file that can be found in the working directory.
 	 * 	<li>
-	 * 		A config file in the same location and with the same name as the executable jar file.
-	 * 		(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
-	 * 	<li>
-	 * 		Any other <js>"*.cfg"</js> file that can be found in the working directory.
+	 * 		Resolve any of the following files in the classpath:  <js>"juneau.cfg"</js>, <js>"system.cfg"</js>
 	 * </ol>
+	 *
+	 * <p>
+	 * If no configuration file is found, and empty in-memory configuration is used.
 	 *
 	 * @param configName The configuration name.
 	 * @return This object (for method chaining).
