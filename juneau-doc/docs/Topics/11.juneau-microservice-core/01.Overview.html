@@ -39,6 +39,9 @@
 			<li class='jc'>{@link oaj.microservice.Microservice} - The base microservice class.
 			<li class='jc'>{@link oaj.microservice.MicroserviceBuilder} - Builder for the microservice class.
 			<li class='jic'>{@link oaj.microservice.MicroserviceListener} - Interface for hooking into lifecyle events of the microservice.
+			<ul>
+				<li class='jc'>{@link oaj.microservice.BasicMicroserviceListener} - Adapter for MicroserviceListener class.
+			</ul>
 		</ul>
 	<li class='jp'>{@link oaj.microservice.console}
 		<ul>
@@ -63,51 +66,3 @@
 		}
 	}
 </p>
-<p>
-	The classes consist of the following methods:
-</p>
-<ul class='doctree'>
-	<li class='jc'>{@link oaj.microservice.MicroserviceBuilder}
-	<ul>
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#args(String...) args(String...)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#config(Config) config(Config)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#configName(String) configName(String)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#console(Scanner,PrintWriter) console(Scanner,PrintWriter)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleCommands(ConsoleCommand...) consoleCommands(ConsoleCommand...)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#consoleEnabled(boolean) consoleEnabled(boolean)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#listener(MicroserviceListener) listener(MicroserviceListener)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#logConfig(LogConfig) logConfig(LogConfig)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#logger(Logger)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#manifest(Object)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#varContext(String, Object) varContext(String,Object)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#vars(Class...) vars(Class...)} 
-	</ul>
-	<li class='jc'>{@link oaj.microservice.Microservice}
-	<ul>
-		<li class='jm'>{@link oaj.microservice.Microservice#init() init()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#start() start()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#startConsole() startConsole()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#join() join()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#stop() stop()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#stopConsole() stopConsole()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#exit() exit()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#kill() kill()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#getArgs() getArgs()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#getConfig() getConfig()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#getLogger() getLogger()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#getManifest() getManifest()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#getVarResolver() getVarResolver()} 
-		<li class='jm'>{@link oaj.microservice.Microservice#log(Level,String,Object...) log(Level,String,Object...)} 
-		<li class='jm'>{@link oaj.microservice.Microservice#out(MessageBundle,String,Object...) out(MessageBundle,String,Object...)} 
-		<li class='jm'>{@link oaj.microservice.Microservice#err(MessageBundle,String,Object...) err(MessageBundle,String,Object...)} 
-		<li class='jm'>{@link oaj.microservice.Microservice#onConfigChange(ConfigEvents) onConfigChange(ConfigEvents)} 
-		<li class='jm'>{@link oaj.microservice.Microservice#executeCommand(Args,Scanner,PrintWriter) executeCommand(Args,Scanner,PrintWriter)} 
-	</ul>
-	<li class='jic'>{@link oaj.microservice.MicroserviceListener}
-	<ul>
-		<li class='jm'>{@link oaj.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents) onConfigChange(Microservice,ConfigEvents)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceListener#onStart(Microservice) onStart(Microservice)} 
-		<li class='jm'>{@link oaj.microservice.MicroserviceListener#onStop(Microservice) onStop(Microservice)} 
-	</ul>
-</ul>

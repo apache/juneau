@@ -13,28 +13,20 @@
  ***************************************************************************************************************************/
  -->
 
-{new} juneau-microservice-jetty
-
-<h5 class='figure'>Maven Dependency</h5>
-<p class='bpcode w500'>
-	<xt>&lt;dependency&gt;</xt>
-		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
-		<xt>&lt;artifactId&gt;</xt>juneau-microservice-jetty<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
-	<xt>&lt;/dependency&gt;</xt>
-</p>	
-
-<h5 class='figure'>Java Library</h5>
-<p class='bpcode w500'>
-	juneau-microservice-jetty-{@property juneauVersion}.jar 
-</p>	
-
-<h5 class='figure'>OSGi Module</h5>
-<p class='bpcode w500'>
-	org.apache.juneau.microservice.jetty_{@property juneauVersion}.jar 
-</p>	
+{todo} Predefined Resource Classes
 
 <p>
-	Juneau Microservice Jetty is an API for creating stand-alone executable jars that can be used to 
-	start lightweight configurable REST interfaces with all the power of the Juneau REST server and client APIs.
+	The following predefined resource classes are also provided for easy inclusion into your microservice:
 </p>
+<ul class='doctree'>
+	<li class='jc'>{@link oaj.microservice.resources.ConfigResource}
+		- View and modify the external INI config file.
+	<li class='jc'>{@link oaj.microservice.resources.DirectoryResource}
+		- View and modify file system directories.
+	<li class='jc'>{@link oaj.microservice.resources.LogsResource}
+		- View and control generated log files.
+	<li class='jc'>{@link oaj.microservice.resources.SampleRootResource}
+		- A sample root resource class to get started from.
+	<li class='jc'>{@link oaj.microservice.resources.ShutdownResource}
+		- Shutdown and/or restart the JVM.
+</ul>
