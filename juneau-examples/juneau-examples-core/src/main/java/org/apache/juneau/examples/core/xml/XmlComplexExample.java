@@ -20,13 +20,12 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
 /**
- * TODO
- * 
+ * Sample class which shows the complex usage of XmlSerializer.
  */
 public class XmlComplexExample {
 	/**
-	 * TODO
-	 * 
+	 * Serializing PojoComplex bean into human readable XML
+	 * and Deserialize back to PojoComplex instance type.
 	 * @param args
 	 * @throws SerializeException 
 	 * @throws ParseException 

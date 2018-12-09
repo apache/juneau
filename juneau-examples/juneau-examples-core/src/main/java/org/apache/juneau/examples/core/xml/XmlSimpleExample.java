@@ -12,12 +12,12 @@ import java.util.List;
 
 
 /**
- * TODO
+ * Sample class which shows the simple usage of XmlSerializer.
  */
 public class XmlSimpleExample {
     /**
-     * TODO
-     *
+     * Serializing SimplePojo bean into human readable XML
+     * and Deserialize back to Pojo instance type.
      * @param args
      * @throws SerializeException
      * @throws ParseException
@@ -31,7 +31,7 @@ public class XmlSimpleExample {
         String serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojo);
         System.out.println(serial);
 
-        // Deserialize back to PojoComplex instance
+        // Deserialize back to Pojo instance
         Pojo obj = XmlParser.DEFAULT.parse(serial, Pojo.class);
 
         assert obj.getId().equals(pojo.getId());
