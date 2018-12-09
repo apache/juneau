@@ -124,8 +124,8 @@
 <p>
 	Changes to the configuration file can trigger notifications that can be used to restart your microservice or make various other
 	on-the-fly changes.  
-	This can be accomplished by either overriding the {@link oaj.microservice.Microservice#onConfigChange(List)} or implementing
-	a listener and using the {@link oaj.microservice.MicroserviceListener#onConfigChange(Microservice,List)} methods.
+	This can be accomplished by either overriding the {@link oaj.microservice.Microservice#onConfigChange(ConfigEvents)} or implementing
+	a listener and using the {@link oaj.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents)} methods.
 	These will be described in detail later.
 </p>
 

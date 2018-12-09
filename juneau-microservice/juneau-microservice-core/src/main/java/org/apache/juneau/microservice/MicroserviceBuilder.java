@@ -93,7 +93,7 @@ public class MicroserviceBuilder {
 	 * Specifies the command-line arguments passed into the Java command.
 	 *
 	 * <p>
-	 * This is required if you use {@link Microservice#getArgs()} or <code>$ARG</code> string variables.
+	 * This is required if you use {@link Microservice#getArgs()} or <code>$A</code> string variables.
 	 *
 	 * @param args
 	 * 	The command-line arguments passed into the Java command as a pre-parsed {@link Args} object.
@@ -108,7 +108,7 @@ public class MicroserviceBuilder {
 	 * Specifies the command-line arguments passed into the Java command.
 	 *
 	 * <p>
-	 * This is required if you use {@link Microservice#getArgs()} or <code>$ARG</code> string variables.
+	 * This is required if you use {@link Microservice#getArgs()} or <code>$A</code> string variables.
 	 *
 	 * @param args
 	 * 	The command-line arguments passed into the Java command as the raw command-line arguments.

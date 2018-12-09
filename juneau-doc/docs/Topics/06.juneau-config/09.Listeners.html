@@ -31,7 +31,7 @@ Listeners
 <ul class='doctree'>
 	<li class='jic'>{@link oaj.config.event.ConfigEventListener}
 	<ul>
-		<li class='jm'>{@link oaj.config.event.ConfigEventListener#onConfigChange(List) onConfigChange(List&lt;ConfigEvent&gt;)}
+		<li class='jm'>{@link oaj.config.event.ConfigEventListener#onConfigChange(ConfigEvents) onConfigChange(ConfigEvents)}
 	</ul>
 </ul>
 <p>
@@ -66,7 +66,7 @@ Listeners
 	c.addListener(
 		<jk>new</jk> ConfigEventListener() {
 			<ja>@Override</ja>
-			<jk>public void</jk> onConfigChange(List&lt;ConfigEvent&gt; events) {
+			<jk>public void</jk> onConfigChange(ConfigEvents) {
 				<jk>for</jk> (ConfigEvent event : events) {
 					<jk>if</jk> (event.getType() == <jsf>SET_ENTRY</jsf>) {
 						

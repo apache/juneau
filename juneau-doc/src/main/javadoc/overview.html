@@ -12222,7 +12222,7 @@
 <ul class='doctree'>
 	<li class='jic'>{@link org.apache.juneau.config.event.ConfigEventListener}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEventListener#onConfigChange(List) onConfigChange(List&lt;ConfigEvent&gt;)}
+		<li class='jm'>{@link org.apache.juneau.config.event.ConfigEventListener#onConfigChange(ConfigEvents) onConfigChange(ConfigEvents)}
 	</ul>
 </ul>
 <p>
@@ -12257,7 +12257,7 @@
 	c.addListener(
 		<jk>new</jk> ConfigEventListener() {
 			<ja>@Override</ja>
-			<jk>public void</jk> onConfigChange(List&lt;ConfigEvent&gt; events) {
+			<jk>public void</jk> onConfigChange(ConfigEvents) {
 				<jk>for</jk> (ConfigEvent event : events) {
 					<jk>if</jk> (event.getType() == <jsf>SET_ENTRY</jsf>) {
 						
@@ -20368,7 +20368,7 @@
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='link'>{@doc juneau-microservice.UiCustomization}
+	<li class='link'>{@doc juneau-microservice-jetty.UiCustomization}
 </ul>
 </div><!-- END: 7.28.4 - juneau-rest-server.HtmlDocAnnotation.UiCustomization -->
 
@@ -23587,12 +23587,12 @@
 		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#log(Level,String,Object...) log(Level,String,Object...)} 
 		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#out(MessageBundle,String,Object...) out(MessageBundle,String,Object...)} 
 		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#err(MessageBundle,String,Object...) err(MessageBundle,String,Object...)} 
-		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#onConfigChange(List) onConfigChange(List)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#onConfigChange(ConfigEvents) onConfigChange(ConfigEvents)} 
 		<li class='jm'>{@link org.apache.juneau.microservice.Microservice#executeCommand(Args,Scanner,PrintWriter) executeCommand(Args,Scanner,PrintWriter)} 
 	</ul>
 	<li class='jic'>{@link org.apache.juneau.microservice.MicroserviceListener}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onConfigChange(Microservice,List) onConfigChange(Microservice,List)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents) onConfigChange(Microservice,ConfigEvents)} 
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onStart(Microservice) onStart(Microservice)} 
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceListener#onStop(Microservice) onStop(Microservice)} 
 	</ul>
@@ -23939,8 +23939,8 @@
 <p>
 	Changes to the configuration file can trigger notifications that can be used to restart your microservice or make various other
 	on-the-fly changes.  
-	This can be accomplished by either overriding the {@link org.apache.juneau.microservice.Microservice#onConfigChange(List)} or implementing
-	a listener and using the {@link org.apache.juneau.microservice.MicroserviceListener#onConfigChange(Microservice,List)} methods.
+	This can be accomplished by either overriding the {@link org.apache.juneau.microservice.Microservice#onConfigChange(ConfigEvents)} or implementing
+	a listener and using the {@link org.apache.juneau.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents)} methods.
 	These will be described in detail later.
 </p>
 
@@ -23993,7 +23993,7 @@
 <ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.microservice.MicroserviceBuilder}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#vars(Class) vars(Class...)} 
+		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#vars(Class...) vars(Class...)} 
 		<li class='jm'>{@link org.apache.juneau.microservice.MicroserviceBuilder#varContext(String, Object) varContext(String,Object)} 
 	</ul>
 </ul>
@@ -25260,14 +25260,19 @@
 <ul class='doctree'>
 	<li class='jp'>{@link org.apache.juneau.examples.core.json}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.examples.core.json.JsonSimpleExample} - TODO
-		<li class='jc'>{@link org.apache.juneau.examples.core.json.JsonComplexExample} - TODO
+		<li class='jc'>{@link org.apache.juneau.examples.core.json.JsonSimpleExample} - JsonSerializer and JsonParser usage on serialize and deserialize simple Pojo bean.
+		<li class='jc'>{@link org.apache.juneau.examples.core.json.JsonComplexExample} - JsonSerializer and JsonParser usage on serialize and deserialize complex Pojo bean.
 		<li class='jc'>{@link org.apache.juneau.examples.core.json.JsonConfigurationExample} - TODO
 	</ul>
 	<li class='jp'><code>org.apache.juneau.examples.core.xml</code>
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.examples.core.xml.XmlSimpleExample} - TODO
-		<li class='jc'>{@link org.apache.juneau.examples.core.xml.XmlComplexExample} - TODO
+		<li class='jc'>{@link org.apache.juneau.examples.core.xml.XmlSimpleExample} - XmlSerializer and XmlParser usage on serialize and deserialize simple Pojo bean.
+		<li class='jc'>{@link org.apache.juneau.examples.core.xml.XmlComplexExample} - XmlSerializer and XmlParser usage on serialize and deserialize complex Pojo bean.
+	</ul>
+	<li class='jp'><code>org.apache.juneau.examples.core.rdf</code>
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.examples.core.rdf.RdfExample} - RdfXmlSerializer usage on serialize simple Pojo bean.
+		<li class='jc'>{@link org.apache.juneau.examples.core.rdf.RdfComplexExample} - RdfXmlSerializer usage on serialize complex Pojo bean.
 	</ul>
 </ul>
 </div><!-- END: 14.1 - juneau-examples-core.Examples -->
