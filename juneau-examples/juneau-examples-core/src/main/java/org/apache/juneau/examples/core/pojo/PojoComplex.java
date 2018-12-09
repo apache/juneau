@@ -17,8 +17,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * TODO
- * 
+ * Complex Pojo class.
  */
 public class PojoComplex {
 

@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * TODO
+ * Sample class which shows the complex usage of JsonSerializer.
  */
 public class JsonComplexExample {
     /**
-     * TODO
-     *
+     * Serializing PojoComplex bean into Json type
+     * and Deserialize back to PojoComplex instance type.
      * @param args
      * @throws Exception
      */

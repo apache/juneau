@@ -22,7 +22,7 @@ package org.apache.juneau.examples.core.pojo;
 import org.apache.juneau.annotation.BeanConstructor;
 
 /**
- * TODO
+ * Sample pojo class.
  */
 public class Pojo {
 	private final String id;
