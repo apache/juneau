@@ -4,8 +4,6 @@ import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.json.JsonSerializer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
