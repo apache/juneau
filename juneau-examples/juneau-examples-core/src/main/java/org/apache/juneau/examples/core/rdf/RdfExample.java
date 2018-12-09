@@ -23,13 +23,12 @@ import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.jena.*;
 
 /**
- * TODO
+ *	Sample class which shows the simple usage of RdfXmlSerializer.
  */
 public class RdfExample {
 
 	/**
-	 * TODO
-	 *
+	 * Serializing Pojo bean into RDF XML format.
 	 * @param args
 	 * @throws Exception
 	 */

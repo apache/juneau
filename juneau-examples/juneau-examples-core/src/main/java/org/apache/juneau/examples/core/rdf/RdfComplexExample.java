@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Sample class which shows the complex usage of RdfXmlSerializer.
+ */
 public class RdfComplexExample {
 
     /**
-     * TODO
+     * Serializing PojoComplex bean into RDF XML format.
      *
      * @param args
      * @throws Exception
