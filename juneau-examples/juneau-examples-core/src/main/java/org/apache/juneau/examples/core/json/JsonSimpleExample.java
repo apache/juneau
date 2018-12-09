@@ -29,8 +29,8 @@ import org.apache.juneau.json.JsonSerializer;
 public class JsonSimpleExample {
 
 	/**
-	 * TODO
-	 *
+	 * Serializing Pojo bean into Json format
+     * and Deserialize back to Pojo instance type.
 	 * @param args
 	 * @throws Exception
 	 */
