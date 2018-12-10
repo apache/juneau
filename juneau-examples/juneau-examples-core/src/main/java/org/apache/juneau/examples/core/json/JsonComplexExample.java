@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Sample class which shows the complex usage of JsonSerializer.
+ * Sample class which shows the complex usage of JsonSerializer and JsonParser.
  */
 public class JsonComplexExample {
     /**
