@@ -24,7 +24,7 @@ import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.json.JsonSerializer;
 
 /**
- * TODO
+ * Sample class which shows the simple usage of JsonSerializer and JsonParser.
  */
 public class JsonSimpleExample {
 

@@ -10,55 +10,40 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.core.json;
+package org.apache.juneau.examples.core.html;
 
-import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.json.JsonParser;
-import org.apache.juneau.json.JsonSerializer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import org.apache.juneau.examples.core.pojo.Pojo;
+import org.apache.juneau.html.HtmlParser;
+import org.apache.juneau.html.HtmlSerializer;
 
 /**
- * Sample class which shows the complex usage of JsonSerializer and JsonParser.
+ * Sample class which shows the simple usage of HtmlSerializer and HtmlParser.
  */
-public class JsonComplexExample {
+public class HtmlSimpleExample {
     /**
-     * Serializing PojoComplex bean into Json type
-     * and Deserialize back to PojoComplex instance type.
+     * Serializing Pojo bean into Html format
+     * and Deserialize back to Pojo instance type.
      * @param args
      * @throws Exception
      */
     public static void main(String[] args) throws Exception{
         // Juneau provides static constants with the most commonly used configurations
         // Get a reference to a serializer - converting POJO to flat format
-        JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
+        HtmlSerializer htmlSerializer = HtmlSerializer.DEFAULT;
         // Get a reference to a parser - converts that flat format back into the POJO
-        JsonParser jsonParser = JsonParser.DEFAULT;
+        HtmlParser htmlParser = HtmlParser.DEFAULT;
 
-        // Fill some data to a PojoComplex bean
-        HashMap<String, List<Pojo>> values = new HashMap<>();
-        ArrayList<Pojo> setOne = new ArrayList<>();
-        setOne.add(new Pojo("1.1", "name1"));
-        setOne.add(new Pojo("1.1", "name2"));
-        ArrayList<Pojo> setTwo = new ArrayList<>();
-        setTwo.add(new Pojo("1.2", "name1"));
-        setTwo.add(new Pojo("1.2", "name2"));
-        values.put("setOne", setOne);
-        values.put("setTwo", setTwo);
-        PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
+        Pojo pojo = new Pojo("id","name");
 
-        String flat = jsonSerializer.serialize(pojoc);
+        String flat = htmlSerializer.serialize(pojo);
 
         // Print out the created POJO in JSON format.
         System.out.println(flat);
 
-        PojoComplex parse = jsonParser.parse(flat, PojoComplex.class);
+        Pojo parse = htmlParser.parse(flat, Pojo.class);
 
-        assert parse.getId().equals(pojoc.getId());
-        assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());
-        assert parse.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());
+        assert parse.getId().equals(pojo.getId());
+        assert parse.getName().equals(pojo.getName());
 
         // The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
         // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
