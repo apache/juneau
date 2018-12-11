@@ -1,0 +1,99 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} Jetty.xml file
+
+<p>
+	The Jetty microservice comes with a bare-bones <code>jetty.xml</code> file which can be modified to suite any needs. 
+</p>	
+<p>
+	The <code>jetty.xml</code> can be located in either the <js>"."</js> or <js>"files"</js> working directory or classpath.
+	It can also be specified in any of the following ways:
+</p>
+<ul class='spaced-list'>
+	<li>
+		Using the {@link oaj.microservice.jetty.JettyMicroserviceBuilder#jettyXml(Object,boolean)} method to specify the location or contents
+		of the file.
+	<li>
+		Specifying the location using a <code>Jetty-Config</code> value in the <code>MANIFEST.MF</code> file.
+		<p class='bcode w800'>
+	<mk>Jetty-Config:</mk> <mv>files/jetty.xml</mv>
+		</p>
+	<li>
+		Specifying the location using the <js>"Jetty/jettyXml"</js> configuration value.
+		<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# Jetty settings
+	#=======================================================================================================================</cc>
+	<cs>[Jetty]</cs>
+	
+	<cc># Path of the jetty.xml file used to configure the Jetty server.</cc>
+	<ck>config</ck> = <cv>files/jetty.xml</cv>
+		</p>
+</ul>
+<p>
+	SVL variables in the <code>jetty.xml</code> file are automatically resolved by the microservice.
+	This allows you to reference values in your configuration file from the <code>jetty.xml</code> file.
+</p>
+<p>
+	The HTTP port used is controlled via the following:
+</p>
+<ul class='spaced-list'>
+	<li>
+		The {@link oaj.microservice.jetty.JettyMicroserviceBuilder#ports(int...)} method.
+		<p class='bcode w800'>
+	JettyMicroservice
+		.<jsm>create</jsm>() 
+		.args(args)  
+		.servlets(RootResource.<jk>class</jk>)
+		.port(1000,2000,0,0,0)  <jc>// Try port 1000, then 2000, then 3 random ports.</jc>
+		.build()  
+		.start()
+		</p>
+	<li>
+		The <js>"Jetty/ports"</js> configuration property.
+		<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# Jetty settings
+	#=======================================================================================================================</cc>
+	<cs>[Jetty]</cs>
+	
+	<cc># Port to use for the jetty server.
+	# You can specify multiple ports.  The first available will be used.  '0' indicates to try a random port.
+	<ck>port</ck> = <cv>1000,2000,0,0,0</cv>
+		</p>
+</ul>
+<p>
+	The first available port is then made available through the system property <js>"availablePort"</js> so that it
+	can be referenced in our <code>jetty.xml</code> file.
+</p>
+<p class='bpcode w800'>
+	<xt>&lt;Set</xt> <xa>name</xa>=<xs>"connectors"</xs><xt>&gt;</xt>
+		<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Connector"</xs><xt>&gt;</xt>
+			<xt>&lt;Item&gt;</xt>
+				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.ServerConnector"</xs><xt>&gt;</xt>
+					<xt>&lt;Arg&gt;</xt>
+						<xt>&lt;Ref</xt> <xa>refid</xa>=<xs>"ExampleServer"</xs> <xt>/&gt;</xt>
+					<xt>&lt;/Arg&gt;</xt>
+					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"port"</xs><xt>&gt;</xt>$S{availablePort,8080}<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;/New&gt;</xt>
+			<xt>&lt;/Item&gt;</xt>
+		<xt>&lt;/Array&gt;</xt>
+	<xt>&lt;/Set&gt;</xt>
+</p>
+<p>
+	The {@link oaj.microservice.jetty.JettyMicroserviceBuilder#jettyServerFactory(JettyServerFactory)} method is also provided
+	to use your own customized Jetty server.
+</p>
