@@ -211,6 +211,28 @@
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.rest.server.jaxrs_${project.version}.jar</destFileName>
 								</artifactItem>
+								
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-springboot</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<classifier>sources</classifier>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-springboot</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-rest-server-springboot</artifactId>
+									<version>${project.version}</version>
+									<destFileName>org.apache.juneau.rest.server.springboot_${project.version}.jar</destFileName>
+								</artifactItem>
 
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
@@ -276,28 +298,6 @@
 									<artifactId>juneau-microservice-jetty</artifactId>
 									<version>${project.version}</version>
 									<destFileName>org.apache.juneau.microservice.jetty_${project.version}.jar</destFileName>
-								</artifactItem>
-
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-microservice-springboot</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-microservice-springboot</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-microservice-springboot</artifactId>
-									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.microservice.springboot_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<artifactItem>
