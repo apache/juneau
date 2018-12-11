@@ -419,13 +419,15 @@
 	</ol>
 	<li><p class='new'><a class='doclink' href='#juneau-microservice-jetty-template'>juneau-microservice-jetty-template</a></p>
 	<ol>
-		<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.Introduction'>Microservice Introduction</a></p>
-		<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.GettingStarted'>Getting Started</a></p>
-		<ol>
-			<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.GettingStarted.Installing'>Installing in Eclipse</a></p>
-			<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.GettingStarted.Running'>Running in Eclipse</a></p>
-			<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.GettingStarted.Building'>Building and Running from Command-Line</a></p>
-		</ol>
+		<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.Installing'>Installing in Eclipse</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.Running'>Running in Eclipse</a></p>
+		<li><p class='updated'><a class='doclink' href='#juneau-microservice-jetty-template.Building'>Building and Running from Command-Line</a></p>
+	</ol>
+	<li><p class='new'><a class='doclink' href='#juneau-microservice-springboot-template'>juneau-microservice-springboot-template</a></p>
+	<ol>
+		<li><p class='todo'><a class='doclink' href='#juneau-microservice-springboot-template.Installing'>Installing in Eclipse</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-microservice-springboot-template.Running'>Running in Eclipse</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-microservice-springboot-template.Building'>Building and Running from Command-Line</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></p>
 	<ol>
@@ -25103,16 +25105,7 @@
 
 <h2 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template' id='juneau-microservice-jetty-template'>13 - juneau-microservice-jetty-template</a></h2>
 <div class='topic'><!-- START: 13 - juneau-microservice-jetty-template -->
-<h5 class='figure'>Maven Dependency</h5>
-<p class='bpcode w500'>
-	<xt>&lt;dependency&gt;</xt>
-		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
-		<xt>&lt;artifactId&gt;</xt>juneau-microservice-jetty-template<xt>&lt;/artifactId&gt;</xt>
-		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
-	<xt>&lt;/dependency&gt;</xt>
-</p>	
-
-<h5 class='figure'>Microservice Starter Project</h5>
+<h5 class='figure'>Starter Project Zip</h5>
 <p class='bpcode w500'>
 	my-microservice-jetty-{@property juneauVersion}.zip 
 </p>	
@@ -25121,56 +25114,24 @@
 	The <l>my-microservice-jetty.zip</l> file is a predefined starter Eclipse project for developing
 	REST microservices using the {@doc juneau-microservice-jetty} package.
 </p>
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.Introduction' id='juneau-microservice-jetty-template.Introduction'>13.1 - Microservice Introduction</a></h3>
-<div class='topic'><!-- START: 13.1 - juneau-microservice-jetty-template.Introduction -->
 <p>
-	The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
-	Eclipse Jetty Servlet Container.  
-	<br>It includes all libraries needed to execute in a Java 1.8+ environment.
+	It includes a combination of the Juneau Core, Server, and Client APIs and all libraries needed to execute in a Java 1.8+ environment.
 </p>
 <p>
-	Features include:
-</p>
-<ul class='spaced-list'>
-	<li>
-		An out-of-the-box zipped Eclipse project to get started quickly.
-	<li>
-		Buildable as a simple executable jar and configuration file.
-	<li>
-		All the power of the Juneau ecosystem for defining REST servlets and clients with the ability to 
-		serialize and parse POJOs as HTML, JSON, XML, RDF, URL-Encoding, and others.
-	<li>
-		An extensible API that allows you to hook into various lifecycle events.
-	<li>
-		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
-		file properties.
-	<li>
-		Predefined REST resources for configuring microservice and accessing log files.
-</ul>
-</div><!-- END: 13.1 - juneau-microservice-jetty-template.Introduction -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.GettingStarted' id='juneau-microservice-jetty-template.GettingStarted'>13.2 - Getting Started</a></h3>
-<div class='topic'><!-- START: 13.2 - juneau-microservice-jetty-template.GettingStarted -->
-<p>
-	The <l>my-microservice-jetty.zip</l> file is a zipped eclipse project that includes everything you 
-	need to create a REST microservice in an Eclipse workspace.
+	One significant difference is that we are not using the Juneau {@link org.apache.juneau.microservice.Microservice} API for our
+	application but instead using the existing Spring Boot API.
 </p>
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.GettingStarted.Installing' id='juneau-microservice-jetty-template.GettingStarted.Installing'>13.2.1 - Installing in Eclipse</a></h4>
-<div class='topic'><!-- START: 13.2.1 - juneau-microservice-jetty-template.GettingStarted.Installing -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.Installing' id='juneau-microservice-jetty-template.Installing'>13.1 - Installing in Eclipse</a></h3>
+<div class='topic'><!-- START: 13.1 - juneau-microservice-jetty-template.Installing -->
 <p>
 	Follow these instructions to create a new template project in Eclipse.
 </p>		
 <ol class='spaced-list'>
 	<li>
-		Download the latest <l>my-jetty-microservice.zip</l> file.
+		Download the latest <l>my-microservice-jetty.zip</l> file.
 	<li>
 		In your Eclipse workspace, go to <b>File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</b> 
 		and select the zip file and click <b>Finish</b>.
@@ -25404,12 +25365,12 @@
 <p>
 	At this point, you're ready to start the microservice from your workspace.
 </p>
-</div><!-- END: 13.2.1 - juneau-microservice-jetty-template.GettingStarted.Installing -->
+</div><!-- END: 13.1 - juneau-microservice-jetty-template.Installing -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.GettingStarted.Running' id='juneau-microservice-jetty-template.GettingStarted.Running'>13.2.2 - Running in Eclipse</a></h4>
-<div class='topic'><!-- START: 13.2.2 - juneau-microservice-jetty-template.GettingStarted.Running -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.Running' id='juneau-microservice-jetty-template.Running'>13.2 - Running in Eclipse</a></h3>
+<div class='topic'><!-- START: 13.2 - juneau-microservice-jetty-template.Running -->
 <p>
 	The <l>my-microservice.launch</l> file is already provided to allow you to quickly start
 	your new microservice.
@@ -25441,12 +25402,12 @@
 	You have started a REST interface on port 10000.
 	<br>You can enter the command <code>exit</code> to shut it down.
 </p>
-</div><!-- END: 13.2.2 - juneau-microservice-jetty-template.GettingStarted.Running -->
+</div><!-- END: 13.2 - juneau-microservice-jetty-template.Running -->
 
 <!-- ==================================================================================================== -->
 
-<h4 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.GettingStarted.Building' id='juneau-microservice-jetty-template.GettingStarted.Building'>13.2.3 - Building and Running from Command-Line</a></h4>
-<div class='topic'><!-- START: 13.2.3 - juneau-microservice-jetty-template.GettingStarted.Building -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-microservice-jetty-template.Building' id='juneau-microservice-jetty-template.Building'>13.3 - Building and Running from Command-Line</a></h3>
+<div class='topic'><!-- START: 13.3 - juneau-microservice-jetty-template.Building -->
 <p>
 	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
 	as an executable uber-jar.
@@ -25488,14 +25449,212 @@
 	If you get this error message: <code class='snippet'>java.net.BindException: Address already in use</code>, 
 	then this microservice is already running elsewhere and so it cannot bind to port 10000.
 </p>
-</div><!-- END: 13.2.3 - juneau-microservice-jetty-template.GettingStarted.Building -->
-</div><!-- END: 13.2 - juneau-microservice-jetty-template.GettingStarted -->
+</div><!-- END: 13.3 - juneau-microservice-jetty-template.Building -->
 </div><!-- END: 13 - juneau-microservice-jetty-template -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-core' id='juneau-examples-core'>14 - juneau-examples-core</a></h2>
-<div class='topic'><!-- START: 14 - juneau-examples-core -->
+<h2 class='topic new' onclick='toggle(this)'><a href='#juneau-microservice-springboot-template' id='juneau-microservice-springboot-template'>14 - juneau-microservice-springboot-template</a></h2>
+<div class='topic'><!-- START: 14 - juneau-microservice-springboot-template -->
+<h5 class='figure'>Starter Project Zip</h5>
+<p class='bpcode w500'>
+	my-microservice-springboot-{@property juneauVersion}.zip 
+</p>	
+
+<p>
+	The <l>my-microservice-springboot.zip</l> file is a predefined starter Eclipse project for developing
+	REST microservices using the {@doc juneau-rest-server-springboot} package with Spring Boot.
+</p>
+<p>
+	It includes a combination of the Juneau Core, Server, and Client APIs and all libraries needed to execute in a Java 1.8+ environment.
+</p>
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-springboot-template.Installing' id='juneau-microservice-springboot-template.Installing'>14.1 - Installing in Eclipse</a></h3>
+<div class='topic'><!-- START: 14.1 - juneau-microservice-springboot-template.Installing -->
+<p>
+	Follow these instructions to create a new template project in Eclipse.
+</p>		
+<ol class='spaced-list'>
+	<li>
+		Download the latest <l>my-microservice-springboot.zip</l> file.
+	<li>
+		In your Eclipse workspace, go to <b>File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</b> 
+		and select the zip file and click <b>Finish</b>.
+		<br><br>
+		<img class='bordered' src='doc-files/juneau-microservice-springboot-template.Installing.1.png' style='width:549px'>
+	<li>
+		In your workspace, you should now see the following project:
+		<br><br>
+		<img class='bordered' src='doc-files/juneau-microservice-springboot-template.Installing.2.png' style='width:400px'>
+</ol>
+<p>
+	The important elements in this project are:
+</p>
+<ul class='spaced-list'>
+	<li>
+		<l>App.java</l> - The entry point. 
+		<br>This class creates and starts our microservice.
+		<br>Note that we're using the existing Spring Boot application logic for the microservice.
+		<br><br>
+		<p class='bcode w800'>
+	<ja>@SpringBootApplication</ja>
+	<ja>@Controller</ja>
+	<jk>public class</jk> App {
+	
+		<jk>public static void</jk> main(String[] args) {
+			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+				.run(args);
+		}
+	
+		<ja>@Bean @JuneauRest</ja>
+		<jk>public</jk> RootResources getRootResources() {
+			<jk>return new</jk> RootResources();
+		}
+	}
+		</p>
+	<li>
+		<l>RootResources.java</l> - The top-level REST resource. 
+		<br>This class routes HTTP requests to child resources.
+		<br>This is identical to the Jetty example.
+		<br><br>
+		<p class='bcode w800'>
+	<ja>@RestResource</ja>(
+		path=<js>"/"</js>,
+		title=<js>"My Microservice"</js>,
+		description=<js>"Top-level resources page"</js>,
+		htmldoc=<ja>@HtmlDoc</ja>(
+			widgets={
+				ContentTypeMenuItem.<jk>class</jk>,
+				StyleMenuItem.<jk>class</jk>
+			},
+			navlinks={
+				<js>"options: servlet:/?method=OPTIONS"</js>
+			}
+		),
+		children={
+			HelloWorldResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			LogsResource.<jk>class</jk>
+		}
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
+		<jc>// No code</jc>
+	}
+		</p>
+	<li>
+		<l>my-microservice.cfg</l> - The external configuration file. 
+		<br>Contains various useful settings.
+		<br>Can be used for your own resource configurations.
+		<br>Note that the Jetty configuration is not present.
+		<br><br>
+		<p class='bcode w800'>
+	<cc>#=======================================================================================================================
+	# Basic configuration file for REST microservices
+	# Subprojects can use this as a starting point.
+	#=======================================================================================================================</cc>
+	
+	<cc>#=======================================================================================================================
+	# REST settings
+	#=======================================================================================================================</cc>
+	<cs>[REST]</cs>
+	
+	<cc># URL mappings to static files in the working directory or classpath.</cc>
+	<ck>staticFiles</ck> = htdocs:files/htdocs
+	
+	<cc># Stylesheet to use for HTML views.</cc>
+	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+	
+	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+	
+	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
+	<ck>header</ck> = 
+		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;
+			&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;
+		&lt;/a&gt;</cv>
+	<ck>footer</ck> = 
+		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;
+			&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;
+		&lt;/a&gt;</cv>
+	</p>
+</ul>
+<p>
+	At this point, you're ready to start the microservice from your workspace.
+</p>
+</div><!-- END: 14.1 - juneau-microservice-springboot-template.Installing -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-springboot-template.Running' id='juneau-microservice-springboot-template.Running'>14.2 - Running in Eclipse</a></h3>
+<div class='topic'><!-- START: 14.2 - juneau-microservice-springboot-template.Running -->
+<p>
+	The <l>my-microservice.launch</l> file is already provided to allow you to quickly start
+	your new microservice.
+</p>
+<p>
+	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-microservice</b> and click <b>Run</b>.
+	<br>In your console view, you should see the following output:
+</p>
+<p class='bpcode w800'>
+	TODO
+</p>
+<p>
+	Now open your browser and point to <l>http://localhost:5000</l>.  
+	You should see the following:
+</p>
+<p class='bpcode w400'>
+	http://localhost:5000
+</p>			
+<img class='bordered w400' src='doc-files/juneau-microservice-springboot-template.Running.1.png'>
+<p>
+	You have started a REST interface on port 5000.
+</p>
+</div><!-- END: 14.2 - juneau-microservice-springboot-template.Running -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-microservice-springboot-template.Building' id='juneau-microservice-springboot-template.Building'>14.3 - Building and Running from Command-Line</a></h3>
+<div class='topic'><!-- START: 14.3 - juneau-microservice-springboot-template.Building -->
+<p>
+	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
+	as an executable uber-jar.
+</p>
+<p>
+	The easiest way to build your microservice is to run the following from the project root.
+</p>
+<p class='bpcode w800'>
+	mvn clean install
+</p>
+<p>
+	Your <code>target</code> directory should now contain the following files:
+</p>
+<ul>
+	<li><code>my-microservice-1.0.jar</code>
+</ul>
+<p>
+	To start from a command line, run the following command from inside your <code>target</code> directory:
+</p>
+<p class='bpcode w800'>
+	java -jar my-microservice-1.0.jar
+</p>
+<p>
+	You should see the following console output:
+</p>
+<p class='bpcode w800'>
+	TODO
+</p>
+</div><!-- END: 14.3 - juneau-microservice-springboot-template.Building -->
+</div><!-- END: 14 - juneau-microservice-springboot-template -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-core' id='juneau-examples-core'>15 - juneau-examples-core</a></h2>
+<div class='topic'><!-- START: 15 - juneau-examples-core -->
 <h5 class='figure'>Archive File</h5>
 <p class='bpcode w500'>
 	juneau-examples-core-{@property juneauVersion}.zip 
@@ -25531,8 +25690,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-core.Examples' id='juneau-examples-core.Examples'>14.1 - Examples</a></h3>
-<div class='topic'><!-- START: 14.1 - juneau-examples-core.Examples -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-core.Examples' id='juneau-examples-core.Examples'>15.1 - Examples</a></h3>
+<div class='topic'><!-- START: 15.1 - juneau-examples-core.Examples -->
 <p>
 	The following shows the core examples provided:
 </p>
@@ -25559,13 +25718,13 @@
 			<li class='jc'>{@link org.apache.juneau.examples.core.html.HtmlComplexExample} - HtmlSerializer usage on serialize complex Pojo bean.
 		</ul>
 </ul>
-</div><!-- END: 14.1 - juneau-examples-core.Examples -->
-</div><!-- END: 14 - juneau-examples-core -->
+</div><!-- END: 15.1 - juneau-examples-core.Examples -->
+</div><!-- END: 15 - juneau-examples-core -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>15 - juneau-examples-rest</a></h2>
-<div class='topic'><!-- START: 15 - juneau-examples-rest -->
+<h2 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest' id='juneau-examples-rest'>16 - juneau-examples-rest</a></h2>
+<div class='topic'><!-- START: 16 - juneau-examples-rest -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
 	<xt>&lt;dependency&gt;</xt>
@@ -25600,8 +25759,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.RootResources' id='juneau-examples-rest.RootResources'>15.1 - RootResources</a></h3>
-<div class='topic'><!-- START: 15.1 - juneau-examples-rest.RootResources -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.RootResources' id='juneau-examples-rest.RootResources'>16.1 - RootResources</a></h3>
+<div class='topic'><!-- START: 16.1 - juneau-examples-rest.RootResources -->
 <p>
 	The <l>RootResources</l> class is the main page for the REST microservice.
 	It serves as the jumping-off point for the other resources.
@@ -25741,12 +25900,12 @@
 	The request passed to the child resource is the same as if the child resource had been deployed 
 	independently (e.g. path-info, resource-URI, and so forth).
 </p>
-</div><!-- END: 15.1 - juneau-examples-rest.RootResources -->
+</div><!-- END: 16.1 - juneau-examples-rest.RootResources -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.HelloWorldResource' id='juneau-examples-rest.HelloWorldResource'>15.2 - HelloWorldResource</a></h3>
-<div class='topic'><!-- START: 15.2 - juneau-examples-rest.HelloWorldResource -->
+<h3 class='topic updated' onclick='toggle(this)'><a href='#juneau-examples-rest.HelloWorldResource' id='juneau-examples-rest.HelloWorldResource'>16.2 - HelloWorldResource</a></h3>
+<div class='topic'><!-- START: 16.2 - juneau-examples-rest.HelloWorldResource -->
 <p>
 	The <l>HelloWorldResource</l> class is a simple resource that prints a "Hello world!" message.
 </p>
@@ -25810,12 +25969,12 @@
 	http://localhost:10000/helloWorld?Accept=text/json&amp;plainText=true
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.HelloWorldResource.2.png'>
-</div><!-- END: 15.2 - juneau-examples-rest.HelloWorldResource -->
+</div><!-- END: 16.2 - juneau-examples-rest.HelloWorldResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>15.3 - PetStore</a></h3>
-<div class='topic'><!-- START: 15.3 - juneau-examples-rest.PetStoreResource -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.PetStoreResource' id='juneau-examples-rest.PetStoreResource'>16.3 - PetStore</a></h3>
+<div class='topic'><!-- START: 16.3 - juneau-examples-rest.PetStoreResource -->
 <p>
 	The <code>PetStore</code> application is an functional application meant to demonstrate the following:
 </p>
@@ -27178,12 +27337,12 @@
 <p>
 	Note that we could have also used <ja>@FormData</ja> parameters as well.
 </p>
-</div><!-- END: 15.3 - juneau-examples-rest.PetStoreResource -->
+</div><!-- END: 16.3 - juneau-examples-rest.PetStoreResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.DtoExamples' id='juneau-examples-rest.DtoExamples'>15.4 - DtoExamples</a></h3>
-<div class='topic'><!-- START: 15.4 - juneau-examples-rest.DtoExamples -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest.DtoExamples' id='juneau-examples-rest.DtoExamples'>16.4 - DtoExamples</a></h3>
+<div class='topic'><!-- START: 16.4 - juneau-examples-rest.DtoExamples -->
 <p>
 	The <l>DtoExamples</l> resource is a resource group for demonstrating various DTO examples.
 </p>
@@ -27402,12 +27561,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 15.4 - juneau-examples-rest.DtoExamples -->
+</div><!-- END: 16.4 - juneau-examples-rest.DtoExamples -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>15.5 - ConfigResource</a></h3>
-<div class='topic'><!-- START: 15.5 - juneau-examples-rest.ConfigResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.ConfigResource' id='juneau-examples-rest.ConfigResource'>16.5 - ConfigResource</a></h3>
+<div class='topic'><!-- START: 16.5 - juneau-examples-rest.ConfigResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
 	<br>It provides a REST interface for reading and altering the microservice config file.
@@ -27557,12 +27716,12 @@
 		} 
 	} 		
 </p>
-</div><!-- END: 15.5 - juneau-examples-rest.ConfigResource -->
+</div><!-- END: 16.5 - juneau-examples-rest.ConfigResource -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>15.6 - LogsResource</a></h3>
-<div class='topic'><!-- START: 15.6 - juneau-examples-rest.LogsResource -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#juneau-examples-rest.LogsResource' id='juneau-examples-rest.LogsResource'>16.6 - LogsResource</a></h3>
+<div class='topic'><!-- START: 16.6 - juneau-examples-rest.LogsResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
 	<br>It provides a REST interface for the log files generated by the microservice.
@@ -27574,26 +27733,22 @@
 	http://localhost:10000/logs
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.LogsResource.1.png'>
-</div><!-- END: 15.6 - juneau-examples-rest.LogsResource -->
-</div><!-- END: 15 - juneau-examples-rest -->
+</div><!-- END: 16.6 - juneau-examples-rest.LogsResource -->
+</div><!-- END: 16 - juneau-examples-rest -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>16 - juneau-examples-rest-jetty</a></h2>
-<div class='topic'><!-- START: 16 - juneau-examples-rest-jetty -->
-<h5 class='figure'>Archive File</h5>
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty' id='juneau-examples-rest-jetty'>17 - juneau-examples-rest-jetty</a></h2>
+<div class='topic'><!-- START: 17 - juneau-examples-rest-jetty -->
+<h5 class='figure'>Starter Project Zip</h5>
 <p class='bpcode w500'>
-	juneau-examples-rest-{@property juneauVersion}.zip 
+	juneau-examples-rest-jetty-{@property juneauVersion}.zip 
 </p>	
 
 <p>
-	The <code>juneau-examples-rest</code> project includes everything you need to start the Samples REST 
-	microservice in an Eclipse workspace.
+	The <code>juneau-examples-rest-jetty</code> project includes everything you need create a Samples REST 
+	microservice in an Eclipse workspace and build it as an executable jar.
 </p>
-<p>
-	This project is packaged as a Juneau Microservice project that allows REST resources to be started
-	using embedded Jetty.
-</p>	
 
 <h5 class='topic'>juneau-examples-rest install instructions</h5>
 <p>
@@ -27620,8 +27775,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.Classes' id='juneau-examples-rest-jetty.Classes'>16.1 - Classes</a></h3>
-<div class='topic'><!-- START: 16.1 - juneau-examples-rest-jetty.Classes -->
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.Classes' id='juneau-examples-rest-jetty.Classes'>17.1 - Classes</a></h3>
+<div class='topic'><!-- START: 17.1 - juneau-examples-rest-jetty.Classes -->
 <p>
 	The <code>juneau-examples-rest-springboot</code> project contains the same classes as found in <code>juneau-examples-rest</code>
 	with the inclusion of a <code>org.apache.juneau.examples.rest.springboot</code> package containing the following:
@@ -27660,23 +27815,23 @@
 		}
 	}
 </p>
-</div><!-- END: 16.1 - juneau-examples-rest-jetty.Classes -->
+</div><!-- END: 17.1 - juneau-examples-rest-jetty.Classes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.DeployingToHeroku' id='juneau-examples-rest-jetty.DeployingToHeroku'>16.2 - Deploying to Heroku</a></h3>
-<div class='topic'><!-- START: 16.2 - juneau-examples-rest-jetty.DeployingToHeroku -->
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-jetty.DeployingToHeroku' id='juneau-examples-rest-jetty.DeployingToHeroku'>17.2 - Deploying to Heroku</a></h3>
+<div class='topic'><!-- START: 17.2 - juneau-examples-rest-jetty.DeployingToHeroku -->
 <p>
 	TODO
 </p>
-</div><!-- END: 16.2 - juneau-examples-rest-jetty.DeployingToHeroku -->
-</div><!-- END: 16 - juneau-examples-rest-jetty -->
+</div><!-- END: 17.2 - juneau-examples-rest-jetty.DeployingToHeroku -->
+</div><!-- END: 17 - juneau-examples-rest-jetty -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>17 - juneau-examples-rest-springboot</a></h2>
-<div class='topic'><!-- START: 17 - juneau-examples-rest-springboot -->
-<h5 class='figure'>Archive File</h5>
+<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot' id='juneau-examples-rest-springboot'>18 - juneau-examples-rest-springboot</a></h2>
+<div class='topic'><!-- START: 18 - juneau-examples-rest-springboot -->
+<h5 class='figure'>Starter Project Zip</h5>
 <p class='bpcode w500'>
 	juneau-examples-rest-springboot-{@property juneauVersion}.zip 
 </p>	
@@ -27709,8 +27864,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.Classes' id='juneau-examples-rest-springboot.Classes'>17.1 - Classes</a></h3>
-<div class='topic'><!-- START: 17.1 - juneau-examples-rest-springboot.Classes -->
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.Classes' id='juneau-examples-rest-springboot.Classes'>18.1 - Classes</a></h3>
+<div class='topic'><!-- START: 18.1 - juneau-examples-rest-springboot.Classes -->
 <p>
 	The <code>juneau-examples-rest-springboot</code> project contains the same classes as found in <code>juneau-examples-rest</code>
 	with the inclusion of a <code>org.apache.juneau.examples.rest.springboot</code> package containing the following:
@@ -27749,22 +27904,22 @@
 		}
 	}
 </p>
-</div><!-- END: 17.1 - juneau-examples-rest-springboot.Classes -->
+</div><!-- END: 18.1 - juneau-examples-rest-springboot.Classes -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.DeployingToHeroku' id='juneau-examples-rest-springboot.DeployingToHeroku'>17.2 - Deploying to Heroku</a></h3>
-<div class='topic'><!-- START: 17.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.DeployingToHeroku' id='juneau-examples-rest-springboot.DeployingToHeroku'>18.2 - Deploying to Heroku</a></h3>
+<div class='topic'><!-- START: 18.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
 <p>
 	TODO
 </p>
-</div><!-- END: 17.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
-</div><!-- END: 17 - juneau-examples-rest-springboot -->
+</div><!-- END: 18.2 - juneau-examples-rest-springboot.DeployingToHeroku -->
+</div><!-- END: 18 - juneau-examples-rest-springboot -->
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic ' onclick='toggle(this)'><a href='#Security' id='Security'>18 - Security Best-Practices</a></h2>
-<div class='topic'><!-- START: 18 - Security -->
+<h2 class='topic ' onclick='toggle(this)'><a href='#Security' id='Security'>19 - Security Best-Practices</a></h2>
+<div class='topic'><!-- START: 19 - Security -->
 <p>
 	Security is always an ongoing concern in any library.  
 	If you discover any security vulnerabilities in this code, please refer to the instructions found here:
@@ -27775,8 +27930,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-marshall' id='Security.juneau-marshall'>18.1 - juneau-marshall</a></h3>
-<div class='topic'><!-- START: 18.1 - Security.juneau-marshall -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-marshall' id='Security.juneau-marshall'>19.1 - juneau-marshall</a></h3>
+<div class='topic'><!-- START: 19.1 - Security.juneau-marshall -->
 <h5 class='topic'>Demarshalling vulnerabilities</h5>
 <p>
 	One common security vulnerability is the ability to create arbitrary Java object instances through crafted
@@ -27849,12 +28004,12 @@
 	<li>The RDF parsers rely on Apache Jena 2.7.1.  
 		As of <code>7.0.1</code>, no known security vulnerabilities exist that affect Juneau at this time.
 </ul>
-</div><!-- END: 18.1 - Security.juneau-marshall -->
+</div><!-- END: 19.1 - Security.juneau-marshall -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-svl' id='Security.juneau-svl'>18.2 - juneau-svl</a></h3>
-<div class='topic'><!-- START: 18.2 - Security.juneau-svl -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-svl' id='Security.juneau-svl'>19.2 - juneau-svl</a></h3>
+<div class='topic'><!-- START: 19.2 - Security.juneau-svl -->
 <p>
 	Care must be used when defining new {@link org.apache.juneau.svl.Var Vars} using the SVL API since mistakes 
 	could potentially expose system properties, environment variables, or even file system files.
@@ -27899,12 +28054,12 @@
 	{@link org.apache.juneau.svl.Var#allowNested()} and {@link org.apache.juneau.svl.Var#allowRecurse()} 
 	methods to prevent recursive handling of variables.
 </p>
-</div><!-- END: 18.2 - Security.juneau-svl -->
+</div><!-- END: 19.2 - Security.juneau-svl -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-rest-server' id='Security.juneau-rest-server'>18.3 - juneau-rest-server</a></h3>
-<div class='topic'><!-- START: 18.3 - Security.juneau-rest-server -->
+<h3 class='topic ' onclick='toggle(this)'><a href='#Security.juneau-rest-server' id='Security.juneau-rest-server'>19.3 - juneau-rest-server</a></h3>
+<div class='topic'><!-- START: 19.3 - Security.juneau-rest-server -->
 <p>
 	Denial of service attacks can be alleviated through the {@link org.apache.juneau.rest.annotation.RestResource#maxInput() maxInput()}
 	setting.  Arbitrarily-large input will trigger an exception before causing out-of-memory errors.
@@ -27916,8 +28071,8 @@
 	becomes an issue.  However, this is NOT true of the RDF parsers that use an intermediate DOM.  If parsing 
 	RDF, you may want to consider lowering the max-input value above.
 </p>
-</div><!-- END: 18.3 - Security.juneau-rest-server -->
-</div><!-- END: 18 - Security -->
+</div><!-- END: 19.3 - Security.juneau-rest-server -->
+</div><!-- END: 19 - Security -->
 
 
 <h2 class='topic' onclick='toggle(this)'><a href='#ReleaseNotes' id='ReleaseNotes'>Release Notes</a></h2>

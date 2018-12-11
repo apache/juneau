@@ -13,29 +13,35 @@
  ***************************************************************************************************************************/
  -->
 
-{updated} Microservice Introduction
+{todo} juneau-examples-rest-springboot
+
+<h5 class='figure'>Starter Project Zip</h5>
+<p class='bpcode w500'>
+	juneau-examples-rest-springboot-{@property juneauVersion}.zip 
+</p>	
 
 <p>
-	The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
-	Eclipse Jetty Servlet Container.  
-	<br>It includes all libraries needed to execute in a Java 1.8+ environment.
-</p>
-<p>
-	Features include:
+	The <code>juneau-examples-rest-springboot</code> class contains the same examples as <code>juneau-examples-rest</code>
+	but also includes the following:
 </p>
 <ul class='spaced-list'>
 	<li>
-		An out-of-the-box zipped Eclipse project to get started quickly.
+		A starter class for invoking the examples using Spring Boot.
 	<li>
-		Buildable as a simple executable jar and configuration file.
+		A resource resolver for resolving REST resources as injectable beans.
 	<li>
-		All the power of the Juneau ecosystem for defining REST servlets and clients with the ability to 
-		serialize and parse POJOs as HTML, JSON, XML, RDF, URL-Encoding, and others.
+		A POM that extends from <code>spring-boot-starter-parent</code> that allows you to build a fully-shaded executable jar.
 	<li>
-		An extensible API that allows you to hook into various lifecycle events.
-	<li>
-		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
-		file properties.
-	<li>
-		Predefined REST resources for configuring microservice and accessing log files.
+		Configuration files for deploying the microservice to Heroku.
 </ul>
+
+<p>
+	The microservice app can be imported into Eclipse just like <code>juneau-examples-rest</code>.
+</p>
+<p>
+	The microservice can be started from the <code>juneau-examples-rest-springboot.launch</code> file. 
+	It will start up the microservice on port 5000 which you can then view through a browser.
+</p>
+<p>
+	The Spring Boot examples app has identical functionality to the normal examples app except for console command support.
+</p>

@@ -13,21 +13,33 @@
  ***************************************************************************************************************************/
  -->
 
-{new} juneau-microservice-jetty-template
-
-<h5 class='figure'>Starter Project Zip</h5>
-<p class='bpcode w500'>
-	my-microservice-jetty-{@property juneauVersion}.zip 
-</p>	
+{todo} Building and Running from Command-Line
 
 <p>
-	The <l>my-microservice-jetty.zip</l> file is a predefined starter Eclipse project for developing
-	REST microservices using the {@doc juneau-microservice-jetty} package.
+	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
+	as an executable uber-jar.
 </p>
 <p>
-	It includes a combination of the Juneau Core, Server, and Client APIs and all libraries needed to execute in a Java 1.8+ environment.
+	The easiest way to build your microservice is to run the following from the project root.
+</p>
+<p class='bpcode w800'>
+	mvn clean install
 </p>
 <p>
-	One significant difference is that we are not using the Juneau {@link oaj.microservice.Microservice} API for our
-	application but instead using the existing Spring Boot API.
+	Your <code>target</code> directory should now contain the following files:
+</p>
+<ul>
+	<li><code>my-microservice-1.0.jar</code>
+</ul>
+<p>
+	To start from a command line, run the following command from inside your <code>target</code> directory:
+</p>
+<p class='bpcode w800'>
+	java -jar my-microservice-1.0.jar
+</p>
+<p>
+	You should see the following console output:
+</p>
+<p class='bpcode w800'>
+	TODO
 </p>
