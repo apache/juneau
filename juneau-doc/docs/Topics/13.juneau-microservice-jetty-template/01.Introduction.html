@@ -13,12 +13,12 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Microservice Introduction
+{updated} Microservice Introduction
 
 <p>
 	The Microservice API consists of a combination of the Juneau Core, Server, and Client APIs and an embedded
 	Eclipse Jetty Servlet Container.  
-	<br>It includes all libraries needed to execute in a Java 1.7+ environment.
+	<br>It includes all libraries needed to execute in a Java 1.8+ environment.
 </p>
 <p>
 	Features include:
@@ -27,7 +27,7 @@
 	<li>
 		An out-of-the-box zipped Eclipse project to get started quickly.
 	<li>
-		Packaged as a simple executable jar and configuration file.
+		Buildable as a simple executable jar and configuration file.
 	<li>
 		All the power of the Juneau ecosystem for defining REST servlets and clients with the ability to 
 		serialize and parse POJOs as HTML, JSON, XML, RDF, URL-Encoding, and others.
@@ -38,19 +38,4 @@
 		file properties.
 	<li>
 		Predefined REST resources for configuring microservice and accessing log files.
-</ul>
-<p>
-	The <code>juneau-microservice-server</code> library consists of the following classes:
-</p>
-<ul class='doctree'>
-	<li class='jac'>
-		{@link oaj.microservice.Microservice} 
-		- Defines basic lifecycle methods for microservices in general.
-		<ul>
-			<li class='jc'>
-				{@link oaj.microservice.RestMicroservice}
-				- Defines additional lifecycle methods for REST microservices.
-				<br>Starts up an externally-configured Jetty server, registers servlets, and sets up 
-				other features such as logging.  
-		</ul>
 </ul>

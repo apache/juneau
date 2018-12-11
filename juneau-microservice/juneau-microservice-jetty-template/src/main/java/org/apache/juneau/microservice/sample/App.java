@@ -10,20 +10,15 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.jetty;
+package org.apache.juneau.microservice.sample;
 
-import org.apache.juneau.examples.rest.*;
 import org.apache.juneau.microservice.jetty.*;
 
 /**
- * An example of an extended REST microservice.
+ * Entry-point for your microservice.
  *
  * <p>
- * Subclasses can extend from {@link JettyMicroservice} to implement their own custom behavior.
- * However, this is optional and the {@link JettyMicroservice} class can be invoked directly.
- *
- * <p>
- * The {@link JettyMicroservice} class will locate the <code>examples.cfg</code> file in the home directory and initialize
+ * The {@link JettyMicroservice} class will locate the <code>my-microservice.cfg</code> file in the home directory and initialize
  * the resources and commands defined in that file.
  */
 public class App {

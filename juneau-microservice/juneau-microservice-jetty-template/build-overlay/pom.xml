@@ -19,7 +19,7 @@
 	This POM is likewise meant to be used as a starting point for developers. It creates an uber-jar
 	to run the microservice from the command line. 
 	
-	Copy the jar as well as the my-microservice.cfg and jetty.xml file and start it with: 
+	Copy the jar as well as the my-microservice.cfg file and start it with: 
 		java -jar my-microservice-1.0.jar
 		
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
@@ -35,15 +35,15 @@
 	<description>My microservice.</description>
 	
 	<properties>
-		<juneau.version>7.1.0-SNAPSHOT</juneau.version>
+		<juneau.version>${project.version}</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-server</artifactId>
-			<version>7.1.0-SNAPSHOT</version>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${juneau.version}</version>
 		</dependency>
 	</dependencies>
 	
@@ -85,12 +85,9 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.apache.juneau.microservice.jetty.JettyMicroservice
+							<mainClass>org.apache.juneau.microservice.sample.App
 							</mainClass>
 						</manifest>
-						<manifestEntries>
-							<Main-Config>my-microservice.cfg</Main-Config>
-						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>

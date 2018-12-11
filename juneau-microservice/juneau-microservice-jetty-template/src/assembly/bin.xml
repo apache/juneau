@@ -33,11 +33,7 @@
 			<directory>${basedir}</directory>
 			<includes>
 				<include>src/main/**</include>
-				<include>src/test/**</include>
 				<include>.settings/**</include>
-				<include>files/**</include>
-				<include>META-INF/**</include>
-				<include>jetty.xml</include>
 				<include>my-microservice.cfg</include>
 			</includes>
 		</fileSet>

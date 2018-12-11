@@ -13,28 +13,47 @@
  ***************************************************************************************************************************/
  -->
 
-Installing in Eclipse
+{updated} Installing in Eclipse
 
 <p>
 	Follow these instructions to create a new template project in Eclipse.
 </p>		
 <ol class='spaced-list'>
 	<li>
-		Download the latest microservice-project zip file (e.g. <l>my-microservice.zip</l>).
+		Download the latest <l>my-jetty-microservice.zip</l> file.
 	<li>
 		In your Eclipse workspace, go to <b>File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</b> 
 		and select the zip file and click <b>Finish</b>.
 		<br><br>
-		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.1.png' style='width:549px'>
+		<img class='bordered' src='doc-files/juneau-microservice-jetty-template.Installing.1.png' style='width:549px'>
 	<li>
 		In your workspace, you should now see the following project:
 		<br><br>
-		<img class='bordered' src='doc-files/juneau-microservice-server.Installing.2.png' style='width:299px'>
+		<img class='bordered' src='doc-files/juneau-microservice-jetty-template.Installing.2.png' style='width:400px'>
 </ol>
 <p>
 	The important elements in this project are:
 </p>
 <ul class='spaced-list'>
+	<li>
+		<l>App.java</l> - The entry point. 
+		<br>This class creates and starts our microservice:
+		<br><br>
+		<p class='bcode w800'>
+	<jk>public class</jk> App {
+	
+		<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
+			JettyMicroservice
+				.<jsm>create</jsm>()
+				.args(args)
+				.servlet(RootResources.<jk>class</jk>)
+				.build()
+				.start()
+				.startConsole()
+				.join();
+		}
+	}
+		</p>
 	<li>
 		<l>RootResources.java</l> - The top-level REST resource. 
 		<br>This class routes HTTP requests to child resources:
@@ -74,13 +93,6 @@ Installing in Eclipse
 	# Subprojects can use this as a starting point.
 	#=======================================================================================================================</cc>
 	
-	<cc># What to do when the config file is saved.
-	# Possible values:
-	# 	NOTHING - Don't do anything. (default)
-	#	RESTART_SERVER - Restart the Jetty server.
-	#	RESTART_SERVICE - Shutdown and exit with code '3'.</cc>
-	<ck>saveConfigAction</ck> = <cv>RESTART_SERVER</cv>
-	
 	<cc>#=======================================================================================================================
 	# Jetty settings
 	#=======================================================================================================================</cc>
@@ -98,17 +110,34 @@ Installing in Eclipse
 	# jetty.xml file as "$S{availablePort}" (assuming resolveVars is enabled).</cc>
 	<ck>port</ck> = <cv>10000,0,0,0</cv>
 	
+	<cc># Optionally specify your servlets here:
+	#servlets = org.apache.juneau.microservice.sample.RootResources</cc>
+
 	<cc>#=======================================================================================================================
 	# REST settings
 	#=======================================================================================================================</cc>
 	<cs>[REST]</cs>
 	
-	<cc># Stylesheet to use for HTML views.
-	# The default options are:
-	#  - servlet:/styles/juneau.css
-	#  - servlet:/styles/devops.css
-	# Other stylesheets can be referenced relative to the servlet package or working directory.</cc>
-	<ck>stylesheet</ck> = <cv>servlet:/styles/devops.css</cv>
+	<cc># URL mappings to static files in the working directory or classpath.</cc>
+	<ck>staticFiles</ck> = htdocs:files/htdocs
+	
+	<cc># Stylesheet to use for HTML views.</cc>
+	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+	
+	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+	
+	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
+	<ck>header</ck> = 
+		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;
+			&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;
+		&lt;/a&gt;</cv>
+	<ck>footer</ck> = 
+		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;
+			&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;
+		&lt;/a&gt;</cv>
 	
 	<cc>#=======================================================================================================================
 	# Console settings
@@ -177,10 +206,11 @@ Installing in Eclipse
 	
 		<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
 			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"contextPath"</xs><xt>&gt;/&lt;/Set&gt;</xt>
-			<xt>&lt;Call</xt> <xa>name</xa>=<xs>"addServlet"</xs><xt>&gt;</xt>
-				<xt>&lt;Arg&gt;</xt>org.apache.juneau.microservice.sample.RootResources<xt>&lt;/Arg&gt;</xt>
-				<xt>&lt;Arg&gt;</xt>/*<xt>&lt;/Arg&gt;</xt>
-			<xt>&lt;/Call&gt;</xt>
+			<xc>&lt;!-- Optionally specify your servlets here --&gt;
+			&lt;!--Call name="addServlet"&gt;
+				&lt;Arg&gt;org.apache.juneau.microservice.sample.RootResources&lt;/Arg&gt;
+				&lt;Arg&gt;/*&lt;/Arg&gt;
+			&lt;/Call--&gt;</xc>
 			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"sessionHandler"</xs><xt>&gt;</xt>
 				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.session.SessionHandler"</xs><xt>/&gt;</xt>
 			<xt>&lt;/Set&gt;</xt>
