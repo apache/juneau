@@ -72,7 +72,7 @@ public class DocGenerator {
 
 			for (PageFile pf1 : topics.pageFiles) {
 				toc
-					.append("\t<li><p class='toc2 ").append(pf1.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
+					.append("\t<li><p class='").append(pf1.tags.isEmpty() ? "toc2" : pf1.tags).append("'><a class='doclink' href='{OVERVIEW_URL}#").append(pf1.fullId).append("'>").append(pf1.title).append("</a></p>\n");
 				ds
 					.addLink(pf1.fullId, "#" + pf1.fullId, "Overview > " + pf1.title);
 				contents

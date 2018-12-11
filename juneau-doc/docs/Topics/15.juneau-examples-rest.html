@@ -13,41 +13,36 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} juneau-examples-rest
+{updated} juneau-examples-rest
 
-<h5 class='figure'>Archive File</h5>
+<h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
-	juneau-examples-rest-{@property juneauVersion}.zip 
+	<xt>&lt;dependency&gt;</xt>
+		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		<xt>&lt;artifactId&gt;</xt>juneau-examples-rest<xt>&lt;/artifactId&gt;</xt>
+		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+	<xt>&lt;/dependency&gt;</xt>
+</p>	
+
+<h5 class='figure'>Java Library</h5>
+<p class='bpcode w500'>
+	juneau-examples-rest-{@property juneauVersion}.jar 
+</p>	
+
+<h5 class='figure'>OSGi Module</h5>
+<p class='bpcode w500'>
+	org.apache.juneau.examples.rest_{@property juneauVersion}.jar 
 </p>	
 
 <p>
-	The <code>juneau-examples-rest</code> project includes everything you need to start the Samples REST 
-	microservice in an Eclipse workspace.
+	The <code>juneau-examples-rest</code> project includes various examples of REST resources written
+	using Juneau.
 </p>
 <p>
-	This project is packaged as a Juneau Microservice project that allows REST resources to be started
-	using embedded Jetty.
-</p>	
-
-<h5 class='topic'>juneau-examples-rest install instructions</h5>
-<p>
-	Download the <code>juneau-examples-rest-{@property juneauVersion}.zip</code> file from the downloads page
-	(located in the binaries) and import it into your workspace as an existing project:
+	Note:  These examples can be deployed as buildable Eclipse projects using Jetty or Spring Boot using instructions
+	in the following sections:
 </p>
-<img class='bordered' src='doc-files/juneau-examples-rest.1.png' style='width:524px'>
-<p>
-	Select the archive file and import the project:
-</p>
-<img class='bordered' src='doc-files/juneau-examples-rest.2.png' style='width:523px'>
-<p>
-	Once loaded, you should see the following project structure:
-</p>
-<img class='bordered' src='doc-files/juneau-examples-rest.3.png' style='width:325px'>
-<p>
-	The microservice can be started from the <code>juneau-examples-rest.launch</code> file.
-	It will start up the microservice on port 10000 which you can then view through a browser:
-</p>
-<p class='bpcode w400'>
-	http://localhost:10000
-</p>			
-<img class='bordered w400' src='doc-files/juneau-examples-rest.4.png'>
+<ul class='spaced-list'>
+	<li>{@doc juneau-examples-rest-jetty}
+	<li>{@doc juneau-examples-rest-springboot}
+</ul>
