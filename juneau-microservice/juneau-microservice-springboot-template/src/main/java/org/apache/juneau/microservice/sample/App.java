@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.sample;
 
-import org.apache.juneau.examples.rest.RootResources;
 import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.springboot.annotation.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

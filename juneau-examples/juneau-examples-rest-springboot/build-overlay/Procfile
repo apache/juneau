@@ -1,1 +1,1 @@
-web: java -jar target/juneau-examples-rest-${version}.jar
+web: java -jar target/juneau-examples-rest-springboot-${version}.jar

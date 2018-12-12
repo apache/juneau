@@ -32,7 +32,7 @@
 	</parent>
 
 	<artifactId>juneau-microservice-springboot-template</artifactId>
-	<name>Apache Juneau Microservice Template</name>
+	<name>Apache Juneau Spring Boot Microservice Template</name>
 	<description>A template project developers use to start with to create a microservice.</description>
 	
 	<properties>
@@ -43,12 +43,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-examples-rest</artifactId>
+			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>${juneau.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-springboot</artifactId>
+			<artifactId>juneau-microservice-core</artifactId>
 			<version>${juneau.version}</version>
 		</dependency>
 	</dependencies>

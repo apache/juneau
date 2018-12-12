@@ -15,7 +15,7 @@
 -->
 <!--
 	This project is meant to be used as a starting point for developers to use in creating their own REST microservices.
-	It creates a parent REST interface on port 10000 with a single child hello-world resource.
+	It creates a Spring Boot application on port 5000 with a single child hello-world resource.
 	This POM is likewise meant to be used as a starting point for developers. It creates an uber-jar
 	to run the microservice from the command line. 
 	
@@ -27,101 +27,112 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	
-	<groupId>juneau-examples</groupId>
-	<artifactId>juneau-examples-rest-springboot</artifactId>
+
+	<groupId>my-microservices</groupId>
+	<artifactId>my-microservice</artifactId>
 	<version>${project.version}</version>
-	<name>Juneau REST Examples using Spring Boot</name>
-	<description>Juneau REST Examples using Spring Boot</description>
-	
+	<name>Juneau REST start project using Spring Boot</name>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>${springframework.version}</version>
+		<relativePath />
+	</parent>
+
 	<properties>
-		<juneau.version>${project.version}</juneau.version>
+		<encoding>UTF-8</encoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<javax.inject.version>${javax.inject.version}</javax.inject.version>
+		<juneau.version>${version}</juneau.version>
+		<jena.version>${jena.version}</jena.version>
 	</properties>
-	
+
 	<dependencies>
+
+		<!-- Juneau artifacts -->	
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-server</artifactId>
-			<version>7.1.0-SNAPSHOT</version>
+			<artifactId>juneau-all</artifactId>
+			<version>\${juneau.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-core</artifactId>
+			<version>\${juneau.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-springboot</artifactId>
+			<version>\${juneau.version}</version>
+		</dependency>
+				
+		<!-- Spring Boot dependencies-->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>\${javax.inject.version}</version>
+		</dependency>
+
 	</dependencies>
-	
+
 	<build>
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-       			<version>3.0.2</version>
- 				<executions>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
 					<execution>
-						<id>package-config</id>
-						<phase>package</phase>
+						<id>attach-sources</id>
+						<phase>verify</phase>
 						<goals>
-							<goal>copy-resources</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>target</outputDirectory>
-							<resources>
-								<resource>
-									<directory>.</directory>
-									<includes>my-microservice.cfg,jetty.xml</includes>
-								</resource>
-							</resources>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.apache.juneau.microservice.springboot.App
-							</mainClass>
-						</manifest>
-						<manifestEntries>
-							<Main-Config>my-microservice.cfg</Main-Config>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-				</configuration>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>package</phase>
 						<goals>
-							<goal>shade</goal>
+							<goal>build-info</goal>
 						</goals>
 						<configuration>
-							<filters>
-								<filter>
-									<artifact>*:*</artifact>
-									<excludes>
-										<exclude>META-INF/*.SF</exclude>
-										<exclude>META-INF/*.RSA</exclude>
-										<exclude>META-INF/*.INF</exclude> <!-- This one may not be required -->
-									</excludes>
-								</filter>
-							</filters>
+							<additionalProperties>
+								<encoding.source>\${project.build.sourceEncoding}</encoding.source>
+								<encoding.reporting>\${project.reporting.outputEncoding}</encoding.reporting>
+								<java.source>\${maven.compiler.source}</java.source>
+								<java.target>\${maven.compiler.target}</java.target>
+							</additionalProperties>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 </project>

@@ -25,8 +25,8 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.juneau</groupId>
-	<artifactId>juneau-examples-rest</artifactId>
+	<groupId>org.apache.juneau.examples</groupId>
+	<artifactId>juneau-examples-rest-jetty</artifactId>
 	<name>Apache Juneau REST Examples</name>
 	<version>${version}</version>
 	<description>Sample code packaged as a microservice.</description>

@@ -28,11 +28,10 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>juneau-examples</groupId>
-	<artifactId>juneau-examples-rest-jetty</artifactId>
+	<groupId>my-microservices</groupId>
+	<artifactId>my-microservice</artifactId>
 	<version>${project.version}</version>
-	<name>Juneau REST Examples using Jetty</name>
-	<description>Juneau REST Examples using Jetty</description>
+	<name>Juneau REST start project using Jetty</name>
 	
 	<properties>
 		<juneau.version>${project.version}</juneau.version>

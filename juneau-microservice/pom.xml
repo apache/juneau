@@ -33,6 +33,7 @@
 		<module>juneau-microservice-jetty</module>
 		<module>juneau-microservice-jetty-template</module>
 		<module>juneau-microservice-test</module>
+		<module>juneau-microservice-springboot-template</module>
 	</modules>
 
 </project>

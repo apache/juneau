@@ -32,7 +32,7 @@
 	</parent>
 
 	<artifactId>juneau-microservice-jetty-template</artifactId>
-	<name>Apache Juneau Microservice Template</name>
+	<name>Apache Juneau Jetty Microservice Template</name>
 	<description>A template project developers use to start with to create a microservice.</description>
 	
 	<properties>
