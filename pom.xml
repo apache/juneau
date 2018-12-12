@@ -19,7 +19,7 @@
 
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>7.2.2</version>
+	<version>7.2.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Apache Juneau</name>
 	<description>All the Apache Juneau content in one convenient package.</description>
@@ -40,8 +40,8 @@
 		<jetty.version>9.4.12.v20180830</jetty.version>
 		<juneau.compare.version>7.2.0</juneau.compare.version>
 		<javadoc.juneau.version>7.2.1</javadoc.juneau.version>
-		<juneauVersion>7.2.2</juneauVersion>
-		<juneauVersionNext>7.2.3</juneauVersionNext>
+		<juneauVersion>7.2.3-SNAPSHOT</juneauVersion>
+		<juneauVersionNext>7.2.4</juneauVersionNext>
 	</properties>
 
 	<dependencyManagement>
@@ -138,6 +138,8 @@
 					<excludes>
 						<exclude>**/DEPENDENCIES</exclude>
 						<exclude>**/target/**</exclude>
+						<exclude>**/*.log</exclude>
+						<exclude>**/*.log.*</exclude>
 						
 						<!-- Eclipse metadata files -->
 						<exclude>**/.settings/**</exclude>

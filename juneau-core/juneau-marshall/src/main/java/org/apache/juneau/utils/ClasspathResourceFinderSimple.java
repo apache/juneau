@@ -65,13 +65,26 @@ public class ClasspathResourceFinderSimple implements ClasspathResourceFinder {
 	 * @throws IOException
 	 */
 	protected InputStream findClasspathResource(Class<?> baseClass, String name, Locale locale) throws IOException {
-		if (locale == null)
-			return baseClass.getResourceAsStream(name);
+		
+		if (locale == null) 
+			return getResourceAsStream(baseClass, name);
+		
 		for (String n : getCandidateFileNames(name, locale)) {
-			InputStream is = baseClass.getResourceAsStream(n);
+			InputStream is = getResourceAsStream(baseClass, n);
 			if (is != null)
 				return is;
 		}
+		return null;
+	}
+
+	private InputStream getResourceAsStream(Class<?> baseClass, String name) {
+		InputStream is = baseClass.getResourceAsStream(name);
+		if (is != null)
+			return is;
+		if (! name.startsWith("/"))
+			is = baseClass.getResourceAsStream("/" + name);
+		if (is != null)
+			return is;
 		return null;
 	}
 
