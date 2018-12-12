@@ -449,7 +449,7 @@
 	</ol>
 	<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></p>
 	<ol>
-		<li><p class='new'><a class='doclink' href='#juneau-examples-rest-springboot.Classes'>Classes</a></p>
+		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.Classes'>Classes</a></p>
 		<li><p class='todo'><a class='doclink' href='#juneau-examples-rest-springboot.DeployingToHeroku'>Deploying to Heroku</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#Security'>Security Best-Practices</a></p>
@@ -21408,13 +21408,13 @@
 	The Juneau integration component for Spring Boot consists of the following classes:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.rest.springboot.annotation.JuneauRest}
+	<li class='ja'>{@link org.apache.juneau.rest.springboot.annotation.JuneauRestRoot}
 	<li class='jc'>{@link org.apache.juneau.rest.springboot.JuneauRestInitializer}
 	<li class='jc'>{@link org.apache.juneau.rest.springboot.SpringRestResourceResolver}
 </ul>
 <p>
 	A typical Spring Boot application can use the {@link org.apache.juneau.rest.springboot.JuneauRestInitializer} to find
-	and register Juneau REST servlets via the {@link org.apache.juneau.rest.springboot.annotation.JuneauRest} annotation.
+	and register Juneau REST servlets via the {@link org.apache.juneau.rest.springboot.annotation.JuneauRestRoot} annotation.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -21429,23 +21429,23 @@
 		}
 	
 		<jd>/** Our root resource */</jd>
-		<ja>@Bean @JuneauRest</ja>
+		<ja>@Bean @JuneauRestRoot</ja>
 		<jk>public</jk> RootResource getRootResource() {
 			<jk>return new</jk> RootResource();  <jc>// A subclass of RestServlet.</jc>
 		}
 	}
 </p>
 <p>
-	The initializer will search for Spring beans annotated with the <ja>@JuneauRest</ja> annotation identifying it
+	The initializer will search for Spring beans annotated with the <ja>@JuneauRestRoot</ja> annotation identifying it
 	as a top-level servlet to be deployed in the Spring Boot web container.
 </p>
 <p>
-	Another option is to use the <ja>@JuneauRest</ja> annotation on your Spring Boot source class like so:  
+	Another option is to use the <ja>@JuneauRestRoot</ja> annotation on your Spring Boot source class like so:  
 </p>
 <p class='bpcode w800'>
 	<ja>@SpringBootApplication</ja>
 	<ja>@Controller</ja>
-	<ja>@JuneauRest</ja>(servlets=RootResource.<jk>class</jk>)
+	<ja>@JuneauRestRoot</ja>(servlets=RootResource.<jk>class</jk>)
 	<jk>public class</jk> App {
 	
 		<jk>public static void</jk> main(String[] args) {
@@ -25496,7 +25496,9 @@
 	<li>
 		<l>App.java</l> - The entry point. 
 		<br>This class creates and starts our microservice.
-		<br>Note that we're using the existing Spring Boot application logic for the microservice.
+		<br>Note that we're using the existing Spring Boot application logic for the microservice and we're retrieving
+		our root resource as a spring bean.
+		<br>Only the top-level resource needs to be annotated with {@link org.apache.juneau.microservice.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
 		<br><br>
 		<p class='bcode w800'>
 	<ja>@SpringBootApplication</ja>
@@ -25509,7 +25511,7 @@
 				.run(args);
 		}
 	
-		<ja>@Bean @JuneauRest</ja>
+		<ja>@Bean @JuneauRestRoot</ja>
 		<jk>public</jk> RootResources getRootResources() {
 			<jk>return new</jk> RootResources();
 		}
@@ -25545,10 +25547,11 @@
 	}
 		</p>
 	<li>
-		<l>my-microservice.cfg</l> - The external configuration file. 
+		<l>juneau.cfg</l> - The configuration file. 
 		<br>Contains various useful settings.
 		<br>Can be used for your own resource configurations.
 		<br>Note that the Jetty configuration is not present.
+		<br>Also it's located in the classpath so that our microservice can be built as a single executable jar. 
 		<br><br>
 		<p class='bcode w800'>
 	<cc>#=======================================================================================================================
@@ -27864,7 +27867,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.Classes' id='juneau-examples-rest-springboot.Classes'>18.1 - Classes</a></h3>
+<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-examples-rest-springboot.Classes' id='juneau-examples-rest-springboot.Classes'>18.1 - Classes</a></h3>
 <div class='topic'><!-- START: 18.1 - juneau-examples-rest-springboot.Classes -->
 <p>
 	The <code>juneau-examples-rest-springboot</code> project contains the same classes as found in <code>juneau-examples-rest</code>

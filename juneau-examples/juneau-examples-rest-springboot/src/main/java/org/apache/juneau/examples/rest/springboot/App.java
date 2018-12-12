@@ -36,7 +36,7 @@ public class App {
 	/**
 	 * Our root resource.
 	 */
-	@Bean @JuneauRest
+	@Bean @JuneauRestRoot
 	public RootResources getRootResources() {
 		return new RootResources();
 	}

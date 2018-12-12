@@ -40,7 +40,7 @@ public class App {
 	/**
 	 * @return Our root resource.
 	 */
-	@Bean @JuneauRest
+	@Bean @JuneauRestRoot
 	public RootResources getRootResources() {
 		return new RootResources();
 	}

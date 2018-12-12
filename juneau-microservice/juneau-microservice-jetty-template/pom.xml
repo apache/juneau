@@ -72,6 +72,7 @@
 							<descriptors>
 								<descriptor>src/assembly/bin.xml</descriptor>
 							</descriptors>
+							<escapeString>\</escapeString>
 						</configuration>
 					</execution>
 				</executions>

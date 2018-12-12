@@ -36,7 +36,7 @@ import java.lang.annotation.*;
 @Retention(RUNTIME)
 @Documented
 @Inherited
-public @interface JuneauRest {
+public @interface JuneauRestRoot {
 
 	/**
 	 * Specifies one or more implementations of {@link RestServlet} to deploy as servlets.

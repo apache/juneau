@@ -24,7 +24,7 @@ import org.apache.juneau.rest.widget.ThemeMenuItem;
  * Root microservice page.
  */
 @RestResource(
-	path="/",
+	path="/*",
 	title="My Microservice",
 	description="Top-level resources page",
 	htmldoc=@HtmlDoc(

@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} Installing in Eclipse
+{new} Installing in Eclipse
 
 <p>
 	Follow these instructions to create a new template project in Eclipse.
@@ -38,7 +38,9 @@
 	<li>
 		<l>App.java</l> - The entry point. 
 		<br>This class creates and starts our microservice.
-		<br>Note that we're using the existing Spring Boot application logic for the microservice.
+		<br>Note that we're using the existing Spring Boot application logic for the microservice and we're retrieving
+		our root resource as a spring bean.
+		<br>Only the top-level resource needs to be annotated with {@link oaj.microservice.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
 		<br><br>
 		<p class='bcode w800'>
 	<ja>@SpringBootApplication</ja>
@@ -51,7 +53,7 @@
 				.run(args);
 		}
 	
-		<ja>@Bean @JuneauRest</ja>
+		<ja>@Bean @JuneauRestRoot</ja>
 		<jk>public</jk> RootResources getRootResources() {
 			<jk>return new</jk> RootResources();
 		}

@@ -20,7 +20,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * Spring Boot context initializer for Juneau REST resources.
  *
  * <p>
- * Looks for the {@link JuneauRest} annotation on the Spring application class to automatically register Juneau REST resources.
+ * Looks for the {@link JuneauRestRoot} annotation on the Spring application class to automatically register Juneau REST resources.
  */
 public class JuneauRestInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 

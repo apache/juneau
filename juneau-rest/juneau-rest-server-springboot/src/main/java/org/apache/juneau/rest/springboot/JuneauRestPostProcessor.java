@@ -28,7 +28,7 @@ import java.util.*;
 import javax.servlet.Servlet;
 
 /**
- * Processes the {@link JuneauRest} annotation on the Spring application class and <ja>@Bean</ja> methods.
+ * Processes the {@link JuneauRestRoot} annotation on the Spring application class and <ja>@Bean</ja> methods.
  */
 public class JuneauRestPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
@@ -57,25 +57,25 @@ public class JuneauRestPostProcessor implements BeanDefinitionRegistryPostProces
 		try {
 			Map<String,RestServlet> m = new LinkedHashMap<>();
 
-			// @JuneauRest on App class.
+			// @JuneauRestRoot on App class.
 			if (appClass != null) {
-				JuneauRest a = appClass.getAnnotation(JuneauRest.class);
+				JuneauRestRoot a = appClass.getAnnotation(JuneauRestRoot.class);
 				if (a != null)
 					for (Class<? extends RestServlet> c : a.servlets())
 						m.put(c.getName(), c.newInstance());
 			}
 
-			// @JuneauRest on classes.
-			for (Map.Entry<String,Object> e : beanFactory.getBeansWithAnnotation(JuneauRest.class).entrySet())
+			// @JuneauRestRoot on classes.
+			for (Map.Entry<String,Object> e : beanFactory.getBeansWithAnnotation(JuneauRestRoot.class).entrySet())
 				if (e.getValue() instanceof RestServlet)
 					m.put(e.getKey(), (RestServlet) e.getValue());
 
-			// @JuneauRest on @Bean method.
+			// @JuneauRestRoot on @Bean method.
 			for (String beanName : beanFactory.getBeanNamesForType(RestServlet.class)) {
 				BeanDefinition bd = beanFactory.getBeanDefinition(beanName);
 				if (bd.getSource() instanceof AnnotatedTypeMetadata) {
 					AnnotatedTypeMetadata metadata = (AnnotatedTypeMetadata) bd.getSource();
-					if (metadata.isAnnotated(JuneauRest.class.getName()))
+					if (metadata.isAnnotated(JuneauRestRoot.class.getName()))
 						m.put(beanName, (RestServlet) beanFactory.getBean(beanName));
 				}
 			}
