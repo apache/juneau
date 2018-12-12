@@ -23,13 +23,13 @@ import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.json.*;
 
 /**
- * TODO
+ * Json configuration example.
  */
 public class JsonConfigurationExample {
 
 	/**
-	 * TODO
-	 *
+	 * Examples on Json Serializers configured using properties
+	 * defined in JsonSerializer class
 	 * @param args
 	 * @throws Exception
 	 */
