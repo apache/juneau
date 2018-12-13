@@ -36,6 +36,16 @@ public class HtmlComplexExample {
     public static void main(String[] args) throws Exception {
         // Juneau provides static constants with the most commonly used configurations
         // Get a reference to a serializer - converting POJO to flat format
+        /**
+         * Produces
+         * <table><tr><td>innerPojo</td><td><table><tr><td>name</td><td>name0</td></tr>
+         * <tr><td>id</td><td>1.0</td></tr></table></td></tr><tr><td>values</td><td><table>
+         * <tr><td>setOne</td><td><table _type="array"><tr><th>name</th><th>id</th></tr>
+         * <tr><td>name1</td><td>1.1</td></tr><tr><td>name2</td><td>1.1</td></tr>
+         * </table></td></tr><tr><td>setTwo</td><td><table _type="array"><tr><th>name
+         * </th><th>id</th></tr><tr><td>name1</td><td>1.2</td></tr><tr><td>name2</td><td>1.2
+         * </td></tr></table></td></tr></table></td></tr><tr><td>id</td><td>pojo</td></tr></table>
+         */
         HtmlSerializer htmlSerializer = HtmlSerializer.DEFAULT;
         // Get a reference to a parser - converts that flat format back into the POJO
         HtmlParser htmlParser = HtmlParser.DEFAULT;

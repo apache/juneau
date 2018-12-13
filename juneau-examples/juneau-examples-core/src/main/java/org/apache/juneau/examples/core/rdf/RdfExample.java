@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.juneau.examples.core.rdf;
 
 import org.apache.juneau.examples.core.pojo.Pojo;

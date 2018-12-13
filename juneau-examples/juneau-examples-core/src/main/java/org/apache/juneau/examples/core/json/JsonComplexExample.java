@@ -33,6 +33,12 @@ public class JsonComplexExample {
     public static void main(String[] args) throws Exception{
         // Juneau provides static constants with the most commonly used configurations
         // Get a reference to a serializer - converting POJO to flat format
+        /**
+         * Produces
+         * {"innerPojo":{"name":"name0","id":"1.0"},
+         * "values":{"setOne":[{"name":"name1","id":"1.1"},{"name":"name2","id":"1.1"}],
+         * "setTwo":[{"name":"name1","id":"1.2"},{"name":"name2","id":"1.2"}]},"id":"pojo"}
+         */
         JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
         // Get a reference to a parser - converts that flat format back into the POJO
         JsonParser jsonParser = JsonParser.DEFAULT;

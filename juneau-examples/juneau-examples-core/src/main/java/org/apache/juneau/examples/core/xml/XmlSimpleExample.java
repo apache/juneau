@@ -37,6 +37,12 @@ public class XmlSimpleExample {
         Pojo pojo = new Pojo("id","name");
 
         // Serialize to human readable XML and print
+        /**
+         * <object>
+         * <name>name</name>
+         * <id>id</id>
+         * </object>
+         */
         String serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojo);
         System.out.println(serial);
 

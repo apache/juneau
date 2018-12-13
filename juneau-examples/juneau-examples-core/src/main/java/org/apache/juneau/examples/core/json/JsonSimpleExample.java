@@ -19,9 +19,13 @@
 
 package org.apache.juneau.examples.core.json;
 
+import org.apache.juneau.dto.atom.Person;
 import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.json.JsonSerializer;
+import org.apache.juneau.json.SimpleJsonSerializer;
+
+import java.util.Map;
 
 /**
  * Sample class which shows the simple usage of JsonSerializer and JsonParser.
@@ -37,6 +41,8 @@ public class JsonSimpleExample {
 	public static void main(String[] args) throws Exception{
 		// Juneau provides static constants with the most commonly used configurations
 		// Get a reference to a serializer - converting POJO to flat format
+		// Produces
+		// {"name":"name","id":"id"}
 		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
 		// Get a reference to a parser - converts that flat format back into the POJO
 		JsonParser jsonParser = JsonParser.DEFAULT;
@@ -44,7 +50,6 @@ public class JsonSimpleExample {
 		Pojo pojo = new Pojo("id","name");
 
 		String flat = jsonSerializer.serialize(pojo);
-
 		// Print out the created POJO in JSON format.
 		System.out.println(flat);
 
@@ -52,6 +57,24 @@ public class JsonSimpleExample {
 
 		assert parse.getId().equals(pojo.getId());
 		assert parse.getName().equals(pojo.getName());
+
+		// Produces
+		// {name:'name',id:'id'}
+		String simpleJson = SimpleJsonSerializer.DEFAULT.serialize(pojo);
+		System.out.println(simpleJson);
+
+		// Parse a JSON object (creates a generic ObjectMap).
+		String json = "{name:'John Smith',age:21}";
+		Map m1 = jsonParser.parse(json, Map.class);
+
+		// Parse a JSON string.
+		json = "'foobar'";
+		String s2 = jsonParser.parse(json, String.class);
+
+		// Parse a JSON number as a Long or Float.
+		json = "123";
+		Long l3 = jsonParser.parse(json, Long.class);
+		Float f3 = jsonParser.parse(json, Float.class);
 
 		// The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
