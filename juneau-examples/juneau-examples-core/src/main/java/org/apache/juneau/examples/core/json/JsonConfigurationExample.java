@@ -36,12 +36,42 @@ public class JsonConfigurationExample {
 	public static void main(String[] args) throws Exception {
 		Pojo aPojo = new Pojo("a","</pojo>");
 		// Json Serializers can be configured using properties defined in JsonSerializer
+		/**
+		 * Produces
+		 * {
+		 * 	"name": "</pojo>",
+		 * 	"id": "a"
+		 * }
+		 */
 		String withWhitespace = JsonSerializer.create().ws().build().serialize(aPojo);
 		// the output will be padded with spaces after format characters
 		System.out.println(withWhitespace);
 
+		/**
+		 * Produces
+		 * {"name":"<\/pojo>","id":"a"}
+		 */
 		String escaped = JsonSerializer.create().escapeSolidus().build().serialize(aPojo);
 		// the output will have escaped /
 		System.out.println(escaped);
+
+		/**
+		 * Produces
+		 * {
+		 * 	name: '</pojo>',
+		 *	id: 'a'
+		 * }
+		 */
+		String configurableJson =JsonSerializer
+				.create()  // Create a JsonSerializerBuilder
+				.simple()  // Simple mode
+				.ws()  // Use whitespace
+				.sq()  // Use single quotes
+				.build()
+				.serialize(aPojo);  // Create a JsonSerializer
+
+		System.out.println(configurableJson);
+
+
 	}
 }

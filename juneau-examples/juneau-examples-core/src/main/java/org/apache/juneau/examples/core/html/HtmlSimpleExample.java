@@ -13,6 +13,7 @@
 package org.apache.juneau.examples.core.html;
 
 import org.apache.juneau.examples.core.pojo.Pojo;
+import org.apache.juneau.html.HtmlDocSerializer;
 import org.apache.juneau.html.HtmlParser;
 import org.apache.juneau.html.HtmlSerializer;
 
@@ -29,6 +30,8 @@ public class HtmlSimpleExample {
     public static void main(String[] args) throws Exception{
         // Juneau provides static constants with the most commonly used configurations
         // Get a reference to a serializer - converting POJO to flat format
+        // Produces
+        // <table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr></table>
         HtmlSerializer htmlSerializer = HtmlSerializer.DEFAULT;
         // Get a reference to a parser - converts that flat format back into the POJO
         HtmlParser htmlParser = HtmlParser.DEFAULT;
@@ -44,6 +47,15 @@ public class HtmlSimpleExample {
 
         assert parse.getId().equals(pojo.getId());
         assert parse.getName().equals(pojo.getName());
+
+        /**
+         *  Produces
+         *  <html><head><style></style><script></script></head><body><section><article><div class="outerdata">
+         *  <div class="data" id="data"><table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr>
+         *  </table></div></div></article></section></body></html>
+         */
+        String docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);
+        System.out.println(docSerialized);
 
         // The object above can be parsed thanks to the @BeanConstructor(properties = id,name) annotation on Pojo
         // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.
