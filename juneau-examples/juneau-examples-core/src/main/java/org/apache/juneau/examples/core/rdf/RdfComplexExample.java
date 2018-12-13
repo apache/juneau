@@ -14,6 +14,7 @@ package org.apache.juneau.examples.core.rdf;
 
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.jena.RdfSerializer;
+import org.apache.juneau.jena.RdfXmlAbbrevSerializer;
 import org.apache.juneau.jena.RdfXmlSerializer;
 
 import java.util.ArrayList;
@@ -46,8 +47,58 @@ public class RdfComplexExample {
         PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
         // this creates an RDF serializer with the default XML structure
+        /**Produces
+         * <rdf:RDF
+         * xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         * xmlns:j="http://www.apache.org/juneau/"
+         * xmlns:jp="http://www.apache.org/juneaubp/" >
+         * <rdf:Description rdf:nodeID="A0">
+         * <jp:name>name1</jp:name>
+         * <jp:id>1.1</jp:id>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A1">
+         * <jp:innerPojo rdf:nodeID="A2"/>
+         * <jp:values rdf:nodeID="A3"/>
+         * <jp:id>pojo</jp:id>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A3">
+         * <jp:setOne rdf:nodeID="A4"/>
+         * <jp:setTwo rdf:nodeID="A5"/>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A6">
+         * <jp:name>name2</jp:name>
+         * <jp:id>1.1</jp:id>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A2">
+         * <jp:name>name0</jp:name>
+         * <jp:id>1.0</jp:id>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A7">
+         * <jp:name>name2</jp:name>
+         * <jp:id>1.2</jp:id>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A4">
+         * <rdf:_2 rdf:nodeID="A6"/>
+         * <rdf:_1 rdf:nodeID="A0"/>
+         * <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A5">
+         * <rdf:_2 rdf:nodeID="A7"/>
+         * <rdf:_1 rdf:nodeID="A8"/>
+         * <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+         * </rdf:Description>
+         * <rdf:Description rdf:nodeID="A8">
+         * <jp:name>name1</jp:name>
+         * <jp:id>1.2</jp:id>
+         * </rdf:Description>
+         * </rdf:RDF>
+         */
         RdfSerializer rdfSerializer = RdfXmlSerializer.DEFAULT;
         // This will show the final output from the bean
         System.out.println(rdfSerializer.serialize(pojoc));
+
+        //Usage of RdfXmlAbbrevSerializer.
+        String rdfXml = RdfXmlAbbrevSerializer.DEFAULT.serialize(pojoc);
+        System.out.println(rdfXml);
     }
 }
