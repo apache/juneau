@@ -85,7 +85,6 @@ public class JettyMicroservice extends Microservice {
 			.join();
 	}
 
-
 	final MessageBundle messages = MessageBundle.create(JettyMicroservice.class);
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -126,6 +125,24 @@ public class JettyMicroservice extends Microservice {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Methods implemented on Microservice API
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Microservice */
+	public JettyMicroservice init() throws Exception {
+		super.init();
+		return this;
+	}
+
+	@Override /* Microservice */
+	public JettyMicroservice startConsole() throws Exception {
+		super.startConsole();
+		return this;
+	}
+
+	@Override /* Microservice */
+	public JettyMicroservice stopConsole() throws Exception {
+		super.stopConsole();
+		return this;
+	}
 
 	@Override /* Microservice */
 	public synchronized JettyMicroservice start() throws Exception {

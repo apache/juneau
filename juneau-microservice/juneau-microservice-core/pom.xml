@@ -76,7 +76,7 @@
 					<oldVersion>
 						<dependency>
 							<groupId>org.apache.juneau</groupId>
-							<artifactId>juneau-microservice-server</artifactId>
+							<artifactId>juneau-microservice-core</artifactId>
 							<version>7.1.0</version>
 							<type>jar</type>
 						</dependency>
