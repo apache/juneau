@@ -100,7 +100,7 @@ public class CommonEntry extends Common {
 	 * @return The list of categories of this object.
 	 */
 	@Xml(format=COLLAPSED, childName="category")
-	public Category[] getCatetories() {
+	public Category[] getCategories() {
 		return categories;
 	}
 

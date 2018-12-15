@@ -15,10 +15,13 @@
 -->
 <!--
 	This project is meant to be used as a starting point for developers to use in creating their own REST microservices.
-	It creates a parent REST interface on port 10000 with a single child hello-world resource.
+	It creates a Spring Boot application on port 5000 populated with the Juneau REST examples.
 	This POM is likewise meant to be used as a starting point for developers. It creates an uber-jar
-	to run the microserice from the command line. Copy the jar as well as the .cfg file and start it
-	with java -jar juneau-microservice-template-1.0.0.jar microservice.cfg
+	to run the microservice from the command line. 
+	
+	Copy the jar as well as the my-microservice.cfg and jetty.xml file and start it with: 
+		java -jar juneau-examples-rest-springboot-1.0.jar
+		
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -29,7 +32,7 @@
 	<artifactId>juneau-examples-rest-springboot</artifactId>
 	<name>Apache Juneau REST Examples</name>
 	<version>${version}</version>
-	<description>Sample code packaged as a microservice.</description>
+	<description>REST examples packaged as a Spring Boot microservice.</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -71,10 +74,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server</artifactId>
+			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>\${juneau.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 				
 		<!-- Spring Boot dependencies-->
@@ -136,32 +137,6 @@
 		<plugins>
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- This runs the _TestSuite class. You must run within the testsuite 
-				so the REST microservice is started for the tests. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>**/_TestSuite.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
@@ -180,13 +155,21 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.apache.juneau.examples.rest.springboot.App
+							</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 	</build>
 	
 </project>

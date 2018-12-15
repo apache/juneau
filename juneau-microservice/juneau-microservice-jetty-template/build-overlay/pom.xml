@@ -20,7 +20,7 @@
 	to run the microservice from the command line. 
 	
 	Copy the jar as well as the my-microservice.cfg file and start it with: 
-		java -jar my-microservice-1.0.jar
+		java -jar my-jetty-microservice-1.0.jar
 		
 	The group/artifact/version information is meant to be overwritten by developers to match their own needs.
 -->
@@ -29,12 +29,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>my-microservices</groupId>
-	<artifactId>my-microservice</artifactId>
-	<version>${project.version}</version>
+	<artifactId>my-jetty-microservice</artifactId>
+	<version>${version}</version>
 	<name>Juneau REST start project using Jetty</name>
 	
 	<properties>
-		<juneau.version>${project.version}</juneau.version>
+		<juneau.version>${version}</juneau.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -42,12 +42,13 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-jetty</artifactId>
-			<version>${juneau.version}</version>
+			<version>\${juneau.version}</version>
 		</dependency>
 	</dependencies>
 	
 	<build>
 		<plugins>
+			
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -55,6 +56,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -71,25 +73,27 @@
 							<resources>
 								<resource>
 									<directory>.</directory>
-									<includes>my-microservice.cfg,jetty.xml</includes>
+									<includes>my-microservice.cfg</includes>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.apache.juneau.microservice.sample.App
+							<mainClass>org.apache.juneau.microservice.jetty.template.App
 							</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -118,6 +122,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 </project>

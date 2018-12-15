@@ -54,25 +54,15 @@
 		<!-- Juneau artifacts -->	
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-all</artifactId>
+			<artifactId>juneau-microservice-jetty</artifactId>
 			<version>\${juneau.version}</version>
 		</dependency>
+
+		<!-- Optional RDF support -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-marshall-rdf</artifactId>
 			<version>\${juneau.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-jetty</artifactId>
-			<version>\${juneau.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server</artifactId>
-			<version>\${juneau.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 				
 		<dependency>
@@ -135,57 +125,80 @@
 		<plugins>
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- This runs the _TestSuite class. You must run within the testsuite 
-				so the REST microservice is started for the tests. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<includes>
-						<include>**/_TestSuite.java</include>
-					</includes>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
-
+			
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+       			<version>3.0.2</version>
+ 				<executions>
 					<execution>
+						<id>package-config</id>
+						<phase>package</phase>
 						<goals>
-							<goal>build-info</goal>
+							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<additionalProperties>
-								<encoding.source>\${project.build.sourceEncoding}</encoding.source>
-								<encoding.reporting>\${project.reporting.outputEncoding}</encoding.reporting>
-								<java.source>\${maven.compiler.source}</java.source>
-								<java.target>\${maven.compiler.target}</java.target>
-							</additionalProperties>
+							<outputDirectory>target</outputDirectory>
+							<resources>
+								<resource>
+									<directory>.</directory>
+									<includes>examples.cfg</includes>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.apache.juneau.examples.rest.jetty.App
+							</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<createDependencyReducedPom>false</createDependencyReducedPom>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+										<exclude>META-INF/*.INF</exclude> <!-- This one may not be required -->
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 	</build>
 	
 </project>

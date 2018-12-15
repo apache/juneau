@@ -10,38 +10,38 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.examples.rest.jetty;
+package org.apache.juneau.microservice.springboot.template;
 
-import org.apache.juneau.examples.rest.RootResources;
-import org.apache.juneau.microservice.jetty.*;
+import org.apache.juneau.rest.springboot.*;
+import org.apache.juneau.rest.springboot.annotation.*;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.*;
+import org.springframework.context.annotation.*;
+import org.springframework.stereotype.Controller;
 
 /**
- * An example of an extended REST microservice.
- *
- * <p>
- * Subclasses can extend from {@link JettyMicroservice} to implement their own custom behavior.
- * However, this is optional and the {@link JettyMicroservice} class can be invoked directly.
- *
- * <p>
- * The {@link JettyMicroservice} class will locate the <code>examples.cfg</code> file in the home directory and initialize
- * the resources and commands defined in that file.
+ * Entry point for Examples REST application when deployed as a Spring Boot application.
  */
+@SpringBootApplication
+@Controller
 public class App {
 
 	/**
 	 * Entry point method.
 	 *
-	 * @param args Command line arguments.
-	 * @throws Exception
+	 * @param args Command-line arguments
 	 */
-	public static void main(String[] args) throws Exception {
-		JettyMicroservice
-			.create()
-			.args(args)
-			.servlet(RootResources.class)
-			.build()
-			.start()
-			.startConsole()
-			.join();
+	public static void main(String[] args) {
+		new SpringApplicationBuilder(App.class)
+			.initializers(new JuneauRestInitializer(App.class))
+			.run(args);
+	}
+
+	/**
+	 * @return Our root resource.
+	 */
+	@Bean @JuneauRestRoot
+	public RootResources getRootResources() {
+		return new RootResources();
 	}
 }

@@ -234,8 +234,13 @@ public class Microservice implements ConfigEventListener {
 				consoleCommandMap.put(cc.getName(), cc);
 			}
 			for (String s : config.getStringArray("Console/commands")) {
-				ConsoleCommand cc = (ConsoleCommand)Class.forName(s).newInstance();
-				consoleCommandMap.put(cc.getName(), cc);
+				ConsoleCommand cc;
+				try {
+					cc = (ConsoleCommand)Class.forName(s).newInstance();
+					consoleCommandMap.put(cc.getName(), cc);
+				} catch (Exception e) {
+					getConsoleWriter().println("Could not create console command '"+s+"', " + e.getLocalizedMessage());
+				}
 			}
 			consoleThread = new Thread("ConsoleThread") {
 				@Override /* Thread */

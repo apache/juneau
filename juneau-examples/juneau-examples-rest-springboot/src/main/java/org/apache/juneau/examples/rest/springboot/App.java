@@ -12,13 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.springboot;
 
-import org.apache.juneau.examples.rest.RootResources;
+import org.apache.juneau.examples.rest.*;
 import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.springboot.annotation.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.*;
+import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.filter.*;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
@@ -31,6 +33,8 @@ public class App {
 		new SpringApplicationBuilder(App.class)
 			.initializers(new JuneauRestInitializer(App.class))
 			.run(args);
+
+		System.err.println(System.getProperty("server.port"));
 	}
 
 	/**
@@ -39,5 +43,16 @@ public class App {
 	@Bean @JuneauRestRoot
 	public RootResources getRootResources() {
 		return new RootResources();
+	}
+
+	/**
+	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
+	 * body to be consumed.  So disable it.
+	 */
+	@Bean
+	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
+	    FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
+	    registration.setEnabled(false);
+	    return registration;
 	}
 }

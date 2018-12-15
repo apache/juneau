@@ -10,38 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.sample;
+package org.apache.juneau.microservice.springboot.template;
 
-import org.apache.juneau.microservice.resources.ConfigResource;
-import org.apache.juneau.microservice.resources.LogsResource;
+import static org.apache.juneau.http.HttpMethodName.*;
+
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.HtmlDoc;
+import org.apache.juneau.rest.annotation.RestMethod;
 import org.apache.juneau.rest.annotation.RestResource;
-import org.apache.juneau.rest.widget.ContentTypeMenuItem;
-import org.apache.juneau.rest.widget.ThemeMenuItem;
 
 /**
- * Root microservice page.
+ * Sample REST resource that prints out a simple "Hello world!" message.
  */
 @RestResource(
-	path="/*",
-	title="My Microservice",
-	description="Top-level resources page",
-	htmldoc=@HtmlDoc(
-		widgets={
-			ContentTypeMenuItem.class,
-			ThemeMenuItem.class
-		},
-		navlinks={
-			"options: servlet:/?method=OPTIONS"
-		}
-	),
-	children={
-		HelloWorldResource.class,
-		ConfigResource.class,
-		LogsResource.class
-	}
+	title="Hello World example",
+	path="/helloworld",
+	description="Simplest possible REST resource"
 )
-public class RootResources extends BasicRestServletGroup {
+public class HelloWorldResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * GET request handler.
+	 * @return The string "Hello world!"
+	 */
+	@RestMethod(method=GET, path="/*")
+	public String sayHello() {
+		return "Hello world!";
+	}
 }

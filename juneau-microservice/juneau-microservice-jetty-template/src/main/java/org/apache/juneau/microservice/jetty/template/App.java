@@ -10,38 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.sample;
+package org.apache.juneau.microservice.jetty.template;
 
-import org.apache.juneau.rest.springboot.*;
-import org.apache.juneau.rest.springboot.annotation.*;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.*;
-import org.springframework.context.annotation.*;
-import org.springframework.stereotype.Controller;
+import org.apache.juneau.microservice.jetty.JettyMicroservice;
 
 /**
- * Entry point for Examples REST application when deployed as a Spring Boot application.
+ * Entry-point for your microservice.
+ *
+ * <p>
+ * The {@link JettyMicroservice} class will locate the <code>my-microservice.cfg</code> file in the home directory and initialize
+ * the resources and commands defined in that file.
  */
-@SpringBootApplication
-@Controller
 public class App {
 
 	/**
 	 * Entry point method.
 	 *
-	 * @param args Command-line arguments
+	 * @param args Command line arguments.
+	 * @throws Exception
 	 */
-	public static void main(String[] args) {
-		new SpringApplicationBuilder(App.class)
-			.initializers(new JuneauRestInitializer(App.class))
-			.run(args);
-	}
-
-	/**
-	 * @return Our root resource.
-	 */
-	@Bean @JuneauRestRoot
-	public RootResources getRootResources() {
-		return new RootResources();
+	public static void main(String[] args) throws Exception {
+		JettyMicroservice
+			.create()
+			.args(args)
+			.servlet(RootResources.class)
+			.build()
+			.start()
+			.startConsole()
+			.join();
 	}
 }

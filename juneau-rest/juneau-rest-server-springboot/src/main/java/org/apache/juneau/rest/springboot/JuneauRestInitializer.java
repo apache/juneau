@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.springboot;
 
+import static java.lang.System.*;
 import org.apache.juneau.rest.springboot.annotation.*;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -37,6 +38,9 @@ public class JuneauRestInitializer implements ApplicationContextInitializer<Conf
 
 	@Override /* ApplicationContextInitializer */
 	public void initialize(ConfigurableApplicationContext ctx) {
+		String port = ctx.getEnvironment().getProperty("server.port");
+		if (port != null && getProperty("juneau.serverPort") == null)
+			setProperty("juneau.serverPort", port);
 		ctx.addBeanFactoryPostProcessor(new JuneauRestPostProcessor(ctx, appClass));
 	}
 }

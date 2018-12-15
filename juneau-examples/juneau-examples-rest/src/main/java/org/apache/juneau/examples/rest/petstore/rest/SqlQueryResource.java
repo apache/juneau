@@ -98,6 +98,7 @@ public class SqlQueryResource extends BasicRestServlet {
 		try {
 			Class.forName(driver).newInstance();
 		} catch (Exception e) {
+			e.printStackTrace(System.err);
 			throw new RuntimeException(e);
 		}
 	}

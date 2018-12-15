@@ -34,7 +34,7 @@
 		<Set name="contextPath">/</Set>
 		<!-- Optionally specify your servlets here -->
 		<!--Call name="addServlet">
-            <Arg>org.apache.juneau.microservice.sample.RootResources</Arg>
+            <Arg>org.apache.juneau.microservice.jetty.template.RootResources</Arg>
             <Arg>/*</Arg>
          </Call-->
 		<Set name="sessionHandler">
