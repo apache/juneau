@@ -14,7 +14,8 @@ import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 
 public class DtoExample {
 
-    public static void main(String[] args) throws Exception {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) throws Exception {
 
         //Produces
         /**

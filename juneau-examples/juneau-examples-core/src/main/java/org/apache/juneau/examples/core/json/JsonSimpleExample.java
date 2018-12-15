@@ -19,7 +19,6 @@
 
 package org.apache.juneau.examples.core.json;
 
-import org.apache.juneau.dto.atom.Person;
 import org.apache.juneau.examples.core.pojo.Pojo;
 import org.apache.juneau.json.JsonParser;
 import org.apache.juneau.json.JsonSerializer;
@@ -38,6 +37,7 @@ public class JsonSimpleExample {
 	 * @param args
 	 * @throws Exception
 	 */
+	@SuppressWarnings({ "unused", "rawtypes" })
 	public static void main(String[] args) throws Exception{
 		// Juneau provides static constants with the most commonly used configurations
 		// Get a reference to a serializer - converting POJO to flat format
