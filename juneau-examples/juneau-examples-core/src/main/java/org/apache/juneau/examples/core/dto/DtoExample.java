@@ -35,6 +35,7 @@ public class DtoExample {
      * @param args
      * @throws Exception
      */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 
         //Produces
