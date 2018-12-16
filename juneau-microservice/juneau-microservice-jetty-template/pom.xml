@@ -68,7 +68,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>my-microservice-jetty-${project.version}</finalName>
+							<finalName>my-jetty-microservice-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/bin.xml</descriptor>
 							</descriptors>

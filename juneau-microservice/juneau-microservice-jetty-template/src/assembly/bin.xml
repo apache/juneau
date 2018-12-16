@@ -34,7 +34,7 @@
 			<includes>
 				<include>src/main/**</include>
 				<include>.settings/**</include>
-				<include>my-microservice.cfg</include>
+				<include>*.cfg</include>
 			</includes>
 		</fileSet>
 		<fileSet>

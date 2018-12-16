@@ -38,7 +38,7 @@
 				<include>files/**</include>
 				<include>META-INF/**</include>
 				<include>jetty.xml</include>
-				<include>my-microservice.cfg</include>
+				<include>*.cfg</include>
 			</includes>
 		</fileSet>
 		<fileSet>

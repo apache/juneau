@@ -73,7 +73,7 @@
 							<resources>
 								<resource>
 									<directory>.</directory>
-									<includes>my-microservice.cfg</includes>
+									<includes>my-jetty-microservice.cfg</includes>
 								</resource>
 							</resources>
 						</configuration>
