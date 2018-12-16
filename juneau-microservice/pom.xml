@@ -31,9 +31,9 @@
 	<modules>
 		<module>juneau-microservice-core</module>
 		<module>juneau-microservice-jetty</module>
-		<module>juneau-microservice-jetty-template</module>
+		<module>juneau-my-jetty-microservice</module>
 		<module>juneau-microservice-test</module>
-		<module>juneau-microservice-springboot-template</module>
+		<module>juneau-my-springboot-microservice</module>
 	</modules>
 
 </project>

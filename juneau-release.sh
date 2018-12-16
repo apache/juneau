@@ -67,7 +67,8 @@ mvn clean verify
 mvn javadoc:aggregate
 yprompt "Is the javadoc generation clean?"
 
-yprompt "Can juneau/juneau-microservice/juneau-microservice-jetty-template/target/my-jetty-microservice-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
+yprompt "Can juneau/juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
+yprompt "Can juneau/juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
 yprompt "Can juneau/juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
 yprompt "Can juneau/juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
 

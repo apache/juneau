@@ -330,11 +330,20 @@
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-microservice-jetty-template</artifactId>
+									<artifactId>juneau-my-jetty-microservice</artifactId>
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
 									<destFileName>my-jetty-microservice-${project.version}.zip</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
+									<groupId>org.apache.juneau</groupId>
+									<artifactId>juneau-my-springboot-microservice</artifactId>
+									<classifier>bin</classifier>
+									<type>zip</type>
+									<version>${project.version}</version>
+									<destFileName>my-springboot-microservice-${project.version}.zip</destFileName>
 								</artifactItem>
 
 							</artifactItems>

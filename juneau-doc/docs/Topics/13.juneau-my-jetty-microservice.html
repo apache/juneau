@@ -13,36 +13,21 @@
  ***************************************************************************************************************************/
  -->
 
-{updated} Running in Eclipse
+{new} juneau-my-jetty-microservice / my-jetty-microservice
+
+<h5 class='figure'>Starter Project Zip</h5>
+<p class='bpcode w500'>
+	my-jetty-microservice-{@property juneauVersion}.zip 
+</p>	
 
 <p>
-	The <l>my-microservice.launch</l> file is already provided to allow you to quickly start
-	your new microservice.
+	The <l>my-jetty-microservice.zip</l> file is a predefined starter Eclipse project for developing
+	REST microservices using the {@doc juneau-microservice-jetty} package.
 </p>
 <p>
-	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-microservice</b> and click <b>Run</b>.
-	<br>In your console view, you should see the following output:
-</p>
-<p class='bpcode w800'>
-	Running class 'RestMicroservice' using config file 'my-microservice.cfg'.
-	Server started on port 10000
-	
-	List of available commands:
-		exit -- Shut down service
-		restart -- Restarts service
-		help -- Commands help
-	
-	> 			
+	It includes a combination of the Juneau Core, Server, and Client APIs and all libraries needed to execute in a Java 1.8+ environment.
 </p>
 <p>
-	Now open your browser and point to <l>http://localhost:10000</l>.  
-	You should see the following:
-</p>
-<p class='bpcode w400'>
-	http://localhost:10000
-</p>			
-<img class='bordered w400' src='doc-files/juneau-microservice-jetty-template.Running.1.png'>
-<p>
-	You have started a REST interface on port 10000.
-	<br>You can enter the command <code>exit</code> to shut it down.
+	One significant difference is that we are not using the Juneau {@link oaj.microservice.Microservice} API for our
+	application but instead using the existing Spring Boot API.
 </p>
