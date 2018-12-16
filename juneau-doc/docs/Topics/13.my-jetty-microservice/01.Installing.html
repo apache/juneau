@@ -25,11 +25,11 @@
 		In your Eclipse workspace, go to <b>File -&gt; Import -&gt; General -&gt; Existing Projects into Workspace</b> 
 		and select the zip file and click <b>Finish</b>.
 		<br><br>
-		<img class='bordered' src='doc-files/juneau-my-jetty-microservice.Installing.1.png' style='width:549px'>
+		<img class='bordered' src='doc-files/my-jetty-microservice.Installing.1.png' style='width:549px'>
 	<li>
 		In your workspace, you should now see the following project:
 		<br><br>
-		<img class='bordered' src='doc-files/juneau-my-jetty-microservice.Installing.2.png' style='width:400px'>
+		<img class='bordered' src='doc-files/my-jetty-microservice.Installing.2.png' style='width:400px'>
 </ol>
 <p>
 	The important elements in this project are:
@@ -83,7 +83,7 @@
 	}
 		</p>
 	<li>
-		<l>my-microservice.cfg</l> - The external configuration file. 
+		<l>my-jetty-microservice.cfg</l> - The external configuration file. 
 		<br>Contains various useful settings.
 		<br>Can be used for your own resource configurations.
 		<br><br>
@@ -118,17 +118,26 @@
 	#=======================================================================================================================</cc>
 	<cs>[REST]</cs>
 	
-	<cc># URL mappings to static files in the working directory or classpath.</cc>
-	<ck>staticFiles</ck> = htdocs:files/htdocs
+	<cc># Comma-delimited list of key-value pairs that represent locations of static files that can be served up by your @RestResource-annotated
+	# classes.  These are static files that are served up by the servlet under the specified sub-paths.
+	# For example, given the following setting...
+	# 	staticFiles = htdocs:my-docs,styles/my-styles
+	# ...the URI "/servletPath/htdocs/javadoc.css" resolves to the path "/my-docs/javadoc.css".
+	# This path can be relative to the working directory, classpath root, or package of your resource class.
+	# Used by the BasicRestConfig interface that defines the following value:
+	# 	staticFiles="$C{REST/staticFiles}"</cc>
+	<ck>staticFiles</ck> = htdocs:htdocs
 	
-	<cc># Stylesheet to use for HTML views.</cc>
+	<cc># Stylesheet to use for HTML views.
+	# Used by the BasicRestConfig interface that defines the following value:
+	# 	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}"</cc>
 	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
 	
+	<cc># Various look-and-feel settings used in the BasicRestConfig interface.</cc>
 	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
 	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
 	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
 	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
-	
 	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
 	<ck>header</ck> = 
 		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;
@@ -154,7 +163,8 @@
 	<ck>commands</ck> = 
 		<cv>org.apache.juneau.microservice.console.ExitCommand,
 		org.apache.juneau.microservice.console.RestartCommand,
-		org.apache.juneau.microservice.console.HelpCommand</cv>
+		org.apache.juneau.microservice.console.HelpCommand,
+		org.apache.juneau.microservice.console.ConfigCommand</cv>
 		
 	<cc>#=======================================================================================================================
 	# Logger settings

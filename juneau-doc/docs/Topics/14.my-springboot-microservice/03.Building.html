@@ -13,15 +13,32 @@
  ***************************************************************************************************************************/
  -->
 
-{new} Running in Eclipse
+{new} Building and Running from Command-Line
 
 <p>
-	The <l>my-microservice.launch</l> file is already provided to allow you to quickly start
-	your new microservice.
+	The <l>pom.xml</l> file is a basic Maven build script for creating your microservice
+	as an executable uber-jar.
 </p>
 <p>
-	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-microservice</b> and click <b>Run</b>.
-	<br>In your console view, you should see the following output:
+	The easiest way to build your microservice is to run the following from the project root.
+</p>
+<p class='bpcode w800'>
+	mvn clean install
+</p>
+<p>
+	Your <code>target</code> directory should now contain the following files:
+</p>
+<ul>
+	<li><code>my-springboot-microservice-1.0.jar</code>
+</ul>
+<p>
+	To start from a command line, run the following command from inside your <code>target</code> directory:
+</p>
+<p class='bpcode w800'>
+	java -jar my-springboot-microservice-1.0.jar
+</p>
+<p>
+	You should see the following console output:
 </p>
 <p class='bpcode w800'>
 	  .   ____          _            __ _ _
@@ -35,15 +52,4 @@
 	INFO: Tomcat started on port(s): 8080 (http) with context path ''
 	Dec 21, 2012 12:30:00 AM org.springframework.boot.StartupInfoLogger logStarted
 	INFO: Started App in 1.999 seconds (JVM running for 2.999)
-</p>
-<p>
-	Now open your browser and point to <l>http://localhost:8080</l>.  
-	You should see the following:
-</p>
-<p class='bpcode w400'>
-	http://localhost:8080
-</p>			
-<img class='bordered w400' src='doc-files/juneau-my-springboot-microservice.Running.1.png'>
-<p>
-	You have started a REST interface on port 8080.
 </p>
