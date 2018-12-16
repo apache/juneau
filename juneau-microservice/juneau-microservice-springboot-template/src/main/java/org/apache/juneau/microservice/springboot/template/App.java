@@ -16,8 +16,10 @@ import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.springboot.annotation.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.*;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
@@ -43,5 +45,17 @@ public class App {
 	@Bean @JuneauRestRoot
 	public RootResources getRootResources() {
 		return new RootResources();
+	}
+
+
+	/**
+	 * If you want to parse URL-encoded form posts directly into beans, this call will disable the HiddenHttpMethodFilter
+	 * which triggers form posts to be consumed.
+	 */
+	@Bean
+	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
+	    FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
+	    registration.setEnabled(false);
+	    return registration;
 	}
 }
