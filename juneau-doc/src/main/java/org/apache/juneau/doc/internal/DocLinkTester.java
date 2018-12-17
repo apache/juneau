@@ -30,6 +30,8 @@ public class DocLinkTester {
 	private static Pattern p = Pattern.compile("(href|src)\\=['\\\"]([^'\\\"]+)['\\\"]");
 	private static Pattern p2 = Pattern.compile("(name|id)\\=['\\\"]([^'\\\"]+)['\\\"]");
 	private static int errors, files, directories, links;
+	private static Map<String,File> docFiles = new HashMap<>();
+
 
 	/**
 	 * Entry point.
@@ -40,8 +42,12 @@ public class DocLinkTester {
 		try {
 			long startTime = System.currentTimeMillis();
 			File root = new File("../target/site/apidocs").getCanonicalFile();
+			for (File fc : new File(root, "doc-files").listFiles())
+				docFiles.put(fc.getAbsolutePath(), fc);
 			info("Checking links in {0}", root);
 			process(root);
+			for (String df : new TreeMap<>(docFiles).keySet())
+				error(docFiles.get(df), "unused");
 			info("Checked {0} links in {1} files in {2} directories in {3}ms", links, files, directories, System.currentTimeMillis()-startTime);
 			if (errors == 0)
 				info("No link errors");
@@ -111,6 +117,8 @@ public class DocLinkTester {
 				} else {
 					error(f, "invalidAnchor=["+link+"#"+anchor+"]");
 				}
+			} else {
+				docFiles.remove(f2.getAbsolutePath());
 			}
 		}
 	}
