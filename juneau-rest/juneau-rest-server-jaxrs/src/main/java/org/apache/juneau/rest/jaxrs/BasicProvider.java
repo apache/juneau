@@ -20,6 +20,8 @@ import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.soap.*;
+import org.apache.juneau.uon.UonParser;
+import org.apache.juneau.uon.UonSerializer;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
@@ -63,12 +65,15 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		HtmlDocSerializer.class,
 		UrlEncodingSerializer.class,
 		SoapXmlSerializer.class,
+		HtmlSerializer.class,
+		UonSerializer.class,
 		JsoSerializer.class
 	},
 	parsers={
 		JsonParser.class,
 		XmlParser.class,
 		HtmlParser.class,
+		UonParser.class,
 		UrlEncodingParser.class,
 	}
 )
