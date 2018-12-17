@@ -408,6 +408,11 @@ a.doclink {
 }
 .w900 {
 	width:900px !important;
+	max-width:900px !important;
+}
+.w1000 {
+	width:1000px !important;
+	max-width:1000px !important;
 }
 
 hr {
@@ -415,4 +420,13 @@ hr {
 	margin-left: 0;
 	max-width: 900px;
 }
+
+.console {
+	color: #8df900;
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 1.1em;
+	background-color: black !important;
+}
+
 
