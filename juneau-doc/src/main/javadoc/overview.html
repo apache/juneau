@@ -34814,7 +34814,7 @@
 		<li><b><code>juneau-my-jetty-microservice</code></b> - New.  Template starter project for Jetty-based microservices.
 		<li><b><code>juneau-my-springboot-microservice</code></b> - New.  Template starter project for Spring-Boot-based microservices.
 	</ul>
-	<li><code>juneau-<examples/code>
+	<li><code>juneau-examples</code>
 	<ul>
 		<li><code>juneau-core</code>
 		<li><b><code>juneau-microservice-rest</code></b> - Now contains only servlet example classes.  No Jetty configuration.
@@ -34858,7 +34858,7 @@
 			<ul>
 				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#exists(String) exists(String)}
 			</ul>
-			
+		</ul>
 </ul>
 
 <h5 class='topic w800'>juneau-server</h5>
@@ -34888,6 +34888,9 @@
 		directory that ends with <js>".cfg"</js>.
 	<li>
 		New {@link org.apache.juneau.microservice.MicroserviceListener} API for defining lifecycle event listeners.
+	<li>
+		New {@link org.apache.juneau.microservice.console.ConfigCommand} class for performing config queries and updates through 
+		the microservice console.
 </ul>
 
 <h5 class='topic w800'>juneau-microservice-jetty</h5>
