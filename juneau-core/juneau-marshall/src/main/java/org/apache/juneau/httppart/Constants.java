@@ -130,12 +130,12 @@ public class Constants {
 	public static final String FORMAT_BINARY_SPACED = "binary-spaced";
 
 	/**
-	 * An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+	 * An RFC3339 full-date.
 	 */
 	public static final String FORMAT_DATE = "date";
 
 	/**
-	 *  An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+	 *  An RFC3339 date-time.
 	 */
 	public static final String FORMAT_DATE_TIME = "date-time";
 

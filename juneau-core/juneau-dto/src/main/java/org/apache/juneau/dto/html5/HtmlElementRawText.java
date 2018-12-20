@@ -16,7 +16,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
- * A subclass of HTML elements that contain <a href="https://www.w3.org/TR/html51/syntax.html#raw-text raw text}
+ * A subclass of HTML elements that contain <a href="https://www.w3.org/TR/html51/syntax.html#raw-text">raw text</a>
  * only.
  *
  * <h5 class='section'>See Also:</h5>

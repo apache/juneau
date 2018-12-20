@@ -1467,7 +1467,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	cf.save();
 	 * </p>
 	 *
-	 * <h5 class='notes'>
+	 * <h5 class='section'>Notes</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
 	 * </ul>

@@ -17,7 +17,7 @@ import java.util.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents possible values for the following properties:
+ * Represents possible values for JSONSCHEMA_addExamplesTo and JSONSCHEMA_addDescriptionsTo.
  *
  * <ul class='doctree'>
  * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_addExamplesTo}

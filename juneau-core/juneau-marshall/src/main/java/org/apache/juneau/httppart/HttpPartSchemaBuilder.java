@@ -1195,7 +1195,7 @@ public class HttpPartSchemaBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Ignored if value is <jk>null</jk> or <code>-1<code>.
+	 * 	<br>Ignored if value is <jk>null</jk> or <code>-1</code>.
 	 * @return This object (for method chaining).
 	 */
 	public HttpPartSchemaBuilder minItems(Long value) {

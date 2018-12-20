@@ -492,7 +492,7 @@ public interface RdfCommon {
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
 	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from
-	 * <{@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
+	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
 	 * rules that will not be used.
 	 */
 	public static final String RDF_rdfxml_blockRules = PREFIX + "jena.rdfXml.blockRules.s";

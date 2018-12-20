@@ -1169,7 +1169,7 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>getAnnotations(a, m, <jk>true</jk>, <jk>true</jk>, <jk>false</jk>);</code>
+	 * Shortcut for calling <code>getAnnotations(a,m,<jk>true</jk>,<jk>true</jk>,<jk>false</jk>)</code>
 	 *
 	 * <p>
 	 * Annotations are ordered method first, then return class, then return superclasses.
@@ -1183,7 +1183,7 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>getAnnotations(a, m, <jk>true</jk>, <jk>true</jk>, <jk>true</jk>);</code>
+	 * Shortcut for calling <code>getAnnotations(a,m,<jk>true</jk>,<jk>true</jk>,<jk>true</jk>)</code>
 	 *
 	 * @param a The annotation to look for.
 	 * @param m The method being inspected.
@@ -1225,7 +1225,7 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>getAnnotation(a, m, true, true);
+	 * Shortcut for calling <code>getAnnotation(a,m,<jk>true</jk>,<jk>true</jk>)</code>
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -1314,7 +1314,7 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Shortcut for calling <code>getAnnotation(a, m, index, <jk>true</jk>, <jk>true</jk>);</code>
+	 * Shortcut for calling <code>getAnnotation(a,m,index,<jk>true</jk>,<jk>true</jk>)</code>
 	 *
 	 * @param a The annotation to check for.
 	 * @param m The method containing the parameter to check.

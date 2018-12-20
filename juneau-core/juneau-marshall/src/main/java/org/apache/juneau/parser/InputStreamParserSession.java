@@ -61,7 +61,6 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 *
 	 * @param input
 	 * 	The input.
-	 * 	</ul>
 	 * 	<br>This can be any of the following types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
