@@ -656,7 +656,7 @@
 	For example, selecting <l>APPLICATION/JSON+SIMPLE</l> shows us simplified JSON:
 </p>
 <p class='bpcode w800'>
-	http://localhost:10000/petstore/pet?plainText=true&Accept=application%2Fjson%2Bsimple
+	http://localhost:10000/petstore/pet?plainText=true&amp;Accept=application%2Fjson%2Bsimple
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.5b.png'>
 <p>
@@ -715,7 +715,7 @@
 		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
 		<jk>public</jk> Div getContent(RestRequest req) {
 			Div div = <jsm>div</jsm>();
-			Set&lt;MediaType&gt; l = <jk>new</jk> TreeSet<>();
+			Set&lt;MediaType&gt; l = <jk>new</jk> TreeSet&lt;&gt;();
 			<jk>for</jk> (Serializer s : req.getSerializers().getSerializers())
 				l.add(s.getPrimaryMediaType());
 			<jk>for</jk> (MediaType mt : l) {
@@ -761,7 +761,7 @@
 	The converter will take the POJOs to be serialized and filter them based on the provided query/view/sort/paging attributes:
 </p>
 <p class='bpcode w800'>
-	http://localhost:10000/petstore/pet?s=name%3DHoppy*&v=species%2Cname&o=name&p=0&l=20
+	http://localhost:10000/petstore/pet?s=name%3DHoppy*&amp;v=species%2Cname&amp;o=name&amp;p=0&amp;l=20
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.7b.png'>
 <p>
@@ -963,7 +963,7 @@
 	<jk>public class</jk> PhotosResource <jk>extends</jk> BasicRestServlet {
 	
 		<jd>/** Our cache of photos */</jd>
-		<jk>private</jk> Map&lt;String,Photo&gt; <jf>photos</jf> = <jk>new</jk> TreeMap<>();
+		<jk>private</jk> Map&lt;String,Photo&gt; <jf>photos</jf> = <jk>new</jk> TreeMap&lt;&gt;();
 	
 		<jd>/** Our bean class for storing photos */</jd>
 		<jk>public static class</jk> Photo {
@@ -1319,15 +1319,15 @@
 			PostInput in
 		) <jk>throws</jk> BadRequest {
 
-		List&lt;Object&gt; results = <jk>new</jk> LinkedList<>();
+		List&lt;Object&gt; results = <jk>new</jk> LinkedList&lt;&gt;();
 
 		<jc>// Don't try to submit empty input.</jc>
 		<jk>if</jk> (isEmpty(in.<jf>sql</jf>))
 			<jk>return</jk> results;
 
-		<jk>if</jk> (in.<jf>pos</jf> < 1 || in.<jf>pos</jf> > 10000)
+		<jk>if</jk> (in.<jf>pos</jf> &lt; 1 || in.<jf>pos</jf> > 10000)
 			<jk>throw new</jk> BadRequest(<js>"Invalid value for position.  Must be between 1-10000"</js>);
-		<jk>if</jk> (in.<jf>limit</jf> < 1 || in.<jf>limit</jf> > 10000)
+		<jk>if</jk> (in.<jf>limit</jf> &lt; 1 || in.<jf>limit</jf> > 10000)
 			<jk>throw new</jk> BadRequest(<js>"Invalid value for limit.  Must be between 1-10000"</js>);
 
 		String sql = <jk>null</jk>;
@@ -1341,7 +1341,7 @@
 					sql = s.trim();
 					<jk>if</jk> (! sql.isEmpty()) {
 						Object o = <jk>null</jk>;
-						<jk>if</jk> (<jf>allowUpdates</jf> || (<jf>allowTempUpdates</jf> && ! sql.matches(<js>"(?:i)commit.*"</js>))) {
+						<jk>if</jk> (<jf>allowUpdates</jf> || (<jf>allowTempUpdates</jf> &amp;&amp; ! sql.matches(<js>"(?:i)commit.*"</js>))) {
 							<jk>if</jk> (st.execute(sql)) {
 								<jk>try</jk> (ResultSet rs = st.getResultSet()) {
 									o = <jk>new</jk> ResultSetList(rs, in.<jf>pos</jf>, in.<jf>limit</jf>, <jf>includeRowNums</jf>);

@@ -1713,28 +1713,28 @@
 </p>
 <ul class='doctree'>
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.Swap @Swap} 
+		{@link org.apache.juneau.annotation.Swap} 
 		- Used to tailor how non-bean POJOs get interpreted by the framework.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.Bean @Bean} 
+		{@link org.apache.juneau.annotation.Bean} 
 		- Used to tailor how beans get interpreted by the framework.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} 
+		{@link org.apache.juneau.annotation.BeanConstructor} 
 		- Maps constructor arguments to property names on beans with read-only properties.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.BeanIgnore @BeanIgnore} 
+		{@link org.apache.juneau.annotation.BeanIgnore} 
 		- Ignore classes, fields, and methods from being interpreted as bean or bean components.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} 
+		{@link org.apache.juneau.annotation.BeanProperty} 
 		- Used to tailor how bean properties get interpreted by the framework.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.NameProperty @NameProperty} 
+		{@link org.apache.juneau.annotation.NameProperty} 
 		- Identifies a setter as a method for setting the name of a POJO as it's known by its parent object.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.ParentProperty @ParentProperty} 
+		{@link org.apache.juneau.annotation.ParentProperty} 
 		- Identifies a setter as a method for adding a parent reference to a child object.
 	<li class='ja'>
-		{@link org.apache.juneau.annotation.URI @URI} 
+		{@link org.apache.juneau.annotation.URI} 
 		- Used to identify a class or bean property as a URI.
 </ul>
 
@@ -3097,7 +3097,7 @@
 </p>
 <ul>
 	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanFilters}
-	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interfaceClass() @Bean(interfaceClass)}
+	<li class='ja'>{@link org.apache.juneau.annotation.Bean#interfaceClass() Bean(interfaceClass)}
 	<li class='jm'>{@link org.apache.juneau.transform.BeanFilterBuilder#interfaceClass(Class)}
 </ul>
 <p>
@@ -3200,7 +3200,7 @@
 	Stop classes are defined through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.annotation.Bean#stopClass() @Bean(stopClass)}
+	<li class='ja'>{@link org.apache.juneau.annotation.Bean#stopClass() Bean(stopClass)}
 	<li class='jf'>{@link org.apache.juneau.transform.BeanFilterBuilder#stopClass(Class)}
 </ul>
 <p>
@@ -3359,9 +3359,9 @@
 	Bean dictionaries are registered through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty(beanDictionary)} 
+	<li class='ja'>{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() BeanProperty(beanDictionary)} 
 		- On individual bean properties through the annotation.
-	<li class='ja'>{@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean(beanDictionary)} 
+	<li class='ja'>{@link org.apache.juneau.annotation.Bean#beanDictionary() Bean(beanDictionary)} 
 		- On all properties on a bean and all subclasses.
 	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanDictionary} 
 		- Configuration property on serializers and parsers.
@@ -3401,7 +3401,7 @@
 	The <js>"_type"</js> property name can be overridden through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName() @Bean(typePropertyName)} 
+	<li class='ja'>{@link org.apache.juneau.annotation.Bean#typePropertyName() Bean(typePropertyName)} 
 		- On individual beans through the annotation.
 	<li class='jf'>{@link org.apache.juneau.BeanContext#BEAN_beanTypePropertyName} 
 		- Configuration property on serializers and parsers.
@@ -8710,13 +8710,13 @@
 	can be applied to method parameters and class types to define the schema for various HTTP parts:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
 </ul>
 
 <!-- ==================================================================================================== -->
@@ -10794,7 +10794,7 @@
 				<jc>// Override the nav links for the swagger page.</jc>
 				navlinks={
 					<js>"back: servlet:/"</js>,
-					<js>"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"</js>
+					<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
 				},
 				<jc>// Never show aside contents of page inherited from class.</jc>
 				aside="<js>NONE"</js>
@@ -14519,7 +14519,7 @@
 
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#matchers}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#matchers RestMethod(matchers)}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.MultipartFormDataMatcher}
 	<li class='jc'>{@link org.apache.juneau.rest.matchers.UrlEncodedFormMatcher}
 </ul>
@@ -15261,11 +15261,11 @@
 	therefore support OpenAPI syntax and validation:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body} (<code>Content-Type</code> must match <js>"text/openapi"</js>)
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body} (<code>Content-Type</code> must match <js>"text/openapi"</js>)
 </ul>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a query parameter can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -15376,8 +15376,8 @@
 	therefore support OpenAPI syntax and validation:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response} (<code>Accept</code> must match <js>"text/openapi"</js>)
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response} (<code>Accept</code> must match <js>"text/openapi"</js>)
 </ul>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) in a response header can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -15447,30 +15447,30 @@
 	The annotations used for defining the schema for request HTTP parts are:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 </ul>
 <p>
 	The annotations used for defining the schema for response HTTP parts are:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody ResponseBody}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 </ul>
 <p>
 	The sub-annotations used in the annotation above are:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Schema Schema}
-	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Items Items}
+	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Schema}
+	<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Items}
 </ul>
 
 <h5 class='section'>Other Notes:</h5>
@@ -15491,7 +15491,7 @@
 	The {@link org.apache.juneau.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#api() api} - Free-form Swagger JSON.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#description() description} - Description.
@@ -15675,7 +15675,7 @@
 	The {@link org.apache.juneau.http.annotation.FormData @FormData} annotation is used to retrieve request form post entries.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
@@ -15849,7 +15849,7 @@
 	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData HasFormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 </ul>
 
 <h5 class='figure'>Example:</h5>
@@ -15922,7 +15922,7 @@
 	<br>It's identical to {@link org.apache.juneau.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum} - Input validation.  Must match one of the values.
@@ -16096,7 +16096,7 @@
 	URL-encoded form posts.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery HasQuery}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 </ul>
 <p>
 	Unlike {@link org.apache.juneau.http.annotation.HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
@@ -16162,7 +16162,7 @@
 	The {@link org.apache.juneau.http.annotation.Header @Header} annotation is used to retrieve request headers.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum} - Input validation.  Must match one of the values.
@@ -16321,7 +16321,7 @@
 	The {@link org.apache.juneau.http.annotation.Path @Path} annotation is used to retrieve request path parameters.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum} - Input validation.  Must match one of the values.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
@@ -16486,7 +16486,7 @@
 	to identify it as an interface for retrieving HTTP parts through a bean-like interface.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Request#partParser() partParser} - Override the part parser.
 	</ul>
@@ -16574,7 +16574,7 @@
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation is used to identify schema information about an HTTP response.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#api() api} - Free-form Swagger JSON.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#code() code} - HTTP status code.
@@ -16969,7 +16969,7 @@
 	The {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response headers.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_default() _default} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.ResponseHeader#_enum() _enum} - Output validation.  Must match one of the values.
@@ -17085,7 +17085,7 @@
 	The {@link org.apache.juneau.http.annotation.ResponseStatus @ResponseStatus} annotation annotation can be applied to <ja>@RestMethod</ja>-annotated parameters to denote them as an HTTP response status codes.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
 </ul>
 <p>
 	This can only be applied to parameters of the {@link org.apache.juneau.Value} class with an {@link java.lang.Integer} type.
@@ -17258,10 +17258,10 @@
 </p>
 <ul class='doctree'>
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestResource#serializers()} 
+		{@link org.apache.juneau.rest.annotation.RestResource#serializers() RestResource(serializers)} 
 		- Annotation on resource Java class.
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestMethod#serializers()} 
+		{@link org.apache.juneau.rest.annotation.RestMethod#serializers() RestMethod(serializers)} 
 		- Annotation on resource Java method.
 	<li class='jf'>
 		{@link org.apache.juneau.rest.RestContext#REST_serializers} 
@@ -17326,10 +17326,10 @@
 </p>
 <ul class='doctree'>
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestResource#parsers()} 
+		{@link org.apache.juneau.rest.annotation.RestResource#parsers() RestResource(parsers)} 
 		- Annotation on resource Java class.
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestMethod#parsers()} 
+		{@link org.apache.juneau.rest.annotation.RestMethod#parsers() RestMethod(parsers)} 
 		- Annotation on resource Java method.
 	<li class='jm'>
 		{@link org.apache.juneau.rest.RestContextBuilder#parsers(Class[])} 
@@ -17387,7 +17387,7 @@
 	These properties can be defined for serializers and parsers registered on a REST resource via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#properties()} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#properties() RestResource(properties)} 
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextBuilder} - Various methods on the context builder.
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -17432,7 +17432,7 @@
 	Properties can also be overridden at the Java method level:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties()} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#properties() RestMethod(properties)} 
 	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
 </ul>
 <p class='bpcode w800'>
@@ -17484,8 +17484,8 @@
 </ul>
 <h5 class='section'>See Also:</h5>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#flags()} - Shorthand for boolean properties.
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags()} - Shorthand for boolean properties.
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#flags() RestResource(flags)} - Shorthand for boolean properties.
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#flags() RestMethod(flags)} - Shorthand for boolean properties.
 	<li class='jc'>{@link org.apache.juneau.rest.RestContextProperties} 
 	<li class='jc'>{@link org.apache.juneau.rest.RestMethodProperties} 
 	<li class='jc'>{@link org.apache.juneau.rest.RequestProperties} 
@@ -17504,10 +17504,10 @@
 	Transforms are associated serializers and parsers registered on a REST resource via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters()} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps()} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters()} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps()}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#beanFilters() RestResource(beanFilters)} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#pojoSwaps() RestResource(pojoSwaps)} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#beanFilters() RestMethod(beanFilters)} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#pojoSwaps() RestMethod(pojoSwaps)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#beanFilters(Object...)} 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#pojoSwaps(Object...)} 
 </ul>
@@ -17632,7 +17632,6 @@
 <p>
 	URIs are resolved by both regular and part serializers.
 </p>
-</p>
 </div><!-- END: 7.17 - juneau-rest-server.URIs -->
 
 <!-- ==================================================================================================== -->
@@ -17646,8 +17645,8 @@
 	Guards are associated with resource classes and methods via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#guards()} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#guards()} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#guards() RestResource(guards)} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#guards() RestMethod(guards)} 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#guards(Class...)} 
 </ul>
 <p class='bpcode w800'>
@@ -17725,8 +17724,8 @@
 	Converters are associated with resource classes and methods via the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#converters()} 
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#converters()} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#converters() RestResource(converters)} 
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#converters() RestMethod(converters)} 
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#converters(Class...)} 
 </ul>
 <h5 class='figure'>Example:</h5>
@@ -18216,7 +18215,7 @@
 	Configuration files are associated with REST resources through the following:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#config()}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#config() RestResource(config)}
 </ul>
 
 <h5 class='figure'>Example:</h5>
@@ -18347,7 +18346,7 @@
 </p>
 <h5 class='section'>See Also:</h5>
 <ul class='doctree'>
-	{@doc juneau-config}
+	<li>{@doc juneau-config}
 </ul>
 </div><!-- END: 7.23 - juneau-rest-server.ConfigurationFiles -->
 
@@ -18415,9 +18414,9 @@
 	The APIs involved with defining client version headers are:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#clientVersionHeader()}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#clientVersionHeader() RestResource(clientVersionHeader)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#clientVersionHeader(String)}
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#clientVersion()}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#clientVersion() RestMethod(clientVersion)}
 </ul>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -18581,7 +18580,7 @@
 				<jc>// Override the nav links for the swagger page.</jc>
 				navlinks={
 					<js>"back: servlet:/"</js>,
-					<js>"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"</js>
+					<js>"json: servlet:/?method=OPTIONS&amp;Accept=text/json&amp;plainText=true"</js>
 				},
 				<jc>// Never show aside contents of page inherited from class.</jc>
 				aside=<js>"NONE"</js>
@@ -18959,7 +18958,7 @@
 					<js>"Search."</js>,
 					<js>"Key/value pairs representing column names and search tokens."</js>,
 					<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
-					<js>"'>', '>=', '<', and '<=' can be used as limits on numeric and date fields."</js>,
+					<js>"'&gt;', '&gt;=', '&lt;', and '&lt;=' can be used as limits on numeric and date fields."</js>,
 					<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
 				},
 				type=<js>"array"</js>,
@@ -19024,7 +19023,7 @@
 					+ <js>"Search.\n"</js>
 					+ <js>"Key/value pairs representing column names and search tokens.\n"</js>
 					+ <js>"\\'*\\' and \\'?\\' can be used as meta-characters in string fields.\n"</js>
-					+ <js>"\\'>\\', \\'>=\\', \\'<\\', and \\'<=\\' can be used as limits on numeric and date fields.\n"</js>
+					+ <js>"\\'&gt;\\', \\'&gt;=\\', \\'&lt;\\', and \\'&lt;=\\' can be used as limits on numeric and date fields.\n"</js>
 					+ <js>"Date fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018)."</js>
 				+ <js>"',"</js>
 				+ <js>"type:'array',"</js>
@@ -19098,7 +19097,7 @@
 					<js>"Search."</js>,
 					<js>"Key/value pairs representing column names and search tokens."</js>,
 					<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
-					<js>"'>', '>=', '<', and '<=' can be used as limits on numeric and date fields."</js>,
+					<js>"'&gt;', '&gt;=', '&lt;', and '&lt;=' can be used as limits on numeric and date fields."</js>,
 					<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
 				},
 				type=<js>"array"</js>,
@@ -19206,10 +19205,10 @@
 					<jok>"x-examples"</jok>: {
 						<jok>"application/json"</jok>: <jov>"{\n\t\"name\": \"Doggie\",\n\t\"species\": \"Dog\",\n\t\"price\": 9.99,\n\t\"tags\": [\n..."</jov>,
 						<jok>"application/json+simple"</jok>: <jov>"{\n\tname: 'Doggie',\n\tspecies: 'Dog',\n\tprice: 9.99,\n\ttags: [\n\t\t'friendly..."</jov>,
-						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&..."</jov>,
+						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&amp;..."</jov>,
 						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;name&lt;/td&gt;\n\t\t&lt;td&gt;Doggie&lt;/t..."</jov>,
 						<jok>"text/uon"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
-						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"name=Doggie\n&species=Dog\n&price=9.99\n&tags=@(\n\tfriendly,\n\tcute\n)"</jov>,
+						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"name=Doggie\n&amp;species=Dog\n&amp;price=9.99\n&amp;tags=@(\n\tfriendly,\n\tcute\n)"</jov>,
 						<jok>"text/openapi"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
 						<jok>"octal/msgpack"</jok>: <jov>"84 A4 6E 61 6D 65 A6 44 6F 67 67 69 65 A7 73 70 65 63 69 65 73 A3 44 6F 67 A5 70 72 69 63 6..."</jov>,
 						<jok>"text/plain"</jok>: <jov>"{name:'Doggie',species:'Dog',price:9.99,tags:['friendly','cute']}"</jov>,
@@ -19393,7 +19392,7 @@
 						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Pet&gt;\n\t&lt;id&gt;123&lt;/id&gt;\n\t&lt;spec..."</jov>,
 						<jok>"text/xml+schema"</jok>: <jov>"&lt;schema xmlns=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.apache.org/..."</jov>,
 						<jok>"text/uon"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\t\tn..."</jov>,
-						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"id=123\n&species=(\n\tname=Dog,\n\tid=123\n)\n&name=Doggie\n&tags=@(\n\t(\n\..."</jov>,
+						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"id=123\n&amp;species=(\n\tname=Dog,\n\tid=123\n)\n&amp;name=Doggie\n&amp;tags=@(\n\t(\n\..."</jov>,
 						<jok>"text/openapi"</jok>: <jov>"(\n\tid=123,\n\tspecies=(\n\t\tname=Dog,\n\t\tid=123\n\t),\n\tname=Doggie,\n\ttags=@(\n\t\t(\n\t\..."</jov>,
 						<jok>"octal/msgpack"</jok>: <jov>"86 A2 69 64 7B A7 73 70 65 63 69 65 73 82 A4 6E 61 6D 65 A3 44 6F 67 A2 69 64 7B A4 6E 61 6D 65 ..."</jov>,
 						<jok>"text/xml+soap"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;Envelope soap=\"http://www.w3.org/2003/05/..."</jov>,
@@ -19701,8 +19700,8 @@
 	<br>It's used in the following locations:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#htmldoc()}
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#htmldoc()}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#htmldoc() RestResource(htmldoc)}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestMethod#htmldoc() RestMethod(htmldoc)}
 </ul>
 <p>
 	The annotation itself is just a convenience for setting configuration properties set
@@ -19870,7 +19869,7 @@
 <br>They are registered in the following locations:
 </p>
 <ul>
-	<li class='ja'>{@link org.apache.juneau.rest.annotation.HtmlDoc#widgets() @HtmlDoc.widgets}
+	<li class='ja'>{@link org.apache.juneau.rest.annotation.HtmlDoc#widgets() HtmlDoc(widgets)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#widgets(Class...)}
 	<li class='jm'>{@link org.apache.juneau.rest.RestContextBuilder#widgets(Widget...)}
 	<li class='jf'>{@link org.apache.juneau.rest.RestContext#REST_widgets}
@@ -20498,10 +20497,10 @@
 </p>
 <ul class='doctree'>
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() @RestResource(defaultRequestHeaders)} 
+		{@link org.apache.juneau.rest.annotation.RestResource#defaultRequestHeaders() RestResource(defaultRequestHeaders)} 
 		<br>Defines default headers on request when the client doesn't specify them.
 	<li class='ja'>
-		{@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() @RestResource(defaultResponseHeaders)}
+		{@link org.apache.juneau.rest.annotation.RestResource#defaultResponseHeaders() RestResource(defaultResponseHeaders)}
 		<br>Appends the specified headers if they weren't already set programmatically.	
 </ul>		
 
@@ -21691,13 +21690,13 @@
 	</ul>
 	<li class='jp'>{@link org.apache.juneau.http.annotation}
 	<ul>
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
+		<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 	</ul>
 </ul>
 
@@ -21961,7 +21960,7 @@
 	to denote that they are the HTTP body of the request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#required() required} - Input validation.  Body must be present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Body#schema() schema} - Swagger schema.
@@ -22056,7 +22055,7 @@
 	to denote that they are form-data parameters on the request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_default() _default} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.FormData#_enum() _enum} - Input validation.  Must match one of the values.
@@ -22164,7 +22163,7 @@
 	to denote that they are query parameters on the request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_default() _default} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Query#_enum() _enum} - Input validation.  Must match one of the values.
@@ -22275,7 +22274,7 @@
 	to denote that they are header parameters on the request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_default() _default} - Default value if not present.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Header#_enum() _enum} - Input validation.  Must match one of the values.
@@ -22372,7 +22371,7 @@
 	to denote that they are path parameters on the request.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#_enum() _enum} - Input validation.  Must match one of the values.
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Path#allowEmptyValue() allowEmptyValue} - Input validation.  Allow empty value.
@@ -22463,7 +22462,7 @@
 </p>
 
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Request Request}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Request#partSerializer() partSerializer} - Override the part serializer.
 	</ul>
@@ -22521,11 +22520,11 @@
 	Any of the following annotations can be used on the methods:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Body Body}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Header Header}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData FormData}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Query Query}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Path Path}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Body}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 </ul>
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly.
@@ -22580,7 +22579,7 @@
 	The {@link org.apache.juneau.http.annotation.Response @Response} annotation can be applied to types returned by <ja>@RemoteMethod</ja>-annotated methods.
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.Response Response}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
 	<ul>
 		<li class='jf'>{@link org.apache.juneau.http.annotation.Response#partParser() partParser} - Override the part parser.
 	</ul>
@@ -22626,9 +22625,9 @@
 	Any of the following annotations can be used on the methods:
 </p>
 <ul class='doctree'>
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody ResponseBody}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader ResponseHeader}
-	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus ResponseStatus}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseBody}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseHeader}
+	<li class='ja'>{@link org.apache.juneau.http.annotation.ResponseStatus}
 </ul>
 <p>
 	The behavior and functionality of all of the annotations are the same as if they were used on method arguments directly. This means full support for OpenAPI serialization and validation.
@@ -23497,6 +23496,19 @@
 	Juneau Microservice is an API for creating stand-alone executable jars with automatic support for
 	Juneau configurations and console commands.
 </p>
+
+<p>
+	Features include:
+</p>
+<ul class='spaced-list'>
+	<li>
+		A builder-based API for defining and starting microservices.
+	<li>
+		An extensible API that allows you to hook into various lifecycle events.
+	<li>
+		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
+		file properties.
+</ul>
 
 <!-- ==================================================================================================== -->
 
@@ -25754,6 +25766,10 @@
 		<li class='jc'>{@link org.apache.juneau.examples.core.xml.XmlComplexExample} - XmlSerializer and XmlParser usage on serialize and deserialize complex Pojo bean.
 		<li class='jc'>{@link org.apache.juneau.examples.core.xml.XmlConfigurationExample} - XmlSerializers configured using properties defined in XmlSerializer class.
 	</ul>
+	<li class='jp'>{@link org.apache.juneau.examples.core.dto}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.examples.core.dto.DtoExample} - Usage of core dto module.
+		</ul>
 	<li class='jp'>{@link org.apache.juneau.examples.core.rdf}
 	<ul>
 		<li class='jc'>{@link org.apache.juneau.examples.core.rdf.RdfExample} - RdfXmlSerializer usage on serialize simple Pojo bean.
@@ -25761,8 +25777,17 @@
 	</ul>
 	<li class='jp'>{@link org.apache.juneau.examples.core.html}
 		<ul>
-			<li class='jc'>{@link org.apache.juneau.examples.core.html.HtmlSimpleExample} - HtmlSerializer usage on serialize simple Pojo bean.
-			<li class='jc'>{@link org.apache.juneau.examples.core.html.HtmlComplexExample} - HtmlSerializer usage on serialize complex Pojo bean.
+			<li class='jc'>{@link org.apache.juneau.examples.core.html.HtmlSimpleExample} - HtmlSerializer usage on serialize and deserialize simple Pojo bean.
+			<li class='jc'>{@link org.apache.juneau.examples.core.html.HtmlComplexExample} - HtmlSerializer usage on serialize and deserialize complex Pojo bean.
+		</ul>
+	<li class='jp'>{@link org.apache.juneau.examples.core.uon}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.examples.core.uon.UONExample} - UonSerializer usage on serialize and deserialize simple Pojo bean.
+			<li class='jc'>{@link org.apache.juneau.examples.core.uon.UONComplexExample} - UonSerializer usage on serialize and deserialize complex Pojo bean.
+		</ul>
+	<li class='jp'>{@link org.apache.juneau.examples.core.svl}
+		<ul>
+			<li class='jc'>{@link org.apache.juneau.examples.core.svl.SvlExample} - Usage of Svl module in juneau.
 		</ul>
 </ul>
 </div><!-- END: 15.2 - juneau-examples-core.Examples -->
@@ -26663,7 +26688,7 @@
 	For example, selecting <l>APPLICATION/JSON+SIMPLE</l> shows us simplified JSON:
 </p>
 <p class='bpcode w800'>
-	http://localhost:10000/petstore/pet?plainText=true&Accept=application%2Fjson%2Bsimple
+	http://localhost:10000/petstore/pet?plainText=true&amp;Accept=application%2Fjson%2Bsimple
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.5b.png'>
 <p>
@@ -26722,7 +26747,7 @@
 		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
 		<jk>public</jk> Div getContent(RestRequest req) {
 			Div div = <jsm>div</jsm>();
-			Set&lt;MediaType&gt; l = <jk>new</jk> TreeSet<>();
+			Set&lt;MediaType&gt; l = <jk>new</jk> TreeSet&lt;&gt;();
 			<jk>for</jk> (Serializer s : req.getSerializers().getSerializers())
 				l.add(s.getPrimaryMediaType());
 			<jk>for</jk> (MediaType mt : l) {
@@ -26768,7 +26793,7 @@
 	The converter will take the POJOs to be serialized and filter them based on the provided query/view/sort/paging attributes:
 </p>
 <p class='bpcode w800'>
-	http://localhost:10000/petstore/pet?s=name%3DHoppy*&v=species%2Cname&o=name&p=0&l=20
+	http://localhost:10000/petstore/pet?s=name%3DHoppy*&amp;v=species%2Cname&amp;o=name&amp;p=0&amp;l=20
 </p>			
 <img class='bordered w800' src='doc-files/juneau-examples-rest.PetStoreResource.7b.png'>
 <p>
@@ -26970,7 +26995,7 @@
 	<jk>public class</jk> PhotosResource <jk>extends</jk> BasicRestServlet {
 	
 		<jd>/** Our cache of photos */</jd>
-		<jk>private</jk> Map&lt;String,Photo&gt; <jf>photos</jf> = <jk>new</jk> TreeMap<>();
+		<jk>private</jk> Map&lt;String,Photo&gt; <jf>photos</jf> = <jk>new</jk> TreeMap&lt;&gt;();
 	
 		<jd>/** Our bean class for storing photos */</jd>
 		<jk>public static class</jk> Photo {
@@ -27326,15 +27351,15 @@
 			PostInput in
 		) <jk>throws</jk> BadRequest {
 
-		List&lt;Object&gt; results = <jk>new</jk> LinkedList<>();
+		List&lt;Object&gt; results = <jk>new</jk> LinkedList&lt;&gt;();
 
 		<jc>// Don't try to submit empty input.</jc>
 		<jk>if</jk> (isEmpty(in.<jf>sql</jf>))
 			<jk>return</jk> results;
 
-		<jk>if</jk> (in.<jf>pos</jf> < 1 || in.<jf>pos</jf> > 10000)
+		<jk>if</jk> (in.<jf>pos</jf> &lt; 1 || in.<jf>pos</jf> > 10000)
 			<jk>throw new</jk> BadRequest(<js>"Invalid value for position.  Must be between 1-10000"</js>);
-		<jk>if</jk> (in.<jf>limit</jf> < 1 || in.<jf>limit</jf> > 10000)
+		<jk>if</jk> (in.<jf>limit</jf> &lt; 1 || in.<jf>limit</jf> > 10000)
 			<jk>throw new</jk> BadRequest(<js>"Invalid value for limit.  Must be between 1-10000"</js>);
 
 		String sql = <jk>null</jk>;
@@ -27348,7 +27373,7 @@
 					sql = s.trim();
 					<jk>if</jk> (! sql.isEmpty()) {
 						Object o = <jk>null</jk>;
-						<jk>if</jk> (<jf>allowUpdates</jf> || (<jf>allowTempUpdates</jf> && ! sql.matches(<js>"(?:i)commit.*"</js>))) {
+						<jk>if</jk> (<jf>allowUpdates</jf> || (<jf>allowTempUpdates</jf> &amp;&amp; ! sql.matches(<js>"(?:i)commit.*"</js>))) {
 							<jk>if</jk> (st.execute(sql)) {
 								<jk>try</jk> (ResultSet rs = st.getResultSet()) {
 									o = <jk>new</jk> ResultSetList(rs, in.<jf>pos</jf>, in.<jf>limit</jf>, <jf>includeRowNums</jf>);
@@ -28170,7 +28195,7 @@
 </p>	
 
 <p>
-	The <code>juneau-examples-rest-springboot</code> class contains the same examples as <code>juneau-examples-rest</code>
+	The <code>juneau-examples-rest-springboot</code> library contains the same examples as <code>juneau-examples-rest</code>
 	but also includes the following:
 </p>
 <ul class='spaced-list'>
@@ -34861,7 +34886,7 @@
 		</ul>
 </ul>
 
-<h5 class='topic w800'>juneau-server</h5>
+<h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
 		New methods on {@link org.apache.juneau.rest.RestServlet}:
@@ -34872,6 +34897,12 @@
 	<li>
 		The registered resource resolver is now used to instantiate objects of classes defined via <ja>@RestResource</ja>.
 		<br>This allows for any of those instance to be injectable beans.
+</ul>
+
+<h5 class='topic w800'>juneau-rest-server-springboot</h5>
+<ul class='spaced-list'>
+	<li>
+		New project containing classes for making it easy to use Juneau with Spring Boot.
 </ul>
 
 <h5 class='topic w800'>juneau-microservice-core</h5>
@@ -34899,13 +34930,19 @@
 		New {@link org.apache.juneau.microservice.jetty.JettyMicroservice} class replaces the previous <code>RestMicroservice</code>.
 </ul>
 
-<h5 class='topic w800'>juneau-examples-rest</h5>
+<h5 class='topic w800'>juneau-my-jetty-microservice</h5>
 <ul class='spaced-list'>
 	<li>
-		New <code>org.apache.juneau.examples.rest.spring</code> package with code showing how to use Juneau REST
-		with Spring Boot. 
+		New template starter project for Jetty-based microservices.
+</ul>
+
+<h5 class='topic w800'>juneau-my-springboot-microservice</h5>
+<ul class='spaced-list'>
 	<li>
-		New <code>app.json</code> and <code>Procfile</code> files for deploying examples into Heroku.
+		Template starter project for Spring-Boot-based microservices.
+	<li>
+		<code>app.json</code> and <code>Procfile</code> files for deploying examples into Heroku.
+		<br>Includes instructions.
 </ul>
 </div><!-- END: 8.0.0 -->
 

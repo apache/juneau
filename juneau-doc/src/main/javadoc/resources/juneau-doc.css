@@ -332,7 +332,10 @@ l {
 .footer .spaced-list ul { margin:0; max-width: 800px; }
 
 /* Documentation Tree */
-.doctree li { max-width: 800px; }
+.doctree li { 
+	max-width: 800px;
+	margin-top: 0px; 
+}
 li.normal {
     list-style-image:none; 
 }
@@ -377,12 +380,15 @@ li.jp {
 }
 
 .doctree ul { 
-	padding: 5px 0px 5px 20px; 
+	padding: 0px 0px 0px 15px; 
+	margin-top: -2px;
+	margin-bottom: -2px;
 }
 
 ul.doctree {
-	padding: 0px 0px 0px 20px; 
+	padding: 0px 0px 0px 15px; 
 	margin-left: 5px;
+	margin-top: -2px;
 }
 
 .topic a {

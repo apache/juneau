@@ -87,7 +87,7 @@
 		</ul>
 </ul>
 
-<h5 class='topic w800'>juneau-server</h5>
+<h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
 		New methods on {@link oajr.RestServlet}:
@@ -98,6 +98,12 @@
 	<li>
 		The registered resource resolver is now used to instantiate objects of classes defined via <ja>@RestResource</ja>.
 		<br>This allows for any of those instance to be injectable beans.
+</ul>
+
+<h5 class='topic w800'>juneau-rest-server-springboot</h5>
+<ul class='spaced-list'>
+	<li>
+		New project containing classes for making it easy to use Juneau with Spring Boot.
 </ul>
 
 <h5 class='topic w800'>juneau-microservice-core</h5>
@@ -125,12 +131,17 @@
 		New {@link oaj.microservice.jetty.JettyMicroservice} class replaces the previous <code>RestMicroservice</code>.
 </ul>
 
-<h5 class='topic w800'>juneau-examples-rest</h5>
+<h5 class='topic w800'>juneau-my-jetty-microservice</h5>
 <ul class='spaced-list'>
 	<li>
-		New <code>org.apache.juneau.examples.rest.spring</code> package with code showing how to use Juneau REST
-		with Spring Boot. 
-	<li>
-		New <code>app.json</code> and <code>Procfile</code> files for deploying examples into Heroku.
+		New template starter project for Jetty-based microservices.
 </ul>
 
+<h5 class='topic w800'>juneau-my-springboot-microservice</h5>
+<ul class='spaced-list'>
+	<li>
+		Template starter project for Spring-Boot-based microservices.
+	<li>
+		<code>app.json</code> and <code>Procfile</code> files for deploying examples into Heroku.
+		<br>Includes instructions.
+</ul>

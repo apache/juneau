@@ -36,7 +36,7 @@ public class Value<T> {
 	 * 	}
 	 * </p>
 	 * <p class='bcode w800'>
-	 * 	Class<?> t = Value.<jsm>getValueType</jsm>(A.<jk>class</jk>.getMethod(<js>"doX"</js>, Value.<jk>class</jk>));
+	 * 	Class&lt;?&gt; t = Value.<jsm>getValueType</jsm>(A.<jk>class</jk>.getMethod(<js>"doX"</js>, Value.<jk>class</jk>));
 	 * 	<jsm>assertTrue</jsm>(t == Foo.<jk>class</jk>);
 	 * </p>
 	 *
@@ -59,7 +59,7 @@ public class Value<T> {
 			ParameterizedType pt = (ParameterizedType)t;
 			if (pt.getRawType() == Value.class) {
 				Type[] ta = pt.getActualTypeArguments();
-				if (ta.length > 0) 
+				if (ta.length > 0)
 					return ta[0];
 			}
 		} else if (t instanceof Class) {

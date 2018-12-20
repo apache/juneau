@@ -33,7 +33,7 @@ Parameter Examples
 					<js>"Search."</js>,
 					<js>"Key/value pairs representing column names and search tokens."</js>,
 					<js>"'*' and '?' can be used as meta-characters in string fields."</js>,
-					<js>"'>', '>=', '<', and '<=' can be used as limits on numeric and date fields."</js>,
+					<js>"'&gt;', '&gt;=', '&lt;', and '&lt;=' can be used as limits on numeric and date fields."</js>,
 					<js>"Date fields can be matched with partial dates (e.g. '2018' to match any date in the year 2018)."</js>
 				},
 				type=<js>"array"</js>,
@@ -141,10 +141,10 @@ Parameter Examples
 					<jok>"x-examples"</jok>: {
 						<jok>"application/json"</jok>: <jov>"{\n\t\"name\": \"Doggie\",\n\t\"species\": \"Dog\",\n\t\"price\": 9.99,\n\t\"tags\": [\n..."</jov>,
 						<jok>"application/json+simple"</jok>: <jov>"{\n\tname: 'Doggie',\n\tspecies: 'Dog',\n\tprice: 9.99,\n\ttags: [\n\t\t'friendly..."</jov>,
-						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&..."</jov>,
+						<jok>"text/xml"</jok>: <jov>"&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n&lt;object&gt;\n\t&lt;name&gt;Doggie&lt;/name&amp;..."</jov>,
 						<jok>"text/html+stripped"</jok>: <jov>"&lt;table&gt;\n\t&lt;tr&gt;\n\t\t&lt;td&gt;name&lt;/td&gt;\n\t\t&lt;td&gt;Doggie&lt;/t..."</jov>,
 						<jok>"text/uon"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
-						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"name=Doggie\n&species=Dog\n&price=9.99\n&tags=@(\n\tfriendly,\n\tcute\n)"</jov>,
+						<jok>"application/x-www-form-urlencoded"</jok>: <jov>"name=Doggie\n&amp;species=Dog\n&amp;price=9.99\n&amp;tags=@(\n\tfriendly,\n\tcute\n)"</jov>,
 						<jok>"text/openapi"</jok>: <jov>"(\n\tname=Doggie,\n\tspecies=Dog,\n\tprice=9.99,\n\ttags=@(\n\t\tfriendly,\n\t\tcute\n\t)\n)"</jov>,
 						<jok>"octal/msgpack"</jok>: <jov>"84 A4 6E 61 6D 65 A6 44 6F 67 67 69 65 A7 73 70 65 63 69 65 73 A3 44 6F 67 A5 70 72 69 63 6..."</jov>,
 						<jok>"text/plain"</jok>: <jov>"{name:'Doggie',species:'Dog',price:9.99,tags:['friendly','cute']}"</jov>,

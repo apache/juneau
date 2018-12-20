@@ -2673,7 +2673,7 @@ public final class RestContext extends BeanContext {
 	 * 	String scheme = request.getScheme();
 	 * 	<jk>int</jk> port = request.getServerPort();
 	 * 	StringBuilder sb = <jk>new</jk> StringBuilder(request.getScheme()).append(<js>"://"</js>).append(request.getServerName());
-	 * 	<jk>if</jk> (! (port == 80 && <js>"http"</js>.equals(scheme) || port == 443 && <js>"https"</js>.equals(scheme)))
+	 * 	<jk>if</jk> (! (port == 80 &amp;&amp; <js>"http"</js>.equals(scheme) || port == 443 &amp;&amp; <js>"https"</js>.equals(scheme)))
 	 * 		sb.append(<js>':'</js>).append(port);
 	 * 	authorityPath = sb.toString();
 	 * </p>

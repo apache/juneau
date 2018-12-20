@@ -56,7 +56,7 @@ public class DocGenerator {
 		try {
 			long startTime = System.currentTimeMillis();
 
-			String template = IOUtils.readFile("docs/overview.html");
+			String template = IOUtils.readFile("docs/overview_template.html");
 
 			DocStore ds = new DocStore(new File("docs/docs.txt"));
 
@@ -200,10 +200,12 @@ public class DocGenerator {
 
 		public Topics(File topicsDir) throws IOException {
 			for (File f : topicsDir.listFiles()) {
-				if (f.isFile())
-					pageFiles.add(new PageFile(null, f, docFiles));
-				else if (f.isDirectory() && f.getName().contains("doc-files"))
-					docFiles.addAll(Arrays.asList(f.listFiles()));
+				if (! f.getName().startsWith(".")) {
+					if (f.isFile())
+						pageFiles.add(new PageFile(null, f, docFiles));
+					else if (f.isDirectory() && f.getName().contains("doc-files"))
+						docFiles.addAll(Arrays.asList(f.listFiles()));
+				}
 			}
 		}
 	}

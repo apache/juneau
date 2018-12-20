@@ -16,14 +16,34 @@
 	Apache Juneau&trade; is a single cohesive Java ecosystem consisting of the following parts:
 </p>
 <ul class='spaced-list'>
-	<li><b>juneau-marshall</b><br>A universal toolkit for marshalling POJOs to a wide variety of content types using a common framework with no external library dependencies.
-	<li><b>juneau-dto</b><br>A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
-	<li><b>juneau-svl</b><br>A simple yet powerful variable replacement language API.
-	<li><b>juneau-config</b><br>A sophisticated configuration file API.
-	<li><b>juneau-rest-server</b><br>A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as 
-		one or more top-level servlets in any Servlet 3.1.0+ container or Spring Boot.
-	<li><b>juneau-rest-client</b><br>A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-	<li><b>juneau-microservice</b><br>A REST microservice API that combines all the features above as a simple configurable Jetty server for 
+	<li>
+		<b>juneau-marshall</b>
+		<br>A universal toolkit for marshalling POJOs to a wide variety of content types using a common framework with no external library dependencies.
+	<li>
+		<b>juneau-dto</b>
+		<br>A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
+	<li>
+		<b>juneau-svl</b>
+		<br>A simple yet powerful variable replacement language API.
+	<li>
+		<b>juneau-config</b>
+		<br>A sophisticated configuration API.
+	<li>
+		<b>juneau-rest-server</b>
+		<br>A universal REST server API for creating REST interfaces using POJOs simply deployed in any Servlet 3.1.0+ container.
+		<br>Includes auto-generation of Swagger and self-hosting of Swagger UI through OPTIONS page requests.
+	<li>
+		<b>juneau-rest-server-springboot</b>
+		<br>Integration support for deploying Juneau-based REST resources as Spring beans in a Spring Boot application.
+	<li>
+		<b>juneau-rest-client</b>
+		<br>A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
+	<li>
+		<b>juneau-microservice</b>
+		<br>A builder-based API for creating microservices.
+	<li>
+		<b>juneau-microservice-jetty</b>
+		<br>REST microservice API that combines all the features above as a simple configurable Jetty server for 
 		creating lightweight standalone REST interfaces that start up in milliseconds.
 </ul>
 <p>
