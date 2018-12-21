@@ -18,7 +18,6 @@ import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.html.HtmlSerializer;
 import org.apache.juneau.http.MediaType;
 import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.xml.XmlSerializer;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
@@ -121,7 +120,7 @@ public class DtoExample {
                                                         .text("<div><p><i>[Update: Juneau supports ATOM.]</i></p></div>")
                                         )
                         );
-        
+
         Swagger swagger = swagger()
                 .swagger("2.0")
                 .info(

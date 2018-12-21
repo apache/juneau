@@ -15,11 +15,10 @@ package org.apache.juneau.examples.core.dto.atom;
 import org.apache.juneau.dto.atom.Feed;
 import org.apache.juneau.xml.XmlSerializer;
 
-import static org.apache.juneau.dto.atom.AtomBuilder.*;
-
 public class AtomXmlExample {
 
-    public static void main(String[] args) throws Exception {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) throws Exception {
 
 
         Feed feed = AtomFeed.GetAtomFeed();

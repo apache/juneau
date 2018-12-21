@@ -17,17 +17,8 @@ import org.apache.juneau.httppart.HttpPartParser;
 import org.apache.juneau.httppart.HttpPartSchema;
 import org.apache.juneau.httppart.HttpPartSerializer;
 import org.apache.juneau.httppart.HttpPartType;
-import org.apache.juneau.json.JsonParser;
-import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.json.SimpleJsonSerializer;
-import org.apache.juneau.marshall.OpenApi;
 import org.apache.juneau.oapi.OpenApiParser;
 import org.apache.juneau.oapi.OpenApiSerializer;
-import org.apache.juneau.oapi.OpenApiSerializerBuilder;
-
-import java.util.Map;
-
-import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 
 /**
  * Sample class which shows the simple usage of OpenApiSerializer
@@ -40,7 +31,8 @@ public class OapiExample {
      * @param args
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception{
+    @SuppressWarnings("unused")
+	public static void main(String[] args) throws Exception{
 
         OpenApiSerializer oapiSerializer = OpenApiSerializer.DEFAULT;
 

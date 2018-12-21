@@ -18,7 +18,8 @@ import org.apache.juneau.json.SimpleJsonSerializer;
 
 public class AtomJsonExample {
 
-    public static void main(String[] args) throws Exception {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) throws Exception {
 
         Feed feed = AtomFeed.GetAtomFeed();
 
