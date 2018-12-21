@@ -418,5 +418,10 @@
 			<name>Shalitha Suranga</name>
 			<roles><role>PMC</role></roles>
 		</developer>
+		<developer>
+			<id>marcelosouzav</id>
+			<name>Marcelo Vieira</name>
+			<roles><role>PMC</role></roles>
+		</developer>
 	</developers>
 </project>
