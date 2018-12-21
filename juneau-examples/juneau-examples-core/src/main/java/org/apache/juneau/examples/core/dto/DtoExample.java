@@ -121,32 +121,7 @@ public class DtoExample {
                                                         .text("<div><p><i>[Update: Juneau supports ATOM.]</i></p></div>")
                                         )
                         );
-
-        // Serialize to ATOM/XML
-        /**
-         * <feed>
-         *     <title>Example apache Juneau feed</title>
-         *     <link href="http://juneau.apache.org/" hreflang="en" rel="alternate" type="text/html"/>
-         *     <link href="http://juneau.apache.org/feed.atom" rel="self" type="application/atom+xml"/>
-         *     <rights>Copyright (c) 2016, Apache Foundation</rights>
-         *     <author><name>Juneau_Commiter</name></author>
-         *     <updated>2018-12-15T08:52:05Z</updated>
-         *     <id>tag:juneau.apache.org</id>
-         *     <subtitle type="html">Describes <em>stuff</em> about Juneau</subtitle>
-         *     <entry>
-         *          <title>Juneau ATOM specification snapshot</title>
-         *          <updated>2016-01-02T03:04:05Z</updated>
-         *          <id>tag:juneau.sample.com,2013:1.2345</id>
-         *          <published>2016-01-02T03:04:05Z</published>
-         *          <content lang="en" base="http://www.apache.org/" type="xhtml">
-         *              <div><p><i>[Update: Juneau supports ATOM.]</i></p></div>
-         *          </content>
-         *     </entry>
-         * </feed>
-         */
-        String atomXml = XmlSerializer.DEFAULT.serialize(feed);
-        System.out.print(atomXml);
-
+        
         Swagger swagger = swagger()
                 .swagger("2.0")
                 .info(
