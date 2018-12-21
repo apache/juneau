@@ -123,7 +123,7 @@
 	{@link oaj.annotation.Bean#beanDictionary() @Bean(beanDictionary)} and 
 	{@link oaj.annotation.BeanProperty#beanDictionary() @BeanProperty(beanDictionary)} 
 	annotations so that the beans can be resolved at parse time.  
-	<br>These annotations are not necessary during serialization, but are needed during parsing in order to 
+	These annotations are not necessary during serialization, but are needed during parsing in order to 
 	resolve the bean types.
 </p>
 <p>
@@ -245,7 +245,7 @@
 </table>
 <p>
 	Bean type names are also used for resolution when abstract fields are used.
-	<br>The following examples show how they are used in a variety of circumstances.
+	The following examples show how they are used in a variety of circumstances.
 </p>
 <table class='styled w800'>
 	<tr>
@@ -448,10 +448,10 @@
 </table>
 <p>
 	On a side note, characters that cannot be represented in XML 1.0 are encoded using a simple encoding.
-	<br>Note in the examples below, some characters such as <js>'\n'</js>, <js>'\t</js>', and <js>'\r'</js>
+	Note in the examples below, some characters such as <js>'\n'</js>, <js>'\t</js>', and <js>'\r'</js>
 	can be represented as XML entities when used in text but not in element names.  Other characters such as
 	<js>'\b'</js> and <js>'\f'</js> cannot be encoded in XML 1.0 at all without inventing our own notation.
-	<br>Whitespace characters in element names are encoded as well as whitespace end characters in text.
+	Whitespace characters in element names are encoded as well as whitespace end characters in text.
 </p>
 <table class='styled w800'>
 	<tr>
@@ -490,7 +490,7 @@
 <p>
 	While it's true that these characters CAN be represented in XML 1.1, it's impossible to parse XML 1.1 
 	text in Java without the XML containing an XML declaration.
-	<br>Unfortunately, this, and the uselessness of the 
+	Unfortunately, this, and the uselessness of the 
 	{@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting in Java
 	forced us to make some hard design decisions that may not be the most elegant.
 </p>

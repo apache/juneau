@@ -49,7 +49,7 @@ Namespaces
 	The namespace URLs can either be defined as part of the {@link oaj.xml.annotation.Xml @Xml}
 	annotation, or can be defined at the package level with the {@link oaj.xml.annotation.XmlSchema @XmlSchema}
 	annotation.
-	<br>Below shows it defined at the package level:
+	Below shows it defined at the package level:
 </p>
 <h5 class='figure'>package-info.java</h5>
 <p class='bpcode w800'>
@@ -162,9 +162,9 @@ Namespaces
 <p>
 	One important property on the XML serializer class is 
 	{@link oaj.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}.
-	<br>This property tells the serializer to make a first-pass over the data structure to look for namespaces 
+	This property tells the serializer to make a first-pass over the data structure to look for namespaces 
 	defined on classes and bean properties.
-	<br>In high-performance environments, you may want to consider disabling auto-detection and providing your 
+	In high-performance environments, you may want to consider disabling auto-detection and providing your 
 	own explicit list of namespaces to the serializer to avoid this scanning step.
 </p>
 <p>

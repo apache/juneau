@@ -17,7 +17,7 @@ Interface Filters
 
 <p>
 	Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
-	<br>This is accomplished through interface filters.
+	This is accomplished through interface filters.
 </p>
 <p>
 	Interface filters are defined through the following:
@@ -44,7 +44,7 @@ Interface Filters
 </p>
 <p>
 	Suppose we only want to render the properties defined on our interface, not the implementation. 
-	<br>To do so, we can define the following bean filter:
+	To do so, we can define the following bean filter:
 </p>
 <p class='bpcode w800'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
@@ -73,7 +73,7 @@ Interface Filters
 <p>
 	The {@link oaj.BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
 	non-<code>BeanFilter</code> classes passed in as meaning interface classes. 
-	<br>So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
+	So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
 	passing in <code>MyInterface.<jk>class</jk></code> to the serializer, like so:
 </p>
 <p class='bpcode w800'>
@@ -106,7 +106,7 @@ Interface Filters
 </p>
 <p>
 	The annotation can be used on parent classes as well.
-	<br>Child beans will only serialize properties defined on the parent class.
+	Child beans will only serialize properties defined on the parent class.
 <p class='bpcode w800'>
 	<ja>@Bean</ja>(interfaceClass=MyAbstractClass.<jk>class</jk>)
 	<jk>public abstract class</jk> MyAbstractClass {

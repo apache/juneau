@@ -27,7 +27,7 @@ Components
 	</tr>
 	<tr class='dark bb'>
 		<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
-		<td class='code'>juneau-marshall</td>
+		<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
 		<td>Serializers and parsers for:
 			<ul style='margin:0px 10px;'>
 				<li>JSON
@@ -36,6 +36,7 @@ Components
 				<li>UON
 				<li>URL-Encoding
 				<li>MessagePack
+				<li>OpenAPI
 				<li>SOAP/XML
 				<li>CSV
 				<li>BSON (coming soon)
@@ -46,12 +47,12 @@ Components
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
+				<li>Java 8
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-marshall-rdf</td>
+		<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
 		<td>
 			Serializers and parsers for:
 			<ul style='margin:0px 10px;'>
@@ -64,13 +65,13 @@ Components
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
+				<li>Java 8
 				<li>Apache Jena 2.7.1
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-dto</td>
+		<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
 		<td>
 			Data Transfer Objects for:
 			<ul style='margin:0px 10px;'>
@@ -81,96 +82,145 @@ Components
 				<li>Swagger 2.0
 			</ul>				
 		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 7</li></ul></td>
+		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-svl</td>
+		<td class='code'><a class='doclink' href='#juneau-svl'>juneau-svl</a></td>
 		<td>
 			Simple Variable Language API
 		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 7</li></ul></td>
+		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-config</td>
+		<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
 		<td>
 			Configuration file API
 		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 7</li></ul></td>
+		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan="3" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
-		<td class='code'>juneau-rest-server</td>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
 		<td>
 			REST Servlet API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
-				<li>Servlet 3.1
+				<li>Java 8
+				<li>Servlet 3.1+
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td class='code'>juneau-rest-server-jaxrs</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
 		<td>
-			Optional JAX-RS support
+			Spring Boot integration support
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
+				<li>Java 8+
+				<li>Spring Boot 2.0+
+			</ul>
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
+		<td>
+			JAX-RS support
+		</td>
+		<td>
+			<ul style='margin:0px 10px;'>
+				<li>Java 8+
 				<li>JAX-RS 2.0
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td class='code'>juneau-rest-client</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
 		<td>
 			REST Client API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
-				<li>Apache HttpClient 4.5.3
+				<li>Java 8+
+				<li>Apache HttpClient 4.5+
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-microservice</td>
-		<td class='code'>juneau-microservice-server</td>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-microservice</td>
+		<td class='code'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></td>
 		<td>
-			REST Microservice Server API
+			Microservice API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Eclipse Jetty 9.4.3
+				<li>Java 8+
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-microservice-template</td>
+		<td class='code'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></td>
 		<td>
-			Developer template project
+			Jetty Microservice API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Eclipse Jetty 9.4.3
+				<li>Java 8+
+				<li>Eclipse Jetty 9.4+
+			</ul>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-jetty-microservice'>my-jetty-microservice</a></td>
+		<td>
+			Developer template project for Jetty-based microservices.
+		</td>
+		<td>
+			<ul style='margin:0px 10px;'>
+				<li>Java 8+
+				<li>Eclipse Jetty 9.4+
+			</ul>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
+		<td>
+			Developer template project for Spring-Boot-based microservices.
+		</td>
+		<td>
+			<ul style='margin:0px 10px;'>
+				<li>Java 8+
+				<li>Spring Boot 2.0+
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
-		<td class='code'>juneau-examples-core</td>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
+		<td class='code'><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></td>
 		<td>
 			Core code examples
 		</td>
 		<td></td>
 	</tr>
 	<tr class='light bb'>
-		<td class='code'>juneau-example-rest</td>
+		<td class='code'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></td>
 		<td>
 			REST code examples
+		</td>
+		<td></td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest-jetty</a></td>
+		<td>
+			REST code examples deployed using Jetty
+		</td>
+		<td></td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></td>
+		<td>
+			REST code examples deployed using Spring Boot
 		</td>
 		<td></td>
 	</tr>
@@ -190,9 +240,9 @@ Components
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
-				<li>Servlet 3.1
-				<li>Apache HttpClient 4.5.3
+				<li>Java 8+
+				<li>Servlet 3.1+
+				<li>Apache HttpClient 4.5+
 			</ul>
 		</td>
 	</tr>

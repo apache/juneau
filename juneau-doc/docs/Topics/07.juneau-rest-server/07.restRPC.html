@@ -78,7 +78,7 @@
 </ul>
 <p>
 	Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
-	<br>For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
+	For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
 	serializers and parsers, and the ability to provide your own customized Apache <code>HttpClient</code> for 
 	handling various scenarios involving authentication and Internet proxies.
 </p>
@@ -130,8 +130,8 @@
 </p>
 <p>
 	Note that the body of the request is an array.  
-	<br>This array contains the serialized arguments of the method.
-	<br>The object returned by the method is then serialized as the body of the response.
+	This array contains the serialized arguments of the method.
+	The object returned by the method is then serialized as the body of the response.
 </p>
 
 <h5 class='topic'>Server side</h5>
@@ -146,9 +146,9 @@
 </ol>
 <p>
 	In either case, the proxy communications layer is pure REST.
-	<br>Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
+	Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
 	be made through pure REST calls.  
-	<br>This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
+	This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
 	a browser with no coding involved.
 </p>
 
@@ -184,7 +184,7 @@
 <p>
 	The <code><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</code> approach is easier if you only have a single 
 	interface you want to expose.  
-	<br>You simply define a Java method whose return type is an interface, and return the implementation of that 
+	You simply define a Java method whose return type is an interface, and return the implementation of that 
 	interface:
 </p>
 <p class='bpcode w800'>
@@ -205,7 +205,7 @@
 <img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.1.png'>
 <p>
 	Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
-	<br>Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
+	Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
 	interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
 </p>
 <h5 class='figure'>IAddressBook</h5>
@@ -225,8 +225,8 @@
 <p>
 	Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
 	how this works.
-	<br>We'll use the same method call as in the introduction.
-	<br>First, we need to create the serialized form of the arguments:
+	We'll use the same method call as in the introduction.
+	First, we need to create the serialized form of the arguments:
 </p>
 <p class='bpcode w800'>
 	Object[] args = <jk>new</jk> Object[] {
@@ -259,20 +259,20 @@
 </p>
 <p>
 	Note that in this example we're using JSON.  
-	<br>However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
-	<br>In practice however, JSON will preferred since it is often the most efficient.
+	However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
+	In practice however, JSON will preferred since it is often the most efficient.
 </p>
 <p>
 	Next, we can use a tool such as Poster to make the REST call.
-	<br>Methods are invoked by POSTing the serialized object array to the URI of the interface method.
+	Methods are invoked by POSTing the serialized object array to the URI of the interface method.
 	In this case, we want to POST our JSON to the following URL:
 </p>
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
 </p>
 <p>
-	<br>Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
-	<br>We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
+	Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
+	We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
 	<code>text/json</code> as well.
 </p>
 <img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.4.png'>
@@ -320,10 +320,10 @@
 <p>
 	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
 	notation.
-	<br>See {@link oaj.uon.UonSerializer} for more information about this encoding.
-	<br>Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
+	See {@link oaj.uon.UonSerializer} for more information about this encoding.
+	Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
 	but passing in unencoded JSON in a URL may not work in all browsers.  
-	<br>Therefore, UON is preferred.
+	Therefore, UON is preferred.
 </p>
 <p>
 	The hyperlinks on the method names above lead you to a simple form-entry page where you can test

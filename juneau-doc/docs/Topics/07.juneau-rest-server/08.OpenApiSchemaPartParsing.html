@@ -52,7 +52,7 @@ OpenAPI Schema Part Parsing
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	The following shows the same for a request body:
@@ -85,7 +85,7 @@ OpenAPI Schema Part Parsing
 </p>
 <p>
 	The list of valid POJO types for parameters depends on type and format of the value or items/entries of the value.
-	<br>For example, instead of <code>Longs</code> in the example above, we could also define a 2-dimensional array of POJOs convertible from <code>Longs</code>:
+	For example, instead of <code>Longs</code> in the example above, we could also define a 2-dimensional array of POJOs convertible from <code>Longs</code>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
@@ -122,5 +122,5 @@ OpenAPI Schema Part Parsing
 </p>
 <p>
 	As you can see, the complexity of possible input types expands significantly.
-	<br>For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
+	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
 </p>

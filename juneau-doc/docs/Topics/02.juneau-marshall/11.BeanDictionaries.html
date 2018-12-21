@@ -18,9 +18,9 @@ Bean Names and Dictionaries
 <p>
 	While parsing into beans, Juneau attempts to determine the class types of bean properties through 
 	reflection on the bean property getter or setter.
-	<br>Often this is insufficient if the property type is an interface or abstract class that cannot be 
+	Often this is insufficient if the property type is an interface or abstract class that cannot be 
 	instantiated.
-	<br>This is where bean names and dictionaries come into play.
+	This is where bean names and dictionaries come into play.
 </p>
 <p>
 	Bean names and dictionaries are used for identifying class types when they cannot be inferred through 
@@ -29,7 +29,7 @@ Bean Names and Dictionaries
 <p>
 	Bean classes are given names through the {@link oaj.annotation.Bean#typeName() @Bean(typeName)} 
 	annotation.
-	<br>These names are then added to the serialized output as virtual <js>"_type"</js> properties (or element 
+	These names are then added to the serialized output as virtual <js>"_type"</js> properties (or element 
 	names in XML).
 </p>
 <p>
@@ -67,8 +67,8 @@ Bean Names and Dictionaries
 </p>
 <p>
 	Type names can be represented slightly differently in different languages.
-	<br>For example, the dictionary name is used as element names when serialized to XML.
-	<br>This allows the <code>typeName</code> annotation to be used as a shortcut for defining element names for 
+	For example, the dictionary name is used as element names when serialized to XML.
+	This allows the <code>typeName</code> annotation to be used as a shortcut for defining element names for 
 	beans.
 </p>
 <p>

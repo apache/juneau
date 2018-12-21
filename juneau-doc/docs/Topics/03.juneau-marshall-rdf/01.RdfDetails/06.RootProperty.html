@@ -17,22 +17,22 @@ Root Property
 
 <p>
 	For all RDF languages, the POJO objects get broken down into simple triplets.
-	<br>Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
+	Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
 	to become lost.
-	<br>There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
+	There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
 	form, and in some cases it's impossible.
 </p>
 <p>
 	By default, the {@link oaj.jena.RdfParser} class handles this by scanning all the nodes and 
 	identifying the nodes without incoming references.
-	<br>However, this is inefficient, especially for large models.
-	<br>And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
+	However, this is inefficient, especially for large models.
+	And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
 	locate the root at all.
 </p>
 <p>
 	To resolve this issue, the property {@link oaj.jena.RdfSerializer#RDF_addRootProperty} 
 	was introduced.
-	<br>When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
+	When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
 	by the parser.
 </p>
 <p>

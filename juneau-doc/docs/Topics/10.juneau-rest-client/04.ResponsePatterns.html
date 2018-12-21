@@ -18,7 +18,7 @@ Using Response Patterns
 <p>
 	One issue with REST (and HTTP in general) is that the HTTP response code must be set as a header before the 
 	body of the request is sent.  
-	<br>This can be problematic when REST calls invoke long-running processes, pipes
+	This can be problematic when REST calls invoke long-running processes, pipes
 	the results through the connection, and then fails after an HTTP 200 has already been sent.
 </p>
 <p>
@@ -57,7 +57,7 @@ Using Response Patterns
 	These convenience methods are specialized methods that use the 
 	{@link oajrc.RestCall#responsePattern(ResponsePattern)} method which uses regular 
 	expression matching against the response body.
-	<br>This method can be used to search for arbitrary patterns in the response body.
+	This method can be used to search for arbitrary patterns in the response body.
 </p>
 <p>
 	The following example shows how to use a response pattern finder to find and capture patterns for 
@@ -100,7 +100,7 @@ Using Response Patterns
 	Using response patterns does not affect the functionality of any of the other methods
 	used to retrieve the response such as {@link oajrc.RestCall#getResponseAsString()} 
 	or {@link oajrc.RestCall#getResponse(Class)}.
-	<br>HOWEVER, if you want to retrieve the entire text of the response from inside the match methods,
+	HOWEVER, if you want to retrieve the entire text of the response from inside the match methods,
 	use {@link oajrc.RestCall#getCapturedResponse()} since this method will not absorb 
 	the response for those other methods.
 </p>

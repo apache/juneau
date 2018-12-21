@@ -21,7 +21,7 @@ OpenAPI Serializers
 <p>
 	Later we'll describe how to use HTTP-Part annotations to define OpenAPI schemas for serialization and parsing
 	of HTTP parts.  
-	<br>The following example is a preview showing an HTTP body defined as pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
+	The following example is a preview showing an HTTP body defined as pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
@@ -90,7 +90,7 @@ OpenAPI Serializers
 <p>
 	As a general rule, any POJO convertible to the intermediate type for the <code>type/format</code> of the schema can
 	be serialized using the OpenAPI serializer.
-	<br>Here are the rules of POJO types allowed for various type/format combinations:
+	Here are the rules of POJO types allowed for various type/format combinations:
 </p>
 <table class='styled w800'>
 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>

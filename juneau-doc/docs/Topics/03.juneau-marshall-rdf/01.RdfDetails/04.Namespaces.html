@@ -17,7 +17,7 @@ Namespaces
 
 <p>
 	You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
-	<br>These are used by default when namespaces are not explicitly specified.
+	These are used by default when namespaces are not explicitly specified.
 </p>
 <p>
 	The <code>juneau</code> namespace is used for generic names for objects that don't have namespaces 
@@ -29,9 +29,9 @@ Namespaces
 </p>
 <p>
 	The easiest way to specify namespaces is through annotations.
-	<br>In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all properties 
+	In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all properties 
 	of this class.
-	<br>We do this by adding the following annotation to our class:
+	We do this by adding the following annotation to our class:
 </p>
 <p class='bpcode w800'>
 	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
@@ -77,8 +77,8 @@ Namespaces
 <p>
 	Namespace auto-detection ({@link oaj.xml.XmlSerializer#XML_autoDetectNamespaces}) is 
 	enabled on serializers by default.
-	<br>This causes the serializer to make a first-pass over the data structure to look for namespaces.
-	<br>In high-performance environments, you may want to consider disabling auto-detection and providing an 
+	This causes the serializer to make a first-pass over the data structure to look for namespaces.
+	In high-performance environments, you may want to consider disabling auto-detection and providing an 
 	explicit list of namespaces to the serializer to avoid this scanning step.
 </p>
 <p class='bpcode w800'>

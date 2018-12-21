@@ -17,8 +17,8 @@ Simple Variable Language
 
 <p>
 	The <l>juneau-svl</l> module defines an API for a language called <l>Simple Variable Language</l>.
-	<br>In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
-	<br>It is used extensively in the Config, REST and Microservice APIs.
+	In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
+	It is used extensively in the Config, REST and Microservice APIs.
 </p>
 <p>
 	Most variables can be recursively nested within the varKey (e.g. <js>"$FOO{$BAR{xxx},$BAZ{xxx}}"</js>)
@@ -26,7 +26,7 @@ Simple Variable Language
 </p>
 <p>
 	The {@link oaj.svl.VarResolver} class is used to resolve variables.
-	<br>The {@link oaj.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
+	The {@link oaj.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
 	configured with the following basic variables:
 </p>
 <ul class='doctree'>

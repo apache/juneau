@@ -181,7 +181,7 @@
 </p>
 <p>
 	The <ja>@Response</ja> annotation can be simultaneously on both the Java method and return type.
-	<br>When used in both locations, the annotation values are combined, but values defined on the
+	When used in both locations, the annotation values are combined, but values defined on the
 	method return annotation take precedence over the values defined on the type.
 </p>
 
@@ -306,7 +306,7 @@
 <p>
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
 	matching the requesting <code>Accept</code> header.
-	<br>The {@link oaj.oapi.OpenApiSerializer} class can be used to serialize response bodies using OpenAPI rules.
+	The {@link oaj.oapi.OpenApiSerializer} class can be used to serialize response bodies using OpenAPI rules.
 </p>
 <p>
 	The following examples show part-schema-based serialization of response bodies:
@@ -361,7 +361,7 @@
 <h5 class='topic'>Swagger documentation</h5>
 <p>
 	The attributes on this annotation are also used to populate the generated Swagger for the method.
-	<br>For example, in the case of the <code>InvalidLogin</code> example above, the following Swagger is generated:
+	For example, in the case of the <code>InvalidLogin</code> example above, the following Swagger is generated:
 </p>
 <p class='bpcode w800'>
 	<jok>'/user/login'</jok>: {

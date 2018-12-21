@@ -18,12 +18,12 @@
 <p>
 	The {@link oajr.annotation.RestMethod#path() @RestMethod(path)} annotation allows 
 	you to define URL path patterns to match against.
-	<br>These patterns can contain variables of the form <l>"{xxx}"</l> that can be passed in directly to the
+	These patterns can contain variables of the form <l>"{xxx}"</l> that can be passed in directly to the
 	Java methods as extra parameters.
 </p>
 <p>
 	In the following example, 3 separate GET request handlers are defined with different path patterns.
-	<br>Note how the variables are passed in as additional arguments on the method, and how those arguments are 
+	Note how the variables are passed in as additional arguments on the method, and how those arguments are 
 	automatically converted to the specified class type...
 </p>
 <p class='bpcode w800'>
@@ -47,7 +47,7 @@
 </p>
 <p>
 	By default, path patterns are matched using a best-match heuristic. 
-	<br>When overlaps occur, URLs are matched from most-specific to most-general order:
+	When overlaps occur, URLs are matched from most-specific to most-general order:
 </p>
 <p class='bpcode w800'>
 	<jc>// Try first </jc>
@@ -78,14 +78,14 @@
 	The match heuristic behavior can be overridden by the 
 	{@link oajr.annotation.RestMethod#priority() @RestMethod(priority)} annotation 
 	property.
-	<br>However, in practice this is almost never needed.
+	However, in practice this is almost never needed.
 </p>
 <p>
 	Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
-	<br>Any remainder after the match can be accessed through 
+	Any remainder after the match can be accessed through 
 	{@link oajr.RequestPath#getRemainder()} or parameters with the 
 	<code><ja>@Path</ja>(<js>"/*"</js>)</code> annotation.
-	<br>On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
+	On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 	require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
 </p>
 <p>
@@ -104,7 +104,7 @@
 </p>
 <p>
 	Annotations are provided for easy access to URL parameters with automatic conversion to any {@doc PojoCategories parsable} type.
-	<br>For example, the following example can process the URL <l>"/urlWithParams?foo=foo&amp;bar=[1,2,3]&amp;baz=067e6162-3b6f-4ae2-a171-2470b63dff00"</l>...
+	For example, the following example can process the URL <l>"/urlWithParams?foo=foo&amp;bar=[1,2,3]&amp;baz=067e6162-3b6f-4ae2-a171-2470b63dff00"</l>...
 </p>
 <p class='bpcode w800'>
 	<jc>// Example GET request with access to query parameters</jc>

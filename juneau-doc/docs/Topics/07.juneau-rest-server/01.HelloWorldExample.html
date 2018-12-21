@@ -17,13 +17,13 @@ Hello World Example
 
 <p>
 	A REST resource is simply a Java class annotated with {@link oajr.annotation.RestResource}.
-	<br>The most common case is a class that extends {@link oajr.RestServlet}, which itself is simply an 
+	The most common case is a class that extends {@link oajr.RestServlet}, which itself is simply an 
 	extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 </p>
 <p>
 	In this example, we define a resource called <l>HelloWorldResource</l>.  
-	<br>This example is located in the <l>juneau-examples-rest</l> project.
-	<br>It's assumed the reader is familiar with defining servlets in web applications.
+	This example is located in the <l>juneau-examples-rest</l> project.
+	It's assumed the reader is familiar with defining servlets in web applications.
 </p>
 <p>
 	Like any servlet, we could define our resource in the <l>web.xml</l> file of the web application like so...
@@ -80,13 +80,13 @@ Hello World Example
 <img class='bordered w800' src='doc-files/juneau-rest-server.HelloWorldExample.1.png'>
 <p>
 	It doesn't much simpler than that.  
-	<br>In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
+	In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
 	JSON, XML, HTML, ...).
-	<br>However, we could have returned any POJO consisting of beans, maps, collections, etc...
+	However, we could have returned any POJO consisting of beans, maps, collections, etc...
 </p>
 <p>
 	The {@link oajr.BasicRestServlet} class that we're using here is a subclass of 
 	{@link oajr.RestServlet} that provides default support for a variety of content types.  
-	<br>Implementers can choose to use this class, or create their own subclass of 
+	Implementers can choose to use this class, or create their own subclass of 
 	{@link oajr.RestServlet} with their own specialized serializers and parsers.
 </p>

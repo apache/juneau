@@ -66,8 +66,8 @@ Setting Values
 <p>
 	The last 4 arguments in {@link oaj.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} 
 	are optional in that if you pass <jk>null</jk>, the current value will not be overwritten.
-	<br>To unset the same-line comment, you should pass in a blank string.
-	<br>To remove pre-lines, you should pass in an empty list.
+	To unset the same-line comment, you should pass in a blank string.
+	To remove pre-lines, you should pass in an empty list.
 </p>	
 <p>
 	Sections can be added with optional pre-lines using the <code>setSection</code> methods:
@@ -88,8 +88,8 @@ Setting Values
 </p>		
 <p>
 	Changes made to the configuration are transactional in nature.  
-	<br>They are kept in memory until you call the {@link oaj.config.Config#commit()} method.
-	<br>Until then, you still see the modified values when you call any of the getters, but the modified values
+	They are kept in memory until you call the {@link oaj.config.Config#commit()} method.
+	Until then, you still see the modified values when you call any of the getters, but the modified values
 	exist only in memory.
 </p>
 <p>

@@ -543,7 +543,7 @@
 	</tr>
 	<tr class='dark bb'>
 		<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
-		<td class='code'>juneau-marshall</td>
+		<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
 		<td>Serializers and parsers for:
 			<ul style='margin:0px 10px;'>
 				<li>JSON
@@ -552,6 +552,7 @@
 				<li>UON
 				<li>URL-Encoding
 				<li>MessagePack
+				<li>OpenAPI
 				<li>SOAP/XML
 				<li>CSV
 				<li>BSON (coming soon)
@@ -562,12 +563,12 @@
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
+				<li>Java 8
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-marshall-rdf</td>
+		<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
 		<td>
 			Serializers and parsers for:
 			<ul style='margin:0px 10px;'>
@@ -580,13 +581,13 @@
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
+				<li>Java 8
 				<li>Apache Jena 2.7.1
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-dto</td>
+		<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
 		<td>
 			Data Transfer Objects for:
 			<ul style='margin:0px 10px;'>
@@ -597,96 +598,145 @@
 				<li>Swagger 2.0
 			</ul>				
 		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 7</li></ul></td>
+		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-svl</td>
+		<td class='code'><a class='doclink' href='#juneau-svl'>juneau-svl</a></td>
 		<td>
 			Simple Variable Language API
 		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 7</li></ul></td>
+		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-config</td>
+		<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
 		<td>
 			Configuration file API
 		</td>
-		<td><ul style='margin:0px 10px;'><li>Java 7</li></ul></td>
+		<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan="3" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
-		<td class='code'>juneau-rest-server</td>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
 		<td>
 			REST Servlet API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
-				<li>Servlet 3.1
+				<li>Java 8
+				<li>Servlet 3.1+
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td class='code'>juneau-rest-server-jaxrs</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
 		<td>
-			Optional JAX-RS support
+			Spring Boot integration support
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
+				<li>Java 8+
+				<li>Spring Boot 2.0+
+			</ul>
+		</td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
+		<td>
+			JAX-RS support
+		</td>
+		<td>
+			<ul style='margin:0px 10px;'>
+				<li>Java 8+
 				<li>JAX-RS 2.0
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td class='code'>juneau-rest-client</td>
+		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
 		<td>
 			REST Client API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
-				<li>Apache HttpClient 4.5.3
+				<li>Java 8+
+				<li>Apache HttpClient 4.5+
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-microservice</td>
-		<td class='code'>juneau-microservice-server</td>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-microservice</td>
+		<td class='code'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></td>
 		<td>
-			REST Microservice Server API
+			Microservice API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Eclipse Jetty 9.4.3
+				<li>Java 8+
 			</ul>
 		</td>
 	</tr>
 	<tr class='dark bb'>
-		<td class='code'>juneau-microservice-template</td>
+		<td class='code'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a></td>
 		<td>
-			Developer template project
+			Jetty Microservice API
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 8
-				<li>Eclipse Jetty 9.4.3
+				<li>Java 8+
+				<li>Eclipse Jetty 9.4+
+			</ul>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-jetty-microservice'>my-jetty-microservice</a></td>
+		<td>
+			Developer template project for Jetty-based microservices.
+		</td>
+		<td>
+			<ul style='margin:0px 10px;'>
+				<li>Java 8+
+				<li>Eclipse Jetty 9.4+
+			</ul>
+		</td>
+	</tr>
+	<tr class='dark bb'>
+		<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
+		<td>
+			Developer template project for Spring-Boot-based microservices.
+		</td>
+		<td>
+			<ul style='margin:0px 10px;'>
+				<li>Java 8+
+				<li>Spring Boot 2.0+
 			</ul>
 		</td>
 	</tr>
 	<tr class='light bb'>
-		<td rowspan="2" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
-		<td class='code'>juneau-examples-core</td>
+		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-examples</td>
+		<td class='code'><a class='doclink' href='#juneau-examples-core'>juneau-examples-core</a></td>
 		<td>
 			Core code examples
 		</td>
 		<td></td>
 	</tr>
 	<tr class='light bb'>
-		<td class='code'>juneau-example-rest</td>
+		<td class='code'><a class='doclink' href='#juneau-examples-rest'>juneau-examples-rest</a></td>
 		<td>
 			REST code examples
+		</td>
+		<td></td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-examples-rest-jetty'>juneau-examples-rest-jetty</a></td>
+		<td>
+			REST code examples deployed using Jetty
+		</td>
+		<td></td>
+	</tr>
+	<tr class='light bb'>
+		<td class='code'><a class='doclink' href='#juneau-examples-rest-springboot'>juneau-examples-rest-springboot</a></td>
+		<td>
+			REST code examples deployed using Spring Boot
 		</td>
 		<td></td>
 	</tr>
@@ -706,9 +756,9 @@
 		</td>
 		<td>
 			<ul style='margin:0px 10px;'>
-				<li>Java 7
-				<li>Servlet 3.1
-				<li>Apache HttpClient 4.5.3
+				<li>Java 8+
+				<li>Servlet 3.1+
+				<li>Apache HttpClient 4.5+
 			</ul>
 		</td>
 	</tr>
@@ -862,7 +912,7 @@
 <p>
 	Default serialization support is provided for Java primitives, <code>Maps</code>, <code>Collections</code>, 
 	beans, and arrays. 
-	<br>Extensible support for other data types such as <code>Calendars</code>, <code>Dates</code>, 
+	Extensible support for other data types such as <code>Calendars</code>, <code>Dates</code>, 
 	<code>Iterators</code> is available through the use of POJO swaps (described later).
 </p>
 <p>
@@ -990,12 +1040,13 @@
 	Map&lt;String,Person&gt; m3 = <jk>new</jk> TreeMap&lt;String,Person&gt;();
 	parser.parseIntoMap(json, m3, String.<jk>class</jk>, Person.<jk>class</jk>);
 </p>
+<br>
 <ul class='doctree'>
 	<li class='info'>
 		In the example above, we're parsing "lax" JSON (single quotes, unquoted attributes).
 		The JSON parser can handle any valid JSON syntax (such as quoted or unquoted attributes, single or double 
 		quotes).
-		<br>It can also handle JSON fragments and embedded Javascript comments. 
+		It can also handle JSON fragments and embedded Javascript comments. 
 		Many of the JSON examples provided will use lax syntax which is easier to read since we don't have to deal 
 		with escapes.  
 </ul>
@@ -1057,7 +1108,9 @@
 </ul>
 <p>
 	Marshalls are often cleaner to use on-the-fly since they have simplified names.
-	<br>The following shows the {@link org.apache.juneau.marshall.Json} marshall in action:
+</p>
+<p>
+	The following shows the {@link org.apache.juneau.marshall.Json} marshall in action:
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -1072,7 +1125,7 @@
 	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
 </p>
 <p>
-	Marshalls exist for all supported languages.
+	Marshalls exist for all supported languages:
 </p>
 <ul class='doctree'>
 	<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
@@ -1107,7 +1160,7 @@
 <div class='topic'><!-- START: 2.4 - juneau-marshall.HttpPartSerializers -->
 <p>
 	There is a separate set of serializers for serializing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
-	<br>The distinction is that these are designed to serialize directly to strings based on Open-API schema information.
+	The distinction is that these are designed to serialize directly to strings based on Open-API schema information.
 </p>
 <p class='bpcode w800'>
 	<jc>// Schema information about our part.</jc>
@@ -1152,7 +1205,7 @@
 <div class='topic'><!-- START: 2.5 - juneau-marshall.HttpPartParsers -->
 <p>
 	There is a separate set of parsers for parsing HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
-	<br>The distinction is that these are designed to parse directly from strings based on Open-API schema information.
+	The distinction is that these are designed to parse directly from strings based on Open-API schema information.
 </p>
 <p class='bpcode w800'>
 	<jc>// Schema information about our part.</jc>
@@ -1197,9 +1250,9 @@
 <div class='topic'><!-- START: 2.6 - juneau-marshall.ConfigurableProperties -->
 <p>
 	Serializers and parsers have a wide variety of configurable properties.
-	<br>They all extend from the {@link org.apache.juneau.BeanContextBuilder} class that allows you to easily construct
+	They all extend from the {@link org.apache.juneau.BeanContextBuilder} class that allows you to easily construct
 	new instances from scratch or build upon existing instances.
-	<br>For example, the following code shows how to configure a JSON serializer:
+	For example, the following code shows how to configure a JSON serializer:
 </p>
 <p class='bpcode w800'>
 	WriterSerializer s = JsonSerializer
@@ -1211,7 +1264,7 @@
 </p>
 <p>
 	Configurable settings can also be set declaratively.
-	<br>The following produces the same serializer.
+	The following produces the same serializer.
 </p>
 <p class='bpcode w800'>
 	WriterSerializer s = JsonSerializer
@@ -1223,7 +1276,7 @@
 </p>
 <p>
 	However, each of the serializers and parsers already contain reusable instances with common configurations.
-	<br>For example, JSON has the following predefined reusable serializers and parsers:
+	For example, JSON has the following predefined reusable serializers and parsers:
 </p>
 <ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.json.JsonSerializer}
@@ -1271,7 +1324,7 @@
 <div class='topic'><!-- START: 2.6.1 - juneau-marshall.ConfigurableProperties.Common -->
 <p>
 	All serializers and parsers extend from the {@link org.apache.juneau.BeanContext} class.
-	<br>Therefore, the following properties are common to all serializers and parsers:
+	Therefore, the following properties are common to all serializers and parsers:
 </p>
 <ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.BeanContext}
@@ -1440,7 +1493,7 @@
 <p>
 	Any valid JSON can be parsed into an unstructured model consisting of generic 
 	{@link org.apache.juneau.ObjectMap} and {@link org.apache.juneau.ObjectList} objects. 
-	<br>
+	
 	(In theory, any valid XML can also be parsed into an unstructured model, although this has not been 
 	officially 'tested')
 </p>
@@ -1683,8 +1736,8 @@
 <div class='topic'><!-- START: 2.10 - juneau-marshall.Transforms -->
 <p>
 	By default, the Juneau framework can serialize and parse a wide variety of POJOs out-of-the-box.  
-	<br>However, two special classes are provided tailor how certain Java objects are handled by the framework.
-	<br>These classes are:
+	However, two special classes are provided tailor how certain Java objects are handled by the framework.
+	These classes are:
 </p>
 <ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.transform.BeanFilter} - Transforms that alter the way beans are handled.
@@ -1896,7 +1949,7 @@
 <p>
 	Swaps have access to the session locale and timezone through the {@link org.apache.juneau.BeanSession#getLocale()} and
 	{@link org.apache.juneau.BeanSession#getTimeZone()} methods.
-	<br>This allows you to specify localized swap values when needed.
+	This allows you to specify localized swap values when needed.
 </p>
 <p>
 	If using the REST server API, the locale and timezone are set based on the <code>Accept-Language</code> and
@@ -1920,9 +1973,9 @@
 <p>	
 	The {@link org.apache.juneau.transform.PojoSwap#forMediaTypes()} method can be overridden to 
 	provide a set of media types that the swap is invoked on.
-	<br>It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
+	It's also possible to define multiple swaps against the same POJO as long as they're differentiated 
 	by media type.
-	<br>When multiple swaps are defined, the best-match media type is used.
+	When multiple swaps are defined, the best-match media type is used.
 </p>
 <p>
 	In the following example, we define 3 swaps against the same POJO.  
@@ -2017,17 +2070,17 @@
 <p>
 	In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
 	reconstructing during parsing. 
-	<br>However, there are certain kinds of POJOs that we may want to support for serializing, but that are not 
+	However, there are certain kinds of POJOs that we may want to support for serializing, but that are not 
 	possible to reconstruct during parsing.  
-	<br>For these, we can use one-way object swaps.
+	For these, we can use one-way object swaps.
 </p>
 <p>
 	A one-way POJO swap is simply an object transform that only implements the {@code swap()} method.  
-	<br>The {@code unswap()} method is simply left unimplemented.
+	The {@code unswap()} method is simply left unimplemented.
 </p>
 <p>
 	An example of a one-way swaps would be one that allows {@code Iterators} to be serialized as JSON arrays.  
-	<br>It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
+	It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
 	reconstruct an {@code Iterator} during parsing. 
 </p>
 <p class='bpcode w800'>
@@ -2043,7 +2096,7 @@
 </p>
 <p>
 	Here is an example of our one-way swap being used.  
-	<br>Note that trying to parse the original object will cause a {@link org.apache.juneau.parser.ParseException} 
+	Note that trying to parse the original object will cause a {@link org.apache.juneau.parser.ParseException} 
 	to be thrown.
 </p>
 <p class='bpcode w800'>
@@ -2069,7 +2122,7 @@
 <p>
 	{@link org.apache.juneau.annotation.Swap @Swap} can be used to associate a swap class using an 
 	annotation.
-	<br>This is often cleaner than using the builder <code>pojoSwaps()</code> method since you can keep
+	This is often cleaner than using the builder <code>pojoSwaps()</code> method since you can keep
 	your swap class near your POJO class. 
 </p>
 <p class='bpcode w800'>
@@ -2162,9 +2215,9 @@
 <p>
 	The {@link org.apache.juneau.annotation.Swap#template() @Swap(template)} annotation allows you to associate
 	arbitrary contextual strings with swaps.
-	<br>The primary purpose is for providing template names, such as for Apache FreeMarker, therefore
+	The primary purpose is for providing template names, such as for Apache FreeMarker, therefore
 	the name 'template'.
-	<br>However, the usage of the string is open-ended.
+	However, the usage of the string is open-ended.
 </p>
 <p>
 	For example, you could pair a template string like so:
@@ -2200,7 +2253,7 @@
 <div class='topic'><!-- START: 2.10.6 - juneau-marshall.Transforms.SwapMethods -->
 <p>
 	Various methods can be defined on a class directly to affect how it gets serialized.
-	<br>This can often be simpler than using <code>PojoSwaps</code>.
+	This can often be simpler than using <code>PojoSwaps</code>.
 </p>
 <p>
 	Objects serialized as <code>Strings</code> can be parsed back into their original objects by 
@@ -2251,7 +2304,7 @@
 <p>
 	The <code>BeanSession</code> parameter allows you access to various information about the current 
 	serialization session.
-	<br>For example, you could provide customized results based on the media type being produced 
+	For example, you could provide customized results based on the media type being produced 
 	({@link org.apache.juneau.BeanSession#getMediaType()}).
 </p>
 <p>
@@ -2451,7 +2504,7 @@
 </p>
 <p>
 	Property namers are used to transform bean property names from standard form to some other form.
-	<br>For example, the {@link org.apache.juneau.PropertyNamerDLC} will convert property names to 
+	For example, the {@link org.apache.juneau.PropertyNamerDLC} will convert property names to 
 	dashed-lowercase, and these will be used as attribute names in JSON and element names in XML.
 </p>
 <p class='bpcode w800'>
@@ -2462,9 +2515,9 @@
 <p>
 	The {@link org.apache.juneau.annotation.Bean#interfaceClass @Bean(interfaceClass)} annotation is used
 	to limit properties on beans to specific interface classes.
-	<br>When specified, only the list of properties defined on the interface class will be used during 
+	When specified, only the list of properties defined on the interface class will be used during 
 	serialization.
-	<br>Additional properties on subclasses will be ignored.
+	Additional properties on subclasses will be ignored.
 </p>
 <p class='bpcode w800'>
 	<jc>// Parent class</jc>
@@ -2486,13 +2539,13 @@
 </p>
 <p>
 	Note that this annotation can be used on the parent class so that it filters to all child classes.
-	<br>Or can be set individually on the child classes.
+	Or can be set individually on the child classes.
 </p>
 <p>
 	The {@link org.apache.juneau.annotation.Bean#stopClass @Bean(stopClass)} annotation is another
 	way to limit which properties are serialized (except from the opposite direction).
-	<br>It's identical in purpose to the stop class specified by {@link java.beans.Introspector#getBeanInfo(Class, Class)}.
-	<br>Any properties in the stop class or in its base classes will be ignored during analysis.
+	It's identical in purpose to the stop class specified by {@link java.beans.Introspector#getBeanInfo(Class, Class)}.
+	Any properties in the stop class or in its base classes will be ignored during analysis.
 </p>
 <p>
 	For example, in the following class hierarchy, instances of <code>C3</code> will include property 
@@ -2578,9 +2631,9 @@
 <p>
 	The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 	properties not otherwise defined.
-	<br>This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> 
+	This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> 
 	annotations, but generalized for all supported marshall languages.
-	<br>The primary purpose is for backwards compatibility in parsing newer streams with addition 
+	The primary purpose is for backwards compatibility in parsing newer streams with addition 
 	information into older beans.
 </p>
 <p>
@@ -2624,7 +2677,7 @@
 </p>
 <p>
 	Similar rules apply for value types and swaps.
-	<br>The property values optionally can be any serializable type or use swaps.
+	The property values optionally can be any serializable type or use swaps.
 </p>
 <p class='bpcode w800'>
 	<jc>// A serializable type other than Object.</jc>
@@ -2654,7 +2707,7 @@
 <p>
 	The {@link org.apache.juneau.annotation.BeanProperty#value() @BeanProperty(value)} annotation
 	is a synonym for {@link org.apache.juneau.annotation.BeanProperty#name() @BeanProperty(name)}.
-	<br>Use it in cases where you're only specifying a name so that you can shorten your annotation.
+	Use it in cases where you're only specifying a name so that you can shorten your annotation.
 </p>
 <p>
 	The following annotations are equivalent:
@@ -2667,10 +2720,10 @@
 <p>
 	The {@link org.apache.juneau.annotation.BeanProperty#type() @BeanProperty(type)} annotation
 	is used to identify a specialized class type for a generalized property.
-	<br>Normally the type is inferred through reflection of the field type or getter return type.
-	<br>However, you'll want to specify this value if you're parsing beans where the bean property class 
+	Normally the type is inferred through reflection of the field type or getter return type.
+	However, you'll want to specify this value if you're parsing beans where the bean property class 
 	is an interface or abstract class to identify the bean type to instantiate.
-	<br>Otherwise, you may cause an {@link java.lang.InstantiationException} when trying to set these fields.
+	Otherwise, you may cause an {@link java.lang.InstantiationException} when trying to set these fields.
 </p>
 <p>
 	This property must denote a concrete class with a no-arg constructor.
@@ -2686,7 +2739,7 @@
 <p>
 	The {@link org.apache.juneau.annotation.BeanProperty#params() @BeanProperty(params)} annotation
 	is for bean properties of type map or collection.
-	<br>It's used to identify the class types of the contents of the bean property object when
+	It's used to identify the class types of the contents of the bean property object when
 	the general parameter types are interfaces or abstract classes.
 </p>
 <p class='bpcode w800'>
@@ -2700,7 +2753,7 @@
 <p>
 	The {@link org.apache.juneau.annotation.BeanProperty#properties() @BeanProperty(properties)} 
 	annotation is used to limit which child properties are rendered by the serializers.
-	<br>It can be used on any of the following bean property types:
+	It can be used on any of the following bean property types:
 </p>
 <ul class='spaced-list'>
 	<li>Beans - Only render the specified properties of the bean.
@@ -2742,7 +2795,7 @@
 <p>
 	The {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation is used to 
 	map constructor arguments to property names on bean with read-only properties.
-	<br>Since method parameter names are lost during compilation, this annotation essentially redefines 
+	Since method parameter names are lost during compilation, this annotation essentially redefines 
 	them so that they are available at runtime.
 </p>
 <p>
@@ -2886,8 +2939,8 @@
 <div class='topic'><!-- START: 2.10.14 - juneau-marshall.Transforms.PojoBuilders -->
 <p>
 	Juneau parsers can use builders to instantiate POJOs.
-	<br>This is useful in cases where you want to create beans with read-only properties.
-	<br>Note that while it's possible to do this using the {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor}
+	This is useful in cases where you want to create beans with read-only properties.
+	Note that while it's possible to do this using the {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor}
 	annotation, using builders can often be cleaner.
 </p>
 <p>
@@ -2945,8 +2998,8 @@
 </p>
 <p>
 	The POJO class can be any type including beans.
-	<br>Builders MUST be beans with one or more writable properties.
-	<br>The bean properties themselves do not need to be readable (i.e. getters are optional).
+	Builders MUST be beans with one or more writable properties.
+	The bean properties themselves do not need to be readable (i.e. getters are optional).
 </p>
 <p>
 	Builders require two parts:
@@ -3006,7 +3059,7 @@
 <p>
 	In practice, it's usually simpler to use the {@link org.apache.juneau.annotation.Bean @Bean} and 
 	{@link org.apache.juneau.annotation.BeanProperty @BeanProperty} annotations on your bean classes.
-	<br>However, bean filters make it possible to accomplish the same when you can't add annotations
+	However, bean filters make it possible to accomplish the same when you can't add annotations
 	to existing code.
 </p>
 <p>
@@ -3050,13 +3103,13 @@
 </p>
 <p>
 	Note that if you use the annotation, you do NOT need to set anything on the serializers/parsers.
-	<br>The annotations will be detected and bean filters will automatically be created for them.
+	The annotations will be detected and bean filters will automatically be created for them.
 </p>
 <p>
 	The {@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)} method also allows you to pass in interfaces.
-	<br>Any class that's not a subclass of {@link org.apache.juneau.transform.BeanFilterBuilder} get interpreted 
+	Any class that's not a subclass of {@link org.apache.juneau.transform.BeanFilterBuilder} get interpreted 
 	as bean interface classes.
-	<br>These cause bean implementations of those interfaces to only expose the properties defined on the 
+	These cause bean implementations of those interfaces to only expose the properties defined on the 
 	interface.
 </p>
 <p class='bpcode w800'>
@@ -3090,7 +3143,7 @@
 <div class='topic'><!-- START: 2.10.16 - juneau-marshall.Transforms.InterfaceFilters -->
 <p>
 	Occasionally, you may want to limit bean properties to only those defined on a parent class or interface.  
-	<br>This is accomplished through interface filters.
+	This is accomplished through interface filters.
 </p>
 <p>
 	Interface filters are defined through the following:
@@ -3117,7 +3170,7 @@
 </p>
 <p>
 	Suppose we only want to render the properties defined on our interface, not the implementation. 
-	<br>To do so, we can define the following bean filter:
+	To do so, we can define the following bean filter:
 </p>
 <p class='bpcode w800'>
 	<jc>// Define transform that limits properties to only those defined on MyClass</jc>
@@ -3146,7 +3199,7 @@
 <p>
 	The {@link org.apache.juneau.BeanContextBuilder#beanFilters(Object...)} method will automatically interpret any 
 	non-<code>BeanFilter</code> classes passed in as meaning interface classes. 
-	<br>So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
+	So in the previous example, the <code>BeanFilter</code> class could have been avoided altogether by just 
 	passing in <code>MyInterface.<jk>class</jk></code> to the serializer, like so:
 </p>
 <p class='bpcode w800'>
@@ -3179,7 +3232,7 @@
 </p>
 <p>
 	The annotation can be used on parent classes as well.
-	<br>Child beans will only serialize properties defined on the parent class.
+	Child beans will only serialize properties defined on the parent class.
 <p class='bpcode w800'>
 	<ja>@Bean</ja>(interfaceClass=MyAbstractClass.<jk>class</jk>)
 	<jk>public abstract class</jk> MyAbstractClass {
@@ -3205,7 +3258,7 @@
 </ul>
 <p>
 	Stop classes are identical in purpose to the stop class specified by {@link java.beans.Introspector#getBeanInfo(Class, Class)}.
-	<br>Any properties in the stop class or in its base classes will be ignored during serialization.
+	Any properties in the stop class or in its base classes will be ignored during serialization.
 </p>
 <p>
 	For example, in the following class hierarchy, instances of <code>C3</code> will include property <code>p3</code>,
@@ -3237,7 +3290,7 @@
 <p>
 	Juneau serializers treat instances of <code>Readers</code> and <code>InputStreams</code> special by 
 	simply serializing their contents directly to the output stream or writer.
-	<br>This allows you to embed fully customized serializer output.
+	This allows you to embed fully customized serializer output.
 </p>
 <p class='bpcode w800'>
 	<jk>public class</jk> MyBean {
@@ -3256,7 +3309,7 @@
 <p>
 	A more typical scenario where this is useful is by using swaps to convert POJOs to Readers whose 
 	contents are determined via the {@link org.apache.juneau.BeanSession#getMediaType()} method.
-	<br>In the following example, we're customizing the JSON output for a particular bean type, but leaving
+	In the following example, we're customizing the JSON output for a particular bean type, but leaving
 	all other renditions as-is:
 </p>			
 <p class='bpcode w800'>
@@ -3291,9 +3344,9 @@
 <p>
 	While parsing into beans, Juneau attempts to determine the class types of bean properties through 
 	reflection on the bean property getter or setter.
-	<br>Often this is insufficient if the property type is an interface or abstract class that cannot be 
+	Often this is insufficient if the property type is an interface or abstract class that cannot be 
 	instantiated.
-	<br>This is where bean names and dictionaries come into play.
+	This is where bean names and dictionaries come into play.
 </p>
 <p>
 	Bean names and dictionaries are used for identifying class types when they cannot be inferred through 
@@ -3302,7 +3355,7 @@
 <p>
 	Bean classes are given names through the {@link org.apache.juneau.annotation.Bean#typeName() @Bean(typeName)} 
 	annotation.
-	<br>These names are then added to the serialized output as virtual <js>"_type"</js> properties (or element 
+	These names are then added to the serialized output as virtual <js>"_type"</js> properties (or element 
 	names in XML).
 </p>
 <p>
@@ -3340,8 +3393,8 @@
 </p>
 <p>
 	Type names can be represented slightly differently in different languages.
-	<br>For example, the dictionary name is used as element names when serialized to XML.
-	<br>This allows the <code>typeName</code> annotation to be used as a shortcut for defining element names for 
+	For example, the dictionary name is used as element names when serialized to XML.
+	This allows the <code>typeName</code> annotation to be used as a shortcut for defining element names for 
 	beans.
 </p>
 <p>
@@ -3561,15 +3614,15 @@
 <div class='topic'><!-- START: 2.13 - juneau-marshall.Recursion -->
 <p>
 	The Juneau Serializer API is designed to be used against POJO tree structures. 
-	<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
-	<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
+	It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
+	If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
 	be thrown (if {@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_maxDepth} is not reached 
 	first).
 </p>
 <p>
 	If you still want to use the Juneau serializers on such models, Juneau provides the 
 	{@link org.apache.juneau.BeanTraverseContext#BEANTRAVERSE_detectRecursions} setting.
-	<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
+	It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 	serialization when a duplicate is encountered.
 </p>
 <p>
@@ -3620,7 +3673,7 @@
 </p>
 <p>
 	Recursion detection introduces a performance penalty of around 20%.
-	<br>For this reason the setting is disabled by default.
+	For this reason the setting is disabled by default.
 </p>
 </div><!-- END: 2.13 - juneau-marshall.Recursion -->
 
@@ -3630,7 +3683,7 @@
 <div class='topic'><!-- START: 2.14 - juneau-marshall.ParsingIntoGenericModels -->
 <p>
 	The Juneau parsers are not limited to parsing back into the original bean classes.
-	<br>If the bean classes are not available on the parsing side, the parser can also be used to 
+	If the bean classes are not available on the parsing side, the parser can also be used to 
 	parse into a generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive
 	objects.
 </p>
@@ -3638,7 +3691,7 @@
 	You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
 	using {@link org.apache.juneau.ObjectMap} is recommended since it has many convenience methods
 	for converting values to various types.
-	<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
+	The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
 	<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
 	<code>String[][]</code>), but using {@link org.apache.juneau.ObjectList} is recommended.
 </p>
@@ -3683,7 +3736,7 @@
 </p>
 <p>
 	What we end up with is the exact same output.
-	<br>Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
+	Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
 	<code>Boolean</code> objects when parsing into generic models.
 </p>
 <p class='bpcode w800'>
@@ -3735,7 +3788,7 @@
 
 <p>
 	As a general rule, parsing into beans is often more efficient than parsing into generic models.
-	<br>And working with beans is often less error prone than working with generic models.
+	And working with beans is often less error prone than working with generic models.
 </p>
 </div><!-- END: 2.14 - juneau-marshall.ParsingIntoGenericModels -->
 
@@ -3755,7 +3808,7 @@
 	The {@link org.apache.juneau.json.JsonParser} and {@link org.apache.juneau.uon.UonParser}
 	classes can read continuous streams by using the {@link org.apache.juneau.parser.Parser#PARSER_unbuffered PARSER_unbuffered}
 	setting.
-	<br>This prevents the parsers from using an internal buffer that would read past the end of the currently
+	This prevents the parsers from using an internal buffer that would read past the end of the currently
 	parsed POJO.
 </p>
 <h5 class='figure'>Examples:</h5>
@@ -3906,9 +3959,9 @@
 <p>
 	Juneau automatically interprets any {@link java.net.URL} and {@link java.net.URI} objects as URIs and will
 	resolve them accordingly.
-	<br>The {@link org.apache.juneau.annotation.URI @URI} annotation can be used to extend that to other bean 
+	The {@link org.apache.juneau.annotation.URI @URI} annotation can be used to extend that to other bean 
 	properties and class types so that they also get interpreted as URIs.
-	<br>For example:
+	For example:
 </p>
 <p class='bpcode w800'>
 	<jc>// Applied to a class whose toString() method returns a URI.</jc>
@@ -4326,7 +4379,7 @@
 
 <p>
 	As a general rule, all POJOs are converted to Strings using the <code>toString()</code> method.
-	<br>However, there is one exception:
+	However, there is one exception:
 </p>
 <ul class='spaced-list'>
 	<li>{@link java.util.TimeZone} - Uses {@link java.util.TimeZone#getID()}
@@ -4362,7 +4415,7 @@
 <h5 class='topic' id='PojosConveribleToOtherTypes'>POJOs convertible to/from other types</h5>
 <p>
 	POJOs are also converted to various other types in places such as the Open-API serializers and parsers. 
-	<br>In this section, the type being converted to will be referred to as <code>X</code>.
+	In this section, the type being converted to will be referred to as <code>X</code>.
 </p>
 <p>
 	POJOs are considered convertible from X if it has any of the following (matched in the specified order):
@@ -4387,9 +4440,9 @@
 <div class='topic'><!-- START: 2.19 - juneau-marshall.JsonDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from JSON using ultra-efficient serializers and parsers.
-	<br>The JSON serializer converts POJOs directly to JSON without the need for intermediate DOM objects using a 
+	The JSON serializer converts POJOs directly to JSON without the need for intermediate DOM objects using a 
 	highly-efficient state machine.
-	<br>Likewise, the JSON parser creates POJOs directly from JSON without the need for intermediate DOM objects. 
+	Likewise, the JSON parser creates POJOs directly from JSON without the need for intermediate DOM objects. 
 </p>
 <p>
 	The following example shows JSON for a typical bean:
@@ -4626,7 +4679,7 @@
 </p>
 <p>
 	The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
-	<br>This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
+	This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
 </p>
 <p class='bpcode w800'>
 	WriterSerializer ws = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
@@ -4744,8 +4797,8 @@
 <p>
 	Juneau provides the {@link org.apache.juneau.json.JsonSchemaSerializer} class for generating JSON-Schema 
 	documents that describe the output generated by the {@link org.apache.juneau.json.JsonSerializer} class.
-	<br>This class shares the same properties as <code>JsonSerializer</code>.
-	<br>For convenience the {@link org.apache.juneau.json.JsonSerializer#getSchemaSerializer()} method has been 
+	This class shares the same properties as <code>JsonSerializer</code>.
+	For convenience the {@link org.apache.juneau.json.JsonSerializer#getSchemaSerializer()} method has been 
 	added for creating instances of schema serializers from the regular serializer instance.
 </p>
 <h5 class='figure'>Sample Beans</h5>
@@ -4841,13 +4894,13 @@
 <div class='topic'><!-- START: 2.20 - juneau-marshall.XmlDetails -->
 <p>
 	Juneau supports converting arbitrary POJOs to and from XML using ultra-efficient serializers and parsers.
-	<br>The XML serializer converts POJOs directly to XML without the need for intermediate DOM objects.
-	<br>Likewise, the XML parser uses a STaX parser and creates POJOs directly without intermediate DOM objects. 
+	The XML serializer converts POJOs directly to XML without the need for intermediate DOM objects.
+	Likewise, the XML parser uses a STaX parser and creates POJOs directly without intermediate DOM objects. 
 </p>
 <p>
 	Unlike frameworks such as JAXB, Juneau does not require POJO classes to be annotated to produce and consume 
 	XML.
-	<br>However, several XML annotations are provided for handling namespaces and fine-tuning the format of the XML produced.
+	However, several XML annotations are provided for handling namespaces and fine-tuning the format of the XML produced.
 </p>
 <p>
 	The following example shows XML for a typical bean:
@@ -4908,9 +4961,9 @@
 	<xt>&lt;/person&gt;</xt>
 </p>
 <p>
-	<br>Juneau produces JSON-equivalent XML, meaning any valid JSON document can be losslessly converted into an XML 
+	Juneau produces JSON-equivalent XML, meaning any valid JSON document can be losslessly converted into an XML 
 	equivalent.
-	<br>In fact, all of the Juneau serializers and parsers are built upon this JSON-equivalence.
+	In fact, all of the Juneau serializers and parsers are built upon this JSON-equivalence.
 </p>
 
 <!-- ==================================================================================================== -->
@@ -5511,7 +5564,7 @@
 	{@link org.apache.juneau.annotation.Bean#beanDictionary() @Bean(beanDictionary)} and 
 	{@link org.apache.juneau.annotation.BeanProperty#beanDictionary() @BeanProperty(beanDictionary)} 
 	annotations so that the beans can be resolved at parse time.  
-	<br>These annotations are not necessary during serialization, but are needed during parsing in order to 
+	These annotations are not necessary during serialization, but are needed during parsing in order to 
 	resolve the bean types.
 </p>
 <p>
@@ -5633,7 +5686,7 @@
 </table>
 <p>
 	Bean type names are also used for resolution when abstract fields are used.
-	<br>The following examples show how they are used in a variety of circumstances.
+	The following examples show how they are used in a variety of circumstances.
 </p>
 <table class='styled w800'>
 	<tr>
@@ -5836,10 +5889,10 @@
 </table>
 <p>
 	On a side note, characters that cannot be represented in XML 1.0 are encoded using a simple encoding.
-	<br>Note in the examples below, some characters such as <js>'\n'</js>, <js>'\t</js>', and <js>'\r'</js>
+	Note in the examples below, some characters such as <js>'\n'</js>, <js>'\t</js>', and <js>'\r'</js>
 	can be represented as XML entities when used in text but not in element names.  Other characters such as
 	<js>'\b'</js> and <js>'\f'</js> cannot be encoded in XML 1.0 at all without inventing our own notation.
-	<br>Whitespace characters in element names are encoded as well as whitespace end characters in text.
+	Whitespace characters in element names are encoded as well as whitespace end characters in text.
 </p>
 <table class='styled w800'>
 	<tr>
@@ -5878,7 +5931,7 @@
 <p>
 	While it's true that these characters CAN be represented in XML 1.1, it's impossible to parse XML 1.1 
 	text in Java without the XML containing an XML declaration.
-	<br>Unfortunately, this, and the uselessness of the 
+	Unfortunately, this, and the uselessness of the 
 	{@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting in Java
 	forced us to make some hard design decisions that may not be the most elegant.
 </p>
@@ -5980,13 +6033,13 @@
 <p>
 	The {@link org.apache.juneau.xml.annotation.Xml#format() @Xml(format)} annotation can be used to tweak 
 	the XML format of a POJO.
-	<br>The value is set to an enum value of type {@link org.apache.juneau.xml.annotation.XmlFormat}.
-	<br>This annotation can be applied to both classes and bean properties.
+	The value is set to an enum value of type {@link org.apache.juneau.xml.annotation.XmlFormat}.
+	This annotation can be applied to both classes and bean properties.
 </p>
 <p>
 	The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} format can be applied to bean properties to 
 	serialize them as XML attributes instead of elements.
-	<br>Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
+	Note that this only supports properties of simple types (e.g. strings, numbers, booleans).
 </p>
 
 <h5 class='figure'>Example</h5>
@@ -6103,7 +6156,7 @@
 	The {@link org.apache.juneau.xml.annotation.XmlFormat#ATTRS} format can be applied to a single bean 
 	property of type <code>Map&lt;String,Object&gt;</code> to denote arbitrary XML attribute values on the 
 	element.
-	<br>These can be mixed with other {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} annotated 
+	These can be mixed with other {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} annotated 
 	properties, but there must not be an overlap in bean property names and map keys. 
 </p>
 
@@ -6150,10 +6203,10 @@
 <p>
 	The {@link org.apache.juneau.xml.annotation.XmlFormat#COLLAPSED} format can be applied to bean properties
 	of type array/Collection.
-	<br>This causes the child objects to be serialized directly inside the bean element.
-	<br>This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml(childName)}
+	This causes the child objects to be serialized directly inside the bean element.
+	This format must be used in conjunction with {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml(childName)}
 	to differentiate which collection the values came from if you plan on parsing the output back into beans.
-	<br>Note that child names must not conflict with other property names.
+	Note that child names must not conflict with other property names.
 </p>
 <table class='styled w800'>
 	<tr>
@@ -6202,8 +6255,8 @@
 <p>
 	The {@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} format can be applied to a single bean 
 	property of either a simple type or array/Collection.
-	<br>It allows free-form child elements to be formed.
-	<br>All other properties on the bean MUST be serialized as attributes.
+	It allows free-form child elements to be formed.
+	All other properties on the bean MUST be serialized as attributes.
 </p>
 <table class='styled w800'>
 	<tr>
@@ -6268,8 +6321,8 @@
 	The {@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} format is similar to 
 	{@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
 	(string/number/boolean/null) are stripped from the output.
-	<br>This format particularly useful when combined with bean dictionaries to produce mixed content.  
-	<br>The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
+	This format particularly useful when combined with bean dictionaries to produce mixed content.  
+	The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
 	types.
 </p>
 <p>
@@ -6337,20 +6390,20 @@
 </table>
 <p>
 	Whitespace (tabs and newlines) are not added to MIXED child nodes in readable-output mode. 
-	<br>This helps ensures strings in the serialized output can be losslessly parsed back into their original 
+	This helps ensures strings in the serialized output can be losslessly parsed back into their original 
 	forms when they contain whitespace characters.
-	<br>If the {@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting was not useless 
+	If the {@link javax.xml.stream.XMLInputFactory#IS_REPLACING_ENTITY_REFERENCES} setting was not useless 
 	in Java, we could support lossless readable XML for MIXED content.  
-	<br>But as of Java 8, it still does not work. 
+	But as of Java 8, it still does not work. 
 </p>
 <p>
 	XML suffers from other deficiencies as well that affect MIXED content.  
-	<br>For example, <xt>&lt;X&gt;&lt;/X&gt;</xt> and <xt>&lt;X/&gt;</xt> are equivalent in XML and 
+	For example, <xt>&lt;X&gt;&lt;/X&gt;</xt> and <xt>&lt;X/&gt;</xt> are equivalent in XML and 
 	indistinguishable by the Java XML parsers.  
-	<br>This makes it impossible to differentiate between an empty element and an element containing an empty 
+	This makes it impossible to differentiate between an empty element and an element containing an empty 
 	string.  
-	<br>This causes empty strings to get lost in translation. 
-	<br>To alleviate this, we use the constructs <js>"_xE000_"</js> to represent an empty string, and 
+	This causes empty strings to get lost in translation. 
+	To alleviate this, we use the constructs <js>"_xE000_"</js> to represent an empty string, and 
 	<js>"_x0020_"</js> to represent leading and trailing spaces.
 </p>
 <p>
@@ -6615,8 +6668,8 @@
 	The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} format is similar to 
 	{@link org.apache.juneau.xml.annotation.XmlFormat#MIXED} except it's meant for solitary objects that 
 	get serialized as simple child text nodes.
-	<br>Any object that can be serialize to a <code>String</code> can be used.
-	<br>The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
+	Any object that can be serialize to a <code>String</code> can be used.
+	The {@link org.apache.juneau.xml.annotation.XmlFormat#TEXT_PWS} is the same except whitespace is 
 	preserved in the output.
 </p>
 <table class='styled w800'>
@@ -6652,8 +6705,8 @@
 	The {@link org.apache.juneau.xml.annotation.XmlFormat#XMLTEXT} format is similar to 
 	{@link org.apache.juneau.xml.annotation.XmlFormat#TEXT} except it's meant for strings containing XML 
 	that should be serialized as-is to the document.
-	<br>Any object that can be serialize to a <code>String</code> can be used.
-	<br>During parsing, the element content gets parsed with the rest of the document and then re-serialized to 
+	Any object that can be serialize to a <code>String</code> can be used.
+	During parsing, the element content gets parsed with the rest of the document and then re-serialized to 
 	XML before being set as the property value.  
 	This process may not be perfect (e.g. double quotes may be replaced by single quotes, etc...).
 </p>
@@ -6724,7 +6777,7 @@
 	The namespace URLs can either be defined as part of the {@link org.apache.juneau.xml.annotation.Xml @Xml}
 	annotation, or can be defined at the package level with the {@link org.apache.juneau.xml.annotation.XmlSchema @XmlSchema}
 	annotation.
-	<br>Below shows it defined at the package level:
+	Below shows it defined at the package level:
 </p>
 <h5 class='figure'>package-info.java</h5>
 <p class='bpcode w800'>
@@ -6837,9 +6890,9 @@
 <p>
 	One important property on the XML serializer class is 
 	{@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces XML_autoDetectNamespaces}.
-	<br>This property tells the serializer to make a first-pass over the data structure to look for namespaces 
+	This property tells the serializer to make a first-pass over the data structure to look for namespaces 
 	defined on classes and bean properties.
-	<br>In high-performance environments, you may want to consider disabling auto-detection and providing your 
+	In high-performance environments, you may want to consider disabling auto-detection and providing your 
 	own explicit list of namespaces to the serializer to avoid this scanning step.
 </p>
 <p>
@@ -6864,23 +6917,23 @@
 <p>
 	Juneau provides the {@link org.apache.juneau.xmlschema.XmlSchemaSerializer} class for generating XML-Schema 
 	documents that describe the output generated by the {@link org.apache.juneau.xml.XmlSerializer} class.
-	<br>This class shares the same properties as <code>XmlSerializer</code>.
-	<br>Since the XML output differs based on settings on the XML serializer class, the XML-Schema serializer
+	This class shares the same properties as <code>XmlSerializer</code>.
+	Since the XML output differs based on settings on the XML serializer class, the XML-Schema serializer
 	class must have the same property values as the XML serializer class it's describes.
-	<br>To help facilitate creating an XML Schema serializer with the same properties as the corresponding 
+	To help facilitate creating an XML Schema serializer with the same properties as the corresponding 
 	XML serializer, the {@link org.apache.juneau.xml.XmlSerializer#getSchemaSerializer()} method 
 	has been added.
 </p>
 <p>
 	XML-Schema requires a separate file for each namespace.
-	<br>Unfortunately, does not mesh well with the Juneau serializer architecture which serializes to single writers.
-	<br>To get around this limitation, the schema serializer will produce a single output, but with multiple
+	Unfortunately, does not mesh well with the Juneau serializer architecture which serializes to single writers.
+	To get around this limitation, the schema serializer will produce a single output, but with multiple
 	schema documents separated by the null character (<js>'\u0000'</js>) to make it simple to split apart.
 </p>
 <p>
 	Lets start with an example where everything is in the same namespace.
-	<br>We'll use the classes from before, but remove the references to namespaces.
-	<br>Since we have not defined a default namespace, everything is defined under the default Juneau namespace.
+	We'll use the classes from before, but remove the references to namespaces.
+	Since we have not defined a default namespace, everything is defined under the default Juneau namespace.
 </p>
 <h5 class='figure'>Sample Beans</h5>
 <p class='bpcode w800'>
@@ -7706,7 +7759,7 @@
 <div class='topic'><!-- START: 2.21.3 - juneau-marshall.HtmlDetails.Parsers -->
 <p>
 	The {@link org.apache.juneau.html.HtmlParser} class is used to parse HTML into POJOs.
-	<br>They can also parse the contents produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
+	They can also parse the contents produced by {@link org.apache.juneau.html.HtmlDocSerializer}.
 </p>	
 <p>
 	The HTML parser provides the following settings:
@@ -7770,7 +7823,7 @@
 </p>
 <p>
 	The {@link org.apache.juneau.html.annotation.Html#format @Html(format)} annotation is used to specify what format to use for HTML elements.
-	<br>For example, the HTML beans defined in the {@link org.apache.juneau.dto.html5} package use <code>format=<jsf>XML</jsf></code> so that
+	For example, the HTML beans defined in the {@link org.apache.juneau.dto.html5} package use <code>format=<jsf>XML</jsf></code> so that
 	the beans get serialized as standard XML:
 </p>
 <h5 class='figure'>Example:</h5>
@@ -8202,9 +8255,9 @@
 <p>
 	Juneau supports converting arbitrary POJOs to and from UON strings using ultra-efficient serializers 
 	and parsers.
-	<br>The serializer converts POJOs directly to UON strings without the need for intermediate DOM objects 
+	The serializer converts POJOs directly to UON strings without the need for intermediate DOM objects 
 	using a highly-efficient state machine.
-	<br>Likewise, the parser creates POJOs directly from UON strings without the need for intermediate DOM 
+	Likewise, the parser creates POJOs directly from UON strings without the need for intermediate DOM 
 	objects. 
 </p>
 <p>
@@ -8403,9 +8456,9 @@
 <p>
 	Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
 	and parsers.
-	<br>The serializer converts POJOs directly to URL-encoded strings without the need for intermediate DOM objects 
+	The serializer converts POJOs directly to URL-encoded strings without the need for intermediate DOM objects 
 	using a highly-efficient state machine.
-	<br>Likewise, the parser creates POJOs directly from URL-encoded strings without the need for intermediate DOM 
+	Likewise, the parser creates POJOs directly from URL-encoded strings without the need for intermediate DOM 
 	objects. 
 </p>
 <p>
@@ -8609,7 +8662,7 @@
 <p>
 	The {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() expandedParams} setting is
 	used to force bean properties of type array or Collection to be expanded into multiple key/value pairings.
-	<br>It's identical in behavior to using the {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams}
+	It's identical in behavior to using the {@link org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams}
 	and {@link org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams} properties, but applies to only individual bean properties.
 </p>
 </div><!-- END: 2.23.4 - juneau-marshall.UrlEncodingDetails.UrlEncodingAnnotation -->
@@ -8794,7 +8847,7 @@
 </table>
 <p>
 	The valid POJO types for serializing/parsing are based on the intermediate types above.
-	<br>As a general rule, any POJOs that are the intermediate type or transformable to or from
+	As a general rule, any POJOs that are the intermediate type or transformable to or from
 	the intermediate type are valid POJO types.
 </p>
 <p>
@@ -8875,7 +8928,7 @@
 <p>
 	Later we'll describe how to use HTTP-Part annotations to define OpenAPI schemas for serialization and parsing
 	of HTTP parts.  
-	<br>The following example is a preview showing an HTTP body defined as pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
+	The following example is a preview showing an HTTP body defined as pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
@@ -8944,7 +8997,7 @@
 <p>
 	As a general rule, any POJO convertible to the intermediate type for the <code>type/format</code> of the schema can
 	be serialized using the OpenAPI serializer.
-	<br>Here are the rules of POJO types allowed for various type/format combinations:
+	Here are the rules of POJO types allowed for various type/format combinations:
 </p>
 <table class='styled w800'>
 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
@@ -9354,7 +9407,7 @@
 <p>
 	As a general rule, any POJO convertible from the intermediate type for the <code>type/format</code> of the schema can
 	be parsed using the OpenAPI parser.
-	<br>Here are the rules of POJO types allowed for various type/format combinations:
+	Here are the rules of POJO types allowed for various type/format combinations:
 </p>
 <table class='styled w800'>
 	<tr><th>Type</th><th>Format</th><th>Valid parameter types</th></tr>
@@ -9762,7 +9815,7 @@
 <div class='topic'><!-- START: 3.1.1 - juneau-marshall-rdf.RdfDetails.Serializers -->
 <p>
 	The {@link org.apache.juneau.jena.RdfSerializer} class is the top-level class for all Jena-based serializers.
-	<br>Language-specific serializers are defined as inner subclasses of the <code>RdfSerializer</code> class:
+	Language-specific serializers are defined as inner subclasses of the <code>RdfSerializer</code> class:
 </p>	
 <ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfSerializer}
@@ -9861,7 +9914,7 @@
 <div class='topic'><!-- START: 3.1.2 - juneau-marshall-rdf.RdfDetails.Parsers -->
 <p>
 	The {@link org.apache.juneau.jena.RdfParser} class is the top-level class for all Jena-based parsers.
-	<br>Language-specific parsers are defined as inner subclasses of the <code>RdfParser</code> class:
+	Language-specific parsers are defined as inner subclasses of the <code>RdfParser</code> class:
 </p>	
 <ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.jena.RdfParser}
@@ -9971,7 +10024,7 @@
 <div class='topic'><!-- START: 3.1.4 - juneau-marshall-rdf.RdfDetails.Namespaces -->
 <p>
 	You'll notice in the previous example that Juneau namespaces are used to represent bean property names.
-	<br>These are used by default when namespaces are not explicitly specified.
+	These are used by default when namespaces are not explicitly specified.
 </p>
 <p>
 	The <code>juneau</code> namespace is used for generic names for objects that don't have namespaces 
@@ -9983,9 +10036,9 @@
 </p>
 <p>
 	The easiest way to specify namespaces is through annotations.
-	<br>In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all properties 
+	In this example, we're going to associate the prefix <code>'per'</code> to our bean class and all properties 
 	of this class.
-	<br>We do this by adding the following annotation to our class:
+	We do this by adding the following annotation to our class:
 </p>
 <p class='bpcode w800'>
 	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
@@ -10031,8 +10084,8 @@
 <p>
 	Namespace auto-detection ({@link org.apache.juneau.xml.XmlSerializer#XML_autoDetectNamespaces}) is 
 	enabled on serializers by default.
-	<br>This causes the serializer to make a first-pass over the data structure to look for namespaces.
-	<br>In high-performance environments, you may want to consider disabling auto-detection and providing an 
+	This causes the serializer to make a first-pass over the data structure to look for namespaces.
+	In high-performance environments, you may want to consider disabling auto-detection and providing an 
 	explicit list of namespaces to the serializer to avoid this scanning step.
 </p>
 <p class='bpcode w800'>
@@ -10057,13 +10110,13 @@
 <p>
 	Bean properties of type <code>java.net.URI</code> or <code>java.net.URL</code> have special meaning to the 
 	RDF serializer.
-	<br>They are interpreted as resource identifiers.
+	They are interpreted as resource identifiers.
 </p>
 <p>
 	In the following code, we're adding 2 new properties.
-	<br>The first property is annotated with <ja>@BeanProperty</ja> to identify that this property is the resource 
+	The first property is annotated with <ja>@BeanProperty</ja> to identify that this property is the resource 
 	identifier for this bean.
-	<br>The second un-annotated property is interpreted as a reference to another resource.
+	The second un-annotated property is interpreted as a reference to another resource.
 </p>
 <p class='bpcode w800'>	
 	<jk>public class</jk> Person {
@@ -10163,22 +10216,22 @@
 <div class='topic'><!-- START: 3.1.6 - juneau-marshall-rdf.RdfDetails.RootProperty -->
 <p>
 	For all RDF languages, the POJO objects get broken down into simple triplets.
-	<br>Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
+	Unfortunately, for tree-structured data like the POJOs shown above, this causes the root node of the tree 
 	to become lost.
-	<br>There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
+	There is no easy way to identify that <code>person/1</code> is the root node in our tree once in triplet 
 	form, and in some cases it's impossible.
 </p>
 <p>
 	By default, the {@link org.apache.juneau.jena.RdfParser} class handles this by scanning all the nodes and 
 	identifying the nodes without incoming references.
-	<br>However, this is inefficient, especially for large models.
-	<br>And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
+	However, this is inefficient, especially for large models.
+	And in cases where the root node is referenced by another node in the model by URL, it's not possible to 
 	locate the root at all.
 </p>
 <p>
 	To resolve this issue, the property {@link org.apache.juneau.jena.RdfSerializer#RDF_addRootProperty} 
 	was introduced.
-	<br>When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
+	When enabled, this adds a special <code>root</code> attribute to the root node to make it easy to locate 
 	by the parser.
 </p>
 <p>
@@ -10436,7 +10489,7 @@
 <div class='topic'><!-- START: 4.2 - juneau-dto.Atom -->
 <p>
 	The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
-	<br>The following code shows a feed being created programmatically using the 
+	The following code shows a feed being created programmatically using the 
 	{@link org.apache.juneau.dto.atom.AtomBuilder} class.
 </p>
 <p class='bpcode w800'>
@@ -10569,7 +10622,7 @@
 <p>
 	The Juneau Swagger DTOs are simply beans with fluent-style setters that allow you to quickly construct 
 	Swagger documents as Java objects.  
-	<br>These object can then be serialized to JSON using one of the existing JSON serializers, or to other 
+	These object can then be serialized to JSON using one of the existing JSON serializers, or to other 
 	languages such as XML or HTML using the other serializers.
 </p>
 <p>
@@ -10707,7 +10760,7 @@
 <p>
 	Properties can also be accessed via the {@link org.apache.juneau.dto.swagger.SwaggerElement#get(String,Class)}
 	and {@link org.apache.juneau.dto.swagger.SwaggerElement#set(String,Object)} methods.
-	<br>These methods can also be used to set and retrieve non-Swagger attributes such as 
+	These methods can also be used to set and retrieve non-Swagger attributes such as 
 	<js>"$ref"</js> (which is not a part of the Swagger spec, but is part of the JSON Schema spec).
 </p>
 <p class='bpcode w800'>
@@ -10838,8 +10891,8 @@
 <div class='topic'><!-- START: 5.1 - juneau-svl.SimpleVarLanguage -->
 <p>
 	The <l>juneau-svl</l> module defines an API for a language called <l>Simple Variable Language</l>.
-	<br>In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
-	<br>It is used extensively in the Config, REST and Microservice APIs.
+	In a nutshell, Simple Variable Language (or SVL) is text that contains variables of the form <js>"$varName{varKey}"</js>.
+	It is used extensively in the Config, REST and Microservice APIs.
 </p>
 <p>
 	Most variables can be recursively nested within the varKey (e.g. <js>"$FOO{$BAR{xxx},$BAZ{xxx}}"</js>)
@@ -10847,7 +10900,7 @@
 </p>
 <p>
 	The {@link org.apache.juneau.svl.VarResolver} class is used to resolve variables.
-	<br>The {@link org.apache.juneau.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
+	The {@link org.apache.juneau.svl.VarResolver#DEFAULT} resolver is a reusable instance of this class 
 	configured with the following basic variables:
 </p>
 <ul class='doctree'>
@@ -10893,7 +10946,7 @@
 <div class='topic'><!-- START: 5.2 - juneau-svl.SvlVariables -->
 <p>
 	Variables are defined through the {@link org.apache.juneau.svl.Var} API.
-	<br>The API comes with several predefined variables and is easily extensible.
+	The API comes with several predefined variables and is easily extensible.
 </p>
 <p>
 	The following is an example of a variable that performs URL-Encoding on strings.
@@ -11084,7 +11137,7 @@
 <div class='topic'><!-- START: 5.3 - juneau-svl.VarResolvers -->
 <p>
 	The main class for performing variable resolution is {@link org.apache.juneau.svl.VarResolver}.
-	<br>Two methods are provided for resolving variables:
+	Two methods are provided for resolving variables:
 </p>
 <ul class='doctree'>
 	<li class='jc'>{@link org.apache.juneau.svl.VarResolver}
@@ -11097,8 +11150,8 @@
 </ul>
 <p>
 	Var resolvers can rely on the existence of other objects.
-	<br>For example, {@link org.apache.juneau.config.vars.ConfigVar} relies on the existence of a {@link org.apache.juneau.config.Config}.
-	<br>This is accomplished through the following:
+	For example, {@link org.apache.juneau.config.vars.ConfigVar} relies on the existence of a {@link org.apache.juneau.config.Config}.
+	This is accomplished through the following:
 </p>
 <ul class='spaced-list'>
 	<li>Context-objects - Objects set on the resolver.
@@ -11127,7 +11180,7 @@
 </ul>
 <p>
 	Var resolvers can be cloned and extended by using the {@link org.apache.juneau.svl.VarResolver#builder()} method.
-	<br>Cloning a resolver will copy it's {@link org.apache.juneau.svl.Var} class names and context objects.
+	Cloning a resolver will copy it's {@link org.apache.juneau.svl.Var} class names and context objects.
 </p>
 
 <h5 class='figure'>Example:</h5>
@@ -11212,7 +11265,7 @@
 <p>
 	Config files are access through the {@link org.apache.juneau.config.Config} class which
 	are created through the {@link org.apache.juneau.config.ConfigBuilder} class.
-	<br>Builder creator methods are provided on the <code>Config</code> class:
+	Builder creator methods are provided on the <code>Config</code> class:
 </p>
 <p class='bpcode w800'>
 	<jc>// Create a Config object</jc>
@@ -11456,7 +11509,7 @@
 <p>
 	In theory, any {@doc PojoCategories parsable} POJO type can be represented
 	as a config value. 
-	<br>However in practice, we're typically talking about the following:
+	However in practice, we're typically talking about the following:
 </p>
 <ul>
 	<li>Objects convertible from Strings.
@@ -11464,7 +11517,7 @@
 </ul>
 <p>
 	An example of an object convertible from a String was already shown in an example above.
-	<br>In that case, it was a URL which has a public constructor that takes in a String:
+	In that case, it was a URL which has a public constructor that takes in a String:
 </p>
 <p class='bpcode w800'>
 	<cc># A POJO</cc>
@@ -11610,12 +11663,12 @@
 </ul>
 <p>
 	The <code>Type,Type...</code> arguments allow you to specify the component types for maps and collections.
-	<br><code>List</code> class arguments can be followed by zero or one arguments representing the entry types.
-	<br><code>Map</code> class arguments can be followed by zero or two arguments representing the key and value types.
-	<br>The arguments can be chained to produce any data structure consisting of maps, collections, or POJOs.
+	<code>List</code> class arguments can be followed by zero or one arguments representing the entry types.
+	<code>Map</code> class arguments can be followed by zero or two arguments representing the key and value types.
+	The arguments can be chained to produce any data structure consisting of maps, collections, or POJOs.
 </p>
 <p>
-	<br>Examples are shown below:
+	Examples are shown below:
 </p>
 <ul class='spaced-list'>
 	<li><code>getObject(<js>"..."</js>, List.<jk>class</jk>)</code>
@@ -11903,11 +11956,11 @@
 </ul>
 <p>
 	Encoded values can be set to plain-text values.  
-	<br>The curly brackets around the value identify whether the value has been encoded or not. 
+	The curly brackets around the value identify whether the value has been encoded or not. 
 </p>
 <p>
 	Unencoded values are encoded when the file is saved using the {@link org.apache.juneau.config.Config#commit()} method.
-	<br>They can also be encoded immediately by calling {@link org.apache.juneau.config.Config#encodeEntries()}.
+	They can also be encoded immediately by calling {@link org.apache.juneau.config.Config#encodeEntries()}.
 </p>
 </div><!-- END: 6.4 - juneau-config.EncodedEntries -->
 
@@ -12095,8 +12148,8 @@
 <p>
 	The last 4 arguments in {@link org.apache.juneau.config.Config#set(String,Object,Serializer,ConfigMod[],String,List)} 
 	are optional in that if you pass <jk>null</jk>, the current value will not be overwritten.
-	<br>To unset the same-line comment, you should pass in a blank string.
-	<br>To remove pre-lines, you should pass in an empty list.
+	To unset the same-line comment, you should pass in a blank string.
+	To remove pre-lines, you should pass in an empty list.
 </p>	
 <p>
 	Sections can be added with optional pre-lines using the <code>setSection</code> methods:
@@ -12117,8 +12170,8 @@
 </p>		
 <p>
 	Changes made to the configuration are transactional in nature.  
-	<br>They are kept in memory until you call the {@link org.apache.juneau.config.Config#commit()} method.
-	<br>Until then, you still see the modified values when you call any of the getters, but the modified values
+	They are kept in memory until you call the {@link org.apache.juneau.config.Config#commit()} method.
+	Until then, you still see the modified values when you call any of the getters, but the modified values
 	exist only in memory.
 </p>
 <p>
@@ -12132,14 +12185,14 @@
 <p>
 	In general, external file modifications will be detected immediately in the <code>Config</code>
 	object when a watcher thread is enabled (explained later).
-	<br>Otherwise, they are detected when a commit is performed.
+	Otherwise, they are detected when a commit is performed.
 </p>
 <p>
 	The <code>Config</code> object maintains an in-memory record of all changes that have been applied to it
 	through getters and setters.
-	<br>When the underlying file changes, the new contents are loaded and the in-memory changes are then 
+	When the underlying file changes, the new contents are loaded and the in-memory changes are then 
 	applied to the new configuration.
-	<br>This provides the benefits of real-time updates of configurations while not losing any changes made in the JVM.
+	This provides the benefits of real-time updates of configurations while not losing any changes made in the JVM.
 </p>
 <p>
 	If the <code>commit()</code> method is called on the <code>Config</code> objects after the file system
@@ -12384,7 +12437,7 @@
 <p>
 	The {@link org.apache.juneau.config.store.ConfigMemoryStore} class is simply an in-memory storage
 	location for configuration files.
-	<br>There is no hard persistence and is used primarily for testing purposes.
+	There is no hard persistence and is used primarily for testing purposes.
 </p>
 <p>
 	However, the implementation provides a good idea on how stores work (especially the write method):
@@ -12468,7 +12521,7 @@
 </p>
 <p>
 	The example below shows a starting point for an implementation based on polling a relational database.
-	<br>Completing it is left as an exercise:
+	Completing it is left as an exercise:
 </p>
 <h5 class='figure'>Example Store Class:</h5>
 <p class='bpcode w800'>
@@ -12639,7 +12692,7 @@
 </ul>
 <p>
 	Note that this is a different listener than {@link org.apache.juneau.config.event.ConfigEventListener}.
-	<br>In this case, we're just listening for changed files:
+	In this case, we're just listening for changed files:
 </p>		
 <ul class='doctree'>
 	<li class='jic'>{@link org.apache.juneau.config.store.ConfigStoreListener}
@@ -12772,26 +12825,26 @@
 <p>
 	The <l>juneau-rest-server</l> library allows you to quickly wrap POJOs and expose them as full-fledged REST 
 	resources served up in a servlet container using a bare-minimum amount of code.
-	<br>The primary goal for Juneau was to make it as easy as possible to implement easy-to-read and self-documenting 
+	The primary goal for Juneau was to make it as easy as possible to implement easy-to-read and self-documenting 
 	REST resources using very little code.
 </p>
 <p>
 	One of the biggest advantages of the Juneau REST framework over similar architectures is that it hides the 
 	serialization layer from the developer.  
-	<br>The developer can work entirely with POJOs and let the Juneau framework handle all the serialization and 
+	The developer can work entirely with POJOs and let the Juneau framework handle all the serialization and 
 	parsing work.  
-	<br>The developer need never know what the <l>Accept</l> or <l>Content-Type</l> or <l>Accept-Encoding</l> (etc...) 
+	The developer need never know what the <l>Accept</l> or <l>Content-Type</l> or <l>Accept-Encoding</l> (etc...) 
 	header values are because those details are all handled by the framework. 
 </p>
 <p> 
 	The API builds upon the existing JEE Servlet API.  
-	<br>The root class, {@link org.apache.juneau.rest.RestServlet} is nothing but a specialized 
+	The root class, {@link org.apache.juneau.rest.RestServlet} is nothing but a specialized 
 	{@link javax.servlet.http.HttpServlet}, and the {@link org.apache.juneau.rest.RestRequest} and 
 	{@link org.apache.juneau.rest.RestResponse} classes are nothing more than specialized 
 	{@link javax.servlet.http.HttpServletRequest} and {@link javax.servlet.http.HttpServletResponse} objects.  
-	<br>This allows maximum flexibility for the developer since you can let Juneau handle operations such as 
+	This allows maximum flexibility for the developer since you can let Juneau handle operations such as 
 	serialization, or you can revert to the existing servlet APIs to do low-level processing of requests yourself.	
-	<br>It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
+	It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
 </p>
 
 <h5 class='topic'>Features</h5>
@@ -12867,13 +12920,13 @@
 <div class='topic'><!-- START: 7.1 - juneau-rest-server.HelloWorldExample -->
 <p>
 	A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.RestResource}.
-	<br>The most common case is a class that extends {@link org.apache.juneau.rest.RestServlet}, which itself is simply an 
+	The most common case is a class that extends {@link org.apache.juneau.rest.RestServlet}, which itself is simply an 
 	extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 </p>
 <p>
 	In this example, we define a resource called <l>HelloWorldResource</l>.  
-	<br>This example is located in the <l>juneau-examples-rest</l> project.
-	<br>It's assumed the reader is familiar with defining servlets in web applications.
+	This example is located in the <l>juneau-examples-rest</l> project.
+	It's assumed the reader is familiar with defining servlets in web applications.
 </p>
 <p>
 	Like any servlet, we could define our resource in the <l>web.xml</l> file of the web application like so...
@@ -12930,14 +12983,14 @@
 <img class='bordered w800' src='doc-files/juneau-rest-server.HelloWorldExample.1.png'>
 <p>
 	It doesn't much simpler than that.  
-	<br>In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
+	In this case, we're simply returning a string that will be converted to any of the supported languages (e.g. 
 	JSON, XML, HTML, ...).
-	<br>However, we could have returned any POJO consisting of beans, maps, collections, etc...
+	However, we could have returned any POJO consisting of beans, maps, collections, etc...
 </p>
 <p>
 	The {@link org.apache.juneau.rest.BasicRestServlet} class that we're using here is a subclass of 
 	{@link org.apache.juneau.rest.RestServlet} that provides default support for a variety of content types.  
-	<br>Implementers can choose to use this class, or create their own subclass of 
+	Implementers can choose to use this class, or create their own subclass of 
 	{@link org.apache.juneau.rest.RestServlet} with their own specialized serializers and parsers.
 </p>
 </div><!-- END: 7.1 - juneau-rest-server.HelloWorldExample -->
@@ -12987,8 +13040,8 @@
 </ul>
 <p>
 	The servlets with RDF support require Jena on the classpath.  
-	<br>All other serializers and parsers do not have any external library dependencies.
-	<br>For this reason, we have separate servlets for supporting RDF so that you don't need Jena if you don't need to 
+	All other serializers and parsers do not have any external library dependencies.
+	For this reason, we have separate servlets for supporting RDF so that you don't need Jena if you don't need to 
 	support RDF. 
 </p>
 <p>
@@ -13017,7 +13070,7 @@
 <p>
 	<b>When deployed as a child of another resource, you MAY extend from one of the servlet classes but it's 
 	not necessary.</b>
-	<br>The only requirement is that the class be annotated with <ja>@RestResource</ja> and have one of the following constructors:
+	The only requirement is that the class be annotated with <ja>@RestResource</ja> and have one of the following constructors:
 </p>
 <ul>
 	<li class='jm'><code><jk>public</jk> T()</code>
@@ -13058,18 +13111,18 @@
 <div class='topic'><!-- START: 7.3.1 - juneau-rest-server.Instantiation.RestServlet -->
 <p>
 	The {@link org.apache.juneau.rest.RestServlet} class is the entry point for your REST resources.
-	<br>It extends directly from <l>HttpServlet</l> and is deployed like any other servlet.
+	It extends directly from <l>HttpServlet</l> and is deployed like any other servlet.
 </p>
 <p>
 	When the servlet <l>init()</l> method is called, it triggers the code to find and process the <l>@RestResource</l>
 	annotations on that class and all child classes.
-	<br>These get constructed into a {@link org.apache.juneau.rest.RestContext} object that holds all the configuration
+	These get constructed into a {@link org.apache.juneau.rest.RestContext} object that holds all the configuration
 	information about your resource in a read-only object.
 </p>
 <p>
 	Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
 	extend from one of the preconfigured default servlets such as {@link org.apache.juneau.rest.BasicRestServlet}.
-	<br>The <l>RestServlet</l> class by itself is not configured with any serializers and parsers, and therefore
+	The <l>RestServlet</l> class by itself is not configured with any serializers and parsers, and therefore
 	not very useful on it's own.
 	However, the class does provide a couple of convenience methods to be aware of:
 </p>
@@ -13103,7 +13156,7 @@
 </ul>
 <p>
 	The contents of the class is shown below.
-	<br>You should notice that very little code is being used and everything is configurable through
+	You should notice that very little code is being used and everything is configurable through
 	annotations:
 </p>
 <p class='bpcode w800'>
@@ -13273,11 +13326,11 @@
 <p>
 	Not shown but equally important is that all of the annotations shown have programmatic equivalents via the {@link org.apache.juneau.rest.RestContextBuilder} class
 	which can be manipulated during servlet initialization.
-	<br>(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
+	(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
 </p>
 <p>
 	There's a lot going on in this class.
-	<br>But not to worry, the details will be described later.
+	But not to worry, the details will be described later.
 </p>
 </div><!-- END: 7.3.2 - juneau-rest-server.Instantiation.BasicRestServlet -->
 
@@ -13307,13 +13360,13 @@
 </p>
 <p>
 	The path of the child resource gets appended to the path of the parent resource. 
-	<br>So in the example above, the child resource is accessed through the URL <l>/parent/foo</l>.
+	So in the example above, the child resource is accessed through the URL <l>/parent/foo</l>.
 </p>
 <p>
 	A HUGE advantage of using child resources is that they do not need to be declared in the JEE <l>web.xml</l> 
 	file.
-	<br>Initialization of and access to the child resources occurs through the parent resource.
-	<br>Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
+	Initialization of and access to the child resources occurs through the parent resource.
+	Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
@@ -13368,7 +13421,7 @@
 	The {@link org.apache.juneau.rest.BasicRestServletGroup} class is nothing more than a subclass of 
 	{@link org.apache.juneau.rest.BasicRestServlet} with a <l>getChildren()</l> method mapped to the servlet 
 	root path.
-	<br>The method returns a POJO with is just a linked-list of beans with name/description properties.
+	The method returns a POJO with is just a linked-list of beans with name/description properties.
 </p>	
 <p class='bpcode w800'>
 	<jc>// The entire contents of the BasicRestServletGroup class.</jc>
@@ -13410,7 +13463,7 @@
 </ul>
 <p>
 	This API can be extended to provide your own custom resource resolution.
-	<br>Later topics discuss how to use this API to instantiate resources using Spring.
+	Later topics discuss how to use this API to instantiate resources using Spring.
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
@@ -13489,7 +13542,7 @@
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestResource @RestResource} annotation is the primary way of defining
 	and configuring REST resource classes.
-	<br>The functionality of the class itself is covered in detail in the topics below.
+	The functionality of the class itself is covered in detail in the topics below.
 </p>
 
 <!-- ==================================================================================================== -->
@@ -13498,7 +13551,7 @@
 <div class='topic'><!-- START: 7.4.1 - juneau-rest-server.RestResource.AnnotationInheritance -->
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestResource @RestResource} annotation can also be used on parents and interfaces of resource classes.
-	<br>When multiple annotations are defined at different levels, the annotation values are combined.
+	When multiple annotations are defined at different levels, the annotation values are combined.
 </p>
 <p>
 	This is a particularly useful feature because it allows you to define your own configured parent
@@ -13645,12 +13698,12 @@
 <p>
 	The {@link org.apache.juneau.rest.RestContext} object is the workhorse class for all of the configuration
 	of a single REST resource class.
-	<br>It's by-far the most important class in the REST API.
+	It's by-far the most important class in the REST API.
 </p>
 <p>
 	Every class annotated with <l>@RestResource</l> ends up with an instance of this object.
-	<br>The object itself is read-only and unchangeable.
-	<br>It is populated through the following:
+	The object itself is read-only and unchangeable.
+	It is populated through the following:
 </p>
 <ul>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource} - Settings copied from the annotation during servlet initialization.
@@ -13658,12 +13711,12 @@
 </ul>
 <p>
 	The annotation should be self-explanatory at this point.
-	<br>The builder allows you to perform all of the same configuration as the annotation programmatically.
+	The builder allows you to perform all of the same configuration as the annotation programmatically.
 </p>
 <p>
 	The {@link org.apache.juneau.rest.RestContextBuilder} class extends {@link org.apache.juneau.BeanContextBuilder}
 	allowing you to programmatically set any properties defined on that builder class.
-	<br>It also implements {@link javax.servlet.ServletConfig}
+	It also implements {@link javax.servlet.ServletConfig}
 </p>
 <p>
 	To access this object, simply pass it in as a constructor argument or in an INIT hook:
@@ -13698,7 +13751,7 @@
 <p>
 	REST Java methods are identified on REST servlets using the 
 	{@link org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation. 
-	<br>The annotation allows the framework to identify the available REST methods through reflection.
+	The annotation allows the framework to identify the available REST methods through reflection.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
@@ -13909,7 +13962,7 @@
 <p>
 	The {@link org.apache.juneau.rest.RestRequest} object is an extension of the <l>HttpServletRequest</l> class
 	with various built-in convenience methods for use in building REST interfaces.
-	<br>It can be accessed by passing it as a parameter on your REST Java method:
+	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
@@ -13945,7 +13998,7 @@
 <p>
 	The {@link org.apache.juneau.rest.RestResponse} object is an extension of the <l>HttpServletResponse</l> class
 	with various built-in convenience methods for use in building REST interfaces.
-	<br>It can be accessed by passing it as a parameter on your REST Java method:
+	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
@@ -13970,7 +14023,7 @@
 <div class='topic'><!-- START: 7.6.4 - juneau-rest-server.RestMethod.RequestBody -->
 <p>
 	The {@link org.apache.juneau.rest.RequestBody} object is the API for accessing the body of an HTTP request.
-	<br>It can be accessed by passing it as a parameter on your REST Java method:
+	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
@@ -14013,7 +14066,7 @@
 <div class='topic'><!-- START: 7.6.5 - juneau-rest-server.RestMethod.RequestHeaders -->
 <p>
 	The {@link org.apache.juneau.rest.RequestHeaders} object is the API for accessing the headers of an HTTP request.
-	<br>It can be accessed by passing it as a parameter on your REST Java method:
+	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
@@ -14061,7 +14114,7 @@
 <div class='topic'><!-- START: 7.6.6 - juneau-rest-server.RestMethod.RequestQuery -->
 <p>
 	The {@link org.apache.juneau.rest.RequestQuery} object is the API for accessing the GET query parameters of an HTTP request.
-	<br>It can be accessed by passing it as a parameter on your REST Java method:
+	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
@@ -14082,7 +14135,7 @@
 	An important distinction between the behavior of this object and <l>HttpServletRequest.getParameter(String)</l> is
 	that the former will NOT load the body of the request on FORM POSTS and will only look at parameters
 	found in the query string.
-	<br>This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to 
+	This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to 
 	inadvertently read the body of the request to get a query parameter.
 </p>
 <p>
@@ -14114,7 +14167,7 @@
 <div class='topic'><!-- START: 7.6.7 - juneau-rest-server.RestMethod.RequestFormData -->
 <p>
 	The {@link org.apache.juneau.rest.RequestFormData} object is the API for accessing the HTTP request body as form data.
-	<br>It can be accessed by passing it as a parameter on your REST Java method:
+	It can be accessed by passing it as a parameter on your REST Java method:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(...)
@@ -14163,12 +14216,12 @@
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestMethod#path() @RestMethod(path)} annotation allows 
 	you to define URL path patterns to match against.
-	<br>These patterns can contain variables of the form <l>"{xxx}"</l> that can be passed in directly to the
+	These patterns can contain variables of the form <l>"{xxx}"</l> that can be passed in directly to the
 	Java methods as extra parameters.
 </p>
 <p>
 	In the following example, 3 separate GET request handlers are defined with different path patterns.
-	<br>Note how the variables are passed in as additional arguments on the method, and how those arguments are 
+	Note how the variables are passed in as additional arguments on the method, and how those arguments are 
 	automatically converted to the specified class type...
 </p>
 <p class='bpcode w800'>
@@ -14192,7 +14245,7 @@
 </p>
 <p>
 	By default, path patterns are matched using a best-match heuristic. 
-	<br>When overlaps occur, URLs are matched from most-specific to most-general order:
+	When overlaps occur, URLs are matched from most-specific to most-general order:
 </p>
 <p class='bpcode w800'>
 	<jc>// Try first </jc>
@@ -14223,14 +14276,14 @@
 	The match heuristic behavior can be overridden by the 
 	{@link org.apache.juneau.rest.annotation.RestMethod#priority() @RestMethod(priority)} annotation 
 	property.
-	<br>However, in practice this is almost never needed.
+	However, in practice this is almost never needed.
 </p>
 <p>
 	Paths that end with <js>"/*"</js> will do a prefix match on the incoming URL.  
-	<br>Any remainder after the match can be accessed through 
+	Any remainder after the match can be accessed through 
 	{@link org.apache.juneau.rest.RequestPath#getRemainder()} or parameters with the 
 	<code><ja>@Path</ja>(<js>"/*"</js>)</code> annotation.
-	<br>On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
+	On the other hand, paths that don't end with <js>"/*"</js> (e.g. <js>"/"</js> or <js>"/foo"</js>) will 
 	require an exact URL match, and if any remainder exists, a 404 (not found) error will be thrown.
 </p>
 <p>
@@ -14249,7 +14302,7 @@
 </p>
 <p>
 	Annotations are provided for easy access to URL parameters with automatic conversion to any {@doc PojoCategories parsable} type.
-	<br>For example, the following example can process the URL <l>"/urlWithParams?foo=foo&amp;bar=[1,2,3]&amp;baz=067e6162-3b6f-4ae2-a171-2470b63dff00"</l>...
+	For example, the following example can process the URL <l>"/urlWithParams?foo=foo&amp;bar=[1,2,3]&amp;baz=067e6162-3b6f-4ae2-a171-2470b63dff00"</l>...
 </p>
 <p class='bpcode w800'>
 	<jc>// Example GET request with access to query parameters</jc>
@@ -14317,7 +14370,7 @@
 <div class='topic'><!-- START: 7.6.10 - juneau-rest-server.RestMethod.MethodReturnTypes -->
 <p>
 	The return type can be any serializable POJO as defined in {@doc PojoCategories}.
-	<br>It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
+	It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
 	setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -14413,7 +14466,7 @@
 <p>
 	The {@link org.apache.juneau.http.ReaderResource} class is a convenience object for defining thread-safe
 	reusable character-based responses.
-	<br>In essence, it's a container for character data with optional response headers and support for
+	In essence, it's a container for character data with optional response headers and support for
 	resolving SVL variables.
 </p>
 
@@ -14443,7 +14496,7 @@
 <div class='topic'><!-- START: 7.6.12 - juneau-rest-server.RestMethod.StreamResource -->
 <p>
 	The {@link org.apache.juneau.http.StreamResource} class is the binary equivalent to the {@link org.apache.juneau.http.ReaderResource} object.
-	<br>In essence, it's a container for binary data with optional response headers.
+	In essence, it's a container for binary data with optional response headers.
 </p>
 <p>
 	The class is annotated with {@link org.apache.juneau.http.annotation.Response @Response}
@@ -14531,7 +14584,7 @@
 <div class='topic'><!-- START: 7.6.14 - juneau-rest-server.RestMethod.PredefinedResponses -->
 <p>
 	Predefined response beans are provided for all standard HTTP responses.
-	<br>These can be used as-is or extended to provide customized HTTP responses. 
+	These can be used as-is or extended to provide customized HTTP responses. 
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -14582,7 +14635,7 @@
 <p>
 	These predefined response beans are an example of {@link org.apache.juneau.http.annotation.Response @Response}-annotated 
 	objects that are describe in detail later.
-	<br>Without going into details, this is how the {@link org.apache.juneau.rest.response.SeeOther} is defined:
+	Without going into details, this is how the {@link org.apache.juneau.rest.response.SeeOther} is defined:
 </p>
 <p class='bpcode w800'>
 	<ja>@Response</ja>(
@@ -14625,7 +14678,7 @@
 </p>
 <p>
 	Note that the runtime behavior of the following code is identical to the example above.
-	<br>However, the important distinction is that in the previous example, the 302 response would show in
+	However, the important distinction is that in the previous example, the 302 response would show in
 	the generated Swagger (since we can see the response through reflection), whereas it will NOT show up
 	in the following example (since all we see is an Object response). 
 </p>
@@ -14707,7 +14760,7 @@
 <p>
 	These exception extend from {@link java.lang.RuntimeException}, so they can optionally be specified in the thrown
 	declaration of the method.
-	<br>The important distinction is that when part of the thrown declaration, they show up in the generated Swagger
+	The important distinction is that when part of the thrown declaration, they show up in the generated Swagger
 	documentation, whereas they don't if not.  This behavior can be used to define what error conditions show in your Swagger doc.
 </p>
 </div><!-- END: 7.6.15 - juneau-rest-server.RestMethod.PredefinedExceptions -->
@@ -14735,7 +14788,7 @@
 <p>
 	The {@link org.apache.juneau.rest.helper.ResourceDescription} class is a bean with name/description
 	properties for labeling and linking to child resources.
-	<br>The following examples is pulled from the REST examples:
+	The following examples is pulled from the REST examples:
 </p>
 <p class='bpcode w800'>
 	<ja>@Resource</ja>
@@ -14770,7 +14823,7 @@
 </p>
 <p>
 	{@link org.apache.juneau.rest.helper.ResourceDescriptions} is a convenience class for doing the same.
-	<br>The example above can also be written as follows (which you'll notice is more concise):
+	The example above can also be written as follows (which you'll notice is more concise):
 </p>
 <p class='bpcode w800'>
 	<ja>@Resource</ja>
@@ -14814,7 +14867,7 @@
 <p>
 	The {@link org.apache.juneau.dto.LinkString LinkString} bean is a predefined <ja>@HtmlLink</ja> bean provided
 	to simplify specifying actions.
-	<br>The following is equivalent to above.
+	The following is equivalent to above.
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>
@@ -14995,7 +15048,7 @@
 </ul>
 <p>
 	Since we build upon the existing <code>RestClient</code> API, we inherit all of it's features.
-	<br>For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
+	For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
 	serializers and parsers, and the ability to provide your own customized Apache <code>HttpClient</code> for 
 	handling various scenarios involving authentication and Internet proxies.
 </p>
@@ -15047,8 +15100,8 @@
 </p>
 <p>
 	Note that the body of the request is an array.  
-	<br>This array contains the serialized arguments of the method.
-	<br>The object returned by the method is then serialized as the body of the response.
+	This array contains the serialized arguments of the method.
+	The object returned by the method is then serialized as the body of the response.
 </p>
 
 <h5 class='topic'>Server side</h5>
@@ -15063,9 +15116,9 @@
 </ol>
 <p>
 	In either case, the proxy communications layer is pure REST.
-	<br>Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
+	Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
 	be made through pure REST calls.  
-	<br>This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
+	This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
 	a browser with no coding involved.
 </p>
 
@@ -15101,7 +15154,7 @@
 <p>
 	The <code><ja>@RestMethod</ja>(name=<jsf>RRPC</jsf>)</code> approach is easier if you only have a single 
 	interface you want to expose.  
-	<br>You simply define a Java method whose return type is an interface, and return the implementation of that 
+	You simply define a Java method whose return type is an interface, and return the implementation of that 
 	interface:
 </p>
 <p class='bpcode w800'>
@@ -15122,7 +15175,7 @@
 <img class='bordered w800' src='doc-files/juneau-rest-server.restRPC.1.png'>
 <p>
 	Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
-	<br>Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
+	Note that the <code>IAddressBook</code> link shows that you can only invoke methods defined on that
 	interface, whereas the <code>AddressBook</code> link shows ALL public methods defined on that class.
 </p>
 <h5 class='figure'>IAddressBook</h5>
@@ -15142,8 +15195,8 @@
 <p>
 	Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
 	how this works.
-	<br>We'll use the same method call as in the introduction.
-	<br>First, we need to create the serialized form of the arguments:
+	We'll use the same method call as in the introduction.
+	First, we need to create the serialized form of the arguments:
 </p>
 <p class='bpcode w800'>
 	Object[] args = <jk>new</jk> Object[] {
@@ -15176,20 +15229,20 @@
 </p>
 <p>
 	Note that in this example we're using JSON.  
-	<br>However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
-	<br>In practice however, JSON will preferred since it is often the most efficient.
+	However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
+	In practice however, JSON will preferred since it is often the most efficient.
 </p>
 <p>
 	Next, we can use a tool such as Poster to make the REST call.
-	<br>Methods are invoked by POSTing the serialized object array to the URI of the interface method.
+	Methods are invoked by POSTing the serialized object array to the URI of the interface method.
 	In this case, we want to POST our JSON to the following URL:
 </p>
 <p class='bpcode w800'>
 	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
 </p>
 <p>
-	<br>Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
-	<br>We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
+	Make sure that we specify the <code>Content-Type</code> of the body as <code>text/json</code>.
+	We also want the results to be returned as JSON, so we set the <code>Accept</code> header to 
 	<code>text/json</code> as well.
 </p>
 <img class='bordered w400' src='doc-files/juneau-rest-server.restRPC.4.png'>
@@ -15237,10 +15290,10 @@
 <p>
 	When specifying the POST body as a <code>&amp;body</code> parameter, the method arguments should be in UON 
 	notation.
-	<br>See {@link org.apache.juneau.uon.UonSerializer} for more information about this encoding.
-	<br>Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
+	See {@link org.apache.juneau.uon.UonSerializer} for more information about this encoding.
+	Usually you can also pass in JSON if you specify <code>&amp;Content-Type=text/json</code> in the URL parameters
 	but passing in unencoded JSON in a URL may not work in all browsers.  
-	<br>Therefore, UON is preferred.
+	Therefore, UON is preferred.
 </p>
 <p>
 	The hyperlinks on the method names above lead you to a simple form-entry page where you can test
@@ -15293,7 +15346,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	The following shows the same for a request body:
@@ -15326,7 +15379,7 @@
 </p>
 <p>
 	The list of valid POJO types for parameters depends on type and format of the value or items/entries of the value.
-	<br>For example, instead of <code>Longs</code> in the example above, we could also define a 2-dimensional array of POJOs convertible from <code>Longs</code>:
+	For example, instead of <code>Longs</code> in the example above, we could also define a 2-dimensional array of POJOs convertible from <code>Longs</code>:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(method=<js>"POST"</js>, path=<js>"/2dLongArray"</js>)	
@@ -15363,7 +15416,7 @@
 </p>
 <p>
 	As you can see, the complexity of possible input types expands significantly.
-	<br>For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
+	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
 </p>
 </div><!-- END: 7.8 - juneau-rest-server.OpenApiSchemaPartParsing -->
 
@@ -15609,7 +15662,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	For more information about valid parameter types when using OpenAPI parsing, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
@@ -15617,7 +15670,7 @@
 
 <p>
 	The <ja>@Body</ja> annotation is also used for supplying swagger information about the body of the request.
-	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+	This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -15753,7 +15806,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
+	By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -15781,7 +15834,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
@@ -15789,7 +15842,7 @@
 
 <p>
 	The <ja>@FormData</ja> annotation is also used for supplying swagger information about the HTTP part.
-	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+	This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -15919,7 +15972,7 @@
 <div class='topic'><!-- START: 7.10.4 - juneau-rest-server.HttpPartAnnotations.Query -->
 <p>
 	The {@link org.apache.juneau.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
-	<br>It's identical to {@link org.apache.juneau.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
+	It's identical to {@link org.apache.juneau.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
@@ -15955,7 +16008,7 @@
 <p>
 	Unlike {@link org.apache.juneau.http.annotation.FormData @FormData}, using this annotation does not result in the servlet reading the contents of
 	URL-encoded form posts.
-	<br>Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
+	Therefore, this annotation can be used in conjunction with the {@link org.apache.juneau.http.annotation.Body @Body} annotation or
 	{@link org.apache.juneau.rest.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
 </p>
 <p>
@@ -16007,7 +16060,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
+	By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -16035,7 +16088,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
@@ -16043,7 +16096,7 @@
 
 <p>
 	The <ja>@Query</ja> annotation is also used for supplying swagger information about the HTTP part.
-	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+	This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -16234,7 +16287,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
+	By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -16262,7 +16315,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
@@ -16270,7 +16323,7 @@
 
 <p>
 	The <ja>@Header</ja> annotation is also used for supplying swagger information about the HTTP part.
-	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+	This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -16399,7 +16452,7 @@
 <p>
 	The registered {@link org.apache.juneau.rest.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
+	By default, this is the {@link org.apache.juneau.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 
 <p>
@@ -16428,7 +16481,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
@@ -16436,7 +16489,7 @@
 
 <p>
 	The <ja>@Path</ja> annotation is also used for supplying swagger information about the HTTP part.
-	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+	This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>
@@ -16528,8 +16581,8 @@
 </p>
 <p>
 	The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
-	<br>Schema-based serialization and parsing is used just as if used as individual parameter types.
-	<br>Annotations used are the exact same used on REST parameters and have all the
+	Schema-based serialization and parsing is used just as if used as individual parameter types.
+	Annotations used are the exact same used on REST parameters and have all the
 	same feature support including automatic Swagger validation and documentation.  
 </p>
 <h5 class='figure'>Example:</h5>
@@ -16736,7 +16789,7 @@
 </p>
 <p>
 	The <ja>@Response</ja> annotation can be simultaneously on both the Java method and return type.
-	<br>When used in both locations, the annotation values are combined, but values defined on the
+	When used in both locations, the annotation values are combined, but values defined on the
 	method return annotation take precedence over the values defined on the type.
 </p>
 
@@ -16861,7 +16914,7 @@
 <p>
 	By default, POJOs representing the body of the request are serialized using the Juneau serializer
 	matching the requesting <code>Accept</code> header.
-	<br>The {@link org.apache.juneau.oapi.OpenApiSerializer} class can be used to serialize response bodies using OpenAPI rules.
+	The {@link org.apache.juneau.oapi.OpenApiSerializer} class can be used to serialize response bodies using OpenAPI rules.
 </p>
 <p>
 	The following examples show part-schema-based serialization of response bodies:
@@ -16916,7 +16969,7 @@
 <h5 class='topic'>Swagger documentation</h5>
 <p>
 	The attributes on this annotation are also used to populate the generated Swagger for the method.
-	<br>For example, in the case of the <code>InvalidLogin</code> example above, the following Swagger is generated:
+	For example, in the case of the <code>InvalidLogin</code> example above, the following Swagger is generated:
 </p>
 <p class='bpcode w800'>
 	<jok>'/user/login'</jok>: {
@@ -17055,7 +17108,7 @@
 <h5 class='topic'>Swagger documentation</h5>
 <p>
 	The attributes on this annotation are also used to populate the generated Swagger for the method.
-	<br>For example, in the case of the <code>X-Rate-Limit</code> example above, the following Swagger is generated:
+	For example, in the case of the <code>X-Rate-Limit</code> example above, the following Swagger is generated:
 </p>
 <p class='bpcode w800'>
 	<jok>'/user/login'</jok>: {
@@ -17114,7 +17167,7 @@
 <div class='topic'><!-- START: 7.11 - juneau-rest-server.HandlingFormPosts -->
 <p>
 	The best way to handle a form post is usually by using an input bean.
-	<br>The following is a class that takes in URL-Encoded form post of the 
+	The following is a class that takes in URL-Encoded form post of the 
 	form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l>.
 </p>
 <p class='bpcode w800'>				
@@ -17151,7 +17204,7 @@
 <p>
 	The advantage to the form input bean is that it can handle any of the parsable types (e.g. JSON, XML...) 
 	in addition to URL-Encoding.  
-	<br>The latter approach only supports URL-Encoding.
+	The latter approach only supports URL-Encoding.
 </p>
 <ul class='doctree'>
 	<li class='warn'>
@@ -17170,7 +17223,7 @@
 <div class='topic'><!-- START: 7.12 - juneau-rest-server.HandlingMultiPartFormPosts -->
 <p>
 	The Juneau framework does not natively support multipart form posts.  
-	<br>However, it can be done in conjunction with the Apache Commons File Upload library or through the Servlet 3.0 API directly.
+	However, it can be done in conjunction with the Apache Commons File Upload library or through the Servlet 3.0 API directly.
 </p>	
 <p>
 	The following is an example that uses the File Upload library to allow files to be uploaded as multipart form posts.
@@ -17476,7 +17529,7 @@
 </p>			
 <p>
 	Properties are open-ended and can be used for other purposes.
-	<br>They're made available through the following methods:
+	They're made available through the following methods:
 </p>
 <ul>
 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getProperties()}
@@ -17687,7 +17740,7 @@
 </p>
 <p>
 	A guard failure results in an <l>HTTP 401 Unauthorized</l> response.
-	<br>However, this can be configured by overriding the 
+	However, this can be configured by overriding the 
 	{@link org.apache.juneau.rest.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
 	yourself.
 </p>
@@ -17705,7 +17758,7 @@
 <p>
 	When guards are associated at the class-level, it's equivalent to associating guards on all Java methods on 
 	the servlet.
-	<br>If multiple guards are present, ALL guards must pass.
+	If multiple guards are present, ALL guards must pass.
 </p>
 <h5 class='section'>See Also:</h5>
 <ul>
@@ -17754,8 +17807,8 @@
 <p>
 	The following converter is used to provide support for addressing child nodes in a POJO tree with URL path 
 	remainders.  
-	<br>In this code, the 3rd parameter is the object that was returned by the Java method.
-	<br>The converter uses the {@link org.apache.juneau.utils.PojoRest} wrapper class to address nodes in the 
+	In this code, the 3rd parameter is the object that was returned by the Java method.
+	The converter uses the {@link org.apache.juneau.utils.PojoRest} wrapper class to address nodes in the 
 	tree.
 </p>
 <p class='bpcode w800'>
@@ -17875,7 +17928,7 @@
 <p>
 	The {@link org.apache.juneau.rest.annotation.RestResource#encoders @RestResource(encoders)} annotation can 
 	be used to associate character encoders with a servlet class.
-	<br>Encoders can be used to enable various kinds of compression (e.g. <l>"gzip"</l>) on requests and responses 
+	Encoders can be used to enable various kinds of compression (e.g. <l>"gzip"</l>) on requests and responses 
 	based on the request <l>Accept-Encoding</l> and <l>Content-Encoding</l> headers.
 </p>
 
@@ -17921,7 +17974,7 @@
 </p>
 <p>
 	Variables take the form <l>$X{contents}</l> where <l>X</l> can consist of zero or more ASCII characters and <l>contents</l> can be virtually anything.
-	<br>This is called Simple Variable Language, or SVL, and is defined here: {@doc juneau-svl juneau-svl}.
+	This is called Simple Variable Language, or SVL, and is defined here: {@doc juneau-svl juneau-svl}.
 </p>
 <h5 class='topic'>Features</h5>
 <ul class='spaced-list'>
@@ -18229,7 +18282,7 @@
 </p>
 <p>
 	The annotation itself can contain string variables.  
-	<br>For example, the Microservice API {@link org.apache.juneau.rest.BasicRestServlet} class defines the 
+	For example, the Microservice API {@link org.apache.juneau.rest.BasicRestServlet} class defines the 
 	location of the config file as a system property <l>"juneau.configFile"</l>:
 </p>
 <p class='bpcode w800'>
@@ -18408,7 +18461,7 @@
 <div class='topic'><!-- START: 7.25 - juneau-rest-server.ClientVersioning -->
 <p>
 	Client version headers are used to support backwards compatibility for breaking REST interface changes.
-	<br>Using them, you're able to return different responses based on which client is making a request.
+	Using them, you're able to return different responses based on which client is making a request.
 </p>
 <p>
 	The APIs involved with defining client version headers are:
@@ -18456,7 +18509,7 @@
 <p>
 	The {@link org.apache.juneau.rest.RestInfoProvider} class is used to find the title
 	and description for your resource and also generate the Swagger documentation.
-	<br>It can be overridden to provide your own custom Swagger documentation.
+	It can be overridden to provide your own custom Swagger documentation.
 </p>
 <p>
 	The methods on this interface are:
@@ -18796,7 +18849,7 @@
 <p>
 	Tags allow you to group operations into general categories.
 	In the user interface, these can be expanded/collapsed by clicking on the tag sections.
-	<br>In the example below, the <code>pet</code> and <code>store</code> tag sections are collapsed
+	In the example below, the <code>pet</code> and <code>store</code> tag sections are collapsed
 	and the <code>user</code> section is not:
 </p>
 <img class='bordered w900' src='doc-files/juneau-rest-server.Swagger.4.png'>
@@ -18985,11 +19038,11 @@
 <p>
 	<b>Note:</b>  The <code>type</code> and <code>collectionFormat</code> values above are optional and auto-detected based on the
 	parameter class type if omitted.  They're included here for clarity.
-	<br>The examples will be explained in the next section.
+	The examples will be explained in the next section.
 </p>
 <p>
 	Another option is to specify your parameter information in the <code>parameters</code> annotation as free-form Simple JSON.
-	<br>In the case of the <code>PetStoreResource.getPets()</code> method, we pull this information from a static field
+	In the case of the <code>PetStoreResource.getPets()</code> method, we pull this information from a static field
 	defined in the {@link org.apache.juneau.rest.converters.Queryable} class:
 </p>
 <h5 class='figure'>PetStoreResource.getPets()</h5>
@@ -19225,7 +19278,7 @@
 </p>
 <p>
 	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
-	<br>By default, the generated swagger uses to the {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
+	By default, the generated swagger uses to the {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
 	setting to automatically add examples to beans, collections, arrays, and maps:
 </p>
 <p class='bpcode w800'>
@@ -19449,7 +19502,7 @@
 
 <p>
 	Juneau also supports auto-generation of JSON-Schema directly from POJO classes.
-	<br>By default, the generated swagger uses to the {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
+	By default, the generated swagger uses to the {@link org.apache.juneau.jsonschema.JsonSchemaGenerator#JSONSCHEMA_addExamplesTo JSONSCHEMA_addExamplesTo} 
 	setting to automatically add examples to beans, collections, arrays, and maps:
 </p>
 <p>
@@ -19507,7 +19560,7 @@
 <p>
 	These can be auto-generated from {@link org.apache.juneau.http.annotation.ResponseHeader @ResponseHeader} annotations defined on either
 	method parameters or type classes.
-	<br>The example above shows one of each:
+	The example above shows one of each:
 </p>
 <p class='bpcode w800'>
 	<ja>@RestMethod</ja>(
@@ -19685,7 +19738,7 @@
 <p>
 	In the microservice template, this file is located in the <code>files/htdocs/styles</code> directory.
 	It's a simple straightforward file consisting of less than 350 lines.
-	<br>This file can be modified to change the look-and-feel of your Swagger UI.
+	This file can be modified to change the look-and-feel of your Swagger UI.
 </p>
 </div><!-- END: 7.27.10 - juneau-rest-server.Swagger.Stylesheet -->
 </div><!-- END: 7.27 - juneau-rest-server.Swagger -->
@@ -19697,7 +19750,7 @@
 <p>
 	The {@link org.apache.juneau.rest.annotation.HtmlDoc @HtmlDoc} annotation is used to customize the HTML 
 	view of your serialized POJOs.
-	<br>It's used in the following locations:
+	It's used in the following locations:
 </p>
 <ul>
 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestResource#htmldoc() RestResource(htmldoc)}
@@ -19706,7 +19759,7 @@
 <p>
 	The annotation itself is just a convenience for setting configuration properties set
 	on the {@link org.apache.juneau.html.HtmlDocSerializer} class.
-	<br>For example, the following two pieces of code are equivalent:
+	For example, the following two pieces of code are equivalent:
 </p>
 <p class='bpcode w800'>
 	<jc>// Title defined via property.</jc>
@@ -19916,7 +19969,7 @@
 <p>
 	The following examples shows how to associate a widget with a REST method and then have it rendered in the links
 	and aside section of the page.
-	<br>It shows an example of a widget that renders an image located in the <code>htdocs</code> static files
+	It shows an example of a widget that renders an image located in the <code>htdocs</code> static files
 	directory in your classpath (see {@link org.apache.juneau.rest.annotation.RestResource#staticFiles() @RestResource(staticFiles)}):
 </p>
 <p class='bpcode w800'>
@@ -20403,7 +20456,7 @@
 <img class='bordered w800' src='doc-files/juneau-rest-server.Stylesheets.3.png'>
 <p>
 	The stylesheet URL is controlled by the {@link org.apache.juneau.rest.annotation.HtmlDoc#stylesheet() @HtmlDoc(stylesheet)} annotation.
-	<br>The {@link org.apache.juneau.rest.BasicRestServlet} class defines the stylesheet served up as a static file:
+	The {@link org.apache.juneau.rest.BasicRestServlet} class defines the stylesheet served up as a static file:
 <p class='bpcode w800'>
 	<ja>@RestResource</ja>(
 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -20435,7 +20488,7 @@
 <p>
 	You can try out different stylesheets by passing in a <code>stylesheet</code> attribute in the request
 	URL.
-	<br>The example above show this in use.
+	The example above show this in use.
 </p>
 <p>
 	In case you're curious about how the menu item works, it's defined via a widget:
@@ -20460,7 +20513,7 @@
 <p>
 	The <l>StyleMenuItem</l> is a widget that extends from {@link org.apache.juneau.rest.widget.MenuItemWidget}, a
 	specialized widget for creating pop-up menus.
-	<br>In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
+	In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
 </p>
 <p class='bpcode w800'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
@@ -20542,7 +20595,7 @@
 <p>
 	The {@link org.apache.juneau.rest.RestContext#REST_logger} property allows you to configure 
 	logging for your resource.
-	<br>The interface is shown below:
+	The interface is shown below:
 </p>
 <ul class='doctree'>
 	<li class='jac'>
@@ -20573,7 +20626,7 @@
 </p>
 <p>
 	By default, the Juneau framework uses the built-in Java Logging API for logging.
-	<br>But you can define your own implementation to use any framework you wish.
+	But you can define your own implementation to use any framework you wish.
 </p>
 <p>
 	The {@link org.apache.juneau.rest.RestLogger} instance is accessible via the following:
@@ -21106,7 +21159,7 @@
 <p>
 	The {@link org.apache.juneau.rest.mock.MockRest} object can also be used with the {@link org.apache.juneau.rest.client.RestClient} class to 
 	perform serverless unit testing through the client API of REST resources.
-	<br>This can be useful for testing of interface proxies against REST interfaces (described later).
+	This can be useful for testing of interface proxies against REST interfaces (described later).
 </p>
 <p>
 	The example above can be rewritten to use a mock as follows:
@@ -21136,7 +21189,7 @@
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method allows you to pass in a mocked
 	interface for creating HTTP requests through the client interface.
-	<br>The method creates a specialized <code>HttpClientConnectionManager</code> for handling requests by taking information on the 
+	The method creates a specialized <code>HttpClientConnectionManager</code> for handling requests by taking information on the 
 	client-side request and populating the {@link org.apache.juneau.rest.mock.MockServletRequest} and {@link org.apache.juneau.rest.mock.MockServletResponse} objects
 	directly without involving any sockets.
 </p>
@@ -21256,7 +21309,7 @@
 <p>
 	Juneau is built as a veneer on top of the Servlet API, allowing you to use low-level Servlet APIs
 	whenever needed.
-	<br>This allows you to take advantage of the newest HTTP/2 features implemented in the new Servlet 4.0 
+	This allows you to take advantage of the newest HTTP/2 features implemented in the new Servlet 4.0 
 	specification.
 </p>
 </div><!-- END: 7.38 - juneau-rest-server.HTTP2 -->
@@ -21664,7 +21717,7 @@
 <div class='topic'><!-- START: 10.1 - juneau-rest-client.RestProxies -->
 <p>
 	The <code>juneau-rest-client</code> library can also be used to define interface proxies against 3rd-party REST interfaces.
-	<br>This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
+	This is an extremely powerful feature that allows you to quickly define easy-to-use interfaces against 
 	virtually any REST interface.
 </p>
 <p>
@@ -22532,7 +22585,7 @@
 </p>
 <p>
 	Annotations on methods are inherited from parent classes and interfaces. 
-	<br>For example, the request bean above could have defined annotations in an interface to keep them clear from the implementation:
+	For example, the request bean above could have defined annotations in an interface to keep them clear from the implementation:
 </p>
 <p class='bpcode w800'>
 	<ja>@Request</ja> 
@@ -22826,7 +22879,7 @@
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder} class does not itself provide FORM-based 
 	authentication since there is no standard way of providing such support. 
-	<br>Typically, to perform FORM-based or other types of authentication, you'll want to create your own
+	Typically, to perform FORM-based or other types of authentication, you'll want to create your own
 	subclass of {@link org.apache.juneau.rest.client.RestClientBuilder} and override the 
 	{@link org.apache.juneau.rest.client.RestClientBuilder#createHttpClient()} method to provide an 
 	authenticated client.
@@ -23044,7 +23097,7 @@
 <p>
 	One issue with REST (and HTTP in general) is that the HTTP response code must be set as a header before the 
 	body of the request is sent.  
-	<br>This can be problematic when REST calls invoke long-running processes, pipes
+	This can be problematic when REST calls invoke long-running processes, pipes
 	the results through the connection, and then fails after an HTTP 200 has already been sent.
 </p>
 <p>
@@ -23083,7 +23136,7 @@
 	These convenience methods are specialized methods that use the 
 	{@link org.apache.juneau.rest.client.RestCall#responsePattern(ResponsePattern)} method which uses regular 
 	expression matching against the response body.
-	<br>This method can be used to search for arbitrary patterns in the response body.
+	This method can be used to search for arbitrary patterns in the response body.
 </p>
 <p>
 	The following example shows how to use a response pattern finder to find and capture patterns for 
@@ -23126,7 +23179,7 @@
 	Using response patterns does not affect the functionality of any of the other methods
 	used to retrieve the response such as {@link org.apache.juneau.rest.client.RestCall#getResponseAsString()} 
 	or {@link org.apache.juneau.rest.client.RestCall#getResponse(Class)}.
-	<br>HOWEVER, if you want to retrieve the entire text of the response from inside the match methods,
+	HOWEVER, if you want to retrieve the entire text of the response from inside the match methods,
 	use {@link org.apache.juneau.rest.client.RestCall#getCapturedResponse()} since this method will not absorb 
 	the response for those other methods.
 </p>
@@ -23166,7 +23219,7 @@
 <p>
 	Under-the-covers, this is simply a shortcut for adding the {@link org.apache.juneau.rest.client.RestCallLogger#DEFAULT} 
 	interceptor to the client.  
-	<br>This causes the following output to be generated by the Java <code>org.apache.juneau.rest.client</code> 
+	This causes the following output to be generated by the Java <code>org.apache.juneau.rest.client</code> 
 	logger at <jsf>WARNING</jsf> level:
 </p>
 <p class='bpcode w800 console'>
@@ -23221,7 +23274,7 @@
 <p>
 	Use the {@link org.apache.juneau.rest.client.RestClientBuilder#logTo(Level,Logger)} and 
 	{@link org.apache.juneau.rest.client.RestCall#logTo(Level,Logger)} methods to log HTTP calls.
-	<br>These methods will cause the HTTP request and response headers and body to be logged to the specified logger.  
+	These methods will cause the HTTP request and response headers and body to be logged to the specified logger.  
 </p>
 
 <h5 class='figure'>Example:</h5>
@@ -23442,7 +23495,7 @@
 <p>
 	The {@link org.apache.juneau.rest.client.RestClientBuilder#set(String,Object)} method can be used to 
 	set serializer and parser properties.
-	<br>For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
+	For example, if you're parsing a response into POJOs and you want to ignore fields that aren't on the
 	POJOs, you can use the {@link org.apache.juneau.BeanContext#BEAN_ignoreUnknownBeanProperties} property.
 </p>
 <p class='bpcode w800'>
@@ -23456,7 +23509,7 @@
 <p>
 	The {@link org.apache.juneau.rest.client.RestCall#retryable(int,long,RetryOn)} method can be used to 
 	automatically retry requests on failures.
-	<br>This can be particularly useful if you're attempting to connect to a REST resource that may be in the 
+	This can be particularly useful if you're attempting to connect to a REST resource that may be in the 
 	process of still initializing.
 </p>
 <p class='bpcode w800'>
@@ -23765,7 +23818,7 @@
 <p>
 	The manifest file can be retrieved using the the {@link org.apache.juneau.microservice.Microservice#getManifest()} method which 
 	provides an API for accessing manifest file entries.
-	<br>This method returns an instance of {@link org.apache.juneau.utils.ManifestFile} which extends from {@link org.apache.juneau.ObjectMap} allowing
+	This method returns an instance of {@link org.apache.juneau.utils.ManifestFile} which extends from {@link org.apache.juneau.ObjectMap} allowing
 	you to retrieve entries as any data types supported by that class.
 </p>
 <h5 class='figure'>Example:</h5>
@@ -23882,7 +23935,7 @@
 </p>
 <p>
 	Once the configuration is resolved, it is made as the system default configuration available through the {@link org.apache.juneau.config.Config#getSystemDefault()}.
-	<br>This in turn allows it to be used by REST resources that reference the system default configuration via the <js>"SYSTEM_DEFAULT"</js> such as those
+	This in turn allows it to be used by REST resources that reference the system default configuration via the <js>"SYSTEM_DEFAULT"</js> such as those
 	implementing the {@link org.apache.juneau.rest.BasicRestConfig} interface.
 <p>
 <h5 class='figure'>BasicRestConfig.java</h5>
@@ -24800,7 +24853,7 @@
 </ul>
 <p>
 	That <l>sayLocalizedHello()</l> example might need some explanation since there's a lot going on there.
-	<br>Here's what happens when an HTTP call is made to <l>GET /hello/localized/Bob</l>:
+	Here's what happens when an HTTP call is made to <l>GET /hello/localized/Bob</l>:
 </p>
 <ol class='spaced-list'>
 	<li>
@@ -25044,7 +25097,7 @@
 <p>
 	This example shows how the {@link org.apache.juneau.microservice.jetty.JettyMicroservice} class
 	can be extended to implement lifecycle listener methods or override existing methods.
-	<br>We'll create a new class <l>com.foo.MyJettyMicroservice</l>.
+	We'll create a new class <l>com.foo.MyJettyMicroservice</l>.
 </p>
 <p class='bpcode w800'>
 	<jd>/**
@@ -25401,7 +25454,7 @@
 </p>
 <p>
 	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-jetty-microservice</b> and click <b>Run</b>.
-	<br>In your console view, you should see the following output:
+	In your console view, you should see the following output:
 </p>
 <p class='bpcode w800 console'>
 	Running class 'JettyMicroservice' using config file 'my-jetty-microservice.cfg'.
@@ -25639,7 +25692,7 @@
 </p>
 <p>
 	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; my-springboot-microservice</b> and click <b>Run</b>.
-	<br>In your console view, you should see the following output:
+	In your console view, you should see the following output:
 </p>
 <p class='bpcode w800'>
 	  .   ____          _            __ _ _
@@ -27641,7 +27694,7 @@
 <div class='topic'><!-- START: 16.5 - juneau-examples-rest.ConfigResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.ConfigResource} class is a predefined reusable resource.
-	<br>It provides a REST interface for reading and altering the microservice config file.
+	It provides a REST interface for reading and altering the microservice config file.
 </p>
 <p>
 	Pointing a browser to the resource shows the following:
@@ -27796,7 +27849,7 @@
 <div class='topic'><!-- START: 16.6 - juneau-examples-rest.LogsResource -->
 <p>
 	The {@link org.apache.juneau.microservice.resources.LogsResource} class is a reusable predefined resource.
-	<br>It provides a REST interface for the log files generated by the microservice.
+	It provides a REST interface for the log files generated by the microservice.
 </p>
 <p>
 	Pointing a browser to the resource shows the following:
@@ -28111,7 +28164,7 @@
 </p>
 <p>
 	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; juneau-examples-rest-jetty</b> and click <b>Run</b>.
-	<br>In your console view, you should see the following output:
+	In your console view, you should see the following output:
 </p>
 <p class='bpcode w800 console'>
 	Running class 'JettyMicroservice' using config file 'juneau-examples-rest-jetty.cfg'.
@@ -28364,7 +28417,7 @@
 </p>
 <p>
 	Go to <b>Run -&gt; Run Configurations -&gt; Java Application -&gt; juneau-examples-rest-springboot</b> and click <b>Run</b>.
-	<br>In your console view, you should see the following output:
+	In your console view, you should see the following output:
 </p>
 <p class='bpcode w800 console'>
 	  .   ____          _            __ _ _
@@ -28495,7 +28548,7 @@
 
 <p>
 	For this example, we'll use the <l>Heroku Git</l> option for deploying our application.
-	<br>Follow the instructions for installing the Heroku CLI and logging into Heroku:
+	Follow the instructions for installing the Heroku CLI and logging into Heroku:
 </p>
 <p class='bpcode w1000'>
 	https://dashboard.heroku.com/apps/juneau-examples-rest/deploy/heroku-git
@@ -28620,8 +28673,8 @@
 	and instead can only specify type keys defined through bean dictionaries. 
 	Instead of serializing the fully-qualified class names in the output, we instead serialize type
 	names that represent those POJO types.
-	<br>i.e. instead of <js>"class='com.foo.MyBean'"</js>, we instead serialize <js>"type='MyBeanIdentifier'"</js>.
-	<br>Since bean types are defined at compile time, it's impossible to instantiate arbitrary POJOs.
+	i.e. instead of <js>"class='com.foo.MyBean'"</js>, we instead serialize <js>"type='MyBeanIdentifier'"</js>.
+	Since bean types are defined at compile time, it's impossible to instantiate arbitrary POJOs.
 </p>
 <p>
 	POJO types of generalized input are also inferred through swaps.

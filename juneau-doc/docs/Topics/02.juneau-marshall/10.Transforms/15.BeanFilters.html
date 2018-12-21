@@ -22,7 +22,7 @@ BeanFilter Class
 <p>
 	In practice, it's usually simpler to use the {@link oaj.annotation.Bean @Bean} and 
 	{@link oaj.annotation.BeanProperty @BeanProperty} annotations on your bean classes.
-	<br>However, bean filters make it possible to accomplish the same when you can't add annotations
+	However, bean filters make it possible to accomplish the same when you can't add annotations
 	to existing code.
 </p>
 <p>
@@ -66,13 +66,13 @@ BeanFilter Class
 </p>
 <p>
 	Note that if you use the annotation, you do NOT need to set anything on the serializers/parsers.
-	<br>The annotations will be detected and bean filters will automatically be created for them.
+	The annotations will be detected and bean filters will automatically be created for them.
 </p>
 <p>
 	The {@link oaj.BeanContextBuilder#beanFilters(Object...)} method also allows you to pass in interfaces.
-	<br>Any class that's not a subclass of {@link oaj.transform.BeanFilterBuilder} get interpreted 
+	Any class that's not a subclass of {@link oaj.transform.BeanFilterBuilder} get interpreted 
 	as bean interface classes.
-	<br>These cause bean implementations of those interfaces to only expose the properties defined on the 
+	These cause bean implementations of those interfaces to only expose the properties defined on the 
 	interface.
 </p>
 <p class='bpcode w800'>

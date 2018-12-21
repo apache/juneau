@@ -163,7 +163,7 @@ Serverless Unit Testing
 <p>
 	The {@link oajr.mock.MockRest} object can also be used with the {@link oajrc.RestClient} class to 
 	perform serverless unit testing through the client API of REST resources.
-	<br>This can be useful for testing of interface proxies against REST interfaces (described later).
+	This can be useful for testing of interface proxies against REST interfaces (described later).
 </p>
 <p>
 	The example above can be rewritten to use a mock as follows:
@@ -193,7 +193,7 @@ Serverless Unit Testing
 <p>
 	The {@link oajrc.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method allows you to pass in a mocked
 	interface for creating HTTP requests through the client interface.
-	<br>The method creates a specialized <code>HttpClientConnectionManager</code> for handling requests by taking information on the 
+	The method creates a specialized <code>HttpClientConnectionManager</code> for handling requests by taking information on the 
 	client-side request and populating the {@link oajr.mock.MockServletRequest} and {@link oajr.mock.MockServletResponse} objects
 	directly without involving any sockets.
 </p>

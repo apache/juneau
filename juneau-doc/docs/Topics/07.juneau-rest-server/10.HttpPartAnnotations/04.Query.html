@@ -17,7 +17,7 @@
 
 <p>
 	The {@link oaj.http.annotation.Query @Query} annotation is used to retrieve request URL query parameters.
-	<br>It's identical to {@link oaj.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
+	It's identical to {@link oaj.http.annotation.FormData @FormData}, but only retrieves the parameter from the URL string, not URL-encoded form posts.
 </p>
 <ul class='doctree'>
 	<li class='ja'>{@link oaj.http.annotation.Query}
@@ -53,7 +53,7 @@
 <p>
 	Unlike {@link oaj.http.annotation.FormData @FormData}, using this annotation does not result in the servlet reading the contents of
 	URL-encoded form posts.
-	<br>Therefore, this annotation can be used in conjunction with the {@link oaj.http.annotation.Body @Body} annotation or
+	Therefore, this annotation can be used in conjunction with the {@link oaj.http.annotation.Body @Body} annotation or
 	{@link oajr.RestRequest#getBody()} method for <code>application/x-www-form-urlencoded POST</code> calls.
 </p>
 <p>
@@ -105,7 +105,7 @@
 <p>
 	The registered {@link oajr.RestContext#REST_partParser REST_partParser} is used to convert strings
 	to POJOs and controls what POJO types are supported.
-	<br>By default, this is the {@link oaj.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
+	By default, this is the {@link oaj.oapi.OpenApiParser} which supports the standard Swagger-based rules for parsing.
 </p>
 <p>
 	For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <code>Longs</code>:
@@ -133,7 +133,7 @@
 </p>
 <p>
 	Input will be converted based on the types and formats defined in the schema definition.
-	<br>Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
+	Input validations such as <code>minLength/maxLength</code> that don't match the input will result in automatic <code>400 Bad Request</code> responses.
 </p>
 <p>
 	For more information about valid parameter types, see {@doc juneau-marshall.OpenApiDetails.Parsers OpenAPI Parsers}
@@ -141,7 +141,7 @@
 
 <p>
 	The <ja>@Query</ja> annotation is also used for supplying swagger information about the HTTP part.
-	<br>This information is used to populate the auto-generated Swagger documentation and UI.
+	This information is used to populate the auto-generated Swagger documentation and UI.
 </p>
 <h5 class='figure'>Examples:</h5>
 <p class='bpcode w800'>

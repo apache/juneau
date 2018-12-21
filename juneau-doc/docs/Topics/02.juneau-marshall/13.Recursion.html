@@ -17,15 +17,15 @@ Non-Tree Models and Recursion Detection
 
 <p>
 	The Juneau Serializer API is designed to be used against POJO tree structures. 
-	<br>It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
-	<br>If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
+	It expects that there not be loops in the POJO model (e.g. children with references to parents, etc...).
+	If you try to serialize models with loops, you will usually cause a <code>StackOverflowError</code> to 
 	be thrown (if {@link oaj.BeanTraverseContext#BEANTRAVERSE_maxDepth} is not reached 
 	first).
 </p>
 <p>
 	If you still want to use the Juneau serializers on such models, Juneau provides the 
 	{@link oaj.BeanTraverseContext#BEANTRAVERSE_detectRecursions} setting.
-	<br>It tells the serializer to look for instances of an object in the current branch of the tree and skip 
+	It tells the serializer to look for instances of an object in the current branch of the tree and skip 
 	serialization when a duplicate is encountered.
 </p>
 <p>
@@ -76,5 +76,5 @@ Non-Tree Models and Recursion Detection
 </p>
 <p>
 	Recursion detection introduces a performance penalty of around 20%.
-	<br>For this reason the setting is disabled by default.
+	For this reason the setting is disabled by default.
 </p>

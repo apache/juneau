@@ -17,7 +17,7 @@ VarResolvers and VarResolverSessions
 
 <p>
 	The main class for performing variable resolution is {@link oaj.svl.VarResolver}.
-	<br>Two methods are provided for resolving variables:
+	Two methods are provided for resolving variables:
 </p>
 <ul class='doctree'>
 	<li class='jc'>{@link oaj.svl.VarResolver}
@@ -30,8 +30,8 @@ VarResolvers and VarResolverSessions
 </ul>
 <p>
 	Var resolvers can rely on the existence of other objects.
-	<br>For example, {@link oaj.config.vars.ConfigVar} relies on the existence of a {@link oaj.config.Config}.
-	<br>This is accomplished through the following:
+	For example, {@link oaj.config.vars.ConfigVar} relies on the existence of a {@link oaj.config.Config}.
+	This is accomplished through the following:
 </p>
 <ul class='spaced-list'>
 	<li>Context-objects - Objects set on the resolver.
@@ -60,7 +60,7 @@ VarResolvers and VarResolverSessions
 </ul>
 <p>
 	Var resolvers can be cloned and extended by using the {@link oaj.svl.VarResolver#builder()} method.
-	<br>Cloning a resolver will copy it's {@link oaj.svl.Var} class names and context objects.
+	Cloning a resolver will copy it's {@link oaj.svl.Var} class names and context objects.
 </p>
 
 <h5 class='figure'>Example:</h5>

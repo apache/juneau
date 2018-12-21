@@ -43,9 +43,9 @@
 <p>
 	The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 	properties not otherwise defined.
-	<br>This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> 
+	This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> 
 	annotations, but generalized for all supported marshall languages.
-	<br>The primary purpose is for backwards compatibility in parsing newer streams with addition 
+	The primary purpose is for backwards compatibility in parsing newer streams with addition 
 	information into older beans.
 </p>
 <p>
@@ -89,7 +89,7 @@
 </p>
 <p>
 	Similar rules apply for value types and swaps.
-	<br>The property values optionally can be any serializable type or use swaps.
+	The property values optionally can be any serializable type or use swaps.
 </p>
 <p class='bpcode w800'>
 	<jc>// A serializable type other than Object.</jc>
@@ -119,7 +119,7 @@
 <p>
 	The {@link oaj.annotation.BeanProperty#value() @BeanProperty(value)} annotation
 	is a synonym for {@link oaj.annotation.BeanProperty#name() @BeanProperty(name)}.
-	<br>Use it in cases where you're only specifying a name so that you can shorten your annotation.
+	Use it in cases where you're only specifying a name so that you can shorten your annotation.
 </p>
 <p>
 	The following annotations are equivalent:
@@ -132,10 +132,10 @@
 <p>
 	The {@link oaj.annotation.BeanProperty#type() @BeanProperty(type)} annotation
 	is used to identify a specialized class type for a generalized property.
-	<br>Normally the type is inferred through reflection of the field type or getter return type.
-	<br>However, you'll want to specify this value if you're parsing beans where the bean property class 
+	Normally the type is inferred through reflection of the field type or getter return type.
+	However, you'll want to specify this value if you're parsing beans where the bean property class 
 	is an interface or abstract class to identify the bean type to instantiate.
-	<br>Otherwise, you may cause an {@link java.lang.InstantiationException} when trying to set these fields.
+	Otherwise, you may cause an {@link java.lang.InstantiationException} when trying to set these fields.
 </p>
 <p>
 	This property must denote a concrete class with a no-arg constructor.
@@ -151,7 +151,7 @@
 <p>
 	The {@link oaj.annotation.BeanProperty#params() @BeanProperty(params)} annotation
 	is for bean properties of type map or collection.
-	<br>It's used to identify the class types of the contents of the bean property object when
+	It's used to identify the class types of the contents of the bean property object when
 	the general parameter types are interfaces or abstract classes.
 </p>
 <p class='bpcode w800'>
@@ -165,7 +165,7 @@
 <p>
 	The {@link oaj.annotation.BeanProperty#properties() @BeanProperty(properties)} 
 	annotation is used to limit which child properties are rendered by the serializers.
-	<br>It can be used on any of the following bean property types:
+	It can be used on any of the following bean property types:
 </p>
 <ul class='spaced-list'>
 	<li>Beans - Only render the specified properties of the bean.

@@ -18,14 +18,14 @@ File System Changes
 <p>
 	In general, external file modifications will be detected immediately in the <code>Config</code>
 	object when a watcher thread is enabled (explained later).
-	<br>Otherwise, they are detected when a commit is performed.
+	Otherwise, they are detected when a commit is performed.
 </p>
 <p>
 	The <code>Config</code> object maintains an in-memory record of all changes that have been applied to it
 	through getters and setters.
-	<br>When the underlying file changes, the new contents are loaded and the in-memory changes are then 
+	When the underlying file changes, the new contents are loaded and the in-memory changes are then 
 	applied to the new configuration.
-	<br>This provides the benefits of real-time updates of configurations while not losing any changes made in the JVM.
+	This provides the benefits of real-time updates of configurations while not losing any changes made in the JVM.
 </p>
 <p>
 	If the <code>commit()</code> method is called on the <code>Config</code> objects after the file system

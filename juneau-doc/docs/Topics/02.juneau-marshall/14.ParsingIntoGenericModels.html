@@ -17,7 +17,7 @@ Parsing into Generic Models
 
 <p>
 	The Juneau parsers are not limited to parsing back into the original bean classes.
-	<br>If the bean classes are not available on the parsing side, the parser can also be used to 
+	If the bean classes are not available on the parsing side, the parser can also be used to 
 	parse into a generic model consisting of <code>Maps</code>, <code>Collections</code>, and primitive
 	objects.
 </p>
@@ -25,7 +25,7 @@ Parsing into Generic Models
 	You can parse into any <code>Map</code> type (e.g. <code>HashMap</code>, <code>TreeMap</code>), but
 	using {@link oaj.ObjectMap} is recommended since it has many convenience methods
 	for converting values to various types.
-	<br>The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
+	The same is true when parsing collections.  You can use any Collection (e.g. <code>HashSet</code>, 
 	<code>LinkedList</code>) or array (e.g. <code>Object[]</code>, <code>String[]</code>, 
 	<code>String[][]</code>), but using {@link oaj.ObjectList} is recommended.
 </p>
@@ -70,7 +70,7 @@ Parsing into Generic Models
 </p>
 <p>
 	What we end up with is the exact same output.
-	<br>Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
+	Even the numbers and booleans are preserved because they are parsed into <code>Number</code> and 
 	<code>Boolean</code> objects when parsing into generic models.
 </p>
 <p class='bpcode w800'>
@@ -122,5 +122,5 @@ Parsing into Generic Models
 
 <p>
 	As a general rule, parsing into beans is often more efficient than parsing into generic models.
-	<br>And working with beans is often less error prone than working with generic models.
+	And working with beans is often less error prone than working with generic models.
 </p>		
