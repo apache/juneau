@@ -19,7 +19,7 @@
 
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>8.0.0</version>
+	<version>8.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Apache Juneau</name>
 	<description>All the Apache Juneau content in one convenient package.</description>
@@ -352,7 +352,7 @@
 		<connection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</connection>
 		<developerConnection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</developerConnection>
 		<url>https://github.com/apache/juneau</url>
-		<tag>juneau-8.0.0-RC1</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>Jira</system>
