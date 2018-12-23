@@ -94,9 +94,7 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 
 		// Default contents to add to the <head> section of the HTML page.
 		// Use it to add a favicon link to the page.
-		head={
-			"<link rel='icon' href='$U{$C{REST/favicon}}'/>"
-		},
+		head="$C{REST/head}",
 
 		// No default page footer contents.
 		// Can be overridden from external config file.
@@ -112,6 +110,6 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 	// These are static files that are served up by the servlet under the specified sub-paths.
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
 	// By default, we define static files through the external configuration file.
-	staticFiles="$C{REST/staticFiles}"
+	staticFiles="$C{REST/staticFiles,htdocs:htdocs}"
 )
 public interface BasicRestConfig {}
