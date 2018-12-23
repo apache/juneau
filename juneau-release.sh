@@ -32,57 +32,87 @@ function success {
 	exit 1; 
 }
 
+function message { 
+	echo ' '
+	echo '-------------------------------------------------------------------------------'
+	echo '> $1'
+	echo '-------------------------------------------------------------------------------'
+	echo ' '
+	exit 1; 
+}
+
+
 function yprompt {
+	echo ' '
 	echo -n "$1 (Y/n): "
 	read prompt
 	if [ "$prompt" != "Y" ] && [ "$prompt" != "" ] 
 	then 
 		fail;
 	fi
-
 } 
 
 cd ~/.m2
+
+message "Cleaning existing Git repository"
 mv repository repository-old
 rm -rf repository-old & 
 rm -rf $X_STAGING
 mkdir -p $X_STAGING
 mkdir $X_STAGING/git
 cd $X_STAGING/git
+
+message "Cloning juneau.git"
 git clone https://gitbox.apache.org/repos/asf/juneau.git
+
+message "Cloning juneau-website.git"
 git clone https://gitbox.apache.org/repos/asf/juneau-website.git
+
 cd juneau
 git config user.name $X_USERNAME
 git config user.email $X_EMAIL
 
+message "Checking Java version"
 java -version
 yprompt "Are you using at least Java 8?";
 
+message "Checking Maven version"
 mvn -version
 yprompt "Are you using at least Maven 3?"
 
+message "Running clean verify"
 cd $X_STAGING/git/juneau
 mvn clean verify
 
+message "Running javadoc:aggregate"
 mvn javadoc:aggregate
 yprompt "Is the javadoc generation clean?"
 
-yprompt "Can juneau/juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
-yprompt "Can juneau/juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
-yprompt "Can juneau/juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
-yprompt "Can juneau/juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$X_VERSION.bin.zip be deployed into an Eclipse workspace?"
+message "Creating test workspace"
+export WORKSPACE=target/workspace
+rm -Rf $WORKSPACE
+mkdir -p $WORKSPACE
+unzip -o juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-jetty-microservice
+unzip -o juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-springboot-microservice
+unzip -o juneau-examples/juneau-examples-core/target/juneau-examples-core-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-core
+unzip -o juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-jetty
+unzip -o juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-springboot
 
+yprompt "Can all workspace projecs in $X_STAGING/git/juneau/target/workspace be cleanly imported into Eclipse?"
+
+message "Running deploy"
 cd $X_STAGING/git/juneau
 mvn deploy
 
+message "Running release:prepare"
 mvn release:prepare -DautoVersionSubmodules=true -DreleaseVersion=$X_VERSION -Dtag=$X_RELEASE -DdevelopmentVersion=$X_NEXT_VERSION
-
 yprompt "Did the release:prepare command succeed?"
 
+message "Running git diff"
 git diff $X_RELEASE
 
+message "Running release:perform"
 mvn release:perform
-
 open "https://repository.apache.org/#stagingRepositories"
 
 echo "On Apache's Nexus instance, locate the staging repository for the code you just released.  It should be called something like orgapachejuneau-1000." 
@@ -98,6 +128,7 @@ export X_REPO=$prompt;
 
 yprompt "X_REPO = $X_REPO.  Is this correct?"
 
+message "Creating binary artifacts"
 cd $X_STAGING
 rm -rf dist 
 svn co https://dist.apache.org/repos/dist/dev/juneau dist
