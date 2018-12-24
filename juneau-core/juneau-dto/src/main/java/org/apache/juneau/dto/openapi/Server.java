@@ -13,19 +13,20 @@
 package org.apache.juneau.dto.openapi;
 
 import org.apache.juneau.UriResolver;
+import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.dto.swagger.Contact;
 import org.apache.juneau.dto.swagger.HeaderInfo;
+import org.apache.juneau.internal.MultiSet;
 import org.apache.juneau.internal.StringUtils;
+import org.apache.juneau.utils.ASet;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
+@Bean(properties="url,description,variables,*")
 public class Server extends OpenApiElement{
     private URI url;
     private String description;
@@ -215,8 +216,42 @@ public class Server extends OpenApiElement{
         return this;
     }
 
-
     public Server variables(Object value) {
         return setVariables((HashMap<String,ServerVariable>)value);
+    }
+
+    @Override /* OpenApiElement */
+    public <T> T get(String property, Class<T> type) {
+        if (property == null)
+            return null;
+        switch (property) {
+            case "url": return toType(getUrl(), type);
+            case "description": return toType(getDescription(), type);
+            case "variables": return toType(getVariables(), type);
+            default: return super.get(property, type);
+        }
+    }
+
+    @Override /* OpenApiElement */
+    public Server set(String property, Object value) {
+        if (property == null)
+            return this;
+        switch (property) {
+            case "url": return url(value);
+            case "description": return description(value);
+            case "variables": return variables(value);
+            default:
+                super.set(property, value);
+                return this;
+        }
+    }
+
+    @Override /* OpenApiElement */
+    public Set<String> keySet() {
+        ASet<String> s = new ASet<String>()
+                .appendIf(url != null, "url")
+                .appendIf(description != null, "description")
+                .appendIf(variables != null, "variables");
+        return new MultiSet<>(s, super.keySet());
     }
 }
