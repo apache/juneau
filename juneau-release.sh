@@ -32,15 +32,13 @@ function success {
 	exit 1; 
 }
 
-function message { 
+function message {
+	X_DATE=$(date +'%H:%M:%S') 
 	echo ' '
+	echo "-------------------------------------------------------------------------------"
+	echo "[$X_DATE] $1"
 	echo '-------------------------------------------------------------------------------'
-	echo '> $1'
-	echo '-------------------------------------------------------------------------------'
-	echo ' '
-	exit 1; 
 }
-
 
 function yprompt {
 	echo ' '
@@ -50,27 +48,15 @@ function yprompt {
 	then 
 		fail;
 	fi
-} 
+}
 
-cd ~/.m2
+function st {
+	SECONDS=0
+}
 
-message "Cleaning existing Git repository"
-mv repository repository-old
-rm -rf repository-old & 
-rm -rf $X_STAGING
-mkdir -p $X_STAGING
-mkdir $X_STAGING/git
-cd $X_STAGING/git
-
-message "Cloning juneau.git"
-git clone https://gitbox.apache.org/repos/asf/juneau.git
-
-message "Cloning juneau-website.git"
-git clone https://gitbox.apache.org/repos/asf/juneau-website.git
-
-cd juneau
-git config user.name $X_USERNAME
-git config user.email $X_EMAIL
+function et {
+	echo "Execution time: ${SECONDS}s" 
+}
 
 message "Checking Java version"
 java -version
@@ -80,29 +66,61 @@ message "Checking Maven version"
 mvn -version
 yprompt "Are you using at least Maven 3?"
 
+cd ~/.m2
+
+message "Cleaning existing Git repository"
+st
+mv repository repository-old
+rm -rf repository-old & 
+rm -rf $X_STAGING
+mkdir -p $X_STAGING
+mkdir $X_STAGING/git
+cd $X_STAGING/git
+et
+
+message "Cloning juneau.git"
+st
+git clone https://gitbox.apache.org/repos/asf/juneau.git
+et
+
+message "Cloning juneau-website.git"
+st
+git clone https://gitbox.apache.org/repos/asf/juneau-website.git
+et
+
+cd juneau
+git config user.name $X_USERNAME
+git config user.email $X_EMAIL
+
 message "Running clean verify"
+st
 cd $X_STAGING/git/juneau
 mvn clean verify
+et
 
 message "Running javadoc:aggregate"
+st
 mvn javadoc:aggregate
 yprompt "Is the javadoc generation clean?"
+et
 
 message "Creating test workspace"
-export WORKSPACE=target/workspace
+WORKSPACE=target/workspace
+XV=${X_VERSION}-SNAPSHOT
 rm -Rf $WORKSPACE
 mkdir -p $WORKSPACE
-unzip -o juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-jetty-microservice
-unzip -o juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-springboot-microservice
-unzip -o juneau-examples/juneau-examples-core/target/juneau-examples-core-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-core
-unzip -o juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-jetty
-unzip -o juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-springboot
-
+unzip -o juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$XV-bin.zip -d $WORKSPACE/my-jetty-microservice
+unzip -o juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$XV-bin.zip -d $WORKSPACE/my-springboot-microservice
+unzip -o juneau-examples/juneau-examples-core/target/juneau-examples-core-$XV-bin.zip -d $WORKSPACE/juneau-examples-core
+unzip -o juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$XV-bin.zip -d $WORKSPACE/juneau-examples-rest-jetty
+unzip -o juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$XV-bin.zip -d $WORKSPACE/juneau-examples-rest-springboot
 yprompt "Can all workspace projecs in $X_STAGING/git/juneau/target/workspace be cleanly imported into Eclipse?"
 
 message "Running deploy"
+st
 cd $X_STAGING/git/juneau
 mvn deploy
+et
 
 message "Running release:prepare"
 mvn release:prepare -DautoVersionSubmodules=true -DreleaseVersion=$X_VERSION -Dtag=$X_RELEASE -DdevelopmentVersion=$X_NEXT_VERSION
@@ -112,8 +130,10 @@ message "Running git diff"
 git diff $X_RELEASE
 
 message "Running release:perform"
+st
 mvn release:perform
 open "https://repository.apache.org/#stagingRepositories"
+et
 
 echo "On Apache's Nexus instance, locate the staging repository for the code you just released.  It should be called something like orgapachejuneau-1000." 
 echo "Check the Updated time stamp and click to verify its Content."
@@ -124,11 +144,12 @@ echo " "
 echo "Enter the staging repository name: orgapachejuneau-"
 
 read prompt
-export X_REPO=$prompt;
+export X_REPO="orgapachejuneau-$prompt";
 
 yprompt "X_REPO = $X_REPO.  Is this correct?"
 
 message "Creating binary artifacts"
+st
 cd $X_STAGING
 rm -rf dist 
 svn co https://dist.apache.org/repos/dist/dev/juneau dist
@@ -154,6 +175,7 @@ cd $X_STAGING/dist
 svn add source/$X_RELEASE
 svn add binaries/$X_RELEASE
 svn commit -m "$X_RELEASE"
+et
 
 open "https://dist.apache.org/repos/dist/dev/juneau"
 yprompt "Are the files available at https://dist.apache.org/repos/dist/dev/juneau?"

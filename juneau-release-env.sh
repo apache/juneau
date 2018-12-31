@@ -20,14 +20,13 @@ export X_RELEASE=juneau-7.0.0-RC1
 export X_STAGING=~/tmp/dist-release-juneau
 export X_USERNAME=your apache username
 export X_EMAIL=you@apache.org
-export X_REPO=orgapachejuneau-9999
 
-echo --- Settings -------------------------------------------------------------
+echo ' '
+echo --- Settings ------------------------------------------------------------------
 echo X_VERSION: $X_VERSION
-echo NEXT_VERSION: $NEXT_VERSION
+echo X_NEXT_VERSION: $X_NEXT_VERSION
 echo X_RELEASE = $X_RELEASE
 echo X_STAGING = $X_STAGING
 echo X_USERNAME = $X_USERNAME
 echo X_EMAIL = $X_EMAIL
-echo X_REPO = $X_REPO
-echo --------------------------------------------------------------------------
+echo -------------------------------------------------------------------------------
