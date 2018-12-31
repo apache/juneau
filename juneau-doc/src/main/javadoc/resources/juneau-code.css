@@ -134,9 +134,11 @@ us { color: #00B; } /* String value */
 mc { color: green; }
 mk { color: DarkRed; font-weight: bold; }
 mv { color: DarkBlue;}
+mi { color: DarkBlue; font-style: italic; }
 
 /*--- Config file effects ---*/
 cc { color: green; }
 cs { color: DarkRed;font-weight: bold;}
 ck { color: DarkRed; }
 cv { color: DarkBlue; }
+ci { color: purple; font-style: italic; }

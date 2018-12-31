@@ -75,6 +75,7 @@ juneau-config.EntryTypes.BinaryData = #juneau-config.EntryTypes.BinaryData, Over
 juneau-config.EntryTypes.Collections = #juneau-config.EntryTypes.Collections, Overview > juneau-config > Entry Types > Collections
 juneau-config.EntryTypes.POJOs = #juneau-config.EntryTypes.POJOs, Overview > juneau-config > Entry Types > POJOs
 juneau-config.EntryTypes.PrimitiveTypes = #juneau-config.EntryTypes.PrimitiveTypes, Overview > juneau-config > Entry Types > Primitive Types
+juneau-config.Imports = #juneau-config.Imports, Overview > juneau-config > Imports
 juneau-config.Listeners = #juneau-config.Listeners, Overview > juneau-config > Listeners
 juneau-config.Overview = #juneau-config.Overview, Overview > juneau-config > Overview
 juneau-config.Overview.SyntaxRules = #juneau-config.Overview.SyntaxRules, Overview > juneau-config > Overview > Syntax Rules
