@@ -18,6 +18,14 @@ import static org.apache.juneau.dto.atom.AtomBuilder.*;
 import static org.apache.juneau.dto.atom.AtomBuilder.content;
 import static org.apache.juneau.dto.atom.AtomBuilder.person;
 
+/**
+ * Atom feed example.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 public class AtomFeed {
 
     public static Feed GetAtomFeed(){

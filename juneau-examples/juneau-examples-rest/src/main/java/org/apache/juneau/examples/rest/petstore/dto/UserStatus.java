@@ -16,6 +16,14 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 
+/**
+ * Enum of all possible user statuses.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 @Html(render=UserStatus.UserStatusRender.class)
 public enum UserStatus {
 	ACTIVE, INACTIVE;

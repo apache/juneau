@@ -16,6 +16,14 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.transform.*;
 
+/**
+ * Swap for {@link PetTag} beans.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 public class PetTagNameSwap extends PojoSwap<PetTag,String> {
 
 	/**

@@ -16,6 +16,14 @@ import org.apache.juneau.dto.atom.Feed;
 import org.apache.juneau.json.JsonSerializer;
 import org.apache.juneau.json.SimpleJsonSerializer;
 
+/**
+ * Atom feed JSON example.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 public class AtomJsonExample {
 
     @SuppressWarnings("unused")

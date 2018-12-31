@@ -20,6 +20,14 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 
+/**
+ * User bean.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 @Bean(typeName="User", fluentSetters=true, properties="username,firstName,lastName,email,password,phone,userStatus")
 @Entity(name="PetstoreUser")
 public class User {

@@ -17,6 +17,14 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.Html;
 import org.apache.juneau.serializer.*;
 
+/**
+ * Enum of all possible animal types.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 @Html(render=Species.SpeciesRender.class)
 public enum Species {
 

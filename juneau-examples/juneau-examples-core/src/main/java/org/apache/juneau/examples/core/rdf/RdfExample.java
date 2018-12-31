@@ -23,6 +23,11 @@ import org.apache.juneau.jena.*;
 
 /**
  *	Sample class which shows the simple usage of RdfXmlSerializer.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class RdfExample {
 
@@ -110,6 +115,6 @@ public class RdfExample {
 		assert turtleparsed.getClass().equals(pojo.getClass());
 		assert turtleparsed.getId().equals(pojo.getId());
 
-		
+
 	}
 }

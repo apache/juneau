@@ -16,6 +16,14 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 
+/**
+ * Enum of all possible order statuses.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 @Html(render=OrderStatus.OrderStatusRender.class)
 public enum OrderStatus {
 	PLACED, APPROVED, DELIVERED;

@@ -20,6 +20,11 @@ import org.apache.juneau.utils.*;
 
 /**
  * Implements an 'echo' console command that simply returns the command arguments as a comma-delimited list.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class EchoCommand extends ConsoleCommand {
 

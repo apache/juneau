@@ -1582,6 +1582,47 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	/**
+	 * Creates the specified import statement if it doesn't exist.
+	 *
+	 * @param sectionName
+	 * 	The section name where to place the import statement.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
+	 * @param importName
+	 * 	The import name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param preLines
+	 * 	Optional comment and blank lines to add immediately before the import statement.
+	 * 	<br>If <jk>null</jk>, previous pre-lines will not be replaced.
+	 * @return The appended or existing import statement.
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config setImport(String sectionName, String importName, List<String> preLines) {
+		checkWrite();
+		configMap.setImport(section(name), importName, preLines);
+		return this;
+	}
+
+	/**
+	 * Removes the import statement with the specified name from the specified section.
+	 *
+	 * @param sectionName
+	 * 	The section name where to place the import statement.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Use blank for the default section.
+	 * @param importName
+	 * 	The import name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object (for method chaining).
+	 * @throws UnsupportedOperationException If configuration is read only.
+	 */
+	public Config removeImport(String sectionName, String importName) {
+		checkWrite();
+		configMap.removeImport(sectionName, importName);
+		return this;
+	}
+
+	/**
 	 * Loads the contents of the specified map of maps into this config.
 	 *
 	 * @param m The maps to load.
@@ -1718,7 +1759,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return configMap.asMap();
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1731,7 +1772,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return Collections.unmodifiableList(listeners);
 	}
 
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Interface methods
 	//-----------------------------------------------------------------------------------------------------------------

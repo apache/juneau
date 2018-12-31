@@ -17,6 +17,11 @@ import org.apache.juneau.jsonschema.annotation.*;
 
 /**
  * Bean for creating {@link Pet} objects.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Bean(fluentSetters=true, properties="name,price,species,tags,photo")
 public class CreatePet {

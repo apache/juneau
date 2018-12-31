@@ -24,6 +24,11 @@ import org.springframework.web.filter.*;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SpringBootApplication
 @Controller

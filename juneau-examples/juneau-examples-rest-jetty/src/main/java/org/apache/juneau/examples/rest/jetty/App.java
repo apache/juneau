@@ -25,6 +25,11 @@ import org.apache.juneau.microservice.jetty.*;
  * <p>
  * The {@link JettyMicroservice} class will locate the <code>examples.cfg</code> file in the home directory and initialize
  * the resources and commands defined in that file.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class App {
 

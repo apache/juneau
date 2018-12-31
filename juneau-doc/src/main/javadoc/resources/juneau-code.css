@@ -141,4 +141,4 @@ cc { color: green; }
 cs { color: DarkRed;font-weight: bold;}
 ck { color: DarkRed; }
 cv { color: DarkBlue; }
-ci { color: purple; font-style: italic; }
+ci { color: DarkRed; font-weight: bold; font-style: italic; }

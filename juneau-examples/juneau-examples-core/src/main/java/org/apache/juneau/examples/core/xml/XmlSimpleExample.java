@@ -18,10 +18,13 @@ import org.apache.juneau.serializer.SerializeException;
 import org.apache.juneau.xml.XmlParser;
 import org.apache.juneau.xml.XmlSerializer;
 
-
-
 /**
  * Sample class which shows the simple usage of XmlSerializer.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class XmlSimpleExample {
     /**

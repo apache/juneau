@@ -29,6 +29,11 @@ import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample resource that shows how to generate ATOM feeds.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @RestResource(
 	path="/atom",

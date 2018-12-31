@@ -16,6 +16,14 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 
+/**
+ * Enum of all possible pet statuses.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 @Html(render=PetStatus.PetStatusRender.class)
 public enum PetStatus {
 	AVAILABLE, PENDING, SOLD, UNKNOWN;

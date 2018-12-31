@@ -377,6 +377,20 @@ public class ConfigMap implements ConfigStoreListener {
 		return applyChange(true, ConfigEvent.setEntry(name, section, key, value, modifiers, comment, preLines));
 	}
 
+
+	/**
+	 * TODO
+	 *
+	 * @param section
+	 * @param importName
+	 * @param preLines
+	 * @return This object (for method chaining).
+	 */
+	public ConfigMap setImport(String section, String importName, List<String> preLines) {
+		// TODO Auto-generated method stub
+		return this;
+	}
+
 	/**
 	 * Removes a section.
 	 *
@@ -410,6 +424,18 @@ public class ConfigMap implements ConfigStoreListener {
 		checkSectionName(section);
 		checkKeyName(key);
 		return applyChange(true, ConfigEvent.removeEntry(name, section, key));
+	}
+
+	/**
+	 * TODO
+	 *
+	 * @param section
+	 * @param importName
+	 * @return This object (for method chaining).
+	 */
+	public ConfigMap removeImport(String section, String importName) {
+		// TODO Auto-generated method stub
+		return this;
 	}
 
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {

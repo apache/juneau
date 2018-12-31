@@ -43,6 +43,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @RestResource(
 	path="/photos",

@@ -26,6 +26,11 @@ import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 /**
  * Sample class which shows the usage of DTO module which is a
  * Sub module of the core.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class DtoExample {
 

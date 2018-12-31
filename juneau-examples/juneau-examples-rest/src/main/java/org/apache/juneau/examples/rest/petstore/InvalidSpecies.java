@@ -17,6 +17,11 @@ import org.apache.juneau.rest.exception.*;
 
 /**
  * Exception thrown when an invalid species is looked up.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @SuppressWarnings("serial")
 @Response(description="Invalid species provided")

@@ -19,6 +19,11 @@ import org.apache.juneau.rest.annotation.*;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @RestResource(
 	title="Hello World",

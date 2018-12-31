@@ -23,6 +23,11 @@ import org.apache.juneau.annotation.BeanConstructor;
 
 /**
  * Sample pojo class.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class Pojo {
 	private final String id;

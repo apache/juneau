@@ -16,6 +16,11 @@ import org.apache.juneau.annotation.*;
 
 /**
  * Bean for creating {@link Order} objects.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Bean(fluentSetters=true, properties="petId,username")
 public class CreateOrder {

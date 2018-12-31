@@ -24,6 +24,14 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.transforms.*;
 
+/**
+ * Order bean.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 @Bean(fluentSetters=true, properties="id,petId,username,status,shipDate")
 @Example("{id:123,petId:456,shipDate:'2012-12-21',status:'APPROVED'}")
 @Entity(name="PetstoreOrder")

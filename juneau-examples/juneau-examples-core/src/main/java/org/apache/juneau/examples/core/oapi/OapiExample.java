@@ -22,6 +22,11 @@ import org.apache.juneau.oapi.OpenApiSerializer;
 
 /**
  * Sample class which shows the simple usage of OpenApiSerializer
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class OapiExample {
 

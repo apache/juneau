@@ -20,6 +20,11 @@ import org.apache.juneau.rest.widget.*;
 
 /**
  * Menu item for adding a Pet.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class AddPetMenuItem extends MenuItemWidget {
 

@@ -27,6 +27,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * UON complex example.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 public class UONComplexExample {
     /**
      * Serializing PojoComplex bean into UON format.

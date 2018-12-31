@@ -23,6 +23,11 @@ import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample REST resource for rendering predefined label beans.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @RestResource(
 	path="/predefinedLabels",

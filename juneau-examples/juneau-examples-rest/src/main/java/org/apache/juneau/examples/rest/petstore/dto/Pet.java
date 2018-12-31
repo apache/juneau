@@ -26,6 +26,11 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Pet bean.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @Bean(typeName="Pet", fluentSetters=true, properties="id,species,name,tags,price,status,photo")
 @Entity(name="PetstorePet")

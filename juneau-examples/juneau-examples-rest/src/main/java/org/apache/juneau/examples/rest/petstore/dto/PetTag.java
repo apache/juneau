@@ -17,6 +17,14 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
+/**
+ * Pet tag bean.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 @Bean(typeName="Tag", fluentSetters=true)
 @Swap(PetTagNameSwap.class)
 public class PetTag {

@@ -20,6 +20,11 @@ import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample REST resource showing how to implement a nested "router" resource page.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @RestResource(
 	path="/dto",

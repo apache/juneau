@@ -41,6 +41,11 @@ import org.apache.juneau.rest.converters.*;
 
 /**
  * Sample Petstore application.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @RestResource(
 	path="/petstore",

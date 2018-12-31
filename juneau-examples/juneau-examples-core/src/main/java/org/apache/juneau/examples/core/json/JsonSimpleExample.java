@@ -28,6 +28,11 @@ import java.util.Map;
 
 /**
  * Sample class which shows the simple usage of JsonSerializer and JsonParser.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 public class JsonSimpleExample {
 

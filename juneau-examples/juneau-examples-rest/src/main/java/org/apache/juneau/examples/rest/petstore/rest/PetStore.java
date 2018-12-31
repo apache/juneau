@@ -28,6 +28,11 @@ import org.apache.juneau.rest.response.*;
 
 /**
  * Defines the interface for both the server-side and client-side pet store application.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
  */
 @RemoteResource(path="/petstore")
 public interface PetStore {

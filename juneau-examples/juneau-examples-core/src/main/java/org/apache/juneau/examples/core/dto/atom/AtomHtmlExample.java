@@ -15,6 +15,14 @@ package org.apache.juneau.examples.core.dto.atom;
 import org.apache.juneau.dto.atom.Feed;
 import org.apache.juneau.html.HtmlSerializer;
 
+/**
+ * Atom feed HTML example.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul class='doctree'>
+ * 	<li class='extlink'>{@source}
+ * </ul>
+ */
 public class AtomHtmlExample {
 
     public static void main(String[] args) throws Exception {
