@@ -68,7 +68,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(foo = baz)']", events);
+				assertObjectEquals("['SET(S1/foo = baz)']", events);
 			}
 		};
 
@@ -97,7 +97,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k = vb)','SET(k1 = v1b)']", events);
+				assertObjectEquals("['SET(k = vb)','SET(S1/k1 = v1b)']", events);
 			}
 		};
 
@@ -123,7 +123,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k^* = kb # C)','SET(k1^* = k1b # C1)']", events);
+				assertObjectEquals("['SET(k^* = kb # C)','SET(S1/k1^* = k1b # C1)']", events);
 			}
 		};
 
@@ -155,7 +155,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k^* = kb # Cb)','SET(k1^* = k1b # Cb1)']", events);
+				assertObjectEquals("['SET(k^* = kb # Cb)','SET(S1/k1^* = k1b # Cb1)']", events);
 			}
 		};
 
@@ -250,7 +250,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k3 = v3)']", events);
+				assertObjectEquals("['SET(S3/k3 = v3)']", events);
 			}
 		};
 
@@ -285,7 +285,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k3 = v3)']", events);
+				assertObjectEquals("['SET(S3/k3 = v3)']", events);
 			}
 		};
 
@@ -361,7 +361,7 @@ public class ConfigMapListenerTest {
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
 			public void check(ConfigEvents events) throws Exception {
-				assertObjectEquals("['SET(k = v # cv)','SET(k1 = v1 # cv1)','SET(k2 = v2 # cv2)']", events);
+				assertObjectEquals("['SET(k = v # cv)','SET(S1/k1 = v1 # cv1)','SET(S2/k2 = v2 # cv2)']", events);
 			}
 		};
 
@@ -401,8 +401,8 @@ public class ConfigMapListenerTest {
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-		eventList.add("['SET(k1 = v1b)']");
-		eventList.add("['SET(k2 = v2b)']");
+		eventList.add("['SET(S1/k1 = v1b)']");
+		eventList.add("['SET(S2/k2 = v2b)']");
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
@@ -439,8 +439,8 @@ public class ConfigMapListenerTest {
 
 		final CountDownLatch latch = new CountDownLatch(2);
 		final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-		eventList.add("['SET(k1 = v1b)']");
-		eventList.add("['SET(k1 = v1c)']");
+		eventList.add("['SET(S1/k1 = v1b)']");
+		eventList.add("['SET(S1/k1 = v1c)']");
 
 		LatchedListener l = new LatchedListener(latch) {
 			@Override
@@ -486,8 +486,8 @@ public class ConfigMapListenerTest {
 		try {
 			final CountDownLatch latch = new CountDownLatch(2);
 			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-			eventList.add("['SET(k1 = v1b)']");
-			eventList.add("['SET(k1 = v1c)']");
+			eventList.add("['SET(S1/k1 = v1b)']");
+			eventList.add("['SET(S1/k1 = v1c)']");
 
 			LatchedListener l = new LatchedListener(latch) {
 				@Override
@@ -524,16 +524,16 @@ public class ConfigMapListenerTest {
 		try {
 			final CountDownLatch latch = new CountDownLatch(10);
 			final Queue<String> eventList = new ConcurrentLinkedQueue<>();
-			eventList.add("['SET(k1 = v1b)']");
-			eventList.add("['SET(k1 = v1c)']");
-			eventList.add("['SET(k1 = v1d)']");
-			eventList.add("['SET(k1 = v1e)']");
-			eventList.add("['SET(k1 = v1f)']");
-			eventList.add("['SET(k1 = v1g)']");
-			eventList.add("['SET(k1 = v1h)']");
-			eventList.add("['SET(k1 = v1i)']");
-			eventList.add("['SET(k1 = v1j)']");
-			eventList.add("['SET(k1 = v1k)']");
+			eventList.add("['SET(S1/k1 = v1b)']");
+			eventList.add("['SET(S1/k1 = v1c)']");
+			eventList.add("['SET(S1/k1 = v1d)']");
+			eventList.add("['SET(S1/k1 = v1e)']");
+			eventList.add("['SET(S1/k1 = v1f)']");
+			eventList.add("['SET(S1/k1 = v1g)']");
+			eventList.add("['SET(S1/k1 = v1h)']");
+			eventList.add("['SET(S1/k1 = v1i)']");
+			eventList.add("['SET(S1/k1 = v1j)']");
+			eventList.add("['SET(S1/k1 = v1k)']");
 
 			LatchedListener l = new LatchedListener(latch) {
 				@Override

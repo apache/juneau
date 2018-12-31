@@ -39,16 +39,48 @@ public class ConfigFileStoreTest {
 	@Test
 	public void testDifferentExtension() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
-		assertEquals("", fs.read("X.ini"));
-		assertFileNotExists("X.ini");
+		assertEquals("", fs.read("X.xxx"));
+		assertFileNotExists("X.xxx");
 	}
 
 	@Test
-	public void testSimpleCreate() throws Exception {
+	public void testSimpleCreateAndDelete() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 		assertFileExists("X.cfg");
+		fs.write("X.cfg", "foo", null);
+		assertFileNotExists("X.cfg");
+	}
+
+	@Test
+	public void testSimpleCreateAndDeleteWithNoExtension() throws Exception {
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		assertNull(fs.write("X", null, "foo"));
+		assertEquals("foo", fs.read("X"));
+		assertFileExists("X.cfg");
+		fs.write("X", "foo", null);
+		assertFileNotExists("X.cfg");
+	}
+
+	@Test
+	public void testSimpleCreateAndDeleteWithNonStandardExtension() throws Exception {
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).extensions("xxx").build();
+		assertNull(fs.write("X", null, "foo"));
+		assertEquals("foo", fs.read("X"));
+		assertFileExists("X.xxx");
+		fs.write("X", "foo", null);
+		assertFileNotExists("X.xxx");
+	}
+
+	@Test
+	public void testSimpleCreateAndDeleteWithMultipleSpecialExtension() throws Exception {
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).extensions("foo1","foo2").build();
+		assertNull(fs.write("X", null, "foo"));
+		assertEquals("foo", fs.read("X"));
+		assertFileExists("X.foo1");
+		fs.write("X", "foo", null);
+		assertFileNotExists("X.foo1");
 	}
 
 	@Test
@@ -68,9 +100,38 @@ public class ConfigFileStoreTest {
 	}
 
 	@Test
+	public void testFailOnMismatchNoExtension() throws Exception {
+		assertFileNotExists("X.cfg");
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
+		assertNotNull(fs.write("X", "xxx", "foo"));
+		assertFileNotExists("X.cfg");
+		assertEquals("", fs.read("X"));
+		assertEquals("", fs.read("X.cfg"));
+		assertFileNotExists("X.cfg");
+		assertNull(fs.write("X", null, "foo"));
+		assertEquals("foo", fs.read("X"));
+		assertEquals("foo", fs.read("X.cfg"));
+		assertNotNull(fs.write("X", "xxx", "foo"));
+		assertEquals("foo", fs.read("X"));
+		assertEquals("foo", fs.read("X.cfg"));
+		assertNull(fs.write("X", "foo", "bar"));
+		assertEquals("bar", fs.read("X"));
+		assertEquals("bar", fs.read("X.cfg"));
+	}
+
+	@Test
 	public void testCharset() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset("UTF-8").build();
 		assertNull(fs.write("X.cfg", null, "foo"));
+		assertEquals("foo", fs.read("X.cfg"));
+		assertEquals("foo", fs.read("X"));
+	}
+
+	@Test
+	public void testCharsetNoExtension() throws Exception {
+		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).charset("UTF-8").build();
+		assertNull(fs.write("X", null, "foo"));
+		assertEquals("foo", fs.read("X"));
 		assertEquals("foo", fs.read("X.cfg"));
 	}
 
@@ -78,7 +139,7 @@ public class ConfigFileStoreTest {
 	public void testWatcher() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 
-		final CountDownLatch latch = new CountDownLatch(2);
+		final CountDownLatch latch = new CountDownLatch(4);
 		fs.register("X.cfg", new ConfigStoreListener() {
 			@Override
 			public void onChange(String contents) {
@@ -86,7 +147,21 @@ public class ConfigFileStoreTest {
 					latch.countDown();
 			}
 		});
+		fs.register("X", new ConfigStoreListener() {
+			@Override
+			public void onChange(String contents) {
+				if ("xxx".equals(contents))
+					latch.countDown();
+			}
+		});
 		fs.register("Y.cfg", new ConfigStoreListener() {
+			@Override
+			public void onChange(String contents) {
+				if ("yyy".equals(contents))
+					latch.countDown();
+			}
+		});
+		fs.register("Y", new ConfigStoreListener() {
 			@Override
 			public void onChange(String contents) {
 				if ("yyy".equals(contents))
@@ -104,7 +179,7 @@ public class ConfigFileStoreTest {
 	public void testUpdate() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).build();
 
-		final CountDownLatch latch = new CountDownLatch(2);
+		final CountDownLatch latch = new CountDownLatch(4);
 		fs.register("X.cfg", new ConfigStoreListener() {
 			@Override
 			public void onChange(String contents) {
@@ -112,7 +187,21 @@ public class ConfigFileStoreTest {
 					latch.countDown();
 			}
 		});
+		fs.register("X", new ConfigStoreListener() {
+			@Override
+			public void onChange(String contents) {
+				if ("xxx".equals(contents))
+					latch.countDown();
+			}
+		});
 		fs.register("Y.cfg", new ConfigStoreListener() {
+			@Override
+			public void onChange(String contents) {
+				if ("yyy".equals(contents))
+					latch.countDown();
+			}
+		});
+		fs.register("Y", new ConfigStoreListener() {
 			@Override
 			public void onChange(String contents) {
 				if ("yyy".equals(contents))
@@ -128,19 +217,25 @@ public class ConfigFileStoreTest {
 
 	@Test
 	public void testExists() throws IOException {
-		assertTrue(ConfigFileStore.DEFAULT.exists("test.cfg"));
-		assertFalse(ConfigFileStore.DEFAULT.exists("test2.cfg"));
+		ConfigFileStore cs = ConfigFileStore.DEFAULT;
+		assertTrue(cs.exists("test.cfg"));
+		assertTrue(cs.exists("test"));
+		assertFalse(cs.exists("test2.cfg"));
 
-		assertFalse(ConfigFileStore.DEFAULT.exists("foo.cfg"));
-		ConfigFileStore.DEFAULT.write("foo.cfg", null, "foo");
-		assertTrue(ConfigFileStore.DEFAULT.exists("foo.cfg"));
-		ConfigFileStore.DEFAULT.write("foo.cfg", "foo", null);
-		assertFalse(ConfigFileStore.DEFAULT.exists("foo.cfg"));
+		assertFalse(cs.exists("foo.cfg"));
+		cs.write("foo.cfg", null, "foo");
+		assertTrue(cs.exists("foo.cfg"));
+		assertTrue(cs.exists("foo"));
+		cs.write("foo.cfg", "foo", null);
+		assertFalse(cs.exists("foo.cfg"));
+		assertFalse(cs.exists("foo"));
 
 		IOUtils.write(new File("Foox.cfg"), new StringReader("xxx"));
-		assertTrue(ConfigFileStore.DEFAULT.exists("Foox.cfg"));
+		assertTrue(cs.exists("Foox.cfg"));
+		assertTrue(cs.exists("Foox"));
 		new File("Foox.cfg").delete();
-		assertFalse(ConfigFileStore.DEFAULT.exists("Foox.cfg"));
+		assertFalse(cs.exists("Foox.cfg"));
+		assertFalse(cs.exists("Foox"));
 	}
 
 	private void assertFileExists(String name) {

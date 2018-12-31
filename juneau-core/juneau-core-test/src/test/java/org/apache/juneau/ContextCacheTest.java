@@ -127,7 +127,7 @@ public class ContextCacheTest {
 		public final String f1;
 
 		public A(PropertyStore ps) {
-			super(ps);
+			super(ps, true);
 			f1 = getStringProperty("A.f1", "xxx");
 		}
 

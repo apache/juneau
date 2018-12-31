@@ -1956,7 +1956,7 @@ public class BeanContext extends Context {
 	 * @param ps The property store containing the unmodifiable configuration for this bean context.
 	 */
 	public BeanContext(PropertyStore ps) {
-		super(ps);
+		super(ps, true);
 
 		if (ps == null)
 			ps = PropertyStore.DEFAULT;

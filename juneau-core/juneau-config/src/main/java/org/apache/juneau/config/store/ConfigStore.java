@@ -40,7 +40,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @param ps The settings for this content store.
 	 */
 	protected ConfigStore(PropertyStore ps) {
-		super(ps);
+		super(ps, false);
 	}
 
 	/**
@@ -84,6 +84,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized ConfigStore register(String name, ConfigStoreListener l) {
+		name = resolveName(name);
 		Set<ConfigStoreListener> s = listeners.get(name);
 		if (s == null) {
 			s = Collections.synchronizedSet(Collections.newSetFromMap(new IdentityHashMap<ConfigStoreListener,Boolean>()));
@@ -101,6 +102,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized ConfigStore unregister(String name, ConfigStoreListener l) {
+		name = resolveName(name);
 		Set<ConfigStoreListener> s = listeners.get(name);
 		if (s != null)
 			s.remove(l);
@@ -117,6 +119,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @throws IOException
 	 */
 	public synchronized ConfigMap getMap(String name) throws IOException {
+		name = resolveName(name);
 		ConfigMap cm = configMaps.get(name);
 		if (cm != null)
 			return cm;
@@ -139,6 +142,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized ConfigStore update(String name, String contents) {
+		name = resolveName(name);
 		Set<ConfigStoreListener> s = listeners.get(name);
 		if (s != null)
 			for (ConfigStoreListener l : listeners.get(name))
@@ -154,10 +158,25 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @return This object (for method chaining).
 	 */
 	public synchronized ConfigStore update(String name, String...contentLines) {
+		name = resolveName(name);
 		StringBuilder sb = new StringBuilder();
 		for (String l : contentLines)
 			sb.append(l).append('\n');
 		return update(name, sb.toString());
+	}
+
+	/**
+	 * Subclasses can override this method to convert config names to internal forms.
+	 *
+	 * <p>
+	 * For example, the {@link ConfigFileStore} class can take in both <js>"MyConfig"</js> and <js>"MyConfig.cfg"</js>
+	 * as names that both resolve to <js>"MyConfig.cfg"</js>.
+	 *
+	 * @param name The name to resolve.
+	 * @return The resolved name.
+	 */
+	protected String resolveName(String name) {
+		return name;
 	}
 
 	/**

@@ -43,7 +43,7 @@ import org.apache.juneau.serializer.*;
 public abstract class Context {
 
 	private final PropertyStore propertyStore;
-	private final int hashCode;
+	private final int identityCode;
 
 	/**
 	 * Constructor for this class.
@@ -52,10 +52,11 @@ public abstract class Context {
 	 * Subclasses MUST implement the same public constructor.
 	 *
 	 * @param ps The read-only configuration for this context object.
+	 * @param allowReuse If <jk>true</jk>, subclasses that share the same property store values can be reused.
 	 */
-	public Context(PropertyStore ps) {
+	public Context(PropertyStore ps, boolean allowReuse) {
 		this.propertyStore = ps == null ? PropertyStore.DEFAULT : ps;
-		this.hashCode = new HashCode().add(getClass().getName()).add(ps).get();
+		this.identityCode = allowReuse ? new HashCode().add(getClass().getName()).add(ps).get() : System.identityHashCode(this);
 	}
 
 	/**
@@ -495,8 +496,17 @@ public abstract class Context {
 	}
 
 	@Override /* Object */
-	public final int hashCode() {
-		return hashCode;
+	public int hashCode() {
+		return identityCode;
+	}
+
+	/**
+	 * Returns a uniqueness identity code for this context.
+	 *
+	 * @return A uniqueness identity code.
+	 */
+	public int identityCode() {
+		return identityCode;
 	}
 
 	@Override /* Object */

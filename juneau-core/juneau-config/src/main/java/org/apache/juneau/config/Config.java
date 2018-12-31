@@ -411,7 +411,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @throws IOException
 	 */
 	public Config(PropertyStore ps) throws IOException {
-		super(ps);
+		super(ps, true);
 
 		name = getStringProperty(CONFIG_name, "Configuration.cfg");
 		store = getInstanceProperty(CONFIG_store, ConfigStore.class, ConfigFileStore.DEFAULT);
@@ -434,7 +434,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	}
 
 	Config(Config copyFrom, VarResolverSession varSession) {
-		super(null);
+		super(null, true);
 		name = copyFrom.name;
 		store = copyFrom.store;
 		configMap = copyFrom.configMap;
@@ -1633,7 +1633,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param listener The new listener to add.
 	 * @return This object (for method chaining).
 	 */
-	public Config addListener(ConfigEventListener listener) {
+	public synchronized Config addListener(ConfigEventListener listener) {
 		listeners.add(listener);
 		return this;
 	}
@@ -1644,7 +1644,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * @param listener The listener to remove.
 	 * @return This object (for method chaining).
 	 */
-	public Config removeListener(ConfigEventListener listener) {
+	public synchronized Config removeListener(ConfigEventListener listener) {
 		listeners.remove(listener);
 		return this;
 	}
@@ -1718,7 +1718,20 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return configMap.asMap();
 	}
 
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
+	ConfigMap getConfigMap() {
+		return configMap;
+	}
+
+	List<ConfigEventListener> getListeners() {
+		return Collections.unmodifiableList(listeners);
+	}
+
+	
 	//-----------------------------------------------------------------------------------------------------------------
 	// Interface methods
 	//-----------------------------------------------------------------------------------------------------------------

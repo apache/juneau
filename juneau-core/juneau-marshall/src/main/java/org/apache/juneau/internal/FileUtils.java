@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
+import java.nio.file.*;
 
 import org.apache.juneau.*;
 
@@ -168,5 +169,31 @@ public class FileUtils {
 		if (i == -1)
 			return "";
 		return name.substring(i+1);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified file exists in the specified directory.
+	 *
+	 * @param dir The directory.
+	 * @param fileName The file name.
+	 * @return <jk>true</jk> if the specified file exists in the specified directory.
+	 */
+	public static boolean exists(File dir, String fileName) {
+		if (dir == null || fileName == null)
+			return false;
+		return Files.exists(dir.toPath().resolve(fileName));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified file name contains the specified extension.
+	 *
+	 * @param name The file name.
+	 * @param ext The extension.
+	 * @return <jk>true</jk> if the specified file name contains the specified extension.
+	 */
+	public static boolean hasExtension(String name, String ext) {
+		if (name == null || ext == null)
+			return false;
+		return ext.equals(getExtension(name));
 	}
 }

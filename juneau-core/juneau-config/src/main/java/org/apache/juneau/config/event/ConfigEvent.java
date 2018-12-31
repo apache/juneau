@@ -27,12 +27,13 @@ import org.apache.juneau.internal.*;
 public class ConfigEvent {
 
 	private final ConfigEventType type;
-	private final String section, key, value, comment;
+	private final String config, section, key, value, comment;
 	private final List<String> preLines;
 	private final String modifiers;
 
-	private ConfigEvent(ConfigEventType type, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
+	private ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
 		this.type = type;
+		this.config = config;
 		this.section = section;
 		this.key = key;
 		this.value = value;
@@ -48,6 +49,8 @@ public class ConfigEvent {
 	/**
 	 * Sets or replaces a value in a configuration.
 	 *
+	 * @param config
+	 * 	The configuration name.
 	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -67,13 +70,15 @@ public class ConfigEvent {
 	 * @return
 	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ConfigEvent setEntry(String section, String key, String value, String modifiers, String comment, List<String> prelines) {
-		return new ConfigEvent(SET_ENTRY, section, key, value, modifiers, comment, prelines);
+	public static ConfigEvent setEntry(String config, String section, String key, String value, String modifiers, String comment, List<String> prelines) {
+		return new ConfigEvent(SET_ENTRY, config, section, key, value, modifiers, comment, prelines);
 	}
 
 	/**
 	 * Removes a value from a configuration.
 	 *
+	 * @param config
+	 * 	The configuration name.
 	 * @param section
 	 * 	The section name.
 	 * 	<br>Must not be <jk>null</jk>.
@@ -83,13 +88,15 @@ public class ConfigEvent {
 	 * @return
 	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ConfigEvent removeEntry(String section, String key) {
-		return new ConfigEvent(REMOVE_ENTRY, section, key, null, null, null, null);
+	public static ConfigEvent removeEntry(String config, String section, String key) {
+		return new ConfigEvent(REMOVE_ENTRY, config, section, key, null, null, null, null);
 	}
 
 	/**
 	 * Adds a new empty section to the config.
 	 *
+	 * @param config
+	 * 	The configuration name.
 	 * @param section
 	 * 	The section name.
 	 * @param prelines
@@ -98,20 +105,22 @@ public class ConfigEvent {
 	 * @return
 	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ConfigEvent setSection(String section, List<String> prelines) {
-		return new ConfigEvent(SET_SECTION, section, null, null, null, null, prelines);
+	public static ConfigEvent setSection(String config, String section, List<String> prelines) {
+		return new ConfigEvent(SET_SECTION, config, section, null, null, null, null, prelines);
 	}
 
 	/**
 	 * Removes a section from the config.
 	 *
+	 * @param config
+	 * 	The configuration name.
 	 * @param section
 	 * 	The section name.
 	 * @return
 	 * 	A new {@link ConfigEvent} object.
 	 */
-	public static ConfigEvent removeSection(String section) {
-		return new ConfigEvent(REMOVE_SECTION, section, null, null, null, null, null);
+	public static ConfigEvent removeSection(String config, String section) {
+		return new ConfigEvent(REMOVE_SECTION, config, section, null, null, null, null, null);
 	}
 
 
@@ -126,6 +135,15 @@ public class ConfigEvent {
 	 */
 	public ConfigEventType getType() {
 		return type;
+	}
+
+	/**
+	 * Returns the configuration name.
+	 *
+	 * @return The configuration name.
+	 */
+	public String getConfig() {
+		return config;
 	}
 
 	/**
@@ -195,7 +213,7 @@ public class ConfigEvent {
 				return "SET_SECTION("+section+", preLines="+StringUtils.join(preLines, '|')+")";
 			case SET_ENTRY:
 				StringBuilder out = new StringBuilder("SET(");
-				out.append(key);
+				out.append(section+(section.isEmpty() ? "" : "/") + key);
 				if (modifiers != null)
 					out.append(modifiers);
 				out.append(" = ");

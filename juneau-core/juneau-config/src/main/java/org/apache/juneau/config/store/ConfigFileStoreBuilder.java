@@ -207,6 +207,22 @@ public class ConfigFileStoreBuilder extends ConfigStoreBuilder {
 		return this;
 	}
 
+	/**
+	 * Configuration property:  File extensions.
+	 *
+	 * <p>
+	 * Defines what file extensions to search for when the config name does not have an extension.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <js>"cfg"</js>.
+	 * @return This object (for method chaining).
+	 */
+	public ConfigFileStoreBuilder extensions(String...value) {
+		super.set(FILESTORE_extensions, value);
+		return this;
+	}
+
 	@Override /* ContextBuilder */
 	public ConfigFileStore build() {
 		return new ConfigFileStore(getPropertyStore());

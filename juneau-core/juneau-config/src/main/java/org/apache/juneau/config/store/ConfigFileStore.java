@@ -24,6 +24,7 @@ import java.nio.file.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Filesystem-based storage location for configuration files.
@@ -156,6 +157,25 @@ public class ConfigFileStore extends ConfigStore {
 	 */
 	public static final String FILESTORE_updateOnWrite = PREFIX + "updateOnWrite.b";
 
+	/**
+	 * Configuration property:  File extensions.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"ConfigFileStore.extensions.ls"</js>
+	 * 	<li><b>Data type:</b>  <code>String[]</code>
+	 * 	<li><b>Default:</b>  <jk>"cfg"</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link ConfigFileStoreBuilder#extensions(String...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines what file extensions to search for when the config name does not have an extension.
+	 */
+	public static final String FILESTORE_extensions = PREFIX + "extensions.ls";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -188,6 +208,8 @@ public class ConfigFileStore extends ConfigStore {
 	private final WatcherThread watcher;
 	private final boolean updateOnWrite;
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String,String> nameCache = new ConcurrentHashMap<>();
+	private final String[] extensions;
 
 	/**
 	 * Constructor.
@@ -201,10 +223,12 @@ public class ConfigFileStore extends ConfigStore {
 			dir.mkdirs();
 			charset = getProperty(FILESTORE_charset, Charset.class, Charset.defaultCharset());
 			updateOnWrite = getBooleanProperty(FILESTORE_updateOnWrite, false);
+			extensions = getArrayProperty(FILESTORE_extensions, String.class, new String[]{"cfg"});
 			WatcherSensitivity ws = getProperty(FILESTORE_watcherSensitivity, WatcherSensitivity.class, WatcherSensitivity.MEDIUM);
 			watcher = getBooleanProperty(FILESTORE_useWatcher, false) ? new WatcherThread(dir, ws) : null;
 			if (watcher != null)
 				watcher.start();
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -212,6 +236,11 @@ public class ConfigFileStore extends ConfigStore {
 
 	@Override /* ConfigStore */
 	public synchronized String read(String name) throws IOException {
+		name = resolveName(name);
+
+		Path p = resolveFile(name);
+		name = p.getFileName().toString();
+
 		String s = cache.get(name);
 		if (s != null)
 			return s;
@@ -219,7 +248,6 @@ public class ConfigFileStore extends ConfigStore {
 		dir.mkdirs();
 
 		// If file doesn't exist, don't trigger creation.
-		Path p = dir.toPath().resolve(name);
 		if (! Files.exists(p))
 			return "";
 
@@ -244,13 +272,16 @@ public class ConfigFileStore extends ConfigStore {
 
 	@Override /* ConfigStore */
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
+		name = resolveName(name);
 
 		// This is a no-op.
 		if (isEquals(expectedContents, newContents))
 			return null;
 
 		dir.mkdirs();
-		Path p = dir.toPath().resolve(name);
+
+		Path p = resolveFile(name);
+		name = p.getFileName().toString();
 
 		boolean exists = Files.exists(p);
 
@@ -298,7 +329,49 @@ public class ConfigFileStore extends ConfigStore {
 
 	@Override /* ConfigStore */
 	public synchronized boolean exists(String name) {
-		return Files.exists(dir.toPath().resolve(name));
+		return Files.exists(resolveFile(name));
+	}
+
+	private Path resolveFile(String name) {
+		return dir.toPath().resolve(resolveName(name));
+	}
+
+	@Override
+	protected String resolveName(String name) {
+		if (! nameCache.containsKey(name)) {
+			String n = null;
+
+			// Does file exist as-is?
+			if (FileUtils.exists(dir, name))
+				n = name;
+
+			// Does name already have an extension?
+			if (n == null) {
+				for (String ext : extensions) {
+					if (FileUtils.hasExtension(name, ext)) {
+						n = name;
+						break;
+					}
+				}
+			}
+
+			// Find file with the correct extension.
+			if (n == null) {
+				for (String ext : extensions) {
+					if (FileUtils.exists(dir, name + '.' + ext)) {
+						n = name + '.' + ext;
+						break;
+					}
+				}
+			}
+
+			// If file not found, use the default which is the name with the first extension.
+			if (n == null)
+				n = extensions.length == 0 ? name : (name + "." + extensions[0]);
+
+			nameCache.put(name, n);
+		}
+		return nameCache.get(name);
 	}
 
 	private synchronized boolean isWritable(Path p) {
