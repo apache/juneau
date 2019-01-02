@@ -135,7 +135,7 @@ import org.apache.juneau.rest.converters.*;
 		PhotosResource.class
 	}
 )
-public class PetStoreResource extends BasicRestServletJena implements PetStore {
+public class PetStoreResource extends BasicRestJena implements PetStore {
 	private static final long serialVersionUID = 1L;
 
 	private PetStoreService store;

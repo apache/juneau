@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-8.0.0 (TBD)
+8.0.1 (TBD)
 
 <p>
 	TBD
@@ -40,5 +40,19 @@
 		Fixed a bug where instances of {@link oaj.config.store.ConfigMemoryStore} ended up resolving to the same object.
 	<li>
 		
+</ul>
+
+<h5 class='topic w800'>juneau-rest-server</h5>
+<ul class='spaced-list'>
+	<li>
+		Added the following classes that provide the same support as the servlet classes but doesn't extend from <code>HttpServlet</code>.
+		<br>This fixes an issue where instances of {@link oajr.BasicRestServlet} are registered as top-level servlets even though
+		you don't want them to be.  
+		<ul>
+			<li class='jac'>{@link oajr.BasicRest} - Non-servlet equivalent to {@link oajr.BasicRestServlet}
+			<li class='jac'>{@link oajr.BasicRestGroup} - Non-servlet equivalent to {@link oajr.BasicRestServletGroup}
+			<li class='jac'>{@link oajr.BasicRestJena} - Non-servlet equivalent to {@link oajr.BasicRestServletJena}
+			<li class='jac'>{@link oajr.BasicRestJenaGroup} - Non-servlet equivalent to {@link oajr.BasicRestServletJenaGroup}
+		</ul>
 </ul>
 

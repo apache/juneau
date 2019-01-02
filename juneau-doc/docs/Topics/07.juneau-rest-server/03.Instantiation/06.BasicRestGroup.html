@@ -1,0 +1,35 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} BasicRestGroup
+
+<p>
+	The {@link oajr.BasicRestGroup} class is identical to the {@link oajr.BasicRestServletGroup} class except that
+	it does not extend from <code>HttpServlet</code>.
+	It defines the exact same set of serializers, parsers, etc., but it cannot be deployed as a top-level
+	servlet.  It can however be used for child resources registered via the {@link oajr.annotation.RestResource#children() @RestResource(children)} 
+	annotation. 
+</p>
+<p class='bpcode w800'>
+	<jc>// The entire contents of the BasicRestGroup class.</jc>
+	
+	<jk>public class</jk> BasicRestGroup <jk>extends</jk> BasicRest {
+	
+		<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/"</js>, description=<js>"Child resources"</js>)
+		<jk>public</jk> ChildResourceDescriptions getChildren(RestRequest req) {
+			<jk>return new</jk> ChildResourceDescriptions(<jk>this</jk>, req);
+		}
+	}		
+</p>

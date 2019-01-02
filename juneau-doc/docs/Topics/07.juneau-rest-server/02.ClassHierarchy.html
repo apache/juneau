@@ -13,21 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Class Hierarchy
-<!--
-/***************************************************************************************************************************
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *  
- *  http://www.apache.org/licenses/LICENSE-2.0
- *  
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations under the License.
- ***************************************************************************************************************************/
- -->
+{updated} Class Hierarchy
 
 <p>
 	The class hierarchy for the REST servlet class is shown below:
@@ -53,6 +39,33 @@ Class Hierarchy
 		</ul>
 	</li>
 </ul>
+<p>
+	For top-level resources, you'll typically extend from one of the classes above.
+</p>
+<p>
+	For child resources, you can either extend from one of the classes above, or extend from one of the following
+	that provides identical support but does not extent from <code>HttpServlet</code>:
+</p>
+<ul class='doctree'>
+	<li class='jic'>
+		{@link oajr.BasicRestConfig} 
+		<ul>
+			<li class='jac'>{@link oajr.BasicRest org.apache.juneau.rest.BasicRest}
+				<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
+				<ul>
+					<li class='jac'>{@link oajr.BasicRestGroup org.apache.juneau.rest.BasicRestGroup}
+						<br>A default implementation for "router" pages.
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
+<p>
+	One reason to use the latter classes as your base classes is when you're implementing REST resources as 
+	<ja>@Bean</ja>-annotated Spring Beans and you don't want them to be automatically registered as top-level servlets.
+</p>
+
 <p>
 	The servlets with RDF support require Jena on the classpath.  
 	All other serializers and parsers do not have any external library dependencies.

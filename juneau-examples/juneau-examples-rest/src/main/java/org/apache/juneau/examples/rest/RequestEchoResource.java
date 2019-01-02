@@ -78,8 +78,7 @@ import org.apache.juneau.transforms.*;
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
 )
-public class RequestEchoResource extends BasicRestServlet {
-	private static final long serialVersionUID = 1L;
+public class RequestEchoResource extends BasicRest {
 
 	/** GET request handler */
 	@RestMethod(name="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")

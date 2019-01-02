@@ -82,7 +82,7 @@ PetStore
 			PhotosResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestJena {
 </p>
 <p>
 	The inner contents of the page are generated from this method which is used to define a jumping-off
@@ -248,7 +248,7 @@ PetStore
 </p>
 <h5 class='figure'>PetStoreResource.java</h5>
 <p class='bpcode w800'>
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestJena <jk>implements</jk> PetStore {
 	
 		<jk>private</jk> PetStoreService <jf>store</jf>;
 	
@@ -448,7 +448,7 @@ PetStore
 </p>
 <h5 class='figure'>PetStoreResource.java</h5>
 <p class='bpcode w800'>
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestJena <jk>implements</jk> PetStore {
 	
 		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
