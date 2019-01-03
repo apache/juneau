@@ -50,7 +50,7 @@ import static org.apache.juneau.internal.BeanPropertyUtils.*;
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
-@Bean(properties="summary,description,externalValue,value,*")
+@Bean(properties="operationRef,operationId,description,requestBody,server,parameters,*")
 public class Link extends OpenApiElement {
 
 	private String operationRef;
