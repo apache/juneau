@@ -17,6 +17,7 @@ import static org.apache.juneau.jena.RdfSerializer.*;
 
 import java.util.*;
 
+import org.apache.jena.rdf.model.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
@@ -24,8 +25,6 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
-
-import com.hp.hpl.jena.rdf.model.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.
