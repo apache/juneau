@@ -170,8 +170,7 @@ public class Microservice implements ConfigEventListener {
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
-				URLClassLoader cl = (URLClassLoader)getClass().getClassLoader();
-				URL url = cl.findResource("META-INF/MANIFEST.MF");
+				URL url = getClass().getResource("META-INF/MANIFEST.MF");
 				if (url != null) {
 					try {
 						m.read(url.openStream());

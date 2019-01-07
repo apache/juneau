@@ -60,6 +60,10 @@
 			<optional>false</optional>
 		</dependency>
 		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
@@ -88,6 +92,9 @@
 					<includes>
 						<include>**/*Test.class</include>
 					</includes>
+					<systemPropertyVariables>
+						<java.locale.providers>JRE,COMPAT,SPI,CLDR</java.locale.providers>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -117,7 +124,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.2.201409121644</version>
+				<version>0.8.2</version>
 				<executions>
 					<execution>
 						<id>default-prepare-agent</id>

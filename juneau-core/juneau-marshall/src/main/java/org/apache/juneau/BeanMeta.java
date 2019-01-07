@@ -18,7 +18,9 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 
-import java.beans.*;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
