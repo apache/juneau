@@ -234,7 +234,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlows password(Object value) {
-		return setImplicit(toType(value, OAuthFlow.class));
+		return setPassword(toType(value, OAuthFlow.class));
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlows clientCredentials(Object value) {
-		return setImplicit(toType(value, OAuthFlow.class));
+		return setClientCredentials(toType(value, OAuthFlow.class));
 	}
 
 	/**
@@ -336,7 +336,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlows authorizationCode(Object value) {
-		return setImplicit(toType(value, OAuthFlow.class));
+		return setAuthorizationCode(toType(value, OAuthFlow.class));
 	}
 
 
