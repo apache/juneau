@@ -17,13 +17,12 @@ import static org.apache.juneau.jena.Constants.*;
 
 import java.util.*;
 
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.util.iterator.*;
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.*;
-
-import com.hp.hpl.jena.rdf.model.*;
-import com.hp.hpl.jena.util.iterator.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfParser}.

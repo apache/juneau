@@ -34,7 +34,7 @@ RFC2616 = https://www.w3.org/Protocols/rfc2616/rfc2616.html, Hypertext Transfer 
 RFC2616.section9 = https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html, RFC2616/9
 RFC2616.section14.1 = https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html, RFC2616/14.1
 JsonSchemaValidation = http://json-schema.org/latest/json-schema-validation.html, JSON Schema Org > Validation
-ARP = http://jena.sourceforge.net/javadoc/com/hp/hpl/jena/rdf/arp
+ARP = https://jena.apache.org/documentation/io/arp.html
 
 HTML5 = https://www.w3.org/TR/html5
 HTML5.text-level-semantics = https://www.w3.org/TR/html5/text-level-semantics.html
