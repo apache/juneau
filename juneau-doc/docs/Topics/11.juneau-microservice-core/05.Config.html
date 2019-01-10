@@ -44,7 +44,14 @@ Config
 	<li>
 		Resolve any <js>"*.cfg"</js> file that can be found in the working directory.
 	<li>
-		Resolve any of the following files in the classpath:  <js>"juneau.cfg"</js>, <js>"system.cfg"</js>
+		Resolve any of the following files in the classpath:
+		<ol>
+			<li><code>juneau.cfg</code>
+			<li><code>default.cfg</code>
+			<li><code>application.cfg</code>
+			<li><code>app.cfg</code>
+			<li><code>settings.cfg</code>
+		</ol>
 </ol>
 <p>
 	If no configuration file is found, and empty in-memory configuration is used.
