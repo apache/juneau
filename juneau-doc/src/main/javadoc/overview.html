@@ -11613,7 +11613,7 @@
 	<ck>key1</ck> = <cv>['foo','bar','baz']</cv>
 </p>
 <p class='bpcode w800'>
-	String[] key1 = c.getObject(<js>"key1"</js>, String.<jk>class</jk>);
+	String[] key1 = c.getObject(<js>"key1"</js>, String[].<jk>class</jk>);
 </p>
 <p>
 	Primitive arrays can also be retrieved using the <code>getObject()</code> methods:
@@ -12910,6 +12910,9 @@
 			<li><code>&lt;jar-name&gt;.cfg</code>
 			<li><code>juneau.cfg</code>
 			<li><code>default.cfg</code>
+			<li><code>application.cfg</code>
+			<li><code>app.cfg</code>
+			<li><code>settings.cfg</code>
 		</ol>
 </ol>
 <p>
@@ -13479,7 +13482,7 @@
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.Instantiation.BasicRest' id='juneau-rest-server.Instantiation.BasicRest'>7.3.3 - BasicRest</a></h4>
 <div class='topic'><!-- START: 7.3.3 - juneau-rest-server.Instantiation.BasicRest -->
 <p>
-	The {@link org.apache.juneau.rest.BasicRest} class is identical to the {@link org.apache.juneau.BasicRestServlet} class except that
+	The {@link org.apache.juneau.rest.BasicRest} class is identical to the {@link org.apache.juneau.rest.BasicRestServlet} class except that
 	it does not extend from <code>HttpServlet</code>.
 	It defines the exact same set of serializers, parsers, etc., but it cannot be deployed as a top-level
 	servlet.  It can however be used for child resources registered via the {@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource(children)} 
@@ -13620,12 +13623,9 @@
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			PetStoreResource.<jk>class</jk>,
-			PhotosResource.<jk>class</jk>,
 			DtoExamples.<jk>class</jk>,
-			SqlQueryResource.<jk>class</jk>,
 			ConfigResource.<jk>class</jk>,
 			LogsResource.<jk>class</jk>,
-			DebugResource.<jk>class</jk>,
 			ShutdownResource.<jk>class</jk>
 		}
 	)
@@ -13665,7 +13665,7 @@
 <h4 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-server.Instantiation.BasicRestGroup' id='juneau-rest-server.Instantiation.BasicRestGroup'>7.3.6 - BasicRestGroup</a></h4>
 <div class='topic'><!-- START: 7.3.6 - juneau-rest-server.Instantiation.BasicRestGroup -->
 <p>
-	The {@link org.apache.juneau.rest.BasicRestGroup} class is identical to the {@link org.apache.juneau.BasicRestServletGroup} class except that
+	The {@link org.apache.juneau.rest.BasicRestGroup} class is identical to the {@link org.apache.juneau.rest.BasicRestServletGroup} class except that
 	it does not extend from <code>HttpServlet</code>.
 	It defines the exact same set of serializers, parsers, etc., but it cannot be deployed as a top-level
 	servlet.  It can however be used for child resources registered via the {@link org.apache.juneau.rest.annotation.RestResource#children() @RestResource(children)} 
@@ -23061,7 +23061,7 @@
 		title=<js>"Petstore application"</js>,
 		...
 	)
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestJena <jk>implements</jk> PetStore {
 	
 		...
 	
@@ -24200,7 +24200,14 @@
 	<li>
 		Resolve any <js>"*.cfg"</js> file that can be found in the working directory.
 	<li>
-		Resolve any of the following files in the classpath:  <js>"juneau.cfg"</js>, <js>"system.cfg"</js>
+		Resolve any of the following files in the classpath:
+		<ol>
+			<li><code>juneau.cfg</code>
+			<li><code>default.cfg</code>
+			<li><code>application.cfg</code>
+			<li><code>app.cfg</code>
+			<li><code>settings.cfg</code>
+		</ol>
 </ol>
 <p>
 	If no configuration file is found, and empty in-memory configuration is used.
@@ -26487,7 +26494,7 @@
 			PhotosResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestJena {
 </p>
 <p>
 	The inner contents of the page are generated from this method which is used to define a jumping-off
@@ -26653,7 +26660,7 @@
 </p>
 <h5 class='figure'>PetStoreResource.java</h5>
 <p class='bpcode w800'>
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestJena <jk>implements</jk> PetStore {
 	
 		<jk>private</jk> PetStoreService <jf>store</jf>;
 	
@@ -26853,7 +26860,7 @@
 </p>
 <h5 class='figure'>PetStoreResource.java</h5>
 <p class='bpcode w800'>
-	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena <jk>implements</jk> PetStore {
+	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestJena <jk>implements</jk> PetStore {
 	
 		<ja>@Override</ja> <jc>/* PetStore */</jc>
 		<ja>@RestMethod</ja>(
