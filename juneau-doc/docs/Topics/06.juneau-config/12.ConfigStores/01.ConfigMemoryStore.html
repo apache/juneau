@@ -39,7 +39,7 @@ ConfigMemoryStore
 		<jk>public synchronized</jk> String write(String name, String expectedContents, String newContents) {
 	
 			<jc>// This is a no-op.</jc>
-			<jk>if</jk> (isEquals(expectedContents, newContents))
+			<jk>if</jk> (<jsm>isEquals</jsm>(expectedContents, newContents))
 				<jk>return null</jk>;
 			
 			String currentContents = read(name);
