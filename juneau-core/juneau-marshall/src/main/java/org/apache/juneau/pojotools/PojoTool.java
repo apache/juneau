@@ -10,70 +10,24 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.pojotools;
 
-import java.util.*;
+import org.apache.juneau.*;
 
 /**
- * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
+ * Interface for classes that convert POJOs in some way using some predefined arguments object.
  *
- * <p>
- * Primarily used for testing purposes for quickly creating populated sets.
- * <p class='bcode w800'>
- * 	<jc>// Example:</jc>
- * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
- * </p>
- *
- * @param <T> The entry type.
+ * @param <T> The argument object type.
  */
-@SuppressWarnings({"unchecked"})
-public final class ASet<T> extends LinkedHashSet<T> {
-
-	private static final long serialVersionUID = 1L;
+public interface PojoTool<T> {
 
 	/**
-	 * Convenience method for creating a list of objects.
+	 * Converts the specified input to some other output.
 	 *
-	 * @param t The initial values.
-	 * @return A new list.
+	 * @param session The current bean session.
+	 * @param input The input POJO.
+	 * @param args The arguments.
+	 * @return The output POJO.
 	 */
-	@SafeVarargs
-	public static <T> ASet<T> create(T...t) {
-		return new ASet<T>().appendAll(t);
-	}
-
-	/**
-	 * Adds an entry to this set.
-	 *
-	 * @param t The entry to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> append(T t) {
-		add(t);
-		return this;
-	}
-
-	/**
-	 * Adds multiple entries to this set.
-	 *
-	 * @param t The entries to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendAll(T...t) {
-		addAll(Arrays.asList(t));
-		return this;
-	}
-
-	/**
-	 * Adds a value to this set if the boolean value is <jk>true</jk>
-	 *
-	 * @param b The boolean value.
-	 * @param t The value to add.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendIf(boolean b, T t) {
-		if (b)
-			append(t);
-		return this;
-	}
+	public Object run(BeanSession session, Object input, T args);
 }

@@ -557,13 +557,13 @@ public @interface HtmlDoc {
 	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
+	 * 		<js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest,RestResponse)}.
 	 * 	<li>
-	 * 		<js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
+	 * 		<js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest,RestResponse)}.
 	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
 	 * 			 in the HTML page.
 	 * 	<li>
-	 * 		<js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest)}.
+	 * 		<js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest,RestResponse)}.
 	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
 	 * 			 in the HTML page.
 	 * </ul>

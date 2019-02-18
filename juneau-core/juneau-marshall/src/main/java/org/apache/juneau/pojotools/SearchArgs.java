@@ -10,70 +10,68 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.pojotools;
 
 import java.util.*;
 
+import org.apache.juneau.internal.*;
+
 /**
- * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
- *
- * <p>
- * Primarily used for testing purposes for quickly creating populated sets.
- * <p class='bcode w800'>
- * 	<jc>// Example:</jc>
- * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
- * </p>
- *
- * @param <T> The entry type.
+ * Encapsulates arguments for the {@link PojoSorter} class.
  */
-@SuppressWarnings({"unchecked"})
-public final class ASet<T> extends LinkedHashSet<T> {
+public class SearchArgs {
 
-	private static final long serialVersionUID = 1L;
+	private final Map<String,String> search = new LinkedHashMap<>();
+
 
 	/**
-	 * Convenience method for creating a list of objects.
+	 * Constructor.
 	 *
-	 * @param t The initial values.
-	 * @return A new list.
+	 * @param searchArgs Search arguments.
 	 */
-	@SafeVarargs
-	public static <T> ASet<T> create(T...t) {
-		return new ASet<T>().appendAll(t);
+	public SearchArgs(String searchArgs) {
+		this(Arrays.asList(StringUtils.split(searchArgs, ',')));
 	}
 
 	/**
-	 * Adds an entry to this set.
+	 * Constructor.
 	 *
-	 * @param t The entry to add to this set.
+	 * @param searchArgs Search arguments.
+	 */
+	public SearchArgs(List<String> searchArgs) {
+		for (String s : searchArgs) {
+			int i = StringUtils.indexOf(s, '=', '>', '<');
+			if (i == -1)
+				throw new PatternException("Invalid search terms: ''{0}''", searchArgs);
+			char c = s.charAt(i);
+			append(s.substring(0, i).trim(), s.substring(c == '=' ? i+1 : i).trim());
+		}
+	}
+
+	/**
+	 * Appends the specified search argument.
+	 *
+	 * @param column The column name to search.
+	 * @param searchTerm The search term.
 	 * @return This object (for method chaining).
 	 */
-	public ASet<T> append(T t) {
-		add(t);
+	public SearchArgs append(String column, String searchTerm) {
+		this.search.put(column, searchTerm);
 		return this;
 	}
 
 	/**
-	 * Adds multiple entries to this set.
+	 * The query search terms.
 	 *
-	 * @param t The entries to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendAll(T...t) {
-		addAll(Arrays.asList(t));
-		return this;
-	}
-
-	/**
-	 * Adds a value to this set if the boolean value is <jk>true</jk>
+	 * <p>
+	 * The search terms are key/value pairs consisting of column-names and search tokens.
 	 *
-	 * @param b The boolean value.
-	 * @param t The value to add.
-	 * @return This object (for method chaining).
+	 * <p>
+	 * It's up to implementers to decide the syntax and meaning of the search term.
+	 *
+	 * @return An unmodifiable map of query search terms.
 	 */
-	public ASet<T> appendIf(boolean b, T t) {
-		if (b)
-			append(t);
-		return this;
+	public Map<String,String> getSearch() {
+		return search;
 	}
 }

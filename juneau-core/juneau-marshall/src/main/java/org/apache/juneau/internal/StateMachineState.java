@@ -10,70 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
-
-import java.util.*;
+package org.apache.juneau.internal;
 
 /**
- * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
- *
- * <p>
- * Primarily used for testing purposes for quickly creating populated sets.
- * <p class='bcode w800'>
- * 	<jc>// Example:</jc>
- * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
- * </p>
- *
- * @param <T> The entry type.
+ * Enums for state-machine states.
  */
-@SuppressWarnings({"unchecked"})
-public final class ASet<T> extends LinkedHashSet<T> {
-
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Convenience method for creating a list of objects.
-	 *
-	 * @param t The initial values.
-	 * @return A new list.
-	 */
-	@SafeVarargs
-	public static <T> ASet<T> create(T...t) {
-		return new ASet<T>().appendAll(t);
-	}
-
-	/**
-	 * Adds an entry to this set.
-	 *
-	 * @param t The entry to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> append(T t) {
-		add(t);
-		return this;
-	}
-
-	/**
-	 * Adds multiple entries to this set.
-	 *
-	 * @param t The entries to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendAll(T...t) {
-		addAll(Arrays.asList(t));
-		return this;
-	}
-
-	/**
-	 * Adds a value to this set if the boolean value is <jk>true</jk>
-	 *
-	 * @param b The boolean value.
-	 * @param t The value to add.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendIf(boolean b, T t) {
-		if (b)
-			append(t);
-		return this;
-	}
+@SuppressWarnings("javadoc")
+public enum StateMachineState {
+	S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20;
 }

@@ -10,70 +10,51 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.pojotools;
+
+import static java.util.Collections.*;
 
 import java.util.*;
 
 /**
- * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
- *
- * <p>
- * Primarily used for testing purposes for quickly creating populated sets.
- * <p class='bcode w800'>
- * 	<jc>// Example:</jc>
- * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
- * </p>
- *
- * @param <T> The entry type.
+ * Encapsulates arguments for the {@link PojoViewer} class.
  */
-@SuppressWarnings({"unchecked"})
-public final class ASet<T> extends LinkedHashSet<T> {
+public class ViewArgs {
 
-	private static final long serialVersionUID = 1L;
+	private final List<String> view;
 
 	/**
-	 * Convenience method for creating a list of objects.
+	 * Constructor.
 	 *
-	 * @param t The initial values.
-	 * @return A new list.
+	 * @param viewArgs
+	 * 	View arguments.
+	 * 	<br>Values are column names.
 	 */
-	@SafeVarargs
-	public static <T> ASet<T> create(T...t) {
-		return new ASet<T>().appendAll(t);
+	public ViewArgs(String...viewArgs) {
+		this(Arrays.asList(viewArgs));
 	}
 
 	/**
-	 * Adds an entry to this set.
+	 * Constructor.
 	 *
-	 * @param t The entry to add to this set.
-	 * @return This object (for method chaining).
+	 * @param viewArgs
+	 * 	View arguments.
+	 * 	<br>Values are column names.
 	 */
-	public ASet<T> append(T t) {
-		add(t);
-		return this;
+	public ViewArgs(Collection<String> viewArgs) {
+		this.view = unmodifiableList(new ArrayList<>(viewArgs));
 	}
 
 	/**
-	 * Adds multiple entries to this set.
+	 * The view columns.
 	 *
-	 * @param t The entries to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendAll(T...t) {
-		addAll(Arrays.asList(t));
-		return this;
-	}
-
-	/**
-	 * Adds a value to this set if the boolean value is <jk>true</jk>
+	 * <p>
+	 * The view columns are the list of columns that should be displayed.
+	 * An empty list implies all columns should be displayed.
 	 *
-	 * @param b The boolean value.
-	 * @param t The value to add.
-	 * @return This object (for method chaining).
+	 * @return An unmodifiable list of columns to view.
 	 */
-	public ASet<T> appendIf(boolean b, T t) {
-		if (b)
-			append(t);
-		return this;
+	public List<String> getView() {
+		return view;
 	}
 }

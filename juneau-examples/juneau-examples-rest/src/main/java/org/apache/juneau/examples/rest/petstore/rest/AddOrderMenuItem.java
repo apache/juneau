@@ -29,17 +29,17 @@ import org.apache.juneau.rest.widget.*;
 public class AddOrderMenuItem extends MenuItemWidget {
 
 	@Override /* MenuItemWidget */
-	public String getLabel(RestRequest req) throws Exception {
+	public String getLabel(RestRequest req, RestResponse res) throws Exception {
 		return "add";
 	}
 
 	@Override /* MenuItemWidget */
-	public String getBeforeShowScript(RestRequest req) throws Exception {
+	public String getBeforeShowScript(RestRequest req, RestResponse res) throws Exception {
 		return loadScript("AddOrderMenuItem_beforeShow.js");
 	}
 
 	@Override /* Widget */
-	public Object getContent(RestRequest req) throws Exception {
+	public Object getContent(RestRequest req, RestResponse res) throws Exception {
 
 		return div(
 			form().id("form").action("servlet:/store/order").method(POST).children(

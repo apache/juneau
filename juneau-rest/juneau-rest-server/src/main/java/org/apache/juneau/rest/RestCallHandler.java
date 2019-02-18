@@ -103,7 +103,8 @@ public interface RestCallHandler {
 	 * Returns the session objects for the specified request.
 	 *
 	 * @param req The REST request.
+	 * @param res The REST response.
 	 * @return The session objects for that request.
 	 */
-	public Map<String,Object> getSessionObjects(RestRequest req);
+	public Map<String,Object> getSessionObjects(RestRequest req, RestResponse res);
 }

@@ -772,6 +772,19 @@ public final class StringUtils {
 	 * 	<br>An empty string results in an empty array.
 	 */
 	public static String[] splitQuoted(String s) {
+		return splitQuoted(s, false);
+	}
+
+	/**
+	 * Same as {@link #splitQuoted(String)} but allows you to optionally keep the quote characters.
+	 *
+	 * @param s The input string.
+	 * @param keepQuotes If <jk>true</jk>, quote characters are kept on the tokens.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static String[] splitQuoted(String s, boolean keepQuotes) {
 
 		if (s == null)
 			return null;
@@ -802,10 +815,10 @@ public final class StringUtils {
 			if (state == S1) {
 				if (c == '\'') {
 					state = S2;
-					mark = i+1;
+					mark = keepQuotes ? i : i+1;
 				} else if (c == '"') {
 					state = S3;
-					mark = i+1;
+					mark = keepQuotes ? i : i+1;
 				} else if (c != ' ' && c != '\t') {
 					state = S4;
 					mark = i;
@@ -813,10 +826,10 @@ public final class StringUtils {
 			} else if (state == S2 || state == S3) {
 				if (c == '\\') {
 					isInEscape = ! isInEscape;
-					needsUnescape = true;
+					needsUnescape = ! keepQuotes;
 				} else if (! isInEscape) {
 					if (c == (state == S2 ? '\'' : '"')) {
-						String s2 = s.substring(mark, i);
+						String s2 = s.substring(mark, keepQuotes ? i+1 : i);
 						if (needsUnescape)
 							s2 = unEscapeChars(s2, QUOTE_ESCAPE_SET);
 						l.add(s2);
@@ -1282,6 +1295,18 @@ public final class StringUtils {
 		if (s == null)
 			return null;
 		return s.trim();
+	}
+
+	/**
+	 * Strips the first and last character from a string.
+	 *
+	 * @param s The string to strip.
+	 * @return The striped string, or the same string if the input was <jk>null</jk> or less than length 2.
+	 */
+	public static String strip(String s) {
+		if (s == null || s.length() <= 1)
+			return s;
+		return s.substring(1, s.length()-1);
 	}
 
 	/**
@@ -2584,4 +2609,47 @@ public final class StringUtils {
 		}
 		return l;
 	}
+
+	/**
+	 * Replaces tokens in a string with a different token.
+	 *
+	 * <p>
+	 * replace("A and B and C", "and", "or") -> "A or B or C"
+	 * replace("andandand", "and", "or") -> "ororor"
+	 * replace(null, "and", "or") -> null
+	 * replace("andandand", null, "or") -> "andandand"
+	 * replace("andandand", "", "or") -> "andandand"
+	 * replace("A and B and C", "and", null) -> "A  B  C"
+	 *
+	 * @param s The string to replace characters in.
+	 * @param from The character to replace.
+	 * @param to The character to replace with.
+	 * @param ignoreEscapedChars Specify 'true' if escaped 'from' characters should be ignored.
+	 * @return The string with characters replaced.
+	 */
+	public static String replaceChars(String s, char from, char to, boolean ignoreEscapedChars) {
+		if (s == null)
+			return null;
+
+		if (s.indexOf(from) == -1)
+			return s;
+
+		char[] sArray = s.toCharArray();
+
+		int escapeCount = 0;
+		int singleQuoteCount = 0;
+		int doubleQuoteCount = 0;
+		for (int i = 0; i < sArray.length; i++) {
+			char c = sArray[i];
+			if (c == '\\' && ignoreEscapedChars)
+				escapeCount++;
+			else if (escapeCount % 2 == 0) {
+				if (c == from && singleQuoteCount % 2 == 0 && doubleQuoteCount % 2 == 0)
+				sArray[i] = to;
+			}
+			if (sArray[i] != '\\') escapeCount = 0;
+		}
+		return new String(sArray);
+	}
+
 }

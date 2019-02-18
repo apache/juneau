@@ -10,70 +10,71 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.pojotools;
+
+import static java.util.Collections.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
 /**
- * An extension of {@link LinkedHashSet} with a convenience {@link #append(Object)} method.
- *
- * <p>
- * Primarily used for testing purposes for quickly creating populated sets.
- * <p class='bcode w800'>
- * 	<jc>// Example:</jc>
- * 	Set&lt;String&gt; s = <jk>new</jk> ASet&lt;String&gt;().append(<js>"foo"</js>).append(<js>"bar"</js>);
- * </p>
- *
- * @param <T> The entry type.
+ * Encapsulates arguments for the {@link PojoSorter} class.
  */
-@SuppressWarnings({"unchecked"})
-public final class ASet<T> extends LinkedHashSet<T> {
+public class SortArgs {
 
-	private static final long serialVersionUID = 1L;
+	private final Map<String,Boolean> sort;
 
 	/**
-	 * Convenience method for creating a list of objects.
+	 * Constructor.
 	 *
-	 * @param t The initial values.
-	 * @return A new list.
+	 * @param sortArgs
+	 * 	Sort arguments.
+	 * 	<br>Values are of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"column"</js> - Sort column ascending.
+	 * 		<li><js>"column+"</js> - Sort column ascending.
+	 * 		<li><js>"column-"</js> - Sort column descending.
+	 * 	</ul>
 	 */
-	@SafeVarargs
-	public static <T> ASet<T> create(T...t) {
-		return new ASet<T>().appendAll(t);
+	public SortArgs(String...sortArgs) {
+		this(Arrays.asList(sortArgs));
 	}
 
 	/**
-	 * Adds an entry to this set.
+	 * Constructor.
 	 *
-	 * @param t The entry to add to this set.
-	 * @return This object (for method chaining).
+	 * @param sortArgs
+	 * 	Sort arguments.
+	 * 	<br>Values are of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"column"</js> - Sort column ascending.
+	 * 		<li><js>"column+"</js> - Sort column ascending.
+	 * 		<li><js>"column-"</js> - Sort column descending.
+	 * 	</ul>
 	 */
-	public ASet<T> append(T t) {
-		add(t);
-		return this;
+	public SortArgs(Collection<String> sortArgs) {
+		Map<String,Boolean> sort = new LinkedHashMap<>();
+		for (String s : sortArgs) {
+			boolean isDesc = false;
+			if (endsWith(s, '-', '+')) {
+				isDesc = endsWith(s, '-');
+				s = s.substring(0, s.length()-1);
+			}
+			sort.put(s, isDesc);
+		}
+		this.sort = unmodifiableMap(sort);
 	}
 
 	/**
-	 * Adds multiple entries to this set.
+	 * The sort columns.
 	 *
-	 * @param t The entries to add to this set.
-	 * @return This object (for method chaining).
-	 */
-	public ASet<T> appendAll(T...t) {
-		addAll(Arrays.asList(t));
-		return this;
-	}
-
-	/**
-	 * Adds a value to this set if the boolean value is <jk>true</jk>
+	 * <p>
+	 * The sort columns are key/value pairs consisting of column-names and direction flags
+	 * (<jk>false</jk> = ascending, <jk>true</jk> = descending).
 	 *
-	 * @param b The boolean value.
-	 * @param t The value to add.
-	 * @return This object (for method chaining).
+	 * @return An unmodifiable ordered map of sort columns and directions.
 	 */
-	public ASet<T> appendIf(boolean b, T t) {
-		if (b)
-			append(t);
-		return this;
+	public Map<String,Boolean> getSort() {
+		return sort;
 	}
 }

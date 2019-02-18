@@ -1742,7 +1742,7 @@ public class ConfigTest {
 		assertObjectEquals("['foo.txt']", Config.getCandidateSystemDefaultConfigNames());
 
 		System.clearProperty("juneau.configFile");
-		assertObjectEquals("['test.cfg','juneau.cfg','default.cfg']", Config.getCandidateSystemDefaultConfigNames());
+		assertObjectEquals("['test.cfg','juneau.cfg','default.cfg','application.cfg','app.cfg','settings.cfg']", Config.getCandidateSystemDefaultConfigNames());
 	}
 
 }

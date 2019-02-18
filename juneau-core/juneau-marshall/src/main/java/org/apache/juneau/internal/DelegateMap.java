@@ -21,7 +21,8 @@ import org.apache.juneau.*;
  *
  * @param <T> The class type of the wrapped bean.
  */
-public class DelegateMap<T> extends ObjectMap implements Delegate<T> {
+@SuppressWarnings("rawtypes")
+public class DelegateMap<T extends Map> extends ObjectMap implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
 	private transient ClassMeta<T> classMeta;
@@ -29,10 +30,13 @@ public class DelegateMap<T> extends ObjectMap implements Delegate<T> {
 	/**
 	 * Constructor.
 	 *
-	 * @param classMeta The metadata object that created this delegate object.
+	 * @param m The metadata object that created this delegate object.
+	 * @param session
 	 */
-	public DelegateMap(ClassMeta<T> classMeta) {
-		this.classMeta = classMeta;
+	public DelegateMap(T m, BeanSession session) {
+		this.classMeta = session.getClassMetaForObject(m);
+		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
+			put(StringUtils.asString(e.getKey()), e.getValue());
 	}
 
 	@Override /* Delegate */
@@ -47,12 +51,15 @@ public class DelegateMap<T> extends ObjectMap implements Delegate<T> {
 	 * This does not affect the underlying map.
 	 *
 	 * @param keys The remaining keys in the map (in the specified order).
+	 * @return This object (for method chaining).
 	 */
-	public void filterKeys(List<String> keys) {
+	public DelegateMap<T> filterKeys(List<String> keys) {
 		ObjectMap m2 = new ObjectMap();
 		for (String k : keys)
-			m2.put(k, get(k));
+			if (containsKey(k))
+				m2.put(k, get(k));
 		this.clear();
 		this.putAll(m2);
+		return this;
 	}
 }

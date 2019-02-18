@@ -69,6 +69,11 @@ public class RequestVar extends MultipartResolvingVar {
 	 */
 	public static final String SESSION_req = "req";
 
+	/**
+	 * The name of the session or context object that identifies the {@link RestResponse} object.
+	 */
+	public static final String SESSION_res = "res";
+
 
 	/** The name of this variable. */
 	public static final String NAME = "R";
