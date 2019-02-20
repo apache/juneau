@@ -1,0 +1,9 @@
+**/.DS_Store
+target
+derby.log
+.idea/
+*.iml
+**/.settings
+.project
+.classpath
+.settings/
