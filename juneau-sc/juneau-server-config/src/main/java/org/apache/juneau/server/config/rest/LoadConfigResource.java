@@ -14,15 +14,28 @@ package org.apache.juneau.server.config.rest;
 
 import static org.apache.juneau.http.HttpMethodName.GET;
 
+import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.rest.RestServlet;
 import org.apache.juneau.rest.annotation.RestMethod;
 import org.apache.juneau.rest.annotation.RestResource;
+import org.apache.juneau.server.config.repository.GetConfiguration;
 
-@RestResource(path = "/helloWorld")
+@RestResource(path = "/configs")
 public class LoadConfigResource extends RestServlet {
 
-	@RestMethod(name = GET, path = "/*", consumes = "application/json", produces = "application/json")
-	public String sayHello() {
+	private static final long serialVersionUID = 8247663789227304097L;
+
+	@RestMethod(name = GET, path = "/{project}/", consumes = "application/json", produces = "application/json")
+	public String get(@Path("project") String project) {
+
+		return "{'msg':'OK'}";
+	}
+
+	@RestMethod(name = GET, path = "/{project}/{branch}/", consumes = "application/json", produces = "application/json")
+	public String gets(@Path("project") String project, @Path("branch") String branch) {
+
+		new GetConfiguration(project, branch).execute();
+
 		return "{'msg':'OK'}";
 	}
 
