@@ -39,7 +39,7 @@ public class ClientFuturesTest {
 			return new ObjectMap().append("foo","bar");
 		}
 	}
-	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
+	static RestClient a = RestClient.create().mockHttpConnection(MockRest.build(A.class, null)).build();
 
 	@Test
 	public void a01() throws Exception {

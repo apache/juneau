@@ -412,4 +412,31 @@ public final class RestUtils {
 		}
 		return l.toArray(new Object[l.size()]);
 	}
+
+	/**
+	 * If the specified path-info starts with the specified context path, trims the context path from the path info.
+	 *
+	 * @param contextPath The context path.
+	 * @param path The URL path.
+	 * @return The path following the context path, or the original path.
+	 */
+	public static String trimContextPath(String contextPath, String path) {
+		if (path == null)
+			return null;
+		if (path.length() == 0 || path.equals("/") || contextPath.length() == 0 || contextPath.equals("/"))
+			return path;
+		String op = path;
+		if (path.charAt(0) == '/')
+			path = path.substring(1);
+		if (contextPath.charAt(0) == '/')
+			contextPath = contextPath.substring(1);
+		if (path.startsWith(contextPath)) {
+			if (path.length() == contextPath.length())
+				return "/";
+			path = path.substring(contextPath.length());
+			if (path.isEmpty() || path.charAt(0) == '/')
+				return path;
+		}
+		return op;
+	}
 }

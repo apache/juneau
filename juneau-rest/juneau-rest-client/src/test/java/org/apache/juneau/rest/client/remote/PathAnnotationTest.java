@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -59,7 +59,6 @@ public class PathAnnotationTest {
 			return x.toString();
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
 
 	@RemoteResource
 	public static interface A01 {
@@ -81,7 +80,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="a/{x}") String getA09b(@Path NameValuePairs b);
 	}
 
-	private static A01 a01 = RestClient.create().mockHttpConnection(a).build().getRemoteResource(A01.class);
+	private static A01 a01 = MockRemoteResource.build(A01.class, A.class, null);
 
 	@Test
 	public void a01_int() throws Exception {
@@ -160,7 +159,6 @@ public class PathAnnotationTest {
 			return x.toString();
 		}
 	}
-	private static MockRest c = MockRest.create(C.class);
 
 	@RemoteResource
 	public static interface CR {
@@ -173,7 +171,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/a/{x}") String getC07(@Path(name="x",collectionFormat="uon") String...b);
 	}
 
-	private static CR cr = RestClient.create().mockHttpConnection(c).build().getRemoteResource(CR.class);
+	private static CR cr = MockRemoteResource.build(CR.class, C.class, null);
 
 	@Test
 	public void c01a_default() throws Exception {
@@ -217,7 +215,6 @@ public class PathAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest d = MockRest.create(D.class);
 
 	@RemoteResource
 	public static interface DR {
@@ -265,7 +262,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/a/{x}") String getC16c(@Path(name="x",minimum="1",maximum="10",exclusiveMinimum=true,exclusiveMaximum=true) Byte b);
 	}
 
-	private static DR dr = RestClient.create().mockHttpConnection(d).build().getRemoteResource(DR.class);
+	private static DR dr = MockRemoteResource.build(DR.class, D.class, null);
 
 	@Test
 	public void d01a_int_defaultExclusive() throws Exception {
@@ -574,7 +571,6 @@ public class PathAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest e = MockRest.create(E.class);
 
 	@RemoteResource
 	public static interface ER {
@@ -586,7 +582,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/{x}") String getE06(@Path(name="x",items=@Items(collectionFormat="pipes",uniqueItems=true)) String[]...b);
 	}
 
-	private static ER er = RestClient.create().mockHttpConnection(e).build().getRemoteResource(ER.class);
+	private static ER er = MockRemoteResource.build(ER.class, E.class, null);
 
 	@Test
 	public void e01_minMax() throws Exception {
@@ -635,7 +631,6 @@ public class PathAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest f = MockRest.create(F.class);
 
 	@RemoteResource
 	public static interface FR {
@@ -647,7 +642,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/{x}") String getF06(@Path(name="x",collectionFormat="pipes",items=@Items(pattern="foo\\d{1,3}")) String...b);
 	}
 
-	private static FR fr = RestClient.create().mockHttpConnection(f).build().getRemoteResource(FR.class);
+	private static FR fr = MockRemoteResource.build(FR.class, F.class, null);
 
 	@Test
 	public void f01_minMaxLength() throws Exception {
@@ -699,7 +694,6 @@ public class PathAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest g = MockRest.create(G.class);
 
 	@RemoteResource
 	public static interface GR {
@@ -719,7 +713,7 @@ public class PathAnnotationTest {
 		@RemoteMethod(path="/{x}") String getG16(@Path(name="x",multipleOf="2") Byte b);
 	}
 
-	private static GR gr = RestClient.create().mockHttpConnection(g).build().getRemoteResource(GR.class);
+	private static GR gr = MockRemoteResource.build(GR.class, G.class, null);
 
 	@Test
 	public void g01_multipleOf_int() throws Exception {
@@ -804,14 +798,13 @@ public class PathAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest h = MockRest.create(H.class);
 
 	@RemoteResource
 	public static interface HR {
 		@RemoteMethod(path="/{x}") String getH01(@Path(name="x") String b);
 	}
 
-	private static HR hr = RestClient.create().mockHttpConnection(h).build().getRemoteResource(HR.class);
+	private static HR hr = MockRemoteResource.build(HR.class, H.class);
 
 	@Test
 	public void h01_required_default() throws Exception {
@@ -830,14 +823,13 @@ public class PathAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest j = MockRest.create(J.class);
 
 	@RemoteResource
 	public static interface JR {
 		@RemoteMethod(path="/{x}") String getJ01(@Path(name="x",serializer=XPartSerializer.class) String b);
 	}
 
-	private static JR jr = RestClient.create().mockHttpConnection(j).build().getRemoteResource(JR.class);
+	private static JR jr = MockRemoteResource.build(JR.class, J.class, null);
 
 	@Test
 	public void j01_serializer() throws Exception {

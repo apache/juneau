@@ -153,7 +153,7 @@ public class HeadersTest {
 			return warning.toString();
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
+	private static MockRest a = MockRest.build(A.class);
 
 	public static class AnythingSerializer extends PlainTextSerializer {
 		public AnythingSerializer(PropertyStore ps) {
@@ -417,7 +417,7 @@ public class HeadersTest {
 			return customHeader.toString();
 		}
 	}
-	static MockRest b = MockRest.create(B.class);
+	static MockRest b = MockRest.build(B.class, null);
 
 	public static class CustomHeaderParam extends RestMethodParam {
 		public CustomHeaderParam() {
@@ -463,7 +463,7 @@ public class HeadersTest {
 				.append("h3", headers.getString("H3"));
 		}
 	}
-	static MockRest c = MockRest.create(C.class);
+	static MockRest c = MockRest.build(C.class, null);
 
 	@Test
 	public void c01_defaultRequestHeaders_default() throws Exception {
@@ -492,7 +492,7 @@ public class HeadersTest {
 				.append("h3", headers.getString("h3"));
 		}
 	}
-	static MockRest d = MockRest.create(D.class);
+	static MockRest d = MockRest.build(D.class, null);
 
 	@Test
 	public void d01_defaultRequestHeadersCaseInsensitive_default() throws Exception {
@@ -521,7 +521,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest e = MockRest.create(E.class);
+	static MockRest e = MockRest.build(E.class, null);
 
 	@Test
 	public void e01_annotatedHeaders_default() throws Exception {
@@ -550,7 +550,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest f = MockRest.create(F.class);
+	static MockRest f = MockRest.build(F.class, null);
 
 	@Test
 	public void f01_annotatedHeadersCaseInsensitive_default() throws Exception {
@@ -579,7 +579,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest g = MockRest.create(G.class);
+	static MockRest g = MockRest.build(G.class, null);
 
 	@Test
 	public void g01_annotatedHeadersDefault_default() throws Exception {
@@ -604,7 +604,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest gb = MockRest.create(GB.class);
+	static MockRest gb = MockRest.build(GB.class, null);
 
 	@Test
 	public void gb01_annotatedHeadersDefault_default() throws Exception {
@@ -633,7 +633,7 @@ public class HeadersTest {
 				.append("h3", h3);
 		}
 	}
-	static MockRest h = MockRest.create(H.class);
+	static MockRest h = MockRest.build(H.class, null);
 
 	@Test
 	public void h01_annotatedAndDefaultHeaders_default() throws Exception {

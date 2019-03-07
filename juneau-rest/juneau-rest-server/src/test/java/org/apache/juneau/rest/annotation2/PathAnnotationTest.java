@@ -61,7 +61,7 @@ public class PathAnnotationTest {
 			return "GET /a "+foo+","+bar+",r="+remainder;
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a00_nonExistentPath() throws Exception {
@@ -137,7 +137,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRest b = MockRest.create(B.class);
+	static MockRest b = MockRest.build(B.class, null);
 
 	@Test
 	public void b01_int() throws Exception {
@@ -219,7 +219,7 @@ public class PathAnnotationTest {
 			return String.valueOf(x);
 		}
 	}
-	static MockRest c = MockRest.create(C.class);
+	static MockRest c = MockRest.build(C.class, null);
 
 	@Test
 	public void c01_Integer() throws Exception {
@@ -274,7 +274,7 @@ public class PathAnnotationTest {
 			return uuid;
 		}
 	}
-	static MockRest d = MockRest.create(D.class);
+	static MockRest d = MockRest.build(D.class, null);
 
 	@Test
 	public void d01_uuid() throws Exception {
@@ -309,7 +309,7 @@ public class PathAnnotationTest {
 			return new ObjectMap().append("m","numbers3").append("0", foo).append("1", bar);
 		}
 	}
-	static MockRest e = MockRest.create(E.class);
+	static MockRest e = MockRest.build(E.class, null);
 
 	@Test
 	public void e01_normal1() throws Exception {

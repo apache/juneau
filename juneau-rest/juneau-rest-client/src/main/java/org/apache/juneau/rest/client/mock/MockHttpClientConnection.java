@@ -79,8 +79,8 @@ public class MockHttpClientConnection implements HttpClientConnection {
 	public void sendRequestHeader(HttpRequest request) throws HttpException, IOException {
 		try {
 			RequestLine rl = request.getRequestLine();
-			req = c.request(rl.getMethod(), rl.getUri(), null);
-			for (Header h : request.getAllHeaders())
+			req = c.request(rl.getMethod(), rl.getUri(), null, null);
+			for (Header h : request.getAllHeaders()) 
 				req.header(h.getName(), h.getValue());
 		} catch (Exception e) {
 			throw new HttpException(e.getMessage(), e);

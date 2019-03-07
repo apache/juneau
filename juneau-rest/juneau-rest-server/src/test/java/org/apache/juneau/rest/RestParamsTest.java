@@ -125,7 +125,7 @@ public class RestParamsTest {
 			return t != null;
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_ResourceBundle() throws Exception {

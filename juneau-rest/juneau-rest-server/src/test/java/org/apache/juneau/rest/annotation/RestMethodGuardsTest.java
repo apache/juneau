@@ -51,7 +51,7 @@ public class RestMethodGuardsTest {
 			}
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_overlappingOneGuard() throws Exception {

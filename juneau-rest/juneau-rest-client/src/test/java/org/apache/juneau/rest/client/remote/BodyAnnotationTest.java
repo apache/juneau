@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -115,7 +115,6 @@ public class BodyAnnotationTest {
 			return IOUtils.read(b);
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
 
 	@RemoteResource
 	public static interface A01 {
@@ -131,7 +130,7 @@ public class BodyAnnotationTest {
 		String postA10(@Body NameValuePairs b);
 	}
 
-	private static A01 a01 = RestClient.create().mockHttpConnection(a).serializer(JsonSerializer.class).build().getRemoteResource(A01.class);
+	private static A01 a01 = MockRemoteResource.create(A01.class, A.class).parser(null).build();
 
 	@Test
 	public void a01_int() throws Exception {
@@ -241,8 +240,6 @@ public class BodyAnnotationTest {
 			return b;
 		}
 	}
-	private static MockRest b = MockRest.create(B.class);
-
 	@RemoteResource
 	public static interface B01 {
 		String postB01(@Body int b);
@@ -257,7 +254,7 @@ public class BodyAnnotationTest {
 		String postB10(@Body NameValuePairs b);
 	}
 
-	private static B01 b01 = RestClient.create().openapi().mockHttpConnection(b).build().getRemoteResource(B01.class);
+	private static B01 b01 = MockRemoteResource.create(B01.class, B.class).marshall(OpenApi.DEFAULT).contentType(null).build();
 
 	@Test
 	public void b01_int() throws Exception {
@@ -368,8 +365,6 @@ public class BodyAnnotationTest {
 			return b;
 		}
 	}
-	private static MockRest c = MockRest.create(C.class);
-
 	@RemoteResource
 	public static interface C01 {
 		String postC01(@Body int b);
@@ -384,7 +379,7 @@ public class BodyAnnotationTest {
 		String postC10(@Body NameValuePairs b);
 	}
 
-	private static C01 c01 = RestClient.create().mockHttpConnection(c).contentType("text/foo").build().getRemoteResource(C01.class);
+	private static C01 c01 = MockRemoteResource.create(C01.class, C.class).serializer(null).contentType("text/foo").build();
 
 	@Test
 	public void c01_int() throws Exception {

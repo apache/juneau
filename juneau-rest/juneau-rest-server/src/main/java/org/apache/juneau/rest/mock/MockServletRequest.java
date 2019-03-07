@@ -114,12 +114,41 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	}
 
 	/**
+	 * Specifies the <code>Accept</code> header value.
+	 *
+	 * @param value The <code>Accept</code> header value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest accept(String value) {
+		return header("Accept", value);
+	}
+
+	/**
+	 * Specifies the <code>Content-Type</code> header value.
+	 *
+	 * @param value The <code>Content-Type</code> header value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest contentType(String value) {
+		return header("Content-Type", value);
+	}
+
+	/**
 	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json"</js>.
 	 *
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest json() {
-		return header("Accept", "application/json").header("Content-Type", "application/json");
+		return accept("application/json").contentType("application/json");
+	}
+
+	/**
+	 * Convenience method for setting <code>Accept</code> and <code>Content-Type</code> headers to <js>"application/json+simple"</js>.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest simpleJson() {
+		return accept("application/json+simple").contentType("application/json+simple");
 	}
 
 	/**
@@ -128,7 +157,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest xml() {
-		return header("Accept", "text/xml").header("Content-Type", "text/xml");
+		return accept("text/xml").contentType("text/xml");
 	}
 
 	/**
@@ -137,7 +166,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest html() {
-		return header("Accept", "text/html").header("Content-Type", "text/html");
+		return accept("text/html").contentType("text/html");
 	}
 
 	/**
@@ -146,7 +175,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest plainText() {
-		return header("Accept", "text/plain").header("Content-Type", "text/plain");
+		return accept("text/plain").contentType("text/plain");
 	}
 
 	/**
@@ -155,7 +184,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest msgpack() {
-		return header("Accept", "octal/msgpack").header("Content-Type", "octal/msgpack");
+		return accept("octal/msgpack").contentType("octal/msgpack");
 	}
 
 	/**
@@ -164,7 +193,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest uon() {
-		return header("Accept", "text/uon").header("Content-Type", "text/uon");
+		return accept("text/uon").contentType("text/uon");
 	}
 
 	/**
@@ -173,7 +202,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest urlEnc() {
-		return header("Accept", "application/x-www-form-urlencoded").header("Content-Type", "application/x-www-form-urlencoded");
+		return accept("application/x-www-form-urlencoded").contentType("application/x-www-form-urlencoded");
 	}
 
 	/**
@@ -182,7 +211,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * @return This object (for method chaining).
 	 */
 	public MockServletRequest yaml() {
-		return header("Accept", "text/yaml").header("Content-Type", "text/yaml");
+		return accept("text/yaml").contentType("text/yaml");
 	}
 
 	/**
@@ -234,7 +263,12 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		sb.append("\n=== HTTP Call =================================================================");
 
 		sb.append("\n=== REQUEST ===");
-		sb.append("\nTODO");
+		sb.append("\n---request headers---");
+		for (Map.Entry<String,String[]> h : req.getHeaders().entrySet())
+			for (String h2 : h.getValue())
+				sb.append("\n").append(h.getKey()).append(": ").append(h2);
+		sb.append("\n---request entity---");
+		sb.append(body == null ? "NONE" : new String(body));
 		sb.append("\n=== RESPONSE ===");
 		sb.append("\nStatus: ").append(res.getStatus());
 		sb.append("\n---response headers---");
@@ -798,6 +832,15 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		return Collections.enumeration(Arrays.asList(s == null ? new String[0] : s));
 	}
 
+	/**
+	 * Returns the headers defined on this request.
+	 *
+	 * @return The headers defined on this request.  Never <jk>null</jk>.
+	 */
+	public Map<String,String[]> getHeaders() {
+		return headerMap;
+	}
+
 	@Override /* HttpServletRequest */
 	public Enumeration<String> getHeaderNames() {
 		return Collections.enumeration(headerMap.keySet());
@@ -960,6 +1003,19 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	/**
 	 * Fluent setter.
 	 *
+	 * @param headers Headers to add to this request.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest headers(Map<String,Object> headers) {
+		if (headers != null)
+			for (Map.Entry<String,Object> e : headers.entrySet())
+				header(e.getKey(), e.getValue());
+		return this;
+	}
+
+	/**
+	 * Fluent setter.
+	 *
 	 * @param name Header name.
 	 * @param value
 	 * 	Header value.
@@ -968,7 +1024,10 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	@Override /* MockHttpRequest */
 	public MockServletRequest header(String name, Object value) {
-		this.headerMap.put(name, new String[] {asString(value)});
+		if (value == null)
+			headerMap.remove(name);
+		else
+			headerMap.put(name, new String[] {asString(value)});
 		return this;
 	}
 
@@ -996,6 +1055,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 * 		<li>{@link InputStream}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
+	 * 	Any other types are converted to a string using the <code>toString()</code> method.
 	 * @return This object (for method chaining).
 	 */
 	@Override /* MockHttpRequest */
@@ -1003,12 +1063,14 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 		try {
 			if (value instanceof byte[])
 				this.body = (byte[])value;
-			if (value instanceof Reader)
+			else if (value instanceof Reader)
 				this.body = IOUtils.read((Reader)value).getBytes();
-			if (value instanceof InputStream)
+			else if (value instanceof InputStream)
 				this.body = IOUtils.readBytes((InputStream)value, 1024);
-			if (value instanceof CharSequence)
+			else if (value instanceof CharSequence)
 				this.body = ((CharSequence)value).toString().getBytes();
+			else if (value != null)
+				this.body = value.toString().getBytes();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -1361,6 +1423,20 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	public MockServletRequest debug() {
 		this.debug = true;
+		return this;
+	}
+
+	/**
+	 * Enabled debug mode on this request.
+	 *
+	 * <p>
+	 * Causes information about the request execution to be sent to STDERR.
+	 *
+	 * @param value The enable flag value.
+	 * @return This object (for method chaining).
+	 */
+	public MockServletRequest debug(boolean value) {
+		this.debug = value;
 		return this;
 	}
 }

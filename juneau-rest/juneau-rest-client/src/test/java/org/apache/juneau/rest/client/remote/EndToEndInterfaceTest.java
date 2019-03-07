@@ -24,8 +24,10 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.helper.*;
 import org.apache.juneau.rest.mock.*;
@@ -80,8 +82,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static MockRest a = MockRest.create(A.class);
-	private static IA ia = RestClient.create().json().mockHttpConnection(a).build().getRemoteResource(IA.class);
+	private static IA ia = MockRemoteResource.build(IA.class, A.class, Json.DEFAULT);
 
 	@Test
 	public void a01_splitAnnotations_Body() throws Exception {
@@ -135,8 +136,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static MockRest b = MockRest.create(B.class);
-	private static IB ib = RestClient.create().json().mockHttpConnection(b).build().getRemoteResource(IB.class);
+	private static IB ib = MockRemoteResource.build(IB.class, B.class);
 
 	@Test
 	public void b01_combinedAnnotations_Body() throws Exception {
@@ -207,7 +207,7 @@ public class EndToEndInterfaceTest {
 		@Override public UseProxy useProxy() { return UseProxy.INSTANCE; }
 	}
 
-	private static IC ic = RestClient.create().json().disableRedirectHandling().mockHttpConnection(MockRest.create(C.class)).build().getRemoteResource(IC.class);
+	private static IC ic = RestClient.create().json().disableRedirectHandling().mockHttpConnection(MockRest.create(C.class).build()).build().getRemoteResource(IC.class);
 
 	@Test
 	public void c01_standardResponses_Ok() throws Exception {
@@ -326,7 +326,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static ID id = RestClient.create().json().mockHttpConnection(MockRest.create(D.class)).build().getRemoteResource(ID.class);
+	private static ID id = MockRemoteResource.build(ID.class, D.class);
 
 	@Test
 	public void d01_StreamResource() throws Exception {
@@ -344,7 +344,7 @@ public class EndToEndInterfaceTest {
 		assertEquals("text/foo", r.getMediaType().toString());
 	}
 
-	private static ID id2 = RestClient.create().mockHttpConnection(MockRest.create(D.class)).build().getRemoteResource(ID.class);
+	private static ID id2 = MockRemoteResource.build(ID.class, D.class);
 
 	@Test
 	public void d03_StreamResource_noMediaTypes() throws Exception {
@@ -539,7 +539,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IE iea = RestClient.create().json().mockHttpConnection(MockRest.create(EA.class)).build().getRemoteResource(IE.class);
+	private static IE iea = MockRemoteResource.build(IE.class, EA.class);
 
 	@Test
 	public void ea01_badRequest() {
@@ -974,7 +974,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IE ieb = RestClient.create().json().mockHttpConnection(MockRest.create(EB.class)).build().getRemoteResource(IE.class);
+	private static IE ieb = MockRemoteResource.build(IE.class, EB.class);
 
 	@Test
 	public void eb01_badRequest() {
@@ -1451,7 +1451,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IF ifa = RestClient.create().json().mockHttpConnection(MockRest.create(F.class)).build().getRemoteResource(IF.class);
+	private static IF ifa = MockRemoteResource.build(IF.class, F.class);
 
 	@Test
 	public void fa01_badRequest() {
@@ -1607,7 +1607,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IG ig = RestClient.create().json().mockHttpConnection(MockRest.create(G.class)).build().getRemoteResource(IG.class);
+	private static IG ig = MockRemoteResource.build(IG.class, G.class);
 
 	@Test
 	public void g01_reader() throws Exception {
@@ -1635,7 +1635,7 @@ public class EndToEndInterfaceTest {
 		}
 	}
 
-	private static IH ih = RestClient.create().json().disableRedirectHandling().mockHttpConnection(MockRest.create(H.class)).build().getRemoteResource(IH.class);
+	private static IH ih = RestClient.create().json().disableRedirectHandling().mockHttpConnection(MockRest.create(H.class).build()).build().getRemoteResource(IH.class);
 
 	@Test
 	public void h01_seeOtherRoot() throws Exception {

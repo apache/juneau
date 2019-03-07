@@ -125,7 +125,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
+	private static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01a_onParameter_String() throws Exception {
@@ -315,7 +315,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRest b = MockRest.create(B.class);
+	private static MockRest b = MockRest.build(B.class, null);
 
 	@Test
 	public void b01a_onPojo_StringTransform() throws Exception {
@@ -534,7 +534,7 @@ public class BodyAnnotationTest {
 			@Override public String toString() { return s; }
 		}
 	}
-	private static MockRest d = MockRest.create(D.class);
+	private static MockRest d = MockRest.build(D.class, null);
 
 	@Test
 	public void d01a_noMediaTypes_String() throws Exception {
@@ -624,7 +624,7 @@ public class BodyAnnotationTest {
 			return c;
 		}
 	}
-	private static MockRest e = MockRest.create(E.class);
+	private static MockRest e = MockRest.build(E.class);
 
 	@Test
 	public void e01_complexPojos_B_body() throws Exception {
@@ -665,7 +665,7 @@ public class BodyAnnotationTest {
 			public int p2;
 		}
 	}
-	static MockRest f = MockRest.create(F.class);
+	static MockRest f = MockRest.build(F.class);
 
 	@Test
 	public void f01_formPostAsContent() throws Exception {
@@ -688,7 +688,7 @@ public class BodyAnnotationTest {
 			return content;
 		}
 	}
-	static MockRest g = MockRest.create(G.class);
+	static MockRest g = MockRest.build(G.class);
 
 	@Test
 	public void g01() throws Exception {
@@ -734,7 +734,7 @@ public class BodyAnnotationTest {
 			return content;
 		}
 	}
-	static MockRest h = MockRest.create(H.class);
+	static MockRest h = MockRest.build(H.class);
 
 	@Test
 	public void h01() throws Exception {
@@ -773,7 +773,7 @@ public class BodyAnnotationTest {
 			return content;
 		}
 	}
-	static MockRest i = MockRest.create(I.class);
+	static MockRest i = MockRest.build(I.class);
 
 	@Test
 	public void i01() throws Exception {

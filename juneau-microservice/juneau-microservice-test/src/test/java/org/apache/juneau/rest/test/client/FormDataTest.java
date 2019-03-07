@@ -41,7 +41,7 @@ public class FormDataTest extends RestTestcase {
 			return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
 		}
 	}
-	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
+	static RestClient a = RestClient.create().mockHttpConnection(MockRest.build(A.class)).build();
 
 	@Test
 	public void a01_formDataMethod() throws Exception {
@@ -61,7 +61,7 @@ public class FormDataTest extends RestTestcase {
 
 	@Test
 	public void a03_plainTextParams() throws Exception {
-		RestClient c = RestClient.create().mockHttpConnection(MockRest.create(A.class)).urlEnc().paramFormatPlain().build();
+		RestClient c = RestClient.create().mockHttpConnection(MockRest.build(A.class)).urlEnc().paramFormatPlain().build();
 		try {
 			String r;
 

@@ -21,8 +21,7 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -56,7 +55,6 @@ public class ResponseAnnotationTest {
 			return "foo";
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
 
 	@Response
 	public interface AResponse {
@@ -76,7 +74,7 @@ public class ResponseAnnotationTest {
 		@RemoteMethod AResponse get();
 	}
 
-	private static AR ar = RestClient.create().mockHttpConnection(a).build().getRemoteResource(AR.class);
+	private static AR ar = MockRemoteResource.build(AR.class, A.class, null);
 
 	@Test
 	public void a01_basic() throws Exception {

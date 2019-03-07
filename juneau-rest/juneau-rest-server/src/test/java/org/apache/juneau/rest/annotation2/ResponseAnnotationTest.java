@@ -70,7 +70,7 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_codeOnClass() throws Exception {
@@ -123,7 +123,7 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRest b = MockRest.create(B.class);
+	static MockRest b = MockRest.build(B.class, null);
 
 	@Test
 	public void b01_useOnMethod() throws Exception {
@@ -214,7 +214,7 @@ public class ResponseAnnotationTest {
 		}
 	}
 
-	static MockRest d = MockRest.create(D.class);
+	static MockRest d = MockRest.build(D.class, null);
 
 	@Test
 	public void d01_useOnMethod() throws Exception {
@@ -285,7 +285,7 @@ public class ResponseAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRest e = MockRest.create(E.class);
+	static MockRest e = MockRest.build(E.class, null);
 
 	@Test
 	public void e01_basic_onParameter() throws Exception {
@@ -337,7 +337,7 @@ public class ResponseAnnotationTest {
 		}
 	}
 
-	static MockRest f = MockRest.create(F.class);
+	static MockRest f = MockRest.build(F.class, null);
 	static Swagger sf = getSwagger(F.class);
 
 	@Test
@@ -410,7 +410,7 @@ public class ResponseAnnotationTest {
 		}
 	}
 
-	static MockRest g = MockRest.create(G.class);
+	static MockRest g = MockRest.build(G.class);
 	static Swagger sg = getSwagger(G.class);
 
 	@Test
@@ -467,7 +467,7 @@ public class ResponseAnnotationTest {
 			return body;
 		}
 	}
-	static MockRest j = MockRest.create(J.class);
+	static MockRest j = MockRest.build(J.class);
 
 	@Test
 	public void j01a_basic() throws Exception {

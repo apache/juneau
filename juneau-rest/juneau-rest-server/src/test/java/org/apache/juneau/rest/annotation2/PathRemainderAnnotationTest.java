@@ -38,7 +38,7 @@ public class PathRemainderAnnotationTest {
 			return remainder;
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_withoutRemainder() throws Exception {

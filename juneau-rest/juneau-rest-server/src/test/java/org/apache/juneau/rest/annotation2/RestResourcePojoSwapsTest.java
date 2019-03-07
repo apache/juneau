@@ -117,7 +117,7 @@ public class RestResourcePojoSwapsTest {
 			return a; // Should return "A3-1".
 		}
 	}
-	static MockRest a = MockRest.create(A01.class);
+	static MockRest a = MockRest.build(A01.class);
 
 	@Test
 	public void a01_classTransformOverridesParentClassTransform() throws Exception {

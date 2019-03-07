@@ -594,6 +594,19 @@ public class RestClientBuilder extends BeanContextBuilder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Sets arbitrary request headers.
+	 *
+	 * @param headers The headers to set on requests.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder headers(Map<String,Object> headers) {
+		if (headers != null)
+			for (Map.Entry<String,Object> e : headers.entrySet())
+				header(e.getKey(), e.getValue());
+		return this;
+	}
+
+	/**
 	 * Sets the value for the <code>Accept</code> request header.
 	 *
 	 * <p>
@@ -2343,6 +2356,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder debug() {
 		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder debug(boolean value) {
+		super.debug(value);
 		return this;
 	}
 

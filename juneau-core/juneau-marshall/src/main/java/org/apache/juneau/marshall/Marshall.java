@@ -64,6 +64,24 @@ public abstract class Marshall {
 	}
 
 	/**
+	 * Returns the serializer associated with this marshall.
+	 *
+	 * @return The serializer associated with this marshall.
+	 */
+	public Serializer getSerializer() {
+		return s;
+	}
+
+	/**
+	 * Returns the parser associated with this marshall.
+	 *
+	 * @return The parser associated with this marshall.
+	 */
+	public Parser getParser() {
+		return p;
+	}
+
+	/**
 	 * Serializes a POJO directly to either a <code>String</code> or <code><jk>byte</jk>[]</code> depending on the serializer type.
 	 *
 	 * @param o The object to serialize.

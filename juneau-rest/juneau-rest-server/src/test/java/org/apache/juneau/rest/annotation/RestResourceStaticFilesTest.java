@@ -34,7 +34,7 @@ public class RestResourceStaticFilesTest {
 			return null;
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01() throws Exception {
@@ -58,7 +58,7 @@ public class RestResourceStaticFilesTest {
 			return null;
 		}
 	}
-	static MockRest b = MockRest.create(B.class);
+	static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01() throws Exception {

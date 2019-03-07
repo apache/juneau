@@ -71,7 +71,7 @@ public class ReaderResourceTest {
 		}
 	}
 
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_basic() throws Exception {

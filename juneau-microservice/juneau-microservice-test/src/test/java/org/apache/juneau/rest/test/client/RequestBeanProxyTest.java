@@ -52,7 +52,7 @@ public class RequestBeanProxyTest {
 			return req.getQuery().toString(true);
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	//=================================================================================================================
 	// @Query - Simple values
@@ -341,7 +341,7 @@ public class RequestBeanProxyTest {
 			return req.getFormData().toString(true);
 		}
 	}
-	static MockRest c = MockRest.create(C.class);
+	static MockRest c = MockRest.build(C.class, null);
 
 	//=================================================================================================================
 	// @FormData, Simple values
@@ -645,7 +645,7 @@ public class RequestBeanProxyTest {
 			return req.getHeaders().subset("a,b,c,d,e,f,g,h,i,a1,a2,a3,a4,b1,b2,b3,b4,c1,c2,c3,c4").toString(true);
 		}
 	}
-	static MockRest e = MockRest.create(E.class);
+	static MockRest e = MockRest.build(E.class, null);
 
 	//=================================================================================================================
 	// @Header, Simple values
@@ -898,7 +898,7 @@ public class RequestBeanProxyTest {
 			return req.getPathMatch().getRemainder();
 		}
 	}
-	static MockRest g = MockRest.create(G.class);
+	static MockRest g = MockRest.build(G.class, null);
 
 	//=================================================================================================================
 	// @Path, Simple values

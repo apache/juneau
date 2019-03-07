@@ -59,7 +59,7 @@ public class BasicTest {
 		@RestMethod public UseProxy useProxy() { return new UseProxy(); }
 	}
 
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_accepted() throws Exception {
@@ -162,7 +162,7 @@ public class BasicTest {
 		@RestMethod public TemporaryRedirect temporaryRedirect() { return new TemporaryRedirect(URI.create("servlet:/foo")); }
 	}
 
-	static MockRest b = MockRest.create(B.class);
+	static MockRest b = MockRest.build(B.class, null);
 
 	@Test
 	public void b01_movedPermanently() throws Exception {
@@ -211,7 +211,7 @@ public class BasicTest {
 		@RestMethod public UseProxy useProxy() { return new UseProxy("foo"); }
 	}
 
-	static MockRest c = MockRest.create(C.class);
+	static MockRest c = MockRest.build(C.class, null);
 
 	@Test
 	public void c01_accepted() throws Exception {
@@ -311,7 +311,7 @@ public class BasicTest {
 		@RestMethod public Accepted accepted() { return new Accepted("foo"); }
 	}
 
-	static MockRest d = MockRest.create(D.class);
+	static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01_accepted() throws Exception {

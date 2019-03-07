@@ -21,10 +21,10 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -61,8 +61,6 @@ public class RemoteMethodAnnotationTest {
 			return "qux";
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
-	private static RestClient ra = RestClient.create().mockHttpConnection(a).build();
 
 	@RemoteResource
 	public static interface A01 {
@@ -75,7 +73,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void a01_inferredMethodsAndPaths() throws Exception {
-		A01 t = ra.getRemoteResource(A01.class);
+		A01 t = MockRemoteResource.build(A01.class, A.class, null);
 		assertEquals("foo", t.doGet());
 		assertEquals("foo", t.doGET());
 		assertEquals("qux", t.doFoo());
@@ -111,8 +109,6 @@ public class RemoteMethodAnnotationTest {
 			return "qux";
 		}
 	}
-	private static MockRest b = MockRest.create(B.class);
-	private static RestClient rb = RestClient.create().mockHttpConnection(b).build();
 
 	@RemoteResource
 	public static interface B01 {
@@ -126,7 +122,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void b01_returnTypes() throws Exception {
-		B01 t = rb.getRemoteResource(B01.class);
+		B01 t = MockRemoteResource.build(B01.class, B.class, null);
 		t.b01();
 		assertEquals("foo", t.b02());
 		assertEquals("bar", IOUtils.read(t.b02a().getEntity().getContent()));
@@ -146,8 +142,6 @@ public class RemoteMethodAnnotationTest {
 			return body;
 		}
 	}
-	private static MockRest c = MockRest.create(C.class);
-	private static RestClient rc = RestClient.create().mockHttpConnection(c).simpleJson().build();
 
 	@RemoteResource
 	public static interface C01 {
@@ -167,7 +161,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void c01_returnTypes_json() throws Exception {
-		C01 t = rc.getRemoteResource(C01.class);
+		C01 t = MockRemoteResource.build(C01.class, C.class, Json.DEFAULT);
 		assertEquals("foo", t.c01a("foo"));
 		assertEquals("'foo'", IOUtils.read(t.c01b("foo").getEntity().getContent()));
 		assertEquals("'foo'", IOUtils.read(t.c01c("foo")));
@@ -187,8 +181,6 @@ public class RemoteMethodAnnotationTest {
 			return body;
 		}
 	}
-	private static MockRest d = MockRest.create(D.class, true);
-	private static RestClient rd = RestClient.create().debug().mockHttpConnection(d).build();
 
 	@RemoteResource
 	public static interface D01 {
@@ -208,7 +200,7 @@ public class RemoteMethodAnnotationTest {
 
 	@Test
 	public void d01_returnTypes_partSerialization() throws Exception {
-		D01 t = rd.getRemoteResource(D01.class);
+		D01 t = MockRemoteResource.build(D01.class, D.class, OpenApi.DEFAULT);
 		assertEquals("foo", t.d01a("foo"));
 		assertEquals("foo", IOUtils.read(t.d01b("foo").getEntity().getContent()));
 		assertEquals("foo", IOUtils.read(t.d01c("foo")));

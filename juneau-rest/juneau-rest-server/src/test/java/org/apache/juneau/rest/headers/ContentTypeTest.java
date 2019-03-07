@@ -71,7 +71,7 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
+	private static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_defaultHeadersOnServletAnnotation_valid() throws Exception {
@@ -100,7 +100,7 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest b = MockRest.create(B.class);
+	private static MockRest b = MockRest.build(B.class, null);
 
 	@Test
 	public void b01_restMethodWithParsersSerializers_valid() throws Exception {
@@ -144,7 +144,7 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest c = MockRest.create(C.class);
+	private static MockRest c = MockRest.build(C.class, null);
 
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
@@ -179,7 +179,7 @@ public class ContentTypeTest {
 			return in;
 		}
 	}
-	private static MockRest e = MockRest.create(E.class);
+	private static MockRest e = MockRest.build(E.class, null);
 
 	@Test
 	public void e01_restMethodParserSerializerAnnotations_valid() throws Exception {
@@ -218,7 +218,7 @@ public class ContentTypeTest {
 		}
 	}
 
-	private static MockRest f = MockRest.create(F.class);
+	private static MockRest f = MockRest.build(F.class, null);
 
 	@Test
 	public void f01_restMethodAddParsersSerializersAnnotations_valid() throws Exception {

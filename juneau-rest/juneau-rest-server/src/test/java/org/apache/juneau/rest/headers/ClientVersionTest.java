@@ -53,7 +53,7 @@ public class ClientVersionTest {
 			return "2";
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_defaultHeader() throws Exception {
@@ -96,7 +96,7 @@ public class ClientVersionTest {
 			return "2";
 		}
 	}
-	static MockRest b = MockRest.create(B.class);
+	static MockRest b = MockRest.build(B.class, null);
 
 	@Test
 	public void b01_testCustomHeader() throws Exception {

@@ -259,4 +259,21 @@ public class RestUtilsTest {
 		public String f1 = "f1";
 	}
 
+	//=================================================================================================================
+	// Other tests
+	//=================================================================================================================
+
+	@Test
+	public void testTrimContextPath() {
+		assertEquals("/bar", trimContextPath("/foo", "/bar"));
+		assertEquals("/", trimContextPath("/foo", "/"));
+		assertEquals("", trimContextPath("/foo", ""));
+		assertEquals(null, trimContextPath("/foo", null));
+
+		assertEquals("/bar", trimContextPath("/foo", "/foo/bar"));
+		assertEquals("/bar/baz", trimContextPath("/foo", "/foo/bar/baz"));
+		assertEquals("/bar/", trimContextPath("/foo", "/foo/bar/"));
+		assertEquals("/", trimContextPath("/foo", "/foo/"));
+		assertEquals("/", trimContextPath("/foo", "/foo"));
+	}
 }

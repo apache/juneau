@@ -53,7 +53,7 @@ public class AcceptEncodingTest {
 			return "foo";
 		}
 	}
-	static MockRest a = MockRest.create(A.class);
+	static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01_noCompression() throws Exception {
@@ -124,7 +124,7 @@ public class AcceptEncodingTest {
 			return "foo";
 		}
 	}
-	static MockRest b = MockRest.create(B.class);
+	static MockRest b = MockRest.build(B.class, null);
 
 	@Test
 	public void b01_withCompression_identity() throws Exception {
@@ -217,7 +217,7 @@ public class AcceptEncodingTest {
 			w.flush();
 		}
 	}
-	static MockRest c = MockRest.create(C.class);
+	static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01_direct1() throws Exception {

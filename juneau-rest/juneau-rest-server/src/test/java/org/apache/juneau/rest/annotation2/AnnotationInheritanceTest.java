@@ -64,7 +64,7 @@ public class AnnotationInheritanceTest {
 		}
 	}
 
-	private static MockRest a = MockRest.create(A.class);
+	private static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_inherited_Body() throws Exception {

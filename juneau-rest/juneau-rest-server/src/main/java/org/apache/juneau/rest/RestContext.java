@@ -3192,7 +3192,7 @@ public final class RestContext extends BeanContext {
 					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : resourceClass, mbl[i].bundlePath);
 			}
 
-			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.path;
+			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + (builder.path == null ? "_" : builder.path);
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 

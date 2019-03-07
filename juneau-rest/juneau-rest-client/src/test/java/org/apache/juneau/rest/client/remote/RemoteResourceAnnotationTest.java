@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -49,8 +50,7 @@ public class RemoteResourceAnnotationTest {
 			return "foo";
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
-	private static RestClient ra = RestClient.create().mockHttpConnection(a).build();
+	private static MockRest a = MockRest.build(A.class, null);
 
 	@RemoteResource
 	public static interface A01a {
@@ -64,7 +64,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a01_noPath() throws Exception {
-		A01a t = ra.getRemoteResource(A01a.class);
+		A01a t = MockRemoteResource.build(A01a.class, A.class, null);
 		assertEquals("foo", t.a01());
 		assertEquals("foo", t.a01a());
 		assertEquals("foo", t.a01b());
@@ -82,7 +82,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a02a_normalPath() throws Exception {
-		A02a t = ra.getRemoteResource(A02a.class);
+		A02a t = MockRemoteResource.build(A02a.class, A.class, null);
 		assertEquals("foo", t.a02());
 		assertEquals("foo", t.a02a());
 		assertEquals("foo", t.a02b());
@@ -100,7 +100,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a02b_normalPathWithSlashes() throws Exception {
-		A02b t = ra.getRemoteResource(A02b.class);
+		A02b t = MockRemoteResource.build(A02b.class, A.class, null);
 		assertEquals("foo", t.a02());
 		assertEquals("foo", t.a02a());
 		assertEquals("foo", t.a02b());
@@ -138,7 +138,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03a_normalPath() throws Exception {
-		A03a t = ra.getRemoteResource(A03a.class);
+		A03a t = MockRemoteResource.build(A03a.class, A.class, null);
 		assertEquals("foo", t.a03());
 		assertEquals("foo", t.a03a());
 		assertEquals("foo", t.a03b());
@@ -156,7 +156,7 @@ public class RemoteResourceAnnotationTest {
 
 	@Test
 	public void a03b_normalPathWithSlashes() throws Exception {
-		A03b t = ra.getRemoteResource(A03b.class);
+		A03b t = MockRemoteResource.build(A03b.class, A.class, null);
 		assertEquals("foo", t.a03());
 		assertEquals("foo", t.a03a());
 		assertEquals("foo", t.a03b());
@@ -224,7 +224,7 @@ public class RemoteResourceAnnotationTest {
 			return "foo";
 		}
 	}
-	private static MockRest b = MockRest.create(B.class);
+	private static MockRest b = MockRest.build(B.class, null);
 	private static RestClient rb = RestClient.create().mockHttpConnection(b).rootUrl("http://localhost/B").build();
 
 	@RemoteResource

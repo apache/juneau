@@ -312,7 +312,6 @@ public class TimeMatcherFactory extends MatcherFactory {
 			if (state == S01) {
 				// No tokens found.
 			} else if (state == S02 || state == S03 || state == S04 || state == S05 || state == S06 || state == S10 || state == S11 || state == S12) {
-				System.err.println("state=["+state+"]");
 				throw new PatternException("Invalid range pattern (E{0}): {1}", state, s);
 			} else if (state == S07) {
 				l.add(new TimestampRange(f, eq, s1));
@@ -361,8 +360,6 @@ public class TimeMatcherFactory extends MatcherFactory {
 		}
 
 		public TimestampRange(SimpleDateFormat[] formats, Equality eq, String singleDate) {
-			System.err.println("eq=["+eq+"], singleDate=["+singleDate+"]");
-
 			CalendarP singleDate1 = parseDate(formats, singleDate);
 			if (eq == Equality.GT) {
 				this.start = singleDate1.roll(1).roll(MILLISECOND, -1).getCalendar();

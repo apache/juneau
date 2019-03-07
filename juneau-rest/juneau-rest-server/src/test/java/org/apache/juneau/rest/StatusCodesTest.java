@@ -43,7 +43,7 @@ public class StatusCodesTest {
 			return new StringReader(b);
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
+	private static MockRest a = MockRest.build(A.class, null);
 
 	@Test
 	public void a01a_OK() throws Exception {
@@ -108,7 +108,7 @@ public class StatusCodesTest {
 			return "OK";
 		}
 	}
-	private static MockRest b = MockRest.create(B.class);
+	private static MockRest b = MockRest.build(B.class);
 
 	@Test
 	public void b01a_nonExistentBeanProperties() throws Exception {
@@ -202,7 +202,7 @@ public class StatusCodesTest {
 			return "OK";
 		}
 	}
-	private static MockRest c = MockRest.create(C.class);
+	private static MockRest c = MockRest.build(C.class);
 
 	@Test
 	public void c01_badPath() throws Exception {
@@ -237,7 +237,7 @@ public class StatusCodesTest {
 			}
 		}
 	}
-	private static MockRest d = MockRest.create(D.class);
+	private static MockRest d = MockRest.build(D.class);
 
 	@Test
 	public void d01() throws Exception {

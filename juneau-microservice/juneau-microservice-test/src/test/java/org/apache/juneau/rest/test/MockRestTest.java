@@ -45,14 +45,14 @@ public class MockRestTest {
 
 	@Test
 	public void a01() throws Exception {
-		MockRest a = MockRest.create(A.class);
+		MockRest a = MockRest.build(A.class, null);
 		RestClient rc = RestClient.create().mockHttpConnection(a).build();
 		assertEquals("OK", rc.doPut("/a01", "OK").getResponseAsString());
 	}
 
 	@Test
 	public void a02() throws Exception {
-		MockRest a = MockRest.create(A.class);
+		MockRest a = MockRest.build(A.class);
 		RestClient rc = RestClient.create().json().mockHttpConnection(a).build();
 		assertEquals("OK", rc.doPut("/a02", "OK").getResponse(String.class));
 	}

@@ -55,7 +55,7 @@ public class ResponseHeaderAnnotationTest {
 		public String toString() {return "foo";}
 	}
 
-	static MockRest a = MockRest.create(A.class,true);
+	static MockRest a = MockRest.build(A.class);
 
 	@Test
 	public void a01_valueOnParameterPojo() throws Exception {

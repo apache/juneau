@@ -37,6 +37,7 @@ public class TestUtils extends org.apache.juneau.testutils.TestUtils {
 		try (GZIPOutputStream gos = new GZIPOutputStream(baos)) {
 			gos.write(contents.getBytes());
 			gos.finish();
+			gos.flush();
 		}
 		return baos.toByteArray();
 	}

@@ -24,8 +24,7 @@ import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.client.mock.*;
 import org.apache.juneau.rest.testutils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -53,8 +52,6 @@ public class RequestAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest a = MockRest.create(A.class);
-
 	@Request
 	public static class ARequest {
 		@Body
@@ -80,7 +77,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(ARequest req);
 	}
 
-	private static AR ar = RestClient.create().mockHttpConnection(a).build().getRemoteResource(AR.class);
+	private static AR ar = MockRemoteResource.build(AR.class, A.class, null);
 
 	@Test
 	public void a01_basic() throws Exception {
@@ -107,7 +104,6 @@ public class RequestAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest b = MockRest.create(B.class);
 
 	@Request
 	public abstract static class BRequest {
@@ -145,7 +141,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(BRequest req);
 	}
 
-	private static BR br = RestClient.create().mockHttpConnection(b).build().getRemoteResource(BR.class);
+	private static BR br = MockRemoteResource.build(BR.class, B.class, null);
 
 	@Test
 	public void b01_annotationOnParent() throws Exception {
@@ -172,7 +168,6 @@ public class RequestAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest c = MockRest.create(C.class);
 
 	@Request
 	public interface CRequest {
@@ -210,7 +205,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(CRequest req);
 	}
 
-	private static CR cr = RestClient.create().mockHttpConnection(c).build().getRemoteResource(CR.class);
+	private static CR cr = MockRemoteResource.build(CR.class, C.class, null);
 
 	@Test
 	public void c01_annotationOnInterface() throws Exception {
@@ -237,7 +232,6 @@ public class RequestAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest d = MockRest.create(D.class);
 
 	public static class DRequest {
 		@Body
@@ -263,7 +257,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(@Request DRequest req);
 	}
 
-	private static DR dr = RestClient.create().mockHttpConnection(d).build().getRemoteResource(DR.class);
+	private static DR dr = MockRemoteResource.build(DR.class, D.class, null);
 
 	@Test
 	public void d01_annotationOnParameter() throws Exception {
@@ -290,7 +284,6 @@ public class RequestAnnotationTest {
 			return m.toString();
 		}
 	}
-	private static MockRest e = MockRest.create(E.class);
 
 	@Request(partSerializer=XPartSerializer.class)
 	public static class ERequest {
@@ -317,7 +310,7 @@ public class RequestAnnotationTest {
 		@RemoteMethod(path="/{x}") String post(ERequest req);
 	}
 
-	private static ER er = RestClient.create().mockHttpConnection(e).build().getRemoteResource(ER.class);
+	private static ER er = MockRemoteResource.build(ER.class, E.class, null);
 
 	@Test
 	public void e01_partSerializer() throws Exception {

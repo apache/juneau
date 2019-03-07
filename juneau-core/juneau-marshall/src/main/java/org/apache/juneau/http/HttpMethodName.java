@@ -46,6 +46,9 @@ public final class HttpMethodName {
 	/** {@doc RFC2616.section9#sec9.9 CONNECT} */
 	public static final String CONNECT = "CONNECT";
 
+	/** {@doc https://tools.ietf.org/html/rfc5789 PATCH} */
+	public static final String PATCH = "PATCH";
+
 	/** Special case for a REST method that implements a REST-RPC interface. */
 	public static final String RRPC = "RRPC";
 
