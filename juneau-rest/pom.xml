@@ -34,6 +34,9 @@
 		<module>juneau-rest-server-rdf</module>
 		<module>juneau-rest-server-springboot</module>
 		<module>juneau-rest-client</module>
+		<module>juneau-rest-mock</module>
+		<module>juneau-rest-server-test</module>
+		<module>juneau-rest-client-test</module>
 	</modules>
 
 </project>
