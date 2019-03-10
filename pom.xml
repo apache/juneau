@@ -36,7 +36,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<jaxb.version>2.3.1</jaxb.version>
-		<jena.version>2.7.1</jena.version>
+		<jena.version>3.10.0</jena.version>
 		<junit.version>4.11</junit.version>
 		<jaxrs.version>1.1.1</jaxrs.version>
 		<servlet.version>3.1.0</servlet.version>

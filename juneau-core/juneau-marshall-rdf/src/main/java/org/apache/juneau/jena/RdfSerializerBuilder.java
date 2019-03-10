@@ -231,7 +231,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when
 	 * 		created.
 	 * 		Default is the pretty writer but can be overridden with system property
-	 * 		<code>com.hp.hpl.jena.n3.N3JenaWriter.writer</code>.
+	 * 		<code>org.apache.jena.n3.N3JenaWriter.writer</code>.
 	 * 	<li>
 	 * 		<js>"N3-PP"</js> - Name of the N3 pretty writer.
 	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding
