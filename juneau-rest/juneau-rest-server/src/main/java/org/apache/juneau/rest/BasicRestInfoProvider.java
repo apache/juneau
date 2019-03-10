@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -397,7 +398,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (s != null) {
 			Map<String,OperationMap> sp = s.getPaths();
 			if (sp != null) {
-				Map<String,Operation> spp = sp.get(getAnnotation(RestMethod.class, method).path());
+				Map<String,Operation> spp = sp.get(fixMethodPath(getAnnotation(RestMethod.class, method).path()));
 				if (spp != null)
 					return spp.get(req.getMethod());
 			}

@@ -13,6 +13,7 @@
 package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.internal.SystemUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -389,6 +390,8 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public JettyMicroservice addServlet(Servlet servlet, String pathSpec) {
 		ServletHolder sh = new ServletHolder(servlet);
+		if (pathSpec != null && ! pathSpec.endsWith("/*"))
+			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
 		getServletContextHandler().addServlet(sh, pathSpec);
 		return this;
 	}

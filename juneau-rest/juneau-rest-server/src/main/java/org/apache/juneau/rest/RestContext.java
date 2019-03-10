@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -3229,7 +3230,7 @@ public final class RestContext extends BeanContext {
 			for (java.lang.reflect.Method method : resourceClass.getMethods()) {
 				RestMethod a = ClassUtils.getAnnotation(RestMethod.class, method);
 				if (a != null) {
-					methodsFound.add(method.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + a.path());
+					methodsFound.add(method.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
 						if (! isPublic(method))
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), method.getName());

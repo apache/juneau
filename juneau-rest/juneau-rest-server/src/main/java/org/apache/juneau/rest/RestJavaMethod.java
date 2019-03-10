@@ -202,7 +202,8 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					pgb.append(mParsers);
 				}
 
-				String p = m.path();
+				//String p = trimTrailingSlashes(m.path());
+				String p = fixMethodPath(m.path());
 				if (isEmpty(p))
 					p = HttpUtils.detectHttpPath(method, true);
 

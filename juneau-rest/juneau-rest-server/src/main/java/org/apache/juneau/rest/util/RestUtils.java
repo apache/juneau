@@ -25,6 +25,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
 
@@ -438,5 +439,19 @@ public final class RestUtils {
 				return path;
 		}
 		return op;
+	}
+
+	/**
+	 * Normalizes the {@link RestMethod#path()} value.
+	 *
+	 * @param path
+	 * @return The normalized path.
+	 */
+	public static String fixMethodPath(String path) {
+		if (path == null)
+			return null;
+		if (path.equals("/"))
+			return path;
+		return trimTrailingSlashes(path);
 	}
 }
