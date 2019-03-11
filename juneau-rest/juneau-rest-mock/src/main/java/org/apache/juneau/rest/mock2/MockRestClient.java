@@ -19,7 +19,12 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * TODO
+ * Mocked {@link RestClient}.
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'>{@doc juneau-rest-mock}
+ * </ul>
  */
 public class MockRestClient extends RestClientBuilder {
 

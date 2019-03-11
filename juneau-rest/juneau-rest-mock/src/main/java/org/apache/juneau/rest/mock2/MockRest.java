@@ -57,8 +57,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
- * 	<li class='link'>{@doc juneau-rest-client.UnitTesting}
+ * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
  * </ul>
  */
 public class MockRest implements MockHttpConnection {
@@ -446,6 +445,28 @@ public class MockRest implements MockHttpConnection {
 	 * Performs a REST request against the REST interface.
 	 *
 	 * @param method The HTTP method
+	 * @param path The URI path.
+	 * @param body
+	 * 	The body of the request.
+	 * 	<br>Can be any of the following data types:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	Any other types are converted to a string using the <code>toString()</code> method.
+	 * @return A new servlet request.
+	 * @throws Exception
+	 */
+	public MockServletRequest request(String method, String path, Object body) throws Exception {
+		return request(method, path, null, body);
+	}
+
+	/**
+	 * Performs a REST request against the REST interface.
+	 *
+	 * @param method The HTTP method
 	 * @param headers Optional headers to include in the request.
 	 * @param path The URI path.
 	 * @return A new servlet request.
@@ -470,7 +491,16 @@ public class MockRest implements MockHttpConnection {
 	 * Perform a PUT request.
 	 *
 	 * @param path The URI path.
-	 * @param body The body of the request.
+	 * @param body
+	 * 	The body of the request.
+	 * 	<br>Can be any of the following data types:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	Any other types are converted to a string using the <code>toString()</code> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
@@ -482,7 +512,16 @@ public class MockRest implements MockHttpConnection {
 	 * Perform a POST request.
 	 *
 	 * @param path The URI path.
-	 * @param body The body of the request.
+	 * @param body
+	 * 	The body of the request.
+	 * 	<br>Can be any of the following data types:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	Any other types are converted to a string using the <code>toString()</code> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
@@ -516,7 +555,16 @@ public class MockRest implements MockHttpConnection {
 	 * Perform a PATCH request.
 	 *
 	 * @param path The URI path.
-	 * @param body The body of the request.
+	 * @param body
+	 * 	The body of the request.
+	 * 	<br>Can be any of the following data types:
+	 * 	<ul>
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	Any other types are converted to a string using the <code>toString()</code> method.
 	 * @return A new servlet request.
 	 * @throws Exception
 	 */
@@ -534,5 +582,4 @@ public class MockRest implements MockHttpConnection {
 	public Map<String,Object> getHeaders() {
 		return headers;
 	}
-
 }

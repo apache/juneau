@@ -22,7 +22,7 @@ import javax.servlet.http.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
+ * 	<li class='link'>{@doc juneau-rest-mock}
  * </ul>
  */
 public class MockHttpSession implements HttpSession {

@@ -254,7 +254,6 @@ juneau-rest-client.SSL = #juneau-rest-client.SSL, Overview > juneau-rest-client 
 juneau-rest-mock = #juneau-rest-mock, Overview > juneau-rest-mock
 juneau-rest-mock.MockRemoteResource = #juneau-rest-mock.MockRemoteResource, Overview > juneau-rest-mock > MockRemoteResource
 juneau-rest-mock.MockRest = #juneau-rest-mock.MockRest, Overview > juneau-rest-mock > MockRest
-juneau-rest-mock.MockRestClient = #juneau-rest-mock.MockRestClient, Overview > juneau-rest-mock > MockRestClient
 juneau-rest-server = #juneau-rest-server, Overview > juneau-rest-server
 juneau-rest-server-jaxrs = #juneau-rest-server-jaxrs, Overview > juneau-rest-server-jaxrs
 juneau-rest-server-jaxrs.BaseProvider = #juneau-rest-server-jaxrs.BaseProvider, Overview > juneau-rest-server-jaxrs > Juneau JAX-RS Provider

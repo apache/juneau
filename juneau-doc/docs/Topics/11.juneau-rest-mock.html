@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} juneau-rest-mock
+{new} juneau-rest-mock
 
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -35,20 +35,20 @@
 </p>	
 
 <p>
-	Juneau Microservice is an API for creating stand-alone executable jars with automatic support for
-	Juneau configurations and console commands.
+	The <code>juneau-rest-mock</code> module contains convenience APIs for performing serverless unit
+	testing of your REST APIs.
+	Each of the APIs provide the ability to fully test your server and client REST interfaces without the
+	need for a running servlet container.
 </p>
 
 <p>
-	Features include:
+	The API consists of the following classes:
 </p>
-<ul class='spaced-list'>
-	<li>
-		A builder-based API for defining and starting microservices.
-	<li>
-		An extensible API that allows you to hook into various lifecycle events.
-	<li>
-		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
-		file properties.
+<ul class='doctree'>
+	<li class='jp'>{@link oajr.mock2}
+	<ul>
+		<li class='jc'>{@link oajr.mock2.MockRest} - API for unit testing {@link oajr.annotation.RestResource @RestResource}-annotated classes.
+		<li class='jc'>{@link oajr.mock2.MockRemoteResource} - API for unit testing {@link oajrc.remote.RemoteResource @RemoteResource}-annotated classes.
+	</ul>
 </ul>
 

@@ -395,11 +395,10 @@
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.Interceptors'>Interceptors</a></p>
 		<li><p class=''><a class='doclink' href='#juneau-rest-client.Other'>Other Useful Methods</a></p>
 	</ol>
-	<li><p class='todo'><a class='doclink' href='#juneau-rest-mock'>juneau-rest-mock</a></p>
+	<li><p class='new'><a class='doclink' href='#juneau-rest-mock'>juneau-rest-mock</a></p>
 	<ol>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-mock.MockRest'>MockRest</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-mock.MockRestClient'>MockRestClient</a></p>
-		<li><p class='todo'><a class='doclink' href='#juneau-rest-mock.MockRemoteResource'>MockRemoteResource</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-mock.MockRest'>MockRest</a></p>
+		<li><p class='new'><a class='doclink' href='#juneau-rest-mock.MockRemoteResource'>MockRemoteResource</a></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-microservice-core'>juneau-microservice-core</a></p>
 	<ol>
@@ -20201,21 +20200,21 @@
 <ul class='doctree'>
 	<li class='jac'>{@link org.apache.juneau.rest.widget.Widget}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
-		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest) getStyle(RestRequest)}
-		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)}
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest,RestResponse) getStyle(RestRequest,RestResponse)}
+		<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
 	</ul>
 </ul>
 <p>
-	The HTML content returned by the {@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
+	The HTML content returned by the {@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)}
 	method is added wherever the <js>"$W{...}"</js> variable is used.
 </p>
 <p>
-	The CSS returned by {@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+	The CSS returned by {@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
 	is added to the style section in the page header.
 </p>
 <p>	
-	The Javascript returned by {@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+	The Javascript returned by {@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
 	is added to the script section in the page header.
 </p>
 <p>
@@ -20323,8 +20322,8 @@
 <ul class='doctree'>
 	<li class='jac'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getLabel(RestRequest) getLabel(RestRequest)} - The menu item label.
-		<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getContent(RestRequest) getContent(RestRequest)} - The menu item content.
+		<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getLabel(RestRequest,RestResponse) getLabel(RestRequest,RestResponse)} - The menu item label.
+		<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getContent(RestRequest,RestResponse) getContent(RestRequest,RestResponse)} - The menu item content.
 	</ul>
 </ul>
 <p>
@@ -20342,7 +20341,7 @@
 	};
 </p>
 <p>
-	The HTML content returned by the {@link org.apache.juneau.rest.widget.MenuItemWidget#getHtml(RestRequest) getHtml(RestRequest)} method is added where the <js>"$W{...}"</js> is referenced in the page.
+	The HTML content returned by the {@link org.apache.juneau.rest.widget.MenuItemWidget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)} method is added where the <js>"$W{...}"</js> is referenced in the page.
 </p>
 
 <h5 class='topic'>ContentTypeMenuItem</h5>
@@ -23576,7 +23575,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h2 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-mock' id='juneau-rest-mock'>11 - juneau-rest-mock</a></h2>
+<h2 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-mock' id='juneau-rest-mock'>11 - juneau-rest-mock</a></h2>
 <div class='topic'><!-- START: 11 - juneau-rest-mock -->
 <h5 class='figure'>Maven Dependency</h5>
 <p class='bpcode w500'>
@@ -23598,378 +23597,364 @@
 </p>	
 
 <p>
-	Juneau Microservice is an API for creating stand-alone executable jars with automatic support for
-	Juneau configurations and console commands.
+	The <code>juneau-rest-mock</code> module contains convenience APIs for performing serverless unit
+	testing of your REST APIs.
+	Each of the APIs provide the ability to fully test your server and client REST interfaces without the
+	need for a running servlet container.
 </p>
 
 <p>
-	Features include:
+	The API consists of the following classes:
 </p>
-<ul class='spaced-list'>
-	<li>
-		A builder-based API for defining and starting microservices.
-	<li>
-		An extensible API that allows you to hook into various lifecycle events.
-	<li>
-		Simple-to-use APIs for accessing manifest file entries, command-line arguments, and external configuration 
-		file properties.
+<ul class='doctree'>
+	<li class='jp'>{@link org.apache.juneau.rest.mock2}
+	<ul>
+		<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRest} - API for unit testing {@link org.apache.juneau.rest.annotation.RestResource @RestResource}-annotated classes.
+		<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRemoteResource} - API for unit testing {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource}-annotated classes.
+	</ul>
 </ul>
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-mock.MockRest' id='juneau-rest-mock.MockRest'>11.1 - MockRest</a></h3>
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-mock.MockRest' id='juneau-rest-mock.MockRest'>11.1 - MockRest</a></h3>
 <div class='topic'><!-- START: 11.1 - juneau-rest-mock.MockRest -->
 <p>
-	The {@link org.apache.juneau.rest.mock.MockRest} class is used for performing serverless unit testing of REST interfaces.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jk>public class</jk> MockTest {
-	
-		<jc>// Our REST resource to test.</jc>
-		<ja>@RestResource</ja>(serializers=SimpleJsonSerializer.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
-		<jk>public static class</jk> MyRest {
-	
-			<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
-			<jk>public</jk> String echo(<ja>@Body</ja> String body) {
-				<jk>return</jk> body;
-			}
-		}
-	
-		<ja>@Test</ja>
-		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
-			MockRest
-				.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-				.put(<js>"/String"</js>, <js>"'foo'"</js>)
-				.execute()
-				.assertStatus(200)
-				.assertBody(<js>"'foo'"</js>);
-		}
-	}
-</p>
-<p>
-	The {@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method is used to associate a <code>MockRest</code> with
-	a <code>RestClient</code> to allow for serverless testing of clients.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@Test</ja>
-	<jk>public void</jk> testClient() <jk>throws</jk> Exception {
-		MockRest mr = MockRest.<jsm>create</jsm>(MyRest.<jk>class</jk>);
-		RestClient rc = RestClient.<jsm>create</jsm>().mockHttpConnection(mr).build();
-		<jsm>assertEquals</jsm>(<js>"'foo'"</js>, rc.doPut(<js>"/String"</js>, <js>"'foo'"</js>).getResponseAsString());
-	}
-</p>
-<p>
-	Mocked connections can also be used for serverless testing of remote resources and interfaces.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Our remote resource to test.</jc>
-	<ja>@RemoteResource</ja>
-	<jk>public interface</jk> MyRemoteInterface {
-	
-		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
-		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
-	}
-
-	<jc>// Our mocked-up REST interface to test against.</jc>
-	<ja>@RestResource</ja>
-	<jk>public class</jk> MyRest {
-	
-		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
-		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
-			<jk>return</jk> id;
-		}
-	}
-
-	<ja>@Test</ja>
-	<jk>public void</jk> testProxy() {
-		MockRest mr = MockRest.create(MyRest.<jk>class</jk>);
-		MyRemoteInterface r = RestClient
-			.<jsm>create</jsm>()
-			.mockHttpConnection(mr)
-			.build()
-			.getRemoteResource(MyRemoteInterface.<jk>class</jk>);
-		<jsm>assertEquals</jsm>(123, r.echoQuery(123));
-	}
-</p>
-</div><!-- END: 11.1 - juneau-rest-mock.MockRest -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-mock.MockRestClient' id='juneau-rest-mock.MockRestClient'>11.2 - MockRestClient</a></h3>
-<div class='topic'><!-- START: 11.2 - juneau-rest-mock.MockRestClient -->
-<p>
-	The {@link org.apache.juneau.rest.mock.MockRest} class is used for performing serverless unit testing of REST interfaces.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jk>public class</jk> MockTest {
-	
-		<jc>// Our REST resource to test.</jc>
-		<ja>@RestResource</ja>(serializers=SimpleJsonSerializer.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
-		<jk>public static class</jk> MyRest {
-	
-			<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
-			<jk>public</jk> String echo(<ja>@Body</ja> String body) {
-				<jk>return</jk> body;
-			}
-		}
-	
-		<ja>@Test</ja>
-		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
-			MockRest
-				.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-				.put(<js>"/String"</js>, <js>"'foo'"</js>)
-				.execute()
-				.assertStatus(200)
-				.assertBody(<js>"'foo'"</js>);
-		}
-	}
-</p>
-<p>
-	The {@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method is used to associate a <code>MockRest</code> with
-	a <code>RestClient</code> to allow for serverless testing of clients.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<ja>@Test</ja>
-	<jk>public void</jk> testClient() <jk>throws</jk> Exception {
-		MockRest mr = MockRest.<jsm>create</jsm>(MyRest.<jk>class</jk>);
-		RestClient rc = RestClient.<jsm>create</jsm>().mockHttpConnection(mr).build();
-		<jsm>assertEquals</jsm>(<js>"'foo'"</js>, rc.doPut(<js>"/String"</js>, <js>"'foo'"</js>).getResponseAsString());
-	}
-</p>
-<p>
-	Mocked connections can also be used for serverless testing of remote resources and interfaces.
-</p>
-
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jc>// Our remote resource to test.</jc>
-	<ja>@RemoteResource</ja>
-	<jk>public interface</jk> MyRemoteInterface {
-	
-		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
-		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
-	}
-
-	<jc>// Our mocked-up REST interface to test against.</jc>
-	<ja>@RestResource</ja>
-	<jk>public class</jk> MyRest {
-	
-		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
-		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
-			<jk>return</jk> id;
-		}
-	}
-
-	<ja>@Test</ja>
-	<jk>public void</jk> testProxy() {
-		MockRest mr = MockRest.create(MyRest.<jk>class</jk>);
-		MyRemoteInterface r = RestClient
-			.<jsm>create</jsm>()
-			.mockHttpConnection(mr)
-			.build()
-			.getRemoteResource(MyRemoteInterface.<jk>class</jk>);
-		<jsm>assertEquals</jsm>(123, r.echoQuery(123));
-	}
-</p>
-</div><!-- END: 11.2 - juneau-rest-mock.MockRestClient -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic todo' onclick='toggle(this)'><a href='#juneau-rest-mock.MockRemoteResource' id='juneau-rest-mock.MockRemoteResource'>11.3 - MockRemoteResource</a></h3>
-<div class='topic'><!-- START: 11.3 - juneau-rest-mock.MockRemoteResource -->
-<p>
-	The {@link org.apache.juneau.rest.mock.MockRest} class is a simple yet powerful interface for creating serverless
-	unit tests for your REST interfaces.
-</p>
-<p>
-	The following shows a self-encapsulated standalone JUnit testcase that tests the functionality of a simple REST interface.
-</p>
-<h5 class='figure'>Example:</h5>
-<p class='bpcode w800'>
-	<jk>public class</jk> MockTest {
- 	
-		<jc>// Our REST resource to test.</jc>
-		<ja>@RestResource</ja>(serializers=JsonSerializer.Simple.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
-		<jk>public static class</jk> MyRest {
-			
-			<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
-			<jk>public</jk> String echo(<ja>@Body</ja> String b) {
-				<jk>return</jk> b;
-			}
-		}
-		 
-		<ja>@Test</ja>
-		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
-			MockRest.<jsf>create</jsf>(MyRest.<jk>class</jk>).put(<js>"/String"</js>, <js>"'foo'"</js>).execute().assertStatus(200).assertBody(<js>"'foo'"</js>));
-		}
-	}
+	The {@link org.apache.juneau.rest.mock2.MockRest} class is used for performing serverless unit testing of {@link org.apache.juneau.rest.annotation.RestResource @RestResource}-annotated
+	classes.  These include both parent resource classes that extend from {@link org.apache.juneau.rest.RestServlet} and child resources that do not.
 </p>
 <p>
 	The API consists of the following classes:
 </p>	
 <ul class='doctree'>
-	<li class='jp'>{@link org.apache.juneau.rest.mock}
+	<li class='jp'>{@link org.apache.juneau.rest.mock2}
 	<ul>
-		<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+		<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRest}
 			<br>The API for instantiating mocks of REST resource classes.
-		<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+		<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletRequest}
 			<br>An implementation of {@link javax.servlet.http.HttpServletRequest} with additional convenience methods for building requests.
-		<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletResponse}
+		<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletResponse}
 			<br>An implementation of {@link javax.servlet.http.HttpServletRequest} with additional convenience methods for testing responses.
 	</ul>
 </ul>
 <p>
-	The concept of the design is simple.  The {@link org.apache.juneau.rest.mock.MockRest} class is used to create instances of {@link org.apache.juneau.rest.mock.MockServletRequest}
-	and {@link org.apache.juneau.rest.mock.MockServletResponse} which are passed directly to the call handler on the resource class {@link org.apache.juneau.rest.RestCallHandler#service(HttpServletRequest,HttpServletResponse)}.
+	The following shows a simple example of invoking a PUT method on a simple REST interface and asserting
+	the correct status code and response body: 
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MockTest {
+	
+		<jc>// Our REST resource to test.</jc>
+		<ja>@RestResource</ja>(
+			serializers=SimpleJsonSerializer.<jk>class</jk>, 
+			parsers=JsonParser.<jk>class</jk>
+		)
+		<jk>public static class</jk> EchoRest {
+	
+			<ja>@RestMethod</ja>(
+				name=<jsf>PUT</jsf>, 
+				path=<js>"/echo"</js>
+			)
+			<jk>public</jk> String echo(<ja>@Body</ja> String body) {
+				<jk>return</jk> body;
+			}
+		}
+	
+		<jc>// Our JUnit test.</jc>
+		<ja>@Test</ja>
+		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+		
+			MockRest mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>);
+			
+			mr
+				.put(<js>"/echo"</js>, <js>"'foo'"</js>)
+				.execute()
+				.assertStatus(200)
+				.assertBody(<js>"'foo'"</js>);
+		}
+	}
 </p>
 <p>
 	Breaking apart the fluent method call above will help you understand how this works.
 </p>
 <p class='bpcode w800'>
-	<ja>@Test</ja>
+ 	<ja>@Test</ja>
 	<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
-		
+      
 		<jc>// Instantiate our mock.</jc>
-		MockRest mr = MockRest.<jsf>create</jsf>(MyRest.<jk>class</jk>);
-		
+		MockRest mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>);
+      
 		<jc>// Create a request.</jc>
-		MockServletRequest req = mr.put(<js>"/String"</js>, <js>"'foo'"</js>);
-		
+		MockServletRequest req = mr.put(<js>"/echo"</js>, <js>"'foo'"</js>);
+      
 		<jc>// Execute it (by calling RestCallHandler.service(...) and then returning the response object).</jc>
 		MockServletResponse res = req.execute();
-		
+      
 		<jc>// Run assertion tests on the results.</jc>
 		res.assertStatus(200);
 		res.assertBody(<js>"'foo'"</js>);
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.rest.mock.MockRest} class provides the following methods for creating requests:
+	The concept of the design is simple.  The {@link org.apache.juneau.rest.mock2.MockRest} class is used to create instances of {@link org.apache.juneau.rest.mock2.MockServletRequest}
+	and {@link org.apache.juneau.rest.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link org.apache.juneau.rest.RestCallHandler#service(HttpServletRequest,HttpServletResponse)}.
+	In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
+	actually having to run in a servlet container.
+</p>
+<p>
+	The <code>create(Object)</code> method can take in either <code>Class</code> objects or pre-instantiated beans.
+	The latter is particularly useful for testing Spring beans.
+</p>
+<hr>
+<p>
+	By default, the {@link org.apache.juneau.rest.mock2.MockRest} class specifies the following request headers:
+</p>
+<p class='bpcode w800'>
+	Accept: application/json+simple
+	Content-Type: application/json
+</p>
+<p>
+	The reason for using <js>"application/json+simple"</js> as the default is that it significantly simplifies
+	testing by allowing you to compare response content with simple Java strings without having to escape lots
+	of quotes:
+</p>
+<p class='bpcode w800'>
+	<jc>// Using Simple JSON</jc>
+	mr.assertBody(<js>"{foo:'bar':baz:123}"</js>);
+	
+	<jc>// Using normal JSON</jc>
+	mr.assertBody(<js>"{\"foo\":\"bar\",\"baz\":123}"</js>);
+</p>
+<p>
+	Other media types headers can be specified via any of the following methods:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#build(Object,Marshall) build(Object,Marshall)} - Use media types defined on a marshall.
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#build(Object,Serializer,Parser) build(Object,Serializer,Parser)} - Use media types defined on a serializer and parser.
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest.Builder#accept(String) accept(String)} - Explicitly set the <code>Accept</code> header.
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest.Builder#contentType(String) contentType(String)} - Explicitly set the <code>Content-Type</code> header.
+</ul>
+<p>
+	Various other convenience methods for common media types are also provided.
+</p>
+<p>
+	The following examples are functionally equivalent for specifying XML serialization:
+</p>
+<p class='bpcode w800'>
+	MockRest mr;
+
+	mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>, Xml.<jsf>DEFAULT</jsf>);
+	
+	mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>, XmlSerializer.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>);
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).marshall(Xml.<jsf>DEFAULT</jsf>).build();
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).serializer(XmlSerializer.<jsf>DEFAULT</jsf>).parser(XmlParser.<jsf>DEFAULT</jsf>).build();
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).accept(<js>"text/xml"</js>).contentType(<js>"text/xml"</js>).build();
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).xml().build();
+</p>
+<hr>
+<p>
+	The {@link org.apache.juneau.rest.mock2.MockRest} class provides the following methods for creating requests:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockRest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#request(String,String) request(String,String)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#request(String,String,Object) request(String,String,Object)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#get(String) get(String)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#put(String,Object) put(String,Object)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#post(String,Object) post(String,Object)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#delete(String) delete(String)} 
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockRest#options(String) options(String)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#request(String,String) request(String,String)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#request(String,String,Object) request(String,String,Object)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#get(String) get(String)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#put(String,Object) put(String,Object)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#post(String,Object) post(String,Object)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#delete(String) delete(String)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#patch(String,Object) patch(String,Object)} 
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRest#options(String) options(String)} 
 	</ul>
 </ul>
 <p>
-	The {@link org.apache.juneau.rest.mock.MockServletRequest} class provides default implementations for all the methods defined
+	For HTTP methods that pass a request body (i.e. <code>PUT</code>,<code>POST</code><code>PATCH</code>), the body object can be any of the following types:
+</p>
+<ul>
+	<li><code><jk>byte</jk>[]</code>
+	<li>{@link java.io.Reader}
+	<li>{@link java.io.InputStream}
+	<li>{@link java.lang.CharSequence}
+</ul>
+<p>
+	All other body object types are converted to strings using the <code>toString()</code> method.
+</p>
+<p>
+	A common tactic is to override a bean's <code>toString()</code> method to return Simple JSON so that
+	instances can be passed to the methods above.
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+	
+		...
+		
+		<ja>@Override</ja>
+		<jk>public</jk> String toString() {
+			SimpleJson.<jsf>DEFAULT</jsf>.toString(<jk>this</jk>);
+		}
+	}
+</p>
+<p>
+	The {@link org.apache.juneau.rest.mock2.MockServletRequest} class provides default implementations for all the methods defined
 	on the {@link javax.servlet.http.HttpServletRequest} in addition to many convenience methods.
 </p>
 <p>
 	The following fluent convenience methods are provided for setting common <code>Accept</code> and <code>Content-Type</code> headers.
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletRequest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#json() json()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#xml() xml()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#html() html()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#plainText() plainText()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#msgpack() msgpack()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#uon() uon()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#urlEnc() urlEnc()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#yaml() yaml()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#json() json()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#xml() xml()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#html() html()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#plainText() plainText()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#msgpack() msgpack()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#uon() uon()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#urlEnc() urlEnc()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#yaml() yaml()}
 	</ul>
 </ul>
 <p>
 	The following fluent convenience methods are provided for building up your request.
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletRequest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#header(String,Object) header(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#query(String,Object) query(String,Object}}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#formData(String,Object) formData(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#attribute(String,Object) attribute(String,Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#body(Object) body(Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#query(String,Object) query(String,Object}}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#formData(String,Object) formData(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#attribute(String,Object) attribute(String,Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#body(Object) body(Object)}
 	</ul>
 </ul>
 <p>
 	Fluent setters are provided for all common request headers:
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletRequest}
+	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletRequest}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#accept(Object) accept(Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#acceptCharset(Object) acceptCharset(Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#acceptEncoding(Object) acceptEncoding(Object)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletRequest#acceptLanguage(Object) acceptLanguage(Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#accept(Object) accept(Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#acceptCharset(Object) acceptCharset(Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#acceptEncoding(Object) acceptEncoding(Object)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletRequest#acceptLanguage(Object) acceptLanguage(Object)}
 		<li class='jm'>...
 	</ul>
 </ul>
 <p>
-	The {@link org.apache.juneau.rest.mock.MockServletResponse} class provides default implementations for all the methods defined
+	The {@link org.apache.juneau.rest.mock2.MockServletResponse} class provides default implementations for all the methods defined
 	on the {@link javax.servlet.http.HttpServletResponse} in addition to many convenience methods.
 </p>
 <ul class='doctree'>
-	<li class='jc'>{@link org.apache.juneau.rest.mock.MockServletResponse}
+	<li class='jc'>{@link org.apache.juneau.rest.mock2.MockServletResponse}
 	<ul>
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#getBody() getBody()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#getBodyAsString() getBodyAsString()}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertStatus(int) assertStatus(int)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBody(String) assertBody(String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBodyContains(String...) assertBodyContains(String...)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBodyMatches(String) assertBodyMatches(String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertBodyMatchesRE(String) assertBodyMatchesRE(String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertHeader(String,String) assertHeader(String,String)}
-		<li class='jm'>{@link org.apache.juneau.rest.mock.MockServletResponse#assertHeaderContains(String,String...) assertHeaderContains(String,String...)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#getBody() getBody()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#getBodyAsString() getBodyAsString()}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#assertStatus(int) assertStatus(int)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#assertBody(String) assertBody(String)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#assertBodyContains(String...) assertBodyContains(String...)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#assertBodyMatches(String) assertBodyMatches(String)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#assertBodyMatchesRE(String) assertBodyMatchesRE(String)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#assertHeader(String,String) assertHeader(String,String)}
+		<li class='jm'>{@link org.apache.juneau.rest.mock2.MockServletResponse#assertHeaderContains(String,String...) assertHeaderContains(String,String...)}
 	</ul>
 </ul>	
+<hr>
 <p>
-	The {@link org.apache.juneau.rest.mock.MockRest} object can also be used with the {@link org.apache.juneau.rest.client.RestClient} class to 
-	perform serverless unit testing through the client API of REST resources.
-	This can be useful for testing of interface proxies against REST interfaces (described later).
+	The {@link org.apache.juneau.rest.mock2.MockRest} class has a debug mode that will cause your HTTP requests and responses to
+	be sent to the console:
+</p>
+<p class='bpcode w800'>
+	MockRest mr = MockRest
+		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
+		.debug()
+		.simpleJson()
+		.build();
+</p>
+</div><!-- END: 11.1 - juneau-rest-mock.MockRest -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic new' onclick='toggle(this)'><a href='#juneau-rest-mock.MockRemoteResource' id='juneau-rest-mock.MockRemoteResource'>11.2 - MockRemoteResource</a></h3>
+<div class='topic'><!-- START: 11.2 - juneau-rest-mock.MockRemoteResource -->
+<p>
+	The {@link org.apache.juneau.rest.mock2.MockRemoteResource} class is used for serverless unit testing of {@link org.apache.juneau.rest.client.remote.RemoteResource @RemoteResource}-annotated
+	classes.  
 </p>
 <p>
-	The example above can be rewritten to use a mock as follows:
+	The {@link org.apache.juneau.rest.mock2.MockRemoteResource} API requires a {@link org.apache.juneau.rest.annotation.RestResource @RestResource}-annotated class to be used as
+	an underlying mocked resource to process the request and return a response.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<jk>public class</jk> MockTest {
- 	
-		<jc>// Our REST resource to test.</jc>
-		<ja>@RestResource</ja>(serializers=JsonSerializer.Simple.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
-		<jk>public static class</jk> MyRest {
-			
-			<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
-			<jk>public</jk> String echo(<ja>@Body</ja> String b) {
-				<jk>return</jk> b;
-			}
+	<jc>// Our remote resource to test.</jc>
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> MyRemoteInterface {
+	
+		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
+	}
+
+	<jc>// Our mocked-up REST interface to test against.</jc>
+	<ja>@RestResource</ja>
+	<jk>public class</jk> MyRest {
+	
+		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
+			<jk>return</jk> id;
 		}
-		 
-		<ja>@Test</ja>
-		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
-			MockRest mr = MockRest.<jsm>create</jsm>(MyRest.<jk>class</jk>);
-			RestClient rc = RestClient.<jsm>create</jsm>().mockHttpConnection(mr).build();
-			<jsm>assertEquals</jsm>(<js>"'OK'"</js>, rc.doPut(<js>"/String"</js>, <js>"'OK'"</js>).getResponseAsString());
-		}
+	}
+
+	<ja>@Test</ja>
+	<jk>public void</jk> testProxy() {
+		MyRemoteInterface mri = MockRemoteResource.build(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
+		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
 	}
 </p>
 <p>
-	The {@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method allows you to pass in a mocked
-	interface for creating HTTP requests through the client interface.
-	The method creates a specialized <code>HttpClientConnectionManager</code> for handling requests by taking information on the 
-	client-side request and populating the {@link org.apache.juneau.rest.mock.MockServletRequest} and {@link org.apache.juneau.rest.mock.MockServletResponse} objects
-	directly without involving any sockets.
+	It looks simple, but there's a lot going on here.   
 </p>
-</div><!-- END: 11.3 - juneau-rest-mock.MockRemoteResource -->
+<p>
+	Remote resource interfaces are normally created through the {@link org.apache.juneau.rest.client.RestClient#getRemoteResource(Class)} method.
+	The {@link org.apache.juneau.rest.mock2.MockRemoteResource} will create a {@link org.apache.juneau.rest.client.RestClient} using a specialized <code>HttpClientConnectionManager</code>
+	designed to transform client-side <code>HttpRequest</code>/<code>HttpResponse</code> objects into server-side 
+	{@link org.apache.juneau.rest.mock2.MockServletRequest}/{@link org.apache.juneau.rest.mock2.MockServletResponse} objects and then pass those to the {@link org.apache.juneau.rest.mock2.MockRest} 
+	object described in the previous section.
+</p>
+<p>
+	All aspects of the client and server side code are tested, yet no servlet container is required.  The actual
+	over-the-wire serialization is the only aspect being bypassed.
+</p>
+<hr>
+<p>
+	By default, the {@link org.apache.juneau.rest.mock2.MockRemoteResource} class uses JSON marshalling.
+	This can be overridden via any of the following methods: 
+</p>
+<ul class='doctree'>
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemoteResource#build(Class,Object,Marshall)}
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemoteResource#build(Class,Object,Serializer,Parser)}
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemoteResource#create(Class,Object,Marshall)}
+	<li class='jm'>{@link org.apache.juneau.rest.mock2.MockRemoteResource#create(Class,Object,Serializer,Parser)}
+</ul>
+<hr>
+<p>
+	The {@link org.apache.juneau.rest.mock2.MockRemoteResource} class has a debug mode that will cause your HTTP requests and responses to
+	be sent to the console on both the client and server sides:
+</p>
+<p class='bpcode w800'>
+	<ja>@Test</ja>
+	<jk>public void</jk> testProxy() {
+		MyRemoteInterface mri = MockRemoteResource
+			.create(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>)
+			.debug()
+			.build();
+		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
+	}
+</p>
+</div><!-- END: 11.2 - juneau-rest-mock.MockRemoteResource -->
 </div><!-- END: 11 - juneau-rest-mock -->
 
 <!-- ==================================================================================================== -->
@@ -33409,9 +33394,9 @@
 			<li>
 				You can now add arbitrary CSS and Javascript along with your widgets through new methods:
 				<ul>
-					<li>{@link org.apache.juneau.rest.widget.Widget#getHtml(RestRequest)}
-					<li>{@link org.apache.juneau.rest.widget.Widget#getScript(RestRequest)}
-					<li>{@link org.apache.juneau.rest.widget.Widget#getStyle(RestRequest)}
+					<li><code><del>Widget#getHtml(RestRequest)</del></code>
+					<li><code><del>Widget#getScript(RestRequest)</del></code>
+					<li><code><del>Widget#getStyle(RestRequest)</del></code>
 				</ul>
 			</li>
 			<li>
@@ -33913,7 +33898,7 @@
 		</ul>
 	<li>
 		Simplified {@link org.apache.juneau.rest.widget.MenuItemWidget}.
-		<br>Exposes an abstract method {@link org.apache.juneau.rest.widget.MenuItemWidget#getContent(RestRequest)} that
+		<br>Exposes an abstract method <code><del>getContent(RestRequest)</del></code> that
 		can return raw HTML via readers or char-sequences, or any other object (such as HTML5 beans) that will
 		get converted to HTML using {@link org.apache.juneau.html.HtmlSerializer#DEFAULT}.
 	<li>
@@ -35034,7 +35019,7 @@
 	<li>
 		New class for mock unit testing of REST resources:
 		<ul class='doctree'>
-			<li class='jc'>{@link org.apache.juneau.rest.mock.MockRest}
+			<li class='jc'><code><del>MockRest</del></code>
 		</ul>
 	<li>
 		<code><ja>@RestMethod</ja>(inherit)</code> annotation has been removed and replaced with the following classes:
@@ -35068,8 +35053,8 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link org.apache.juneau.rest.widget.MenuItemWidget}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getBeforeShowScript(RestRequest) getBeforeShowScript(RestRequest)}
-				<li class='jm'>{@link org.apache.juneau.rest.widget.MenuItemWidget#getAfterShowScript(RestRequest) getAfterShowScript(RestRequest)}
+				<li class='jm'><code><del>getBeforeShowScript(RestRequest)</del></code>
+				<li class='jm'><code><del>getAfterShowScript(RestRequest)</del></code>
 			</ul>
 		</ul>
 	<li>
@@ -35077,14 +35062,14 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link org.apache.juneau.rest.widget.Widget}
 			<ul>
-				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadHtmlWithVars(RestRequest,String) loadHtmlWithVars(RestRequest,String)}
-				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadScriptWithVars(RestRequest,String) loadScriptWithVars(RestRequest,String)}
-				<li class='jm'>{@link org.apache.juneau.rest.widget.Widget#loadStyleWithVars(RestRequest,String) loadStyleWithVars(RestRequest,String)}
+				<li class='jm'><code><del>loadHtmlWithVars(RestRequest,String)</del></code>
+				<li class='jm'><code><del>loadScriptWithVars(RestRequest,String)</del></code>
+				<li class='jm'><code><del>loadStyleWithVars(RestRequest,String)</del></code>
 			</ul>
 		</ul>
 	<li>
 		New/updated documentation: 
-		<br>{@doc juneau-rest-server.UnitTesting}
+		<br><code><del>juneau-rest-server.UnitTesting</del></code>
 	<li>
 		The behavior of the default values for {@link org.apache.juneau.rest.annotation.RestMethod#name()} and {@link org.apache.juneau.rest.annotation.RestMethod#path()}
 		have changed.
@@ -35161,7 +35146,7 @@
 		<ul class='doctree'>
 			<li class='jc'>{@link org.apache.juneau.rest.client.RestClientBuilder}
 			<ul>
-				<li class='jf'>{@link org.apache.juneau.rest.client.RestClientBuilder#mockHttpConnection(MockHttpConnection) mockHttpConnection(MockHttpConnection)}
+				<li class='jf'><code><del>mockHttpConnection(MockHttpConnection)</del></code>
 			</ul>
 		</ul>
 	<li>

@@ -50,8 +50,8 @@ Predefined Widgets
 <ul class='doctree'>
 	<li class='jac'>{@link oajr.widget.MenuItemWidget}
 	<ul>
-		<li class='jm'>{@link oajr.widget.MenuItemWidget#getLabel(RestRequest) getLabel(RestRequest)} - The menu item label.
-		<li class='jm'>{@link oajr.widget.MenuItemWidget#getContent(RestRequest) getContent(RestRequest)} - The menu item content.
+		<li class='jm'>{@link oajr.widget.MenuItemWidget#getLabel(RestRequest,RestResponse) getLabel(RestRequest,RestResponse)} - The menu item label.
+		<li class='jm'>{@link oajr.widget.MenuItemWidget#getContent(RestRequest,RestResponse) getContent(RestRequest,RestResponse)} - The menu item content.
 	</ul>
 </ul>
 <p>
@@ -69,7 +69,7 @@ Predefined Widgets
 	};
 </p>
 <p>
-	The HTML content returned by the {@link oajr.widget.MenuItemWidget#getHtml(RestRequest) getHtml(RestRequest)} method is added where the <js>"$W{...}"</js> is referenced in the page.
+	The HTML content returned by the {@link oajr.widget.MenuItemWidget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)} method is added where the <js>"$W{...}"</js> is referenced in the page.
 </p>
 
 <h5 class='topic'>ContentTypeMenuItem</h5>

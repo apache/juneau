@@ -27,8 +27,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
- * 	<li class='link'>{@doc juneau-rest-client.UnitTesting}
+ * 	<li class='link'>{@doc juneau-rest-mock.MockRemoteResource}
  * </ul>
  *
  * @param <T> The interface class.
@@ -88,6 +87,29 @@ public class MockRemoteResource<T> {
 	 */
 	public static <T> MockRemoteResource<T> create(Class<T> intf, Object impl, Marshall m) {
 		return new MockRemoteResource<>(intf, impl).marshall(m);
+	}
+
+	/**
+	 * Create a new builder using the specified remote resource interface and REST implementation bean or bean class.
+	 *
+	 * <p>
+	 * Uses the serializer and parser defined on the specified marshall for serializing and parsing by default.
+	 *
+	 * @param intf
+	 * 	The remote interface annotated with {@link RemoteResource @RemoteResource}.
+	 * @param impl
+	 * 	The REST implementation bean or bean class annotated with {@link RestResource @RestResource}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @param s
+	 * 	The serializer to use for serializing request bodies.
+	 * 	<br>Can be <jk>null</jk> to force no serializer to be used and no <code>Content-Type</code> header.
+	 * @param p
+	 * 	The parser to use for parsing response bodies.
+	 * 	<br>Can be <jk>null</jk> to force no parser to be used and no <code>Accept</code> header.
+	 * @return A new builder.
+	 */
+	public static <T> MockRemoteResource<T> create(Class<T> intf, Object impl, Serializer s, Parser p) {
+		return new MockRemoteResource<>(intf, impl).serializer(s).parser(p);
 	}
 
 	/**

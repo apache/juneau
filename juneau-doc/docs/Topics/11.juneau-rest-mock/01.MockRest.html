@@ -13,31 +13,57 @@
  ***************************************************************************************************************************/
  -->
 
-{todo} MockRest
+{new} MockRest
 
 <p>
-	The {@link oajr.mock.MockRest} class is used for performing serverless unit testing of REST interfaces.
+	The {@link oajr.mock2.MockRest} class is used for performing serverless unit testing of {@link oajr.annotation.RestResource @RestResource}-annotated
+	classes.  These include both parent resource classes that extend from {@link oajr.RestServlet} and child resources that do not.
 </p>
-
-<h5 class='figure'>Example:</h5>
+<p>
+	The API consists of the following classes:
+</p>	
+<ul class='doctree'>
+	<li class='jp'>{@link oajr.mock2}
+	<ul>
+		<li class='jc'>{@link oajr.mock2.MockRest}
+			<br>The API for instantiating mocks of REST resource classes.
+		<li class='jc'>{@link oajr.mock2.MockServletRequest}
+			<br>An implementation of {@link javax.servlet.http.HttpServletRequest} with additional convenience methods for building requests.
+		<li class='jc'>{@link oajr.mock2.MockServletResponse}
+			<br>An implementation of {@link javax.servlet.http.HttpServletRequest} with additional convenience methods for testing responses.
+	</ul>
+</ul>
+<p>
+	The following shows a simple example of invoking a PUT method on a simple REST interface and asserting
+	the correct status code and response body: 
+</p>
 <p class='bpcode w800'>
 	<jk>public class</jk> MockTest {
 	
 		<jc>// Our REST resource to test.</jc>
-		<ja>@RestResource</ja>(serializers=SimpleJsonSerializer.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
-		<jk>public static class</jk> MyRest {
+		<ja>@RestResource</ja>(
+			serializers=SimpleJsonSerializer.<jk>class</jk>, 
+			parsers=JsonParser.<jk>class</jk>
+		)
+		<jk>public static class</jk> EchoRest {
 	
-			<ja>@RestMethod</ja>(name=<jsf>PUT</jsf>, path=<js>"/String"</js>)
+			<ja>@RestMethod</ja>(
+				name=<jsf>PUT</jsf>, 
+				path=<js>"/echo"</js>
+			)
 			<jk>public</jk> String echo(<ja>@Body</ja> String body) {
 				<jk>return</jk> body;
 			}
 		}
 	
+		<jc>// Our JUnit test.</jc>
 		<ja>@Test</ja>
 		<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
-			MockRest
-				.<jsm>create</jsm>(MyRest.<jk>class</jk>)
-				.put(<js>"/String"</js>, <js>"'foo'"</js>)
+		
+			MockRest mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>);
+			
+			mr
+				.put(<js>"/echo"</js>, <js>"'foo'"</js>)
 				.execute()
 				.assertStatus(200)
 				.assertBody(<js>"'foo'"</js>);
@@ -45,51 +71,204 @@
 	}
 </p>
 <p>
-	The {@link oajrc.RestClientBuilder#mockHttpConnection(MockHttpConnection)} method is used to associate a <code>MockRest</code> with
-	a <code>RestClient</code> to allow for serverless testing of clients.
+	Breaking apart the fluent method call above will help you understand how this works.
 </p>
-
-<h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
-	<ja>@Test</ja>
-	<jk>public void</jk> testClient() <jk>throws</jk> Exception {
-		MockRest mr = MockRest.<jsm>create</jsm>(MyRest.<jk>class</jk>);
-		RestClient rc = RestClient.<jsm>create</jsm>().mockHttpConnection(mr).build();
-		<jsm>assertEquals</jsm>(<js>"'foo'"</js>, rc.doPut(<js>"/String"</js>, <js>"'foo'"</js>).getResponseAsString());
+ 	<ja>@Test</ja>
+	<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
+      
+		<jc>// Instantiate our mock.</jc>
+		MockRest mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>);
+      
+		<jc>// Create a request.</jc>
+		MockServletRequest req = mr.put(<js>"/echo"</js>, <js>"'foo'"</js>);
+      
+		<jc>// Execute it (by calling RestCallHandler.service(...) and then returning the response object).</jc>
+		MockServletResponse res = req.execute();
+      
+		<jc>// Run assertion tests on the results.</jc>
+		res.assertStatus(200);
+		res.assertBody(<js>"'foo'"</js>);
 	}
 </p>
 <p>
-	Mocked connections can also be used for serverless testing of remote resources and interfaces.
+	The concept of the design is simple.  The {@link oajr.mock2.MockRest} class is used to create instances of {@link oajr.mock2.MockServletRequest}
+	and {@link oajr.mock2.MockServletResponse} which are passed directly to the call handler on the resource class {@link oajr.RestCallHandler#service(HttpServletRequest,HttpServletResponse)}.
+	In effect, you're fully testing your REST API as if it were running in a live servlet container, yet not
+	actually having to run in a servlet container.
 </p>
-
-<h5 class='figure'>Example:</h5>
+<p>
+	The <code>create(Object)</code> method can take in either <code>Class</code> objects or pre-instantiated beans.
+	The latter is particularly useful for testing Spring beans.
+</p>
+<hr>
+<p>
+	By default, the {@link oajr.mock2.MockRest} class specifies the following request headers:
+</p>
 <p class='bpcode w800'>
-	<jc>// Our remote resource to test.</jc>
-	<ja>@RemoteResource</ja>
-	<jk>public interface</jk> MyRemoteInterface {
+	Accept: application/json+simple
+	Content-Type: application/json
+</p>
+<p>
+	The reason for using <js>"application/json+simple"</js> as the default is that it significantly simplifies
+	testing by allowing you to compare response content with simple Java strings without having to escape lots
+	of quotes:
+</p>
+<p class='bpcode w800'>
+	<jc>// Using Simple JSON</jc>
+	mr.assertBody(<js>"{foo:'bar':baz:123}"</js>);
 	
-		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
-		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
-	}
+	<jc>// Using normal JSON</jc>
+	mr.assertBody(<js>"{\"foo\":\"bar\",\"baz\":123}"</js>);
+</p>
+<p>
+	Other media types headers can be specified via any of the following methods:
+</p>
+<ul class='doctree'>
+	<li class='jm'>{@link oajr.mock2.MockRest#build(Object,Marshall) build(Object,Marshall)} - Use media types defined on a marshall.
+	<li class='jm'>{@link oajr.mock2.MockRest#build(Object,Serializer,Parser) build(Object,Serializer,Parser)} - Use media types defined on a serializer and parser.
+	<li class='jm'>{@link oajr.mock2.MockRest.Builder#accept(String) accept(String)} - Explicitly set the <code>Accept</code> header.
+	<li class='jm'>{@link oajr.mock2.MockRest.Builder#contentType(String) contentType(String)} - Explicitly set the <code>Content-Type</code> header.
+</ul>
+<p>
+	Various other convenience methods for common media types are also provided.
+</p>
+<p>
+	The following examples are functionally equivalent for specifying XML serialization:
+</p>
+<p class='bpcode w800'>
+	MockRest mr;
 
-	<jc>// Our mocked-up REST interface to test against.</jc>
-	<ja>@RestResource</ja>
-	<jk>public class</jk> MyRest {
+	mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>, Xml.<jsf>DEFAULT</jsf>);
 	
-		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
-		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
-			<jk>return</jk> id;
+	mr = MockRest.<jsm>build</jsm>(EchoRest.<jk>class</jk>, XmlSerializer.<jsf>DEFAULT</jsf>, XmlParser.<jsf>DEFAULT</jsf>);
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).marshall(Xml.<jsf>DEFAULT</jsf>).build();
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).serializer(XmlSerializer.<jsf>DEFAULT</jsf>).parser(XmlParser.<jsf>DEFAULT</jsf>).build();
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).accept(<js>"text/xml"</js>).contentType(<js>"text/xml"</js>).build();
+	
+	mr = MockRest.<jsm>create</jsm>(EchoRest.<jk>class</jk>).xml().build();
+</p>
+<hr>
+<p>
+	The {@link oajr.mock2.MockRest} class provides the following methods for creating requests:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oajr.mock2.MockRest}
+	<ul>
+		<li class='jm'>{@link oajr.mock2.MockRest#request(String,String) request(String,String)} 
+		<li class='jm'>{@link oajr.mock2.MockRest#request(String,String,Object) request(String,String,Object)} 
+		<li class='jm'>{@link oajr.mock2.MockRest#get(String) get(String)} 
+		<li class='jm'>{@link oajr.mock2.MockRest#put(String,Object) put(String,Object)} 
+		<li class='jm'>{@link oajr.mock2.MockRest#post(String,Object) post(String,Object)} 
+		<li class='jm'>{@link oajr.mock2.MockRest#delete(String) delete(String)} 
+		<li class='jm'>{@link oajr.mock2.MockRest#patch(String,Object) patch(String,Object)} 
+		<li class='jm'>{@link oajr.mock2.MockRest#options(String) options(String)} 
+	</ul>
+</ul>
+<p>
+	For HTTP methods that pass a request body (i.e. <code>PUT</code>,<code>POST</code><code>PATCH</code>), the body object can be any of the following types:
+</p>
+<ul>
+	<li><code><jk>byte</jk>[]</code>
+	<li>{@link java.io.Reader}
+	<li>{@link java.io.InputStream}
+	<li>{@link java.lang.CharSequence}
+</ul>
+<p>
+	All other body object types are converted to strings using the <code>toString()</code> method.
+</p>
+<p>
+	A common tactic is to override a bean's <code>toString()</code> method to return Simple JSON so that
+	instances can be passed to the methods above.
+</p>
+<p class='bpcode w800'>
+	<jk>public class</jk> MyBean {
+	
+		...
+		
+		<ja>@Override</ja>
+		<jk>public</jk> String toString() {
+			SimpleJson.<jsf>DEFAULT</jsf>.toString(<jk>this</jk>);
 		}
 	}
-
-	<ja>@Test</ja>
-	<jk>public void</jk> testProxy() {
-		MockRest mr = MockRest.create(MyRest.<jk>class</jk>);
-		MyRemoteInterface r = RestClient
-			.<jsm>create</jsm>()
-			.mockHttpConnection(mr)
-			.build()
-			.getRemoteResource(MyRemoteInterface.<jk>class</jk>);
-		<jsm>assertEquals</jsm>(123, r.echoQuery(123));
-	}
 </p>
+<p>
+	The {@link oajr.mock2.MockServletRequest} class provides default implementations for all the methods defined
+	on the {@link javax.servlet.http.HttpServletRequest} in addition to many convenience methods.
+</p>
+<p>
+	The following fluent convenience methods are provided for setting common <code>Accept</code> and <code>Content-Type</code> headers.
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oajr.mock2.MockServletRequest}
+	<ul>
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#json() json()}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#xml() xml()}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#html() html()}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#plainText() plainText()}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#msgpack() msgpack()}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#uon() uon()}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#urlEnc() urlEnc()}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#yaml() yaml()}
+	</ul>
+</ul>
+<p>
+	The following fluent convenience methods are provided for building up your request.
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oajr.mock2.MockServletRequest}
+	<ul>
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#header(String,Object) header(String,Object)}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#query(String,Object) query(String,Object}}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#formData(String,Object) formData(String,Object)}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#attribute(String,Object) attribute(String,Object)}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#body(Object) body(Object)}
+	</ul>
+</ul>
+<p>
+	Fluent setters are provided for all common request headers:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oajr.mock2.MockServletRequest}
+	<ul>
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#accept(Object) accept(Object)}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#acceptCharset(Object) acceptCharset(Object)}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#acceptEncoding(Object) acceptEncoding(Object)}
+		<li class='jm'>{@link oajr.mock2.MockServletRequest#acceptLanguage(Object) acceptLanguage(Object)}
+		<li class='jm'>...
+	</ul>
+</ul>
+<p>
+	The {@link oajr.mock2.MockServletResponse} class provides default implementations for all the methods defined
+	on the {@link javax.servlet.http.HttpServletResponse} in addition to many convenience methods.
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oajr.mock2.MockServletResponse}
+	<ul>
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#getBody() getBody()}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#getBodyAsString() getBodyAsString()}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#assertStatus(int) assertStatus(int)}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#assertBody(String) assertBody(String)}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#assertBodyContains(String...) assertBodyContains(String...)}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#assertBodyMatches(String) assertBodyMatches(String)}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#assertBodyMatchesRE(String) assertBodyMatchesRE(String)}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#assertHeader(String,String) assertHeader(String,String)}
+		<li class='jm'>{@link oajr.mock2.MockServletResponse#assertHeaderContains(String,String...) assertHeaderContains(String,String...)}
+	</ul>
+</ul>	
+<hr>
+<p>
+	The {@link oajr.mock2.MockRest} class has a debug mode that will cause your HTTP requests and responses to
+	be sent to the console:
+</p>
+<p class='bpcode w800'>
+	MockRest mr = MockRest
+		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
+		.debug()
+		.simpleJson()
+		.build();
+</p>
+

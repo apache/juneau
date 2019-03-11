@@ -31,7 +31,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
+ * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
  * </ul>
 */
 public class MockServletResponse implements HttpServletResponse, MockHttpResponse {

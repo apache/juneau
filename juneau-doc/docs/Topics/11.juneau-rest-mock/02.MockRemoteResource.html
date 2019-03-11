@@ -1,0 +1,92 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{new} MockRemoteResource
+
+<p>
+	The {@link oajr.mock2.MockRemoteResource} class is used for serverless unit testing of {@link oajrc.remote.RemoteResource @RemoteResource}-annotated
+	classes.  
+</p>
+<p>
+	The {@link oajr.mock2.MockRemoteResource} API requires a {@link oajr.annotation.RestResource @RestResource}-annotated class to be used as
+	an underlying mocked resource to process the request and return a response.
+</p>
+<h5 class='figure'>Example:</h5>
+<p class='bpcode w800'>
+	<jc>// Our remote resource to test.</jc>
+	<ja>@RemoteResource</ja>
+	<jk>public interface</jk> MyRemoteInterface {
+	
+		<ja>@RemoteMethod</ja>(httpMethod=<js>"GET"</js>, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(name=<js>"id"</js>) <jk>int</jk> id);
+	}
+
+	<jc>// Our mocked-up REST interface to test against.</jc>
+	<ja>@RestResource</ja>
+	<jk>public class</jk> MyRest {
+	
+		<ja>@RestMethod</ja>(name=GET, path=<js>"/echoQuery"</js>)
+		<jk>public int</jk> echoQuery(<ja>@Query</ja>(<js>"id"</js>) String id) {
+			<jk>return</jk> id;
+		}
+	}
+
+	<ja>@Test</ja>
+	<jk>public void</jk> testProxy() {
+		MyRemoteInterface mri = MockRemoteResource.build(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>);
+		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
+	}
+</p>
+<p>
+	It looks simple, but there's a lot going on here.   
+</p>
+<p>
+	Remote resource interfaces are normally created through the {@link oajrc.RestClient#getRemoteResource(Class)} method.
+	The {@link oajr.mock2.MockRemoteResource} will create a {@link oajrc.RestClient} using a specialized <code>HttpClientConnectionManager</code>
+	designed to transform client-side <code>HttpRequest</code>/<code>HttpResponse</code> objects into server-side 
+	{@link oajr.mock2.MockServletRequest}/{@link oajr.mock2.MockServletResponse} objects and then pass those to the {@link oajr.mock2.MockRest} 
+	object described in the previous section.
+</p>
+<p>
+	All aspects of the client and server side code are tested, yet no servlet container is required.  The actual
+	over-the-wire serialization is the only aspect being bypassed.
+</p>
+<hr>
+<p>
+	By default, the {@link oajr.mock2.MockRemoteResource} class uses JSON marshalling.
+	This can be overridden via any of the following methods: 
+</p>
+<ul class='doctree'>
+	<li class='jm'>{@link oajr.mock2.MockRemoteResource#build(Class,Object,Marshall)}
+	<li class='jm'>{@link oajr.mock2.MockRemoteResource#build(Class,Object,Serializer,Parser)}
+	<li class='jm'>{@link oajr.mock2.MockRemoteResource#create(Class,Object,Marshall)}
+	<li class='jm'>{@link oajr.mock2.MockRemoteResource#create(Class,Object,Serializer,Parser)}
+</ul>
+<hr>
+<p>
+	The {@link oajr.mock2.MockRemoteResource} class has a debug mode that will cause your HTTP requests and responses to
+	be sent to the console on both the client and server sides:
+</p>
+<p class='bpcode w800'>
+	<ja>@Test</ja>
+	<jk>public void</jk> testProxy() {
+		MyRemoteInterface mri = MockRemoteResource
+			.create(MyRemoteInterface.<jk>class</jk>, MyRest.<jk>class</jk>)
+			.debug()
+			.build();
+		<jsm>assertEquals</jsm>(123, mri.echoQuery(123));
+	}
+</p>
+

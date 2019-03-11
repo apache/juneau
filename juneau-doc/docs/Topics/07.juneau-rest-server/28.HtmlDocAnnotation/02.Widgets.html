@@ -48,21 +48,21 @@ Widgets
 <ul class='doctree'>
 	<li class='jac'>{@link oajr.widget.Widget}
 	<ul>
-		<li class='jm'>{@link oajr.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
-		<li class='jm'>{@link oajr.widget.Widget#getStyle(RestRequest) getStyle(RestRequest)}
-		<li class='jm'>{@link oajr.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+		<li class='jm'>{@link oajr.widget.Widget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)}
+		<li class='jm'>{@link oajr.widget.Widget#getStyle(RestRequest,RestResponse) getStyle(RestRequest,RestResponse)}
+		<li class='jm'>{@link oajr.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
 	</ul>
 </ul>
 <p>
-	The HTML content returned by the {@link oajr.widget.Widget#getHtml(RestRequest) getHtml(RestRequest)}
+	The HTML content returned by the {@link oajr.widget.Widget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)}
 	method is added wherever the <js>"$W{...}"</js> variable is used.
 </p>
 <p>
-	The CSS returned by {@link oajr.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+	The CSS returned by {@link oajr.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
 	is added to the style section in the page header.
 </p>
 <p>	
-	The Javascript returned by {@link oajr.widget.Widget#getScript(RestRequest) getScript(RestRequest)}
+	The Javascript returned by {@link oajr.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
 	is added to the script section in the page header.
 </p>
 <p>
