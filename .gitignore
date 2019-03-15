@@ -4,3 +4,4 @@ derby.log
 .idea/
 *.iml
 **/.settings
+**/.classpath
