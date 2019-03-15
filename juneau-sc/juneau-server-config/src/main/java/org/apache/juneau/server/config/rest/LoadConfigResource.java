@@ -20,18 +20,18 @@ import org.apache.juneau.rest.annotation.RestMethod;
 import org.apache.juneau.rest.annotation.RestResource;
 import org.apache.juneau.server.config.repository.GetConfiguration;
 
-@RestResource(path = "/configs")
+@RestResource(path = "/configs/*")
 public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;
 
-	@RestMethod(name = GET, path = "/{project}/", consumes = "application/json", produces = "application/json")
+	@RestMethod(name = GET, path = "/{project}/*", consumes = "application/json", produces = "application/json")
 	public String get(@Path("project") String project) {
 
 		return "{'msg':'OK'}";
 	}
 
-	@RestMethod(name = GET, path = "/{project}/{branch}/", consumes = "application/json", produces = "application/json")
+	@RestMethod(name = GET, path = "/{project}/{branch}/*", consumes = "application/json", produces = "application/json")
 	public String gets(@Path("project") String project, @Path("branch") String branch) {
 
 		new GetConfiguration(project, branch).execute();
