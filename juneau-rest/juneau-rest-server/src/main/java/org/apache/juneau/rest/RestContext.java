@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -2920,11 +2921,11 @@ public final class RestContext extends BeanContext {
 	 *
 	 * Widgets resolve the following variables:
 	 * <ul class='spaced-list'>
-	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest)}.
-	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest)}.
+	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link Widget#getHtml(RestRequest,RestResponse)}.
+	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link Widget#getScript(RestRequest,RestResponse)}.
 	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
 	 * 			 in the HTML page.
-	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest)}.
+	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link Widget#getStyle(RestRequest,RestResponse)}.
 	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
 	 * 			 in the HTML page.
 	 * </ul>
@@ -3192,7 +3193,7 @@ public final class RestContext extends BeanContext {
 					msgs.addSearchPath(mbl[i] != null ? mbl[i].baseClass : resourceClass, mbl[i].bundlePath);
 			}
 
-			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + builder.path;
+			fullPath = (builder.parentContext == null ? "" : (builder.parentContext.fullPath + '/')) + (builder.path == null ? "_" : builder.path);
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
@@ -3229,7 +3230,7 @@ public final class RestContext extends BeanContext {
 			for (java.lang.reflect.Method method : resourceClass.getMethods()) {
 				RestMethod a = ClassUtils.getAnnotation(RestMethod.class, method);
 				if (a != null) {
-					methodsFound.add(method.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + a.path());
+					methodsFound.add(method.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
 						if (! isPublic(method))
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), method.getName());

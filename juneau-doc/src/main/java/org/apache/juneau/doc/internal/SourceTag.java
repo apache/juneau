@@ -102,7 +102,7 @@ public class SourceTag implements Taglet {
 		String path = f.getAbsolutePath();
 		String href = GITHUB_LINK + path.substring(JUNEAU_ROOT.length());
 
-		return "<a class='doclink' href='" + href + "'>" + label + "</a>";
+		return "<a class='doclink' target='_blank' href='" + href + "'>" + label + "</a>";
 	}
 
 	@Override

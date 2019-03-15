@@ -350,4 +350,32 @@ public final class ObjectUtils {
 				return oo;
 		return null;
 	}
+
+	/**
+	 * Compares two objects for equality.
+	 *
+	 * <p>
+	 * Nulls are always considered less-than unless both are null.
+	 *
+	 * @param o1 Object 1.
+	 * @param o2 Object 2.
+	 * @return
+	 * 	<code>-1</code>, <code>0</code>, or <code>1</code> if <code>o1</code> is less-than, equal, or greater-than <code>o2</code>.
+	 *	<br><code>0</code> if objects are not of the same type or do not implement the {@link Comparable} interface.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static int compare(Object o1, Object o2) {
+		if (o1 == null) {
+			if (o2 == null)
+				return 0;
+			return -1;
+		} else if (o2 == null) {
+			return 1;
+		}
+
+		if (o1.getClass() == o2.getClass() && o1 instanceof Comparable)
+			return ((Comparable)o1).compareTo(o2);
+
+		return 0;
+	}
 }

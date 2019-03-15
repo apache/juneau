@@ -65,10 +65,11 @@ public abstract class Widget {
 	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
 	 *
 	 * @param req The HTTP request object.
+	 * @param res The current HTTP response.
 	 * @return The HTML content of this widget.
 	 * @throws Exception
 	 */
-	public String getHtml(RestRequest req) throws Exception {
+	public String getHtml(RestRequest req, RestResponse res) throws Exception {
 		return null;
 	}
 
@@ -79,10 +80,11 @@ public abstract class Widget {
 	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
 	 *
 	 * @param req The HTTP request object.
+	 * @param res The current HTTP response.
 	 * @return The Javascript needed by this widget.
 	 * @throws Exception
 	 */
-	public String getScript(RestRequest req) throws Exception {
+	public String getScript(RestRequest req, RestResponse res) throws Exception {
 		return null;
 	}
 
@@ -93,10 +95,11 @@ public abstract class Widget {
 	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
 	 *
 	 * @param req The HTTP request object.
+	 * @param res The current HTTP response.
 	 * @return The CSS styles needed by this widget.
 	 * @throws Exception
 	 */
-	public String getStyle(RestRequest req) throws Exception {
+	public String getStyle(RestRequest req, RestResponse res) throws Exception {
 		return null;
 	}
 
@@ -169,11 +172,12 @@ public abstract class Widget {
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
+	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 */
-	protected String loadScriptWithVars(RestRequest req, String name) throws IOException {
+	protected String loadScriptWithVars(RestRequest req, RestResponse res, String name) throws IOException {
 		return req.getVarResolverSession().resolve(loadScript(name));
 	}
 
@@ -205,11 +209,12 @@ public abstract class Widget {
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
+	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 */
-	protected String loadStyleWithVars(RestRequest req, String name) throws IOException {
+	protected String loadStyleWithVars(RestRequest req, RestResponse res, String name) throws IOException {
 		return req.getVarResolverSession().resolve(loadStyle(name));
 	}
 
@@ -241,11 +246,12 @@ public abstract class Widget {
 	 * </ul>
 	 *
 	 * @param req The current HTTP request.
+	 * @param res The current HTTP response.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
 	 * @throws IOException
 	 */
-	protected String loadHtmlWithVars(RestRequest req, String name) throws IOException {
+	protected String loadHtmlWithVars(RestRequest req, RestResponse res, String name) throws IOException {
 		return req.getVarResolverSession().resolve(loadHtml(name));
 	}
 }

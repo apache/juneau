@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import java.util.*;
+
 /**
  * Represent the basic connection for mock HTTP requests.
  *
@@ -26,9 +28,10 @@ public interface MockHttpConnection {
 	 *
 	 * @param method The HTTP request method.
 	 * @param path The HTTP request path.
+	 * @param headers Optional HTTP request headers.
 	 * @param body The HTTP request body.
 	 * @return A new mock request.
 	 * @throws Exception
 	 */
-	MockHttpRequest request(String method, String path, Object body) throws Exception;
+	MockHttpRequest request(String method, String path, Map<String,Object> headers, Object body) throws Exception;
 }

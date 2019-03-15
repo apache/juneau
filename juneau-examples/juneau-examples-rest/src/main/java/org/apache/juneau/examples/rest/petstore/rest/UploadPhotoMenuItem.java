@@ -29,12 +29,12 @@ import org.apache.juneau.rest.widget.*;
 public class UploadPhotoMenuItem extends MenuItemWidget {
 
 	@Override /* MenuItemWidget */
-	public String getLabel(RestRequest req) throws Exception {
+	public String getLabel(RestRequest req, RestResponse res) throws Exception {
 		return "upload";
 	}
 
 	@Override /* Widget */
-	public Object getContent(RestRequest req) throws Exception {
+	public Object getContent(RestRequest req, RestResponse res) throws Exception {
 		return div(
 			form().id("form").action("servlet:/upload").method(POST).enctype("multipart/form-data").children(
 				table(

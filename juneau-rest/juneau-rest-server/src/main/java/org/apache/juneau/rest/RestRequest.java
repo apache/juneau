@@ -111,6 +111,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	private Swagger swagger;
 	private SerializerSessionArgs serializerSessionArgs;
 	private ParserSessionArgs parserSessionArgs;
+	private RestResponse res;
 
 	/**
 	 * Constructor.
@@ -1315,7 +1316,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public VarResolverSession getVarResolverSession() {
 		if (varSession == null)
-			varSession = context.getVarResolver().createSession(context.getCallHandler().getSessionObjects(this));
+			varSession = context.getVarResolver().createSession(context.getCallHandler().getSessionObjects(this, context.getResponse()));
 		return varSession;
 	}
 

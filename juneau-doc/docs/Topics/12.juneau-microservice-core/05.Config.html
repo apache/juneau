@@ -1,0 +1,143 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+Config
+
+<p>
+	The following methods can be used to define the configuration for your microservice using the powerful Config API:
+</p>
+<ul class='doctree'>
+	<li class='jc'>{@link oaj.microservice.MicroserviceBuilder}
+	<ul>
+		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#config(Config) config(Config)} 
+		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#configName(String) configName(String)} 
+		<li class='jm'>{@link oaj.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} 
+	</ul>
+</ul>
+<p>
+	If you do not specify any of this information, we attempt to resolve it through the following methods:
+</p>
+<ol class='spaced-list'>
+	<li>
+		Resolve file first in working directory, then in classpath, using the following names:
+		<ol>
+			<li>
+				The <js>"configFile"</js> argument in the command line arguments passed in through the constructor.
+			<li>
+				The value of the <code>Main-Config</code> entry in the manifest file.
+			<li>
+				A config file in the same location and with the same name as the executable jar file.
+				(e.g. <js>"java -jar myjar.jar"</js> will look for <js>"myjar.cfg"</js>).
+		</ol>
+	<li>
+		Resolve any <js>"*.cfg"</js> file that can be found in the working directory.
+	<li>
+		Resolve any of the following files in the classpath:
+		<ol>
+			<li><code>juneau.cfg</code>
+			<li><code>default.cfg</code>
+			<li><code>application.cfg</code>
+			<li><code>app.cfg</code>
+			<li><code>settings.cfg</code>
+		</ol>
+</ol>
+<p>
+	If no configuration file is found, and empty in-memory configuration is used.
+</p>
+<p>
+	The {@link oaj.microservice.MicroserviceBuilder#configName(String) configName(String)} method allows you to explicitly specify the name
+	of the external configuration file location for your microservice.
+</p>
+<p class='bpcode w800'>
+	Microservice
+		.<jsm>create</jsm>()     
+		.config(<js>"my-files/MyMicroservice.cfg"</js>) 
+		.build()
+		.start()
+	;
+</p>
+<p>
+	By default, we try to find the file on the file system and then the classpath.
+	If located on the file system, then the configuration is writeable and the microservice can automatically 
+	listen for and react to changes in the configuration file on the file system.
+	If located on the classpath, then the configuration can still react to modifications made to it through
+	the Config API, but the changes cannot be persisted since the location prevents the file from being modified.
+</p>
+
+<p>
+	The {@link oaj.microservice.MicroserviceBuilder#configStore(ConfigStore) configStore(ConfigStore)} method can be used to explicitly
+	specify a configuration store.
+	This can include your own custom configuration store, such as one that's implemented in a relational database.
+</p>
+<p class='bpcode w800'>
+	Microservice
+		.<jsm>create</jsm>()     
+		.configStore(<jk>new</jk> MyConfigSqlStore()) 
+		.configName(<js>"MyConfig"</js>) 
+		.build()
+		.start()
+	;
+</p>
+<p>
+	The {@link oaj.microservice.MicroserviceBuilder#config(Config) config(Config)} method can be used to explicitly specify a {@link oaj.config.Config} 
+	file as the microservice configuration.  When this method is used, the above two methods are bypassed entirely.
+</p>
+<p class='bpcode w800'>
+	Config config = <jsm>getMyOwnConfig</jsm>();
+
+	Microservice
+		.<jsm>create</jsm>()     
+		.config(config) 
+		.build()
+		.start()
+	;
+</p>
+<p>
+	Once the configuration is resolved, it is made as the system default configuration available through the {@link oaj.config.Config#getSystemDefault()}.
+	This in turn allows it to be used by REST resources that reference the system default configuration via the <js>"SYSTEM_DEFAULT"</js> such as those
+	implementing the {@link oajr.BasicRestConfig} interface.
+<p>
+<h5 class='figure'>BasicRestConfig.java</h5>
+<p class='bpcode w800'>
+	<ja>@RestResource</ja>(
+		config=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
+		...
+	)
+</p>
+<p>
+	The {@link oaj.microservice.Microservice#getConfig()} method can be used to get access to the configuration.
+</p>
+<p class='bpcode w800'>
+	Config c = Microservice.<jsm>getInstance</jsm>().getConfig();
+	
+	File logDir = c.getObject(<js>"Logging/logDir"</js>, File.<jk>class</jk>);
+	boolean append = c.getBoolean(<js>"Logging/append"</js>);
+	String format = c.getString(<js>"Logging/format"</js>, <js>"[{date} {level}] {msg}%n"</js>);
+	long limit = c.getLong(<js>"Logging/limit"</js>);
+	Map&lt;String,Level&gt; levels = c.getObject(<js>"Logging/levels"</js>, Map.<jk>class</jk>, String.<jk>class</jk>, Level.<jk>class</jk>);
+</p>	
+<p>
+	Changes to the configuration file can trigger notifications that can be used to restart your microservice or make various other
+	on-the-fly changes.  
+	This can be accomplished by either overriding the {@link oaj.microservice.Microservice#onConfigChange(ConfigEvents)} or implementing
+	a listener and using the {@link oaj.microservice.MicroserviceListener#onConfigChange(Microservice,ConfigEvents)} methods.
+	These will be described in detail later.
+</p>
+
+<h5 class='section'>See Also:</h5>
+<ul class='doctree'>
+	<li class='link'>{@doc juneau-config}
+</ul>
+

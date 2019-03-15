@@ -332,9 +332,10 @@ public class BasicRestCallHandler implements RestCallHandler {
 	 * @return The session objects for that request.
 	 */
 	@Override /* RestCallHandler */
-	public Map<String,Object> getSessionObjects(RestRequest req) {
+	public Map<String,Object> getSessionObjects(RestRequest req, RestResponse res) {
 		Map<String,Object> m = new HashMap<>();
 		m.put(RequestVar.SESSION_req, req);
+		m.put(RequestVar.SESSION_res, res);
 		return m;
 	}
 }

@@ -29,7 +29,7 @@ import org.apache.juneau.rest.helper.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.Instantiation.RouterPages}
+ * 	<li class='link'>{@doc juneau-rest-server.Instantiation.BasicRestServletGroup}
  * </ul>
  */
 @RestResource

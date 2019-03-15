@@ -34,12 +34,12 @@ public class ThemeMenuItem extends MenuItemWidget {
 	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original", "dark"};
 
 	@Override /* Widget */
-	public String getLabel(RestRequest req) {
+	public String getLabel(RestRequest req, RestResponse res) {
 		return "themes";
 	}
 
 	@Override /* MenuItemWidget */
-	public Div getContent(RestRequest req) throws Exception {
+	public Div getContent(RestRequest req, RestResponse res) throws Exception {
 		Div div = div();
 		for (String s : BUILT_IN_STYLES) {
 			java.net.URI uri = req.getUri(true, new AMap<String,String>().append("stylesheet", "htdocs/themes/"+s+".css"));

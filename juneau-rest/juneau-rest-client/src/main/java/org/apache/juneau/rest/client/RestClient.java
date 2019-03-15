@@ -39,6 +39,7 @@ import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Utility class for interfacing with remote REST interfaces.
@@ -399,6 +400,7 @@ public class RestClient extends BeanContext implements Closeable {
 	 */
 	public static final String RESTCLIENT_serializer = PREFIX + "serializer.o";
 
+	private static final Set<String> NO_BODY_METHODS = Collections.unmodifiableSet(ASet.<String>create("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE"));
 
 	private static final ConcurrentHashMap<Class,HttpPartSerializer> partSerializerCache = new ConcurrentHashMap<>();
 
@@ -533,6 +535,18 @@ public class RestClient extends BeanContext implements Closeable {
 			creationStack = Thread.currentThread().getStackTrace();
 		else
 			creationStack = null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if specified http method has content.
+	 * <p>
+	 * By default, anything not in this list can have content:  <code>GET, HEAD, DELETE, CONNECT, OPTIONS, TRACE</code>.
+	 *
+	 * @param httpMethod The HTTP method.  Must be upper-case.
+	 * @return <jk>true</jk> if specified http method has content.
+	 */
+	protected boolean hasContent(String httpMethod) {
+		return ! NO_BODY_METHODS.contains(httpMethod);
 	}
 
 	/**
@@ -752,6 +766,59 @@ public class RestClient extends BeanContext implements Closeable {
 		return doCall("POST", url, true)
 			.body(o instanceof HttpEntity ? o : new RestRequestEntity(o, urlEncodingSerializer, null));
 	}
+
+	/**
+	 * Perform a <code>PATCH</code> request against the specified URL.
+	 *
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @param o
+	 * 	The object to serialize and transmit to the URL as the body of the request.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the {@link RestClient}.
+	 * 		<li>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestCall doPatch(Object url, Object o) throws RestCallException {
+		return doCall("PATCH", url, true).body(o);
+	}
+
+	/**
+	 * Same as {@link #doPatch(Object, Object)} but don't specify the input yet.
+	 *
+	 * <p>
+	 * You must call either {@link RestCall#body(Object)} or {@link RestCall#formData(String, Object)} to set the
+	 * contents on the result object.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>Use {@link #doFormPost(Object, Object)} for <code>application/x-www-form-urlencoded</code> form posts.
+	 * </ul>
+	 *
+	 * @param url
+	 * 	The URL of the remote REST resource.
+	 * 	Can be any of the following:  {@link String}, {@link URI}, {@link URL}.
+	 * @return
+	 * 	A {@link RestCall} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException
+	 */
+	public RestCall doPatch(Object url) throws RestCallException {
+		return doCall("PATCH", url, true);
+	}
+
 
 	/**
 	 * Performs a REST call where the entire call is specified in a simple string.
@@ -1048,7 +1115,7 @@ public class RestClient extends BeanContext implements Closeable {
 						String httpMethod = rmm.getHttpMethod();
 						HttpPartSerializer s = getPartSerializer();
 
-						try (RestCall rc = doCall(httpMethod, url, httpMethod.equals("POST") || httpMethod.equals("PUT"))) {
+						try (RestCall rc = doCall(httpMethod, url, hasContent(httpMethod))) {
 
 							rc.serializer(serializer).parser(parser);
 

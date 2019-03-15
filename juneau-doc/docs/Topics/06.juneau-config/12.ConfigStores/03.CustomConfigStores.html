@@ -50,7 +50,7 @@ Custom ConfigStores
 			<jk>this</jk>.<jf>nameColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_nameColumn</jsf>);
 			<jk>this</jk>.<jf>valueColumn</jf> = getStringProperty(<jsf>CONFIGSQLSTORE_valueColumn</jsf>);		
 
-			<jk>int</jk> pollInterval = getStringProperty(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, 600);
+			<jk>int</jk> pollInterval = getStringProperty(<jsf>CONFIGSQLSTORE_pollInterval</jsf>, 600);  <jc>// Time in seconds.</jc>
 			
 			TimerTask timerTask = <jk>new</jk> TimerTask() {
 				<ja>@Override</ja>
@@ -60,7 +60,7 @@ Custom ConfigStores
 			};
 
 			<jk>this</jk>.<jf>watcher</jf> = <jk>new</jk> Timer(<js>"MyTimer"</js>);
-			<jf>watcher</jf>.scheduleAtFixedRate(timerTask, 0, pollInterval * 10000);
+			<jf>watcher</jf>.scheduleAtFixedRate(timerTask, 0, pollInterval * 1000);
 		}
 		
 		<jk>private synchronized void</jk> poll() {
@@ -97,7 +97,7 @@ Custom ConfigStores
 		<jk>public synchronized</jk> String write(String name, String expectedContents, String newContents) {
 	
 			<jc>// This is a no-op.</jc>
-			<jk>if</jk> (isEquals(expectedContents, newContents))
+			<jk>if</jk> (<jsm>isEquals</jsm>(expectedContents, newContents))
 				<jk>return null</jk>;
 			
 			String currentContents = read(name);

@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
 
@@ -50,7 +50,7 @@ public class CallbackStringsTest {
 			return m;
 		}
 	}
-	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
+	static RestClient a = MockRestClient.build(A.class, null);
 
 	@Test
 	public void a01() throws Exception {

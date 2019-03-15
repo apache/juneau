@@ -18,10 +18,11 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.test.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -41,7 +42,7 @@ public class FormDataTest extends RestTestcase {
 			return new StringReader("Content-Type=["+req.getContentType()+"], contents=["+read(req.getReader())+"]");
 		}
 	}
-	static RestClient a = RestClient.create().mockHttpConnection(MockRest.create(A.class)).build();
+	static RestClient a = MockRestClient.build(A.class, SimpleJson.DEFAULT);
 
 	@Test
 	public void a01_formDataMethod() throws Exception {
@@ -61,7 +62,7 @@ public class FormDataTest extends RestTestcase {
 
 	@Test
 	public void a03_plainTextParams() throws Exception {
-		RestClient c = RestClient.create().mockHttpConnection(MockRest.create(A.class)).urlEnc().paramFormatPlain().build();
+		RestClient c = MockRestClient.create(A.class, UrlEncoding.DEFAULT).paramFormatPlain().build();
 		try {
 			String r;
 

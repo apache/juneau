@@ -416,6 +416,4 @@ public class ConfigImportsTest {
 		assertEquals("1", cb.get("A/a1"));
 		assertEquals("2", cb.get("B/b1"));
 	}
-
-	// TODO - Overwriting config should not unregister listeners
 }

@@ -28,7 +28,7 @@ import org.apache.juneau.*;
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
-	private Set<String> keys = Collections.newSetFromMap(new LinkedHashMap<String,Boolean>());
+	private Set<String> keys = new LinkedHashSet<>();
 	private ObjectMap overrideValues = new ObjectMap();
 
 	/**
@@ -78,10 +78,12 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	 * This does not affect the underlying bean.
 	 *
 	 * @param keys The remaining keys in the bean map (in the specified order).
+	 * @return This object (for method chaining).
 	 */
-	public void filterKeys(List<String> keys) {
+	public DelegateBeanMap<T> filterKeys(List<String> keys) {
 		this.keys.clear();
 		this.keys.addAll(keys);
+		return this;
 	}
 
 	@Override /* Map */
@@ -119,7 +121,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			if (overrideValues.containsKey(key))
 				p = BeanPropertyMeta.builder(this.meta, key).overrideValue(overrideValues.get(key)).delegateFor(p).build();
 			if (p == null)
-				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", key);
+				p = BeanPropertyMeta.builder(this.meta, key).overrideValue(null).delegateFor(p).build();
 			l.add(p);
 		}
 		return l;

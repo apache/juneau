@@ -37,6 +37,7 @@ public final class ASet<T> extends LinkedHashSet<T> {
 	 * @param t The initial values.
 	 * @return A new list.
 	 */
+	@SafeVarargs
 	public static <T> ASet<T> create(T...t) {
 		return new ASet<T>().appendAll(t);
 	}

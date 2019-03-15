@@ -52,15 +52,14 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.client.mock.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -583,15 +582,28 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 * @param c The mock connection.
 	 * @return This object (for method chaining).
 	 */
-	public RestClientBuilder mockHttpConnection(MockHttpConnection c) {
-		rootUrl("http://localhost");
-		return httpClientConnectionManager(new MockHttpClientConnectionManager(c));
-	}
+//	public RestClientBuilder mockHttpConnection(MockHttpConnection c) {
+//		rootUrl("http://localhost");
+//		return httpClientConnectionManager(new MockHttpClientConnectionManager(c));
+//	}
 
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// HTTP headers
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sets arbitrary request headers.
+	 *
+	 * @param headers The headers to set on requests.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder headers(Map<String,Object> headers) {
+		if (headers != null)
+			for (Map.Entry<String,Object> e : headers.entrySet())
+				header(e.getKey(), e.getValue());
+		return this;
+	}
 
 	/**
 	 * Sets the value for the <code>Accept</code> request header.
@@ -1091,6 +1103,24 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder interceptors(RestCallInterceptor...value) {
 		return addTo(RESTCLIENT_interceptors, value);
+	}
+
+	/**
+	 * Configuration property:  Marshall
+	 *
+	 * <p>
+	 * Shortcut for specifying the {@link RestClient#RESTCLIENT_serializer} and {@link RestClient#RESTCLIENT_parser}
+	 * using the serializer and parser defined in a marshall.
+	 *
+	 * @param value The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestClientBuilder marshall(Marshall value) {
+		if (value == null)
+			serializer((Serializer)null).parser((Parser)null);
+		else
+			serializer(value.getSerializer()).parser(value.getParser());
+		return this;
 	}
 
 	/**
@@ -2343,6 +2373,12 @@ public class RestClientBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public RestClientBuilder debug() {
 		super.debug();
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestClientBuilder debug(boolean value) {
+		super.debug(value);
 		return this;
 	}
 

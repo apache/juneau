@@ -43,6 +43,7 @@ public class WidgetVar extends SimpleVar {
 	 * The name of the session or context object that identifies the {@link RestRequest} object.
 	 */
 	private static final String SESSION_req = "req";
+	private static final String SESSION_res = "res";
 
 	/**
 	 * The name of this variable.
@@ -59,6 +60,7 @@ public class WidgetVar extends SimpleVar {
 	@Override /* Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
+		RestResponse res = session.getSessionObject(RestResponse.class, SESSION_res, true);
 		boolean isScript = false, isStyle = false;
 
 		if (key.endsWith(".script")) {
@@ -76,9 +78,9 @@ public class WidgetVar extends SimpleVar {
 			return "unknown-widget-"+key;
 
 		if (isScript)
-			return w.getScript(req);
+			return w.getScript(req, res);
 		if (isStyle)
-			return w.getStyle(req);
-		return w.getHtml(req);
+			return w.getStyle(req, res);
+		return w.getHtml(req, res);
 	}
 }

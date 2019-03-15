@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import javax.servlet.http.HttpServlet;
+
 import org.apache.juneau.jena.*;
 import org.apache.juneau.rest.annotation.*;
 

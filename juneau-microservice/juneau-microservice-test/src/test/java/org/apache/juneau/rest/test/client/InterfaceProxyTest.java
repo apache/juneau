@@ -29,8 +29,7 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
@@ -935,7 +934,7 @@ public class InterfaceProxyTest {
 			};
 		}
 	}
-	static MockRest interfaceProxyResource = MockRest.create(InterfaceProxyResource.class);
+	static MockRest interfaceProxyResource = MockRest.build(InterfaceProxyResource.class);
 
 	private static Map<String,InterfaceProxy> cache = new LinkedHashMap<>();
 
@@ -944,7 +943,7 @@ public class InterfaceProxyTest {
 	public InterfaceProxyTest(String label, Serializer serializer, Parser parser) {
 		proxy = cache.get(label);
 		if (proxy == null) {
-			proxy = RestClient.create().mockHttpConnection(interfaceProxyResource).serializer(serializer).parser(parser).build().getRrpcInterface(InterfaceProxy.class, "/proxy");
+			proxy = MockRestClient.create(InterfaceProxyResource.class, serializer, parser).build().getRrpcInterface(InterfaceProxy.class, "/proxy");
 			cache.put(label, proxy);
 		}
 	}

@@ -88,6 +88,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li>Any file ending in <js>".cfg"</js> in the home directory (names ordered alphabetically).
 	 * 	<li><js>"juneau.cfg"</js>
 	 * 	<li><js>"default.cfg"</js>
+	 * 	<li><js>"application.cfg"</js>
+	 * 	<li><js>"app.cfg"</js>
+	 * 	<li><js>"settings.cfg"</js>
 	 * </ol>
 	 * <p>
 	 *
@@ -120,6 +123,9 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 		l.add("juneau.cfg");
 		l.add("default.cfg");
+		l.add("application.cfg");
+		l.add("app.cfg");
+		l.add("settings.cfg");
 
 		return l;
 	}

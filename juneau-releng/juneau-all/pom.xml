@@ -51,6 +51,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -74,6 +79,8 @@
 							<include>org.apache.juneau:juneau-dto</include>
 							<include>org.apache.juneau:juneau-rest-server</include>
 							<include>org.apache.juneau:juneau-rest-client</include>
+							<include>org.apache.juneau:juneau-rest-mock</include>
+							<include>org.apache.juneau:juneau-microservice-core</include>
 						</includes>
 					</artifactSet>
 				</configuration>

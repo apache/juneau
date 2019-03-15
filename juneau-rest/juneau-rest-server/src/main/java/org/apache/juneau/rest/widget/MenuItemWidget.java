@@ -35,7 +35,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * Returns the Javascript needed for the show and hide actions of the menu item.
 	 */
 	@Override /* Widget */
-	public String getScript(RestRequest req) throws Exception {
+	public String getScript(RestRequest req, RestResponse res) throws Exception {
 		return loadScript("MenuItemWidget.js");
 	}
 
@@ -81,11 +81,12 @@ public abstract class MenuItemWidget extends Widget {
 	 * 	}
 	 * </p>
 	 *
-	 * @param req The current request.
+	 * @param req The HTTP request object.
+	 * @param res The HTTP response object.
 	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
 	 * @throws Exception
 	 */
-	public String getBeforeShowScript(RestRequest req) throws Exception {
+	public String getBeforeShowScript(RestRequest req, RestResponse res) throws Exception {
 		return null;
 	}
 
@@ -93,33 +94,34 @@ public abstract class MenuItemWidget extends Widget {
 	 * Optional Javascript to execute immediately after a menu item is shown.
 	 *
 	 * <p>
-	 * Same as {@link #getBeforeShowScript(RestRequest)} except this Javascript gets executed after the popup dialog has become visible.
+	 * Same as {@link #getBeforeShowScript(RestRequest,RestResponse)} except this Javascript gets executed after the popup dialog has become visible.
 	 *
-	 * @param req The current request.
+	 * @param req The HTTP request object.
+	 * @param res The HTTP response object.
 	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
 	 * @throws Exception
 	 */
-	public String getAfterShowScript(RestRequest req) throws Exception {
+	public String getAfterShowScript(RestRequest req, RestResponse res) throws Exception {
 		return null;
 	}
 
 	/**
 	 * Defines a <js>"menu-item"</js> class that needs to be used on the outer element of the HTML returned by the
-	 * {@link #getHtml(RestRequest)} method.
+	 * {@link #getHtml(RestRequest,RestResponse)} method.
 	 */
 	@Override /* Widget */
-	public String getStyle(RestRequest req) throws Exception {
+	public String getStyle(RestRequest req, RestResponse res) throws Exception {
 		return loadStyle("MenuItemWidget.css");
 	}
 
 	@Override /* Widget */
-	public String getHtml(RestRequest req) throws Exception {
+	public String getHtml(RestRequest req, RestResponse res) throws Exception {
 		StringBuilder sb = new StringBuilder();
 
 		// Need a unique number to define unique function names.
 		Integer id = null;
 
-		String pre = nullIfEmpty(getBeforeShowScript(req)), post = nullIfEmpty(getAfterShowScript(req));
+		String pre = nullIfEmpty(getBeforeShowScript(req, res)), post = nullIfEmpty(getAfterShowScript(req, res));
 
 		sb.append("\n<div class='menu-item'>");
 		if (pre != null || post != null) {
@@ -140,10 +142,10 @@ public abstract class MenuItemWidget extends Widget {
 		}
 		String onclick = (pre == null ? "" : "onPreShow"+id+"();") + "menuClick(this);" + (post == null ? "" : "onPostShow"+id+"();");
 		sb.append(""
-			+ "\n\t<a onclick='"+onclick+"'>"+getLabel(req)+"</a>"
+			+ "\n\t<a onclick='"+onclick+"'>"+getLabel(req, res)+"</a>"
 			+ "\n<div class='popup-content'>"
 		);
-		Object o = getContent(req);
+		Object o = getContent(req, res);
 		if (o instanceof Reader) {
 			try (Reader r = (Reader)o; Writer w = new StringBuilderWriter(sb)) {
 				IOUtils.pipe(r, w);
@@ -177,15 +179,17 @@ public abstract class MenuItemWidget extends Widget {
 	 * The label for the menu item as it's rendered in the menu bar.
 	 *
 	 * @param req The HTTP request object.
+	 * @param res The HTTP response object.
 	 * @return The menu item label.
 	 * @throws Exception
 	 */
-	public abstract String getLabel(RestRequest req) throws Exception;
+	public abstract String getLabel(RestRequest req, RestResponse res) throws Exception;
 
 	/**
 	 * The content of the popup.
 	 *
 	 * @param req The HTTP request object.
+	 * @param res The HTTP response object.
 	 * @return
 	 * 	The content of the popup.
 	 * 	<br>Can be any of the following types:
@@ -197,5 +201,5 @@ public abstract class MenuItemWidget extends Widget {
 	 * 	</ul>
 	 * @throws Exception
 	 */
-	public abstract Object getContent(RestRequest req) throws Exception;
+	public abstract Object getContent(RestRequest req, RestResponse res) throws Exception;
 }

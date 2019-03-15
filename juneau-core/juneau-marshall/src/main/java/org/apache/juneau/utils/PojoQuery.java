@@ -292,7 +292,7 @@ public final class PojoQuery {
 		}
 		if (cm.isMap()) {
 			Map m = (Map)o;
-			DelegateMap dm = new DelegateMap(session.getClassMetaForObject(m));
+			DelegateMap dm = new DelegateMap(m, session);
 			for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 				dm.put(e.getKey().toString(), e.getValue());
 			return dm;
