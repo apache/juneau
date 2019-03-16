@@ -455,13 +455,21 @@ public class ClassUtilsTest {
 
 	public static interface I1 {
 		public int foo(int x);
+		public int foo(String x);
+		public int foo();
 	}
 	public static class I2 {
 		public int foo(int x) { return 0; }
+		public int foo(String x) {return 0;}
+		public int foo() {return 0;}
 	}
 	public static class I3 extends I2 implements I1 {
 		@Override
 		public int foo(int x) {return 0;}
+		@Override
+		public int foo(String x) {return 0;}
+		@Override
+		public int foo() {return 0;}
 	}
 
 	@Test
