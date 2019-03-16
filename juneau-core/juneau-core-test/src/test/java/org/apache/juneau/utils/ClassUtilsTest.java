@@ -164,10 +164,10 @@ public class ClassUtilsTest {
 	//====================================================================================================
 	@Test
 	public void getMethodAnnotations() throws Exception {
-		assertEquals("a1", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a1")).value());
-		assertEquals("a2b", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a2")).value());
-		assertEquals("a3", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a3", CharSequence.class)).value());
-		assertEquals("a4", getAnnotation(TestAnnotation.class, CI3.class.getMethod("a4")).value());
+		assertEquals("a1", getMethodInfo(CI3.class.getMethod("a1")).getAnnotation(TestAnnotation.class).value());
+		assertEquals("a2b", getMethodInfo(CI3.class.getMethod("a2")).getAnnotation(TestAnnotation.class).value());
+		assertEquals("a3", getMethodInfo(CI3.class.getMethod("a3", CharSequence.class)).getAnnotation(TestAnnotation.class).value());
+		assertEquals("a4", getMethodInfo(CI3.class.getMethod("a4")).getAnnotation(TestAnnotation.class).value());
 	}
 
 	public static interface CI1 {
@@ -417,7 +417,8 @@ public class ClassUtilsTest {
 	@Test
 	public void getAnnotationsOnParameter() throws Exception {
 		ObjectList l = new ObjectList();
-		for (HI1 ia : getAnnotations(HI1.class, HA.class.getMethod("doX", HA01.class), 0)) {
+		MethodParamInfo mpi = getMethodInfo(HA.class.getMethod("doX", HA01.class)).getParam(0);
+		for (HI1 ia : mpi.getAnnotations(HI1.class)) {
 			l.add(ia.value());
 		}
 		assertEquals("['0','1','2','3','4']", l.toString());
@@ -442,7 +443,8 @@ public class ClassUtilsTest {
 	@Test
 	public void getAnnotationsOnParameterInherited() throws Exception {
 		ObjectList l = new ObjectList();
-		for (HI2 ib : getAnnotations(HI2.class, HB.class.getMethod("doX", HB01.class), 0)) {
+		MethodParamInfo mpi = getMethodInfo(HB.class.getMethod("doX", HB01.class)).getParam(0);
+		for (HI2 ib : mpi.getAnnotations(HI2.class)) {
 			l.add(ib.value());
 		}
 		assertEquals("['0','1','2','3','4']", l.toString());
@@ -474,7 +476,8 @@ public class ClassUtilsTest {
 
 	@Test
 	public void findMatchingMethods() throws Exception {
-		assertObjectEquals("['public int org.apache.juneau.utils.ClassUtilsTest$I3.foo(int)','public int org.apache.juneau.utils.ClassUtilsTest$I2.foo(int)','public abstract int org.apache.juneau.utils.ClassUtilsTest$I1.foo(int)']", ClassUtils.findMatchingMethods(I3.class.getMethod("foo", int.class)));
+		MethodInfo mi = getMethodInfo(I3.class.getMethod("foo", int.class));
+		assertObjectEquals("['public int org.apache.juneau.utils.ClassUtilsTest$I3.foo(int)','public int org.apache.juneau.utils.ClassUtilsTest$I2.foo(int)','public abstract int org.apache.juneau.utils.ClassUtilsTest$I1.foo(int)']", mi.getMatching());
 	}
 
 }

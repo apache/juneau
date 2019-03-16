@@ -15,7 +15,6 @@ package org.apache.juneau.json;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.annotation.*;
 
 /**
@@ -34,7 +33,7 @@ public class JsonClassMeta extends ClassMetaExtended {
 	 */
 	public JsonClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.json = ClassUtils.getAnnotation(Json.class, getInnerClass());
+		this.json = cm.getClassInfo().getAnnotation(Json.class);
 		if (json != null) {
 			wrapperAttr = nullIfEmpty(json.wrapperAttr());
 		} else {

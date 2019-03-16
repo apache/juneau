@@ -184,7 +184,7 @@ public class BeanMeta<T> {
 				}
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : getAnnotationsParentFirst(Bean.class, classMeta.innerClass))
+				for (Bean b : classMeta.getClassInfo().getAnnotationsParentFirst(Bean.class))
 					if (! b.typePropertyName().isEmpty())
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)
@@ -607,11 +607,13 @@ public class BeanMeta<T> {
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
 					continue;
 
-				BeanIgnore bi = getAnnotation(BeanIgnore.class, m);
+				MethodInfo mi = getMethodInfo(m);
+
+				BeanIgnore bi = mi.getAnnotation(BeanIgnore.class);
 				if (bi != null)
 					continue;
 
-				BeanProperty bp = getAnnotation(BeanProperty.class, m);
+				BeanProperty bp = mi.getAnnotation(BeanProperty.class);
 				if (! (v.isVisible(m) || bp != null))
 					continue;
 

@@ -45,14 +45,15 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Type t, PropertyStore ps) {
-		if (! hasAnnotation(Response.class, t))
+		ClassInfo ci = ClassInfo.create(t);
+		if (! ci.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
 		if (Value.isType(t))
 			b.apply(Value.getParameterType(t));
 		else
 			b.apply(t);
-		for (Response r : getAnnotationsParentFirst(Response.class, t))
+		for (Response r : ci.getAnnotationsParentFirst(Response.class))
 			b.apply(r);
 		return b.build();
 	}
@@ -67,7 +68,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Method m, PropertyStore ps) {
-		if (! hasAnnotation(Response.class, m))
+		if (! getMethodInfo(m).hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
 		Type t = m.getGenericReturnType();
@@ -75,7 +76,7 @@ public class ResponseBeanMeta {
 			b.apply(Value.getParameterType(t));
 		else
 			b.apply(t);
-		for (Response r : getAnnotationsParentFirst(Response.class, m))
+		for (Response r : getMethodInfo(m).getAnnotationsParentFirst(Response.class))
 			b.apply(r);
 		return b.build();
 	}
@@ -83,23 +84,22 @@ public class ResponseBeanMeta {
 	/**
 	 * Create metadata from specified method parameter.
 	 *
-	 * @param m The method containing the parameter annotated with {@link Response}.
-	 * @param i The parameter index.
+	 * @param mpi The method parameter.
 	 * @param ps
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(Method m, int i, PropertyStore ps) {
-		if (! hasAnnotation(Response.class, m, i))
+	public static ResponseBeanMeta create(MethodParamInfo mpi, PropertyStore ps) {
+		if (! mpi.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		Type t = m.getGenericParameterTypes()[i];
+		Type t = mpi.getGenericParameterType();
 		if (Value.isType(t))
 			b.apply(Value.getParameterType(t));
 		else
 			b.apply(t);
-		for (Response r : getAnnotationsParentFirst(Response.class, m, i))
+		for (Response r : mpi.getAnnotationsParentFirst(Response.class))
 			b.apply(r);
 		return b.build();
 	}
@@ -166,17 +166,18 @@ public class ResponseBeanMeta {
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			for (Method m : ClassUtils.getAllMethods(c, false)) {
 				if (isPublic(m)) {
-					assertNoAnnotations(m, Response.class, Body.class, Header.class, Query.class, FormData.class, Path.class);
-					if (hasAnnotation(ResponseHeader.class, m)) {
+					MethodInfo mi = getMethodInfo(m);
+					mi.assertNoAnnotations(Response.class, Body.class, Header.class, Query.class, FormData.class, Path.class);
+					if (mi.hasAnnotation(ResponseHeader.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnNotVoid(m, ResponseHeader.class);
-						HttpPartSchema s = HttpPartSchema.create(getAnnotation(ResponseHeader.class, m), getPropertyName(m));
+						HttpPartSchema s = HttpPartSchema.create(getMethodInfo(m).getAnnotation(ResponseHeader.class), getPropertyName(m));
 						headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
-					} else if (hasAnnotation(ResponseStatus.class, m)) {
+					} else if (mi.hasAnnotation(ResponseStatus.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnType(m, ResponseHeader.class, int.class, Integer.class);
 						statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
-					} else if (hasAnnotation(ResponseBody.class, m)) {
+					} else if (mi.hasAnnotation(ResponseBody.class)) {
 						Class<?>[] pt = m.getParameterTypes();
 						if (pt.length == 0)
 							assertReturnNotVoid(m, ResponseHeader.class);

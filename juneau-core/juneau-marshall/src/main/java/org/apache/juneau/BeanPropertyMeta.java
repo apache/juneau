@@ -52,6 +52,7 @@ public final class BeanPropertyMeta {
 	private final Field field;                                // The bean property field (if it has one).
 	private final Field innerField;                                // The bean property field (if it has one).
 	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
+	private final MethodInfo getterInfo, setterInfo, extraKeysInfo;           // The bean property getter and setter.
 	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
 	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
 
@@ -194,7 +195,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty p = ClassUtils.getAnnotation(BeanProperty.class, getter);
+				BeanProperty p = getMethodInfo(getter).getAnnotation(BeanProperty.class);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -210,7 +211,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty p = ClassUtils.getAnnotation(BeanProperty.class, setter);
+				BeanProperty p = getMethodInfo(setter).getAnnotation(BeanProperty.class);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -370,8 +371,11 @@ public final class BeanPropertyMeta {
 		this.field = b.field;
 		this.innerField = b.innerField;
 		this.getter = b.getter;
+		this.getterInfo = getMethodInfo(b.getter);
 		this.setter = b.setter;
+		this.setterInfo = getMethodInfo(b.setter);
 		this.extraKeys = b.extraKeys;
+		this.extraKeysInfo = getMethodInfo(b.extraKeys);
 		this.isUri = b.isUri;
 		this.beanMeta = b.beanMeta;
 		this.beanContext = b.beanContext;
@@ -1064,15 +1068,15 @@ public final class BeanPropertyMeta {
 			appendAnnotations(a, field.getType(), l);
 		}
 		if (getter != null) {
-			addIfNotNull(l, ClassUtils.getAnnotation(a, getter));
+			addIfNotNull(l, ClassUtils.getMethodInfo(getter).getAnnotation(a));
 			appendAnnotations(a, getter.getReturnType(), l);
 		}
 		if (setter != null) {
-			addIfNotNull(l, ClassUtils.getAnnotation(a, setter));
+			addIfNotNull(l, ClassUtils.getMethodInfo(setter).getAnnotation(a));
 			appendAnnotations(a, setter.getReturnType(), l);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, ClassUtils.getAnnotation(a, extraKeys));
+			addIfNotNull(l, ClassUtils.getMethodInfo(extraKeys).getAnnotation(a));
 			appendAnnotations(a, extraKeys.getReturnType(), l);
 		}
 
@@ -1095,13 +1099,13 @@ public final class BeanPropertyMeta {
 		if (field != null)
 			t = field.getAnnotation(a);
 		if (t == null && getter != null)
-			t = ClassUtils.getAnnotation(a, getter);
+			t = getterInfo.getAnnotation(a);
 		if (t == null && setter != null)
-			t = ClassUtils.getAnnotation(a, setter);
+			t = setterInfo.getAnnotation(a);
 		if (t == null && extraKeys != null)
-			t = ClassUtils.getAnnotation(a, extraKeys);
+			t = extraKeysInfo.getAnnotation(a);
 		if (t == null)
-			t = ClassUtils.getAnnotation(a, typeMeta.getInnerClass());
+			t = typeMeta.getClassInfo().getAnnotation(a);
 		return t;
 	}
 

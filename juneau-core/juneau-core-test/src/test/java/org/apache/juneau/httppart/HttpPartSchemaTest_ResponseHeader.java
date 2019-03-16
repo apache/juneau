@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
@@ -128,7 +129,8 @@ public class HttpPartSchemaTest_ResponseHeader {
 
 	@Test
 	public void a03_basic_onParameter() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(ResponseHeader.class, A03.class.getMethod("a", String.class), 0).noValidate().build();
+		MethodParamInfo mpi = getMethodInfo(A03.class.getMethod("a", String.class)).getParam(0);
+		HttpPartSchema s = HttpPartSchema.create().apply(ResponseHeader.class, mpi).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartSchema.Type.NUMBER, s.getType());
 		assertEquals(HttpPartSchema.Format.INT32, s.getFormat());
@@ -180,7 +182,8 @@ public class HttpPartSchemaTest_ResponseHeader {
 
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
-		HttpPartSchema s = HttpPartSchema.create().apply(ResponseHeader.class, A04.class.getMethod("a", A01.class), 0).noValidate().build();
+		MethodParamInfo mpi = getMethodInfo(A04.class.getMethod("a", A01.class)).getParam(0);
+		HttpPartSchema s = HttpPartSchema.create().apply(ResponseHeader.class, mpi).noValidate().build();
 		assertEquals("y", s.getName());
 		assertEquals(HttpPartSchema.Type.INTEGER, s.getType());
 		assertEquals(HttpPartSchema.Format.INT64, s.getFormat());

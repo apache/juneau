@@ -3228,7 +3228,7 @@ public final class RestContext extends BeanContext {
 				_destroyMethodParams = new ArrayList<>();
 
 			for (java.lang.reflect.Method method : resourceClass.getMethods()) {
-				RestMethod a = ClassUtils.getAnnotation(RestMethod.class, method);
+				RestMethod a = ClassUtils.getMethodInfo(method).getAnnotation(RestMethod.class);
 				if (a != null) {
 					methodsFound.add(method.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
@@ -4572,6 +4572,7 @@ public final class RestContext extends BeanContext {
 		Type[] pt = method.getGenericParameterTypes();
 		RestMethodParam[] rp = new RestMethodParam[pt.length];
 		PropertyStore ps = getPropertyStore();
+		MethodInfo mi = getMethodInfo(method);
 
 		for (int i = 0; i < pt.length; i++) {
 
@@ -4583,29 +4584,31 @@ public final class RestContext extends BeanContext {
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
 			}
 
-			if (hasAnnotation(Header.class, method, i)) {
-				rp[i] = new RestParamDefaults.HeaderObject(method, i, ps);
-			} else if (hasAnnotation(Query.class, method, i)) {
-				rp[i] = new RestParamDefaults.QueryObject(method, i, ps);
-			} else if (hasAnnotation(FormData.class, method, i)) {
-				rp[i] = new RestParamDefaults.FormDataObject(method, i, ps);
-			} else if (hasAnnotation(Path.class, method, i)) {
-				rp[i] = new RestParamDefaults.PathObject(method, i, ps, pathPattern);
-			} else if (hasAnnotation(Body.class, method, i)) {
-				rp[i] = new RestParamDefaults.BodyObject(method, i, ps);
-			} else if (hasAnnotation(Request.class, method, i)) {
-				rp[i] = new RestParamDefaults.RequestObject(method, i, ps);
-			} else if (hasAnnotation(Response.class, method, i)) {
-				rp[i] = new RestParamDefaults.ResponseObject(method, i, ps);
-			} else if (hasAnnotation(ResponseHeader.class, method, i)) {
-				rp[i] = new RestParamDefaults.ResponseHeaderObject(method, i, ps);
-			} else if (hasAnnotation(ResponseStatus.class, method, i)) {
+			MethodParamInfo mpi = mi.getParam(i);
+
+			if (mpi.hasAnnotation(Header.class)) {
+				rp[i] = new RestParamDefaults.HeaderObject(mpi, ps);
+			} else if (mpi.hasAnnotation(Query.class)) {
+				rp[i] = new RestParamDefaults.QueryObject(mpi, ps);
+			} else if (mpi.hasAnnotation(FormData.class)) {
+				rp[i] = new RestParamDefaults.FormDataObject(mpi, ps);
+			} else if (mpi.hasAnnotation(Path.class)) {
+				rp[i] = new RestParamDefaults.PathObject(mpi, ps, pathPattern);
+			} else if (mpi.hasAnnotation(Body.class)) {
+				rp[i] = new RestParamDefaults.BodyObject(mpi, ps);
+			} else if (mpi.hasAnnotation(Request.class)) {
+				rp[i] = new RestParamDefaults.RequestObject(mpi, ps);
+			} else if (mpi.hasAnnotation(Response.class)) {
+				rp[i] = new RestParamDefaults.ResponseObject(mpi, ps);
+			} else if (mpi.hasAnnotation(ResponseHeader.class)) {
+				rp[i] = new RestParamDefaults.ResponseHeaderObject(mpi, ps);
+			} else if (mpi.hasAnnotation(ResponseStatus.class)) {
 				rp[i] = new RestParamDefaults.ResponseStatusObject(method, t);
-			} else if (hasAnnotation(HasFormData.class, method, i)) {
-				rp[i] = new RestParamDefaults.HasFormDataObject(method, i);
-			} else if (hasAnnotation(HasQuery.class, method, i)) {
-				rp[i] = new RestParamDefaults.HasQueryObject(method, i);
-			} else if (hasAnnotation(org.apache.juneau.rest.annotation.Method.class, method, i)) {
+			} else if (mpi.hasAnnotation(HasFormData.class)) {
+				rp[i] = new RestParamDefaults.HasFormDataObject(mpi);
+			} else if (mpi.hasAnnotation(HasQuery.class)) {
+				rp[i] = new RestParamDefaults.HasQueryObject(mpi);
+			} else if (mpi.hasAnnotation(org.apache.juneau.rest.annotation.Method.class)) {
 				rp[i] = new RestParamDefaults.MethodObject(method, t);
 			}
 

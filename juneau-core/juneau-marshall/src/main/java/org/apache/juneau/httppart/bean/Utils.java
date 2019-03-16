@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -24,14 +22,6 @@ import org.apache.juneau.annotation.*;
  * Utility methods.
  */
 class Utils {
-
-	@SafeVarargs
-	static final void assertNoAnnotations(Method m, Class<? extends Annotation> a, Class<? extends Annotation>...c) throws InvalidAnnotationException {
-		for (Class<? extends Annotation> cc : c) {
-			if (hasAnnotation(cc, m))
-				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cc.getSimpleName(), a.getSimpleName(), m);
-		}
-	}
 
 	static void assertNoArgs(Method m, Class<?> a) throws InvalidAnnotationException {
 		if (m.getParameterTypes().length != 0)

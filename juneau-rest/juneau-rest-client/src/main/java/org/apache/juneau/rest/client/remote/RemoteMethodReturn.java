@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -38,7 +36,8 @@ public final class RemoteMethodReturn {
 		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
 		Class<?> rt = m.getReturnType();
 		RemoteReturn rv = rt == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
-		if (hasAnnotation(Response.class, rt) && rt.isInterface()) {
+		ClassInfo rti = ClassInfo.lookup(rt);
+		if (rti.hasAnnotation(Response.class) && rt.isInterface()) {
 			this.meta = ResponseBeanMeta.create(m, PropertyStore.DEFAULT);
 			rv = RemoteReturn.BEAN;
 		} else {

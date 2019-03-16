@@ -146,7 +146,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 			try {
 
-				RestMethod m = getAnnotation(RestMethod.class, method);
+				RestMethod m = getMethodInfo(method).getAnnotation(RestMethod.class);
 				if (m == null)
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
@@ -394,7 +394,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				methodParams = context.findParams(method, false, pathPattern);
 
-				if (hasAnnotation(Response.class, method))
+				if (getMethodInfo(method).hasAnnotation(Response.class))
 					responseMeta = ResponseBeanMeta.create(method, serializers.getPropertyStore());
 
 				// Need this to access methods in anonymous inner classes.

@@ -19,6 +19,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
+
 /**
  * Contains the meta-data about a remote proxy REST interface.
  *
@@ -50,7 +52,8 @@ public class RemoteInterfaceMeta {
 	public RemoteInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
 		String path = "";
-		List<RemoteInterface> rr = getAnnotationsParentFirst(RemoteInterface.class, c);
+		ClassInfo ci = ClassInfo.lookup(c);
+		List<RemoteInterface> rr = ci.getAnnotationsParentFirst(RemoteInterface.class);
 		for (RemoteInterface r : rr)
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());

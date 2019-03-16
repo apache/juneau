@@ -13,7 +13,6 @@
 package org.apache.juneau.urlencoding;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.urlencoding.annotation.*;
 
 /**
@@ -31,7 +30,7 @@ public class UrlEncodingClassMeta extends ClassMetaExtended {
 	 */
 	public UrlEncodingClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.urlEncoding = ClassUtils.getAnnotation(UrlEncoding.class, getInnerClass());
+		this.urlEncoding = cm.getClassInfo().getAnnotation(UrlEncoding.class);
 		if (urlEncoding != null) {
 			expandedParams = urlEncoding.expandedParams();
 		} else {

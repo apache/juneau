@@ -19,6 +19,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
+
 /**
  * Contains the meta-data about a REST proxy class.
  *
@@ -44,7 +46,8 @@ public class RemoteResourceMeta {
 	public RemoteResourceMeta(Class<?> c) {
 		String path = "";
 
-		for (RemoteResource r : getAnnotationsParentFirst(RemoteResource.class, c))
+		ClassInfo ci = ClassInfo.lookup(c);
+		for (RemoteResource r : ci.getAnnotationsParentFirst(RemoteResource.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 

@@ -65,6 +65,7 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
+	final ClassInfo info;
 
 	private final Class<? extends T> implClass;             // The implementation class to use if this is an interface.
 	private final ClassCategory cc;                         // The class category.
@@ -151,6 +152,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 		this.innerClass = innerClass;
+		this.info = ClassInfo.lookup(innerClass);
 		this.beanContext = beanContext;
 		this.extMeta = new MetadataMap();
 		String notABeanReason = null;
@@ -229,6 +231,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	ClassMeta(ClassMeta<T> mainType, ClassMeta<?> keyType, ClassMeta<?> valueType, ClassMeta<?> elementType) {
 		this.innerClass = mainType.innerClass;
+		this.info = ClassInfo.lookup(innerClass);
 		this.implClass = mainType.implClass;
 		this.childPojoSwaps = mainType.childPojoSwaps;
 		this.childSwapMap = mainType.childSwapMap;
@@ -280,6 +283,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
 		this.innerClass = (Class<T>) Object[].class;
+		this.info = ClassInfo.lookup(innerClass);
 		this.extMeta = new MetadataMap();
 		this.args = args;
 		this.implClass = null;
@@ -817,6 +821,14 @@ public final class ClassMeta<T> implements Type {
 		}
 	}
 
+	/**
+	 * Returns the {@link ClassInfo} wrapper for the underlying class.
+	 *
+	 * @return The {@link ClassInfo} wrapper for the underlying class, never <jk>null</jk>.
+	 */
+	public ClassInfo getClassInfo() {
+		return info;
+	}
 
 	/**
 	 * Returns the type property name associated with this class and subclasses.

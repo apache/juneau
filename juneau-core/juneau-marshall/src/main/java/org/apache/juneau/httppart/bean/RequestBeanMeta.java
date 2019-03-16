@@ -32,17 +32,16 @@ public class RequestBeanMeta {
 	/**
 	 * Create metadata from specified parameter.
 	 *
-	 * @param m The method containing the parameter or parameter type annotated with {@link Request}.
-	 * @param i The parameter index.
+	 * @param mpi The method parameter.
 	 * @param ps
 	 * 	Configuration information used to instantiate part serializers and part parsers.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(Method m, int i, PropertyStore ps) {
-		if (! hasAnnotation(Request.class, m, i))
+	public static RequestBeanMeta create(MethodParamInfo mpi, PropertyStore ps) {
+		if (! mpi.hasAnnotation(Request.class))
 			return null;
-		return new RequestBeanMeta.Builder(ps).apply(m, i).build();
+		return new RequestBeanMeta.Builder(ps).apply(mpi).build();
 	}
 
 	/**
@@ -55,7 +54,8 @@ public class RequestBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(Class<?> c, PropertyStore ps) {
-		if (! hasAnnotation(Request.class, c))
+		ClassInfo ci = ClassInfo.lookup(c);
+		if (! ci.hasAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(ps).apply(c).build();
 	}
@@ -90,34 +90,37 @@ public class RequestBeanMeta {
 			this.ps = ps;
 		}
 
-		Builder apply(Method m, int i) {
-			return apply(m.getParameterTypes()[i]).apply(getAnnotation(Request.class, m, i));
+		Builder apply(MethodParamInfo mpi) {
+			return apply(mpi.getParameterType()).apply(mpi.getAnnotation(Request.class));
 		}
 
 		Builder apply(Class<?> c) {
-			apply(getAnnotation(Request.class, c));
+			ClassInfo ci = ClassInfo.lookup(c);
+			apply(ci.getAnnotation(Request.class));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			for (Method m : ClassUtils.getAllMethods(c, false)) {
+
 				if (isPublic(m)) {
-					assertNoAnnotations(m, Request.class, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
+					MethodInfo mi = getMethodInfo(m);
+					mi.assertNoAnnotations(Request.class, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
 					String n = m.getName();
-					if (hasAnnotation(Body.class, m)) {
+					if (mi.hasAnnotation(Body.class)) {
 						assertNoArgs(m, Body.class);
 						assertReturnNotVoid(m, Body.class);
 						properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, m));
-					} else if (hasAnnotation(Header.class, m)) {
+					} else if (mi.hasAnnotation(Header.class)) {
 						assertNoArgs(m, Header.class);
 						assertReturnNotVoid(m, Header.class);
 						properties.put(n, RequestBeanPropertyMeta.create(HEADER, Header.class, m));
-					} else if (hasAnnotation(Query.class, m)) {
+					} else if (mi.hasAnnotation(Query.class)) {
 						assertNoArgs(m, Query.class);
 						assertReturnNotVoid(m, Query.class);
 						properties.put(n, RequestBeanPropertyMeta.create(QUERY, Query.class, m));
-					} else if (hasAnnotation(FormData.class, m)) {
+					} else if (mi.hasAnnotation(FormData.class)) {
 						assertNoArgs(m, FormData.class);
 						assertReturnNotVoid(m, FormData.class);
 						properties.put(n, RequestBeanPropertyMeta.create(FORMDATA, FormData.class, m));
-					} else if (hasAnnotation(Path.class, m)) {
+					} else if (mi.hasAnnotation(Path.class)) {
 						assertNoArgs(m, Path.class);
 						assertReturnNotVoid(m, Path.class);
 						properties.put(n, RequestBeanPropertyMeta.create(PATH, Path.class, m));

@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
@@ -67,7 +68,8 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 			description;
 
 		Builder(RestContext context) {
-			for (RestResource r : getAnnotationsParentFirst(RestResource.class, context.getResource().getClass())) {
+			ClassInfo ci = ClassInfo.lookup(context.getResource().getClass());
+			for (RestResource r : ci.getAnnotationsParentFirst(RestResource.class)) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
 				if (r.title().length > 0)
@@ -164,7 +166,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public String getMethodSummary(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 
-		String s = getAnnotation(RestMethod.class, method).summary();
+		String s = getMethodInfo(method).getAnnotation(RestMethod.class).summary();
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)
@@ -220,7 +222,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 	public String getMethodDescription(Method method, RestRequest req) throws Exception {
 		VarResolverSession vr = req.getVarResolverSession();
 
-		String s = joinnl(getAnnotation(RestMethod.class, method).description());
+		String s = joinnl(getMethodInfo(method).getAnnotation(RestMethod.class).description());
 		if (s.isEmpty()) {
 			Operation o = getSwaggerOperation(method, req);
 			if (o != null)
@@ -398,7 +400,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 		if (s != null) {
 			Map<String,OperationMap> sp = s.getPaths();
 			if (sp != null) {
-				Map<String,Operation> spp = sp.get(fixMethodPath(getAnnotation(RestMethod.class, method).path()));
+				Map<String,Operation> spp = sp.get(fixMethodPath(getMethodInfo(method).getAnnotation(RestMethod.class).path()));
 				if (spp != null)
 					return spp.get(req.getMethod());
 			}

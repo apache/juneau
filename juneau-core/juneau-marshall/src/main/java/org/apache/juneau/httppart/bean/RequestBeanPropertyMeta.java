@@ -30,7 +30,7 @@ public class RequestBeanPropertyMeta {
 
 	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, Method m) {
 		HttpPartSchemaBuilder sb = HttpPartSchema.create().name(getPropertyName(m));
-		for (Annotation a : getAnnotationsParentFirst(c, m))
+		for (Annotation a : getMethodInfo(m).getAnnotationsParentFirst(c))
 			sb.apply(a);
 		return new Builder().partType(partType).schema(sb.build()).getter(m);
 	}
