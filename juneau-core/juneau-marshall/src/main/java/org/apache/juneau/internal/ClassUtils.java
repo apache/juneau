@@ -1359,21 +1359,18 @@ public final class ClassUtils {
 	 * 	Methods are ordered from child-to-parent order.
 	 */
 	public static List<Method> findMatchingMethods(Method m) {
-		return findMatchingMethods(new ArrayList<Method>(), m);
+		return findMatchingMethods(new ArrayList<Method>(), m, m.getDeclaringClass());
 	}
 
-	private static List<Method> findMatchingMethods(List<Method> l, Method m) {
-		l.add(m);
-		Class<?> c = m.getDeclaringClass();
+	private static List<Method> findMatchingMethods(List<Method> l, Method m, Class<?> c) {
+		for (Method m2 : c.getDeclaredMethods())
+			if (isSameMethod(m, m2))
+				l.add(m2);
 		Class<?> pc = c.getSuperclass();
 		if (pc != null)
-			for (Method m2 : pc.getDeclaredMethods())
-				if (isSameMethod(m, m2))
-					findMatchingMethods(l, m2);
+			findMatchingMethods(l, m, pc);
 		for (Class<?> ic : c.getInterfaces())
-			for (Method m2 : ic.getDeclaredMethods())
-				if (isSameMethod(m, m2))
-					findMatchingMethods(l, m2);
+			findMatchingMethods(l, m, ic);
 		return l;
 	}
 

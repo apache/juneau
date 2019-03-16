@@ -14,6 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
 
+import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -44,5 +45,10 @@ public class HelloWorldResource implements BasicRestConfig {
 	@RestMethod(name=GET, path="/*", summary="Responds with \"Hello world!\"")
 	public String sayHello() {
 		return "Hello world!";
+	}
+
+	@Override
+	public Swagger getOptions(RestRequest req) {
+		return req.getSwagger();
 	}
 }
