@@ -18,11 +18,13 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Utility class for introspecting information about a method parameter.
  */
+@BeanIgnore
 public final class MethodParamInfo {
 
 	private MethodInfo methodInfo;

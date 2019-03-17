@@ -12,17 +12,22 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Utility class for introspecting information about a field.
  */
+@BeanIgnore
 public final class FieldInfo {
 
 	private final ClassInfo declaringClass;
 	private final Field f;
+	private ClassInfo type;
 
 	/**
 	 * Constructor.
@@ -257,5 +262,53 @@ public final class FieldInfo {
 	 */
 	public boolean isNotTransient() {
 		return ! Modifier.isTransient(f.getModifiers());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present.
+	 */
+	public boolean isAnnotationPresent(Class<? extends Annotation> a) {
+		return f.isAnnotationPresent(a);
+	}
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 *
+	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public boolean setAccessible(boolean ignoreExceptions) {
+		try {
+			if (! (f.isAccessible()))
+				f.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			if (ignoreExceptions)
+				return false;
+			throw new ClassMetaRuntimeException("Could not set accessibility to true on field ''{0}''", f);
+		}
+	}
+
+	/**
+	 * Returns the type of this field.
+	 *
+	 * @return The type of this field.
+	 */
+	public ClassInfo getType() {
+		if (type == null)
+			type = ClassInfo.lookup(f.getType());
+		return type;
+	}
+
+	@Override
+	public String toString() {
+		return f.getDeclaringClass().getName() + "." + f.getName();
 	}
 }

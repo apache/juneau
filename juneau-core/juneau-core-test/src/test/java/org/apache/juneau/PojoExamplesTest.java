@@ -214,12 +214,12 @@ public class PojoExamplesTest {
 		try {
 			bs.getClassMeta(F3.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid field 'public static java.lang.String org.apache.juneau.PojoExamplesTest$F3.F3'");
+			assertContains(e.getMessage(), "@Example used on invalid field 'org.apache.juneau.PojoExamplesTest$F3.F3'");
 		}
 		try {
 			bs.getClassMeta(F4.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid field 'public org.apache.juneau.PojoExamplesTest$F4 org.apache.juneau.PojoExamplesTest$F4.f4'");
+			assertContains(e.getMessage(), "@Example used on invalid field 'org.apache.juneau.PojoExamplesTest$F4.f4'");
 		}
 	}
 

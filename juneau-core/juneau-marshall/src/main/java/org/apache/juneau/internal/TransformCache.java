@@ -14,6 +14,8 @@ package org.apache.juneau.internal;
 
 import java.util.concurrent.*;
 
+import org.apache.juneau.reflection.*;
+
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ClassFlags.*;
 
@@ -118,11 +120,12 @@ public class TransformCache {
 		if (t != null)
 			return t == NULL ? null : t;
 
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(ic, false, true); i.hasNext(); ) {
-			Class pic = i.next();
-			t = m.get(pic);
+		ClassInfo ici = ClassInfo.lookup(ic), oci = ClassInfo.lookup(oc);
+
+		for (ClassInfo pic : ici.getParentClassesAndInterfaces()) {
+			t = m.get(pic.getInnerClass());
 			if (t != null) {
-				m.put(pic, t);
+				m.put(pic.getInnerClass(), t);
 				return t == NULL ? null : t;
 			}
 		}
@@ -135,6 +138,7 @@ public class TransformCache {
 			};
 		} else if (ic == String.class) {
 			final Class<?> oc2 = hasPrimitiveWrapper(oc) ? getPrimitiveWrapper(oc) : oc;
+			ClassInfo oc2i = ClassInfo.lookup(oc2);
 			if (oc2.isEnum()) {
 				t = new Transform<String,O>() {
 					@Override
@@ -143,7 +147,7 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final Method fromStringMethod = findPublicFromStringMethod(oc2);
+				final MethodInfo fromStringMethod = oc2i.findPublicFromStringMethod();
 				if (fromStringMethod != null) {
 					t = new Transform<String,O>() {
 						@Override
@@ -160,11 +164,11 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			Method createMethod = findPublicStaticCreateMethod(oc, ic, "create");
+			MethodInfo createMethod = oci.findPublicStaticCreateMethod(ic, "create");
 			if (createMethod == null)
-				createMethod = findPublicStaticCreateMethod(oc, ic, "from" + ic.getSimpleName());
+				createMethod = oci.findPublicStaticCreateMethod(ic, "from" + ic.getSimpleName());
 			if (createMethod != null) {
-				final Method cm = createMethod;
+				final Method cm = createMethod.getInner();
 				t = new Transform<I,O>() {
 					@Override
 					public O transform(Object context, I in) {

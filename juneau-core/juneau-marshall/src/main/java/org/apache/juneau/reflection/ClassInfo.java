@@ -12,16 +12,21 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
+import static org.apache.juneau.internal.ClassFlags.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
  * Utility class for introspecting information about a class.
  */
+@BeanIgnore
 public final class ClassInfo {
 
 	private final Type type;
@@ -32,7 +37,7 @@ public final class ClassInfo {
 	private Optional<ClassInfo> parent;
 	private ClassInfo[] interfaces;
 	private List<FieldInfo> allFields, allFieldsPf, declaredFields;
-	private List<MethodInfo> allMethods, allMethodsPf, declaredMethods;
+	private List<MethodInfo> allMethods, allMethodsPf, declaredMethods, publicMethods;
 	private List<ClassInfo> parentClasses, parentClassesAndInterfaces;
 
 	private static final Map<Type,ClassInfo> CACHE = new ConcurrentHashMap<>();
@@ -232,6 +237,20 @@ public final class ClassInfo {
 		return declaredMethods;
 	}
 
+	/**
+	 * Returns all public methods on this class.
+	 *
+	 * <p>
+	 * Returns the methods (in the same order) as the call to {@link Class#getMethods()}.
+	 *
+	 * @return All public methods on this class.
+	 */
+	public Iterable<MethodInfo> getPublicMethods() {
+		if (publicMethods == null)
+			publicMethods = Collections.unmodifiableList(findPublicMethods());
+		return publicMethods;
+	}
+
 	private List<MethodInfo> findAllMethods() {
 		List<MethodInfo> l = new ArrayList<>();
 		for (ClassInfo c : getParentClasses())
@@ -253,6 +272,56 @@ public final class ClassInfo {
 		for (Method m : ClassUtils.sort(c.getDeclaredMethods()))
 			l.add(MethodInfo.create(this, m));
 		return l;
+	}
+
+	private List<MethodInfo> findPublicMethods() {
+		List<MethodInfo> l = new ArrayList<>(c.getMethods().length);
+		for (Method m : c.getMethods())
+			l.add(MethodInfo.create(this, m));
+		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Special methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Finds the public static "fromString" method on this class.
+	 *
+	 * <p>
+	 * Looks for the following method names:
+	 * <ul>
+	 * 	<li><code>fromString</code>
+	 * 	<li><code>fromValue</code>
+	 * 	<li><code>valueOf</code>
+	 * 	<li><code>parse</code>
+	 * 	<li><code>parseString</code>
+	 * 	<li><code>forName</code>
+	 * 	<li><code>forString</code>
+	 * </ul>
+	 *
+	 * @return The static method, or <jk>null</jk> if it couldn't be found.
+	 */
+	public MethodInfo findPublicFromStringMethod() {
+		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"})
+			for (MethodInfo m : getPublicMethods())
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class))
+					return m;
+		return null;
+	}
+
+	/**
+	 * Find the public static creator method on this class.
+	 *
+	 * @param ic The argument type.
+	 * @param name The method name.
+	 * @return The static method, or <jk>null</jk> if it couldn't be found.
+	 */
+	public MethodInfo findPublicStaticCreateMethod(Class<?> ic, String name) {
+		for (MethodInfo m : getPublicMethods())
+			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(name) && m.hasReturnType(c) && m.hasArgs(ic))
+				return m;
+		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -319,6 +388,51 @@ public final class ClassInfo {
 		for (Field f : ClassUtils.sort(c.getDeclaredFields()))
 			l.add(FieldInfo.create(this, f));
 		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Locates the no-arg constructor for this class.
+	 *
+	 * <p>
+	 * Constructor must match the visibility requirements specified by parameter 'v'.
+	 * If class is abstract, always returns <jk>null</jk>.
+	 * Note that this also returns the 1-arg constructor for non-static member classes.
+	 *
+	 * @param v The minimum visibility.
+	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
+	 */
+	public Constructor<?> findNoArgConstructor(Visibility v) {
+		int mod = c.getModifiers();
+		if (Modifier.isAbstract(mod))
+			return null;
+		boolean isMemberClass = c.isMemberClass() && ! ClassUtils.isStatic(c);
+		for (Constructor<?> cc : c.getConstructors()) {
+			mod = cc.getModifiers();
+			if (ClassUtils.hasNumArgs(cc, isMemberClass ? 1 : 0) && v.isVisible(mod) && ClassUtils.isNotDeprecated(cc))
+				return v.transform(cc);
+		}
+		return null;
+	}
+
+	/**
+	 * Finds a constructor with the specified parameters without throwing an exception.
+	 *
+	 * @param vis The minimum visibility.
+	 * @param fuzzyArgs
+	 * 	Use fuzzy-arg matching.
+	 * 	Find a constructor that best matches the specified args.
+	 * @param argTypes
+	 * 	The argument types in the constructor.
+	 * 	Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Constructor<T> findConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
+		return (Constructor<T>)ClassUtils.findConstructor(c, vis, fuzzyArgs, argTypes);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

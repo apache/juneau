@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
@@ -243,60 +242,6 @@ public final class ClassUtils {
 		if (! c.isPrimitive())
 			return c;
 		return pmap1.get(c);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to the specified class.
-	 *
-	 * @param x The class to test.
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to the specified class.
-	 */
-	public static boolean isAll(Class<?> x, ClassFlags...flags) {
-		for (ClassFlags f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isNotDeprecated(x))
-						return false;
-					break;
-				case NOT_DEPRECATED:
-					if (isDeprecated(x))
-						return false;
-					break;
-				case PUBLIC:
-					if (isNotPublic(x))
-						return false;
-					break;
-				case NOT_PUBLIC:
-					if (isPublic(x))
-						return false;
-					break;
-				case STATIC:
-					if (isNotStatic(x))
-						return false;
-					break;
-				case NOT_STATIC:
-					if (isStatic(x))
-						return false;
-					break;
-				case ABSTRACT:
-					if (isNotAbstract(x))
-						return false;
-					break;
-				case NOT_ABSTRACT:
-					if (isAbstract(x))
-						return false;
-					break;
-				case HAS_ARGS:
-				case HAS_NO_ARGS:
-				case TRANSIENT:
-				case NOT_TRANSIENT:
-				default:
-					break;
-
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -1876,47 +1821,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Finds the public static "fromString" method on the specified class.
-	 *
-	 * <p>
-	 * Looks for the following method names:
-	 * <ul>
-	 * 	<li><code>fromString</code>
-	 * 	<li><code>fromValue</code>
-	 * 	<li><code>valueOf</code>
-	 * 	<li><code>parse</code>
-	 * 	<li><code>parseString</code>
-	 * 	<li><code>forName</code>
-	 * 	<li><code>forString</code>
-	 * </ul>
-	 *
-	 * @param c The class to find the method on.
-	 * @return The static method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public static Method findPublicFromStringMethod(Class<?> c) {
-		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"})
-			for (Method m : c.getMethods())
-				if (isAll(m, STATIC, PUBLIC, NOT_DEPRECATED) && hasName(m, methodName) && hasReturnType(m, c) && hasArgs(m, String.class))
-					return m;
-		return null;
-	}
-
-	/**
-	 * Find the public static creator method on the specified class.
-	 *
-	 * @param oc The created type.
-	 * @param ic The argument type.
-	 * @param name The method name.
-	 * @return The static method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public static Method findPublicStaticCreateMethod(Class<?> oc, Class<?> ic, String name) {
-		for (Method m : oc.getMethods())
-			if (isAll(m, STATIC, PUBLIC, NOT_DEPRECATED) && hasName(m, name) && hasReturnType(m, oc) && hasArgs(m, ic))
-				return m;
-		return null;
-	}
-
-	/**
 	 * Constructs a new instance of the specified class from the specified string.
 	 *
 	 * <p>
@@ -1924,7 +1828,7 @@ public final class ClassUtils {
 	 * <ul>
 	 * 	<li>Have a public constructor that takes in a single <code>String</code> argument.
 	 * 	<li>Have a static <code>fromString(String)</code> (or related) method.
-	 * 		<br>See {@link #findPublicFromStringMethod(Class)} for the list of possible static method names.
+	 * 		<br>See {@link ClassInfo#findPublicFromStringMethod()} for the list of possible static method names.
 	 * 	<li>Be an <code>enum</code>.
 	 * </ul>
 	 *

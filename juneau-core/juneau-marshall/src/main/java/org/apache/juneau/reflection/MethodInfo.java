@@ -24,9 +24,11 @@ import org.apache.juneau.internal.*;
 /**
  * Utility class for introspecting information about a method.
  */
+@BeanIgnore
 public final class MethodInfo {
 
 	private final ClassInfo declaringClass;
+	private ClassInfo returnType;
 	private final Method m;
 	private final MethodParamInfo[] params;
 	private List<Method> matching;
@@ -35,6 +37,7 @@ public final class MethodInfo {
 	private Map<Class<?>,List<?>> annotationsPfMap;
 	private ClassInfo returnTypeInfo;
 	private ClassInfo[] exceptionInfos;
+	private String signature;
 
 	/**
 	 * Constructor.
@@ -265,6 +268,16 @@ public final class MethodInfo {
 		for (Class<? extends Annotation> cc : c)
 			if (hasAnnotation(cc))
 				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cc.getSimpleName(), a.getSimpleName(), m);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this method.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present on this method.
+	 */
+	public boolean isAnnotationPresent(Class<? extends Annotation> a) {
+		return m.isAnnotationPresent(a);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -580,5 +593,97 @@ public final class MethodInfo {
 	 */
 	public boolean hasReturnTypeParent(Class<?> c) {
 		return ClassUtils.isParentClass(c, m.getReturnType());
+	}
+
+	/**
+	 * Returns the name of this method.
+	 *
+	 * @return The name of this method.
+	 */
+	public String getName() {
+		return m.getName();
+	}
+
+	/**
+	 * Returns the return type of this method.
+	 *
+	 * @return The return type of this method.
+	 */
+	public ClassInfo getReturnType() {
+		if (returnType == null)
+			returnType = ClassInfo.lookup(m.getReturnType());
+		return returnType;
+	}
+
+	/**
+	 * Shortcut for calling the invoke method on the underlying method.
+	 *
+	 * @param obj the object the underlying method is invoked from.
+	 * @param args the arguments used for the method call
+	 * @return The object returned from the method.
+	 * @throws InvocationTargetException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
+	public Object invoke(Object obj, Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		return m.invoke(obj, args);
+	}
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 *
+	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public boolean setAccessible(boolean ignoreExceptions) {
+		try {
+			if (! (m.isAccessible()))
+				m.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			if (ignoreExceptions)
+				return false;
+			throw new ClassMetaRuntimeException("Could not set accessibility to true on method ''{0}''", m);
+		}
+	}
+
+	/**
+	 * Returns the signature of this method.
+	 *
+	 * <p>
+	 * For no-arg methods, the signature will be a simple string such as <js>"toString"</js>.
+	 * For methods with one or more args, the arguments will be fully-qualified class names (e.g.
+	 * <js>"append(java.util.StringBuilder,boolean)"</js>)
+	 *
+	 * @return The methods signature.
+	 */
+	public String getSignature() {
+		if (signature == null) {
+			StringBuilder sb = new StringBuilder(m.getName());
+			Class<?>[] pt = m.getParameterTypes();
+			if (pt.length > 0) {
+				sb.append('(');
+				for (int i = 0; i < pt.length; i++) {
+					if (i > 0)
+						sb.append(',');
+					sb.append(ClassUtils.getReadableClassName(pt[i]));
+				}
+				sb.append(')');
+			}
+			signature = sb.toString();
+		}
+		return signature;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
+		for (int i = 0; i < m.getParameterTypes().length; i++) {
+			if (i > 0)
+				sb.append(",");
+			sb.append(m.getParameterTypes()[i].getSimpleName());
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 }
