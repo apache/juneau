@@ -10,123 +10,85 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau;
+package org.apache.juneau.reflection;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Utility class for introspecting information about a method.
+ * Utility class for introspecting information about a method parameter.
  */
-public class MethodInfo {
+public class MethodParamInfo {
 
-	private final Method method;
-	private final MethodParamInfo[] params;
-	private List<Method> matching;
-	private Map<Class<?>,Optional<Annotation>> annotationMap;
-	private Map<Class<?>,List<?>> annotationsMap;
-	private Map<Class<?>,List<?>> annotationsPfMap;
-	private ClassInfo returnTypeInfo;
-	private ClassInfo[] exceptionInfos;
+	private MethodInfo methodInfo;
+	private int index;
+	private Map<Class<?>,Optional<Annotation>> annotationMap = new ConcurrentHashMap<>();
+	private Map<Class<?>,List<?>> annotationsMap = new ConcurrentHashMap<>();
+	private Map<Class<?>,List<?>> annotationsPfMap = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
 	 *
-	 * @param m The method being wrapped.
-	 */
-	public MethodInfo(Method m) {
-		this.method = m;
-		params = new MethodParamInfo[m.getParameterCount()];
-		for (int i = 0; i < m.getParameterCount(); i++)
-			params[i] = new MethodParamInfo(this, i);
-	}
-
-	/**
-	 * Returns the wrapped method.
-	 *
-	 * @return The wrapped method.
-	 */
-	public Method getInner() {
-		return method;
-	}
-
-	/**
-	 * Returns the parameters defined on this method.
-	 *
-	 * @return An array of parameter information, never <jk>null</jk>.
-	 */
-	public MethodParamInfo[] getParams() {
-		return params;
-	}
-
-	/**
-	 * Returns parameter information at the specified index.
-	 *
+	 * @param methodInfo The method wrapper.
 	 * @param index The parameter index.
-	 * @return The parameter information, never <jk>null</jk>.
 	 */
-	public MethodParamInfo getParam(int index) {
-		return params[index];
+	protected MethodParamInfo(MethodInfo methodInfo, int index) {
+		this.methodInfo = methodInfo;
+		this.index = index;
 	}
 
 	/**
-	 * Finds all declared methods with the same name and arguments on all superclasses and interfaces.
+	 * Returns the index position of this parameter.
 	 *
-	 * @return
-	 * 	All matching methods including this method itself.
-	 * 	<br>Methods are ordered from child-to-parent order.
+	 * @return The index position of this parameter.
 	 */
-	public List<Method> getMatching() {
-		if (matching == null)
-			matching = Collections.unmodifiableList(findMatching(new ArrayList<>(), method, method.getDeclaringClass()));
-		return matching;
-	}
-
-	private static List<Method> findMatching(List<Method> l, Method m, Class<?> c) {
-		for (Method m2 : c.getDeclaredMethods())
-			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
-				l.add(m2);
-		Class<?> pc = c.getSuperclass();
-		if (pc != null)
-			findMatching(l, m, pc);
-		for (Class<?> ic : c.getInterfaces())
-			findMatching(l, m, ic);
-		return l;
+	public int getIndex() {
+		return index;
 	}
 
 	/**
-	 * Returns the {@link ClassInfo} object associated with the return type on this method.
+	 * Returns the method that this parameter belongs to.
 	 *
-	 * @return The {@link ClassInfo} object associated with the return type on this method.
+	 * @return The method that this parameter belongs to.
 	 */
-	public synchronized ClassInfo getReturnTypeInfo() {
-		if (returnTypeInfo == null)
-			returnTypeInfo = ClassInfo.lookup(method.getReturnType());
-		return returnTypeInfo;
+	public Method getMethod() {
+		return methodInfo.getInner();
 	}
 
 	/**
-	 * Returns the {@link ClassInfo} objects associated with the exception types on this method.
+	 * Returns the class type of this parameter.
 	 *
-	 * @return The {@link ClassInfo} objects associated with the exception types on this method.
+	 * @return The class type of this parameter.
 	 */
-	public synchronized ClassInfo[] getExceptionInfos() {
-		if (exceptionInfos == null) {
-			Class<?>[] exceptionTypes = method.getExceptionTypes();
-			exceptionInfos = new ClassInfo[exceptionTypes.length];
-			for (int i = 0; i < exceptionTypes.length; i++)
-				exceptionInfos[i] = ClassInfo.lookup(exceptionTypes[i]);
-		}
-		return exceptionInfos;
+	public Class<?> getParameterType() {
+		return getMethod().getParameterTypes()[index];
 	}
 
 	/**
-	 * Finds the annotation of the specified type defined on this method.
+	 * Returns the generic class type of this parameter.
+	 *
+	 * @return The generic class type of htis parameter.
+	 */
+	public Type getGenericParameterType() {
+		return methodInfo.getInner().getGenericParameterTypes()[index];
+	}
+
+	/**
+	 * Returns the parameter annotations defined on this parameter.
+	 *
+	 * @return The parameter annotations defined on this parameter.
+	 */
+	public Annotation[] getParameterAnnotations() {
+		return methodInfo.getInner().getParameterAnnotations()[index];
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on this method parameter.
 	 *
 	 * <p>
 	 * If the annotation cannot be found on the immediate method, searches methods with the same
@@ -152,7 +114,7 @@ public class MethodInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this method has the specified annotation.
+	 * Returns <jk>true</jk> if this parameter has the specified annotation.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -165,12 +127,12 @@ public class MethodInfo {
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
-		List<Method> methods = getMatching();
+		List<Method> methods = methodInfo.getMatching();
 		for (Method m2 : methods)
-			for (Annotation a2 :  m2.getAnnotations())
+			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		Type t = method.getGenericReturnType();
+		Type t = methodInfo.getInner().getGenericParameterTypes()[index];
 		if (Value.isType(t))
 			return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
 		return ClassInfo.lookup(t).getAnnotation(a);
@@ -199,12 +161,16 @@ public class MethodInfo {
 	}
 
 	/**
-	 * Identical to {@link #getAnnotations(Class)} but returns the list in reverse (parent-to-child) order.
+	 * Returns all annotations of the specified type defined on the specified method.
+	 *
+	 * <p>
+	 * Searches all methods with the same signature on the parent classes or interfaces
+	 * and the return type on the method.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
 	 * @return
-	 * 	A list of all matching annotations found in parent-to-child order, or an empty list if none found.
+	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
@@ -218,29 +184,15 @@ public class MethodInfo {
 		return l;
 	}
 
-	/**
-	 * Asserts that the specified method that's annotated with the specified annotation cannot also be annotated with other annotations.
-	 *
-	 * @param a The annotation known to exist on the method.
-	 * @param c The annotations that cannot be present on the method.
-	 * @throws InvalidAnnotationException
-	 */
-	@SafeVarargs
-	public final void assertNoAnnotations(Class<? extends Annotation> a, Class<? extends Annotation>...c) throws InvalidAnnotationException {
-		for (Class<? extends Annotation> cc : c)
-			if (hasAnnotation(cc))
-				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cc.getSimpleName(), a.getSimpleName(), method);
-	}
-
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
 		List<T> l = new ArrayList<>();
-		List<Method> methods = getMatching();
+		List<Method> methods = methodInfo.getMatching();
 		for (Method m2 : methods)
-			for (Annotation a2 :  m2.getAnnotations())
+			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		Type t = method.getGenericReturnType();
+		Type t = methodInfo.getInner().getGenericParameterTypes()[index];
 		if (Value.isType(t))
 			ClassUtils.appendAnnotations(a, Value.getParameterType(t), l);
 		else
@@ -264,5 +216,10 @@ public class MethodInfo {
 		if (annotationsPfMap == null)
 			annotationsPfMap = new ConcurrentHashMap<>();
 		return annotationsPfMap;
+	}
+
+	@Override
+	public String toString() {
+		return getMethod().getName() + "[" + index + "]";
 	}
 }

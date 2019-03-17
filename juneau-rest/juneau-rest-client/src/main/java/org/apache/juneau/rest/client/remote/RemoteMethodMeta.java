@@ -24,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Contains the meta-data about a Java method on a REST proxy class.

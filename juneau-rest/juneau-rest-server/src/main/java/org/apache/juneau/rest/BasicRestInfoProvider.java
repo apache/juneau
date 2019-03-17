@@ -20,9 +20,9 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
 

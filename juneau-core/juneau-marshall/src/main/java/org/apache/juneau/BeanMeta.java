@@ -26,6 +26,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
