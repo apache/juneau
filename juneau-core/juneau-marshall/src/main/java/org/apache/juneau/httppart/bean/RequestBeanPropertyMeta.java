@@ -12,9 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.httppart.bean.Utils.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -22,17 +19,18 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Request}.
  */
 public class RequestBeanPropertyMeta {
 
-	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, Method m) {
-		HttpPartSchemaBuilder sb = HttpPartSchema.create().name(getPropertyName(m));
-		for (Annotation a : getMethodInfo(m).getAnnotationsParentFirst(c))
+	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, MethodInfo m) {
+		HttpPartSchemaBuilder sb = HttpPartSchema.create().name(m.getPropertyName());
+		for (Annotation a : m.getAnnotationsParentFirst(c))
 			sb.apply(a);
-		return new Builder().partType(partType).schema(sb.build()).getter(m);
+		return new Builder().partType(partType).schema(sb.build()).getter(m.getInner());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

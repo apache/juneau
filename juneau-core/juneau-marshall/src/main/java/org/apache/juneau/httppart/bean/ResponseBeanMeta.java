@@ -165,20 +165,20 @@ public class ResponseBeanMeta {
 		Builder apply(Type t) {
 			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			for (Method m : ClassUtils.getAllMethods(c, false)) {
-				if (isPublic(m)) {
-					MethodInfo mi = getMethodInfo(m);
-					mi.assertNoAnnotations(Response.class, Body.class, Header.class, Query.class, FormData.class, Path.class);
-					if (mi.hasAnnotation(ResponseHeader.class)) {
+			ClassInfo ci = cm.getClassInfo();
+			for (MethodInfo m : ci.getAllMethods()) {
+				if (m.isPublic()) {
+					m.assertNoAnnotations(Response.class, Body.class, Header.class, Query.class, FormData.class, Path.class);
+					if (m.hasAnnotation(ResponseHeader.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnNotVoid(m, ResponseHeader.class);
-						HttpPartSchema s = HttpPartSchema.create(getMethodInfo(m).getAnnotation(ResponseHeader.class), getPropertyName(m));
+						HttpPartSchema s = HttpPartSchema.create(m.getAnnotation(ResponseHeader.class), m.getPropertyName());
 						headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
-					} else if (mi.hasAnnotation(ResponseStatus.class)) {
+					} else if (m.hasAnnotation(ResponseStatus.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnType(m, ResponseHeader.class, int.class, Integer.class);
 						statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
-					} else if (mi.hasAnnotation(ResponseBody.class)) {
+					} else if (m.hasAnnotation(ResponseBody.class)) {
 						Class<?>[] pt = m.getParameterTypes();
 						if (pt.length == 0)
 							assertReturnNotVoid(m, ResponseHeader.class);

@@ -38,6 +38,7 @@ public final class ClassInfo {
 	private ClassInfo[] interfaces;
 	private List<FieldInfo> allFields, allFieldsPf, declaredFields;
 	private List<MethodInfo> allMethods, allMethodsPf, declaredMethods, publicMethods;
+	private List<ConstructorInfo> constructors;
 	private List<ClassInfo> parentClasses, parentClassesAndInterfaces;
 
 	private static final Map<Type,ClassInfo> CACHE = new ConcurrentHashMap<>();
@@ -349,6 +350,28 @@ public final class ClassInfo {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns all the public constructors defined on this class.
+	 *
+	 * @return All public constructors defined on this class.
+	 */
+	public Iterable<ConstructorInfo> getPublicConstructors() {
+		if (constructors == null)
+			constructors = findConstructors();
+		return constructors;
+	}
+
+	private List<ConstructorInfo> findConstructors() {
+		List<ConstructorInfo> l = new ArrayList<>(c.getConstructors().length);
+		for (Constructor<?> cc : c.getConstructors())
+			l.add(ConstructorInfo.create(this, cc));
+		return Collections.unmodifiableList(l);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Fields
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -429,7 +452,7 @@ public final class ClassInfo {
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
-	public Constructor<?> findNoArgConstructor(Visibility v) {
+	public ConstructorInfo findNoArgConstructor(Visibility v) {
 		int mod = c.getModifiers();
 		if (Modifier.isAbstract(mod))
 			return null;
@@ -437,7 +460,7 @@ public final class ClassInfo {
 		for (Constructor<?> cc : c.getConstructors()) {
 			mod = cc.getModifiers();
 			if (ClassUtils.hasNumArgs(cc, isMemberClass ? 1 : 0) && v.isVisible(mod) && ClassUtils.isNotDeprecated(cc))
-				return v.transform(cc);
+				return ConstructorInfo.create(this, v.transform(cc));
 		}
 		return null;
 	}
@@ -789,5 +812,42 @@ public final class ClassInfo {
 	 */
 	public boolean isNotAbstract() {
 		return ! Modifier.isAbstract(c.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a member class.
+	 *
+	 * @return <jk>true</jk> if this class is a member class.
+	 */
+	public boolean isMemberClass() {
+		return c.isMemberClass();
+	}
+
+	/**
+	 * Identifies if the specified visibility matches this constructor.
+	 *
+	 * @param v The visibility to validate against.
+	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this constructor.
+	 */
+	public boolean isVisible(Visibility v) {
+		return v.isVisible(c);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this is a primitive class.
+	 *
+	 * @return <jk>true</jk> if this is a primitive class.
+	 */
+	public boolean isPrimitive() {
+		return c.isPrimitive();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this is not a primitive class.
+	 *
+	 * @return <jk>true</jk> if this is not a primitive class.
+	 */
+	public boolean isNotPrimitive() {
+		return ! c.isPrimitive();
 	}
 }

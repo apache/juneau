@@ -12,11 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.bean.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -99,29 +97,28 @@ public class RequestBeanMeta {
 			ClassInfo ci = ClassInfo.lookup(c);
 			apply(ci.getAnnotation(Request.class));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			for (Method m : ClassUtils.getAllMethods(c, false)) {
+			for (MethodInfo m : cm.getClassInfo().getAllMethods()) {
 
-				if (isPublic(m)) {
-					MethodInfo mi = getMethodInfo(m);
-					mi.assertNoAnnotations(Request.class, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
+				if (m.isPublic()) {
+					m.assertNoAnnotations(Request.class, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
 					String n = m.getName();
-					if (mi.hasAnnotation(Body.class)) {
+					if (m.hasAnnotation(Body.class)) {
 						assertNoArgs(m, Body.class);
 						assertReturnNotVoid(m, Body.class);
 						properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, m));
-					} else if (mi.hasAnnotation(Header.class)) {
+					} else if (m.hasAnnotation(Header.class)) {
 						assertNoArgs(m, Header.class);
 						assertReturnNotVoid(m, Header.class);
 						properties.put(n, RequestBeanPropertyMeta.create(HEADER, Header.class, m));
-					} else if (mi.hasAnnotation(Query.class)) {
+					} else if (m.hasAnnotation(Query.class)) {
 						assertNoArgs(m, Query.class);
 						assertReturnNotVoid(m, Query.class);
 						properties.put(n, RequestBeanPropertyMeta.create(QUERY, Query.class, m));
-					} else if (mi.hasAnnotation(FormData.class)) {
+					} else if (m.hasAnnotation(FormData.class)) {
 						assertNoArgs(m, FormData.class);
 						assertReturnNotVoid(m, FormData.class);
 						properties.put(n, RequestBeanPropertyMeta.create(FORMDATA, FormData.class, m));
-					} else if (mi.hasAnnotation(Path.class)) {
+					} else if (m.hasAnnotation(Path.class)) {
 						assertNoArgs(m, Path.class);
 						assertReturnNotVoid(m, Path.class);
 						properties.put(n, RequestBeanPropertyMeta.create(PATH, Path.class, m));

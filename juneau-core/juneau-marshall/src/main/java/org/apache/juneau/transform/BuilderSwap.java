@@ -135,7 +135,8 @@ public class BuilderSwap<T,B> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
-		if (! isPublic(builderClass))
+		ClassInfo bci = ClassInfo.lookup(builderClass);
+		if (bci.isNotPublic())
 			return null;
 
 		Class<?> pojoClass = resolveParameterType(Builder.class, 0, builderClass);
@@ -143,7 +144,6 @@ public class BuilderSwap<T,B> {
 		MethodInfo createPojoMethod, createBuilderMethod;
 		Constructor<?> pojoConstructor, builderConstructor;
 
-		ClassInfo bci = ClassInfo.lookup(builderClass);
 		createPojoMethod = bci.findCreatePojoMethod();
 		if (createPojoMethod != null)
 			pojoClass = createPojoMethod.getReturnType().getInnerClass();

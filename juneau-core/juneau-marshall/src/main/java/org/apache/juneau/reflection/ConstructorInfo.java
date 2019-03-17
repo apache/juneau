@@ -66,6 +66,18 @@ public final class ConstructorInfo {
 	}
 
 	/**
+	 * Convenience method for instantiating a {@link ConstructorInfo};
+	 *
+	 * @param c The constructor being wrapped.
+	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
+	 */
+	public static ConstructorInfo create(Constructor<?> c) {
+		if (c == null)
+			return null;
+		return new ConstructorInfo(ClassInfo.lookup(c.getDeclaringClass()), c);
+	}
+
+	/**
 	 * Returns the wrapped method.
 	 *
 	 * @return The wrapped method.
@@ -157,6 +169,26 @@ public final class ConstructorInfo {
 	 */
 	public Annotation[] getParameterAnnotations(int index) {
 		return c.getParameterAnnotations()[index];
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
+	 */
+	public boolean isAnnotationPresent(Class<? extends Annotation> a) {
+		return c.isAnnotationPresent(a);
+	}
+
+	/**
+	 * Returns the specified annotation on this constructor.
+	 *
+	 * @param a The annotation to search for.
+	 * @return The annotation, or <jk>null</jk> if not present.
+	 */
+	public <T extends Annotation> T getAnnotation(Class<T> a) {
+		return c.getAnnotation(a);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -346,6 +378,16 @@ public final class ConstructorInfo {
 	 */
 	public boolean isNotPublic() {
 		return ! Modifier.isPublic(c.getModifiers());
+	}
+
+	/**
+	 * Identifies if the specified visibility matches this constructor.
+	 *
+	 * @param v The visibility to validate against.
+	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this constructor.
+	 */
+	public boolean isVisible(Visibility v) {
+		return v.isVisible(c);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

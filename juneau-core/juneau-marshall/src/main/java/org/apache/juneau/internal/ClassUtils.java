@@ -245,54 +245,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to the specified constructor.
-	 *
-	 * @param x The constructor to test.
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to the specified constructor.
-	 */
-	public static boolean isAll(Constructor<?> x, ClassFlags...flags) {
-		for (ClassFlags f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isNotDeprecated(x))
-						return false;
-					break;
-				case NOT_DEPRECATED:
-					if (isDeprecated(x))
-						return false;
-					break;
-				case HAS_ARGS:
-					if (hasNoArgs(x))
-						return false;
-					break;
-				case HAS_NO_ARGS:
-					if (hasArgs(x))
-						return false;
-					break;
-				case PUBLIC:
-					if (isNotPublic(x))
-						return false;
-					break;
-				case NOT_PUBLIC:
-					if (isPublic(x))
-						return false;
-					break;
-				case STATIC:
-				case NOT_STATIC:
-				case ABSTRACT:
-				case NOT_ABSTRACT:
-				case TRANSIENT:
-				case NOT_TRANSIENT:
-				default:
-					break;
-
-			}
-		}
-		return true;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified constructor has the specified arguments.
 	 *
 	 * @param x The constructor to test.
@@ -311,37 +263,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified constructor has one or more arguments.
-	 *
-	 * @param x The method to test.
-	 * @return <jk>true</jk> if the specified constructor has one or more arguments.
-	 */
-	public static boolean hasArgs(Constructor<?> x) {
-		return x.getParameterTypes().length > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor has zero arguments.
-	 *
-	 * @param x The method to test.
-	 * @return <jk>true</jk> if the specified constructor has zero arguments.
-	 */
-	public static boolean hasNoArgs(Constructor<?> x) {
-		return x.getParameterTypes().length == 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor has the specified number of arguments.
-	 *
-	 * @param x The method to test.
-	 * @param number The number of expected arguments.
-	 * @return <jk>true</jk> if the specified method has the specified number of arguments.
-	 */
-	public static boolean hasNumArgs(Method x, int number) {
-		return x.getParameterTypes().length == number;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified constructor has the specified number of arguments.
 	 *
 	 * @param x The constructor to test.
@@ -350,49 +271,6 @@ public final class ClassUtils {
 	 */
 	public static boolean hasNumArgs(Constructor<?> x, int number) {
 		return x.getParameterTypes().length == number;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method has at most only the specified arguments in any order.
-	 *
-	 * @param x The method to test.
-	 * @param args The arguments to test for.
-	 * @return <jk>true</jk> if the specified method has at most only the specified arguments in any order.
-	 */
-	public static boolean hasFuzzyArgs(Method x, Class<?>...args) {
-		return fuzzyArgsMatch(x.getParameterTypes(), args) != -1;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor has at most only the specified arguments in any order.
-	 *
-	 * @param x The constructor to test.
-	 * @param args The arguments to test for.
-	 * @return <jk>true</jk> if the specified constructor has at most only the specified arguments in any order.
-	 */
-	public static boolean hasFuzzyArgs(Constructor<?> x, Class<?>...args) {
-		return fuzzyArgsMatch(x.getParameterTypes(), args) != -1;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified class has the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class has the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Class<?> c) {
-		return c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method has the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method has the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Method m) {
-		return m.isAnnotationPresent(Deprecated.class);
-
 	}
 
 	/**
@@ -406,37 +284,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified field has the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field has the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Field f) {
-		return f.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isNotDeprecated(Class<?> c) {
-		return ! c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isNotDeprecated(Method m) {
-		return ! m.isAnnotationPresent(Deprecated.class);
-
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @param c The constructor.
@@ -444,36 +291,6 @@ public final class ClassUtils {
 	 */
 	public static boolean isNotDeprecated(Constructor<?> c) {
 		return ! c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isNotDeprecated(Field f) {
-		return ! f.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified class is public.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class is public.
-	 */
-	public static boolean isPublic(Class<?> c) {
-		return Modifier.isPublic(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified class is not public.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class is not public.
-	 */
-	public static boolean isNotPublic(Class<?> c) {
-		return ! Modifier.isPublic(c.getModifiers());
 	}
 
 	/**
@@ -487,16 +304,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified class is not static.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class is not static.
-	 */
-	public static boolean isNotStatic(Class<?> c) {
-		return ! Modifier.isStatic(c.getModifiers());
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified class is abstract.
 	 *
 	 * @param c The class.
@@ -504,36 +311,6 @@ public final class ClassUtils {
 	 */
 	public static boolean isAbstract(Class<?> c) {
 		return Modifier.isAbstract(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified class is not abstract.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class is not abstract.
-	 */
-	public static boolean isNotAbstract(Class<?> c) {
-		return ! Modifier.isAbstract(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method is abstract.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method is abstract.
-	 */
-	public static boolean isAbstract(Method m) {
-		return Modifier.isAbstract(m.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method is not abstract.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method is not abstract.
-	 */
-	public static boolean isNotAbstract(Method m) {
-		return ! Modifier.isAbstract(m.getModifiers());
 	}
 
 	/**

@@ -19,18 +19,19 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Response}.
  */
 public class ResponseBeanPropertyMeta {
 
-	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, HttpPartSchema schema, Method m) {
-		return new Builder().partType(partType).schema(schema).getter(m);
+	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, HttpPartSchema schema, MethodInfo m) {
+		return new Builder().partType(partType).schema(schema).getter(m.getInner());
 	}
 
-	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, Method m) {
-		return new Builder().partType(partType).getter(m);
+	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, MethodInfo m) {
+		return new Builder().partType(partType).getter(m.getInner());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

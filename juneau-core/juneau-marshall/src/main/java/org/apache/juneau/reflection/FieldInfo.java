@@ -288,6 +288,16 @@ public final class FieldInfo {
 		return f.getName().equals(name);
 	}
 
+	/**
+	 * Identifies if the specified visibility matches this field.
+	 *
+	 * @param v The visibility to validate against.
+	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this field.
+	 */
+	public boolean isVisible(Visibility v) {
+		return v.isVisible(f);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotations.
 	//-----------------------------------------------------------------------------------------------------------------

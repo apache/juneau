@@ -462,7 +462,7 @@ public final class ClassMeta<T> implements Type {
 					cc = INPUTSTREAM;
 			}
 
-			isMemberClass = c.isMemberClass() && ! isStatic(c);
+			isMemberClass = ci.isMemberClass() && ci.isNotStatic();
 
 			// Find static fromString(String) or equivalent method.
 			// fromString() must be checked before valueOf() so that Enum classes can create their own
@@ -566,7 +566,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			// Note:  Primitive types are normally abstract.
-			isAbstract = ClassUtils.isAbstract(c) && ! c.isPrimitive();
+			isAbstract = ci.isAbstract() && ci.isNotPrimitive();
 
 			// Find constructor(String) method if present.
 			for (Constructor cs : c.getConstructors()) {
@@ -984,14 +984,15 @@ public final class ClassMeta<T> implements Type {
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
-	@SuppressWarnings({"rawtypes","unchecked"})
+	@SuppressWarnings({"unchecked"})
 	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
-		if (ClassUtils.isAbstract(c))
+		ClassInfo ci = ClassInfo.lookup(c);
+		if (ci.isAbstract())
 			return null;
-		boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
-		for (Constructor cc : c.getConstructors()) {
-			if (hasNumArgs(cc,  isMemberClass ? 1 : 0) && v.isVisible(cc.getModifiers()) && isNotDeprecated(cc))
-				return v.transform(cc);
+		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
+		for (ConstructorInfo cc : ci.getPublicConstructors()) {
+			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
+				return (Constructor<? extends T>) v.transform(cc.getInner());
 		}
 		return null;
 	}

@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
+import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.Visibility;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
@@ -615,6 +617,16 @@ public final class MethodInfo {
 		return returnType;
 	}
 
+	/**
+	 * Identifies if the specified visibility matches this method.
+	 *
+	 * @param v The visibility to validate against.
+	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this method.
+	 */
+	public boolean isVisible(Visibility v) {
+		return v.isVisible(m);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -735,6 +747,21 @@ public final class MethodInfo {
 	public Annotation[] getParameterAnnotations(int index) {
 		return m.getParameterAnnotations()[index];
 	}
+
+	/**
+	 * Returns the bean property name if this is a getter or setter.
+	 *
+	 * @return The bean property name, or <jk>null</jk> if this isn't a getter or setter.
+	 */
+	public String getPropertyName() {
+		String n = m.getName();
+		if ((n.startsWith("get") || n.startsWith("set")) && n.length() > 3)
+			return Introspector.decapitalize(n.substring(3));
+		if (n.startsWith("is") && n.length() > 2)
+			return Introspector.decapitalize(n.substring(2));
+		return n;
+	}
+
 
 	@Override
 	public String toString() {
