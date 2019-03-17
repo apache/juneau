@@ -24,9 +24,10 @@ import org.apache.juneau.internal.*;
 /**
  * Utility class for introspecting information about a method.
  */
-public class MethodInfo {
+public final class MethodInfo {
 
-	private final Method method;
+	private final ClassInfo declaringClass;
+	private final Method m;
 	private final MethodParamInfo[] params;
 	private List<Method> matching;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
@@ -41,10 +42,34 @@ public class MethodInfo {
 	 * @param m The method being wrapped.
 	 */
 	public MethodInfo(Method m) {
-		this.method = m;
+		this(ClassInfo.lookup(m.getDeclaringClass()), m);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param m The method being wrapped.
+	 */
+	public MethodInfo(ClassInfo declaringClass, Method m) {
+		this.declaringClass = declaringClass;
+		this.m = m;
 		params = new MethodParamInfo[m.getParameterCount()];
 		for (int i = 0; i < m.getParameterCount(); i++)
 			params[i] = new MethodParamInfo(this, i);
+	}
+
+	/**
+	 * Convenience method for instantiating a {@link MethodInfo};
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param m The method being wrapped.
+	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
+	 */
+	public static MethodInfo create(ClassInfo declaringClass, Method m) {
+		if (m == null)
+			return null;
+		return new MethodInfo(declaringClass, m);
 	}
 
 	/**
@@ -53,7 +78,16 @@ public class MethodInfo {
 	 * @return The wrapped method.
 	 */
 	public Method getInner() {
-		return method;
+		return m;
+	}
+
+	/**
+	 * Returns metadata about the declaring class.
+	 *
+	 * @return Metadata about the declaring class.
+	 */
+	public ClassInfo getDeclaringClass() {
+		return declaringClass;
 	}
 
 	/**
@@ -84,7 +118,7 @@ public class MethodInfo {
 	 */
 	public List<Method> getMatching() {
 		if (matching == null)
-			matching = Collections.unmodifiableList(findMatching(new ArrayList<>(), method, method.getDeclaringClass()));
+			matching = Collections.unmodifiableList(findMatching(new ArrayList<>(), m, m.getDeclaringClass()));
 		return matching;
 	}
 
@@ -107,7 +141,7 @@ public class MethodInfo {
 	 */
 	public synchronized ClassInfo getReturnTypeInfo() {
 		if (returnTypeInfo == null)
-			returnTypeInfo = ClassInfo.lookup(method.getReturnType());
+			returnTypeInfo = ClassInfo.lookup(m.getReturnType());
 		return returnTypeInfo;
 	}
 
@@ -118,7 +152,7 @@ public class MethodInfo {
 	 */
 	public synchronized ClassInfo[] getExceptionInfos() {
 		if (exceptionInfos == null) {
-			Class<?>[] exceptionTypes = method.getExceptionTypes();
+			Class<?>[] exceptionTypes = m.getExceptionTypes();
 			exceptionInfos = new ClassInfo[exceptionTypes.length];
 			for (int i = 0; i < exceptionTypes.length; i++)
 				exceptionInfos[i] = ClassInfo.lookup(exceptionTypes[i]);
@@ -171,7 +205,7 @@ public class MethodInfo {
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
 					return (T)a2;
-		Type t = method.getGenericReturnType();
+		Type t = m.getGenericReturnType();
 		if (Value.isType(t))
 			return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
 		return ClassInfo.lookup(t).getAnnotation(a);
@@ -230,7 +264,7 @@ public class MethodInfo {
 	public final void assertNoAnnotations(Class<? extends Annotation> a, Class<? extends Annotation>...c) throws InvalidAnnotationException {
 		for (Class<? extends Annotation> cc : c)
 			if (hasAnnotation(cc))
-				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cc.getSimpleName(), a.getSimpleName(), method);
+				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cc.getSimpleName(), a.getSimpleName(), m);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -241,7 +275,7 @@ public class MethodInfo {
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		Type t = method.getGenericReturnType();
+		Type t = m.getGenericReturnType();
 		if (Value.isType(t))
 			ClassUtils.appendAnnotations(a, Value.getParameterType(t), l);
 		else
@@ -265,5 +299,286 @@ public class MethodInfo {
 		if (annotationsPfMap == null)
 			annotationsPfMap = new ConcurrentHashMap<>();
 		return annotationsPfMap;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Characteristics
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this method.
+	 */
+	public boolean isAll(ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isNotDeprecated())
+						return false;
+					break;
+				case NOT_DEPRECATED:
+					if (isDeprecated())
+						return false;
+					break;
+				case HAS_ARGS:
+					if (hasNoArgs())
+						return false;
+					break;
+				case HAS_NO_ARGS:
+					if (hasArgs())
+						return false;
+					break;
+				case PUBLIC:
+					if (isNotPublic())
+						return false;
+					break;
+				case NOT_PUBLIC:
+					if (isPublic())
+						return false;
+					break;
+				case STATIC:
+					if (isNotStatic())
+						return false;
+					break;
+				case NOT_STATIC:
+					if (isStatic())
+						return false;
+					break;
+				case ABSTRACT:
+					if (isNotAbstract())
+						return false;
+					break;
+				case NOT_ABSTRACT:
+					if (isAbstract())
+						return false;
+					break;
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this method.
+	 */
+	public boolean isAny(ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isDeprecated())
+						return true;
+					break;
+				case NOT_DEPRECATED:
+					if (isNotDeprecated())
+						return true;
+					break;
+				case HAS_ARGS:
+					if (hasArgs())
+						return true;
+					break;
+				case HAS_NO_ARGS:
+					if (hasNoArgs())
+						return true;
+					break;
+				case PUBLIC:
+					if (isPublic())
+						return true;
+					break;
+				case NOT_PUBLIC:
+					if (isNotPublic())
+						return true;
+					break;
+				case STATIC:
+					if (isStatic())
+						return true;
+					break;
+				case NOT_STATIC:
+					if (isNotStatic())
+						return true;
+					break;
+				case ABSTRACT:
+					if (isAbstract())
+						return true;
+					break;
+				case NOT_ABSTRACT:
+					if (isNotAbstract())
+						return true;
+					break;
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has this arguments.
+	 *
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if this method has this arguments in the exact order.
+	 */
+	public boolean hasArgs(Class<?>...args) {
+		Class<?>[] pt = m.getParameterTypes();
+		if (pt.length == args.length) {
+			for (int i = 0; i < pt.length; i++)
+				if (! pt[i].equals(args[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has this number of arguments.
+	 *
+	 * @param number The number of expected arguments.
+	 * @return <jk>true</jk> if this method has this number of arguments.
+	 */
+	public boolean hasNumArgs(int number) {
+		return m.getParameterTypes().length == number;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
+	 *
+	 * @param args The arguments to test for.
+	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
+	 */
+	public boolean hasFuzzyArgs(Class<?>...args) {
+		return ClassUtils.fuzzyArgsMatch(m.getParameterTypes(), args) != -1;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @return <jk>true</jk> if this method has the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public boolean isDeprecated() {
+		return m.isAnnotationPresent(Deprecated.class);
+
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @return <jk>true</jk> if this method doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public boolean isNotDeprecated() {
+		return ! m.isAnnotationPresent(Deprecated.class);
+
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is abstract.
+	 *
+	 * @return <jk>true</jk> if this method is abstract.
+	 */
+	public boolean isAbstract() {
+		return Modifier.isAbstract(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is not abstract.
+	 *
+	 * @return <jk>true</jk> if this method is not abstract.
+	 */
+	public boolean isNotAbstract() {
+		return ! Modifier.isAbstract(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is public.
+	 *
+	 * @return <jk>true</jk> if this method is public.
+	 */
+	public boolean isPublic() {
+		return Modifier.isPublic(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is not public.
+	 *
+	 * @return <jk>true</jk> if this method is not public.
+	 */
+	public boolean isNotPublic() {
+		return ! Modifier.isPublic(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is static.
+	 *
+	 * @return <jk>true</jk> if this method is static.
+	 */
+	public boolean isStatic() {
+		return Modifier.isStatic(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is not static.
+	 *
+	 * @return <jk>true</jk> if this method is not static.
+	 */
+	public boolean isNotStatic() {
+		return ! Modifier.isStatic(m.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has one or more arguments.
+	 *
+	 * @return <jk>true</jk> if this method has one or more arguments.
+	 */
+	public boolean hasArgs() {
+		return m.getParameterTypes().length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has zero arguments.
+	 *
+	 * @return <jk>true</jk> if this method has zero arguments.
+	 */
+	public boolean hasNoArgs() {
+		return m.getParameterTypes().length == 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has this name.
+	 *
+	 * @param name The name to test for.
+	 * @return <jk>true</jk> if this method has this name.
+	 */
+	public boolean hasName(String name) {
+		return m.getName().equals(name);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has this return type.
+	 *
+	 * @param c The return type to test for.
+	 * @return <jk>true</jk> if this method has this return type.
+	 */
+	public boolean hasReturnType(Class<?> c) {
+		return m.getReturnType() == c;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method has this parent return type.
+	 *
+	 * @param c The return type to test for.
+	 * @return <jk>true</jk> if this method has this parent return type.
+	 */
+	public boolean hasReturnTypeParent(Class<?> c) {
+		return ClassUtils.isParentClass(c, m.getReturnType());
 	}
 }

@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
 /**
  * Utility class for introspecting information about a method parameter.
  */
-public class MethodParamInfo {
+public final class MethodParamInfo {
 
 	private MethodInfo methodInfo;
 	private int index;

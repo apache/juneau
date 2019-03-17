@@ -1,0 +1,261 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.reflection;
+
+import java.lang.reflect.*;
+
+import org.apache.juneau.internal.*;
+
+/**
+ * Utility class for introspecting information about a field.
+ */
+public final class FieldInfo {
+
+	private final ClassInfo declaringClass;
+	private final Field f;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param f The field being wrapped.
+	 */
+	public FieldInfo(Field f) {
+		this(ClassInfo.lookup(f.getDeclaringClass()), f);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param f The field being wrapped.
+	 */
+	public FieldInfo(ClassInfo declaringClass, Field f) {
+		this.declaringClass = declaringClass;
+		this.f = f;
+	}
+
+	/**
+	 * Convenience method for instantiating a {@link FieldInfo};
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param f The field being wrapped.
+	 * @return A new {@link FieldInfo} object, or <jk>null</jk> if the field was null.
+	 */
+	public static FieldInfo create(ClassInfo declaringClass, Field f) {
+		if (f == null)
+			return null;
+		return new FieldInfo(declaringClass, f);
+	}
+
+	/**
+	 * Returns the wrapped field.
+	 *
+	 * @return The wrapped field.
+	 */
+	public Field getInner() {
+		return f;
+	}
+
+	/**
+	 * Returns metadata about the declaring class.
+	 *
+	 * @return Metadata about the declaring class.
+	 */
+	public ClassInfo getDeclaringClass() {
+		return declaringClass;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Characteristics
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this field.
+	 */
+	public boolean isAll(ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isNotDeprecated())
+						return false;
+					break;
+				case NOT_DEPRECATED:
+					if (isDeprecated())
+						return false;
+					break;
+				case HAS_ARGS:
+					break;
+				case HAS_NO_ARGS:
+					break;
+				case PUBLIC:
+					if (isNotPublic())
+						return false;
+					break;
+				case NOT_PUBLIC:
+					if (isPublic())
+						return false;
+					break;
+				case STATIC:
+					if (isNotStatic())
+						return false;
+					break;
+				case NOT_STATIC:
+					if (isStatic())
+						return false;
+					break;
+				case TRANSIENT:
+					if (isNotTransient())
+						return false;
+					break;
+				case NOT_TRANSIENT:
+					if (isTransient())
+						return false;
+					break;
+				case ABSTRACT:
+				case NOT_ABSTRACT:
+				default:
+					break;
+
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this field.
+	 */
+	public boolean isAny(ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isDeprecated())
+						return true;
+					break;
+				case NOT_DEPRECATED:
+					if (isNotDeprecated())
+						return true;
+					break;
+				case PUBLIC:
+					if (isPublic())
+						return true;
+					break;
+				case NOT_PUBLIC:
+					if (isNotPublic())
+						return true;
+					break;
+				case STATIC:
+					if (isStatic())
+						return true;
+					break;
+				case NOT_STATIC:
+					if (isNotStatic())
+						return true;
+					break;
+				case TRANSIENT:
+					if (isTransient())
+						return true;
+					break;
+				case NOT_TRANSIENT:
+					if (isNotTransient())
+						return true;
+					break;
+				case HAS_ARGS:
+				case HAS_NO_ARGS:
+				case ABSTRACT:
+				case NOT_ABSTRACT:
+				default:
+					break;
+
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @return <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public boolean isDeprecated() {
+		return f.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @return <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public boolean isNotDeprecated() {
+		return ! f.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is public.
+	 *
+	 * @return <jk>true</jk> if this field is public.
+	 */
+	public boolean isPublic() {
+		return Modifier.isPublic(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is not public.
+	 *
+	 * @return <jk>true</jk> if this field is not public.
+	 */
+	public boolean isNotPublic() {
+		return ! Modifier.isPublic(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is static.
+	 *
+	 * @return <jk>true</jk> if this field is static.
+	 */
+	public boolean isStatic() {
+		return Modifier.isStatic(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is not static.
+	 *
+	 * @return <jk>true</jk> if this field is not static.
+	 */
+	public boolean isNotStatic() {
+		return ! Modifier.isStatic(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is transient.
+	 *
+	 * @return <jk>true</jk> if this field is transient.
+	 */
+	public boolean isTransient() {
+		return Modifier.isTransient(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is not transient.
+	 *
+	 * @return <jk>true</jk> if this field is not transient.
+	 */
+	public boolean isNotTransient() {
+		return ! Modifier.isTransient(f.getModifiers());
+	}
+}

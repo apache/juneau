@@ -1283,31 +1283,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Finds a public method with the specified parameters.
-	 *
-	 * @param c The class to look for the method.
-	 * @param name The method name.
-	 * @param returnType
-	 * 	The return type of the method.
-	 * 	Can be a super type of the actual return type.
-	 * 	For example, if the actual return type is <code>CharSequence</code>, then <code>Object</code> will match but
-	 * 	<code>String</code> will not.
-	 * @param argTypes
-	 * 	The argument types of the method.
-	 * 	Can be subtypes of the actual parameter types.
-	 * 	For example, if the parameter type is <code>CharSequence</code>, then <code>String</code> will match but
-	 * 	<code>Object</code> will not.
-	 * @return The matched method, or <jk>null</jk> if no match was found.
-	 */
-	public static Method findPublicMethod(Class<?> c, String name, Class<?> returnType, Class<?>...argTypes) {
-		for (Method m : c.getMethods()) {
-			if (isPublic(m) && hasName(m, name) && hasReturnTypeParent(m, returnType) && argsMatch(m.getParameterTypes(), argTypes))
-				return m;
-		}
-		return null;
-	}
-
-	/**
 	 * Finds a public constructor with the specified parameters without throwing an exception.
 	 *
 	 * @param c The class to search for a constructor.

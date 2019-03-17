@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
 /**
  * Utility class for introspecting information about a class.
  */
-public class ClassInfo {
+public final class ClassInfo {
 
 	private final Type type;
 	private final Class<?> c;
@@ -31,6 +31,9 @@ public class ClassInfo {
 	private Map<Class<?>,List<?>> annotationsPfMap;
 	private Optional<ClassInfo> parent;
 	private ClassInfo[] interfaces;
+	private List<FieldInfo> allFields, allFieldsPf, declaredFields;
+	private List<MethodInfo> allMethods, allMethodsPf, declaredMethods;
+	private List<ClassInfo> parentClasses, parentClassesAndInterfaces;
 
 	private static final Map<Type,ClassInfo> CACHE = new ConcurrentHashMap<>();
 
@@ -116,6 +119,212 @@ public class ClassInfo {
 		return interfaces;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Classes
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns an iterable over this class and all parent classes in child-to-parent order.
+	 *
+	 * <p>
+	 * Does not include interfaces.
+	 *
+	 * @return An iterable over this class and all parent classes in child-to-parent order.
+	 */
+	public Iterable<ClassInfo> getParentClasses() {
+		if (parentClasses == null)
+			parentClasses = Collections.unmodifiableList(findParentClasses(new ArrayList<>(), c));
+		return parentClasses;
+	}
+
+	/**
+	 * Returns an iterable over this class and all parent classes in parent-to-child order.
+	 *
+	 * <p>
+	 * Does not include interfaces.
+	 *
+	 * @return An iterable over this class and all parent classes in parent-to-child order.
+	 */
+	public Iterable<ClassInfo> getParentClassesParentFirst() {
+		if (parentClasses == null)
+			parentClasses = Collections.unmodifiableList(findParentClasses(new ArrayList<>(), c));
+		return ReverseIterable.of(parentClasses);
+	}
+
+	/**
+	 * Returns an iterable over this class and all parent classes and interfaces in child-to-parent order.
+	 *
+	 * @return An iterable over this class and all parent classes and interfaces in child-to-parent order.
+	 */
+	public Iterable<ClassInfo> getParentClassesAndInterfaces() {
+		if (parentClassesAndInterfaces == null)
+			parentClassesAndInterfaces = Collections.unmodifiableList(findParentClassesAndInterfaces(new ArrayList<>(), c));
+		return parentClassesAndInterfaces;
+	}
+
+	/**
+	 * Returns an iterable over this class and all parent classes and interfaces in parent-to-child order.
+	 *
+	 * @return An iterable over this class and all parent classes and interfaces in parent-to-child order.
+	 */
+	public Iterable<ClassInfo> getParentClassesAndInterfacesParentFirst() {
+		if (parentClassesAndInterfaces == null)
+			parentClassesAndInterfaces = Collections.unmodifiableList(findParentClassesAndInterfaces(new ArrayList<>(), c));
+		return ReverseIterable.of(parentClassesAndInterfaces);
+	}
+
+	private static List<ClassInfo> findParentClasses(List<ClassInfo> l, Class<?> c) {
+		l.add(ClassInfo.lookup(c));
+		if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
+			findParentClasses(l, c.getSuperclass());
+		return l;
+	}
+
+	private static List<ClassInfo> findParentClassesAndInterfaces(List<ClassInfo> l, Class<?> c) {
+		l.add(ClassInfo.lookup(c));
+		if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
+			findParentClassesAndInterfaces(l, c.getSuperclass());
+		for (Class<?> i : c.getInterfaces())
+			l.add(ClassInfo.lookup(i));
+		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
+	 *
+	 * <p>
+	 * Methods are sorted alphabetically per class before being aggregated.
+	 *
+	 * @return All declared methods on this class and all parent classes in child-to-parent order.
+	 */
+	public Iterable<MethodInfo> getAllMethods() {
+		if (allMethods == null)
+			allMethods = Collections.unmodifiableList(findAllMethods());
+		return allMethods;
+	}
+
+	/**
+	 * Returns all declared methods on this class and all parent classes in parent-to-child order.
+	 *
+	 * <p>
+	 * Methods are sorted alphabetically per class before being aggregated.
+	 *
+	 * @return All declared methods on this class and all parent classes in parent-to-child order.
+	 */
+	public Iterable<MethodInfo> getAllMethodsParentFirst() {
+		if (allMethodsPf == null)
+			allMethodsPf = Collections.unmodifiableList(findAllMethodsParentFirst());
+		return ReverseIterable.of(allMethodsPf);
+	}
+
+	/**
+	 * Returns all methods declared on this class.
+	 *
+	 * @return All methods declared on this class in alphabetical order.
+	 */
+	public Iterable<MethodInfo> getDeclaredMethods() {
+		if (declaredMethods == null)
+			declaredMethods = Collections.unmodifiableList(findDeclaredMethods());
+		return declaredMethods;
+	}
+
+	private List<MethodInfo> findAllMethods() {
+		List<MethodInfo> l = new ArrayList<>();
+		for (ClassInfo c : getParentClasses())
+			for (MethodInfo m : c.getDeclaredMethods())
+				l.add(m);
+		return l;
+	}
+
+	private List<MethodInfo> findAllMethodsParentFirst() {
+		List<MethodInfo> l = new ArrayList<>();
+		for (ClassInfo c : getParentClassesParentFirst())
+			for (MethodInfo m : c.getDeclaredMethods())
+				l.add(m);
+		return l;
+	}
+
+	private List<MethodInfo> findDeclaredMethods() {
+		List<MethodInfo> l = new ArrayList<>(c.getDeclaredMethods().length);
+		for (Method m : ClassUtils.sort(c.getDeclaredMethods()))
+			l.add(MethodInfo.create(this, m));
+		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fields
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns all field on this class and all parent classes in child-to-parent order.
+	 *
+	 * <p>
+	 * Fields are sorted alphabetically per class before being aggregated.
+	 *
+	 * @return All declared methods on this class and all parent classes in child-to-parent order.
+	 */
+	public Iterable<FieldInfo> getAllFields() {
+		if (allFields == null)
+			allFields = findAllFields();
+		return allFields;
+	}
+
+	/**
+	 * Returns all field on this class and all parent classes in parent-to-child order.
+	 *
+	 * <p>
+	 * Fields are sorted alphabetically per class before being aggregated.
+	 *
+	 * @return All declared methods on this class and all parent classes in parent-to-child order.
+	 */
+	public Iterable<FieldInfo> getAllFieldsParentFirst() {
+		if (allFieldsPf == null)
+			allFieldsPf = findAllFieldsParentFirst();
+		return allFieldsPf;
+	}
+
+	/**
+	 * Returns all fields declared on this class.
+	 *
+	 * @return All fields declared on this class in alphabetical order.
+	 */
+	public Iterable<FieldInfo> getDeclaredFields() {
+		if (declaredFields == null)
+			declaredFields = Collections.unmodifiableList(findDeclaredFields());
+		return declaredFields;
+	}
+
+	private List<FieldInfo> findAllFieldsParentFirst() {
+		List<FieldInfo> l = new ArrayList<>();
+		for (ClassInfo c : getParentClassesParentFirst())
+			for (FieldInfo f : c.getDeclaredFields())
+				l.add(f);
+		return l;
+	}
+
+	private List<FieldInfo> findAllFields() {
+		List<FieldInfo> l = new ArrayList<>();
+		for (ClassInfo c : getParentClasses())
+			for (FieldInfo f : c.getDeclaredFields())
+				l.add(f);
+		return l;
+	}
+
+	private List<FieldInfo> findDeclaredFields() {
+		List<FieldInfo> l = new ArrayList<>(c.getDeclaredFields().length);
+		for (Field f : ClassUtils.sort(c.getDeclaredFields()))
+			l.add(FieldInfo.create(this, f));
+		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Finds the annotation of the specified type defined on this method.
 	 *
@@ -152,29 +361,6 @@ public class ClassInfo {
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a) {
 		return getAnnotation(a) != null;
-	}
-
-	private <T extends Annotation> T findAnnotation(Class<T> a) {
-		if (c != null) {
-			T t2 = getDeclaredAnnotation(a);
-			if (t2 != null)
-				return t2;
-
-			ClassInfo sci = getParent();
-			if (sci != null) {
-				t2 = sci.getAnnotation(a);
-				if (t2 != null)
-					return t2;
-			}
-
-			for (ClassInfo c2 : getInterfaces()) {
-				t2 = c2.getAnnotation(a);
-				if (t2 != null)
-					return t2;
-			}
-		}
-		return null;
-
 	}
 
 	/**
@@ -219,6 +405,48 @@ public class ClassInfo {
 		return l;
 	}
 
+	/**
+	 * Returns the specified annotation only if it's been declared on the specified class.
+	 *
+	 * <p>
+	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
+	 * up the parent chain.
+	 *
+	 * @param <T> The annotation class type.
+	 * @param a The annotation class.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
+		if (c != null)
+			for (Annotation a2 : c.getDeclaredAnnotations())
+				if (a2.annotationType() == a)
+					return (T)a2;
+		return null;
+	}
+
+	private <T extends Annotation> T findAnnotation(Class<T> a) {
+		if (c != null) {
+			T t2 = getDeclaredAnnotation(a);
+			if (t2 != null)
+				return t2;
+
+			ClassInfo sci = getParent();
+			if (sci != null) {
+				t2 = sci.getAnnotation(a);
+				if (t2 != null)
+					return t2;
+			}
+
+			for (ClassInfo c2 : getInterfaces()) {
+				t2 = c2.getAnnotation(a);
+				if (t2 != null)
+					return t2;
+			}
+		}
+		return null;
+	}
+
 	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
 		List<T> l = new LinkedList<>();
 		ClassUtils.appendAnnotations(a, type, l);
@@ -243,24 +471,185 @@ public class ClassInfo {
 		return annotationsPfMap;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Characteristics
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the specified annotation only if it's been declared on the specified class.
+	 * Returns <jk>true</jk> if all specified flags are applicable to this class.
 	 *
-	 * <p>
-	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
-	 * up the parent chain.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this class.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
-		if (c != null)
-			for (Annotation a2 : c.getDeclaredAnnotations())
-				if (a2.annotationType() == a)
-					return (T)a2;
-		return null;
+	public boolean isAll(ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isNotDeprecated())
+						return false;
+					break;
+				case NOT_DEPRECATED:
+					if (isDeprecated())
+						return false;
+					break;
+				case PUBLIC:
+					if (isNotPublic())
+						return false;
+					break;
+				case NOT_PUBLIC:
+					if (isPublic())
+						return false;
+					break;
+				case STATIC:
+					if (isNotStatic())
+						return false;
+					break;
+				case NOT_STATIC:
+					if (isStatic())
+						return false;
+					break;
+				case ABSTRACT:
+					if (isNotAbstract())
+						return false;
+					break;
+				case NOT_ABSTRACT:
+					if (isAbstract())
+						return false;
+					break;
+				case HAS_ARGS:
+				case HAS_NO_ARGS:
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				default:
+					break;
+
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this class.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this class.
+	 */
+	public boolean isAny(ClassFlags...flags) {
+		for (ClassFlags f : flags) {
+			switch (f) {
+				case DEPRECATED:
+					if (isDeprecated())
+						return true;
+					break;
+				case NOT_DEPRECATED:
+					if (isNotDeprecated())
+						return true;
+					break;
+				case PUBLIC:
+					if (isPublic())
+						return true;
+					break;
+				case NOT_PUBLIC:
+					if (isNotPublic())
+						return true;
+					break;
+				case STATIC:
+					if (isStatic())
+						return true;
+					break;
+				case NOT_STATIC:
+					if (isNotStatic())
+						return true;
+					break;
+				case ABSTRACT:
+					if (isAbstract())
+						return true;
+					break;
+				case NOT_ABSTRACT:
+					if (isNotAbstract())
+						return true;
+					break;
+				case TRANSIENT:
+				case NOT_TRANSIENT:
+				case HAS_ARGS:
+				case HAS_NO_ARGS:
+				default:
+					break;
+
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @return <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public boolean isDeprecated() {
+		return c.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 *
+	 * @return <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
+	 */
+	public boolean isNotDeprecated() {
+		return ! c.isAnnotationPresent(Deprecated.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is public.
+	 *
+	 * @return <jk>true</jk> if this class is public.
+	 */
+	public boolean isPublic() {
+		return Modifier.isPublic(c.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is not public.
+	 *
+	 * @return <jk>true</jk> if this class is not public.
+	 */
+	public boolean isNotPublic() {
+		return ! Modifier.isPublic(c.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is public.
+	 *
+	 * @return <jk>true</jk> if this class is public.
+	 */
+	public boolean isStatic() {
+		return Modifier.isStatic(c.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is not static.
+	 *
+	 * @return <jk>true</jk> if this class is not static.
+	 */
+	public boolean isNotStatic() {
+		return ! Modifier.isStatic(c.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is abstract.
+	 *
+	 * @return <jk>true</jk> if this class is abstract.
+	 */
+	public boolean isAbstract() {
+		return Modifier.isAbstract(c.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is not abstract.
+	 *
+	 * @return <jk>true</jk> if this class is not abstract.
+	 */
+	public boolean isNotAbstract() {
+		return ! Modifier.isAbstract(c.getModifiers());
 	}
 }
