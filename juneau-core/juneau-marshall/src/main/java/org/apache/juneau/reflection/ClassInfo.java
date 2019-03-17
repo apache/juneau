@@ -324,6 +324,30 @@ public final class ClassInfo {
 		return null;
 	}
 
+	/**
+	 * Returns the <code>public static Builder create()</code> method on this class.
+	 *
+	 * @return The <code>public static Builder create()</code> method on this class, or <jk>null</jk> if it doesn't exist.
+	 */
+	public MethodInfo findBuilderCreateMethod() {
+		for (MethodInfo m : getDeclaredMethods())
+			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && ! m.hasReturnType(Void.class))
+				return m;
+		return null;
+	}
+
+	/**
+	 * Returns the <code>T build()</code> method on this class.
+	 *
+	 * @return The <code>T build()</code> method on this class, or <jk>null</jk> if it doesn't exist.
+	 */
+	public MethodInfo findCreatePojoMethod() {
+		for (MethodInfo m : getDeclaredMethods())
+			if (m.isAll(NOT_STATIC) && m.hasName("build") && ! m.hasReturnType(Void.class))
+				return m;
+		return null;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fields
 	//-----------------------------------------------------------------------------------------------------------------

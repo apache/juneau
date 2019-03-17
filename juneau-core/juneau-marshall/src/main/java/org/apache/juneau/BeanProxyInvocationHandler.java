@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.json.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Provides an {@link InvocationHandler} for creating beans from bean interfaces.
@@ -48,8 +47,8 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 	 */
 	@Override /* InvocationHandler */
 	public Object invoke(Object proxy, Method method, Object[] args) {
-		Class<?>[] paramTypes = method.getParameterTypes();
-		if (hasName(method, "equals") && hasArgs(method, java.lang.Object.class)) {
+		MethodInfo mi = new MethodInfo(method);
+		if (mi.hasName("equals") && mi.hasArgs(java.lang.Object.class)) {
 			Object arg = args[0];
 			if (arg == null)
 				return false;
@@ -65,10 +64,10 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return this.beanProps.equals(bean);
 		}
 
-		if (hasName(method, "hashCode") && (paramTypes.length == 0))
+		if (mi.hasName("hashCode") && mi.hasNoArgs())
 			return Integer.valueOf(this.beanProps.hashCode());
 
-		if (hasName(method, "toString") && (paramTypes.length == 0))
+		if (mi.hasName("toString") && mi.hasNoArgs())
 			return SimpleJsonSerializer.DEFAULT.toString(this.beanProps);
 
 		String prop = this.meta.getterProps.get(method);

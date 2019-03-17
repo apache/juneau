@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Specialized transform for builder classes.
@@ -38,8 +38,8 @@ public class BuilderSwap<T,B> {
 	private final Class<B> builderClass;
 	private final Constructor<T> pojoConstructor;      // public Pojo(Builder);
 	private final Constructor<B> builderConstructor;   // public Builder();
-	private final Method createBuilderMethod;          // Builder create();
-	private final Method createPojoMethod;             // Pojo build();
+	private final MethodInfo createBuilderMethod;          // Builder create();
+	private final MethodInfo createPojoMethod;             // Pojo build();
 	private ClassMeta<?> builderClassMeta;
 
 	/**
@@ -52,7 +52,7 @@ public class BuilderSwap<T,B> {
 	 * @param createBuilderMethod The static create() method on the POJO class.
 	 * @param createPojoMethod The build() method on the builder class.
 	 */
-	protected BuilderSwap(Class<T> pojoClass, Class<B> builderClass, Constructor<T> pojoConstructor, Constructor<B> builderConstructor, Method createBuilderMethod, Method createPojoMethod) {
+	protected BuilderSwap(Class<T> pojoClass, Class<B> builderClass, Constructor<T> pojoConstructor, Constructor<B> builderConstructor, MethodInfo createBuilderMethod, MethodInfo createPojoMethod) {
 		this.pojoClass = pojoClass;
 		this.builderClass = builderClass;
 		this.pojoConstructor = pojoConstructor;
@@ -140,22 +140,25 @@ public class BuilderSwap<T,B> {
 
 		Class<?> pojoClass = resolveParameterType(Builder.class, 0, builderClass);
 
-		Method createPojoMethod, createBuilderMethod;
+		MethodInfo createPojoMethod, createBuilderMethod;
 		Constructor<?> pojoConstructor, builderConstructor;
 
-		createPojoMethod = findCreatePojoMethod(builderClass);
+		ClassInfo bci = ClassInfo.lookup(builderClass);
+		createPojoMethod = bci.findCreatePojoMethod();
 		if (createPojoMethod != null)
-			pojoClass = createPojoMethod.getReturnType();
+			pojoClass = createPojoMethod.getReturnType().getInnerClass();
 
 		if (pojoClass == null)
 			return null;
+
+		ClassInfo pci = ClassInfo.lookup(pojoClass);
 
 		pojoConstructor = findConstructor(pojoClass, cVis, false, builderClass);
 		if (pojoConstructor == null)
 			return null;
 
 		builderConstructor = findNoArgConstructor(builderClass, cVis);
-		createBuilderMethod = findBuilderCreateMethod(pojoClass);
+		createBuilderMethod = pci.findBuilderCreateMethod();
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
@@ -174,7 +177,7 @@ public class BuilderSwap<T,B> {
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromPojoClass(Class<?> pojoClass, Visibility cVis, Visibility mVis) {
 		Class<?> builderClass = null;
-		Method pojoCreateMethod, builderCreateMethod;
+		MethodInfo pojoCreateMethod, builderCreateMethod;
 		Constructor<?> pojoConstructor = null, builderConstructor;
 
 		org.apache.juneau.annotation.Builder b = pojoClass.getAnnotation(org.apache.juneau.annotation.Builder.class);
@@ -182,10 +185,12 @@ public class BuilderSwap<T,B> {
 		if (b != null && b.value() != Null.class)
 			builderClass = b.value();
 
-		builderCreateMethod = findBuilderCreateMethod(pojoClass);
+		ClassInfo pci = ClassInfo.lookup(pojoClass);
+
+		builderCreateMethod = pci.findBuilderCreateMethod();
 
 		if (builderClass == null && builderCreateMethod != null)
-			builderClass = builderCreateMethod.getReturnType();
+			builderClass = builderCreateMethod.getReturnType().getInnerClass();
 
 		if (builderClass == null) {
 			for (Constructor cc : pojoClass.getConstructors()) {
@@ -206,7 +211,8 @@ public class BuilderSwap<T,B> {
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
-		pojoCreateMethod = findCreatePojoMethod(builderClass);
+		ClassInfo bci = ClassInfo.lookup(builderClass);
+		pojoCreateMethod = bci.findCreatePojoMethod();
 		if (pojoConstructor == null)
 			pojoConstructor = findConstructor(pojoClass, cVis, false, builderClass);
 
@@ -214,19 +220,5 @@ public class BuilderSwap<T,B> {
 			return null;
 
 		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor, builderCreateMethod, pojoCreateMethod);
-	}
-
-	private static Method findBuilderCreateMethod(Class<?> pojoClass) {
-		for (Method m : pojoClass.getDeclaredMethods())
-			if (isAll(m, PUBLIC, STATIC) && hasName(m, "create") && ! hasReturnType(m, Void.class))
-				return m;
-		return null;
-	}
-
-	private static Method findCreatePojoMethod(Class<?> builderClass) {
-		for (Method m : builderClass.getDeclaredMethods())
-			if (isAll(m, NOT_STATIC) && hasName(m, "build") && ! hasReturnType(m, Void.class))
-				return m;
-		return null;
 	}
 }

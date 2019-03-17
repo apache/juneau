@@ -711,8 +711,9 @@ public class BeanMeta<T> {
 	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
 		List<Field> l = new LinkedList<>();
 		for (Class<?> c2 : findClasses(c, stopClass)) {
-			for (Field f : c2.getDeclaredFields()) {
-				if (isAny(f, STATIC, TRANSIENT))
+			ClassInfo c2i = ClassInfo.lookup(c2);
+			for (FieldInfo f : c2i.getDeclaredFields()) {
+				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
 					continue;
@@ -720,13 +721,13 @@ public class BeanMeta<T> {
 				BeanProperty bp = f.getAnnotation(BeanProperty.class);
 				String bpName = bpName(bp);
 
-				if (! (v.isVisible(f) || bp != null))
+				if (! (v.isVisible(f.getInner()) || bp != null))
 					continue;
 
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
-				l.add(f);
+				l.add(f.getInner());
 			}
 		}
 		return l;
@@ -734,13 +735,14 @@ public class BeanMeta<T> {
 
 	static final Field findInnerBeanField(Class<?> c, Class<?> stopClass, String name) {
 		for (Class<?> c2 : findClasses(c, stopClass)) {
-			for (Field f : c2.getDeclaredFields()) {
-				if (isAny(f, STATIC, TRANSIENT))
+			ClassInfo c2i = ClassInfo.lookup(c2);
+			for (FieldInfo f : c2i.getDeclaredFields()) {
+				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
 					continue;
-				if (f.getName().equals(name))
-					return f;
+				if (f.hasName(name))
+					return f.getInner();
 			}
 		}
 		return null;

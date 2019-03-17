@@ -615,6 +615,10 @@ public final class MethodInfo {
 		return returnType;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Shortcut for calling the invoke method on the underlying method.
 	 *
@@ -673,6 +677,63 @@ public final class MethodInfo {
 			signature = sb.toString();
 		}
 		return signature;
+	}
+
+	/**
+	 * Returns the parameter types on this method.
+	 *
+	 * @return The parameter types on this method.
+	 */
+	public Class<?>[] getParameterTypes() {
+		return m.getParameterTypes();
+	}
+
+	/**
+	 * Returns the generic parameter types on this method.
+	 *
+	 * @return The generic parameter types on this method.
+	 */
+	public Type[] getGenericParameterTypes() {
+		return m.getGenericParameterTypes();
+	}
+
+	/**
+	 * Returns the parameter type of the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The parameter type of the parameter at the specified index.
+	 */
+	public Class<?> getParameterType(int index) {
+		return getParameterTypes()[index];
+	}
+
+	/**
+	 * Returns the generic parameter type of the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The generic parameter type of the parameter at the specified index.
+	 */
+	public Type getGenericParameterType(int index) {
+		return getGenericParameterTypes()[index];
+	}
+
+	/**
+	 * Returns the parameter annotations on this method.
+	 *
+	 * @return The parameter annotations on this method.
+	 */
+	public Annotation[][] getParameterAnnotations() {
+		return m.getParameterAnnotations();
+	}
+
+	/**
+	 * Returns the parameter annotations on the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The parameter annotations on the parameter at the specified index.
+	 */
+	public Annotation[] getParameterAnnotations(int index) {
+		return m.getParameterAnnotations()[index];
 	}
 
 	@Override

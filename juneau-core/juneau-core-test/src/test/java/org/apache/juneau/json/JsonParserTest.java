@@ -186,13 +186,13 @@ public class JsonParserTest {
 		ReaderParser p = JsonParser.DEFAULT;
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 
-		json = "{f1:'1',f2:'1',f3:'true',f4:'true',f5:'1',f6:'1',f7:'1',f8:'1',f9:'1',f10:'1'}";
+		json = "{f1:'1',f10:'1',f2:'1',f3:'true',f4:'true',f5:'1',f6:'1',f7:'1',f8:'1',f9:'1'}";
 		B b = p.parse(json, B.class);
-		assertEquals("{f1:1,f2:1,f3:true,f4:true,f5:1.0,f6:1.0,f7:1,f8:1,f9:1,f10:1}", s.toString(b));
+		assertEquals("{f1:1,f10:1,f2:1,f3:true,f4:true,f5:1.0,f6:1.0,f7:1,f8:1,f9:1}", s.toString(b));
 
 		json = "{f1:'',f2:'',f3:'',f4:'',f5:'',f6:'',f7:'',f8:'',f9:'',f10:''}";
 		b = p.parse(json, B.class);
-		assertEquals("{f1:0,f2:0,f3:false,f4:false,f5:0.0,f6:0.0,f7:0,f8:0,f9:0,f10:0}", s.toString(b));
+		assertEquals("{f1:0,f10:0,f2:0,f3:false,f4:false,f5:0.0,f6:0.0,f7:0,f8:0,f9:0}", s.toString(b));
 	}
 
 	public static class B {

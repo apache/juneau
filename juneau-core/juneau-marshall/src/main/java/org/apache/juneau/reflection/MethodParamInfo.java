@@ -27,7 +27,9 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public final class MethodParamInfo {
 
-	private MethodInfo methodInfo;
+	private final MethodInfo methodInfo;
+	private final ConstructorInfo constructorInfo;
+	private final boolean isConstructor;
 	private int index;
 	private Map<Class<?>,Optional<Annotation>> annotationMap = new ConcurrentHashMap<>();
 	private Map<Class<?>,List<?>> annotationsMap = new ConcurrentHashMap<>();
@@ -41,6 +43,21 @@ public final class MethodParamInfo {
 	 */
 	protected MethodParamInfo(MethodInfo methodInfo, int index) {
 		this.methodInfo = methodInfo;
+		this.constructorInfo = null;
+		this.isConstructor = false;
+		this.index = index;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param constructorInfo The constructor wrapper.
+	 * @param index The parameter index.
+	 */
+	protected MethodParamInfo(ConstructorInfo constructorInfo, int index) {
+		this.methodInfo = null;
+		this.constructorInfo = constructorInfo;
+		this.isConstructor = true;
 		this.index = index;
 	}
 
@@ -59,7 +76,16 @@ public final class MethodParamInfo {
 	 * @return The method that this parameter belongs to.
 	 */
 	public Method getMethod() {
-		return methodInfo.getInner();
+		return isConstructor ? null : methodInfo.getInner();
+	}
+
+	/**
+	 * Returns the method that this parameter belongs to.
+	 *
+	 * @return The method that this parameter belongs to.
+	 */
+	public Constructor<?> getConstructor() {
+		return isConstructor ? constructorInfo.getInner() : null;
 	}
 
 	/**
@@ -68,7 +94,7 @@ public final class MethodParamInfo {
 	 * @return The class type of this parameter.
 	 */
 	public Class<?> getParameterType() {
-		return getMethod().getParameterTypes()[index];
+		return isConstructor ? constructorInfo.getParameterType(index) : methodInfo.getParameterType(index);
 	}
 
 	/**
@@ -77,7 +103,7 @@ public final class MethodParamInfo {
 	 * @return The generic class type of htis parameter.
 	 */
 	public Type getGenericParameterType() {
-		return methodInfo.getInner().getGenericParameterTypes()[index];
+		return isConstructor ? constructorInfo.getGenericParameterType(index) : methodInfo.getGenericParameterType(index);
 	}
 
 	/**
@@ -86,7 +112,7 @@ public final class MethodParamInfo {
 	 * @return The parameter annotations defined on this parameter.
 	 */
 	public Annotation[] getParameterAnnotations() {
-		return methodInfo.getInner().getParameterAnnotations()[index];
+		return isConstructor ? constructorInfo.getParameterAnnotations(index) : methodInfo.getParameterAnnotations(index);
 	}
 
 	/**
@@ -129,6 +155,15 @@ public final class MethodParamInfo {
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
+		if (isConstructor) {
+			for (Annotation a2 : constructorInfo.getParameterAnnotations(index))
+				if (a.isInstance(a2))
+					return (T)a2;
+			Type t = constructorInfo.getGenericParameterType(index);
+			if (Value.isType(t))
+				return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
+			return ClassInfo.lookup(t).getAnnotation(a);
+		}
 		List<Method> methods = methodInfo.getMatching();
 		for (Method m2 : methods)
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
@@ -189,16 +224,27 @@ public final class MethodParamInfo {
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
 		List<T> l = new ArrayList<>();
-		List<Method> methods = methodInfo.getMatching();
-		for (Method m2 : methods)
-			for (Annotation a2 :  m2.getParameterAnnotations()[index])
+		if (isConstructor) {
+			for (Annotation a2 : constructorInfo.getParameterAnnotations(index))
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		Type t = methodInfo.getInner().getGenericParameterTypes()[index];
-		if (Value.isType(t))
-			ClassUtils.appendAnnotations(a, Value.getParameterType(t), l);
-		else
-			ClassUtils.appendAnnotations(a, t, l);
+			Type t = constructorInfo.getGenericParameterType(index);
+			if (Value.isType(t))
+				ClassUtils.appendAnnotations(a, Value.getParameterType(t), l);
+			else
+				ClassUtils.appendAnnotations(a, t, l);
+		} else {
+			List<Method> methods = methodInfo.getMatching();
+			for (Method m2 : methods)
+				for (Annotation a2 :  m2.getParameterAnnotations()[index])
+					if (a.isInstance(a2))
+						l.add((T)a2);
+			Type t = methodInfo.getInner().getGenericParameterTypes()[index];
+			if (Value.isType(t))
+				ClassUtils.appendAnnotations(a, Value.getParameterType(t), l);
+			else
+				ClassUtils.appendAnnotations(a, t, l);
+		}
 		return l;
 	}
 
@@ -222,6 +268,6 @@ public final class MethodParamInfo {
 
 	@Override
 	public String toString() {
-		return getMethod().getName() + "[" + index + "]";
+		return (isConstructor ? getConstructor().getName() : getMethod().getName()) + "[" + index + "]";
 	}
 }

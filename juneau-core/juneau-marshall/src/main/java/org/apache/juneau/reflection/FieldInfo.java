@@ -81,6 +81,20 @@ public final class FieldInfo {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the specified annotation on this field.
+	 *
+	 * @param a The annotation to look for.
+	 * @return The annotation, or <jk>null</jk> if not found.
+	 */
+	public <T extends Annotation> T getAnnotation(Class<T> a) {
+		return f.getAnnotation(a);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Characteristics
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -262,6 +276,16 @@ public final class FieldInfo {
 	 */
 	public boolean isNotTransient() {
 		return ! Modifier.isTransient(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the field has the specified name.
+	 *
+	 * @param name The name to compare against.
+	 * @return <jk>true</jk> if the field has the specified name.
+	 */
+	public boolean hasName(String name) {
+		return f.getName().equals(name);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

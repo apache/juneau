@@ -201,9 +201,9 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			for (Method m2 : getAllMethods(ic, false)) {
-				if (isAll(m2, PUBLIC, NOT_STATIC, HAS_NO_ARGS, NOT_DEPRECATED) && m2.getName().startsWith("to") && m2.getReturnType() == oc) {
-					final Method m3 = m2;
+			for (MethodInfo m2 : ici.getAllMethods()) {
+				if (m2.isAll(PUBLIC, NOT_STATIC, HAS_NO_ARGS, NOT_DEPRECATED) && m2.getName().startsWith("to") && m2.hasReturnType(oc)) {
+					final Method m3 = m2.getInner();
 					t = new Transform<I,O>() {
 						@Override
 						public O transform(Object outer, I in) {

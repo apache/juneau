@@ -1063,20 +1063,20 @@ public class OpenApiPartParserTest {
 	}
 
 	public static class H2 {
-		public Object f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f99;
+		public Object f01, f02, f03, f04, f05, f06, f07, f08, f09, f10, f11, f12, f99;
 	}
 
 	@Test
 	public void h04_objectType_simpleProperties() throws Exception {
 		HttpPartSchema s = schema("object")
-			.property("f1", schema("string"))
-			.property("f2", schema("string", "byte"))
-			.property("f4", schema("string", "date-time"))
-			.property("f5", schema("string", "binary"))
-			.property("f6", schema("string", "binary-spaced"))
-			.property("f7", schema("string", "uon"))
-			.property("f8", schema("integer"))
-			.property("f9", schema("integer", "int64"))
+			.property("f01", schema("string"))
+			.property("f02", schema("string", "byte"))
+			.property("f04", schema("string", "date-time"))
+			.property("f05", schema("string", "binary"))
+			.property("f06", schema("string", "binary-spaced"))
+			.property("f07", schema("string", "uon"))
+			.property("f08", schema("integer"))
+			.property("f09", schema("integer", "int64"))
 			.property("f10", schema("number"))
 			.property("f11", schema("number", "double"))
 			.property("f12", schema("boolean"))
@@ -1084,48 +1084,48 @@ public class OpenApiPartParserTest {
 			.build();
 
 		byte[] foob = "foo".getBytes();
-		String in = "(f1=foo,f2="+base64Encode(foob)+",f4=2012-12-21T12:34:56Z,f5="+toHex(foob)+",f6='"+toSpacedHex(foob)+"',f7=foo,f8=1,f9=1,f10=1,f11=1,f12=true,f99=1)";
+		String in = "(f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06='"+toSpacedHex(foob)+"',f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1)";
 
 		H2 h2 = p.parse(s, in, H2.class);
-		assertObjectEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", h2);
-		assertClass(String.class, h2.f1);
-		assertClass(byte[].class, h2.f2);
-		assertClass(GregorianCalendar.class, h2.f4);
-		assertClass(byte[].class, h2.f5);
-		assertClass(byte[].class, h2.f6);
-		assertClass(String.class, h2.f7);
-		assertClass(Integer.class, h2.f8);
-		assertClass(Long.class, h2.f9);
+		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", h2);
+		assertClass(String.class, h2.f01);
+		assertClass(byte[].class, h2.f02);
+		assertClass(GregorianCalendar.class, h2.f04);
+		assertClass(byte[].class, h2.f05);
+		assertClass(byte[].class, h2.f06);
+		assertClass(String.class, h2.f07);
+		assertClass(Integer.class, h2.f08);
+		assertClass(Long.class, h2.f09);
 		assertClass(Float.class, h2.f10);
 		assertClass(Double.class, h2.f11);
 		assertClass(Boolean.class, h2.f12);
 		assertClass(Integer.class, h2.f99);
 
 		ObjectMap om = p.parse(s, in, ObjectMap.class);
-		assertObjectEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
-		assertClass(String.class, om.get("f1"));
-		assertClass(byte[].class, om.get("f2"));
-		assertClass(GregorianCalendar.class, om.get("f4"));
-		assertClass(byte[].class, om.get("f5"));
-		assertClass(byte[].class, om.get("f6"));
-		assertClass(String.class, om.get("f7"));
-		assertClass(Integer.class, om.get("f8"));
-		assertClass(Long.class, om.get("f9"));
+		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
+		assertClass(String.class, om.get("f01"));
+		assertClass(byte[].class, om.get("f02"));
+		assertClass(GregorianCalendar.class, om.get("f04"));
+		assertClass(byte[].class, om.get("f05"));
+		assertClass(byte[].class, om.get("f06"));
+		assertClass(String.class, om.get("f07"));
+		assertClass(Integer.class, om.get("f08"));
+		assertClass(Long.class, om.get("f09"));
 		assertClass(Float.class, om.get("f10"));
 		assertClass(Double.class, om.get("f11"));
 		assertClass(Boolean.class, om.get("f12"));
 		assertClass(Integer.class, om.get("f99"));
 
 		om = (ObjectMap)p.parse(s, in, Object.class);
-		assertObjectEquals("{f1:'foo',f2:[102,111,111],f4:'2012-12-21T12:34:56Z',f5:[102,111,111],f6:[102,111,111],f7:'foo',f8:1,f9:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
-		assertClass(String.class, om.get("f1"));
-		assertClass(byte[].class, om.get("f2"));
-		assertClass(GregorianCalendar.class, om.get("f4"));
-		assertClass(byte[].class, om.get("f5"));
-		assertClass(byte[].class, om.get("f6"));
-		assertClass(String.class, om.get("f7"));
-		assertClass(Integer.class, om.get("f8"));
-		assertClass(Long.class, om.get("f9"));
+		assertObjectEquals("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}", om);
+		assertClass(String.class, om.get("f01"));
+		assertClass(byte[].class, om.get("f02"));
+		assertClass(GregorianCalendar.class, om.get("f04"));
+		assertClass(byte[].class, om.get("f05"));
+		assertClass(byte[].class, om.get("f06"));
+		assertClass(String.class, om.get("f07"));
+		assertClass(Integer.class, om.get("f08"));
+		assertClass(Long.class, om.get("f09"));
 		assertClass(Float.class, om.get("f10"));
 		assertClass(Double.class, om.get("f11"));
 		assertClass(Boolean.class, om.get("f12"));
@@ -1135,14 +1135,14 @@ public class OpenApiPartParserTest {
 	@Test
 	public void h05_objectType_arrayProperties() throws Exception {
 		HttpPartSchema s = schema("object")
-			.property("f1", schema("array").items(schema("string")))
-			.property("f2", schema("array").items(schema("string", "byte")))
-			.property("f4", schema("array").items(schema("string", "date-time")))
-			.property("f5", schema("array").items(schema("string", "binary")))
-			.property("f6", schema("array").items(schema("string", "binary-spaced")))
-			.property("f7", schema("array").items(schema("string", "uon")))
-			.property("f8", schema("array").items(schema("integer")))
-			.property("f9", schema("array").items(schema("integer", "int64")))
+			.property("f01", schema("array").items(schema("string")))
+			.property("f02", schema("array").items(schema("string", "byte")))
+			.property("f04", schema("array").items(schema("string", "date-time")))
+			.property("f05", schema("array").items(schema("string", "binary")))
+			.property("f06", schema("array").items(schema("string", "binary-spaced")))
+			.property("f07", schema("array").items(schema("string", "uon")))
+			.property("f08", schema("array").items(schema("integer")))
+			.property("f09", schema("array").items(schema("integer", "int64")))
 			.property("f10", schema("array").items(schema("number")))
 			.property("f11", schema("array").items(schema("number", "double")))
 			.property("f12", schema("array").items(schema("boolean")))
@@ -1150,29 +1150,29 @@ public class OpenApiPartParserTest {
 			.build();
 
 		byte[] foob = "foo".getBytes();
-		String in = "(f1=foo,f2="+base64Encode(foob)+",f4=2012-12-21T12:34:56Z,f5="+toHex(foob)+",f6='"+toSpacedHex(foob)+"',f7=foo,f8=1,f9=1,f10=1,f11=1,f12=true,f99=1)";
+		String in = "(f01=foo,f02="+base64Encode(foob)+",f04=2012-12-21T12:34:56Z,f05="+toHex(foob)+",f06='"+toSpacedHex(foob)+"',f07=foo,f08=1,f09=1,f10=1,f11=1,f12=true,f99=1)";
 
 		H2 h2 = p.parse(s, in, H2.class);
-		assertObjectEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", h2);
+		assertObjectEquals("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", h2);
 
 		ObjectMap om = p.parse(s, in, ObjectMap.class);
-		assertObjectEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
+		assertObjectEquals("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
 
 		om = (ObjectMap)p.parse(s, in, Object.class);
-		assertObjectEquals("{f1:['foo'],f2:[[102,111,111]],f4:['2012-12-21T12:34:56Z'],f5:[[102,111,111]],f6:[[102,111,111]],f7:['foo'],f8:[1],f9:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
+		assertObjectEquals("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}", om);
 	}
 
 	@Test
 	public void h06_objectType_arrayProperties_pipes() throws Exception {
 		HttpPartSchema s = schema("object")
-			.property("f1", schema("array").collectionFormat("pipes").items(schema("string")))
-			.property("f2", schema("array").collectionFormat("pipes").items(schema("string", "byte")))
-			.property("f4", schema("array").collectionFormat("pipes").items(schema("string", "date-time")))
-			.property("f5", schema("array").collectionFormat("pipes").items(schema("string", "binary")))
-			.property("f6", schema("array").collectionFormat("pipes").items(schema("string", "binary-spaced")))
-			.property("f7", schema("array").collectionFormat("pipes").items(schema("string", "uon")))
-			.property("f8", schema("array").collectionFormat("pipes").items(schema("integer")))
-			.property("f9", schema("array").collectionFormat("pipes").items(schema("integer", "int64")))
+			.property("f01", schema("array").collectionFormat("pipes").items(schema("string")))
+			.property("f02", schema("array").collectionFormat("pipes").items(schema("string", "byte")))
+			.property("f04", schema("array").collectionFormat("pipes").items(schema("string", "date-time")))
+			.property("f05", schema("array").collectionFormat("pipes").items(schema("string", "binary")))
+			.property("f06", schema("array").collectionFormat("pipes").items(schema("string", "binary-spaced")))
+			.property("f07", schema("array").collectionFormat("pipes").items(schema("string", "uon")))
+			.property("f08", schema("array").collectionFormat("pipes").items(schema("integer")))
+			.property("f09", schema("array").collectionFormat("pipes").items(schema("integer", "int64")))
 			.property("f10", schema("array").collectionFormat("pipes").items(schema("number")))
 			.property("f11", schema("array").collectionFormat("pipes").items(schema("number", "double")))
 			.property("f12", schema("array").collectionFormat("pipes").items(schema("boolean")))
@@ -1180,16 +1180,16 @@ public class OpenApiPartParserTest {
 			.build();
 
 		byte[] foob = "foo".getBytes(), barb = "bar".getBytes();
-		String in = "(f1=foo|bar,f2="+base64Encode(foob)+"|"+base64Encode(barb)+",f4=2012-12-21T12:34:56Z|2012-12-21T12:34:56Z,f5="+toHex(foob)+"|"+toHex(barb)+",f6='"+toSpacedHex(foob)+"|"+toSpacedHex(barb)+"',f7=foo|bar,f8=1|2,f9=1|2,f10=1|2,f11=1|2,f12=true|true,f99=1|2)";
+		String in = "(f01=foo|bar,f02="+base64Encode(foob)+"|"+base64Encode(barb)+",f04=2012-12-21T12:34:56Z|2012-12-21T12:34:56Z,f05="+toHex(foob)+"|"+toHex(barb)+",f06='"+toSpacedHex(foob)+"|"+toSpacedHex(barb)+"',f07=foo|bar,f08=1|2,f09=1|2,f10=1|2,f11=1|2,f12=true|true,f99=1|2)";
 
 		H2 h2 = p.parse(s, in, H2.class);
-		assertObjectEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", h2);
+		assertObjectEquals("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", h2);
 
 		ObjectMap om = p.parse(s, in, ObjectMap.class);
-		assertObjectEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
+		assertObjectEquals("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
 
 		om = (ObjectMap)p.parse(s, in, Object.class);
-		assertObjectEquals("{f1:['foo','bar'],f2:[[102,111,111],[98,97,114]],f4:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f5:[[102,111,111],[98,97,114]],f6:[[102,111,111],[98,97,114]],f7:['foo','bar'],f8:[1,2],f9:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
+		assertObjectEquals("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}", om);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

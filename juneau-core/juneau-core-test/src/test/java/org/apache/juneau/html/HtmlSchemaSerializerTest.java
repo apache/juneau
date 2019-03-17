@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
@@ -52,12 +53,14 @@ public class HtmlSchemaSerializerTest {
 	// Documentation examples
 	//====================================================================================================
 
+	@Bean(properties="name,birthDate,addresses")
 	public static class Person {
 		public String name;
 		public Calendar birthDate;
 		public List<Address> addresses;
 	}
 
+	@Bean(properties="street,city,state,zip,isCurrent")
 	public static class Address {
 		public String street, city;
 		public StateEnum state;
