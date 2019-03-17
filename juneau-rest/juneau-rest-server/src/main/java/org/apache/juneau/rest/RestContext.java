@@ -3101,6 +3101,7 @@ public final class RestContext extends BeanContext {
 
 			PropertyStore ps = getPropertyStore().builder().add(builder.properties).build();
 			Class<?> resourceClass = resource.getClass();
+			ClassInfo rci = ClassInfo.lookup(resourceClass);
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority, null));
@@ -3228,15 +3229,15 @@ public final class RestContext extends BeanContext {
 				_postInitChildFirstMethodParams = new ArrayList<>(),
 				_destroyMethodParams = new ArrayList<>();
 
-			for (java.lang.reflect.Method method : resourceClass.getMethods()) {
-				RestMethod a = ClassUtils.getMethodInfo(method).getAnnotation(RestMethod.class);
+			for (MethodInfo mi : rci.getPublicMethods()) {
+				RestMethod a = mi.getAnnotation(RestMethod.class);
 				if (a != null) {
-					methodsFound.add(method.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
+					methodsFound.add(mi.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
-						if (! isPublic(method))
-							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), method.getName());
+						if (mi.isNotPublic())
+							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getName());
 
-						RestJavaMethod sm = new RestJavaMethod(resource, method, this);
+						RestJavaMethod sm = new RestJavaMethod(resource, mi.getInner(), this);
 						String httpMethod = sm.getHttpMethod();
 
 						// RRPC is a special case where a method returns an interface that we
@@ -3244,12 +3245,12 @@ public final class RestContext extends BeanContext {
 						// We override the CallMethod.invoke() method to insert our logic.
 						if ("RRPC".equals(httpMethod)) {
 
-							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(method.getGenericReturnType());
+							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(mi.getInner().getGenericReturnType());
 							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
 							if (rim.getMethodsByPath().isEmpty())
-								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", getMethodSignature(method), interfaceClass.getReadableName());
+								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getReadableName());
 
-							sm = new RestJavaMethod(resource, method, this) {
+							sm = new RestJavaMethod(resource, mi.getInner(), this) {
 
 								@Override
 								int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
@@ -3294,12 +3295,12 @@ public final class RestContext extends BeanContext {
 								}
 							};
 
-							_javaRestMethods.put(method.getName(), sm);
+							_javaRestMethods.put(mi.getName(), sm);
 							addToRouter(routers, "GET", sm);
 							addToRouter(routers, "POST", sm);
 
 						} else {
-							_javaRestMethods.put(method.getName(), sm);
+							_javaRestMethods.put(mi.getName(), sm);
 							addToRouter(routers, httpMethod, sm);
 						}
 					} catch (Throwable e) {

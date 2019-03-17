@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -52,9 +51,9 @@ public class RemoteResourceMeta {
 				path = trimSlashes(r.path());
 
 		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
-		for (Method m : c.getMethods())
-			if (isPublic(m))
-				methods.put(m, new RemoteMethodMeta(path, m, false, "GET"));
+		for (MethodInfo m : ci.getPublicMethods())
+			if (m.isPublic())
+				methods.put(m.getInner(), new RemoteMethodMeta(path, m.getInner(), false, "GET"));
 
 		this.methods = unmodifiableMap(methods);
 		this.path = path;

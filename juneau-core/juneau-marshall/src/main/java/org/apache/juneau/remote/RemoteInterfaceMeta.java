@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -59,9 +58,9 @@ public class RemoteInterfaceMeta {
 				path = trimSlashes(r.path());
 
 		Map<Method,RemoteInterfaceMethod> methods = new LinkedHashMap<>();
-		for (Method m : c.getMethods())
-			if (isPublic(m))
-				methods.put(m, new RemoteInterfaceMethod(uri, m));
+		for (MethodInfo m : ci.getPublicMethods())
+			if (m.isPublic())
+				methods.put(m.getInner(), new RemoteInterfaceMethod(uri, m.getInner()));
 
 		Map<String,RemoteInterfaceMethod> methodsByPath = new LinkedHashMap<>();
 		for (RemoteInterfaceMethod rmm : methods.values())

@@ -12,14 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transform;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -59,17 +58,18 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
-		for (Constructor<?> cc : c.getConstructors()) {
+		ClassInfo ci = ClassInfo.lookup(c);
+		for (ConstructorInfo cc : ci.getPublicConstructors()) {
 			Class<?>[] pt = cc.getParameterTypes();
-			if (cc.getAnnotation(BeanIgnore.class) == null && hasNumArgs(cc, 1) && isPublic(cc) && pt[0] != c.getDeclaringClass()) {
+			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumArgs(1) && cc.isPublic() && pt[0] != c.getDeclaringClass()) {
 				// Find the unswap method if there is one.
 				Method unswapMethod = null;
-				for (Method m : c.getMethods()) {
-					if (pt[0].equals(m.getReturnType()) && isPublic(m))
-					unswapMethod = m;
+				for (MethodInfo m : ci.getPublicMethods()) {
+					if (pt[0].equals(m.getReturnType().getInner()) && m.isPublic())
+					unswapMethod = m.getInner();
 				}
 
-				l.add(new SurrogateSwap(pt[0], cc, unswapMethod));
+				l.add(new SurrogateSwap(pt[0], cc.getInner(), unswapMethod));
 			}
 		}
 		return l;
