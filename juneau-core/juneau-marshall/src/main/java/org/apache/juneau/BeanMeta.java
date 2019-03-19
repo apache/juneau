@@ -88,7 +88,7 @@ public class BeanMeta<T> {
 	protected final Map<Class<?>,Class<?>[]> typeVarImpls;
 
 	/** The constructor for this bean. */
-	protected final Constructor<T> constructor;
+	protected final ConstructorInfo constructor;
 
 	/** For beans with constructors with BeanConstructor annotation, this is the list of constructor arg properties. */
 	protected final String[] constructorArgs;
@@ -149,7 +149,7 @@ public class BeanMeta<T> {
 		BeanPropertyMeta dynaProperty;
 
 		Map<Class<?>,Class<?>[]> typeVarImpls;
-		Constructor<T> constructor;
+		ConstructorInfo constructor;
 		String[] constructorArgs = new String[0];
 		MetadataMap extMeta = new MetadataMap();
 		PropertyNamer propertyNamer;
@@ -164,9 +164,9 @@ public class BeanMeta<T> {
 			this.pNames = pNames;
 		}
 
-		@SuppressWarnings("unchecked")
 		String init(BeanMeta<T> beanMeta) {
 			Class<?> c = classMeta.getInnerClass();
+			ClassInfo ci = classMeta.getClassInfo();
 
 			try {
 				Visibility
@@ -218,29 +218,30 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @BeanConstructor constructor.
-				for (Constructor<?> x : c.getConstructors()) {
+				for (ConstructorInfo x : ci.getPublicConstructors()) {
 					if (x.isAnnotationPresent(BeanConstructor.class)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
-						constructor = (Constructor<T>)x;
+						constructor = x;
 						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties());
 						if (constructorArgs.length != x.getParameterTypes().length)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
-						setAccessible(constructor, false);
+						constructor.setAccessible();
 					}
 				}
 
 				// If this is an interface, look for impl classes defined in the context.
 				if (constructor == null)
-					constructor = (Constructor<T>)ctx.getImplClassConstructor(c, conVis);
+					constructor = ctx.getImplClassConstructor(c, conVis);
 
 				if (constructor == null)
-					constructor = (Constructor<T>)findNoArgConstructor(c, conVis);
+					constructor = ci.findNoArgConstructor(conVis);
 
 				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";
 
-				setAccessible(constructor, false);
+				if (constructor != null)
+					constructor.setAccessible();
 
 				// Explicitly defined property names in @Bean annotation.
 				Set<String> fixedBeanProps = new LinkedHashSet<>();
@@ -824,10 +825,10 @@ public class BeanMeta<T> {
 	protected T newBean(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (classMeta.isMemberClass()) {
 			if (constructor != null)
-				return constructor.newInstance(outer);
+				return (T)constructor.invoke(outer);
 		} else {
 			if (constructor != null)
-				return constructor.newInstance((Object[])null);
+				return (T)constructor.invoke((Object[])null);
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (h != null) {
 				ClassLoader cl = classMeta.innerClass.getClassLoader();

@@ -453,15 +453,12 @@ public final class ClassInfo {
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
 	public ConstructorInfo findNoArgConstructor(Visibility v) {
-		int mod = c.getModifiers();
-		if (Modifier.isAbstract(mod))
+		if (isAbstract())
 			return null;
-		boolean isMemberClass = c.isMemberClass() && ! ClassUtils.isStatic(c);
-		for (Constructor<?> cc : c.getConstructors()) {
-			mod = cc.getModifiers();
-			if (ClassUtils.hasNumArgs(cc, isMemberClass ? 1 : 0) && v.isVisible(mod) && ClassUtils.isNotDeprecated(cc))
-				return ConstructorInfo.create(this, v.transform(cc));
-		}
+		boolean isMemberClass = isMemberClass() && ! isStatic();
+		for (ConstructorInfo cc : getPublicConstructors())
+			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
+				return cc.transform(v);
 		return null;
 	}
 
@@ -849,5 +846,23 @@ public final class ClassInfo {
 	 */
 	public boolean isNotPrimitive() {
 		return ! c.isPrimitive();
+	}
+
+	/**
+	 * Returns the underlying class name.
+	 *
+	 * @return The underlying class name.
+	 */
+	public String getName() {
+		return c.getName();
+	}
+
+	/**
+	 * Returns the simple name of the underlying class.
+	 *
+	 * @return The simple name of the underlying class;
+	 */
+	public String getSimpleName() {
+		return c.getSimpleName();
 	}
 }

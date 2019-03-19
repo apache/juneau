@@ -49,6 +49,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
@@ -2286,10 +2287,10 @@ public final class RestCall extends BeanSession implements Closeable {
 					// So instantiate the object anyway if it has a no-arg constructor.
 					// This allows a remote resource method to return a NoContent object for example.
 					if (in == null && (sc < SC_OK || sc == SC_NO_CONTENT || sc == SC_NOT_MODIFIED || sc == SC_RESET_CONTENT)) {
-						Constructor<T> c = ClassUtils.findNoArgConstructor(type.getInnerClass(), Visibility.PUBLIC);
+						ConstructorInfo c = type.getClassInfo().findNoArgConstructor(Visibility.PUBLIC);
 						if (c != null) {
 							try {
-								return c.newInstance();
+								return (T)c.invoke();
 							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 								throw new ParseException(e);
 							}

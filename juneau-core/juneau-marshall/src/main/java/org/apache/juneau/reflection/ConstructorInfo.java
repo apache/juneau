@@ -411,18 +411,41 @@ public final class ConstructorInfo {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
 	 * @return <jk>true</jk> if call was successful.
 	 */
-	public boolean setAccessible(boolean ignoreExceptions) {
+	public boolean setAccessible() {
 		try {
 			if (! (c.isAccessible()))
 				c.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {
-			if (ignoreExceptions)
-				return false;
-			throw new ClassMetaRuntimeException("Could not set accessibility to true on constructor ''{0}''", c);
+			return false;
 		}
+	}
+
+	/**
+	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
+	 *
+	 * <p>
+	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
+	 *
+	 * @param v The minimum visibility.
+	 * @return
+	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
+	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
+	 */
+	public ConstructorInfo transform(Visibility v) {
+		if (v.transform(c) == null)
+			return null;
+		return this;
+	}
+
+	/**
+	 * Returns the name of the underlying constructor.
+	 *
+	 * @return The name of the underlying constructor.
+	 */
+	public String getName() {
+		return c.getName();
 	}
 }

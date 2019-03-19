@@ -245,24 +245,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified constructor has the specified arguments.
-	 *
-	 * @param x The constructor to test.
-	 * @param args The arguments to test for.
-	 * @return <jk>true</jk> if the specified constructor has the specified arguments in the exact order.
-	 */
-	public static boolean hasArgs(Constructor<?> x, Class<?>...args) {
-		Class<?>[] pt = x.getParameterTypes();
-		if (pt.length == args.length) {
-			for (int i = 0; i < pt.length; i++)
-				if (! pt[i].equals(args[i]))
-					return false;
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified constructor has the specified number of arguments.
 	 *
 	 * @param x The constructor to test.
@@ -271,16 +253,6 @@ public final class ClassUtils {
 	 */
 	public static boolean hasNumArgs(Constructor<?> x, int number) {
 		return x.getParameterTypes().length == number;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor has the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param c The constructor.
-	 * @return <jk>true</jk> if the specified constructor has the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isDeprecated(Constructor<?> c) {
-		return c.isAnnotationPresent(Deprecated.class);
 	}
 
 	/**
@@ -324,36 +296,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified method is not public.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method is not public.
-	 */
-	public static boolean isNotPublic(Method m) {
-		return ! Modifier.isPublic(m.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field is public.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field is public.
-	 */
-	public static boolean isPublic(Field f) {
-		return Modifier.isPublic(f.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field is not public.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field is not public.
-	 */
-	public static boolean isNotPublic(Field f) {
-		return ! Modifier.isPublic(f.getModifiers());
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified method is static.
 	 *
 	 * @param m The method.
@@ -361,102 +303,6 @@ public final class ClassUtils {
 	 */
 	public static boolean isStatic(Method m) {
 		return Modifier.isStatic(m.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method is not static.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method is not static.
-	 */
-	public static boolean isNotStatic(Method m) {
-		return !  Modifier.isStatic(m.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field is static.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field is static.
-	 */
-	public static boolean isStatic(Field f) {
-		return Modifier.isStatic(f.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field is not static.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field is not static.
-	 */
-	public static boolean isNotStatic(Field f) {
-		return ! Modifier.isStatic(f.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor is public.
-	 *
-	 * @param c The constructor.
-	 * @return <jk>true</jk> if the specified constructor is public.
-	 */
-	public static boolean isPublic(Constructor<?> c) {
-		return Modifier.isPublic(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor is not public.
-	 *
-	 * @param c The constructor.
-	 * @return <jk>true</jk> if the specified constructor is not public.
-	 */
-	public static boolean isNotPublic(Constructor<?> c) {
-		return ! Modifier.isPublic(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field is transient.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field is transient.
-	 */
-	public static boolean isTransient(Field f) {
-		return Modifier.isTransient(f.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified field is not transient.
-	 *
-	 * @param f The field.
-	 * @return <jk>true</jk> if the specified field is not transient.
-	 */
-	public static boolean isNotTransient(Field f) {
-		return ! Modifier.isTransient(f.getModifiers());
-	}
-
-	/**
-	 * Locates the no-arg constructor for the specified class.
-	 *
-	 * <p>
-	 * Constructor must match the visibility requirements specified by parameter 'v'.
-	 * If class is abstract, always returns <jk>null</jk>.
-	 * Note that this also returns the 1-arg constructor for non-static member classes.
-	 *
-	 * @param c The class from which to locate the no-arg constructor.
-	 * @param v The minimum visibility.
-	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
-	 */
-	@SuppressWarnings({"rawtypes","unchecked"})
-	public static final <T> Constructor<T> findNoArgConstructor(Class<T> c, Visibility v) {
-		int mod = c.getModifiers();
-		if (Modifier.isAbstract(mod))
-			return null;
-		boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
-		for (Constructor cc : c.getConstructors()) {
-			mod = cc.getModifiers();
-			if (hasNumArgs(cc, isMemberClass ? 1 : 0) && v.isVisible(mod) && isNotDeprecated(cc))
-				return v.transform(cc);
-		}
-		return null;
 	}
 
 	/**
@@ -550,30 +396,6 @@ public final class ClassUtils {
 	 */
 	public static Object invokeMethodFuzzy(Method m, Object pojo, Object...args) throws Exception {
 		return m.invoke(pojo, getMatchingArgs(m.getParameterTypes(), args));
-	}
-
-	/**
-	 * Invokes the specified constructor using fuzzy-arg matching.
-	 *
-	 * <p>
-	 * Arguments will be matched to the parameters based on the parameter types.
-	 * <br>Arguments can be in any order.
-	 * <br>Extra arguments will be ignored.
-	 * <br>Missing arguments will be left <jk>null</jk>.
-	 *
-	 * <p>
-	 * Note that this only works for constructors that have distinguishable argument types.
-	 * <br>It's not going to work on constructors with generic argument types like <code>Object</code>
-	 *
-	 * @param c The constructor being called.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The results of the method invocation.
-	 * @throws Exception
-	 */
-	public static <T> T invokeConstructorFuzzy(Constructor<T> c, Object...args) throws Exception {
-		return c.newInstance(getMatchingArgs(c.getParameterTypes(), args));
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
@@ -720,19 +542,6 @@ public final class ClassUtils {
 			return -1;
 		}
 		return matches;
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
-	 * @param c The class we're trying to construct.
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Object...args) {
-		return findPublicConstructor(c, false, getClasses(args));
 	}
 
 	/**
@@ -916,64 +725,6 @@ public final class ClassUtils {
 			}
 		}
 		return params;
-	}
-
-	/**
-	 * Returns all the fields in the specified class and all parent classes.
-	 *
-	 * <p>
-	 * Fields are ordered in either parent-to-child, or child-to-parent order, then alphabetically.
-	 *
-	 * @param c The class to get all fields on.
-	 * @param parentFirst Order them in parent-class-to-child-class order, otherwise child-class-to-parent-class order.
-	 * @return An iterable of all fields in the specified class.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static Iterable<Field> getAllFields(final Class c, final boolean parentFirst) {
-		return new Iterable<Field>() {
-			@Override
-			public Iterator<Field> iterator() {
-				return new Iterator<Field>(){
-					final Iterator<Class<?>> classIterator = getParentClasses(c, parentFirst, false);
-					Field[] fields = classIterator.hasNext() ? sort(classIterator.next().getDeclaredFields()) : new Field[0];
-					int fIndex = 0;
-					Field next;
-
-					@Override
-					public boolean hasNext() {
-						prime();
-						return next != null;
-					}
-
-					private void prime() {
-						if (next == null) {
-							while (fIndex >= fields.length) {
-								if (classIterator.hasNext()) {
-									fields = sort(classIterator.next().getDeclaredFields());
-									fIndex = 0;
-								} else {
-									fIndex = -1;
-								}
-			 				}
-							if (fIndex != -1)
-								next = fields[fIndex++];
-						}
-					}
-
-					@Override
-					public Field next() {
-						prime();
-						Field f = next;
-						next = null;
-						return f;
-					}
-
-					@Override
-					public void remove() {
-					}
-				};
-			}
-		};
 	}
 
 	/**

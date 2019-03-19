@@ -345,4 +345,13 @@ public final class FieldInfo {
 	public String toString() {
 		return f.getDeclaringClass().getName() + "." + f.getName();
 	}
+
+	/**
+	 * Returns the name of this field.
+	 *
+	 * @return The name of this field.
+	 */
+	public String getName() {
+		return f.getName();
+	}
 }

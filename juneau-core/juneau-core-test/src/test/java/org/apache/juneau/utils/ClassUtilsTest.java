@@ -263,14 +263,15 @@ public class ClassUtilsTest {
 	@Test
 	public void getParentFieldsParentFirst() throws Exception {
 		Set<String> s = new TreeSet<>();
-		for (Field f : ClassUtils.getAllFields(EB.class, true)) {
+		ClassInfo ci = ClassInfo.create(EB.class);
+		for (FieldInfo f : ci.getAllFieldsParentFirst()) {
 			if (! f.getName().startsWith("$"))
 				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
 		}
 		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
 
 		s = new TreeSet<>();
-		for (Field f : ClassUtils.getAllFields(EB.class, false)) {
+		for (FieldInfo f : ci.getAllFields()) {
 			if (! f.getName().startsWith("$"))
 				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
 		}

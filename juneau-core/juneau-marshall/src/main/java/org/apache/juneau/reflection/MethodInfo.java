@@ -78,6 +78,18 @@ public final class MethodInfo {
 	}
 
 	/**
+	 * Convenience method for instantiating a {@link MethodInfo};
+	 *
+	 * @param m The method being wrapped.
+	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
+	 */
+	public static MethodInfo create(Method m) {
+		if (m == null)
+			return null;
+		return new MethodInfo(ClassInfo.lookup(m.getDeclaringClass()), m);
+	}
+
+	/**
 	 * Returns the wrapped method.
 	 *
 	 * @return The wrapped method.
@@ -648,18 +660,15 @@ public final class MethodInfo {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
 	 * @return <jk>true</jk> if call was successful.
 	 */
-	public boolean setAccessible(boolean ignoreExceptions) {
+	public boolean setAccessible() {
 		try {
 			if (! (m.isAccessible()))
 				m.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {
-			if (ignoreExceptions)
-				return false;
-			throw new ClassMetaRuntimeException("Could not set accessibility to true on method ''{0}''", m);
+			return false;
 		}
 	}
 
@@ -760,6 +769,23 @@ public final class MethodInfo {
 		if (n.startsWith("is") && n.length() > 2)
 			return Introspector.decapitalize(n.substring(2));
 		return n;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the parameters on the method are not in the specified list provided.
+	 *
+	 * @param args The valid class types (exact) for the arguments.
+	 * @throws FormattedIllegalArgumentException If any of the parameters on the method weren't in the list.
+	 */
+	public void assertArgsOfType(Class<?>...args) throws FormattedIllegalArgumentException {
+		for (Class<?> c1 : getParameterTypes()) {
+			boolean foundMatch = false;
+			for (Class<?> c2 : args)
+				if (c1 == c2)
+					foundMatch = true;
+			if (! foundMatch)
+				throw new FormattedIllegalArgumentException("Invalid argument of type {0} passed in method {1}.  Only arguments of type {2} are allowed.", c1, m, args);
+		}
 	}
 
 

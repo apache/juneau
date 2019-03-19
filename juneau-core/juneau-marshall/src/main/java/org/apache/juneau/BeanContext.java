@@ -26,6 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -1932,7 +1933,7 @@ public class BeanContext extends Context {
 	private final PojoSwap<?,?>[] pojoSwaps;
 	private final Map<String,?> examples;
 	private final BeanRegistry beanRegistry;
-	private final Map<String,Class<?>> implClasses;
+	private final Map<String,ClassInfo> implClasses;
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
@@ -2030,7 +2031,10 @@ public class BeanContext extends Context {
 
 		examples = getMapProperty(BEAN_examples, Object.class);
 
-		implClasses = getClassMapProperty(BEAN_implClasses);
+		Map<String,ClassInfo> icm = new LinkedHashMap<>();
+		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
+			icm.put(e.getKey(), ClassInfo.lookup(e.getValue()));
+		implClasses = unmodifiableMap(icm);
 
 		Map<String,String[]> m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_includeProperties, String.class).entrySet())
@@ -2643,36 +2647,36 @@ public class BeanContext extends Context {
 	 * @param v The minimum visibility for the constructor.
 	 * @return The no arg constructor, or <jk>null</jk> if the class has no no-arg constructor.
 	 */
-	protected final <T> Constructor<? extends T> getImplClassConstructor(Class<T> c, Visibility v) {
+	protected final <T> ConstructorInfo getImplClassConstructor(Class<T> c, Visibility v) {
 		if (implClasses.isEmpty())
 			return null;
 		Class cc = c;
 		while (cc != null) {
-			Class implClass = implClasses.get(cc.getName());
+			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return findNoArgConstructor(implClass, v);
+				return implClass.findNoArgConstructor(v);
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return findNoArgConstructor(implClass, v);
+					return implClass.findNoArgConstructor(v);
 			}
 			cc = cc.getSuperclass();
 		}
 		return null;
 	}
 
-	private final <T> Class<? extends T> findImplClass(Class<T> c) {
+	private final <T> Class<T> findImplClass(Class<T> c) {
 		if (implClasses.isEmpty())
 			return null;
 		Class cc = c;
 		while (cc != null) {
-			Class implClass = implClasses.get(cc.getName());
+			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return implClass;
+				return (Class<T>) implClass.getInner();
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return implClass;
+					return (Class<T>) implClass.getInner();
 			}
 			cc = cc.getSuperclass();
 		}
