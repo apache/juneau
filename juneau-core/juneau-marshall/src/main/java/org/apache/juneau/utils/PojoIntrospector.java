@@ -15,9 +15,9 @@ package org.apache.juneau.utils;
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Used to invoke methods on {@code Objects} using arguments in serialized form.
@@ -98,7 +98,7 @@ public final class PojoIntrospector {
 	}
 
 	/**
-	 * Convenience method for invoking argument from method signature (@see {@link ClassUtils#getMethodSignature(Method)}.
+	 * Convenience method for invoking argument from method signature (@see {@link MethodInfo#getSignature()}.
 	 *
 	 * @param method The method being invoked.
 	 * @param args

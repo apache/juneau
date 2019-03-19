@@ -151,32 +151,6 @@ public final class ClassUtils {
 		return false;
 	}
 
-	/**
-	 * Returns the signature of the specified method.
-	 *
-	 * <p>
-	 * For no-arg methods, the signature will be a simple string such as <js>"toString"</js>.
-	 * For methods with one or more args, the arguments will be fully-qualified class names (e.g.
-	 * <js>"append(java.util.StringBuilder,boolean)"</js>)
-	 *
-	 * @param m The methods to get the signature on.
-	 * @return The methods signature.
-	 */
-	public static String getMethodSignature(Method m) {
-		StringBuilder sb = new StringBuilder(m.getName());
-		Class<?>[] pt = m.getParameterTypes();
-		if (pt.length > 0) {
-			sb.append('(');
-			for (int i = 0; i < pt.length; i++) {
-				if (i > 0)
-					sb.append(',');
-				sb.append(getReadableClassName(pt[i]));
-			}
-			sb.append(')');
-		}
-		return sb.toString();
-	}
-
 	private static final Map<Class<?>, Class<?>>
 		pmap1 = new HashMap<>(),
 		pmap2 = new HashMap<>();
@@ -925,24 +899,6 @@ public final class ClassUtils {
 	 */
 	public static String toString(Field f) {
 		return f.getDeclaringClass().getName() + "." + f.getName();
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the parameters on the method are not in the specified list provided.
-	 *
-	 * @param m The method to test.
-	 * @param args The valid class types (exact) for the arguments.
-	 * @throws FormattedIllegalArgumentException If any of the parameters on the method weren't in the list.
-	 */
-	public static void assertArgsOfType(Method m, Class<?>...args) throws FormattedIllegalArgumentException {
-		for (Class<?> c1 : m.getParameterTypes()) {
-			boolean foundMatch = false;
-			for (Class<?> c2 : args)
-				if (c1 == c2)
-					foundMatch = true;
-			if (! foundMatch)
-				throw new FormattedIllegalArgumentException("Invalid argument of type {0} passed in method {1}.  Only arguments of type {2} are allowed.", c1, m, args);
-		}
 	}
 
 	/**

@@ -13,9 +13,9 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -37,11 +37,11 @@ public class ClientVersionMatcher extends RestMatcher {
 	 * @param clientVersionHeader
 	 * 	The HTTP request header name containing the client version.
 	 * 	If <jk>null</jk> or an empty string, uses <js>"X-Client-Version"</js>
-	 * @param javaMethod The version string that the client version must match.
+	 * @param mi The version string that the client version must match.
 	 */
-	protected ClientVersionMatcher(String clientVersionHeader, java.lang.reflect.Method javaMethod) {
+	protected ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "X-Client-Version" : clientVersionHeader;
-		RestMethod m = getMethodInfo(javaMethod).getAnnotation(RestMethod.class);
+		RestMethod m = mi.getAnnotation(RestMethod.class);
 		range = new VersionRange(m.clientVersion());
 	}
 

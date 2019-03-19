@@ -21,7 +21,6 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
-import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -36,6 +35,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.RestUtils;
@@ -143,10 +143,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				if (! r.config().isEmpty())
 					configPath = r.config();
 			String cf = vr.resolve(configPath);
-			
-			if ("SYSTEM_DEFAULT".equals(cf)) 
+
+			if ("SYSTEM_DEFAULT".equals(cf))
 				this.config = Config.getSystemDefault();
-			
+
 			if (this.config == null) {
 				ConfigBuilder cb = Config.create().varResolver(vr);
 				if (! cf.isEmpty())
@@ -280,6 +280,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
+		ClassInfo rci = ClassInfo.lookup(resourceClass);
 
 		// Once we have the resource object, we can construct the Widgets.
 		// We want to do that here so that we can update the script/style properties while they're still modifiable.
@@ -292,17 +293,17 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 		widgets(false, widgets);
 
-		Map<String,Method> map = new LinkedHashMap<>();
-		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
+		Map<String,MethodInfo> map = new LinkedHashMap<>();
+		for (MethodInfo m : rci.getAllMethodsParentFirst()) {
 			if (m.isAnnotationPresent(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
-				setAccessible(m, false);
-				String sig = ClassUtils.getMethodSignature(m);
+				m.setAccessible();
+				String sig = m.getSignature();
 				if (! map.containsKey(sig))
 					map.put(sig, m);
 			}
 		}
-		for (Method m : map.values()) {
-			ClassUtils.assertArgsOfType(m, RestContextBuilder.class, ServletConfig.class);
+		for (MethodInfo m : map.values()) {
+			assertArgsOnlyOfType(m, RestContextBuilder.class, ServletConfig.class);
 			Class<?>[] pt = m.getParameterTypes();
 			Object[] args = new Object[pt.length];
 			for (int i = 0; i < args.length; i++) {
@@ -318,6 +319,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			}
 		}
 		return this;
+	}
+
+	private static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
+		if (! m.isArgsOnlyOfType(args))
+			throw new FormattedIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
 	}
 
 	RestContextBuilder servletContext(ServletContext servletContext) {

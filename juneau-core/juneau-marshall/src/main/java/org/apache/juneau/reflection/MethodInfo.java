@@ -772,22 +772,33 @@ public final class MethodInfo {
 	}
 
 	/**
-	 * Throws an {@link IllegalArgumentException} if the parameters on the method are not in the specified list provided.
+	 * Returns <jk>true</jk> if the parameters on the method only consist of the types specified in the list.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bpcode w800'>
+	 *
+	 *  <jc>// Example method:</jc>
+	 * 	<jk>public void</jk> foo(String bar, Integer baz);
+	 *
+	 * 	isArgsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	isArgsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>, Map.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	isArgsOnlyOfType(fooMethod, String.<jk>class</jk>);  <jc>// False.</jc>
+	 * </p>
 	 *
 	 * @param args The valid class types (exact) for the arguments.
-	 * @throws FormattedIllegalArgumentException If any of the parameters on the method weren't in the list.
+	 * @return <jk>true</jk> if the method parameters only consist of the types specified in the list.
 	 */
-	public void assertArgsOfType(Class<?>...args) throws FormattedIllegalArgumentException {
+	public boolean isArgsOnlyOfType(Class<?>...args) {
 		for (Class<?> c1 : getParameterTypes()) {
 			boolean foundMatch = false;
 			for (Class<?> c2 : args)
 				if (c1 == c2)
 					foundMatch = true;
 			if (! foundMatch)
-				throw new FormattedIllegalArgumentException("Invalid argument of type {0} passed in method {1}.  Only arguments of type {2} are allowed.", c1, m, args);
+				return false;
 		}
+		return true;
 	}
-
 
 	@Override
 	public String toString() {
@@ -799,5 +810,14 @@ public final class MethodInfo {
 		}
 		sb.append(")");
 		return sb.toString();
+	}
+
+	/**
+	 * Returns the generic return type of this method.
+	 *
+	 * @return The generic return type of this method.
+	 */
+	public Type getGenericReturnType() {
+		return m.getGenericReturnType();
 	}
 }

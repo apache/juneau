@@ -224,7 +224,7 @@ public final class ClassInfo {
 	public Iterable<MethodInfo> getAllMethodsParentFirst() {
 		if (allMethodsPf == null)
 			allMethodsPf = Collections.unmodifiableList(findAllMethodsParentFirst());
-		return ReverseIterable.of(allMethodsPf);
+		return allMethodsPf;
 	}
 
 	/**

@@ -33,9 +33,9 @@ public final class RemoteMethodReturn {
 	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
 
-	RemoteMethodReturn(Method m) {
+	RemoteMethodReturn(MethodInfo m) {
 		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
-		Class<?> rt = m.getReturnType();
+		Class<?> rt = m.getReturnType().getInnerClass();
 		RemoteReturn rv = rt == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
 		ClassInfo rti = ClassInfo.lookup(rt);
 		if (rti.hasAnnotation(Response.class) && rt.isInterface()) {

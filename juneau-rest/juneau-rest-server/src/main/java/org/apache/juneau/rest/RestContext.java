@@ -13,7 +13,6 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -3309,69 +3308,69 @@ public final class RestContext extends BeanContext {
 				}
 			}
 
-			for (Method m : ClassUtils.getAllMethods(resourceClass, true)) {
-				if (ClassUtils.isPublic(m) && m.isAnnotationPresent(RestHook.class)) {
+			for (MethodInfo m : rci.getAllMethodsParentFirst()) {
+				if (m.isPublic() && m.isAnnotationPresent(RestHook.class)) {
 					HookEvent he = m.getAnnotation(RestHook.class).value();
-					String sig = ClassUtils.getMethodSignature(m);
+					String sig = m.getSignature();
 					switch(he) {
 						case PRE_CALL: {
 							if (! _preCallMethods.containsKey(sig)) {
-								setAccessible(m, false);
-								_preCallMethods.put(sig, m);
+								m.setAccessible();
+								_preCallMethods.put(sig, m.getInner());
 								_preCallMethodParams.add(findParams(m, true, null));
 							}
 							break;
 						}
 						case POST_CALL: {
 							if (! _postCallMethods.containsKey(sig)) {
-								setAccessible(m, false);
-								_postCallMethods.put(sig, m);
+								m.setAccessible();
+								_postCallMethods.put(sig, m.getInner());
 								_postCallMethodParams.add(findParams(m, true, null));
 							}
 							break;
 						}
 						case START_CALL: {
 							if (! _startCallMethods.containsKey(sig)) {
-								setAccessible(m, false);
-								_startCallMethods.put(sig, m);
+								m.setAccessible();
+								_startCallMethods.put(sig, m.getInner());
 								_startCallMethodParams.add(m.getParameterTypes());
-								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
+								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
 						}
 						case END_CALL: {
 							if (! _endCallMethods.containsKey(sig)) {
-								setAccessible(m, false);
-								_endCallMethods.put(sig, m);
+								m.setAccessible();
+								_endCallMethods.put(sig, m.getInner());
 								_endCallMethodParams.add(m.getParameterTypes());
-								ClassUtils.assertArgsOfType(m, HttpServletRequest.class, HttpServletResponse.class);
+								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
 						}
 						case POST_INIT: {
 							if (! _postInitMethods.containsKey(sig)) {
-								setAccessible(m, false);
-								_postInitMethods.put(sig, m);
+								m.setAccessible();
+								_postInitMethods.put(sig, m.getInner());
 								_postInitMethodParams.add(m.getParameterTypes());
-								ClassUtils.assertArgsOfType(m, RestContext.class);
+								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
 						}
 						case POST_INIT_CHILD_FIRST: {
 							if (! _postInitChildFirstMethods.containsKey(sig)) {
-								setAccessible(m, false);
-								_postInitChildFirstMethods.put(sig, m);
+								m.setAccessible();
+								_postInitChildFirstMethods.put(sig, m.getInner());
 								_postInitChildFirstMethodParams.add(m.getParameterTypes());
-								ClassUtils.assertArgsOfType(m, RestContext.class);
+								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
 						}
 						case DESTROY: {
 							if (! _destroyMethods.containsKey(sig)) {
-								setAccessible(m, false);
-								_destroyMethods.put(sig, m);
+								m.setAccessible();
+								_destroyMethods.put(sig, m.getInner());
 								_destroyMethodParams.add(m.getParameterTypes());
-								ClassUtils.assertArgsOfType(m, RestContext.class);
+								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
 						}
@@ -3453,6 +3452,11 @@ public final class RestContext extends BeanContext {
 		} finally {
 			initException = _initException;
 		}
+	}
+
+	private static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
+		if (! m.isArgsOnlyOfType(args))
+			throw new FormattedIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
 	}
 
 	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestJavaMethod cm) throws RestServletException {
@@ -4563,18 +4567,17 @@ public final class RestContext extends BeanContext {
 	/**
 	 * Finds the {@link RestMethodParam} instances to handle resolving objects on the calls to the specified Java method.
 	 *
-	 * @param method The Java method being called.
+	 * @param mi The Java method being called.
 	 * @param isPreOrPost Whether this is a {@link HookEvent#PRE_CALL} or {@link HookEvent#POST_CALL}.
 	 * @param pathPattern
 	 * @return The array of resolvers.
 	 * @throws ServletException If an annotation usage error was detected.
 	 */
-	protected RestMethodParam[] findParams(Method method, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
+	protected RestMethodParam[] findParams(MethodInfo mi, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
 
-		Type[] pt = method.getGenericParameterTypes();
+		Type[] pt = mi.getGenericParameterTypes();
 		RestMethodParam[] rp = new RestMethodParam[pt.length];
 		PropertyStore ps = getPropertyStore();
-		MethodInfo mi = getMethodInfo(method);
 
 		for (int i = 0; i < pt.length; i++) {
 
@@ -4605,17 +4608,17 @@ public final class RestContext extends BeanContext {
 			} else if (mpi.hasAnnotation(ResponseHeader.class)) {
 				rp[i] = new RestParamDefaults.ResponseHeaderObject(mpi, ps);
 			} else if (mpi.hasAnnotation(ResponseStatus.class)) {
-				rp[i] = new RestParamDefaults.ResponseStatusObject(method, t);
+				rp[i] = new RestParamDefaults.ResponseStatusObject(t);
 			} else if (mpi.hasAnnotation(HasFormData.class)) {
 				rp[i] = new RestParamDefaults.HasFormDataObject(mpi);
 			} else if (mpi.hasAnnotation(HasQuery.class)) {
 				rp[i] = new RestParamDefaults.HasQueryObject(mpi);
 			} else if (mpi.hasAnnotation(org.apache.juneau.rest.annotation.Method.class)) {
-				rp[i] = new RestParamDefaults.MethodObject(method, t);
+				rp[i] = new RestParamDefaults.MethodObject(mi, t);
 			}
 
 			if (rp[i] == null && ! isPreOrPost)
-				throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", method, i);
+				throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", mi.getInner(), i);
 		}
 
 		return rp;

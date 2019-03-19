@@ -68,8 +68,8 @@ public class ResponseBeanMeta {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(Method m, PropertyStore ps) {
-		if (! getMethodInfo(m).hasAnnotation(Response.class))
+	public static ResponseBeanMeta create(MethodInfo m, PropertyStore ps) {
+		if (! m.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
 		Type t = m.getGenericReturnType();
@@ -77,7 +77,7 @@ public class ResponseBeanMeta {
 			b.apply(Value.getParameterType(t));
 		else
 			b.apply(t);
-		for (Response r : getMethodInfo(m).getAnnotationsParentFirst(Response.class))
+		for (Response r : m.getAnnotationsParentFirst(Response.class))
 			b.apply(r);
 		return b.build();
 	}

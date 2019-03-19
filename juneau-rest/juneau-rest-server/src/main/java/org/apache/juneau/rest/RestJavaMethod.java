@@ -42,6 +42,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.util.RestUtils;
@@ -143,10 +144,11 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
+			MethodInfo mi = MethodInfo.create(method);
 
 			try {
 
-				RestMethod m = getMethodInfo(method).getAnnotation(RestMethod.class);
+				RestMethod m = mi.getAnnotation(RestMethod.class);
 				if (m == null)
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
@@ -233,7 +235,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 						optionalMatchers.add(matcher);
 				}
 				if (! m.clientVersion().isEmpty())
-					requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), method));
+					requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
 
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
@@ -392,13 +394,13 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes())))
 					: parsers.getSupportedMediaTypes();
 
-				methodParams = context.findParams(method, false, pathPattern);
+				methodParams = context.findParams(mi, false, pathPattern);
 
-				if (getMethodInfo(method).hasAnnotation(Response.class))
-					responseMeta = ResponseBeanMeta.create(method, serializers.getPropertyStore());
+				if (mi.hasAnnotation(Response.class))
+					responseMeta = ResponseBeanMeta.create(mi, serializers.getPropertyStore());
 
 				// Need this to access methods in anonymous inner classes.
-				setAccessible(method, true);
+				mi.setAccessible();
 			} catch (RestServletException e) {
 				throw e;
 			} catch (Exception e) {
