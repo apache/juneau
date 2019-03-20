@@ -15,6 +15,7 @@ package org.apache.juneau.httppart.bean;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.bean.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.annotation.InvalidAnnotationException.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -168,7 +169,7 @@ public class ResponseBeanMeta {
 			ClassInfo ci = cm.getClassInfo();
 			for (MethodInfo m : ci.getAllMethods()) {
 				if (m.isPublic()) {
-					m.assertNoAnnotations(Response.class, Body.class, Header.class, Query.class, FormData.class, Path.class);
+					assertNoInvalidAnnotations(m, Header.class, Query.class, FormData.class, Path.class);
 					if (m.hasAnnotation(ResponseHeader.class)) {
 						assertNoArgs(m, ResponseHeader.class);
 						assertReturnNotVoid(m, ResponseHeader.class);

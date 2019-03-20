@@ -271,17 +271,17 @@ public final class MethodInfo {
 	}
 
 	/**
-	 * Asserts that the specified method that's annotated with the specified annotation cannot also be annotated with other annotations.
+	 * Returns the first annotation in the specified list on this method.
 	 *
-	 * @param a The annotation known to exist on the method.
 	 * @param c The annotations that cannot be present on the method.
-	 * @throws InvalidAnnotationException
+	 * @return <jk>true</jk> if this method does not have any of the specified annotations.
 	 */
 	@SafeVarargs
-	public final void assertNoAnnotations(Class<? extends Annotation> a, Class<? extends Annotation>...c) throws InvalidAnnotationException {
+	public final Class<? extends Annotation> findAnnotation(Class<? extends Annotation>...c) {
 		for (Class<? extends Annotation> cc : c)
 			if (hasAnnotation(cc))
-				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cc.getSimpleName(), a.getSimpleName(), m);
+				return cc;
+		return null;
 	}
 
 	/**

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.FormattedIllegalArgumentException.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -3452,11 +3453,6 @@ public final class RestContext extends BeanContext {
 		} finally {
 			initException = _initException;
 		}
-	}
-
-	private static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
-		if (! m.argsOnlyOfType(args))
-			throw new FormattedIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
 	}
 
 	private static void addToRouter(Map<String, RestCallRouter.Builder> routers, String httpMethodName, RestJavaMethod cm) throws RestServletException {
