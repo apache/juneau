@@ -351,7 +351,7 @@ public class BeanSession extends Session {
 						if (tc == Byte.TYPE)
 							return (T)(Byte.valueOf(b ? (byte)1 : 0));
 					} else if (isNullOrEmpty(value)) {
-						return (T)getPrimitiveDefault(to.innerClass);
+						return (T)to.info.getPrimitiveDefault();
 					} else {
 						String s = value.toString();
 						int multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(s) : 1;
@@ -381,14 +381,14 @@ public class BeanSession extends Session {
 					}
 				} else if (to.isChar()) {
 					if (isNullOrEmpty(value))
-						return (T)getPrimitiveDefault(to.innerClass);
+						return (T)to.info.getPrimitiveDefault();
 					return (T)parseCharacter(value);
 				} else if (to.isBoolean()) {
 					if (from.isNumber()) {
 						int i = ((Number)value).intValue();
 						return (T)(i == 0 ? Boolean.FALSE : Boolean.TRUE);
 					} else if (isNullOrEmpty(value)) {
-						return (T)getPrimitiveDefault(to.innerClass);
+						return (T)to.info.getPrimitiveDefault();
 					} else {
 						return (T)Boolean.valueOf(value.toString());
 					}

@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
@@ -1190,7 +1191,7 @@ public class RestClient extends BeanContext implements Closeable {
 							} else {
 								Object v = rc.getResponseBody(rmr.getReturnType());
 								if (v == null && method.getReturnType().isPrimitive())
-									v = ClassUtils.getPrimitiveDefault(method.getReturnType());
+									v = getClassInfo(method.getReturnType()).getPrimitiveDefault();
 								return v;
 							}
 
@@ -1310,7 +1311,7 @@ public class RestClient extends BeanContext implements Closeable {
 
 							Object v = rc.getResponse(method.getGenericReturnType());
 							if (v == null && method.getReturnType().isPrimitive())
-								v = ClassUtils.getPrimitiveDefault(method.getReturnType());
+								v = getClassInfo(method.getReturnType()).getPrimitiveDefault();
 							return v;
 
 						} catch (RestCallException e) {

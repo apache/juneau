@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.PropertyType.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -758,7 +759,7 @@ public final class PropertyStore {
 		}
 
 		public <T> T as(Class<T> c) {
-			Class<?> c2 = ClassUtils.getPrimitiveWrapper(c);
+			Class<?> c2 = getClassInfo(c).getPrimitiveWrapper();
 			if (c2 != null)
 				c = (Class<T>)c2;
 			if (c.isInstance(value))
@@ -766,7 +767,7 @@ public final class PropertyStore {
 			if (c.isArray() && value instanceof Collection)
 				return (T)asArray(c.getComponentType());
 			if (type == STRING) {
-				T t = ClassUtils.fromString(c, value.toString());
+				T t = fromString(c, value.toString());
 				if (t != null)
 					return t;
 			}
@@ -783,7 +784,7 @@ public final class PropertyStore {
 					if (eType.isInstance(o))
 						o2 = o;
 					else if (type == SET_STRING || type == LIST_STRING) {
-						o2 = ClassUtils.fromString(eType, o.toString());
+						o2 = fromString(eType, o.toString());
 						if (o2 == null)
 							throw new ConfigException("Invalid property conversion ''{0}'' to ''{1}[]'' on property ''{2}''", type, eType, name);
 					} else {
@@ -802,7 +803,7 @@ public final class PropertyStore {
 			} else if (type == SET_STRING) {
 				Set<T> s = new LinkedHashSet<>();
 				for (Object o : (Set<?>)value) {
-					T t = ClassUtils.fromString(eType, o.toString());
+					T t = fromString(eType, o.toString());
 					if (t == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''Set<{1}>'' on property ''{2}''", type, eType, name);
 					s.add(t);
@@ -819,7 +820,7 @@ public final class PropertyStore {
 			} else if (type == PropertyType.LIST_STRING) {
 				List<T> l = new ArrayList<>();
 				for (Object o : (List<?>)value) {
-					T t = ClassUtils.fromString(eType, o.toString());
+					T t = fromString(eType, o.toString());
 					if (t == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''List<{1}>'' on property ''{2}''", type, eType, name);
 					l.add(t);
@@ -840,7 +841,7 @@ public final class PropertyStore {
 			} else if (type == SORTED_MAP_STRING || type == ORDERED_MAP_STRING) {
 				Map<String,T> m = new LinkedHashMap<>();
 				for (Map.Entry<String,String> e : ((Map<String,String>)value).entrySet()) {
-					T t = ClassUtils.fromString(eType, e.getValue());
+					T t = fromString(eType, e.getValue());
 					if (t == null)
 						throw new ConfigException("Invalid property conversion ''{0}'' to ''Map<String,{1}>'' on property ''{2}''", type, eType, name);
 					m.put(e.getKey(), t);
@@ -855,7 +856,7 @@ public final class PropertyStore {
 			if (value == null)
 				return null;
 			if (type == STRING)
-				return ClassUtils.fromString(iType, value.toString());
+				return fromString(iType, value.toString());
 			else if (type == OBJECT || type == CLASS) {
 				T t = instantiate(resolver, outer, iType, value, args);
 				if (t != null)
@@ -874,7 +875,7 @@ public final class PropertyStore {
 					if (eType.isInstance(o))
 						o2 = o;
 					else if (type == SET_STRING || type == LIST_STRING)
-						o2 = ClassUtils.fromString(eType, o.toString());
+						o2 = fromString(eType, o.toString());
 					else if (type == SET_CLASS || type == LIST_CLASS || type == LIST_OBJECT)
 						o2 = instantiate(resolver, outer, eType, o, args);
 					if (o2 == null)
@@ -908,9 +909,9 @@ public final class PropertyStore {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static <T> T instantiate(ResourceResolver resolver, Object outer, Class<T> c, Object value, Object...args) {
-		if (ClassUtils.isParentClass(c, value.getClass()))
+		if (isParentClass(c, value.getClass()))
 			return (T)value;
-		if (ClassUtils.isParentClass(Class.class, value.getClass()))
+		if (isParentClass(Class.class, value.getClass()))
 			return resolver.resolve(outer, (Class<T>)value, args);
 		return null;
 	}

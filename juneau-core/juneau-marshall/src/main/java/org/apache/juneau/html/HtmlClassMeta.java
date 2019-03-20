@@ -33,7 +33,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.html = cm.getClassInfo().getAnnotation(Html.class);
+		this.html = cm.getInfo().getAnnotation(Html.class);
 		if (html != null) {
 			format = html.format();
 			noTables = html.noTables();

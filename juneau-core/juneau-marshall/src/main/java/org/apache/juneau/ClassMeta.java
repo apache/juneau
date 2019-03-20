@@ -584,13 +584,13 @@ public final class ClassMeta<T> implements Type {
 							swapConstructor = (Constructor<T>)cs.getInner();
 						else if (cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
 							numberConstructor = cs;
-							numberConstructorType = getWrapperIfPrimitive(arg);
+							numberConstructorType = getClassInfo(arg).getWrapperIfPrimitive();
 						}
 					}
 				}
 			}
 
-			primitiveDefault = ClassUtils.getPrimitiveDefault(c);
+			primitiveDefault = ci.getPrimitiveDefault();
 
 			for (MethodInfo m : ci.getPublicMethods())
 				if (m.isAll(PUBLIC, NOT_DEPRECATED))
@@ -833,7 +833,7 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return The {@link ClassInfo} wrapper for the underlying class, never <jk>null</jk>.
 	 */
-	public ClassInfo getClassInfo() {
+	public ClassInfo getInfo() {
 		return info;
 	}
 
@@ -1402,7 +1402,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a {@link Date}.
 	 */
 	public boolean isDate() {
-		return cc == DATE && ClassUtils.isParentClass(Date.class, innerClass);
+		return cc == DATE && isParentClass(Date.class, innerClass);
 	}
 
 	/**
@@ -1411,7 +1411,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a {@link Calendar}.
 	 */
 	public boolean isCalendar() {
-		return cc == DATE && ClassUtils.isParentClass(Calendar.class, innerClass);
+		return cc == DATE && isParentClass(Calendar.class, innerClass);
 	}
 
 	/**
@@ -2002,7 +2002,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isInstance(Object o) {
 		if (o != null)
-			return isParentClass(this.innerClass, o.getClass()) || (isPrimitive() && getPrimitiveWrapper(this.innerClass) == o.getClass());
+			return isParentClass(this.innerClass, o.getClass()) || (isPrimitive() && info.getPrimitiveWrapper() == o.getClass());
 		return false;
 	}
 

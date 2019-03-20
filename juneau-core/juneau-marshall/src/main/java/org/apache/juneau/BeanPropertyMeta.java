@@ -1106,7 +1106,7 @@ public final class BeanPropertyMeta {
 		if (t == null && extraKeys != null)
 			t = extraKeysInfo.getAnnotation(a);
 		if (t == null)
-			t = typeMeta.getClassInfo().getAnnotation(a);
+			t = typeMeta.getInfo().getAnnotation(a);
 		return t;
 	}
 

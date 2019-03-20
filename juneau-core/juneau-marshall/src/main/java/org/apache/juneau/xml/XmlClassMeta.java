@@ -39,7 +39,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	public XmlClassMeta(ClassMeta<?> cm) {
 		super(cm);
 		this.namespace = findNamespace(cm);
-		this.xml = cm.getClassInfo().getAnnotation(Xml.class);
+		this.xml = cm.getInfo().getAnnotation(Xml.class);
 		if (xml != null) {
 			this.format = xml.format();
 			this.childName = nullIfEmpty(xml.childName());
@@ -101,7 +101,7 @@ public class XmlClassMeta extends ClassMetaExtended {
 	private static Namespace findNamespace(ClassMeta<?> cm) {
 		if (cm == null)
 			return null;
-		ClassInfo ci = cm.getClassInfo();
+		ClassInfo ci = cm.getInfo();
 		List<Xml> xmls = ci.getAnnotations(Xml.class);
 		List<XmlSchema> schemas = ci.getAnnotations(XmlSchema.class);
 		return XmlUtils.findNamespace(xmls, schemas);

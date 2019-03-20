@@ -22,6 +22,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Utility class for introspecting information about a class.
@@ -990,4 +991,101 @@ public final class ClassInfo {
 	public <T> Constructor<T> findPublicConstructor(boolean fuzzyArgs, Object...args) {
 		return findPublicConstructor(fuzzyArgs, ClassUtils.getClasses(args));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Primitive wrappers.
+	//-----------------------------------------------------------------------------------------------------------------
+
+
+	private static final Map<Class<?>, Class<?>>
+		pmap1 = new HashMap<>(),
+		pmap2 = new HashMap<>();
+	static {
+		pmap1.put(boolean.class, Boolean.class);
+		pmap1.put(byte.class, Byte.class);
+		pmap1.put(short.class, Short.class);
+		pmap1.put(char.class, Character.class);
+		pmap1.put(int.class, Integer.class);
+		pmap1.put(long.class, Long.class);
+		pmap1.put(float.class, Float.class);
+		pmap1.put(double.class, Double.class);
+		pmap2.put(Boolean.class, boolean.class);
+		pmap2.put(Byte.class, byte.class);
+		pmap2.put(Short.class, short.class);
+		pmap2.put(Character.class, char.class);
+		pmap2.put(Integer.class, int.class);
+		pmap2.put(Long.class, long.class);
+		pmap2.put(Float.class, float.class);
+		pmap2.put(Double.class, double.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the {@link #getPrimitiveWrapper()} method returns a value.
+	 *
+	 * @return <jk>true</jk> if the {@link #getPrimitiveWrapper()} method returns a value.
+	 */
+	public boolean hasPrimitiveWrapper() {
+		return pmap1.containsKey(c);
+	}
+
+	/**
+	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
+	 * (e.g. <code>Integer.<jk>class</jk></code>).
+	 *
+	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
+	 */
+	public Class<?> getPrimitiveWrapper() {
+		return pmap1.get(c);
+	}
+
+	/**
+	 * If this class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>) returns it's
+	 * primitive class (e.g. <code>int.<jk>class</jk></code>).
+	 *
+	 * @return The primitive class, or <jk>null</jk> if class is not a primitive wrapper.
+	 */
+	public Class<?> getPrimitiveForWrapper() {
+		return pmap2.get(c);
+	}
+
+	/**
+	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
+	 * (e.g. <code>Integer.<jk>class</jk></code>).
+	 *
+	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
+	 */
+	public Class<?> getWrapperIfPrimitive() {
+		if (! c.isPrimitive())
+			return c;
+		return pmap1.get(c);
+	}
+
+	/**
+	 * Returns the default value for this primitive class.
+	 *
+	 * @return The default value, or <jk>null</jk> if this is not a primitive class.
+	 */
+	public Object getPrimitiveDefault() {
+		return primitiveDefaultMap.get(c);
+	}
+
+	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
+		new AMap<Class<?>,Object>()
+			.append(Boolean.TYPE, false)
+			.append(Character.TYPE, (char)0)
+			.append(Short.TYPE, (short)0)
+			.append(Integer.TYPE, 0)
+			.append(Long.TYPE, 0l)
+			.append(Float.TYPE, 0f)
+			.append(Double.TYPE, 0d)
+			.append(Byte.TYPE, (byte)0)
+			.append(Boolean.class, false)
+			.append(Character.class, (char)0)
+			.append(Short.class, (short)0)
+			.append(Integer.class, 0)
+			.append(Long.class, 0l)
+			.append(Float.class, 0f)
+			.append(Double.class, 0d)
+			.append(Byte.class, (byte)0)
+	);
 }

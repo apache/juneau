@@ -166,7 +166,7 @@ public class ResponseBeanMeta {
 		Builder apply(Type t) {
 			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			ClassInfo ci = cm.getClassInfo();
+			ClassInfo ci = cm.getInfo();
 			for (MethodInfo m : ci.getAllMethods()) {
 				if (m.isPublic()) {
 					assertNoInvalidAnnotations(m, Header.class, Query.class, FormData.class, Path.class);

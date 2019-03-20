@@ -98,7 +98,7 @@ public class RequestBeanMeta {
 			ClassInfo ci = ClassInfo.lookup(c);
 			apply(ci.getAnnotation(Request.class));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			for (MethodInfo m : cm.getClassInfo().getAllMethods()) {
+			for (MethodInfo m : cm.getInfo().getAllMethods()) {
 
 				if (m.isPublic()) {
 					assertNoInvalidAnnotations(m, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);

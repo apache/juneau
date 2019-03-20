@@ -166,7 +166,7 @@ public class BeanMeta<T> {
 
 		String init(BeanMeta<T> beanMeta) {
 			Class<?> c = classMeta.getInnerClass();
-			ClassInfo ci = classMeta.getClassInfo();
+			ClassInfo ci = classMeta.getInfo();
 
 			try {
 				Visibility
@@ -185,7 +185,7 @@ public class BeanMeta<T> {
 				}
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : classMeta.getClassInfo().getAnnotationsParentFirst(Bean.class))
+				for (Bean b : classMeta.getInfo().getAnnotationsParentFirst(Bean.class))
 					if (! b.typePropertyName().isEmpty())
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)

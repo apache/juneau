@@ -16,7 +16,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.reflection.*;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ClassFlags.*;
 
 import java.lang.reflect.*;
@@ -137,7 +136,7 @@ public class TransformCache {
 				}
 			};
 		} else if (ic == String.class) {
-			final Class<?> oc2 = hasPrimitiveWrapper(oc) ? getPrimitiveWrapper(oc) : oc;
+			final Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
 			ClassInfo oc2i = ClassInfo.lookup(oc2);
 			if (oc2.isEnum()) {
 				t = new Transform<String,O>() {

@@ -30,7 +30,7 @@ public class UrlEncodingClassMeta extends ClassMetaExtended {
 	 */
 	public UrlEncodingClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.urlEncoding = cm.getClassInfo().getAnnotation(UrlEncoding.class);
+		this.urlEncoding = cm.getInfo().getAnnotation(UrlEncoding.class);
 		if (urlEncoding != null) {
 			expandedParams = urlEncoding.expandedParams();
 		} else {

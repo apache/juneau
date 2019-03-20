@@ -36,7 +36,7 @@ public class RdfClassMeta extends ClassMetaExtended {
 	 */
 	public RdfClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		ClassInfo ci = cm.getClassInfo();
+		ClassInfo ci = cm.getInfo();
 		this.rdf = ci.getAnnotation(Rdf.class);
 		if (rdf != null) {
 			collectionFormat = rdf.collectionFormat();

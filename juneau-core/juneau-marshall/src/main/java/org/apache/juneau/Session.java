@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.text.*;
@@ -85,7 +86,7 @@ public abstract class Session {
 	public final <T> T getProperty(String key, Class<T> type, T def) {
 		if (properties == null)
 			return def;
-		type = (Class<T>)ClassUtils.getWrapperIfPrimitive(type);
+		type = (Class<T>)getClassInfo(type).getWrapperIfPrimitive();
 		T t = properties.get(key, type);
 		return t == null ? def : t;
 	}

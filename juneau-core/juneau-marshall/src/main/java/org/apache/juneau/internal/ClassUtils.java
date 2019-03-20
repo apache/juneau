@@ -188,73 +188,6 @@ public final class ClassUtils {
 		return false;
 	}
 
-	private static final Map<Class<?>, Class<?>>
-		pmap1 = new HashMap<>(),
-		pmap2 = new HashMap<>();
-	static {
-		pmap1.put(boolean.class, Boolean.class);
-		pmap1.put(byte.class, Byte.class);
-		pmap1.put(short.class, Short.class);
-		pmap1.put(char.class, Character.class);
-		pmap1.put(int.class, Integer.class);
-		pmap1.put(long.class, Long.class);
-		pmap1.put(float.class, Float.class);
-		pmap1.put(double.class, Double.class);
-		pmap2.put(Boolean.class, boolean.class);
-		pmap2.put(Byte.class, byte.class);
-		pmap2.put(Short.class, short.class);
-		pmap2.put(Character.class, char.class);
-		pmap2.put(Integer.class, int.class);
-		pmap2.put(Long.class, long.class);
-		pmap2.put(Float.class, float.class);
-		pmap2.put(Double.class, double.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the {@link #getPrimitiveWrapper(Class)} class returns a value for the specified class.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the {@link #getPrimitiveWrapper(Class)} class returns a value for the specified class.
-	 */
-	public static boolean hasPrimitiveWrapper(Class<?> c) {
-		return pmap1.containsKey(c);
-	}
-
-	/**
-	 * If the specified class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
-	 * (e.g. <code>Integer.<jk>class</jk></code>).
-	 *
-	 * @param c The class.
-	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
-	 */
-	public static Class<?> getPrimitiveWrapper(Class<?> c) {
-		return pmap1.get(c);
-	}
-
-	/**
-	 * If the specified class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>) returns it's
-	 * primitive class (e.g. <code>int.<jk>class</jk></code>).
-	 *
-	 * @param c The class.
-	 * @return The primitive class, or <jk>null</jk> if class is not a primitive wrapper.
-	 */
-	public static Class<?> getPrimitiveForWrapper(Class<?> c) {
-		return pmap2.get(c);
-	}
-
-	/**
-	 * If the specified class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
-	 * (e.g. <code>Integer.<jk>class</jk></code>).
-	 *
-	 * @param c The class.
-	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
-	 */
-	public static Class<?> getWrapperIfPrimitive(Class<?> c) {
-		if (! c.isPrimitive())
-			return c;
-		return pmap1.get(c);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if the specified class is public.
 	 *
@@ -393,7 +326,7 @@ public final class ClassUtils {
 	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>... argTypes) {
 		int matches = 0;
 		outer: for (Class<?> p : paramTypes) {
-			p = getWrapperIfPrimitive(p);
+			p = getClassInfo(p).getWrapperIfPrimitive();
 			for (Class<?> a : argTypes) {
 				if (isParentClass(p, a)) {
 					matches++;
@@ -537,7 +470,7 @@ public final class ClassUtils {
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object... args) {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
-			Class<?> pt = getWrapperIfPrimitive(paramTypes[i]);
+			Class<?> pt = getClassInfo(paramTypes[i]).getWrapperIfPrimitive();
 			for (int j = 0; j < args.length; j++) {
 				if (isParentClass(pt, args[j].getClass())) {
 					params[i] = args[j];
@@ -579,36 +512,6 @@ public final class ClassUtils {
 		}
 		return l;
 	}
-
-	/**
-	 * Returns the default value for the specified primitive class.
-	 *
-	 * @param primitiveClass The primitive class to get the default value for.
-	 * @return The default value, or <jk>null</jk> if the specified class is not a primitive class.
-	 */
-	public static Object getPrimitiveDefault(Class<?> primitiveClass) {
-		return primitiveDefaultMap.get(primitiveClass);
-	}
-
-	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
-		new AMap<Class<?>,Object>()
-			.append(Boolean.TYPE, false)
-			.append(Character.TYPE, (char)0)
-			.append(Short.TYPE, (short)0)
-			.append(Integer.TYPE, 0)
-			.append(Long.TYPE, 0l)
-			.append(Float.TYPE, 0f)
-			.append(Double.TYPE, 0d)
-			.append(Byte.TYPE, (byte)0)
-			.append(Boolean.class, false)
-			.append(Character.class, (char)0)
-			.append(Short.class, (short)0)
-			.append(Integer.class, 0)
-			.append(Long.class, 0l)
-			.append(Float.class, 0f)
-			.append(Double.class, 0d)
-			.append(Byte.class, (byte)0)
-	);
 
 	/**
 	 * Returns a readable representation of the specified method.
