@@ -18,7 +18,6 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflection.*;
@@ -28,8 +27,6 @@ import org.apache.juneau.utils.*;
  * Class-related utility methods.
  */
 public final class ClassUtils {
-
-	private static final Map<Class<?>,ConstructorCacheEntry> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
 
 	/**
 	 * Shortcut for calling {@link ClassInfo#create(Type)}.
@@ -370,88 +367,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Finds a public constructor with the specified parameters without throwing an exception.
-	 *
-	 * @param c The class to search for a constructor.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
-	 */
-	public static <T> Constructor<T> findPublicConstructor(Class<T> c, boolean fuzzyArgs, Class<?>...argTypes) {
-		return findConstructor(c, Visibility.PUBLIC, fuzzyArgs, argTypes);
-	}
-
-	/**
-	 * Finds a constructor with the specified parameters without throwing an exception.
-	 *
-	 * @param c The class to search for a constructor.
-	 * @param vis The minimum visibility.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> Constructor<T> findConstructor(Class<T> c, Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
-		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
-		if (cce != null && argsMatch(cce.paramTypes, argTypes) && cce.isVisible(vis))
-			return (Constructor<T>)cce.constructor;
-
-		if (fuzzyArgs) {
-			int bestCount = -1;
-			Constructor<?> bestMatch = null;
-			for (Constructor<?> n : c.getDeclaredConstructors()) {
-				if (vis.isVisible(n)) {
-					int m = fuzzyArgsMatch(n.getParameterTypes(), argTypes);
-					if (m > bestCount) {
-						bestCount = m;
-						bestMatch = n;
-					}
-				}
-			}
-			if (bestCount >= 0)
-				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, bestMatch));
-			return (Constructor<T>)bestMatch;
-		}
-
-		final boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
-		for (Constructor<?> n : c.getConstructors()) {
-			Class<?>[] paramTypes = n.getParameterTypes();
-			if (isMemberClass)
-				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
-			if (argsMatch(paramTypes, argTypes) && vis.isVisible(n)) {
-				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
-				return (Constructor<T>)n;
-			}
-		}
-
-		return null;
-	}
-
-
-
-	private static final class ConstructorCacheEntry {
-		final Constructor<?> constructor;
-		final Class<?>[] paramTypes;
-
-		ConstructorCacheEntry(Class<?> forClass, Constructor<?> constructor) {
-			this.constructor = constructor;
-			this.paramTypes = constructor.getParameterTypes();
-		}
-
-		boolean isVisible(Visibility vis) {
-			return vis.isVisible(constructor);
-		}
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified argument types are valid for the specified parameter types.
 	 *
 	 * @param paramTypes The parameters types specified on a method.
@@ -488,35 +403,6 @@ public final class ClassUtils {
 			return -1;
 		}
 		return matches;
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
-	 * @param c The class we're trying to construct.
-	 * @param args The argument types we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public static <T> Constructor<T> findPublicConstructor(Class<T> c, Class<?>...args) {
-		return findPublicConstructor(c, false, args);
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
-	 * @param c The class we're trying to construct.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public static <T> Constructor<T> findPublicConstructor(Class<T> c, boolean fuzzyArgs, Object...args) {
-		return findPublicConstructor(c, fuzzyArgs, getClasses(args));
 	}
 
 	/**
@@ -603,23 +489,24 @@ public final class ClassUtils {
 				Class<?> c3 = (Class<?>)c2;
 				if (c3.isInterface() || isAbstract(c3))
 					return null;
+				ClassInfo c3i = ClassInfo.lookup(c3);
 
 				// First look for an exact match.
-				Constructor<?> con = findPublicConstructor(c3, false, args);
+				Constructor<?> con = c3i.findPublicConstructor(false, args);
 				if (con != null)
 					return (T)con.newInstance(args);
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
 					args = new AList<>().append(outer).appendAll(args).toArray();
-					con = findPublicConstructor(c3, false, args);
+					con = c3i.findPublicConstructor(false, args);
 					if (con != null)
 						return (T)con.newInstance(args);
 				}
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
-					con = findPublicConstructor(c3, true, args);
+					con = c3i.findPublicConstructor(true, args);
 					if (con != null)
 						return (T)con.newInstance(getMatchingArgs(con.getParameterTypes(), args));
 				}

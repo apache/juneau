@@ -180,7 +180,7 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final Constructor<?> c = findPublicConstructor(oc, ic);
+				final Constructor<?> c = oci.findPublicConstructor(ic);
 				final boolean isMemberClass = oci.isMemberClass() && ! oci.isStatic();
 				if (c != null && ! c.isAnnotationPresent(Deprecated.class)) {
 					t = new Transform<I,O>() {
