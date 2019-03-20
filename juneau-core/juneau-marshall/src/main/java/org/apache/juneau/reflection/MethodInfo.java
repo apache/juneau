@@ -658,6 +658,33 @@ public final class MethodInfo {
 	}
 
 	/**
+	 * Invokes the specified method using fuzzy-arg matching.
+	 *
+	 * <p>
+	 * Arguments will be matched to the parameters based on the parameter types.
+	 * <br>Arguments can be in any order.
+	 * <br>Extra arguments will be ignored.
+	 * <br>Missing arguments will be left <jk>null</jk>.
+	 *
+	 * <p>
+	 * Note that this only works for methods that have distinguishable argument types.
+	 * <br>It's not going to work on methods with generic argument types like <code>Object</code>
+	 *
+	 * @param pojo
+	 * 	The POJO the method is being called on.
+	 * 	<br>Can be <jk>null</jk> for static methods.
+	 * @param args
+	 * 	The arguments to pass to the method.
+	 * @return
+	 * 	The results of the method invocation.
+	 * @throws Exception
+	 */
+	public Object invokeFuzzy(Object pojo, Object...args) throws Exception {
+		return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+	}
+
+
+	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
 	 * @return <jk>true</jk> if call was successful.
@@ -788,7 +815,7 @@ public final class MethodInfo {
 	 * @param args The valid class types (exact) for the arguments.
 	 * @return <jk>true</jk> if the method parameters only consist of the types specified in the list.
 	 */
-	public boolean isArgsOnlyOfType(Class<?>...args) {
+	public boolean argsOnlyOfType(Class<?>...args) {
 		for (Class<?> c1 : getParameterTypes()) {
 			boolean foundMatch = false;
 			for (Class<?> c2 : args)
@@ -819,5 +846,14 @@ public final class MethodInfo {
 	 */
 	public Type getGenericReturnType() {
 		return m.getGenericReturnType();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is a bridge method.
+	 *
+	 * @return <jk>true</jk> if this method is a bridge method.
+	 */
+	public boolean isBridge() {
+		return m.isBridge();
 	}
 }

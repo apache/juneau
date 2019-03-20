@@ -254,7 +254,7 @@ public final class ClassInfo {
 
 	private List<MethodInfo> findAllMethods() {
 		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParentClasses())
+		for (ClassInfo c : getParentClassesAndInterfaces())
 			for (MethodInfo m : c.getDeclaredMethods())
 				l.add(m);
 		return l;
@@ -262,7 +262,7 @@ public final class ClassInfo {
 
 	private List<MethodInfo> findAllMethodsParentFirst() {
 		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParentClassesParentFirst())
+		for (ClassInfo c : getParentClassesAndInterfacesParentFirst())
 			for (MethodInfo m : c.getDeclaredMethods())
 				l.add(m);
 		return l;
@@ -270,7 +270,7 @@ public final class ClassInfo {
 
 	private List<MethodInfo> findDeclaredMethods() {
 		List<MethodInfo> l = new ArrayList<>(c.getDeclaredMethods().length);
-		for (Method m : ClassUtils.sort(c.getDeclaredMethods()))
+		for (Method m : sort(c.getDeclaredMethods()))
 			l.add(MethodInfo.create(this, m));
 		return l;
 	}
@@ -280,6 +280,27 @@ public final class ClassInfo {
 		for (Method m : c.getMethods())
 			l.add(MethodInfo.create(this, m));
 		return l;
+	}
+
+	private static Comparator<Method> METHOD_COMPARATOR = new Comparator<Method>() {
+		@Override
+		public int compare(Method o1, Method o2) {
+			int i = o1.getName().compareTo(o2.getName());
+			if (i == 0) {
+				i = o1.getParameterTypes().length - o2.getParameterTypes().length;
+				if (i == 0) {
+					for (int j = 0; j < o1.getParameterTypes().length && i == 0; j++) {
+						i = o1.getParameterTypes()[j].getName().compareTo(o2.getParameterTypes()[j].getName());
+					}
+				}
+			}
+			return i;
+		}
+	};
+
+	private static Method[] sort(Method[] m) {
+		Arrays.sort(m, METHOD_COMPARATOR);
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -432,9 +453,21 @@ public final class ClassInfo {
 
 	private List<FieldInfo> findDeclaredFields() {
 		List<FieldInfo> l = new ArrayList<>(c.getDeclaredFields().length);
-		for (Field f : ClassUtils.sort(c.getDeclaredFields()))
+		for (Field f : sort(c.getDeclaredFields()))
 			l.add(FieldInfo.create(this, f));
 		return l;
+	}
+
+	private static Comparator<Field> FIELD_COMPARATOR = new Comparator<Field>() {
+		@Override
+		public int compare(Field o1, Field o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+	};
+
+	private static Field[] sort(Field[] m) {
+		Arrays.sort(m, FIELD_COMPARATOR);
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

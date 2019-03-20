@@ -181,7 +181,7 @@ public class TransformCache {
 				};
 			} else {
 				final Constructor<?> c = findPublicConstructor(oc, ic);
-				final boolean isMemberClass = oc.isMemberClass() && ! isStatic(oc);
+				final boolean isMemberClass = oci.isMemberClass() && ! oci.isStatic();
 				if (c != null && ! c.isAnnotationPresent(Deprecated.class)) {
 					t = new Transform<I,O>() {
 						@Override

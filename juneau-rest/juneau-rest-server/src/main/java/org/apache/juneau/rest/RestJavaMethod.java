@@ -144,7 +144,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
-			MethodInfo mi = MethodInfo.create(method);
+			MethodInfo mi = getMethodInfo(method);
 
 			try {
 

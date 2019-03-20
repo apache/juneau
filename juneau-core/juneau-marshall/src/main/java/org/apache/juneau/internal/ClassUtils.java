@@ -32,6 +32,46 @@ public final class ClassUtils {
 	private static final Map<Class<?>,ConstructorCacheEntry> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
 
 	/**
+	 * Shortcut for calling {@link ClassInfo#create(Type)}.
+	 *
+	 * @param t The class being wrapped.
+	 * @return The wrapped class.
+	 */
+	public static ClassInfo getClassInfo(Type t) {
+		return ClassInfo.create(t);
+	}
+
+	/**
+	 * Shortcut for calling {@link MethodInfo#create(Method)}.
+	 *
+	 * @param m The method being wrapped.
+	 * @return The wrapped method.
+	 */
+	public static MethodInfo getMethodInfo(Method m) {
+		return MethodInfo.create(m);
+	}
+
+	/**
+	 * Shortcut for calling {@link FieldInfo#create(Field)}.
+	 *
+	 * @param f The field being wrapped.
+	 * @return The wrapped field.
+	 */
+	public static FieldInfo getFieldInfo(Field f) {
+		return FieldInfo.create(f);
+	}
+
+	/**
+	 * Shortcut for calling {@link ConstructorInfo#create(Constructor)}.
+	 *
+	 * @param c The constructor being wrapped.
+	 * @return The wrapped constructor.
+	 */
+	public static ConstructorInfo getConstructorInfo(Constructor<?> c) {
+		return ConstructorInfo.create(c);
+	}
+
+	/**
 	 * Given the specified list of objects, return readable names for the class types of the objects.
 	 *
 	 * @param o The objects.
@@ -219,27 +259,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified constructor has the specified number of arguments.
-	 *
-	 * @param x The constructor to test.
-	 * @param number The number of expected arguments.
-	 * @return <jk>true</jk> if the specified constructor has the specified number of arguments.
-	 */
-	public static boolean hasNumArgs(Constructor<?> x, int number) {
-		return x.getParameterTypes().length == number;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @param c The constructor.
-	 * @return <jk>true</jk> if the specified constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public static boolean isNotDeprecated(Constructor<?> c) {
-		return ! c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified class is public.
 	 *
 	 * @param c The class.
@@ -257,26 +276,6 @@ public final class ClassUtils {
 	 */
 	public static boolean isAbstract(Class<?> c) {
 		return Modifier.isAbstract(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method is public.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method is public.
-	 */
-	public static boolean isPublic(Method m) {
-		return Modifier.isPublic(m.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified method is static.
-	 *
-	 * @param m The method.
-	 * @return <jk>true</jk> if the specified method is static.
-	 */
-	public static boolean isStatic(Method m) {
-		return Modifier.isStatic(m.getModifiers());
 	}
 
 	/**
@@ -343,33 +342,6 @@ public final class ClassUtils {
 		} else {
 			throw new FormattedRuntimeException("Invalid type found in resolveParameterType: {0}", actualType);
 		}
-	}
-
-	/**
-	 * Invokes the specified method using fuzzy-arg matching.
-	 *
-	 * <p>
-	 * Arguments will be matched to the parameters based on the parameter types.
-	 * <br>Arguments can be in any order.
-	 * <br>Extra arguments will be ignored.
-	 * <br>Missing arguments will be left <jk>null</jk>.
-	 *
-	 * <p>
-	 * Note that this only works for methods that have distinguishable argument types.
-	 * <br>It's not going to work on methods with generic argument types like <code>Object</code>
-	 *
-	 * @param m The method being called.
-	 * @param pojo
-	 * 	The POJO the method is being called on.
-	 * 	<br>Can be <jk>null</jk> for static methods.
-	 * @param args
-	 * 	The arguments to pass to the method.
-	 * @return
-	 * 	The results of the method invocation.
-	 * @throws Exception
-	 */
-	public static Object invokeMethodFuzzy(Method m, Object pojo, Object...args) throws Exception {
-		return m.invoke(pojo, getMatchingArgs(m.getParameterTypes(), args));
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
@@ -561,18 +533,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns a {@link MethodInfo} bean that describes the specified method.
-	 *
-	 * @param m The method to describe.
-	 * @return The bean with information about the method.
-	 */
-	public static MethodInfo getMethodInfo(Method m) {
-		if (m == null)
-			return null;
-		return new MethodInfo(m);
-	}
-
-	/**
 	 * Creates an instance of the specified class.
 	 *
 	 * @param c
@@ -699,111 +659,6 @@ public final class ClassUtils {
 			}
 		}
 		return params;
-	}
-
-	/**
-	 * Returns all the methods in the specified class and all parent classes.
-	 *
-	 * <p>
-	 * Methods are ordered in either parent-to-child, or child-to-parent order, then alphabetically.
-	 *
-	 * @param c The class to get all methods on.
-	 * @param parentFirst Order them in parent-class-to-child-class order, otherwise child-class-to-parent-class order.
-	 * @return An iterable of all methods in the specified class.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static Iterable<Method> getAllMethods(final Class c, final boolean parentFirst) {
-		return new Iterable<Method>() {
-			@Override
-			public Iterator<Method> iterator() {
-				return new Iterator<Method>(){
-					final Iterator<Class<?>> classIterator = getParentClasses(c, parentFirst, true);
-					Method[] methods = classIterator.hasNext() ? sort(classIterator.next().getDeclaredMethods()) : new Method[0];
-					int mIndex = 0;
-					Method next;
-
-					@Override
-					public boolean hasNext() {
-						prime();
-						return next != null;
-					}
-
-					private void prime() {
-						if (next == null) {
-							while (mIndex >= methods.length) {
-								if (classIterator.hasNext()) {
-									methods = sort(classIterator.next().getDeclaredMethods());
-									mIndex = 0;
-								} else {
-									mIndex = -1;
-								}
-			 				}
-							if (mIndex != -1)
-								next = methods[mIndex++];
-						}
-					}
-
-					@Override
-					public Method next() {
-						prime();
-						Method m = next;
-						next = null;
-						return m;
-					}
-
-					@Override
-					public void remove() {
-					}
-				};
-			}
-		};
-	}
-
-	private static Comparator<Method> METHOD_COMPARATOR = new Comparator<Method>() {
-
-		@Override
-		public int compare(Method o1, Method o2) {
-			int i = o1.getName().compareTo(o2.getName());
-			if (i == 0) {
-				i = o1.getParameterTypes().length - o2.getParameterTypes().length;
-				if (i == 0) {
-					for (int j = 0; j < o1.getParameterTypes().length && i == 0; j++) {
-						i = o1.getParameterTypes()[j].getName().compareTo(o2.getParameterTypes()[j].getName());
-					}
-				}
-			}
-			return i;
-		}
-	};
-
-	/**
-	 * Sorts methods in alphabetical order.
-	 *
-	 * @param m The methods to sort.
-	 * @return The same array, but with elements sorted.
-	 */
-	public static Method[] sort(Method[] m) {
-		Arrays.sort(m, METHOD_COMPARATOR);
-		return m;
-	}
-
-	private static Comparator<Field> FIELD_COMPARATOR = new Comparator<Field>() {
-
-		@Override
-		public int compare(Field o1, Field o2) {
-			return o1.getName().compareTo(o2.getName());
-		}
-	};
-
-	/**
-	 * Sorts methods in alphabetical order.
-	 *
-	 * @param m The methods to sort.
-	 * @return The same array, but with elements sorted.
-	 */
-	public static Field[] sort(Field[] m) {
-		Arrays.sort(m, FIELD_COMPARATOR);
-		return m;
 	}
 
 	/**

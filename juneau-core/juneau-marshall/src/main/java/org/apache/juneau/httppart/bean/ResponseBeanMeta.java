@@ -46,7 +46,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Type t, PropertyStore ps) {
-		ClassInfo ci = ClassInfo.create(t);
+		ClassInfo ci = getClassInfo(t);
 		if (! ci.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);

@@ -25,9 +25,8 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public final class FieldInfo {
 
-	private final ClassInfo declaringClass;
 	private final Field f;
-	private ClassInfo type;
+	private ClassInfo declaringClass, type;
 
 	/**
 	 * Constructor.
@@ -63,6 +62,18 @@ public final class FieldInfo {
 	}
 
 	/**
+	 * Convenience method for instantiating a {@link FieldInfo};
+	 *
+	 * @param f The field being wrapped.
+	 * @return A new {@link FieldInfo} object, or <jk>null</jk> if the field was null.
+	 */
+	public static FieldInfo create(Field f) {
+		if (f == null)
+			return null;
+		return new FieldInfo(null, f);
+	}
+
+	/**
 	 * Returns the wrapped field.
 	 *
 	 * @return The wrapped field.
@@ -77,6 +88,8 @@ public final class FieldInfo {
 	 * @return Metadata about the declaring class.
 	 */
 	public ClassInfo getDeclaringClass() {
+		if (declaringClass == null)
+			declaringClass = ClassInfo.lookup(f.getDeclaringClass());
 		return declaringClass;
 	}
 

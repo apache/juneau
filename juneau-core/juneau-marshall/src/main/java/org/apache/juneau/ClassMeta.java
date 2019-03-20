@@ -1055,7 +1055,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 			if (exampleMethod != null)
-				return (T)invokeMethodFuzzy(exampleMethod, null, session);
+				return (T)getMethodInfo(exampleMethod).invokeFuzzy(null, session);
 			if (exampleField != null)
 				return (T)exampleField.get(null);
 

@@ -1069,15 +1069,15 @@ public final class BeanPropertyMeta {
 			appendAnnotations(a, field.getType(), l);
 		}
 		if (getter != null) {
-			addIfNotNull(l, ClassUtils.getMethodInfo(getter).getAnnotation(a));
+			addIfNotNull(l, getMethodInfo(getter).getAnnotation(a));
 			appendAnnotations(a, getter.getReturnType(), l);
 		}
 		if (setter != null) {
-			addIfNotNull(l, ClassUtils.getMethodInfo(setter).getAnnotation(a));
+			addIfNotNull(l, getMethodInfo(setter).getAnnotation(a));
 			appendAnnotations(a, setter.getReturnType(), l);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, ClassUtils.getMethodInfo(extraKeys).getAnnotation(a));
+			addIfNotNull(l, getMethodInfo(extraKeys).getAnnotation(a));
 			appendAnnotations(a, extraKeys.getReturnType(), l);
 		}
 

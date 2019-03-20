@@ -392,15 +392,14 @@ final class SwaggerGenerator {
 								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), eci.getInnerClass()));
 						}
 					}
-					for (Method ecm : getAllMethods(eci.getInnerClass(), true)) {
-						MethodInfo ecmi = getMethodInfo(ecm);
+					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 							String ha = a.name();
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecm.getGenericReturnType()));
+								mergePartSchema(header, getSchema(header, ecmi.getGenericReturnType()));
 							}
 						}
 					}
@@ -420,15 +419,14 @@ final class SwaggerGenerator {
 					}
 				}
 				if (mi.getReturnTypeInfo().hasAnnotation(Response.class)) {
-					for (Method ecm : getAllMethods(m.getReturnType(), true)) {
-						MethodInfo ecmi = getMethodInfo(ecm);
+					for (MethodInfo ecmi : mi.getReturnTypeInfo().getAllMethodsParentFirst()) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 							String ha = a.name();
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecm.getGenericReturnType()));
+								mergePartSchema(header, getSchema(header, ecmi.getGenericReturnType()));
 							}
 						}
 					}

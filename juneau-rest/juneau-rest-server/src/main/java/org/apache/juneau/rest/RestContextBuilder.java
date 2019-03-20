@@ -322,7 +322,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	private static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
-		if (! m.isArgsOnlyOfType(args))
+		if (! m.argsOnlyOfType(args))
 			throw new FormattedIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
 	}
 

@@ -602,27 +602,25 @@ public class BeanMeta<T> {
 	static final List<BeanMethod> findBeanMethods(Class<?> c, Class<?> stopClass, Visibility v, Set<String> fixedBeanProps, Set<String> filterProps, PropertyNamer pn, boolean fluentSetters) {
 		List<BeanMethod> l = new LinkedList<>();
 
-		for (Class<?> c2 : findClasses(c, stopClass)) {
-			for (Method m : c2.getDeclaredMethods()) {
-				if (isStatic(m))
+		for (ClassInfo c2 : findClasses(c, stopClass)) {
+			for (MethodInfo m : c2.getDeclaredMethods()) {
+				if (m.isStatic())
 					continue;
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
 					continue;
 
-				MethodInfo mi = getMethodInfo(m);
-
-				BeanIgnore bi = mi.getAnnotation(BeanIgnore.class);
+				BeanIgnore bi = m.getAnnotation(BeanIgnore.class);
 				if (bi != null)
 					continue;
 
-				BeanProperty bp = mi.getAnnotation(BeanProperty.class);
-				if (! (v.isVisible(m) || bp != null))
+				BeanProperty bp = m.getAnnotation(BeanProperty.class);
+				if (! (m.isVisible(v) || bp != null))
 					continue;
 
 				String n = m.getName();
 
 				Class<?>[] pt = m.getParameterTypes();
-				Class<?> rt = m.getReturnType();
+				Class<?> rt = m.getReturnType().getInnerClass();
 				MethodType methodType = UNKNOWN;
 				String bpName = bpName(bp);
 
@@ -702,7 +700,7 @@ public class BeanMeta<T> {
 								n = null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties
 					}
 					if (n != null)
-						l.add(new BeanMethod(n, methodType, m));
+						l.add(new BeanMethod(n, methodType, m.getInner()));
 				}
 			}
 		}
@@ -711,9 +709,8 @@ public class BeanMeta<T> {
 
 	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
 		List<Field> l = new LinkedList<>();
-		for (Class<?> c2 : findClasses(c, stopClass)) {
-			ClassInfo c2i = ClassInfo.lookup(c2);
-			for (FieldInfo f : c2i.getDeclaredFields()) {
+		for (ClassInfo c2 : findClasses(c, stopClass)) {
+			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
@@ -735,9 +732,8 @@ public class BeanMeta<T> {
 	}
 
 	static final Field findInnerBeanField(Class<?> c, Class<?> stopClass, String name) {
-		for (Class<?> c2 : findClasses(c, stopClass)) {
-			ClassInfo c2i = ClassInfo.lookup(c2);
-			for (FieldInfo f : c2i.getDeclaredFields()) {
+		for (ClassInfo c2 : findClasses(c, stopClass)) {
+			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
@@ -749,15 +745,15 @@ public class BeanMeta<T> {
 		return null;
 	}
 
-	private static List<Class<?>> findClasses(Class<?> c, Class<?> stopClass) {
-		LinkedList<Class<?>> l = new LinkedList<>();
+	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
+		LinkedList<ClassInfo> l = new LinkedList<>();
 		findClasses(c, l, stopClass);
 		return l;
 	}
 
-	private static void findClasses(Class<?> c, LinkedList<Class<?>> l, Class<?> stopClass) {
+	private static void findClasses(Class<?> c, LinkedList<ClassInfo> l, Class<?> stopClass) {
 		while (c != null && stopClass != c) {
-			l.addFirst(c);
+			l.addFirst(ClassInfo.lookup(c));
 			for (Class<?> ci : c.getInterfaces())
 				findClasses(ci, l, stopClass);
 			c = c.getSuperclass();

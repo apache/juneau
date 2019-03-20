@@ -20,7 +20,6 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.annotation.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -123,56 +122,6 @@ public class ClassUtilsTest {
 		fail("Not implemented");
 	}
 
-
-	//====================================================================================================
-	// getMethodAnnotation
-	//====================================================================================================
-	@Test
-	public void getMethodAnnotations() throws Exception {
-		assertEquals("a1", getMethodInfo(CI3.class.getMethod("a1")).getAnnotation(TestAnnotation.class).value());
-		assertEquals("a2b", getMethodInfo(CI3.class.getMethod("a2")).getAnnotation(TestAnnotation.class).value());
-		assertEquals("a3", getMethodInfo(CI3.class.getMethod("a3", CharSequence.class)).getAnnotation(TestAnnotation.class).value());
-		assertEquals("a4", getMethodInfo(CI3.class.getMethod("a4")).getAnnotation(TestAnnotation.class).value());
-	}
-
-	public static interface CI1 {
-		@TestAnnotation("a1")
-		void a1();
-		@TestAnnotation("a2a")
-		void a2();
-		@TestAnnotation("a3")
-		void a3(CharSequence foo);
-
-		void a4();
-	}
-
-	public static class CI2 implements CI1 {
-		@Override
-		public void a1() {}
-		@Override
-		@TestAnnotation("a2b")
-		public void a2() {}
-		@Override
-		public void a3(CharSequence s) {}
-		@Override
-		public void a4() {}
-	}
-
-	public static class CI3 extends CI2 {
-		@Override
-		public void a1() {}
-		@Override public void a2() {}
-		@Override
-		@TestAnnotation("a4")
-		public void a4() {}
-	}
-
-	@Target(METHOD)
-	@Retention(RUNTIME)
-	public @interface TestAnnotation {
-		String value() default "";
-	}
-
 	//====================================================================================================
 	// getParentClassesParentFirst()
 	//====================================================================================================
@@ -214,77 +163,6 @@ public class ClassUtilsTest {
 	static class CB implements CA1, CA2 {}
 	static class CC extends CB implements CA3 {}
 	static class CD extends CC {}
-
-	//====================================================================================================
-	// getAllMethodsParentFirst()
-	//====================================================================================================
-	@Test
-	public void getParentMethodsParentFirst() throws Exception {
-		Set<String> s = new TreeSet<>();
-		for (Method m : ClassUtils.getAllMethods(DD.class, true))
-			if (! m.getName().startsWith("$"))
-				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
-		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
-
-		s = new TreeSet<>();
-		for (Method m : ClassUtils.getAllMethods(DD.class, false))
-			if (! m.getName().startsWith("$"))
-				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
-		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
-	}
-
-	static interface DA1 {
-		void da1();
-	}
-	static interface DA2 extends DA1 {
-		void da2();
-	}
-	static interface DA3 {}
-	static interface DA4 {}
-	static abstract class DB implements DA1, DA2 {
-		@Override
-		public void da1() {}
-		public void db() {}
-	}
-	static class DC extends DB implements DA3 {
-		@Override
-		public void da2() {}
-		public void dc() {}
-	}
-	static class DD extends DC {
-		@Override
-		public void da2() {}
-		public void dd() {}
-	}
-
-	//====================================================================================================
-	// getAllFieldsParentFirst()
-	//====================================================================================================
-	@Test
-	public void getParentFieldsParentFirst() throws Exception {
-		Set<String> s = new TreeSet<>();
-		ClassInfo ci = ClassInfo.create(EB.class);
-		for (FieldInfo f : ci.getAllFieldsParentFirst()) {
-			if (! f.getName().startsWith("$"))
-				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
-		}
-		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
-
-		s = new TreeSet<>();
-		for (FieldInfo f : ci.getAllFields()) {
-			if (! f.getName().startsWith("$"))
-				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
-		}
-		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
-	}
-
-	static class EA {
-		int a1;
-	}
-	static class EB extends EA {
-		int a1;
-		int b1;
-	}
 
 	//====================================================================================================
 	// Fuzzy constructor args
@@ -383,7 +261,7 @@ public class ClassUtilsTest {
 	@Test
 	public void getAnnotationsOnParameter() throws Exception {
 		ObjectList l = new ObjectList();
-		MethodParamInfo mpi = getMethodInfo(HA.class.getMethod("doX", HA01.class)).getParam(0);
+		MethodParamInfo mpi = MethodInfo.create(HA.class.getMethod("doX", HA01.class)).getParam(0);
 		for (HI1 ia : mpi.getAnnotations(HI1.class)) {
 			l.add(ia.value());
 		}
@@ -409,7 +287,7 @@ public class ClassUtilsTest {
 	@Test
 	public void getAnnotationsOnParameterInherited() throws Exception {
 		ObjectList l = new ObjectList();
-		MethodParamInfo mpi = getMethodInfo(HB.class.getMethod("doX", HB01.class)).getParam(0);
+		MethodParamInfo mpi = MethodInfo.create(HB.class.getMethod("doX", HB01.class)).getParam(0);
 		for (HI2 ib : mpi.getAnnotations(HI2.class)) {
 			l.add(ib.value());
 		}
@@ -442,7 +320,7 @@ public class ClassUtilsTest {
 
 	@Test
 	public void findMatchingMethods() throws Exception {
-		MethodInfo mi = getMethodInfo(I3.class.getMethod("foo", int.class));
+		MethodInfo mi = MethodInfo.create(I3.class.getMethod("foo", int.class));
 		assertObjectEquals("['public int org.apache.juneau.utils.ClassUtilsTest$I3.foo(int)','public int org.apache.juneau.utils.ClassUtilsTest$I2.foo(int)','public abstract int org.apache.juneau.utils.ClassUtilsTest$I1.foo(int)']", mi.getMatching());
 	}
 
