@@ -2004,9 +2004,10 @@ public class BeanContext extends Context {
 
 		LinkedList<BeanFilter> lbf = new LinkedList<>();
 		for (Class<?> c : getClassListProperty(BEAN_beanFilters)) {
-			if (isParentClass(BeanFilter.class, c))
+			ClassInfo ci = getClassInfo(c);
+			if (ci.isChildOf(BeanFilter.class))
 				lbf.add(newInstance(BeanFilter.class, c));
-			else if (isParentClass(BeanFilterBuilder.class, c))
+			else if (ci.isChildOf(BeanFilterBuilder.class))
 				lbf.add(newInstance(BeanFilterBuilder.class, c).build());
 			else
 				lbf.add(new InterfaceBeanFilterBuilder(c).build());
@@ -2016,13 +2017,13 @@ public class BeanContext extends Context {
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
 		for (Object o : getListProperty(BEAN_pojoSwaps, Object.class)) {
 			if (o instanceof Class) {
-				Class<?> c = (Class<?>)o;
-				if (isParentClass(PojoSwap.class, c))
-					lpf.add(newInstance(PojoSwap.class, c));
-				else if (isParentClass(Surrogate.class, c))
-					lpf.addAll(SurrogateSwap.findPojoSwaps(c));
+				ClassInfo ci = getClassInfo((Class<?>)o);
+				if (ci.isChildOf(PojoSwap.class))
+					lpf.add(newInstance(PojoSwap.class, ci.getInnerClass()));
+				else if (ci.isChildOf(Surrogate.class))
+					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.getInnerClass()));
 				else
-					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", c);
+					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.getInnerClass());
 			} else if (o instanceof PojoSwap) {
 				lpf.add((PojoSwap)o);
 			}
@@ -2185,8 +2186,9 @@ public class BeanContext extends Context {
 				if (p.getName().startsWith(p2))
 					return true;
 		}
+		ClassInfo ci = getClassInfo(c);
 		for (Class exclude : notBeanClasses)
-			if (isParentClass(exclude, c))
+			if (ci.isChildOf(exclude))
 				return true;
 		return false;
 	}
@@ -2583,7 +2585,7 @@ public class BeanContext extends Context {
 		if (c != null) {
 			List<PojoSwap> l = new ArrayList<>();
 			for (PojoSwap f : pojoSwaps)
-				if (isParentClass(f.getNormalClass(), c))
+				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
 			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
 		}
@@ -2614,7 +2616,7 @@ public class BeanContext extends Context {
 			return null;
 		List<PojoSwap> l = null;
 		for (PojoSwap f : pojoSwaps) {
-			if (isParentClass(c, f.getNormalClass())) {
+			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
 					l = new ArrayList<>();
 				l.add(f);
@@ -2634,7 +2636,7 @@ public class BeanContext extends Context {
 	private final <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
 			for (BeanFilter f : beanFilters)
-				if (isParentClass(f.getBeanClass(), c))
+				if (getClassInfo(f.getBeanClass()).isParentOf(c))
 					return f;
 		return null;
 	}

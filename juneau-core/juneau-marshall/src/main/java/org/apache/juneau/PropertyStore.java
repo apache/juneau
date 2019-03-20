@@ -909,9 +909,9 @@ public final class PropertyStore {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	static <T> T instantiate(ResourceResolver resolver, Object outer, Class<T> c, Object value, Object...args) {
-		if (isParentClass(c, value.getClass()))
+		if (getClassInfo(c).isParentOf(value.getClass()))
 			return (T)value;
-		if (isParentClass(Class.class, value.getClass()))
+		if (getClassInfo(value.getClass()).isChildOf(Class.class))
 			return resolver.resolve(outer, (Class<T>)value, args);
 		return null;
 	}

@@ -214,7 +214,7 @@ public class BeanMeta<T> {
 					return "Class is annotated with @BeanIgnore";
 
 				// Make sure it's serializable.
-				if (beanFilter == null && ctx.isBeansRequireSerializable() && ! isParentClass(Serializable.class, c))
+				if (beanFilter == null && ctx.isBeansRequireSerializable() && ! ci.isChildOf(Serializable.class))
 					return "Class is not serializable";
 
 				// Look for @BeanConstructor constructor.
@@ -536,16 +536,16 @@ public class BeanMeta<T> {
 		String propertyName;
 		MethodType methodType;
 		Method method;
-		Class<?> type;
+		ClassInfo type;
 
 		BeanMethod(String propertyName, MethodType type, Method method) {
 			this.propertyName = propertyName;
 			this.methodType = type;
 			this.method = method;
 			if (type == MethodType.SETTER)
-				this.type = method.getParameterTypes()[0];
+				this.type = getClassInfo(method.getParameterTypes()[0]);
 			else
-				this.type = method.getReturnType();
+				this.type = getClassInfo(method.getReturnType());
 		}
 
 		/*
@@ -572,7 +572,7 @@ public class BeanMeta<T> {
 				return true;
 
 			// Doesn't match if not same type or super type as getter/field.
-			if (! isParentClass(type, pt))
+			if (! type.isParentOf(pt))
 				return false;
 
 			// If a setter was previously set, only use this setter if it's a closer
@@ -580,8 +580,7 @@ public class BeanMeta<T> {
 			if (b.setter == null)
 				return true;
 
-			Class<?> prevType = b.setter.getParameterTypes()[0];
-			return isParentClass(prevType, type, true);
+			return type.isChildOf(b.setter.getParameterTypes()[0], true);
 		}
 
 		@Override /* Object */
@@ -620,7 +619,7 @@ public class BeanMeta<T> {
 				String n = m.getName();
 
 				Class<?>[] pt = m.getParameterTypes();
-				Class<?> rt = m.getReturnType().getInnerClass();
+				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
 				String bpName = bpName(bp);
 
@@ -629,16 +628,16 @@ public class BeanMeta<T> {
 
 				if (pt.length == 0) {
 					if ("*".equals(bpName)) {
-						if (isParentClass(Collection.class, rt)) {
+						if (rt.isChildOf(Collection.class)) {
 							methodType = EXTRAKEYS;
-						} else if (isParentClass(Map.class, rt)) {
+						} else if (rt.isChildOf(Map.class)) {
 							methodType = GETTER;
 						}
 						n = bpName;
-					} else if (n.startsWith("get") && (! rt.equals(Void.TYPE))) {
+					} else if (n.startsWith("get") && (! rt.is(Void.TYPE))) {
 						methodType = GETTER;
 						n = n.substring(3);
-					} else if (n.startsWith("is") && (rt.equals(Boolean.TYPE) || rt.equals(Boolean.class))) {
+					} else if (n.startsWith("is") && (rt.is(Boolean.TYPE) || rt.is(Boolean.class))) {
 						methodType = GETTER;
 						n = n.substring(2);
 					} else if (bpName != null) {
@@ -655,14 +654,14 @@ public class BeanMeta<T> {
 					}
 				} else if (pt.length == 1) {
 					if ("*".equals(bpName)) {
-						if (isParentClass(Map.class, pt[0])) {
+						if (getClassInfo(pt[0]).isChildOf(Map.class)) {
 							methodType = SETTER;
 							n = bpName;
 						} else if (pt[0] == String.class) {
 							methodType = GETTER;
 							n = bpName;
 						}
-					} else if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
+					} else if (n.startsWith("set") && (rt.isParentOf(c) || rt.is(Void.TYPE))) {
 						methodType = SETTER;
 						n = n.substring(3);
 					} else if (bpName != null) {
@@ -674,12 +673,12 @@ public class BeanMeta<T> {
 						} else {
 							n = bpName;
 						}
-					} else if (fluentSetters && isParentClass(rt, c)) {
+					} else if (fluentSetters && rt.isParentOf(c)) {
 						methodType = SETTER;
 					}
 				} else if (pt.length == 2) {
 					if ("*".equals(bpName) && pt[0] == String.class) {
-						if (n.startsWith("set") && (isParentClass(rt, c) || rt.equals(Void.TYPE))) {
+						if (n.startsWith("set") && (rt.isParentOf(c) || rt.is(Void.TYPE))) {
 							methodType = SETTER;
 						} else {
 							methodType = GETTER;

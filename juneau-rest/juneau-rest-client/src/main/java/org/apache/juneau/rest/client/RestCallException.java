@@ -160,9 +160,9 @@ public final class RestCallException extends IOException {
 				if (t.getName().endsWith(serverExceptionName))
 					doThrow(t, serverExceptionMessage);
 			try {
-				Class<?> t = cl.loadClass(serverExceptionName);
-				if (isParentClass(RuntimeException.class, t) || isParentClass(Error.class, t))
-					doThrow(t, serverExceptionMessage);
+				ClassInfo t = getClassInfo(cl.loadClass(serverExceptionName));
+				if (t.isChildOf(RuntimeException.class) || t.isChildOf(Error.class))
+					doThrow(t.getInnerClass(), serverExceptionMessage);
 			} catch (ClassNotFoundException e2) { /* Ignore */ }
 		}
 	}

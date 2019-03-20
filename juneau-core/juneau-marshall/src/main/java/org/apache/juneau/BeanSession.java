@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
@@ -27,6 +26,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -307,16 +307,16 @@ public class BeanSession extends Session {
 
 			PojoSwap swap = to.getPojoSwap(this);
 			if (swap != null) {
-				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
-				if (isParentClass(nc, tc) && isParentClass(fc, value.getClass()))
+				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
+				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
 					return (T)swap.unswap(this, value, to);
 			}
 
 			ClassMeta<?> from = getClassMetaForObject(value);
 			swap = from.getPojoSwap(this);
 			if (swap != null) {
-				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
-				if (isParentClass(nc, from.getInnerClass()) && isParentClass(fc, tc))
+				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
+				if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
 					return (T)swap.swap(this, value);
 			}
 
@@ -622,7 +622,7 @@ public class BeanSession extends Session {
 					String typeName = m2.getString(getBeanTypePropertyName(to));
 					if (typeName != null) {
 						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (cm != null && isParentClass(to.innerClass, cm.innerClass))
+						if (cm != null && to.info.isParentOf(cm.innerClass))
 							return (T)m2.cast(cm);
 					}
 				}

@@ -39,6 +39,16 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Shortcut for calling {@link ClassInfo#create(Object)}.
+	 *
+	 * @param o The object whose class being wrapped.
+	 * @return The wrapped class.
+	 */
+	public static ClassInfo getClassInfo(Object o) {
+		return ClassInfo.create(o);
+	}
+
+	/**
 	 * Shortcut for calling {@link MethodInfo#create(Method)}.
 	 *
 	 * @param m The method being wrapped.
@@ -150,42 +160,6 @@ public final class ClassUtils {
 		for (int i = 0; i < depth; i++)
 			sb.append("[]");
 		return sb.toString();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <code>parent</code> is a parent class of <code>child</code>.
-	 *
-	 * @param parent The parent class.
-	 * @param child The child class.
-	 * @param strict If <jk>true</jk> returns <jk>false</jk> if the classes are the same.
-	 * @return <jk>true</jk> if <code>parent</code> is a parent class of <code>child</code>.
-	 */
-	public static boolean isParentClass(Class<?> parent, Class<?> child, boolean strict) {
-		return parent.isAssignableFrom(child) && ((!strict) || ! parent.equals(child));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <code>parent</code> is a parent class or the same as <code>child</code>.
-	 *
-	 * @param parent The parent class.
-	 * @param child The child class.
-	 * @return <jk>true</jk> if <code>parent</code> is a parent class or the same as <code>child</code>.
-	 */
-	public static boolean isParentClass(Class<?> parent, Class<?> child) {
-		return isParentClass(parent, child, false);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if <code>parent</code> is a parent class or the same as <code>child</code>.
-	 *
-	 * @param parent The parent class.
-	 * @param child The child class.
-	 * @return <jk>true</jk> if <code>parent</code> is a parent class or the same as <code>child</code>.
-	 */
-	public static boolean isParentClass(Class<?> parent, Type child) {
-		if (child instanceof Class)
-			return isParentClass(parent, (Class<?>)child);
-		return false;
 	}
 
 	/**
@@ -309,7 +283,7 @@ public final class ClassUtils {
 	public static boolean argsMatch(Class<?>[] paramTypes, Class<?>[] argTypes) {
 		if (paramTypes.length == argTypes.length) {
 			for (int i = 0; i < paramTypes.length; i++)
-				if (! isParentClass(paramTypes[i], argTypes[i]))
+				if (! getClassInfo(paramTypes[i]).isParentOf(argTypes[i]))
 					return false;
 			return true;
 		}
@@ -328,7 +302,7 @@ public final class ClassUtils {
 		outer: for (Class<?> p : paramTypes) {
 			p = getClassInfo(p).getWrapperIfPrimitive();
 			for (Class<?> a : argTypes) {
-				if (isParentClass(p, a)) {
+				if (getClassInfo(p).isParentOf(a)) {
 					matches++;
 					continue outer;
 				}
@@ -448,7 +422,7 @@ public final class ClassUtils {
 			} catch (Exception e) {
 				throw new FormattedRuntimeException(e, "Could not instantiate class {0}", c.getName());
 			}
-		} else if (isParentClass(c, c2.getClass())) {
+		} else if (getClassInfo(c).isParentOf(c2.getClass())) {
 			return (T)c2;
 		} else {
 			throw new FormattedRuntimeException("Object of type {0} found but was expecting {1}.", c2.getClass(), c.getClass());
@@ -470,9 +444,9 @@ public final class ClassUtils {
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object... args) {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
-			Class<?> pt = getClassInfo(paramTypes[i]).getWrapperIfPrimitive();
+			ClassInfo pt = getClassInfo(paramTypes[i]).getWrapperInfoIfPrimitive();
 			for (int j = 0; j < args.length; j++) {
-				if (isParentClass(pt, args[j].getClass())) {
+				if (pt.isParentOf(args[j].getClass())) {
 					params[i] = args[j];
 					break;
 				}

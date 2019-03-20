@@ -67,6 +67,18 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Same as using the constructor, but operates on an object instance.
+	 *
+	 * @param o The class instance.
+	 * @return The constructed class info.
+	 */
+	public static ClassInfo create(Object o) {
+		if (o == null)
+			return null;
+		return new ClassInfo(o.getClass());
+	}
+
+	/**
 	 * Returns the cached instance of the specified type.
 	 *
 	 * @param t The class type.
@@ -1061,6 +1073,17 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Same as {@link #getWrapperIfPrimitive()} but wraps it in a {@link ClassInfo}.
+	 *
+	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
+	 */
+	public ClassInfo getWrapperInfoIfPrimitive() {
+		if (! c.isPrimitive())
+			return this;
+		return create(pmap1.get(c));
+	}
+
+	/**
 	 * Returns the default value for this primitive class.
 	 *
 	 * @return The default value, or <jk>null</jk> if this is not a primitive class.
@@ -1088,4 +1111,104 @@ public final class ClassInfo {
 			.append(Double.class, 0d)
 			.append(Byte.class, (byte)0)
 	);
+
+	/**
+	 * Returns <jk>true</jk> if this class is a parent of <code>child</code>.
+	 *
+	 * @param child The child class.
+	 * @param strict If <jk>true</jk> returns <jk>false</jk> if the classes are the same.
+	 * @return <jk>true</jk> if this class is a parent of <code>child</code>.
+	 */
+	public boolean isParentOf(Class<?> child, boolean strict) {
+		return c.isAssignableFrom(child) && ((!strict) || ! c.equals(child));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 */
+	public boolean isParentOf(Class<?> child) {
+		return isParentOf(child, false);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 *
+	 * @param child The child class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <code>child</code>.
+	 */
+	public boolean isParentOf(Type child) {
+		if (child instanceof Class)
+			return isParentOf((Class<?>)child);
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a child of <code>parent</code>.
+	 *
+	 * @param parent The parent class.
+	 * @param strict If <jk>true</jk> returns <jk>false</jk> if the classes are the same.
+	 * @return <jk>true</jk> if this class is a parent of <code>child</code>.
+	 */
+	public boolean isChildOf(Class<?> parent, boolean strict) {
+		return parent.isAssignableFrom(c) && ((!strict) || ! c.equals(parent));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a child or the same as <code>parent</code>.
+	 *
+	 * @param parent The parent class.
+	 * @return <jk>true</jk> if this class is a child or the same as <code>parent</code>.
+	 */
+	public boolean isChildOf(Class<?> parent) {
+		return isChildOf(parent, false);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a child or the same as any of the <code>parents</code>.
+	 *
+	 * @param parents The parents class.
+	 * @return <jk>true</jk> if this class is a child or the same as any of the <code>parents</code>.
+	 */
+	public boolean isChildOfAny(Class<?>...parents) {
+		for (Class<?> p : parents)
+			if (isChildOf(p))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a child or the same as <code>parent</code>.
+	 *
+	 * @param parent The parent class.
+	 * @return <jk>true</jk> if this class is a parent or the same as <code>parent</code>.
+	 */
+	public boolean isChildOf(Type parent) {
+		if (parent instanceof Class)
+			return isChildOf((Class<?>)parent);
+		return false;
+	}
+
+	/**
+	 * Checks for equality with the specified class.
+	 *
+	 * @param c The class to check equality with.
+	 * @return <jk>true</jk> if the specified class is the same as this one.
+	 */
+	public boolean is(Class<?> c) {
+		return this.c.equals(c);
+	}
+
+	/**
+	 * Shortcut for calling {@link Class#newInstance()} on the underlying class.
+	 *
+	 * @return A new instance of the underlying class
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
+	public Object newInstance() throws InstantiationException, IllegalAccessException {
+		return c.newInstance();
+	}
 }

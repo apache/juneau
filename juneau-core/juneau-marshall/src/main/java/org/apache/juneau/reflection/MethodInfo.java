@@ -606,7 +606,7 @@ public final class MethodInfo {
 	 * @return <jk>true</jk> if this method has this parent return type.
 	 */
 	public boolean hasReturnTypeParent(Class<?> c) {
-		return ClassUtils.isParentClass(c, m.getReturnType());
+		return ClassInfo.create(c).isParentOf(m.getReturnType());
 	}
 
 	/**

@@ -417,7 +417,7 @@ public final class ClassMeta<T> implements Type {
 				else if (c == void.class || c == Void.class)
 					cc = VOID;
 			} else {
-				if (isParentClass(Delegate.class, c))
+				if (ci.isChildOf(Delegate.class))
 					isDelegate = true;
 
 				if (c == Object.class)
@@ -426,24 +426,24 @@ public final class ClassMeta<T> implements Type {
 					cc = ENUM;
 				else if (c.equals(Class.class))
 					cc = CLASS;
-				else if (isParentClass(Method.class, c))
+				else if (ci.isChildOf(Method.class))
 					cc = METHOD;
-				else if (isParentClass(CharSequence.class, c)) {
+				else if (ci.isChildOf(CharSequence.class)) {
 					if (c.equals(String.class))
 						cc = STR;
 					else
 						cc = CHARSEQ;
 				}
-				else if (isParentClass(Number.class, c)) {
-					if (isParentClass(Float.class, c) || isParentClass(Double.class, c))
+				else if (ci.isChildOf(Number.class)) {
+					if (ci.isChildOfAny(Float.class, Double.class))
 						cc = DECIMAL;
 					else
 						cc = NUMBER;
 				}
-				else if (isParentClass(Collection.class, c))
+				else if (ci.isChildOf(Collection.class))
 					cc = COLLECTION;
-				else if (isParentClass(Map.class, c)) {
-					if (isParentClass(BeanMap.class, c))
+				else if (ci.isChildOf(Map.class)) {
+					if (ci.isChildOf(BeanMap.class))
 						cc = BEANMAP;
 					else
 						cc = MAP;
@@ -452,15 +452,15 @@ public final class ClassMeta<T> implements Type {
 					cc = CHAR;
 				else if (c == Boolean.class)
 					cc = BOOLEAN;
-				else if (isParentClass(Date.class, c) || isParentClass(Calendar.class, c))
+				else if (ci.isChildOfAny(Date.class, Calendar.class))
 					cc = DATE;
 				else if (c.isArray())
 					cc = ARRAY;
-				else if (isParentClass(URL.class, c) || isParentClass(URI.class, c) || c.isAnnotationPresent(org.apache.juneau.annotation.URI.class))
+				else if (ci.isChildOfAny(URL.class, URI.class) || c.isAnnotationPresent(org.apache.juneau.annotation.URI.class))
 					cc = URI;
-				else if (isParentClass(Reader.class, c))
+				else if (ci.isChildOf(Reader.class))
 					cc = READER;
-				else if (isParentClass(InputStream.class, c))
+				else if (ci.isChildOf(InputStream.class))
 					cc = INPUTSTREAM;
 			}
 
@@ -535,7 +535,7 @@ public final class ClassMeta<T> implements Type {
 
 			for (FieldInfo f : ci.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Example.class)) {
-					if (! (f.isStatic() && isParentClass(innerClass, f.getType().getInner())))
+					if (! (f.isStatic() && ci.isParentOf(f.getType().getInner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
 					f.setAccessible(false);
 					exampleField = f.getInner();
@@ -560,7 +560,7 @@ public final class ClassMeta<T> implements Type {
 
 			for (MethodInfo m : ci.getDeclaredMethods()) {
 				if (m.isAnnotationPresent(Example.class)) {
-					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && isParentClass(innerClass, m.getReturnType().getInner())))
+					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().getInner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
 					m.setAccessible();
 					exampleMethod = m.getInner();
@@ -800,8 +800,9 @@ public final class ClassMeta<T> implements Type {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
+			ClassInfo ci = ClassInfo.create(c);
 
-			if (isParentClass(PojoSwap.class, c)) {
+			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);
 				if (s.mediaTypes().length > 0)
 					ps.forMediaTypes(MediaType.forStrings(s.mediaTypes()));
@@ -810,7 +811,7 @@ public final class ClassMeta<T> implements Type {
 				return ps;
 			}
 
-			if (isParentClass(Surrogate.class, c)) {
+			if (ci.isChildOf(Surrogate.class)) {
 				List<SurrogateSwap<?,?>> l = SurrogateSwap.findPojoSwaps(c);
 				if (! l.isEmpty())
 					return (PojoSwap<T,?>)l.iterator().next();
@@ -895,7 +896,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a superclass of or the same as the specified class.
 	 */
 	public boolean isAssignableFrom(Class<?> c) {
-		return isParentClass(innerClass, c);
+		return info.isChildOf(c);
 	}
 
 	/**
@@ -905,7 +906,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a subclass of or the same as the specified class.
 	 */
 	public boolean isInstanceOf(Class<?> c) {
-		return isParentClass(c, innerClass);
+		return info.isParentOf(c);
 	}
 
 	/**
@@ -933,7 +934,7 @@ public final class ClassMeta<T> implements Type {
 			PojoSwap<?,?> s = childSwapMap.get(normalClass);
 			if (s == null) {
 				for (PojoSwap<?,?> f : childPojoSwaps)
-					if (s == null && isParentClass(f.getNormalClass(), normalClass))
+					if (s == null && f.getNormalClass().isParentOf(normalClass))
 						s = f;
 				if (s == null)
 					s = PojoSwap.NULL;
@@ -960,7 +961,7 @@ public final class ClassMeta<T> implements Type {
 			PojoSwap<?,?> s = childUnswapMap.get(swapClass);
 			if (s == null) {
 				for (PojoSwap<?,?> f : childPojoSwaps)
-					if (s == null && isParentClass(f.getSwapClass(), swapClass))
+					if (s == null && f.getSwapClass().isParentOf(swapClass))
 						s = f;
 				if (s == null)
 					s = PojoSwap.NULL;
@@ -1185,7 +1186,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class extends from {@link Set}.
 	 */
 	public boolean isSet() {
-		return cc == COLLECTION && isParentClass(Set.class, innerClass);
+		return cc == COLLECTION && info.isChildOf(Set.class);
 	}
 
 	/**
@@ -1194,7 +1195,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class extends from {@link List}.
 	 */
 	public boolean isList() {
-		return cc == COLLECTION && isParentClass(List.class, innerClass);
+		return cc == COLLECTION && info.isChildOf(List.class);
 	}
 
 	/**
@@ -1339,7 +1340,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this metadata represents the specified type.
 	 */
 	public boolean isType(Class<?> c) {
-		return isParentClass(c, innerClass);
+		return info.isChildOf(c);
 	}
 
 	/**
@@ -1402,7 +1403,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a {@link Date}.
 	 */
 	public boolean isDate() {
-		return cc == DATE && isParentClass(Date.class, innerClass);
+		return cc == DATE && info.isChildOf(Date.class);
 	}
 
 	/**
@@ -1411,7 +1412,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a {@link Calendar}.
 	 */
 	public boolean isCalendar() {
-		return cc == DATE && isParentClass(Calendar.class, innerClass);
+		return cc == DATE && info.isChildOf(Calendar.class);
 	}
 
 	/**
@@ -2002,7 +2003,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isInstance(Object o) {
 		if (o != null)
-			return isParentClass(this.innerClass, o.getClass()) || (isPrimitive() && info.getPrimitiveWrapper() == o.getClass());
+			return info.isParentOf(o.getClass()) || (isPrimitive() && info.getPrimitiveWrapper() == o.getClass());
 		return false;
 	}
 

@@ -237,11 +237,11 @@ public final class BeanPropertyMeta {
 			isDyna = "*".equals(name);
 
 			// Do some annotation validation.
-			Class<?> c = rawTypeMeta.getInnerClass();
+			ClassInfo ci = rawTypeMeta.getInfo();
 			if (getter != null) {
 				Class<?>[] pt = getter.getParameterTypes();
 				if (isDyna) {
-					if (isParentClass(Map.class, c) && pt.length == 0) {
+					if (ci.isChildOf(Map.class) && pt.length == 0) {
 						isDynaGetterMap = true;
 					} else if (pt.length == 1 && pt[0] == String.class) {
 						// OK.
@@ -249,7 +249,7 @@ public final class BeanPropertyMeta {
 						return false;
 					}
 				} else {
-					if (! isParentClass(getter.getReturnType(), c))
+					if (! ci.isChildOf(getter.getReturnType()))
 						return false;
 				}
 			}
@@ -264,16 +264,16 @@ public final class BeanPropertyMeta {
 				} else {
 					if (pt.length != 1)
 						return false;
-					if (! isParentClass(pt[0], c))
+					if (! ci.isChildOf(pt[0]))
 						return false;
 				}
 			}
 			if (field != null) {
 				if (isDyna) {
-					if (! isParentClass(Map.class, field.getType()))
+					if (! getClassInfo(field.getType()).isChildOf(Map.class))
 						return false;
 				} else {
-					if (! isParentClass(field.getType(), c))
+					if (! ci.isChildOf(field.getType()))
 						return false;
 				}
 			}
@@ -287,7 +287,7 @@ public final class BeanPropertyMeta {
 				return false;
 
 			if (typeMeta == null)
-				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
+				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass().getInner()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
 
@@ -313,7 +313,8 @@ public final class BeanPropertyMeta {
 				c = s.impl();
 			if (c == Null.class)
 				return null;
-			if (isParentClass(PojoSwap.class, c)) {
+			ClassInfo ci = getClassInfo(c);
+			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);
 				if (ps.forMediaTypes() != null)
 					throw new RuntimeException("TODO - Media types on swaps not yet supported on bean properties.");
@@ -321,7 +322,7 @@ public final class BeanPropertyMeta {
 					throw new RuntimeException("TODO - Templates on swaps not yet supported on bean properties.");
 				return ps;
 			}
-			if (isParentClass(Surrogate.class, c))
+			if (ci.isChildOf(Surrogate.class))
 				throw new RuntimeException("TODO - Surrogate swaps not yet supported on bean properties.");
 			throw new FormattedRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate.", c);
 		}
@@ -777,7 +778,7 @@ public final class BeanPropertyMeta {
 					}
 
 				} else {
-					if (swap != null && value != null && isParentClass(swap.getSwapClass(), value.getClass())) {
+					if (swap != null && value != null && swap.getSwapClass().isParentOf(value.getClass())) {
 						value = swap.unswap(session, value, rawTypeMeta);
 					} else {
 						value = session.convertToType(value, rawTypeMeta);

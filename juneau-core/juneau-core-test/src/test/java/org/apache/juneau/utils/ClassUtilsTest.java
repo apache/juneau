@@ -82,26 +82,26 @@ public class ClassUtilsTest {
 	public void testIsParentClass() throws Exception {
 
 		// Strict
-		assertTrue(isParentClass(A.class, A1.class, true));
-		assertTrue(isParentClass(A1.class, A2.class, true));
-		assertTrue(isParentClass(Object.class, A2.class, true));
-		assertFalse(isParentClass(A.class, A.class, true));
-		assertFalse(isParentClass(A1.class, A1.class, true));
-		assertFalse(isParentClass(A2.class, A2.class, true));
-		assertFalse(isParentClass(A2.class, A1.class, true));
-		assertFalse(isParentClass(A1.class, A.class, true));
-		assertFalse(isParentClass(A2.class, Object.class, true));
+		assertTrue(getClassInfo(A.class).isParentOf(A1.class, true));
+		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, true));
+		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, true));
+		assertFalse(getClassInfo(A.class).isParentOf(A.class, true));
+		assertFalse(getClassInfo(A1.class).isParentOf(A1.class, true));
+		assertFalse(getClassInfo(A2.class).isParentOf(A2.class, true));
+		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, true));
+		assertFalse(getClassInfo(A1.class).isParentOf(A.class, true));
+		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, true));
 
 		// Not strict
-		assertTrue(isParentClass(A.class, A1.class, false));
-		assertTrue(isParentClass(A1.class, A2.class, false));
-		assertTrue(isParentClass(Object.class, A2.class, false));
-		assertTrue(isParentClass(A.class, A.class, false));
-		assertTrue(isParentClass(A1.class, A1.class, false));
-		assertTrue(isParentClass(A2.class, A2.class, false));
-		assertFalse(isParentClass(A2.class, A1.class, false));
-		assertFalse(isParentClass(A1.class, A.class, false));
-		assertFalse(isParentClass(A2.class, Object.class, false));
+		assertTrue(getClassInfo(A.class).isParentOf(A1.class, false));
+		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, false));
+		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, false));
+		assertTrue(getClassInfo(A.class).isParentOf(A.class, false));
+		assertTrue(getClassInfo(A1.class).isParentOf(A1.class, false));
+		assertTrue(getClassInfo(A2.class).isParentOf(A2.class, false));
+		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, false));
+		assertFalse(getClassInfo(A1.class).isParentOf(A.class, false));
+		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, false));
 	}
 
 	public interface A {}

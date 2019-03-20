@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * A lookup table for resolving bean types by name.
@@ -63,7 +64,8 @@ public class BeanRegistry {
 	private void addClass(Class<?> c) {
 		try {
 			if (c != null) {
-				if (isParentClass(Collection.class, c)) {
+				ClassInfo ci = getClassInfo(c);
+				if (ci.isChildOf(Collection.class)) {
 					@SuppressWarnings("rawtypes")
 					Collection cc = beanContext.newInstance(Collection.class, c);
 					for (Object o : cc) {
@@ -72,7 +74,7 @@ public class BeanRegistry {
 						else
 							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", c.getName());
 					}
-				} else if (isParentClass(Map.class, c)) {
+				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = beanContext.newInstance(Map.class, c);
 					for (Map.Entry<?,?> e : m.entrySet()) {
 						String typeName = asString(e.getKey());
