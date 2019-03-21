@@ -71,7 +71,7 @@ public final class MethodInfo {
 	 * @param m The method being wrapped.
 	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static MethodInfo create(ClassInfo declaringClass, Method m) {
+	public static MethodInfo of(ClassInfo declaringClass, Method m) {
 		if (m == null)
 			return null;
 		return new MethodInfo(declaringClass, m);
@@ -83,7 +83,7 @@ public final class MethodInfo {
 	 * @param m The method being wrapped.
 	 * @return A new {@link MethodInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static MethodInfo create(Method m) {
+	public static MethodInfo of(Method m) {
 		if (m == null)
 			return null;
 		return new MethodInfo(ClassInfo.lookup(m.getDeclaringClass()), m);
@@ -606,7 +606,7 @@ public final class MethodInfo {
 	 * @return <jk>true</jk> if this method has this parent return type.
 	 */
 	public boolean hasReturnTypeParent(Class<?> c) {
-		return ClassInfo.create(c).isParentOf(m.getReturnType());
+		return ClassInfo.of(c).isParentOf(m.getReturnType());
 	}
 
 	/**

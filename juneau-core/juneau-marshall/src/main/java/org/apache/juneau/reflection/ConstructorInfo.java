@@ -59,7 +59,7 @@ public final class ConstructorInfo {
 	 * @param c The constructor being wrapped.
 	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static ConstructorInfo create(ClassInfo declaringClass, Constructor<?> c) {
+	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> c) {
 		if (c == null)
 			return null;
 		return new ConstructorInfo(declaringClass, c);
@@ -71,7 +71,7 @@ public final class ConstructorInfo {
 	 * @param c The constructor being wrapped.
 	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
 	 */
-	public static ConstructorInfo create(Constructor<?> c) {
+	public static ConstructorInfo of(Constructor<?> c) {
 		if (c == null)
 			return null;
 		return new ConstructorInfo(ClassInfo.lookup(c.getDeclaringClass()), c);

@@ -55,7 +55,7 @@ public final class FieldInfo {
 	 * @param f The field being wrapped.
 	 * @return A new {@link FieldInfo} object, or <jk>null</jk> if the field was null.
 	 */
-	public static FieldInfo create(ClassInfo declaringClass, Field f) {
+	public static FieldInfo of(ClassInfo declaringClass, Field f) {
 		if (f == null)
 			return null;
 		return new FieldInfo(declaringClass, f);
@@ -67,7 +67,7 @@ public final class FieldInfo {
 	 * @param f The field being wrapped.
 	 * @return A new {@link FieldInfo} object, or <jk>null</jk> if the field was null.
 	 */
-	public static FieldInfo create(Field f) {
+	public static FieldInfo of(Field f) {
 		if (f == null)
 			return null;
 		return new FieldInfo(null, f);

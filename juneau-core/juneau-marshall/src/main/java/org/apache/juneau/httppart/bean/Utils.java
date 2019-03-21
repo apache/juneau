@@ -29,14 +29,14 @@ class Utils {
 
 	static void assertReturnNotVoid(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
 		ClassInfo rt = m.getReturnType();
-		if (rt.getInner() == void.class)
+		if (rt.is(void.class))
 			throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", a.getSimpleName(), m);
 	}
 
 	static void assertReturnType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
 		ClassInfo rt = m.getReturnType();
 		for (Class<?> cc : c)
-			if (rt.getInner() == cc)
+			if (rt.is(cc))
 				return;
 		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", a.getSimpleName(), m);
 	}

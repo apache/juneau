@@ -389,7 +389,7 @@ final class SwaggerGenerator {
 							ObjectMap om = responses.getObjectMap(String.valueOf(code), true);
 							merge(om, a);
 							if (! om.containsKey("schema"))
-								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), eci.getInnerClass()));
+								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), eci.inner()));
 						}
 					}
 					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {

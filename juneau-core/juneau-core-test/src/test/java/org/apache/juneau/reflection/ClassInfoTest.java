@@ -26,7 +26,7 @@ public class ClassInfoTest {
 	@Test
 	public void getParentMethodsParentFirst() throws Exception {
 		Set<String> s = new TreeSet<>();
-		ClassInfo ci = ClassInfo.create(DD.class);
+		ClassInfo ci = ClassInfo.of(DD.class);
 		for (MethodInfo m : ci.getAllMethodsParentFirst())
 			if (! m.getName().startsWith("$"))
 				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
@@ -69,7 +69,7 @@ public class ClassInfoTest {
 	@Test
 	public void getParentFieldsParentFirst() throws Exception {
 		Set<String> s = new TreeSet<>();
-		ClassInfo ci = ClassInfo.create(EB.class);
+		ClassInfo ci = ClassInfo.of(EB.class);
 		for (FieldInfo f : ci.getAllFieldsParentFirst()) {
 			if (! f.getName().startsWith("$"))
 				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());

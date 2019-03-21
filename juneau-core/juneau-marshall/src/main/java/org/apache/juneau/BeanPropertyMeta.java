@@ -287,7 +287,7 @@ public final class BeanPropertyMeta {
 				return false;
 
 			if (typeMeta == null)
-				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass().getInner()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
+				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass().innerType()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
 

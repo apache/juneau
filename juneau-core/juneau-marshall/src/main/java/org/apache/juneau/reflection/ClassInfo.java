@@ -60,7 +60,7 @@ public final class ClassInfo {
 	 * @param t The class type.
 	 * @return The constructed class info.
 	 */
-	public static ClassInfo create(Type t) {
+	public static ClassInfo of(Type t) {
 		if (t == null)
 			return null;
 		return new ClassInfo(t);
@@ -72,7 +72,7 @@ public final class ClassInfo {
 	 * @param o The class instance.
 	 * @return The constructed class info.
 	 */
-	public static ClassInfo create(Object o) {
+	public static ClassInfo of(Object o) {
 		if (o == null)
 			return null;
 		return new ClassInfo(o.getClass());
@@ -89,7 +89,7 @@ public final class ClassInfo {
 			return null;
 		ClassInfo ci = CACHE.get(t);
 		if (ci == null) {
-			ci = create(t);
+			ci = of(t);
 			CACHE.put(t, ci);
 		}
 		return ci;
@@ -100,7 +100,7 @@ public final class ClassInfo {
 	 *
 	 * @return The wrapped class.
 	 */
-	public Type getInner() {
+	public Type innerType() {
 		return type;
 	}
 
@@ -109,7 +109,7 @@ public final class ClassInfo {
 	 *
 	 * @return The wrapped class or <jk>null</jk> if it's not a class.
 	 */
-	public Class<?> getInnerClass() {
+	public Class<?> inner() {
 		return c;
 	}
 
@@ -120,7 +120,7 @@ public final class ClassInfo {
 	 */
 	public synchronized ClassInfo getParent() {
 		if (parent == null)
-			parent = Optional.ofNullable(c == null ? null : create(c.getSuperclass()));
+			parent = Optional.ofNullable(c == null ? null : of(c.getSuperclass()));
 		return parent.isPresent() ? parent.get() : null;
 	}
 
@@ -133,7 +133,7 @@ public final class ClassInfo {
 		if (interfaces == null) {
 			interfaces = new ClassInfo[c == null ? 0 : c.getInterfaces().length];
 			for (int i = 0; i < interfaces.length; i++)
-				interfaces[i] = ClassInfo.create(c.getInterfaces()[i]);
+				interfaces[i] = ClassInfo.of(c.getInterfaces()[i]);
 		}
 		return interfaces;
 	}
@@ -284,14 +284,14 @@ public final class ClassInfo {
 	private List<MethodInfo> findDeclaredMethods() {
 		List<MethodInfo> l = new ArrayList<>(c.getDeclaredMethods().length);
 		for (Method m : sort(c.getDeclaredMethods()))
-			l.add(MethodInfo.create(this, m));
+			l.add(MethodInfo.of(this, m));
 		return l;
 	}
 
 	private List<MethodInfo> findPublicMethods() {
 		List<MethodInfo> l = new ArrayList<>(c.getMethods().length);
 		for (Method m : c.getMethods())
-			l.add(MethodInfo.create(this, m));
+			l.add(MethodInfo.of(this, m));
 		return l;
 	}
 
@@ -401,7 +401,7 @@ public final class ClassInfo {
 	private List<ConstructorInfo> findConstructors() {
 		List<ConstructorInfo> l = new ArrayList<>(c.getConstructors().length);
 		for (Constructor<?> cc : c.getConstructors())
-			l.add(ConstructorInfo.create(this, cc));
+			l.add(ConstructorInfo.of(this, cc));
 		return Collections.unmodifiableList(l);
 	}
 
@@ -467,7 +467,7 @@ public final class ClassInfo {
 	private List<FieldInfo> findDeclaredFields() {
 		List<FieldInfo> l = new ArrayList<>(c.getDeclaredFields().length);
 		for (Field f : sort(c.getDeclaredFields()))
-			l.add(FieldInfo.create(this, f));
+			l.add(FieldInfo.of(this, f));
 		return l;
 	}
 
@@ -1080,7 +1080,7 @@ public final class ClassInfo {
 	public ClassInfo getWrapperInfoIfPrimitive() {
 		if (! c.isPrimitive())
 			return this;
-		return create(pmap1.get(c));
+		return of(pmap1.get(c));
 	}
 
 	/**
@@ -1210,5 +1210,14 @@ public final class ClassInfo {
 	 */
 	public Object newInstance() throws InstantiationException, IllegalAccessException {
 		return c.newInstance();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is an interface.
+	 *
+	 * @return <jk>true</jk> if this class is an interface.
+	 */
+	public boolean isInterface() {
+		return c.isInterface();
 	}
 }

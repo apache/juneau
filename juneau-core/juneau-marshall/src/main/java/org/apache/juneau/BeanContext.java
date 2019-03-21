@@ -2019,11 +2019,11 @@ public class BeanContext extends Context {
 			if (o instanceof Class) {
 				ClassInfo ci = getClassInfo((Class<?>)o);
 				if (ci.isChildOf(PojoSwap.class))
-					lpf.add(newInstance(PojoSwap.class, ci.getInnerClass()));
+					lpf.add(newInstance(PojoSwap.class, ci.inner()));
 				else if (ci.isChildOf(Surrogate.class))
-					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.getInnerClass()));
+					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner()));
 				else
-					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.getInnerClass());
+					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
 			} else if (o instanceof PojoSwap) {
 				lpf.add((PojoSwap)o);
 			}
@@ -2674,11 +2674,11 @@ public class BeanContext extends Context {
 		while (cc != null) {
 			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return (Class<T>) implClass.getInner();
+				return (Class<T>) implClass.inner();
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return (Class<T>) implClass.getInner();
+					return (Class<T>) implClass.inner();
 			}
 			cc = cc.getSuperclass();
 		}

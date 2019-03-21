@@ -29,53 +29,53 @@ import org.apache.juneau.utils.*;
 public final class ClassUtils {
 
 	/**
-	 * Shortcut for calling {@link ClassInfo#create(Type)}.
+	 * Shortcut for calling {@link ClassInfo#of(Type)}.
 	 *
 	 * @param t The class being wrapped.
 	 * @return The wrapped class.
 	 */
 	public static ClassInfo getClassInfo(Type t) {
-		return ClassInfo.create(t);
+		return ClassInfo.of(t);
 	}
 
 	/**
-	 * Shortcut for calling {@link ClassInfo#create(Object)}.
+	 * Shortcut for calling {@link ClassInfo#of(Object)}.
 	 *
 	 * @param o The object whose class being wrapped.
 	 * @return The wrapped class.
 	 */
 	public static ClassInfo getClassInfo(Object o) {
-		return ClassInfo.create(o);
+		return ClassInfo.of(o);
 	}
 
 	/**
-	 * Shortcut for calling {@link MethodInfo#create(Method)}.
+	 * Shortcut for calling {@link MethodInfo#of(Method)}.
 	 *
 	 * @param m The method being wrapped.
 	 * @return The wrapped method.
 	 */
 	public static MethodInfo getMethodInfo(Method m) {
-		return MethodInfo.create(m);
+		return MethodInfo.of(m);
 	}
 
 	/**
-	 * Shortcut for calling {@link FieldInfo#create(Field)}.
+	 * Shortcut for calling {@link FieldInfo#of(Field)}.
 	 *
 	 * @param f The field being wrapped.
 	 * @return The wrapped field.
 	 */
 	public static FieldInfo getFieldInfo(Field f) {
-		return FieldInfo.create(f);
+		return FieldInfo.of(f);
 	}
 
 	/**
-	 * Shortcut for calling {@link ConstructorInfo#create(Constructor)}.
+	 * Shortcut for calling {@link ConstructorInfo#of(Constructor)}.
 	 *
 	 * @param c The constructor being wrapped.
 	 * @return The wrapped constructor.
 	 */
 	public static ConstructorInfo getConstructorInfo(Constructor<?> c) {
-		return ConstructorInfo.create(c);
+		return ConstructorInfo.of(c);
 	}
 
 	/**

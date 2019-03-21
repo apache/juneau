@@ -27,10 +27,10 @@ public class MethodInfoTest {
 	//====================================================================================================
 	@Test
 	public void getMethodAnnotations() throws Exception {
-		assertEquals("a1", MethodInfo.create(CI3.class.getMethod("a1")).getAnnotation(TestAnnotation.class).value());
-		assertEquals("a2b", MethodInfo.create(CI3.class.getMethod("a2")).getAnnotation(TestAnnotation.class).value());
-		assertEquals("a3", MethodInfo.create(CI3.class.getMethod("a3", CharSequence.class)).getAnnotation(TestAnnotation.class).value());
-		assertEquals("a4", MethodInfo.create(CI3.class.getMethod("a4")).getAnnotation(TestAnnotation.class).value());
+		assertEquals("a1", MethodInfo.of(CI3.class.getMethod("a1")).getAnnotation(TestAnnotation.class).value());
+		assertEquals("a2b", MethodInfo.of(CI3.class.getMethod("a2")).getAnnotation(TestAnnotation.class).value());
+		assertEquals("a3", MethodInfo.of(CI3.class.getMethod("a3", CharSequence.class)).getAnnotation(TestAnnotation.class).value());
+		assertEquals("a4", MethodInfo.of(CI3.class.getMethod("a4")).getAnnotation(TestAnnotation.class).value());
 	}
 
 	public static interface CI1 {

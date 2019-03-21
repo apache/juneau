@@ -65,7 +65,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 				// Find the unswap method if there is one.
 				Method unswapMethod = null;
 				for (MethodInfo m : ci.getPublicMethods()) {
-					if (pt[0].equals(m.getReturnType().getInner()) && m.isPublic())
+					if (m.getReturnType().is(pt[0]) && m.isPublic())
 					unswapMethod = m.getInner();
 				}
 

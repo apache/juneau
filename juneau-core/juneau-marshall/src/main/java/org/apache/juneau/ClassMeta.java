@@ -496,7 +496,7 @@ public final class ClassMeta<T> implements Type {
 			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && m.hasName("swap") && m.hasFuzzyArgs(BeanSession.class)) {
 					swapMethod = m.getInner();
-					swapMethodType = m.getReturnType().getInnerClass();
+					swapMethodType = m.getReturnType().inner();
 					break;
 				}
 			}
@@ -535,7 +535,7 @@ public final class ClassMeta<T> implements Type {
 
 			for (FieldInfo f : ci.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Example.class)) {
-					if (! (f.isStatic() && ci.isParentOf(f.getType().getInner())))
+					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
 					f.setAccessible(false);
 					exampleField = f.getInner();
@@ -560,7 +560,7 @@ public final class ClassMeta<T> implements Type {
 
 			for (MethodInfo m : ci.getDeclaredMethods()) {
 				if (m.isAnnotationPresent(Example.class)) {
-					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().getInner())))
+					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
 					m.setAccessible();
 					exampleMethod = m.getInner();
@@ -800,7 +800,7 @@ public final class ClassMeta<T> implements Type {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
-			ClassInfo ci = ClassInfo.create(c);
+			ClassInfo ci = ClassInfo.of(c);
 
 			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);

@@ -147,7 +147,7 @@ public class BuilderSwap<T,B> {
 
 		createPojoMethod = bci.findCreatePojoMethod();
 		if (createPojoMethod != null)
-			pojoClass = createPojoMethod.getReturnType().getInnerClass();
+			pojoClass = createPojoMethod.getReturnType().inner();
 
 		if (pojoClass == null)
 			return null;
@@ -192,7 +192,7 @@ public class BuilderSwap<T,B> {
 		builderCreateMethod = pci.findBuilderCreateMethod();
 
 		if (builderClass == null && builderCreateMethod != null)
-			builderClass = builderCreateMethod.getReturnType().getInnerClass();
+			builderClass = builderCreateMethod.getReturnType().inner();
 
 		if (builderClass == null) {
 			for (ConstructorInfo cc : pci.getPublicConstructors()) {
