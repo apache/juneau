@@ -145,7 +145,7 @@ public class BuilderSwap<T,B> {
 		Constructor<?> pojoConstructor;
 		ConstructorInfo builderConstructor;
 
-		createPojoMethod = bci.findCreatePojoMethod();
+		createPojoMethod = bci.getBuilderBuildMethod();
 		if (createPojoMethod != null)
 			pojoClass = createPojoMethod.getReturnType().inner();
 
@@ -158,8 +158,8 @@ public class BuilderSwap<T,B> {
 		if (pojoConstructor == null)
 			return null;
 
-		builderConstructor = bci.findNoArgConstructor(cVis);
-		createBuilderMethod = pci.findBuilderCreateMethod();
+		builderConstructor = bci.getNoArgConstructor(cVis);
+		createBuilderMethod = pci.getBuilderCreateMethod();
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
@@ -189,13 +189,13 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = ClassInfo.lookup(pojoClass);
 
-		builderCreateMethod = pci.findBuilderCreateMethod();
+		builderCreateMethod = pci.getBuilderCreateMethod();
 
 		if (builderClass == null && builderCreateMethod != null)
 			builderClass = builderCreateMethod.getReturnType().inner();
 
 		if (builderClass == null) {
-			for (ConstructorInfo cc : pci.getPublicConstructors()) {
+			for (ConstructorInfo cc : pci.getConstructors()) {
 				if (cc.isVisible(cVis) && cc.hasNumArgs(1)) {
 					Class<?>[] pt = cc.getParameterTypes();
 					if (getClassInfo(pt[0]).isChildOf(Builder.class)) {
@@ -210,11 +210,11 @@ public class BuilderSwap<T,B> {
 			return null;
 
 		ClassInfo bci = ClassInfo.lookup(builderClass);
-		builderConstructor = bci.findNoArgConstructor(cVis);
+		builderConstructor = bci.getNoArgConstructor(cVis);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
-		pojoCreateMethod = bci.findCreatePojoMethod();
+		pojoCreateMethod = bci.getBuilderBuildMethod();
 		if (pojoConstructor == null)
 			pojoConstructor = pci.findConstructor(cVis, false, builderClass);
 

@@ -2287,7 +2287,7 @@ public final class RestCall extends BeanSession implements Closeable {
 					// So instantiate the object anyway if it has a no-arg constructor.
 					// This allows a remote resource method to return a NoContent object for example.
 					if (in == null && (sc < SC_OK || sc == SC_NO_CONTENT || sc == SC_NOT_MODIFIED || sc == SC_RESET_CONTENT)) {
-						ConstructorInfo c = type.getInfo().findNoArgConstructor(Visibility.PUBLIC);
+						ConstructorInfo c = type.getInfo().getNoArgConstructor(Visibility.PUBLIC);
 						if (c != null) {
 							try {
 								return (T)c.invoke();

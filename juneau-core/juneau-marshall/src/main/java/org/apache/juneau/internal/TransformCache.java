@@ -146,7 +146,7 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final MethodInfo fromStringMethod = oc2i.findPublicFromStringMethod();
+				final MethodInfo fromStringMethod = oc2i.getFromStringMethod();
 				if (fromStringMethod != null) {
 					t = new Transform<String,O>() {
 						@Override
@@ -163,9 +163,9 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			MethodInfo createMethod = oci.findPublicStaticCreateMethod(ic, "create");
+			MethodInfo createMethod = oci.getStaticCreateMethod(ic, "create");
 			if (createMethod == null)
-				createMethod = oci.findPublicStaticCreateMethod(ic, "from" + ic.getSimpleName());
+				createMethod = oci.getStaticCreateMethod(ic, "from" + ic.getSimpleName());
 			if (createMethod != null) {
 				final Method cm = createMethod.getInner();
 				t = new Transform<I,O>() {

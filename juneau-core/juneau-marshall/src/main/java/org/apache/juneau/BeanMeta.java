@@ -218,7 +218,7 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @BeanConstructor constructor.
-				for (ConstructorInfo x : ci.getPublicConstructors()) {
+				for (ConstructorInfo x : ci.getConstructors()) {
 					if (x.isAnnotationPresent(BeanConstructor.class)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
@@ -235,7 +235,7 @@ public class BeanMeta<T> {
 					constructor = ctx.getImplClassConstructor(c, conVis);
 
 				if (constructor == null)
-					constructor = ci.findNoArgConstructor(conVis);
+					constructor = ci.getNoArgConstructor(conVis);
 
 				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";

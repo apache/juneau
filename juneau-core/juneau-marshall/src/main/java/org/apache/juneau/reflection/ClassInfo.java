@@ -35,11 +35,6 @@ public final class ClassInfo {
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private Map<Class<?>,List<?>> annotationsMap;
 	private Map<Class<?>,List<?>> annotationsPfMap;
-	private Optional<ClassInfo> parent;
-	private ClassInfo[] interfaces;
-	private List<FieldInfo> allFields, allFieldsPf, declaredFields;
-	private List<MethodInfo> allMethods, allMethodsPf, declaredMethods, publicMethods;
-	private List<ConstructorInfo> constructors;
 
 	private static final Map<Type,ClassInfo> CACHE = new ConcurrentHashMap<>();
 
@@ -117,10 +112,8 @@ public final class ClassInfo {
 	 *
 	 * @return The parent class info, or <jk>null</jk> if the class has no parent.
 	 */
-	public synchronized ClassInfo getParent() {
-		if (parent == null)
-			parent = Optional.ofNullable(c == null ? null : of(c.getSuperclass()));
-		return parent.isPresent() ? parent.get() : null;
+	public synchronized ClassInfo getParentInfo() {
+		return of(c.getSuperclass());
 	}
 
 	/**
@@ -128,13 +121,12 @@ public final class ClassInfo {
 	 *
 	 * @return The implemented interfaces info, or an empty array if the class has no interfaces.
 	 */
-	public synchronized ClassInfo[] getInterfaces() {
-		if (interfaces == null) {
-			interfaces = new ClassInfo[c == null ? 0 : c.getInterfaces().length];
-			for (int i = 0; i < interfaces.length; i++)
-				interfaces[i] = ClassInfo.of(c.getInterfaces()[i]);
-		}
-		return interfaces;
+	public synchronized Iterable<ClassInfo> getInterfaceInfos() {
+		Class<?>[] interfaces = c.getInterfaces();
+		List<ClassInfo> l = new ArrayList<>(interfaces.length);
+		for (Class<?> i : interfaces)
+			l.add(of(i));
+		return l;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -191,23 +183,18 @@ public final class ClassInfo {
 	 * @return All declared methods on this class and all parent classes in child-to-parent order.
 	 */
 	public Iterable<MethodInfo> getAllMethods() {
-		if (allMethods == null)
-			allMethods = Collections.unmodifiableList(findAllMethods());
-		return allMethods;
+		return getAllMethods(false, true);
 	}
 
 	/**
-	 * Returns all declared methods on this class and all parent classes in parent-to-child order.
+	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
-	 * <p>
-	 * Methods are sorted alphabetically per class before being aggregated.
-	 *
-	 * @return All declared methods on this class and all parent classes in parent-to-child order.
+	 * @param parentFirst If <jk>true</jk>, methods on parent classes are listed first.
+	 * @param sort If <jk>true</jk>, methods are sorted alphabetically per class.
+	 * @return All declared methods on this class and all parent classes.
 	 */
-	public Iterable<MethodInfo> getAllMethodsParentFirst() {
-		if (allMethodsPf == null)
-			allMethodsPf = Collections.unmodifiableList(findAllMethodsParentFirst());
-		return allMethodsPf;
+	public Iterable<MethodInfo> getAllMethods(boolean parentFirst, boolean sort) {
+		return findAllMethods(parentFirst, sort);
 	}
 
 	/**
@@ -216,9 +203,17 @@ public final class ClassInfo {
 	 * @return All methods declared on this class in alphabetical order.
 	 */
 	public Iterable<MethodInfo> getDeclaredMethods() {
-		if (declaredMethods == null)
-			declaredMethods = Collections.unmodifiableList(findDeclaredMethods());
-		return declaredMethods;
+		return getDeclaredMethods(true);
+	}
+
+	/**
+	 * Returns all methods declared on this class.
+	 *
+	 * @param sort If <jk>true</jk>, sorts the results in alphabetical order.
+	 * @return All methods declared on this class.
+	 */
+	public Iterable<MethodInfo> getDeclaredMethods(boolean sort) {
+		return findDeclaredMethods(null, sort);
 	}
 
 	/**
@@ -230,37 +225,43 @@ public final class ClassInfo {
 	 * @return All public methods on this class.
 	 */
 	public Iterable<MethodInfo> getPublicMethods() {
-		if (publicMethods == null)
-			publicMethods = Collections.unmodifiableList(findPublicMethods());
-		return publicMethods;
+		return getPublicMethods(false);
 	}
 
-	private List<MethodInfo> findAllMethods() {
+	/**
+	 * Returns all public methods on this class.
+	 *
+	 * @param sort If <jk>true</jk>, sorts methods in alphabetical order.
+	 * @return All public methods on this class.
+	 */
+	public Iterable<MethodInfo> getPublicMethods(boolean sort) {
+		return findPublicMethods(sort);
+	}
+
+	private List<MethodInfo> findAllMethods(boolean parentFirst, boolean sort) {
 		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents(false, true))
-			for (MethodInfo m : c.getDeclaredMethods())
-				l.add(m);
+		for (ClassInfo c : getParents(parentFirst, true))
+			c.findDeclaredMethods(l, sort);
 		return l;
 	}
 
-	private List<MethodInfo> findAllMethodsParentFirst() {
-		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents(true, true))
-			for (MethodInfo m : c.getDeclaredMethods())
-				l.add(m);
-		return l;
-	}
-
-	private List<MethodInfo> findDeclaredMethods() {
-		List<MethodInfo> l = new ArrayList<>(c.getDeclaredMethods().length);
-		for (Method m : sort(c.getDeclaredMethods()))
+	private List<MethodInfo> findDeclaredMethods(List<MethodInfo> l, boolean sort) {
+		Method[] mm = c.getDeclaredMethods();
+		if (sort)
+			mm = sort(mm);
+		if (l == null)
+			l = new ArrayList<>(mm.length);
+		for (Method m : mm)
 			l.add(MethodInfo.of(this, m));
 		return l;
 	}
 
-	private List<MethodInfo> findPublicMethods() {
-		List<MethodInfo> l = new ArrayList<>(c.getMethods().length);
-		for (Method m : c.getMethods())
+	private List<MethodInfo> findPublicMethods(boolean sorted) {
+		Method[] mm = c.getMethods();
+		List<MethodInfo> l = new ArrayList<>(mm.length);
+		if (sorted)
+			mm = sort(mm);
+		for (Method m : mm)
 			l.add(MethodInfo.of(this, m));
 		return l;
 	}
@@ -307,7 +308,7 @@ public final class ClassInfo {
 	 *
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo findPublicFromStringMethod() {
+	public MethodInfo getFromStringMethod() {
 		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"})
 			for (MethodInfo m : getPublicMethods())
 				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class))
@@ -322,7 +323,7 @@ public final class ClassInfo {
 	 * @param name The method name.
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo findPublicStaticCreateMethod(Class<?> ic, String name) {
+	public MethodInfo getStaticCreateMethod(Class<?> ic, String name) {
 		for (MethodInfo m : getPublicMethods())
 			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(name) && m.hasReturnType(c) && m.hasArgs(ic))
 				return m;
@@ -334,7 +335,7 @@ public final class ClassInfo {
 	 *
 	 * @return The <code>public static Builder create()</code> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public MethodInfo findBuilderCreateMethod() {
+	public MethodInfo getBuilderCreateMethod() {
 		for (MethodInfo m : getDeclaredMethods())
 			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && ! m.hasReturnType(Void.class))
 				return m;
@@ -346,7 +347,7 @@ public final class ClassInfo {
 	 *
 	 * @return The <code>T build()</code> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public MethodInfo findCreatePojoMethod() {
+	public MethodInfo getBuilderBuildMethod() {
 		for (MethodInfo m : getDeclaredMethods())
 			if (m.isAll(NOT_STATIC) && m.hasName("build") && ! m.hasReturnType(Void.class))
 				return m;
@@ -362,16 +363,15 @@ public final class ClassInfo {
 	 *
 	 * @return All public constructors defined on this class.
 	 */
-	public Iterable<ConstructorInfo> getPublicConstructors() {
-		if (constructors == null)
-			constructors = findConstructors();
-		return constructors;
+	public Iterable<ConstructorInfo> getConstructors() {
+		return findConstructors();
 	}
 
 	private List<ConstructorInfo> findConstructors() {
-		List<ConstructorInfo> l = new ArrayList<>(c.getConstructors().length);
-		for (Constructor<?> cc : c.getConstructors())
-			l.add(ConstructorInfo.of(this, cc));
+		Constructor<?>[] cc = c.getConstructors();
+		List<ConstructorInfo> l = new ArrayList<>(cc.length);
+		for (Constructor<?> ccc : cc)
+			l.add(ConstructorInfo.of(this, ccc));
 		return Collections.unmodifiableList(l);
 	}
 
@@ -388,9 +388,18 @@ public final class ClassInfo {
 	 * @return All declared methods on this class and all parent classes in child-to-parent order.
 	 */
 	public Iterable<FieldInfo> getAllFields() {
-		if (allFields == null)
-			allFields = findAllFields();
-		return allFields;
+		return getAllFields(false, true);
+	}
+
+	/**
+	 * Returns all field on this class and all parent classes.
+	 *
+	 * @param parentFirst If <jk>true</jk>, fields are listed in parent-to-child order.
+	 * @param sort If <jk>true</jk>, fields are sorted alphabetically within each class.
+	 * @return All declared methods on this class and all parent classes.
+	 */
+	public Iterable<FieldInfo> getAllFields(boolean parentFirst, boolean sort) {
+		return findAllFields(null, parentFirst, sort);
 	}
 
 	/**
@@ -402,9 +411,7 @@ public final class ClassInfo {
 	 * @return All declared methods on this class and all parent classes in parent-to-child order.
 	 */
 	public Iterable<FieldInfo> getAllFieldsParentFirst() {
-		if (allFieldsPf == null)
-			allFieldsPf = findAllFieldsParentFirst();
-		return allFieldsPf;
+		return getAllFields(true, true);
 	}
 
 	/**
@@ -413,30 +420,34 @@ public final class ClassInfo {
 	 * @return All fields declared on this class in alphabetical order.
 	 */
 	public Iterable<FieldInfo> getDeclaredFields() {
-		if (declaredFields == null)
-			declaredFields = Collections.unmodifiableList(findDeclaredFields());
-		return declaredFields;
+		return getDeclaredFields(true);
 	}
 
-	private List<FieldInfo> findAllFieldsParentFirst() {
-		List<FieldInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents(true, false))
-			for (FieldInfo f : c.getDeclaredFields())
-				l.add(f);
+	/**
+	 * Returns all fields declared on this class.
+	 *
+	 * @param sort If <jk>true</jk>, fields are listed in alphabetical order.
+	 * @return All fields declared on this class.
+	 */
+	public Iterable<FieldInfo> getDeclaredFields(boolean sort) {
+		return findDeclaredFields(null, sort);
+	}
+
+	private List<FieldInfo> findAllFields(List<FieldInfo> l, boolean parentFirst, boolean sort) {
+		if (l == null)
+			l = new ArrayList<>();
+		for (ClassInfo c : getParents(parentFirst, false))
+			c.findDeclaredFields(l, sort);
 		return l;
 	}
 
-	private List<FieldInfo> findAllFields() {
-		List<FieldInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents())
-			for (FieldInfo f : c.getDeclaredFields())
-				l.add(f);
-		return l;
-	}
-
-	private List<FieldInfo> findDeclaredFields() {
-		List<FieldInfo> l = new ArrayList<>(c.getDeclaredFields().length);
-		for (Field f : sort(c.getDeclaredFields()))
+	private List<FieldInfo> findDeclaredFields(List<FieldInfo> l, boolean sort) {
+		Field[] ff = c.getDeclaredFields();
+		if (sort)
+			ff = sort(ff);
+		if (l == null)
+			l = new ArrayList<>(ff.length);
+		for (Field f : ff)
 			l.add(FieldInfo.of(this, f));
 		return l;
 	}
@@ -468,11 +479,11 @@ public final class ClassInfo {
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
-	public ConstructorInfo findNoArgConstructor(Visibility v) {
+	public ConstructorInfo getNoArgConstructor(Visibility v) {
 		if (isAbstract())
 			return null;
 		boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (ConstructorInfo cc : getPublicConstructors())
+		for (ConstructorInfo cc : getConstructors())
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
 				return cc.transform(v);
 		return null;
@@ -588,14 +599,14 @@ public final class ClassInfo {
 			if (t2 != null)
 				return t2;
 
-			ClassInfo sci = getParent();
+			ClassInfo sci = getParentInfo();
 			if (sci != null) {
 				t2 = sci.getAnnotation(a);
 				if (t2 != null)
 					return t2;
 			}
 
-			for (ClassInfo c2 : getInterfaces()) {
+			for (ClassInfo c2 : getInterfaceInfos()) {
 				t2 = c2.getAnnotation(a);
 				if (t2 != null)
 					return t2;

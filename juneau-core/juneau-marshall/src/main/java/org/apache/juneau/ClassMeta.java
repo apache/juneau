@@ -543,7 +543,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			// Find @NameProperty and @ParentProperty methods if present.
-			for (MethodInfo m : ci.getAllMethodsParentFirst()) {
+			for (MethodInfo m : ci.getAllMethods(true, true)) {
 				if (m.isAnnotationPresent(ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
@@ -571,7 +571,7 @@ public final class ClassMeta<T> implements Type {
 			isAbstract = ci.isAbstract() && ci.isNotPrimitive();
 
 			// Find constructor(String) method if present.
-			for (ConstructorInfo cs : ci.getPublicConstructors()) {
+			for (ConstructorInfo cs : ci.getConstructors()) {
 				if (cs.isPublic() && cs.isNotDeprecated()) {
 					Class<?>[] pt = cs.getParameterTypes();
 					if (pt.length == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
@@ -598,7 +598,7 @@ public final class ClassMeta<T> implements Type {
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ici;
-				noArgConstructor = x.findNoArgConstructor(Visibility.PUBLIC);
+				noArgConstructor = x.getNoArgConstructor(Visibility.PUBLIC);
 			}
 
 			if (beanFilter == null)
@@ -994,7 +994,7 @@ public final class ClassMeta<T> implements Type {
 		if (ci.isAbstract())
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
-		for (ConstructorInfo cc : ci.getPublicConstructors()) {
+		for (ConstructorInfo cc : ci.getConstructors()) {
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
 				return (Constructor<? extends T>) v.transform(cc.getInner());
 		}

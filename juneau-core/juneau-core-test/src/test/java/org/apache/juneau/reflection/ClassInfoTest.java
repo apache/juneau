@@ -27,7 +27,7 @@ public class ClassInfoTest {
 	public void getParentMethodsParentFirst() throws Exception {
 		Set<String> s = new TreeSet<>();
 		ClassInfo ci = ClassInfo.of(DD.class);
-		for (MethodInfo m : ci.getAllMethodsParentFirst())
+		for (MethodInfo m : ci.getAllMethods(true, true))
 			if (! m.getName().startsWith("$"))
 				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
 		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
