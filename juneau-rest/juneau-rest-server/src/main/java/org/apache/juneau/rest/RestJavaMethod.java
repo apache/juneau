@@ -176,7 +176,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				widgets = new HashMap<>(context.getWidgets());
 				for (Class<? extends Widget> wc : hd.widgets()) {
-					Widget w = beanContext.newInstance(Widget.class, wc);
+					Widget w = castOrCreate(Widget.class, wc);
 					widgets.put(w.getName(), w);
 					hdb.script("INHERIT", "$W{"+w.getName()+".script}");
 					hdb.style("INHERIT", "$W{"+w.getName()+".style}");
@@ -219,16 +219,16 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				converters = new RestConverter[m.converters().length];
 				for (int i = 0; i < converters.length; i++)
-					converters[i] = beanContext.newInstance(RestConverter.class, m.converters()[i]);
+					converters[i] = castOrCreate(RestConverter.class, m.converters()[i]);
 
 				guards = new RestGuard[m.guards().length];
 				for (int i = 0; i < guards.length; i++)
-					guards[i] = beanContext.newInstance(RestGuard.class, m.guards()[i]);
+					guards[i] = castOrCreate(RestGuard.class, m.guards()[i]);
 
 				List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
 				for (int i = 0; i < m.matchers().length; i++) {
 					Class<? extends RestMatcher> c = m.matchers()[i];
-					RestMatcher matcher = beanContext.newInstance(RestMatcher.class, c, true, servlet, method);
+					RestMatcher matcher = castOrCreate(RestMatcher.class, c, true, servlet, method);
 					if (matcher.mustMatch())
 						requiredMatchers.add(matcher);
 					else

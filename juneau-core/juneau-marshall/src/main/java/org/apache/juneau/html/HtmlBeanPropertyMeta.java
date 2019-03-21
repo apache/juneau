@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
 
@@ -51,7 +53,7 @@ public final class HtmlBeanPropertyMeta extends BeanPropertyMetaExtended {
 		this.format = b.format;
 		this.noTables = b.noTables;
 		this.noTableHeaders = b.noTableHeaders;
-		this.render = bpm.getBeanMeta().getClassMeta().getBeanContext().newInstance(HtmlRender.class, b.render);
+		this.render = castOrCreate(HtmlRender.class, b.render);
 		this.link = b.link;
 		this.anchorText = b.anchorText;
 	}

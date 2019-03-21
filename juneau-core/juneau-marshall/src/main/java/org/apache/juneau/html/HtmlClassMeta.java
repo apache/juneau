@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
 
@@ -38,7 +40,7 @@ public class HtmlClassMeta extends ClassMetaExtended {
 			format = html.format();
 			noTables = html.noTables();
 			noTableHeaders = html.noTableHeaders();
-			render = cm.getBeanContext().newInstance(HtmlRender.class, html.render());
+			render = castOrCreate(HtmlRender.class, html.render());
 		} else {
 			format = HtmlFormat.HTML;
 			noTables = false;

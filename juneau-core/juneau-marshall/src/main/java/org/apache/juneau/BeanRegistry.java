@@ -67,7 +67,7 @@ public class BeanRegistry {
 				ClassInfo ci = getClassInfo(c);
 				if (ci.isChildOf(Collection.class)) {
 					@SuppressWarnings("rawtypes")
-					Collection cc = beanContext.newInstance(Collection.class, c);
+					Collection cc = castOrCreate(Collection.class, c);
 					for (Object o : cc) {
 						if (o instanceof Class)
 							addClass((Class<?>)o);
@@ -75,7 +75,7 @@ public class BeanRegistry {
 							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", c.getName());
 					}
 				} else if (ci.isChildOf(Map.class)) {
-					Map<?,?> m = beanContext.newInstance(Map.class, c);
+					Map<?,?> m = castOrCreate(Map.class, c);
 					for (Map.Entry<?,?> e : m.entrySet()) {
 						String typeName = asString(e.getKey());
 						Object v = e.getValue();

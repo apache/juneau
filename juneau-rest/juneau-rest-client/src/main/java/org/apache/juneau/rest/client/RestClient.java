@@ -1345,7 +1345,7 @@ public class RestClient extends BeanContext implements Closeable {
 			return null;
 		HttpPartSerializer pf = partSerializerCache.get(c);
 		if (pf == null) {
-			partSerializerCache.putIfAbsent(c, newInstance(HttpPartSerializer.class, c, true, getPropertyStore()));
+			partSerializerCache.putIfAbsent(c, castOrCreate(HttpPartSerializer.class, c, true, getPropertyStore()));
 			pf = partSerializerCache.get(c);
 		}
 		return pf;

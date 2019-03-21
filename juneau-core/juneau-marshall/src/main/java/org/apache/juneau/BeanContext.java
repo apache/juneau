@@ -2006,9 +2006,9 @@ public class BeanContext extends Context {
 		for (Class<?> c : getClassListProperty(BEAN_beanFilters)) {
 			ClassInfo ci = getClassInfo(c);
 			if (ci.isChildOf(BeanFilter.class))
-				lbf.add(newInstance(BeanFilter.class, c));
+				lbf.add(castOrCreate(BeanFilter.class, c));
 			else if (ci.isChildOf(BeanFilterBuilder.class))
-				lbf.add(newInstance(BeanFilterBuilder.class, c).build());
+				lbf.add(castOrCreate(BeanFilterBuilder.class, c).build());
 			else
 				lbf.add(new InterfaceBeanFilterBuilder(c).build());
 		}
@@ -2019,7 +2019,7 @@ public class BeanContext extends Context {
 			if (o instanceof Class) {
 				ClassInfo ci = getClassInfo((Class<?>)o);
 				if (ci.isChildOf(PojoSwap.class))
-					lpf.add(newInstance(PojoSwap.class, ci.inner()));
+					lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
 				else if (ci.isChildOf(Surrogate.class))
 					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner()));
 				else
@@ -2695,8 +2695,8 @@ public class BeanContext extends Context {
 		if (includeProperties.isEmpty())
 			return null;
 		String[] s = null;
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(c, false, true); i.hasNext();) {
-			Class<?> c2 = i.next();
+		ClassInfo ci = getClassInfo(c);
+		for (ClassInfo c2 : ci.getParents(false, true)) {
 			s = includeProperties.get(c2.getName());
 			if (s != null)
 				return s;
@@ -2727,72 +2727,6 @@ public class BeanContext extends Context {
 				return s;
 		}
 		return excludeProperties.get("*");
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstance(Class<T> c, Object c2) {
-		return ClassUtils.castOrCreate(c, c2);
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ClassUtils.castOrCreate(c, c2, fuzzyArgs, args);
-	}
-
-	/**
-	 * Creates an instance of the specified class from within the context of another object.
-	 *
-	 * @param outer
-	 * 	The outer object.
-	 * 	Can be <jk>null</jk>.
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ClassUtils.castOrCreateFromOuter(outer, c, c2, fuzzyArgs, args);
 	}
 
 	/**

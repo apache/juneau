@@ -76,7 +76,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		args = args == null ? SerializerSessionArgs.DEFAULT : args;
 		this.javaMethod = args.javaMethod;
 		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
-		this.listener = newInstance(SerializerListener.class, ctx.getListener());
+		this.listener = castOrCreate(SerializerListener.class, ctx.getListener());
 		this.useWhitespace = args.useWhitespace != null ? args.useWhitespace : ctx.isUseWhitespace();
 	}
 

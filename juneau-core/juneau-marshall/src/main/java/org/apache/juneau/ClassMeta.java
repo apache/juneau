@@ -803,7 +803,7 @@ public final class ClassMeta<T> implements Type {
 			ClassInfo ci = ClassInfo.of(c);
 
 			if (ci.isChildOf(PojoSwap.class)) {
-				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);
+				PojoSwap ps = castOrCreate(PojoSwap.class, c);
 				if (s.mediaTypes().length > 0)
 					ps.forMediaTypes(MediaType.forStrings(s.mediaTypes()));
 				if (! s.template().isEmpty())

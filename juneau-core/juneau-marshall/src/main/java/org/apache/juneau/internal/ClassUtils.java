@@ -344,38 +344,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns a list of all the parent classes of the specified class including the class itself.
-	 *
-	 * @param c The class to retrieve the parent classes.
-	 * @param parentFirst In parent-to-child order, otherwise child-to-parent.
-	 * @param includeInterfaces Include interfaces.
-	 * @return An iterator of parent classes in the class hierarchy.
-	 */
-	public static Iterator<Class<?>> getParentClasses(final Class<?> c, boolean parentFirst, boolean includeInterfaces) {
-		List<Class<?>> l = getParentClasses(new ArrayList<Class<?>>(), c, parentFirst, includeInterfaces);
-		return l.iterator();
-	}
-
-	private static List<Class<?>> getParentClasses(List<Class<?>> l, Class<?> c, boolean parentFirst, boolean includeInterfaces) {
-		if (parentFirst) {
-			if (includeInterfaces)
-				for (Class<?> i : c.getInterfaces())
-					l.add(i);
-			if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
-				getParentClasses(l, c.getSuperclass(), parentFirst, includeInterfaces);
-			l.add(c);
-		} else {
-			l.add(c);
-			if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
-				getParentClasses(l, c.getSuperclass(), parentFirst, includeInterfaces);
-			if (includeInterfaces)
-				for (Class<?> i : c.getInterfaces())
-					l.add(i);
-		}
-		return l;
-	}
-
-	/**
 	 * Returns a readable representation of the specified method.
 	 *
 	 * <p>
@@ -384,7 +352,7 @@ public final class ClassUtils {
 	 * @param m The method to stringify.
 	 * @return The stringified method.
 	 */
-	public static String toString(Method m) {
+	public static String asString(Method m) {
 		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
 		for (int i = 0; i < m.getParameterTypes().length; i++) {
 			if (i > 0)
@@ -404,7 +372,7 @@ public final class ClassUtils {
 	 * @param f The field to stringify.
 	 * @return The stringified field.
 	 */
-	public static String toString(Field f) {
+	public static String asString(Field f) {
 		return f.getDeclaringClass().getName() + "." + f.getName();
 	}
 

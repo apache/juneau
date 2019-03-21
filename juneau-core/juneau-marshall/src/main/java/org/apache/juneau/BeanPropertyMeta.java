@@ -303,7 +303,7 @@ public final class BeanPropertyMeta {
 
 		private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
 			if (! p.format().isEmpty())
-				return beanContext.newInstance(PojoSwap.class, StringFormatSwap.class, false, p.format());
+				return castOrCreate(PojoSwap.class, StringFormatSwap.class, false, p.format());
 			return null;
 		}
 
@@ -315,7 +315,7 @@ public final class BeanPropertyMeta {
 				return null;
 			ClassInfo ci = getClassInfo(c);
 			if (ci.isChildOf(PojoSwap.class)) {
-				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);
+				PojoSwap ps = castOrCreate(PojoSwap.class, c);
 				if (ps.forMediaTypes() != null)
 					throw new RuntimeException("TODO - Media types on swaps not yet supported on bean properties.");
 				if (ps.withTemplate() != null)
@@ -707,7 +707,7 @@ public final class BeanPropertyMeta {
 						}
 					} else {
 						if (propMap == null) {
-							propMap = beanContext.newInstance(Map.class, propertyClass);
+							propMap = castOrCreate(Map.class, propertyClass);
 						} else {
 							propMap.clear();
 						}
@@ -763,7 +763,7 @@ public final class BeanPropertyMeta {
 						propList.clear();
 					} else {
 						if (propList == null) {
-							propList = beanContext.newInstance(Collection.class, propertyClass);
+							propList = castOrCreate(Collection.class, propertyClass);
 							invokeSetter(bean, pName, propList);
 						} else {
 							propList.clear();

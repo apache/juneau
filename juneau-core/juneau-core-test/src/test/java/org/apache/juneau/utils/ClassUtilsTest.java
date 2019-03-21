@@ -136,22 +136,19 @@ public class ClassUtilsTest {
 		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
 
 		s = new TreeSet<>();
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, true, false); i.hasNext();) {
-			Class<?> c = i.next();
+		for (ClassInfo c : ci.getParents(true, false)) {
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CB','CC','CD']", s);
 
 		s = new TreeSet<>();
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, false, true); i.hasNext();) {
-			Class<?> c = i.next();
+		for (ClassInfo c : ci.getParents(false, true)) {
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
 
 		s = new TreeSet<>();
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, false, false); i.hasNext();) {
-			Class<?> c = i.next();
+		for (ClassInfo c : ci.getParents(false, false)) {
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CB','CC','CD']", s);
