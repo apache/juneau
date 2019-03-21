@@ -2717,8 +2717,8 @@ public class BeanContext extends Context {
 		if (excludeProperties.isEmpty())
 			return null;
 		String[] s = null;
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(c, false, true); i.hasNext();) {
-			Class<?> c2 = i.next();
+		ClassInfo ci = getClassInfo(c);
+		for (ClassInfo c2 : ci.getParents(false, true)) {
 			s = excludeProperties.get(c2.getName());
 			if (s != null)
 				return s;
@@ -2743,7 +2743,7 @@ public class BeanContext extends Context {
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	public <T> T newInstance(Class<T> c, Object c2) {
-		return ClassUtils.newInstance(c, c2);
+		return ClassUtils.castOrCreate(c, c2);
 	}
 
 	/**
@@ -2766,7 +2766,7 @@ public class BeanContext extends Context {
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	public <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ClassUtils.newInstance(c, c2, fuzzyArgs, args);
+		return ClassUtils.castOrCreate(c, c2, fuzzyArgs, args);
 	}
 
 	/**
@@ -2792,7 +2792,7 @@ public class BeanContext extends Context {
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ClassUtils.newInstanceFromOuter(outer, c, c2, fuzzyArgs, args);
+		return ClassUtils.castOrCreateFromOuter(outer, c, c2, fuzzyArgs, args);
 	}
 
 	/**

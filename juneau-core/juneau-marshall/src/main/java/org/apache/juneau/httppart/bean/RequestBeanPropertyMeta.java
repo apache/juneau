@@ -12,13 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflection.*;
 
 /**
@@ -47,8 +48,8 @@ public class RequestBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = schema.getSerializer() == null ? serializer : ClassUtils.newInstance(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
-		this.parser = schema.getParser() == null ? parser : ClassUtils.newInstance(HttpPartParser.class, schema.getParser(), true, b.ps);
+		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
+		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.ps);
 	}
 
 	static class Builder {

@@ -227,8 +227,8 @@ public final class ClassUtils {
 	 * @throws
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public static <T> T newInstance(Class<T> c, Object c2) {
-		return newInstanceFromOuter(null, c, c2, false);
+	public static <T> T castOrCreate(Class<T> c, Object c2) {
+		return castOrCreateFromOuter(null, c, c2, false);
 	}
 
 	/**
@@ -250,8 +250,8 @@ public final class ClassUtils {
 	 * @throws
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
-	public static <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return newInstanceFromOuter(null, c, c2, fuzzyArgs, args);
+	public static <T> T castOrCreate(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
+		return castOrCreateFromOuter(null, c, c2, fuzzyArgs, args);
 	}
 
 	/**
@@ -277,7 +277,7 @@ public final class ClassUtils {
 	 * 	RuntimeException if constructor could not be found or called.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
+	public static <T> T castOrCreateFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
 		if (c2 == null)
 			return null;
 		if (c2 instanceof Class) {

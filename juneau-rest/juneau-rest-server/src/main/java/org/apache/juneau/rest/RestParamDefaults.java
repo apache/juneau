@@ -829,10 +829,10 @@ class RestParamDefaults {
 	}
 
 	static final HttpPartParser createPartParser(Class<? extends HttpPartParser> p, PropertyStore ps) {
-		return ClassUtils.newInstance(HttpPartParser.class, p, true, ps);
+		return castOrCreate(HttpPartParser.class, p, true, ps);
 	}
 
 	static final HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> s, PropertyStore ps) {
-		return ClassUtils.newInstance(HttpPartSerializer.class, s, true, ps);
+		return castOrCreate(HttpPartSerializer.class, s, true, ps);
 	}
 }

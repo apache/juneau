@@ -49,7 +49,7 @@ public final class RemoteMethodArg {
 	private static HttpPartSerializer createSerializer(HttpPartType partType, HttpPartSchema schema) {
 		if (schema == null)
 			return null;
-		return newInstance(HttpPartSerializer.class, schema.getSerializer());
+		return castOrCreate(HttpPartSerializer.class, schema.getSerializer());
 	}
 
 	/**

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -147,7 +148,7 @@ public class ContextCache {
 	}
 
 	private <T> T newInstance(Class<T> cc, PropertyStore ps) throws Exception {
-		return (T)ClassUtils.newInstance(Context.class, cc, true, ps);
+		return (T)castOrCreate(Context.class, cc, true, ps);
 	}
 
 	private static class CacheEntry {

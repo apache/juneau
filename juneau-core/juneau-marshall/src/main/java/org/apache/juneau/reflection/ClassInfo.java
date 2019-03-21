@@ -40,7 +40,6 @@ public final class ClassInfo {
 	private List<FieldInfo> allFields, allFieldsPf, declaredFields;
 	private List<MethodInfo> allMethods, allMethodsPf, declaredMethods, publicMethods;
 	private List<ConstructorInfo> constructors;
-	private List<ClassInfo> parentClasses, parentClassesAndInterfaces;
 
 	private static final Map<Type,ClassInfo> CACHE = new ConcurrentHashMap<>();
 
@@ -150,63 +149,34 @@ public final class ClassInfo {
 	 *
 	 * @return An iterable over this class and all parent classes in child-to-parent order.
 	 */
-	public Iterable<ClassInfo> getParentClasses() {
-		if (parentClasses == null)
-			parentClasses = Collections.unmodifiableList(findParentClasses(new ArrayList<>(), c));
-		return parentClasses;
+	public Iterable<ClassInfo> getParents() {
+		return getParents(false, false);
 	}
 
 	/**
-	 * Returns an iterable over this class and all parent classes in parent-to-child order.
+	 * Returns an iterable over this class and all parent classes.
 	 *
-	 * <p>
-	 * Does not include interfaces.
-	 *
-	 * @return An iterable over this class and all parent classes in parent-to-child order.
+	 * @param parentFirst If <jk>true</jk>, results are ordered parent-first.
+	 * @param includeInterfaces If <jk>true</jk>, results include interfaces.
+	 * @return An iterable over this class and all parent classes.
 	 */
-	public Iterable<ClassInfo> getParentClassesParentFirst() {
-		if (parentClasses == null)
-			parentClasses = Collections.unmodifiableList(findParentClasses(new ArrayList<>(), c));
-		return ReverseIterable.of(parentClasses);
+	public Iterable<ClassInfo> getParents(boolean parentFirst, boolean includeInterfaces) {
+		return findParents(new ArrayList<>(), c, parentFirst, includeInterfaces);
 	}
 
-	/**
-	 * Returns an iterable over this class and all parent classes and interfaces in child-to-parent order.
-	 *
-	 * @return An iterable over this class and all parent classes and interfaces in child-to-parent order.
-	 */
-	public Iterable<ClassInfo> getParentClassesAndInterfaces() {
-		if (parentClassesAndInterfaces == null)
-			parentClassesAndInterfaces = Collections.unmodifiableList(findParentClassesAndInterfaces(new ArrayList<>(), c));
-		return parentClassesAndInterfaces;
-	}
-
-	/**
-	 * Returns an iterable over this class and all parent classes and interfaces in parent-to-child order.
-	 *
-	 * @return An iterable over this class and all parent classes and interfaces in parent-to-child order.
-	 */
-	public Iterable<ClassInfo> getParentClassesAndInterfacesParentFirst() {
-		if (parentClassesAndInterfaces == null)
-			parentClassesAndInterfaces = Collections.unmodifiableList(findParentClassesAndInterfaces(new ArrayList<>(), c));
-		return ReverseIterable.of(parentClassesAndInterfaces);
-	}
-
-	private static List<ClassInfo> findParentClasses(List<ClassInfo> l, Class<?> c) {
-		l.add(ClassInfo.lookup(c));
+	private static List<ClassInfo> findParents(List<ClassInfo> l, Class<?> c, boolean parentFirst, boolean includeInterfaces) {
+		if (! parentFirst)
+			l.add(of(c));
 		if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
-			findParentClasses(l, c.getSuperclass());
+			findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
+		if (includeInterfaces)
+			for (Class<?> i : c.getInterfaces())
+				l.add(of(i));
+		if (parentFirst)
+			l.add(of(c));
 		return l;
 	}
 
-	private static List<ClassInfo> findParentClassesAndInterfaces(List<ClassInfo> l, Class<?> c) {
-		l.add(ClassInfo.lookup(c));
-		if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
-			findParentClassesAndInterfaces(l, c.getSuperclass());
-		for (Class<?> i : c.getInterfaces())
-			l.add(ClassInfo.lookup(i));
-		return l;
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Methods
@@ -267,7 +237,7 @@ public final class ClassInfo {
 
 	private List<MethodInfo> findAllMethods() {
 		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParentClassesAndInterfaces())
+		for (ClassInfo c : getParents(false, true))
 			for (MethodInfo m : c.getDeclaredMethods())
 				l.add(m);
 		return l;
@@ -275,7 +245,7 @@ public final class ClassInfo {
 
 	private List<MethodInfo> findAllMethodsParentFirst() {
 		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParentClassesAndInterfacesParentFirst())
+		for (ClassInfo c : getParents(true, true))
 			for (MethodInfo m : c.getDeclaredMethods())
 				l.add(m);
 		return l;
@@ -450,7 +420,7 @@ public final class ClassInfo {
 
 	private List<FieldInfo> findAllFieldsParentFirst() {
 		List<FieldInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParentClassesParentFirst())
+		for (ClassInfo c : getParents(true, false))
 			for (FieldInfo f : c.getDeclaredFields())
 				l.add(f);
 		return l;
@@ -458,7 +428,7 @@ public final class ClassInfo {
 
 	private List<FieldInfo> findAllFields() {
 		List<FieldInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParentClasses())
+		for (ClassInfo c : getParents())
 			for (FieldInfo f : c.getDeclaredFields())
 				l.add(f);
 		return l;

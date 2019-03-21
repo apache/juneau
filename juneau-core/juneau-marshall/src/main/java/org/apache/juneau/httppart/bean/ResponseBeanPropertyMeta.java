@@ -48,8 +48,8 @@ public class ResponseBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = schema.getSerializer() == null ? serializer : newInstance(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
-		this.parser = schema.getParser() == null ? parser : newInstance(HttpPartParser.class, schema.getParser(), true, b.ps);
+		this.serializer = schema.getSerializer() == null ? serializer : castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true, b.ps);
+		this.parser = schema.getParser() == null ? parser : castOrCreate(HttpPartParser.class, schema.getParser(), true, b.ps);
 	}
 
 	static class Builder {

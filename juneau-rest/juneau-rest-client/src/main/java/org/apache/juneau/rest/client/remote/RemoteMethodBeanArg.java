@@ -34,7 +34,7 @@ public final class RemoteMethodBeanArg {
 
 	RemoteMethodBeanArg(int index, Class<? extends HttpPartSerializer> serializer, RequestBeanMeta meta) {
 		this.index = index;
-		this.serializer = newInstance(HttpPartSerializer.class, serializer);
+		this.serializer = castOrCreate(HttpPartSerializer.class, serializer);
 		this.meta = meta;
 	}
 

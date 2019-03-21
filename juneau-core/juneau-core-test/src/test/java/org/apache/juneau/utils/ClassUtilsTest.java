@@ -127,9 +127,10 @@ public class ClassUtilsTest {
 	//====================================================================================================
 	@Test
 	public void getParentClassesParentFirst() throws Exception {
+		ClassInfo ci = getClassInfo(CD.class);
+
 		Set<String> s = new TreeSet<>();
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(CD.class, true, true); i.hasNext();) {
-			Class<?> c = i.next();
+		for (ClassInfo c : ci.getParents(true, true)) {
 			s.add(c.getSimpleName());
 		}
 		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
@@ -171,34 +172,34 @@ public class ClassUtilsTest {
 	public void newInstanceWithFuzzyArgs() throws Exception {
 		FA t = null;
 
-		t = ClassUtils.newInstance(FA.class, FA.class, true);
+		t = ClassUtils.castOrCreate(FA.class, FA.class, true);
 		assertEquals(1, t.c);
 
-		t = ClassUtils.newInstance(FA.class, FA.class, true, "foo");
+		t = ClassUtils.castOrCreate(FA.class, FA.class, true, "foo");
 		assertEquals(2, t.c);
 
-		t = ClassUtils.newInstance(FA.class, FA.class, true, 123, "foo");
+		t = ClassUtils.castOrCreate(FA.class, FA.class, true, 123, "foo");
 		assertEquals(3, t.c);
 
-		t = ClassUtils.newInstance(FA.class, FA.class, true, "foo", 123);
+		t = ClassUtils.castOrCreate(FA.class, FA.class, true, "foo", 123);
 		assertEquals(3, t.c);
 
 		FB t2 = null;
 
 		try {
-			t2 = ClassUtils.newInstance(FB.class, FB.class, true);
+			t2 = ClassUtils.castOrCreate(FB.class, FB.class, true);
 			fail();
 		} catch (Exception e) {
 			assertEquals("Could not instantiate class org.apache.juneau.utils.ClassUtilsTest$FB", e.getMessage());
 		}
 
-		t2 = ClassUtils.newInstance(FB.class, FB.class, true, "foo");
+		t2 = ClassUtils.castOrCreate(FB.class, FB.class, true, "foo");
 		assertEquals(1, t2.c);
 
-		t2 = ClassUtils.newInstance(FB.class, FB.class, true, 123, "foo");
+		t2 = ClassUtils.castOrCreate(FB.class, FB.class, true, 123, "foo");
 		assertEquals(1, t2.c);
 
-		t2 = ClassUtils.newInstance(FB.class, FB.class, true, "foo", 123);
+		t2 = ClassUtils.castOrCreate(FB.class, FB.class, true, "foo", 123);
 		assertEquals(1, t2.c);
 	}
 

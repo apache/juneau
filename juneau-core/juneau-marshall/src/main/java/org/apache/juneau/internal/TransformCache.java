@@ -121,7 +121,7 @@ public class TransformCache {
 
 		ClassInfo ici = ClassInfo.lookup(ic), oci = ClassInfo.lookup(oc);
 
-		for (ClassInfo pic : ici.getParentClassesAndInterfaces()) {
+		for (ClassInfo pic : ici.getParents(false, true)) {
 			t = m.get(pic.inner());
 			if (t != null) {
 				m.put(pic.inner(), t);

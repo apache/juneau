@@ -190,12 +190,12 @@ public abstract class Session {
 		if (o == null) {
 			if (def == null)
 				return null;
-			t = ClassUtils.newInstance(type, def);
+			t = castOrCreate(type, def);
 		}
 		else if (type.isInstance(o))
 			t = (T)o;
 		else if (o.getClass() == Class.class)
-			t = ClassUtils.newInstance(type, o);
+			t = castOrCreate(type, o);
 		else if (o.getClass() == String.class)
 			t = ClassUtils.fromString(type, o.toString());
 		if (t != null)

@@ -122,8 +122,8 @@ public class ResponseBeanMeta {
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
-		this.partSerializer = newInstance(HttpPartSerializer.class, b.partSerializer, true, b.ps);
-		this.partParser = newInstance(HttpPartParser.class, b.partParser, true, b.ps);
+		this.partSerializer = castOrCreate(HttpPartSerializer.class, b.partSerializer, true, b.ps);
+		this.partParser = castOrCreate(HttpPartParser.class, b.partParser, true, b.ps);
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = new LinkedHashMap<>();

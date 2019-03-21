@@ -701,7 +701,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	}
 
 	static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, PropertyStore ps, HttpPartSerializer _default) {
-		HttpPartSerializer hps = ClassUtils.newInstance(HttpPartSerializer.class, c, true, ps);
+		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true, ps);
 		return hps == null ? _default : hps;
 	}
 }
