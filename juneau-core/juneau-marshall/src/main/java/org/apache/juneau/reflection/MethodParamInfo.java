@@ -230,9 +230,9 @@ public final class MethodParamInfo {
 					l.add((T)a2);
 			Type t = constructorInfo.getGenericParameterType(index);
 			if (Value.isType(t))
-				ClassUtils.appendAnnotations(a, Value.getParameterType(t), l);
+				ClassUtils.appendAnnotations(l, a, Value.getParameterType(t));
 			else
-				ClassUtils.appendAnnotations(a, t, l);
+				ClassUtils.appendAnnotations(l, a, t);
 		} else {
 			List<Method> methods = methodInfo.getMatching();
 			for (Method m2 : methods)
@@ -241,9 +241,9 @@ public final class MethodParamInfo {
 						l.add((T)a2);
 			Type t = methodInfo.getInner().getGenericParameterTypes()[index];
 			if (Value.isType(t))
-				ClassUtils.appendAnnotations(a, Value.getParameterType(t), l);
+				ClassUtils.appendAnnotations(l, a, Value.getParameterType(t));
 			else
-				ClassUtils.appendAnnotations(a, t, l);
+				ClassUtils.appendAnnotations(l, a, t);
 		}
 		return l;
 	}

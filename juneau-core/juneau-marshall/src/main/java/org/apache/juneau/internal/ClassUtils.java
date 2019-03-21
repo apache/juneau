@@ -452,18 +452,15 @@ public final class ClassUtils {
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
 	 * @param x The constructor.
-	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
 	 * @return <jk>true</jk> if call was successful.
 	 */
-	public static boolean setAccessible(Constructor<?> x, boolean ignoreExceptions) {
+	public static boolean setAccessible(Constructor<?> x) {
 		try {
 			if (! (x == null || x.isAccessible()))
 				x.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {
-			if (ignoreExceptions)
-				return false;
-			throw new ClassMetaRuntimeException("Could not set accessibility to true on constructor ''{0}''", x);
+			return false;
 		}
 	}
 
@@ -471,18 +468,15 @@ public final class ClassUtils {
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
 	 * @param x The method.
-	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
 	 * @return <jk>true</jk> if call was successful.
 	 */
-	public static boolean setAccessible(Method x, boolean ignoreExceptions) {
+	public static boolean setAccessible(Method x) {
 		try {
 			if (! (x == null || x.isAccessible()))
 				x.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {
-			if (ignoreExceptions)
-				return false;
-			throw new ClassMetaRuntimeException("Could not set accessibility to true on method ''{0}''", x);
+			return false;
 		}
 	}
 
@@ -490,18 +484,15 @@ public final class ClassUtils {
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
 	 * @param x The field.
-	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
 	 * @return <jk>true</jk> if call was successful.
 	 */
-	public static boolean setAccessible(Field x, boolean ignoreExceptions) {
+	public static boolean setAccessible(Field x) {
 		try {
 			if (! (x == null || x.isAccessible()))
 				x.setAccessible(true);
 			return true;
 		} catch (SecurityException e) {
-			if (ignoreExceptions)
-				return false;
-			throw new ClassMetaRuntimeException("Could not set accessibility to true on field ''{0}''", x);
+			return false;
 		}
 	}
 
@@ -622,12 +613,11 @@ public final class ClassUtils {
 	/**
 	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
 	 * list.
-	 *
+	 * @param l The list of annotations.
 	 * @param a The annotation.
 	 * @param t The class.
-	 * @param l The list of annotations.
 	 */
-	public static <T extends Annotation> void appendAnnotations(Class<T> a, Type t, List<T> l) {
+	public static <T extends Annotation> void appendAnnotations(List<T> l, Class<T> a, Type t) {
 		Class<?> c = toClass(t);
 		if (c != null) {
 			addIfNotNull(l, getDeclaredAnnotation(a, c));
@@ -635,10 +625,10 @@ public final class ClassUtils {
 			if (c.getPackage() != null)
 				addIfNotNull(l, c.getPackage().getAnnotation(a));
 
-			appendAnnotations(a, c.getSuperclass(), l);
+			appendAnnotations(l, a, c.getSuperclass());
 
 			for (Class<?> c2 : c.getInterfaces())
-				appendAnnotations(a, c2, l);
+				appendAnnotations(l, a, c2);
 		}
 	}
 

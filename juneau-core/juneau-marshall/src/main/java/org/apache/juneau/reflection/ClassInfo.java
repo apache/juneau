@@ -617,7 +617,7 @@ public final class ClassInfo {
 
 	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
 		List<T> l = new LinkedList<>();
-		ClassUtils.appendAnnotations(a, type, l);
+		ClassUtils.appendAnnotations(l, a, type);
 		return l;
 	}
 

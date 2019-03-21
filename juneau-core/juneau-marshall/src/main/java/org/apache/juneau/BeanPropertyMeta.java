@@ -328,19 +328,19 @@ public final class BeanPropertyMeta {
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {
-			setAccessible(getter, false);
+			setAccessible(getter);
 			this.getter = getter;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setSetter(Method setter) {
-			setAccessible(setter, false);
+			setAccessible(setter);
 			this.setter = setter;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setField(Field field) {
-			setAccessible(field, false);
+			setAccessible(field);
 			this.field = field;
 			this.innerField = field;
 			return this;
@@ -352,7 +352,7 @@ public final class BeanPropertyMeta {
 		}
 
 		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
-			setAccessible(extraKeys, false);
+			setAccessible(extraKeys);
 			this.extraKeys = extraKeys;
 			return this;
 		}
@@ -1067,22 +1067,22 @@ public final class BeanPropertyMeta {
 		List<A> l = new LinkedList<>();
 		if (field != null) {
 			addIfNotNull(l, field.getAnnotation(a));
-			appendAnnotations(a, field.getType(), l);
+			appendAnnotations(l, a, field.getType());
 		}
 		if (getter != null) {
 			addIfNotNull(l, getMethodInfo(getter).getAnnotation(a));
-			appendAnnotations(a, getter.getReturnType(), l);
+			appendAnnotations(l, a, getter.getReturnType());
 		}
 		if (setter != null) {
 			addIfNotNull(l, getMethodInfo(setter).getAnnotation(a));
-			appendAnnotations(a, setter.getReturnType(), l);
+			appendAnnotations(l, a, setter.getReturnType());
 		}
 		if (extraKeys != null) {
 			addIfNotNull(l, getMethodInfo(extraKeys).getAnnotation(a));
-			appendAnnotations(a, extraKeys.getReturnType(), l);
+			appendAnnotations(l, a, extraKeys.getReturnType());
 		}
 
-		appendAnnotations(a, this.getBeanMeta().getClassMeta().getInnerClass(), l);
+		appendAnnotations(l, a, this.getBeanMeta().getClassMeta().getInnerClass());
 		return l;
 	}
 
