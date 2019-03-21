@@ -586,10 +586,9 @@ public final class ClassInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
-		if (c != null)
-			for (Annotation a2 : c.getDeclaredAnnotations())
-				if (a2.annotationType() == a)
-					return (T)a2;
+		for (Annotation a2 : c.getDeclaredAnnotations())
+			if (a2.annotationType() == a)
+				return (T)a2;
 		return null;
 	}
 

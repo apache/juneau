@@ -14,7 +14,6 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 
-import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -512,28 +511,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns the specified annotation only if it's been declared on the specified class.
-	 *
-	 * <p>
-	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
-	 * up the parent chain.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class.
-	 * @param t The annotated class.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends Annotation> T getDeclaredAnnotation(Class<T> a, Type t) {
-		Class<?> c = toClass(t);
-		if (c != null)
-			for (Annotation a2 : c.getDeclaredAnnotations())
-				if (a2.annotationType() == a)
-					return (T)a2;
-		return null;
-	}
-
-	/**
 	 * Same as getAnnotations(Class, Type) except returns the annotations as a map with the keys being the
 	 * class on which the annotation was found.
 	 *
@@ -566,8 +543,8 @@ public final class ClassUtils {
 	private static <T extends Annotation> void findAnnotationsMap(Class<T> a, Type t, Map<Class<?>,T> m) {
 		Class<?> c = toClass(t);
 		if (c != null) {
-
-			T t2 = getDeclaredAnnotation(a, c);
+			ClassInfo ci = getClassInfo(c);
+			T t2 = ci.getDeclaredAnnotation(a);
 			if (t2 != null)
 				m.put(c, t2);
 
@@ -588,7 +565,8 @@ public final class ClassUtils {
 	public static <T extends Annotation> void appendAnnotations(List<T> l, Class<T> a, Type t) {
 		Class<?> c = toClass(t);
 		if (c != null) {
-			addIfNotNull(l, getDeclaredAnnotation(a, c));
+			ClassInfo ci = getClassInfo(c);
+			addIfNotNull(l, ci.getDeclaredAnnotation(a));
 
 			if (c.getPackage() != null)
 				addIfNotNull(l, c.getPackage().getAnnotation(a));
@@ -617,26 +595,6 @@ public final class ClassUtils {
 			ParameterizedType pt = (ParameterizedType)t;
 			// The raw type should always be a class (right?)
 			return (Class<?>)pt.getRawType();
-		}
-		return null;
-	}
-
-	/**
-	 * Similar to {@link Class#getResourceAsStream(String)} except looks up the parent hierarchy for the existence of
-	 * the specified resource.
-	 *
-	 * @param c The class to return the resource on.
-	 * @param name The resource name.
-	 * @return An input stream on the specified resource, or <jk>null</jk> if the resource could not be found.
-	 */
-	public static InputStream getResource(Class<?> c, String name) {
-		if (name == null)
-			return null;
-		while (c != null) {
-			InputStream is = c.getResourceAsStream(name);
-			if (is != null)
-				return is;
-			c = c.getSuperclass();
 		}
 		return null;
 	}
