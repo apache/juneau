@@ -1220,4 +1220,99 @@ public final class ClassInfo {
 	public boolean isInterface() {
 		return c.isInterface();
 	}
+
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parameter types.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Finds the real parameter type of the specified class.
+	 *
+	 * @param index The zero-based index of the parameter to resolve.
+	 * @param oc The class we're trying to resolve the parameter type for.
+	 * @return The resolved real class.
+	 */
+	public Class<?> resolveParameterType(int index, Class<?> oc) {
+
+		// We need to make up a mapping of type names.
+		Map<Type,Type> typeMap = new HashMap<>();
+		while (c != oc.getSuperclass()) {
+			extractTypes(typeMap, oc);
+			oc = oc.getSuperclass();
+		}
+
+		Type gsc = oc.getGenericSuperclass();
+
+		// Not actually a parameterized type.
+		if (! (gsc instanceof ParameterizedType))
+			return Object.class;
+
+		ParameterizedType opt = (ParameterizedType)gsc;
+		Type actualType = opt.getActualTypeArguments()[index];
+
+		if (typeMap.containsKey(actualType))
+			actualType = typeMap.get(actualType);
+
+		if (actualType instanceof Class) {
+			return (Class<?>)actualType;
+
+		} else if (actualType instanceof GenericArrayType) {
+			Class<?> cmpntType = (Class<?>)((GenericArrayType)actualType).getGenericComponentType();
+			return Array.newInstance(cmpntType, 0).getClass();
+
+		} else if (actualType instanceof TypeVariable) {
+			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
+			List<Class<?>> nestedOuterTypes = new LinkedList<>();
+			for (Class<?> ec = oc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
+				try {
+					Class<?> outerClass = oc.getClass();
+					nestedOuterTypes.add(outerClass);
+					Map<Type,Type> outerTypeMap = new HashMap<>();
+					extractTypes(outerTypeMap, outerClass);
+					for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
+						Type key = entry.getKey(), value = entry.getValue();
+						if (key instanceof TypeVariable) {
+							TypeVariable<?> keyType = (TypeVariable<?>)key;
+							if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
+								if (value instanceof Class)
+									return (Class<?>)value;
+								typeVariable = (TypeVariable<?>)entry.getValue();
+							}
+						}
+					}
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+			throw new FormattedRuntimeException("Could not resolve type: {0}", actualType);
+		} else {
+			throw new FormattedRuntimeException("Invalid type found in resolveParameterType: {0}", actualType);
+		}
+	}
+
+	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
+		if (od instanceof Class && id instanceof Class) {
+			Class<?> oc = (Class<?>)od;
+			Class<?> ic = (Class<?>)id;
+			while ((ic = ic.getEnclosingClass()) != null)
+				if (ic == oc)
+					return true;
+		}
+		return false;
+	}
+
+	private static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
+		Type gs = c.getGenericSuperclass();
+		if (gs instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)gs;
+			Type[] typeParameters = ((Class<?>)pt.getRawType()).getTypeParameters();
+			Type[] actualTypeArguments = pt.getActualTypeArguments();
+			for (int i = 0; i < typeParameters.length; i++) {
+				if (typeMap.containsKey(actualTypeArguments[i]))
+					actualTypeArguments[i] = typeMap.get(actualTypeArguments[i]);
+				typeMap.put(typeParameters[i], actualTypeArguments[i]);
+			}
+		}
+	}
 }

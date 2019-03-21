@@ -163,117 +163,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified class is public.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class is public.
-	 */
-	public static boolean isStatic(Class<?> c) {
-		return Modifier.isStatic(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified class is abstract.
-	 *
-	 * @param c The class.
-	 * @return <jk>true</jk> if the specified class is abstract.
-	 */
-	public static boolean isAbstract(Class<?> c) {
-		return Modifier.isAbstract(c.getModifiers());
-	}
-
-	/**
-	 * Finds the real parameter type of the specified class.
-	 *
-	 * @param c The class containing the parameters (e.g. PojoSwap&lt;T,S&gt;)
-	 * @param index The zero-based index of the parameter to resolve.
-	 * @param oc The class we're trying to resolve the parameter type for.
-	 * @return The resolved real class.
-	 */
-	public static Class<?> resolveParameterType(Class<?> c, int index, Class<?> oc) {
-
-		// We need to make up a mapping of type names.
-		Map<Type,Type> typeMap = new HashMap<>();
-		while (c != oc.getSuperclass()) {
-			extractTypes(typeMap, oc);
-			oc = oc.getSuperclass();
-		}
-
-		Type gsc = oc.getGenericSuperclass();
-
-		// Not actually a parameterized type.
-		if (! (gsc instanceof ParameterizedType))
-			return Object.class;
-
-		ParameterizedType opt = (ParameterizedType)gsc;
-		Type actualType = opt.getActualTypeArguments()[index];
-
-		if (typeMap.containsKey(actualType))
-			actualType = typeMap.get(actualType);
-
-		if (actualType instanceof Class) {
-			return (Class<?>)actualType;
-
-		} else if (actualType instanceof GenericArrayType) {
-			Class<?> cmpntType = (Class<?>)((GenericArrayType)actualType).getGenericComponentType();
-			return Array.newInstance(cmpntType, 0).getClass();
-
-		} else if (actualType instanceof TypeVariable) {
-			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
-			List<Class<?>> nestedOuterTypes = new LinkedList<>();
-			for (Class<?> ec = oc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
-				try {
-					Class<?> outerClass = oc.getClass();
-					nestedOuterTypes.add(outerClass);
-					Map<Type,Type> outerTypeMap = new HashMap<>();
-					extractTypes(outerTypeMap, outerClass);
-					for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
-						Type key = entry.getKey(), value = entry.getValue();
-						if (key instanceof TypeVariable) {
-							TypeVariable<?> keyType = (TypeVariable<?>)key;
-							if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
-								if (value instanceof Class)
-									return (Class<?>)value;
-								typeVariable = (TypeVariable<?>)entry.getValue();
-							}
-						}
-					}
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-			throw new FormattedRuntimeException("Could not resolve type: {0}", actualType);
-		} else {
-			throw new FormattedRuntimeException("Invalid type found in resolveParameterType: {0}", actualType);
-		}
-	}
-
-	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
-		if (od instanceof Class && id instanceof Class) {
-			Class<?> oc = (Class<?>)od;
-			Class<?> ic = (Class<?>)id;
-			while ((ic = ic.getEnclosingClass()) != null)
-				if (ic == oc)
-					return true;
-		}
-		return false;
-	}
-
-	private static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
-		Type gs = c.getGenericSuperclass();
-		if (gs instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)gs;
-			Type[] typeParameters = ((Class<?>)pt.getRawType()).getTypeParameters();
-			Type[] actualTypeArguments = pt.getActualTypeArguments();
-			for (int i = 0; i < typeParameters.length; i++) {
-				if (typeMap.containsKey(actualTypeArguments[i]))
-					actualTypeArguments[i] = typeMap.get(actualTypeArguments[i]);
-				typeMap.put(typeParameters[i], actualTypeArguments[i]);
-			}
-		}
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified argument types are valid for the specified parameter types.
 	 *
 	 * @param paramTypes The parameters types specified on a method.
@@ -393,27 +282,26 @@ public final class ClassUtils {
 			return null;
 		if (c2 instanceof Class) {
 			try {
-				Class<?> c3 = (Class<?>)c2;
-				if (c3.isInterface() || isAbstract(c3))
+				ClassInfo c3 = getClassInfo((Class<?>)c2);
+				if (c3.isInterface() || c3.isAbstract())
 					return null;
-				ClassInfo c3i = ClassInfo.lookup(c3);
 
 				// First look for an exact match.
-				Constructor<?> con = c3i.findPublicConstructor(false, args);
+				Constructor<?> con = c3.findPublicConstructor(false, args);
 				if (con != null)
 					return (T)con.newInstance(args);
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
 					args = new AList<>().append(outer).appendAll(args).toArray();
-					con = c3i.findPublicConstructor(false, args);
+					con = c3.findPublicConstructor(false, args);
 					if (con != null)
 						return (T)con.newInstance(args);
 				}
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
-					con = c3i.findPublicConstructor(true, args);
+					con = c3.findPublicConstructor(true, args);
 					if (con != null)
 						return (T)con.newInstance(getMatchingArgs(con.getParameterTypes(), args));
 				}
