@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -35,8 +37,6 @@ public final class MethodInfo {
 	private final MethodParamInfo[] params;
 	private List<Method> matching;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
-	private Map<Class<?>,List<?>> annotationsMap;
-	private Map<Class<?>,List<?>> annotationsPfMap;
 	private ClassInfo returnTypeInfo;
 	private ClassInfo[] exceptionInfos;
 	private String signature;
@@ -177,6 +177,10 @@ public final class MethodInfo {
 		return exceptionInfos;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Finds the annotation of the specified type defined on this method.
 	 *
@@ -215,19 +219,6 @@ public final class MethodInfo {
 		return getAnnotation(a) != null;
 	}
 
-	@SuppressWarnings("unchecked")
-	private <T extends Annotation> T findAnnotation(Class<T> a) {
-		List<Method> methods = getMatching();
-		for (Method m2 : methods)
-			for (Annotation a2 :  m2.getAnnotations())
-				if (a.isInstance(a2))
-					return (T)a2;
-		Type t = m.getGenericReturnType();
-		if (Value.isType(t))
-			return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
-		return ClassInfo.lookup(t).getAnnotation(a);
-	}
-
 	/**
 	 * Returns all annotations of the specified type defined on the specified method.
 	 *
@@ -240,33 +231,61 @@ public final class MethodInfo {
 	 * @return
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		List<T> l = (List<T>)annotationsMap().get(a);
-		if (l == null) {
-			l = Collections.unmodifiableList(findAnnotations(a));
-			annotationsMap().put(a, l);
-		}
-		return l;
+		return getAnnotations(a, false );
 	}
 
 	/**
-	 * Identical to {@link #getAnnotations(Class)} but returns the list in reverse (parent-to-child) order.
+	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
+	 * @param parentFirst If <jk>true</jk>, results are in parent-to-child order.
 	 * @return
-	 * 	A list of all matching annotations found in parent-to-child order, or an empty list if none found.
+	 * 	A list of all matching annotations found or an empty list if none found.
+	 */
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a, boolean parentFirst) {
+		return appendAnnotations(new ArrayList<>(), a, parentFirst);
+	}
+
+	/**
+	 * Finds and appends the specified annotation on the specified method and methods onsuperclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Results are ordered in child-to-parent order.
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
+		return appendAnnotations(l, a, false);
+	}
+
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation.
+	 * @param parentFirst If <jk>true</jk>, results are ordered in parent-to-child order.
+	 * @return The same list.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		List<T> l = (List<T>)annotationsPfMap().get(a);
-		if (l == null) {
-			l = new ArrayList<>(getAnnotations(a));
-			Collections.reverse(l);
-			l = Collections.unmodifiableList(l);
-			annotationsPfMap().put(a, l);
-		}
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
+		List<Method> methods = getMatching();
+		if (parentFirst)
+			methods = reverse(new ArrayList<>(methods));
+		for (Method m2 : methods)
+			for (Annotation a2 :  m2.getAnnotations())
+				if (a.isInstance(a2))
+					l.add((T)a2);
+		Type t = m.getGenericReturnType();
+		if (Value.isType(t))
+			ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
+		else
+			ClassInfo.of(t).appendAnnotations(l, a);
 		return l;
 	}
 
@@ -295,37 +314,22 @@ public final class MethodInfo {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
-		List<T> l = new ArrayList<>();
+	private <T extends Annotation> T findAnnotation(Class<T> a) {
 		List<Method> methods = getMatching();
 		for (Method m2 : methods)
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
-					l.add((T)a2);
+					return (T)a2;
 		Type t = m.getGenericReturnType();
 		if (Value.isType(t))
-			ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
-		else
-			ClassInfo.of(t).appendAnnotations(l, a);
-		return l;
+			return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
+		return ClassInfo.lookup(t).getAnnotation(a);
 	}
 
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
 		if (annotationMap == null)
 			annotationMap = new ConcurrentHashMap<>();
 		return annotationMap;
-	}
-
-	private synchronized Map<Class<?>,List<?>> annotationsMap() {
-		if (annotationsMap == null)
-			annotationsMap = new ConcurrentHashMap<>();
-		return annotationsMap;
-	}
-
-	private synchronized Map<Class<?>,List<?>> annotationsPfMap() {
-		if (annotationsPfMap == null)
-			annotationsPfMap = new ConcurrentHashMap<>();
-		return annotationsPfMap;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

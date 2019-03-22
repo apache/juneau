@@ -78,7 +78,7 @@ public class ResponseBeanMeta {
 			b.apply(Value.getParameterType(t));
 		else
 			b.apply(t);
-		for (Response r : m.getAnnotationsParentFirst(Response.class))
+		for (Response r : m.getAnnotations(Response.class, true))
 			b.apply(r);
 		return b.build();
 	}

@@ -494,15 +494,12 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Finds the annotation of the specified type defined on this method.
+	 * Finds the annotation of the specified type defined on this class or parent class/interface.
 	 *
 	 * <p>
-	 * If the annotation cannot be found on the immediate method, searches methods with the same
+	 * If the annotation cannot be found on the immediate class, searches methods with the same
 	 * signature on the parent classes or interfaces.
 	 * <br>The search is performed in child-to-parent order.
-	 *
-	 * <p>
-	 * If still not found, searches for the annotation on the return type of the method.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -520,7 +517,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this method has the specified annotation.
+	 * Returns <jk>true</jk> if this class has the specified annotation.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -532,11 +529,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified method.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
@@ -548,7 +541,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Identical to {@link #getAnnotations(Class)} but returns the list in reverse (parent-to-child) order.
+	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.

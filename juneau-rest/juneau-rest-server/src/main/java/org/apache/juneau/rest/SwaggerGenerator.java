@@ -410,7 +410,7 @@ final class SwaggerGenerator {
 			}
 
 			if (mi.hasAnnotation(Response.class)) {
-				List<Response> la = mi.getAnnotationsParentFirst(Response.class);
+				List<Response> la = mi.getAnnotations(Response.class, true);
 				Set<Integer> codes = getCodes(la, 200);
 				for (Response a : la) {
 					for (Integer code : codes) {
