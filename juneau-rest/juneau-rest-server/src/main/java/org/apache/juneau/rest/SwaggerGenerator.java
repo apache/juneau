@@ -120,8 +120,7 @@ final class SwaggerGenerator {
 			omSwagger = new ObjectMap();
 
 		// Combine it with @RestResource(swagger)
-		for (Map.Entry<Class<?>,RestResource> e : rci.getAnnotationsMapParentFirst(RestResource.class).entrySet()) {
-			RestResource rr = e.getValue();
+		for (RestResource rr : rci.getAnnotationsParentFirst(RestResource.class)) {
 
 			ObjectMap sInfo = omSwagger.getObjectMap("info", true);
 			sInfo.appendSkipEmpty("title",

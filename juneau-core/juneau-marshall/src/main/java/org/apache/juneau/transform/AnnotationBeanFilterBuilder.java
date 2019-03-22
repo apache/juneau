@@ -37,10 +37,10 @@ public final class AnnotationBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 	 * 	The {@link Bean @Bean} annotations found on the class and all parent classes in child-to-parent order.
 	 * @throws Exception Thrown from property namer constructor.
 	 */
-	public AnnotationBeanFilterBuilder(Class<T> annotatedClass, Map<Class<?>,Bean> annotations) throws Exception {
+	public AnnotationBeanFilterBuilder(Class<T> annotatedClass, List<Bean> annotations) throws Exception {
 		super(annotatedClass);
 
-		ListIterator<Bean> li = new ArrayList<>(annotations.values()).listIterator(annotations.size());
+		ListIterator<Bean> li = annotations.listIterator(annotations.size());
 		while (li.hasPrevious()) {
 			Bean b = li.previous();
 

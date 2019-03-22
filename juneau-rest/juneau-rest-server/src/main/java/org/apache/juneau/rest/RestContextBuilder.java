@@ -136,13 +136,13 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			VarResolver vr = varResolverBuilder.build();
 
-			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = rci.getAnnotationsMapParentFirst(RestResource.class);
+			List<ClassAnnotation<RestResource>> restResourceAnnotationsParentFirst = rci.getClassAnnotations(RestResource.class, true);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";
-			for (RestResource r : restResourceAnnotationsParentFirst.values())
-				if (! r.config().isEmpty())
-					configPath = r.config();
+			for (ClassAnnotation<RestResource> r : restResourceAnnotationsParentFirst)
+				if (! r.getAnnotation().config().isEmpty())
+					configPath = r.getAnnotation().config();
 			String cf = vr.resolve(configPath);
 
 			if ("SYSTEM_DEFAULT".equals(cf))
@@ -170,9 +170,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
-			for (Map.Entry<Class<?>,RestResource> e : restResourceAnnotationsParentFirst.entrySet()) {
-				Class<?> c = e.getKey();
-				RestResource r = e.getValue();
+			for (ClassAnnotation<RestResource> e : restResourceAnnotationsParentFirst) {
+				ClassInfo c = e.getClassInfo();
+				RestResource r = e.getAnnotation();
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
@@ -204,9 +204,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				uriRelativity(vr.resolve(r.uriRelativity()));
 				uriResolution(vr.resolve(r.uriResolution()));
 				for (String mapping : r.staticFiles())
-					staticFiles(c, vr.resolve(mapping));
+					staticFiles(c.inner(), vr.resolve(mapping));
 				if (! r.messages().isEmpty())
-					messages(c, vr.resolve(r.messages()));
+					messages(c.inner(), vr.resolve(r.messages()));
 				staticFileResponseHeaders(resolveVars(vr, r.staticFileResponseHeaders()));
 				if (! r.useClasspathResourceCaching().isEmpty())
 					useClasspathResourceCaching(Boolean.valueOf(vr.resolve(r.useClasspathResourceCaching())));

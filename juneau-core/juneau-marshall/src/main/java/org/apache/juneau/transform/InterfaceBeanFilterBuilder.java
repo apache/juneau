@@ -54,9 +54,9 @@ public class InterfaceBeanFilterBuilder<T> extends BeanFilterBuilder<T> {
 
 	private void init(Class<?> interfaceClass) {
 		interfaceClass(interfaceClass);
-		Map<Class<?>,Bean> annotations = getClassInfo(interfaceClass).getAnnotationsMap(Bean.class);
+		List<Bean> annotations = getClassInfo(interfaceClass).getAnnotations(Bean.class);
 
-		ListIterator<Bean> li = new ArrayList<>(annotations.values()).listIterator(annotations.size());
+		ListIterator<Bean> li = annotations.listIterator(annotations.size());
 		while (li.hasPrevious()) {
 			Bean b = li.previous();
 

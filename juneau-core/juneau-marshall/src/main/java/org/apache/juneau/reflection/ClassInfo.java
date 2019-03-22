@@ -616,46 +616,59 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Same as getAnnotations(Class) except returns the annotations as a map with the keys being the
-	 * class on which the annotation was found.
+	 * Same as getAnnotations(Class) except returns the annotations with the accompanying class.
 	 *
 	 * <p>
 	 * Results are ordered child-to-parent.
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
-	 * @return The found matches, or an empty map if annotation was not found.
+	 * @return The found matches, or an empty list if annotation was not found.
 	 */
-	public <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMap(Class<T> a) {
-		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<>();
-		findAnnotationsMap(a, m);
-		return m;
+	public <T extends Annotation> List<ClassAnnotation<T>> getClassAnnotations(Class<T> a) {
+		return getClassAnnotations(a, false);
 	}
 
 	/**
-	 * Same as {@link #getAnnotationsMap(Class)} except returns results in parent-to-child order.
+	 * Same as {@link #getClassAnnotations(Class)} except optionally returns results in parent-to-child order.
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
-	 * @return The found matches, or an empty map if annotation was not found.
+	 * @param parentFirst If <jk>true</jk>, annotations are returned in parent-to-child order.
+	 * @return The found matches, or an empty list if annotation was not found.
 	 */
-	public <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMapParentFirst(Class<T> a) {
-		return CollectionUtils.reverse(getAnnotationsMap(a));
+	public <T extends Annotation> List<ClassAnnotation<T>> getClassAnnotations(Class<T> a, boolean parentFirst) {
+		return findClassAnnotations(new ArrayList<>(), a, parentFirst);
 	}
 
-	private <T extends Annotation> void findAnnotationsMap(Class<T> a, Map<Class<?>,T> m) {
+	private <T extends Annotation> List<ClassAnnotation<T>> findClassAnnotations(List<ClassAnnotation<T>> l, Class<T> a, boolean parentFirst) {
 		if (c != null) {
-			T t2 = getDeclaredAnnotation(a);
-			if (t2 != null)
-				m.put(c, t2);
+			if (parentFirst) {
+				for (Class<?> c2 : c.getInterfaces())
+					of(c2).findClassAnnotations(l, a, true);
 
-			ClassInfo sci = of(c.getSuperclass());
-			if (sci != null)
-				sci.findAnnotationsMap(a, m);
+				ClassInfo sci = of(c.getSuperclass());
+				if (sci != null)
+					sci.findClassAnnotations(l, a, true);
 
-			for (Class<?> c2 : c.getInterfaces())
-				of(c2).findAnnotationsMap(a, m);
+				T t2 = getDeclaredAnnotation(a);
+				if (t2 != null)
+					l.add(ClassAnnotation.of(this, t2));
+
+			} else {
+				T t2 = getDeclaredAnnotation(a);
+				if (t2 != null)
+					l.add(ClassAnnotation.of(this, t2));
+
+				ClassInfo sci = of(c.getSuperclass());
+				if (sci != null)
+					sci.findClassAnnotations(l, a, false);
+
+				for (Class<?> c2 : c.getInterfaces())
+					of(c2).findClassAnnotations(l, a, false);
+			}
 		}
+		return l;
 	}
 
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
@@ -1409,4 +1422,5 @@ public final class ClassInfo {
 			}
 		}
 	}
+
 }
