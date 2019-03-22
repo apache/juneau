@@ -304,9 +304,9 @@ public final class MethodInfo {
 					l.add((T)a2);
 		Type t = m.getGenericReturnType();
 		if (Value.isType(t))
-			ClassUtils.appendAnnotations(l, a, Value.getParameterType(t));
+			ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
 		else
-			ClassUtils.appendAnnotations(l, a, t);
+			ClassInfo.of(t).appendAnnotations(l, a);
 		return l;
 	}
 

@@ -19,7 +19,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for introspecting information about a method parameter.
@@ -230,9 +229,9 @@ public final class MethodParamInfo {
 					l.add((T)a2);
 			Type t = constructorInfo.getGenericParameterType(index);
 			if (Value.isType(t))
-				ClassUtils.appendAnnotations(l, a, Value.getParameterType(t));
+				ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
 			else
-				ClassUtils.appendAnnotations(l, a, t);
+				ClassInfo.of(t).appendAnnotations(l, a);
 		} else {
 			List<Method> methods = methodInfo.getMatching();
 			for (Method m2 : methods)
@@ -241,9 +240,9 @@ public final class MethodParamInfo {
 						l.add((T)a2);
 			Type t = methodInfo.getInner().getGenericParameterTypes()[index];
 			if (Value.isType(t))
-				ClassUtils.appendAnnotations(l, a, Value.getParameterType(t));
+				ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
 			else
-				ClassUtils.appendAnnotations(l, a, t);
+				ClassInfo.of(t).appendAnnotations(l, a);
 		}
 		return l;
 	}

@@ -1067,22 +1067,22 @@ public final class BeanPropertyMeta {
 		List<A> l = new LinkedList<>();
 		if (field != null) {
 			addIfNotNull(l, field.getAnnotation(a));
-			appendAnnotations(l, a, field.getType());
+			getClassInfo(field.getType()).appendAnnotations(l, a);
 		}
 		if (getter != null) {
 			addIfNotNull(l, getMethodInfo(getter).getAnnotation(a));
-			appendAnnotations(l, a, getter.getReturnType());
+			getClassInfo(getter.getReturnType()).appendAnnotations(l, a);
 		}
 		if (setter != null) {
 			addIfNotNull(l, getMethodInfo(setter).getAnnotation(a));
-			appendAnnotations(l, a, setter.getReturnType());
+			getClassInfo(setter.getReturnType()).appendAnnotations(l, a);
 		}
 		if (extraKeys != null) {
 			addIfNotNull(l, getMethodInfo(extraKeys).getAnnotation(a));
-			appendAnnotations(l, a, extraKeys.getReturnType());
+			getClassInfo(extraKeys.getReturnType()).appendAnnotations(l, a);
 		}
 
-		appendAnnotations(l, a, this.getBeanMeta().getClassMeta().getInnerClass());
+		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a);
 		return l;
 	}
 

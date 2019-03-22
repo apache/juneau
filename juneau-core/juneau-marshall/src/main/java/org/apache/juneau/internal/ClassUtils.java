@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -552,29 +550,6 @@ public final class ClassUtils {
 
 			for (Class<?> c2 : c.getInterfaces())
 				findAnnotationsMap(a, c2, m);
-		}
-	}
-
-	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
-	 * @param l The list of annotations.
-	 * @param a The annotation.
-	 * @param t The class.
-	 */
-	public static <T extends Annotation> void appendAnnotations(List<T> l, Class<T> a, Type t) {
-		Class<?> c = toClass(t);
-		if (c != null) {
-			ClassInfo ci = getClassInfo(c);
-			addIfNotNull(l, ci.getDeclaredAnnotation(a));
-
-			if (c.getPackage() != null)
-				addIfNotNull(l, c.getPackage().getAnnotation(a));
-
-			appendAnnotations(l, a, c.getSuperclass());
-
-			for (Class<?> c2 : c.getInterfaces())
-				appendAnnotations(l, a, c2);
 		}
 	}
 

@@ -13,6 +13,7 @@
 package org.apache.juneau.reflection;
 
 import static org.apache.juneau.internal.ClassFlags.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -592,6 +593,28 @@ public final class ClassInfo {
 		return null;
 	}
 
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 * @param l The list of annotations.
+	 * @param a The annotation.
+	 */
+	public <T extends Annotation> void appendAnnotations(List<T> l, Class<T> a) {
+		if (c != null) {
+			addIfNotNull(l, getDeclaredAnnotation(a));
+
+			if (c.getPackage() != null)
+				addIfNotNull(l, c.getPackage().getAnnotation(a));
+
+			ClassInfo sci = of(c.getSuperclass());
+			if (sci != null)
+				sci.appendAnnotations(l, a);
+
+			for (Class<?> c2 : c.getInterfaces())
+				of(c2).appendAnnotations(l, a);
+		}
+	}
+
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
 		if (c != null) {
 			T t2 = getDeclaredAnnotation(a);
@@ -616,7 +639,7 @@ public final class ClassInfo {
 
 	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
 		List<T> l = new LinkedList<>();
-		ClassUtils.appendAnnotations(l, a, type);
+		appendAnnotations(l, a);
 		return l;
 	}
 
