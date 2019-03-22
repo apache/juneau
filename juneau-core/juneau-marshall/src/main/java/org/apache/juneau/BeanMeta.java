@@ -185,7 +185,7 @@ public class BeanMeta<T> {
 				}
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : classMeta.getInfo().getAnnotationsParentFirst(Bean.class))
+				for (Bean b : classMeta.getInfo().getAnnotations(Bean.class, true))
 					if (! b.typePropertyName().isEmpty())
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)

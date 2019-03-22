@@ -34,8 +34,7 @@ public final class ClassInfo {
 	private final Type t;
 	private final Class<?> c;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
-	private Map<Class<?>,List<?>> annotationsMap;
-	private Map<Class<?>,List<?>> annotationsPfMap;
+	private Map<Class<?>,Optional<Annotation>> declaredAnnotationMap;
 
 	private static final Map<Type,ClassInfo> CACHE = new ConcurrentHashMap<>();
 
@@ -544,14 +543,8 @@ public final class ClassInfo {
 	 * @return
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		List<T> l = (List<T>)annotationsMap().get(a);
-		if (l == null) {
-			l = Collections.unmodifiableList(findAnnotations(a));
-			annotationsMap().put(a, l);
-		}
-		return l;
+		return getAnnotations(a, false);
 	}
 
 	/**
@@ -559,19 +552,12 @@ public final class ClassInfo {
 	 *
 	 * @param a
 	 * 	The annotation to search for.
+	 * @param parentFirst If <jk>true</jk>, results are in parent-to-child order.
 	 * @return
-	 * 	A list of all matching annotations found in parent-to-child order, or an empty list if none found.
+	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		List<T> l = (List<T>)annotationsPfMap().get(a);
-		if (l == null) {
-			l = new ArrayList<>(getAnnotations(a));
-			Collections.reverse(l);
-			l = Collections.unmodifiableList(l);
-			annotationsPfMap().put(a, l);
-		}
-		return l;
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a, boolean parentFirst) {
+		return appendAnnotations(new ArrayList<>(), a, parentFirst);
 	}
 
 	/**
@@ -587,32 +573,67 @@ public final class ClassInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
-		for (Annotation a2 : c.getDeclaredAnnotations())
-			if (a2.annotationType() == a)
-				return (T)a2;
-		return null;
+		Optional<Annotation> o = declaredAnnotationMap().get(a);
+		if (o == null) {
+			o = Optional.ofNullable(findDeclaredAnnotation(a));
+			declaredAnnotationMap().put(a, o);
+		}
+		return o.isPresent() ? (T)o.get() : null;
 	}
 
 	/**
 	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
 	 * list.
+	 *
+	 * <p>
+	 * Results are ordered in child-to-parent order.
+	 *
 	 * @param l The list of annotations.
 	 * @param a The annotation.
+	 * @return The same list.
 	 */
-	public <T extends Annotation> void appendAnnotations(List<T> l, Class<T> a) {
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
+		return appendAnnotations(l, a, false);
+	}
+
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation.
+	 * @param parentFirst If <jk>true</jk>, results are ordered in parent-to-child order.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		if (c != null) {
-			addIfNotNull(l, getDeclaredAnnotation(a));
+			if (parentFirst) {
+				for (Class<?> c2 : c.getInterfaces())
+					of(c2).appendAnnotations(l, a, true);
 
-			if (c.getPackage() != null)
-				addIfNotNull(l, c.getPackage().getAnnotation(a));
+				ClassInfo sci = of(c.getSuperclass());
+				if (sci != null)
+					sci.appendAnnotations(l, a, true);
 
-			ClassInfo sci = of(c.getSuperclass());
-			if (sci != null)
-				sci.appendAnnotations(l, a);
+				if (c.getPackage() != null)
+					addIfNotNull(l, c.getPackage().getAnnotation(a));
 
-			for (Class<?> c2 : c.getInterfaces())
-				of(c2).appendAnnotations(l, a);
+				addIfNotNull(l, getDeclaredAnnotation(a));
+			} else {
+				addIfNotNull(l, getDeclaredAnnotation(a));
+
+				if (c.getPackage() != null)
+					addIfNotNull(l, c.getPackage().getAnnotation(a));
+
+				ClassInfo sci = of(c.getSuperclass());
+				if (sci != null)
+					sci.appendAnnotations(l, a, false);
+
+				for (Class<?> c2 : c.getInterfaces())
+					of(c2).appendAnnotations(l, a, false);
+			}
 		}
+		return l;
 	}
 
 	/**
@@ -693,10 +714,12 @@ public final class ClassInfo {
 		return null;
 	}
 
-	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
-		List<T> l = new LinkedList<>();
-		appendAnnotations(l, a);
-		return l;
+	@SuppressWarnings("unchecked")
+	private <T extends Annotation> T findDeclaredAnnotation(Class<T> a) {
+		for (Annotation a2 : c.getDeclaredAnnotations())
+			if (a2.annotationType() == a)
+				return (T)a2;
+		return null;
 	}
 
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
@@ -705,16 +728,10 @@ public final class ClassInfo {
 		return annotationMap;
 	}
 
-	private synchronized Map<Class<?>,List<?>> annotationsMap() {
-		if (annotationsMap == null)
-			annotationsMap = new ConcurrentHashMap<>();
-		return annotationsMap;
-	}
-
-	private synchronized Map<Class<?>,List<?>> annotationsPfMap() {
-		if (annotationsPfMap == null)
-			annotationsPfMap = new ConcurrentHashMap<>();
-		return annotationsPfMap;
+	private synchronized Map<Class<?>,Optional<Annotation>> declaredAnnotationMap() {
+		if (declaredAnnotationMap == null)
+			declaredAnnotationMap = new ConcurrentHashMap<>();
+		return declaredAnnotationMap;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
