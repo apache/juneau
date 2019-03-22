@@ -421,8 +421,8 @@ final class SwaggerGenerator {
 						addBodyExamples(sm, om, true, m.getGenericReturnType());
 					}
 				}
-				if (mi.getReturnTypeInfo().hasAnnotation(Response.class)) {
-					for (MethodInfo ecmi : mi.getReturnTypeInfo().getAllMethods(true, true)) {
+				if (mi.getReturnType().hasAnnotation(Response.class)) {
+					for (MethodInfo ecmi : mi.getReturnType().getAllMethods(true, true)) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 							String ha = a.name();

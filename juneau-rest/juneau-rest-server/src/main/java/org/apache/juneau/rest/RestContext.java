@@ -3310,7 +3310,7 @@ public final class RestContext extends BeanContext {
 			}
 
 			for (MethodInfo m : rci.getAllMethods(true, true)) {
-				if (m.isPublic() && m.isAnnotationPresent(RestHook.class)) {
+				if (m.isPublic() && m.hasAnnotation(RestHook.class)) {
 					HookEvent he = m.getAnnotation(RestHook.class).value();
 					String sig = m.getSignature();
 					switch(he) {

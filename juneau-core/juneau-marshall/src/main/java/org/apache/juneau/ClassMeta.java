@@ -544,13 +544,13 @@ public final class ClassMeta<T> implements Type {
 
 			// Find @NameProperty and @ParentProperty methods if present.
 			for (MethodInfo m : ci.getAllMethods(true, true)) {
-				if (m.isAnnotationPresent(ParentProperty.class)) {
+				if (m.hasAnnotation(ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					parentPropertyMethod = new Setter.MethodSetter(m.getInner());
 				}
-				if (m.isAnnotationPresent(NameProperty.class)) {
+				if (m.hasAnnotation(NameProperty.class)) {
 					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
@@ -559,7 +559,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			for (MethodInfo m : ci.getDeclaredMethods()) {
-				if (m.isAnnotationPresent(Example.class)) {
+				if (m.hasAnnotation(Example.class)) {
 					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
 					m.setAccessible();

@@ -32,12 +32,10 @@ import org.apache.juneau.internal.*;
 public final class MethodInfo {
 
 	private final ClassInfo declaringClass;
-	private ClassInfo returnType;
 	private final Method m;
-	private final MethodParamInfo[] params;
+	private MethodParamInfo[] params;
 	private List<Method> matching;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
-	private ClassInfo returnTypeInfo;
 	private ClassInfo[] exceptionInfos;
 	private String signature;
 
@@ -59,9 +57,6 @@ public final class MethodInfo {
 	public MethodInfo(ClassInfo declaringClass, Method m) {
 		this.declaringClass = declaringClass;
 		this.m = m;
-		params = new MethodParamInfo[m.getParameterCount()];
-		for (int i = 0; i < m.getParameterCount(); i++)
-			params[i] = new MethodParamInfo(this, i);
 	}
 
 	/**
@@ -113,6 +108,11 @@ public final class MethodInfo {
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public MethodParamInfo[] getParams() {
+		if (params == null) {
+			params = new MethodParamInfo[m.getParameterCount()];
+			for (int i = 0; i < m.getParameterCount(); i++)
+				params[i] = new MethodParamInfo(this, i);
+		}
 		return params;
 	}
 
@@ -123,7 +123,7 @@ public final class MethodInfo {
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
 	public MethodParamInfo getParam(int index) {
-		return params[index];
+		return getParams()[index];
 	}
 
 	/**
@@ -152,17 +152,6 @@ public final class MethodInfo {
 	}
 
 	/**
-	 * Returns the {@link ClassInfo} object associated with the return type on this method.
-	 *
-	 * @return The {@link ClassInfo} object associated with the return type on this method.
-	 */
-	public synchronized ClassInfo getReturnTypeInfo() {
-		if (returnTypeInfo == null)
-			returnTypeInfo = ClassInfo.lookup(m.getReturnType());
-		return returnTypeInfo;
-	}
-
-	/**
 	 * Returns the {@link ClassInfo} objects associated with the exception types on this method.
 	 *
 	 * @return The {@link ClassInfo} objects associated with the exception types on this method.
@@ -172,7 +161,7 @@ public final class MethodInfo {
 			Class<?>[] exceptionTypes = m.getExceptionTypes();
 			exceptionInfos = new ClassInfo[exceptionTypes.length];
 			for (int i = 0; i < exceptionTypes.length; i++)
-				exceptionInfos[i] = ClassInfo.lookup(exceptionTypes[i]);
+				exceptionInfos[i] = ClassInfo.of(exceptionTypes[i]);
 		}
 		return exceptionInfos;
 	}
@@ -296,21 +285,13 @@ public final class MethodInfo {
 	 * @return <jk>true</jk> if this method does not have any of the specified annotations.
 	 */
 	@SafeVarargs
-	public final Class<? extends Annotation> findAnnotation(Class<? extends Annotation>...c) {
-		for (Class<? extends Annotation> cc : c)
-			if (hasAnnotation(cc))
-				return cc;
+	public final Annotation getAnnotation(Class<? extends Annotation>...c) {
+		for (Class<? extends Annotation> cc : c) {
+			Annotation a = getAnnotation(cc);
+			if (a != null)
+				return a;
+		}
 		return null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this method.
-	 *
-	 * @param a The annotation to check for.
-	 * @return <jk>true</jk> if the specified annotation is present on this method.
-	 */
-	public boolean isAnnotationPresent(Class<? extends Annotation> a) {
-		return m.isAnnotationPresent(a);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -628,9 +609,7 @@ public final class MethodInfo {
 	 * @return The return type of this method.
 	 */
 	public ClassInfo getReturnType() {
-		if (returnType == null)
-			returnType = ClassInfo.lookup(m.getReturnType());
-		return returnType;
+		return ClassInfo.of(m.getReturnType());
 	}
 
 	/**
