@@ -108,15 +108,19 @@ final class SwaggerGenerator {
 	 */
 	public Swagger getSwagger() throws Exception {
 
+		ClassInfo rci = getClassInfo(resource.getClass());
+
+		rci.getSimpleName();
+
 		// Load swagger JSON from classpath.
-		ObjectMap omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, ClassUtils.getSimpleName(resource.getClass()) + ".json", locale);
+		ObjectMap omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, rci.getSimpleName() + ".json", locale);
 		if (omSwagger == null)
-			omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, resource.getClass().getSimpleName() + ".json", locale);
+			omSwagger = context.getClasspathResource(ObjectMap.class, MediaType.JSON, rci.getSimpleName() + ".json", locale);
 		if (omSwagger == null)
 			omSwagger = new ObjectMap();
 
 		// Combine it with @RestResource(swagger)
-		for (Map.Entry<Class<?>,RestResource> e : getAnnotationsMapParentFirst(RestResource.class, resource.getClass()).entrySet()) {
+		for (Map.Entry<Class<?>,RestResource> e : rci.getAnnotationsMapParentFirst(RestResource.class).entrySet()) {
 			RestResource rr = e.getValue();
 
 			ObjectMap sInfo = omSwagger.getObjectMap("info", true);

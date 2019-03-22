@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -458,98 +457,6 @@ public final class ClassUtils {
 			return true;
 		} catch (SecurityException e) {
 			return false;
-		}
-	}
-
-	/**
-	 * Returns the simple name of a class.
-	 *
-	 * <p>
-	 * Similar to {@link Class#getSimpleName()}, but includes the simple name of an enclosing or declaring class.
-	 *
-	 * @param c The class to get the simple name on.
-	 * @return The simple name of a class.
-	 */
-	public static String getSimpleName(Class<?> c) {
-		if (c.isLocalClass())
-			return getSimpleName(c.getEnclosingClass()) + '.' + c.getSimpleName();
-		if (c.isMemberClass())
-			return getSimpleName(c.getDeclaringClass()) + '.' + c.getSimpleName();
-		return c.getSimpleName();
-	}
-
-	/**
-	 * Returns the simple name of a class.
-	 *
-	 * <p>
-	 * Similar to {@link Class#getSimpleName()}, but includes the simple name of an enclosing or declaring class.
-	 *
-	 * @param t The class to get the simple name on.
-	 * @return The simple name of a class.
-	 */
-	public static String getSimpleName(Type t) {
-		if (t instanceof Class)
-			return getSimpleName((Class<?>)t);
-		if (t instanceof ParameterizedType) {
-			StringBuilder sb = new StringBuilder();
-			ParameterizedType pt = (ParameterizedType)t;
-			sb.append(getSimpleName(pt.getRawType()));
-			sb.append("<");
-			boolean first = true;
-			for (Type t2 : pt.getActualTypeArguments()) {
-				if (! first)
-					sb.append(',');
-				first = false;
-				sb.append(getSimpleName(t2));
-			}
-			sb.append(">");
-			return sb.toString();
-		}
-		return null;
-	}
-
-	/**
-	 * Same as getAnnotations(Class, Type) except returns the annotations as a map with the keys being the
-	 * class on which the annotation was found.
-	 *
-	 * <p>
-	 * Results are ordered child-to-parent.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class type.
-	 * @param t The class being searched.
-	 * @return The found matches, or an empty map if annotation was not found.
-	 */
-	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMap(Class<T> a, Type t) {
-		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<>();
-		findAnnotationsMap(a, t, m);
-		return m;
-	}
-
-	/**
-	 * Same as {@link #getAnnotationsMap(Class, Type)} except returns results in parent-to-child order.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class type.
-	 * @param t The class being searched.
-	 * @return The found matches, or an empty map if annotation was not found.
-	 */
-	public static <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMapParentFirst(Class<T> a, Type t) {
-		return CollectionUtils.reverse(getAnnotationsMap(a, t));
-	}
-
-	private static <T extends Annotation> void findAnnotationsMap(Class<T> a, Type t, Map<Class<?>,T> m) {
-		Class<?> c = toClass(t);
-		if (c != null) {
-			ClassInfo ci = getClassInfo(c);
-			T t2 = ci.getDeclaredAnnotation(a);
-			if (t2 != null)
-				m.put(c, t2);
-
-			findAnnotationsMap(a, c.getSuperclass(), m);
-
-			for (Class<?> c2 : c.getInterfaces())
-				findAnnotationsMap(a, c2, m);
 		}
 	}
 

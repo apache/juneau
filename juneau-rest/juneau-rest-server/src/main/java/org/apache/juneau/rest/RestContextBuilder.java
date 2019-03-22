@@ -114,8 +114,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
+		this.properties = new RestContextProperties();
 
-		properties = new RestContextProperties();
+		ClassInfo rci = getClassInfo(resourceClass);
 
 		// Default values.
 		logger(BasicRestLogger.class);
@@ -135,7 +136,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			VarResolver vr = varResolverBuilder.build();
 
-			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = getAnnotationsMapParentFirst(RestResource.class, resourceClass);
+			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = rci.getAnnotationsMapParentFirst(RestResource.class);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";

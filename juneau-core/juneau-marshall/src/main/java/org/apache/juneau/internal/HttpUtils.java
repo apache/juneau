@@ -17,6 +17,8 @@ import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.reflection.*;
+
 /**
  * Utilities.
  */
@@ -83,9 +85,10 @@ public class HttpUtils {
 			return "";
 		sb.append('(');
 		for (int i = 0; i < pt.length; i++) {
+			ClassInfo pti = getClassInfo(pt[i]);
 			if (i > 0)
 				sb.append(',');
-			sb.append(full ? getReadableClassName(pt[i]) : getSimpleName(pt[i]));
+			sb.append(full ? pti.getReadableName() : pti.getShortName());
 		}
 		sb.append(')');
 		return sb.toString();

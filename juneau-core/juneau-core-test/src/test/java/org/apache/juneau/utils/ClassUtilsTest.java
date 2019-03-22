@@ -229,9 +229,9 @@ public class ClassUtilsTest {
 	//====================================================================================================
 
 	@Test
-	public void getSimpleName() throws Exception {
-		assertEquals("ClassUtilsTest.G1", ClassUtils.getSimpleName(G1.class));
-		assertEquals("ClassUtilsTest.G2", ClassUtils.getSimpleName(G2.class));
+	public void getShortName() throws Exception {
+		assertEquals("ClassUtilsTest.G1", getClassInfo(G1.class).getShortName());
+		assertEquals("ClassUtilsTest.G2", getClassInfo(G2.class).getShortName());
 	}
 
 	public class G1 {}

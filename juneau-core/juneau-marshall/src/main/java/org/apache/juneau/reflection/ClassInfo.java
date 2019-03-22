@@ -31,7 +31,7 @@ import org.apache.juneau.utils.*;
 @BeanIgnore
 public final class ClassInfo {
 
-	private final Type type;
+	private final Type t;
 	private final Class<?> c;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private Map<Class<?>,List<?>> annotationsMap;
@@ -45,7 +45,7 @@ public final class ClassInfo {
 	 * @param t The class type.
 	 */
 	public ClassInfo(Type t) {
-		this.type = t;
+		this.t = t;
 		this.c = ClassUtils.toClass(t);
 	}
 
@@ -96,7 +96,7 @@ public final class ClassInfo {
 	 * @return The wrapped class.
 	 */
 	public Type innerType() {
-		return type;
+		return t;
 	}
 
 	/**
@@ -615,6 +615,49 @@ public final class ClassInfo {
 		}
 	}
 
+	/**
+	 * Same as getAnnotations(Class) except returns the annotations as a map with the keys being the
+	 * class on which the annotation was found.
+	 *
+	 * <p>
+	 * Results are ordered child-to-parent.
+	 *
+	 * @param <T> The annotation class type.
+	 * @param a The annotation class type.
+	 * @return The found matches, or an empty map if annotation was not found.
+	 */
+	public <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMap(Class<T> a) {
+		LinkedHashMap<Class<?>,T> m = new LinkedHashMap<>();
+		findAnnotationsMap(a, m);
+		return m;
+	}
+
+	/**
+	 * Same as {@link #getAnnotationsMap(Class)} except returns results in parent-to-child order.
+	 *
+	 * @param <T> The annotation class type.
+	 * @param a The annotation class type.
+	 * @return The found matches, or an empty map if annotation was not found.
+	 */
+	public <T extends Annotation> LinkedHashMap<Class<?>,T> getAnnotationsMapParentFirst(Class<T> a) {
+		return CollectionUtils.reverse(getAnnotationsMap(a));
+	}
+
+	private <T extends Annotation> void findAnnotationsMap(Class<T> a, Map<Class<?>,T> m) {
+		if (c != null) {
+			T t2 = getDeclaredAnnotation(a);
+			if (t2 != null)
+				m.put(c, t2);
+
+			ClassInfo sci = of(c.getSuperclass());
+			if (sci != null)
+				sci.findAnnotationsMap(a, m);
+
+			for (Class<?> c2 : c.getInterfaces())
+				of(c2).findAnnotationsMap(a, m);
+		}
+	}
+
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
 		if (c != null) {
 			T t2 = getDeclaredAnnotation(a);
@@ -892,10 +935,58 @@ public final class ClassInfo {
 	/**
 	 * Returns the simple name of the underlying class.
 	 *
+	 * <p>
+	 * Returns either {@link Class#getSimpleName()} or {@link Type#getTypeName()} depending on whether
+	 * this is a class or type.
+	 *
 	 * @return The simple name of the underlying class;
 	 */
 	public String getSimpleName() {
-		return c.getSimpleName();
+		return c != null ? c.getSimpleName() : t.getTypeName();
+	}
+
+	/**
+	 * Returns the short name of the underlying class.
+	 *
+	 * <p>
+	 * Similar to {@link #getSimpleName()} but also renders local or member class name prefixes.
+	 *
+	 * @return The short name of the underlying class.
+	 */
+	public String getShortName() {
+		if (t instanceof Class) {
+			if (c.isLocalClass())
+				return of(c.getEnclosingClass()).getShortName() + '.' + c.getSimpleName();
+			if (c.isMemberClass())
+				return of(c.getDeclaringClass()).getShortName() + '.' + c.getSimpleName();
+			return c.getSimpleName();
+		}
+		if (t instanceof ParameterizedType) {
+			StringBuilder sb = new StringBuilder();
+			ParameterizedType pt = (ParameterizedType)t;
+			sb.append(of(pt.getRawType()).getShortName());
+			sb.append("<");
+			boolean first = true;
+			for (Type t2 : pt.getActualTypeArguments()) {
+				if (! first)
+					sb.append(',');
+				first = false;
+				sb.append(of(t2).getShortName());
+			}
+			sb.append(">");
+			return sb.toString();
+		}
+		return null;
+
+	}
+
+	/**
+	 * Shortcut for calling <code><jsm>getReadableClassName</jsm>(c.getName())</code>
+	 *
+	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
+	 */
+	public String getReadableName() {
+		return ClassUtils.getReadableClassName(c != null ? c.getName() : t.getTypeName());
 	}
 
 	/**
