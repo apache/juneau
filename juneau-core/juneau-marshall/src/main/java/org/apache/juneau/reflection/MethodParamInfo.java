@@ -75,7 +75,7 @@ public final class MethodParamInfo {
 	 * @return The method that this parameter belongs to.
 	 */
 	public Method getMethod() {
-		return isConstructor ? null : methodInfo.getInner();
+		return isConstructor ? null : methodInfo.inner();
 	}
 
 	/**
@@ -84,7 +84,7 @@ public final class MethodParamInfo {
 	 * @return The method that this parameter belongs to.
 	 */
 	public Constructor<?> getConstructor() {
-		return isConstructor ? constructorInfo.getInner() : null;
+		return isConstructor ? constructorInfo.inner() : null;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public final class MethodParamInfo {
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		Type t = methodInfo.getInner().getGenericParameterTypes()[index];
+		Type t = methodInfo.inner().getGenericParameterTypes()[index];
 		if (Value.isType(t))
 			return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
 		return ClassInfo.lookup(t).getAnnotation(a);
@@ -238,7 +238,7 @@ public final class MethodParamInfo {
 				for (Annotation a2 :  m2.getParameterAnnotations()[index])
 					if (a.isInstance(a2))
 						l.add((T)a2);
-			Type t = methodInfo.getInner().getGenericParameterTypes()[index];
+			Type t = methodInfo.inner().getGenericParameterTypes()[index];
 			if (Value.isType(t))
 				ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
 			else

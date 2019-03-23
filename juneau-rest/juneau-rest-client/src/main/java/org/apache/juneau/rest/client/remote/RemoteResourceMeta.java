@@ -53,7 +53,7 @@ public class RemoteResourceMeta {
 		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
 		for (MethodInfo m : ci.getPublicMethods())
 			if (m.isPublic())
-				methods.put(m.getInner(), new RemoteMethodMeta(path, m.getInner(), false, "GET"));
+				methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), false, "GET"));
 
 		this.methods = unmodifiableMap(methods);
 		this.path = path;

@@ -476,7 +476,7 @@ public final class ClassMeta<T> implements Type {
 				if (fromStringMethod == null) {
 					for (MethodInfo m : ci.getPublicMethods()) {
 						if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class)) {
-							fromStringMethod = m.getInner();
+							fromStringMethod = m.inner();
 							break;
 						}
 					}
@@ -495,7 +495,7 @@ public final class ClassMeta<T> implements Type {
 			// Find swap() method if present.
 			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && m.hasName("swap") && m.hasFuzzyArgs(BeanSession.class)) {
-					swapMethod = m.getInner();
+					swapMethod = m.inner();
 					swapMethodType = m.getReturnType().inner();
 					break;
 				}
@@ -504,7 +504,7 @@ public final class ClassMeta<T> implements Type {
 			if (swapMethod != null) {
 				for (MethodInfo m : ci.getPublicMethods()) {
 					if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("unswap") && m.hasFuzzyArgs(BeanSession.class, swapMethodType)) {
-						unswapMethod = m.getInner();
+						unswapMethod = m.inner();
 						break;
 					}
 				}
@@ -513,7 +513,7 @@ public final class ClassMeta<T> implements Type {
 			// Find example() method if present.
 			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("example") && m.hasFuzzyArgs(BeanSession.class)) {
-					exampleMethod = m.getInner();
+					exampleMethod = m.inner();
 					break;
 				}
 			}
@@ -523,13 +523,13 @@ public final class ClassMeta<T> implements Type {
 					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
 					f.setAccessible(false);
-					parentPropertyMethod = new Setter.FieldSetter(f.getInner());
+					parentPropertyMethod = new Setter.FieldSetter(f.inner());
 				}
 				if (f.isAnnotationPresent(NameProperty.class)) {
 					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@NameProperty used on invalid field ''{0}''.  Must be static.", f);
 					f.setAccessible(false);
-					namePropertyMethod = new Setter.FieldSetter(f.getInner());
+					namePropertyMethod = new Setter.FieldSetter(f.inner());
 				}
 			}
 
@@ -538,7 +538,7 @@ public final class ClassMeta<T> implements Type {
 					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
 					f.setAccessible(false);
-					exampleField = f.getInner();
+					exampleField = f.inner();
 				}
 			}
 
@@ -548,13 +548,13 @@ public final class ClassMeta<T> implements Type {
 					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
-					parentPropertyMethod = new Setter.MethodSetter(m.getInner());
+					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
 				if (m.hasAnnotation(NameProperty.class)) {
 					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
-					namePropertyMethod = new Setter.MethodSetter(m.getInner());
+					namePropertyMethod = new Setter.MethodSetter(m.inner());
 				}
 			}
 
@@ -563,7 +563,7 @@ public final class ClassMeta<T> implements Type {
 					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
 					m.setAccessible();
-					exampleMethod = m.getInner();
+					exampleMethod = m.inner();
 				}
 			}
 
@@ -581,7 +581,7 @@ public final class ClassMeta<T> implements Type {
 						if (arg == String.class)
 							stringConstructor = cs;
 						else if (swapMethodType != null && swapMethodType.isAssignableFrom(arg))
-							swapConstructor = (Constructor<T>)cs.getInner();
+							swapConstructor = (Constructor<T>)cs.inner();
 						else if (cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
 							numberConstructor = cs;
 							numberConstructorType = getClassInfo(arg).getWrapperIfPrimitive();
@@ -594,7 +594,7 @@ public final class ClassMeta<T> implements Type {
 
 			for (MethodInfo m : ci.getPublicMethods())
 				if (m.isAll(PUBLIC, NOT_DEPRECATED))
-					publicMethods.put(m.getSignature(), m.getInner());
+					publicMethods.put(m.getSignature(), m.inner());
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ici;
@@ -996,7 +996,7 @@ public final class ClassMeta<T> implements Type {
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
 		for (ConstructorInfo cc : ci.getConstructors()) {
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
-				return (Constructor<? extends T>) v.transform(cc.getInner());
+				return (Constructor<? extends T>) v.transform(cc.inner());
 		}
 		return null;
 	}

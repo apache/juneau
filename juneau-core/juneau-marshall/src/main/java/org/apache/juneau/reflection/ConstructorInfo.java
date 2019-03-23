@@ -27,7 +27,7 @@ public final class ConstructorInfo {
 
 	private final ClassInfo declaringClass;
 	private final Constructor<?> c;
-	private final MethodParamInfo[] params;
+	private MethodParamInfo[] params;
 
 	/**
 	 * Constructor.
@@ -47,9 +47,6 @@ public final class ConstructorInfo {
 	public ConstructorInfo(ClassInfo declaringClass, Constructor<?> c) {
 		this.declaringClass = declaringClass;
 		this.c = c;
-		params = new MethodParamInfo[c.getParameterCount()];
-		for (int i = 0; i < c.getParameterCount(); i++)
-			params[i] = new MethodParamInfo(this, i);
 	}
 
 	/**
@@ -82,7 +79,7 @@ public final class ConstructorInfo {
 	 *
 	 * @return The wrapped method.
 	 */
-	public Constructor<?> getInner() {
+	public Constructor<?> inner() {
 		return c;
 	}
 
@@ -101,6 +98,11 @@ public final class ConstructorInfo {
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public MethodParamInfo[] getParams() {
+		if (params == null) {
+			params = new MethodParamInfo[c.getParameterCount()];
+			for (int i = 0; i < c.getParameterCount(); i++)
+				params[i] = new MethodParamInfo(this, i);
+		}
 		return params;
 	}
 
@@ -111,7 +113,7 @@ public final class ConstructorInfo {
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
 	public MethodParamInfo getParam(int index) {
-		return params[index];
+		return getParams()[index];
 	}
 
 	/**

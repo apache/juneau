@@ -31,15 +31,6 @@ public final class FieldInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param f The field being wrapped.
-	 */
-	public FieldInfo(Field f) {
-		this(ClassInfo.lookup(f.getDeclaringClass()), f);
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param f The field being wrapped.
 	 */
@@ -78,7 +69,7 @@ public final class FieldInfo {
 	 *
 	 * @return The wrapped field.
 	 */
-	public Field getInner() {
+	public Field inner() {
 		return f;
 	}
 

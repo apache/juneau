@@ -60,7 +60,7 @@ public class RemoteInterfaceMeta {
 		Map<Method,RemoteInterfaceMethod> methods = new LinkedHashMap<>();
 		for (MethodInfo m : ci.getPublicMethods())
 			if (m.isPublic())
-				methods.put(m.getInner(), new RemoteInterfaceMethod(uri, m.getInner()));
+				methods.put(m.inner(), new RemoteInterfaceMethod(uri, m.inner()));
 
 		Map<String,RemoteInterfaceMethod> methodsByPath = new LinkedHashMap<>();
 		for (RemoteInterfaceMethod rmm : methods.values())

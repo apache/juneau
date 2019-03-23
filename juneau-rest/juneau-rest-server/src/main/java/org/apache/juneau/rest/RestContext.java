@@ -3237,7 +3237,7 @@ public final class RestContext extends BeanContext {
 						if (mi.isNotPublic())
 							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getName());
 
-						RestJavaMethod sm = new RestJavaMethod(resource, mi.getInner(), this);
+						RestJavaMethod sm = new RestJavaMethod(resource, mi.inner(), this);
 						String httpMethod = sm.getHttpMethod();
 
 						// RRPC is a special case where a method returns an interface that we
@@ -3245,12 +3245,12 @@ public final class RestContext extends BeanContext {
 						// We override the CallMethod.invoke() method to insert our logic.
 						if ("RRPC".equals(httpMethod)) {
 
-							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(mi.getInner().getGenericReturnType());
+							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(mi.inner().getGenericReturnType());
 							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
 							if (rim.getMethodsByPath().isEmpty())
 								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getReadableName());
 
-							sm = new RestJavaMethod(resource, mi.getInner(), this) {
+							sm = new RestJavaMethod(resource, mi.inner(), this) {
 
 								@Override
 								int invoke(String pathInfo, RestRequest req, RestResponse res) throws Throwable {
@@ -3317,7 +3317,7 @@ public final class RestContext extends BeanContext {
 						case PRE_CALL: {
 							if (! _preCallMethods.containsKey(sig)) {
 								m.setAccessible();
-								_preCallMethods.put(sig, m.getInner());
+								_preCallMethods.put(sig, m.inner());
 								_preCallMethodParams.add(findParams(m, true, null));
 							}
 							break;
@@ -3325,7 +3325,7 @@ public final class RestContext extends BeanContext {
 						case POST_CALL: {
 							if (! _postCallMethods.containsKey(sig)) {
 								m.setAccessible();
-								_postCallMethods.put(sig, m.getInner());
+								_postCallMethods.put(sig, m.inner());
 								_postCallMethodParams.add(findParams(m, true, null));
 							}
 							break;
@@ -3333,7 +3333,7 @@ public final class RestContext extends BeanContext {
 						case START_CALL: {
 							if (! _startCallMethods.containsKey(sig)) {
 								m.setAccessible();
-								_startCallMethods.put(sig, m.getInner());
+								_startCallMethods.put(sig, m.inner());
 								_startCallMethodParams.add(m.getParameterTypes());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
@@ -3342,7 +3342,7 @@ public final class RestContext extends BeanContext {
 						case END_CALL: {
 							if (! _endCallMethods.containsKey(sig)) {
 								m.setAccessible();
-								_endCallMethods.put(sig, m.getInner());
+								_endCallMethods.put(sig, m.inner());
 								_endCallMethodParams.add(m.getParameterTypes());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
@@ -3351,7 +3351,7 @@ public final class RestContext extends BeanContext {
 						case POST_INIT: {
 							if (! _postInitMethods.containsKey(sig)) {
 								m.setAccessible();
-								_postInitMethods.put(sig, m.getInner());
+								_postInitMethods.put(sig, m.inner());
 								_postInitMethodParams.add(m.getParameterTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
@@ -3360,7 +3360,7 @@ public final class RestContext extends BeanContext {
 						case POST_INIT_CHILD_FIRST: {
 							if (! _postInitChildFirstMethods.containsKey(sig)) {
 								m.setAccessible();
-								_postInitChildFirstMethods.put(sig, m.getInner());
+								_postInitChildFirstMethods.put(sig, m.inner());
 								_postInitChildFirstMethodParams.add(m.getParameterTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
@@ -3369,7 +3369,7 @@ public final class RestContext extends BeanContext {
 						case DESTROY: {
 							if (! _destroyMethods.containsKey(sig)) {
 								m.setAccessible();
-								_destroyMethods.put(sig, m.getInner());
+								_destroyMethods.put(sig, m.inner());
 								_destroyMethodParams.add(m.getParameterTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
@@ -4614,7 +4614,7 @@ public final class RestContext extends BeanContext {
 			}
 
 			if (rp[i] == null && ! isPreOrPost)
-				throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", mi.getInner(), i);
+				throw new RestServletException("Invalid parameter specified for method ''{0}'' at index position {1}", mi.inner(), i);
 		}
 
 		return rp;

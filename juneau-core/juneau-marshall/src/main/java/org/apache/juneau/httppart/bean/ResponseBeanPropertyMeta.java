@@ -27,11 +27,11 @@ import org.apache.juneau.reflection.*;
 public class ResponseBeanPropertyMeta {
 
 	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, HttpPartSchema schema, MethodInfo m) {
-		return new Builder().partType(partType).schema(schema).getter(m.getInner());
+		return new Builder().partType(partType).schema(schema).getter(m.inner());
 	}
 
 	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, MethodInfo m) {
-		return new Builder().partType(partType).getter(m.getInner());
+		return new Builder().partType(partType).getter(m.inner());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

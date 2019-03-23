@@ -391,7 +391,7 @@ class RestParamDefaults {
 		protected MethodObject(MethodInfo m, Type t) throws ServletException {
 			super(OTHER, (MethodParamInfo)null);
 			if (t != String.class)
-				throw new RestServletException("Use of @Method annotation on parameter that is not a String on method ''{0}''", m.getInner());
+				throw new RestServletException("Use of @Method annotation on parameter that is not a String on method ''{0}''", m.inner());
 		}
 
 		@Override /* RestMethodParam */

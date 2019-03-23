@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public final class MethodInfo {
 
-	private final ClassInfo declaringClass;
+	private ClassInfo declaringClass;
 	private final Method m;
 	private MethodParamInfo[] params;
 	private List<Method> matching;
@@ -45,7 +45,7 @@ public final class MethodInfo {
 	 * @param m The method being wrapped.
 	 */
 	public MethodInfo(Method m) {
-		this(ClassInfo.lookup(m.getDeclaringClass()), m);
+		this(null, m);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public final class MethodInfo {
 	 *
 	 * @return The wrapped method.
 	 */
-	public Method getInner() {
+	public Method inner() {
 		return m;
 	}
 
@@ -99,6 +99,8 @@ public final class MethodInfo {
 	 * @return Metadata about the declaring class.
 	 */
 	public ClassInfo getDeclaringClass() {
+		if (declaringClass == null)
+			declaringClass = ClassInfo.of(m.getDeclaringClass());
 		return declaringClass;
 	}
 

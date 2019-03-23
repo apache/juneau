@@ -163,7 +163,7 @@ public class BuilderSwap<T,B> {
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
-		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.getInner(), createBuilderMethod, createPojoMethod);
+		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createPojoMethod);
 	}
 
 
@@ -199,7 +199,7 @@ public class BuilderSwap<T,B> {
 				if (cc.isVisible(cVis) && cc.hasNumArgs(1)) {
 					Class<?>[] pt = cc.getParameterTypes();
 					if (getClassInfo(pt[0]).isChildOf(Builder.class)) {
-						pojoConstructor = cc.getInner();
+						pojoConstructor = cc.inner();
 						builderClass = pt[0];
 					}
 				}
@@ -221,6 +221,6 @@ public class BuilderSwap<T,B> {
 		if (pojoConstructor == null && pojoCreateMethod == null)
 			return null;
 
-		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.getInner(), builderCreateMethod, pojoCreateMethod);
+		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, pojoCreateMethod);
 	}
 }

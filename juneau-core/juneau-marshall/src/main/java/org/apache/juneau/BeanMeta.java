@@ -699,7 +699,7 @@ public class BeanMeta<T> {
 								n = null;  // Could happen if filtered via BEAN_includeProperties/BEAN_excludeProperties
 					}
 					if (n != null)
-						l.add(new BeanMethod(n, methodType, m.getInner()));
+						l.add(new BeanMethod(n, methodType, m.inner()));
 				}
 			}
 		}
@@ -718,13 +718,13 @@ public class BeanMeta<T> {
 				BeanProperty bp = f.getAnnotation(BeanProperty.class);
 				String bpName = bpName(bp);
 
-				if (! (v.isVisible(f.getInner()) || bp != null))
+				if (! (v.isVisible(f.inner()) || bp != null))
 					continue;
 
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
-				l.add(f.getInner());
+				l.add(f.inner());
 			}
 		}
 		return l;
@@ -738,7 +738,7 @@ public class BeanMeta<T> {
 				if (f.isAnnotationPresent(BeanIgnore.class))
 					continue;
 				if (f.hasName(name))
-					return f.getInner();
+					return f.inner();
 			}
 		}
 		return null;
