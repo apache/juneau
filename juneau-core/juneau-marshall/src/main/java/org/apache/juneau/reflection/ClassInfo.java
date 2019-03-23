@@ -55,8 +55,6 @@ public final class ClassInfo {
 	 * @return The constructed class info.
 	 */
 	public static ClassInfo of(Type t) {
-		if (t == null)
-			return null;
 		return new ClassInfo(t);
 	}
 
@@ -105,6 +103,17 @@ public final class ClassInfo {
 	 */
 	public Class<?> inner() {
 		return c;
+	}
+
+	/**
+	 * If this class is a parameterized {@link Value} type, returns the parameterized type.
+	 *
+	 * @return The parameterized type, or this object if this class is not a parameterized {@link Value} type.
+	 */
+	public ClassInfo resolved() {
+		if (Value.isType(t))
+			return of(Value.getParameterType(t));
+		return this;
 	}
 
 	/**

@@ -47,14 +47,11 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Type t, PropertyStore ps) {
-		ClassInfo ci = getClassInfo(t);
+		ClassInfo ci = getClassInfo(t).resolved();
 		if (! ci.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		if (Value.isType(t))
-			b.apply(Value.getParameterType(t));
-		else
-			b.apply(t);
+		b.apply(ci.innerType());
 		for (Response r : ci.getAnnotations(Response.class, true))
 			b.apply(r);
 		return b.build();
@@ -73,11 +70,7 @@ public class ResponseBeanMeta {
 		if (! m.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		Type t = m.getGenericReturnType();
-		if (Value.isType(t))
-			b.apply(Value.getParameterType(t));
-		else
-			b.apply(t);
+		b.apply(m.getGenericReturnTypeInfo().resolved().innerType());
 		for (Response r : m.getAnnotations(Response.class, true))
 			b.apply(r);
 		return b.build();
@@ -96,12 +89,8 @@ public class ResponseBeanMeta {
 		if (! mpi.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		Type t = mpi.getGenericParameterType();
-		if (Value.isType(t))
-			b.apply(Value.getParameterType(t));
-		else
-			b.apply(t);
-		for (Response r : mpi.getAnnotationsParentFirst(Response.class))
+		b.apply(mpi.getGenericParameterTypeInfo().resolved().innerType());
+		for (Response r : mpi.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();
 	}

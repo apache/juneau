@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -31,8 +32,6 @@ public final class MethodParamInfo {
 	private final boolean isConstructor;
 	private int index;
 	private Map<Class<?>,Optional<Annotation>> annotationMap = new ConcurrentHashMap<>();
-	private Map<Class<?>,List<?>> annotationsMap = new ConcurrentHashMap<>();
-	private Map<Class<?>,List<?>> annotationsPfMap = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -106,6 +105,15 @@ public final class MethodParamInfo {
 	}
 
 	/**
+	 * Returns the generic class type of this parameter.
+	 *
+	 * @return The generic class type of this parameter.
+	 */
+	public ClassInfo getGenericParameterTypeInfo() {
+		return isConstructor ? constructorInfo.getGenericParameterTypeInfo(index) : methodInfo.getGenericParameterTypeInfo(index);
+	}
+
+	/**
 	 * Returns the parameter annotations defined on this parameter.
 	 *
 	 * @return The parameter annotations defined on this parameter.
@@ -158,24 +166,17 @@ public final class MethodParamInfo {
 			for (Annotation a2 : constructorInfo.getParameterAnnotations(index))
 				if (a.isInstance(a2))
 					return (T)a2;
-			Type t = constructorInfo.getGenericParameterType(index);
-			if (Value.isType(t))
-				return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
-			return ClassInfo.lookup(t).getAnnotation(a);
+			return constructorInfo.getGenericParameterTypeInfo(index).resolved().getAnnotation(a);
 		}
-		List<Method> methods = methodInfo.getMatching();
-		for (Method m2 : methods)
+		for (Method m2 : methodInfo.getMatching())
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		Type t = methodInfo.inner().getGenericParameterTypes()[index];
-		if (Value.isType(t))
-			return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
-		return ClassInfo.lookup(t).getAnnotation(a);
+		return methodInfo.getGenericParameterTypeInfo(index).resolved().getAnnotation(a);
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified method.
+	 * Returns all annotations of the specified type defined on this method parameter.
 	 *
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
@@ -186,63 +187,79 @@ public final class MethodParamInfo {
 	 * @return
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		List<T> l = (List<T>)annotationsMap().get(a);
-		if (l == null) {
-			l = Collections.unmodifiableList(findAnnotations(a));
-			annotationsMap().put(a, l);
-		}
-		return l;
+		return getAnnotations(a, false);
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified method.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
+	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
+	 * @param parentFirst If <jk>true</jk>, results are in parent-to-child order.
 	 * @return
-	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
+	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		List<T> l = (List<T>)annotationsPfMap().get(a);
-		if (l == null) {
-			l = new ArrayList<>(getAnnotations(a));
-			Collections.reverse(l);
-			l = Collections.unmodifiableList(l);
-			annotationsPfMap().put(a, l);
-		}
-		return l;
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a, boolean parentFirst) {
+		return appendAnnotations(new ArrayList<>(), a, parentFirst);
 	}
 
+	/**
+	 * Finds and appends the specified annotation on the specified method and methods onsuperclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Results are ordered in child-to-parent order.
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
+		return appendAnnotations(l, a, false);
+	}
+
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation.
+	 * @param parentFirst If <jk>true</jk>, results are ordered in parent-to-child order.
+	 * @return The same list.
+	 */
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> List<T> findAnnotations(Class<T> a) {
-		List<T> l = new ArrayList<>();
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		if (isConstructor) {
-			for (Annotation a2 : constructorInfo.getParameterAnnotations(index))
-				if (a.isInstance(a2))
-					l.add((T)a2);
-			Type t = constructorInfo.getGenericParameterType(index);
-			if (Value.isType(t))
-				ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
-			else
-				ClassInfo.of(t).appendAnnotations(l, a);
-		} else {
-			List<Method> methods = methodInfo.getMatching();
-			for (Method m2 : methods)
-				for (Annotation a2 :  m2.getParameterAnnotations()[index])
+			ClassInfo ci = constructorInfo.getGenericParameterTypeInfo(index).resolved();
+			Annotation[] annotations = constructorInfo.getParameterAnnotations(index);
+			if (parentFirst) {
+				ci.appendAnnotations(l, a, true);
+				for (Annotation a2 : annotations)
 					if (a.isInstance(a2))
 						l.add((T)a2);
-			Type t = methodInfo.inner().getGenericParameterTypes()[index];
-			if (Value.isType(t))
-				ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
-			else
-				ClassInfo.of(t).appendAnnotations(l, a);
+			} else {
+				for (Annotation a2 : annotations)
+					if (a.isInstance(a2))
+						l.add((T)a2);
+				ci.appendAnnotations(l, a);
+			}
+		} else {
+			List<Method> methods = methodInfo.getMatching();
+			ClassInfo ci = methodInfo.getGenericParameterTypeInfo(index).resolved();
+			if (parentFirst) {
+				ci.appendAnnotations(l, a, true);
+				for (Method m2 : iterable(methods, true))
+					for (Annotation a2 :  m2.getParameterAnnotations()[index])
+						if (a.isInstance(a2))
+							l.add((T)a2);
+			} else {
+				for (Method m2 : methods)
+					for (Annotation a2 :  m2.getParameterAnnotations()[index])
+						if (a.isInstance(a2))
+							l.add((T)a2);
+				ci.appendAnnotations(l, a);
+			}
 		}
 		return l;
 	}
@@ -251,18 +268,6 @@ public final class MethodParamInfo {
 		if (annotationMap == null)
 			annotationMap = new ConcurrentHashMap<>();
 		return annotationMap;
-	}
-
-	private synchronized Map<Class<?>,List<?>> annotationsMap() {
-		if (annotationsMap == null)
-			annotationsMap = new ConcurrentHashMap<>();
-		return annotationsMap;
-	}
-
-	private synchronized Map<Class<?>,List<?>> annotationsPfMap() {
-		if (annotationsPfMap == null)
-			annotationsPfMap = new ConcurrentHashMap<>();
-		return annotationsPfMap;
 	}
 
 	@Override

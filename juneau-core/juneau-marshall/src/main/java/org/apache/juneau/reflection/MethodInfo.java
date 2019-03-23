@@ -20,7 +20,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.Visibility;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
@@ -223,7 +222,7 @@ public final class MethodInfo {
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return getAnnotations(a, false );
+		return getAnnotations(a, false);
 	}
 
 	/**
@@ -266,17 +265,11 @@ public final class MethodInfo {
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		List<Method> methods = getMatching();
-		if (parentFirst)
-			methods = reverse(new ArrayList<>(methods));
-		for (Method m2 : methods)
+		for (Method m2 : iterable(methods, parentFirst))
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		Type t = m.getGenericReturnType();
-		if (Value.isType(t))
-			ClassInfo.of(Value.getParameterType(t)).appendAnnotations(l, a);
-		else
-			ClassInfo.of(t).appendAnnotations(l, a);
+		getGenericReturnTypeInfo().resolved().appendAnnotations(l, a);
 		return l;
 	}
 
@@ -298,15 +291,11 @@ public final class MethodInfo {
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
-		List<Method> methods = getMatching();
-		for (Method m2 : methods)
+		for (Method m2 : getMatching())
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
 					return (T)a2;
-		Type t = m.getGenericReturnType();
-		if (Value.isType(t))
-			return ClassInfo.lookup(Value.getParameterType(t)).getAnnotation(a);
-		return ClassInfo.lookup(t).getAnnotation(a);
+		return getGenericReturnTypeInfo().resolved().getAnnotation(a);
 	}
 
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
@@ -751,6 +740,16 @@ public final class MethodInfo {
 	}
 
 	/**
+	 * Returns the generic parameter type of the parameter at the specified index as a {@link ClassInfo} object.
+	 *
+	 * @param index The parameter index.
+	 * @return The generic parameter type of the parameter at the specified index.
+	 */
+	public ClassInfo getGenericParameterTypeInfo(int index) {
+		return ClassInfo.of(getGenericParameterType(index));
+	}
+
+	/**
 	 * Returns the parameter annotations on this method.
 	 *
 	 * @return The parameter annotations on this method.
@@ -831,6 +830,15 @@ public final class MethodInfo {
 	 */
 	public Type getGenericReturnType() {
 		return m.getGenericReturnType();
+	}
+
+	/**
+	 * Returns the generic return type of this method as a {@link ClassInfo} object.
+	 *
+	 * @return The generic return type of this method.
+	 */
+	public ClassInfo getGenericReturnTypeInfo() {
+		return ClassInfo.of(getGenericReturnType());
 	}
 
 	/**

@@ -344,19 +344,19 @@ final class SwaggerGenerator {
 					try {
 						if (mpi != null) {
 							if (in == BODY) {
-								for (Body a : mpi.getAnnotationsParentFirst(Body.class))
+								for (Body a : mpi.getAnnotations(Body.class, true))
 									merge(param, a);
 							} else if (in == QUERY) {
-								for (Query a : mpi.getAnnotationsParentFirst(Query.class))
+								for (Query a : mpi.getAnnotations(Query.class, true))
 									merge(param, a);
 							} else if (in == FORM_DATA) {
-								for (FormData a : mpi.getAnnotationsParentFirst(FormData.class))
+								for (FormData a : mpi.getAnnotations(FormData.class, true))
 									merge(param, a);
 							} else if (in == HEADER) {
-								for (Header a : mpi.getAnnotationsParentFirst(Header.class))
+								for (Header a : mpi.getAnnotations(Header.class, true))
 									merge(param, a);
 							} else if (in == PATH) {
-								for (Path a : mpi.getAnnotationsParentFirst(Path.class))
+								for (Path a : mpi.getAnnotations(Path.class, true))
 									merge(param, a);
 							}
 						}
@@ -448,7 +448,7 @@ final class SwaggerGenerator {
 				MethodParamInfo mpi = mp.getMethodParamInfo();
 
 				if (in == RESPONSE_HEADER) {
-					List<ResponseHeader> la = mpi.getAnnotationsParentFirst(ResponseHeader.class);
+					List<ResponseHeader> la = mpi.getAnnotations(ResponseHeader.class, true);
 					Set<Integer> codes = getCodes2(la, 200);
 					for (ResponseHeader a : la) {
 						for (Integer code : codes) {
@@ -459,7 +459,7 @@ final class SwaggerGenerator {
 					}
 
 				} else if (in == RESPONSE) {
-					List<Response> la = mpi.getAnnotationsParentFirst(Response.class);
+					List<Response> la = mpi.getAnnotations(Response.class, true);
 					Set<Integer> codes = getCodes(la, 200);
 					for (Response a : la) {
 						for (Integer code : codes) {

@@ -155,6 +155,16 @@ public final class ConstructorInfo {
 	}
 
 	/**
+	 * Returns the generic parameter type of the parameter at the specified index as a {@link ClassInfo} object.
+	 *
+	 * @param index The parameter index.
+	 * @return The generic parameter type of the parameter at the specified index.
+	 */
+	public ClassInfo getGenericParameterTypeInfo(int index) {
+		return ClassInfo.of(getGenericParameterType(index));
+	}
+
+	/**
 	 * Returns the parameter annotations on this constructor.
 	 *
 	 * @return The parameter annotations on this constructor.
