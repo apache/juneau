@@ -752,7 +752,7 @@ public class BeanMeta<T> {
 
 	private static void findClasses(Class<?> c, LinkedList<ClassInfo> l, Class<?> stopClass) {
 		while (c != null && stopClass != c) {
-			l.addFirst(ClassInfo.lookup(c));
+			l.addFirst(getClassInfo(c));
 			for (Class<?> ci : c.getInterfaces())
 				findClasses(ci, l, stopClass);
 			c = c.getSuperclass();

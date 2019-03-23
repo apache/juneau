@@ -14,10 +14,12 @@ package org.apache.juneau.reflection;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.*;
 import org.junit.*;
 
 public class MethodInfoTest {
@@ -71,5 +73,87 @@ public class MethodInfoTest {
 		String value() default "";
 	}
 
+	//====================================================================================================
+	// getAnnotations()
+	//====================================================================================================
 
+	@Target({PARAMETER,TYPE})
+	@Retention(RUNTIME)
+	public static @interface HI1 {
+		public String value();
+	}
+
+	public static interface HA {
+		public void doX(@HI1("0") HA01 x);
+	}
+
+	@HI1("1") public static class HA01 extends HA02 {}
+	@HI1("2") public static class HA02 implements HA03, HA04 {}
+	@HI1("3") public static interface HA03 {}
+	@HI1("4") public static interface HA04 {}
+
+	@Test
+	public void getAnnotationsOnParameter() throws Exception {
+		ObjectList l = new ObjectList();
+		MethodParamInfo mpi = MethodInfo.of(HA.class.getMethod("doX", HA01.class)).getParam(0);
+		for (HI1 ia : mpi.getAnnotations(HI1.class)) {
+			l.add(ia.value());
+		}
+		assertEquals("['0','1','2','3','4']", l.toString());
+	}
+
+	@Target({PARAMETER,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface HI2 {
+		public String value();
+	}
+
+	public static interface HB {
+		public void doX(@HI2("0") HB01 x);
+	}
+
+	@HI2("1") public static class HB01 extends HB02 {}
+	@HI2("2") public static class HB02 implements HB03, HB04 {}
+	@HI2("3") public static interface HB03 {}
+	@HI2("4") public static interface HB04 {}
+
+	@Test
+	public void getAnnotationsOnParameterInherited() throws Exception {
+		ObjectList l = new ObjectList();
+		MethodParamInfo mpi = MethodInfo.of(HB.class.getMethod("doX", HB01.class)).getParam(0);
+		for (HI2 ib : mpi.getAnnotations(HI2.class)) {
+			l.add(ib.value());
+		}
+		assertEquals("['0','1','2','3','4']", l.toString());
+	}
+
+	//====================================================================================================
+	// findMatchingMethods()
+	//====================================================================================================
+
+	public static interface I1 {
+		public int foo(int x);
+		public int foo(String x);
+		public int foo();
+	}
+	public static class I2 {
+		public int foo(int x) { return 0; }
+		public int foo(String x) {return 0;}
+		public int foo() {return 0;}
+	}
+	public static class I3 extends I2 implements I1 {
+		@Override
+		public int foo(int x) {return 0;}
+		@Override
+		public int foo(String x) {return 0;}
+		@Override
+		public int foo() {return 0;}
+	}
+
+	@Test
+	public void findMatchingMethods() throws Exception {
+		MethodInfo mi = MethodInfo.of(I3.class.getMethod("foo", int.class));
+		assertObjectEquals("['public int org.apache.juneau.reflection.MethodInfoTest$I3.foo(int)','public int org.apache.juneau.reflection.MethodInfoTest$I2.foo(int)','public abstract int org.apache.juneau.reflection.MethodInfoTest$I1.foo(int)']", mi.getMatching());
+	}
 }

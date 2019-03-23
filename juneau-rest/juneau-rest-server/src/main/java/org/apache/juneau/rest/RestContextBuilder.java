@@ -281,7 +281,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
-		ClassInfo rci = ClassInfo.lookup(resourceClass);
+		ClassInfo rci = getClassInfo(resourceClass);
 
 		// Once we have the resource object, we can construct the Widgets.
 		// We want to do that here so that we can update the script/style properties while they're still modifiable.

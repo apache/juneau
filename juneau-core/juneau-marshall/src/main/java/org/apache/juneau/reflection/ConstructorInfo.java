@@ -35,7 +35,7 @@ public final class ConstructorInfo {
 	 * @param c The constructor being wrapped.
 	 */
 	public ConstructorInfo(Constructor<?> c) {
-		this(ClassInfo.lookup(c.getDeclaringClass()), c);
+		this(ClassInfo.of(c.getDeclaringClass()), c);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public final class ConstructorInfo {
 	public static ConstructorInfo of(Constructor<?> c) {
 		if (c == null)
 			return null;
-		return new ConstructorInfo(ClassInfo.lookup(c.getDeclaringClass()), c);
+		return new ConstructorInfo(ClassInfo.of(c.getDeclaringClass()), c);
 	}
 
 	/**

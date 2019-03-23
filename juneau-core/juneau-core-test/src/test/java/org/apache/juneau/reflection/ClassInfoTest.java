@@ -12,13 +12,51 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.testutils.TestUtils.*;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
 import org.junit.*;
 
 public class ClassInfoTest {
+
+	//====================================================================================================
+	// isParentClass(Class, Class)
+	//====================================================================================================
+	@Test
+	public void testIsParentClass() throws Exception {
+
+		// Strict
+		assertTrue(getClassInfo(A.class).isParentOf(A1.class, true));
+		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, true));
+		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, true));
+		assertFalse(getClassInfo(A.class).isParentOf(A.class, true));
+		assertFalse(getClassInfo(A1.class).isParentOf(A1.class, true));
+		assertFalse(getClassInfo(A2.class).isParentOf(A2.class, true));
+		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, true));
+		assertFalse(getClassInfo(A1.class).isParentOf(A.class, true));
+		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, true));
+
+		// Not strict
+		assertTrue(getClassInfo(A.class).isParentOf(A1.class, false));
+		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, false));
+		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, false));
+		assertTrue(getClassInfo(A.class).isParentOf(A.class, false));
+		assertTrue(getClassInfo(A1.class).isParentOf(A1.class, false));
+		assertTrue(getClassInfo(A2.class).isParentOf(A2.class, false));
+		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, false));
+		assertFalse(getClassInfo(A1.class).isParentOf(A.class, false));
+		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, false));
+	}
+
+	public interface A {}
+
+	public static class A1 implements A {}
+
+	public static class A2 extends A1 {}
 
 	//====================================================================================================
 	// getAllMethodsParentFirst()
@@ -91,4 +129,59 @@ public class ClassInfoTest {
 		int a1;
 		int b1;
 	}
+
+	//====================================================================================================
+	// getParentClassesParentFirst()
+	//====================================================================================================
+	@Test
+	public void getParentClassesParentFirst() throws Exception {
+		ClassInfo ci = getClassInfo(CD.class);
+
+		Set<String> s = new TreeSet<>();
+		for (ClassInfo c : ci.getParents(true, true)) {
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
+
+		s = new TreeSet<>();
+		for (ClassInfo c : ci.getParents(true, false)) {
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CB','CC','CD']", s);
+
+		s = new TreeSet<>();
+		for (ClassInfo c : ci.getParents(false, true)) {
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
+
+		s = new TreeSet<>();
+		for (ClassInfo c : ci.getParents(false, false)) {
+			s.add(c.getSimpleName());
+		}
+		assertObjectEquals("['CB','CC','CD']", s);
+	}
+
+	static interface CA1 {}
+	static interface CA2 extends CA1 {}
+	static interface CA3 {}
+	static interface CA4 {}
+	static class CB implements CA1, CA2 {}
+	static class CC extends CB implements CA3 {}
+	static class CD extends CC {}
+
+	//====================================================================================================
+	// getSimpleName()
+	//====================================================================================================
+
+	@Test
+	public void getShortName() throws Exception {
+		assertEquals("ClassInfoTest.G1", getClassInfo(G1.class).getShortName());
+		assertEquals("ClassInfoTest.G2", getClassInfo(G2.class).getShortName());
+	}
+
+	public class G1 {}
+	public static class G2 {}
+
+
 }

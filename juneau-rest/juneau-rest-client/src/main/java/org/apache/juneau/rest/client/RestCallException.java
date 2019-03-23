@@ -169,7 +169,7 @@ public final class RestCallException extends IOException {
 
 	private void doThrow(Class<?> t, String msg) throws Throwable {
 		Constructor<?> c = null;
-		ClassInfo ci = ClassInfo.lookup(t);
+		ClassInfo ci = getClassInfo(t);
 		if (msg != null) {
 			c = ci.findPublicConstructor(String.class);
 			if (c != null)

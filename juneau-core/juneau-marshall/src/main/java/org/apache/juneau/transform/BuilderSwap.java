@@ -135,7 +135,7 @@ public class BuilderSwap<T,B> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
-		ClassInfo bci = ClassInfo.lookup(builderClass);
+		ClassInfo bci = getClassInfo(builderClass);
 		if (bci.isNotPublic())
 			return null;
 
@@ -152,7 +152,7 @@ public class BuilderSwap<T,B> {
 		if (pojoClass == null)
 			return null;
 
-		ClassInfo pci = ClassInfo.lookup(pojoClass);
+		ClassInfo pci = getClassInfo(pojoClass);
 
 		pojoConstructor = pci.findConstructor(cVis, false, builderClass);
 		if (pojoConstructor == null)
@@ -187,7 +187,7 @@ public class BuilderSwap<T,B> {
 		if (b != null && b.value() != Null.class)
 			builderClass = b.value();
 
-		ClassInfo pci = ClassInfo.lookup(pojoClass);
+		ClassInfo pci = getClassInfo(pojoClass);
 
 		builderCreateMethod = pci.getBuilderCreateMethod();
 
@@ -209,7 +209,7 @@ public class BuilderSwap<T,B> {
 		if (builderClass == null)
 			return null;
 
-		ClassInfo bci = ClassInfo.lookup(builderClass);
+		ClassInfo bci = getClassInfo(builderClass);
 		builderConstructor = bci.getNoArgConstructor(cVis);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;

@@ -2034,7 +2034,7 @@ public class BeanContext extends Context {
 
 		Map<String,ClassInfo> icm = new LinkedHashMap<>();
 		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
-			icm.put(e.getKey(), ClassInfo.lookup(e.getValue()));
+			icm.put(e.getKey(), getClassInfo(e.getValue()));
 		implClasses = unmodifiableMap(icm);
 
 		Map<String,String[]> m2 = new HashMap<>();

@@ -80,7 +80,7 @@ public final class FieldInfo {
 	 */
 	public ClassInfo getDeclaringClass() {
 		if (declaringClass == null)
-			declaringClass = ClassInfo.lookup(f.getDeclaringClass());
+			declaringClass = ClassInfo.of(f.getDeclaringClass());
 		return declaringClass;
 	}
 
@@ -341,7 +341,7 @@ public final class FieldInfo {
 	 */
 	public ClassInfo getType() {
 		if (type == null)
-			type = ClassInfo.lookup(f.getType());
+			type = ClassInfo.of(f.getType());
 		return type;
 	}
 

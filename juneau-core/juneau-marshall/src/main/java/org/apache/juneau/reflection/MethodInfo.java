@@ -80,7 +80,7 @@ public final class MethodInfo {
 	public static MethodInfo of(Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(ClassInfo.lookup(m.getDeclaringClass()), m);
+		return new MethodInfo(ClassInfo.of(m.getDeclaringClass()), m);
 	}
 
 	/**

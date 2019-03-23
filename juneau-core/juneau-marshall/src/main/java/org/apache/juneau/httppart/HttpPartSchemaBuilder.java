@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -83,7 +84,7 @@ public class HttpPartSchemaBuilder {
 	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 		if (t instanceof Class<?>) {
 			Class<?> tc = (Class<?>)t;
-			ClassInfo ci = ClassInfo.lookup(tc);
+			ClassInfo ci = getClassInfo(tc);
 			for (Annotation a : ci.getAnnotations(c, true))
 				apply(a);
 		} else if (Value.isType(t)) {

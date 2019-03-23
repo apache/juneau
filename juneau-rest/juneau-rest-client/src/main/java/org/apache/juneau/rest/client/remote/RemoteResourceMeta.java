@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -45,7 +46,7 @@ public class RemoteResourceMeta {
 	public RemoteResourceMeta(Class<?> c) {
 		String path = "";
 
-		ClassInfo ci = ClassInfo.lookup(c);
+		ClassInfo ci = getClassInfo(c);
 		for (RemoteResource r : ci.getAnnotations(RemoteResource.class, true))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());

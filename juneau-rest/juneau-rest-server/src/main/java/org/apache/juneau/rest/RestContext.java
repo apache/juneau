@@ -16,6 +16,7 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.FormattedIllegalArgumentException.*;
 
@@ -3101,7 +3102,7 @@ public final class RestContext extends BeanContext {
 
 			PropertyStore ps = getPropertyStore().builder().add(builder.properties).build();
 			Class<?> resourceClass = resource.getClass();
-			ClassInfo rci = ClassInfo.lookup(resourceClass);
+			ClassInfo rci = getClassInfo(resourceClass);
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority, null));

@@ -153,7 +153,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 		this.innerClass = innerClass;
-		this.info = ClassInfo.lookup(innerClass);
+		this.info = getClassInfo(innerClass);
 		this.beanContext = beanContext;
 		this.extMeta = new MetadataMap();
 		String notABeanReason = null;
@@ -284,7 +284,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
 		this.innerClass = (Class<T>) Object[].class;
-		this.info = ClassInfo.lookup(innerClass);
+		this.info = getClassInfo(innerClass);
 		this.extMeta = new MetadataMap();
 		this.args = args;
 		this.implClass = null;
@@ -390,7 +390,7 @@ public final class ClassMeta<T> implements Type {
 			this.beanContext = beanContext;
 
 			this.implClass = implClass;
-			ClassInfo ici = ClassInfo.lookup(implClass);
+			ClassInfo ici = getClassInfo(implClass);
 			this.childPojoSwaps = childPojoSwaps;
 			if (childPojoSwaps == null) {
 				this.childSwapMap = null;
@@ -401,7 +401,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			Class<T> c = innerClass;
-			ci = ClassInfo.lookup(c);
+			ci = getClassInfo(c);
 
 			if (c.isPrimitive()) {
 				if (c == Boolean.TYPE)
@@ -800,7 +800,7 @@ public final class ClassMeta<T> implements Type {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
-			ClassInfo ci = ClassInfo.of(c);
+			ClassInfo ci = getClassInfo(c);
 
 			if (ci.isChildOf(PojoSwap.class)) {
 				PojoSwap ps = castOrCreate(PojoSwap.class, c);
@@ -990,7 +990,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings({"unchecked"})
 	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
-		ClassInfo ci = ClassInfo.lookup(c);
+		ClassInfo ci = getClassInfo(c);
 		if (ci.isAbstract())
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();

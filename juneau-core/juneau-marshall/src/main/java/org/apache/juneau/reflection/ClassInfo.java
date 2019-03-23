@@ -33,17 +33,16 @@ public final class ClassInfo {
 
 	private final Type t;
 	private final Class<?> c;
+	private List<ClassInfo> interfaceInfos;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private Map<Class<?>,Optional<Annotation>> declaredAnnotationMap;
-
-	private static final Map<Type,ClassInfo> CACHE = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
 	 *
 	 * @param t The class type.
 	 */
-	public ClassInfo(Type t) {
+	protected ClassInfo(Type t) {
 		this.t = t;
 		this.c = ClassUtils.toClass(t);
 	}
@@ -68,23 +67,6 @@ public final class ClassInfo {
 		if (o == null)
 			return null;
 		return new ClassInfo(o.getClass());
-	}
-
-	/**
-	 * Returns the cached instance of the specified type.
-	 *
-	 * @param t The class type.
-	 * @return The cached class info, or <jk>null</jk> if the type is <jk>null</jk>.
-	 */
-	public synchronized static ClassInfo lookup(Type t) {
-		if (t == null)
-			return null;
-		ClassInfo ci = CACHE.get(t);
-		if (ci == null) {
-			ci = of(t);
-			CACHE.put(t, ci);
-		}
-		return ci;
 	}
 
 	/**
@@ -121,7 +103,7 @@ public final class ClassInfo {
 	 *
 	 * @return The parent class info, or <jk>null</jk> if the class has no parent.
 	 */
-	public synchronized ClassInfo getParentInfo() {
+	public ClassInfo getParentInfo() {
 		return of(c.getSuperclass());
 	}
 
@@ -130,12 +112,15 @@ public final class ClassInfo {
 	 *
 	 * @return The implemented interfaces info, or an empty array if the class has no interfaces.
 	 */
-	public synchronized Iterable<ClassInfo> getInterfaceInfos() {
-		Class<?>[] interfaces = c.getInterfaces();
-		List<ClassInfo> l = new ArrayList<>(interfaces.length);
-		for (Class<?> i : interfaces)
-			l.add(of(i));
-		return l;
+	public Iterable<ClassInfo> getInterfaceInfos() {
+		if (interfaceInfos == null) {
+			Class<?>[] interfaces = c.getInterfaces();
+			List<ClassInfo> l = new ArrayList<>(interfaces.length);
+			for (Class<?> i : interfaces)
+				l.add(of(i));
+			interfaceInfos = Collections.unmodifiableList(l);
+		}
+		return interfaceInfos;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

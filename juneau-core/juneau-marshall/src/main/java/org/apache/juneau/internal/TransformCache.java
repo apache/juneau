@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ClassFlags.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.util.concurrent.*;
 
 import org.apache.juneau.reflection.*;
-
-import static org.apache.juneau.internal.ClassFlags.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -119,7 +120,7 @@ public class TransformCache {
 		if (t != null)
 			return t == NULL ? null : t;
 
-		ClassInfo ici = ClassInfo.lookup(ic), oci = ClassInfo.lookup(oc);
+		ClassInfo ici = getClassInfo(ic), oci = getClassInfo(oc);
 
 		for (ClassInfo pic : ici.getParents(false, true)) {
 			t = m.get(pic.inner());
@@ -137,7 +138,7 @@ public class TransformCache {
 			};
 		} else if (ic == String.class) {
 			final Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-			ClassInfo oc2i = ClassInfo.lookup(oc2);
+			ClassInfo oc2i = getClassInfo(oc2);
 			if (oc2.isEnum()) {
 				t = new Transform<String,O>() {
 					@Override

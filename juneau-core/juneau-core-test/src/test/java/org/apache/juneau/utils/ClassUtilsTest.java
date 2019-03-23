@@ -12,19 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
-import java.lang.annotation.*;
-import java.util.*;
-
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflection.*;
 import org.junit.*;
 
 public class ClassUtilsTest {
@@ -76,41 +68,6 @@ public class ClassUtilsTest {
 	}
 
 	//====================================================================================================
-	// isParentClass(Class, Class)
-	//====================================================================================================
-	@Test
-	public void testIsParentClass() throws Exception {
-
-		// Strict
-		assertTrue(getClassInfo(A.class).isParentOf(A1.class, true));
-		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, true));
-		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, true));
-		assertFalse(getClassInfo(A.class).isParentOf(A.class, true));
-		assertFalse(getClassInfo(A1.class).isParentOf(A1.class, true));
-		assertFalse(getClassInfo(A2.class).isParentOf(A2.class, true));
-		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, true));
-		assertFalse(getClassInfo(A1.class).isParentOf(A.class, true));
-		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, true));
-
-		// Not strict
-		assertTrue(getClassInfo(A.class).isParentOf(A1.class, false));
-		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, false));
-		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, false));
-		assertTrue(getClassInfo(A.class).isParentOf(A.class, false));
-		assertTrue(getClassInfo(A1.class).isParentOf(A1.class, false));
-		assertTrue(getClassInfo(A2.class).isParentOf(A2.class, false));
-		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, false));
-		assertFalse(getClassInfo(A1.class).isParentOf(A.class, false));
-		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, false));
-	}
-
-	public interface A {}
-
-	public static class A1 implements A {}
-
-	public static class A2 extends A1 {}
-
-	//====================================================================================================
 	// getReadableClassNames(Object[])
 	//====================================================================================================
 	@Test
@@ -123,50 +80,10 @@ public class ClassUtilsTest {
 	}
 
 	//====================================================================================================
-	// getParentClassesParentFirst()
-	//====================================================================================================
-	@Test
-	public void getParentClassesParentFirst() throws Exception {
-		ClassInfo ci = getClassInfo(CD.class);
-
-		Set<String> s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(true, true)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
-
-		s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(true, false)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CB','CC','CD']", s);
-
-		s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(false, true)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
-
-		s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(false, false)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CB','CC','CD']", s);
-	}
-
-	static interface CA1 {}
-	static interface CA2 extends CA1 {}
-	static interface CA3 {}
-	static interface CA4 {}
-	static class CB implements CA1, CA2 {}
-	static class CC extends CB implements CA3 {}
-	static class CD extends CC {}
-
-	//====================================================================================================
 	// Fuzzy constructor args
 	//====================================================================================================
 	@Test
-	public void newInstanceWithFuzzyArgs() throws Exception {
+	public void castOrCreateWithFuzzyArgs() throws Exception {
 		FA t = null;
 
 		t = ClassUtils.castOrCreate(FA.class, FA.class, true);
@@ -202,15 +119,12 @@ public class ClassUtilsTest {
 
 	public static class FA {
 		int c;
-
 		public FA() {
 			c = 1;
 		}
-
 		public FA(String foo) {
 			c = 2;
 		}
-
 		public FA(int foo, String bar) {
 			c = 3;
 		}
@@ -218,108 +132,8 @@ public class ClassUtilsTest {
 
 	public static class FB {
 		int c;
-
 		public FB(String foo) {
 			c = 1;
 		}
 	}
-
-	//====================================================================================================
-	// getSimpleName()
-	//====================================================================================================
-
-	@Test
-	public void getShortName() throws Exception {
-		assertEquals("ClassUtilsTest.G1", getClassInfo(G1.class).getShortName());
-		assertEquals("ClassUtilsTest.G2", getClassInfo(G2.class).getShortName());
-	}
-
-	public class G1 {}
-	public static class G2 {}
-
-	//====================================================================================================
-	// getAnnotations()
-	//====================================================================================================
-
-	@Target({PARAMETER,TYPE})
-	@Retention(RUNTIME)
-	public static @interface HI1 {
-		public String value();
-	}
-
-	public static interface HA {
-		public void doX(@HI1("0") HA01 x);
-	}
-
-	@HI1("1") public static class HA01 extends HA02 {}
-	@HI1("2") public static class HA02 implements HA03, HA04 {}
-	@HI1("3") public static interface HA03 {}
-	@HI1("4") public static interface HA04 {}
-
-	@Test
-	public void getAnnotationsOnParameter() throws Exception {
-		ObjectList l = new ObjectList();
-		MethodParamInfo mpi = MethodInfo.of(HA.class.getMethod("doX", HA01.class)).getParam(0);
-		for (HI1 ia : mpi.getAnnotations(HI1.class)) {
-			l.add(ia.value());
-		}
-		assertEquals("['0','1','2','3','4']", l.toString());
-	}
-
-	@Target({PARAMETER,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface HI2 {
-		public String value();
-	}
-
-	public static interface HB {
-		public void doX(@HI2("0") HB01 x);
-	}
-
-	@HI2("1") public static class HB01 extends HB02 {}
-	@HI2("2") public static class HB02 implements HB03, HB04 {}
-	@HI2("3") public static interface HB03 {}
-	@HI2("4") public static interface HB04 {}
-
-	@Test
-	public void getAnnotationsOnParameterInherited() throws Exception {
-		ObjectList l = new ObjectList();
-		MethodParamInfo mpi = MethodInfo.of(HB.class.getMethod("doX", HB01.class)).getParam(0);
-		for (HI2 ib : mpi.getAnnotations(HI2.class)) {
-			l.add(ib.value());
-		}
-		assertEquals("['0','1','2','3','4']", l.toString());
-	}
-
-
-	//====================================================================================================
-	// findMatchingMethods()
-	//====================================================================================================
-
-	public static interface I1 {
-		public int foo(int x);
-		public int foo(String x);
-		public int foo();
-	}
-	public static class I2 {
-		public int foo(int x) { return 0; }
-		public int foo(String x) {return 0;}
-		public int foo() {return 0;}
-	}
-	public static class I3 extends I2 implements I1 {
-		@Override
-		public int foo(int x) {return 0;}
-		@Override
-		public int foo(String x) {return 0;}
-		@Override
-		public int foo() {return 0;}
-	}
-
-	@Test
-	public void findMatchingMethods() throws Exception {
-		MethodInfo mi = MethodInfo.of(I3.class.getMethod("foo", int.class));
-		assertObjectEquals("['public int org.apache.juneau.utils.ClassUtilsTest$I3.foo(int)','public int org.apache.juneau.utils.ClassUtilsTest$I2.foo(int)','public abstract int org.apache.juneau.utils.ClassUtilsTest$I1.foo(int)']", mi.getMatching());
-	}
-
 }
