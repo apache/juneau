@@ -106,6 +106,32 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Creates an unmodifiable list from the specified list.
+	 *
+	 * @param l The collection to copy from.
+	 * @return An unmodifiable view of the list, or a {@link Collections#emptyList()}
+	 * 	if the list was empty or <jk>null</jk>.
+	 */
+	public static <T> List<T> unmodifiableList(List<T> l) {
+		if (l == null || l.isEmpty())
+			return Collections.emptyList();
+		return Collections.unmodifiableList(l);
+	}
+
+	/**
+	 * Creates an unmodifiable list from the specified array.
+	 *
+	 * @param l The collection to copy from.
+	 * @return An unmodifiable view of the list, or a {@link Collections#emptyList()}
+	 * 	if the list was empty or <jk>null</jk>.
+	 */
+	public static <T> List<T> unmodifiableList(T[] l) {
+		if (l == null || l.length == 0)
+			return Collections.emptyList();
+		return Collections.unmodifiableList(Arrays.asList(l));
+	}
+
+	/**
 	 * Creates an immutable list from the specified collection.
 	 *
 	 * @param l The collection to copy from.
@@ -116,19 +142,6 @@ public final class CollectionUtils {
 		if (l == null || l.isEmpty())
 			return Collections.emptyList();
 		return Collections.unmodifiableList(new ArrayList<>(l));
-	}
-
-	/**
-	 * Creates an unmodifiable list from the specified collection.
-	 *
-	 * @param l The collection to copy from.
-	 * @return An unmodifiable view of the list, or a {@link Collections#emptyList()}
-	 * 	if the list was empty or <jk>null</jk>.
-	 */
-	public static <T> List<T> unmodifiableList(List<T> l) {
-		if (l == null || l.isEmpty())
-			return Collections.emptyList();
-		return Collections.unmodifiableList(l);
 	}
 
 	/**

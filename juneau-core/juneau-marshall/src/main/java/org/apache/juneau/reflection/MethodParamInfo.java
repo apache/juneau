@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Utility class for introspecting information about a method parameter.
+ * Lightweight utility class for introspecting information about a method parameter.
  */
 @BeanIgnore
 public final class MethodParamInfo {

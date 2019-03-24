@@ -26,13 +26,37 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Utility class for introspecting information about a class.
+ * Lightweight utility class for introspecting information about a class.
+ *
+ * <p>
+ * Provides various convenience methods for introspecting fields/methods/annotations
+ * that aren't provided by the standard Java reflection APIs.
+ *
+ * <p>
+ * Objects are designed to be lightweight to create and threadsafe.
+ *
+ * <h5 class='figure'>
+ * <p class='bpcode w800'>
+ * 	<jc>// Wrap our class inside a ClassInfo.</jc>
+ * 	ClassInfo ci = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ *
+ * 	<jc>// Get all methods in parent-to-child order, sorted alphabetically per class.</jc>
+ * 	<jk>for</jk> (MethodInfo mi : ci.getAllMethodInfos(<jk>true</jk>, <jk>true</jk>)) {
+ * 		<jc>// Do something with it.</jc>
+ * 	}
+ *
+ * 	<jc>// Get all class-level annotations in parent-to-child order.</jc>
+ * 	<jk>for</jk> (MyAnnotation a : ci.getAnnotations(MyAnnotation.<jk>class</jk>, <jk>true</jk>)) {
+ * 		// Do something with it.
+ * 	}
+ * </p>
  */
 @BeanIgnore
 public final class ClassInfo {
 
 	private final Type t;
 	private final Class<?> c;
+	private List<Class<?>> interfaces;
 	private List<ClassInfo> interfaceInfos;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private Map<Class<?>,Optional<Annotation>> declaredAnnotationMap;
@@ -48,13 +72,37 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Same as using the constructor, but returns <jk>null</jk> if the type is <jk>null</jk>.
+	 * Constructor.
+	 *
+	 * @param c The class type.
+	 */
+	protected ClassInfo(Class<?> c) {
+		this.t = c;
+		this.c = c;
+	}
+
+	/**
+	 * Returns a class info wrapper around the specified class type.
 	 *
 	 * @param t The class type.
-	 * @return The constructed class info.
+	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Type t) {
+		if (t == null)
+			return null;
 		return new ClassInfo(t);
+	}
+
+	/**
+	 * Returns a class info wrapper around the specified class type.
+	 *
+	 * @param c The class type.
+	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 */
+	public static ClassInfo of(Class<?> c) {
+		if (c == null)
+			return null;
+		return new ClassInfo(c);
 	}
 
 	/**
@@ -70,18 +118,18 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the wrapped class.
+	 * Returns the wrapped class as a {@link Type}.
 	 *
-	 * @return The wrapped class.
+	 * @return The wrapped class as a {@link Type}.
 	 */
 	public Type innerType() {
 		return t;
 	}
 
 	/**
-	 * Returns the wrapped class.
+	 * Returns the wrapped class as a {@link Class}.
 	 *
-	 * @return The wrapped class or <jk>null</jk> if it's not a class.
+	 * @return The wrapped class as a {@link Class}, or <jk>null</jk> if it's not a class (e.g. it's a {@link ParameterizedType}).
 	 */
 	public Class<?> inner() {
 		return c;
@@ -98,71 +146,142 @@ public final class ClassInfo {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parent classes and interfaces.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns the parent class info.
+	 * Returns the parent class.
 	 *
-	 * @return The parent class info, or <jk>null</jk> if the class has no parent.
+	 * @return The parent class, or <jk>null</jk> if the class has no parent.
 	 */
-	public ClassInfo getParentInfo() {
-		return of(c.getSuperclass());
+	public Class<?> getParent() {
+		return c.getSuperclass();
 	}
 
 	/**
-	 * Returns the interfaces info.
+	 * Returns the parent class wrapped in {@link ClassInfo}.
 	 *
-	 * @return The implemented interfaces info, or an empty array if the class has no interfaces.
+	 * @return The parent class wrapped in {@link ClassInfo}, or <jk>null</jk> if the class has no parent.
 	 */
-	public Iterable<ClassInfo> getInterfaceInfos() {
+	public ClassInfo getParentInfo() {
+		return of(getParent());
+	}
+
+	/**
+	 * Returns a list of interfaces defined on this class.
+	 *
+	 * <p>
+	 * Does not include interfaces defined on parent classes.
+	 *
+	 * @return
+	 * 	An unmodifiable list of interfaces defined on this class.
+	 */
+	public List<Class<?>> getInterfaces() {
+		if (interfaces == null)
+			interfaces = unmodifiableList(c.getInterfaces());
+		return interfaces;
+	}
+
+	/**
+	 * Returns a list of interfaces defined on this class wrapped in {@link ClassInfo}.
+	 *
+	 * <p>
+	 * Does not include interfaces defined on parent classes.
+	 *
+	 * @return
+	 * 	An unmodifiable list of interfaces defined on this class wrapped in {@link ClassInfo}.
+	 */
+	public List<ClassInfo> getInterfaceInfos() {
 		if (interfaceInfos == null) {
-			Class<?>[] interfaces = c.getInterfaces();
-			List<ClassInfo> l = new ArrayList<>(interfaces.length);
+			List<Class<?>> interfaces = getInterfaces();
+			List<ClassInfo> l = new ArrayList<>(interfaces.size());
 			for (Class<?> i : interfaces)
 				l.add(of(i));
-			interfaceInfos = Collections.unmodifiableList(l);
+			interfaceInfos = unmodifiableList(l);
 		}
 		return interfaceInfos;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Classes
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns an iterable over this class and all parent classes in child-to-parent order.
+	 * Returns a list including this class and all parent classes in child-to-parent order.
 	 *
 	 * <p>
 	 * Does not include interfaces.
 	 *
-	 * @return An iterable over this class and all parent classes in child-to-parent order.
+	 * @return An unmodifiable list including this class and all parent classes in child-to-parent order.
 	 */
-	public Iterable<ClassInfo> getParents() {
-		return getParents(false, false);
+	public List<ClassInfo> getParentInfos() {
+		return getParentInfos(false, false);
 	}
 
 	/**
-	 * Returns an iterable over this class and all parent classes.
+	 * Returns a list including this class and all parent classes and interfaces.
 	 *
-	 * @param parentFirst If <jk>true</jk>, results are ordered parent-first.
-	 * @param includeInterfaces If <jk>true</jk>, results include interfaces.
-	 * @return An iterable over this class and all parent classes.
+	 * <h5 class='figure'>Examples</h5>
+	 * <p class='bpcode'>
+	 * 	<jc>// Class hierarchy</jc>
+	 * 	<jk>interface</jk> I1 {}
+	 * 	<jk>interface</jk> I2 <jk>extends</jk> I11 {}
+	 * 	<jk>interface</jk> I3 {}
+	 * 	<jk>interface</jk> I4 {}
+	 * 	<jk>class</jk> CA <jk>implements</jk> I1, I2 {}
+	 * 	<jk>class</jk> CB <jk>extends</jk> CA <jk>implements</jk> I3 {}
+	 * 	<jk>class</jk> CC <jk>extends</jk> CB {}
+	 *
+	 * 	<jc>// Examples</jc>
+	 * 	ClassInfo cc = ClassInfo.<jsm>of</jsm>(CC.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parent last, no interfaces.
+	 * 	cc.getParentInfos();             // CC,CB,CA
+	 * 	cc.getParentInfos(false,false);  // CC,CB,CA
+	 *
+	 * 	<jc>// Parent first, no interfaces.
+	 * 	cc.getParentInfos(true,false);   // CA,CB,CC
+	 *
+	 * 	<jc>// Parent last, include interfaces.
+	 * 	cc.getParentInfos(false,true);   // CC,CB,I3,CA,I1,I2
+	 *
+	 * 	<jc>// Parent first, include interfaces.
+	 * 	cc.getParentInfos(true,true);    // I2,I1,CA,I3,CB,CC
+	 * </p>
+	 *
+	 * @param parentFirst
+	 * 	If <jk>true</jk>, results are ordered parent-first.
+	 * @param includeInterfaces
+	 * 	If <jk>true</jk>, results include interfaces.
+	 * @return An unmodifiable list including this class and all parent classes and interfaces.
 	 */
-	public Iterable<ClassInfo> getParents(boolean parentFirst, boolean includeInterfaces) {
-		return findParents(new ArrayList<>(), c, parentFirst, includeInterfaces);
+	public List<ClassInfo> getParentInfos(boolean parentFirst, boolean includeInterfaces) {
+		return unmodifiableList(findParents(new ArrayList<>(), c, parentFirst, includeInterfaces));
 	}
 
 	private static List<ClassInfo> findParents(List<ClassInfo> l, Class<?> c, boolean parentFirst, boolean includeInterfaces) {
-		if (! parentFirst)
+		if (parentFirst) {
+			if (hasSuperclass(c))
+				findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
+			if (includeInterfaces)
+				for (Class<?> i : iterable(c.getInterfaces(), true))
+					l.add(of(i));
 			l.add(of(c));
-		if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
-			findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
-		if (includeInterfaces)
-			for (Class<?> i : c.getInterfaces())
-				l.add(of(i));
-		if (parentFirst)
+		} else {
 			l.add(of(c));
+			if (includeInterfaces)
+				for (Class<?> i : c.getInterfaces())
+					l.add(of(i));
+			if (hasSuperclass(c))
+				findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
+		}
 		return l;
 	}
 
+	private static boolean hasSuperclass(Class<?> c) {
+		if (c.getSuperclass() == Object.class)
+			return false;
+		if (c.getSuperclass() == null)
+			return false;
+		return true;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Methods
@@ -185,7 +304,7 @@ public final class ClassInfo {
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
 	 * @param parentFirst If <jk>true</jk>, methods on parent classes are listed first.
-	 * @param sort 
+	 * @param sort
 	 * 	If <jk>true</jk>, methods are sorted alphabetically per class.
 	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All declared methods on this class and all parent classes.
@@ -196,7 +315,7 @@ public final class ClassInfo {
 
 	/**
 	 * Returns all methods declared on this class.
-	 * 
+	 *
 	 * <p>
 	 * Methods are ordered per the natural ordering of the underlying JVM.
 	 * <br>Some JVMs (IBM) preserve the declaration order of methods.  Other JVMs (Oracle) do not and return them in random order.
@@ -210,7 +329,7 @@ public final class ClassInfo {
 	/**
 	 * Returns all methods declared on this class.
 	 *
-	 * @param sort 
+	 * @param sort
 	 * 	If <jk>true</jk>, methods are sorted alphabetically.
 	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All methods declared on this class.
@@ -234,7 +353,7 @@ public final class ClassInfo {
 	/**
 	 * Returns all public methods on this class.
 	 *
-	 * @param sort 
+	 * @param sort
 	 * 	If <jk>true</jk>, methods are sorted alphabetically.
 	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All public methods on this class.
@@ -245,7 +364,7 @@ public final class ClassInfo {
 
 	private List<MethodInfo> findAllMethods(boolean parentFirst, boolean sort) {
 		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents(parentFirst, true))
+		for (ClassInfo c : getParentInfos(parentFirst, true))
 			c.findDeclaredMethods(l, sort);
 		return l;
 	}
@@ -401,7 +520,7 @@ public final class ClassInfo {
 	 * Returns all field on this class and all parent classes.
 	 *
 	 * @param parentFirst If <jk>true</jk>, fields are listed in parent-to-child order.
-	 * @param sort 
+	 * @param sort
 	 * 	If <jk>true</jk>, fields are sorted alphabetically.
 	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All declared methods on this class and all parent classes.
@@ -425,11 +544,11 @@ public final class ClassInfo {
 
 	/**
 	 * Returns all fields declared on this class.
-	 * 
+	 *
 	 * <p>
 	 * Fields are ordered per the natural ordering of the underlying JVM.
 	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
-	 * 
+	 *
 	 * @return All fields declared on this class.
 	 */
 	public Iterable<FieldInfo> getDeclaredFields() {
@@ -439,7 +558,7 @@ public final class ClassInfo {
 	/**
 	 * Returns all fields declared on this class.
 	 *
-	 * @param sort 
+	 * @param sort
 	 * 	If <jk>true</jk>, fields are sorted alphabetically.
 	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All fields declared on this class.
@@ -451,7 +570,7 @@ public final class ClassInfo {
 	private List<FieldInfo> findAllFields(List<FieldInfo> l, boolean parentFirst, boolean sort) {
 		if (l == null)
 			l = new ArrayList<>();
-		for (ClassInfo c : getParents(parentFirst, false))
+		for (ClassInfo c : getParentInfos(parentFirst, false))
 			c.findDeclaredFields(l, sort);
 		return l;
 	}
@@ -713,7 +832,7 @@ public final class ClassInfo {
 					return t2;
 			}
 
-			for (ClassInfo c2 : getInterfaceInfos()) {
+			for (Class<?> c2 : getInterfaces()) {
 				t2 = c2.getAnnotation(a);
 				if (t2 != null)
 					return t2;
@@ -1353,7 +1472,6 @@ public final class ClassInfo {
 		return c.isInterface();
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Parameter types.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1365,7 +1483,7 @@ public final class ClassInfo {
 	 * @param oc The class we're trying to resolve the parameter type for.
 	 * @return The resolved real class.
 	 */
-	public Class<?> resolveParameterType(int index, Class<?> oc) {
+	public Class<?> getParameterType(int index, Class<?> oc) {
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -1446,6 +1564,11 @@ public final class ClassInfo {
 				typeMap.put(typeParameters[i], actualTypeArguments[i]);
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return t.toString();
 	}
 
 }

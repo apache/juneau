@@ -139,7 +139,7 @@ public class BuilderSwap<T,B> {
 		if (bci.isNotPublic())
 			return null;
 
-		Class<?> pojoClass = getClassInfo(Builder.class).resolveParameterType(0, builderClass);
+		Class<?> pojoClass = getClassInfo(Builder.class).getParameterType(0, builderClass);
 
 		MethodInfo createPojoMethod, createBuilderMethod;
 		Constructor<?> pojoConstructor;

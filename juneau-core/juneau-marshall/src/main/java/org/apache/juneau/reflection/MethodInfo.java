@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Utility class for introspecting information about a method.
+ * Lightweight utility class for introspecting information about a method.
  */
 @BeanIgnore
 public final class MethodInfo {

@@ -12,51 +12,174 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
-import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.reflection.ClassInfo.*;
 import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.junit.*;
 
 public class ClassInfoTest {
 
+	private static void assertListEquals(String expected, List<?> l) {
+		String actual = l
+			.stream()
+			.map(TO_STRING)
+			.collect(Collectors.joining(","));
+		assertEquals(expected, actual);
+	}
+
+	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
+		@Override
+		public String apply(Object t) {
+			if (t == null)
+				return null;
+			if (t instanceof Class)
+				return ((Class<?>)t).getSimpleName();
+			if (t instanceof ClassInfo)
+				return ((ClassInfo)t).getSimpleName();
+			return t.toString();
+		}
+	};
+
+	//====================================================================================================
+	// of(Type)
+	//====================================================================================================
+
+	public class A1 {}
+	public class A2 extends Value<A1>{};
+
+	@Test
+	public void ofType() {
+		assertEquals("A1", of(A1.class).getSimpleName());
+	}
+
+	@Test
+	public void ofTypeOnObject() {
+		assertEquals("A1", of(new A1()).getSimpleName());
+	}
+
+	@Test
+	public void ofTypeOnNulls() {
+		assertNull(of((Class<?>)null));
+		assertNull(of((Type)null));
+		assertNull(of((Object)null));
+	}
+
+	@Test
+	public void inner() {
+		assertTrue(of(A1.class).inner() instanceof Class);
+		assertTrue(of(A1.class).innerType() instanceof Class);
+	}
+
+	//====================================================================================================
+	// resolved(Type)
+	//====================================================================================================
+
+	@Test
+	public void resolved() {
+		assertEquals("A1", of(A1.class).resolved().getSimpleName());
+		assertEquals("A1", of(A2.class).resolved().getSimpleName());
+	}
+
+
+	//====================================================================================================
+	// getInterfaces()
+	//====================================================================================================
+
+	static interface CA1 {}
+	static interface CA2 extends CA1 {}
+	static interface CA3 {}
+	static interface CA4 {}
+	static class CB implements CA1, CA2 {}
+	static class CC extends CB implements CA3 {}
+	static class CD extends CC {}
+
+	@Test
+	public void getInterfaces() {
+		assertListEquals("", of(CA4.class).getInterfaces());
+		assertListEquals("CA1,CA2", of(CB.class).getInterfaces());
+		assertListEquals("CA3", of(CC.class).getInterfaces());
+		assertListEquals("", of(CD.class).getInterfaces());
+	}
+
+	@Test
+	public void getInterfacesTwice() {
+		ClassInfo cc = of(CC.class);
+		assertListEquals("CA3", cc.getInterfaces());
+		assertListEquals("CA3", cc.getInterfaces());
+	}
+
+	@Test
+	public void getInterfaceInfos() {
+		assertListEquals("", of(CA4.class).getInterfaceInfos());
+		assertListEquals("CA1,CA2", of(CB.class).getInterfaceInfos());
+		assertListEquals("CA3", of(CC.class).getInterfaceInfos());
+		assertListEquals("", of(CD.class).getInterfaceInfos());
+	}
+
+	@Test
+	public void getInterfaceInfosTwice() {
+		ClassInfo cc = of(CC.class);
+		assertListEquals("CA3", cc.getInterfaceInfos());
+		assertListEquals("CA3", cc.getInterfaceInfos());
+	}
+
+
+
+
+	@Test
+	public void getParentInfos() {
+		ClassInfo cd = of(CD.class);
+		assertListEquals("CD,CC,CB", cd.getParentInfos());
+		assertListEquals("CD,CC,CB", cd.getParentInfos(false,false));
+		assertListEquals("CB,CC,CD", cd.getParentInfos(true,false));
+
+		assertListEquals("CD,CC,CA3,CB,CA1,CA2", cd.getParentInfos(false,true));
+		assertListEquals("CA2,CA1,CB,CA3,CC,CD", cd.getParentInfos(true,true));
+	}
+
 	//====================================================================================================
 	// isParentClass(Class, Class)
 	//====================================================================================================
+
+	public interface B1 {}
+	public static class B2 implements B1 {}
+	public static class B3 extends B2 {}
+
+
 	@Test
 	public void testIsParentClass() throws Exception {
 
 		// Strict
-		assertTrue(getClassInfo(A.class).isParentOf(A1.class, true));
-		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, true));
-		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, true));
-		assertFalse(getClassInfo(A.class).isParentOf(A.class, true));
-		assertFalse(getClassInfo(A1.class).isParentOf(A1.class, true));
-		assertFalse(getClassInfo(A2.class).isParentOf(A2.class, true));
-		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, true));
-		assertFalse(getClassInfo(A1.class).isParentOf(A.class, true));
-		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, true));
+		assertTrue(of(B1.class).isParentOf(B2.class, true));
+		assertTrue(of(B2.class).isParentOf(B3.class, true));
+		assertTrue(of(Object.class).isParentOf(B3.class, true));
+		assertFalse(of(B1.class).isParentOf(B1.class, true));
+		assertFalse(of(B2.class).isParentOf(B2.class, true));
+		assertFalse(of(B3.class).isParentOf(B3.class, true));
+		assertFalse(of(B3.class).isParentOf(B2.class, true));
+		assertFalse(of(B2.class).isParentOf(B1.class, true));
+		assertFalse(of(B3.class).isParentOf(Object.class, true));
 
 		// Not strict
-		assertTrue(getClassInfo(A.class).isParentOf(A1.class, false));
-		assertTrue(getClassInfo(A1.class).isParentOf(A2.class, false));
-		assertTrue(getClassInfo(Object.class).isParentOf(A2.class, false));
-		assertTrue(getClassInfo(A.class).isParentOf(A.class, false));
-		assertTrue(getClassInfo(A1.class).isParentOf(A1.class, false));
-		assertTrue(getClassInfo(A2.class).isParentOf(A2.class, false));
-		assertFalse(getClassInfo(A2.class).isParentOf(A1.class, false));
-		assertFalse(getClassInfo(A1.class).isParentOf(A.class, false));
-		assertFalse(getClassInfo(A2.class).isParentOf(Object.class, false));
+		assertTrue(of(B1.class).isParentOf(B2.class, false));
+		assertTrue(of(B2.class).isParentOf(B3.class, false));
+		assertTrue(of(Object.class).isParentOf(B3.class, false));
+		assertTrue(of(B1.class).isParentOf(B1.class, false));
+		assertTrue(of(B2.class).isParentOf(B2.class, false));
+		assertTrue(of(B3.class).isParentOf(B3.class, false));
+		assertFalse(of(B3.class).isParentOf(B2.class, false));
+		assertFalse(of(B2.class).isParentOf(B1.class, false));
+		assertFalse(of(B3.class).isParentOf(Object.class, false));
 	}
 
-	public interface A {}
-
-	public static class A1 implements A {}
-
-	public static class A2 extends A1 {}
 
 	//====================================================================================================
 	// getAllMethodsParentFirst()
@@ -131,53 +254,13 @@ public class ClassInfoTest {
 	}
 
 	//====================================================================================================
-	// getParentClassesParentFirst()
-	//====================================================================================================
-	@Test
-	public void getParentClassesParentFirst() throws Exception {
-		ClassInfo ci = getClassInfo(CD.class);
-
-		Set<String> s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(true, true)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
-
-		s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(true, false)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CB','CC','CD']", s);
-
-		s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(false, true)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CA1','CA2','CA3','CB','CC','CD']", s);
-
-		s = new TreeSet<>();
-		for (ClassInfo c : ci.getParents(false, false)) {
-			s.add(c.getSimpleName());
-		}
-		assertObjectEquals("['CB','CC','CD']", s);
-	}
-
-	static interface CA1 {}
-	static interface CA2 extends CA1 {}
-	static interface CA3 {}
-	static interface CA4 {}
-	static class CB implements CA1, CA2 {}
-	static class CC extends CB implements CA3 {}
-	static class CD extends CC {}
-
-	//====================================================================================================
 	// getSimpleName()
 	//====================================================================================================
 
 	@Test
 	public void getShortName() throws Exception {
-		assertEquals("ClassInfoTest.G1", getClassInfo(G1.class).getShortName());
-		assertEquals("ClassInfoTest.G2", getClassInfo(G2.class).getShortName());
+		assertEquals("ClassInfoTest.G1", of(G1.class).getShortName());
+		assertEquals("ClassInfoTest.G2", of(G2.class).getShortName());
 	}
 
 	public class G1 {}
