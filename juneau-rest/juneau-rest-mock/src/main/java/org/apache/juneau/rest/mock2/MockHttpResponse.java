@@ -10,28 +10,44 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.rest.mock2;
+
+import java.util.*;
 
 /**
- * Represent the basic connection for mock HTTP requests.
+ * Represent the basic interface for an HTTP response.
  *
  * <p>
  * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
  * class to send and receive mocked requests using the <code>MockRest</code> interface.
- *
- * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
  */
-@Deprecated
-public interface MockHttpConnection {
+public interface MockHttpResponse {
 
 	/**
-	 * Creates a mocked HTTP request.
+	 * Returns the status code of the response.
 	 *
-	 * @param method The HTTP request method.
-	 * @param path The HTTP request path.
-	 * @param body The HTTP request body.
-	 * @return A new mock request.
-	 * @throws Exception
+	 * @return The status code of the response.
 	 */
-	MockHttpRequest request(String method, String path, Object body) throws Exception;
+	int getStatus();
+
+	/**
+	 * Returns the status message of the response.
+	 *
+	 * @return The status message of the response.
+	 */
+	String getMessage();
+
+	/**
+	 * Returns the headers of the response.
+	 *
+	 * @return The headers of the response.
+	 */
+	Map<String,String[]> getHeaders();
+
+	/**
+	 * Returns the body of the response.
+	 *
+	 * @return The body of the response.
+	 */
+	byte[] getBody();
 }

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.mock2;
+package org.apache.juneau.rest.client.mock;
 
 import java.io.*;
 import java.util.*;
@@ -19,12 +19,16 @@ import org.apache.http.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpClientConnection} specifically for use in mocked connections using the {@link MockHttpConnection} class.
  *
  * This implementation is NOT thread safe.
+ * 
+ * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
  */
+@Deprecated
 public class MockHttpClientConnection implements HttpClientConnection {
 
 	private final MockHttpConnection c;
@@ -78,7 +82,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 	public void sendRequestHeader(HttpRequest request) throws HttpException, IOException {
 		try {
 			RequestLine rl = request.getRequestLine();
-			req = c.request(rl.getMethod(), rl.getUri(), null, null);
+			req = c.request(rl.getMethod(), rl.getUri(), null);
 			for (Header h : request.getAllHeaders())
 				req.header(h.getName(), h.getValue());
 		} catch (Exception e) {

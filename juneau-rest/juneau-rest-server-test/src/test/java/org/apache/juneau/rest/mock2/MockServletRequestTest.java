@@ -10,12 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.mock;
+package org.apache.juneau.rest.mock2;
 
 import static org.apache.juneau.rest.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 
-import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
 

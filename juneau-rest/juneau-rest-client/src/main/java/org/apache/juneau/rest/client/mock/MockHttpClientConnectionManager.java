@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.mock2;
+package org.apache.juneau.rest.client.mock;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -19,12 +19,16 @@ import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.http.conn.routing.*;
 import org.apache.http.protocol.*;
+import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpClientConnectionManager} specifically for use in mocked connections using the {@link MockHttpConnection} class.
  *
  * This implementation is NOT thread safe.
+ * 
+ * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
  */
+@Deprecated
 public class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
 	final ConnectionRequest cr;

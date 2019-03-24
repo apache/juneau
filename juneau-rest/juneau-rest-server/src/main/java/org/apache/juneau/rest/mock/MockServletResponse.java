@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.mock2;
+package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -24,15 +24,19 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
+import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpServletResponse} for mocking purposes.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='link'>{@doc juneau-rest-mock.MockRest}
+ * 	<li class='link'>{@doc juneau-rest-server.UnitTesting}
  * </ul>
+ *
+ * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
 */
+@Deprecated
 public class MockServletResponse implements HttpServletResponse, MockHttpResponse {
 
 	private String characterEncoding = "UTF-8";
@@ -251,7 +255,7 @@ public class MockServletResponse implements HttpServletResponse, MockHttpRespons
 	@Override /* HttpServletResponse */
 	public Collection<String> getHeaders(String name) {
 		String[] s = headerMap.get(name);
-		return s == null ? Collections.emptyList() : Arrays.asList(s);
+		return s == null ? Collections.EMPTY_LIST : Arrays.asList(s);
 	}
 
 	@Override /* HttpServletResponse */
