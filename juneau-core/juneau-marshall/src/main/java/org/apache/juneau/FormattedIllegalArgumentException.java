@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 
+import org.apache.juneau.reflection.*;
+
 /**
  * Subclass of illegal-argument exceptions that take in a message and zero or more arguments.
  */
@@ -43,5 +45,16 @@ public class FormattedIllegalArgumentException extends IllegalArgumentException 
 	public FormattedIllegalArgumentException(Throwable causedBy, String message, Object...args) {
 		this(message, args);
 		initCause(causedBy);
+	}
+
+	/**
+	 * Throws a {@link FormattedIllegalArgumentException} if the specified method does not only contain args of the specified types.
+	 *
+	 * @param m The method to check.
+	 * @param args The allowed args.
+	 */
+	public static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
+		if (! m.argsOnlyOfType(args))
+			throw new FormattedIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
 	}
 }

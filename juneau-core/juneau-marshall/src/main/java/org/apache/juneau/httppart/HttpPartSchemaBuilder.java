@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -24,9 +25,9 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.jsonschema.annotation.SubItems;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.httppart.HttpPartSchema.*;
 import org.apache.juneau.httppart.HttpPartSchema.Type;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -64,9 +65,9 @@ public class HttpPartSchemaBuilder {
 		return new HttpPartSchema(this);
 	}
 
-	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, Method m, int index) {
-		apply(c, m.getGenericParameterTypes()[index]);
-		for (Annotation a :  m.getParameterAnnotations()[index])
+	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, MethodParamInfo mpi) {
+		apply(c, mpi.getGenericParameterType());
+		for (Annotation a : mpi.getParameterAnnotations())
 			if (c.isInstance(a))
 				apply(a);
 		return this;
@@ -83,7 +84,8 @@ public class HttpPartSchemaBuilder {
 	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 		if (t instanceof Class<?>) {
 			Class<?> tc = (Class<?>)t;
-			for (Annotation a : ClassUtils.getAnnotationsParentFirst(c, tc))
+			ClassInfo ci = getClassInfo(tc);
+			for (Annotation a : ci.getAnnotations(c, true))
 				apply(a);
 		} else if (Value.isType(t)) {
 			apply(c, Value.getParameterType(t));

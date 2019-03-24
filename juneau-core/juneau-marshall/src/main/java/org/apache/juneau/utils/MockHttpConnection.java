@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import java.util.*;
-
 /**
  * Represent the basic connection for mock HTTP requests.
  *
  * <p>
  * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
  * class to send and receive mocked requests using the <code>MockRest</code> interface.
+ *
+ * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
  */
+@Deprecated
 public interface MockHttpConnection {
 
 	/**
@@ -28,10 +29,9 @@ public interface MockHttpConnection {
 	 *
 	 * @param method The HTTP request method.
 	 * @param path The HTTP request path.
-	 * @param headers Optional HTTP request headers.
 	 * @param body The HTTP request body.
 	 * @return A new mock request.
 	 * @throws Exception
 	 */
-	MockHttpRequest request(String method, String path, Map<String,Object> headers, Object body) throws Exception;
+	MockHttpRequest request(String method, String path, Object body) throws Exception;
 }

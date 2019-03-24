@@ -32,7 +32,7 @@ public final class RemoteMethodBeanReturn {
 	private final HttpPartParser parser;
 
 	RemoteMethodBeanReturn(Class<? extends HttpPartParser> parser, ResponseBeanMeta meta) {
-		this.parser = newInstance(HttpPartParser.class, parser);
+		this.parser = castOrCreate(HttpPartParser.class, parser);
 		this.meta = meta;
 	}
 

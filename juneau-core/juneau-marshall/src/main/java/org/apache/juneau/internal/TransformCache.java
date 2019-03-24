@@ -12,10 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ClassFlags.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import java.util.concurrent.*;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ClassFlags.*;
+import org.apache.juneau.reflection.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -118,11 +120,12 @@ public class TransformCache {
 		if (t != null)
 			return t == NULL ? null : t;
 
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(ic, false, true); i.hasNext(); ) {
-			Class pic = i.next();
-			t = m.get(pic);
+		ClassInfo ici = getClassInfo(ic), oci = getClassInfo(oc);
+
+		for (ClassInfo pic : ici.getParents(false, true)) {
+			t = m.get(pic.inner());
 			if (t != null) {
-				m.put(pic, t);
+				m.put(pic.inner(), t);
 				return t == NULL ? null : t;
 			}
 		}
@@ -134,7 +137,8 @@ public class TransformCache {
 				}
 			};
 		} else if (ic == String.class) {
-			final Class<?> oc2 = hasPrimitiveWrapper(oc) ? getPrimitiveWrapper(oc) : oc;
+			final Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
+			ClassInfo oc2i = getClassInfo(oc2);
 			if (oc2.isEnum()) {
 				t = new Transform<String,O>() {
 					@Override
@@ -143,7 +147,7 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final Method fromStringMethod = findPublicFromStringMethod(oc2);
+				final MethodInfo fromStringMethod = oc2i.getFromStringMethod();
 				if (fromStringMethod != null) {
 					t = new Transform<String,O>() {
 						@Override
@@ -160,11 +164,11 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			Method createMethod = findPublicStaticCreateMethod(oc, ic, "create");
+			MethodInfo createMethod = oci.getStaticCreateMethod(ic, "create");
 			if (createMethod == null)
-				createMethod = findPublicStaticCreateMethod(oc, ic, "from" + ic.getSimpleName());
+				createMethod = oci.getStaticCreateMethod(ic, "from" + ic.getSimpleName());
 			if (createMethod != null) {
-				final Method cm = createMethod;
+				final Method cm = createMethod.inner();
 				t = new Transform<I,O>() {
 					@Override
 					public O transform(Object context, I in) {
@@ -176,9 +180,9 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final Constructor<?> c = findPublicConstructor(oc, ic);
-				final boolean isMemberClass = oc.isMemberClass() && ! isStatic(oc);
-				if (c != null && ! isDeprecated(c)) {
+				final Constructor<?> c = oci.findPublicConstructor(ic);
+				final boolean isMemberClass = oci.isMemberClass() && ! oci.isStatic();
+				if (c != null && ! c.isAnnotationPresent(Deprecated.class)) {
 					t = new Transform<I,O>() {
 						@Override
 						public O transform(Object outer, I in) {
@@ -197,9 +201,9 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			for (Method m2 : getAllMethods(ic, false)) {
-				if (isAll(m2, PUBLIC, NOT_STATIC, HAS_NO_ARGS, NOT_DEPRECATED) && m2.getName().startsWith("to") && m2.getReturnType() == oc) {
-					final Method m3 = m2;
+			for (MethodInfo m2 : ici.getAllMethods()) {
+				if (m2.isAll(PUBLIC, NOT_STATIC, HAS_NO_ARGS, NOT_DEPRECATED) && m2.getName().startsWith("to") && m2.hasReturnType(oc)) {
+					final Method m3 = m2.inner();
 					t = new Transform<I,O>() {
 						@Override
 						public O transform(Object outer, I in) {

@@ -19,7 +19,6 @@ import org.apache.http.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpClientConnection} specifically for use in mocked connections using the {@link MockHttpConnection} class.
@@ -80,7 +79,7 @@ public class MockHttpClientConnection implements HttpClientConnection {
 		try {
 			RequestLine rl = request.getRequestLine();
 			req = c.request(rl.getMethod(), rl.getUri(), null, null);
-			for (Header h : request.getAllHeaders()) 
+			for (Header h : request.getAllHeaders())
 				req.header(h.getName(), h.getValue());
 		} catch (Exception e) {
 			throw new HttpException(e.getMessage(), e);

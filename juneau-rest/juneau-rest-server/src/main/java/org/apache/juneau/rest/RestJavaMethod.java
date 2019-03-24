@@ -42,6 +42,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.internal.HttpUtils;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.util.RestUtils;
@@ -143,10 +144,11 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
+			MethodInfo mi = getMethodInfo(method);
 
 			try {
 
-				RestMethod m = getAnnotation(RestMethod.class, method);
+				RestMethod m = mi.getAnnotation(RestMethod.class);
 				if (m == null)
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
@@ -174,7 +176,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				widgets = new HashMap<>(context.getWidgets());
 				for (Class<? extends Widget> wc : hd.widgets()) {
-					Widget w = beanContext.newInstance(Widget.class, wc);
+					Widget w = castOrCreate(Widget.class, wc);
 					widgets.put(w.getName(), w);
 					hdb.script("INHERIT", "$W{"+w.getName()+".script}");
 					hdb.style("INHERIT", "$W{"+w.getName()+".style}");
@@ -217,23 +219,23 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				converters = new RestConverter[m.converters().length];
 				for (int i = 0; i < converters.length; i++)
-					converters[i] = beanContext.newInstance(RestConverter.class, m.converters()[i]);
+					converters[i] = castOrCreate(RestConverter.class, m.converters()[i]);
 
 				guards = new RestGuard[m.guards().length];
 				for (int i = 0; i < guards.length; i++)
-					guards[i] = beanContext.newInstance(RestGuard.class, m.guards()[i]);
+					guards[i] = castOrCreate(RestGuard.class, m.guards()[i]);
 
 				List<RestMatcher> optionalMatchers = new LinkedList<>(), requiredMatchers = new LinkedList<>();
 				for (int i = 0; i < m.matchers().length; i++) {
 					Class<? extends RestMatcher> c = m.matchers()[i];
-					RestMatcher matcher = beanContext.newInstance(RestMatcher.class, c, true, servlet, method);
+					RestMatcher matcher = castOrCreate(RestMatcher.class, c, true, servlet, method);
 					if (matcher.mustMatch())
 						requiredMatchers.add(matcher);
 					else
 						optionalMatchers.add(matcher);
 				}
 				if (! m.clientVersion().isEmpty())
-					requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), method));
+					requiredMatchers.add(new ClientVersionMatcher(context.getClientVersionHeader(), mi));
 
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
@@ -392,13 +394,13 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					? immutableList(MediaType.forStrings(resolveVars(vr, m.consumes())))
 					: parsers.getSupportedMediaTypes();
 
-				methodParams = context.findParams(method, false, pathPattern);
+				methodParams = context.findParams(mi, false, pathPattern);
 
-				if (hasAnnotation(Response.class, method))
-					responseMeta = ResponseBeanMeta.create(method, serializers.getPropertyStore());
+				if (mi.hasAnnotation(Response.class))
+					responseMeta = ResponseBeanMeta.create(mi, serializers.getPropertyStore());
 
 				// Need this to access methods in anonymous inner classes.
-				setAccessible(method, true);
+				mi.setAccessible();
 			} catch (RestServletException e) {
 				throw e;
 			} catch (Exception e) {
@@ -699,7 +701,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	}
 
 	static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, PropertyStore ps, HttpPartSerializer _default) {
-		HttpPartSerializer hps = ClassUtils.newInstance(HttpPartSerializer.class, c, true, ps);
+		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true, ps);
 		return hps == null ? _default : hps;
 	}
 }

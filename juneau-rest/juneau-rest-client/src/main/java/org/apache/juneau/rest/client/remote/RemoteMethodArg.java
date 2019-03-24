@@ -13,12 +13,12 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.httppart.HttpPartType.*;
 
-import java.lang.reflect.*;
+import static org.apache.juneau.httppart.HttpPartType.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a REST proxy class.
@@ -49,7 +49,7 @@ public final class RemoteMethodArg {
 	private static HttpPartSerializer createSerializer(HttpPartType partType, HttpPartSchema schema) {
 		if (schema == null)
 			return null;
-		return newInstance(HttpPartSerializer.class, schema.getSerializer());
+		return castOrCreate(HttpPartSerializer.class, schema.getSerializer());
 	}
 
 	/**
@@ -107,17 +107,18 @@ public final class RemoteMethodArg {
 		return schema;
 	}
 
-	static RemoteMethodArg create(Method m, int i) {
-		if (hasAnnotation(Header.class, m, i)) {
-			return new RemoteMethodArg(i, HEADER, HttpPartSchema.create(Header.class, m, i));
-		} else if (hasAnnotation(Query.class, m, i)) {
-			return new RemoteMethodArg(i, QUERY, HttpPartSchema.create(Query.class, m, i));
-		} else if (hasAnnotation(FormData.class, m, i)) {
-			return new RemoteMethodArg(i, FORMDATA, HttpPartSchema.create(FormData.class, m, i));
-		} else if (hasAnnotation(Path.class, m, i)) {
-			return new RemoteMethodArg(i, PATH, HttpPartSchema.create(Path.class, m, i));
-		} else if (hasAnnotation(Body.class, m, i)) {
-			return new RemoteMethodArg(i, BODY, HttpPartSchema.create(Body.class, m, i));
+	static RemoteMethodArg create(MethodParamInfo mpi) {
+		int i = mpi.getIndex();
+		if (mpi.hasAnnotation(Header.class)) {
+			return new RemoteMethodArg(i, HEADER, HttpPartSchema.create(Header.class, mpi));
+		} else if (mpi.hasAnnotation(Query.class)) {
+			return new RemoteMethodArg(i, QUERY, HttpPartSchema.create(Query.class, mpi));
+		} else if (mpi.hasAnnotation(FormData.class)) {
+			return new RemoteMethodArg(i, FORMDATA, HttpPartSchema.create(FormData.class, mpi));
+		} else if (mpi.hasAnnotation(Path.class)) {
+			return new RemoteMethodArg(i, PATH, HttpPartSchema.create(Path.class, mpi));
+		} else if (mpi.hasAnnotation(Body.class)) {
+			return new RemoteMethodArg(i, BODY, HttpPartSchema.create(Body.class, mpi));
 		}
 		return null;
 	}

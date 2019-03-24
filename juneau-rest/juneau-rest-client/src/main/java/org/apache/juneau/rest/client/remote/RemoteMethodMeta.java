@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
@@ -23,6 +24,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Contains the meta-data about a Java method on a REST proxy class.
@@ -86,7 +88,9 @@ public class RemoteMethodMeta {
 
 		Builder(String parentPath, Method m, boolean useMethodSignatures, String defaultMethod) {
 
-			RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
+			MethodInfo mi = getMethodInfo(m);
+
+			RemoteMethod rm = mi.getAnnotation(RemoteMethod.class);
 
 			httpMethod = rm == null ? "" : rm.method();
 			path = rm == null ? "" : rm.path();
@@ -105,12 +109,12 @@ public class RemoteMethodMeta {
 				throw new RemoteMetadataException(m,
 					"Invalid value specified for @RemoteMethod(httpMethod) annotation.  Valid values are [DELTE,GET,POST,PUT].");
 
-			methodReturn = new RemoteMethodReturn(m);
+			methodReturn = new RemoteMethodReturn(mi);
 
 			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
 
-			for (int i = 0; i < m.getParameterTypes().length; i++) {
-				RemoteMethodArg rma = RemoteMethodArg.create(m, i);
+			for (MethodParamInfo mpi : mi.getParams()) {
+				RemoteMethodArg rma = RemoteMethodArg.create(mpi);
 				boolean annotated = false;
 				if (rma != null) {
 					annotated = true;
@@ -128,13 +132,13 @@ public class RemoteMethodMeta {
 					else
 						annotated = false;
 				}
-				RequestBeanMeta rmba = RequestBeanMeta.create(m, i, PropertyStore.DEFAULT);
+				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, PropertyStore.DEFAULT);
 				if (rmba != null) {
 					annotated = true;
-					requestArgs.add(new RemoteMethodBeanArg(i, null, rmba));
+					requestArgs.add(new RemoteMethodBeanArg(mpi.getIndex(), null, rmba));
 				}
 				if (! annotated) {
-					otherArgs.add(new RemoteMethodArg(i, BODY, null));
+					otherArgs.add(new RemoteMethodArg(mpi.getIndex(), BODY, null));
 				}
 			}
 		}

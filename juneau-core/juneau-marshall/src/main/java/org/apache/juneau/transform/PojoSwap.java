@@ -20,6 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -112,6 +113,7 @@ public abstract class PojoSwap<T,S> {
 
 	private final Class<T> normalClass;
 	private final Class<?> swapClass;
+	private final ClassInfo normalClassInfo, swapClassInfo;
 	private ClassMeta<?> swapClassMeta;
 
 	// Unfortunately these cannot be made final because we want to allow for PojoSwaps with no-arg constructors
@@ -123,8 +125,11 @@ public abstract class PojoSwap<T,S> {
 	 * Constructor.
 	 */
 	protected PojoSwap() {
-		normalClass = (Class<T>)resolveParameterType(PojoSwap.class, 0, this.getClass());
-		swapClass = resolveParameterType(PojoSwap.class, 1, this.getClass());
+		ClassInfo psi = getClassInfo(PojoSwap.class);
+		normalClass = (Class<T>)psi.resolveParameterType(0, this.getClass());
+		swapClass = psi.resolveParameterType(1, this.getClass());
+		normalClassInfo = getClassInfo(normalClass);
+		swapClassInfo = getClassInfo(swapClass);
 		forMediaTypes = forMediaTypes();
 		template = withTemplate();
 	}
@@ -138,6 +143,8 @@ public abstract class PojoSwap<T,S> {
 	protected PojoSwap(Class<T> normalClass, Class<?> swapClass) {
 		this.normalClass = normalClass;
 		this.swapClass = swapClass;
+		normalClassInfo = getClassInfo(normalClass);
+		swapClassInfo = getClassInfo(swapClass);
 		this.forMediaTypes = forMediaTypes();
 		this.template = withTemplate();
 	}
@@ -345,8 +352,8 @@ public abstract class PojoSwap<T,S> {
 	 *
 	 * @return The normal form of this class.
 	 */
-	public Class<T> getNormalClass() {
-		return normalClass;
+	public ClassInfo getNormalClass() {
+		return normalClassInfo;
 	}
 
 	/**
@@ -358,8 +365,8 @@ public abstract class PojoSwap<T,S> {
 	 *
 	 * @return The transformed form of this class.
 	 */
-	public Class<?> getSwapClass() {
-		return swapClass;
+	public ClassInfo getSwapClass() {
+		return swapClassInfo;
 	}
 
 	/**
@@ -390,7 +397,7 @@ public abstract class PojoSwap<T,S> {
 	public boolean isNormalObject(Object o) {
 		if (o == null)
 			return false;
-		return isParentClass(normalClass, o.getClass());
+		return normalClassInfo.isParentOf(o.getClass());
 	}
 
 	/**
@@ -404,7 +411,7 @@ public abstract class PojoSwap<T,S> {
 	public boolean isSwappedObject(Object o) {
 		if (o == null)
 			return false;
-		return isParentClass(swapClass, o.getClass());
+		return swapClassInfo.isParentOf(o.getClass());
 	}
 
 

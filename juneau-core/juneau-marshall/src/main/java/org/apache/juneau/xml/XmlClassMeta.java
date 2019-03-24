@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -39,9 +38,8 @@ public class XmlClassMeta extends ClassMetaExtended {
 	 */
 	public XmlClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		Class<?> c = getInnerClass();
-		this.namespace = findNamespace(c);
-		this.xml = ClassUtils.getAnnotation(Xml.class, c);
+		this.namespace = findNamespace(cm);
+		this.xml = cm.getInfo().getAnnotation(Xml.class);
 		if (xml != null) {
 			this.format = xml.format();
 			this.childName = nullIfEmpty(xml.childName());
@@ -100,12 +98,12 @@ public class XmlClassMeta extends ClassMetaExtended {
 		return namespace;
 	}
 
-	private static Namespace findNamespace(Class<?> c) {
-		if (c == null)
+	private static Namespace findNamespace(ClassMeta<?> cm) {
+		if (cm == null)
 			return null;
-
-		List<Xml> xmls = getAnnotations(Xml.class, c);
-		List<XmlSchema> schemas = getAnnotations(XmlSchema.class, c);
+		ClassInfo ci = cm.getInfo();
+		List<Xml> xmls = ci.getAnnotations(Xml.class);
+		List<XmlSchema> schemas = ci.getAnnotations(XmlSchema.class);
 		return XmlUtils.findNamespace(xmls, schemas);
 	}
 }

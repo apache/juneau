@@ -51,7 +51,7 @@ public class VarResolverBuilder {
 	@SuppressWarnings("unchecked")
 	public VarResolverBuilder vars(Class<?>...vars) {
 		for (Class<?> v : vars) {
-			newInstance(Var.class, v);
+			castOrCreate(Var.class, v);
 			this.vars.add((Class<? extends Var>)v);
 		}
 		return this;

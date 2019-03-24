@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Represents the metadata about the returned object of a method on a remote proxy interface.
@@ -34,11 +33,11 @@ public final class RemoteMethodReturn {
 	private final RemoteReturn returnValue;
 	private final ResponseBeanMeta meta;
 
-	RemoteMethodReturn(Method m) {
+	RemoteMethodReturn(MethodInfo m) {
 		RemoteMethod rm = m.getAnnotation(RemoteMethod.class);
-		Class<?> rt = m.getReturnType();
-		RemoteReturn rv = rt == void.class ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
-		if (hasAnnotation(Response.class, rt) && rt.isInterface()) {
+		ClassInfo rt = m.getReturnType();
+		RemoteReturn rv = rt.is(void.class) ? RemoteReturn.NONE : rm == null ? RemoteReturn.BODY : rm.returns();
+		if (rt.hasAnnotation(Response.class) && rt.isInterface()) {
 			this.meta = ResponseBeanMeta.create(m, PropertyStore.DEFAULT);
 			rv = RemoteReturn.BEAN;
 		} else {

@@ -26,6 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -1932,7 +1933,7 @@ public class BeanContext extends Context {
 	private final PojoSwap<?,?>[] pojoSwaps;
 	private final Map<String,?> examples;
 	private final BeanRegistry beanRegistry;
-	private final Map<String,Class<?>> implClasses;
+	private final Map<String,ClassInfo> implClasses;
 	private final Locale locale;
 	private final TimeZone timeZone;
 	private final MediaType mediaType;
@@ -2003,10 +2004,11 @@ public class BeanContext extends Context {
 
 		LinkedList<BeanFilter> lbf = new LinkedList<>();
 		for (Class<?> c : getClassListProperty(BEAN_beanFilters)) {
-			if (isParentClass(BeanFilter.class, c))
-				lbf.add(newInstance(BeanFilter.class, c));
-			else if (isParentClass(BeanFilterBuilder.class, c))
-				lbf.add(newInstance(BeanFilterBuilder.class, c).build());
+			ClassInfo ci = getClassInfo(c);
+			if (ci.isChildOf(BeanFilter.class))
+				lbf.add(castOrCreate(BeanFilter.class, c));
+			else if (ci.isChildOf(BeanFilterBuilder.class))
+				lbf.add(castOrCreate(BeanFilterBuilder.class, c).build());
 			else
 				lbf.add(new InterfaceBeanFilterBuilder(c).build());
 		}
@@ -2015,13 +2017,13 @@ public class BeanContext extends Context {
 		LinkedList<PojoSwap<?,?>> lpf = new LinkedList<>();
 		for (Object o : getListProperty(BEAN_pojoSwaps, Object.class)) {
 			if (o instanceof Class) {
-				Class<?> c = (Class<?>)o;
-				if (isParentClass(PojoSwap.class, c))
-					lpf.add(newInstance(PojoSwap.class, c));
-				else if (isParentClass(Surrogate.class, c))
-					lpf.addAll(SurrogateSwap.findPojoSwaps(c));
+				ClassInfo ci = getClassInfo((Class<?>)o);
+				if (ci.isChildOf(PojoSwap.class))
+					lpf.add(castOrCreate(PojoSwap.class, ci.inner()));
+				else if (ci.isChildOf(Surrogate.class))
+					lpf.addAll(SurrogateSwap.findPojoSwaps(ci.inner()));
 				else
-					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", c);
+					throw new FormattedRuntimeException("Invalid class {0} specified in BeanContext.pojoSwaps property.  Must be a subclass of PojoSwap or Surrogate.", ci.inner());
 			} else if (o instanceof PojoSwap) {
 				lpf.add((PojoSwap)o);
 			}
@@ -2030,7 +2032,10 @@ public class BeanContext extends Context {
 
 		examples = getMapProperty(BEAN_examples, Object.class);
 
-		implClasses = getClassMapProperty(BEAN_implClasses);
+		Map<String,ClassInfo> icm = new LinkedHashMap<>();
+		for (Map.Entry<String,Class<?>> e : getClassMapProperty(BEAN_implClasses).entrySet())
+			icm.put(e.getKey(), getClassInfo(e.getValue()));
+		implClasses = unmodifiableMap(icm);
 
 		Map<String,String[]> m2 = new HashMap<>();
 		for (Map.Entry<String,String> e : getMapProperty(BEAN_includeProperties, String.class).entrySet())
@@ -2181,8 +2186,9 @@ public class BeanContext extends Context {
 				if (p.getName().startsWith(p2))
 					return true;
 		}
+		ClassInfo ci = getClassInfo(c);
 		for (Class exclude : notBeanClasses)
-			if (isParentClass(exclude, c))
+			if (ci.isChildOf(exclude))
 				return true;
 		return false;
 	}
@@ -2579,7 +2585,7 @@ public class BeanContext extends Context {
 		if (c != null) {
 			List<PojoSwap> l = new ArrayList<>();
 			for (PojoSwap f : pojoSwaps)
-				if (isParentClass(f.getNormalClass(), c))
+				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
 			return l.size() == 0 ? null : l.toArray(new PojoSwap[l.size()]);
 		}
@@ -2610,7 +2616,7 @@ public class BeanContext extends Context {
 			return null;
 		List<PojoSwap> l = null;
 		for (PojoSwap f : pojoSwaps) {
-			if (isParentClass(c, f.getNormalClass())) {
+			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
 					l = new ArrayList<>();
 				l.add(f);
@@ -2630,7 +2636,7 @@ public class BeanContext extends Context {
 	private final <T> BeanFilter findBeanFilter(Class<T> c) {
 		if (c != null)
 			for (BeanFilter f : beanFilters)
-				if (isParentClass(f.getBeanClass(), c))
+				if (getClassInfo(f.getBeanClass()).isParentOf(c))
 					return f;
 		return null;
 	}
@@ -2643,36 +2649,36 @@ public class BeanContext extends Context {
 	 * @param v The minimum visibility for the constructor.
 	 * @return The no arg constructor, or <jk>null</jk> if the class has no no-arg constructor.
 	 */
-	protected final <T> Constructor<? extends T> getImplClassConstructor(Class<T> c, Visibility v) {
+	protected final <T> ConstructorInfo getImplClassConstructor(Class<T> c, Visibility v) {
 		if (implClasses.isEmpty())
 			return null;
 		Class cc = c;
 		while (cc != null) {
-			Class implClass = implClasses.get(cc.getName());
+			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return findNoArgConstructor(implClass, v);
+				return implClass.getNoArgConstructor(v);
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return findNoArgConstructor(implClass, v);
+					return implClass.getNoArgConstructor(v);
 			}
 			cc = cc.getSuperclass();
 		}
 		return null;
 	}
 
-	private final <T> Class<? extends T> findImplClass(Class<T> c) {
+	private final <T> Class<T> findImplClass(Class<T> c) {
 		if (implClasses.isEmpty())
 			return null;
 		Class cc = c;
 		while (cc != null) {
-			Class implClass = implClasses.get(cc.getName());
+			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return implClass;
+				return (Class<T>) implClass.inner();
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return implClass;
+					return (Class<T>) implClass.inner();
 			}
 			cc = cc.getSuperclass();
 		}
@@ -2689,8 +2695,8 @@ public class BeanContext extends Context {
 		if (includeProperties.isEmpty())
 			return null;
 		String[] s = null;
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(c, false, true); i.hasNext();) {
-			Class<?> c2 = i.next();
+		ClassInfo ci = getClassInfo(c);
+		for (ClassInfo c2 : ci.getParents(false, true)) {
 			s = includeProperties.get(c2.getName());
 			if (s != null)
 				return s;
@@ -2711,8 +2717,8 @@ public class BeanContext extends Context {
 		if (excludeProperties.isEmpty())
 			return null;
 		String[] s = null;
-		for (Iterator<Class<?>> i = ClassUtils.getParentClasses(c, false, true); i.hasNext();) {
-			Class<?> c2 = i.next();
+		ClassInfo ci = getClassInfo(c);
+		for (ClassInfo c2 : ci.getParents(false, true)) {
 			s = excludeProperties.get(c2.getName());
 			if (s != null)
 				return s;
@@ -2721,72 +2727,6 @@ public class BeanContext extends Context {
 				return s;
 		}
 		return excludeProperties.get("*");
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstance(Class<T> c, Object c2) {
-		return ClassUtils.newInstance(c, c2);
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ClassUtils.newInstance(c, c2, fuzzyArgs, args);
-	}
-
-	/**
-	 * Creates an instance of the specified class from within the context of another object.
-	 *
-	 * @param outer
-	 * 	The outer object.
-	 * 	Can be <jk>null</jk>.
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ClassUtils.newInstanceFromOuter(outer, c, c2, fuzzyArgs, args);
 	}
 
 	/**

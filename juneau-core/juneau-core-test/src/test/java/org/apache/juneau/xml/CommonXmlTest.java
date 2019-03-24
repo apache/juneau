@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 
 import java.net.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -43,6 +44,7 @@ public class CommonXmlTest {
 		validateXml(t, s);
 	}
 
+	@Bean(properties="url,id,name")
 	public static class A {
 		@Xml(format=XmlFormat.ATTR) public URL url;
 		@Xml(format=ATTR) public int id;

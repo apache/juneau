@@ -74,7 +74,7 @@ public class BeanFilterBuilder<T> {
 	 * Bean class is determined through reflection of the parameter type.
 	 */
 	protected BeanFilterBuilder() {
-		beanClass = resolveParameterType(BeanFilterBuilder.class, 0, this.getClass());
+		beanClass = getClassInfo(BeanFilterBuilder.class).resolveParameterType(0, this.getClass());
 	}
 
 	/**

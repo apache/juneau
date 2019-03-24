@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
+import java.lang.annotation.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Defines an invalid usage of an annotation.
@@ -30,5 +33,19 @@ public class InvalidAnnotationException extends FormattedRuntimeException {
 	 */
 	public InvalidAnnotationException(String message, Object...args) {
 		super(message, args);
+	}
+
+	/**
+	 * Throws an {@link InvalidAnnotationException} if the specified method contains any of the specified annotations.
+	 *
+	 * @param m The method to check.
+	 * @param a The annotations to check for.
+	 * @throws InvalidAnnotationException
+	 */
+	@SafeVarargs
+	public static void assertNoInvalidAnnotations(MethodInfo m, Class<? extends Annotation>...a) throws InvalidAnnotationException {
+		Annotation aa = m.getAnnotation(a);
+		if (aa != null)
+			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", aa.getClass().getSimpleName(), m.getDeclaringClass().getSimpleName(), m);
 	}
 }

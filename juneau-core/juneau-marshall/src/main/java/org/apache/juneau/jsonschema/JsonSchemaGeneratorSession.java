@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.jsonschema.TypeCategory.*;
 
@@ -222,13 +221,13 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 			} else if (tc == COLLECTION) {
 				ClassMeta et = sType.getElementType();
-				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
+				if (sType.isCollection() && sType.getInfo().isChildOf(Set.class))
 					out.put("uniqueItems", true);
 				out.put("items", getSchema(et, "items", pNames, exampleAdded, descriptionAdded, null));
 
 			} else if (tc == ARRAY) {
 				ClassMeta et = sType.getElementType();
-				if (sType.isCollection() && isParentClass(Set.class, sType.getInnerClass()))
+				if (sType.isCollection() && sType.getInfo().isChildOf(Set.class))
 					out.put("uniqueItems", true);
 				out.put("items", getSchema(et, "items", pNames, exampleAdded, descriptionAdded, null));
 

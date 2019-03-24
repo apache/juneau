@@ -21,7 +21,6 @@ import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 
-import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 
@@ -36,6 +35,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.RestUtils;
@@ -114,8 +114,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
 		this.parentContext = parentContext;
+		this.properties = new RestContextProperties();
 
-		properties = new RestContextProperties();
+		ClassInfo rci = getClassInfo(resourceClass);
 
 		// Default values.
 		logger(BasicRestLogger.class);
@@ -135,18 +136,18 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			VarResolver vr = varResolverBuilder.build();
 
-			Map<Class<?>,RestResource> restResourceAnnotationsParentFirst = getAnnotationsMapParentFirst(RestResource.class, resourceClass);
+			List<ClassAnnotation<RestResource>> restResourceAnnotationsParentFirst = rci.getClassAnnotations(RestResource.class, true);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";
-			for (RestResource r : restResourceAnnotationsParentFirst.values())
-				if (! r.config().isEmpty())
-					configPath = r.config();
+			for (ClassAnnotation<RestResource> r : restResourceAnnotationsParentFirst)
+				if (! r.getAnnotation().config().isEmpty())
+					configPath = r.getAnnotation().config();
 			String cf = vr.resolve(configPath);
-			
-			if ("SYSTEM_DEFAULT".equals(cf)) 
+
+			if ("SYSTEM_DEFAULT".equals(cf))
 				this.config = Config.getSystemDefault();
-			
+
 			if (this.config == null) {
 				ConfigBuilder cb = Config.create().varResolver(vr);
 				if (! cf.isEmpty())
@@ -169,9 +170,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
-			for (Map.Entry<Class<?>,RestResource> e : restResourceAnnotationsParentFirst.entrySet()) {
-				Class<?> c = e.getKey();
-				RestResource r = e.getValue();
+			for (ClassAnnotation<RestResource> e : restResourceAnnotationsParentFirst) {
+				ClassInfo c = e.getClassInfo();
+				RestResource r = e.getAnnotation();
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
@@ -203,9 +204,9 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				uriRelativity(vr.resolve(r.uriRelativity()));
 				uriResolution(vr.resolve(r.uriResolution()));
 				for (String mapping : r.staticFiles())
-					staticFiles(c, vr.resolve(mapping));
+					staticFiles(c.inner(), vr.resolve(mapping));
 				if (! r.messages().isEmpty())
-					messages(c, vr.resolve(r.messages()));
+					messages(c.inner(), vr.resolve(r.messages()));
 				staticFileResponseHeaders(resolveVars(vr, r.staticFileResponseHeaders()));
 				if (! r.useClasspathResourceCaching().isEmpty())
 					useClasspathResourceCaching(Boolean.valueOf(vr.resolve(r.useClasspathResourceCaching())));
@@ -280,6 +281,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
+		ClassInfo rci = getClassInfo(resourceClass);
 
 		// Once we have the resource object, we can construct the Widgets.
 		// We want to do that here so that we can update the script/style properties while they're still modifiable.
@@ -292,17 +294,17 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 		widgets(false, widgets);
 
-		Map<String,Method> map = new LinkedHashMap<>();
-		for (Method m : ClassUtils.getAllMethods(this.resourceClass, true)) {
-			if (m.isAnnotationPresent(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
-				setAccessible(m, false);
-				String sig = ClassUtils.getMethodSignature(m);
+		Map<String,MethodInfo> map = new LinkedHashMap<>();
+		for (MethodInfo m : rci.getAllMethods(true, true)) {
+			if (m.hasAnnotation(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
+				m.setAccessible();
+				String sig = m.getSignature();
 				if (! map.containsKey(sig))
 					map.put(sig, m);
 			}
 		}
-		for (Method m : map.values()) {
-			ClassUtils.assertArgsOfType(m, RestContextBuilder.class, ServletConfig.class);
+		for (MethodInfo m : map.values()) {
+			assertArgsOnlyOfType(m, RestContextBuilder.class, ServletConfig.class);
 			Class<?>[] pt = m.getParameterTypes();
 			Object[] args = new Object[pt.length];
 			for (int i = 0; i < args.length; i++) {
@@ -318,6 +320,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			}
 		}
 		return this;
+	}
+
+	private static void assertArgsOnlyOfType(MethodInfo m, Class<?>...args) {
+		if (! m.argsOnlyOfType(args))
+			throw new FormattedIllegalArgumentException("Invalid arguments passed to method {0}.  Only arguments of type {1} are allowed.", m, args);
 	}
 
 	RestContextBuilder servletContext(ServletContext servletContext) {

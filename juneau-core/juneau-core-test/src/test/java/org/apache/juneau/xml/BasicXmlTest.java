@@ -37,126 +37,126 @@ public class BasicXmlTest {
 	public static Collection<Object[]> getParameters() {
 		return Arrays.asList(new Object[][] {
 
-			{
+			{	/* 0 */
 				"SimpleTypes-1",
 				"foo",
 				"<string>foo</string>",
 				"<string>foo</string>\n",
 				"<string>foo</string>",
 			},
-			{
+			{	/* 1 */
 				"SimpleTypes-2",
 				true,
 				"<boolean>true</boolean>",
 				"<boolean>true</boolean>\n",
 				"<boolean>true</boolean>",
 			},
-			{
+			{	/* 2 */
 				"SimpleTypes-3",
 				123,
 				"<number>123</number>",
 				"<number>123</number>\n",
 				"<number>123</number>",
 			},
-			{
+			{	/* 3 */
 				"SimpleTypes-4",
 				1.23f,
 				"<number>1.23</number>",
 				"<number>1.23</number>\n",
 				"<number>1.23</number>",
 			},
-			{
+			{	/* 4 */
 				"SimpleTypes-5",
 				null,
 				"<null/>",
 				"<null/>\n",
 				"<null/>",
 			},
-			{
+			{	/* 5 */
 				"Arrays-1",
 				new String[]{"foo"},
 				"<array><string>foo</string></array>",
 				"<array>\n\t<string>foo</string>\n</array>\n",
 				"<array><string>foo</string></array>",
 			},
-			{
+			{	/* 6 */
 				"Arrays-2",
 				new String[]{null},
 				"<array><null/></array>",
 				"<array>\n\t<null/>\n</array>\n",
 				"<array><null/></array>",
 			},
-			{
+			{	/* 7 */
 				"Arrays-3",
 				new Object[]{"foo"},
 				"<array><string>foo</string></array>",
 				"<array>\n\t<string>foo</string>\n</array>\n",
 				"<array><string>foo</string></array>",
 			},
-			{
+			{	/* 8 */
 				"Arrays-4",
 				new int[]{123},
 				"<array><number>123</number></array>",
 				"<array>\n\t<number>123</number>\n</array>\n",
 				"<array><number>123</number></array>",
 			},
-			{
+			{	/* 9 */
 				"Arrays-5",
 				new boolean[]{true},
 				"<array><boolean>true</boolean></array>",
 				"<array>\n\t<boolean>true</boolean>\n</array>\n",
 				"<array><boolean>true</boolean></array>",
 			},
-			{
+			{	/* 10 */
 				"Arrays-6",
 				new String[][]{{"foo"}},
 				"<array><array><string>foo</string></array></array>",
 				"<array>\n\t<array>\n\t\t<string>foo</string>\n\t</array>\n</array>\n",
 				"<array><array><string>foo</string></array></array>",
 			},
-			{
+			{	/* 11 */
 				"MapWithStrings",
 				new MapWithStrings().append("k1", "v1").append("k2", null),
 				"<object><k1>v1</k1><k2 _type='null'/></object>",
 				"<object>\n\t<k1>v1</k1>\n\t<k2 _type='null'/>\n</object>\n",
 				"<object><k1>v1</k1><k2 _type='null'/></object>",
 			},
-			{
+			{	/* 12 */
 				"MapsWithNumbers",
 				new MapWithNumbers().append("k1", 123).append("k2", 1.23).append("k3", null),
 				"<object><k1>123</k1><k2>1.23</k2><k3 _type='null'/></object>",
 				"<object>\n\t<k1>123</k1>\n\t<k2>1.23</k2>\n\t<k3 _type='null'/>\n</object>\n",
 				"<object><k1>123</k1><k2>1.23</k2><k3 _type='null'/></object>",
 			},
-			{
+			{	/* 13 */
 				"MapWithObjects",
 				new MapWithObjects().append("k1", "v1").append("k2", 123).append("k3", 1.23).append("k4", true).append("k5", null),
 				"<object><k1>v1</k1><k2 _type='number'>123</k2><k3 _type='number'>1.23</k3><k4 _type='boolean'>true</k4><k5 _type='null'/></object>",
 				"<object>\n\t<k1>v1</k1>\n\t<k2 _type='number'>123</k2>\n\t<k3 _type='number'>1.23</k3>\n\t<k4 _type='boolean'>true</k4>\n\t<k5 _type='null'/>\n</object>\n",
 				"<object><k1>v1</k1><k2 _type='number'>123</k2><k3 _type='number'>1.23</k3><k4 _type='boolean'>true</k4><k5 _type='null'/></object>",
 			},
-			{
+			{	/* 14 */
 				"ListWithStrings",
 				new ListWithStrings().append("foo").append(null),
 				"<array><string>foo</string><null/></array>",
 				"<array>\n\t<string>foo</string>\n\t<null/>\n</array>\n",
 				"<array><string>foo</string><null/></array>",
 			},
-			{
+			{	/* 15 */
 				"ListWithNumbers",
 				new ListWithNumbers().append(123).append(1.23).append(null),
 				"<array><number>123</number><number>1.23</number><null/></array>",
 				"<array>\n\t<number>123</number>\n\t<number>1.23</number>\n\t<null/>\n</array>\n",
 				"<array><number>123</number><number>1.23</number><null/></array>",
 			},
-			{
+			{	/* 16 */
 				"ListWithObjects",
 				new ListWithObjects().append("foo").append(123).append(1.23).append(true).append(null),
 				"<array><string>foo</string><number>123</number><number>1.23</number><boolean>true</boolean><null/></array>",
 				"<array>\n\t<string>foo</string>\n\t<number>123</number>\n\t<number>1.23</number>\n\t<boolean>true</boolean>\n\t<null/>\n</array>\n",
 				"<array><string>foo</string><number>123</number><number>1.23</number><boolean>true</boolean><null/></array>",
 			},
-			{
+			{	/* 17 */
 				"BeanWithNormalProperties",
 				new BeanWithNormalProperties().init(),
 				"<object>"
@@ -205,7 +205,7 @@ public class BasicXmlTest {
 					+"</g>"
 				+"</object>",
 			},
-			{
+			{	/* 18 */
 				"BeanWithMapProperties",
 				new BeanWithMapProperties().init(),
 				"<object>"
@@ -251,21 +251,21 @@ public class BasicXmlTest {
 					+"</c>"
 				+"</object>",
 			},
-			{
+			{	/* 19 */
 				"BeanWithTypeName",
 				new BeanWithTypeName().init(),
 				"<X><a>123</a><b>foo</b></X>",
 				"<X>\n\t<a>123</a>\n\t<b>foo</b>\n</X>\n",
 				"<X><a>123</a><b>foo</b></X>",
 			},
-			{
+			{	/* 20 */
 				"BeanWithPropertiesWithTypeNames",
 				new BeanWithPropertiesWithTypeNames().init(),
 				"<object><b1><b>foo</b></b1><b2 _type='B'><b>foo</b></b2></object>",
 				"<object>\n\t<b1>\n\t\t<b>foo</b>\n\t</b1>\n\t<b2 _type='B'>\n\t\t<b>foo</b>\n\t</b2>\n</object>\n",
 				"<object><b1><b>foo</b></b1><b2 _type='B'><b>foo</b></b2></object>"
 			},
-			{
+			{	/* 21 */
 				"BeanWithPropertiesWithArrayTypeNames",
 				new BeanWithPropertiesWithArrayTypeNames().init(),
 				"<object>"
@@ -320,7 +320,7 @@ public class BasicXmlTest {
 					+"</b3>"
 				+"</object>",
 			},
-			{
+			{	/* 22 */
 				"BeanWithPropertiesWithArray2dTypeNames",
 				new BeanWithPropertiesWith2dArrayTypeNames().init(),
 				"<object>"
@@ -393,7 +393,7 @@ public class BasicXmlTest {
 					+"</b3>"
 				+"</object>",
 			},
-			{
+			{	/* 23 */
 				"BeanWithPropertiesWithMapTypeNames",
 				new BeanWithPropertiesWithMapTypeNames().init(),
 				"<object>"
@@ -433,7 +433,7 @@ public class BasicXmlTest {
 					+"</b2>"
 				+"</object>",
 			},
-			{
+			{	/* 24 */
 				"BeanWithChildTypeNames",
 				new BeanWithChildTypeNames().init(),
 				"<object>"
@@ -491,98 +491,98 @@ public class BasicXmlTest {
 					+"</d>"
 				+"</object>",
 			},
-			{
+			{	/* 25 */
 				"BeanWithChildName",
 				new BeanWithChildName().init(),
 				"<object><a><X>foo</X><X>bar</X></a><b><Y>123</Y><Y>456</Y></b></object>",
 				"<object>\n\t<a>\n\t\t<X>foo</X>\n\t\t<X>bar</X>\n\t</a>\n\t<b>\n\t\t<Y>123</Y>\n\t\t<Y>456</Y>\n\t</b>\n</object>\n",
 				"<object><a><X>foo</X><X>bar</X></a><b><Y>123</Y><Y>456</Y></b></object>",
 			},
-			{
+			{	/* 26 */
 				"BeanWithXmlFormatAttrProperty",
 				new BeanWithXmlFormatAttrProperty().init(),
 				"<object a='foo' b='123'/>",
 				"<object a='foo' b='123'/>\n",
 				"<object a='foo' b='123'/>",
 			},
-			{
+			{	/* 27 */
 				"BeanWithXmlFormatAttrs",
 				new BeanWithXmlFormatAttrs().init(),
 				"<object a='foo' b='123'/>",
 				"<object a='foo' b='123'/>\n",
 				"<object a='foo' b='123'/>",
 			},
-			{
+			{	/* 28 */
 				"BeanWithXmlFormatElementProperty",
 				new BeanWithXmlFormatElementProperty().init(),
 				"<object a='foo'><b>123</b></object>",
 				"<object a='foo'>\n\t<b>123</b>\n</object>\n",
 				"<object a='foo'><b>123</b></object>",
 			},
-			{
+			{	/* 29 */
 				"BeanWithXmlFormatAttrsProperty",
 				new BeanWithXmlFormatAttrsProperty().init(),
 				"<object k1='foo' k2='123' b='456'/>",
 				"<object k1='foo' k2='123' b='456'/>\n",
 				"<object k1='foo' k2='123' b='456'/>",
 			},
-			{
+			{	/* 30 */
 				"BeanWithXmlFormatCollapsedProperty",
 				new BeanWithXmlFormatCollapsedProperty().init(),
 				"<object><A>foo</A><A>bar</A><B>123</B><B>456</B></object>",
 				"<object>\n\t<A>foo</A>\n\t<A>bar</A>\n\t<B>123</B>\n\t<B>456</B>\n</object>\n",
 				"<object><A>foo</A><A>bar</A><B>123</B><B>456</B></object>",
 			},
-			{
+			{	/* 31 */
 				"BeanWithXmlFormatTextProperty",
 				new BeanWithXmlFormatTextProperty().init(),
 				"<object a='foo'>bar</object>",
 				"<object a='foo'>bar</object>\n",
 				"<object a='foo'>bar</object>",
 			},
-			{
+			{	/* 32 */
 				"BeanWithXmlFormatXmlTextProperty",
 				new BeanWithXmlFormatXmlTextProperty().init(),
 				"<object a='foo'>bar<b>baz</b>qux</object>",
 				"<object a='foo'>bar<b>baz</b>qux</object>\n",
 				"<object a='foo'>bar<b>baz</b>qux</object>",
 			},
-			{
+			{	/* 33 */
 				"BeanWithXmlFormatElementsPropertyCollection",
 				new BeanWithXmlFormatElementsPropertyCollection().init(),
 				"<object a='foo'><string>bar</string><string>baz</string><number>123</number><boolean>true</boolean><null/></object>",
 				"<object a='foo'>\n\t<string>bar</string>\n\t<string>baz</string>\n\t<number>123</number>\n\t<boolean>true</boolean>\n\t<null/>\n</object>\n",
 				"<object a='foo'><string>bar</string><string>baz</string><number>123</number><boolean>true</boolean><null/></object>",
 			},
-			{
+			{	/* 34 */
 				"BeanWithMixedContent",
 				new BeanWithMixedContent().init(),
 				"<object>foo<X fx='fx1'/>bar<Y fy='fy1'/>baz</object>",
 				"<object>foo<X fx='fx1'/>bar<Y fy='fy1'/>baz</object>\n",  // Mixed content doesn't use whitespace!
 				"<object>foo<X fx='fx1'/>bar<Y fy='fy1'/>baz</object>",
 			},
-			{
+			{	/* 35 */
 				"BeanWithSpecialCharacters",
 				new BeanWithSpecialCharacters().init(),
 				"<object><a>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</a></object>",
 				"<object>\n\t<a>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</a>\n</object>\n",
 				"<object><a>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</a></object>"
 			},
-			{
+			{	/* 36 */
 				"BeanWithSpecialCharacters2",
 				new BeanWithSpecialCharacters2().init(),
 				"<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_><_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_></_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>",
 				"<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>\n\t<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>\n</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>\n",
 				"<_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_><_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>_x0020_ _x0008__x000C_&#x000a;&#x0009;&#x000d; _x0020_</_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_></_x0020__x0020__x0008__x000C__x000A__x0009__x000D__x0020__x0020_>"
 			},
-			{
+			{	/* 37 */
 				"BeanWithNullProperties",
 				new BeanWithNullProperties(),
 				"<object/>",
 				"<object/>\n",
 				"<object/>"
 			},
-			{
+			{	/* 38 */
 				"BeanWithAbstractFields",
 				new BeanWithAbstractFields().init(),
 				"<object>"
@@ -628,7 +628,7 @@ public class BasicXmlTest {
 					+"</o>"
 				+"</object>",
 			},
-			{
+			{	/* 39 */
 				"BeanWithAbstractArrayFields",
 				new BeanWithAbstractArrayFields().init(),
 				"<object>"
@@ -743,7 +743,7 @@ public class BasicXmlTest {
 					+"</o2>"
 				+"</object>",
 			},
-			{
+			{	/* 40 */
 				"BeanWithAbstractMapFields",
 				new BeanWithAbstractMapFields().init(),
 				"<object>"
@@ -798,7 +798,7 @@ public class BasicXmlTest {
 					+"</c>"
 				+"</object>",
 			},
-			{
+			{	/* 41 */
 				"BeanWithAbstractMapArrayFields",
 				new BeanWithAbstractMapArrayFields().init(),
 				"<object>"
@@ -937,154 +937,154 @@ public class BasicXmlTest {
 					+"</o>"
 				+"</object>",
 			},
-			{
+			{	/* 42 */
 				"BeanWithWhitespaceTextFields-1",
 				new BeanWithWhitespaceTextFields().init(null),
 				"<object/>",
 				"<object/>\n",
 				"<object/>",
 			},
-			{
+			{	/* 43 */
 				"BeanWithWhitespaceTextFields-2",
 				new BeanWithWhitespaceTextFields().init(""),
 				"<object>_xE000_</object>",
 				"<object>_xE000_</object>\n",
 				"<object>_xE000_</object>",
 			},
-			{
+			{	/* 44 */
 				"BeanWithWhitespaceTextFields-3",
 				new BeanWithWhitespaceTextFields().init(" "),
 				"<object>_x0020_</object>",
 				"<object>_x0020_</object>\n",
 				"<object>_x0020_</object>",
 			},
-			{
+			{	/* 45 */
 				"BeanWithWhitespaceTextFields-4",
 				new BeanWithWhitespaceTextFields().init("  "),
 				"<object>_x0020__x0020_</object>",
 				"<object>_x0020__x0020_</object>\n",
 				"<object>_x0020__x0020_</object>",
 			},
-			{
+			{	/* 46 */
 				"BeanWithWhitespaceTextFields-5",
 				new BeanWithWhitespaceTextFields().init(" foo\n\tbar "),
 				"<object>_x0020_foo&#x000a;&#x0009;bar_x0020_</object>",
 				"<object>_x0020_foo&#x000a;&#x0009;bar_x0020_</object>\n",
 				"<object>_x0020_foo&#x000a;&#x0009;bar_x0020_</object>",
 			},
-			{
+			{	/* 47 */
 				"BeanWithWhitespaceTextPwsFields-1",
 				new BeanWithWhitespaceTextPwsFields().init(null),
 				"<object/>",
 				"<object/>\n",
 				"<object/>",
 			},
-			{
+			{	/* 48 */
 				"BeanWithWhitespaceTextPwsFields-2",
 				new BeanWithWhitespaceTextPwsFields().init(""),
 				"<object>_xE000_</object>",
 				"<object>_xE000_</object>\n",
 				"<object>_xE000_</object>",
 			},
-			{
+			{	/* 49 */
 				"BeanWithWhitespaceTextPwsFields-3",
 				new BeanWithWhitespaceTextPwsFields().init(" "),
 				"<object> </object>",
 				"<object> </object>\n",
 				"<object> </object>",
 			},
-			{
+			{	/* 50 */
 				"BeanWithWhitespaceTextPwsFields-4",
 				new BeanWithWhitespaceTextPwsFields().init("  "),
 				"<object>  </object>",
 				"<object>  </object>\n",
 				"<object>  </object>",
 			},
-			{
+			{	/* 51 */
 				"BeanWithWhitespaceTextPwsFields-5",
 				new BeanWithWhitespaceTextPwsFields().init("  foobar  "),
 				"<object>  foobar  </object>",
 				"<object>  foobar  </object>\n",
 				"<object>  foobar  </object>",
 			},
-			{
+			{	/* 52 */
 				"BeanWithWhitespaceMixedFields-1",
 				new BeanWithWhitespaceMixedFields().init(null),
 				"<object/>",
 				"<object/>\n",
 				"<object/>",
 			},
-			{
+			{	/* 53 */
 				"BeanWithWhitespaceMixedFields-2",
 				new BeanWithWhitespaceMixedFields().init(new String[0]),
 				"<object/>",
 				"<object/>\n",
 				"<object/>",
 			},
-			{
+			{	/* 54 */
 				"BeanWithWhitespaceMixedFields-3",
 				new BeanWithWhitespaceMixedFields().init(new String[]{""}),
 				"<object>_xE000_</object>",
 				"<object>_xE000_</object>\n",
 				"<object>_xE000_</object>",
 			},
-			{
+			{	/* 55 */
 				"BeanWithWhitespaceMixedFields-4",
 				new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
 				"<object>_x0020_</object>",
 				"<object>_x0020_</object>\n",
 				"<object>_x0020_</object>",
 			},
-			{
+			{	/* 56 */
 				"BeanWithWhitespaceMixedFields-5",
 				new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
 				"<object>_x0020__x0020_</object>",
 				"<object>_x0020__x0020_</object>\n",
 				"<object>_x0020__x0020_</object>",
 			},
-			{
+			{	/* 57 */
 				"BeanWithWhitespaceMixedFields-6",
 				new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
 				"<object>_x0020_ foobar _x0020_</object>",
 				"<object>_x0020_ foobar _x0020_</object>\n",
 				"<object>_x0020_ foobar _x0020_</object>",
 			},
-			{
+			{	/* 58 */
 				"BeanWithWhitespaceMixedPwsFields-1",
 				new BeanWithWhitespaceMixedPwsFields().init(null),
 				"<object/>",
 				"<object/>\n",
 				"<object/>",
 			},
-			{
+			{	/* 59 */
 				"BeanWithWhitespaceMixedPwsFields-2",
 				new BeanWithWhitespaceMixedPwsFields().init(new String[0]),
 				"<object/>",
 				"<object/>\n",
 				"<object/>",
 			},
-			{
+			{	/* 60 */
 				"BeanWithWhitespaceMixedPwsFields-3",
 				new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
 				"<object>_xE000_</object>",
 				"<object>_xE000_</object>\n",
 				"<object>_xE000_</object>",
 			},
-			{
+			{	/* 61 */
 				"BeanWithWhitespaceMixedPwsFields-4",
 				new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
 				"<object> </object>",
 				"<object> </object>\n",
 				"<object> </object>",
 			},
-			{
+			{	/* 62 */
 				"BeanWithWhitespaceMixedPwsFields-5",
 				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
 				"<object>  </object>",
 				"<object>  </object>\n",
 				"<object>  </object>",
 			},
-			{
+			{	/* 63 */
 				"BeanWithWhitespaceMixedPwsFields-6",
 				new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
 				"<object>  foobar  </object>",
@@ -1558,7 +1558,7 @@ public class BasicXmlTest {
 		public String[] b;
 	}
 
-	@Bean(beanDictionary={A.class})
+	@Bean(beanDictionary={A.class},properties="a,ia,aa,o")
 	public static class BeanWithAbstractFields {
 		public A a;
 		public IA ia;
@@ -1574,7 +1574,7 @@ public class BasicXmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={A.class})
+	@Bean(beanDictionary={A.class},properties="a,ia1,ia2,aa1,aa2,o1,o2")
 	public static class BeanWithAbstractArrayFields {
 		public A[] a;
 		public IA[] ia1, ia2;
@@ -1610,7 +1610,7 @@ public class BasicXmlTest {
 		}
 	}
 
-	@Bean(beanDictionary={A.class})
+	@Bean(beanDictionary={A.class},properties="a,ia,aa,o")
 	public static class BeanWithAbstractMapArrayFields {
 		public Map<String,A[]> a;
 		public Map<String,IA[]> ia;

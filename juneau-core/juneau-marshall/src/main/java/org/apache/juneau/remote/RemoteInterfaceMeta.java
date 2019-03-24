@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+
+import org.apache.juneau.reflection.*;
 
 /**
  * Contains the meta-data about a remote proxy REST interface.
@@ -50,15 +52,16 @@ public class RemoteInterfaceMeta {
 	public RemoteInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
 		String path = "";
-		List<RemoteInterface> rr = getAnnotationsParentFirst(RemoteInterface.class, c);
+		ClassInfo ci = getClassInfo(c);
+		List<RemoteInterface> rr = ci.getAnnotations(RemoteInterface.class, true);
 		for (RemoteInterface r : rr)
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
 		Map<Method,RemoteInterfaceMethod> methods = new LinkedHashMap<>();
-		for (Method m : c.getMethods())
-			if (isPublic(m))
-				methods.put(m, new RemoteInterfaceMethod(uri, m));
+		for (MethodInfo m : ci.getPublicMethods())
+			if (m.isPublic())
+				methods.put(m.inner(), new RemoteInterfaceMethod(uri, m.inner()));
 
 		Map<String,RemoteInterfaceMethod> methodsByPath = new LinkedHashMap<>();
 		for (RemoteInterfaceMethod rmm : methods.values())

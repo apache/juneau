@@ -13,11 +13,11 @@
 package org.apache.juneau;
 
 import static org.junit.Assert.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 /**
@@ -60,6 +60,6 @@ public class ValueTest {
 	@Test
 	public void testOnParameterType() throws Exception {
 		Type t = Value.getParameterType(C.class.getMethod("m1", Value.class), 0);
-		assertEquals("List<Integer>", ClassUtils.getSimpleName(t));
+		assertEquals("List<Integer>", getClassInfo(t).getShortName());
 	}
 }

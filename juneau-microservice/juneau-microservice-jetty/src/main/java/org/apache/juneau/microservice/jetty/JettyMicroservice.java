@@ -14,6 +14,7 @@ package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.internal.SystemUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.reflection.ClassInfo;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
@@ -336,8 +338,8 @@ public class JettyMicroservice extends Microservice {
 		server = factory.create(jettyXml);
 
 		for (String s : cf.getStringArray("Jetty/servlets", new String[0])) {
-			Class<?> c = Class.forName(s);
-			if (ClassUtils.isParentClass(RestServlet.class, c)) {
+			ClassInfo c = getClassInfo(Class.forName(s));
+			if (c.isChildOf(RestServlet.class)) {
 				RestServlet rs = (RestServlet)c.newInstance();
 				addServlet(rs, rs.getPath());
 			} else {
@@ -346,8 +348,8 @@ public class JettyMicroservice extends Microservice {
 		}
 
 		for (Map.Entry<String,Object> e : cf.getObjectMap("Jetty/servletMap", ObjectMap.EMPTY_MAP).entrySet()) {
-			Class<?> c = Class.forName(e.getValue().toString());
-			if (ClassUtils.isParentClass(Servlet.class, c)) {
+			ClassInfo c = getClassInfo(Class.forName(e.getValue().toString()));
+			if (c.isChildOf(Servlet.class)) {
 				Servlet rs = (Servlet)c.newInstance();
 				addServlet(rs, e.getKey());
 			} else {

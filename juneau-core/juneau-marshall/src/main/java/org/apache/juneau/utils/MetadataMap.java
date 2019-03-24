@@ -59,7 +59,7 @@ public class MetadataMap {
 			try {
 				for (Constructor<?> con : c.getConstructors()) {
 					Class<?>[] pt = con.getParameterTypes();
-					if (pt.length == 1 && isParentClass(pt[0], constructorArg.getClass())) {
+					if (pt.length == 1 && getClassInfo(pt[0]).isParentOf(constructorArg.getClass())) {
 						o = con.newInstance(constructorArg);
 						break;
 					}

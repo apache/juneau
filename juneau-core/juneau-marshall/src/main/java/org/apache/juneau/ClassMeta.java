@@ -32,6 +32,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
@@ -65,15 +66,16 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	final Class<T> innerClass;                              // The class being wrapped.
+	final ClassInfo info;
 
 	private final Class<? extends T> implClass;             // The implementation class to use if this is an interface.
 	private final ClassCategory cc;                         // The class category.
 	private final Method fromStringMethod;                  // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
-	private final Constructor<? extends T>
-		noArgConstructor;                                    // The no-arg constructor for this class (if it has one).
-	private final Constructor<T>
+	private final ConstructorInfo
+		noArgConstructor,                                    // The no-arg constructor for this class (if it has one).
 		stringConstructor,                                   // The X(String) constructor (if it has one).
-		numberConstructor,                                   // The X(Number) constructor (if it has one).
+		numberConstructor;                                   // The X(Number) constructor (if it has one).
+	private final Constructor<T>
 		swapConstructor;                                     // The X(Swappable) constructor (if it has one).
 	private final Class<?>
 		swapMethodType,                                      // The class type of the object in the number constructor.
@@ -151,6 +153,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	ClassMeta(Class<T> innerClass, BeanContext beanContext, Class<? extends T> implClass, BeanFilter beanFilter, PojoSwap<T,?>[] pojoSwaps, PojoSwap<?,?>[] childPojoSwaps, Object example) {
 		this.innerClass = innerClass;
+		this.info = getClassInfo(innerClass);
 		this.beanContext = beanContext;
 		this.extMeta = new MetadataMap();
 		String notABeanReason = null;
@@ -229,6 +232,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	ClassMeta(ClassMeta<T> mainType, ClassMeta<?> keyType, ClassMeta<?> valueType, ClassMeta<?> elementType) {
 		this.innerClass = mainType.innerClass;
+		this.info = mainType.info;
 		this.implClass = mainType.implClass;
 		this.childPojoSwaps = mainType.childPojoSwaps;
 		this.childSwapMap = mainType.childSwapMap;
@@ -280,6 +284,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
 		this.innerClass = (Class<T>) Object[].class;
+		this.info = getClassInfo(innerClass);
 		this.extMeta = new MetadataMap();
 		this.args = args;
 		this.implClass = null;
@@ -328,6 +333,7 @@ public final class ClassMeta<T> implements Type {
 	@SuppressWarnings({"unchecked","rawtypes","hiding"})
 	private final class ClassMetaBuilder<T> {
 		Class<T> innerClass;
+		ClassInfo ci;
 		Class<? extends T> implClass;
 		BeanContext beanContext;
 		ClassCategory cc = ClassCategory.OTHER;
@@ -342,11 +348,12 @@ public final class ClassMeta<T> implements Type {
 		Setter
 			parentPropertyMethod = null,
 			namePropertyMethod = null;
-		Constructor<T>
+		ConstructorInfo
 			noArgConstructor = null,
 			stringConstructor = null,
-			swapConstructor = null,
 			numberConstructor = null;
+		Constructor<T>
+			swapConstructor = null;
 		Class<?>
 			swapMethodType = null,
 			numberConstructorType = null;
@@ -383,6 +390,7 @@ public final class ClassMeta<T> implements Type {
 			this.beanContext = beanContext;
 
 			this.implClass = implClass;
+			ClassInfo ici = getClassInfo(implClass);
 			this.childPojoSwaps = childPojoSwaps;
 			if (childPojoSwaps == null) {
 				this.childSwapMap = null;
@@ -393,6 +401,8 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			Class<T> c = innerClass;
+			ci = getClassInfo(c);
+
 			if (c.isPrimitive()) {
 				if (c == Boolean.TYPE)
 					cc = BOOLEAN;
@@ -407,7 +417,7 @@ public final class ClassMeta<T> implements Type {
 				else if (c == void.class || c == Void.class)
 					cc = VOID;
 			} else {
-				if (isParentClass(Delegate.class, c))
+				if (ci.isChildOf(Delegate.class))
 					isDelegate = true;
 
 				if (c == Object.class)
@@ -416,24 +426,24 @@ public final class ClassMeta<T> implements Type {
 					cc = ENUM;
 				else if (c.equals(Class.class))
 					cc = CLASS;
-				else if (isParentClass(Method.class, c))
+				else if (ci.isChildOf(Method.class))
 					cc = METHOD;
-				else if (isParentClass(CharSequence.class, c)) {
+				else if (ci.isChildOf(CharSequence.class)) {
 					if (c.equals(String.class))
 						cc = STR;
 					else
 						cc = CHARSEQ;
 				}
-				else if (isParentClass(Number.class, c)) {
-					if (isParentClass(Float.class, c) || isParentClass(Double.class, c))
+				else if (ci.isChildOf(Number.class)) {
+					if (ci.isChildOfAny(Float.class, Double.class))
 						cc = DECIMAL;
 					else
 						cc = NUMBER;
 				}
-				else if (isParentClass(Collection.class, c))
+				else if (ci.isChildOf(Collection.class))
 					cc = COLLECTION;
-				else if (isParentClass(Map.class, c)) {
-					if (isParentClass(BeanMap.class, c))
+				else if (ci.isChildOf(Map.class)) {
+					if (ci.isChildOf(BeanMap.class))
 						cc = BEANMAP;
 					else
 						cc = MAP;
@@ -442,19 +452,19 @@ public final class ClassMeta<T> implements Type {
 					cc = CHAR;
 				else if (c == Boolean.class)
 					cc = BOOLEAN;
-				else if (isParentClass(Date.class, c) || isParentClass(Calendar.class, c))
+				else if (ci.isChildOfAny(Date.class, Calendar.class))
 					cc = DATE;
 				else if (c.isArray())
 					cc = ARRAY;
-				else if (isParentClass(URL.class, c) || isParentClass(URI.class, c) || c.isAnnotationPresent(org.apache.juneau.annotation.URI.class))
+				else if (ci.isChildOfAny(URL.class, URI.class) || c.isAnnotationPresent(org.apache.juneau.annotation.URI.class))
 					cc = URI;
-				else if (isParentClass(Reader.class, c))
+				else if (ci.isChildOf(Reader.class))
 					cc = READER;
-				else if (isParentClass(InputStream.class, c))
+				else if (ci.isChildOf(InputStream.class))
 					cc = INPUTSTREAM;
 			}
 
-			isMemberClass = c.isMemberClass() && ! isStatic(c);
+			isMemberClass = ci.isMemberClass() && ci.isNotStatic();
 
 			// Find static fromString(String) or equivalent method.
 			// fromString() must be checked before valueOf() so that Enum classes can create their own
@@ -464,9 +474,9 @@ public final class ClassMeta<T> implements Type {
 			// forName() is used by Class and Charset
 			for (String methodName : new String[]{"fromString","fromValue","valueOf","parse","parseString","forName","forString"}) {
 				if (fromStringMethod == null) {
-					for (Method m : c.getMethods()) {
-						if (isAll(m, STATIC, PUBLIC, NOT_DEPRECATED) && hasName(m, methodName) && hasReturnType(m, c) && hasArgs(m, String.class)) {
-							fromStringMethod = m;
+					for (MethodInfo m : ci.getPublicMethods()) {
+						if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class)) {
+							fromStringMethod = m.inner();
 							break;
 						}
 					}
@@ -483,86 +493,86 @@ public final class ClassMeta<T> implements Type {
 			} catch (NoSuchMethodException e1) {}
 
 			// Find swap() method if present.
-			for (Method m : c.getMethods()) {
-				if (isAll(m, PUBLIC, NOT_DEPRECATED, NOT_STATIC) && hasName(m, "swap") && hasFuzzyArgs(m, BeanSession.class)) {
-					swapMethod = m;
-					swapMethodType = m.getReturnType();
+			for (MethodInfo m : ci.getPublicMethods()) {
+				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && m.hasName("swap") && m.hasFuzzyArgs(BeanSession.class)) {
+					swapMethod = m.inner();
+					swapMethodType = m.getReturnType().inner();
 					break;
 				}
 			}
 			// Find unswap() method if present.
 			if (swapMethod != null) {
-				for (Method m : c.getMethods()) {
-					if (isAll(m, PUBLIC, NOT_DEPRECATED, STATIC) &&hasName(m, "unswap") && hasFuzzyArgs(m, BeanSession.class, swapMethodType)) {
-						unswapMethod = m;
+				for (MethodInfo m : ci.getPublicMethods()) {
+					if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("unswap") && m.hasFuzzyArgs(BeanSession.class, swapMethodType)) {
+						unswapMethod = m.inner();
 						break;
 					}
 				}
 			}
 
 			// Find example() method if present.
-			for (Method m : c.getMethods()) {
-				if (isAll(m, PUBLIC, NOT_DEPRECATED, STATIC) && hasName(m, "example") && hasFuzzyArgs(m, BeanSession.class)) {
-					exampleMethod = m;
+			for (MethodInfo m : ci.getPublicMethods()) {
+				if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("example") && m.hasFuzzyArgs(BeanSession.class)) {
+					exampleMethod = m.inner();
 					break;
 				}
 			}
 
-			for (Field f : getAllFields(c, true)) {
+			for (FieldInfo f : ci.getAllFieldsParentFirst()) {
 				if (f.isAnnotationPresent(ParentProperty.class)) {
-					if (isStatic(f))
+					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
-					setAccessible(f, false);
-					parentPropertyMethod = new Setter.FieldSetter(f);
+					f.setAccessible(false);
+					parentPropertyMethod = new Setter.FieldSetter(f.inner());
 				}
 				if (f.isAnnotationPresent(NameProperty.class)) {
-					if (isStatic(f))
+					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@NameProperty used on invalid field ''{0}''.  Must be static.", f);
-					setAccessible(f, false);
-					namePropertyMethod = new Setter.FieldSetter(f);
+					f.setAccessible(false);
+					namePropertyMethod = new Setter.FieldSetter(f.inner());
 				}
 			}
 
-			for (Field f : c.getDeclaredFields()) {
+			for (FieldInfo f : ci.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Example.class)) {
-					if (! (isStatic(f) && isParentClass(innerClass, f.getType())))
+					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
-					setAccessible(f, false);
-					exampleField = f;
+					f.setAccessible(false);
+					exampleField = f.inner();
 				}
 			}
 
 			// Find @NameProperty and @ParentProperty methods if present.
-			for (Method m : getAllMethods(c, true)) {
-				if (m.isAnnotationPresent(ParentProperty.class)) {
-					if (isStatic(m) || ! hasNumArgs(m, 1))
+			for (MethodInfo m : ci.getAllMethods(true, true)) {
+				if (m.hasAnnotation(ParentProperty.class)) {
+					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
-					setAccessible(m, false);
-					parentPropertyMethod = new Setter.MethodSetter(m);
+					m.setAccessible();
+					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
-				if (m.isAnnotationPresent(NameProperty.class)) {
-					if (isStatic(m) || ! hasNumArgs(m, 1))
+				if (m.hasAnnotation(NameProperty.class)) {
+					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
-					setAccessible(m, false);
-					namePropertyMethod = new Setter.MethodSetter(m);
+					m.setAccessible();
+					namePropertyMethod = new Setter.MethodSetter(m.inner());
 				}
 			}
 
-			for (Method m : c.getDeclaredMethods()) {
-				if (m.isAnnotationPresent(Example.class)) {
-					if (! (isStatic(m) && hasFuzzyArgs(m, BeanSession.class) && isParentClass(innerClass, m.getReturnType())))
+			for (MethodInfo m : ci.getDeclaredMethods()) {
+				if (m.hasAnnotation(Example.class)) {
+					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
-					setAccessible(m, false);
-					exampleMethod = m;
+					m.setAccessible();
+					exampleMethod = m.inner();
 				}
 			}
 
 			// Note:  Primitive types are normally abstract.
-			isAbstract = ClassUtils.isAbstract(c) && ! c.isPrimitive();
+			isAbstract = ci.isAbstract() && ci.isNotPrimitive();
 
 			// Find constructor(String) method if present.
-			for (Constructor cs : c.getConstructors()) {
-				if (isPublic(cs) && isNotDeprecated(cs)) {
+			for (ConstructorInfo cs : ci.getConstructors()) {
+				if (cs.isPublic() && cs.isNotDeprecated()) {
 					Class<?>[] pt = cs.getParameterTypes();
 					if (pt.length == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
 						noArgConstructor = cs;
@@ -571,23 +581,24 @@ public final class ClassMeta<T> implements Type {
 						if (arg == String.class)
 							stringConstructor = cs;
 						else if (swapMethodType != null && swapMethodType.isAssignableFrom(arg))
-							swapConstructor = cs;
+							swapConstructor = (Constructor<T>)cs.inner();
 						else if (cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
 							numberConstructor = cs;
-							numberConstructorType = getWrapperIfPrimitive(arg);
+							numberConstructorType = getClassInfo(arg).getWrapperIfPrimitive();
 						}
 					}
 				}
 			}
 
-			primitiveDefault = ClassUtils.getPrimitiveDefault(c);
+			primitiveDefault = ci.getPrimitiveDefault();
 
-			for (Method m : c.getMethods())
-				if (isAll(m, PUBLIC, NOT_DEPRECATED))
-					publicMethods.put(getMethodSignature(m), m);
+			for (MethodInfo m : ci.getPublicMethods())
+				if (m.isAll(PUBLIC, NOT_DEPRECATED))
+					publicMethods.put(m.getSignature(), m.inner());
 
 			if (innerClass != Object.class) {
-				noArgConstructor = (Constructor<T>)findNoArgConstructor(implClass == null ? innerClass : implClass, Visibility.PUBLIC);
+				ClassInfo x = implClass == null ? ci : ici;
+				noArgConstructor = x.getNoArgConstructor(Visibility.PUBLIC);
 			}
 
 			if (beanFilter == null)
@@ -766,7 +777,7 @@ public final class ClassMeta<T> implements Type {
 
 		private BeanFilter findBeanFilter() {
 			try {
-				Map<Class<?>,Bean> ba = getAnnotationsMap(Bean.class, innerClass);
+				List<Bean> ba = info.getAnnotations(Bean.class);
 				if (! ba.isEmpty())
 					return new AnnotationBeanFilterBuilder(innerClass, ba).build();
 			} catch (Exception e) {
@@ -789,9 +800,10 @@ public final class ClassMeta<T> implements Type {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
+			ClassInfo ci = getClassInfo(c);
 
-			if (isParentClass(PojoSwap.class, c)) {
-				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);
+			if (ci.isChildOf(PojoSwap.class)) {
+				PojoSwap ps = castOrCreate(PojoSwap.class, c);
 				if (s.mediaTypes().length > 0)
 					ps.forMediaTypes(MediaType.forStrings(s.mediaTypes()));
 				if (! s.template().isEmpty())
@@ -799,7 +811,7 @@ public final class ClassMeta<T> implements Type {
 				return ps;
 			}
 
-			if (isParentClass(Surrogate.class, c)) {
+			if (ci.isChildOf(Surrogate.class)) {
 				List<SurrogateSwap<?,?>> l = SurrogateSwap.findPojoSwaps(c);
 				if (! l.isEmpty())
 					return (PojoSwap<T,?>)l.iterator().next();
@@ -817,6 +829,14 @@ public final class ClassMeta<T> implements Type {
 		}
 	}
 
+	/**
+	 * Returns the {@link ClassInfo} wrapper for the underlying class.
+	 *
+	 * @return The {@link ClassInfo} wrapper for the underlying class, never <jk>null</jk>.
+	 */
+	public ClassInfo getInfo() {
+		return info;
+	}
 
 	/**
 	 * Returns the type property name associated with this class and subclasses.
@@ -876,7 +896,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a superclass of or the same as the specified class.
 	 */
 	public boolean isAssignableFrom(Class<?> c) {
-		return isParentClass(innerClass, c);
+		return info.isChildOf(c);
 	}
 
 	/**
@@ -886,7 +906,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a subclass of or the same as the specified class.
 	 */
 	public boolean isInstanceOf(Class<?> c) {
-		return isParentClass(c, innerClass);
+		return info.isParentOf(c);
 	}
 
 	/**
@@ -914,7 +934,7 @@ public final class ClassMeta<T> implements Type {
 			PojoSwap<?,?> s = childSwapMap.get(normalClass);
 			if (s == null) {
 				for (PojoSwap<?,?> f : childPojoSwaps)
-					if (s == null && isParentClass(f.getNormalClass(), normalClass))
+					if (s == null && f.getNormalClass().isParentOf(normalClass))
 						s = f;
 				if (s == null)
 					s = PojoSwap.NULL;
@@ -941,7 +961,7 @@ public final class ClassMeta<T> implements Type {
 			PojoSwap<?,?> s = childUnswapMap.get(swapClass);
 			if (s == null) {
 				for (PojoSwap<?,?> f : childPojoSwaps)
-					if (s == null && isParentClass(f.getSwapClass(), swapClass))
+					if (s == null && f.getSwapClass().isParentOf(swapClass))
 						s = f;
 				if (s == null)
 					s = PojoSwap.NULL;
@@ -968,14 +988,15 @@ public final class ClassMeta<T> implements Type {
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
-	@SuppressWarnings({"rawtypes","unchecked"})
+	@SuppressWarnings({"unchecked"})
 	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
-		if (ClassUtils.isAbstract(c))
+		ClassInfo ci = getClassInfo(c);
+		if (ci.isAbstract())
 			return null;
-		boolean isMemberClass = c.isMemberClass() && ! isStatic(c);
-		for (Constructor cc : c.getConstructors()) {
-			if (hasNumArgs(cc,  isMemberClass ? 1 : 0) && v.isVisible(cc.getModifiers()) && isNotDeprecated(cc))
-				return v.transform(cc);
+		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
+		for (ConstructorInfo cc : ci.getConstructors()) {
+			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
+				return (Constructor<? extends T>) v.transform(cc.inner());
 		}
 		return null;
 	}
@@ -1035,7 +1056,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 			if (exampleMethod != null)
-				return (T)invokeMethodFuzzy(exampleMethod, null, session);
+				return (T)getMethodInfo(exampleMethod).invokeFuzzy(null, session);
 			if (exampleField != null)
 				return (T)exampleField.get(null);
 
@@ -1165,7 +1186,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class extends from {@link Set}.
 	 */
 	public boolean isSet() {
-		return cc == COLLECTION && isParentClass(Set.class, innerClass);
+		return cc == COLLECTION && info.isChildOf(Set.class);
 	}
 
 	/**
@@ -1174,7 +1195,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class extends from {@link List}.
 	 */
 	public boolean isList() {
-		return cc == COLLECTION && isParentClass(List.class, innerClass);
+		return cc == COLLECTION && info.isChildOf(List.class);
 	}
 
 	/**
@@ -1319,7 +1340,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this metadata represents the specified type.
 	 */
 	public boolean isType(Class<?> c) {
-		return isParentClass(c, innerClass);
+		return info.isChildOf(c);
 	}
 
 	/**
@@ -1382,7 +1403,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a {@link Date}.
 	 */
 	public boolean isDate() {
-		return cc == DATE && ClassUtils.isParentClass(Date.class, innerClass);
+		return cc == DATE && info.isChildOf(Date.class);
 	}
 
 	/**
@@ -1391,7 +1412,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is a {@link Calendar}.
 	 */
 	public boolean isCalendar() {
-		return cc == DATE && ClassUtils.isParentClass(Calendar.class, innerClass);
+		return cc == DATE && info.isChildOf(Calendar.class);
 	}
 
 	/**
@@ -1561,7 +1582,7 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
 	 */
-	public Constructor<? extends T> getConstructor() {
+	public ConstructorInfo getConstructor() {
 		return noArgConstructor;
 	}
 
@@ -1613,7 +1634,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean canCreateNewInstance(Object outer) {
 		if (isMemberClass)
-			return outer != null && noArgConstructor != null && hasArgs(noArgConstructor, outer.getClass());
+			return outer != null && noArgConstructor != null && noArgConstructor.hasArgs(outer.getClass());
 		return canCreateNewInstance();
 	}
 
@@ -1633,7 +1654,7 @@ public final class ClassMeta<T> implements Type {
 		if (beanMeta.constructor == null)
 			return false;
 		if (isMemberClass)
-			return outer != null && hasArgs(beanMeta.constructor, outer.getClass());
+			return outer != null && beanMeta.constructor.hasArgs(outer.getClass());
 		return true;
 	}
 
@@ -1650,7 +1671,7 @@ public final class ClassMeta<T> implements Type {
 			return true;
 		if (stringConstructor != null) {
 			if (isMemberClass)
-				return outer != null && hasArgs(stringConstructor, outer.getClass(), String.class);
+				return outer != null && stringConstructor.hasArgs(outer.getClass(), String.class);
 			return true;
 		}
 		return false;
@@ -1667,7 +1688,7 @@ public final class ClassMeta<T> implements Type {
 	public boolean canCreateNewInstanceFromNumber(Object outer) {
 		if (numberConstructor != null) {
 			if (isMemberClass)
-				return outer != null && hasArgs(numberConstructor, outer.getClass());
+				return outer != null && numberConstructor.hasArgs(outer.getClass());
 			return true;
 		}
 		return false;
@@ -1789,11 +1810,11 @@ public final class ClassMeta<T> implements Type {
 		Method m = fromStringMethod;
 		if (m != null)
 			return (T)m.invoke(null, arg);
-		Constructor<T> c = stringConstructor;
+		ConstructorInfo c = stringConstructor;
 		if (c != null) {
 			if (isMemberClass)
-				return c.newInstance(outer, arg);
-			return c.newInstance(arg);
+				return (T)c.invoke(outer, arg);
+			return (T)c.invoke(arg);
 		}
 		throw new InstantiationError("No string constructor or valueOf(String) method found for class '"+getInnerClass().getName()+"'");
 	}
@@ -1822,13 +1843,14 @@ public final class ClassMeta<T> implements Type {
 	 * 	the methods described above.
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
+	@SuppressWarnings("unchecked")
 	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Constructor<T> c = numberConstructor;
+		ConstructorInfo c = numberConstructor;
 		if (c != null) {
 			Object arg2 = session.convertToType(arg, numberConstructor.getParameterTypes()[0]);
 			if (isMemberClass)
-				return c.newInstance(outer, arg2);
-			return c.newInstance(arg2);
+				return (T) c.invoke(outer, arg2);
+			return (T) c.invoke(arg2);
 		}
 		throw new InstantiationError("No string constructor or valueOf(Number) method found for class '"+getInnerClass().getName()+"'");
 	}
@@ -1860,9 +1882,9 @@ public final class ClassMeta<T> implements Type {
 	public T newInstance() throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (isArray())
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
-		Constructor<? extends T> c = getConstructor();
+		ConstructorInfo c = getConstructor();
 		if (c != null)
-			return c.newInstance((Object[])null);
+			return (T) c.invoke((Object[])null);
 		InvocationHandler h = getProxyInvocationHandler();
 		if (h != null)
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { getInnerClass(), java.io.Serializable.class }, h);
@@ -1897,9 +1919,10 @@ public final class ClassMeta<T> implements Type {
 	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class.
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
+	@SuppressWarnings("unchecked")
 	public T newInstance(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (isMemberClass)
-			return noArgConstructor.newInstance(outer);
+			return (T) noArgConstructor.invoke(outer);
 		return newInstance();
 	}
 
@@ -1980,7 +2003,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public boolean isInstance(Object o) {
 		if (o != null)
-			return isParentClass(this.innerClass, o.getClass()) || (isPrimitive() && getPrimitiveWrapper(this.innerClass) == o.getClass());
+			return info.isParentOf(o.getClass()) || (isPrimitive() && info.getPrimitiveWrapper() == o.getClass());
 		return false;
 	}
 

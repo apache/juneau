@@ -13,7 +13,6 @@
 package org.apache.juneau.jsonschema;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.annotation.*;
 
 /**
@@ -32,7 +31,7 @@ public class JsonSchemaClassMeta extends ClassMetaExtended {
 	 */
 	public JsonSchemaClassMeta(ClassMeta<?> cm) throws Exception {
 		super(cm);
-		Schema s = ClassUtils.getAnnotation(Schema.class, getInnerClass());
+		Schema s = cm.getInfo().getAnnotation(Schema.class);
 		schema = s == null ? ObjectMap.EMPTY_MAP : SchemaUtils.asMap(s);
 	}
 

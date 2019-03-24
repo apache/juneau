@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
@@ -27,6 +26,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -307,16 +307,16 @@ public class BeanSession extends Session {
 
 			PojoSwap swap = to.getPojoSwap(this);
 			if (swap != null) {
-				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
-				if (isParentClass(nc, tc) && isParentClass(fc, value.getClass()))
+				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
+				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
 					return (T)swap.unswap(this, value, to);
 			}
 
 			ClassMeta<?> from = getClassMetaForObject(value);
 			swap = from.getPojoSwap(this);
 			if (swap != null) {
-				Class<?> nc = swap.getNormalClass(), fc = swap.getSwapClass();
-				if (isParentClass(nc, from.getInnerClass()) && isParentClass(fc, tc))
+				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
+				if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
 					return (T)swap.swap(this, value);
 			}
 
@@ -351,7 +351,7 @@ public class BeanSession extends Session {
 						if (tc == Byte.TYPE)
 							return (T)(Byte.valueOf(b ? (byte)1 : 0));
 					} else if (isNullOrEmpty(value)) {
-						return (T)getPrimitiveDefault(to.innerClass);
+						return (T)to.info.getPrimitiveDefault();
 					} else {
 						String s = value.toString();
 						int multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(s) : 1;
@@ -381,14 +381,14 @@ public class BeanSession extends Session {
 					}
 				} else if (to.isChar()) {
 					if (isNullOrEmpty(value))
-						return (T)getPrimitiveDefault(to.innerClass);
+						return (T)to.info.getPrimitiveDefault();
 					return (T)parseCharacter(value);
 				} else if (to.isBoolean()) {
 					if (from.isNumber()) {
 						int i = ((Number)value).intValue();
 						return (T)(i == 0 ? Boolean.FALSE : Boolean.TRUE);
 					} else if (isNullOrEmpty(value)) {
-						return (T)getPrimitiveDefault(to.innerClass);
+						return (T)to.info.getPrimitiveDefault();
 					} else {
 						return (T)Boolean.valueOf(value.toString());
 					}
@@ -622,7 +622,7 @@ public class BeanSession extends Session {
 					String typeName = m2.getString(getBeanTypePropertyName(to));
 					if (typeName != null) {
 						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (cm != null && isParentClass(to.innerClass, cm.innerClass))
+						if (cm != null && to.info.isParentOf(cm.innerClass))
 							return (T)m2.cast(cm);
 					}
 				}
@@ -1050,72 +1050,6 @@ public class BeanSession extends Session {
 	 */
 	protected final BeanRegistry getBeanRegistry() {
 		return ctx.getBeanRegistry();
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstance(Class<T> c, Object c2) {
-		return ctx.newInstance(c, c2);
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstance(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ctx.newInstance(c, c2, fuzzyArgs, args);
-	}
-
-	/**
-	 * Creates an instance of the specified class from within the context of another object.
-	 *
-	 * @param outer
-	 * 	The outer object.
-	 * 	Can be <jk>null</jk>.
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public <T> T newInstanceFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return ctx.newInstanceFromOuter(outer, c, c2, fuzzyArgs, args);
 	}
 
 	/**

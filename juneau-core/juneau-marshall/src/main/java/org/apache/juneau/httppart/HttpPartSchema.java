@@ -28,6 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -109,14 +110,11 @@ public class HttpPartSchema {
 	 * 		<li>{@link HasQuery}
 	 * 		<li>{@link HasFormData}
 	 * 	</ul>
-	 * @param m
-	 * 	The Java method containing the parameter.
-	 * @param mi
-	 * 	The index of the parameter on the method.
+	 * @param mpi The Java method parameter.
 	 * @return The schema information about the parameter.
 	 */
-	public static HttpPartSchema create(Class<? extends Annotation> c, Method m, int mi) {
-		return create().apply(c, m, mi).build();
+	public static HttpPartSchema create(Class<? extends Annotation> c, MethodParamInfo mpi) {
+		return create().apply(c, mpi).build();
 	}
 
 	/**

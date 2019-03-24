@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import java.lang.reflect.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
-import org.apache.juneau.internal.*;
+import java.lang.reflect.*;
 
 /**
  * Defines class/field/method visibilities.
@@ -75,6 +75,16 @@ public enum Visibility {
 	/**
 	 * Shortcut for <code>isVisible(x.getModifiers());</code>
 	 *
+	 * @param x The class to check.
+	 * @return <jk>true</jk> if the class is at least as visible as this object.
+	 */
+	public boolean isVisible(Class<?> x) {
+		return isVisible(x.getModifiers());
+	}
+
+	/**
+	 * Shortcut for <code>isVisible(x.getModifiers());</code>
+	 *
 	 * @param x The constructor to check.
 	 * @return <jk>true</jk> if the constructor is at least as visible as this object.
 	 */
@@ -117,7 +127,7 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! ClassUtils.setAccessible(x, true))
+			if (! setAccessible(x))
 				return null;
 		return x;
 	}
@@ -137,7 +147,7 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! ClassUtils.setAccessible(x, true))
+			if (! setAccessible(x))
 				return null;
 		return x;
 	}
@@ -157,7 +167,7 @@ public enum Visibility {
 		if (x == null)
 			return null;
 		if (isVisible(x))
-			if (! ClassUtils.setAccessible(x, true))
+			if (! setAccessible(x))
 				return null;
 		return x;
 	}

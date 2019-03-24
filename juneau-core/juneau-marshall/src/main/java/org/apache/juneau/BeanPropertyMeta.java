@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.transforms.*;
@@ -52,6 +53,7 @@ public final class BeanPropertyMeta {
 	private final Field field;                                // The bean property field (if it has one).
 	private final Field innerField;                                // The bean property field (if it has one).
 	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
+	private final MethodInfo getterInfo, setterInfo, extraKeysInfo;           // The bean property getter and setter.
 	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
 	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
 
@@ -194,7 +196,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				BeanProperty p = ClassUtils.getAnnotation(BeanProperty.class, getter);
+				BeanProperty p = getMethodInfo(getter).getAnnotation(BeanProperty.class);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || getter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -210,7 +212,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				BeanProperty p = ClassUtils.getAnnotation(BeanProperty.class, setter);
+				BeanProperty p = getMethodInfo(setter).getAnnotation(BeanProperty.class);
 				if (rawTypeMeta == null)
 					rawTypeMeta = f.resolveClassMeta(p, setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || setter.isAnnotationPresent(org.apache.juneau.annotation.URI.class));
@@ -235,11 +237,11 @@ public final class BeanPropertyMeta {
 			isDyna = "*".equals(name);
 
 			// Do some annotation validation.
-			Class<?> c = rawTypeMeta.getInnerClass();
+			ClassInfo ci = rawTypeMeta.getInfo();
 			if (getter != null) {
 				Class<?>[] pt = getter.getParameterTypes();
 				if (isDyna) {
-					if (isParentClass(Map.class, c) && pt.length == 0) {
+					if (ci.isChildOf(Map.class) && pt.length == 0) {
 						isDynaGetterMap = true;
 					} else if (pt.length == 1 && pt[0] == String.class) {
 						// OK.
@@ -247,7 +249,7 @@ public final class BeanPropertyMeta {
 						return false;
 					}
 				} else {
-					if (! isParentClass(getter.getReturnType(), c))
+					if (! ci.isChildOf(getter.getReturnType()))
 						return false;
 				}
 			}
@@ -262,16 +264,16 @@ public final class BeanPropertyMeta {
 				} else {
 					if (pt.length != 1)
 						return false;
-					if (! isParentClass(pt[0], c))
+					if (! ci.isChildOf(pt[0]))
 						return false;
 				}
 			}
 			if (field != null) {
 				if (isDyna) {
-					if (! isParentClass(Map.class, field.getType()))
+					if (! getClassInfo(field.getType()).isChildOf(Map.class))
 						return false;
 				} else {
-					if (! isParentClass(field.getType(), c))
+					if (! ci.isChildOf(field.getType()))
 						return false;
 				}
 			}
@@ -285,7 +287,7 @@ public final class BeanPropertyMeta {
 				return false;
 
 			if (typeMeta == null)
-				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
+				typeMeta = (swap != null ? beanContext.getClassMeta(swap.getSwapClass().innerType()) : rawTypeMeta == null ? beanContext.object() : rawTypeMeta);
 			if (typeMeta == null)
 				typeMeta = rawTypeMeta;
 
@@ -301,7 +303,7 @@ public final class BeanPropertyMeta {
 
 		private PojoSwap getPropertyPojoSwap(BeanProperty p) throws Exception {
 			if (! p.format().isEmpty())
-				return beanContext.newInstance(PojoSwap.class, StringFormatSwap.class, false, p.format());
+				return castOrCreate(PojoSwap.class, StringFormatSwap.class, false, p.format());
 			return null;
 		}
 
@@ -311,33 +313,34 @@ public final class BeanPropertyMeta {
 				c = s.impl();
 			if (c == Null.class)
 				return null;
-			if (isParentClass(PojoSwap.class, c)) {
-				PojoSwap ps = beanContext.newInstance(PojoSwap.class, c);
+			ClassInfo ci = getClassInfo(c);
+			if (ci.isChildOf(PojoSwap.class)) {
+				PojoSwap ps = castOrCreate(PojoSwap.class, c);
 				if (ps.forMediaTypes() != null)
 					throw new RuntimeException("TODO - Media types on swaps not yet supported on bean properties.");
 				if (ps.withTemplate() != null)
 					throw new RuntimeException("TODO - Templates on swaps not yet supported on bean properties.");
 				return ps;
 			}
-			if (isParentClass(Surrogate.class, c))
+			if (ci.isChildOf(Surrogate.class))
 				throw new RuntimeException("TODO - Surrogate swaps not yet supported on bean properties.");
 			throw new FormattedRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of PojoSwap or Surrogate.", c);
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {
-			setAccessible(getter, false);
+			setAccessible(getter);
 			this.getter = getter;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setSetter(Method setter) {
-			setAccessible(setter, false);
+			setAccessible(setter);
 			this.setter = setter;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setField(Field field) {
-			setAccessible(field, false);
+			setAccessible(field);
 			this.field = field;
 			this.innerField = field;
 			return this;
@@ -349,7 +352,7 @@ public final class BeanPropertyMeta {
 		}
 
 		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
-			setAccessible(extraKeys, false);
+			setAccessible(extraKeys);
 			this.extraKeys = extraKeys;
 			return this;
 		}
@@ -370,8 +373,11 @@ public final class BeanPropertyMeta {
 		this.field = b.field;
 		this.innerField = b.innerField;
 		this.getter = b.getter;
+		this.getterInfo = getMethodInfo(b.getter);
 		this.setter = b.setter;
+		this.setterInfo = getMethodInfo(b.setter);
 		this.extraKeys = b.extraKeys;
+		this.extraKeysInfo = getMethodInfo(b.extraKeys);
 		this.isUri = b.isUri;
 		this.beanMeta = b.beanMeta;
 		this.beanContext = b.beanContext;
@@ -701,7 +707,7 @@ public final class BeanPropertyMeta {
 						}
 					} else {
 						if (propMap == null) {
-							propMap = beanContext.newInstance(Map.class, propertyClass);
+							propMap = castOrCreate(Map.class, propertyClass);
 						} else {
 							propMap.clear();
 						}
@@ -757,7 +763,7 @@ public final class BeanPropertyMeta {
 						propList.clear();
 					} else {
 						if (propList == null) {
-							propList = beanContext.newInstance(Collection.class, propertyClass);
+							propList = castOrCreate(Collection.class, propertyClass);
 							invokeSetter(bean, pName, propList);
 						} else {
 							propList.clear();
@@ -772,7 +778,7 @@ public final class BeanPropertyMeta {
 					}
 
 				} else {
-					if (swap != null && value != null && isParentClass(swap.getSwapClass(), value.getClass())) {
+					if (swap != null && value != null && swap.getSwapClass().isParentOf(value.getClass())) {
 						value = swap.unswap(session, value, rawTypeMeta);
 					} else {
 						value = session.convertToType(value, rawTypeMeta);
@@ -1061,22 +1067,22 @@ public final class BeanPropertyMeta {
 		List<A> l = new LinkedList<>();
 		if (field != null) {
 			addIfNotNull(l, field.getAnnotation(a));
-			appendAnnotations(a, field.getType(), l);
+			getClassInfo(field.getType()).appendAnnotations(l, a);
 		}
 		if (getter != null) {
-			addIfNotNull(l, ClassUtils.getAnnotation(a, getter));
-			appendAnnotations(a, getter.getReturnType(), l);
+			addIfNotNull(l, getMethodInfo(getter).getAnnotation(a));
+			getClassInfo(getter.getReturnType()).appendAnnotations(l, a);
 		}
 		if (setter != null) {
-			addIfNotNull(l, ClassUtils.getAnnotation(a, setter));
-			appendAnnotations(a, setter.getReturnType(), l);
+			addIfNotNull(l, getMethodInfo(setter).getAnnotation(a));
+			getClassInfo(setter.getReturnType()).appendAnnotations(l, a);
 		}
 		if (extraKeys != null) {
-			addIfNotNull(l, ClassUtils.getAnnotation(a, extraKeys));
-			appendAnnotations(a, extraKeys.getReturnType(), l);
+			addIfNotNull(l, getMethodInfo(extraKeys).getAnnotation(a));
+			getClassInfo(extraKeys.getReturnType()).appendAnnotations(l, a);
 		}
 
-		appendAnnotations(a, this.getBeanMeta().getClassMeta().getInnerClass(), l);
+		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a);
 		return l;
 	}
 
@@ -1095,13 +1101,13 @@ public final class BeanPropertyMeta {
 		if (field != null)
 			t = field.getAnnotation(a);
 		if (t == null && getter != null)
-			t = ClassUtils.getAnnotation(a, getter);
+			t = getterInfo.getAnnotation(a);
 		if (t == null && setter != null)
-			t = ClassUtils.getAnnotation(a, setter);
+			t = setterInfo.getAnnotation(a);
 		if (t == null && extraKeys != null)
-			t = ClassUtils.getAnnotation(a, extraKeys);
+			t = extraKeysInfo.getAnnotation(a);
 		if (t == null)
-			t = ClassUtils.getAnnotation(a, typeMeta.getInnerClass());
+			t = typeMeta.getInfo().getAnnotation(a);
 		return t;
 	}
 

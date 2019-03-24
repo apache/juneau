@@ -19,7 +19,6 @@ import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.http.conn.routing.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpClientConnectionManager} specifically for use in mocked connections using the {@link MockHttpConnection} class.

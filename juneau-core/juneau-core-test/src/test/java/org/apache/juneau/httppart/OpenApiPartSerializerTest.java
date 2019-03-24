@@ -1010,16 +1010,16 @@ public class OpenApiPartSerializerTest {
 	}
 
 	public static class H2 {
-		public Object f1, f2, f4, f5, f6, f7, f8, f9, f10, f11, f12, f99;
-		public H2(Object f1, Object f2, Object f4, Object f5, Object f6, Object f7, Object f8, Object f9, Object f10, Object f11, Object f12, Object f99) {
-			this.f1 = f1;
-			this.f2 = f2;
-			this.f4 = f4;
-			this.f5 = f5;
-			this.f6 = f6;
-			this.f7 = f7;
-			this.f8 = f8;
-			this.f9 = f9;
+		public Object f01, f02, f04, f05, f06, f07, f08, f09, f10, f11, f12, f99;
+		public H2(Object f01, Object f02, Object f04, Object f05, Object f06, Object f07, Object f08, Object f09, Object f10, Object f11, Object f12, Object f99) {
+			this.f01 = f01;
+			this.f02 = f02;
+			this.f04 = f04;
+			this.f05 = f05;
+			this.f06 = f06;
+			this.f07 = f07;
+			this.f08 = f08;
+			this.f09 = f09;
 			this.f10 = f10;
 			this.f11 = f11;
 			this.f12 = f12;
@@ -1030,14 +1030,14 @@ public class OpenApiPartSerializerTest {
 	@Test
 	public void h04_objectType_simpleProperties() throws Exception {
 		HttpPartSchema ps = schema("object")
-			.property("f1", schema("string"))
-			.property("f2", schema("string", "byte"))
-			.property("f4", schema("string", "date-time"))
-			.property("f5", schema("string", "binary"))
-			.property("f6", schema("string", "binary-spaced"))
-			.property("f7", schema("string", "uon"))
-			.property("f8", schema("integer"))
-			.property("f9", schema("integer", "int64"))
+			.property("f01", schema("string"))
+			.property("f02", schema("string", "byte"))
+			.property("f04", schema("string", "date-time"))
+			.property("f05", schema("string", "binary"))
+			.property("f06", schema("string", "binary-spaced"))
+			.property("f07", schema("string", "uon"))
+			.property("f08", schema("integer"))
+			.property("f09", schema("integer", "int64"))
 			.property("f10", schema("number"))
 			.property("f11", schema("number", "double"))
 			.property("f12", schema("boolean"))
@@ -1047,28 +1047,28 @@ public class OpenApiPartSerializerTest {
 		byte[] foob = "foo".getBytes();
 
 		assertEquals(
-			"(f1=foo,f2=Zm9v,f4=2012-12-21T12:34:56Z,f5=666F6F,f6='66 6F 6F',f7=foo,f8=1,f9=2,f10=1.0,f11=1.0,f12=true,f99=1)",
+			"(f01=foo,f02=Zm9v,f04=2012-12-21T12:34:56Z,f05=666F6F,f06='66 6F 6F',f07=foo,f08=1,f09=2,f10=1.0,f11=1.0,f12=true,f99=1)",
 			s.serialize(ps, new H2("foo",foob,parseIsoCalendar("2012-12-21T12:34:56Z"),foob,foob,"foo",1,2,1.0,1.0,true,1))
 		);
 		assertEquals("()", s.serialize(ps, new H2(null,null,null,null,null,null,null,null,null,null,null,null)));
 		assertEquals("null", s.serialize(ps, null));
 		assertEquals(
-			"(f1=foo,f2=Zm9v,f4=2012-12-21T12:34:56Z,f5=666F6F,f6='66 6F 6F',f7=foo,f8=1,f9=2,f10=1.0,f11=1.0,f12=true,f99=1)",
-			s.serialize(ps, new ObjectMap().append("f1","foo").append("f2",foob).append("f4",parseIsoCalendar("2012-12-21T12:34:56Z")).append("f5",foob).append("f6",foob).append("f7","foo").append("f8",1).append("f9",2).append("f10",1.0).append("f11",1.0).append("f12",true).append("f99",1))
+			"(f01=foo,f02=Zm9v,f04=2012-12-21T12:34:56Z,f05=666F6F,f06='66 6F 6F',f07=foo,f08=1,f09=2,f10=1.0,f11=1.0,f12=true,f99=1)",
+			s.serialize(ps, new ObjectMap().append("f01","foo").append("f02",foob).append("f04",parseIsoCalendar("2012-12-21T12:34:56Z")).append("f05",foob).append("f06",foob).append("f07","foo").append("f08",1).append("f09",2).append("f10",1.0).append("f11",1.0).append("f12",true).append("f99",1))
 		);
 	}
 
 	@Test
 	public void h05_objectType_arrayProperties() throws Exception {
 		HttpPartSchema ps = schema("object")
-			.property("f1", schema("array").items(schema("string")))
-			.property("f2", schema("array").items(schema("string", "byte")))
-			.property("f4", schema("array").items(schema("string", "date-time")))
-			.property("f5", schema("array").items(schema("string", "binary")))
-			.property("f6", schema("array").items(schema("string", "binary-spaced")))
-			.property("f7", schema("array").items(schema("string", "uon")))
-			.property("f8", schema("array").items(schema("integer")))
-			.property("f9", schema("array").items(schema("integer", "int64")))
+			.property("f01", schema("array").items(schema("string")))
+			.property("f02", schema("array").items(schema("string", "byte")))
+			.property("f04", schema("array").items(schema("string", "date-time")))
+			.property("f05", schema("array").items(schema("string", "binary")))
+			.property("f06", schema("array").items(schema("string", "binary-spaced")))
+			.property("f07", schema("array").items(schema("string", "uon")))
+			.property("f08", schema("array").items(schema("integer")))
+			.property("f09", schema("array").items(schema("integer", "int64")))
 			.property("f10", schema("array").items(schema("number")))
 			.property("f11", schema("array").items(schema("number", "double")))
 			.property("f12", schema("array").items(schema("boolean")))
@@ -1078,7 +1078,7 @@ public class OpenApiPartSerializerTest {
 		byte[] foob = "foo".getBytes();
 
 		assertEquals(
-			"(f1=@('a,b',null),f2=@(Zm9v,null),f4=@(2012-12-21T12:34:56Z,null),f5=@(666F6F,null),f6=@('66 6F 6F',null),f7=@(a,b,null),f8=@(1,2,null),f9=@(3,4,null),f10=@(1.0,2.0,null),f11=@(3.0,4.0,null),f12=@(true,false,null),f99=@(1,x,null))",
+			"(f01=@('a,b',null),f02=@(Zm9v,null),f04=@(2012-12-21T12:34:56Z,null),f05=@(666F6F,null),f06=@('66 6F 6F',null),f07=@(a,b,null),f08=@(1,2,null),f09=@(3,4,null),f10=@(1.0,2.0,null),f11=@(3.0,4.0,null),f12=@(true,false,null),f99=@(1,x,null))",
 			s.serialize(ps, new H2(new String[]{"a,b",null},new byte[][]{foob,null},new Calendar[]{parseIsoCalendar("2012-12-21T12:34:56Z"),null},new byte[][]{foob,null},new byte[][]{foob,null},new String[]{"a","b",null},new Integer[]{1,2,null},new Integer[]{3,4,null},new Float[]{1f,2f,null},new Float[]{3f,4f,null},new Boolean[]{true,false,null},new Object[]{1,"x",null}))
 		);
 

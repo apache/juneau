@@ -28,6 +28,7 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflection.*;
 
 /**
  * Exception representing a <code>400+</code> HTTP response code against a remote resource.
@@ -159,24 +160,25 @@ public final class RestCallException extends IOException {
 				if (t.getName().endsWith(serverExceptionName))
 					doThrow(t, serverExceptionMessage);
 			try {
-				Class<?> t = cl.loadClass(serverExceptionName);
-				if (isParentClass(RuntimeException.class, t) || isParentClass(Error.class, t))
-					doThrow(t, serverExceptionMessage);
+				ClassInfo t = getClassInfo(cl.loadClass(serverExceptionName));
+				if (t.isChildOf(RuntimeException.class) || t.isChildOf(Error.class))
+					doThrow(t.inner(), serverExceptionMessage);
 			} catch (ClassNotFoundException e2) { /* Ignore */ }
 		}
 	}
 
 	private void doThrow(Class<?> t, String msg) throws Throwable {
 		Constructor<?> c = null;
+		ClassInfo ci = getClassInfo(t);
 		if (msg != null) {
-			c = findPublicConstructor(t, String.class);
+			c = ci.findPublicConstructor(String.class);
 			if (c != null)
 				throw (Throwable)c.newInstance(msg);
-			c = findPublicConstructor(t, Object.class);
+			c = ci.findPublicConstructor(Object.class);
 			if (c != null)
 				throw (Throwable)c.newInstance(msg);
 		}
-		c = findPublicConstructor(t);
+		c = ci.findPublicConstructor();
 		if (c != null)
 			throw (Throwable)c.newInstance();
 	}

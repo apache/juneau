@@ -440,6 +440,7 @@ public class XmlTest {
 		validateXml(t, s);
 	}
 
+	@Bean(properties="url,id,name")
 	public static class N {
 		@Rdf(beanUri=true) @Xml(format=ELEMENT) public URL url;
 		public int id;
@@ -472,6 +473,7 @@ public class XmlTest {
 		validateXml(t, s);
 	}
 
+	@Bean(properties="url2,id2,name")
 	public static class O {
 		@BeanProperty(name="url2") @Xml(format=ELEMENT) public URL url;
 		@BeanProperty(name="id2") public int id;
@@ -504,6 +506,7 @@ public class XmlTest {
 		validateXml(t, s);
 	}
 
+	@Bean(properties="url2,id2,name")
 	public static class P {
 		@BeanProperty(name="url2") @Xml(format=ATTR) public URL url;
 		@BeanProperty(name="id2") @Xml(format=ATTR) public int id;

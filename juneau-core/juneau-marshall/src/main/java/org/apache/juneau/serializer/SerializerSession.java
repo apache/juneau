@@ -76,7 +76,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		args = args == null ? SerializerSessionArgs.DEFAULT : args;
 		this.javaMethod = args.javaMethod;
 		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
-		this.listener = newInstance(SerializerListener.class, ctx.getListener());
+		this.listener = castOrCreate(SerializerListener.class, ctx.getListener());
 		this.useWhitespace = args.useWhitespace != null ? args.useWhitespace : ctx.isUseWhitespace();
 	}
 
@@ -316,14 +316,14 @@ public abstract class SerializerSession extends BeanTraverseSession {
 				if (((Object[])value).length == 0)
 					return true;
 			}
-			if (cm.isCollection() || (cm.isObject() && isParentClass(Collection.class, value.getClass()))) {
+			if (cm.isCollection() || (cm.isObject() && getClassInfo(value).isChildOf(Collection.class))) {
 				if (((Collection<?>)value).isEmpty())
 					return true;
 			}
 		}
 
 		if (isTrimEmptyMaps()) {
-			if (cm.isMap() || (cm.isObject() && isParentClass(Map.class, value.getClass()))) {
+			if (cm.isMap() || (cm.isObject() && getClassInfo(value).isChildOf(Map.class))) {
 				if (((Map<?,?>)value).isEmpty())
 					return true;
 			}

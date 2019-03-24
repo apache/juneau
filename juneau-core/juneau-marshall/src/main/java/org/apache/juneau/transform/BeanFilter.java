@@ -13,10 +13,10 @@
 package org.apache.juneau.transform;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Parent class for all bean filters.
@@ -56,7 +56,7 @@ public final class BeanFilter {
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
 		this.fluentSetters = builder.fluentSetters;
-		this.propertyNamer = ClassUtils.newInstance(PropertyNamer.class, builder.propertyNamer);
+		this.propertyNamer = castOrCreate(PropertyNamer.class, builder.propertyNamer);
 		this.beanDictionary =
 			builder.beanDictionary == null
 			? null
@@ -64,7 +64,7 @@ public final class BeanFilter {
 		this.propertyFilter =
 			builder.propertyFilter == null
 			? PropertyFilter.DEFAULT
-			: ClassUtils.newInstance(PropertyFilter.class, builder.propertyFilter);
+			: castOrCreate(PropertyFilter.class, builder.propertyFilter);
 	}
 
 	/**

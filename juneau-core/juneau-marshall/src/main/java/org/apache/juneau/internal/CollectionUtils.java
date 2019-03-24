@@ -12,37 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import java.lang.reflect.*;
 import java.util.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 
 /**
  * Utility methods for collections.
  */
 public final class CollectionUtils {
-
-	/**
-	 * Reverses the order of a {@link LinkedHashMap}.
-	 *
-	 * @param in The map to reverse the order on.
-	 * @return A new {@link LinkedHashMap} with keys in reverse order.
-	 */
-	public static <K,V> LinkedHashMap<K,V> reverse(Map<K,V> in) {
-		if (in == null)
-			return null;
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
-
-		// Note:  Entry objects are reusable in an entry set, so we simply can't
-		// create a reversed iteration of that set.
-		List<K> keys = new ArrayList<>(in.keySet());
-		List<V> values = new ArrayList<>(in.values());
-		for (int i = in.size()-1; i >= 0; i--)
-			m.put(keys.get(i), values.get(i));
-
-		return m;
-	}
 
 	/**
 	 * Add a value to a list if the value is not null.
@@ -92,85 +67,42 @@ public final class CollectionUtils {
 	}
 
 	/**
-	 * Returns a reverse iterable of the specified collection.
+	 * Returns an iterable over the specified collection.
 	 *
 	 * @param c The collection to iterate over.
-	 * @return An iterable over the collection in reverse order.
+	 * @param reverse If <jk>true</jk>, iterate in reverse order.
+	 * @return An iterable over the collection.
 	 */
-	public static <T> Iterable<T> reverseIterable(final Collection<T> c) {
-		return new Iterable<T>() {
-			@Override
-			public Iterator<T> iterator() {
-				if (c == null)
-					return Collections.EMPTY_LIST.iterator();
-				ArrayList<T> l = new ArrayList<>(c);
-				Collections.reverse(l);
-				return l.iterator();
-			}
-		};
+	public static <T> Iterable<T> iterable(final Collection<T> c, boolean reverse) {
+		if (reverse)
+			return new ReverseIterable<>(c instanceof List ? (List<T>)c : new ArrayList<>(c));
+		return c;
 	}
 
 	/**
-	 * Same as {@link Collections#reverse(List)}, but returns the list.
+	 * Returns an iterable over the specified list.
 	 *
-	 * @param l The list being reversed
-	 * @return The same list.
+	 * @param c The collection to iterate over.
+	 * @param reverse If <jk>true</jk>, iterate in reverse order.
+	 * @return An iterable over the collection.
 	 */
-	public static <T> List<T> reverse(List<T> l) {
-		Collections.reverse(l);
-		return l;
+	public static <T> Iterable<T> iterable(final List<T> c, boolean reverse) {
+		if (reverse)
+			return new ReverseIterable<>(c);
+		return c;
 	}
 
 	/**
-	 * Creates a new copy of a list in reverse order.
+	 * Returns an iterable over the specified array.
 	 *
-	 * @param l The old list.
-	 * @return
-	 * 	A new list with reversed entries.
-	 * 	<br>Returns <jk>null</jk> if the list was <jk>null</jk>.
-	 * 	<br>Returns the same list if the list is empty.
+	 * @param c The collection to iterate over.
+	 * @param reverse If <jk>true</jk>, iterate in reverse order.
+	 * @return An iterable over the collection.
 	 */
-	public static <T> List<T> reverseCopy(List<T> l) {
-		if (l == null || l.isEmpty())
-			return l;
-		List<T> l2 = new ArrayList<>(l);
-		Collections.reverse(l2);
-		return l2;
-	}
-
-	/**
-	 * Collapses a collection of individual objects, arrays, and collections into a single list of objects.
-	 *
-	 * @param o The collection of objects to collapse.
-	 * @return A new linked-list of objects.
-	 */
-	public static List<Object> collapse(Object...o) {
-		return collapse(new LinkedList<>(), o);
-	}
-
-	/**
-	 * Same as {@link #collapse(Object...)} but allows you to supply your own list to append to.
-	 *
-	 * @param l The list to append to.
-	 * @param o The collection of objects to collapse.
-	 * @return The same list passed in.
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<Object> collapse(List<Object> l, Object...o) {
-		for (Object o2 : o) {
-			if (o2 != null) {
-				if (o2.getClass().isArray()) {
-					for (int i = 0; i < Array.getLength(o2); i++)
-						collapse(l, Array.get(o2, i));
-				} else if (o2 instanceof Collection) {
-					for (Object o3 : (Collection<Object>)o2)
-						collapse(l, o3);
-				} else {
-					l.add(o2);
-				}
-			}
-		}
-		return l;
+	public static <T> Iterable<T> iterable(T[] c, boolean reverse) {
+		if (reverse)
+			return new ReverseIterable<>(Arrays.asList(c));
+		return Arrays.asList(c);
 	}
 
 	/**
@@ -237,35 +169,4 @@ public final class CollectionUtils {
 			return Collections.emptyMap();
 		return Collections.unmodifiableMap(m);
 	}
-
-	/**
-	 * Asserts that all entries in the list are either instances or subclasses of at least one of the specified classes.
-	 *
-	 * @param l The list to check.
-	 * @param c The valid classes.
-	 */
-	public static void assertTypes(List<Object> l, Class<?>...c) {
-		for (Object o : l) {
-			boolean matches = false;
-			if (o.getClass() == Class.class) {
-				Class<?> o2 = (Class<?>)o;
-				for (int i = 0; i < c.length && ! matches; i++)
-					matches = c[i].isAssignableFrom(o2);
-			} else {
-				for (int i = 0; i < c.length && ! matches; i++)
-					matches = c[i].isInstance(o);
-			}
-			if (! matches)
-				throw new FormattedRuntimeException("Invalid list entry ''{0}'' ({1}).  Not one of the following types: {2}", string(o), className(o), c);
-		}
-	}
-
-	static String string(Object value) {
-		return SimpleJsonSerializer.DEFAULT.toString(value);
-	}
-
-	static String className(Object value) {
-		return value.getClass().getSimpleName();
-	}
-
 }

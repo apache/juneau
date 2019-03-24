@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on
@@ -34,12 +35,12 @@ public class HtmlClassMeta extends ClassMetaExtended {
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm) {
 		super(cm);
-		this.html = ClassUtils.getAnnotation(Html.class, getInnerClass());
+		this.html = cm.getInfo().getAnnotation(Html.class);
 		if (html != null) {
 			format = html.format();
 			noTables = html.noTables();
 			noTableHeaders = html.noTableHeaders();
-			render = cm.getBeanContext().newInstance(HtmlRender.class, html.render());
+			render = castOrCreate(HtmlRender.class, html.render());
 		} else {
 			format = HtmlFormat.HTML;
 			noTables = false;

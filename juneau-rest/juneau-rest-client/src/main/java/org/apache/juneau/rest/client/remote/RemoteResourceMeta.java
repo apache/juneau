@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+
+import org.apache.juneau.reflection.*;
 
 /**
  * Contains the meta-data about a REST proxy class.
@@ -44,14 +46,15 @@ public class RemoteResourceMeta {
 	public RemoteResourceMeta(Class<?> c) {
 		String path = "";
 
-		for (RemoteResource r : getAnnotationsParentFirst(RemoteResource.class, c))
+		ClassInfo ci = getClassInfo(c);
+		for (RemoteResource r : ci.getAnnotations(RemoteResource.class, true))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
 		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
-		for (Method m : c.getMethods())
-			if (isPublic(m))
-				methods.put(m, new RemoteMethodMeta(path, m, false, "GET"));
+		for (MethodInfo m : ci.getPublicMethods())
+			if (m.isPublic())
+				methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), false, "GET"));
 
 		this.methods = unmodifiableMap(methods);
 		this.path = path;

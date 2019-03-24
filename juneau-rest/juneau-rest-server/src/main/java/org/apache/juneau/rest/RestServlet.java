@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
 import java.text.*;
@@ -23,7 +24,7 @@ import java.util.logging.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.exception.*;
 
@@ -121,7 +122,8 @@ public abstract class RestServlet extends HttpServlet {
 	public synchronized String getPath() {
 		if (context != null)
 			return context.getPath();
-		for (RestResource rr : ClassUtils.getAnnotations(RestResource.class, this.getClass()))
+		ClassInfo ci = getClassInfo(getClass());
+		for (RestResource rr : ci.getAnnotations(RestResource.class))
 			if (! rr.path().isEmpty())
 				return trimSlashes(rr.path());
 		return "";

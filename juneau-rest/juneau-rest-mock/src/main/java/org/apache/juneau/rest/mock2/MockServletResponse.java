@@ -24,7 +24,6 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpServletResponse} for mocking purposes.

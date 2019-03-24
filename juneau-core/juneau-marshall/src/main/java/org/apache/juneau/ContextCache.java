@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * Stores a cache of {@link Context} instances mapped by the property stores used to create them.
@@ -136,8 +137,8 @@ public class ContextCache {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
 			Set<String> ps = new HashSet<>();
-			for (Iterator<Class<?>> i = ClassUtils.getParentClasses(c, false, true); i.hasNext();)
-				ps.add(i.next().getSimpleName());
+			for (ClassInfo c2 : getClassInfo(c).getParents(false, true))
+				ps.add(c2.getSimpleName());
 			prefixes = ps.toArray(new String[ps.size()]);
 			String[] p2 = prefixCache.putIfAbsent(c, prefixes);
 			if (p2 != null)
@@ -147,7 +148,7 @@ public class ContextCache {
 	}
 
 	private <T> T newInstance(Class<T> cc, PropertyStore ps) throws Exception {
-		return (T)ClassUtils.newInstance(Context.class, cc, true, ps);
+		return (T)castOrCreate(Context.class, cc, true, ps);
 	}
 
 	private static class CacheEntry {

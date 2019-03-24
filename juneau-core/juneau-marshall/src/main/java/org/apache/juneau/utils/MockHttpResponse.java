@@ -20,7 +20,10 @@ import java.util.*;
  * <p>
  * Used as a shim between the server and client APIs that allow the <code>RestClient</code>
  * class to send and receive mocked requests using the <code>MockRest</code> interface.
+ *
+ * @deprecated Use <code>org.apache.juneau.rest.mock2</code>
  */
+@Deprecated
 public interface MockHttpResponse {
 
 	/**

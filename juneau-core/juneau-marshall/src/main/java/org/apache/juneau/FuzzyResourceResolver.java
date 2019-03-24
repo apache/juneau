@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import org.apache.juneau.internal.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 
 /**
  * Basic implementation of a resource resolver.
@@ -22,7 +22,7 @@ public class FuzzyResourceResolver implements ResourceResolver {
 	@Override /* ResourceResolver */
 	public <T> T resolve(Object parent, Class<T> c, Object...args) {
 		try {
-			return ClassUtils.newInstanceFromOuter(parent, c, c, true, args);
+			return castOrCreateFromOuter(parent, c, c, true, args);
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e, c, "Could not instantiate resource class ''{0}''");
 		}
