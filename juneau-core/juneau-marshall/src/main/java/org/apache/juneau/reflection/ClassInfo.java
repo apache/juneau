@@ -172,19 +172,22 @@ public final class ClassInfo {
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
 	 * <p>
-	 * Methods are sorted alphabetically per class before being aggregated.
+	 * Methods are ordered per the natural ordering of the underlying JVM.
+	 * <br>Some JVMs (IBM) preserve the declaration order of methods.  Other JVMs (Oracle) do not and return them in random order.
 	 *
 	 * @return All declared methods on this class and all parent classes in child-to-parent order.
 	 */
 	public Iterable<MethodInfo> getAllMethods() {
-		return getAllMethods(false, true);
+		return getAllMethods(false, false);
 	}
 
 	/**
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
 	 * @param parentFirst If <jk>true</jk>, methods on parent classes are listed first.
-	 * @param sort If <jk>true</jk>, methods are sorted alphabetically per class.
+	 * @param sort 
+	 * 	If <jk>true</jk>, methods are sorted alphabetically per class.
+	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All declared methods on this class and all parent classes.
 	 */
 	public Iterable<MethodInfo> getAllMethods(boolean parentFirst, boolean sort) {
@@ -193,17 +196,23 @@ public final class ClassInfo {
 
 	/**
 	 * Returns all methods declared on this class.
+	 * 
+	 * <p>
+	 * Methods are ordered per the natural ordering of the underlying JVM.
+	 * <br>Some JVMs (IBM) preserve the declaration order of methods.  Other JVMs (Oracle) do not and return them in random order.
 	 *
-	 * @return All methods declared on this class in alphabetical order.
+	 * @return All methods declared on this class.
 	 */
 	public Iterable<MethodInfo> getDeclaredMethods() {
-		return getDeclaredMethods(true);
+		return getDeclaredMethods(false);
 	}
 
 	/**
 	 * Returns all methods declared on this class.
 	 *
-	 * @param sort If <jk>true</jk>, sorts the results in alphabetical order.
+	 * @param sort 
+	 * 	If <jk>true</jk>, methods are sorted alphabetically.
+	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All methods declared on this class.
 	 */
 	public Iterable<MethodInfo> getDeclaredMethods(boolean sort) {
@@ -225,7 +234,9 @@ public final class ClassInfo {
 	/**
 	 * Returns all public methods on this class.
 	 *
-	 * @param sort If <jk>true</jk>, sorts methods in alphabetical order.
+	 * @param sort 
+	 * 	If <jk>true</jk>, methods are sorted alphabetically.
+	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All public methods on this class.
 	 */
 	public Iterable<MethodInfo> getPublicMethods(boolean sort) {
@@ -377,19 +388,22 @@ public final class ClassInfo {
 	 * Returns all field on this class and all parent classes in child-to-parent order.
 	 *
 	 * <p>
-	 * Fields are sorted alphabetically per class before being aggregated.
+	 * Fields are ordered per the natural ordering of the underlying JVM.
+	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
 	 *
 	 * @return All declared methods on this class and all parent classes in child-to-parent order.
 	 */
 	public Iterable<FieldInfo> getAllFields() {
-		return getAllFields(false, true);
+		return getAllFields(false, false);
 	}
 
 	/**
 	 * Returns all field on this class and all parent classes.
 	 *
 	 * @param parentFirst If <jk>true</jk>, fields are listed in parent-to-child order.
-	 * @param sort If <jk>true</jk>, fields are sorted alphabetically within each class.
+	 * @param sort 
+	 * 	If <jk>true</jk>, fields are sorted alphabetically.
+	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All declared methods on this class and all parent classes.
 	 */
 	public Iterable<FieldInfo> getAllFields(boolean parentFirst, boolean sort) {
@@ -400,27 +414,34 @@ public final class ClassInfo {
 	 * Returns all field on this class and all parent classes in parent-to-child order.
 	 *
 	 * <p>
-	 * Fields are sorted alphabetically per class before being aggregated.
+	 * Fields are ordered per the natural ordering of the underlying JVM.
+	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
 	 *
 	 * @return All declared methods on this class and all parent classes in parent-to-child order.
 	 */
 	public Iterable<FieldInfo> getAllFieldsParentFirst() {
-		return getAllFields(true, true);
+		return getAllFields(true, false);
 	}
 
 	/**
 	 * Returns all fields declared on this class.
-	 *
-	 * @return All fields declared on this class in alphabetical order.
+	 * 
+	 * <p>
+	 * Fields are ordered per the natural ordering of the underlying JVM.
+	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
+	 * 
+	 * @return All fields declared on this class.
 	 */
 	public Iterable<FieldInfo> getDeclaredFields() {
-		return getDeclaredFields(true);
+		return getDeclaredFields(false);
 	}
 
 	/**
 	 * Returns all fields declared on this class.
 	 *
-	 * @param sort If <jk>true</jk>, fields are listed in alphabetical order.
+	 * @param sort 
+	 * 	If <jk>true</jk>, fields are sorted alphabetically.
+	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All fields declared on this class.
 	 */
 	public Iterable<FieldInfo> getDeclaredFields(boolean sort) {
