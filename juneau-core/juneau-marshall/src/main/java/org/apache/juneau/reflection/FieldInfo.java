@@ -78,7 +78,7 @@ public final class FieldInfo {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClass() {
+	public ClassInfo getDeclaringClassInfo() {
 		if (declaringClass == null)
 			declaringClass = ClassInfo.of(f.getDeclaringClass());
 		return declaringClass;

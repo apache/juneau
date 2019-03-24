@@ -88,7 +88,7 @@ public final class ConstructorInfo {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClass() {
+	public ClassInfo getDeclaringClassInfo() {
 		return declaringClass;
 	}
 

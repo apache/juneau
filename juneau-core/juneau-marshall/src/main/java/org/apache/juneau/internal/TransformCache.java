@@ -147,7 +147,7 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final MethodInfo fromStringMethod = oc2i.getFromStringMethod();
+				final MethodInfo fromStringMethod = oc2i.getFromStringMethodInfo();
 				if (fromStringMethod != null) {
 					t = new Transform<String,O>() {
 						@Override
@@ -164,9 +164,9 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			MethodInfo createMethod = oci.getStaticCreateMethod(ic, "create");
+			MethodInfo createMethod = oci.getStaticCreateMethodInfo(ic, "create");
 			if (createMethod == null)
-				createMethod = oci.getStaticCreateMethod(ic, "from" + ic.getSimpleName());
+				createMethod = oci.getStaticCreateMethodInfo(ic, "from" + ic.getSimpleName());
 			if (createMethod != null) {
 				final Method cm = createMethod.inner();
 				t = new Transform<I,O>() {
@@ -180,7 +180,7 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final Constructor<?> c = oci.findPublicConstructor(ic);
+				final Constructor<?> c = oci.getPublicConstructor(ic);
 				final boolean isMemberClass = oci.isMemberClass() && ! oci.isStatic();
 				if (c != null && ! c.isAnnotationPresent(Deprecated.class)) {
 					t = new Transform<I,O>() {
@@ -201,7 +201,7 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			for (MethodInfo m2 : ici.getAllMethods()) {
+			for (MethodInfo m2 : ici.getAllMethodInfos()) {
 				if (m2.isAll(PUBLIC, NOT_STATIC, HAS_NO_ARGS, NOT_DEPRECATED) && m2.getName().startsWith("to") && m2.hasReturnType(oc)) {
 					final Method m3 = m2.inner();
 					t = new Transform<I,O>() {

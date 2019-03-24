@@ -296,8 +296,8 @@ public final class ClassInfo {
 	 *
 	 * @return All declared methods on this class and all parent classes in child-to-parent order.
 	 */
-	public Iterable<MethodInfo> getAllMethods() {
-		return getAllMethods(false, false);
+	public Iterable<MethodInfo> getAllMethodInfos() {
+		return getAllMethodInfos(false, false);
 	}
 
 	/**
@@ -309,7 +309,7 @@ public final class ClassInfo {
 	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All declared methods on this class and all parent classes.
 	 */
-	public Iterable<MethodInfo> getAllMethods(boolean parentFirst, boolean sort) {
+	public Iterable<MethodInfo> getAllMethodInfos(boolean parentFirst, boolean sort) {
 		return findAllMethods(parentFirst, sort);
 	}
 
@@ -322,8 +322,8 @@ public final class ClassInfo {
 	 *
 	 * @return All methods declared on this class.
 	 */
-	public Iterable<MethodInfo> getDeclaredMethods() {
-		return getDeclaredMethods(false);
+	public Iterable<MethodInfo> getDeclaredMethodInfos() {
+		return getDeclaredMethodInfos(false);
 	}
 
 	/**
@@ -334,7 +334,7 @@ public final class ClassInfo {
 	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All methods declared on this class.
 	 */
-	public Iterable<MethodInfo> getDeclaredMethods(boolean sort) {
+	public Iterable<MethodInfo> getDeclaredMethodInfos(boolean sort) {
 		return findDeclaredMethods(null, sort);
 	}
 
@@ -346,8 +346,8 @@ public final class ClassInfo {
 	 *
 	 * @return All public methods on this class.
 	 */
-	public Iterable<MethodInfo> getPublicMethods() {
-		return getPublicMethods(false);
+	public Iterable<MethodInfo> getPublicMethodInfos() {
+		return getPublicMethodInfos(false);
 	}
 
 	/**
@@ -358,7 +358,7 @@ public final class ClassInfo {
 	 * 	Otherwise, uses the order of the methods in the underlying JVM.
 	 * @return All public methods on this class.
 	 */
-	public Iterable<MethodInfo> getPublicMethods(boolean sort) {
+	public Iterable<MethodInfo> getPublicMethodInfos(boolean sort) {
 		return findPublicMethods(sort);
 	}
 
@@ -432,9 +432,9 @@ public final class ClassInfo {
 	 *
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo getFromStringMethod() {
+	public MethodInfo getFromStringMethodInfo() {
 		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"})
-			for (MethodInfo m : getPublicMethods())
+			for (MethodInfo m : getPublicMethodInfos())
 				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class))
 					return m;
 		return null;
@@ -447,8 +447,8 @@ public final class ClassInfo {
 	 * @param name The method name.
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo getStaticCreateMethod(Class<?> ic, String name) {
-		for (MethodInfo m : getPublicMethods())
+	public MethodInfo getStaticCreateMethodInfo(Class<?> ic, String name) {
+		for (MethodInfo m : getPublicMethodInfos())
 			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(name) && m.hasReturnType(c) && m.hasArgs(ic))
 				return m;
 		return null;
@@ -459,8 +459,8 @@ public final class ClassInfo {
 	 *
 	 * @return The <code>public static Builder create()</code> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public MethodInfo getBuilderCreateMethod() {
-		for (MethodInfo m : getDeclaredMethods())
+	public MethodInfo getBuilderCreateMethodInfo() {
+		for (MethodInfo m : getDeclaredMethodInfos())
 			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && ! m.hasReturnType(Void.class))
 				return m;
 		return null;
@@ -471,8 +471,8 @@ public final class ClassInfo {
 	 *
 	 * @return The <code>T build()</code> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public MethodInfo getBuilderBuildMethod() {
-		for (MethodInfo m : getDeclaredMethods())
+	public MethodInfo getBuilderBuildMethodInfo() {
+		for (MethodInfo m : getDeclaredMethodInfos())
 			if (m.isAll(NOT_STATIC) && m.hasName("build") && ! m.hasReturnType(Void.class))
 				return m;
 		return null;
@@ -487,7 +487,7 @@ public final class ClassInfo {
 	 *
 	 * @return All public constructors defined on this class.
 	 */
-	public Iterable<ConstructorInfo> getConstructors() {
+	public Iterable<ConstructorInfo> getConstructorInfos() {
 		return findConstructors();
 	}
 
@@ -512,8 +512,8 @@ public final class ClassInfo {
 	 *
 	 * @return All declared methods on this class and all parent classes in child-to-parent order.
 	 */
-	public Iterable<FieldInfo> getAllFields() {
-		return getAllFields(false, false);
+	public Iterable<FieldInfo> getAllFieldInfos() {
+		return getAllFieldInfos(false, false);
 	}
 
 	/**
@@ -525,21 +525,8 @@ public final class ClassInfo {
 	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All declared methods on this class and all parent classes.
 	 */
-	public Iterable<FieldInfo> getAllFields(boolean parentFirst, boolean sort) {
+	public Iterable<FieldInfo> getAllFieldInfos(boolean parentFirst, boolean sort) {
 		return findAllFields(null, parentFirst, sort);
-	}
-
-	/**
-	 * Returns all field on this class and all parent classes in parent-to-child order.
-	 *
-	 * <p>
-	 * Fields are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
-	 *
-	 * @return All declared methods on this class and all parent classes in parent-to-child order.
-	 */
-	public Iterable<FieldInfo> getAllFieldsParentFirst() {
-		return getAllFields(true, false);
 	}
 
 	/**
@@ -551,8 +538,8 @@ public final class ClassInfo {
 	 *
 	 * @return All fields declared on this class.
 	 */
-	public Iterable<FieldInfo> getDeclaredFields() {
-		return getDeclaredFields(false);
+	public Iterable<FieldInfo> getDeclaredFieldInfos() {
+		return getDeclaredFieldInfos(false);
 	}
 
 	/**
@@ -563,7 +550,7 @@ public final class ClassInfo {
 	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All fields declared on this class.
 	 */
-	public Iterable<FieldInfo> getDeclaredFields(boolean sort) {
+	public Iterable<FieldInfo> getDeclaredFieldInfos(boolean sort) {
 		return findDeclaredFields(null, sort);
 	}
 
@@ -613,11 +600,11 @@ public final class ClassInfo {
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
-	public ConstructorInfo getNoArgConstructor(Visibility v) {
+	public ConstructorInfo getNoArgConstructorInfo(Visibility v) {
 		if (isAbstract())
 			return null;
 		boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (ConstructorInfo cc : getConstructors())
+		for (ConstructorInfo cc : getConstructorInfos())
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
 				return cc.transform(v);
 		return null;
@@ -1154,8 +1141,8 @@ public final class ClassInfo {
 	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
 	 * 	arguments.
 	 */
-	public <T> Constructor<T> findPublicConstructor(Class<?>...args) {
-		return findPublicConstructor(false, args);
+	public <T> Constructor<T> getPublicConstructor(Class<?>...args) {
+		return getPublicConstructor(false, args);
 	}
 
 	/**
@@ -1169,8 +1156,8 @@ public final class ClassInfo {
 	 * 	Can be subtypes of the actual constructor argument types.
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
-	public <T> Constructor<T> findPublicConstructor(boolean fuzzyArgs, Class<?>...argTypes) {
-		return findConstructor(Visibility.PUBLIC, fuzzyArgs, argTypes);
+	public <T> Constructor<T> getPublicConstructor(boolean fuzzyArgs, Class<?>...argTypes) {
+		return getConstructor(Visibility.PUBLIC, fuzzyArgs, argTypes);
 	}
 
 	/**
@@ -1186,7 +1173,7 @@ public final class ClassInfo {
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Constructor<T> findConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
+	public <T> Constructor<T> getConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
 		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
 		if (cce != null && ClassUtils.argsMatch(cce.paramTypes, argTypes) && cce.isVisible(vis))
 			return (Constructor<T>)cce.constructor;
@@ -1251,8 +1238,8 @@ public final class ClassInfo {
 	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
 	 * 	arguments.
 	 */
-	public <T> Constructor<T> findPublicConstructor(boolean fuzzyArgs, Object...args) {
-		return findPublicConstructor(fuzzyArgs, ClassUtils.getClasses(args));
+	public <T> Constructor<T> getPublicConstructor(boolean fuzzyArgs, Object...args) {
+		return getPublicConstructor(fuzzyArgs, ClassUtils.getClasses(args));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

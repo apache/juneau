@@ -188,15 +188,15 @@ public class ClassInfoTest {
 	public void getParentMethodsParentFirst() throws Exception {
 		Set<String> s = new TreeSet<>();
 		ClassInfo ci = ClassInfo.of(DD.class);
-		for (MethodInfo m : ci.getAllMethods(true, true))
+		for (MethodInfo m : ci.getAllMethodInfos(true, true))
 			if (! m.getName().startsWith("$"))
-				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
+				s.add(m.getDeclaringClassInfo().getSimpleName() + '.' + m.getName());
 		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
 
 		s = new TreeSet<>();
-		for (MethodInfo m : ci.getAllMethods())
+		for (MethodInfo m : ci.getAllMethodInfos())
 			if (! m.getName().startsWith("$"))
-				s.add(m.getDeclaringClass().getSimpleName() + '.' + m.getName());
+				s.add(m.getDeclaringClassInfo().getSimpleName() + '.' + m.getName());
 		assertObjectEquals("['DA1.da1','DA2.da2','DB.da1','DB.db','DC.da2','DC.dc','DD.da2','DD.dd']", s);
 	}
 
@@ -231,16 +231,16 @@ public class ClassInfoTest {
 	public void getParentFieldsParentFirst() throws Exception {
 		Set<String> s = new TreeSet<>();
 		ClassInfo ci = ClassInfo.of(EB.class);
-		for (FieldInfo f : ci.getAllFieldsParentFirst()) {
+		for (FieldInfo f : ci.getAllFieldInfos(true,false)) {
 			if (! f.getName().startsWith("$"))
-				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
+				s.add(f.getDeclaringClassInfo().getSimpleName() + '.' + f.getName());
 		}
 		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
 
 		s = new TreeSet<>();
-		for (FieldInfo f : ci.getAllFields()) {
+		for (FieldInfo f : ci.getAllFieldInfos()) {
 			if (! f.getName().startsWith("$"))
-				s.add(f.getDeclaringClass().getSimpleName() + '.' + f.getName());
+				s.add(f.getDeclaringClassInfo().getSimpleName() + '.' + f.getName());
 		}
 		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
 	}

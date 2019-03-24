@@ -295,7 +295,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		widgets(false, widgets);
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
-		for (MethodInfo m : rci.getAllMethods(true, true)) {
+		for (MethodInfo m : rci.getAllMethodInfos(true, true)) {
 			if (m.hasAnnotation(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
 				m.setAccessible();
 				String sig = m.getSignature();
