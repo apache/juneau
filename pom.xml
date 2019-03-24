@@ -94,22 +94,17 @@
 				<version>${httpclient.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.siom79.japicmp</groupId>
-				<artifactId>japicmp</artifactId>
-				<version>0.13.0</version>
+				<!-- Java 11 -->
+				<groupId>javax.activation</groupId>
+				<artifactId>javax.activation-api</artifactId>
+				<version>1.2.0</version>
 			</dependency>
-      <dependency>
-        <!-- Java 11 -->
-        <groupId>javax.activation</groupId>
-        <artifactId>javax.activation-api</artifactId>
-        <version>1.2.0</version>
-      </dependency>
-      <dependency>
-        <!-- Java 11 -->
-        <groupId>com.sun.activation</groupId>
-        <artifactId>javax.activation</artifactId>
-        <version>1.2.0</version>
-      </dependency>
+			<dependency>
+				<!-- Java 11 -->
+				<groupId>com.sun.activation</groupId>
+				<artifactId>javax.activation</artifactId>
+				<version>1.2.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
