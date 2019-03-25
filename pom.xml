@@ -332,6 +332,10 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.2</version>
 				<configuration>
+					<excludes>
+						<exclude>org/apache/juneau/doc/internal/**/*</exclude>
+						<exclude>org/apache/juneau/examples/**/*</exclude>
+					</excludes>
 					<fileSets>
 						<fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">
 							<directory>${project.parent.build.directory}</directory>
