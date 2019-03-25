@@ -333,8 +333,8 @@
 				<version>0.8.2</version>
 				<configuration>
 					<excludes>
-						<exclude>org/apache/juneau/doc/internal/**/*</exclude>
-						<exclude>org/apache/juneau/examples/**/*</exclude>
+						<exclude>**/doc/**/*</exclude>
+						<exclude>**/examples/**/*</exclude>
 					</excludes>
 					<fileSets>
 						<fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">
