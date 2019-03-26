@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Utility class for introspecting information about a constructor.
+ * Lightweight utility class for introspecting information about a constructor.
  */
 @BeanIgnore
 public final class ConstructorInfo {
@@ -88,7 +88,7 @@ public final class ConstructorInfo {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClass() {
+	public ClassInfo getDeclaringClassInfo() {
 		return declaringClass;
 	}
 

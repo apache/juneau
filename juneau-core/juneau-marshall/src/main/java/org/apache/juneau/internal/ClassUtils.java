@@ -283,21 +283,21 @@ public final class ClassUtils {
 					return null;
 
 				// First look for an exact match.
-				Constructor<?> con = c3.findPublicConstructor(false, args);
+				Constructor<?> con = c3.getPublicConstructor(args);
 				if (con != null)
 					return (T)con.newInstance(args);
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
 					args = new AList<>().append(outer).appendAll(args).toArray();
-					con = c3.findPublicConstructor(false, args);
+					con = c3.getPublicConstructor(args);
 					if (con != null)
 						return (T)con.newInstance(args);
 				}
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
-					con = c3.findPublicConstructor(true, args);
+					con = c3.getPublicConstructorFuzzy(args);
 					if (con != null)
 						return (T)con.newInstance(getMatchingArgs(con.getParameterTypes(), args));
 				}
@@ -380,7 +380,7 @@ public final class ClassUtils {
 	 * <ul>
 	 * 	<li>Have a public constructor that takes in a single <code>String</code> argument.
 	 * 	<li>Have a static <code>fromString(String)</code> (or related) method.
-	 * 		<br>See {@link ClassInfo#getFromStringMethod()} for the list of possible static method names.
+	 * 		<br>See {@link ClassInfo#getFromStringMethodInfo()} for the list of possible static method names.
 	 * 	<li>Be an <code>enum</code>.
 	 * </ul>
 	 *

@@ -20,7 +20,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Utility class for introspecting information about a field.
+ * Lightweight utility class for introspecting information about a field.
  */
 @BeanIgnore
 public final class FieldInfo {
@@ -78,7 +78,7 @@ public final class FieldInfo {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClass() {
+	public ClassInfo getDeclaringClassInfo() {
 		if (declaringClass == null)
 			declaringClass = ClassInfo.of(f.getDeclaringClass());
 		return declaringClass;

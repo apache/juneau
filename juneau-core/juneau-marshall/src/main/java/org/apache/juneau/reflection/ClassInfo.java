@@ -13,6 +13,7 @@
 package org.apache.juneau.reflection;
 
 import static org.apache.juneau.internal.ClassFlags.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -26,13 +27,37 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**
- * Utility class for introspecting information about a class.
+ * Lightweight utility class for introspecting information about a class.
+ *
+ * <p>
+ * Provides various convenience methods for introspecting fields/methods/annotations
+ * that aren't provided by the standard Java reflection APIs.
+ *
+ * <p>
+ * Objects are designed to be lightweight to create and threadsafe.
+ *
+ * <h5 class='figure'>
+ * <p class='bpcode w800'>
+ * 	<jc>// Wrap our class inside a ClassInfo.</jc>
+ * 	ClassInfo ci = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ *
+ * 	<jc>// Get all methods in parent-to-child order, sorted alphabetically per class.</jc>
+ * 	<jk>for</jk> (MethodInfo mi : ci.getAllMethodInfos(<jk>true</jk>, <jk>true</jk>)) {
+ * 		<jc>// Do something with it.</jc>
+ * 	}
+ *
+ * 	<jc>// Get all class-level annotations in parent-to-child order.</jc>
+ * 	<jk>for</jk> (MyAnnotation a : ci.getAnnotations(MyAnnotation.<jk>class</jk>, <jk>true</jk>)) {
+ * 		// Do something with it.
+ * 	}
+ * </p>
  */
 @BeanIgnore
 public final class ClassInfo {
 
 	private final Type t;
 	private final Class<?> c;
+	private List<Class<?>> interfaces;
 	private List<ClassInfo> interfaceInfos;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private Map<Class<?>,Optional<Annotation>> declaredAnnotationMap;
@@ -48,13 +73,37 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Same as using the constructor, but returns <jk>null</jk> if the type is <jk>null</jk>.
+	 * Constructor.
+	 *
+	 * @param c The class type.
+	 */
+	protected ClassInfo(Class<?> c) {
+		this.t = c;
+		this.c = c;
+	}
+
+	/**
+	 * Returns a class info wrapper around the specified class type.
 	 *
 	 * @param t The class type.
-	 * @return The constructed class info.
+	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Type t) {
+		if (t == null)
+			return null;
 		return new ClassInfo(t);
+	}
+
+	/**
+	 * Returns a class info wrapper around the specified class type.
+	 *
+	 * @param c The class type.
+	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 */
+	public static ClassInfo of(Class<?> c) {
+		if (c == null)
+			return null;
+		return new ClassInfo(c);
 	}
 
 	/**
@@ -70,18 +119,18 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the wrapped class.
+	 * Returns the wrapped class as a {@link Type}.
 	 *
-	 * @return The wrapped class.
+	 * @return The wrapped class as a {@link Type}.
 	 */
 	public Type innerType() {
 		return t;
 	}
 
 	/**
-	 * Returns the wrapped class.
+	 * Returns the wrapped class as a {@link Class}.
 	 *
-	 * @return The wrapped class or <jk>null</jk> if it's not a class.
+	 * @return The wrapped class as a {@link Class}, or <jk>null</jk> if it's not a class (e.g. it's a {@link ParameterizedType}).
 	 */
 	public Class<?> inner() {
 		return c;
@@ -98,71 +147,142 @@ public final class ClassInfo {
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parent classes and interfaces.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns the parent class info.
+	 * Returns the parent class.
 	 *
-	 * @return The parent class info, or <jk>null</jk> if the class has no parent.
+	 * @return The parent class, or <jk>null</jk> if the class has no parent.
 	 */
-	public ClassInfo getParentInfo() {
-		return of(c.getSuperclass());
+	public Class<?> getParent() {
+		return c.getSuperclass();
 	}
 
 	/**
-	 * Returns the interfaces info.
+	 * Returns the parent class wrapped in {@link ClassInfo}.
 	 *
-	 * @return The implemented interfaces info, or an empty array if the class has no interfaces.
+	 * @return The parent class wrapped in {@link ClassInfo}, or <jk>null</jk> if the class has no parent.
 	 */
-	public Iterable<ClassInfo> getInterfaceInfos() {
+	public ClassInfo getParentInfo() {
+		return of(getParent());
+	}
+
+	/**
+	 * Returns a list of interfaces defined on this class.
+	 *
+	 * <p>
+	 * Does not include interfaces defined on parent classes.
+	 *
+	 * @return
+	 * 	An unmodifiable list of interfaces defined on this class.
+	 */
+	public List<Class<?>> getInterfaces() {
+		if (interfaces == null)
+			interfaces = unmodifiableList(c.getInterfaces());
+		return interfaces;
+	}
+
+	/**
+	 * Returns a list of interfaces defined on this class wrapped in {@link ClassInfo}.
+	 *
+	 * <p>
+	 * Does not include interfaces defined on parent classes.
+	 *
+	 * @return
+	 * 	An unmodifiable list of interfaces defined on this class wrapped in {@link ClassInfo}.
+	 */
+	public List<ClassInfo> getInterfaceInfos() {
 		if (interfaceInfos == null) {
-			Class<?>[] interfaces = c.getInterfaces();
-			List<ClassInfo> l = new ArrayList<>(interfaces.length);
+			List<Class<?>> interfaces = getInterfaces();
+			List<ClassInfo> l = new ArrayList<>(interfaces.size());
 			for (Class<?> i : interfaces)
 				l.add(of(i));
-			interfaceInfos = Collections.unmodifiableList(l);
+			interfaceInfos = unmodifiableList(l);
 		}
 		return interfaceInfos;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Classes
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns an iterable over this class and all parent classes in child-to-parent order.
+	 * Returns a list including this class and all parent classes in child-to-parent order.
 	 *
 	 * <p>
 	 * Does not include interfaces.
 	 *
-	 * @return An iterable over this class and all parent classes in child-to-parent order.
+	 * @return An unmodifiable list including this class and all parent classes in child-to-parent order.
 	 */
-	public Iterable<ClassInfo> getParents() {
-		return getParents(false, false);
+	public List<ClassInfo> getParentInfos() {
+		return getParentInfos(false, false);
 	}
 
 	/**
-	 * Returns an iterable over this class and all parent classes.
+	 * Returns a list including this class and all parent classes and interfaces.
 	 *
-	 * @param parentFirst If <jk>true</jk>, results are ordered parent-first.
-	 * @param includeInterfaces If <jk>true</jk>, results include interfaces.
-	 * @return An iterable over this class and all parent classes.
+	 * <h5 class='figure'>Examples</h5>
+	 * <p class='bpcode'>
+	 * 	<jc>// Class hierarchy</jc>
+	 * 	<jk>interface</jk> I1 {}
+	 * 	<jk>interface</jk> I2 <jk>extends</jk> I11 {}
+	 * 	<jk>interface</jk> I3 {}
+	 * 	<jk>interface</jk> I4 {}
+	 * 	<jk>class</jk> CA <jk>implements</jk> I1, I2 {}
+	 * 	<jk>class</jk> CB <jk>extends</jk> CA <jk>implements</jk> I3 {}
+	 * 	<jk>class</jk> CC <jk>extends</jk> CB {}
+	 *
+	 * 	<jc>// Examples</jc>
+	 * 	ClassInfo cc = ClassInfo.<jsm>of</jsm>(CC.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parent last, no interfaces.
+	 * 	cc.getParentInfos();             // CC,CB,CA
+	 * 	cc.getParentInfos(false,false);  // CC,CB,CA
+	 *
+	 * 	<jc>// Parent first, no interfaces.
+	 * 	cc.getParentInfos(true,false);   // CA,CB,CC
+	 *
+	 * 	<jc>// Parent last, include interfaces.
+	 * 	cc.getParentInfos(false,true);   // CC,CB,I3,CA,I1,I2
+	 *
+	 * 	<jc>// Parent first, include interfaces.
+	 * 	cc.getParentInfos(true,true);    // I2,I1,CA,I3,CB,CC
+	 * </p>
+	 *
+	 * @param parentFirst
+	 * 	If <jk>true</jk>, results are ordered parent-first.
+	 * @param includeInterfaces
+	 * 	If <jk>true</jk>, results include interfaces.
+	 * @return An unmodifiable list including this class and all parent classes and interfaces.
 	 */
-	public Iterable<ClassInfo> getParents(boolean parentFirst, boolean includeInterfaces) {
-		return findParents(new ArrayList<>(), c, parentFirst, includeInterfaces);
+	public List<ClassInfo> getParentInfos(boolean parentFirst, boolean includeInterfaces) {
+		return unmodifiableList(findParents(new ArrayList<>(), c, parentFirst, includeInterfaces));
 	}
 
 	private static List<ClassInfo> findParents(List<ClassInfo> l, Class<?> c, boolean parentFirst, boolean includeInterfaces) {
-		if (! parentFirst)
+		if (parentFirst) {
+			if (hasSuperclass(c))
+				findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
+			if (includeInterfaces)
+				for (Class<?> i : iterable(c.getInterfaces(), true))
+					l.add(of(i));
 			l.add(of(c));
-		if (c.getSuperclass() != Object.class && c.getSuperclass() != null)
-			findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
-		if (includeInterfaces)
-			for (Class<?> i : c.getInterfaces())
-				l.add(of(i));
-		if (parentFirst)
+		} else {
 			l.add(of(c));
+			if (includeInterfaces)
+				for (Class<?> i : c.getInterfaces())
+					l.add(of(i));
+			if (hasSuperclass(c))
+				findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
+		}
 		return l;
 	}
 
+	private static boolean hasSuperclass(Class<?> c) {
+		if (c.getSuperclass() == Object.class)
+			return false;
+		if (c.getSuperclass() == null)
+			return false;
+		return true;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Methods
@@ -171,125 +291,69 @@ public final class ClassInfo {
 	/**
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
-	 * <p>
-	 * Methods are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of methods.  Other JVMs (Oracle) do not and return them in random order.
-	 *
-	 * @return All declared methods on this class and all parent classes in child-to-parent order.
+	 * @return All declared methods on this class and all parent classes in child-to-parent order in
+	 * 	alphabetical order per class.
 	 */
-	public Iterable<MethodInfo> getAllMethods() {
-		return getAllMethods(false, false);
+	public List<MethodInfo> getAllMethodInfos() {
+		return getAllMethodInfos(false);
 	}
 
 	/**
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
 	 * @param parentFirst If <jk>true</jk>, methods on parent classes are listed first.
-	 * @param sort 
-	 * 	If <jk>true</jk>, methods are sorted alphabetically per class.
-	 * 	Otherwise, uses the order of the methods in the underlying JVM.
-	 * @return All declared methods on this class and all parent classes.
+	 * @return All declared methods on this class and all parent classes in alphabetical order per class.
 	 */
-	public Iterable<MethodInfo> getAllMethods(boolean parentFirst, boolean sort) {
-		return findAllMethods(parentFirst, sort);
-	}
-
-	/**
-	 * Returns all methods declared on this class.
-	 * 
-	 * <p>
-	 * Methods are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of methods.  Other JVMs (Oracle) do not and return them in random order.
-	 *
-	 * @return All methods declared on this class.
-	 */
-	public Iterable<MethodInfo> getDeclaredMethods() {
-		return getDeclaredMethods(false);
+	public List<MethodInfo> getAllMethodInfos(boolean parentFirst) {
+		return findAllMethods(parentFirst);
 	}
 
 	/**
 	 * Returns all methods declared on this class.
 	 *
-	 * @param sort 
-	 * 	If <jk>true</jk>, methods are sorted alphabetically.
-	 * 	Otherwise, uses the order of the methods in the underlying JVM.
-	 * @return All methods declared on this class.
+	 * @return All methods declared on this class in alphabetical order.
 	 */
-	public Iterable<MethodInfo> getDeclaredMethods(boolean sort) {
-		return findDeclaredMethods(null, sort);
+	public List<MethodInfo> getDeclaredMethodInfos() {
+		return findDeclaredMethods(new ArrayList<>());
 	}
 
 	/**
 	 * Returns all public methods on this class.
 	 *
 	 * <p>
-	 * Returns the methods (in the same order) as the call to {@link Class#getMethods()}.
+	 * Methods defined on the {@link Object} class are excluded from the results.
 	 *
-	 * @return All public methods on this class.
+	 * @return All public methods on this class in alphabetical order.
 	 */
-	public Iterable<MethodInfo> getPublicMethods() {
-		return getPublicMethods(false);
+	public List<MethodInfo> getPublicMethodInfos() {
+		return findPublicMethods();
 	}
 
-	/**
-	 * Returns all public methods on this class.
-	 *
-	 * @param sort 
-	 * 	If <jk>true</jk>, methods are sorted alphabetically.
-	 * 	Otherwise, uses the order of the methods in the underlying JVM.
-	 * @return All public methods on this class.
-	 */
-	public Iterable<MethodInfo> getPublicMethods(boolean sort) {
-		return findPublicMethods(sort);
-	}
-
-	private List<MethodInfo> findAllMethods(boolean parentFirst, boolean sort) {
+	private List<MethodInfo> findAllMethods(boolean parentFirst) {
 		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents(parentFirst, true))
-			c.findDeclaredMethods(l, sort);
+		for (ClassInfo c : getParentInfos(parentFirst, true))
+			c.findDeclaredMethods(l);
 		return l;
 	}
 
-	private List<MethodInfo> findDeclaredMethods(List<MethodInfo> l, boolean sort) {
+	private List<MethodInfo> findDeclaredMethods(List<MethodInfo> l) {
 		Method[] mm = c.getDeclaredMethods();
-		if (sort)
-			mm = sort(mm);
-		if (l == null)
-			l = new ArrayList<>(mm.length);
+		int i = l.size();
 		for (Method m : mm)
-			l.add(MethodInfo.of(this, m));
+			if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
+				l.add(MethodInfo.of(this, m));
+		l.subList(i, l.size()).sort(null);
 		return l;
 	}
 
-	private List<MethodInfo> findPublicMethods(boolean sorted) {
+	private List<MethodInfo> findPublicMethods() {
 		Method[] mm = c.getMethods();
 		List<MethodInfo> l = new ArrayList<>(mm.length);
-		if (sorted)
-			mm = sort(mm);
 		for (Method m : mm)
-			l.add(MethodInfo.of(this, m));
+			if (m.getDeclaringClass() != Object.class)
+				l.add(MethodInfo.of(this, m));
+		l.sort(null);
 		return l;
-	}
-
-	private static Comparator<Method> METHOD_COMPARATOR = new Comparator<Method>() {
-		@Override
-		public int compare(Method o1, Method o2) {
-			int i = o1.getName().compareTo(o2.getName());
-			if (i == 0) {
-				i = o1.getParameterTypes().length - o2.getParameterTypes().length;
-				if (i == 0) {
-					for (int j = 0; j < o1.getParameterTypes().length && i == 0; j++) {
-						i = o1.getParameterTypes()[j].getName().compareTo(o2.getParameterTypes()[j].getName());
-					}
-				}
-			}
-			return i;
-		}
-	};
-
-	private static Method[] sort(Method[] m) {
-		Arrays.sort(m, METHOD_COMPARATOR);
-		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -313,25 +377,39 @@ public final class ClassInfo {
 	 *
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo getFromStringMethod() {
-		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"})
-			for (MethodInfo m : getPublicMethods())
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class))
-					return m;
+	public MethodInfo getFromStringMethodInfo() {
+		for (MethodInfo m : getPublicMethodInfos())
+			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED)
+					&& m.hasReturnType(c)
+					&& m.hasArgs(String.class)
+					&& isOneOf(m.getName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
+				return m;
 		return null;
 	}
 
 	/**
 	 * Find the public static creator method on this class.
 	 *
+	 * <p>
+	 * Looks for the following method names:
+	 * <ul>
+	 * 	<li><code>create</code>
+	 * 	<li><code>from</code>
+	 * 	<li><code>fromIC</code>
+	 * </ul>
+	 *
 	 * @param ic The argument type.
-	 * @param name The method name.
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo getStaticCreateMethod(Class<?> ic, String name) {
-		for (MethodInfo m : getPublicMethods())
-			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(name) && m.hasReturnType(c) && m.hasArgs(ic))
-				return m;
+	public MethodInfo getStaticCreateMethodInfo(Class<?> ic) {
+		for (MethodInfo m : getPublicMethodInfos()) {
+			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasArgs(ic)) {
+				String n = m.getName();
+				if (isOneOf(n, "create","from") || (n.startsWith("from") && n.substring(4).equals(ic.getSimpleName()))) {
+					return m;
+				}
+			}
+		}
 		return null;
 	}
 
@@ -340,9 +418,9 @@ public final class ClassInfo {
 	 *
 	 * @return The <code>public static Builder create()</code> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public MethodInfo getBuilderCreateMethod() {
-		for (MethodInfo m : getDeclaredMethods())
-			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && ! m.hasReturnType(Void.class))
+	public MethodInfo getBuilderCreateMethodInfo() {
+		for (MethodInfo m : getDeclaredMethodInfos())
+			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && (!m.hasReturnType(void.class)))
 				return m;
 		return null;
 	}
@@ -352,9 +430,9 @@ public final class ClassInfo {
 	 *
 	 * @return The <code>T build()</code> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public MethodInfo getBuilderBuildMethod() {
-		for (MethodInfo m : getDeclaredMethods())
-			if (m.isAll(NOT_STATIC) && m.hasName("build") && ! m.hasReturnType(Void.class))
+	public MethodInfo getBuilderBuildMethodInfo() {
+		for (MethodInfo m : getDeclaredMethodInfos())
+			if (m.isAll(NOT_STATIC) && m.hasName("build") && (!m.hasArgs()) && (!m.hasReturnType(void.class)))
 				return m;
 		return null;
 	}
@@ -368,8 +446,158 @@ public final class ClassInfo {
 	 *
 	 * @return All public constructors defined on this class.
 	 */
-	public Iterable<ConstructorInfo> getConstructors() {
+	public Iterable<ConstructorInfo> getConstructorInfos() {
 		return findConstructors();
+	}
+
+	/**
+	 * Locates the no-arg constructor for this class.
+	 *
+	 * <p>
+	 * Constructor must match the visibility requirements specified by parameter 'v'.
+	 * If class is abstract, always returns <jk>null</jk>.
+	 * Note that this also returns the 1-arg constructor for non-static member classes.
+	 *
+	 * @param v The minimum visibility.
+	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
+	 */
+	public ConstructorInfo getNoArgConstructorInfo(Visibility v) {
+		if (isAbstract())
+			return null;
+		boolean isMemberClass = isMemberClass() && ! isStatic();
+		for (ConstructorInfo cc : getConstructorInfos())
+			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
+				return cc.transform(v);
+		return null;
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments.
+	 *
+	 * @param args The argument types we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public <T> Constructor<T> getPublicConstructor(Class<?>...args) {
+		return findConstructor(Visibility.PUBLIC, false, args);
+	}
+
+	/**
+	 * Finds a public constructor with the specified parameters using fuzzy-arg matching without throwing an exception.
+	 *
+	 * @param argTypes
+	 * 	The argument types in the constructor.
+	 * 	Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	public <T> Constructor<T> getPublicConstructorFuzzy(Class<?>...argTypes) {
+		return findConstructor(Visibility.PUBLIC, true, argTypes);
+	}
+
+	/**
+	 * Finds a constructor with the specified parameters without throwing an exception.
+	 *
+	 * @param vis The minimum visibility.
+	 * @param argTypes
+	 * 	The argument types in the constructor.
+	 * 	Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	public <T> Constructor<T> getConstructor(Visibility vis, Class<?>...argTypes) {
+		return findConstructor(vis, false, argTypes);
+	}
+
+	/**
+	 * Finds a constructor with the specified parameters using fuzzy-arg matching without throwing an exception.
+	 *
+	 * @param vis The minimum visibility.
+	 * @param argTypes
+	 * 	The argument types in the constructor.
+	 * 	Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	public <T> Constructor<T> getConstructorFuzzy(Visibility vis, Class<?>...argTypes) {
+		return findConstructor(vis, true, argTypes);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> Constructor<T> findConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
+		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
+		if (cce != null && ClassUtils.argsMatch(cce.paramTypes, argTypes) && cce.isVisible(vis))
+			return (Constructor<T>)cce.constructor;
+
+		if (fuzzyArgs) {
+			int bestCount = -1;
+			Constructor<?> bestMatch = null;
+			for (Constructor<?> n : c.getDeclaredConstructors()) {
+				if (vis.isVisible(n)) {
+					int m = ClassUtils.fuzzyArgsMatch(n.getParameterTypes(), argTypes);
+					if (m > bestCount) {
+						bestCount = m;
+						bestMatch = n;
+					}
+				}
+			}
+			if (bestCount >= 0)
+				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, bestMatch));
+			return (Constructor<T>)bestMatch;
+		}
+
+		final boolean isMemberClass = isMemberClass() && ! isStatic();
+		for (Constructor<?> n : c.getConstructors()) {
+			Class<?>[] paramTypes = n.getParameterTypes();
+			if (isMemberClass)
+				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
+			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n)) {
+				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
+				return (Constructor<T>)n;
+			}
+		}
+
+		return null;
+	}
+
+	private static final Map<Class<?>,ConstructorCacheEntry> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
+
+
+
+	private static final class ConstructorCacheEntry {
+		final Constructor<?> constructor;
+		final Class<?>[] paramTypes;
+
+		ConstructorCacheEntry(Class<?> forClass, Constructor<?> constructor) {
+			this.constructor = constructor;
+			this.paramTypes = constructor.getParameterTypes();
+		}
+
+		boolean isVisible(Visibility vis) {
+			return vis.isVisible(constructor);
+		}
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments.
+	 *
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public <T> Constructor<T> getPublicConstructor(Object...args) {
+		return findConstructor(Visibility.PUBLIC, false, ClassUtils.getClasses(args));
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments using fuzzy-arg matching.
+	 *
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public <T> Constructor<T> getPublicConstructorFuzzy(Object...args) {
+		return findConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
 	}
 
 	private List<ConstructorInfo> findConstructors() {
@@ -393,65 +621,52 @@ public final class ClassInfo {
 	 *
 	 * @return All declared methods on this class and all parent classes in child-to-parent order.
 	 */
-	public Iterable<FieldInfo> getAllFields() {
-		return getAllFields(false, false);
+	public Iterable<FieldInfo> getAllFieldInfos() {
+		return getAllFieldInfos(false, false);
 	}
 
 	/**
 	 * Returns all field on this class and all parent classes.
 	 *
 	 * @param parentFirst If <jk>true</jk>, fields are listed in parent-to-child order.
-	 * @param sort 
+	 * @param sort
 	 * 	If <jk>true</jk>, fields are sorted alphabetically.
 	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All declared methods on this class and all parent classes.
 	 */
-	public Iterable<FieldInfo> getAllFields(boolean parentFirst, boolean sort) {
+	public Iterable<FieldInfo> getAllFieldInfos(boolean parentFirst, boolean sort) {
 		return findAllFields(null, parentFirst, sort);
 	}
 
 	/**
-	 * Returns all field on this class and all parent classes in parent-to-child order.
-	 *
-	 * <p>
-	 * Fields are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
-	 *
-	 * @return All declared methods on this class and all parent classes in parent-to-child order.
-	 */
-	public Iterable<FieldInfo> getAllFieldsParentFirst() {
-		return getAllFields(true, false);
-	}
-
-	/**
 	 * Returns all fields declared on this class.
-	 * 
+	 *
 	 * <p>
 	 * Fields are ordered per the natural ordering of the underlying JVM.
 	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
-	 * 
+	 *
 	 * @return All fields declared on this class.
 	 */
-	public Iterable<FieldInfo> getDeclaredFields() {
-		return getDeclaredFields(false);
+	public Iterable<FieldInfo> getDeclaredFieldInfos() {
+		return getDeclaredFieldInfos(false);
 	}
 
 	/**
 	 * Returns all fields declared on this class.
 	 *
-	 * @param sort 
+	 * @param sort
 	 * 	If <jk>true</jk>, fields are sorted alphabetically.
 	 * 	Otherwise, uses the order of the fields in the underlying JVM.
 	 * @return All fields declared on this class.
 	 */
-	public Iterable<FieldInfo> getDeclaredFields(boolean sort) {
+	public Iterable<FieldInfo> getDeclaredFieldInfos(boolean sort) {
 		return findDeclaredFields(null, sort);
 	}
 
 	private List<FieldInfo> findAllFields(List<FieldInfo> l, boolean parentFirst, boolean sort) {
 		if (l == null)
 			l = new ArrayList<>();
-		for (ClassInfo c : getParents(parentFirst, false))
+		for (ClassInfo c : getParentInfos(parentFirst, false))
 			c.findDeclaredFields(l, sort);
 		return l;
 	}
@@ -477,31 +692,6 @@ public final class ClassInfo {
 	private static Field[] sort(Field[] m) {
 		Arrays.sort(m, FIELD_COMPARATOR);
 		return m;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Locates the no-arg constructor for this class.
-	 *
-	 * <p>
-	 * Constructor must match the visibility requirements specified by parameter 'v'.
-	 * If class is abstract, always returns <jk>null</jk>.
-	 * Note that this also returns the 1-arg constructor for non-static member classes.
-	 *
-	 * @param v The minimum visibility.
-	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
-	 */
-	public ConstructorInfo getNoArgConstructor(Visibility v) {
-		if (isAbstract())
-			return null;
-		boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (ConstructorInfo cc : getConstructors())
-			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
-				return cc.transform(v);
-		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -713,7 +903,7 @@ public final class ClassInfo {
 					return t2;
 			}
 
-			for (ClassInfo c2 : getInterfaceInfos()) {
+			for (Class<?> c2 : getInterfaces()) {
 				t2 = c2.getAnnotation(a);
 				if (t2 != null)
 					return t2;
@@ -1027,114 +1217,6 @@ public final class ClassInfo {
 		return ClassUtils.getReadableClassName(c != null ? c.getName() : t.getTypeName());
 	}
 
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
-	 * @param args The argument types we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public <T> Constructor<T> findPublicConstructor(Class<?>...args) {
-		return findPublicConstructor(false, args);
-	}
-
-	/**
-	 * Finds a public constructor with the specified parameters without throwing an exception.
-	 *
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
-	 */
-	public <T> Constructor<T> findPublicConstructor(boolean fuzzyArgs, Class<?>...argTypes) {
-		return findConstructor(Visibility.PUBLIC, fuzzyArgs, argTypes);
-	}
-
-	/**
-	 * Finds a constructor with the specified parameters without throwing an exception.
-	 *
-	 * @param vis The minimum visibility.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> Constructor<T> findConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
-		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
-		if (cce != null && ClassUtils.argsMatch(cce.paramTypes, argTypes) && cce.isVisible(vis))
-			return (Constructor<T>)cce.constructor;
-
-		if (fuzzyArgs) {
-			int bestCount = -1;
-			Constructor<?> bestMatch = null;
-			for (Constructor<?> n : c.getDeclaredConstructors()) {
-				if (vis.isVisible(n)) {
-					int m = ClassUtils.fuzzyArgsMatch(n.getParameterTypes(), argTypes);
-					if (m > bestCount) {
-						bestCount = m;
-						bestMatch = n;
-					}
-				}
-			}
-			if (bestCount >= 0)
-				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, bestMatch));
-			return (Constructor<T>)bestMatch;
-		}
-
-		final boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (Constructor<?> n : c.getConstructors()) {
-			Class<?>[] paramTypes = n.getParameterTypes();
-			if (isMemberClass)
-				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
-			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n)) {
-				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
-				return (Constructor<T>)n;
-			}
-		}
-
-		return null;
-	}
-
-	private static final Map<Class<?>,ConstructorCacheEntry> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
-
-
-
-	private static final class ConstructorCacheEntry {
-		final Constructor<?> constructor;
-		final Class<?>[] paramTypes;
-
-		ConstructorCacheEntry(Class<?> forClass, Constructor<?> constructor) {
-			this.constructor = constructor;
-			this.paramTypes = constructor.getParameterTypes();
-		}
-
-		boolean isVisible(Visibility vis) {
-			return vis.isVisible(constructor);
-		}
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public <T> Constructor<T> findPublicConstructor(boolean fuzzyArgs, Object...args) {
-		return findPublicConstructor(fuzzyArgs, ClassUtils.getClasses(args));
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Primitive wrappers.
@@ -1353,7 +1435,6 @@ public final class ClassInfo {
 		return c.isInterface();
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Parameter types.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1365,7 +1446,7 @@ public final class ClassInfo {
 	 * @param oc The class we're trying to resolve the parameter type for.
 	 * @return The resolved real class.
 	 */
-	public Class<?> resolveParameterType(int index, Class<?> oc) {
+	public Class<?> getParameterType(int index, Class<?> oc) {
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -1446,6 +1527,11 @@ public final class ClassInfo {
 				typeMap.put(typeParameters[i], actualTypeArguments[i]);
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return t.toString();
 	}
 
 }

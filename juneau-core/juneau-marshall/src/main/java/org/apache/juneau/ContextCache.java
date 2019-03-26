@@ -137,7 +137,7 @@ public class ContextCache {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
 			Set<String> ps = new HashSet<>();
-			for (ClassInfo c2 : getClassInfo(c).getParents(false, true))
+			for (ClassInfo c2 : getClassInfo(c).getParentInfos(false, true))
 				ps.add(c2.getSimpleName());
 			prefixes = ps.toArray(new String[ps.size()]);
 			String[] p2 = prefixCache.putIfAbsent(c, prefixes);

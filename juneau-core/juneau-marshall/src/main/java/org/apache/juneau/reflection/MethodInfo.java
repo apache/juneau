@@ -25,10 +25,10 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Utility class for introspecting information about a method.
+ * Lightweight utility class for introspecting information about a method.
  */
 @BeanIgnore
-public final class MethodInfo {
+public final class MethodInfo implements Comparable<MethodInfo> {
 
 	private ClassInfo declaringClass;
 	private final Method m;
@@ -97,7 +97,7 @@ public final class MethodInfo {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClass() {
+	public ClassInfo getDeclaringClassInfo() {
 		if (declaringClass == null)
 			declaringClass = ClassInfo.of(m.getDeclaringClass());
 		return declaringClass;
@@ -848,5 +848,19 @@ public final class MethodInfo {
 	 */
 	public boolean isBridge() {
 		return m.isBridge();
+	}
+
+	@Override
+	public int compareTo(MethodInfo o) {
+		int i = getName().compareTo(o.getName());
+		if (i == 0) {
+			i = getParameterTypes().length - o.getParameterTypes().length;
+			if (i == 0) {
+				for (int j = 0; j < getParameterTypes().length && i == 0; j++) {
+					i = getParameterTypes()[j].getName().compareTo(o.getParameterTypes()[j].getName());
+				}
+			}
+		}
+		return i;
 	}
 }

@@ -171,14 +171,14 @@ public final class RestCallException extends IOException {
 		Constructor<?> c = null;
 		ClassInfo ci = getClassInfo(t);
 		if (msg != null) {
-			c = ci.findPublicConstructor(String.class);
+			c = ci.getPublicConstructor(String.class);
 			if (c != null)
 				throw (Throwable)c.newInstance(msg);
-			c = ci.findPublicConstructor(Object.class);
+			c = ci.getPublicConstructor(Object.class);
 			if (c != null)
 				throw (Throwable)c.newInstance(msg);
 		}
-		c = ci.findPublicConstructor();
+		c = ci.getPublicConstructor();
 		if (c != null)
 			throw (Throwable)c.newInstance();
 	}
