@@ -34,7 +34,14 @@ public class LoadConfigResource extends RestServlet {
 	@RestMethod(name = GET, path = "/{project}/{branch}/*", consumes = "application/json", produces = "application/json")
 	public String gets(@Path("project") String project, @Path("branch") String branch) {
 
-		new GetConfiguration(project, branch).execute();
+		try {
+			new GetConfiguration(project, branch).execute();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 
 		return "{'msg':'OK'}";
 	}

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.server.config.repository;
 
+import java.io.File;
+
 public class GetConfiguration implements Command {
 
 	private String project;
@@ -23,8 +25,24 @@ public class GetConfiguration implements Command {
 	}
 
 	@Override
-	public void execute() {
-		new CloneRepository(branch).execute();
+	public void execute() throws Exception {
+
+		GitControl gitControl = new GitControl("/home/marcelo/desenvolvimento/tmp/juneau-config-test",
+				"https://github.com/marcelosv/juneau-config-test.git");
+
+		String pathDefalt = "/home/marcelo/desenvolvimento/tmp/juneau-config-test";
+
+		File path = new File(pathDefalt);
+
+		if (path.isDirectory()) {
+			gitControl.pullFromRepo();
+		} else {
+			gitControl.cloneRepo();
+		}
+
+		gitControl.branch(branch);
+		gitControl.pullFromRepo();
+
 	}
 
 }
