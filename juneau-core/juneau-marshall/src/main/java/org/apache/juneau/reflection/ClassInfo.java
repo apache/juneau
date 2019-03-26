@@ -13,6 +13,7 @@
 package org.apache.juneau.reflection;
 
 import static org.apache.juneau.internal.ClassFlags.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -290,11 +291,8 @@ public final class ClassInfo {
 	/**
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
-	 * <p>
-	 * Methods are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of methods.  Other JVMs (Oracle) do not and return them in random order.
-	 *
-	 * @return All declared methods on this class and all parent classes in child-to-parent order.
+	 * @return All declared methods on this class and all parent classes in child-to-parent order in
+	 * 	alphabetical order per class.
 	 */
 	public List<MethodInfo> getAllMethodInfos() {
 		return getAllMethodInfos(false);
@@ -304,7 +302,7 @@ public final class ClassInfo {
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
 	 * @param parentFirst If <jk>true</jk>, methods on parent classes are listed first.
-	 * @return All declared methods on this class and all parent classes.
+	 * @return All declared methods on this class and all parent classes in alphabetical order per class.
 	 */
 	public List<MethodInfo> getAllMethodInfos(boolean parentFirst) {
 		return findAllMethods(parentFirst);
@@ -313,11 +311,7 @@ public final class ClassInfo {
 	/**
 	 * Returns all methods declared on this class.
 	 *
-	 * <p>
-	 * Methods are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of methods.  Other JVMs (Oracle) do not and return them in random order.
-	 *
-	 * @return All methods declared on this class.
+	 * @return All methods declared on this class in alphabetical order.
 	 */
 	public List<MethodInfo> getDeclaredMethodInfos() {
 		return findDeclaredMethods(new ArrayList<>());
@@ -327,9 +321,9 @@ public final class ClassInfo {
 	 * Returns all public methods on this class.
 	 *
 	 * <p>
-	 * 	Methods are sorted alphabetically.
+	 * Methods defined on the {@link Object} class are excluded from the results.
 	 *
-	 * @return All public methods on this class.
+	 * @return All public methods on this class in alphabetical order.
 	 */
 	public List<MethodInfo> getPublicMethodInfos() {
 		return findPublicMethods();
@@ -344,8 +338,6 @@ public final class ClassInfo {
 
 	private List<MethodInfo> findDeclaredMethods(List<MethodInfo> l) {
 		Method[] mm = c.getDeclaredMethods();
-		if (l == null)
-			l = new ArrayList<>(mm.length);
 		int i = l.size();
 		for (Method m : mm)
 			if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
@@ -358,7 +350,9 @@ public final class ClassInfo {
 		Method[] mm = c.getMethods();
 		List<MethodInfo> l = new ArrayList<>(mm.length);
 		for (Method m : mm)
-			l.add(MethodInfo.of(this, m));
+			if (m.getDeclaringClass() != Object.class)
+				l.add(MethodInfo.of(this, m));
+		l.sort(null);
 		return l;
 	}
 
@@ -384,24 +378,38 @@ public final class ClassInfo {
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
 	public MethodInfo getFromStringMethodInfo() {
-		for (String methodName : new String[]{"create","fromString","fromValue","valueOf","parse","parseString","forName","forString"})
-			for (MethodInfo m : getPublicMethodInfos())
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class))
-					return m;
+		for (MethodInfo m : getPublicMethodInfos())
+			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) 
+					&& m.hasReturnType(c) 
+					&& m.hasArgs(String.class) 
+					&& isOneOf(m.getName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
+				return m;
 		return null;
 	}
 
 	/**
 	 * Find the public static creator method on this class.
 	 *
+	 * <p>
+	 * Looks for the following method names:
+	 * <ul>
+	 * 	<li><code>create</code>
+	 * 	<li><code>from</code>
+	 * 	<li><code>fromIC</code>
+	 * </ul>
+	 *
 	 * @param ic The argument type.
-	 * @param name The method name.
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
-	public MethodInfo getStaticCreateMethodInfo(Class<?> ic, String name) {
-		for (MethodInfo m : getPublicMethodInfos())
-			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(name) && m.hasReturnType(c) && m.hasArgs(ic))
-				return m;
+	public MethodInfo getStaticCreateMethodInfo(Class<?> ic) {
+		for (MethodInfo m : getPublicMethodInfos()) {
+			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasArgs(ic)) {
+				String n = m.getName();
+				if (isOneOf(n, "create","from") || (n.startsWith("from") && n.substring(4).equals(ic.getSimpleName()))) {
+					return m;
+				}
+			}
+		}
 		return null;
 	}
 
@@ -412,7 +420,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getBuilderCreateMethodInfo() {
 		for (MethodInfo m : getDeclaredMethodInfos())
-			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && ! m.hasReturnType(Void.class))
+			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && (!m.hasReturnType(void.class)))
 				return m;
 		return null;
 	}
@@ -424,7 +432,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getBuilderBuildMethodInfo() {
 		for (MethodInfo m : getDeclaredMethodInfos())
-			if (m.isAll(NOT_STATIC) && m.hasName("build") && ! m.hasReturnType(Void.class))
+			if (m.isAll(NOT_STATIC) && m.hasName("build") && (!m.hasArgs()) && (!m.hasReturnType(void.class)))
 				return m;
 		return null;
 	}

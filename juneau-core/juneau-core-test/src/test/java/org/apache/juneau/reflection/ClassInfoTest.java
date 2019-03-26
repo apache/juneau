@@ -158,7 +158,7 @@ public class ClassInfoTest {
 	static abstract class CC1 implements CI1, CI2 {
 		@Override
 		public void i1a() {}
-		public void c1b() {}
+		protected void c1b() {}
 		public void c1a() {}
 	}
 	static class CC2 extends CC1 implements CI3 {
@@ -169,13 +169,13 @@ public class ClassInfoTest {
 		public void i2b() {}
 		@Override
 		public void i2a() {}
-		public void c2a() {}
+		protected void c2a() {}
 	}
 	static class CC3 extends CC2 {
 		@Override
 		public void i2b() {}
 		public void c3a() {}
-		public void c3b() {}
+		protected void c3b() {}
 	}
 
 	@Test
@@ -184,6 +184,165 @@ public class ClassInfoTest {
 		assertListEquals("CC3.c3a,CC3.c3b,CC3.i2b,CC2.c2a,CC2.c2b,CC2.i1b,CC2.i2a,CC2.i2b,CC1.c1a,CC1.c1b,CC1.i1a,CI1.i1a,CI1.i1b,CI2.i2a,CI2.i2b", cc3.getAllMethodInfos());
 		assertListEquals("CC3.c3a,CC3.c3b,CC3.i2b,CC2.c2a,CC2.c2b,CC2.i1b,CC2.i2a,CC2.i2b,CC1.c1a,CC1.c1b,CC1.i1a,CI1.i1a,CI1.i1b,CI2.i2a,CI2.i2b", cc3.getAllMethodInfos(false));
 		assertListEquals("CI2.i2a,CI2.i2b,CI1.i1a,CI1.i1b,CC1.c1a,CC1.c1b,CC1.i1a,CC2.c2a,CC2.c2b,CC2.i1b,CC2.i2a,CC2.i2b,CC3.c3a,CC3.c3b,CC3.i2b", cc3.getAllMethodInfos(true));
+	}
+
+	@Test
+	public void getDeclaredMethodInfos() throws Exception {
+		ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
+		assertListEquals("CC3.c3a,CC3.c3b,CC3.i2b", cc3.getDeclaredMethodInfos());
+		assertListEquals("CI2.i2a,CI2.i2b", ci2.getDeclaredMethodInfos());
+	}
+
+	@Test
+	public void getPublicMethodInfos() throws Exception {
+		ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
+		assertListEquals("CC3.c1a,CC3.c2b,CC3.c3a,CC3.i1a,CC3.i1b,CC3.i2a,CC3.i2b", cc3.getPublicMethodInfos());
+		assertListEquals("CI2.i1a,CI2.i1b,CI2.i2a,CI2.i2b", ci2.getPublicMethodInfos());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Special methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	static class DA1 {
+		public static DA1 create(String s) {return null;}
+	}
+	static class DA2 {
+		public static DA2 create(Object o) {return null;}
+	}
+	static class DA3 {
+		@Deprecated
+		public static DA3 create(String s) {return null;}
+	}
+	static class DA4 {
+		public static DA1 create(String s) {return null;}
+	}
+	static class DA5 {
+		public static DA5 create(String s1, String s2) {return null;}
+	}
+	static class DA6 {
+		public DA6 create(String s1) {return null;}
+	}
+	static class DA7 {
+		static DA7 create(String s1) {return null;}
+	}
+	static class DA8 {
+		public static DA8 create2(String s1) {return null;}
+	}
+
+	@Test
+	public void getFromStringMethodInfo() throws Exception {
+		assertEquals("create", of(DA1.class).getFromStringMethodInfo().getName());
+		assertNull(of(DA2.class).getFromStringMethodInfo());
+		assertNull(of(DA3.class).getFromStringMethodInfo());
+		assertNull(of(DA4.class).getFromStringMethodInfo());
+		assertNull(of(DA5.class).getFromStringMethodInfo());
+		assertNull(of(DA6.class).getFromStringMethodInfo());
+		assertNull(of(DA7.class).getFromStringMethodInfo());
+		assertNull(of(DA8.class).getFromStringMethodInfo());
+	}
+
+	static class DBx {}
+	static class DB1 {
+		public static DB1 create(DBx x) {return null;}
+	}
+	static class DB2 {
+		public static DB2 fromDBx(DBx x) {return null;}
+	}
+	static class DB3 {
+		public static DB3 from(DBx x) {return null;}
+	}
+	static class DB4 {
+		public static DBx fromDBx(DBx x) {return null;}
+	}
+	static class DB5 {
+		public DB5 fromDBx(DBx x) {return null;}
+	}
+	static class DB6 {
+		protected static DB6 fromDBx(DBx x) {return null;}
+	}
+	static class DB7 {
+		protected static DB7 from(DBx x) {return null;}
+	}
+	static class DB8 {
+		@Deprecated
+		public static DB8 create(DBx x) {return null;}
+	}
+	static class DB9 {
+		public static DB9 create(DB1 x) {return null;}
+	}
+	static class DB10 {
+		public static DB10 foo(DBx x) {return null;}
+	}
+	static class DB11 {
+		public static DB11 fromFoo(DBx x) {return null;}
+	}
+
+	@Test
+	public void getStaticCreateMethodInfo() throws Exception {
+		assertEquals("create", of(DB1.class).getStaticCreateMethodInfo(DBx.class).getName());
+		assertEquals("fromDBx", of(DB2.class).getStaticCreateMethodInfo(DBx.class).getName());
+		assertEquals("from", of(DB3.class).getStaticCreateMethodInfo(DBx.class).getName());
+		assertNull(of(DB4.class).getStaticCreateMethodInfo(DBx.class));
+		assertNull(of(DB5.class).getStaticCreateMethodInfo(DBx.class));
+		assertNull(of(DB6.class).getStaticCreateMethodInfo(DBx.class));
+		assertNull(of(DB7.class).getStaticCreateMethodInfo(DBx.class));
+		assertNull(of(DB8.class).getStaticCreateMethodInfo(DBx.class));
+		assertNull(of(DB9.class).getStaticCreateMethodInfo(DBx.class));
+		assertNull(of(DB10.class).getStaticCreateMethodInfo(DBx.class));
+		assertNull(of(DB11.class).getStaticCreateMethodInfo(DBx.class));
+	}
+
+	static class DCx {}
+	static class DC1 {
+		public static DCx create() {return null;}
+	}
+	static class DC2 {
+		protected static DCx create() {return null;}
+	}
+	static class DC3 {
+		public DCx create() {return null;}
+	}
+	static class DC4 {
+		public static void create() {}
+	}
+	static class DC5 {
+		public static DCx createFoo() {return null;}
+	}
+
+	@Test
+	public void getBuilderCreateMethodInfo() throws Exception {
+		assertEquals("create", of(DC1.class).getBuilderCreateMethodInfo().getName());
+		assertNull(of(DC2.class).getBuilderCreateMethodInfo());
+		assertNull(of(DC3.class).getBuilderCreateMethodInfo());
+		assertNull(of(DC4.class).getBuilderCreateMethodInfo());
+		assertNull(of(DC5.class).getBuilderCreateMethodInfo());
+	}
+
+	static class DDx {}
+	static class DD1 {
+		public DDx build() {return null;}
+	}
+	static class DD2 {
+		public void build() {}
+	}
+	static class DD3 {
+		public static DDx build() {return null;}
+	}
+	static class DD4 {
+		public DDx build2() {return null;}
+	}
+	static class DD5 {
+		public DDx build(String x) {return null;}
+	}
+
+	@Test
+	public void getBuilderBuildMethodInfo() throws Exception {
+		assertEquals("build", of(DD1.class).getBuilderBuildMethodInfo().getName());
+		assertNull(of(DD2.class).getBuilderBuildMethodInfo());
+		assertNull(of(DD3.class).getBuilderBuildMethodInfo());
+		assertNull(of(DD4.class).getBuilderBuildMethodInfo());
+		assertNull(of(DD5.class).getBuilderBuildMethodInfo());
 	}
 
 	//====================================================================================================
@@ -222,9 +381,6 @@ public class ClassInfoTest {
 	}
 
 
-	//====================================================================================================
-	// getAllMethodsParentFirst()
-	//====================================================================================================
 
 	//====================================================================================================
 	// getAllFieldsParentFirst()

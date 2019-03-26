@@ -164,9 +164,7 @@ public class TransformCache {
 		}
 
 		if (t == null) {
-			MethodInfo createMethod = oci.getStaticCreateMethodInfo(ic, "create");
-			if (createMethod == null)
-				createMethod = oci.getStaticCreateMethodInfo(ic, "from" + ic.getSimpleName());
+			MethodInfo createMethod = oci.getStaticCreateMethodInfo(ic);
 			if (createMethod != null) {
 				final Method cm = createMethod.inner();
 				t = new Transform<I,O>() {
