@@ -154,7 +154,7 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = getClassInfo(pojoClass);
 
-		pojoConstructor = pci.getConstructor(cVis, false, builderClass);
+		pojoConstructor = pci.getConstructor(cVis, builderClass);
 		if (pojoConstructor == null)
 			return null;
 
@@ -216,7 +216,7 @@ public class BuilderSwap<T,B> {
 
 		pojoCreateMethod = bci.getBuilderBuildMethodInfo();
 		if (pojoConstructor == null)
-			pojoConstructor = pci.getConstructor(cVis, false, builderClass);
+			pojoConstructor = pci.getConstructor(cVis, builderClass);
 
 		if (pojoConstructor == null && pojoCreateMethod == null)
 			return null;

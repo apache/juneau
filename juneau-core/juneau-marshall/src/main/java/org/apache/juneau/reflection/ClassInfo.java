@@ -379,9 +379,9 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getFromStringMethodInfo() {
 		for (MethodInfo m : getPublicMethodInfos())
-			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) 
-					&& m.hasReturnType(c) 
-					&& m.hasArgs(String.class) 
+			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED)
+					&& m.hasReturnType(c)
+					&& m.hasArgs(String.class)
 					&& isOneOf(m.getName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
 				return m;
 		return null;
@@ -480,38 +480,49 @@ public final class ClassInfo {
 	 * 	arguments.
 	 */
 	public <T> Constructor<T> getPublicConstructor(Class<?>...args) {
-		return getPublicConstructor(false, args);
+		return findConstructor(Visibility.PUBLIC, false, args);
 	}
 
 	/**
-	 * Finds a public constructor with the specified parameters without throwing an exception.
+	 * Finds a public constructor with the specified parameters using fuzzy-arg matching without throwing an exception.
 	 *
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
 	 * @param argTypes
 	 * 	The argument types in the constructor.
 	 * 	Can be subtypes of the actual constructor argument types.
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
-	public <T> Constructor<T> getPublicConstructor(boolean fuzzyArgs, Class<?>...argTypes) {
-		return getConstructor(Visibility.PUBLIC, fuzzyArgs, argTypes);
+	public <T> Constructor<T> getPublicConstructorFuzzy(Class<?>...argTypes) {
+		return findConstructor(Visibility.PUBLIC, true, argTypes);
 	}
 
 	/**
 	 * Finds a constructor with the specified parameters without throwing an exception.
 	 *
 	 * @param vis The minimum visibility.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
 	 * @param argTypes
 	 * 	The argument types in the constructor.
 	 * 	Can be subtypes of the actual constructor argument types.
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
+	public <T> Constructor<T> getConstructor(Visibility vis, Class<?>...argTypes) {
+		return findConstructor(vis, false, argTypes);
+	}
+
+	/**
+	 * Finds a constructor with the specified parameters using fuzzy-arg matching without throwing an exception.
+	 *
+	 * @param vis The minimum visibility.
+	 * @param argTypes
+	 * 	The argument types in the constructor.
+	 * 	Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	public <T> Constructor<T> getConstructorFuzzy(Visibility vis, Class<?>...argTypes) {
+		return findConstructor(vis, true, argTypes);
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T> Constructor<T> getConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
+	private <T> Constructor<T> findConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
 		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
 		if (cce != null && ClassUtils.argsMatch(cce.paramTypes, argTypes) && cce.isVisible(vis))
 			return (Constructor<T>)cce.constructor;
@@ -568,18 +579,26 @@ public final class ClassInfo {
 	/**
 	 * Finds the public constructor that can take in the specified arguments.
 	 *
-	 * @param fuzzyArgs
-	 * 	Use fuzzy-arg matching.
-	 * 	Find a constructor that best matches the specified args.
 	 * @param args The arguments we want to pass into the constructor.
 	 * @return
 	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
 	 * 	arguments.
 	 */
-	public <T> Constructor<T> getPublicConstructor(boolean fuzzyArgs, Object...args) {
-		return getPublicConstructor(fuzzyArgs, ClassUtils.getClasses(args));
+	public <T> Constructor<T> getPublicConstructor(Object...args) {
+		return findConstructor(Visibility.PUBLIC, false, ClassUtils.getClasses(args));
 	}
 
+	/**
+	 * Finds the public constructor that can take in the specified arguments using fuzzy-arg matching.
+	 *
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public <T> Constructor<T> getPublicConstructorFuzzy(Object...args) {
+		return findConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
+	}
 
 	private List<ConstructorInfo> findConstructors() {
 		Constructor<?>[] cc = c.getConstructors();

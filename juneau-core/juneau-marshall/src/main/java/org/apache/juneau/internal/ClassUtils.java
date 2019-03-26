@@ -283,21 +283,21 @@ public final class ClassUtils {
 					return null;
 
 				// First look for an exact match.
-				Constructor<?> con = c3.getPublicConstructor(false, args);
+				Constructor<?> con = c3.getPublicConstructor(args);
 				if (con != null)
 					return (T)con.newInstance(args);
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
 					args = new AList<>().append(outer).appendAll(args).toArray();
-					con = c3.getPublicConstructor(false, args);
+					con = c3.getPublicConstructor(args);
 					if (con != null)
 						return (T)con.newInstance(args);
 				}
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
-					con = c3.getPublicConstructor(true, args);
+					con = c3.getPublicConstructorFuzzy(args);
 					if (con != null)
 						return (T)con.newInstance(getMatchingArgs(con.getParameterTypes(), args));
 				}
