@@ -14,6 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -168,7 +169,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(asString(value));
 	}
 
 	/**
@@ -227,7 +228,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(asString(value));
 	}
 
 	/**
@@ -278,7 +279,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(asString(value));
 	}
 
 	/**
@@ -380,7 +381,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo collectionFormat(Object value) {
-		return setCollectionFormat(toStringVal(value));
+		return setCollectionFormat(asString(value));
 	}
 
 	/**
@@ -762,7 +763,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(asString(value));
 	}
 
 	/**

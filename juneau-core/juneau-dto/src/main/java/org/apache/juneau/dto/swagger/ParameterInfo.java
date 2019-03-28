@@ -14,6 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -321,7 +322,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo name(Object value) {
-		return setName(toStringVal(value));
+		return setName(asString(value));
 	}
 
 	/**
@@ -385,7 +386,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo in(Object value) {
-		return setIn(toStringVal(value));
+		return setIn(asString(value));
 	}
 
 	/**
@@ -430,7 +431,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(asString(value));
 	}
 
 	/**
@@ -599,7 +600,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(asString(value));
 	}
 
 	/**
@@ -648,7 +649,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(asString(value));
 	}
 
 	/**
@@ -816,7 +817,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo collectionFormat(Object value) {
-		return setCollectionFormat(toStringVal(value));
+		return setCollectionFormat(asString(value));
 	}
 
 	/**
@@ -1173,7 +1174,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(asString(value));
 	}
 
 	/**

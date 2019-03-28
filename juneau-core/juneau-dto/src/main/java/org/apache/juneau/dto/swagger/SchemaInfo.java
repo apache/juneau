@@ -13,6 +13,8 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -214,7 +216,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(asString(value));
 	}
 
 	/**
@@ -249,7 +251,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo title(Object value) {
-		return setTitle(toStringVal(value));
+		return setTitle(asString(value));
 	}
 
 	/**
@@ -285,7 +287,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(asString(value));
 	}
 
 	/**
@@ -606,7 +608,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(asString(value));
 	}
 
 	/**
@@ -975,7 +977,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(asString(value));
 	}
 
 	/**
@@ -1208,7 +1210,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo discriminator(Object value) {
-		return setDiscriminator(toStringVal(value));
+		return setDiscriminator(asString(value));
 	}
 
 	/**

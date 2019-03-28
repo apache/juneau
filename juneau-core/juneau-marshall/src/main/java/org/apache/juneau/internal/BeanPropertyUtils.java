@@ -26,16 +26,6 @@ import org.apache.juneau.parser.*;
 public final class BeanPropertyUtils {
 
 	/**
-	 * Converts a value to a String.
-	 *
-	 * @param o The value to convert.
-	 * @return The converted value, or <jk>null</jk> if the input was null.
-	 */
-	public static String toStringVal(Object o) {
-		return StringUtils.asString(o);
-	}
-
-	/**
 	 * Converts a value to a Boolean.
 	 *
 	 * @param o The value to convert.

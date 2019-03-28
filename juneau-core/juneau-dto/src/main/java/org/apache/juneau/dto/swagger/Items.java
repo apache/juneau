@@ -14,6 +14,7 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -194,7 +195,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items type(Object value) {
-		return setType(toStringVal(value));
+		return setType(asString(value));
 	}
 
 	/**
@@ -245,7 +246,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(asString(value));
 	}
 
 	/**
@@ -356,7 +357,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items collectionFormat(Object value) {
-		return setCollectionFormat(toStringVal(value));
+		return setCollectionFormat(asString(value));
 	}
 
 	/**
@@ -740,7 +741,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(asString(value));
 	}
 
 	/**

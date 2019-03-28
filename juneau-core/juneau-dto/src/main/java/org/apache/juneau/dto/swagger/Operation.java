@@ -319,7 +319,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation summary(Object value) {
-		return setSummary(toStringVal(value));
+		return setSummary(asString(value));
 	}
 
 	/**
@@ -362,7 +362,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(asString(value));
 	}
 
 	/**
@@ -458,7 +458,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Operation operationId(Object value) {
-		return setOperationId(toStringVal(value));
+		return setOperationId(asString(value));
 	}
 
 	/**
