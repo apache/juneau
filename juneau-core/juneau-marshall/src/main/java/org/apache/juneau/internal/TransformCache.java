@@ -178,7 +178,7 @@ public class TransformCache {
 					}
 				};
 			} else {
-				final Constructor<?> c = oci.getPublicConstructor(ic);
+				final ConstructorInfo c = oci.getPublicConstructorInfo(ic);
 				final boolean isMemberClass = oci.isMemberClass() && ! oci.isStatic();
 				if (c != null && ! c.isAnnotationPresent(Deprecated.class)) {
 					t = new Transform<I,O>() {
@@ -186,8 +186,8 @@ public class TransformCache {
 						public O transform(Object outer, I in) {
 							try {
 								if (isMemberClass)
-									return (O)c.newInstance(outer, in);
-								return (O)c.newInstance(in);
+									return c.<O>invoke(outer, in);
+								return c.<O>invoke(in);
 							} catch (Exception e) {
 								throw new RuntimeException(e);
 							}

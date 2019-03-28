@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
  * Lightweight utility class for introspecting information about a field.
  */
 @BeanIgnore
-public final class FieldInfo {
+public final class FieldInfo implements Comparable<FieldInfo> {
 
 	private final Field f;
 	private ClassInfo declaringClass, type;
@@ -348,6 +348,11 @@ public final class FieldInfo {
 	@Override
 	public String toString() {
 		return f.getDeclaringClass().getName() + "." + f.getName();
+	}
+
+	@Override
+	public int compareTo(FieldInfo o) {
+		return getName().compareTo(o.getName());
 	}
 
 	/**

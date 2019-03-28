@@ -863,4 +863,13 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 		}
 		return i;
 	}
+
+	/**
+	 * Returns a string representation of this method that consists of its name and simple arguments.
+	 *
+	 * @return A string representation of this method that consists of its name and simple arguments.
+	 */
+	public String getLabel() {
+		return ClassUtils.asString(m);
+	}
 }

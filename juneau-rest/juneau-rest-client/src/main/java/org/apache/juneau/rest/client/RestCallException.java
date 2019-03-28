@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.format;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.*;
 import java.text.*;
 import java.util.regex.*;
@@ -168,19 +167,19 @@ public final class RestCallException extends IOException {
 	}
 
 	private void doThrow(Class<?> t, String msg) throws Throwable {
-		Constructor<?> c = null;
+		ConstructorInfo c = null;
 		ClassInfo ci = getClassInfo(t);
 		if (msg != null) {
-			c = ci.getPublicConstructor(String.class);
+			c = ci.getPublicConstructorInfo(String.class);
 			if (c != null)
-				throw (Throwable)c.newInstance(msg);
-			c = ci.getPublicConstructor(Object.class);
+				throw c.<Throwable>invoke(msg);
+			c = ci.getPublicConstructorInfo(Object.class);
 			if (c != null)
-				throw (Throwable)c.newInstance(msg);
+				throw c.<Throwable>invoke(msg);
 		}
-		c = ci.getPublicConstructor();
+		c = ci.getPublicConstructorInfo();
 		if (c != null)
-			throw (Throwable)c.newInstance();
+			throw c.<Throwable>invoke();
 	}
 
 	/**

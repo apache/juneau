@@ -283,23 +283,23 @@ public final class ClassUtils {
 					return null;
 
 				// First look for an exact match.
-				Constructor<?> con = c3.getPublicConstructor(args);
+				ConstructorInfo con = c3.getPublicConstructorInfo(args);
 				if (con != null)
-					return (T)con.newInstance(args);
+					return con.<T>invoke(args);
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
 					args = new AList<>().append(outer).appendAll(args).toArray();
-					con = c3.getPublicConstructor(args);
+					con = c3.getPublicConstructorInfo(args);
 					if (con != null)
-						return (T)con.newInstance(args);
+						return con.<T>invoke(args);
 				}
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
-					con = c3.getPublicConstructorFuzzy(args);
+					con = c3.getPublicConstructorFuzzyInfo(args);
 					if (con != null)
-						return (T)con.newInstance(getMatchingArgs(con.getParameterTypes(), args));
+						return con.<T>invoke(getMatchingArgs(con.getParameterTypes(), args));
 				}
 
 				throw new FormattedRuntimeException("Could not instantiate class {0}/{1}.  Constructor not found.", c.getName(), c2);
@@ -349,7 +349,27 @@ public final class ClassUtils {
 	 * @return The stringified method.
 	 */
 	public static String asString(Method m) {
-		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
+		StringBuilder sb = new StringBuilder(m.getName() + "(");
+		for (int i = 0; i < m.getParameterTypes().length; i++) {
+			if (i > 0)
+				sb.append(",");
+			sb.append(m.getParameterTypes()[i].getSimpleName());
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+
+	/**
+	 * Returns a readable representation of the specified method.
+	 *
+	 * <p>
+	 * The format of the string is <js>"full-qualified-class.method-name(parameter-simple-class-names)"</js>.
+	 *
+	 * @param m The method to stringify.
+	 * @return The stringified method.
+	 */
+	public static String asString(Constructor<?> m) {
+		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getSimpleName() + "(");
 		for (int i = 0; i < m.getParameterTypes().length; i++) {
 			if (i > 0)
 				sb.append(",");
@@ -369,7 +389,7 @@ public final class ClassUtils {
 	 * @return The stringified field.
 	 */
 	public static String asString(Field f) {
-		return f.getDeclaringClass().getName() + "." + f.getName();
+		return f.getName();
 	}
 
 	/**

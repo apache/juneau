@@ -142,7 +142,7 @@ public class BuilderSwap<T,B> {
 		Class<?> pojoClass = getClassInfo(Builder.class).getParameterType(0, builderClass);
 
 		MethodInfo createPojoMethod, createBuilderMethod;
-		Constructor<?> pojoConstructor;
+		ConstructorInfo pojoConstructor;
 		ConstructorInfo builderConstructor;
 
 		createPojoMethod = bci.getBuilderBuildMethodInfo();
@@ -154,7 +154,7 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = getClassInfo(pojoClass);
 
-		pojoConstructor = pci.getConstructor(cVis, builderClass);
+		pojoConstructor = pci.getConstructorInfo(cVis, builderClass);
 		if (pojoConstructor == null)
 			return null;
 
@@ -163,7 +163,7 @@ public class BuilderSwap<T,B> {
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
-		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createPojoMethod);
+		return new BuilderSwap(pojoClass, builderClass, pojoConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createPojoMethod);
 	}
 
 
@@ -179,7 +179,7 @@ public class BuilderSwap<T,B> {
 	public static BuilderSwap<?,?> findSwapFromPojoClass(Class<?> pojoClass, Visibility cVis, Visibility mVis) {
 		Class<?> builderClass = null;
 		MethodInfo pojoCreateMethod, builderCreateMethod;
-		Constructor<?> pojoConstructor = null;
+		ConstructorInfo pojoConstructor = null;
 		ConstructorInfo builderConstructor;
 
 		org.apache.juneau.annotation.Builder b = pojoClass.getAnnotation(org.apache.juneau.annotation.Builder.class);
@@ -195,11 +195,11 @@ public class BuilderSwap<T,B> {
 			builderClass = builderCreateMethod.getReturnType().inner();
 
 		if (builderClass == null) {
-			for (ConstructorInfo cc : pci.getConstructorInfos()) {
+			for (ConstructorInfo cc : pci.getPublicConstructorInfos()) {
 				if (cc.isVisible(cVis) && cc.hasNumArgs(1)) {
 					Class<?>[] pt = cc.getParameterTypes();
 					if (getClassInfo(pt[0]).isChildOf(Builder.class)) {
-						pojoConstructor = cc.inner();
+						pojoConstructor = cc;
 						builderClass = pt[0];
 					}
 				}
@@ -216,11 +216,11 @@ public class BuilderSwap<T,B> {
 
 		pojoCreateMethod = bci.getBuilderBuildMethodInfo();
 		if (pojoConstructor == null)
-			pojoConstructor = pci.getConstructor(cVis, builderClass);
+			pojoConstructor = pci.getConstructorInfo(cVis, builderClass);
 
 		if (pojoConstructor == null && pojoCreateMethod == null)
 			return null;
 
-		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, pojoCreateMethod);
+		return new BuilderSwap(pojoClass, builderClass, pojoConstructor == null ? null : pojoConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, pojoCreateMethod);
 	}
 }

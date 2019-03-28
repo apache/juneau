@@ -57,8 +57,9 @@ public final class ClassInfo {
 
 	private final Type t;
 	private final Class<?> c;
-	private List<Class<?>> interfaces;
 	private List<ClassInfo> interfaceInfos;
+	private List<MethodInfo> publicMethodInfos, declaredMethodInfos;
+	private List<ConstructorInfo> publicConstructorInfos, declaredConstructorInfos;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private Map<Class<?>,Optional<Annotation>> declaredAnnotationMap;
 
@@ -132,8 +133,9 @@ public final class ClassInfo {
 	 *
 	 * @return The wrapped class as a {@link Class}, or <jk>null</jk> if it's not a class (e.g. it's a {@link ParameterizedType}).
 	 */
-	public Class<?> inner() {
-		return c;
+	@SuppressWarnings("unchecked")
+	public <T> Class<T> inner() {
+		return (Class<T>)c;
 	}
 
 	/**
@@ -152,36 +154,12 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the parent class.
-	 *
-	 * @return The parent class, or <jk>null</jk> if the class has no parent.
-	 */
-	public Class<?> getParent() {
-		return c.getSuperclass();
-	}
-
-	/**
 	 * Returns the parent class wrapped in {@link ClassInfo}.
 	 *
 	 * @return The parent class wrapped in {@link ClassInfo}, or <jk>null</jk> if the class has no parent.
 	 */
 	public ClassInfo getParentInfo() {
-		return of(getParent());
-	}
-
-	/**
-	 * Returns a list of interfaces defined on this class.
-	 *
-	 * <p>
-	 * Does not include interfaces defined on parent classes.
-	 *
-	 * @return
-	 * 	An unmodifiable list of interfaces defined on this class.
-	 */
-	public List<Class<?>> getInterfaces() {
-		if (interfaces == null)
-			interfaces = unmodifiableList(c.getInterfaces());
-		return interfaces;
+		return of(c.getSuperclass());
 	}
 
 	/**
@@ -195,8 +173,8 @@ public final class ClassInfo {
 	 */
 	public List<ClassInfo> getInterfaceInfos() {
 		if (interfaceInfos == null) {
-			List<Class<?>> interfaces = getInterfaces();
-			List<ClassInfo> l = new ArrayList<>(interfaces.size());
+			Class<?>[] interfaces = c.getInterfaces();
+			List<ClassInfo> l = new ArrayList<>(interfaces.length);
 			for (Class<?> i : interfaces)
 				l.add(of(i));
 			interfaceInfos = unmodifiableList(l);
@@ -314,7 +292,7 @@ public final class ClassInfo {
 	 * @return All methods declared on this class in alphabetical order.
 	 */
 	public List<MethodInfo> getDeclaredMethodInfos() {
-		return findDeclaredMethods(new ArrayList<>());
+		return getDeclaredMethods();
 	}
 
 	/**
@@ -326,34 +304,45 @@ public final class ClassInfo {
 	 * @return All public methods on this class in alphabetical order.
 	 */
 	public List<MethodInfo> getPublicMethodInfos() {
-		return findPublicMethods();
+		return getPublicMethods();
 	}
 
 	private List<MethodInfo> findAllMethods(boolean parentFirst) {
 		List<MethodInfo> l = new ArrayList<>();
 		for (ClassInfo c : getParentInfos(parentFirst, true))
-			c.findDeclaredMethods(l);
+			c.appendDeclaredMethods(l);
 		return l;
 	}
 
-	private List<MethodInfo> findDeclaredMethods(List<MethodInfo> l) {
-		Method[] mm = c.getDeclaredMethods();
-		int i = l.size();
-		for (Method m : mm)
-			if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
-				l.add(MethodInfo.of(this, m));
-		l.subList(i, l.size()).sort(null);
+	private List<MethodInfo> appendDeclaredMethods(List<MethodInfo> l) {
+		l.addAll(getDeclaredMethods());
 		return l;
 	}
 
-	private List<MethodInfo> findPublicMethods() {
-		Method[] mm = c.getMethods();
-		List<MethodInfo> l = new ArrayList<>(mm.length);
-		for (Method m : mm)
-			if (m.getDeclaringClass() != Object.class)
-				l.add(MethodInfo.of(this, m));
-		l.sort(null);
-		return l;
+	private List<MethodInfo> getDeclaredMethods() {
+		if (declaredMethodInfos == null) {
+			Method[] mm = c.getDeclaredMethods();
+			List<MethodInfo> l = new ArrayList<>(mm.length);
+			for (Method m : mm)
+				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
+					l.add(MethodInfo.of(this, m));
+			l.sort(null);
+			declaredMethodInfos = Collections.unmodifiableList(l);
+		}
+		return declaredMethodInfos;
+	}
+
+	private List<MethodInfo> getPublicMethods() {
+		if (publicMethodInfos == null) {
+			Method[] mm = c.getMethods();
+			List<MethodInfo> l = new ArrayList<>(mm.length);
+			for (Method m : mm)
+				if (m.getDeclaringClass() != Object.class)
+					l.add(MethodInfo.of(this, m));
+			l.sort(null);
+			publicMethodInfos = Collections.unmodifiableList(l);
+		}
+		return publicMethodInfos;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -446,8 +435,44 @@ public final class ClassInfo {
 	 *
 	 * @return All public constructors defined on this class.
 	 */
-	public Iterable<ConstructorInfo> getConstructorInfos() {
-		return findConstructors();
+	public List<ConstructorInfo> getPublicConstructorInfos() {
+		return getPublicConstructors();
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments.
+	 *
+	 * @param args The argument types we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public ConstructorInfo getPublicConstructorInfo(Class<?>...args) {
+		return getConstructor(Visibility.PUBLIC, false, args);
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments.
+	 *
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public ConstructorInfo getPublicConstructorInfo(Object...args) {
+		return getConstructor(Visibility.PUBLIC, false, ClassUtils.getClasses(args));
+	}
+
+	/**
+	 * Finds the public constructor that can take in the specified arguments using fuzzy-arg matching.
+	 *
+	 * @param args The arguments we want to pass into the constructor.
+	 * @return
+	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
+	 * 	arguments.
+	 */
+	public ConstructorInfo getPublicConstructorFuzzyInfo(Object...args) {
+		return getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
 	}
 
 	/**
@@ -465,34 +490,23 @@ public final class ClassInfo {
 		if (isAbstract())
 			return null;
 		boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (ConstructorInfo cc : getConstructorInfos())
+		for (ConstructorInfo cc : getPublicConstructorInfos())
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
 				return cc.transform(v);
 		return null;
 	}
 
 	/**
-	 * Finds the public constructor that can take in the specified arguments.
+	 * Locates the public no-arg constructor for this class.
 	 *
-	 * @param args The argument types we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public <T> Constructor<T> getPublicConstructor(Class<?>...args) {
-		return findConstructor(Visibility.PUBLIC, false, args);
-	}
-
-	/**
-	 * Finds a public constructor with the specified parameters using fuzzy-arg matching without throwing an exception.
+	 * <p>
+	 * If class is abstract, always returns <jk>null</jk>.
+	 * Note that this also returns the 1-arg constructor for non-static member classes.
 	 *
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 * @return The constructor, or <jk>null</jk> if no public no-arg constructor exists.
 	 */
-	public <T> Constructor<T> getPublicConstructorFuzzy(Class<?>...argTypes) {
-		return findConstructor(Visibility.PUBLIC, true, argTypes);
+	public ConstructorInfo getPublicNoArgConstructorInfo() {
+		return getNoArgConstructorInfo(Visibility.PUBLIC);
 	}
 
 	/**
@@ -504,34 +518,16 @@ public final class ClassInfo {
 	 * 	Can be subtypes of the actual constructor argument types.
 	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
 	 */
-	public <T> Constructor<T> getConstructor(Visibility vis, Class<?>...argTypes) {
-		return findConstructor(vis, false, argTypes);
+	public ConstructorInfo getConstructorInfo(Visibility vis, Class<?>...argTypes) {
+		return getConstructor(vis, false, argTypes);
 	}
 
-	/**
-	 * Finds a constructor with the specified parameters using fuzzy-arg matching without throwing an exception.
-	 *
-	 * @param vis The minimum visibility.
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
-	 */
-	public <T> Constructor<T> getConstructorFuzzy(Visibility vis, Class<?>...argTypes) {
-		return findConstructor(vis, true, argTypes);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> Constructor<T> findConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
-		ConstructorCacheEntry cce = CONSTRUCTOR_CACHE.get(c);
-		if (cce != null && ClassUtils.argsMatch(cce.paramTypes, argTypes) && cce.isVisible(vis))
-			return (Constructor<T>)cce.constructor;
-
+	private ConstructorInfo getConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
 		if (fuzzyArgs) {
 			int bestCount = -1;
-			Constructor<?> bestMatch = null;
-			for (Constructor<?> n : c.getDeclaredConstructors()) {
-				if (vis.isVisible(n)) {
+			ConstructorInfo bestMatch = null;
+			for (ConstructorInfo n : getDeclaredConstructors()) {
+				if (vis.isVisible(n.inner())) {
 					int m = ClassUtils.fuzzyArgsMatch(n.getParameterTypes(), argTypes);
 					if (m > bestCount) {
 						bestCount = m;
@@ -539,73 +535,43 @@ public final class ClassInfo {
 					}
 				}
 			}
-			if (bestCount >= 0)
-				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, bestMatch));
-			return (Constructor<T>)bestMatch;
+			return bestMatch;
 		}
 
 		final boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (Constructor<?> n : c.getConstructors()) {
+		for (ConstructorInfo n : getPublicConstructors()) {
 			Class<?>[] paramTypes = n.getParameterTypes();
 			if (isMemberClass)
 				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
-			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n)) {
-				CONSTRUCTOR_CACHE.put(c, new ConstructorCacheEntry(c, n));
-				return (Constructor<T>)n;
-			}
+			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n.inner()))
+				return n;
 		}
 
 		return null;
 	}
 
-	private static final Map<Class<?>,ConstructorCacheEntry> CONSTRUCTOR_CACHE = new ConcurrentHashMap<>();
-
-
-
-	private static final class ConstructorCacheEntry {
-		final Constructor<?> constructor;
-		final Class<?>[] paramTypes;
-
-		ConstructorCacheEntry(Class<?> forClass, Constructor<?> constructor) {
-			this.constructor = constructor;
-			this.paramTypes = constructor.getParameterTypes();
+	private List<ConstructorInfo> getPublicConstructors() {
+		if (publicConstructorInfos == null) {
+			Constructor<?>[] cc = c.getConstructors();
+			List<ConstructorInfo> l = new ArrayList<>(cc.length);
+			for (Constructor<?> ccc : cc)
+				l.add(ConstructorInfo.of(this, ccc));
+			l.sort(null);
+			publicConstructorInfos = Collections.unmodifiableList(l);
 		}
+		return publicConstructorInfos;
+	}
 
-		boolean isVisible(Visibility vis) {
-			return vis.isVisible(constructor);
+	private List<ConstructorInfo> getDeclaredConstructors() {
+		if (declaredConstructorInfos == null) {
+			Constructor<?>[] cc = c.getDeclaredConstructors();
+			List<ConstructorInfo> l = new ArrayList<>(cc.length);
+			for (Constructor<?> ccc : cc)
+				l.add(ConstructorInfo.of(this, ccc));
+			l.sort(null);
+			declaredConstructorInfos = Collections.unmodifiableList(l);
 		}
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public <T> Constructor<T> getPublicConstructor(Object...args) {
-		return findConstructor(Visibility.PUBLIC, false, ClassUtils.getClasses(args));
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments using fuzzy-arg matching.
-	 *
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public <T> Constructor<T> getPublicConstructorFuzzy(Object...args) {
-		return findConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
-	}
-
-	private List<ConstructorInfo> findConstructors() {
-		Constructor<?>[] cc = c.getConstructors();
-		List<ConstructorInfo> l = new ArrayList<>(cc.length);
-		for (Constructor<?> ccc : cc)
-			l.add(ConstructorInfo.of(this, ccc));
-		return Collections.unmodifiableList(l);
+		return declaredConstructorInfos;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -903,7 +869,7 @@ public final class ClassInfo {
 					return t2;
 			}
 
-			for (Class<?> c2 : getInterfaces()) {
+			for (ClassInfo c2 : getInterfaceInfos()) {
 				t2 = c2.getAnnotation(a);
 				if (t2 != null)
 					return t2;

@@ -61,7 +61,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		ClassInfo ci = getClassInfo(c);
-		for (ConstructorInfo cc : ci.getConstructorInfos()) {
+		for (ConstructorInfo cc : ci.getPublicConstructorInfos()) {
 			Class<?>[] pt = cc.getParameterTypes();
 			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumArgs(1) && cc.isPublic() && pt[0] != c.getDeclaringClass()) {
 				// Find the unswap method if there is one.

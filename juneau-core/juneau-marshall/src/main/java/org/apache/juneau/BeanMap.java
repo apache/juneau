@@ -154,7 +154,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param create If bean hasn't been instantiated yet, then instantiate it.
 	 * @return The inner bean object.
 	 */
-	@SuppressWarnings("unchecked")
 	public T getBean(boolean create) {
 		/** If this is a read-only bean, then we need to create it. */
 		if (bean == null && create && meta.constructorArgs.length > 0) {
@@ -164,7 +163,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			for (int i = 0; i < props.length; i++)
 				args[i] = propertyCache.remove(props[i]);
 			try {
-				bean = (T)c.invoke(args);
+				bean = c.<T>invoke(args);
 				for (Map.Entry<String,Object> e : propertyCache.entrySet())
 					put(e.getKey(), e.getValue());
 				propertyCache = null;

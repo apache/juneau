@@ -45,7 +45,9 @@ public class ClassInfoTest {
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getSimpleName();
 			if (t instanceof MethodInfo)
-				return ((MethodInfo)t).getDeclaringClassInfo().getSimpleName() + '.' + ((MethodInfo)t).getName();
+				return ((MethodInfo)t).getDeclaringClassInfo().getSimpleName() + '.' + ((MethodInfo)t).getLabel();
+			if (t instanceof ConstructorInfo)
+				return ((ConstructorInfo)t).getLabel();
 			return t.toString();
 		}
 	};
@@ -98,21 +100,6 @@ public class ClassInfoTest {
 	static class BC1 implements BI1, BI2 {}
 	static class BC2 extends BC1 implements BI3 {}
 	static class BC3 extends BC2 {}
-
-	@Test
-	public void getInterfaces() {
-		assertListEquals("", of(BI4.class).getInterfaces());
-		assertListEquals("BI1,BI2", of(BC1.class).getInterfaces());
-		assertListEquals("BI3", of(BC2.class).getInterfaces());
-		assertListEquals("", of(BC3.class).getInterfaces());
-	}
-
-	@Test
-	public void getInterfacesTwice() {
-		ClassInfo bc2 = of(BC2.class);
-		assertListEquals("BI3", bc2.getInterfaces());
-		assertListEquals("BI3", bc2.getInterfaces());
-	}
 
 	@Test
 	public void getInterfaceInfos() {
@@ -181,23 +168,23 @@ public class ClassInfoTest {
 	@Test
 	public void getAllMethodInfos() throws Exception {
 		ClassInfo cc3 = of(CC3.class);
-		assertListEquals("CC3.c3a,CC3.c3b,CC3.i2b,CC2.c2a,CC2.c2b,CC2.i1b,CC2.i2a,CC2.i2b,CC1.c1a,CC1.c1b,CC1.i1a,CI1.i1a,CI1.i1b,CI2.i2a,CI2.i2b", cc3.getAllMethodInfos());
-		assertListEquals("CC3.c3a,CC3.c3b,CC3.i2b,CC2.c2a,CC2.c2b,CC2.i1b,CC2.i2a,CC2.i2b,CC1.c1a,CC1.c1b,CC1.i1a,CI1.i1a,CI1.i1b,CI2.i2a,CI2.i2b", cc3.getAllMethodInfos(false));
-		assertListEquals("CI2.i2a,CI2.i2b,CI1.i1a,CI1.i1b,CC1.c1a,CC1.c1b,CC1.i1a,CC2.c2a,CC2.c2b,CC2.i1b,CC2.i2a,CC2.i2b,CC3.c3a,CC3.c3b,CC3.i2b", cc3.getAllMethodInfos(true));
+		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethodInfos());
+		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethodInfos(false));
+		assertListEquals("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethodInfos(true));
 	}
 
 	@Test
 	public void getDeclaredMethodInfos() throws Exception {
 		ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
-		assertListEquals("CC3.c3a,CC3.c3b,CC3.i2b", cc3.getDeclaredMethodInfos());
-		assertListEquals("CI2.i2a,CI2.i2b", ci2.getDeclaredMethodInfos());
+		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getDeclaredMethodInfos());
+		assertListEquals("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethodInfos());
 	}
 
 	@Test
 	public void getPublicMethodInfos() throws Exception {
 		ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
-		assertListEquals("CC3.c1a,CC3.c2b,CC3.c3a,CC3.i1a,CC3.i1b,CC3.i2a,CC3.i2b", cc3.getPublicMethodInfos());
-		assertListEquals("CI2.i1a,CI2.i1b,CI2.i2a,CI2.i2b", ci2.getPublicMethodInfos());
+		assertListEquals("CC3.c1a(),CC3.c2b(),CC3.c3a(),CC3.i1a(),CC3.i1b(),CC3.i2a(),CC3.i2b()", cc3.getPublicMethodInfos());
+		assertListEquals("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethodInfos());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -344,6 +331,55 @@ public class ClassInfoTest {
 		assertNull(of(DD4.class).getBuilderBuildMethodInfo());
 		assertNull(of(DD5.class).getBuilderBuildMethodInfo());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
+	static class EA1 {
+		public EA1() {}
+		public EA1(String a) {}
+		protected EA1(int a) {}
+	}
+
+	@Test
+	public void getPublicConstructorInfos() {
+		ClassInfo ea1 = of(EA1.class);
+		assertListEquals("EA1(),EA1(String)", ea1.getPublicConstructorInfos());
+	}
+
+	@Test
+	public void getPublicConstructorInfo_ClassArgs() {
+	}
+
+	@Test
+	public void getPublicConstructorInfo_ObjectArgs() {
+	}
+
+	@Test
+	public void getPublicConstructorFuzzyInfo() {
+	}
+
+	@Test
+	public void getNoArgConstructorInfo() {
+	}
+
+	@Test
+	public void getPublicNoArgConstructorInfo() {
+	}
+
+	@Test
+	public void getConstructorInfo() {
+	}
+
+
+
+
+
+
+
+
+
 
 	//====================================================================================================
 	// isParentClass(Class, Class)

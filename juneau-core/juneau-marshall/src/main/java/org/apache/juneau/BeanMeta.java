@@ -218,7 +218,7 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @BeanConstructor constructor.
-				for (ConstructorInfo x : ci.getConstructorInfos()) {
+				for (ConstructorInfo x : ci.getPublicConstructorInfos()) {
 					if (x.isAnnotationPresent(BeanConstructor.class)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
@@ -820,10 +820,10 @@ public class BeanMeta<T> {
 	protected T newBean(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (classMeta.isMemberClass()) {
 			if (constructor != null)
-				return (T)constructor.invoke(outer);
+				return constructor.<T>invoke(outer);
 		} else {
 			if (constructor != null)
-				return (T)constructor.invoke((Object[])null);
+				return constructor.<T>invoke((Object[])null);
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (h != null) {
 				ClassLoader cl = classMeta.innerClass.getClassLoader();

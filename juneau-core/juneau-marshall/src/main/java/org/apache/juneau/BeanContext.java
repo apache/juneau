@@ -2674,11 +2674,11 @@ public class BeanContext extends Context {
 		while (cc != null) {
 			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return (Class<T>) implClass.inner();
+				return implClass.<T>inner();
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return (Class<T>) implClass.inner();
+					return implClass.<T>inner();
 			}
 			cc = cc.getSuperclass();
 		}

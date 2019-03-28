@@ -23,7 +23,7 @@ import org.apache.juneau.internal.*;
  * Lightweight utility class for introspecting information about a constructor.
  */
 @BeanIgnore
-public final class ConstructorInfo {
+public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 
 	private final ClassInfo declaringClass;
 	private final Constructor<?> c;
@@ -79,8 +79,9 @@ public final class ConstructorInfo {
 	 *
 	 * @return The wrapped method.
 	 */
-	public Constructor<?> inner() {
-		return c;
+	@SuppressWarnings("unchecked")
+	public <T> Constructor<T> inner() {
+		return (Constructor<T>)c;
 	}
 
 	/**
@@ -416,8 +417,9 @@ public final class ConstructorInfo {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	public Object invoke(Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-		return c.newInstance(args);
+	@SuppressWarnings("unchecked")
+	public <T> T invoke(Object...args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		return (T)c.newInstance(args);
 	}
 
 	/**
@@ -459,5 +461,28 @@ public final class ConstructorInfo {
 	 */
 	public String getName() {
 		return c.getName();
+	}
+
+	@Override
+	public int compareTo(ConstructorInfo o) {
+		int i = getName().compareTo(o.getName());
+		if (i == 0) {
+			i = getParameterTypes().length - o.getParameterTypes().length;
+			if (i == 0) {
+				for (int j = 0; j < getParameterTypes().length && i == 0; j++) {
+					i = getParameterTypes()[j].getName().compareTo(o.getParameterTypes()[j].getName());
+				}
+			}
+		}
+		return i;
+	}
+
+	/**
+	 * Returns a string representation of this constructor that consists of its name and simple arguments.
+	 *
+	 * @return A string representation of this constructor that consists of its name and simple arguments.
+	 */
+	public String getLabel() {
+		return ClassUtils.asString(c);
 	}
 }

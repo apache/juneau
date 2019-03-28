@@ -571,7 +571,7 @@ public final class ClassMeta<T> implements Type {
 			isAbstract = ci.isAbstract() && ci.isNotPrimitive();
 
 			// Find constructor(String) method if present.
-			for (ConstructorInfo cs : ci.getConstructorInfos()) {
+			for (ConstructorInfo cs : ci.getPublicConstructorInfos()) {
 				if (cs.isPublic() && cs.isNotDeprecated()) {
 					Class<?>[] pt = cs.getParameterTypes();
 					if (pt.length == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
@@ -598,7 +598,7 @@ public final class ClassMeta<T> implements Type {
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ici;
-				noArgConstructor = x.getNoArgConstructorInfo(Visibility.PUBLIC);
+				noArgConstructor = x.getPublicNoArgConstructorInfo();
 			}
 
 			if (beanFilter == null)
@@ -994,7 +994,7 @@ public final class ClassMeta<T> implements Type {
 		if (ci.isAbstract())
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
-		for (ConstructorInfo cc : ci.getConstructorInfos()) {
+		for (ConstructorInfo cc : ci.getPublicConstructorInfos()) {
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
 				return (Constructor<? extends T>) v.transform(cc.inner());
 		}
@@ -1813,8 +1813,8 @@ public final class ClassMeta<T> implements Type {
 		ConstructorInfo c = stringConstructor;
 		if (c != null) {
 			if (isMemberClass)
-				return (T)c.invoke(outer, arg);
-			return (T)c.invoke(arg);
+				return c.<T>invoke(outer, arg);
+			return c.<T>invoke(arg);
 		}
 		throw new InstantiationError("No string constructor or valueOf(String) method found for class '"+getInnerClass().getName()+"'");
 	}
@@ -1843,14 +1843,13 @@ public final class ClassMeta<T> implements Type {
 	 * 	the methods described above.
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
-	@SuppressWarnings("unchecked")
 	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		ConstructorInfo c = numberConstructor;
 		if (c != null) {
 			Object arg2 = session.convertToType(arg, numberConstructor.getParameterTypes()[0]);
 			if (isMemberClass)
-				return (T) c.invoke(outer, arg2);
-			return (T) c.invoke(arg2);
+				return c.<T>invoke(outer, arg2);
+			return c.<T>invoke(arg2);
 		}
 		throw new InstantiationError("No string constructor or valueOf(Number) method found for class '"+getInnerClass().getName()+"'");
 	}
@@ -1884,7 +1883,7 @@ public final class ClassMeta<T> implements Type {
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 		ConstructorInfo c = getConstructor();
 		if (c != null)
-			return (T) c.invoke((Object[])null);
+			return c.<T>invoke((Object[])null);
 		InvocationHandler h = getProxyInvocationHandler();
 		if (h != null)
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { getInnerClass(), java.io.Serializable.class }, h);
@@ -1919,10 +1918,9 @@ public final class ClassMeta<T> implements Type {
 	 * @throws InstantiationException If the class that declares the underlying constructor represents an abstract class.
 	 * @throws InvocationTargetException If the underlying constructor throws an exception.
 	 */
-	@SuppressWarnings("unchecked")
 	public T newInstance(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (isMemberClass)
-			return (T) noArgConstructor.invoke(outer);
+			return noArgConstructor.<T>invoke(outer);
 		return newInstance();
 	}
 
