@@ -17,7 +17,7 @@ import static org.apache.juneau.BeanContext.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.Utils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.rest.RestContext.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
