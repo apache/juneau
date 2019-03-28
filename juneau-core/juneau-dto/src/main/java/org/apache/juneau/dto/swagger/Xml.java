@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 
