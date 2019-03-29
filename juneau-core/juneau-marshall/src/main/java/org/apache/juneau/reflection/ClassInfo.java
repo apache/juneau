@@ -60,6 +60,7 @@ public final class ClassInfo {
 	private List<ClassInfo> interfaceInfos;
 	private List<MethodInfo> publicMethodInfos, declaredMethodInfos;
 	private List<ConstructorInfo> publicConstructorInfos, declaredConstructorInfos;
+	private List<FieldInfo> publicFieldInfos, declaredFieldInfos;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private Map<Class<?>,Optional<Annotation>> declaredAnnotationMap;
 
@@ -267,6 +268,45 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns all public methods on this class.
+	 *
+	 * <p>
+	 * Methods defined on the {@link Object} class are excluded from the results.
+	 *
+	 * @return All public methods on this class in alphabetical order.
+	 */
+	public List<MethodInfo> getPublicMethodInfos() {
+		if (publicMethodInfos == null) {
+			Method[] mm = c.getMethods();
+			List<MethodInfo> l = new ArrayList<>(mm.length);
+			for (Method m : mm)
+				if (m.getDeclaringClass() != Object.class)
+					l.add(MethodInfo.of(this, m));
+			l.sort(null);
+			publicMethodInfos = Collections.unmodifiableList(l);
+		}
+		return publicMethodInfos;
+	}
+
+	/**
+	 * Returns all methods declared on this class.
+	 *
+	 * @return All methods declared on this class in alphabetical order.
+	 */
+	public List<MethodInfo> getDeclaredMethodInfos() {
+		if (declaredMethodInfos == null) {
+			Method[] mm = c.getDeclaredMethods();
+			List<MethodInfo> l = new ArrayList<>(mm.length);
+			for (Method m : mm)
+				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
+					l.add(MethodInfo.of(this, m));
+			l.sort(null);
+			declaredMethodInfos = Collections.unmodifiableList(l);
+		}
+		return declaredMethodInfos;
+	}
+
+	/**
 	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
 	 *
 	 * @return All declared methods on this class and all parent classes in child-to-parent order in
@@ -286,27 +326,6 @@ public final class ClassInfo {
 		return findAllMethods(parentFirst);
 	}
 
-	/**
-	 * Returns all methods declared on this class.
-	 *
-	 * @return All methods declared on this class in alphabetical order.
-	 */
-	public List<MethodInfo> getDeclaredMethodInfos() {
-		return getDeclaredMethods();
-	}
-
-	/**
-	 * Returns all public methods on this class.
-	 *
-	 * <p>
-	 * Methods defined on the {@link Object} class are excluded from the results.
-	 *
-	 * @return All public methods on this class in alphabetical order.
-	 */
-	public List<MethodInfo> getPublicMethodInfos() {
-		return getPublicMethods();
-	}
-
 	private List<MethodInfo> findAllMethods(boolean parentFirst) {
 		List<MethodInfo> l = new ArrayList<>();
 		for (ClassInfo c : getParentInfos(parentFirst, true))
@@ -315,35 +334,10 @@ public final class ClassInfo {
 	}
 
 	private List<MethodInfo> appendDeclaredMethods(List<MethodInfo> l) {
-		l.addAll(getDeclaredMethods());
+		l.addAll(getDeclaredMethodInfos());
 		return l;
 	}
 
-	private List<MethodInfo> getDeclaredMethods() {
-		if (declaredMethodInfos == null) {
-			Method[] mm = c.getDeclaredMethods();
-			List<MethodInfo> l = new ArrayList<>(mm.length);
-			for (Method m : mm)
-				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
-					l.add(MethodInfo.of(this, m));
-			l.sort(null);
-			declaredMethodInfos = Collections.unmodifiableList(l);
-		}
-		return declaredMethodInfos;
-	}
-
-	private List<MethodInfo> getPublicMethods() {
-		if (publicMethodInfos == null) {
-			Method[] mm = c.getMethods();
-			List<MethodInfo> l = new ArrayList<>(mm.length);
-			for (Method m : mm)
-				if (m.getDeclaringClass() != Object.class)
-					l.add(MethodInfo.of(this, m));
-			l.sort(null);
-			publicMethodInfos = Collections.unmodifiableList(l);
-		}
-		return publicMethodInfos;
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Special methods
@@ -436,7 +430,32 @@ public final class ClassInfo {
 	 * @return All public constructors defined on this class.
 	 */
 	public List<ConstructorInfo> getPublicConstructorInfos() {
-		return getPublicConstructors();
+		if (publicConstructorInfos == null) {
+			Constructor<?>[] cc = c.getConstructors();
+			List<ConstructorInfo> l = new ArrayList<>(cc.length);
+			for (Constructor<?> ccc : cc)
+				l.add(ConstructorInfo.of(this, ccc));
+			l.sort(null);
+			publicConstructorInfos = Collections.unmodifiableList(l);
+		}
+		return publicConstructorInfos;
+	}
+
+	/**
+	 * Returns all the constructors defined on this class.
+	 *
+	 * @return All constructors defined on this class.
+	 */
+	public List<ConstructorInfo> getDeclaredConstructorInfos() {
+		if (declaredConstructorInfos == null) {
+			Constructor<?>[] cc = c.getDeclaredConstructors();
+			List<ConstructorInfo> l = new ArrayList<>(cc.length);
+			for (Constructor<?> ccc : cc)
+				l.add(ConstructorInfo.of(this, ccc));
+			l.sort(null);
+			declaredConstructorInfos = Collections.unmodifiableList(l);
+		}
+		return declaredConstructorInfos;
 	}
 
 	/**
@@ -476,6 +495,51 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Finds a constructor with the specified parameters without throwing an exception.
+	 *
+	 * @param vis The minimum visibility.
+	 * @param argTypes
+	 * 	The argument types in the constructor.
+	 * 	Can be subtypes of the actual constructor argument types.
+	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
+	 */
+	public ConstructorInfo getConstructorInfo(Visibility vis, Class<?>...argTypes) {
+		return getConstructor(vis, false, argTypes);
+	}
+
+	private ConstructorInfo getConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
+		if (fuzzyArgs) {
+			int bestCount = -1;
+			ConstructorInfo bestMatch = null;
+			for (ConstructorInfo n : getDeclaredConstructorInfos()) {
+				if (vis.isVisible(n.inner())) {
+					int m = ClassUtils.fuzzyArgsMatch(n.getParameterTypes(), argTypes);
+					if (m > bestCount) {
+						bestCount = m;
+						bestMatch = n;
+					}
+				}
+			}
+			return bestMatch;
+		}
+
+		final boolean isMemberClass = isMemberClass() && ! isStatic();
+		for (ConstructorInfo n : getDeclaredConstructorInfos()) {
+			Class<?>[] paramTypes = n.getParameterTypes();
+			if (isMemberClass)
+				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
+			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n.inner()))
+				return n;
+		}
+
+		return null;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Special constructors
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
 	 * Locates the no-arg constructor for this class.
 	 *
 	 * <p>
@@ -490,8 +554,8 @@ public final class ClassInfo {
 		if (isAbstract())
 			return null;
 		boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (ConstructorInfo cc : getPublicConstructorInfos())
-			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
+		for (ConstructorInfo cc : getDeclaredConstructorInfos())
+			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v))
 				return cc.transform(v);
 		return null;
 	}
@@ -509,154 +573,86 @@ public final class ClassInfo {
 		return getNoArgConstructorInfo(Visibility.PUBLIC);
 	}
 
-	/**
-	 * Finds a constructor with the specified parameters without throwing an exception.
-	 *
-	 * @param vis The minimum visibility.
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
-	 */
-	public ConstructorInfo getConstructorInfo(Visibility vis, Class<?>...argTypes) {
-		return getConstructor(vis, false, argTypes);
-	}
-
-	private ConstructorInfo getConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
-		if (fuzzyArgs) {
-			int bestCount = -1;
-			ConstructorInfo bestMatch = null;
-			for (ConstructorInfo n : getDeclaredConstructors()) {
-				if (vis.isVisible(n.inner())) {
-					int m = ClassUtils.fuzzyArgsMatch(n.getParameterTypes(), argTypes);
-					if (m > bestCount) {
-						bestCount = m;
-						bestMatch = n;
-					}
-				}
-			}
-			return bestMatch;
-		}
-
-		final boolean isMemberClass = isMemberClass() && ! isStatic();
-		for (ConstructorInfo n : getPublicConstructors()) {
-			Class<?>[] paramTypes = n.getParameterTypes();
-			if (isMemberClass)
-				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
-			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n.inner()))
-				return n;
-		}
-
-		return null;
-	}
-
-	private List<ConstructorInfo> getPublicConstructors() {
-		if (publicConstructorInfos == null) {
-			Constructor<?>[] cc = c.getConstructors();
-			List<ConstructorInfo> l = new ArrayList<>(cc.length);
-			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc));
-			l.sort(null);
-			publicConstructorInfos = Collections.unmodifiableList(l);
-		}
-		return publicConstructorInfos;
-	}
-
-	private List<ConstructorInfo> getDeclaredConstructors() {
-		if (declaredConstructorInfos == null) {
-			Constructor<?>[] cc = c.getDeclaredConstructors();
-			List<ConstructorInfo> l = new ArrayList<>(cc.length);
-			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc));
-			l.sort(null);
-			declaredConstructorInfos = Collections.unmodifiableList(l);
-		}
-		return declaredConstructorInfos;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fields
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns all field on this class and all parent classes in child-to-parent order.
+	 * Returns all public fields on this class.
 	 *
 	 * <p>
-	 * Fields are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
+	 * Hidden fields are excluded from the results.
 	 *
-	 * @return All declared methods on this class and all parent classes in child-to-parent order.
+	 * @return All public fields on this class in alphabetical order.
 	 */
-	public Iterable<FieldInfo> getAllFieldInfos() {
-		return getAllFieldInfos(false, false);
-	}
-
-	/**
-	 * Returns all field on this class and all parent classes.
-	 *
-	 * @param parentFirst If <jk>true</jk>, fields are listed in parent-to-child order.
-	 * @param sort
-	 * 	If <jk>true</jk>, fields are sorted alphabetically.
-	 * 	Otherwise, uses the order of the fields in the underlying JVM.
-	 * @return All declared methods on this class and all parent classes.
-	 */
-	public Iterable<FieldInfo> getAllFieldInfos(boolean parentFirst, boolean sort) {
-		return findAllFields(null, parentFirst, sort);
-	}
-
-	/**
-	 * Returns all fields declared on this class.
-	 *
-	 * <p>
-	 * Fields are ordered per the natural ordering of the underlying JVM.
-	 * <br>Some JVMs (IBM) preserve the declaration order of fields.  Other JVMs (Oracle) do not and return them in random order.
-	 *
-	 * @return All fields declared on this class.
-	 */
-	public Iterable<FieldInfo> getDeclaredFieldInfos() {
-		return getDeclaredFieldInfos(false);
-	}
-
-	/**
-	 * Returns all fields declared on this class.
-	 *
-	 * @param sort
-	 * 	If <jk>true</jk>, fields are sorted alphabetically.
-	 * 	Otherwise, uses the order of the fields in the underlying JVM.
-	 * @return All fields declared on this class.
-	 */
-	public Iterable<FieldInfo> getDeclaredFieldInfos(boolean sort) {
-		return findDeclaredFields(null, sort);
-	}
-
-	private List<FieldInfo> findAllFields(List<FieldInfo> l, boolean parentFirst, boolean sort) {
-		if (l == null)
-			l = new ArrayList<>();
-		for (ClassInfo c : getParentInfos(parentFirst, false))
-			c.findDeclaredFields(l, sort);
-		return l;
-	}
-
-	private List<FieldInfo> findDeclaredFields(List<FieldInfo> l, boolean sort) {
-		Field[] ff = c.getDeclaredFields();
-		if (sort)
-			ff = sort(ff);
-		if (l == null)
-			l = new ArrayList<>(ff.length);
-		for (Field f : ff)
-			l.add(FieldInfo.of(this, f));
-		return l;
-	}
-
-	private static Comparator<Field> FIELD_COMPARATOR = new Comparator<Field>() {
-		@Override
-		public int compare(Field o1, Field o2) {
-			return o1.getName().compareTo(o2.getName());
+	public List<FieldInfo> getPublicFieldInfos() {
+		if (publicFieldInfos == null) {
+			Map<String,FieldInfo> m = new LinkedHashMap<>();
+			for (ClassInfo c : getParentInfos(false, false))
+				c.appendDeclaredPublicFields(m);
+			List<FieldInfo> l = new ArrayList<>(m.values());
+			l.sort(null);
+			publicFieldInfos = Collections.unmodifiableList(l);
 		}
-	};
+		return publicFieldInfos;
+	}
 
-	private static Field[] sort(Field[] m) {
-		Arrays.sort(m, FIELD_COMPARATOR);
+	/**
+	 * Returns all fields declared on this class.
+	 *
+	 * @return All fields declared on this class in alphabetical order.
+	 */
+	public List<FieldInfo> getDeclaredFieldInfos() {
+		if (declaredFieldInfos == null) {
+			Field[] ff = c.getDeclaredFields();
+			List<FieldInfo> l = new ArrayList<>(ff.length);
+			for (Field f : ff)
+				if (! "$jacocoData".equals(f.getName()))
+					l.add(FieldInfo.of(this, f));
+			l.sort(null);
+			declaredFieldInfos = Collections.unmodifiableList(l);
+		}
+		return declaredFieldInfos;
+	}
+
+	/**
+	 * Returns all declared fields on this class and all parent classes in child-to-parent order.
+	 *
+	 * @return All declared fields on this class and all parent classes in child-to-parent order in
+	 * 	alphabetical order per class.
+	 */
+	public List<FieldInfo> getAllFieldInfos() {
+		return getAllFieldInfos(false);
+	}
+
+	/**
+	 * Returns all declared fields on this class and all parent classes in child-to-parent order.
+	 *
+	 * @param parentFirst If <jk>true</jk>, fields on parent classes are listed first.
+	 * @return All declared fields on this class and all parent classes in alphabetical order per class.
+	 */
+	public List<FieldInfo> getAllFieldInfos(boolean parentFirst) {
+		return findAllFields(parentFirst);
+	}
+
+	private List<FieldInfo> findAllFields(boolean parentFirst) {
+		List<FieldInfo> l = new ArrayList<>();
+		for (ClassInfo c : getParentInfos(parentFirst, true))
+			c.appendDeclaredFields(l);
+		return l;
+	}
+
+	private List<FieldInfo> appendDeclaredFields(List<FieldInfo> l) {
+		l.addAll(getDeclaredFieldInfos());
+		return l;
+	}
+
+	private Map<String,FieldInfo> appendDeclaredPublicFields(Map<String,FieldInfo> m) {
+		for (FieldInfo f : getDeclaredFieldInfos()) {
+			String fn = f.getName();
+			if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
+					m.put(f.getName(), f);
+		}
 		return m;
 	}
 

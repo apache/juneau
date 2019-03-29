@@ -518,7 +518,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			for (FieldInfo f : ci.getAllFieldInfos(true, false)) {
+			for (FieldInfo f : ci.getAllFieldInfos(true)) {
 				if (f.isAnnotationPresent(ParentProperty.class)) {
 					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);

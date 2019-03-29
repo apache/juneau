@@ -13,10 +13,10 @@
 package org.apache.juneau.reflection;
 
 import static org.apache.juneau.reflection.ClassInfo.*;
-import static org.apache.juneau.testutils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -35,6 +35,10 @@ public class ClassInfoTest {
 		assertEquals(expected, actual);
 	}
 
+	private static void assertInfoEquals(String expected, Object o) {
+		assertEquals(expected, TO_STRING.apply(o));
+	}
+
 	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
 		@Override
 		public String apply(Object t) {
@@ -48,6 +52,8 @@ public class ClassInfoTest {
 				return ((MethodInfo)t).getDeclaringClassInfo().getSimpleName() + '.' + ((MethodInfo)t).getLabel();
 			if (t instanceof ConstructorInfo)
 				return ((ConstructorInfo)t).getLabel();
+			if (t instanceof FieldInfo)
+				return ((FieldInfo)t).getDeclaringClassInfo().getSimpleName() + '.' + ((FieldInfo)t).getLabel();
 			return t.toString();
 		}
 	};
@@ -61,12 +67,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void ofType() {
-		assertEquals("A1", of(A1.class).getSimpleName());
+		assertInfoEquals("A1", of(A1.class));
 	}
 
 	@Test
 	public void ofTypeOnObject() {
-		assertEquals("A1", of(new A1()).getSimpleName());
+		assertInfoEquals("A1", of(new A1()));
 	}
 
 	@Test
@@ -84,8 +90,8 @@ public class ClassInfoTest {
 
 	@Test
 	public void resolved() {
-		assertEquals("A1", of(A1.class).resolved().getSimpleName());
-		assertEquals("A1", of(A2.class).resolved().getSimpleName());
+		assertInfoEquals("A1", of(A1.class).resolved());
+		assertInfoEquals("A1", of(A2.class).resolved());
 	}
 
 
@@ -178,6 +184,7 @@ public class ClassInfoTest {
 		ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
 		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getDeclaredMethodInfos());
 		assertListEquals("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethodInfos());
+		assertListEquals("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethodInfos());
 	}
 
 	@Test
@@ -219,7 +226,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getFromStringMethodInfo() throws Exception {
-		assertEquals("create", of(DA1.class).getFromStringMethodInfo().getName());
+		assertInfoEquals("DA1.create(String)", of(DA1.class).getFromStringMethodInfo());
 		assertNull(of(DA2.class).getFromStringMethodInfo());
 		assertNull(of(DA3.class).getFromStringMethodInfo());
 		assertNull(of(DA4.class).getFromStringMethodInfo());
@@ -267,9 +274,9 @@ public class ClassInfoTest {
 
 	@Test
 	public void getStaticCreateMethodInfo() throws Exception {
-		assertEquals("create", of(DB1.class).getStaticCreateMethodInfo(DBx.class).getName());
-		assertEquals("fromDBx", of(DB2.class).getStaticCreateMethodInfo(DBx.class).getName());
-		assertEquals("from", of(DB3.class).getStaticCreateMethodInfo(DBx.class).getName());
+		assertInfoEquals("DB1.create(DBx)", of(DB1.class).getStaticCreateMethodInfo(DBx.class));
+		assertInfoEquals("DB2.fromDBx(DBx)", of(DB2.class).getStaticCreateMethodInfo(DBx.class));
+		assertInfoEquals("DB3.from(DBx)", of(DB3.class).getStaticCreateMethodInfo(DBx.class));
 		assertNull(of(DB4.class).getStaticCreateMethodInfo(DBx.class));
 		assertNull(of(DB5.class).getStaticCreateMethodInfo(DBx.class));
 		assertNull(of(DB6.class).getStaticCreateMethodInfo(DBx.class));
@@ -299,7 +306,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getBuilderCreateMethodInfo() throws Exception {
-		assertEquals("create", of(DC1.class).getBuilderCreateMethodInfo().getName());
+		assertInfoEquals("DC1.create()", of(DC1.class).getBuilderCreateMethodInfo());
 		assertNull(of(DC2.class).getBuilderCreateMethodInfo());
 		assertNull(of(DC3.class).getBuilderCreateMethodInfo());
 		assertNull(of(DC4.class).getBuilderCreateMethodInfo());
@@ -325,7 +332,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getBuilderBuildMethodInfo() throws Exception {
-		assertEquals("build", of(DD1.class).getBuilderBuildMethodInfo().getName());
+		assertInfoEquals("DD1.build()", of(DD1.class).getBuilderBuildMethodInfo());
 		assertNull(of(DD2.class).getBuilderBuildMethodInfo());
 		assertNull(of(DD3.class).getBuilderBuildMethodInfo());
 		assertNull(of(DD4.class).getBuilderBuildMethodInfo());
@@ -336,50 +343,153 @@ public class ClassInfoTest {
 	// Constructors
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static class EA1 {
-		public EA1() {}
-		public EA1(String a) {}
-		protected EA1(int a) {}
+	static class E1 {
+		public E1() {}
+		public E1(String a) {}
+		public E1(Writer a) {}
+		public E1(String a, Writer b) {}
+		protected E1(int a) {}
+		E1(float a) {}
+	}
+
+	static class E2 {
+		protected E2() {}
+	}
+
+	static abstract class E3 {
+		public E3() {}
+	}
+
+	class E4 {
+		public E4() {}
+	}
+
+	static class E5 {
+		@Deprecated
+		public E5() {}
+	}
+
+	class E6 {
+		public E6(String a) {}
 	}
 
 	@Test
 	public void getPublicConstructorInfos() {
-		ClassInfo ea1 = of(EA1.class);
-		assertListEquals("EA1(),EA1(String)", ea1.getPublicConstructorInfos());
+		ClassInfo e1 = of(E1.class);
+		assertListEquals("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructorInfos());
+		assertListEquals("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructorInfos());
 	}
 
 	@Test
-	public void getPublicConstructorInfo_ClassArgs() {
+	public void getPublicConstructorInfo_classArgs() {
+		ClassInfo e1 = of(E1.class);
+		assertInfoEquals("E1(String)", e1.getPublicConstructorInfo(String.class));
+		assertInfoEquals("E1(Writer)", e1.getPublicConstructorInfo(StringWriter.class));
 	}
 
 	@Test
-	public void getPublicConstructorInfo_ObjectArgs() {
+	public void getPublicConstructorInfo_objectArgs() {
+		ClassInfo e1 = of(E1.class);
+		assertInfoEquals("E1(String)", e1.getPublicConstructorInfo("foo"));
 	}
 
 	@Test
 	public void getPublicConstructorFuzzyInfo() {
+		ClassInfo e1 = of(E1.class);
+		assertInfoEquals("E1(String)", e1.getPublicConstructorFuzzyInfo("foo", new HashMap<>()));
+		assertInfoEquals("E1()", e1.getPublicConstructorFuzzyInfo(new HashMap<>()));
 	}
 
 	@Test
 	public void getNoArgConstructorInfo() {
+		ClassInfo e2 = of(E2.class);
+		assertInfoEquals("E2()", e2.getNoArgConstructorInfo(Visibility.PRIVATE));
+		assertInfoEquals("E2()", e2.getNoArgConstructorInfo(Visibility.PROTECTED));
+		assertInfoEquals("E2()", e2.getNoArgConstructorInfo(Visibility.DEFAULT));
+		assertNull(e2.getNoArgConstructorInfo(Visibility.PUBLIC));
+	}
+
+	@Test
+	public void getNoArgConstructorInfo_abstractClass() {
+		ClassInfo e3 = of(E3.class);
+		assertNull(e3.getNoArgConstructorInfo(Visibility.PUBLIC));
+	}
+
+	@Test
+	public void getNoArgConstructorInfo_innerClass() {
+		ClassInfo e4 = of(E4.class);
+		assertInfoEquals("E4(ClassInfoTest)", e4.getNoArgConstructorInfo(Visibility.PUBLIC));
+	}
+
+	@Test
+	public void getNoArgConstructorInfo_noConstructor() {
+		ClassInfo e6 = of(E6.class);
+		assertNull(e6.getNoArgConstructorInfo(Visibility.PUBLIC));
 	}
 
 	@Test
 	public void getPublicNoArgConstructorInfo() {
+		ClassInfo e1 = of(E1.class);
+		assertInfoEquals("E1()", e1.getPublicNoArgConstructorInfo());
 	}
 
 	@Test
 	public void getConstructorInfo() {
+		ClassInfo e1 = of(E1.class);
+		assertInfoEquals("E1(int)", e1.getConstructorInfo(Visibility.PROTECTED, int.class));
+		assertInfoEquals("E1(int)", e1.getConstructorInfo(Visibility.PRIVATE, int.class));
+		assertNull(e1.getConstructorInfo(Visibility.PUBLIC, int.class));
+
+		ClassInfo ea3 = of(E3.class);
+		assertInfoEquals("E3()", ea3.getConstructorInfo(Visibility.PUBLIC));
+
+		ClassInfo ea4 = of(E4.class);
+		assertInfoEquals("E4(ClassInfoTest)", ea4.getConstructorInfo(Visibility.PUBLIC));
+
+		ClassInfo ea5 = of(E5.class);
+		assertInfoEquals("E5()", ea5.getConstructorInfo(Visibility.PUBLIC));
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fields
+	//-----------------------------------------------------------------------------------------------------------------
 
+	static abstract class F1 {
+		public int f1a;
+		public int f1b;
+	}
+	static class F2 extends F1 {
+		public int f1a;
+		public int f2b;
+		@Deprecated int f2c;
+		protected int f2d;
+	}
 
+	@Test
+	public void getPublicFieldInfos() {
+		ClassInfo f2 = of(F2.class);
+		assertListEquals("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFieldInfos());
+		assertListEquals("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFieldInfos());
+	}
 
+	@Test
+	public void getDeclaredFieldInfos() {
+		ClassInfo f2 = of(F2.class);
+		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFieldInfos());
+		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFieldInfos());
+	}
 
+	@Test
+	public void getAllFieldInfos() {
+		ClassInfo f2 = of(F2.class);
+		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFieldInfos());
+	}
 
-
-
-
+	@Test
+	public void getAllFieldInfos_parentFirst() {
+		ClassInfo f2 = of(F2.class);
+		assertListEquals("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFieldInfos(true));
+	}
 
 	//====================================================================================================
 	// isParentClass(Class, Class)
@@ -417,35 +527,6 @@ public class ClassInfoTest {
 	}
 
 
-
-	//====================================================================================================
-	// getAllFieldsParentFirst()
-	//====================================================================================================
-	@Test
-	public void getParentFieldsParentFirst() throws Exception {
-		Set<String> s = new TreeSet<>();
-		ClassInfo ci = ClassInfo.of(EB.class);
-		for (FieldInfo f : ci.getAllFieldInfos(true,false)) {
-			if (! f.getName().startsWith("$"))
-				s.add(f.getDeclaringClassInfo().getSimpleName() + '.' + f.getName());
-		}
-		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
-
-		s = new TreeSet<>();
-		for (FieldInfo f : ci.getAllFieldInfos()) {
-			if (! f.getName().startsWith("$"))
-				s.add(f.getDeclaringClassInfo().getSimpleName() + '.' + f.getName());
-		}
-		assertObjectEquals("['EA.a1','EB.a1','EB.b1']", s);
-	}
-
-	static class EA {
-		int a1;
-	}
-	static class EB extends EA {
-		int a1;
-		int b1;
-	}
 
 	//====================================================================================================
 	// getSimpleName()

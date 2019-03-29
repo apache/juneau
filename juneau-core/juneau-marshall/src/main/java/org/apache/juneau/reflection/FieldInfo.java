@@ -363,4 +363,13 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	public String getName() {
 		return f.getName();
 	}
+
+	/**
+	 * Returns a string representation of this field that consists of its name.
+	 *
+	 * @return A string representation of this field that consists of its name.
+	 */
+	public String getLabel() {
+		return f.getName();
+	}
 }
