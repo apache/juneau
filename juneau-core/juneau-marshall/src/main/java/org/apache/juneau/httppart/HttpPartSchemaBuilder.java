@@ -85,7 +85,7 @@ public class HttpPartSchemaBuilder {
 		if (t instanceof Class<?>) {
 			Class<?> tc = (Class<?>)t;
 			ClassInfo ci = getClassInfo(tc);
-			for (Annotation a : ci.getAnnotations(c, true))
+			for (Annotation a : ci.getAnnotationsParentFirst(c))
 				apply(a);
 		} else if (Value.isType(t)) {
 			apply(c, Value.getParameterType(t));

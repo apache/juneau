@@ -234,7 +234,7 @@ public final class MethodParamInfo {
 			ClassInfo ci = constructorInfo.getGenericParameterTypeInfo(index).resolved();
 			Annotation[] annotations = constructorInfo.getParameterAnnotations(index);
 			if (parentFirst) {
-				ci.appendAnnotations(l, a, true);
+				ci.appendAnnotationsParentFirst(l, a);
 				for (Annotation a2 : annotations)
 					if (a.isInstance(a2))
 						l.add((T)a2);
@@ -248,7 +248,7 @@ public final class MethodParamInfo {
 			List<Method> methods = methodInfo.getMatching();
 			ClassInfo ci = methodInfo.getGenericParameterTypeInfo(index).resolved();
 			if (parentFirst) {
-				ci.appendAnnotations(l, a, true);
+				ci.appendAnnotationsParentFirst(l, a);
 				for (Method m2 : iterable(methods, true))
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
 						if (a.isInstance(a2))

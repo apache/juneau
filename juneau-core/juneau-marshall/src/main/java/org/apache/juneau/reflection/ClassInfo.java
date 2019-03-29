@@ -202,6 +202,16 @@ public final class ClassInfo {
 		return interfaces;
 	}
 
+	/**
+	 * Returns a list of interfaces defined on this class and superclasses.
+	 *
+	 * @return
+	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
+	 * 	<br>Results are in parent-to-child order.
+	 */
+	public Iterable<ClassInfo> getInterfacesParentFirst() {
+		return iterable(getInterfaces(), true);
+	}
 
 	/**
 	 * Returns a list including this class and all parent classes.
@@ -722,32 +732,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return getAnnotations(a, false);
-	}
-
-	/**
-	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @param parentFirst If <jk>true</jk>, results are in parent-to-child order.
-	 * @return
-	 * 	A list of all matching annotations found or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a, boolean parentFirst) {
-		return appendAnnotations(new ArrayList<>(), a, parentFirst);
-	}
-
-	/**
-	 * Returns the specified annotation only if it's been declared on the specified class.
+	 * Returns the specified annotation only if it's been declared on this class.
 	 *
 	 * <p>
 	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
@@ -768,58 +753,63 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
+	 * Returns the specified annotation only if it's been declared on the package of this class.
 	 *
-	 * <p>
-	 * Results are ordered in child-to-parent order.
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation.
-	 * @return The same list.
+	 * @param <T> The annotation class type.
+	 * @param a The annotation class.
+	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		return appendAnnotations(l, a, false);
+	public <T extends Annotation> T getPackageAnnotation(Class<T> a) {
+		Package p = c.getPackage();
+		if (p != null)
+			return p.getAnnotation(a);
+		return null;
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
+	 * Same as {@link #getDeclaredAnnotation(Class)} but returns the annotation wrapped in a {@link AnnotationInfo}.
 	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation.
-	 * @param parentFirst If <jk>true</jk>, results are ordered in parent-to-child order.
-	 * @return The same list.
+	 * @param a The annotation to search for.
+	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
-		if (c != null) {
-			if (parentFirst) {
-				for (Class<?> c2 : c.getInterfaces())
-					of(c2).appendAnnotations(l, a, true);
+	public <T extends Annotation> AnnotationInfo<T> getDeclaredAnnotationInfo(Class<T> a) {
+		T ca = getDeclaredAnnotation(a);
+		return ca == null ? null : AnnotationInfo.of(this, ca);
+	}
 
-				ClassInfo sci = of(c.getSuperclass());
-				if (sci != null)
-					sci.appendAnnotations(l, a, true);
+	/**
+	 * Same as {@link #getPackageAnnotation(Class)} but returns the annotation wrapped in a {@link AnnotationInfo}.
+	 *
+	 * @param a The annotation to search for.
+	 * @return The annotation if found, or <jk>null</jk> if not.
+	 */
+	public <T extends Annotation> AnnotationInfo<T> getPackageAnnotationInfo(Class<T> a) {
+		T ca = getPackageAnnotation(a);
+		return ca == null ? null : AnnotationInfo.of(this, ca);
+	}
 
-				if (c.getPackage() != null)
-					addIfNotNull(l, c.getPackage().getAnnotation(a));
+	/**
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @return
+	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
+	 */
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
+		return appendAnnotations(new ArrayList<>(), a);
+	}
 
-				addIfNotNull(l, getDeclaredAnnotation(a));
-			} else {
-				addIfNotNull(l, getDeclaredAnnotation(a));
-
-				if (c.getPackage() != null)
-					addIfNotNull(l, c.getPackage().getAnnotation(a));
-
-				ClassInfo sci = of(c.getSuperclass());
-				if (sci != null)
-					sci.appendAnnotations(l, a, false);
-
-				for (Class<?> c2 : c.getInterfaces())
-					of(c2).appendAnnotations(l, a, false);
-			}
-		}
-		return l;
+	/**
+	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @return
+	 * 	A list of all matching annotations found or an empty list if none found.
+	 */
+	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
+		return appendAnnotationsParentFirst(new ArrayList<>(), a);
 	}
 
 	/**
@@ -832,49 +822,127 @@ public final class ClassInfo {
 	 * @param a The annotation class type.
 	 * @return The found matches, or an empty list if annotation was not found.
 	 */
-	public <T extends Annotation> List<ClassAnnotation<T>> getClassAnnotations(Class<T> a) {
-		return getClassAnnotations(a, false);
+	public <T extends Annotation> List<AnnotationInfo<T>> getAnnotationInfos(Class<T> a) {
+		return appendAnnotationInfos(new ArrayList<>(), a);
 	}
 
 	/**
-	 * Same as {@link #getClassAnnotations(Class)} except optionally returns results in parent-to-child order.
+	 * Same as getAnnotations(Class) except returns the annotations with the accompanying class.
+	 *
+	 * <p>
+	 * Results are ordered parent-to-child.
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class type.
-	 * @param parentFirst If <jk>true</jk>, annotations are returned in parent-to-child order.
 	 * @return The found matches, or an empty list if annotation was not found.
 	 */
-	public <T extends Annotation> List<ClassAnnotation<T>> getClassAnnotations(Class<T> a, boolean parentFirst) {
-		return appendClassAnnotations(new ArrayList<>(), a, parentFirst);
+	public <T extends Annotation> List<AnnotationInfo<T>> getAnnotationInfosParentFirst(Class<T> a) {
+		return appendAnnotationInfosParentFirst(new ArrayList<>(), a);
 	}
 
-	private <T extends Annotation> List<ClassAnnotation<T>> appendClassAnnotations(List<ClassAnnotation<T>> l, Class<T> a, boolean parentFirst) {
-		if (c != null) {
-			if (parentFirst) {
-				for (Class<?> c2 : c.getInterfaces())
-					of(c2).appendClassAnnotations(l, a, true);
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation to search for.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
+		for (ClassInfo ci : getParents())
+			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+		for (ClassInfo ci : getInterfaces())
+			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+		if (hasPackage())
+			addIfNotNull(l, getPackage().getAnnotation(a));
+		return l;
+	}
 
-				ClassInfo sci = of(c.getSuperclass());
-				if (sci != null)
-					sci.appendClassAnnotations(l, a, true);
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation to search for.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
+		if (hasPackage())
+			addIfNotNull(l, getPackage().getAnnotation(a));
+		for (ClassInfo ci : getInterfacesParentFirst())
+			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+		for (ClassInfo ci : getParentsParentFirst())
+			addIfNotNull(l, ci.getDeclaredAnnotation(a));
+		return l;
+	}
 
-				T t2 = getDeclaredAnnotation(a);
-				if (t2 != null)
-					l.add(ClassAnnotation.of(this, t2));
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation to search for.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<AnnotationInfo<T>> appendAnnotationInfos(List<AnnotationInfo<T>> l, Class<T> a) {
+		for (ClassInfo ci : getParents())
+			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
+		for (ClassInfo ci : getInterfaces())
+			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
+		addIfNotNull(l, getPackageAnnotationInfo(a));
+		return l;
+	}
 
-			} else {
-				T t2 = getDeclaredAnnotation(a);
-				if (t2 != null)
-					l.add(ClassAnnotation.of(this, t2));
-
-				ClassInfo sci = of(c.getSuperclass());
-				if (sci != null)
-					sci.appendClassAnnotations(l, a, false);
-
-				for (Class<?> c2 : c.getInterfaces())
-					of(c2).appendClassAnnotations(l, a, false);
-			}
-		}
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * list.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param l The list of annotations.
+	 * @param a The annotation to search for.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> List<AnnotationInfo<T>> appendAnnotationInfosParentFirst(List<AnnotationInfo<T>> l, Class<T> a) {
+		addIfNotNull(l, getPackageAnnotationInfo(a));
+		for (ClassInfo ci : getInterfacesParentFirst())
+			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
+		for (ClassInfo ci : getParentsParentFirst())
+			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
 		return l;
 	}
 
@@ -1214,6 +1282,23 @@ public final class ClassInfo {
 		return ClassUtils.getReadableClassName(c != null ? c.getName() : t.getTypeName());
 	}
 
+	/**
+	 * Returns the package of this class.
+	 *
+	 * @return The package of this class.
+	 */
+	private Package getPackage() {
+		return c.getPackage();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is not in the root package.
+	 *
+	 * @return <jk>true</jk> if this class is not in the root package.
+	 */
+	private boolean hasPackage() {
+		return c.getPackage() != null;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Primitive wrappers.

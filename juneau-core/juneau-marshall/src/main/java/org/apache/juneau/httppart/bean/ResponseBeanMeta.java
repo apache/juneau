@@ -52,7 +52,7 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(ps);
 		b.apply(ci.innerType());
-		for (Response r : ci.getAnnotations(Response.class, true))
+		for (Response r : ci.getAnnotationsParentFirst(Response.class))
 			b.apply(r);
 		return b.build();
 	}

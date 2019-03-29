@@ -19,7 +19,7 @@ import java.lang.annotation.*;
  *
  * @param <T> The annotation type.
  */
-public class ClassAnnotation<T extends Annotation> {
+public class AnnotationInfo<T extends Annotation> {
 
 	private ClassInfo c;
 	private T a;
@@ -30,7 +30,7 @@ public class ClassAnnotation<T extends Annotation> {
 	 * @param c The class where the annotation was found.
 	 * @param a The annotation found.
 	 */
-	public ClassAnnotation(ClassInfo c, T a) {
+	public AnnotationInfo(ClassInfo c, T a) {
 		this.c = c;
 		this.a = a;
 	}
@@ -40,10 +40,10 @@ public class ClassAnnotation<T extends Annotation> {
 	 *
 	 * @param c The class where the annotation was found.
 	 * @param a The annotation found.
-	 * @return A new {@link ClassAnnotation} object.
+	 * @return A new {@link AnnotationInfo} object.
 	 */
-	public static <T extends Annotation> ClassAnnotation<T> of(ClassInfo c, T a) {
-		return new ClassAnnotation<>(c, a);
+	public static <T extends Annotation> AnnotationInfo<T> of(ClassInfo c, T a) {
+		return new AnnotationInfo<>(c, a);
 	}
 
 	/**

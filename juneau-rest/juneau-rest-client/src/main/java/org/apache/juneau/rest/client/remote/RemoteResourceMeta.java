@@ -47,7 +47,7 @@ public class RemoteResourceMeta {
 		String path = "";
 
 		ClassInfo ci = getClassInfo(c);
-		for (RemoteResource r : ci.getAnnotations(RemoteResource.class, true))
+		for (RemoteResource r : ci.getAnnotationsParentFirst(RemoteResource.class))
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 

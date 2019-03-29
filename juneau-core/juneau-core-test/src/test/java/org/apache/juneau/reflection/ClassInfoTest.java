@@ -81,6 +81,8 @@ public class ClassInfoTest {
 				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getLabel();
 			if (t instanceof A)
 				return "@A(" + ((A)t).value() + ")";
+			if (t instanceof AnnotationInfo)
+				return apply(((AnnotationInfo<?>)t).getAnnotation());
 			return t.toString();
 		}
 	};
@@ -661,68 +663,32 @@ public class ClassInfoTest {
 	@Test
 	public void getAnnotations() {
 		ClassInfo g3 = of(G3.class);
-		check("@A(7),@A(6),@A(5),@A(1),@A(2),@A(1),@A(3)", g3.getAnnotations(A.class));
+		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)", g3.getAnnotations(A.class));
 	}
 
 	@Test
-	public void getAnnotations_parentFirst() {
-	//public <T extends Annotation> List<T> getAnnotations(Class<T> a, boolean parentFirst) {
+	public void getAnnotationsParentFirst() {
+		ClassInfo g3 = of(G3.class);
+		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationsParentFirst(A.class));
 	}
 
 	@Test
 	public void getDeclaredAnnotation() {
-	//public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
-	}
-
-	@Test
-	public void appendAnnotations() {
-	//public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-	}
-
-	@Test
-	public void appendAnnotations_parentFirst() {
-	//public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
+		ClassInfo g3 = of(G3.class);
+		check("@A(7)", g3.getDeclaredAnnotation(A.class));
 	}
 
 	@Test
 	public void getClassAnnotations() {
-	//public <T extends Annotation> List<ClassAnnotation<T>> getClassAnnotations(Class<T> a) {
+		ClassInfo g3 = of(G3.class);
+		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)", g3.getAnnotationInfos(A.class));
 	}
 
 	@Test
-	public void getClassAnnotations_parentFirst() {
-	//public <T extends Annotation> List<ClassAnnotation<T>> getClassAnnotations(Class<T> a, boolean parentFirst) {
+	public void getClassAnnotationsParentFirst() {
+		ClassInfo g3 = of(G3.class);
+		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationsParentFirst(A.class));
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -120,7 +120,7 @@ final class SwaggerGenerator {
 			omSwagger = new ObjectMap();
 
 		// Combine it with @RestResource(swagger)
-		for (RestResource rr : rci.getAnnotations(RestResource.class, true)) {
+		for (RestResource rr : rci.getAnnotationsParentFirst(RestResource.class)) {
 
 			ObjectMap sInfo = omSwagger.getObjectMap("info", true);
 			sInfo.appendSkipEmpty("title",
@@ -385,7 +385,7 @@ final class SwaggerGenerator {
 
 			for (ClassInfo eci : mi.getExceptionInfos()) {
 				if (eci.hasAnnotation(Response.class)) {
-					List<Response> la = eci.getAnnotations(Response.class, true);
+					List<Response> la = eci.getAnnotationsParentFirst(Response.class);
 					Set<Integer> codes = getCodes(la, 500);
 					for (Response a : la) {
 						for (Integer code : codes) {
