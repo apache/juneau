@@ -395,7 +395,7 @@ final class SwaggerGenerator {
 								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), eci.inner()));
 						}
 					}
-					for (MethodInfo ecmi : eci.getAllMethods(true)) {
+					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 							String ha = a.name();
@@ -422,7 +422,7 @@ final class SwaggerGenerator {
 					}
 				}
 				if (mi.getReturnType().hasAnnotation(Response.class)) {
-					for (MethodInfo ecmi : mi.getReturnType().getAllMethods(true)) {
+					for (MethodInfo ecmi : mi.getReturnType().getAllMethodsParentFirst()) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 							String ha = a.name();

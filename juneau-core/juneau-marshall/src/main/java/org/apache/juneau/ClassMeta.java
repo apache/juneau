@@ -518,7 +518,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			for (FieldInfo f : ci.getAllFields(true)) {
+			for (FieldInfo f : ci.getAllFieldsParentFirst()) {
 				if (f.isAnnotationPresent(ParentProperty.class)) {
 					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
@@ -543,7 +543,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			// Find @NameProperty and @ParentProperty methods if present.
-			for (MethodInfo m : ci.getAllMethods(true)) {
+			for (MethodInfo m : ci.getAllMethodsParentFirst()) {
 				if (m.hasAnnotation(ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);

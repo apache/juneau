@@ -57,10 +57,10 @@ public final class ClassInfo {
 
 	private final Type t;
 	private final Class<?> c;
-	private List<ClassInfo> interfaces;
-	private List<MethodInfo> publicMethods, declaredMethods;
+	private List<ClassInfo> interfaces, declaredInterfaces, parents, allParents;
+	private List<MethodInfo> publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
 	private List<ConstructorInfo> publicConstructors, declaredConstructors;
-	private List<FieldInfo> publicFields, declaredFields;
+	private List<FieldInfo> publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private Map<Class<?>,Optional<Annotation>> annotationMap, declaredAnnotationMap;
 
 	/**
@@ -154,112 +154,114 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the parent class wrapped in {@link ClassInfo}.
+	 * Returns the parent class.
 	 *
-	 * @return The parent class wrapped in {@link ClassInfo}, or <jk>null</jk> if the class has no parent.
+	 * @return
+	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
 	public ClassInfo getParent() {
 		return of(c.getSuperclass());
 	}
 
 	/**
-	 * Returns a list of interfaces defined on this class wrapped in {@link ClassInfo}.
+	 * Returns a list of interfaces declared on this class.
 	 *
 	 * <p>
-	 * Does not include interfaces defined on parent classes.
+	 * Does not include interfaces declared on parent classes.
 	 *
 	 * @return
-	 * 	An unmodifiable list of interfaces defined on this class wrapped in {@link ClassInfo}.
+	 * 	An unmodifiable list of interfaces declared on this class.
+	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
-	public List<ClassInfo> getInterfaces() {
-		if (interfaces == null) {
+	public List<ClassInfo> getDeclaredInterfaces() {
+		if (declaredInterfaces == null) {
 			Class<?>[] ii = c.getInterfaces();
 			List<ClassInfo> l = new ArrayList<>(ii.length);
 			for (Class<?> i : ii)
 				l.add(of(i));
-			interfaces = unmodifiableList(l);
+			declaredInterfaces = unmodifiableList(l);
+		}
+		return declaredInterfaces;
+	}
+
+	/**
+	 * Returns a list of interfaces defined on this class and superclasses.
+	 *
+	 * @return
+	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
+	 * 	<br>Results are in child-to-parent order.
+	 */
+	public List<ClassInfo> getInterfaces() {
+		if (interfaces == null) {
+			Set<ClassInfo> s = new LinkedHashSet<>();
+			for (ClassInfo ci : getParents())
+				for (ClassInfo ci2 : ci.getDeclaredInterfaces())
+					s.add(ci2);
+			interfaces = unmodifiableList(new ArrayList<>(s));
 		}
 		return interfaces;
 	}
 
+
 	/**
-	 * Returns a list including this class and all parent classes in child-to-parent order.
+	 * Returns a list including this class and all parent classes.
 	 *
 	 * <p>
 	 * Does not include interfaces.
 	 *
-	 * @return An unmodifiable list including this class and all parent classes in child-to-parent order.
+	 * @return An unmodifiable list including this class and all parent classes.
+	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getParents() {
-		return getParents(false, false);
+		if (parents == null) {
+			List<ClassInfo> l = new ArrayList<>();
+			Class<?> pc = c;
+			while (pc != null && pc != Object.class) {
+				l.add(of(pc));
+				pc = pc.getSuperclass();
+			}
+			parents = Collections.unmodifiableList(l);
+		}
+		return parents;
+	}
+
+	/**
+	 * Returns a list including this class and all parent classes.
+	 *
+	 * <p>
+	 * Does not include interfaces.
+	 *
+	 * @return An unmodifiable list including this class and all parent classes.
+	 * 	<br>Results are in parent-to-child order.
+	 */
+	public Iterable<ClassInfo> getParentsParentFirst() {
+		return iterable(getParents(), true);
 	}
 
 	/**
 	 * Returns a list including this class and all parent classes and interfaces.
 	 *
-	 * <h5 class='figure'>Examples</h5>
-	 * <p class='bpcode'>
-	 * 	<jc>// Class hierarchy</jc>
-	 * 	<jk>interface</jk> I1 {}
-	 * 	<jk>interface</jk> I2 <jk>extends</jk> I11 {}
-	 * 	<jk>interface</jk> I3 {}
-	 * 	<jk>interface</jk> I4 {}
-	 * 	<jk>class</jk> CA <jk>implements</jk> I1, I2 {}
-	 * 	<jk>class</jk> CB <jk>extends</jk> CA <jk>implements</jk> I3 {}
-	 * 	<jk>class</jk> CC <jk>extends</jk> CB {}
-	 *
-	 * 	<jc>// Examples</jc>
-	 * 	ClassInfo cc = ClassInfo.<jsm>of</jsm>(CC.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parent last, no interfaces.
-	 * 	cc.getParentInfos();             // CC,CB,CA
-	 * 	cc.getParentInfos(false,false);  // CC,CB,CA
-	 *
-	 * 	<jc>// Parent first, no interfaces.
-	 * 	cc.getParentInfos(true,false);   // CA,CB,CC
-	 *
-	 * 	<jc>// Parent last, include interfaces.
-	 * 	cc.getParentInfos(false,true);   // CC,CB,I3,CA,I1,I2
-	 *
-	 * 	<jc>// Parent first, include interfaces.
-	 * 	cc.getParentInfos(true,true);    // I2,I1,CA,I3,CB,CC
-	 * </p>
-	 *
-	 * @param parentFirst
-	 * 	If <jk>true</jk>, results are ordered parent-first.
-	 * @param includeInterfaces
-	 * 	If <jk>true</jk>, results include interfaces.
-	 * @return An unmodifiable list including this class and all parent classes and interfaces.
+	 * @return An unmodifiable list including this class and all parent classes.
+	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
-	public List<ClassInfo> getParents(boolean parentFirst, boolean includeInterfaces) {
-		return unmodifiableList(findParents(new ArrayList<>(), c, parentFirst, includeInterfaces));
-	}
-
-	private static List<ClassInfo> findParents(List<ClassInfo> l, Class<?> c, boolean parentFirst, boolean includeInterfaces) {
-		if (parentFirst) {
-			if (hasSuperclass(c))
-				findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
-			if (includeInterfaces)
-				for (Class<?> i : iterable(c.getInterfaces(), true))
-					l.add(of(i));
-			l.add(of(c));
-		} else {
-			l.add(of(c));
-			if (includeInterfaces)
-				for (Class<?> i : c.getInterfaces())
-					l.add(of(i));
-			if (hasSuperclass(c))
-				findParents(l, c.getSuperclass(), parentFirst, includeInterfaces);
+	public List<ClassInfo> getAllParents() {
+		if (allParents == null) {
+			List<ClassInfo> l = new ArrayList<>();
+			l.addAll(getParents());
+			l.addAll(getInterfaces());
+			allParents = Collections.unmodifiableList(l);
 		}
-		return l;
+		return allParents;
 	}
 
-	private static boolean hasSuperclass(Class<?> c) {
-		if (c.getSuperclass() == Object.class)
-			return false;
-		if (c.getSuperclass() == null)
-			return false;
-		return true;
+	/**
+	 * Returns a list including this class and all parent classes and interfaces.
+	 *
+	 * @return An unmodifiable list including this class and all parent classes.
+	 * 	<br>Results are ordered parent-to-child order with interfaces listed before classes.
+	 */
+	public Iterable<ClassInfo> getAllParentsParentFirst() {
+		return iterable(getAllParents(), true);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -272,7 +274,9 @@ public final class ClassInfo {
 	 * <p>
 	 * Methods defined on the {@link Object} class are excluded from the results.
 	 *
-	 * @return All public methods on this class in alphabetical order.
+	 * @return
+	 * 	All public methods on this class.
+	 * 	<br>Results are ordered alphabetically.
 	 */
 	public List<MethodInfo> getPublicMethods() {
 		if (publicMethods == null) {
@@ -290,7 +294,9 @@ public final class ClassInfo {
 	/**
 	 * Returns all methods declared on this class.
 	 *
-	 * @return All methods declared on this class in alphabetical order.
+	 * @return
+	 * 	All methods declared on this class.
+	 * 	<br>Results are ordered alphabetically.
 	 */
 	public List<MethodInfo> getDeclaredMethods() {
 		if (declaredMethods == null) {
@@ -306,30 +312,38 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
+	 * Returns all declared methods on this class and all parent classes.
 	 *
-	 * @return All declared methods on this class and all parent classes in child-to-parent order in
-	 * 	alphabetical order per class.
+	 * @return
+	 * 	All declared methods on this class and all parent classes.
+	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
 	 */
 	public List<MethodInfo> getAllMethods() {
-		return getAllMethods(false);
+		if (allMethods == null) {
+			List<MethodInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParents())
+				c.appendDeclaredMethods(l);
+			allMethods = Collections.unmodifiableList(l);
+		}
+		return allMethods;
 	}
 
 	/**
-	 * Returns all declared methods on this class and all parent classes in child-to-parent order.
+	 * Returns all declared methods on this class and all parent classes.
 	 *
-	 * @param parentFirst If <jk>true</jk>, methods on parent classes are listed first.
-	 * @return All declared methods on this class and all parent classes in alphabetical order per class.
+	 *
+	 * @return
+	 * 	All declared methods on this class and all parent classes.
+	 * 	<br>Results are ordered parent-to-child, and then alphabetically per class.
 	 */
-	public List<MethodInfo> getAllMethods(boolean parentFirst) {
-		return findAllMethods(parentFirst);
-	}
-
-	private List<MethodInfo> findAllMethods(boolean parentFirst) {
-		List<MethodInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents(parentFirst, true))
-			c.appendDeclaredMethods(l);
-		return l;
+	public List<MethodInfo> getAllMethodsParentFirst() {
+		if (allMethodsParentFirst == null) {
+			List<MethodInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParentsParentFirst())
+				c.appendDeclaredMethods(l);
+			allMethodsParentFirst = Collections.unmodifiableList(l);
+		}
+		return allMethodsParentFirst;
 	}
 
 	private List<MethodInfo> appendDeclaredMethods(List<MethodInfo> l) {
@@ -522,7 +536,7 @@ public final class ClassInfo {
 			return bestMatch;
 		}
 
-		final boolean isMemberClass = isMemberClass() && ! isStatic();
+		boolean isMemberClass = isNonStaticMemberClass();
 		for (ConstructorInfo n : getDeclaredConstructors()) {
 			Class<?>[] paramTypes = n.getParameterTypes();
 			if (isMemberClass)
@@ -552,7 +566,7 @@ public final class ClassInfo {
 	public ConstructorInfo getNoArgConstructor(Visibility v) {
 		if (isAbstract())
 			return null;
-		boolean isMemberClass = isMemberClass() && ! isStatic();
+		boolean isMemberClass = isNonStaticMemberClass();
 		for (ConstructorInfo cc : getDeclaredConstructors())
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v))
 				return cc.transform(v);
@@ -582,12 +596,14 @@ public final class ClassInfo {
 	 * <p>
 	 * Hidden fields are excluded from the results.
 	 *
-	 * @return All public fields on this class in alphabetical order.
+	 * @return
+	 * 	All public fields on this class.
+	 * 	<br>Results are in alphabetical order.
 	 */
 	public List<FieldInfo> getPublicField() {
 		if (publicFields == null) {
 			Map<String,FieldInfo> m = new LinkedHashMap<>();
-			for (ClassInfo c : getParents(false, false))
+			for (ClassInfo c : getParents())
 				c.appendDeclaredPublicFields(m);
 			List<FieldInfo> l = new ArrayList<>(m.values());
 			l.sort(null);
@@ -597,9 +613,11 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all fields declared on this class.
+	 * Returns all declared fields on this class.
 	 *
-	 * @return All fields declared on this class in alphabetical order.
+	 * @return
+	 * 	All declared fields on this class.
+	 * 	<br>Results are in alphabetical order.
 	 */
 	public List<FieldInfo> getDeclaredField() {
 		if (declaredFields == null) {
@@ -615,30 +633,37 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all declared fields on this class and all parent classes in child-to-parent order.
+	 * Returns all declared fields on this class and all parent classes.
 	 *
-	 * @return All declared fields on this class and all parent classes in child-to-parent order in
-	 * 	alphabetical order per class.
+	 * @return
+	 * 	All declared fields on this class.
+	 * 	<br>Results are ordered child-to-parent, and then alphabetical per class.
 	 */
 	public List<FieldInfo> getAllFields() {
-		return getAllFields(false);
+		if (allFields == null) {
+			List<FieldInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParents())
+				c.appendDeclaredFields(l);
+			allFields = Collections.unmodifiableList(l);
+		}
+		return allFields;
 	}
 
 	/**
-	 * Returns all declared fields on this class and all parent classes in child-to-parent order.
+	 * Returns all declared fields on this class and all parent classes.
 	 *
-	 * @param parentFirst If <jk>true</jk>, fields on parent classes are listed first.
-	 * @return All declared fields on this class and all parent classes in alphabetical order per class.
+	 * @return
+	 * 	All declared fields on this class.
+	 * 	<br>Results are ordered parent-to-child, and then alphabetical per class.
 	 */
-	public List<FieldInfo> getAllFields(boolean parentFirst) {
-		return findAllFields(parentFirst);
-	}
-
-	private List<FieldInfo> findAllFields(boolean parentFirst) {
-		List<FieldInfo> l = new ArrayList<>();
-		for (ClassInfo c : getParents(parentFirst, true))
-			c.appendDeclaredFields(l);
-		return l;
+	public List<FieldInfo> getAllFieldsParentFirst() {
+		if (allFieldsParentFirst == null) {
+			List<FieldInfo> l = new ArrayList<>();
+			for (ClassInfo c : getAllParentsParentFirst())
+				c.appendDeclaredFields(l);
+			allFieldsParentFirst = Collections.unmodifiableList(l);
+		}
+		return allFieldsParentFirst;
 	}
 
 	private List<FieldInfo> appendDeclaredFields(List<FieldInfo> l) {
@@ -674,6 +699,8 @@ public final class ClassInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> T getAnnotation(Class<T> a) {
+		if (a == null)
+			return null;
 		Optional<Annotation> o = annotationMap().get(a);
 		if (o == null) {
 			o = Optional.ofNullable(findAnnotation(a));
@@ -1082,6 +1109,15 @@ public final class ClassInfo {
 	 */
 	public boolean isMemberClass() {
 		return c.isMemberClass();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a member class and not static.
+	 *
+	 * @return <jk>true</jk> if this class is a member class and not static.
+	 */
+	public boolean isNonStaticMemberClass() {
+		return c.isMemberClass() && ! isStatic();
 	}
 
 	/**
@@ -1495,4 +1531,13 @@ public final class ClassInfo {
 		return t.toString();
 	}
 
+	@Override
+	public int hashCode() {
+		return c.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return ((ClassInfo)o).c == this.c;
+	}
 }
