@@ -89,7 +89,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClassInfo() {
+	public ClassInfo getDeclaringClass() {
 		return declaringClass;
 	}
 

@@ -97,7 +97,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClassInfo() {
+	public ClassInfo getDeclaringClass() {
 		if (declaringClass == null)
 			declaringClass = ClassInfo.of(m.getDeclaringClass());
 		return declaringClass;

@@ -78,7 +78,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClassInfo() {
+	public ClassInfo getDeclaringClass() {
 		if (declaringClass == null)
 			declaringClass = ClassInfo.of(f.getDeclaringClass());
 		return declaringClass;

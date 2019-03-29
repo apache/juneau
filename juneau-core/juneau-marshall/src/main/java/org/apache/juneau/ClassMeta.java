@@ -474,7 +474,7 @@ public final class ClassMeta<T> implements Type {
 			// forName() is used by Class and Charset
 			for (String methodName : new String[]{"fromString","fromValue","valueOf","parse","parseString","forName","forString"}) {
 				if (fromStringMethod == null) {
-					for (MethodInfo m : ci.getPublicMethodInfos()) {
+					for (MethodInfo m : ci.getPublicMethods()) {
 						if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasArgs(String.class)) {
 							fromStringMethod = m.inner();
 							break;
@@ -493,7 +493,7 @@ public final class ClassMeta<T> implements Type {
 			} catch (NoSuchMethodException e1) {}
 
 			// Find swap() method if present.
-			for (MethodInfo m : ci.getPublicMethodInfos()) {
+			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(PUBLIC, NOT_DEPRECATED, NOT_STATIC) && m.hasName("swap") && m.hasFuzzyArgs(BeanSession.class)) {
 					swapMethod = m.inner();
 					swapMethodType = m.getReturnType().inner();
@@ -502,7 +502,7 @@ public final class ClassMeta<T> implements Type {
 			}
 			// Find unswap() method if present.
 			if (swapMethod != null) {
-				for (MethodInfo m : ci.getPublicMethodInfos()) {
+				for (MethodInfo m : ci.getPublicMethods()) {
 					if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("unswap") && m.hasFuzzyArgs(BeanSession.class, swapMethodType)) {
 						unswapMethod = m.inner();
 						break;
@@ -511,14 +511,14 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			// Find example() method if present.
-			for (MethodInfo m : ci.getPublicMethodInfos()) {
+			for (MethodInfo m : ci.getPublicMethods()) {
 				if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("example") && m.hasFuzzyArgs(BeanSession.class)) {
 					exampleMethod = m.inner();
 					break;
 				}
 			}
 
-			for (FieldInfo f : ci.getAllFieldInfos(true)) {
+			for (FieldInfo f : ci.getAllFields(true)) {
 				if (f.isAnnotationPresent(ParentProperty.class)) {
 					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
@@ -533,7 +533,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			for (FieldInfo f : ci.getDeclaredFieldInfos()) {
+			for (FieldInfo f : ci.getDeclaredField()) {
 				if (f.isAnnotationPresent(Example.class)) {
 					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
@@ -543,7 +543,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			// Find @NameProperty and @ParentProperty methods if present.
-			for (MethodInfo m : ci.getAllMethodInfos(true)) {
+			for (MethodInfo m : ci.getAllMethods(true)) {
 				if (m.hasAnnotation(ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumArgs(1))
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
@@ -558,7 +558,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			for (MethodInfo m : ci.getDeclaredMethodInfos()) {
+			for (MethodInfo m : ci.getDeclaredMethods()) {
 				if (m.hasAnnotation(Example.class)) {
 					if (! (m.isStatic() && m.hasFuzzyArgs(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m);
@@ -571,7 +571,7 @@ public final class ClassMeta<T> implements Type {
 			isAbstract = ci.isAbstract() && ci.isNotPrimitive();
 
 			// Find constructor(String) method if present.
-			for (ConstructorInfo cs : ci.getPublicConstructorInfos()) {
+			for (ConstructorInfo cs : ci.getPublicConstructors()) {
 				if (cs.isPublic() && cs.isNotDeprecated()) {
 					Class<?>[] pt = cs.getParameterTypes();
 					if (pt.length == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
@@ -592,13 +592,13 @@ public final class ClassMeta<T> implements Type {
 
 			primitiveDefault = ci.getPrimitiveDefault();
 
-			for (MethodInfo m : ci.getPublicMethodInfos())
+			for (MethodInfo m : ci.getPublicMethods())
 				if (m.isAll(PUBLIC, NOT_DEPRECATED))
 					publicMethods.put(m.getSignature(), m.inner());
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ici;
-				noArgConstructor = x.getPublicNoArgConstructorInfo();
+				noArgConstructor = x.getPublicNoArgConstructor();
 			}
 
 			if (beanFilter == null)
@@ -994,7 +994,7 @@ public final class ClassMeta<T> implements Type {
 		if (ci.isAbstract())
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
-		for (ConstructorInfo cc : ci.getPublicConstructorInfos()) {
+		for (ConstructorInfo cc : ci.getPublicConstructors()) {
 			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
 				return (Constructor<? extends T>) v.transform(cc.inner());
 		}

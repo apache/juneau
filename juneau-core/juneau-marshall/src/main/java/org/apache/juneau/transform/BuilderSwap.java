@@ -145,7 +145,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo pojoConstructor;
 		ConstructorInfo builderConstructor;
 
-		createPojoMethod = bci.getBuilderBuildMethodInfo();
+		createPojoMethod = bci.getBuilderBuildMethod();
 		if (createPojoMethod != null)
 			pojoClass = createPojoMethod.getReturnType().inner();
 
@@ -154,12 +154,12 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = getClassInfo(pojoClass);
 
-		pojoConstructor = pci.getConstructorInfo(cVis, builderClass);
+		pojoConstructor = pci.getConstructor(cVis, builderClass);
 		if (pojoConstructor == null)
 			return null;
 
-		builderConstructor = bci.getNoArgConstructorInfo(cVis);
-		createBuilderMethod = pci.getBuilderCreateMethodInfo();
+		builderConstructor = bci.getNoArgConstructor(cVis);
+		createBuilderMethod = pci.getBuilderCreateMethod();
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
@@ -189,13 +189,13 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = getClassInfo(pojoClass);
 
-		builderCreateMethod = pci.getBuilderCreateMethodInfo();
+		builderCreateMethod = pci.getBuilderCreateMethod();
 
 		if (builderClass == null && builderCreateMethod != null)
 			builderClass = builderCreateMethod.getReturnType().inner();
 
 		if (builderClass == null) {
-			for (ConstructorInfo cc : pci.getPublicConstructorInfos()) {
+			for (ConstructorInfo cc : pci.getPublicConstructors()) {
 				if (cc.isVisible(cVis) && cc.hasNumArgs(1)) {
 					Class<?>[] pt = cc.getParameterTypes();
 					if (getClassInfo(pt[0]).isChildOf(Builder.class)) {
@@ -210,13 +210,13 @@ public class BuilderSwap<T,B> {
 			return null;
 
 		ClassInfo bci = getClassInfo(builderClass);
-		builderConstructor = bci.getNoArgConstructorInfo(cVis);
+		builderConstructor = bci.getNoArgConstructor(cVis);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
-		pojoCreateMethod = bci.getBuilderBuildMethodInfo();
+		pojoCreateMethod = bci.getBuilderBuildMethod();
 		if (pojoConstructor == null)
-			pojoConstructor = pci.getConstructorInfo(cVis, builderClass);
+			pojoConstructor = pci.getConstructor(cVis, builderClass);
 
 		if (pojoConstructor == null && pojoCreateMethod == null)
 			return null;

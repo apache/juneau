@@ -51,7 +51,7 @@ public class ClassAnnotation<T extends Annotation> {
 	 *
 	 * @return the class where the annotation was found.
 	 */
-	public ClassInfo getClassInfo() {
+	public ClassInfo getClassOn() {
 		return c;
 	}
 

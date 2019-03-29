@@ -218,7 +218,7 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @BeanConstructor constructor.
-				for (ConstructorInfo x : ci.getPublicConstructorInfos()) {
+				for (ConstructorInfo x : ci.getPublicConstructors()) {
 					if (x.isAnnotationPresent(BeanConstructor.class)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
@@ -235,7 +235,7 @@ public class BeanMeta<T> {
 					constructor = ctx.getImplClassConstructor(c, conVis);
 
 				if (constructor == null)
-					constructor = ci.getNoArgConstructorInfo(conVis);
+					constructor = ci.getNoArgConstructor(conVis);
 
 				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";
@@ -602,7 +602,7 @@ public class BeanMeta<T> {
 		List<BeanMethod> l = new LinkedList<>();
 
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (MethodInfo m : c2.getDeclaredMethodInfos()) {
+			for (MethodInfo m : c2.getDeclaredMethods()) {
 				if (m.isStatic())
 					continue;
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
@@ -709,7 +709,7 @@ public class BeanMeta<T> {
 	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
 		List<Field> l = new LinkedList<>();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredFieldInfos()) {
+			for (FieldInfo f : c2.getDeclaredField()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
@@ -732,7 +732,7 @@ public class BeanMeta<T> {
 
 	static final Field findInnerBeanField(Class<?> c, Class<?> stopClass, String name) {
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredFieldInfos()) {
+			for (FieldInfo f : c2.getDeclaredField()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))

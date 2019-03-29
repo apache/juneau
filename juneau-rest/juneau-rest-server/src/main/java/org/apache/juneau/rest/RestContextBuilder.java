@@ -171,7 +171,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
 			for (ClassAnnotation<RestResource> e : restResourceAnnotationsParentFirst) {
-				ClassInfo c = e.getClassInfo();
+				ClassInfo c = e.getClassOn();
 				RestResource r = e.getAnnotation();
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
@@ -295,7 +295,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		widgets(false, widgets);
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
-		for (MethodInfo m : rci.getAllMethodInfos(true)) {
+		for (MethodInfo m : rci.getAllMethods(true)) {
 			if (m.hasAnnotation(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
 				m.setAccessible();
 				String sig = m.getSignature();

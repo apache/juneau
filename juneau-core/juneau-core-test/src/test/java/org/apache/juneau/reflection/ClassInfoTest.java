@@ -49,11 +49,11 @@ public class ClassInfoTest {
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getSimpleName();
 			if (t instanceof MethodInfo)
-				return ((MethodInfo)t).getDeclaringClassInfo().getSimpleName() + '.' + ((MethodInfo)t).getLabel();
+				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getLabel();
 			if (t instanceof ConstructorInfo)
 				return ((ConstructorInfo)t).getLabel();
 			if (t instanceof FieldInfo)
-				return ((FieldInfo)t).getDeclaringClassInfo().getSimpleName() + '.' + ((FieldInfo)t).getLabel();
+				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getLabel();
 			return t.toString();
 		}
 	};
@@ -109,28 +109,28 @@ public class ClassInfoTest {
 
 	@Test
 	public void getInterfaceInfos() {
-		assertListEquals("", of(BI4.class).getInterfaceInfos());
-		assertListEquals("BI1,BI2", of(BC1.class).getInterfaceInfos());
-		assertListEquals("BI3", of(BC2.class).getInterfaceInfos());
-		assertListEquals("", of(BC3.class).getInterfaceInfos());
+		assertListEquals("", of(BI4.class).getInterfaces());
+		assertListEquals("BI1,BI2", of(BC1.class).getInterfaces());
+		assertListEquals("BI3", of(BC2.class).getInterfaces());
+		assertListEquals("", of(BC3.class).getInterfaces());
 	}
 
 	@Test
 	public void getInterfaceInfosTwice() {
 		ClassInfo bc2 = of(BC2.class);
-		assertListEquals("BI3", bc2.getInterfaceInfos());
-		assertListEquals("BI3", bc2.getInterfaceInfos());
+		assertListEquals("BI3", bc2.getInterfaces());
+		assertListEquals("BI3", bc2.getInterfaces());
 	}
 
 	@Test
 	public void getParentInfos() {
 		ClassInfo bc3 = of(BC3.class);
-		assertListEquals("BC3,BC2,BC1", bc3.getParentInfos());
-		assertListEquals("BC3,BC2,BC1", bc3.getParentInfos(false,false));
-		assertListEquals("BC1,BC2,BC3", bc3.getParentInfos(true,false));
+		assertListEquals("BC3,BC2,BC1", bc3.getParents());
+		assertListEquals("BC3,BC2,BC1", bc3.getParents(false,false));
+		assertListEquals("BC1,BC2,BC3", bc3.getParents(true,false));
 
-		assertListEquals("BC3,BC2,BI3,BC1,BI1,BI2", bc3.getParentInfos(false,true));
-		assertListEquals("BI2,BI1,BC1,BI3,BC2,BC3", bc3.getParentInfos(true,true));
+		assertListEquals("BC3,BC2,BI3,BC1,BI1,BI2", bc3.getParents(false,true));
+		assertListEquals("BI2,BI1,BC1,BI3,BC2,BC3", bc3.getParents(true,true));
 	}
 
 
@@ -174,24 +174,24 @@ public class ClassInfoTest {
 	@Test
 	public void getAllMethodInfos() throws Exception {
 		ClassInfo cc3 = of(CC3.class);
-		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethodInfos());
-		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethodInfos(false));
-		assertListEquals("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethodInfos(true));
+		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
+		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods(false));
+		assertListEquals("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethods(true));
 	}
 
 	@Test
 	public void getDeclaredMethodInfos() throws Exception {
 		ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
-		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getDeclaredMethodInfos());
-		assertListEquals("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethodInfos());
-		assertListEquals("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethodInfos());
+		assertListEquals("CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getDeclaredMethods());
+		assertListEquals("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
+		assertListEquals("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
 	}
 
 	@Test
 	public void getPublicMethodInfos() throws Exception {
 		ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
-		assertListEquals("CC3.c1a(),CC3.c2b(),CC3.c3a(),CC3.i1a(),CC3.i1b(),CC3.i2a(),CC3.i2b()", cc3.getPublicMethodInfos());
-		assertListEquals("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethodInfos());
+		assertListEquals("CC3.c1a(),CC3.c2b(),CC3.c3a(),CC3.i1a(),CC3.i1b(),CC3.i2a(),CC3.i2b()", cc3.getPublicMethods());
+		assertListEquals("CI2.i1a(),CI2.i1b(),CI2.i2a(),CI2.i2b()", ci2.getPublicMethods());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -226,14 +226,14 @@ public class ClassInfoTest {
 
 	@Test
 	public void getFromStringMethodInfo() throws Exception {
-		assertInfoEquals("DA1.create(String)", of(DA1.class).getFromStringMethodInfo());
-		assertNull(of(DA2.class).getFromStringMethodInfo());
-		assertNull(of(DA3.class).getFromStringMethodInfo());
-		assertNull(of(DA4.class).getFromStringMethodInfo());
-		assertNull(of(DA5.class).getFromStringMethodInfo());
-		assertNull(of(DA6.class).getFromStringMethodInfo());
-		assertNull(of(DA7.class).getFromStringMethodInfo());
-		assertNull(of(DA8.class).getFromStringMethodInfo());
+		assertInfoEquals("DA1.create(String)", of(DA1.class).getFromStringMethod());
+		assertNull(of(DA2.class).getFromStringMethod());
+		assertNull(of(DA3.class).getFromStringMethod());
+		assertNull(of(DA4.class).getFromStringMethod());
+		assertNull(of(DA5.class).getFromStringMethod());
+		assertNull(of(DA6.class).getFromStringMethod());
+		assertNull(of(DA7.class).getFromStringMethod());
+		assertNull(of(DA8.class).getFromStringMethod());
 	}
 
 	static class DBx {}
@@ -274,17 +274,17 @@ public class ClassInfoTest {
 
 	@Test
 	public void getStaticCreateMethodInfo() throws Exception {
-		assertInfoEquals("DB1.create(DBx)", of(DB1.class).getStaticCreateMethodInfo(DBx.class));
-		assertInfoEquals("DB2.fromDBx(DBx)", of(DB2.class).getStaticCreateMethodInfo(DBx.class));
-		assertInfoEquals("DB3.from(DBx)", of(DB3.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB4.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB5.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB6.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB7.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB8.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB9.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB10.class).getStaticCreateMethodInfo(DBx.class));
-		assertNull(of(DB11.class).getStaticCreateMethodInfo(DBx.class));
+		assertInfoEquals("DB1.create(DBx)", of(DB1.class).getStaticCreateMethod(DBx.class));
+		assertInfoEquals("DB2.fromDBx(DBx)", of(DB2.class).getStaticCreateMethod(DBx.class));
+		assertInfoEquals("DB3.from(DBx)", of(DB3.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB4.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB5.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB6.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB7.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB8.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB9.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB10.class).getStaticCreateMethod(DBx.class));
+		assertNull(of(DB11.class).getStaticCreateMethod(DBx.class));
 	}
 
 	static class DCx {}
@@ -306,11 +306,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getBuilderCreateMethodInfo() throws Exception {
-		assertInfoEquals("DC1.create()", of(DC1.class).getBuilderCreateMethodInfo());
-		assertNull(of(DC2.class).getBuilderCreateMethodInfo());
-		assertNull(of(DC3.class).getBuilderCreateMethodInfo());
-		assertNull(of(DC4.class).getBuilderCreateMethodInfo());
-		assertNull(of(DC5.class).getBuilderCreateMethodInfo());
+		assertInfoEquals("DC1.create()", of(DC1.class).getBuilderCreateMethod());
+		assertNull(of(DC2.class).getBuilderCreateMethod());
+		assertNull(of(DC3.class).getBuilderCreateMethod());
+		assertNull(of(DC4.class).getBuilderCreateMethod());
+		assertNull(of(DC5.class).getBuilderCreateMethod());
 	}
 
 	static class DDx {}
@@ -332,11 +332,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getBuilderBuildMethodInfo() throws Exception {
-		assertInfoEquals("DD1.build()", of(DD1.class).getBuilderBuildMethodInfo());
-		assertNull(of(DD2.class).getBuilderBuildMethodInfo());
-		assertNull(of(DD3.class).getBuilderBuildMethodInfo());
-		assertNull(of(DD4.class).getBuilderBuildMethodInfo());
-		assertNull(of(DD5.class).getBuilderBuildMethodInfo());
+		assertInfoEquals("DD1.build()", of(DD1.class).getBuilderBuildMethod());
+		assertNull(of(DD2.class).getBuilderBuildMethod());
+		assertNull(of(DD3.class).getBuilderBuildMethod());
+		assertNull(of(DD4.class).getBuilderBuildMethod());
+		assertNull(of(DD5.class).getBuilderBuildMethod());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -376,78 +376,78 @@ public class ClassInfoTest {
 	@Test
 	public void getPublicConstructorInfos() {
 		ClassInfo e1 = of(E1.class);
-		assertListEquals("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructorInfos());
-		assertListEquals("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructorInfos());
+		assertListEquals("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
+		assertListEquals("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
 	}
 
 	@Test
 	public void getPublicConstructorInfo_classArgs() {
 		ClassInfo e1 = of(E1.class);
-		assertInfoEquals("E1(String)", e1.getPublicConstructorInfo(String.class));
-		assertInfoEquals("E1(Writer)", e1.getPublicConstructorInfo(StringWriter.class));
+		assertInfoEquals("E1(String)", e1.getPublicConstructor(String.class));
+		assertInfoEquals("E1(Writer)", e1.getPublicConstructor(StringWriter.class));
 	}
 
 	@Test
 	public void getPublicConstructorInfo_objectArgs() {
 		ClassInfo e1 = of(E1.class);
-		assertInfoEquals("E1(String)", e1.getPublicConstructorInfo("foo"));
+		assertInfoEquals("E1(String)", e1.getPublicConstructor("foo"));
 	}
 
 	@Test
 	public void getPublicConstructorFuzzyInfo() {
 		ClassInfo e1 = of(E1.class);
-		assertInfoEquals("E1(String)", e1.getPublicConstructorFuzzyInfo("foo", new HashMap<>()));
-		assertInfoEquals("E1()", e1.getPublicConstructorFuzzyInfo(new HashMap<>()));
+		assertInfoEquals("E1(String)", e1.getPublicConstructorFuzzy("foo", new HashMap<>()));
+		assertInfoEquals("E1()", e1.getPublicConstructorFuzzy(new HashMap<>()));
 	}
 
 	@Test
 	public void getNoArgConstructorInfo() {
 		ClassInfo e2 = of(E2.class);
-		assertInfoEquals("E2()", e2.getNoArgConstructorInfo(Visibility.PRIVATE));
-		assertInfoEquals("E2()", e2.getNoArgConstructorInfo(Visibility.PROTECTED));
-		assertInfoEquals("E2()", e2.getNoArgConstructorInfo(Visibility.DEFAULT));
-		assertNull(e2.getNoArgConstructorInfo(Visibility.PUBLIC));
+		assertInfoEquals("E2()", e2.getNoArgConstructor(Visibility.PRIVATE));
+		assertInfoEquals("E2()", e2.getNoArgConstructor(Visibility.PROTECTED));
+		assertInfoEquals("E2()", e2.getNoArgConstructor(Visibility.DEFAULT));
+		assertNull(e2.getNoArgConstructor(Visibility.PUBLIC));
 	}
 
 	@Test
 	public void getNoArgConstructorInfo_abstractClass() {
 		ClassInfo e3 = of(E3.class);
-		assertNull(e3.getNoArgConstructorInfo(Visibility.PUBLIC));
+		assertNull(e3.getNoArgConstructor(Visibility.PUBLIC));
 	}
 
 	@Test
 	public void getNoArgConstructorInfo_innerClass() {
 		ClassInfo e4 = of(E4.class);
-		assertInfoEquals("E4(ClassInfoTest)", e4.getNoArgConstructorInfo(Visibility.PUBLIC));
+		assertInfoEquals("E4(ClassInfoTest)", e4.getNoArgConstructor(Visibility.PUBLIC));
 	}
 
 	@Test
 	public void getNoArgConstructorInfo_noConstructor() {
 		ClassInfo e6 = of(E6.class);
-		assertNull(e6.getNoArgConstructorInfo(Visibility.PUBLIC));
+		assertNull(e6.getNoArgConstructor(Visibility.PUBLIC));
 	}
 
 	@Test
 	public void getPublicNoArgConstructorInfo() {
 		ClassInfo e1 = of(E1.class);
-		assertInfoEquals("E1()", e1.getPublicNoArgConstructorInfo());
+		assertInfoEquals("E1()", e1.getPublicNoArgConstructor());
 	}
 
 	@Test
 	public void getConstructorInfo() {
 		ClassInfo e1 = of(E1.class);
-		assertInfoEquals("E1(int)", e1.getConstructorInfo(Visibility.PROTECTED, int.class));
-		assertInfoEquals("E1(int)", e1.getConstructorInfo(Visibility.PRIVATE, int.class));
-		assertNull(e1.getConstructorInfo(Visibility.PUBLIC, int.class));
+		assertInfoEquals("E1(int)", e1.getConstructor(Visibility.PROTECTED, int.class));
+		assertInfoEquals("E1(int)", e1.getConstructor(Visibility.PRIVATE, int.class));
+		assertNull(e1.getConstructor(Visibility.PUBLIC, int.class));
 
 		ClassInfo ea3 = of(E3.class);
-		assertInfoEquals("E3()", ea3.getConstructorInfo(Visibility.PUBLIC));
+		assertInfoEquals("E3()", ea3.getConstructor(Visibility.PUBLIC));
 
 		ClassInfo ea4 = of(E4.class);
-		assertInfoEquals("E4(ClassInfoTest)", ea4.getConstructorInfo(Visibility.PUBLIC));
+		assertInfoEquals("E4(ClassInfoTest)", ea4.getConstructor(Visibility.PUBLIC));
 
 		ClassInfo ea5 = of(E5.class);
-		assertInfoEquals("E5()", ea5.getConstructorInfo(Visibility.PUBLIC));
+		assertInfoEquals("E5()", ea5.getConstructor(Visibility.PUBLIC));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -468,27 +468,27 @@ public class ClassInfoTest {
 	@Test
 	public void getPublicFieldInfos() {
 		ClassInfo f2 = of(F2.class);
-		assertListEquals("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFieldInfos());
-		assertListEquals("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFieldInfos());
+		assertListEquals("F2.f1a,F1.f1b,F2.f2b", f2.getPublicField());
+		assertListEquals("F2.f1a,F1.f1b,F2.f2b", f2.getPublicField());
 	}
 
 	@Test
 	public void getDeclaredFieldInfos() {
 		ClassInfo f2 = of(F2.class);
-		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFieldInfos());
-		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFieldInfos());
+		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredField());
+		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredField());
 	}
 
 	@Test
 	public void getAllFieldInfos() {
 		ClassInfo f2 = of(F2.class);
-		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFieldInfos());
+		assertListEquals("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFields());
 	}
 
 	@Test
 	public void getAllFieldInfos_parentFirst() {
 		ClassInfo f2 = of(F2.class);
-		assertListEquals("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFieldInfos(true));
+		assertListEquals("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields(true));
 	}
 
 	//====================================================================================================

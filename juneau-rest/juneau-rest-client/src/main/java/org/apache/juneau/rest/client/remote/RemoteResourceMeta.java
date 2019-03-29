@@ -52,7 +52,7 @@ public class RemoteResourceMeta {
 				path = trimSlashes(r.path());
 
 		Map<Method,RemoteMethodMeta> methods = new LinkedHashMap<>();
-		for (MethodInfo m : ci.getPublicMethodInfos())
+		for (MethodInfo m : ci.getPublicMethods())
 			if (m.isPublic())
 				methods.put(m.inner(), new RemoteMethodMeta(path, m.inner(), false, "GET"));
 
