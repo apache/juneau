@@ -13,6 +13,7 @@
 package org.apache.juneau.reflection;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.reflection.ClassFlags.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -1439,11 +1440,7 @@ public final class ClassInfo {
 				return fullName;
 			}
 			StringBuilder sb = new StringBuilder();
-			if (ct != null)
-				sb.append(ct.getName());
-			else {
-				sb.append(t.getTypeName());
-			}
+			sb.append(ct != null ? ct.getName() : t.getTypeName());
 			if (isParameterizedType) {
 				ParameterizedType pt = (ParameterizedType)t;
 				sb.append("<");
@@ -1527,24 +1524,13 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns <jk>true</jk> if this class is a parent of <code>child</code>.
-	 *
-	 * @param child The child class.
-	 * @param strict If <jk>true</jk> returns <jk>false</jk> if the classes are the same.
-	 * @return <jk>true</jk> if this class is a parent of <code>child</code>.
-	 */
-	public boolean isParentOf(Class<?> child, boolean strict) {
-		return c != null && c.isAssignableFrom(child) && ((!strict) || ! c.equals(child));
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <code>child</code>.
 	 *
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <code>child</code>.
 	 */
 	public boolean isParentOf(Class<?> child) {
-		return isParentOf(child, false);
+		return c != null && child != null && c.isAssignableFrom(child);
 	}
 
 	/**
@@ -1563,11 +1549,10 @@ public final class ClassInfo {
 	 * Returns <jk>true</jk> if this class is a child of <code>parent</code>.
 	 *
 	 * @param parent The parent class.
-	 * @param strict If <jk>true</jk> returns <jk>false</jk> if the classes are the same.
 	 * @return <jk>true</jk> if this class is a parent of <code>child</code>.
 	 */
-	public boolean isChildOf(Class<?> parent, boolean strict) {
-		return c != null && parent.isAssignableFrom(c) && ((!strict) || ! c.equals(parent));
+	public boolean isStrictChildOf(Class<?> parent) {
+		return c != null && parent != null && parent.isAssignableFrom(c) && ! c.equals(parent);
 	}
 
 	/**
@@ -1577,7 +1562,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is a child or the same as <code>parent</code>.
 	 */
 	public boolean isChildOf(Class<?> parent) {
-		return isChildOf(parent, false);
+		return c != null && parent != null && parent.isAssignableFrom(c);
 	}
 
 	/**
@@ -1679,7 +1664,9 @@ public final class ClassInfo {
 	 * @throws InstantiationException
 	 */
 	public Object newInstance() throws InstantiationException, IllegalAccessException {
-		return c == null ? null : c.newInstance();
+		if (c == null)
+			throw new InstantiationException("Type '"+ getFullName() + "' cannot be instantiated");
+		return c.newInstance();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1693,13 +1680,19 @@ public final class ClassInfo {
 	 * @param oc The class we're trying to resolve the parameter type for.
 	 * @return The resolved real class.
 	 */
+	@SuppressWarnings("null")
 	public Class<?> getParameterType(int index, Class<?> oc) {
+		if (oc == null)
+			return null;
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
+		Class<?> ooc = oc;
 		while (c != oc.getSuperclass()) {
 			extractTypes(typeMap, oc);
 			oc = oc.getSuperclass();
+			if (oc == null)
+				illegalArg("Class ''{0}'' is not a subclass of parameterized type ''{1}''", ooc.getName(), getShortName());
 		}
 
 		Type gsc = oc.getGenericSuperclass();
@@ -1709,6 +1702,9 @@ public final class ClassInfo {
 			return Object.class;
 
 		ParameterizedType opt = (ParameterizedType)gsc;
+		Type[] actualTypeArguments = opt.getActualTypeArguments();
+		if (index >= actualTypeArguments.length)
+			illegalArg("Invalid type index. index={0}, argsLength={1}", index, actualTypeArguments.length);
 		Type actualType = opt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))
@@ -1783,15 +1779,5 @@ public final class ClassInfo {
 	@Override
 	public String toString() {
 		return t.toString();
-	}
-
-	@Override
-	public int hashCode() {
-		return t.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		return ((ClassInfo)o).t == this.t;
 	}
 }

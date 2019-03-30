@@ -580,7 +580,7 @@ public class BeanMeta<T> {
 			if (b.setter == null)
 				return true;
 
-			return type.isChildOf(b.setter.getParameterTypes()[0], true);
+			return type.isStrictChildOf(b.setter.getParameterTypes()[0]);
 		}
 
 		@Override /* Object */
