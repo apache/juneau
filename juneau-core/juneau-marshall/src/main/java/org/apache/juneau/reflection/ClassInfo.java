@@ -1674,28 +1674,28 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Finds the real parameter type of the specified class.
+	 * Finds the real parameter type of this class.
 	 *
 	 * @param index The zero-based index of the parameter to resolve.
-	 * @param oc The class we're trying to resolve the parameter type for.
+	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <code>HashMap</code>).
 	 * @return The resolved real class.
 	 */
 	@SuppressWarnings("null")
-	public Class<?> getParameterType(int index, Class<?> oc) {
-		if (oc == null)
+	public Class<?> getParameterType(int index, Class<?> pt) {
+		if (pt == null)
 			return null;
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
-		Class<?> ooc = oc;
-		while (c != oc.getSuperclass()) {
-			extractTypes(typeMap, oc);
-			oc = oc.getSuperclass();
-			if (oc == null)
-				illegalArg("Class ''{0}'' is not a subclass of parameterized type ''{1}''", ooc.getName(), getShortName());
+		Class<?> cc = c;
+		while (pt != cc.getSuperclass()) {
+			extractTypes(typeMap, cc);
+			cc = cc.getSuperclass();
+			if (cc == null)
+				illegalArg("Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
-		Type gsc = oc.getGenericSuperclass();
+		Type gsc = cc.getGenericSuperclass();
 
 		// Not actually a parameterized type.
 		if (! (gsc instanceof ParameterizedType))
@@ -1720,9 +1720,9 @@ public final class ClassInfo {
 		} else if (actualType instanceof TypeVariable) {
 			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
 			List<Class<?>> nestedOuterTypes = new LinkedList<>();
-			for (Class<?> ec = oc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
+			for (Class<?> ec = cc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
 				try {
-					Class<?> outerClass = oc.getClass();
+					Class<?> outerClass = cc.getClass();
 					nestedOuterTypes.add(outerClass);
 					Map<Type,Type> outerTypeMap = new HashMap<>();
 					extractTypes(outerTypeMap, outerClass);

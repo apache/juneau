@@ -125,9 +125,9 @@ public abstract class PojoSwap<T,S> {
 	 * Constructor.
 	 */
 	protected PojoSwap() {
-		ClassInfo psi = getClassInfo(PojoSwap.class);
-		normalClass = (Class<T>)psi.getParameterType(0, this.getClass());
-		swapClass = psi.getParameterType(1, this.getClass());
+		ClassInfo ci = getClassInfo(this.getClass());
+		normalClass = (Class<T>)ci.getParameterType(0, PojoSwap.class);
+		swapClass = ci.getParameterType(1, PojoSwap.class);
 		normalClassInfo = getClassInfo(normalClass);
 		swapClassInfo = getClassInfo(swapClass);
 		forMediaTypes = forMediaTypes();

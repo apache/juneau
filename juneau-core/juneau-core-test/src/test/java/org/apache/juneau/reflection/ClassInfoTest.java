@@ -1919,18 +1919,18 @@ public class ClassInfoTest {
 
 	@SuppressWarnings("serial")
 	public static class MA extends HashMap<String,Object> {}
-	ClassInfo hashMap = of(HashMap.class);
+	ClassInfo ma = of(MA.class);
 
 	@Test
 	public void getParameterType_simpleMap() {
-		check("String", hashMap.getParameterType(0, MA.class));
-		check("Object", hashMap.getParameterType(1, MA.class));
+		check("String", ma.getParameterType(0, HashMap.class));
+		check("Object", ma.getParameterType(1, HashMap.class));
 	}
 
 	@Test
 	public void getParameterType_outOfBounds() {
 		try {
-			hashMap.getParameterType(2, MA.class);
+			ma.getParameterType(2, HashMap.class);
 		} catch (IllegalArgumentException e) {
 			assertEquals("Invalid type index. index=2, argsLength=2", e.getMessage());
 		}
@@ -1939,9 +1939,9 @@ public class ClassInfoTest {
 	@Test
 	public void getParameterType_notASubclass() {
 		try {
-			hashMap.getParameterType(2, AClass.class);
+			aClass.getParameterType(2, HashMap.class);
 		} catch (IllegalArgumentException e) {
-			assertEquals("Class 'org.apache.juneau.reflection.AClass' is not a subclass of parameterized type 'HashMap'", e.getMessage());
+			assertEquals("Class 'AClass' is not a subclass of parameterized type 'HashMap'", e.getMessage());
 		}
 	}
 
