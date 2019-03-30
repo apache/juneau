@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
-import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.reflection.ClassFlags.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -160,7 +160,7 @@ public final class ClassInfo {
 	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
 	public ClassInfo getParent() {
-		return of(c.getSuperclass());
+		return c == null ? null : of(c.getSuperclass());
 	}
 
 	/**
@@ -175,7 +175,7 @@ public final class ClassInfo {
 	 */
 	public List<ClassInfo> getDeclaredInterfaces() {
 		if (declaredInterfaces == null) {
-			Class<?>[] ii = c.getInterfaces();
+			Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
 			List<ClassInfo> l = new ArrayList<>(ii.length);
 			for (Class<?> i : ii)
 				l.add(of(i));
@@ -290,7 +290,7 @@ public final class ClassInfo {
 	 */
 	public List<MethodInfo> getPublicMethods() {
 		if (publicMethods == null) {
-			Method[] mm = c.getMethods();
+			Method[] mm = c == null ? new Method[0] : c.getMethods();
 			List<MethodInfo> l = new ArrayList<>(mm.length);
 			for (Method m : mm)
 				if (m.getDeclaringClass() != Object.class)
@@ -310,7 +310,7 @@ public final class ClassInfo {
 	 */
 	public List<MethodInfo> getDeclaredMethods() {
 		if (declaredMethods == null) {
-			Method[] mm = c.getDeclaredMethods();
+			Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
 			List<MethodInfo> l = new ArrayList<>(mm.length);
 			for (Method m : mm)
 				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
@@ -384,12 +384,13 @@ public final class ClassInfo {
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
 	public MethodInfo getFromStringMethod() {
-		for (MethodInfo m : getPublicMethods())
-			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED)
-					&& m.hasReturnType(c)
-					&& m.hasArgs(String.class)
-					&& isOneOf(m.getName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
-				return m;
+		if (c != null)
+			for (MethodInfo m : getPublicMethods())
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED)
+						&& m.hasReturnType(c)
+						&& m.hasArgs(String.class)
+						&& isOneOf(m.getName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
+					return m;
 		return null;
 	}
 
@@ -408,11 +409,13 @@ public final class ClassInfo {
 	 * @return The static method, or <jk>null</jk> if it couldn't be found.
 	 */
 	public MethodInfo getStaticCreateMethod(Class<?> ic) {
-		for (MethodInfo m : getPublicMethods()) {
-			if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasArgs(ic)) {
-				String n = m.getName();
-				if (isOneOf(n, "create","from") || (n.startsWith("from") && n.substring(4).equals(ic.getSimpleName()))) {
-					return m;
+		if (c != null) {
+			for (MethodInfo m : getPublicMethods()) {
+				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasArgs(ic)) {
+					String n = m.getName();
+					if (isOneOf(n, "create","from") || (n.startsWith("from") && n.substring(4).equals(ic.getSimpleName()))) {
+						return m;
+					}
 				}
 			}
 		}
@@ -454,7 +457,7 @@ public final class ClassInfo {
 	 */
 	public List<ConstructorInfo> getPublicConstructors() {
 		if (publicConstructors == null) {
-			Constructor<?>[] cc = c.getConstructors();
+			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
 			List<ConstructorInfo> l = new ArrayList<>(cc.length);
 			for (Constructor<?> ccc : cc)
 				l.add(ConstructorInfo.of(this, ccc));
@@ -471,7 +474,7 @@ public final class ClassInfo {
 	 */
 	public List<ConstructorInfo> getDeclaredConstructors() {
 		if (declaredConstructors == null) {
-			Constructor<?>[] cc = c.getDeclaredConstructors();
+			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
 			List<ConstructorInfo> l = new ArrayList<>(cc.length);
 			for (Constructor<?> ccc : cc)
 				l.add(ConstructorInfo.of(this, ccc));
@@ -610,7 +613,7 @@ public final class ClassInfo {
 	 * 	All public fields on this class.
 	 * 	<br>Results are in alphabetical order.
 	 */
-	public List<FieldInfo> getPublicField() {
+	public List<FieldInfo> getPublicFields() {
 		if (publicFields == null) {
 			Map<String,FieldInfo> m = new LinkedHashMap<>();
 			for (ClassInfo c : getParents())
@@ -629,9 +632,9 @@ public final class ClassInfo {
 	 * 	All declared fields on this class.
 	 * 	<br>Results are in alphabetical order.
 	 */
-	public List<FieldInfo> getDeclaredField() {
+	public List<FieldInfo> getDeclaredFields() {
 		if (declaredFields == null) {
-			Field[] ff = c.getDeclaredFields();
+			Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
 			List<FieldInfo> l = new ArrayList<>(ff.length);
 			for (Field f : ff)
 				if (! "$jacocoData".equals(f.getName()))
@@ -677,12 +680,12 @@ public final class ClassInfo {
 	}
 
 	private List<FieldInfo> appendDeclaredFields(List<FieldInfo> l) {
-		l.addAll(getDeclaredField());
+		l.addAll(getDeclaredFields());
 		return l;
 	}
 
 	private Map<String,FieldInfo> appendDeclaredPublicFields(Map<String,FieldInfo> m) {
-		for (FieldInfo f : getDeclaredField()) {
+		for (FieldInfo f : getDeclaredFields()) {
 			String fn = f.getName();
 			if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
 					m.put(f.getName(), f);
@@ -760,10 +763,8 @@ public final class ClassInfo {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <T extends Annotation> T getPackageAnnotation(Class<T> a) {
-		Package p = c.getPackage();
-		if (p != null)
-			return p.getAnnotation(a);
-		return null;
+		Package p = c == null ? null : c.getPackage();
+		return (p == null ? null : p.getAnnotation(a));
 	}
 
 	/**
@@ -862,8 +863,7 @@ public final class ClassInfo {
 			addIfNotNull(l, ci.getDeclaredAnnotation(a));
 		for (ClassInfo ci : getInterfaces())
 			addIfNotNull(l, ci.getDeclaredAnnotation(a));
-		if (hasPackage())
-			addIfNotNull(l, getPackage().getAnnotation(a));
+		addIfNotNull(l, getPackageAnnotation(a));
 		return l;
 	}
 
@@ -885,8 +885,7 @@ public final class ClassInfo {
 	 * @return The same list.
 	 */
 	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
-		if (hasPackage())
-			addIfNotNull(l, getPackage().getAnnotation(a));
+		addIfNotNull(l, getPackageAnnotation(a));
 		for (ClassInfo ci : getInterfacesParentFirst())
 			addIfNotNull(l, ci.getDeclaredAnnotation(a));
 		for (ClassInfo ci : getParentsParentFirst())
@@ -947,32 +946,32 @@ public final class ClassInfo {
 	}
 
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
-		if (c != null) {
-			T t2 = getDeclaredAnnotation(a);
+		T t2 = getDeclaredAnnotation(a);
+		if (t2 != null)
+			return t2;
+
+		ClassInfo sci = getParent();
+		if (sci != null) {
+			t2 = sci.getAnnotation(a);
 			if (t2 != null)
 				return t2;
-
-			ClassInfo sci = getParent();
-			if (sci != null) {
-				t2 = sci.getAnnotation(a);
-				if (t2 != null)
-					return t2;
-			}
-
-			for (ClassInfo c2 : getInterfaces()) {
-				t2 = c2.getAnnotation(a);
-				if (t2 != null)
-					return t2;
-			}
 		}
+
+		for (ClassInfo c2 : getInterfaces()) {
+			t2 = c2.getAnnotation(a);
+			if (t2 != null)
+				return t2;
+		}
+
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T findDeclaredAnnotation(Class<T> a) {
-		for (Annotation a2 : c.getDeclaredAnnotations())
-			if (a2.annotationType() == a)
-				return (T)a2;
+		if (c != null)
+			for (Annotation a2 : c.getDeclaredAnnotations())
+				if (a2.annotationType() == a)
+					return (T)a2;
 		return null;
 	}
 
@@ -1025,6 +1024,14 @@ public final class ClassInfo {
 					if (isStatic())
 						return false;
 					break;
+				case MEMBER:
+					if (isNotMemberClass())
+						return false;
+					break;
+				case NOT_MEMBER:
+					if (isMemberClass())
+						return false;
+					break;
 				case ABSTRACT:
 					if (isNotAbstract())
 						return false;
@@ -1033,12 +1040,16 @@ public final class ClassInfo {
 					if (isAbstract())
 						return false;
 					break;
-				case HAS_ARGS:
-				case HAS_NO_ARGS:
-				case TRANSIENT:
-				case NOT_TRANSIENT:
-				default:
+				case INTERFACE:
+					if (isClass())
+						return false;
 					break;
+				case CLASS:
+					if (isInterface())
+						return false;
+					break;
+				default:
+					throw new RuntimeException("Invalid flag for class: " + f);
 
 			}
 		}
@@ -1078,6 +1089,14 @@ public final class ClassInfo {
 					if (isNotStatic())
 						return true;
 					break;
+				case MEMBER:
+					if (isMemberClass())
+						return true;
+					break;
+				case NOT_MEMBER:
+					if (isNotMemberClass())
+						return true;
+					break;
 				case ABSTRACT:
 					if (isAbstract())
 						return true;
@@ -1086,13 +1105,16 @@ public final class ClassInfo {
 					if (isNotAbstract())
 						return true;
 					break;
-				case TRANSIENT:
-				case NOT_TRANSIENT:
-				case HAS_ARGS:
-				case HAS_NO_ARGS:
-				default:
+				case INTERFACE:
+					if (isInterface())
+						return true;
 					break;
-
+				case CLASS:
+					if (isClass())
+						return true;
+					break;
+				default:
+					throw new RuntimeException("Invalid flag for class: " + f);
 			}
 		}
 		return false;
@@ -1104,7 +1126,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 */
 	public boolean isDeprecated() {
-		return c.isAnnotationPresent(Deprecated.class);
+		return c != null && c.isAnnotationPresent(Deprecated.class);
 	}
 
 	/**
@@ -1113,7 +1135,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
 	public boolean isNotDeprecated() {
-		return ! c.isAnnotationPresent(Deprecated.class);
+		return c != null && ! c.isAnnotationPresent(Deprecated.class);
 	}
 
 	/**
@@ -1122,7 +1144,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is public.
 	 */
 	public boolean isPublic() {
-		return Modifier.isPublic(c.getModifiers());
+		return c != null && Modifier.isPublic(c.getModifiers());
 	}
 
 	/**
@@ -1131,43 +1153,55 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is not public.
 	 */
 	public boolean isNotPublic() {
-		return ! Modifier.isPublic(c.getModifiers());
+		return c != null && ! Modifier.isPublic(c.getModifiers());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class is public.
 	 *
+	 * <p>
+	 * Note that interfaces are always reported as static, and the static keyword on a member interface is meaningless.
+	 *
 	 * @return <jk>true</jk> if this class is public.
 	 */
 	public boolean isStatic() {
-		return Modifier.isStatic(c.getModifiers());
+		return c != null && Modifier.isStatic(c.getModifiers());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class is not static.
 	 *
+	 * <p>
+	 * Note that interfaces are always reported as static, and the static keyword on a member interface is meaningless.
+	 *
 	 * @return <jk>true</jk> if this class is not static.
 	 */
 	public boolean isNotStatic() {
-		return ! Modifier.isStatic(c.getModifiers());
+		return c != null && ! Modifier.isStatic(c.getModifiers());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class is abstract.
 	 *
+	 * <p>
+	 * Note that interfaces are always reported as abstract.
+	 *
 	 * @return <jk>true</jk> if this class is abstract.
 	 */
 	public boolean isAbstract() {
-		return Modifier.isAbstract(c.getModifiers());
+		return c != null && Modifier.isAbstract(c.getModifiers());
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class is not abstract.
 	 *
+	 * <p>
+	 * Note that interfaces are always reported as abstract.
+	 *
 	 * @return <jk>true</jk> if this class is not abstract.
 	 */
 	public boolean isNotAbstract() {
-		return ! Modifier.isAbstract(c.getModifiers());
+		return c != null && ! Modifier.isAbstract(c.getModifiers());
 	}
 
 	/**
@@ -1176,7 +1210,16 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
 	public boolean isMemberClass() {
-		return c.isMemberClass();
+		return c != null && c.isMemberClass();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a member class.
+	 *
+	 * @return <jk>true</jk> if this class is a member class.
+	 */
+	public boolean isNotMemberClass() {
+		return c != null && ! c.isMemberClass();
 	}
 
 	/**
@@ -1185,7 +1228,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is a member class and not static.
 	 */
 	public boolean isNonStaticMemberClass() {
-		return c.isMemberClass() && ! isStatic();
+		return c != null && c.isMemberClass() && ! isStatic();
 	}
 
 	/**
@@ -1195,7 +1238,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this constructor.
 	 */
 	public boolean isVisible(Visibility v) {
-		return v.isVisible(c);
+		return c != null && v.isVisible(c);
 	}
 
 	/**
@@ -1204,7 +1247,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this is a primitive class.
 	 */
 	public boolean isPrimitive() {
-		return c.isPrimitive();
+		return c != null && c.isPrimitive();
 	}
 
 	/**
@@ -1213,8 +1256,137 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this is not a primitive class.
 	 */
 	public boolean isNotPrimitive() {
-		return ! c.isPrimitive();
+		return c != null && ! c.isPrimitive();
 	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is an interface.
+	 *
+	 * @return <jk>true</jk> if this class is an interface.
+	 */
+	public boolean isInterface() {
+		return c != null && c.isInterface();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is not an interface.
+	 *
+	 * @return <jk>true</jk> if this class is not an interface.
+	 */
+	public boolean isClass() {
+		return c != null && ! c.isInterface();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Primitive wrappers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if the {@link #getPrimitiveWrapper()} method returns a value.
+	 *
+	 * @return <jk>true</jk> if the {@link #getPrimitiveWrapper()} method returns a value.
+	 */
+	public boolean hasPrimitiveWrapper() {
+		return pmap1.containsKey(c);
+	}
+
+	/**
+	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
+	 * (e.g. <code>Integer.<jk>class</jk></code>).
+	 *
+	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
+	 */
+	public Class<?> getPrimitiveWrapper() {
+		return pmap1.get(c);
+	}
+
+	/**
+	 * If this class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>) returns it's
+	 * primitive class (e.g. <code>int.<jk>class</jk></code>).
+	 *
+	 * @return The primitive class, or <jk>null</jk> if class is not a primitive wrapper.
+	 */
+	public Class<?> getPrimitiveForWrapper() {
+		return pmap2.get(c);
+	}
+
+	/**
+	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
+	 * (e.g. <code>Integer.<jk>class</jk></code>).
+	 *
+	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
+	 */
+	public Class<?> getWrapperIfPrimitive() {
+		if (c != null && ! c.isPrimitive())
+			return c;
+		return pmap1.get(c);
+	}
+
+	/**
+	 * Same as {@link #getWrapperIfPrimitive()} but wraps it in a {@link ClassInfo}.
+	 *
+	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
+	 */
+	public ClassInfo getWrapperInfoIfPrimitive() {
+		if (c == null || ! c.isPrimitive())
+			return this;
+		return of(pmap1.get(c));
+	}
+
+	/**
+	 * Returns the default value for this primitive class.
+	 *
+	 * @return The default value, or <jk>null</jk> if this is not a primitive class.
+	 */
+	public Object getPrimitiveDefault() {
+		return primitiveDefaultMap.get(c);
+	}
+
+	private static final Map<Class<?>, Class<?>>
+		pmap1 = new HashMap<>(),
+		pmap2 = new HashMap<>();
+	static {
+		pmap1.put(boolean.class, Boolean.class);
+		pmap1.put(byte.class, Byte.class);
+		pmap1.put(short.class, Short.class);
+		pmap1.put(char.class, Character.class);
+		pmap1.put(int.class, Integer.class);
+		pmap1.put(long.class, Long.class);
+		pmap1.put(float.class, Float.class);
+		pmap1.put(double.class, Double.class);
+		pmap2.put(Boolean.class, boolean.class);
+		pmap2.put(Byte.class, byte.class);
+		pmap2.put(Short.class, short.class);
+		pmap2.put(Character.class, char.class);
+		pmap2.put(Integer.class, int.class);
+		pmap2.put(Long.class, long.class);
+		pmap2.put(Float.class, float.class);
+		pmap2.put(Double.class, double.class);
+	}
+
+	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
+		new AMap<Class<?>,Object>()
+			.append(Boolean.TYPE, false)
+			.append(Character.TYPE, (char)0)
+			.append(Short.TYPE, (short)0)
+			.append(Integer.TYPE, 0)
+			.append(Long.TYPE, 0l)
+			.append(Float.TYPE, 0f)
+			.append(Double.TYPE, 0d)
+			.append(Byte.TYPE, (byte)0)
+			.append(Boolean.class, false)
+			.append(Character.class, (char)0)
+			.append(Short.class, (short)0)
+			.append(Integer.class, 0)
+			.append(Long.class, 0l)
+			.append(Float.class, 0f)
+			.append(Double.class, 0d)
+			.append(Byte.class, (byte)0)
+	);
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Labels
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the underlying class name.
@@ -1222,7 +1394,7 @@ public final class ClassInfo {
 	 * @return The underlying class name.
 	 */
 	public String getName() {
-		return c.getName();
+		return c != null ? c.getName() : t.getTypeName();
 	}
 
 	/**
@@ -1282,131 +1454,11 @@ public final class ClassInfo {
 		return ClassUtils.getReadableClassName(c != null ? c.getName() : t.getTypeName());
 	}
 
-	/**
-	 * Returns the package of this class.
-	 *
-	 * @return The package of this class.
-	 */
-	private Package getPackage() {
-		return c.getPackage();
-	}
 
-	/**
-	 * Returns <jk>true</jk> if this class is not in the root package.
-	 *
-	 * @return <jk>true</jk> if this class is not in the root package.
-	 */
-	private boolean hasPackage() {
-		return c.getPackage() != null;
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Primitive wrappers.
+	// Hierarchy
 	//-----------------------------------------------------------------------------------------------------------------
-
-
-	private static final Map<Class<?>, Class<?>>
-		pmap1 = new HashMap<>(),
-		pmap2 = new HashMap<>();
-	static {
-		pmap1.put(boolean.class, Boolean.class);
-		pmap1.put(byte.class, Byte.class);
-		pmap1.put(short.class, Short.class);
-		pmap1.put(char.class, Character.class);
-		pmap1.put(int.class, Integer.class);
-		pmap1.put(long.class, Long.class);
-		pmap1.put(float.class, Float.class);
-		pmap1.put(double.class, Double.class);
-		pmap2.put(Boolean.class, boolean.class);
-		pmap2.put(Byte.class, byte.class);
-		pmap2.put(Short.class, short.class);
-		pmap2.put(Character.class, char.class);
-		pmap2.put(Integer.class, int.class);
-		pmap2.put(Long.class, long.class);
-		pmap2.put(Float.class, float.class);
-		pmap2.put(Double.class, double.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the {@link #getPrimitiveWrapper()} method returns a value.
-	 *
-	 * @return <jk>true</jk> if the {@link #getPrimitiveWrapper()} method returns a value.
-	 */
-	public boolean hasPrimitiveWrapper() {
-		return pmap1.containsKey(c);
-	}
-
-	/**
-	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
-	 * (e.g. <code>Integer.<jk>class</jk></code>).
-	 *
-	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
-	 */
-	public Class<?> getPrimitiveWrapper() {
-		return pmap1.get(c);
-	}
-
-	/**
-	 * If this class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>) returns it's
-	 * primitive class (e.g. <code>int.<jk>class</jk></code>).
-	 *
-	 * @return The primitive class, or <jk>null</jk> if class is not a primitive wrapper.
-	 */
-	public Class<?> getPrimitiveForWrapper() {
-		return pmap2.get(c);
-	}
-
-	/**
-	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
-	 * (e.g. <code>Integer.<jk>class</jk></code>).
-	 *
-	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
-	 */
-	public Class<?> getWrapperIfPrimitive() {
-		if (! c.isPrimitive())
-			return c;
-		return pmap1.get(c);
-	}
-
-	/**
-	 * Same as {@link #getWrapperIfPrimitive()} but wraps it in a {@link ClassInfo}.
-	 *
-	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
-	 */
-	public ClassInfo getWrapperInfoIfPrimitive() {
-		if (! c.isPrimitive())
-			return this;
-		return of(pmap1.get(c));
-	}
-
-	/**
-	 * Returns the default value for this primitive class.
-	 *
-	 * @return The default value, or <jk>null</jk> if this is not a primitive class.
-	 */
-	public Object getPrimitiveDefault() {
-		return primitiveDefaultMap.get(c);
-	}
-
-	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
-		new AMap<Class<?>,Object>()
-			.append(Boolean.TYPE, false)
-			.append(Character.TYPE, (char)0)
-			.append(Short.TYPE, (short)0)
-			.append(Integer.TYPE, 0)
-			.append(Long.TYPE, 0l)
-			.append(Float.TYPE, 0f)
-			.append(Double.TYPE, 0d)
-			.append(Byte.TYPE, (byte)0)
-			.append(Boolean.class, false)
-			.append(Character.class, (char)0)
-			.append(Short.class, (short)0)
-			.append(Integer.class, 0)
-			.append(Long.class, 0l)
-			.append(Float.class, 0f)
-			.append(Double.class, 0d)
-			.append(Byte.class, (byte)0)
-	);
 
 	/**
 	 * Returns <jk>true</jk> if this class is a parent of <code>child</code>.
@@ -1416,7 +1468,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is a parent of <code>child</code>.
 	 */
 	public boolean isParentOf(Class<?> child, boolean strict) {
-		return c.isAssignableFrom(child) && ((!strict) || ! c.equals(child));
+		return c != null && c.isAssignableFrom(child) && ((!strict) || ! c.equals(child));
 	}
 
 	/**
@@ -1449,7 +1501,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is a parent of <code>child</code>.
 	 */
 	public boolean isChildOf(Class<?> parent, boolean strict) {
-		return parent.isAssignableFrom(c) && ((!strict) || ! c.equals(parent));
+		return c != null && parent.isAssignableFrom(c) && ((!strict) || ! c.equals(parent));
 	}
 
 	/**
@@ -1494,8 +1546,30 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if the specified class is the same as this one.
 	 */
 	public boolean is(Class<?> c) {
-		return this.c.equals(c);
+		return this.c != null && this.c.equals(c);
 	}
+
+	/**
+	 * Returns the package of this class.
+	 *
+	 * @return The package of this class.
+	 */
+	public Package getPackage() {
+		return c == null ? null : c.getPackage();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is not in the root package.
+	 *
+	 * @return <jk>true</jk> if this class is not in the root package.
+	 */
+	public boolean hasPackage() {
+		return getPackage() != null;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Shortcut for calling {@link Class#newInstance()} on the underlying class.
@@ -1505,20 +1579,11 @@ public final class ClassInfo {
 	 * @throws InstantiationException
 	 */
 	public Object newInstance() throws InstantiationException, IllegalAccessException {
-		return c.newInstance();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is an interface.
-	 *
-	 * @return <jk>true</jk> if this class is an interface.
-	 */
-	public boolean isInterface() {
-		return c.isInterface();
+		return c == null ? null : c.newInstance();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Parameter types.
+	// Parameter types
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -1611,6 +1676,10 @@ public final class ClassInfo {
 		}
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override
 	public String toString() {
 		return t.toString();
@@ -1618,11 +1687,11 @@ public final class ClassInfo {
 
 	@Override
 	public int hashCode() {
-		return c.hashCode();
+		return t.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		return ((ClassInfo)o).c == this.c;
+		return ((ClassInfo)o).t == this.t;
 	}
 }

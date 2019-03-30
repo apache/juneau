@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.reflection.ClassInfo.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.apache.juneau.reflection.ClassFlags.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -26,6 +27,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.utils.*;
 import org.junit.*;
 
 public class ClassInfoTest {
@@ -81,6 +83,8 @@ public class ClassInfoTest {
 				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getLabel();
 			if (t instanceof A)
 				return "@A(" + ((A)t).value() + ")";
+			if (t instanceof PA)
+				return "@PA(" + ((PA)t).value() + ")";
 			if (t instanceof AnnotationInfo)
 				return apply(((AnnotationInfo<?>)t).getAnnotation());
 			return t.toString();
@@ -93,10 +97,16 @@ public class ClassInfoTest {
 
 	public class A1 {}
 	public class A2 extends Value<A1>{};
+	public Type aType;
+	{
+		List<?> l = new ArrayList<>();
+		aType = l.getClass().getTypeParameters()[0];
+	}
 
 	@Test
 	public void ofType() {
 		check("A1", of(A1.class));
+		check("E", of(aType));
 	}
 
 	@Test
@@ -142,6 +152,11 @@ public class ClassInfoTest {
 		check("BI1,BI2", of(BC1.class).getDeclaredInterfaces());
 		check("BI3", of(BC2.class).getDeclaredInterfaces());
 		check("", of(BC3.class).getDeclaredInterfaces());
+	}
+
+	@Test
+	public void getDeclaredInterfaces_onType() {
+		check("", of(aType).getDeclaredInterfaces());
 	}
 
 	@Test
@@ -215,6 +230,11 @@ public class ClassInfoTest {
 		check(null, of(BI1.class).getParent());
 	}
 
+	@Test
+	public void getParent_onType() {
+		check(null, of(aType).getParent());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -267,6 +287,11 @@ public class ClassInfoTest {
 	}
 
 	@Test
+	public void getPublicMethods_onType() throws Exception {
+		check("", of(aType).getPublicMethods());
+	}
+
+	@Test
 	public void getAllMethods() throws Exception {
 		ClassInfo cc3 = of(CC3.class);
 		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
@@ -305,6 +330,11 @@ public class ClassInfoTest {
 		ClassInfo ci2 = of(CI2.class);
 		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
 		check("CI2.i2a(),CI2.i2b()", ci2.getDeclaredMethods());
+	}
+
+	@Test
+	public void getDeclaredMethods_onType() throws Exception {
+		check("", of(aType).getDeclaredMethods());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -347,6 +377,11 @@ public class ClassInfoTest {
 		check(null, of(DA6.class).getFromStringMethod());
 		check(null, of(DA7.class).getFromStringMethod());
 		check(null, of(DA8.class).getFromStringMethod());
+	}
+
+	@Test
+	public void getFromStringMethod_onType() throws Exception {
+		check(null, of(aType).getFromStringMethod());
 	}
 
 	static class DBx {}
@@ -398,6 +433,11 @@ public class ClassInfoTest {
 		check(null, of(DB9.class).getStaticCreateMethod(DBx.class));
 		check(null, of(DB10.class).getStaticCreateMethod(DBx.class));
 		check(null, of(DB11.class).getStaticCreateMethod(DBx.class));
+	}
+
+	@Test
+	public void getStaticCreateMethod_onType() throws Exception {
+		check(null, of(aType).getStaticCreateMethod(DBx.class));
 	}
 
 	static class DCx {}
@@ -490,7 +530,36 @@ public class ClassInfoTest {
 	public void getPublicConstructors() {
 		ClassInfo e1 = of(E1.class);
 		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
+	}
+
+	@Test
+	public void getPublicConstructors_twice() {
+		ClassInfo e1 = of(E1.class);
 		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
+		check("E1(),E1(Writer),E1(String),E1(String,Writer)", e1.getPublicConstructors());
+	}
+
+	@Test
+	public void getPublicConstructors_onType() {
+		check("", of(aType).getPublicConstructors());
+	}
+
+	@Test
+	public void getDeclaredConstructors() {
+		ClassInfo e1 = of(E1.class);
+		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
+	}
+
+	@Test
+	public void getDeclaredConstructors_twice() {
+		ClassInfo e1 = of(E1.class);
+		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
+		check("E1(),E1(float),E1(int),E1(Writer),E1(String),E1(String,Writer)", e1.getDeclaredConstructors());
+	}
+
+	@Test
+	public void getDeclaredConstructors_onType() {
+		check("", of(aType).getDeclaredConstructors());
 	}
 
 	@Test
@@ -581,15 +650,37 @@ public class ClassInfoTest {
 	@Test
 	public void getPublicFields() {
 		ClassInfo f2 = of(F2.class);
-		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicField());
-		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicField());
+		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
+	}
+
+	@Test
+	public void getPublicFields_twice() {
+		ClassInfo f2 = of(F2.class);
+		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
+		check("F2.f1a,F1.f1b,F2.f2b", f2.getPublicFields());
+	}
+
+	@Test
+	public void getPublicFields_onType() {
+		check("", of(aType).getPublicFields());
 	}
 
 	@Test
 	public void getDeclaredFields() {
 		ClassInfo f2 = of(F2.class);
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredField());
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredField());
+		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
+	}
+
+	@Test
+	public void getDeclaredFields_twice() {
+		ClassInfo f2 = of(F2.class);
+		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
+		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getDeclaredFields());
+	}
+
+	@Test
+	public void getDeclaredFields_onType() {
+		check("", of(aType).getDeclaredFields());
 	}
 
 	@Test
@@ -603,6 +694,11 @@ public class ClassInfoTest {
 		ClassInfo f2 = of(F2.class);
 		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFields());
 		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFields());
+	}
+
+	@Test
+	public void getAllFields_onType() {
+		check("", of(aType).getAllFields());
 	}
 
 	@Test
@@ -637,6 +733,10 @@ public class ClassInfoTest {
 	@A(7)
 	static class G3 extends G2 {}
 
+	static class G4 extends G3 {}
+
+	static class G5 implements GI3 {}
+
 	@Test
 	public void getAnnotation() {
 		ClassInfo g3 = of(G3.class);
@@ -650,6 +750,22 @@ public class ClassInfoTest {
 		ClassInfo g3 = of(G3.class);
 		check("@A(7)", g3.getAnnotation(A.class));
 		check("@A(7)", g3.getAnnotation(A.class));
+	}
+
+	@Test
+	public void getAnnotation_onParent() {
+		ClassInfo g4 = of(G4.class);
+		check("@A(7)", g4.getAnnotation(A.class));
+		check(null, g4.getAnnotation(B.class));
+		check(null, g4.getAnnotation(null));
+	}
+
+	@Test
+	public void getAnnotation_onInterface() {
+		ClassInfo g5 = of(G5.class);
+		check("@A(3)", g5.getAnnotation(A.class));
+		check(null, g5.getAnnotation(B.class));
+		check(null, g5.getAnnotation(null));
 	}
 
 	@Test
@@ -676,19 +792,611 @@ public class ClassInfoTest {
 	public void getDeclaredAnnotation() {
 		ClassInfo g3 = of(G3.class);
 		check("@A(7)", g3.getDeclaredAnnotation(A.class));
+		check(null, g3.getDeclaredAnnotation(B.class));
 	}
 
 	@Test
-	public void getClassAnnotations() {
+	public void getDeclaredAnnotation_twice() {
+		ClassInfo g3 = of(G3.class);
+		check("@A(7)", g3.getDeclaredAnnotation(A.class));
+		check("@A(7)", g3.getDeclaredAnnotation(A.class));
+	}
+
+	@Test
+	public void getDeclaredAnnotation_onType() {
+		check(null, of(aType).getDeclaredAnnotation(A.class));
+	}
+
+	@Test
+	public void getDeclaredAnnotationInfo() {
+		ClassInfo g3 = of(G3.class);
+		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
+		check(null, g3.getDeclaredAnnotationInfo(B.class));
+	}
+
+	@Test
+	public void getDeclaredAnnotationInfo_twice() {
+		ClassInfo g3 = of(G3.class);
+		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
+		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
+	}
+
+	@Test
+	public void getAnnotationInfos() {
 		ClassInfo g3 = of(G3.class);
 		check("@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)", g3.getAnnotationInfos(A.class));
 	}
 
 	@Test
-	public void getClassAnnotationsParentFirst() {
+	public void getAnnotationInfosParentFirst() {
 		ClassInfo g3 = of(G3.class);
-		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationsParentFirst(A.class));
+		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationInfosParentFirst(A.class));
 	}
+
+	@Test
+	public void getPackageAnnotation() {
+		ClassInfo g3 = of(G3.class);
+		check("@PA(10)", g3.getPackageAnnotation(PA.class));
+	}
+
+	@Test
+	public void getPackageAnnotation_onType() {
+		check(null, of(aType).getPackageAnnotation(PA.class));
+	}
+
+	@Test
+	public void getPackageAnnotationInfo() {
+		ClassInfo g3 = of(G3.class);
+		check("@PA(10)", g3.getPackageAnnotationInfo(PA.class));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Characteristics
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class H_Public {}
+	static class H_Package{}
+	protected static class H_Protected{}
+	private static class H_Private{}
+	public class H_PublicMember {}
+	public abstract class H_AbstractPublic {}
+	@Deprecated public class H_PublicDeprecated {}
+
+	@Test
+	public void isDeprecated() {
+		assertFalse(of(H_Public.class).isDeprecated());
+		assertTrue(of(H_PublicDeprecated.class).isDeprecated());
+	}
+
+	@Test
+	public void isDeprecated_onType() {
+		assertFalse(of(aType).isDeprecated());
+	}
+
+	@Test
+	public void isNotDeprecated() {
+		assertTrue(of(H_Public.class).isNotDeprecated());
+		assertFalse(of(H_PublicDeprecated.class).isNotDeprecated());
+	}
+
+	@Test
+	public void isNotDeprecated_onType() {
+		assertFalse(of(aType).isNotDeprecated());
+	}
+
+	@Test
+	public void isPublic() {
+		assertTrue(of(H_Public.class).isPublic());
+		assertFalse(of(H_Protected.class).isPublic());
+		assertFalse(of(H_Package.class).isPublic());
+		assertFalse(of(H_Private.class).isPublic());
+	}
+
+	@Test
+	public void isPublic_onType() {
+		assertFalse(of(aType).isPublic());
+	}
+
+	@Test
+	public void isNotPublic() {
+		assertFalse(of(H_Public.class).isNotPublic());
+		assertTrue(of(H_Protected.class).isNotPublic());
+		assertTrue(of(H_Package.class).isNotPublic());
+		assertTrue(of(H_Private.class).isNotPublic());
+	}
+
+	@Test
+	public void isNotPublic_onType() {
+		assertFalse(of(aType).isNotPublic());
+	}
+
+	@Test
+	public void isStatic() {
+		assertTrue(of(H_Public.class).isStatic());
+		assertFalse(of(H_PublicMember.class).isStatic());
+	}
+
+	@Test
+	public void isStatic_onType() {
+		assertFalse(of(aType).isStatic());
+	}
+
+	@Test
+	public void isNotStatic() {
+		assertFalse(of(H_Public.class).isNotStatic());
+		assertTrue(of(H_PublicMember.class).isNotStatic());
+	}
+
+	@Test
+	public void isNotStatic_onType() {
+		assertFalse(of(aType).isNotStatic());
+	}
+
+	@Test
+	public void isAbstract() {
+		assertTrue(of(H_AbstractPublic.class).isAbstract());
+		assertFalse(of(H_Public.class).isAbstract());
+	}
+
+	@Test
+	public void isAbstract_onType() {
+		assertFalse(of(aType).isAbstract());
+	}
+
+	@Test
+	public void isNotAbstract() {
+		assertFalse(of(H_AbstractPublic.class).isNotAbstract());
+		assertTrue(of(H_Public.class).isNotAbstract());
+	}
+
+	@Test
+	public void isNotAbstract_onType() {
+		assertFalse(of(aType).isNotAbstract());
+	}
+
+	@Test
+	public void isMemberClass() {
+		assertTrue(of(H_Public.class).isMemberClass());
+		assertTrue(of(H_PublicMember.class).isMemberClass());
+		assertFalse(of(AClass.class).isMemberClass());
+		assertFalse(of(AInterface.class).isMemberClass());
+	}
+
+	@Test
+	public void isMemberClass_onType() {
+		assertFalse(of(aType).isMemberClass());
+	}
+
+	@Test
+	public void isNotMemberClass() {
+		assertFalse(of(H_Public.class).isNotMemberClass());
+		assertFalse(of(H_PublicMember.class).isNotMemberClass());
+		assertTrue(of(AClass.class).isNotMemberClass());
+		assertTrue(of(AInterface.class).isNotMemberClass());
+	}
+
+	@Test
+	public void isNotMemberClass_onType() {
+		assertFalse(of(aType).isNotMemberClass());
+	}
+
+	@Test
+	public void isNonStaticMemberClass() {
+		assertFalse(of(H_Public.class).isNonStaticMemberClass());
+		assertTrue(of(H_PublicMember.class).isNonStaticMemberClass());
+		assertFalse(of(AClass.class).isNonStaticMemberClass());
+		assertFalse(of(AInterface.class).isNonStaticMemberClass());
+	}
+
+	@Test
+	public void isNonStaticMemberClass_onType() {
+		assertFalse(of(aType).isNonStaticMemberClass());
+	}
+
+	@Test
+	public void isVisible_public() {
+		assertTrue(of(H_Public.class).isVisible(Visibility.PUBLIC));
+		assertFalse(of(H_Protected.class).isVisible(Visibility.PUBLIC));
+		assertFalse(of(H_Package.class).isVisible(Visibility.PUBLIC));
+		assertFalse(of(H_Private.class).isVisible(Visibility.PUBLIC));
+	}
+
+
+	@Test
+	public void isVisible_protected() {
+		assertTrue(of(H_Public.class).isVisible(Visibility.PROTECTED));
+		assertTrue(of(H_Protected.class).isVisible(Visibility.PROTECTED));
+		assertFalse(of(H_Package.class).isVisible(Visibility.PROTECTED));
+		assertFalse(of(H_Private.class).isVisible(Visibility.PROTECTED));
+	}
+
+	@Test
+	public void isVisible_package() {
+		assertTrue(of(H_Public.class).isVisible(Visibility.DEFAULT));
+		assertTrue(of(H_Protected.class).isVisible(Visibility.DEFAULT));
+		assertTrue(of(H_Package.class).isVisible(Visibility.DEFAULT));
+		assertFalse(of(H_Private.class).isVisible(Visibility.DEFAULT));
+	}
+
+	@Test
+	public void isVisible_private() {
+		assertTrue(of(H_Public.class).isVisible(Visibility.PRIVATE));
+		assertTrue(of(H_Protected.class).isVisible(Visibility.PRIVATE));
+		assertTrue(of(H_Package.class).isVisible(Visibility.PRIVATE));
+		assertTrue(of(H_Private.class).isVisible(Visibility.PRIVATE));
+	}
+
+	@Test
+	public void isVisible_onType() {
+		assertFalse(of(aType).isVisible(Visibility.PRIVATE));
+	}
+
+	@Test
+	public void isPrimitive() {
+		assertTrue(of(int.class).isPrimitive());
+		assertFalse(of(Integer.class).isPrimitive());
+	}
+
+	@Test
+	public void isPrimitive_onType() {
+		assertFalse(of(aType).isPrimitive());
+	}
+
+	@Test
+	public void isNotPrimitive() {
+		assertFalse(of(int.class).isNotPrimitive());
+		assertTrue(of(Integer.class).isNotPrimitive());
+	}
+
+	@Test
+	public void isNotPrimitive_onType() {
+		assertFalse(of(aType).isNotPrimitive());
+	}
+
+	@Test
+	public void isInterface() {
+		assertTrue(of(AInterface.class).isInterface());
+		assertFalse(of(AClass.class).isInterface());
+	}
+
+	@Test
+	public void isInterface_onType() {
+		assertFalse(of(aType).isInterface());
+	}
+
+	@Test
+	public void isClass() {
+		assertTrue(of(AClass.class).isClass());
+		assertFalse(of(AInterface.class).isClass());
+	}
+
+	@Test
+	public void isClass_onType() {
+		assertFalse(of(aType).isClass());
+	}
+
+	@Deprecated public abstract static class H2a {}
+	private interface H2b {}
+	@Deprecated class H2_Deprecated {}
+	class H2_NotDeprecated {}
+	public class H2_Public {}
+	class H2_NotPublic {}
+	public static class H2_Static {}
+	class H2_NotStatic {}
+	class H2_Member {}
+	static class H2_StaticMember {}
+	abstract class H2_Abstract {}
+	class H2_NotAbstract {}
+
+	@Test
+	public void isAll() {
+		assertTrue(of(H2a.class).isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ClassFlags.CLASS));
+		assertTrue(of(H2b.class).isAll(NOT_DEPRECATED, NOT_PUBLIC, STATIC, ABSTRACT, INTERFACE));
+	}
+
+	@Test
+	public void isAll_onType() {
+		assertTrue(of(aType).isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ClassFlags.CLASS));
+	}
+
+	@Test
+	public void isAll_deprecated() {
+		assertTrue(of(H2_Deprecated.class).isAll(DEPRECATED));
+		assertFalse(of(H2_NotDeprecated.class).isAll(DEPRECATED));
+	}
+
+	@Test
+	public void isAll_notDeprecated() {
+		assertFalse(of(H2_Deprecated.class).isAll(NOT_DEPRECATED));
+		assertTrue(of(H2_NotDeprecated.class).isAll(NOT_DEPRECATED));
+	}
+
+	@Test
+	public void isAll_public() {
+		assertTrue(of(H2_Public.class).isAll(PUBLIC));
+		assertFalse(of(H2_NotPublic.class).isAll(PUBLIC));
+	}
+
+	@Test
+	public void isAll_notPublic() {
+		assertFalse(of(H2_Public.class).isAll(NOT_PUBLIC));
+		assertTrue(of(H2_NotPublic.class).isAll(NOT_PUBLIC));
+	}
+
+	@Test
+	public void isAll_static() {
+		assertTrue(of(H2_Static.class).isAll(STATIC));
+		assertFalse(of(H2_NotStatic.class).isAll(STATIC));
+	}
+
+	@Test
+	public void isAll_notStatic() {
+		assertFalse(of(H2_Static.class).isAll(NOT_STATIC));
+		assertTrue(of(H2_NotStatic.class).isAll(NOT_STATIC));
+	}
+
+	@Test
+	public void isAll_member() {
+		assertTrue(of(H2_Member.class).isAll(MEMBER));
+		assertTrue(of(H2_StaticMember.class).isAll(MEMBER));
+		assertFalse(of(AClass.class).isAll(MEMBER));
+	}
+
+	@Test
+	public void isAll_notMember() {
+		assertFalse(of(H2_Member.class).isAll(NOT_MEMBER));
+		assertFalse(of(H2_StaticMember.class).isAll(NOT_MEMBER));
+		assertTrue(of(AClass.class).isAll(NOT_MEMBER));
+	}
+
+	@Test
+	public void isAll_abstract() {
+		assertTrue(of(H2_Abstract.class).isAll(ABSTRACT));
+		assertFalse(of(H2_NotAbstract.class).isAll(ABSTRACT));
+		assertTrue(of(AInterface.class).isAll(ABSTRACT));
+	}
+
+	@Test
+	public void isAll_notAbstract() {
+		assertFalse(of(H2_Abstract.class).isAll(NOT_ABSTRACT));
+		assertTrue(of(H2_NotAbstract.class).isAll(NOT_ABSTRACT));
+		assertFalse(of(AInterface.class).isAll(NOT_ABSTRACT));
+	}
+
+	@Test
+	public void isAll_interface() {
+		assertTrue(of(AInterface.class).isAll(INTERFACE));
+		assertFalse(of(AClass.class).isAll(INTERFACE));
+	}
+
+	@Test
+	public void isAll_class() {
+		assertFalse(of(AInterface.class).isAll(ClassFlags.CLASS));
+		assertTrue(of(AClass.class).isAll(ClassFlags.CLASS));
+	}
+
+	@Test
+	public void isAll_invalid() {
+		ClassInfo a = of(AClass.class);
+		try {
+			a.isAll(HAS_ARGS);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+		try {
+			a.isAll(HAS_NO_ARGS);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+		try {
+			a.isAll(TRANSIENT);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+		try {
+			a.isAll(NOT_TRANSIENT);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+	}
+
+	@Test
+	public void isAny() {
+		assertTrue(of(H2a.class).isAny(DEPRECATED));
+		assertTrue(of(H2a.class).isAny(PUBLIC));
+		assertTrue(of(H2a.class).isAny(STATIC));
+		assertTrue(of(H2a.class).isAny(MEMBER));
+		assertTrue(of(H2a.class).isAny(ABSTRACT));
+		assertTrue(of(H2a.class).isAny(ClassFlags.CLASS));
+		assertTrue(of(H2b.class).isAny(NOT_DEPRECATED));
+		assertTrue(of(H2b.class).isAny(NOT_PUBLIC));
+		assertTrue(of(H2b.class).isAny(STATIC));
+		assertTrue(of(H2b.class).isAny(ABSTRACT));
+		assertTrue(of(H2b.class).isAny(INTERFACE));
+	}
+
+	@Test
+	public void isAny_onType() {
+		assertFalse(of(aType).isAny());
+	}
+
+	@Test
+	public void isAny_deprecated() {
+		assertTrue(of(H2_Deprecated.class).isAny(DEPRECATED));
+		assertFalse(of(H2_NotDeprecated.class).isAny(DEPRECATED));
+	}
+
+	@Test
+	public void isAny_notDeprecated() {
+		assertFalse(of(H2_Deprecated.class).isAny(NOT_DEPRECATED));
+		assertTrue(of(H2_NotDeprecated.class).isAny(NOT_DEPRECATED));
+	}
+
+	@Test
+	public void isAny_public() {
+		assertTrue(of(H2_Public.class).isAny(PUBLIC));
+		assertFalse(of(H2_NotPublic.class).isAny(PUBLIC));
+	}
+
+	@Test
+	public void isAny_notPublic() {
+		assertFalse(of(H2_Public.class).isAny(NOT_PUBLIC));
+		assertTrue(of(H2_NotPublic.class).isAny(NOT_PUBLIC));
+	}
+
+	@Test
+	public void isAny_static() {
+		assertTrue(of(H2_Static.class).isAny(STATIC));
+		assertFalse(of(H2_NotStatic.class).isAny(STATIC));
+	}
+
+	@Test
+	public void isAny_notStatic() {
+		assertFalse(of(H2_Static.class).isAny(NOT_STATIC));
+		assertTrue(of(H2_NotStatic.class).isAny(NOT_STATIC));
+	}
+
+	@Test
+	public void isAny_member() {
+		assertTrue(of(H2_Member.class).isAny(MEMBER));
+		assertTrue(of(H2_StaticMember.class).isAny(MEMBER));
+		assertFalse(of(AClass.class).isAny(MEMBER));
+	}
+
+	@Test
+	public void isAny_notMember() {
+		assertFalse(of(H2_Member.class).isAny(NOT_MEMBER));
+		assertFalse(of(H2_StaticMember.class).isAny(NOT_MEMBER));
+		assertTrue(of(AClass.class).isAny(NOT_MEMBER));
+	}
+
+	@Test
+	public void isAny_abstract() {
+		assertTrue(of(H2_Abstract.class).isAny(ABSTRACT));
+		assertFalse(of(H2_NotAbstract.class).isAny(ABSTRACT));
+		assertTrue(of(AInterface.class).isAny(ABSTRACT));
+	}
+
+	@Test
+	public void isAny_notAbstract() {
+		assertFalse(of(H2_Abstract.class).isAny(NOT_ABSTRACT));
+		assertTrue(of(H2_NotAbstract.class).isAny(NOT_ABSTRACT));
+		assertFalse(of(AInterface.class).isAny(NOT_ABSTRACT));
+	}
+
+	@Test
+	public void isAny_interface() {
+		assertTrue(of(AInterface.class).isAny(INTERFACE));
+		assertFalse(of(AClass.class).isAny(INTERFACE));
+	}
+
+	@Test
+	public void isAny_class() {
+		assertFalse(of(AInterface.class).isAny(ClassFlags.CLASS));
+		assertTrue(of(AClass.class).isAny(ClassFlags.CLASS));
+	}
+
+	@Test
+	public void isAny_invalid() {
+		ClassInfo a = of(AClass.class);
+		try {
+			a.isAny(HAS_ARGS);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+		try {
+			a.isAny(HAS_NO_ARGS);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+		try {
+			a.isAny(TRANSIENT);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+		try {
+			a.isAny(NOT_TRANSIENT);
+			fail("Expected exception.");
+		} catch (Exception e) {}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Primitive wrappers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	List<Class<?>> primitives = AList.create(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
+	List<Class<?>> primitiveWrappers = AList.create(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
+	List<Object> primitiveDefaults = AList.create(false,(byte)0,(short)0,(char)0,0,0l,0f,0d);
+
+	@Test
+	public void hasPrimitiveWrapper() {
+		for (Class<?> c : primitives)
+			assertTrue(of(c).hasPrimitiveWrapper());
+		for (Class<?> c : primitiveWrappers)
+			assertFalse(of(c).hasPrimitiveWrapper());
+	}
+
+	@Test
+	public void hasPrimitiveWrapper_onType() {
+		assertFalse(of(aType).hasPrimitiveWrapper());
+	}
+
+	@Test
+	public void getPrimitiveWrapper() {
+		for (int i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitives.get(i)).getPrimitiveWrapper(), primitiveWrappers.get(i));
+		assertNull(of(String.class).getPrimitiveWrapper());
+	}
+
+	@Test
+	public void getPrimitiveWrapper_onType() {
+		assertNull(of(aType).getPrimitiveWrapper());
+	}
+
+	@Test
+	public void getPrimitiveForWrapper() {
+		for (int i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitiveWrappers.get(i)).getPrimitiveForWrapper(), primitives.get(i));
+		assertNull(of(String.class).getPrimitiveForWrapper());
+	}
+
+	@Test
+	public void getPrimitiveForWrapper_onType() {
+		assertNull(of(aType).getPrimitiveForWrapper());
+	}
+
+	@Test
+	public void getWrapperIfPrimitive() {
+		for (int i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitives.get(i)).getWrapperIfPrimitive(), primitiveWrappers.get(i));
+		assertEquals(of(String.class).getWrapperIfPrimitive(), String.class);
+	}
+
+	@Test
+	public void getWrapperIfPrimitive_onType() {
+		assertEquals(null, of(aType).getWrapperIfPrimitive());
+	}
+
+	@Test
+	public void getWrapperInfoIfPrimitive() {
+		for (int i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitives.get(i)).getWrapperInfoIfPrimitive().inner(), primitiveWrappers.get(i));
+		assertEquals(of(String.class).getWrapperInfoIfPrimitive().inner(), String.class);
+	}
+
+	@Test
+	public void getWrapperInfoIfPrimitive_onType() {
+		assertEquals(of(aType).getWrapperInfoIfPrimitive().innerType(), aType);
+	}
+
+	@Test
+	public void getPrimitiveDefault() {
+		for (int i = 0; i < primitives.size(); i++)
+			assertEquals(of(primitives.get(i)).getPrimitiveDefault(), primitiveDefaults.get(i));
+		assertNull(of(String.class).getPrimitiveDefault());
+	}
+
+	@Test
+	public void getPrimitiveDefault_onType() {
+		assertNull(of(aType).getPrimitiveDefault());
+	}
+
+
+
+
 
 
 

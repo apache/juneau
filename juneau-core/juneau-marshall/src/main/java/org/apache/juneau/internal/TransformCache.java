@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.reflection.ClassFlags.*;
 
 import java.util.concurrent.*;
 

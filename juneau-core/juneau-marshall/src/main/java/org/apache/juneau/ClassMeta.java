@@ -13,8 +13,8 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
-import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.reflection.ClassFlags.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -425,7 +425,7 @@ public final class ClassMeta<T> implements Type {
 				else if (c.isEnum())
 					cc = ENUM;
 				else if (c.equals(Class.class))
-					cc = CLASS;
+					cc = ClassCategory.CLASS;
 				else if (ci.isChildOf(Method.class))
 					cc = METHOD;
 				else if (ci.isChildOf(CharSequence.class)) {
@@ -533,7 +533,7 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			for (FieldInfo f : ci.getDeclaredField()) {
+			for (FieldInfo f : ci.getDeclaredFields()) {
 				if (f.isAnnotationPresent(Example.class)) {
 					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
@@ -1213,7 +1213,7 @@ public final class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class is {@link Class}.
 	 */
 	public boolean isClass() {
-		return cc == CLASS;
+		return cc == ClassCategory.CLASS;
 	}
 
 	/**

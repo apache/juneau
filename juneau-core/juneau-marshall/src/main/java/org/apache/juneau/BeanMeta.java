@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.reflection.ClassFlags.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 
 import java.beans.BeanInfo;
@@ -709,7 +709,7 @@ public class BeanMeta<T> {
 	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
 		List<Field> l = new LinkedList<>();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredField()) {
+			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
@@ -732,7 +732,7 @@ public class BeanMeta<T> {
 
 	static final Field findInnerBeanField(Class<?> c, Class<?> stopClass, String name) {
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredField()) {
+			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
