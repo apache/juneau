@@ -3249,7 +3249,7 @@ public final class RestContext extends BeanContext {
 							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(mi.inner().getGenericReturnType());
 							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
 							if (rim.getMethodsByPath().isEmpty())
-								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getReadableName());
+								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
 
 							sm = new RestJavaMethod(resource, mi.inner(), this) {
 

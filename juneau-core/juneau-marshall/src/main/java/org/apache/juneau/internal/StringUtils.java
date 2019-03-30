@@ -2242,7 +2242,7 @@ public final class StringUtils {
 		if (o == null)
 			return null;
 		if (o instanceof ClassMeta)
-			return ((ClassMeta<?>)o).getReadableName();
+			return ((ClassMeta<?>)o).getFullName();
 		if (BeanContext.DEFAULT == null)
 			return o.toString();
 		ClassMeta<?> cm = BeanContext.DEFAULT.getClassMetaForObject(o);

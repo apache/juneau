@@ -693,7 +693,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 				for (int i = 0; i < pt.length; i++) {
 					if (i > 0)
 						sb.append(',');
-					sb.append(mpi[i].getGenericParameterTypeInfo().getReadableName());
+					sb.append(mpi[i].getGenericParameterTypeInfo().getFullName());
 				}
 				sb.append(')');
 			}
@@ -894,7 +894,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 		for (int i = 0; i < mpis.length; i++) {
 			if (i > 0)
 				sb.append(",");
-			sb.append(mpis[i].getGenericParameterTypeInfo().getReadableName());
+			sb.append(mpis[i].getGenericParameterTypeInfo().getFullName());
 		}
 		sb.append(")");
 		return sb.toString();

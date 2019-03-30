@@ -96,16 +96,26 @@ public class ClassInfoTest {
 
 	public class A1 {}
 	public class A2 extends Value<A1>{};
-	public Type aType;
+	public class A3 extends Value<Map<String,List<String>>>{};
+	public class A4 extends Value<Map<String,String[][]>>{};
+	public Type aType, pType, pTypeDimensional, pTypeGeneric, pTypeGenericArg;
 	{
-		List<?> l = new ArrayList<>();
-		aType = l.getClass().getTypeParameters()[0];
+		aType = ((ParameterizedType)A2.class.getGenericSuperclass()).getActualTypeArguments()[0];
+		pType = ((ParameterizedType)A3.class.getGenericSuperclass()).getActualTypeArguments()[0];
+		pTypeDimensional = ((ParameterizedType)A4.class.getGenericSuperclass()).getActualTypeArguments()[0];
+		Map<String,String> m = new HashMap<>();
+		pTypeGeneric = m.getClass().getGenericSuperclass();
+		pTypeGenericArg = ((ParameterizedType)pTypeGeneric).getActualTypeArguments()[1];
 	}
 
 	@Test
 	public void ofType() {
 		check("A1", of(A1.class));
-		check("E", of(aType));
+		check("A1", of(aType));
+		check("Map", of(pType));
+		check("Map", of(pTypeDimensional));
+		check("AbstractMap", of(pTypeGeneric));
+		check("V", of(pTypeGenericArg));
 	}
 
 	@Test
@@ -231,7 +241,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParent_onType() {
-		check(null, of(aType).getParent());
+		check("Object", of(aType).getParent());
+		check(null, of(pType).getParent());
+		check(null, of(pTypeDimensional).getParent());
+		check("Object", of(pTypeGeneric).getParent());
+		check(null, of(pTypeGenericArg).getParent());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -540,7 +554,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPublicConstructors_onType() {
-		check("", of(aType).getPublicConstructors());
+		check("A1(ClassInfoTest)", of(aType).getPublicConstructors());
+		check("", of(pType).getPublicConstructors());
+		check("", of(pTypeDimensional).getPublicConstructors());
+		check("", of(pTypeGeneric).getPublicConstructors());
+		check("", of(pTypeGenericArg).getPublicConstructors());
 	}
 
 	@Test
@@ -558,7 +576,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getDeclaredConstructors_onType() {
-		check("", of(aType).getDeclaredConstructors());
+		check("A1(ClassInfoTest)", of(aType).getDeclaredConstructors());
+		check("", of(pType).getDeclaredConstructors());
+		check("", of(pTypeDimensional).getDeclaredConstructors());
+		check("AbstractMap()", of(pTypeGeneric).getDeclaredConstructors());
+		check("", of(pTypeGenericArg).getDeclaredConstructors());
 	}
 
 	@Test
@@ -679,7 +701,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getDeclaredFields_onType() {
-		check("", of(aType).getDeclaredFields());
+		check("A1.this$0", of(aType).getDeclaredFields());
+		check("", of(pType).getDeclaredFields());
+		check("", of(pTypeDimensional).getDeclaredFields());
+		check("AbstractMap.keySet,AbstractMap.values", of(pTypeGeneric).getDeclaredFields());
+		check("", of(pTypeGenericArg).getDeclaredFields());
 	}
 
 	@Test
@@ -697,7 +723,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAllFields_onType() {
-		check("", of(aType).getAllFields());
+		check("A1.this$0", of(aType).getAllFields());
+		check("", of(pType).getAllFields());
+		check("", of(pTypeDimensional).getAllFields());
+		check("AbstractMap.keySet,AbstractMap.values", of(pTypeGeneric).getAllFields());
+		check("", of(pTypeGenericArg).getAllFields());
 	}
 
 	@Test
@@ -840,7 +870,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPackageAnnotation_onType() {
-		check(null, of(aType).getPackageAnnotation(PA.class));
+		check("@PA(10)", of(aType).getPackageAnnotation(PA.class));
+		check(null, of(pType).getPackageAnnotation(PA.class));
+		check(null, of(pTypeDimensional).getPackageAnnotation(PA.class));
+		check(null, of(pTypeGeneric).getPackageAnnotation(PA.class));
+		check(null, of(pTypeGenericArg).getPackageAnnotation(PA.class));
 	}
 
 	@Test
@@ -880,7 +914,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isNotDeprecated_onType() {
-		assertFalse(of(aType).isNotDeprecated());
+		assertTrue(of(aType).isNotDeprecated());
+		assertTrue(of(pType).isNotDeprecated());
+		assertTrue(of(pTypeDimensional).isNotDeprecated());
+		assertTrue(of(pTypeGeneric).isNotDeprecated());
+		assertFalse(of(pTypeGenericArg).isNotDeprecated());
 	}
 
 	@Test
@@ -893,7 +931,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isPublic_onType() {
-		assertFalse(of(aType).isPublic());
+		assertTrue(of(aType).isPublic());
+		assertTrue(of(pType).isPublic());
+		assertTrue(of(pTypeDimensional).isPublic());
+		assertTrue(of(pTypeGeneric).isPublic());
+		assertFalse(of(pTypeGenericArg).isPublic());
 	}
 
 	@Test
@@ -928,7 +970,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isNotStatic_onType() {
-		assertFalse(of(aType).isNotStatic());
+		assertTrue(of(aType).isNotStatic());
+		assertTrue(of(pType).isNotStatic());
+		assertTrue(of(pTypeDimensional).isNotStatic());
+		assertTrue(of(pTypeGeneric).isNotStatic());
+		assertFalse(of(pTypeGenericArg).isNotStatic());
 	}
 
 	@Test
@@ -950,7 +996,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isNotAbstract_onType() {
-		assertFalse(of(aType).isNotAbstract());
+		assertTrue(of(aType).isNotAbstract());
+		assertFalse(of(pType).isNotAbstract());
+		assertFalse(of(pTypeDimensional).isNotAbstract());
+		assertFalse(of(pTypeGeneric).isNotAbstract());
+		assertFalse(of(pTypeGenericArg).isNotAbstract());
 	}
 
 	@Test
@@ -963,7 +1013,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isMemberClass_onType() {
-		assertFalse(of(aType).isMemberClass());
+		assertTrue(of(aType).isMemberClass());
+		assertFalse(of(pType).isMemberClass());
+		assertFalse(of(pTypeDimensional).isMemberClass());
+		assertFalse(of(pTypeGeneric).isMemberClass());
+		assertFalse(of(pTypeGenericArg).isMemberClass());
 	}
 
 	@Test
@@ -989,7 +1043,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isNonStaticMemberClass_onType() {
-		assertFalse(of(aType).isNonStaticMemberClass());
+		assertTrue(of(aType).isNonStaticMemberClass());
+		assertFalse(of(pType).isNonStaticMemberClass());
+		assertFalse(of(pTypeDimensional).isNonStaticMemberClass());
+		assertFalse(of(pTypeGeneric).isNonStaticMemberClass());
+		assertFalse(of(pTypeGenericArg).isNonStaticMemberClass());
 	}
 
 	@Test
@@ -1027,7 +1085,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isVisible_onType() {
-		assertFalse(of(aType).isVisible(Visibility.PRIVATE));
+		assertTrue(of(aType).isVisible(Visibility.PRIVATE));
+		assertTrue(of(pType).isVisible(Visibility.PRIVATE));
+		assertTrue(of(pTypeDimensional).isVisible(Visibility.PRIVATE));
+		assertTrue(of(pTypeGeneric).isVisible(Visibility.PRIVATE));
+		assertFalse(of(pTypeGenericArg).isVisible(Visibility.PRIVATE));
 	}
 
 	@Test
@@ -1049,7 +1111,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isNotPrimitive_onType() {
-		assertFalse(of(aType).isNotPrimitive());
+		assertTrue(of(aType).isNotPrimitive());
+		assertTrue(of(pType).isNotPrimitive());
+		assertTrue(of(pTypeDimensional).isNotPrimitive());
+		assertTrue(of(pTypeGeneric).isNotPrimitive());
+		assertFalse(of(pTypeGenericArg).isNotPrimitive());
 	}
 
 	@Test
@@ -1071,7 +1137,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void isClass_onType() {
-		assertFalse(of(aType).isClass());
+		assertTrue(of(aType).isClass());
+		assertFalse(of(pType).isClass());
+		assertFalse(of(pTypeDimensional).isClass());
+		assertTrue(of(pTypeGeneric).isClass());
+		assertFalse(of(pTypeGenericArg).isClass());
 	}
 
 	@Deprecated public abstract static class H2a {}
@@ -1095,7 +1165,10 @@ public class ClassInfoTest {
 
 	@Test
 	public void isAll_onType() {
-		assertTrue(of(aType).isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ClassFlags.CLASS));
+		assertTrue(of(aType).isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
+		assertFalse(of(pType).isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
+		assertFalse(of(pTypeDimensional).isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
+		assertFalse(of(pTypeGeneric).isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
 	}
 
 	@Test
@@ -1366,7 +1439,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getWrapperIfPrimitive_onType() {
-		assertEquals(null, of(aType).getWrapperIfPrimitive());
+		assertEquals("class org.apache.juneau.reflection.ClassInfoTest$A1", of(aType).getWrapperIfPrimitive().toString());
+		assertEquals("interface java.util.Map", of(pType).getWrapperIfPrimitive().toString());
+		assertEquals("interface java.util.Map", of(pTypeDimensional).getWrapperIfPrimitive().toString());
+		assertEquals("class java.util.AbstractMap", of(pTypeGeneric).getWrapperIfPrimitive().toString());
+		assertEquals(null, of(pTypeGenericArg).getWrapperIfPrimitive());
 	}
 
 	@Test
@@ -1393,60 +1470,226 @@ public class ClassInfoTest {
 		assertNull(of(aType).getPrimitiveDefault());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Labels
+	//-----------------------------------------------------------------------------------------------------------------
 
+	public class J1 {}
+	public static class J2 {}
 
-
-
-
-	//====================================================================================================
-	// getReadableClassName(Class)
-	// getReadableClassName(String)
-	//====================================================================================================
 	@Test
-	public void testGetReadableClassName() throws Exception {
-		assertEquals("java.lang.Object", of(Object.class).getReadableName());
-		assertEquals("java.lang.Object[]", of(Object[].class).getReadableName());
-		assertEquals("java.lang.Object[][]", of(Object[][].class).getReadableName());
+	public void getFullName_simple() {
+		assertEquals("org.apache.juneau.reflection.AClass", of(AClass.class).getFullName());
+	}
 
-		assertEquals("boolean", of(boolean.class).getReadableName());
-		assertEquals("boolean[]", of(boolean[].class).getReadableName());
-		assertEquals("boolean[][]", of(boolean[][].class).getReadableName());
+	@Test
+	public void getFullName_simpleTwice() {
+		ClassInfo ci = of(AClass.class);
+		assertEquals("org.apache.juneau.reflection.AClass", ci.getFullName());
+		assertEquals("org.apache.juneau.reflection.AClass", ci.getFullName());
+	}
 
-		assertEquals("byte", of(byte.class).getReadableName());
-		assertEquals("byte[]", of(byte[].class).getReadableName());
-		assertEquals("byte[][]", of(byte[][].class).getReadableName());
+	@Test
+	public void getFullName_simpleArray() {
+		assertEquals("org.apache.juneau.reflection.AClass[][]", of(AClass[][].class).getFullName());
+	}
 
-		assertEquals("char", of(char.class).getReadableName());
-		assertEquals("char[]", of(char[].class).getReadableName());
-		assertEquals("char[][]", of(char[][].class).getReadableName());
+	@Test
+	public void getFullName_inner() {
+		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J1", of(J1.class).getFullName());
+		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J2", of(J2.class).getFullName());
+	}
 
-		assertEquals("double", of(double.class).getReadableName());
-		assertEquals("double[]", of(double[].class).getReadableName());
-		assertEquals("double[][]", of(double[][].class).getReadableName());
+	@Test
+	public void getFullName_innerArray() {
+		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J1[][]", of(J1[][].class).getFullName());
+		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J2[][]", of(J2[][].class).getFullName());
+	}
 
-		assertEquals("float", of(float.class).getReadableName());
-		assertEquals("float[]", of(float[].class).getReadableName());
-		assertEquals("float[][]", of(float[][].class).getReadableName());
+	@Test
+	public void getFullName_primitive() {
+		assertEquals("int", of(int.class).getFullName());
+	}
 
-		assertEquals("int", of(int.class).getReadableName());
-		assertEquals("int[]", of(int[].class).getReadableName());
-		assertEquals("int[][]", of(int[][].class).getReadableName());
+	@Test
+	public void getFullName_primitiveArray() {
+		assertEquals("int[][]", of(int[][].class).getFullName());
+	}
 
-		assertEquals("long", of(long.class).getReadableName());
-		assertEquals("long[]", of(long[].class).getReadableName());
-		assertEquals("long[][]", of(long[][].class).getReadableName());
+	@Test
+	public void getFullName_simpleType() {
+		assertEquals("org.apache.juneau.reflection.ClassInfoTest$A1", of(aType).getFullName());
+	}
 
-		assertEquals("short", of(short.class).getReadableName());
-		assertEquals("short[]", of(short[].class).getReadableName());
-		assertEquals("short[][]", of(short[][].class).getReadableName());
+	@Test
+	public void getFullName_complexType() {
+		assertEquals("java.util.Map<java.lang.String,java.util.List<java.lang.String>>", of(pType).getFullName());
+	}
+
+	@Test
+	public void getFullName_dimensionalType() {
+		assertEquals("java.util.Map<java.lang.String,java.lang.String[][]>", of(pTypeDimensional).getFullName());
+	}
+
+	@Test
+	public void getFullName_genericType() {
+		assertEquals("java.util.AbstractMap<K,V>", of(pTypeGeneric).getFullName());
+	}
+
+	@Test
+	public void getFullName_genericTypeArg() {
+		assertEquals("V", of(pTypeGenericArg).getFullName());
+	}
+
+	@Test
+	public void getFullName_localClass() {
+		@SuppressWarnings("serial")
+		class LocalClass implements Serializable {};
+		assertEquals("org.apache.juneau.reflection.ClassInfoTest$1LocalClass", of(LocalClass.class).getFullName());
+	}
+
+	@Test
+	public void getShortName_simple() {
+		assertEquals("AClass", of(AClass.class).getShortName());
+	}
+
+	@Test
+	public void getShortName_simpleTwice() {
+		ClassInfo ci = of(AClass.class);
+		assertEquals("AClass", ci.getShortName());
+		assertEquals("AClass", ci.getShortName());
+	}
+
+	@Test
+	public void getShortName_simpleArray() {
+		assertEquals("AClass[][]", of(AClass[][].class).getShortName());
+	}
+
+	@Test
+	public void getShortName_inner() {
+		assertEquals("ClassInfoTest$J1", of(J1.class).getShortName());
+		assertEquals("ClassInfoTest$J2", of(J2.class).getShortName());
+	}
+
+	@Test
+	public void getShortName_innerArray() {
+		assertEquals("ClassInfoTest$J1[][]", of(J1[][].class).getShortName());
+		assertEquals("ClassInfoTest$J2[][]", of(J2[][].class).getShortName());
+	}
+
+	@Test
+	public void getShortName_primitive() {
+		assertEquals("int", of(int.class).getShortName());
+	}
+
+	@Test
+	public void getShortName_primitiveArray() {
+		assertEquals("int[][]", of(int[][].class).getShortName());
+	}
+
+	@Test
+	public void getShortName_simpleType() {
+		assertEquals("ClassInfoTest$A1", of(aType).getShortName());
+	}
+
+	@Test
+	public void getShortName_complexType() {
+		assertEquals("Map<String,List<String>>", of(pType).getShortName());
+	}
+
+	@Test
+	public void getShortName_dimensionalType() {
+		assertEquals("Map<String,String[][]>", of(pTypeDimensional).getShortName());
+	}
+
+	@Test
+	public void getShortName_genericType() {
+		assertEquals("AbstractMap<K,V>", of(pTypeGeneric).getShortName());
+	}
+
+	@Test
+	public void getShortName_genericTypeArg() {
+		assertEquals("V", of(pTypeGenericArg).getShortName());
+	}
+
+	@Test
+	public void getShortName_localClass() {
+		@SuppressWarnings("serial")
+		class LocalClass implements Serializable {};
+		assertEquals("ClassInfoTest$LocalClass", of(LocalClass.class).getShortName());
 	}
 
 
+	@Test
+	public void getSimpleName_simple() {
+		assertEquals("AClass", of(AClass.class).getSimpleName());
+	}
 
+	@Test
+	public void getSimpleName_simpleTwice() {
+		ClassInfo ci = of(AClass.class);
+		assertEquals("AClass", ci.getSimpleName());
+		assertEquals("AClass", ci.getSimpleName());
+	}
 
+	@Test
+	public void getSimpleName_simpleArray() {
+		assertEquals("AClass[][]", of(AClass[][].class).getSimpleName());
+	}
 
+	@Test
+	public void getSimpleName_inner() {
+		assertEquals("J1", of(J1.class).getSimpleName());
+		assertEquals("J2", of(J2.class).getSimpleName());
+	}
 
+	@Test
+	public void getSimpleName_innerArray() {
+		assertEquals("J1[][]", of(J1[][].class).getSimpleName());
+		assertEquals("J2[][]", of(J2[][].class).getSimpleName());
+	}
 
+	@Test
+	public void getSimpleName_primitive() {
+		assertEquals("int", of(int.class).getSimpleName());
+	}
+
+	@Test
+	public void getSimpleName_primitiveArray() {
+		assertEquals("int[][]", of(int[][].class).getSimpleName());
+	}
+
+	@Test
+	public void getSimpleName_simpleType() {
+		assertEquals("A1", of(aType).getSimpleName());
+	}
+
+	@Test
+	public void getSimpleName_complexType() {
+		assertEquals("Map", of(pType).getSimpleName());
+	}
+
+	@Test
+	public void getSimpleName_dimensionalType() {
+		assertEquals("Map", of(pTypeDimensional).getSimpleName());
+	}
+
+	@Test
+	public void getSimpleName_genericType() {
+		assertEquals("AbstractMap", of(pTypeGeneric).getSimpleName());
+	}
+
+	@Test
+	public void getSimpleName_genericTypeArg() {
+		assertEquals("V", of(pTypeGenericArg).getSimpleName());
+	}
+
+	@Test
+	public void getSimpleName_localClass() {
+		@SuppressWarnings("serial")
+		class LocalClass implements Serializable {};
+		assertEquals("LocalClass", of(LocalClass.class).getSimpleName());
+	}
 
 	//====================================================================================================
 	// isParentClass(Class, Class)
@@ -1489,14 +1732,6 @@ public class ClassInfoTest {
 	// getSimpleName()
 	//====================================================================================================
 
-	@Test
-	public void getShortName() throws Exception {
-		assertEquals("ClassInfoTest.Gx1", of(Gx1.class).getShortName());
-		assertEquals("ClassInfoTest.Gx2", of(Gx2.class).getShortName());
-	}
-
-	public class Gx1 {}
-	public static class Gx2 {}
 
 
 }

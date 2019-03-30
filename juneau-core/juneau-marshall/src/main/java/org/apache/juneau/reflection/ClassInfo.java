@@ -57,12 +57,15 @@ public final class ClassInfo {
 
 	private final Type t;
 	private final Class<?> c;
+	private final boolean isParameterizedType;
 	private List<ClassInfo> interfaces, declaredInterfaces, parents, allParents;
 	private List<MethodInfo> publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
 	private List<ConstructorInfo> publicConstructors, declaredConstructors;
 	private List<FieldInfo> publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private Map<Class<?>,Optional<Annotation>> annotationMap, declaredAnnotationMap;
-	private String readableName;
+	private String fullName, shortName;
+	private int dim = -1;
+	private ClassInfo componentType;
 
 	/**
 	 * Constructor.
@@ -72,6 +75,7 @@ public final class ClassInfo {
 	protected ClassInfo(Type t) {
 		this.t = t;
 		this.c = ClassUtils.toClass(t);
+		this.isParameterizedType = (t instanceof ParameterizedType);
 	}
 
 	/**
@@ -82,6 +86,7 @@ public final class ClassInfo {
 	protected ClassInfo(Class<?> c) {
 		this.t = c;
 		this.c = c;
+		this.isParameterizedType = false;
 	}
 
 	/**
@@ -1233,6 +1238,24 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this class is a local class.
+	 *
+	 * @return <jk>true</jk> if this class is a local class.
+	 */
+	public boolean isLocalClass() {
+		return c != null && c.isLocalClass();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is a local class.
+	 *
+	 * @return <jk>true</jk> if this class is a local class.
+	 */
+	public boolean isNotLocalClass() {
+		return c != null && ! c.isLocalClass();
+	}
+
+	/**
 	 * Identifies if the specified visibility matches this constructor.
 	 *
 	 * @param v The visibility to validate against.
@@ -1390,12 +1413,100 @@ public final class ClassInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the underlying class name.
+	 * Returns the full name of this class.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li><js>"com.foo.MyClass"<js> - Normal class
+	 * 	<li><js>"com.foo.MyClass[][]"<js> - Array.
+	 * 	<li><js>"com.foo.MyClass$InnerClass"<js> - Inner class.
+	 * 	<li><js>"com.foo.MyClass$InnerClass[][]"<js> - Inner class array.
+	 * 	<li><js>"int"<js> - Primitive class.
+	 * 	<li><js>"int[][]"<js> - Primitive class class.
+	 * 	<li><js>"java.util.Map&lt;java.lang.String,java.lang.Object&gt;"<js> - Parameterized type.
+	 * 	<li><js>"java.util.AbstractMap&lt;K,V&gt;"<js> - Parameterized generic type.
+	 * 	<li><js>"V"<js> - Parameterized generic type argument.
+	 * </ul>
 	 *
 	 * @return The underlying class name.
 	 */
-	public String getName() {
-		return c != null ? c.getName() : t.getTypeName();
+	public String getFullName() {
+		if (fullName == null) {
+			Class<?> ct = getComponentType().inner();
+			int dim = getDimensions();
+			if (ct != null && dim == 0 && ! isParameterizedType) {
+				fullName = ct.getName();
+				return fullName;
+			}
+			StringBuilder sb = new StringBuilder();
+			if (ct != null)
+				sb.append(ct.getName());
+			else {
+				sb.append(t.getTypeName());
+			}
+			if (isParameterizedType) {
+				ParameterizedType pt = (ParameterizedType)t;
+				sb.append("<");
+				boolean first = true;
+				for (Type t2 : pt.getActualTypeArguments()) {
+					if (! first)
+						sb.append(',');
+					first = false;
+					sb.append(of(t2).getFullName());
+				}
+				sb.append(">");
+			}
+			for (int i = 0; i < dim; i++)
+				sb.append('[').append(']');
+			fullName = sb.toString();
+		}
+		return fullName;
+	}
+
+	/**
+	 * Returns the short name of the underlying class.
+	 *
+	 * <p>
+	 * Similar to {@link #getSimpleName()} but also renders local or member class name prefixes.
+	 *
+	 * @return The short name of the underlying class.
+	 */
+	public String getShortName() {
+		if (shortName == null) {
+			Class<?> ct = getComponentType().inner();
+			int dim = getDimensions();
+			if (ct != null && dim == 0 && ! (isParameterizedType || isMemberClass() || c.isLocalClass())) {
+				shortName = ct.getSimpleName();
+				return shortName;
+			}
+			StringBuilder sb = new StringBuilder();
+			if (ct != null) {
+				if (ct.isLocalClass())
+					sb.append(of(ct.getEnclosingClass()).getSimpleName()).append('$').append(ct.getSimpleName());
+				else if (ct.isMemberClass())
+					sb.append(of(ct.getDeclaringClass()).getSimpleName()).append('$').append(ct.getSimpleName());
+				else
+					sb.append(ct.getSimpleName());
+			} else {
+				sb.append(t.getTypeName());
+			}
+			if (isParameterizedType) {
+				ParameterizedType pt = (ParameterizedType)t;
+				sb.append("<");
+				boolean first = true;
+				for (Type t2 : pt.getActualTypeArguments()) {
+					if (! first)
+						sb.append(',');
+					first = false;
+					sb.append(of(t2).getShortName());
+				}
+				sb.append(">");
+			}
+			for (int i = 0; i < dim; i++)
+				sb.append('[').append(']');
+			shortName = sb.toString();
+		}
+		return shortName;
 	}
 
 	/**
@@ -1409,80 +1520,6 @@ public final class ClassInfo {
 	 */
 	public String getSimpleName() {
 		return c != null ? c.getSimpleName() : t.getTypeName();
-	}
-
-	/**
-	 * Returns the short name of the underlying class.
-	 *
-	 * <p>
-	 * Similar to {@link #getSimpleName()} but also renders local or member class name prefixes.
-	 *
-	 * @return The short name of the underlying class.
-	 */
-	public String getShortName() {
-		if (t instanceof Class) {
-			if (c.isLocalClass())
-				return of(c.getEnclosingClass()).getShortName() + '.' + c.getSimpleName();
-			if (c.isMemberClass())
-				return of(c.getDeclaringClass()).getShortName() + '.' + c.getSimpleName();
-			return c.getSimpleName();
-		}
-		if (t instanceof ParameterizedType) {
-			StringBuilder sb = new StringBuilder();
-			ParameterizedType pt = (ParameterizedType)t;
-			sb.append(of(pt.getRawType()).getShortName());
-			sb.append("<");
-			boolean first = true;
-			for (Type t2 : pt.getActualTypeArguments()) {
-				if (! first)
-					sb.append(',');
-				first = false;
-				sb.append(of(t2).getShortName());
-			}
-			sb.append(">");
-			return sb.toString();
-		}
-		return null;
-
-	}
-
-	/**
-	 * Shortcut for calling <code><jsm>getReadableClassName</jsm>(c.getName())</code>
-	 *
-	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
-	 */
-	public String getReadableName() {
-		if (readableName == null) {
-			String s = (c != null ? c.getName() : t.getTypeName());
-			if (startsWith(s, '[')) {
-				int depth = 0;
-				for (int i = 0; i < s.length(); i++) {
-					if (s.charAt(i) == '[')
-						depth++;
-					else
-						break;
-				}
-				char type = s.charAt(depth);
-				String c;
-				switch (type) {
-					case 'Z': c = "boolean"; break;
-					case 'B': c = "byte"; break;
-					case 'C': c = "char"; break;
-					case 'D': c = "double"; break;
-					case 'F': c = "float"; break;
-					case 'I': c = "int"; break;
-					case 'J': c = "long"; break;
-					case 'S': c = "short"; break;
-					default: c = s.substring(depth+1, s.length()-1);
-				}
-				StringBuilder sb = new StringBuilder(c.length() + 2*depth).append(c);
-				for (int i = 0; i < depth; i++)
-					sb.append("[]");
-				s = sb.toString();
-			}
-			readableName = s;
-		}
-		return readableName;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1594,6 +1631,40 @@ public final class ClassInfo {
 	 */
 	public boolean hasPackage() {
 		return getPackage() != null;
+	}
+
+	/**
+	 * Returns the number of dimensions if this is an array type.
+	 *
+	 * @return The number of dimensions if this is an array type, or <code>0</code> if it is not.
+	 */
+	public int getDimensions() {
+		if (dim == -1) {
+			int d = 0;
+			Class<?> ct = c;
+			while (ct != null && ct.isArray()) {
+				d++;
+				ct = ct.getComponentType();
+			}
+			this.dim = d;
+			this.componentType = ct == c ? this : of(ct);
+		}
+		return dim;
+	}
+
+	/**
+	 * Returns the base component type of this class if it's an array.
+	 *
+	 * @return The base component type of this class if it's an array, or this object if it's not.
+	 */
+	public ClassInfo getComponentType() {
+		if (componentType == null) {
+			if (c == null)
+				componentType = this;
+			else
+				getDimensions();
+		}
+		return componentType;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

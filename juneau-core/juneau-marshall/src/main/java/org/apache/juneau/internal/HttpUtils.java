@@ -88,7 +88,7 @@ public class HttpUtils {
 			ClassInfo pti = getClassInfo(pt[i]);
 			if (i > 0)
 				sb.append(',');
-			sb.append(full ? pti.getReadableName() : pti.getShortName());
+			sb.append(full ? pti.getFullName() : pti.getShortName());
 		}
 		sb.append(')');
 		return sb.toString();

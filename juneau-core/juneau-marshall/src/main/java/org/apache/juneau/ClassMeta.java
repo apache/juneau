@@ -2010,8 +2010,8 @@ public final class ClassMeta<T> implements Type {
 	 *
 	 * @return The readable name for this class.
 	 */
-	public String getReadableName() {
-		return info.getReadableName();
+	public String getFullName() {
+		return info.getFullName();
 	}
 
 	/**

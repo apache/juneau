@@ -465,7 +465,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * <p>
 	 * Also has the following effects:
 	 * <ul>
-	 * 	<li><code>Class</code> object is converted to a readable name.  See {@link ClassInfo#getReadableName()}.
+	 * 	<li><code>Class</code> object is converted to a readable name.  See {@link ClassInfo#getFullName()}.
 	 * 	<li>Whitespace is trimmed if the trim-strings setting is enabled.
 	 * </ul>
 	 *
@@ -476,7 +476,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		if (o == null)
 			return null;
 		if (o.getClass() == Class.class)
-			return ClassInfo.of((Class<?>)o).getReadableName();
+			return ClassInfo.of((Class<?>)o).getFullName();
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
 		String s = o.toString();

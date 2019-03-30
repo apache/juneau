@@ -51,7 +51,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * <p>
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
 	 * <p>
-	 * The description is the result of calling {@link ClassMeta#getReadableName()}.
+	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 * <p>
 	 * The format is a comma-delimited list of any of the following values:
 	 *

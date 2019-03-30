@@ -59,7 +59,7 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 	 * <p>
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
 	 * <p>
-	 * The description is the result of calling {@link ClassMeta#getReadableName()}.
+	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

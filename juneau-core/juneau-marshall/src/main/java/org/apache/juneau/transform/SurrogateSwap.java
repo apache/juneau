@@ -91,7 +91,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
 			throw new ParseException("unswap() method not implement on surrogate class ''{1}''",
-				f.getClass().getName(), getNormalClass().getName());
+				f.getClass().getName(), getNormalClass().getFullName());
 		try {
 			return (T)unswapMethod.invoke(f);
 		} catch (Exception e) {

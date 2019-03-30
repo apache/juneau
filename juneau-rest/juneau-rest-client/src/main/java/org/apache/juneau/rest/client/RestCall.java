@@ -265,7 +265,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			if (isNotEmpty(s))
 				uriBuilder.setCustomQuery(s);
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, ClassInfo.of(value).getReadableName());
+			throw new RestCallException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -392,7 +392,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				body(new StringEntity(value.toString()));
 			} catch (UnsupportedEncodingException e) {}
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, ClassInfo.of(value).getReadableName());
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -520,7 +520,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		} else if (isBean(value)) {
 			return path(name, toBeanMap(value), serializer, schema);
 		} else if (value != null) {
-			throw new RestCallException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, ClassInfo.of(value).getReadableName());
+			throw new RestCallException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -706,7 +706,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		} else if (isBean(value)) {
 			return header(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, ClassInfo.of(value).getReadableName());
+			throw new RestCallException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -2484,5 +2484,9 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (StringUtils.isEmpty(def) && skipIfEmpty)
 			return false;
 		return true;
+	}
+
+	private static String className(Object o) {
+		return ClassInfo.of(o).getFullName();
 	}
 }

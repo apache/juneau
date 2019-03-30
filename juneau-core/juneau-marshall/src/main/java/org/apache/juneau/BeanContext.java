@@ -2697,7 +2697,7 @@ public class BeanContext extends Context {
 		String[] s = null;
 		ClassInfo ci = getClassInfo(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = includeProperties.get(c2.getName());
+			s = includeProperties.get(c2.getFullName());
 			if (s != null)
 				return s;
 			s = includeProperties.get(c2.getSimpleName());
@@ -2719,7 +2719,7 @@ public class BeanContext extends Context {
 		String[] s = null;
 		ClassInfo ci = getClassInfo(c);
 		for (ClassInfo c2 : ci.getAllParents()) {
-			s = excludeProperties.get(c2.getName());
+			s = excludeProperties.get(c2.getFullName());
 			if (s != null)
 				return s;
 			s = excludeProperties.get(c2.getSimpleName());
