@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.text.*;
 
 import org.apache.juneau.json.*;
+import org.apache.juneau.reflection.*;
 
 /**
  * General invalid conversion exception.
@@ -47,7 +46,7 @@ public final class InvalidDataConversionException extends FormattedRuntimeExcept
 	 */
 	public InvalidDataConversionException(Object value, Class<?> toType, Exception cause) {
 		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.",
-			getReadableClassNameForObject(value), getReadableClassName(toType), getValue(value));
+			ClassInfo.of(value).getReadableName(), ClassInfo.of(toType).getReadableName(), getValue(value));
 	}
 
 	/**
@@ -57,12 +56,12 @@ public final class InvalidDataConversionException extends FormattedRuntimeExcept
 	 */
 	public InvalidDataConversionException(Object value, ClassMeta<?> toType, Exception cause) {
 		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.",
-			getReadableClassNameForObject(value), toType.toString(), getValue(value));
+			ClassInfo.of(value).getReadableName(), toType.toString(), getValue(value));
 	}
 
 	private static String getValue(Object o) {
 		if (o instanceof Class)
-			return "'" + getReadableClassName((Class<?>)o) + "'";
+			return "'" + ClassInfo.of((Class<?>)o).getReadableName() + "'";
 		return SimpleJsonSerializer.DEFAULT == null ? "'" + o.toString() + "'" : SimpleJsonSerializer.DEFAULT.toString(o);
 	}
 }

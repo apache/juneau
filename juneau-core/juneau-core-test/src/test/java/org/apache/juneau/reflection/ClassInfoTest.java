@@ -16,7 +16,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.reflection.ClassInfo.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.apache.juneau.reflection.ClassFlags.*;
 
 import java.io.*;
@@ -1399,7 +1398,48 @@ public class ClassInfoTest {
 
 
 
+	//====================================================================================================
+	// getReadableClassName(Class)
+	// getReadableClassName(String)
+	//====================================================================================================
+	@Test
+	public void testGetReadableClassName() throws Exception {
+		assertEquals("java.lang.Object", of(Object.class).getReadableName());
+		assertEquals("java.lang.Object[]", of(Object[].class).getReadableName());
+		assertEquals("java.lang.Object[][]", of(Object[][].class).getReadableName());
 
+		assertEquals("boolean", of(boolean.class).getReadableName());
+		assertEquals("boolean[]", of(boolean[].class).getReadableName());
+		assertEquals("boolean[][]", of(boolean[][].class).getReadableName());
+
+		assertEquals("byte", of(byte.class).getReadableName());
+		assertEquals("byte[]", of(byte[].class).getReadableName());
+		assertEquals("byte[][]", of(byte[][].class).getReadableName());
+
+		assertEquals("char", of(char.class).getReadableName());
+		assertEquals("char[]", of(char[].class).getReadableName());
+		assertEquals("char[][]", of(char[][].class).getReadableName());
+
+		assertEquals("double", of(double.class).getReadableName());
+		assertEquals("double[]", of(double[].class).getReadableName());
+		assertEquals("double[][]", of(double[][].class).getReadableName());
+
+		assertEquals("float", of(float.class).getReadableName());
+		assertEquals("float[]", of(float[].class).getReadableName());
+		assertEquals("float[][]", of(float[][].class).getReadableName());
+
+		assertEquals("int", of(int.class).getReadableName());
+		assertEquals("int[]", of(int[].class).getReadableName());
+		assertEquals("int[][]", of(int[][].class).getReadableName());
+
+		assertEquals("long", of(long.class).getReadableName());
+		assertEquals("long[]", of(long[].class).getReadableName());
+		assertEquals("long[][]", of(long[][].class).getReadableName());
+
+		assertEquals("short", of(short.class).getReadableName());
+		assertEquals("short[]", of(short[].class).getReadableName());
+		assertEquals("short[][]", of(short[][].class).getReadableName());
+	}
 
 
 

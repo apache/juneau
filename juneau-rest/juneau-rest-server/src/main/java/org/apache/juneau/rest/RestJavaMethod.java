@@ -66,6 +66,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	private final Integer priority;
 	private final RestContext context;
 	final java.lang.reflect.Method method;
+	final MethodInfo info;
 	final PropertyStore propertyStore;
 	final SerializerGroup serializers;
 	final ParserGroup parsers;
@@ -93,6 +94,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		Builder b = new Builder(servlet, method, context);
 		this.context = context;
 		this.method = method;
+		this.info = MethodInfo.of(method);
 		this.httpMethod = b.httpMethod;
 		this.pathPattern = b.pathPattern;
 		this.methodParams = b.methodParams;
@@ -552,7 +554,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			} catch (Exception e) {
 				throw new BadRequest(e,
 					"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
-					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), method.getDeclaringClass().getName(), method.getName()
+					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), info.getDeclaringClass().getName(), info.getName()
 				);
 			}
 		}
@@ -591,7 +593,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		} catch (IllegalArgumentException e) {
 			throw new BadRequest(e,
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
-				method.toString(), getReadableClassNames(args)
+				info.toString(), info.getReadableName()
 			);
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.

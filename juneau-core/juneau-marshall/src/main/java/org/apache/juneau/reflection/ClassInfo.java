@@ -62,6 +62,7 @@ public final class ClassInfo {
 	private List<ConstructorInfo> publicConstructors, declaredConstructors;
 	private List<FieldInfo> publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private Map<Class<?>,Optional<Annotation>> annotationMap, declaredAnnotationMap;
+	private String readableName;
 
 	/**
 	 * Constructor.
@@ -1451,10 +1452,38 @@ public final class ClassInfo {
 	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
 	 */
 	public String getReadableName() {
-		return ClassUtils.getReadableClassName(c != null ? c.getName() : t.getTypeName());
+		if (readableName == null) {
+			String s = (c != null ? c.getName() : t.getTypeName());
+			if (startsWith(s, '[')) {
+				int depth = 0;
+				for (int i = 0; i < s.length(); i++) {
+					if (s.charAt(i) == '[')
+						depth++;
+					else
+						break;
+				}
+				char type = s.charAt(depth);
+				String c;
+				switch (type) {
+					case 'Z': c = "boolean"; break;
+					case 'B': c = "byte"; break;
+					case 'C': c = "char"; break;
+					case 'D': c = "double"; break;
+					case 'F': c = "float"; break;
+					case 'I': c = "int"; break;
+					case 'J': c = "long"; break;
+					case 'S': c = "short"; break;
+					default: c = s.substring(depth+1, s.length()-1);
+				}
+				StringBuilder sb = new StringBuilder(c.length() + 2*depth).append(c);
+				for (int i = 0; i < depth; i++)
+					sb.append("[]");
+				s = sb.toString();
+			}
+			readableName = s;
+		}
+		return readableName;
 	}
-
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Hierarchy

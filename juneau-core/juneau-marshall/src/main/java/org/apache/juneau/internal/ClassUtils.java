@@ -83,79 +83,8 @@ public final class ClassUtils {
 	public static ObjectList getReadableClassNames(Object[] o) {
 		ObjectList l = new ObjectList();
 		for (int i = 0; i < o.length; i++)
-			l.add(o[i] == null ? "null" : getReadableClassName(o[i].getClass()));
+			l.add(o[i] == null ? "null" : ClassInfo.of((o[i].getClass())).getReadableName());
 		return l;
-	}
-
-	/**
-	 * Shortcut for calling <code><jsm>getReadableClassName</jsm>(c.getName())</code>
-	 *
-	 * @param c The class.
-	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
-	 */
-	public static String getReadableClassName(Class<?> c) {
-		if (c == null)
-			return null;
-		return getReadableClassName(c.getName());
-	}
-
-	/**
-	 * Shortcut for calling <code><jsm>getReadableClassName</jsm>(c.getClass().getName())</code>
-	 *
-	 * @param o The object whose class we want to render.
-	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
-	 */
-	public static String getReadableClassNameForObject(Object o) {
-		if (o == null)
-			return null;
-		return getReadableClassName(o.getClass().getName());
-	}
-
-	/**
-	 * Converts the specified class name to a readable form when class name is a special construct like <js>"[[Z"</js>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"java.lang.Object"</js>);  <jc>// Returns "java.lang.Object"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"boolean"</js>);  <jc>// Returns "boolean"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"[Z"</js>);  <jc>// Returns "boolean[]"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"[[Z"</js>);  <jc>// Returns "boolean[][]"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"[Ljava.lang.Object;"</js>);  <jc>// Returns "java.lang.Object[]"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<jk>null</jk>);  <jc>// Returns null</jc>
-	 * </p>
-	 *
-	 * @param className The class name.
-	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
-	 */
-	public static String getReadableClassName(String className) {
-		if (className == null)
-			return null;
-		if (! StringUtils.startsWith(className, '['))
-			return className;
-		int depth = 0;
-		for (int i = 0; i < className.length(); i++) {
-			if (className.charAt(i) == '[')
-				depth++;
-			else
-				break;
-		}
-		char type = className.charAt(depth);
-		String c;
-		switch (type) {
-			case 'Z': c = "boolean"; break;
-			case 'B': c = "byte"; break;
-			case 'C': c = "char"; break;
-			case 'D': c = "double"; break;
-			case 'F': c = "float"; break;
-			case 'I': c = "int"; break;
-			case 'J': c = "long"; break;
-			case 'S': c = "short"; break;
-			default: c = className.substring(depth+1, className.length()-1);
-		}
-		StringBuilder sb = new StringBuilder(c.length() + 2*depth).append(c);
-		for (int i = 0; i < depth; i++)
-			sb.append("[]");
-		return sb.toString();
 	}
 
 	/**

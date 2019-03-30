@@ -21,8 +21,8 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflection.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.transform.*;
 
@@ -465,7 +465,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * <p>
 	 * Also has the following effects:
 	 * <ul>
-	 * 	<li><code>Class</code> object is converted to a readable name.  See {@link ClassUtils#getReadableClassName(Class)}.
+	 * 	<li><code>Class</code> object is converted to a readable name.  See {@link ClassInfo#getReadableName()}.
 	 * 	<li>Whitespace is trimmed if the trim-strings setting is enabled.
 	 * </ul>
 	 *
@@ -476,7 +476,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		if (o == null)
 			return null;
 		if (o.getClass() == Class.class)
-			return getReadableClassName((Class<?>)o);
+			return ClassInfo.of((Class<?>)o).getReadableName();
 		if (o.getClass().isEnum())
 			return getClassMetaForObject(o).toString(o);
 		String s = o.toString();

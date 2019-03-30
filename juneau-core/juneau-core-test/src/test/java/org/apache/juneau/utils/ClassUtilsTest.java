@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -20,64 +19,6 @@ import org.apache.juneau.internal.*;
 import org.junit.*;
 
 public class ClassUtilsTest {
-
-	//====================================================================================================
-	// getReadableClassName(Class)
-	// getReadableClassName(String)
-	//====================================================================================================
-	@Test
-	public void testGetReadableClassName() throws Exception {
-		assertEquals("java.lang.Object", getReadableClassName(Object.class));
-		assertEquals("java.lang.Object[]", getReadableClassName(Object[].class));
-		assertEquals("java.lang.Object[][]", getReadableClassName(Object[][].class));
-
-		assertEquals("boolean", getReadableClassName(boolean.class));
-		assertEquals("boolean[]", getReadableClassName(boolean[].class));
-		assertEquals("boolean[][]", getReadableClassName(boolean[][].class));
-
-		assertEquals("byte", getReadableClassName(byte.class));
-		assertEquals("byte[]", getReadableClassName(byte[].class));
-		assertEquals("byte[][]", getReadableClassName(byte[][].class));
-
-		assertEquals("char", getReadableClassName(char.class));
-		assertEquals("char[]", getReadableClassName(char[].class));
-		assertEquals("char[][]", getReadableClassName(char[][].class));
-
-		assertEquals("double", getReadableClassName(double.class));
-		assertEquals("double[]", getReadableClassName(double[].class));
-		assertEquals("double[][]", getReadableClassName(double[][].class));
-
-		assertEquals("float", getReadableClassName(float.class));
-		assertEquals("float[]", getReadableClassName(float[].class));
-		assertEquals("float[][]", getReadableClassName(float[][].class));
-
-		assertEquals("int", getReadableClassName(int.class));
-		assertEquals("int[]", getReadableClassName(int[].class));
-		assertEquals("int[][]", getReadableClassName(int[][].class));
-
-		assertEquals("long", getReadableClassName(long.class));
-		assertEquals("long[]", getReadableClassName(long[].class));
-		assertEquals("long[][]", getReadableClassName(long[][].class));
-
-		assertEquals("short", getReadableClassName(short.class));
-		assertEquals("short[]", getReadableClassName(short[].class));
-		assertEquals("short[][]", getReadableClassName(short[][].class));
-
-		assertNull(getReadableClassName((Class<?>)null));
-		assertNull(getReadableClassName((String)null));
-	}
-
-	//====================================================================================================
-	// getReadableClassNames(Object[])
-	//====================================================================================================
-	@Test
-	public void testGetReadableClassNames() throws Exception {
-		assertEquals("['java.lang.String','java.lang.Integer','java.lang.Boolean','null']", getReadableClassNames(new Object[]{"a",1,true,null}).toString());
-	}
-
-	public void getClassFromReadableName() throws Exception {
-		fail("Not implemented");
-	}
 
 	//====================================================================================================
 	// Fuzzy constructor args

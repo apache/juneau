@@ -689,10 +689,11 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 			Class<?>[] pt = m.getParameterTypes();
 			if (pt.length > 0) {
 				sb.append('(');
+				MethodParamInfo[] mpi = getParams();
 				for (int i = 0; i < pt.length; i++) {
 					if (i > 0)
 						sb.append(',');
-					sb.append(ClassUtils.getReadableClassName(pt[i]));
+					sb.append(mpi[i].getGenericParameterTypeInfo().getReadableName());
 				}
 				sb.append(')');
 			}
@@ -707,6 +708,15 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @return The parameter types on this method.
 	 */
 	public Class<?>[] getParameterTypes() {
+		return m.getParameterTypes();
+	}
+
+	/**
+	 * Returns the parameter types on this method.
+	 *
+	 * @return The parameter types on this method.
+	 */
+	public Class<?>[] getParameterTypeInfos() {
 		return m.getParameterTypes();
 	}
 
@@ -871,5 +881,22 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 */
 	public String getLabel() {
 		return ClassUtils.asString(m);
+	}
+
+	/**
+	 * Returns a readable representation of this method.
+	 *
+	 * @return A readable representation of this method.
+	 */
+	public Object getReadableName() {
+		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
+		MethodParamInfo[] mpis = getParams();
+		for (int i = 0; i < mpis.length; i++) {
+			if (i > 0)
+				sb.append(",");
+			sb.append(mpis[i].getGenericParameterTypeInfo().getReadableName());
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 }
