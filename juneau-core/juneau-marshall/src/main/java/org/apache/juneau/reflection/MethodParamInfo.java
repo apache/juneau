@@ -33,6 +33,10 @@ public final class MethodParamInfo {
 	private int index;
 	private Map<Class<?>,Optional<Annotation>> annotationMap = new ConcurrentHashMap<>();
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
@@ -92,16 +96,16 @@ public final class MethodParamInfo {
 	 * @return The class type of this parameter.
 	 */
 	public Class<?> getParameterType() {
-		return isConstructor ? constructorInfo.getParameterType(index) : methodInfo.getParameterType(index);
+		return isConstructor ? constructorInfo.getParameterType(index).inner() : methodInfo.getParameterType(index);
 	}
 
 	/**
 	 * Returns the generic class type of this parameter.
 	 *
-	 * @return The generic class type of htis parameter.
+	 * @return The generic class type of this parameter.
 	 */
 	public Type getGenericParameterType() {
-		return isConstructor ? constructorInfo.getGenericParameterType(index) : methodInfo.getGenericParameterType(index);
+		return isConstructor ? constructorInfo.getParameterType(index).innerType() : methodInfo.getGenericParameterType(index);
 	}
 
 	/**
@@ -110,7 +114,7 @@ public final class MethodParamInfo {
 	 * @return The generic class type of this parameter.
 	 */
 	public ClassInfo getGenericParameterTypeInfo() {
-		return isConstructor ? constructorInfo.getGenericParameterTypeInfo(index) : methodInfo.getGenericParameterTypeInfo(index);
+		return isConstructor ? constructorInfo.getParameterType(index) : methodInfo.getGenericParameterTypeInfo(index);
 	}
 
 	/**
@@ -166,7 +170,7 @@ public final class MethodParamInfo {
 			for (Annotation a2 : constructorInfo.getParameterAnnotations(index))
 				if (a.isInstance(a2))
 					return (T)a2;
-			return constructorInfo.getGenericParameterTypeInfo(index).resolved().getAnnotation(a);
+			return constructorInfo.getParameterType(index).resolved().getAnnotation(a);
 		}
 		for (Method m2 : methodInfo.getMatching())
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
@@ -231,7 +235,7 @@ public final class MethodParamInfo {
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		if (isConstructor) {
-			ClassInfo ci = constructorInfo.getGenericParameterTypeInfo(index).resolved();
+			ClassInfo ci = constructorInfo.getParameterType(index).resolved();
 			Annotation[] annotations = constructorInfo.getParameterAnnotations(index);
 			if (parentFirst) {
 				ci.appendAnnotationsParentFirst(l, a);

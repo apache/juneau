@@ -15,6 +15,7 @@ package org.apache.juneau.transform;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -198,10 +199,10 @@ public class BuilderSwap<T,B> {
 		if (builderClass == null) {
 			for (ConstructorInfo cc : pci.getPublicConstructors()) {
 				if (cc.isVisible(cVis) && cc.hasNumArgs(1)) {
-					Class<?>[] pt = cc.getParameterTypes();
-					if (getClassInfo(pt[0]).isChildOf(Builder.class)) {
+					List<ClassInfo> pt = cc.getParameterTypes();
+					if (pt.get(0).isChildOf(Builder.class)) {
 						pojoConstructor = cc;
-						builderClass = pt[0];
+						builderClass = pt.get(0).inner();
 					}
 				}
 			}

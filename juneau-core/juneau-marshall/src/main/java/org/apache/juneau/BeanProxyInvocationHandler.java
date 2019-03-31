@@ -47,7 +47,7 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 	 */
 	@Override /* InvocationHandler */
 	public Object invoke(Object proxy, Method method, Object[] args) {
-		MethodInfo mi = new MethodInfo(method);
+		MethodInfo mi = MethodInfo.of(method);
 		if (mi.hasName("equals") && mi.hasArgs(java.lang.Object.class)) {
 			Object arg = args[0];
 			if (arg == null)

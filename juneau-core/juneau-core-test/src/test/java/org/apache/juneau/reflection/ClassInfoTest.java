@@ -1294,7 +1294,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void isAny_onType() {
-		assertFalse(aTypeInfo.isAny());
+		assertFalse(aTypeInfo.isAny(new ClassFlags[0]));
 	}
 
 	@Test

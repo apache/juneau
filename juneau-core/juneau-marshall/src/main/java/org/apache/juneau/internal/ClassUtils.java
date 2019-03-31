@@ -105,6 +105,23 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified argument types are valid for the specified parameter types.
+	 *
+	 * @param paramTypes The parameters types specified on a method.
+	 * @param argTypes The class types of the arguments being passed to the method.
+	 * @return <jk>true</jk> if the arguments match the parameters.
+	 */
+	public static boolean argsMatch(List<ClassInfo> paramTypes, Class<?>[] argTypes) {
+		if (paramTypes.size() == argTypes.length) {
+			for (int i = 0; i < paramTypes.size(); i++)
+				if (! paramTypes.get(i).isParentOf(argTypes[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Returns a number representing the number of arguments that match the specified parameters.
 	 *
 	 * @param paramTypes The parameters types specified on a method.
@@ -117,6 +134,28 @@ public final class ClassUtils {
 			p = getClassInfo(p).getWrapperIfPrimitive();
 			for (Class<?> a : argTypes) {
 				if (getClassInfo(p).isParentOf(a)) {
+					matches++;
+					continue outer;
+				}
+			}
+			return -1;
+		}
+		return matches;
+	}
+
+	/**
+	 * Returns a number representing the number of arguments that match the specified parameters.
+	 *
+	 * @param paramTypes The parameters types specified on a method.
+	 * @param argTypes The class types of the arguments being passed to the method.
+	 * @return The number of matching arguments, or <code>-1</code> a parameter was found that isn't in the list of args.
+	 */
+	public static int fuzzyArgsMatch(List<ClassInfo> paramTypes, Class<?>... argTypes) {
+		int matches = 0;
+		outer: for (ClassInfo p : paramTypes) {
+			p = p.getWrapperInfoIfPrimitive();
+			for (Class<?> a : argTypes) {
+				if (p.isParentOf(a)) {
 					matches++;
 					continue outer;
 				}
@@ -258,6 +297,32 @@ public final class ClassUtils {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
 			ClassInfo pt = getClassInfo(paramTypes[i]).getWrapperInfoIfPrimitive();
+			for (int j = 0; j < args.length; j++) {
+				if (pt.isParentOf(args[j].getClass())) {
+					params[i] = args[j];
+					break;
+				}
+			}
+		}
+		return params;
+	}
+
+	/**
+	 * Matches arguments to a list of parameter types.
+	 *
+	 * <p>
+	 * Extra parameters are ignored.
+	 * <br>Missing parameters are left null.
+	 *
+	 * @param paramTypes The parameter types.
+	 * @param args The arguments to match to the parameter types.
+	 * @return
+	 * 	An array of parameters.
+	 */
+	public static Object[] getMatchingArgs(List<ClassInfo> paramTypes, Object... args) {
+		Object[] params = new Object[paramTypes.size()];
+		for (int i = 0; i < paramTypes.size(); i++) {
+			ClassInfo pt = paramTypes.get(i).getWrapperInfoIfPrimitive();
 			for (int j = 0; j < args.length; j++) {
 				if (pt.isParentOf(args[j].getClass())) {
 					params[i] = args[j];

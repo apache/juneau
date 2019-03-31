@@ -67,26 +67,20 @@ public final class ClassInfo {
 	private int dim = -1;
 	private ClassInfo componentType;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param t The class type.
-	 */
-	protected ClassInfo(Type t) {
-		this.t = t;
-		this.c = ClassUtils.toClass(t);
-		this.isParameterizedType = (t instanceof ParameterizedType);
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
 	 *
 	 * @param c The class type.
+	 * @param t The generic type (if parameterized type).
 	 */
-	protected ClassInfo(Class<?> c) {
-		this.t = c;
+	protected ClassInfo(Class<?> c, Type t) {
+		this.t = t;
 		this.c = c;
-		this.isParameterizedType = false;
+		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
 	}
 
 	/**
@@ -98,7 +92,7 @@ public final class ClassInfo {
 	public static ClassInfo of(Type t) {
 		if (t == null)
 			return null;
-		return new ClassInfo(t);
+		return new ClassInfo(ClassUtils.toClass(t), t);
 	}
 
 	/**
@@ -110,7 +104,18 @@ public final class ClassInfo {
 	public static ClassInfo of(Class<?> c) {
 		if (c == null)
 			return null;
-		return new ClassInfo(c);
+		return new ClassInfo(c, c);
+	}
+
+	/**
+	 * Returns a class info wrapper around the specified class type.
+	 *
+	 * @param c The class type.
+	 * @param t The generic type (if parameterized type).
+	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
+	 */
+	public static ClassInfo of(Class<?> c, Type t) {
+		return new ClassInfo(c, t);
 	}
 
 	/**
@@ -122,7 +127,7 @@ public final class ClassInfo {
 	public static ClassInfo of(Object o) {
 		if (o == null)
 			return null;
-		return new ClassInfo(o.getClass());
+		return new ClassInfo(o.getClass(), o.getClass());
 	}
 
 	/**
@@ -367,7 +372,6 @@ public final class ClassInfo {
 		return l;
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Special methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -557,9 +561,9 @@ public final class ClassInfo {
 
 		boolean isMemberClass = isNonStaticMemberClass();
 		for (ConstructorInfo n : getDeclaredConstructors()) {
-			Class<?>[] paramTypes = n.getParameterTypes();
+			List<ClassInfo> paramTypes = n.getParameterTypes();
 			if (isMemberClass)
-				paramTypes = Arrays.copyOfRange(paramTypes, 1, paramTypes.length);
+				paramTypes = paramTypes.subList(1, paramTypes.size());
 			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n.inner()))
 				return n;
 		}
@@ -1597,6 +1601,29 @@ public final class ClassInfo {
 	 */
 	public boolean is(Class<?> c) {
 		return this.c != null && this.c.equals(c);
+	}
+
+	/**
+	 * Checks for equality with the specified class.
+	 *
+	 * @param c The class to check equality with.
+	 * @return <jk>true</jk> if the specified class is the same as this one.
+	 */
+	public boolean is(ClassInfo c) {
+		return this.c != null && this.c.equals(c.inner());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is any of the specified types.
+	 *
+	 * @param types The types to check against.
+	 * @return <jk>true</jk> if this class is any of the specified types.
+	 */
+	public boolean isAny(Class<?>...types) {
+		for (Class<?> cc : types)
+			if (is(cc))
+				return true;
+		return false;
 	}
 
 	/**

@@ -14,6 +14,7 @@ package org.apache.juneau.reflection;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -27,14 +28,19 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 
 	private final ClassInfo declaringClass;
 	private final Constructor<?> c;
-	private MethodParamInfo[] params;
+	private List<MethodParamInfo> params;
+	private List<ClassInfo> paramTypes;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
 	 *
 	 * @param c The constructor being wrapped.
 	 */
-	public ConstructorInfo(Constructor<?> c) {
+	protected ConstructorInfo(Constructor<?> c) {
 		this(ClassInfo.of(c.getDeclaringClass()), c);
 	}
 
@@ -44,7 +50,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @param declaringClass The class that declares this method.
 	 * @param c The constructor being wrapped.
 	 */
-	public ConstructorInfo(ClassInfo declaringClass, Constructor<?> c) {
+	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> c) {
 		this.declaringClass = declaringClass;
 		this.c = c;
 	}
@@ -93,16 +99,21 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 		return declaringClass;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parameters
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns the parameters defined on this method.
 	 *
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
-	public MethodParamInfo[] getParams() {
+	public List<MethodParamInfo> getParams() {
 		if (params == null) {
-			params = new MethodParamInfo[c.getParameterCount()];
+			List<MethodParamInfo> l = new ArrayList<>(c.getParameterCount());
 			for (int i = 0; i < c.getParameterCount(); i++)
-				params[i] = new MethodParamInfo(this, i);
+				l.add(new MethodParamInfo(this, i));
+			params = Collections.unmodifiableList(l);
 		}
 		return params;
 	}
@@ -114,7 +125,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
 	public MethodParamInfo getParam(int index) {
-		return getParams()[index];
+		return getParams().get(index);
 	}
 
 	/**
@@ -122,17 +133,18 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 *
 	 * @return The parameter types on this constructor.
 	 */
-	public Class<?>[] getParameterTypes() {
-		return c.getParameterTypes();
-	}
-
-	/**
-	 * Returns the generic parameter types on this constructor.
-	 *
-	 * @return The generic parameter types on this constructor.
-	 */
-	public Type[] getGenericParameterTypes() {
-		return c.getGenericParameterTypes();
+	public List<ClassInfo> getParameterTypes() {
+		if (paramTypes == null) {
+			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
+			// always return an empty array.
+			Class<?>[] ptc = c.getParameterTypes();
+			Type[] ptt = c.getGenericParameterTypes();
+			List<ClassInfo> l = new ArrayList<>(ptc.length);
+			for (int i = 0; i < ptc.length; i++)
+				l.add(ClassInfo.of(ptc[i], ptt.length > i ? ptt[i] : ptc[i]));
+			paramTypes = Collections.unmodifiableList(l);
+		}
+		return paramTypes;
 	}
 
 	/**
@@ -141,29 +153,13 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @param index The parameter index.
 	 * @return The parameter type of the parameter at the specified index.
 	 */
-	public Class<?> getParameterType(int index) {
-		return getParameterTypes()[index];
+	public ClassInfo getParameterType(int index) {
+		return getParameterTypes().get(index);
 	}
 
-	/**
-	 * Returns the generic parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The generic parameter type of the parameter at the specified index.
-	 */
-	public Type getGenericParameterType(int index) {
-		return getGenericParameterTypes()[index];
-	}
-
-	/**
-	 * Returns the generic parameter type of the parameter at the specified index as a {@link ClassInfo} object.
-	 *
-	 * @param index The parameter index.
-	 * @return The generic parameter type of the parameter at the specified index.
-	 */
-	public ClassInfo getGenericParameterTypeInfo(int index) {
-		return ClassInfo.of(getGenericParameterType(index));
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the parameter annotations on this constructor.
@@ -241,15 +237,8 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 					if (isPublic())
 						return false;
 					break;
-				case STATIC:
-				case NOT_STATIC:
-				case ABSTRACT:
-				case NOT_ABSTRACT:
-				case TRANSIENT:
-				case NOT_TRANSIENT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for constructor: " + f);
 			}
 		}
 		return true;
@@ -288,15 +277,8 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 					if (isNotPublic())
 						return true;
 					break;
-				case STATIC:
-				case NOT_STATIC:
-				case ABSTRACT:
-				case NOT_ABSTRACT:
-				case TRANSIENT:
-				case NOT_TRANSIENT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for constructor: " + f);
 			}
 		}
 		return false;
@@ -309,10 +291,10 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has this arguments in the exact order.
 	 */
 	public boolean hasArgs(Class<?>...args) {
-		Class<?>[] pt = getParameterTypes();
-		if (pt.length == args.length) {
-			for (int i = 0; i < pt.length; i++)
-				if (! pt[i].equals(args[i]))
+		List<ClassInfo> pt = getParameterTypes();
+		if (pt.size() == args.length) {
+			for (int i = 0; i < pt.size(); i++)
+				if (! pt.get(i).inner().equals(args[i]))
 					return false;
 			return true;
 		}
@@ -325,7 +307,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has one or more arguments.
 	 */
 	public boolean hasArgs() {
-		return getParameterTypes().length > 0;
+		return ! getParameterTypes().isEmpty();
 	}
 
 	/**
@@ -334,7 +316,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has zero arguments.
 	 */
 	public boolean hasNoArgs() {
-		return getParameterTypes().length == 0;
+		return getParameterTypes().isEmpty();
 	}
 
 	/**
@@ -344,7 +326,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has this number of arguments.
 	 */
 	public boolean hasNumArgs(int number) {
-		return getParameterTypes().length == number;
+		return getParameterTypes().size() == number;
 	}
 
 	/**
@@ -467,10 +449,10 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	public int compareTo(ConstructorInfo o) {
 		int i = getName().compareTo(o.getName());
 		if (i == 0) {
-			i = getParameterTypes().length - o.getParameterTypes().length;
+			i = getParameterTypes().size() - o.getParameterTypes().size();
 			if (i == 0) {
-				for (int j = 0; j < getParameterTypes().length && i == 0; j++) {
-					i = getParameterTypes()[j].getName().compareTo(o.getParameterTypes()[j].getName());
+				for (int j = 0; j < getParameterTypes().size() && i == 0; j++) {
+					i = getParameterTypes().get(j).inner().getName().compareTo(o.getParameterTypes().get(j).inner().getName());
 				}
 			}
 		}

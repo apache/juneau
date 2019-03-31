@@ -27,13 +27,17 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	private final Field f;
 	private ClassInfo declaringClass, type;
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param f The field being wrapped.
 	 */
-	public FieldInfo(ClassInfo declaringClass, Field f) {
+	protected FieldInfo(ClassInfo declaringClass, Field f) {
 		this.declaringClass = declaringClass;
 		this.f = f;
 	}
@@ -146,11 +150,8 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 					if (isTransient())
 						return false;
 					break;
-				case ABSTRACT:
-				case NOT_ABSTRACT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for field: " + f);
 			}
 		}
 		return true;
@@ -197,13 +198,8 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 					if (isNotTransient())
 						return true;
 					break;
-				case HAS_ARGS:
-				case HAS_NO_ARGS:
-				case ABSTRACT:
-				case NOT_ABSTRACT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for field: " + f);
 			}
 		}
 		return false;

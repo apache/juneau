@@ -38,12 +38,16 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	private ClassInfo[] exceptionInfos;
 	private String signature;
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Constructor.
 	 *
 	 * @param m The method being wrapped.
 	 */
-	public MethodInfo(Method m) {
+	protected MethodInfo(Method m) {
 		this(null, m);
 	}
 
@@ -53,7 +57,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @param declaringClass The class that declares this method.
 	 * @param m The method being wrapped.
 	 */
-	public MethodInfo(ClassInfo declaringClass, Method m) {
+	protected MethodInfo(ClassInfo declaringClass, Method m) {
 		this.declaringClass = declaringClass;
 		this.m = m;
 	}
@@ -102,6 +106,11 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 			declaringClass = ClassInfo.of(m.getDeclaringClass());
 		return declaringClass;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Parent classes and interfaces.
+	//-----------------------------------------------------------------------------------------------------------------
+
 
 	/**
 	 * Returns the parameters defined on this method.
@@ -357,11 +366,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 					if (isAbstract())
 						return false;
 					break;
-				case TRANSIENT:
-				case NOT_TRANSIENT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for method: " + f);
 			}
 		}
 		return true;
@@ -416,11 +422,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 					if (isNotAbstract())
 						return true;
 					break;
-				case TRANSIENT:
-				case NOT_TRANSIENT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for method: " + f);
 			}
 		}
 		return false;

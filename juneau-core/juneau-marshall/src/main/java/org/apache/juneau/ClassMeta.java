@@ -573,18 +573,18 @@ public final class ClassMeta<T> implements Type {
 			// Find constructor(String) method if present.
 			for (ConstructorInfo cs : ci.getPublicConstructors()) {
 				if (cs.isPublic() && cs.isNotDeprecated()) {
-					Class<?>[] pt = cs.getParameterTypes();
-					if (pt.length == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
+					List<ClassInfo> pt = cs.getParameterTypes();
+					if (pt.size() == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
 						noArgConstructor = cs;
-					} else if (pt.length == (isMemberClass ? 2 : 1)) {
-						Class<?> arg = pt[(isMemberClass ? 1 : 0)];
-						if (arg == String.class)
+					} else if (pt.size() == (isMemberClass ? 2 : 1)) {
+						ClassInfo arg = pt.get(isMemberClass ? 1 : 0);
+						if (arg.is(String.class))
 							stringConstructor = cs;
-						else if (swapMethodType != null && swapMethodType.isAssignableFrom(arg))
+						else if (swapMethodType != null && arg.isChildOf(swapMethodType))
 							swapConstructor = (Constructor<T>)cs.inner();
-						else if (cc != NUMBER && (Number.class.isAssignableFrom(arg) || (arg.isPrimitive() && (arg == int.class || arg == short.class || arg == long.class || arg == float.class || arg == double.class)))) {
+						else if (cc != NUMBER && (arg.isChildOf(Number.class) || (arg.isPrimitive() && (arg.isAny(int.class, short.class, long.class, float.class, double.class))))) {
 							numberConstructor = cs;
-							numberConstructorType = getClassInfo(arg).getWrapperIfPrimitive();
+							numberConstructorType = arg.getWrapperIfPrimitive();
 						}
 					}
 				}
@@ -1846,7 +1846,7 @@ public final class ClassMeta<T> implements Type {
 	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		ConstructorInfo c = numberConstructor;
 		if (c != null) {
-			Object arg2 = session.convertToType(arg, numberConstructor.getParameterTypes()[0]);
+			Object arg2 = session.convertToType(arg, numberConstructor.getParameterTypes().get(0).inner());
 			if (isMemberClass)
 				return c.<T>invoke(outer, arg2);
 			return c.<T>invoke(arg2);
