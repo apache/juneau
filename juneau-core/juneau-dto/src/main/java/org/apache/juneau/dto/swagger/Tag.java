@@ -126,7 +126,7 @@ public class Tag extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Tag name(Object value) {
-		return setName(asString(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class Tag extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Tag description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**

@@ -79,7 +79,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 				Object value = e.getValue();
 				String[] v = get(key);
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-					put(key, asStrings(value));
+					put(key, stringifyAll(value));
 			}
 		}
 		return this;
@@ -217,7 +217,7 @@ public class RequestHeaders extends TreeMap<String,String[]> {
 	 * @param value The header value.
 	 */
 	public void put(String name, Object value) {
-		super.put(name, asStrings(value));
+		super.put(name, stringifyAll(value));
 	}
 
 	/**

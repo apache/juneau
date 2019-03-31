@@ -150,7 +150,7 @@ public class Info extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info title(Object value) {
-		return setTitle(asString(value));
+		return setTitle(stringify(value));
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class Info extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class Info extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info termsOfService(Object value) {
-		return setTermsOfService(asString(value));
+		return setTermsOfService(stringify(value));
 	}
 
 	/**
@@ -373,7 +373,7 @@ public class Info extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info version(Object value) {
-		return setVersion(asString(value));
+		return setVersion(stringify(value));
 	}
 
 

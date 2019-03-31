@@ -13,7 +13,6 @@
 package org.apache.juneau.reflection;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.reflection.ClassFlags.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -1142,7 +1141,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
 	public boolean isNotDeprecated() {
-		return c != null && ! c.isAnnotationPresent(Deprecated.class);
+		return c == null || ! c.isAnnotationPresent(Deprecated.class);
 	}
 
 	/**
@@ -1160,7 +1159,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is not public.
 	 */
 	public boolean isNotPublic() {
-		return c != null && ! Modifier.isPublic(c.getModifiers());
+		return c == null || ! Modifier.isPublic(c.getModifiers());
 	}
 
 	/**
@@ -1184,7 +1183,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is not static.
 	 */
 	public boolean isNotStatic() {
-		return c != null && ! Modifier.isStatic(c.getModifiers());
+		return c == null || ! Modifier.isStatic(c.getModifiers());
 	}
 
 	/**
@@ -1208,7 +1207,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is not abstract.
 	 */
 	public boolean isNotAbstract() {
-		return c != null && ! Modifier.isAbstract(c.getModifiers());
+		return c == null || ! Modifier.isAbstract(c.getModifiers());
 	}
 
 	/**
@@ -1226,7 +1225,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
 	public boolean isNotMemberClass() {
-		return c != null && ! c.isMemberClass();
+		return c == null || ! c.isMemberClass();
 	}
 
 	/**
@@ -1253,7 +1252,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this class is a local class.
 	 */
 	public boolean isNotLocalClass() {
-		return c != null && ! c.isLocalClass();
+		return c == null || ! c.isLocalClass();
 	}
 
 	/**
@@ -1281,7 +1280,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this is not a primitive class.
 	 */
 	public boolean isNotPrimitive() {
-		return c != null && ! c.isPrimitive();
+		return c == null || ! c.isPrimitive();
 	}
 
 	/**
@@ -1680,10 +1679,9 @@ public final class ClassInfo {
 	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <code>HashMap</code>).
 	 * @return The resolved real class.
 	 */
-	@SuppressWarnings("null")
 	public Class<?> getParameterType(int index, Class<?> pt) {
 		if (pt == null)
-			return null;
+			throw new FormattedIllegalArgumentException("Parameterized type cannot be null");
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -1692,20 +1690,19 @@ public final class ClassInfo {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
 			if (cc == null)
-				illegalArg("Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+				throw new FormattedIllegalArgumentException("Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		// Not actually a parameterized type.
 		if (! (gsc instanceof ParameterizedType))
-			return Object.class;
+			throw new FormattedIllegalArgumentException("Class ''{0}'' is not a parameterized type", pt.getSimpleName());
 
-		ParameterizedType opt = (ParameterizedType)gsc;
-		Type[] actualTypeArguments = opt.getActualTypeArguments();
-		if (index >= actualTypeArguments.length)
-			illegalArg("Invalid type index. index={0}, argsLength={1}", index, actualTypeArguments.length);
-		Type actualType = opt.getActualTypeArguments()[index];
+		ParameterizedType cpt = (ParameterizedType)gsc;
+		Type[] atArgs = cpt.getActualTypeArguments();
+		if (index >= atArgs.length)
+			throw new FormattedIllegalArgumentException("Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
+		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))
 			actualType = typeMap.get(actualType);
@@ -1714,37 +1711,33 @@ public final class ClassInfo {
 			return (Class<?>)actualType;
 
 		} else if (actualType instanceof GenericArrayType) {
-			Class<?> cmpntType = (Class<?>)((GenericArrayType)actualType).getGenericComponentType();
-			return Array.newInstance(cmpntType, 0).getClass();
-
+			Type gct = ((GenericArrayType)actualType).getGenericComponentType();
+			if (gct instanceof ParameterizedType)
+				return Array.newInstance((Class<?>)((ParameterizedType)gct).getRawType(), 0).getClass();
 		} else if (actualType instanceof TypeVariable) {
 			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
 			List<Class<?>> nestedOuterTypes = new LinkedList<>();
 			for (Class<?> ec = cc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
-				try {
-					Class<?> outerClass = cc.getClass();
-					nestedOuterTypes.add(outerClass);
-					Map<Type,Type> outerTypeMap = new HashMap<>();
-					extractTypes(outerTypeMap, outerClass);
-					for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
-						Type key = entry.getKey(), value = entry.getValue();
-						if (key instanceof TypeVariable) {
-							TypeVariable<?> keyType = (TypeVariable<?>)key;
-							if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
-								if (value instanceof Class)
-									return (Class<?>)value;
-								typeVariable = (TypeVariable<?>)entry.getValue();
-							}
+				Class<?> outerClass = cc.getClass();
+				nestedOuterTypes.add(outerClass);
+				Map<Type,Type> outerTypeMap = new HashMap<>();
+				extractTypes(outerTypeMap, outerClass);
+				for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
+					Type key = entry.getKey(), value = entry.getValue();
+					if (key instanceof TypeVariable) {
+						TypeVariable<?> keyType = (TypeVariable<?>)key;
+						if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
+							if (value instanceof Class)
+								return (Class<?>)value;
+							typeVariable = (TypeVariable<?>)entry.getValue();
 						}
 					}
-				} catch (Exception e) {
-					throw new RuntimeException(e);
 				}
 			}
-			throw new FormattedRuntimeException("Could not resolve type: {0}", actualType);
-		} else {
-			throw new FormattedRuntimeException("Invalid type found in resolveParameterType: {0}", actualType);
+		} else if (actualType instanceof ParameterizedType) {
+			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
+		throw new FormattedIllegalArgumentException("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {

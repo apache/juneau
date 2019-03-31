@@ -323,7 +323,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo name(Object value) {
-		return setName(asString(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -387,7 +387,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo in(Object value) {
-		return setIn(asString(value));
+		return setIn(stringify(value));
 	}
 
 	/**
@@ -432,7 +432,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -601,7 +601,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo type(Object value) {
-		return setType(asString(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -650,7 +650,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo format(Object value) {
-		return setFormat(asString(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -818,7 +818,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo collectionFormat(Object value) {
-		return setCollectionFormat(asString(value));
+		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -1175,7 +1175,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo pattern(Object value) {
-		return setPattern(asString(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -1456,7 +1456,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo example(Object value) {
-		example = StringUtils.asString(value);
+		example = StringUtils.stringify(value);
 		return this;
 	}
 

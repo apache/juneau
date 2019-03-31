@@ -971,7 +971,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	 */
 	@Override /* MockHttpRequest */
 	public MockServletRequest header(String name, Object value) {
-		this.headerMap.put(name, new String[] {asString(value)});
+		this.headerMap.put(name, new String[] {stringify(value)});
 		return this;
 	}
 
@@ -1029,7 +1029,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	public MockServletRequest formData(String key, Object value) {
 		if (formDataMap == null)
 			formDataMap = new LinkedHashMap<>();
-		String s = asString(value);
+		String s = stringify(value);
 		String[] existing = formDataMap.get(key);
 		if (existing == null)
 			existing = new String[]{s};
@@ -1050,7 +1050,7 @@ public class MockServletRequest implements HttpServletRequest, MockHttpRequest {
 	public MockServletRequest query(String key, Object value) {
 		if (queryData == null)
 			queryData = new LinkedHashMap<>();
-		String s = asString(value);
+		String s = stringify(value);
 		String[] existing = queryData.get(key);
 		if (existing == null)
 			existing = new String[]{s};

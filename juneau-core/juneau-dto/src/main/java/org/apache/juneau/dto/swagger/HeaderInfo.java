@@ -170,7 +170,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo type(Object value) {
-		return setType(asString(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo format(Object value) {
-		return setFormat(asString(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -382,7 +382,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo collectionFormat(Object value) {
-		return setCollectionFormat(asString(value));
+		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -764,7 +764,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo pattern(Object value) {
-		return setPattern(asString(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -1049,7 +1049,7 @@ public class HeaderInfo extends SwaggerElement {
 	 */
 	@BeanProperty("$ref")
 	public HeaderInfo setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = StringUtils.stringify(value);
 		return this;
 	}
 

@@ -124,7 +124,7 @@ public class Contact extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Contact name(Object value) {
-		return setName(asString(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class Contact extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Contact email(Object value) {
-		return setEmail(asString(value));
+		return setEmail(stringify(value));
 	}
 
 	/**

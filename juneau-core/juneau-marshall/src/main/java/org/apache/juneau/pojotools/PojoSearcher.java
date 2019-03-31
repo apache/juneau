@@ -99,7 +99,7 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 		RowMatcher(BeanSession bs, Map query) {
 			this.bs = bs;
 			for (Map.Entry e : (Set<Map.Entry>)query.entrySet())
-				entryMatchers.put(asString(e.getKey()), new ColumnMatcher(bs, asString(e.getValue())));
+				entryMatchers.put(stringify(e.getKey()), new ColumnMatcher(bs, stringify(e.getValue())));
 		}
 
 		boolean matches(Object o) {

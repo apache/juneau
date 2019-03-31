@@ -196,7 +196,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items type(Object value) {
-		return setType(asString(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items format(Object value) {
-		return setFormat(asString(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items collectionFormat(Object value) {
-		return setCollectionFormat(asString(value));
+		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -742,7 +742,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items pattern(Object value) {
-		return setPattern(asString(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -1027,7 +1027,7 @@ public class Items extends SwaggerElement {
 	 */
 	@BeanProperty("$ref")
 	public Items setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = StringUtils.stringify(value);
 		return this;
 	}
 

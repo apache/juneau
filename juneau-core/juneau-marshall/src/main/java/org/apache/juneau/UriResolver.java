@@ -103,7 +103,7 @@ public class UriResolver {
 	}
 
 	private String resolve(Object uri, UriResolution res) {
-		String s = asString(uri);
+		String s = stringify(uri);
 		if (isAbsoluteUri(s))
 			return hasDotSegments(s) && res != NONE ? normalize(s) : s;
 		if (res == ROOT_RELATIVE && startsWith(s, '/'))
@@ -147,7 +147,7 @@ public class UriResolver {
 	public Appendable append(Appendable a, Object o) {
 
 		try {
-			String uri = asString(o);
+			String uri = stringify(o);
 			uri = nullIfEmpty(uri);
 			boolean needsNormalize = hasDotSegments(uri) && resolution != null;
 

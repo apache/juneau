@@ -175,7 +175,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**

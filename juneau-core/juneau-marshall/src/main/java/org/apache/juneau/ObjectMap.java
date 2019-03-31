@@ -818,7 +818,7 @@ public class ObjectMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof Object[])
 			r = ArrayUtils.toStringArray(Arrays.asList((Object[])s));
 		else
-			r = split(asString(s));
+			r = split(stringify(s));
 		return (r.length == 0 ? def : r);
 	}
 

@@ -36,7 +36,7 @@ public class DelegateMap<T extends Map> extends ObjectMap implements Delegate<T>
 	public DelegateMap(T m, BeanSession session) {
 		this.classMeta = session.getClassMetaForObject(m);
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-			put(StringUtils.asString(e.getKey()), e.getValue());
+			put(StringUtils.stringify(e.getKey()), e.getValue());
 	}
 
 	@Override /* Delegate */

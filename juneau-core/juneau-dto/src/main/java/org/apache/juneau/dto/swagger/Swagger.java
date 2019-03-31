@@ -205,7 +205,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger swagger(Object value) {
-		return setSwagger(asString(value));
+		return setSwagger(stringify(value));
 	}
 
 	/**
@@ -309,7 +309,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger host(Object value) {
-		return setHost(asString(value));
+		return setHost(stringify(value));
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger basePath(Object value) {
-		return setBasePath(asString(value));
+		return setBasePath(stringify(value));
 	}
 
 	/**

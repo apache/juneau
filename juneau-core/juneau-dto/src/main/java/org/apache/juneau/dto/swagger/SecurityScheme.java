@@ -175,7 +175,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme type(Object value) {
-		return setType(asString(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -216,7 +216,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme name(Object value) {
-		return setName(asString(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -308,7 +308,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme in(Object value) {
-		return setIn(asString(value));
+		return setIn(stringify(value));
 	}
 
 	/**
@@ -363,7 +363,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme flow(Object value) {
-		return setFlow(asString(value));
+		return setFlow(stringify(value));
 	}
 
 	/**
@@ -406,7 +406,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme authorizationUrl(Object value) {
-		return setAuthorizationUrl(asString(value));
+		return setAuthorizationUrl(stringify(value));
 	}
 
 	/**
@@ -449,7 +449,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme tokenUrl(Object value) {
-		return setTokenUrl(asString(value));
+		return setTokenUrl(stringify(value));
 	}
 
 	/**

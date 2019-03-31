@@ -65,7 +65,7 @@ public final class NameValuePairs extends LinkedList<NameValuePair> {
 	 * @return This object (for method chaining).
 	 */
 	public NameValuePairs append(String name, Object value) {
-		super.add(new BasicNameValuePair(name, asString(value)));
+		super.add(new BasicNameValuePair(name, stringify(value)));
 		return this;
 	}
 

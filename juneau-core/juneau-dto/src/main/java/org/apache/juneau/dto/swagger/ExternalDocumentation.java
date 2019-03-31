@@ -122,7 +122,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ExternalDocumentation description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**

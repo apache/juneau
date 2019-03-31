@@ -85,7 +85,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 				Object value = e.getValue();
 				String[] v = get(key);
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-					put(key, asStrings(value));
+					put(key, stringifyAll(value));
 			}
 		}
 		return this;
@@ -124,7 +124,7 @@ public final class RequestQuery extends LinkedHashMap<String,String[]> {
 		if (value == null)
 			put(name, null);
 		else
-			put(name, asStrings(value));
+			put(name, stringifyAll(value));
 	}
 
 	/**

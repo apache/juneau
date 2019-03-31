@@ -121,7 +121,7 @@ public class License extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public License name(Object value) {
-		return setName(asString(value));
+		return setName(stringify(value));
 	}
 
 	/**

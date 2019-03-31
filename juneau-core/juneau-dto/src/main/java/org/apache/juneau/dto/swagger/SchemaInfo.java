@@ -217,7 +217,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo format(Object value) {
-		return setFormat(asString(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo title(Object value) {
-		return setTitle(asString(value));
+		return setTitle(stringify(value));
 	}
 
 	/**
@@ -288,7 +288,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo description(Object value) {
-		return setDescription(asString(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -609,7 +609,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo pattern(Object value) {
-		return setPattern(asString(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -978,7 +978,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo type(Object value) {
-		return setType(asString(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -1211,7 +1211,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo discriminator(Object value) {
-		return setDiscriminator(asString(value));
+		return setDiscriminator(stringify(value));
 	}
 
 	/**
@@ -1398,7 +1398,7 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	@BeanProperty("$ref")
 	public SchemaInfo setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = StringUtils.stringify(value);
 		return this;
 	}
 

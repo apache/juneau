@@ -56,7 +56,7 @@ public final class InvalidDataConversionException extends FormattedRuntimeExcept
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, ClassMeta<?> toType, Exception cause) {
-		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", name(value), asString(toType), value(value));
+		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", name(value), stringify(toType), value(value));
 	}
 
 	private static String value(Object o) {

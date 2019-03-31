@@ -173,6 +173,10 @@ public class ClassInfoTest {
 	@Test
 	public void getDeclaredInterfaces_onType() {
 		check("", aTypeInfo.getDeclaredInterfaces());
+		check("", pTypeInfo.getDeclaredInterfaces());
+		check("", pTypeDimensionalInfo.getDeclaredInterfaces());
+		check("Map", pTypeGenericInfo.getDeclaredInterfaces());
+		check("", pTypeGenericArgInfo.getDeclaredInterfaces());
 	}
 
 	@Test
@@ -301,6 +305,7 @@ public class ClassInfoTest {
 	@Test
 	public void getPublicMethods_onType() throws Exception {
 		check("", aTypeInfo.getPublicMethods());
+		check("", pTypeGenericArgInfo.getPublicMethods());
 	}
 
 	@Test
@@ -341,6 +346,7 @@ public class ClassInfoTest {
 	@Test
 	public void getDeclaredMethods_onType() throws Exception {
 		check("", aTypeInfo.getDeclaredMethods());
+		check("", pTypeGenericArgInfo.getDeclaredMethods());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -389,6 +395,7 @@ public class ClassInfoTest {
 	@Test
 	public void getFromStringMethod_onType() throws Exception {
 		check(null, aTypeInfo.getFromStringMethod());
+		check(null, pTypeGenericArgInfo.getFromStringMethod());
 	}
 
 	static class DBx {}
@@ -446,6 +453,7 @@ public class ClassInfoTest {
 	@Test
 	public void getStaticCreateMethod_onType() throws Exception {
 		check(null, aTypeInfo.getStaticCreateMethod(DBx.class));
+		check(null, pTypeGenericArgInfo.getStaticCreateMethod(DBx.class));
 	}
 
 	static class DCx {}
@@ -860,6 +868,7 @@ public class ClassInfoTest {
 	@Test
 	public void isDeprecated_onType() {
 		assertFalse(aTypeInfo.isDeprecated());
+		assertFalse(pTypeGenericArgInfo.isDeprecated());
 	}
 
 	@Test
@@ -874,7 +883,7 @@ public class ClassInfoTest {
 		assertTrue(pTypeInfo.isNotDeprecated());
 		assertTrue(pTypeDimensionalInfo.isNotDeprecated());
 		assertTrue(pTypeGenericInfo.isNotDeprecated());
-		assertFalse(pTypeGenericArgInfo.isNotDeprecated());
+		assertTrue(pTypeGenericArgInfo.isNotDeprecated());
 	}
 
 	@Test
@@ -905,6 +914,7 @@ public class ClassInfoTest {
 	@Test
 	public void isNotPublic_onType() {
 		assertFalse(aTypeInfo.isNotPublic());
+		assertTrue(pTypeGenericArgInfo.isNotPublic());
 	}
 
 	@Test
@@ -916,6 +926,7 @@ public class ClassInfoTest {
 	@Test
 	public void isStatic_onType() {
 		assertFalse(aTypeInfo.isStatic());
+		assertFalse(pTypeGenericArgInfo.isStatic());
 	}
 
 	@Test
@@ -930,17 +941,18 @@ public class ClassInfoTest {
 		assertTrue(pTypeInfo.isNotStatic());
 		assertTrue(pTypeDimensionalInfo.isNotStatic());
 		assertTrue(pTypeGenericInfo.isNotStatic());
-		assertFalse(pTypeGenericArgInfo.isNotStatic());
+		assertTrue(pTypeGenericArgInfo.isNotStatic());
 	}
 
 	@Test
 	public void isAbstract() {
 		assertTrue(hAbstractPublic.isAbstract());
-		assertFalse(hPublic.isAbstract());
+		assertFalse(pTypeGenericArgInfo.isAbstract());
 	}
 
 	@Test
 	public void isAbstract_onType() {
+		assertFalse(aTypeInfo.isAbstract());
 		assertFalse(aTypeInfo.isAbstract());
 	}
 
@@ -956,7 +968,7 @@ public class ClassInfoTest {
 		assertFalse(pTypeInfo.isNotAbstract());
 		assertFalse(pTypeDimensionalInfo.isNotAbstract());
 		assertFalse(pTypeGenericInfo.isNotAbstract());
-		assertFalse(pTypeGenericArgInfo.isNotAbstract());
+		assertTrue(pTypeGenericArgInfo.isNotAbstract());
 	}
 
 	@Test
@@ -987,6 +999,7 @@ public class ClassInfoTest {
 	@Test
 	public void isNotMemberClass_onType() {
 		assertFalse(aTypeInfo.isNotMemberClass());
+		assertTrue(pTypeGenericArgInfo.isNotMemberClass());
 	}
 
 	@Test
@@ -1004,6 +1017,42 @@ public class ClassInfoTest {
 		assertFalse(pTypeDimensionalInfo.isNonStaticMemberClass());
 		assertFalse(pTypeGenericInfo.isNonStaticMemberClass());
 		assertFalse(pTypeGenericArgInfo.isNonStaticMemberClass());
+	}
+
+	@Test
+	public void isLocalClass() {
+		class F implements Function<Object,String>{
+			@Override
+			public String apply(Object t) {
+				return null;
+			}
+		}
+		assertFalse(aClass.isLocalClass());
+		assertTrue(of(F.class).isLocalClass());
+	}
+
+	@Test
+	public void isLocalClass_type() {
+		assertFalse(aTypeInfo.isLocalClass());
+		assertFalse(pTypeGenericArgInfo.isLocalClass());
+	}
+
+	@Test
+	public void isNotLocalClass() {
+		class F implements Function<Object,String>{
+			@Override
+			public String apply(Object t) {
+				return null;
+			}
+		}
+		assertTrue(aClass.isNotLocalClass());
+		assertFalse(of(F.class).isNotLocalClass());
+	}
+
+	@Test
+	public void isNotLocalClass_type() {
+		assertTrue(aTypeInfo.isNotLocalClass());
+		assertTrue(pTypeGenericArgInfo.isNotLocalClass());
 	}
 
 	@Test
@@ -1057,6 +1106,7 @@ public class ClassInfoTest {
 	@Test
 	public void isPrimitive_onType() {
 		assertFalse(aTypeInfo.isPrimitive());
+		assertFalse(pTypeGenericArgInfo.isPrimitive());
 	}
 
 	@Test
@@ -1071,7 +1121,7 @@ public class ClassInfoTest {
 		assertTrue(pTypeInfo.isNotPrimitive());
 		assertTrue(pTypeDimensionalInfo.isNotPrimitive());
 		assertTrue(pTypeGenericInfo.isNotPrimitive());
-		assertFalse(pTypeGenericArgInfo.isNotPrimitive());
+		assertTrue(pTypeGenericArgInfo.isNotPrimitive());
 	}
 
 	@Test
@@ -1083,6 +1133,7 @@ public class ClassInfoTest {
 	@Test
 	public void isInterface_onType() {
 		assertFalse(aTypeInfo.isInterface());
+		assertFalse(pTypeGenericArgInfo.isInterface());
 	}
 
 	@Test
@@ -1918,19 +1969,49 @@ public class ClassInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public static class MA extends HashMap<String,Object> {}
-	ClassInfo ma = of(MA.class);
+	public static class MA extends HashMap<String,Integer> {}
+	@SuppressWarnings("serial")
+	public static class MB extends MA {}
+	@SuppressWarnings("serial")
+	public static class MC<K,E> extends HashMap<K,E> {}
+	@SuppressWarnings("serial")
+	public static class MD extends MC<String,Integer> {}
+	@SuppressWarnings("serial")
+	public static class ME extends HashMap<String,HashMap<String,Integer>> {}
+	@SuppressWarnings("serial")
+	public static class MF extends HashMap<String,String[]> {}
+	@SuppressWarnings("serial")
+	public static class MG extends HashMap<String,HashMap<String,Integer>[]> {}
+	@SuppressWarnings({ "serial", "rawtypes" })
+	public static class MH extends HashMap<String,LinkedList[]> {}
+	@SuppressWarnings({ "serial"})
+	public static class MI<X> extends HashMap<String,X[]> {}
+	@SuppressWarnings({ "serial"})
+	public static class MJ<X extends Number> extends HashMap<String,X> {}
+	public class MK {}
+	@SuppressWarnings({ "serial"})
+	public class ML extends HashMap<String,MK> {}
+	public static class MM {
+		@SuppressWarnings({ "serial"})
+		public class MN extends HashMap<String,MM> {}
+	}
+
+
+	ClassInfo ma=of(MA.class), mb=of(MB.class), mc=of(MC.class), md=of(MD.class), me=of(ME.class), mf=of(MF.class), mg=of(MG.class), mh=of(MH.class), mi=of(MI.class), mj=of(MJ.class), ml=of(ML.class), mn=of(MM.MN.class);
 
 	@Test
 	public void getParameterType_simpleMap() {
 		check("String", ma.getParameterType(0, HashMap.class));
-		check("Object", ma.getParameterType(1, HashMap.class));
+		check("Integer", ma.getParameterType(1, HashMap.class));
+		check("String", mb.getParameterType(0, HashMap.class));
+		check("Integer", mb.getParameterType(1, HashMap.class));
 	}
 
 	@Test
 	public void getParameterType_outOfBounds() {
 		try {
 			ma.getParameterType(2, HashMap.class);
+			fail();
 		} catch (IllegalArgumentException e) {
 			assertEquals("Invalid type index. index=2, argsLength=2", e.getMessage());
 		}
@@ -1940,9 +2021,93 @@ public class ClassInfoTest {
 	public void getParameterType_notASubclass() {
 		try {
 			aClass.getParameterType(2, HashMap.class);
+			fail();
 		} catch (IllegalArgumentException e) {
 			assertEquals("Class 'AClass' is not a subclass of parameterized type 'HashMap'", e.getMessage());
 		}
+	}
+
+	@Test
+	public void getParameterType_nullParameterizedType() {
+		try {
+			aClass.getParameterType(2, null);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertEquals("Parameterized type cannot be null", e.getMessage());
+		}
+	}
+
+	@Test
+	public void getParameterType_notParamerizedType() {
+		try {
+			mb.getParameterType(2, MA.class);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertEquals("Class 'MA' is not a parameterized type", e.getMessage());
+		}
+	}
+
+	@Test
+	public void getParameterType_unresolvedTypes() {
+		try {
+			mc.getParameterType(1, HashMap.class);
+			fail();
+		} catch (Exception e) {
+			assertEquals("Could not resolve variable 'E' to a type.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void getParameterType_resolvedTypes() {
+		check("Integer", md.getParameterType(1, HashMap.class));
+	}
+
+	@Test
+	public void getParameterType_parameterizedTypeVariable() {
+		check("HashMap", me.getParameterType(1, HashMap.class));
+	}
+
+	@Test
+	public void getParameterType_arrayParameterType() {
+		check("String[]", mf.getParameterType(1, HashMap.class));
+	}
+
+	@Test
+	public void getParameterType_genericArrayTypeParameter() {
+		check("HashMap[]", mg.getParameterType(1, HashMap.class));
+	}
+
+	@Test
+	public void getParameterType_genericArrayTypeParameterWithoutTypes() {
+		check("LinkedList[]", mh.getParameterType(1, HashMap.class));
+	}
+
+	@Test
+	public void getParameterType_unresolvedGenericArrayType() {
+		try {
+			mi.getParameterType(1, HashMap.class);
+		} catch (Exception e) {
+			assertEquals("Could not resolve variable 'X[]' to a type.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void getParameterType_wildcardType() {
+		try {
+			mj.getParameterType(1, HashMap.class);
+		} catch (Exception e) {
+			assertEquals("Could not resolve variable 'X' to a type.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void getParameterType_innerType() {
+		check("MK", ml.getParameterType(1, HashMap.class));
+	}
+
+	@Test
+	public void getParameterType_nestedType() {
+		check("MM", mn.getParameterType(1, HashMap.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

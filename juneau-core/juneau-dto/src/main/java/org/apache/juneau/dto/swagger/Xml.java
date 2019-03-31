@@ -146,7 +146,7 @@ public class Xml extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml name(Object value) {
-		return setName(asString(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class Xml extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml namespace(Object value) {
-		return setNamespace(asString(value));
+		return setNamespace(stringify(value));
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class Xml extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml prefix(Object value) {
-		return setPrefix(asString(value));
+		return setPrefix(stringify(value));
 	}
 
 	/**

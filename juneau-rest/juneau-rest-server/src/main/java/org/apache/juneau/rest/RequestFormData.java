@@ -83,7 +83,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 				Object value = e.getValue();
 				String[] v = get(key);
 				if (v == null || v.length == 0 || StringUtils.isEmpty(v[0]))
-					put(key, asStrings(value));
+					put(key, stringifyAll(value));
 			}
 		}
 		return this;
@@ -114,7 +114,7 @@ public class RequestFormData extends LinkedHashMap<String,String[]> {
 	 * @param value The parameter value.
 	 */
 	public void put(String name, Object value) {
-		super.put(name, asStrings(value));
+		super.put(name, stringifyAll(value));
 	}
 
 	/**
