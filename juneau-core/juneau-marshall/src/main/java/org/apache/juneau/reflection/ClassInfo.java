@@ -549,7 +549,7 @@ public final class ClassInfo {
 			ConstructorInfo bestMatch = null;
 			for (ConstructorInfo n : getDeclaredConstructors()) {
 				if (vis.isVisible(n.inner())) {
-					int m = ClassUtils.fuzzyArgsMatch(n.getParameterTypes(), argTypes);
+					int m = ClassUtils.fuzzyArgsMatch(n.getParamTypes(), argTypes);
 					if (m > bestCount) {
 						bestCount = m;
 						bestMatch = n;
@@ -561,7 +561,7 @@ public final class ClassInfo {
 
 		boolean isMemberClass = isNonStaticMemberClass();
 		for (ConstructorInfo n : getDeclaredConstructors()) {
-			List<ClassInfo> paramTypes = n.getParameterTypes();
+			List<ClassInfo> paramTypes = n.getParamTypes();
 			if (isMemberClass)
 				paramTypes = paramTypes.subList(1, paramTypes.size());
 			if (ClassUtils.argsMatch(paramTypes, argTypes) && vis.isVisible(n.inner()))

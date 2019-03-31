@@ -305,10 +305,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 		for (MethodInfo m : map.values()) {
 			assertArgsOnlyOfType(m, RestContextBuilder.class, ServletConfig.class);
-			List<ClassInfo> pt = m.getParameterTypes();
-			Object[] args = new Object[pt.size()];
+			Class<?>[] pt = m.getRawParamTypes();
+			Object[] args = new Object[pt.length];
 			for (int i = 0; i < args.length; i++) {
-				if (pt.get(i).is(RestContextBuilder.class))
+				if (pt[i] == RestContextBuilder.class)
 					args[i] = this;
 				else
 					args[i] = this.inner;

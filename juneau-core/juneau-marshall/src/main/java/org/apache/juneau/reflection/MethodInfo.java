@@ -37,6 +37,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 	private List<ClassInfo> paramTypes;
 	private Class<?>[] rawParamTypes;
+	private Type[] rawGenericParamTypes;
 	private ClassInfo[] exceptionInfos;
 	private String signature;
 
@@ -703,10 +704,10 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 *
 	 * @return The parameter types on this method.
 	 */
-	public List<ClassInfo> getParameterTypes() {
+	public List<ClassInfo> getParamTypes() {
 		if (paramTypes == null) {
 			Class<?>[] ptc = rawParamTypes();
-			Type[] ptt = m.getGenericParameterTypes();
+			Type[] ptt = rawGenericParamTypes();
 			List<ClassInfo> l = new ArrayList<>(ptc.length);
 			for (int i = 0; i < ptc.length; i++)
 				l.add(ClassInfo.of(ptc[i], ptt[i]));
@@ -719,6 +720,12 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 		if (rawParamTypes == null)
 			rawParamTypes = m.getParameterTypes();
 		return rawParamTypes;
+	}
+
+	private Type[] rawGenericParamTypes() {
+		if (rawGenericParamTypes == null)
+			rawGenericParamTypes = m.getGenericParameterTypes();
+		return rawGenericParamTypes;
 	}
 
 	/**
@@ -736,9 +743,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @return The raw parameter types on this method.
 	 */
 	public Class<?>[] getRawParamTypes() {
-		if (rawParamTypes == null)
-			rawParamTypes = m.getParameterTypes();
-		return rawParamTypes.clone();
+		return rawParamTypes().clone();
 	}
 
 	/**
@@ -747,8 +752,28 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @param index The parameter index.
 	 * @return The parameter type of the parameter at the specified index.
 	 */
-	public ClassInfo getParameterType(int index) {
-		return getParameterTypes().get(index);
+	public ClassInfo getParamType(int index) {
+		return getParamTypes().get(index);
+	}
+
+	/**
+	 * Returns the parameter type of the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The parameter type of the parameter at the specified index.
+	 */
+	public Class<?> getRawParamType(int index) {
+		return rawParamTypes()[index];
+	}
+
+	/**
+	 * Returns the parameter type of the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The parameter type of the parameter at the specified index.
+	 */
+	public Type getRawGenericParamType(int index) {
+		return rawGenericParamTypes()[index];
 	}
 
 	/**

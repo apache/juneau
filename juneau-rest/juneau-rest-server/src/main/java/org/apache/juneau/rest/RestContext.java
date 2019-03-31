@@ -4571,7 +4571,7 @@ public final class RestContext extends BeanContext {
 	 */
 	protected RestMethodParam[] findParams(MethodInfo mi, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
 
-		List<ClassInfo> pt = mi.getParameterTypes();
+		List<ClassInfo> pt = mi.getParamTypes();
 		RestMethodParam[] rp = new RestMethodParam[pt.size()];
 		PropertyStore ps = getPropertyStore();
 

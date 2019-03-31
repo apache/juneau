@@ -30,6 +30,8 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	private final Constructor<?> c;
 	private List<MethodParamInfo> params;
 	private List<ClassInfo> paramTypes;
+	private Class<?>[] rawParamTypes;
+	private Type[] rawGenericParamTypes;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation.
@@ -133,12 +135,12 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 *
 	 * @return The parameter types on this constructor.
 	 */
-	public List<ClassInfo> getParameterTypes() {
+	public List<ClassInfo> getParamTypes() {
 		if (paramTypes == null) {
 			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
 			// always return an empty array.
-			Class<?>[] ptc = c.getParameterTypes();
-			Type[] ptt = c.getGenericParameterTypes();
+			Class<?>[] ptc = rawParamTypes();
+			Type[] ptt = rawGenericParamTypes();
 			List<ClassInfo> l = new ArrayList<>(ptc.length);
 			for (int i = 0; i < ptc.length; i++)
 				l.add(ClassInfo.of(ptc[i], ptt.length > i ? ptt[i] : ptc[i]));
@@ -153,8 +155,49 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @param index The parameter index.
 	 * @return The parameter type of the parameter at the specified index.
 	 */
-	public ClassInfo getParameterType(int index) {
-		return getParameterTypes().get(index);
+	public ClassInfo getParamType(int index) {
+		return getParamTypes().get(index);
+	}
+
+	/**
+	 * Returns the parameter type of the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The parameter type of the parameter at the specified index.
+	 */
+	public Class<?> getRawParamType(int index) {
+		return rawParamTypes()[index];
+	}
+
+	/**
+	 * Returns the parameter type of the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The parameter type of the parameter at the specified index.
+	 */
+	public Type getRawGenericParamType(int index) {
+		return rawGenericParamTypes()[index];
+	}
+
+	private Class<?>[] rawParamTypes() {
+		if (rawParamTypes == null)
+			rawParamTypes = c.getParameterTypes();
+		return rawParamTypes;
+	}
+
+	private Type[] rawGenericParamTypes() {
+		if (rawGenericParamTypes == null)
+			rawGenericParamTypes = c.getGenericParameterTypes();
+		return rawGenericParamTypes;
+	}
+
+	/**
+	 * Returns the number of parameters in this method.
+	 *
+	 * @return The number of parameters in this method.
+	 */
+	public int getParamCount() {
+		return c.getParameterCount();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -291,10 +334,10 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has this arguments in the exact order.
 	 */
 	public boolean hasArgs(Class<?>...args) {
-		List<ClassInfo> pt = getParameterTypes();
-		if (pt.size() == args.length) {
-			for (int i = 0; i < pt.size(); i++)
-				if (! pt.get(i).inner().equals(args[i]))
+		Class<?>[] pt = rawParamTypes();
+		if (pt.length == args.length) {
+			for (int i = 0; i < pt.length; i++)
+				if (! pt[i].equals(args[i]))
 					return false;
 			return true;
 		}
@@ -307,7 +350,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has one or more arguments.
 	 */
 	public boolean hasArgs() {
-		return ! getParameterTypes().isEmpty();
+		return getParamCount() != 0;
 	}
 
 	/**
@@ -316,7 +359,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has zero arguments.
 	 */
 	public boolean hasNoArgs() {
-		return getParameterTypes().isEmpty();
+		return getParamCount() == 0;
 	}
 
 	/**
@@ -326,7 +369,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has this number of arguments.
 	 */
 	public boolean hasNumArgs(int number) {
-		return getParameterTypes().size() == number;
+		return getParamCount() == number;
 	}
 
 	/**
@@ -336,7 +379,7 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	 * @return <jk>true</jk> if this constructor has at most only this arguments in any order.
 	 */
 	public boolean hasFuzzyArgs(Class<?>...args) {
-		return ClassUtils.fuzzyArgsMatch(getParameterTypes(), args) != -1;
+		return ClassUtils.fuzzyArgsMatch(rawParamTypes(), args) != -1;
 	}
 
 	/**
@@ -449,10 +492,11 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	public int compareTo(ConstructorInfo o) {
 		int i = getName().compareTo(o.getName());
 		if (i == 0) {
-			i = getParameterTypes().size() - o.getParameterTypes().size();
+			i = getParamCount() - o.getParamCount();
 			if (i == 0) {
-				for (int j = 0; j < getParameterTypes().size() && i == 0; j++) {
-					i = getParameterTypes().get(j).inner().getName().compareTo(o.getParameterTypes().get(j).inner().getName());
+				for (int j = 0; j < getParamCount() && i == 0; j++) {
+					Class<?>[] tpt = rawParamTypes(), opt = o.rawParamTypes();
+					i = tpt[j].getName().compareTo(opt[j].getName());
 				}
 			}
 		}

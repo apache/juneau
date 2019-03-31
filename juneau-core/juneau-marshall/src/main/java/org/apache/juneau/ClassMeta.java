@@ -573,7 +573,7 @@ public final class ClassMeta<T> implements Type {
 			// Find constructor(String) method if present.
 			for (ConstructorInfo cs : ci.getPublicConstructors()) {
 				if (cs.isPublic() && cs.isNotDeprecated()) {
-					List<ClassInfo> pt = cs.getParameterTypes();
+					List<ClassInfo> pt = cs.getParamTypes();
 					if (pt.size() == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
 						noArgConstructor = cs;
 					} else if (pt.size() == (isMemberClass ? 2 : 1)) {
@@ -1846,7 +1846,7 @@ public final class ClassMeta<T> implements Type {
 	public T newInstanceFromNumber(BeanSession session, Object outer, Number arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		ConstructorInfo c = numberConstructor;
 		if (c != null) {
-			Object arg2 = session.convertToType(arg, numberConstructor.getParameterTypes().get(0).inner());
+			Object arg2 = session.convertToType(arg, numberConstructor.getRawParamType(0));
 			if (isMemberClass)
 				return c.<T>invoke(outer, arg2);
 			return c.<T>invoke(arg2);

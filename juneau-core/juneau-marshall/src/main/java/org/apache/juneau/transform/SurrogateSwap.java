@@ -62,16 +62,18 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		ClassInfo ci = getClassInfo(c);
 		for (ConstructorInfo cc : ci.getPublicConstructors()) {
-			List<ClassInfo> pt = cc.getParameterTypes();
-			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumArgs(1) && cc.isPublic() && ! pt.get(0).is(c.getDeclaringClass())) {
-				// Find the unswap method if there is one.
-				Method unswapMethod = null;
-				for (MethodInfo m : ci.getPublicMethods()) {
-					if (m.getReturnType().is(pt.get(0)) && m.isPublic())
-					unswapMethod = m.inner();
-				}
+			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumArgs(1) && cc.isPublic()) {
+				Class<?> pt = cc.getRawParamType(0);
+				if (! pt.equals(c.getDeclaringClass())) {
+					// Find the unswap method if there is one.
+					Method unswapMethod = null;
+					for (MethodInfo m : ci.getPublicMethods()) {
+						if (m.getReturnType().is(pt) && m.isPublic())
+						unswapMethod = m.inner();
+					}
 
-				l.add(new SurrogateSwap(pt.get(0).inner(), cc.inner(), unswapMethod));
+					l.add(new SurrogateSwap(pt, cc.inner(), unswapMethod));
+				}
 			}
 		}
 		return l;
