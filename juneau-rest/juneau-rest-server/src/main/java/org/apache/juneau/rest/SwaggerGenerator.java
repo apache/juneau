@@ -402,7 +402,7 @@ final class SwaggerGenerator {
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getGenericReturnType()));
+								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType()));
 							}
 						}
 					}
@@ -429,7 +429,7 @@ final class SwaggerGenerator {
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getGenericReturnType()));
+								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType()));
 							}
 						}
 					}

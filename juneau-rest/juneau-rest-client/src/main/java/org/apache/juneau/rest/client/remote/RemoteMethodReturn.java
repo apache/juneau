@@ -43,7 +43,7 @@ public final class RemoteMethodReturn {
 		} else {
 			this.meta = null;
 		}
-		this.returnType = m.getGenericReturnType();
+		this.returnType = m.getReturnType().innerType();
 		this.returnValue = rv;
 	}
 

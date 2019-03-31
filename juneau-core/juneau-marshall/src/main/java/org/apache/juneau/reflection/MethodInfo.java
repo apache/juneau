@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
 @BeanIgnore
 public final class MethodInfo implements Comparable<MethodInfo> {
 
-	private ClassInfo declaringClass;
+	private ClassInfo declaringClass, returnType;
 	private final Method m;
 	private MethodParamInfo[] params;
 	private List<Method> matching;
@@ -278,7 +278,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
 					l.add((T)a2);
-		getGenericReturnTypeInfo().resolved().appendAnnotations(l, a);
+		getReturnType().resolved().appendAnnotations(l, a);
 		return l;
 	}
 
@@ -304,7 +304,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 			for (Annotation a2 :  m2.getAnnotations())
 				if (a.isInstance(a2))
 					return (T)a2;
-		return getGenericReturnTypeInfo().resolved().getAnnotation(a);
+		return getReturnType().resolved().getAnnotation(a);
 	}
 
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
@@ -598,15 +598,6 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	}
 
 	/**
-	 * Returns the return type of this method.
-	 *
-	 * @return The return type of this method.
-	 */
-	public ClassInfo getReturnType() {
-		return ClassInfo.of(m.getReturnType());
-	}
-
-	/**
 	 * Identifies if the specified visibility matches this method.
 	 *
 	 * @param v The visibility to validate against.
@@ -837,21 +828,14 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	}
 
 	/**
-	 * Returns the generic return type of this method.
-	 *
-	 * @return The generic return type of this method.
-	 */
-	public Type getGenericReturnType() {
-		return m.getGenericReturnType();
-	}
-
-	/**
 	 * Returns the generic return type of this method as a {@link ClassInfo} object.
 	 *
 	 * @return The generic return type of this method.
 	 */
-	public ClassInfo getGenericReturnTypeInfo() {
-		return ClassInfo.of(getGenericReturnType());
+	public ClassInfo getReturnType() {
+		if (returnType == null)
+			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
+		return returnType;
 	}
 
 	/**

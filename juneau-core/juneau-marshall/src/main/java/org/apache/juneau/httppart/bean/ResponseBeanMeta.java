@@ -70,7 +70,7 @@ public class ResponseBeanMeta {
 		if (! m.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		b.apply(m.getGenericReturnTypeInfo().resolved().innerType());
+		b.apply(m.getReturnType().resolved().innerType());
 		for (Response r : m.getAnnotations(Response.class, true))
 			b.apply(r);
 		return b.build();

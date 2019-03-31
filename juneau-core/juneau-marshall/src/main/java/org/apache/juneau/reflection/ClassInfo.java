@@ -1522,6 +1522,15 @@ public final class ClassInfo {
 		return c != null ? c.getSimpleName() : t.getTypeName();
 	}
 
+	/**
+	 * Returns the name of the underlying class.
+	 *
+	 * @return The name of the underlying class.
+	 */
+	public String getName() {
+		return c != null ? c.getName() : t.getTypeName();
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Hierarchy
 	//-----------------------------------------------------------------------------------------------------------------
