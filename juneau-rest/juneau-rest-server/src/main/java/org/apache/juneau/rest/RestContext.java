@@ -21,7 +21,6 @@ import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.FormattedIllegalArgumentException.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
@@ -3335,7 +3334,7 @@ public final class RestContext extends BeanContext {
 							if (! _startCallMethods.containsKey(sig)) {
 								m.setAccessible();
 								_startCallMethods.put(sig, m.inner());
-								_startCallMethodParams.add(m.getParameterTypes());
+								_startCallMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
@@ -3344,7 +3343,7 @@ public final class RestContext extends BeanContext {
 							if (! _endCallMethods.containsKey(sig)) {
 								m.setAccessible();
 								_endCallMethods.put(sig, m.inner());
-								_endCallMethodParams.add(m.getParameterTypes());
+								_endCallMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
@@ -3353,7 +3352,7 @@ public final class RestContext extends BeanContext {
 							if (! _postInitMethods.containsKey(sig)) {
 								m.setAccessible();
 								_postInitMethods.put(sig, m.inner());
-								_postInitMethodParams.add(m.getParameterTypes());
+								_postInitMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -3362,7 +3361,7 @@ public final class RestContext extends BeanContext {
 							if (! _postInitChildFirstMethods.containsKey(sig)) {
 								m.setAccessible();
 								_postInitChildFirstMethods.put(sig, m.inner());
-								_postInitChildFirstMethodParams.add(m.getParameterTypes());
+								_postInitChildFirstMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -3371,7 +3370,7 @@ public final class RestContext extends BeanContext {
 							if (! _destroyMethods.containsKey(sig)) {
 								m.setAccessible();
 								_destroyMethods.put(sig, m.inner());
-								_destroyMethodParams.add(m.getParameterTypes());
+								_destroyMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -4572,15 +4571,15 @@ public final class RestContext extends BeanContext {
 	 */
 	protected RestMethodParam[] findParams(MethodInfo mi, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
 
-		Type[] pt = mi.getGenericParameterTypes();
-		RestMethodParam[] rp = new RestMethodParam[pt.length];
+		List<ClassInfo> pt = mi.getParameterTypes();
+		RestMethodParam[] rp = new RestMethodParam[pt.size()];
 		PropertyStore ps = getPropertyStore();
 
-		for (int i = 0; i < pt.length; i++) {
+		for (int i = 0; i < pt.size(); i++) {
 
-			Type t = pt[i];
-			if (t instanceof Class) {
-				Class<?> c = (Class<?>)t;
+			ClassInfo t = pt.get(i);
+			if (t.inner() != null) {
+				Class<?> c = t.inner();
 				rp[i] = paramResolvers.get(c);
 				if (rp[i] == null)
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);

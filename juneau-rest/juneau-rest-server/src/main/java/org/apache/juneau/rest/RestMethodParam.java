@@ -175,6 +175,16 @@ public abstract class RestMethodParam {
 	 * Constructor.
 	 *
 	 * @param paramType The Swagger parameter type.
+	 * @param type The object type to convert the parameter to.
+	 */
+	protected RestMethodParam(RestParamType paramType, ClassInfo type) {
+		this(paramType, null, null, type.innerType());
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param paramType The Swagger parameter type.
 	 * @param name
 	 * 	The parameter name.
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).

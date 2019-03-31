@@ -366,9 +366,9 @@ class RestParamDefaults {
 
 	static class ResponseStatusObject extends RestMethodParam {
 
-		protected ResponseStatusObject(Type t) {
+		protected ResponseStatusObject(ClassInfo t) {
 			super(RESPONSE_STATUS, t);
-			if (getTypeClass() != Value.class || Value.getParameterType(t) != Integer.class)
+			if (getTypeClass() != Value.class || Value.getParameterType(t.innerType()) != Integer.class)
 				throw new InternalServerError("Invalid type {0} specified with @ResponseStatus annotation.  It must Value<Integer>.", type);
 		}
 
@@ -388,9 +388,9 @@ class RestParamDefaults {
 
 	static final class MethodObject extends RestMethodParam {
 
-		protected MethodObject(MethodInfo m, Type t) throws ServletException {
+		protected MethodObject(MethodInfo m, ClassInfo t) throws ServletException {
 			super(OTHER, (MethodParamInfo)null);
-			if (t != String.class)
+			if (! t.is(String.class))
 				throw new RestServletException("Use of @Method annotation on parameter that is not a String on method ''{0}''", m.inner());
 		}
 

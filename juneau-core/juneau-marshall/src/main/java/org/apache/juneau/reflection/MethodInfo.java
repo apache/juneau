@@ -35,6 +35,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	private MethodParamInfo[] params;
 	private List<Method> matching;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
+	private List<ClassInfo> paramTypes;
+	private Class<?>[] rawParamTypes;
 	private ClassInfo[] exceptionInfos;
 	private String signature;
 
@@ -436,7 +438,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public boolean hasArgs(Class<?>...args) {
-		Class<?>[] pt = m.getParameterTypes();
+		Class<?>[] pt = rawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
 				if (! pt[i].equals(args[i]))
@@ -453,7 +455,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @return <jk>true</jk> if this method has this number of arguments.
 	 */
 	public boolean hasNumArgs(int number) {
-		return m.getParameterTypes().length == number;
+		return rawParamTypes().length == number;
 	}
 
 	/**
@@ -546,7 +548,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @return <jk>true</jk> if this method has one or more arguments.
 	 */
 	public boolean hasArgs() {
-		return m.getParameterTypes().length > 0;
+		return rawParamTypes().length > 0;
 	}
 
 	/**
@@ -555,7 +557,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @return <jk>true</jk> if this method has zero arguments.
 	 */
 	public boolean hasNoArgs() {
-		return m.getParameterTypes().length == 0;
+		return rawParamTypes().length == 0;
 	}
 
 	/**
@@ -680,7 +682,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	public String getSignature() {
 		if (signature == null) {
 			StringBuilder sb = new StringBuilder(m.getName());
-			Class<?>[] pt = m.getParameterTypes();
+			Class<?>[] pt = rawParamTypes();
 			if (pt.length > 0) {
 				sb.append('(');
 				MethodParamInfo[] mpi = getParams();
@@ -701,26 +703,42 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 *
 	 * @return The parameter types on this method.
 	 */
-	public Class<?>[] getParameterTypes() {
-		return m.getParameterTypes();
+	public List<ClassInfo> getParameterTypes() {
+		if (paramTypes == null) {
+			Class<?>[] ptc = rawParamTypes();
+			Type[] ptt = m.getGenericParameterTypes();
+			List<ClassInfo> l = new ArrayList<>(ptc.length);
+			for (int i = 0; i < ptc.length; i++)
+				l.add(ClassInfo.of(ptc[i], ptt[i]));
+			paramTypes = Collections.unmodifiableList(l);
+		}
+		return paramTypes;
+	}
+
+	private Class<?>[] rawParamTypes() {
+		if (rawParamTypes == null)
+			rawParamTypes = m.getParameterTypes();
+		return rawParamTypes;
 	}
 
 	/**
-	 * Returns the parameter types on this method.
+	 * Returns the number of parameters in this method.
 	 *
-	 * @return The parameter types on this method.
+	 * @return The nubmer of parameters in this method.
 	 */
-	public Class<?>[] getParameterTypeInfos() {
-		return m.getParameterTypes();
+	public int getParamCount() {
+		return m.getParameterCount();
 	}
 
 	/**
-	 * Returns the generic parameter types on this method.
+	 * Returns the raw parameter types on this method.
 	 *
-	 * @return The generic parameter types on this method.
+	 * @return The raw parameter types on this method.
 	 */
-	public Type[] getGenericParameterTypes() {
-		return m.getGenericParameterTypes();
+	public Class<?>[] getRawParamTypes() {
+		if (rawParamTypes == null)
+			rawParamTypes = m.getParameterTypes();
+		return rawParamTypes.clone();
 	}
 
 	/**
@@ -729,28 +747,8 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @param index The parameter index.
 	 * @return The parameter type of the parameter at the specified index.
 	 */
-	public Class<?> getParameterType(int index) {
-		return getParameterTypes()[index];
-	}
-
-	/**
-	 * Returns the generic parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The generic parameter type of the parameter at the specified index.
-	 */
-	public Type getGenericParameterType(int index) {
-		return getGenericParameterTypes()[index];
-	}
-
-	/**
-	 * Returns the generic parameter type of the parameter at the specified index as a {@link ClassInfo} object.
-	 *
-	 * @param index The parameter index.
-	 * @return The generic parameter type of the parameter at the specified index.
-	 */
-	public ClassInfo getGenericParameterTypeInfo(int index) {
-		return ClassInfo.of(getGenericParameterType(index));
+	public ClassInfo getParameterType(int index) {
+		return getParameterTypes().get(index);
 	}
 
 	/**
@@ -804,7 +802,7 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	 * @return <jk>true</jk> if the method parameters only consist of the types specified in the list.
 	 */
 	public boolean argsOnlyOfType(Class<?>...args) {
-		for (Class<?> c1 : getParameterTypes()) {
+		for (Class<?> c1 : getRawParamTypes()) {
 			boolean foundMatch = false;
 			for (Class<?> c2 : args)
 				if (c1 == c2)
@@ -818,10 +816,10 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
-		for (int i = 0; i < m.getParameterTypes().length; i++) {
+		for (int i = 0; i < rawParamTypes().length; i++) {
 			if (i > 0)
 				sb.append(",");
-			sb.append(m.getParameterTypes()[i].getSimpleName());
+			sb.append(rawParamTypes()[i].getSimpleName());
 		}
 		sb.append(")");
 		return sb.toString();
@@ -851,10 +849,10 @@ public final class MethodInfo implements Comparable<MethodInfo> {
 	public int compareTo(MethodInfo o) {
 		int i = getName().compareTo(o.getName());
 		if (i == 0) {
-			i = getParameterTypes().length - o.getParameterTypes().length;
+			i = rawParamTypes().length - o.rawParamTypes().length;
 			if (i == 0) {
-				for (int j = 0; j < getParameterTypes().length && i == 0; j++) {
-					i = getParameterTypes()[j].getName().compareTo(o.getParameterTypes()[j].getName());
+				for (int j = 0; j < rawParamTypes().length && i == 0; j++) {
+					i = rawParamTypes()[j].getName().compareTo(o.rawParamTypes()[j].getName());
 				}
 			}
 		}

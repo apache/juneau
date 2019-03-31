@@ -96,7 +96,7 @@ public final class MethodParamInfo {
 	 * @return The class type of this parameter.
 	 */
 	public Class<?> getParameterType() {
-		return isConstructor ? constructorInfo.getParameterType(index).inner() : methodInfo.getParameterType(index);
+		return isConstructor ? constructorInfo.getParameterType(index).inner() : methodInfo.getParameterType(index).inner();
 	}
 
 	/**
@@ -105,7 +105,7 @@ public final class MethodParamInfo {
 	 * @return The generic class type of this parameter.
 	 */
 	public Type getGenericParameterType() {
-		return isConstructor ? constructorInfo.getParameterType(index).innerType() : methodInfo.getGenericParameterType(index);
+		return isConstructor ? constructorInfo.getParameterType(index).innerType() : methodInfo.getParameterType(index).innerType();
 	}
 
 	/**
@@ -114,7 +114,7 @@ public final class MethodParamInfo {
 	 * @return The generic class type of this parameter.
 	 */
 	public ClassInfo getGenericParameterTypeInfo() {
-		return isConstructor ? constructorInfo.getParameterType(index) : methodInfo.getGenericParameterTypeInfo(index);
+		return isConstructor ? constructorInfo.getParameterType(index) : methodInfo.getParameterType(index);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public final class MethodParamInfo {
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		return methodInfo.getGenericParameterTypeInfo(index).resolved().getAnnotation(a);
+		return methodInfo.getParameterType(index).resolved().getAnnotation(a);
 	}
 
 	/**
@@ -250,7 +250,7 @@ public final class MethodParamInfo {
 			}
 		} else {
 			List<Method> methods = methodInfo.getMatching();
-			ClassInfo ci = methodInfo.getGenericParameterTypeInfo(index).resolved();
+			ClassInfo ci = methodInfo.getParameterType(index).resolved();
 			if (parentFirst) {
 				ci.appendAnnotationsParentFirst(l, a);
 				for (Method m2 : iterable(methods, true))

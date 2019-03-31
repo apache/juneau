@@ -136,7 +136,7 @@ public class ConfigFileStoreTest {
 	}
 
 	@Test
-	public void testWatcher() throws Exception {
+	public void testWatcher_LONGRUNNING() throws Exception {
 		ConfigFileStore fs = ConfigFileStore.create().directory(DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 
 		final CountDownLatch latch = new CountDownLatch(4);

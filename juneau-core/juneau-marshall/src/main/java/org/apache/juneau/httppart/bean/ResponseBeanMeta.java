@@ -169,8 +169,7 @@ public class ResponseBeanMeta {
 						assertReturnType(m, ResponseHeader.class, int.class, Integer.class);
 						statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
 					} else if (m.hasAnnotation(ResponseBody.class)) {
-						Class<?>[] pt = m.getParameterTypes();
-						if (pt.length == 0)
+						if (m.getParamCount() == 0)
 							assertReturnNotVoid(m, ResponseHeader.class);
 						else
 							assertArgType(m, ResponseHeader.class, OutputStream.class, Writer.class);

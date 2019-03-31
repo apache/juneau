@@ -607,6 +607,8 @@ public class BeanMeta<T> {
 					continue;
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
 					continue;
+				if (m.getParamCount() > 2)
+					continue;
 
 				BeanIgnore bi = m.getAnnotation(BeanIgnore.class);
 				if (bi != null)
@@ -618,7 +620,7 @@ public class BeanMeta<T> {
 
 				String n = m.getName();
 
-				Class<?>[] pt = m.getParameterTypes();
+				List<ClassInfo> pt = m.getParameterTypes();
 				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
 				String bpName = bpName(bp);
@@ -626,7 +628,7 @@ public class BeanMeta<T> {
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
-				if (pt.length == 0) {
+				if (pt.size() == 0) {
 					if ("*".equals(bpName)) {
 						if (rt.isChildOf(Collection.class)) {
 							methodType = EXTRAKEYS;
@@ -652,12 +654,12 @@ public class BeanMeta<T> {
 							n = bpName;
 						}
 					}
-				} else if (pt.length == 1) {
+				} else if (pt.size() == 1) {
 					if ("*".equals(bpName)) {
-						if (getClassInfo(pt[0]).isChildOf(Map.class)) {
+						if (pt.get(0).isChildOf(Map.class)) {
 							methodType = SETTER;
 							n = bpName;
-						} else if (pt[0] == String.class) {
+						} else if (pt.get(0).is(String.class)) {
 							methodType = GETTER;
 							n = bpName;
 						}
@@ -676,8 +678,8 @@ public class BeanMeta<T> {
 					} else if (fluentSetters && rt.isParentOf(c)) {
 						methodType = SETTER;
 					}
-				} else if (pt.length == 2) {
-					if ("*".equals(bpName) && pt[0] == String.class) {
+				} else if (pt.size() == 2) {
+					if ("*".equals(bpName) && pt.get(0).is(String.class)) {
 						if (n.startsWith("set") && (rt.isParentOf(c) || rt.is(Void.TYPE))) {
 							methodType = SETTER;
 						} else {
