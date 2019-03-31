@@ -197,7 +197,7 @@ public class BuilderSwap<T,B> {
 
 		if (builderClass == null) {
 			for (ConstructorInfo cc : pci.getPublicConstructors()) {
-				if (cc.isVisible(cVis) && cc.hasNumArgs(1)) {
+				if (cc.isVisible(cVis) && cc.hasNumParams(1)) {
 					ClassInfo pt = cc.getParamType(0);
 					if (pt.isChildOf(Builder.class)) {
 						pojoConstructor = cc;

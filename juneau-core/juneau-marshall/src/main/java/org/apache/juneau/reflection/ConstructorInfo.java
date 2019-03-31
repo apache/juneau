@@ -12,9 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -24,14 +22,9 @@ import org.apache.juneau.internal.*;
  * Lightweight utility class for introspecting information about a constructor.
  */
 @BeanIgnore
-public final class ConstructorInfo implements Comparable<ConstructorInfo> {
+public final class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
 
-	private final ClassInfo declaringClass;
 	private final Constructor<?> c;
-	private List<MethodParamInfo> params;
-	private List<ClassInfo> paramTypes;
-	private Class<?>[] rawParamTypes;
-	private Type[] rawGenericParamTypes;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation.
@@ -40,20 +33,11 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The constructor being wrapped.
-	 */
-	protected ConstructorInfo(Constructor<?> c) {
-		this(ClassInfo.of(c.getDeclaringClass()), c);
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param declaringClass The class that declares this method.
 	 * @param c The constructor being wrapped.
 	 */
 	protected ConstructorInfo(ClassInfo declaringClass, Constructor<?> c) {
-		this.declaringClass = declaringClass;
+		super(declaringClass, c);
 		this.c = c;
 	}
 
@@ -90,342 +74,6 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 	@SuppressWarnings("unchecked")
 	public <T> Constructor<T> inner() {
 		return (Constructor<T>)c;
-	}
-
-	/**
-	 * Returns metadata about the declaring class.
-	 *
-	 * @return Metadata about the declaring class.
-	 */
-	public ClassInfo getDeclaringClass() {
-		return declaringClass;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Parameters
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the parameters defined on this method.
-	 *
-	 * @return An array of parameter information, never <jk>null</jk>.
-	 */
-	public List<MethodParamInfo> getParams() {
-		if (params == null) {
-			List<MethodParamInfo> l = new ArrayList<>(c.getParameterCount());
-			for (int i = 0; i < c.getParameterCount(); i++)
-				l.add(new MethodParamInfo(this, i));
-			params = Collections.unmodifiableList(l);
-		}
-		return params;
-	}
-
-	/**
-	 * Returns parameter information at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The parameter information, never <jk>null</jk>.
-	 */
-	public MethodParamInfo getParam(int index) {
-		return getParams().get(index);
-	}
-
-	/**
-	 * Returns the parameter types on this constructor.
-	 *
-	 * @return The parameter types on this constructor.
-	 */
-	public List<ClassInfo> getParamTypes() {
-		if (paramTypes == null) {
-			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
-			// always return an empty array.
-			Class<?>[] ptc = rawParamTypes();
-			Type[] ptt = rawGenericParamTypes();
-			List<ClassInfo> l = new ArrayList<>(ptc.length);
-			for (int i = 0; i < ptc.length; i++)
-				l.add(ClassInfo.of(ptc[i], ptt.length > i ? ptt[i] : ptc[i]));
-			paramTypes = Collections.unmodifiableList(l);
-		}
-		return paramTypes;
-	}
-
-	/**
-	 * Returns the parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The parameter type of the parameter at the specified index.
-	 */
-	public ClassInfo getParamType(int index) {
-		return getParamTypes().get(index);
-	}
-
-	/**
-	 * Returns the parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The parameter type of the parameter at the specified index.
-	 */
-	public Class<?> getRawParamType(int index) {
-		return rawParamTypes()[index];
-	}
-
-	/**
-	 * Returns the parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The parameter type of the parameter at the specified index.
-	 */
-	public Type getRawGenericParamType(int index) {
-		return rawGenericParamTypes()[index];
-	}
-
-	private Class<?>[] rawParamTypes() {
-		if (rawParamTypes == null)
-			rawParamTypes = c.getParameterTypes();
-		return rawParamTypes;
-	}
-
-	private Type[] rawGenericParamTypes() {
-		if (rawGenericParamTypes == null)
-			rawGenericParamTypes = c.getGenericParameterTypes();
-		return rawGenericParamTypes;
-	}
-
-	/**
-	 * Returns the number of parameters in this method.
-	 *
-	 * @return The number of parameters in this method.
-	 */
-	public int getParamCount() {
-		return c.getParameterCount();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the parameter annotations on this constructor.
-	 *
-	 * @return The parameter annotations on this constructor.
-	 */
-	public Annotation[][] getParameterAnnotations() {
-		return c.getParameterAnnotations();
-	}
-
-	/**
-	 * Returns the parameter annotations on the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The parameter annotations on the parameter at the specified index.
-	 */
-	public Annotation[] getParameterAnnotations(int index) {
-		return c.getParameterAnnotations()[index];
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
-	 *
-	 * @param a The annotation to check for.
-	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
-	 */
-	public boolean isAnnotationPresent(Class<? extends Annotation> a) {
-		return c.isAnnotationPresent(a);
-	}
-
-	/**
-	 * Returns the specified annotation on this constructor.
-	 *
-	 * @param a The annotation to search for.
-	 * @return The annotation, or <jk>null</jk> if not present.
-	 */
-	public <T extends Annotation> T getAnnotation(Class<T> a) {
-		return c.getAnnotation(a);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Characteristics
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this constructor.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this constructor.
-	 */
-	public boolean isAll(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isNotDeprecated())
-						return false;
-					break;
-				case NOT_DEPRECATED:
-					if (isDeprecated())
-						return false;
-					break;
-				case HAS_ARGS:
-					if (hasNoArgs())
-						return false;
-					break;
-				case HAS_NO_ARGS:
-					if (hasArgs())
-						return false;
-					break;
-				case PUBLIC:
-					if (isNotPublic())
-						return false;
-					break;
-				case NOT_PUBLIC:
-					if (isPublic())
-						return false;
-					break;
-				default:
-					throw new RuntimeException("Invalid flag for constructor: " + f);
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this constructor.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this constructor.
-	 */
-	public boolean isAny(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isDeprecated())
-						return true;
-					break;
-				case NOT_DEPRECATED:
-					if (isNotDeprecated())
-						return true;
-					break;
-				case HAS_ARGS:
-					if (hasArgs())
-						return true;
-					break;
-				case HAS_NO_ARGS:
-					if (hasNoArgs())
-						return true;
-					break;
-				case PUBLIC:
-					if (isPublic())
-						return true;
-					break;
-				case NOT_PUBLIC:
-					if (isNotPublic())
-						return true;
-					break;
-				default:
-					throw new RuntimeException("Invalid flag for constructor: " + f);
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor has this arguments.
-	 *
-	 * @param args The arguments to test for.
-	 * @return <jk>true</jk> if this constructor has this arguments in the exact order.
-	 */
-	public boolean hasArgs(Class<?>...args) {
-		Class<?>[] pt = rawParamTypes();
-		if (pt.length == args.length) {
-			for (int i = 0; i < pt.length; i++)
-				if (! pt[i].equals(args[i]))
-					return false;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor has one or more arguments.
-	 *
-	 * @return <jk>true</jk> if this constructor has one or more arguments.
-	 */
-	public boolean hasArgs() {
-		return getParamCount() != 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor has zero arguments.
-	 *
-	 * @return <jk>true</jk> if this constructor has zero arguments.
-	 */
-	public boolean hasNoArgs() {
-		return getParamCount() == 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor has this number of arguments.
-	 *
-	 * @param number The number of expected arguments.
-	 * @return <jk>true</jk> if this constructor has this number of arguments.
-	 */
-	public boolean hasNumArgs(int number) {
-		return getParamCount() == number;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor has at most only this arguments in any order.
-	 *
-	 * @param args The arguments to test for.
-	 * @return <jk>true</jk> if this constructor has at most only this arguments in any order.
-	 */
-	public boolean hasFuzzyArgs(Class<?>...args) {
-		return ClassUtils.fuzzyArgsMatch(rawParamTypes(), args) != -1;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor has the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @return <jk>true</jk> if this constructor has the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public boolean isDeprecated() {
-		return c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 *
-	 * @return <jk>true</jk> if this constructor doesn't have the {@link Deprecated @Deprecated} annotation on it.
-	 */
-	public boolean isNotDeprecated() {
-		return ! c.isAnnotationPresent(Deprecated.class);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor is public.
-	 *
-	 * @return <jk>true</jk> if this constructor is public.
-	 */
-	public boolean isPublic() {
-		return Modifier.isPublic(c.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this constructor is not public.
-	 *
-	 * @return <jk>true</jk> if this constructor is not public.
-	 */
-	public boolean isNotPublic() {
-		return ! Modifier.isPublic(c.getModifiers());
-	}
-
-	/**
-	 * Identifies if the specified visibility matches this constructor.
-	 *
-	 * @param v The visibility to validate against.
-	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this constructor.
-	 */
-	public boolean isVisible(Visibility v) {
-		return v.isVisible(c);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -477,15 +125,6 @@ public final class ConstructorInfo implements Comparable<ConstructorInfo> {
 		if (v.transform(c) == null)
 			return null;
 		return this;
-	}
-
-	/**
-	 * Returns the name of the underlying constructor.
-	 *
-	 * @return The name of the underlying constructor.
-	 */
-	public String getName() {
-		return c.getName();
 	}
 
 	@Override

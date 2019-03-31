@@ -383,7 +383,7 @@ final class SwaggerGenerator {
 
 			ObjectMap responses = op.getObjectMap("responses", true);
 
-			for (ClassInfo eci : mi.getExceptionInfos()) {
+			for (ClassInfo eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
 					List<Response> la = eci.getAnnotationsParentFirst(Response.class);
 					Set<Integer> codes = getCodes(la, 500);

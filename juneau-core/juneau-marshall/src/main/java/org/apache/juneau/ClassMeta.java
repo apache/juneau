@@ -545,13 +545,13 @@ public final class ClassMeta<T> implements Type {
 			// Find @NameProperty and @ParentProperty methods if present.
 			for (MethodInfo m : ci.getAllMethodsParentFirst()) {
 				if (m.hasAnnotation(ParentProperty.class)) {
-					if (m.isStatic() || ! m.hasNumArgs(1))
+					if (m.isStatic() || ! m.hasNumParams(1))
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
 				if (m.hasAnnotation(NameProperty.class)) {
-					if (m.isStatic() || ! m.hasNumArgs(1))
+					if (m.isStatic() || ! m.hasNumParams(1))
 						throw new ClassMetaRuntimeException("@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					namePropertyMethod = new Setter.MethodSetter(m.inner());
@@ -995,7 +995,7 @@ public final class ClassMeta<T> implements Type {
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
 		for (ConstructorInfo cc : ci.getPublicConstructors()) {
-			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
+			if (cc.hasNumParams(isMemberClass ? 1 : 0) && cc.isVisible(v) && cc.isNotDeprecated())
 				return (Constructor<? extends T>) v.transform(cc.inner());
 		}
 		return null;

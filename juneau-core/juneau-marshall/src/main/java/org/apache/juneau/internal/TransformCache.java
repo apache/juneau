@@ -180,7 +180,7 @@ public class TransformCache {
 			} else {
 				final ConstructorInfo c = oci.getPublicConstructor(ic);
 				final boolean isMemberClass = oci.isMemberClass() && ! oci.isStatic();
-				if (c != null && ! c.isAnnotationPresent(Deprecated.class)) {
+				if (c != null && ! c.hasAnnotation(Deprecated.class)) {
 					t = new Transform<I,O>() {
 						@Override
 						public O transform(Object outer, I in) {

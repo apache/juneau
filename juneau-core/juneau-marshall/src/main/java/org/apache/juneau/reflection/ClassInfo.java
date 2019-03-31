@@ -451,7 +451,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getBuilderBuildMethod() {
 		for (MethodInfo m : getDeclaredMethods())
-			if (m.isAll(NOT_STATIC) && m.hasName("build") && (!m.hasArgs()) && (!m.hasReturnType(void.class)))
+			if (m.isAll(NOT_STATIC) && m.hasName("build") && (!m.hasParams()) && (!m.hasReturnType(void.class)))
 				return m;
 		return null;
 	}
@@ -591,7 +591,7 @@ public final class ClassInfo {
 			return null;
 		boolean isMemberClass = isNonStaticMemberClass();
 		for (ConstructorInfo cc : getDeclaredConstructors())
-			if (cc.hasNumArgs(isMemberClass ? 1 : 0) && cc.isVisible(v))
+			if (cc.hasNumParams(isMemberClass ? 1 : 0) && cc.isVisible(v))
 				return cc.transform(v);
 		return null;
 	}

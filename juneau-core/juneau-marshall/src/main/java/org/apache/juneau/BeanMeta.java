@@ -219,7 +219,7 @@ public class BeanMeta<T> {
 
 				// Look for @BeanConstructor constructor.
 				for (ConstructorInfo x : ci.getPublicConstructors()) {
-					if (x.isAnnotationPresent(BeanConstructor.class)) {
+					if (x.hasAnnotation(BeanConstructor.class)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
 						constructor = x;
