@@ -15,7 +15,7 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**

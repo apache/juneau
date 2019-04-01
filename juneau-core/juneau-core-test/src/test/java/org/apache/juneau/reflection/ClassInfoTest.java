@@ -14,9 +14,9 @@ package org.apache.juneau.reflection;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.reflection.ClassInfo.*;
+import static org.apache.juneau.reflect.ClassInfo.*;
+import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.reflection.ClassFlags.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -26,6 +26,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 
@@ -1168,16 +1169,16 @@ public class ClassInfoTest {
 
 	@Test
 	public void isAll() {
-		assertTrue(h2a.isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ClassFlags.CLASS));
+		assertTrue(h2a.isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ReflectFlags.CLASS));
 		assertTrue(h2b.isAll(NOT_DEPRECATED, NOT_PUBLIC, STATIC, ABSTRACT, INTERFACE));
 	}
 
 	@Test
 	public void isAll_onType() {
-		assertTrue(aTypeInfo.isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
-		assertFalse(pTypeInfo.isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
-		assertFalse(pTypeDimensionalInfo.isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
-		assertFalse(pTypeGenericInfo.isAll(PUBLIC, MEMBER, ClassFlags.CLASS));
+		assertTrue(aTypeInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
+		assertFalse(pTypeInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
+		assertFalse(pTypeDimensionalInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
+		assertFalse(pTypeGenericInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
 	}
 
 	@Test
@@ -1252,19 +1253,19 @@ public class ClassInfoTest {
 
 	@Test
 	public void isAll_class() {
-		assertFalse(aInterface.isAll(ClassFlags.CLASS));
-		assertTrue(aClass.isAll(ClassFlags.CLASS));
+		assertFalse(aInterface.isAll(ReflectFlags.CLASS));
+		assertTrue(aClass.isAll(ReflectFlags.CLASS));
 	}
 
 	@Test
 	public void isAll_invalid() {
 		ClassInfo a = aClass;
 		try {
-			a.isAll(HAS_ARGS);
+			a.isAll(HAS_PARAMS);
 			fail("Expected exception.");
 		} catch (Exception e) {}
 		try {
-			a.isAll(HAS_NO_ARGS);
+			a.isAll(HAS_NO_PARAMS);
 			fail("Expected exception.");
 		} catch (Exception e) {}
 		try {
@@ -1284,7 +1285,7 @@ public class ClassInfoTest {
 		assertTrue(h2a.isAny(STATIC));
 		assertTrue(h2a.isAny(MEMBER));
 		assertTrue(h2a.isAny(ABSTRACT));
-		assertTrue(h2a.isAny(ClassFlags.CLASS));
+		assertTrue(h2a.isAny(ReflectFlags.CLASS));
 		assertTrue(h2b.isAny(NOT_DEPRECATED));
 		assertTrue(h2b.isAny(NOT_PUBLIC));
 		assertTrue(h2b.isAny(STATIC));
@@ -1294,7 +1295,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void isAny_onType() {
-		assertFalse(aTypeInfo.isAny(new ClassFlags[0]));
+		assertFalse(aTypeInfo.isAny(new ReflectFlags[0]));
 	}
 
 	@Test
@@ -1369,19 +1370,19 @@ public class ClassInfoTest {
 
 	@Test
 	public void isAny_class() {
-		assertFalse(aInterface.isAny(ClassFlags.CLASS));
-		assertTrue(aClass.isAny(ClassFlags.CLASS));
+		assertFalse(aInterface.isAny(ReflectFlags.CLASS));
+		assertTrue(aClass.isAny(ReflectFlags.CLASS));
 	}
 
 	@Test
 	public void isAny_invalid() {
 		ClassInfo a = aClass;
 		try {
-			a.isAny(HAS_ARGS);
+			a.isAny(HAS_PARAMS);
 			fail("Expected exception.");
 		} catch (Exception e) {}
 		try {
-			a.isAny(HAS_NO_ARGS);
+			a.isAny(HAS_NO_PARAMS);
 			fail("Expected exception.");
 		} catch (Exception e) {}
 		try {

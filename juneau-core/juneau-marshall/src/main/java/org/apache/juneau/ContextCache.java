@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Stores a cache of {@link Context} instances mapped by the property stores used to create them.

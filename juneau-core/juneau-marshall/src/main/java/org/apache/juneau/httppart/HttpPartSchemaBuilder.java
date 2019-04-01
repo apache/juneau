@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.jsonschema.annotation.SubItems;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.httppart.HttpPartSchema.*;
 import org.apache.juneau.httppart.HttpPartSchema.Type;
 import org.apache.juneau.utils.*;

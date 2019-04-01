@@ -12,14 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflection;
 
+import static org.apache.juneau.reflect.ConstructorInfo.*;
 import static org.junit.Assert.*;
-import static org.apache.juneau.reflection.ConstructorInfo.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 public class ConstructorInfoTest {

@@ -22,7 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.transform.*;
 

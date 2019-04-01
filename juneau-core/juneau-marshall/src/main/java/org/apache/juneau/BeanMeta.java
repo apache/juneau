@@ -15,7 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.reflection.ClassFlags.*;
+import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 
 import java.beans.BeanInfo;
@@ -26,7 +26,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 

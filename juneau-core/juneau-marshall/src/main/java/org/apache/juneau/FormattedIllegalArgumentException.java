@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.text.*;
 
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Subclass of illegal-argument exceptions that take in a message and zero or more arguments.

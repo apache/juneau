@@ -15,7 +15,7 @@ package org.apache.juneau.annotation;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Defines an invalid usage of an annotation.

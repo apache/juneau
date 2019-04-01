@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.text.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * General invalid conversion exception.

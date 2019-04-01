@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -332,8 +332,8 @@ public abstract class ExecutableInfo {
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this method.
 	 */
-	public final boolean isAll(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
+	public final boolean isAll(ReflectFlags...flags) {
+		for (ReflectFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isNotDeprecated())
@@ -343,11 +343,11 @@ public abstract class ExecutableInfo {
 					if (isDeprecated())
 						return false;
 					break;
-				case HAS_ARGS:
+				case HAS_PARAMS:
 					if (hasNoParams())
 						return false;
 					break;
-				case HAS_NO_ARGS:
+				case HAS_NO_PARAMS:
 					if (hasParams())
 						return false;
 					break;
@@ -388,8 +388,8 @@ public abstract class ExecutableInfo {
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this method.
 	 */
-	public final boolean isAny(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
+	public final boolean isAny(ReflectFlags...flags) {
+		for (ReflectFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isDeprecated())
@@ -399,11 +399,11 @@ public abstract class ExecutableInfo {
 					if (isNotDeprecated())
 						return true;
 					break;
-				case HAS_ARGS:
+				case HAS_PARAMS:
 					if (hasParams())
 						return true;
 					break;
-				case HAS_NO_ARGS:
+				case HAS_NO_PARAMS:
 					if (hasNoParams())
 						return true;
 					break;

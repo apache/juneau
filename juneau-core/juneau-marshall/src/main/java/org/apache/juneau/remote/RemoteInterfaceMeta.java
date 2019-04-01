@@ -19,7 +19,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Contains the meta-data about a remote proxy REST interface.

@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 public class ExecutorInfoTest {

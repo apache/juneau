@@ -10,58 +10,57 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
+
+import java.lang.annotation.*;
 
 /**
- * Identifies possible modifiers on classes, methods, fields, and constructors.
+ * Represents an annotation instance on a class and the class it was found on.
+ *
+ * @param <T> The annotation type.
  */
-public enum ClassFlags {
+public class AnnotationInfo<T extends Annotation> {
 
-	/** PUBLIC */
-	PUBLIC,
+	private ClassInfo c;
+	private T a;
 
-	/** NOT_PUBLIC */
-	NOT_PUBLIC,
+	/**
+	 * Constructor.
+	 *
+	 * @param c The class where the annotation was found.
+	 * @param a The annotation found.
+	 */
+	public AnnotationInfo(ClassInfo c, T a) {
+		this.c = c;
+		this.a = a;
+	}
 
-	/** STATIC */
-	STATIC,
+	/**
+	 * Convenience constructor.
+	 *
+	 * @param c The class where the annotation was found.
+	 * @param a The annotation found.
+	 * @return A new {@link AnnotationInfo} object.
+	 */
+	public static <T extends Annotation> AnnotationInfo<T> of(ClassInfo c, T a) {
+		return new AnnotationInfo<>(c, a);
+	}
 
-	/** NOT_STATIC */
-	NOT_STATIC,
+	/**
+	 * Returns the class where the annotation was found.
+	 *
+	 * @return the class where the annotation was found.
+	 */
+	public ClassInfo getClassOn() {
+		return c;
+	}
 
-	/** MEMBER */
-	MEMBER,
-
-	/** NOT_MEMBER */
-	NOT_MEMBER,
-
-	/** INTERFACE */
-	INTERFACE,
-
-	/** CLASS */
-	CLASS,
-
-	/** HAS_ARGS */
-	HAS_ARGS,
-
-	/** HAS_NO_ARGS */
-	HAS_NO_ARGS,
-
-	/** DEPRECATED */
-	DEPRECATED,
-
-	/** NOT_DEPRECATED */
-	NOT_DEPRECATED,
-
-	/** ABSTRACT */
-	ABSTRACT,
-
-	/** NOT_ABSTRACT */
-	NOT_ABSTRACT,
-
-	/** TRANSIENT */
-	TRANSIENT,
-
-	/** NOT_TRANSIENT */
-	NOT_TRANSIENT
+	/**
+	 * Returns the annotation found.
+	 *
+	 * @return The annotation found.
+	 */
+	public T getAnnotation() {
+		return a;
+	}
 }

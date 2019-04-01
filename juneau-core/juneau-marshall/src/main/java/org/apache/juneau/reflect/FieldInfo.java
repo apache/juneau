@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -111,8 +111,8 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
-	public boolean isAll(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
+	public boolean isAll(ReflectFlags...flags) {
+		for (ReflectFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isNotDeprecated())
@@ -122,9 +122,9 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 					if (isDeprecated())
 						return false;
 					break;
-				case HAS_ARGS:
+				case HAS_PARAMS:
 					break;
-				case HAS_NO_ARGS:
+				case HAS_NO_PARAMS:
 					break;
 				case PUBLIC:
 					if (isNotPublic())
@@ -163,8 +163,8 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
-	public boolean isAny(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
+	public boolean isAny(ReflectFlags...flags) {
+		for (ReflectFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isDeprecated())

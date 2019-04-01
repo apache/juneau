@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 public class MethodInfoTest {

@@ -27,7 +27,7 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Exception representing a <code>400+</code> HTTP response code against a remote resource.

@@ -15,7 +15,7 @@ package org.apache.juneau.httppart.bean;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Utility methods.

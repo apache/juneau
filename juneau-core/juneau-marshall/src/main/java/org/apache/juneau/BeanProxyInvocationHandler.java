@@ -16,7 +16,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Provides an {@link InvocationHandler} for creating beans from bean interfaces.

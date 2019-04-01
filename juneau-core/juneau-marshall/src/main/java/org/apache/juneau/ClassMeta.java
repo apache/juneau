@@ -14,7 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.reflection.ClassFlags.*;
+import static org.apache.juneau.reflect.ReflectFlags.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -32,7 +32,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;

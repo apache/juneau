@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Utilities.
