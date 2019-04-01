@@ -598,7 +598,7 @@ public final class ClassMeta<T> implements Type {
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ici;
-				noArgConstructor = x.getPublicNoArgConstructor();
+				noArgConstructor = x.getPublicConstructor();
 			}
 
 			if (beanFilter == null)

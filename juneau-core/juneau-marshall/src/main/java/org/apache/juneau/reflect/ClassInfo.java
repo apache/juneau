@@ -626,19 +626,6 @@ public final class ClassInfo {
 		return null;
 	}
 
-	/**
-	 * Locates the public no-arg constructor for this class.
-	 *
-	 * <p>
-	 * If class is abstract, always returns <jk>null</jk>.
-	 * Note that this also returns the 1-arg constructor for non-static member classes.
-	 *
-	 * @return The constructor, or <jk>null</jk> if no public no-arg constructor exists.
-	 */
-	public ConstructorInfo getPublicNoArgConstructor() {
-		return getNoArgConstructor(Visibility.PUBLIC);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fields
 	//-----------------------------------------------------------------------------------------------------------------

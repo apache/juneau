@@ -623,7 +623,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPublicNoArgConstructor() {
-		check("E1()", e1.getPublicNoArgConstructor());
+		check("E1()", e1.getPublicConstructor());
 	}
 
 	@Test

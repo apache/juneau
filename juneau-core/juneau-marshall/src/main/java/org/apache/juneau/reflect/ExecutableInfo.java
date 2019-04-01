@@ -130,7 +130,9 @@ public abstract class ExecutableInfo {
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
 	public final ParamInfo getParam(int index) {
-		return getParams().get(index);
+		if (params != null)
+			return params.get(index);
+		return new ParamInfo(this, index);
 	}
 
 	/**
@@ -159,7 +161,9 @@ public abstract class ExecutableInfo {
 	 * @return The parameter type of the parameter at the specified index.
 	 */
 	public final ClassInfo getParamType(int index) {
-		return getParamTypes().get(index);
+		if (paramTypes != null)
+			return getParamTypes().get(index);
+		return ClassInfo.of(getRawParamType(index), getRawGenericParamType(index));
 	}
 
 	/**
