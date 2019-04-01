@@ -33,6 +33,7 @@ public abstract class ExecutableInfo {
 	private List<ClassInfo> paramTypes, exceptionInfos;
 	private Class<?>[] rawParamTypes, rawExceptionTypes;
 	private Type[] rawGenericParamTypes;
+	private Parameter[] rawParameters;
 	private Map<Class<?>,Optional<Annotation>> annotationMap;
 
 	/**
@@ -60,8 +61,8 @@ public abstract class ExecutableInfo {
 	 * Returns <jk>true</jk> if this executable represents a {@link Constructor}.
 	 *
 	 * @return
-	 * 	<jk>true</jk> if this executable represents a {@link Constructor}.
-	 * 	<jk>false</jk> if this executable represents a {@link Method}.
+	 * 	<jk>true</jk> if this executable represents a {@link Constructor} and can be cast to {@link ConstructorInfo}.
+	 * 	<jk>false</jk> if this executable represents a {@link Method} and can be cast to {@link MethodInfo}.
 	 */
 	public final boolean isConstructor() {
 		return isConstructor;
@@ -74,6 +75,9 @@ public abstract class ExecutableInfo {
 	/**
 	 * Returns the number of parameters in this executable.
 	 *
+	 * <p>
+	 * Same as calling {@link Executable#getParameterCount()}.
+	 *
 	 * @return The number of parameters in this executable.
 	 */
 	public final int getParamCount() {
@@ -82,6 +86,9 @@ public abstract class ExecutableInfo {
 
 	/**
 	 * Returns <jk>true</jk> if this executable has at least one parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getParameterCount()} and comparing with zero.
 	 *
 	 * @return <jk>true</jk> if this executable has at least one parameter.
 	 */
@@ -92,6 +99,9 @@ public abstract class ExecutableInfo {
 	/**
 	 * Returns <jk>true</jk> if this executable has no parameters.
 	 *
+	 * <p>
+	 * Same as calling {@link Executable#getParameterCount()} and comparing with zero.
+	 *
 	 * @return <jk>true</jk> if this executable has no parameters.
 	 */
 	public final boolean hasNoParams() {
@@ -100,6 +110,9 @@ public abstract class ExecutableInfo {
 
 	/**
 	 * Returns <jk>true</jk> if this executable has this number of arguments.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getParameterCount()} and comparing the count.
 	 *
 	 * @param number The number of expected arguments.
 	 * @return <jk>true</jk> if this executable has this number of arguments.
@@ -111,13 +124,17 @@ public abstract class ExecutableInfo {
 	/**
 	 * Returns the parameters defined on this executable.
 	 *
+	 * <p>
+	 * Same as calling {@link Executable#getParameters()} but wraps the results
+	 *
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public final List<ParamInfo> getParams() {
 		if (params == null) {
-			List<ParamInfo> l = new ArrayList<>(getParamCount());
-			for (int i = 0; i < getParamCount(); i++)
-				l.add(new ParamInfo(this, i));
+			Parameter[] rp = rawParameters();
+			List<ParamInfo> l = new ArrayList<>(rp.length);
+			for (int i = 0; i < rp.length; i++)
+				l.add(new ParamInfo(this, rp[i], i));
 			params = Collections.unmodifiableList(l);
 		}
 		return params;
@@ -132,7 +149,7 @@ public abstract class ExecutableInfo {
 	public final ParamInfo getParam(int index) {
 		if (params != null)
 			return params.get(index);
-		return new ParamInfo(this, index);
+		return new ParamInfo(this, rawParameters()[index], index);
 	}
 
 	/**
@@ -195,6 +212,27 @@ public abstract class ExecutableInfo {
 	}
 
 	/**
+	 * Returns an array of raw {@link Parameter} objects that represent all the parameters to the underlying executable represented by this object.
+	 *
+	 * @return An array of raw {@link Parameter} objects, or an empty array if executable has no parameters.
+	 * @see Executable#getParameters()
+	 */
+	public final Parameter[] getRawParameters() {
+		return rawParameters().clone();
+	}
+
+	/**
+	 * Returns the raw {@link Parameter} object that represents the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The raw {@link Parameter} object that represents the parameter at the specified index.
+	 * @see Executable#getParameters()
+	 */
+	public final Parameter getRawParameter(int index) {
+		return rawParameters()[index];
+	}
+
+	/**
 	 * Returns the raw generic parameter type of the parameter at the specified index.
 	 *
 	 * @param index The parameter index.
@@ -214,6 +252,12 @@ public abstract class ExecutableInfo {
 		if (rawGenericParamTypes == null)
 			rawGenericParamTypes = e.getGenericParameterTypes();
 		return rawGenericParamTypes;
+	}
+
+	Parameter[] rawParameters() {
+		if (rawParameters == null)
+			rawParameters = e.getParameters();
+		return rawParameters;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

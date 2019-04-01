@@ -28,7 +28,8 @@ import org.apache.juneau.annotation.*;
 public final class ParamInfo {
 
 	private final ExecutableInfo eInfo;
-	private int index;
+	private final Parameter p;
+	private final int index;
 	private Map<Class<?>,Optional<Annotation>> annotationMap = new ConcurrentHashMap<>();
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -39,10 +40,12 @@ public final class ParamInfo {
 	 * Constructor.
 	 *
 	 * @param eInfo The constructor or method wrapper.
+	 * @param p The parameter being wrapped.
 	 * @param index The parameter index.
 	 */
-	protected ParamInfo(ExecutableInfo eInfo, int index) {
+	protected ParamInfo(ExecutableInfo eInfo, Parameter p, int index) {
 		this.eInfo = eInfo;
+		this.p = p;
 		this.index = index;
 	}
 
@@ -233,6 +236,29 @@ public final class ParamInfo {
 			}
 		}
 		return l;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the parameter has a name provided by the class file.
+	 *
+	 * @return <jk>true</jk> if the parameter has a name provided by the class file.
+	 */
+	public boolean hasName() {
+		return p.isNamePresent();
+	}
+
+	/**
+	 * Returns the name of the parameter.
+	 *
+	 * <p>
+	 * If the parameter's name is present, then this method returns the name provided by the class file.
+	 * Otherwise, this method synthesizes a name of the form argN, where N is the index of the parameter in the descriptor of the method which declares the parameter.
+	 *
+	 * @return The name of the parameter.
+	 * @see Parameter#getName()
+	 */
+	public String getName() {
+		return p.getName();
 	}
 
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
