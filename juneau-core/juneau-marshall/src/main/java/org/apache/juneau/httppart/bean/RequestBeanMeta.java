@@ -102,7 +102,7 @@ public class RequestBeanMeta {
 
 				if (m.isPublic()) {
 					assertNoInvalidAnnotations(m, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
-					String n = m.getName();
+					String n = m.getSimpleName();
 					if (m.hasAnnotation(Body.class)) {
 						assertNoArgs(m, Body.class);
 						assertReturnNotVoid(m, Body.class);

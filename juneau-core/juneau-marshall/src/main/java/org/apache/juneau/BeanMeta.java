@@ -618,7 +618,7 @@ public class BeanMeta<T> {
 				if (! (m.isVisible(v) || bp != null))
 					continue;
 
-				String n = m.getName();
+				String n = m.getSimpleName();
 
 				List<ClassInfo> pt = m.getParamTypes();
 				ClassInfo rt = m.getReturnType();
@@ -691,7 +691,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type on method ''{0}''.", m.getName());
+					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
 
 				if (methodType != UNKNOWN) {
 					if (bpName != null && ! bpName.isEmpty()) {

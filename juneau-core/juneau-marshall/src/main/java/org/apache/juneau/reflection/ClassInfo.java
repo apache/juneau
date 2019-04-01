@@ -63,7 +63,6 @@ public final class ClassInfo {
 	private List<ConstructorInfo> publicConstructors, declaredConstructors;
 	private List<FieldInfo> publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private Map<Class<?>,Optional<Annotation>> annotationMap, declaredAnnotationMap;
-	private String fullName, shortName;
 	private int dim = -1;
 	private ClassInfo componentType;
 
@@ -313,6 +312,21 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns the public method with the specified method name and argument types.
+	 *
+	 * @param name The method name (e.g. <js>"toString"</js>).
+	 * @param args The exact argument types.
+	 * @return
+	 *  The public method with the specified method name and argument types, or <jk>null</jk> if not found.
+	 */
+	public MethodInfo getPublicMethod(String name, Class<?>...args) {
+		for (MethodInfo mi : getPublicMethods())
+			if (mi.hasName(name) && mi.hasArgs(args))
+				return mi;
+		return null;
+	}
+
+	/**
 	 * Returns all methods declared on this class.
 	 *
 	 * @return
@@ -399,7 +413,7 @@ public final class ClassInfo {
 				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED)
 						&& m.hasReturnType(c)
 						&& m.hasArgs(String.class)
-						&& isOneOf(m.getName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
+						&& isOneOf(m.getSimpleName(), "create","fromString","fromValue","valueOf","parse","parseString","forName","forString"))
 					return m;
 		return null;
 	}
@@ -422,7 +436,7 @@ public final class ClassInfo {
 		if (c != null) {
 			for (MethodInfo m : getPublicMethods()) {
 				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasArgs(ic)) {
-					String n = m.getName();
+					String n = m.getSimpleName();
 					if (isOneOf(n, "create","from") || (n.startsWith("from") && n.substring(4).equals(ic.getSimpleName()))) {
 						return m;
 					}
@@ -478,6 +492,34 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns the public constructor with the specified argument types.
+	 *
+	 * @param args The exact argument types.
+	 * @return
+	 *  The public constructor with the specified argument types, or <jk>null</jk> if not found.
+	 */
+	public ConstructorInfo getPublicConstructor(Class<?>...args) {
+		for (ConstructorInfo ci : getPublicConstructors())
+			if (ci.hasArgs(args))
+				return ci;
+		return null;
+	}
+
+	/**
+	 * Same as {@link #getPublicConstructor(Class...)} but allows for inexact arg type matching.
+	 *
+	 * <p>
+	 * For example, the method <code>foo(CharSequence)</code> will be matched by <code>getAvailablePublicConstructor(String.<jk>class</jk>)</code>
+	 *
+	 * @param args The exact argument types.
+	 * @return
+	 *  The public constructor with the specified argument types, or <jk>null</jk> if not found.
+	 */
+	public ConstructorInfo getAvailablePublicConstructor(Class<?>...args) {
+		return getConstructor(Visibility.PUBLIC, false, args);
+	}
+
+	/**
 	 * Returns all the constructors defined on this class.
 	 *
 	 * @return All constructors defined on this class.
@@ -497,25 +539,13 @@ public final class ClassInfo {
 	/**
 	 * Finds the public constructor that can take in the specified arguments.
 	 *
-	 * @param args The argument types we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public ConstructorInfo getPublicConstructor(Class<?>...args) {
-		return getConstructor(Visibility.PUBLIC, false, args);
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
 	 * @param args The arguments we want to pass into the constructor.
 	 * @return
 	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
 	 * 	arguments.
 	 */
 	public ConstructorInfo getPublicConstructor(Object...args) {
-		return getConstructor(Visibility.PUBLIC, false, ClassUtils.getClasses(args));
+		return getPublicConstructor(ClassUtils.getClasses(args));
 	}
 
 	/**
@@ -592,7 +622,7 @@ public final class ClassInfo {
 		boolean isMemberClass = isNonStaticMemberClass();
 		for (ConstructorInfo cc : getDeclaredConstructors())
 			if (cc.hasNumParams(isMemberClass ? 1 : 0) && cc.isVisible(v))
-				return cc.transform(v);
+				return cc.makeAccessible(v);
 		return null;
 	}
 
@@ -1435,32 +1465,42 @@ public final class ClassInfo {
 	 * @return The underlying class name.
 	 */
 	public String getFullName() {
-		if (fullName == null) {
-			Class<?> ct = getComponentType().inner();
-			int dim = getDimensions();
-			if (ct != null && dim == 0 && ! isParameterizedType) {
-				fullName = ct.getName();
-				return fullName;
+		Class<?> ct = getComponentType().inner();
+		int dim = getDimensions();
+		if (ct != null && dim == 0 && ! isParameterizedType)
+			return ct.getName();
+		StringBuilder sb = new StringBuilder(128);
+		appendFullName(sb);
+		return sb.toString();
+	}
+
+	/**
+	 * Same as {@link #getFullName()} but appends to an existing string builder.
+	 *
+	 * @param sb The string builder to append to.
+	 * @return The same string builder.
+	 */
+	public StringBuilder appendFullName(StringBuilder sb) {
+		Class<?> ct = getComponentType().inner();
+		int dim = getDimensions();
+		if (ct != null && dim == 0 && ! isParameterizedType)
+			return sb.append(ct.getName());
+		sb.append(ct != null ? ct.getName() : t.getTypeName());
+		if (isParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)t;
+			sb.append('<');
+			boolean first = true;
+			for (Type t2 : pt.getActualTypeArguments()) {
+				if (! first)
+					sb.append(',');
+				first = false;
+				of(t2).appendFullName(sb);
 			}
-			StringBuilder sb = new StringBuilder();
-			sb.append(ct != null ? ct.getName() : t.getTypeName());
-			if (isParameterizedType) {
-				ParameterizedType pt = (ParameterizedType)t;
-				sb.append("<");
-				boolean first = true;
-				for (Type t2 : pt.getActualTypeArguments()) {
-					if (! first)
-						sb.append(',');
-					first = false;
-					sb.append(of(t2).getFullName());
-				}
-				sb.append(">");
-			}
-			for (int i = 0; i < dim; i++)
-				sb.append('[').append(']');
-			fullName = sb.toString();
+			sb.append('>');
 		}
-		return fullName;
+		for (int i = 0; i < dim; i++)
+			sb.append('[').append(']');
+		return sb;
 	}
 
 	/**
@@ -1472,41 +1512,49 @@ public final class ClassInfo {
 	 * @return The short name of the underlying class.
 	 */
 	public String getShortName() {
-		if (shortName == null) {
-			Class<?> ct = getComponentType().inner();
-			int dim = getDimensions();
-			if (ct != null && dim == 0 && ! (isParameterizedType || isMemberClass() || c.isLocalClass())) {
-				shortName = ct.getSimpleName();
-				return shortName;
-			}
-			StringBuilder sb = new StringBuilder();
-			if (ct != null) {
-				if (ct.isLocalClass())
-					sb.append(of(ct.getEnclosingClass()).getSimpleName()).append('$').append(ct.getSimpleName());
-				else if (ct.isMemberClass())
-					sb.append(of(ct.getDeclaringClass()).getSimpleName()).append('$').append(ct.getSimpleName());
-				else
-					sb.append(ct.getSimpleName());
-			} else {
-				sb.append(t.getTypeName());
-			}
-			if (isParameterizedType) {
-				ParameterizedType pt = (ParameterizedType)t;
-				sb.append("<");
-				boolean first = true;
-				for (Type t2 : pt.getActualTypeArguments()) {
-					if (! first)
-						sb.append(',');
-					first = false;
-					sb.append(of(t2).getShortName());
-				}
-				sb.append(">");
-			}
-			for (int i = 0; i < dim; i++)
-				sb.append('[').append(']');
-			shortName = sb.toString();
+		Class<?> ct = getComponentType().inner();
+		int dim = getDimensions();
+		if (ct != null && dim == 0 && ! (isParameterizedType || isMemberClass() || c.isLocalClass()))
+			return ct.getSimpleName();
+		StringBuilder sb = new StringBuilder(32);
+		appendShortName(sb);
+		return sb.toString();
+	}
+
+	/**
+	 * Same as {@link #getShortName()} but appends to an existing string builder.
+	 *
+	 * @param sb The string builder to append to.
+	 * @return The same string builder.
+	 */
+	public StringBuilder appendShortName(StringBuilder sb) {
+		Class<?> ct = getComponentType().inner();
+		int dim = getDimensions();
+		if (ct != null) {
+			if (ct.isLocalClass())
+				sb.append(of(ct.getEnclosingClass()).getSimpleName()).append('$').append(ct.getSimpleName());
+			else if (ct.isMemberClass())
+				sb.append(of(ct.getDeclaringClass()).getSimpleName()).append('$').append(ct.getSimpleName());
+			else
+				sb.append(ct.getSimpleName());
+		} else {
+			sb.append(t.getTypeName());
 		}
-		return shortName;
+		if (isParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)t;
+			sb.append('<');
+			boolean first = true;
+			for (Type t2 : pt.getActualTypeArguments()) {
+				if (! first)
+					sb.append(',');
+				first = false;
+				of(t2).appendShortName(sb);
+			}
+			sb.append('>');
+		}
+		for (int i = 0; i < dim; i++)
+			sb.append('[').append(']');
+		return sb;
 	}
 
 	/**

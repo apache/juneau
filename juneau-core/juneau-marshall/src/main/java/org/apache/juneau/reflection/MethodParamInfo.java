@@ -261,6 +261,6 @@ public final class MethodParamInfo {
 
 	@Override
 	public String toString() {
-		return (eInfo.getName()) + "[" + index + "]";
+		return (eInfo.getSimpleName()) + "[" + index + "]";
 	}
 }

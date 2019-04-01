@@ -96,21 +96,6 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	}
 
 	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 *
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public boolean setAccessible() {
-		try {
-			if (! (c.isAccessible()))
-				c.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		}
-	}
-
-	/**
 	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
 	 *
 	 * <p>
@@ -121,7 +106,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
 	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
 	 */
-	public ConstructorInfo transform(Visibility v) {
+	public ConstructorInfo makeAccessible(Visibility v) {
 		if (v.transform(c) == null)
 			return null;
 		return this;
@@ -129,7 +114,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 
 	@Override
 	public int compareTo(ConstructorInfo o) {
-		int i = getName().compareTo(o.getName());
+		int i = getSimpleName().compareTo(o.getSimpleName());
 		if (i == 0) {
 			i = getParamCount() - o.getParamCount();
 			if (i == 0) {

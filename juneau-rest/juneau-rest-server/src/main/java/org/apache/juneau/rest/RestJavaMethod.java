@@ -554,7 +554,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 			} catch (Exception e) {
 				throw new BadRequest(e,
 					"Invalid data conversion.  Could not convert {0} ''{1}'' to type ''{2}'' on method ''{3}.{4}''.",
-					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), info.getDeclaringClass().getFullName(), info.getName()
+					methodParams[i].getParamType().name(), methodParams[i].getName(), methodParams[i].getType(), info.getDeclaringClass().getFullName(), info.getSimpleName()
 				);
 			}
 		}

@@ -79,7 +79,7 @@ public class HttpUtils {
 	 * @return The arguments signature for the specified method.
 	 */
 	public static String getMethodArgsSignature(Method m, boolean full) {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder(128);
 		Class<?>[] pt = m.getParameterTypes();
 		if (pt.length == 0)
 			return "";
@@ -88,7 +88,10 @@ public class HttpUtils {
 			ClassInfo pti = getClassInfo(pt[i]);
 			if (i > 0)
 				sb.append(',');
-			sb.append(full ? pti.getFullName() : pti.getShortName());
+			if (full)
+				pti.appendFullName(sb);
+			else
+				pti.appendShortName(sb);
 		}
 		sb.append(')');
 		return sb.toString();

@@ -3232,10 +3232,10 @@ public final class RestContext extends BeanContext {
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				RestMethod a = mi.getAnnotation(RestMethod.class);
 				if (a != null) {
-					methodsFound.add(mi.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
+					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
 						if (mi.isNotPublic())
-							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getName());
+							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getSimpleName());
 
 						RestJavaMethod sm = new RestJavaMethod(resource, mi.inner(), this);
 						String httpMethod = sm.getHttpMethod();
@@ -3295,12 +3295,12 @@ public final class RestContext extends BeanContext {
 								}
 							};
 
-							_javaRestMethods.put(mi.getName(), sm);
+							_javaRestMethods.put(mi.getSimpleName(), sm);
 							addToRouter(routers, "GET", sm);
 							addToRouter(routers, "POST", sm);
 
 						} else {
-							_javaRestMethods.put(mi.getName(), sm);
+							_javaRestMethods.put(mi.getSimpleName(), sm);
 							addToRouter(routers, httpMethod, sm);
 						}
 					} catch (Throwable e) {

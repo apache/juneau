@@ -583,7 +583,7 @@ public class ClassInfoTest {
 	@Test
 	public void getPublicConstructor_classArgs() {
 		check("E1(String)", e1.getPublicConstructor(String.class));
-		check("E1(Writer)", e1.getPublicConstructor(StringWriter.class));
+		check("E1(Writer)", e1.getAvailablePublicConstructor(StringWriter.class));
 	}
 
 	@Test

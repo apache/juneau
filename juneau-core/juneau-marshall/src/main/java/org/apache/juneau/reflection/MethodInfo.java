@@ -273,22 +273,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
 	}
 
-
-	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 *
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public boolean setAccessible() {
-		try {
-			if (! (m.isAccessible()))
-				m.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		}
-	}
-
 	/**
 	 * Returns the signature of this method.
 	 *
@@ -301,7 +285,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public String getSignature() {
 		if (signature == null) {
-			StringBuilder sb = new StringBuilder(m.getName());
+			StringBuilder sb = new StringBuilder(128);
+			sb.append(m.getName());
 			Class<?>[] pt = rawParamTypes();
 			if (pt.length > 0) {
 				sb.append('(');
@@ -309,7 +294,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 				for (int i = 0; i < pt.length; i++) {
 					if (i > 0)
 						sb.append(',');
-					sb.append(mpi.get(i).getGenericParameterTypeInfo().getFullName());
+					mpi.get(i).getGenericParameterTypeInfo().appendFullName(sb);
 				}
 				sb.append(')');
 			}
@@ -395,7 +380,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	@Override
 	public int compareTo(MethodInfo o) {
-		int i = getName().compareTo(o.getName());
+		int i = getSimpleName().compareTo(o.getSimpleName());
 		if (i == 0) {
 			i = rawParamTypes().length - o.rawParamTypes().length;
 			if (i == 0) {
@@ -422,14 +407,15 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return A readable representation of this method.
 	 */
 	public Object getReadableName() {
-		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
+		StringBuilder sb = new StringBuilder(128);
+		sb.append(m.getDeclaringClass().getName()).append('.').append(m.getName()).append('(');
 		List<MethodParamInfo> mpis = getParams();
 		for (int i = 0; i < mpis.size(); i++) {
 			if (i > 0)
-				sb.append(",");
-			sb.append(mpis.get(i).getGenericParameterTypeInfo().getFullName());
+				sb.append(',');
+			mpis.get(i).getGenericParameterTypeInfo().appendFullName(sb);
 		}
-		sb.append(")");
+		sb.append(')');
 		return sb.toString();
 	}
 }
