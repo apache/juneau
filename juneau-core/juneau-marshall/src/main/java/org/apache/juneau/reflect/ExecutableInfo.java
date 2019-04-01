@@ -29,7 +29,7 @@ public abstract class ExecutableInfo {
 	final Executable e;
 	final boolean isConstructor;
 
-	private List<MethodParamInfo> params;
+	private List<ParamInfo> params;
 	private List<ClassInfo> paramTypes, exceptionInfos;
 	private Class<?>[] rawParamTypes, rawExceptionTypes;
 	private Type[] rawGenericParamTypes;
@@ -113,11 +113,11 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
-	public final List<MethodParamInfo> getParams() {
+	public final List<ParamInfo> getParams() {
 		if (params == null) {
-			List<MethodParamInfo> l = new ArrayList<>(getParamCount());
+			List<ParamInfo> l = new ArrayList<>(getParamCount());
 			for (int i = 0; i < getParamCount(); i++)
-				l.add(new MethodParamInfo(this, i));
+				l.add(new ParamInfo(this, i));
 			params = Collections.unmodifiableList(l);
 		}
 		return params;
@@ -129,7 +129,7 @@ public abstract class ExecutableInfo {
 	 * @param index The parameter index.
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
-	public final MethodParamInfo getParam(int index) {
+	public final ParamInfo getParam(int index) {
 		return getParams().get(index);
 	}
 

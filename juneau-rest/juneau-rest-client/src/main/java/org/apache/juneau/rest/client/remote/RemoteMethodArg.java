@@ -107,7 +107,7 @@ public final class RemoteMethodArg {
 		return schema;
 	}
 
-	static RemoteMethodArg create(MethodParamInfo mpi) {
+	static RemoteMethodArg create(ParamInfo mpi) {
 		int i = mpi.getIndex();
 		if (mpi.hasAnnotation(Header.class)) {
 			return new RemoteMethodArg(i, HEADER, HttpPartSchema.create(Header.class, mpi));

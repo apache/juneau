@@ -38,7 +38,7 @@ public class RequestBeanMeta {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(MethodParamInfo mpi, PropertyStore ps) {
+	public static RequestBeanMeta create(ParamInfo mpi, PropertyStore ps) {
 		if (! mpi.hasAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(ps).apply(mpi).build();
@@ -90,8 +90,8 @@ public class RequestBeanMeta {
 			this.ps = ps;
 		}
 
-		Builder apply(MethodParamInfo mpi) {
-			return apply(mpi.getParameterType()).apply(mpi.getAnnotation(Request.class));
+		Builder apply(ParamInfo mpi) {
+			return apply(mpi.getParameterType().inner()).apply(mpi.getAnnotation(Request.class));
 		}
 
 		Builder apply(Class<?> c) {

@@ -334,59 +334,6 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns a readable representation of the specified method.
-	 *
-	 * <p>
-	 * The format of the string is <js>"full-qualified-class.method-name(parameter-simple-class-names)"</js>.
-	 *
-	 * @param m The method to stringify.
-	 * @return The stringified method.
-	 */
-	public static String asString(Method m) {
-		StringBuilder sb = new StringBuilder(m.getName() + "(");
-		for (int i = 0; i < m.getParameterTypes().length; i++) {
-			if (i > 0)
-				sb.append(",");
-			sb.append(m.getParameterTypes()[i].getSimpleName());
-		}
-		sb.append(")");
-		return sb.toString();
-	}
-
-	/**
-	 * Returns a readable representation of the specified method.
-	 *
-	 * <p>
-	 * The format of the string is <js>"full-qualified-class.method-name(parameter-simple-class-names)"</js>.
-	 *
-	 * @param m The method to stringify.
-	 * @return The stringified method.
-	 */
-	public static String asString(Constructor<?> m) {
-		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getSimpleName() + "(");
-		for (int i = 0; i < m.getParameterTypes().length; i++) {
-			if (i > 0)
-				sb.append(",");
-			sb.append(m.getParameterTypes()[i].getSimpleName());
-		}
-		sb.append(")");
-		return sb.toString();
-	}
-
-	/**
-	 * Returns a readable representation of the specified field.
-	 *
-	 * <p>
-	 * The format of the string is <js>"full-qualified-class.field-name"</js>.
-	 *
-	 * @param f The field to stringify.
-	 * @return The stringified field.
-	 */
-	public static String asString(Field f) {
-		return f.getName();
-	}
-
-	/**
 	 * Constructs a new instance of the specified class from the specified string.
 	 *
 	 * <p>

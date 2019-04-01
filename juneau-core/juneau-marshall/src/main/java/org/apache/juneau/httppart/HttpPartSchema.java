@@ -113,7 +113,7 @@ public class HttpPartSchema {
 	 * @param mpi The Java method parameter.
 	 * @return The schema information about the parameter.
 	 */
-	public static HttpPartSchema create(Class<? extends Annotation> c, MethodParamInfo mpi) {
+	public static HttpPartSchema create(Class<? extends Annotation> c, ParamInfo mpi) {
 		return create().apply(c, mpi).build();
 	}
 

@@ -85,11 +85,11 @@ public class ResponseBeanMeta {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(MethodParamInfo mpi, PropertyStore ps) {
+	public static ResponseBeanMeta create(ParamInfo mpi, PropertyStore ps) {
 		if (! mpi.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		b.apply(mpi.getGenericParameterTypeInfo().resolved().innerType());
+		b.apply(mpi.getParameterType().resolved().innerType());
 		for (Response r : mpi.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();

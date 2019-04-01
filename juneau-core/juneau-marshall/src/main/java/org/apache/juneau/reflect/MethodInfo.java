@@ -31,7 +31,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	private ClassInfo returnType;
 	private final Method m;
 	private List<Method> matching;
-	private String signature;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation.
@@ -284,23 +283,20 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return The methods signature.
 	 */
 	public String getSignature() {
-		if (signature == null) {
-			StringBuilder sb = new StringBuilder(128);
-			sb.append(m.getName());
-			Class<?>[] pt = rawParamTypes();
-			if (pt.length > 0) {
-				sb.append('(');
-				List<MethodParamInfo> mpi = getParams();
-				for (int i = 0; i < pt.length; i++) {
-					if (i > 0)
-						sb.append(',');
-					mpi.get(i).getGenericParameterTypeInfo().appendFullName(sb);
-				}
-				sb.append(')');
+		StringBuilder sb = new StringBuilder(128);
+		sb.append(m.getName());
+		Class<?>[] pt = rawParamTypes();
+		if (pt.length > 0) {
+			sb.append('(');
+			List<ParamInfo> mpi = getParams();
+			for (int i = 0; i < pt.length; i++) {
+				if (i > 0)
+					sb.append(',');
+				mpi.get(i).getParameterType().appendFullName(sb);
 			}
-			signature = sb.toString();
+			sb.append(')');
 		}
-		return signature;
+		return sb.toString();
 	}
 
 	/**
@@ -393,15 +389,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
-	 * Returns a string representation of this method that consists of its name and simple arguments.
-	 *
-	 * @return A string representation of this method that consists of its name and simple arguments.
-	 */
-	public String getLabel() {
-		return ClassUtils.asString(m);
-	}
-
-	/**
 	 * Returns a readable representation of this method.
 	 *
 	 * @return A readable representation of this method.
@@ -409,11 +396,11 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public Object getReadableName() {
 		StringBuilder sb = new StringBuilder(128);
 		sb.append(m.getDeclaringClass().getName()).append('.').append(m.getName()).append('(');
-		List<MethodParamInfo> mpis = getParams();
+		List<ParamInfo> mpis = getParams();
 		for (int i = 0; i < mpis.size(); i++) {
 			if (i > 0)
 				sb.append(',');
-			mpis.get(i).getGenericParameterTypeInfo().appendFullName(sb);
+			mpis.get(i).getParameterType().appendFullName(sb);
 		}
 		sb.append(')');
 		return sb.toString();

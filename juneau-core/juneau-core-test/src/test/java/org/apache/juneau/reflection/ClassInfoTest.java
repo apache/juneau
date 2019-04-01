@@ -78,11 +78,11 @@ public class ClassInfoTest {
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getSimpleName();
 			if (t instanceof MethodInfo)
-				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getLabel();
+				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
 			if (t instanceof ConstructorInfo)
-				return ((ConstructorInfo)t).getLabel();
+				return ((ConstructorInfo)t).getShortName();
 			if (t instanceof FieldInfo)
-				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getLabel();
+				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getName();
 			if (t instanceof A)
 				return "@A(" + ((A)t).value() + ")";
 			if (t instanceof PA)

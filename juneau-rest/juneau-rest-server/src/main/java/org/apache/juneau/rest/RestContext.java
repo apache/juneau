@@ -4585,7 +4585,7 @@ public final class RestContext extends BeanContext {
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
 			}
 
-			MethodParamInfo mpi = mi.getParam(i);
+			ParamInfo mpi = mi.getParam(i);
 
 			if (mpi.hasAnnotation(Header.class)) {
 				rp[i] = new RestParamDefaults.HeaderObject(mpi, ps);

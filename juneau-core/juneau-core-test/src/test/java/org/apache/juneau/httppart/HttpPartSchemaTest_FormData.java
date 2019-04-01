@@ -136,7 +136,7 @@ public class HttpPartSchemaTest_FormData {
 
 	@Test
 	public void a03_basic_onParameter() throws Exception {
-		MethodParamInfo mpi = getMethodInfo(A03.class.getMethod("a", String.class)).getParam(0);
+		ParamInfo mpi = getMethodInfo(A03.class.getMethod("a", String.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().apply(FormData.class, mpi).noValidate().build();
 		assertEquals("x", s.getName());
 		assertEquals(HttpPartSchema.Type.NUMBER, s.getType());
@@ -193,7 +193,7 @@ public class HttpPartSchemaTest_FormData {
 
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
-		MethodParamInfo mpi = getMethodInfo(A04.class.getMethod("a", A01.class)).getParam(0);
+		ParamInfo mpi = getMethodInfo(A04.class.getMethod("a", A01.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().apply(FormData.class, mpi).noValidate().build();
 		assertEquals("y", s.getName());
 		assertEquals(HttpPartSchema.Type.INTEGER, s.getType());

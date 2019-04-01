@@ -96,7 +96,7 @@ public class MethodInfoTest {
 	@Test
 	public void getAnnotationsOnParameter() throws Exception {
 		ObjectList l = new ObjectList();
-		MethodParamInfo mpi = MethodInfo.of(HA.class.getMethod("doX", HA01.class)).getParam(0);
+		ParamInfo mpi = MethodInfo.of(HA.class.getMethod("doX", HA01.class)).getParam(0);
 		for (HI1 ia : mpi.getAnnotations(HI1.class)) {
 			l.add(ia.value());
 		}
@@ -122,7 +122,7 @@ public class MethodInfoTest {
 	@Test
 	public void getAnnotationsOnParameterInherited() throws Exception {
 		ObjectList l = new ObjectList();
-		MethodParamInfo mpi = MethodInfo.of(HB.class.getMethod("doX", HB01.class)).getParam(0);
+		ParamInfo mpi = MethodInfo.of(HB.class.getMethod("doX", HB01.class)).getParam(0);
 		for (HI2 ib : mpi.getAnnotations(HI2.class)) {
 			l.add(ib.value());
 		}

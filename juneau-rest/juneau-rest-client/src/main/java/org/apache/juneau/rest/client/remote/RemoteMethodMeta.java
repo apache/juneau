@@ -113,7 +113,7 @@ public class RemoteMethodMeta {
 
 			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
 
-			for (MethodParamInfo mpi : mi.getParams()) {
+			for (ParamInfo mpi : mi.getParams()) {
 				RemoteMethodArg rma = RemoteMethodArg.create(mpi);
 				boolean annotated = false;
 				if (rma != null) {

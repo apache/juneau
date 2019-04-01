@@ -65,8 +65,8 @@ public class HttpPartSchemaBuilder {
 		return new HttpPartSchema(this);
 	}
 
-	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, MethodParamInfo mpi) {
-		apply(c, mpi.getGenericParameterType());
+	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, ParamInfo mpi) {
+		apply(c, mpi.getParameterType().innerType());
 		for (Annotation a : mpi.getParameterAnnotations())
 			if (c.isInstance(a))
 				apply(a);

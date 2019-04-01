@@ -18,7 +18,6 @@ import static org.apache.juneau.rest.RestParamType.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.lang.reflect.Method;
 import java.util.*;
 
 import javax.servlet.*;
@@ -196,13 +195,13 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected PathObject(MethodParamInfo mpi, PropertyStore ps, UrlPathPattern pathPattern) {
+		protected PathObject(ParamInfo mpi, PropertyStore ps, UrlPathPattern pathPattern) {
 			super(PATH, mpi, getName(mpi, pathPattern));
 			this.schema = HttpPartSchema.create(Path.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
 		}
 
-		private static String getName(MethodParamInfo mpi, UrlPathPattern pathPattern) {
+		private static String getName(ParamInfo mpi, UrlPathPattern pathPattern) {
 			for (Path h : mpi.getAnnotations(Path.class)) {
 				if (! h.name().isEmpty())
 					return h.name();
@@ -212,15 +211,15 @@ class RestParamDefaults {
 			if (pathPattern != null) {
 				int idx = 0;
 				int i = mpi.getIndex();
-				Method m = mpi.getMethod();
+				MethodInfo mi = mpi.getMethod();
 
 				for (int j = 0; j < i; j++)
-					if (getMethodInfo(m).getParam(i).getAnnotation(Path.class) != null)
+					if (mi.getParam(i).getAnnotation(Path.class) != null)
 						idx++;
 
 				String[] vars = pathPattern.getVars();
 				if (vars.length <= idx)
-					throw new InternalServerError("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", m);
+					throw new InternalServerError("Number of attribute parameters in method ''{0}'' exceeds the number of URL pattern variables.", mi.getShortName());
 
 				// Check for {#} variables.
 				String idxs = String.valueOf(idx);
@@ -242,7 +241,7 @@ class RestParamDefaults {
 	static final class BodyObject extends RestMethodParam {
 		private final HttpPartSchema schema;
 
-		protected BodyObject(MethodParamInfo mpi, PropertyStore ps) {
+		protected BodyObject(ParamInfo mpi, PropertyStore ps) {
 			super(BODY, mpi);
 			this.schema = HttpPartSchema.create(Body.class, mpi);
 		}
@@ -257,13 +256,13 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected HeaderObject(MethodParamInfo mpi, PropertyStore ps) {
+		protected HeaderObject(ParamInfo mpi, PropertyStore ps) {
 			super(HEADER, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(Header.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
 		}
 
-		private static String getName(MethodParamInfo mpi) {
+		private static String getName(ParamInfo mpi) {
 			for (Header h : mpi.getAnnotations(Header.class)) {
 				if (! h.name().isEmpty())
 					return h.name();
@@ -282,7 +281,7 @@ class RestParamDefaults {
 	static final class RequestObject extends RestMethodParam {
 		private final RequestBeanMeta meta;
 
-		protected RequestObject(MethodParamInfo mpi, PropertyStore ps) {
+		protected RequestObject(ParamInfo mpi, PropertyStore ps) {
 			super(RESPONSE_BODY, mpi);
 			this.meta = RequestBeanMeta.create(mpi, ps);
 		}
@@ -296,7 +295,7 @@ class RestParamDefaults {
 	static final class ResponseHeaderObject extends RestMethodParam {
 		final ResponsePartMeta meta;
 
-		protected ResponseHeaderObject(MethodParamInfo mpi, PropertyStore ps) {
+		protected ResponseHeaderObject(ParamInfo mpi, PropertyStore ps) {
 			super(RESPONSE_HEADER, mpi, getName(mpi));
 			HttpPartSchema schema = HttpPartSchema.create(ResponseHeader.class, mpi);
 			this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, createPartSerializer(schema.getSerializer(), ps));
@@ -305,7 +304,7 @@ class RestParamDefaults {
 				throw new InternalServerError("Invalid type {0} specified with @ResponseHeader annotation.  It must be Value.", type);
 		}
 
-		private static String getName(MethodParamInfo mpi) {
+		private static String getName(ParamInfo mpi) {
 			for (ResponseHeader h : mpi.getAnnotations(ResponseHeader.class)) {
 				if (! h.name().isEmpty())
 					return h.name();
@@ -339,7 +338,7 @@ class RestParamDefaults {
 	static final class ResponseObject extends RestMethodParam {
 		final ResponseBeanMeta meta;
 
-		protected ResponseObject(MethodParamInfo mpi, PropertyStore ps) {
+		protected ResponseObject(ParamInfo mpi, PropertyStore ps) {
 			super(RESPONSE, mpi);
 			this.meta = ResponseBeanMeta.create(mpi, ps);
 			if (getTypeClass() != Value.class)
@@ -389,7 +388,7 @@ class RestParamDefaults {
 	static final class MethodObject extends RestMethodParam {
 
 		protected MethodObject(MethodInfo m, ClassInfo t) throws ServletException {
-			super(OTHER, (MethodParamInfo)null);
+			super(OTHER, (ParamInfo)null);
 			if (! t.is(String.class))
 				throw new RestServletException("Use of @Method annotation on parameter that is not a String on method ''{0}''", m.inner());
 		}
@@ -405,7 +404,7 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected FormDataObject(MethodParamInfo mpi, PropertyStore ps) {
+		protected FormDataObject(ParamInfo mpi, PropertyStore ps) {
 			super(FORM_DATA, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(FormData.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
@@ -415,7 +414,7 @@ class RestParamDefaults {
 				throw new InternalServerError("Use of multipart flag on @FormData parameter that's not an array or Collection on method ''{0}''", mpi.getMethod());
 		}
 
-		private static String getName(MethodParamInfo mpi) {
+		private static String getName(ParamInfo mpi) {
 			for (FormData h : mpi.getAnnotations(FormData.class)) {
 				if (! h.name().isEmpty())
 					return h.name();
@@ -438,7 +437,7 @@ class RestParamDefaults {
 		private final HttpPartParser partParser;
 		private final HttpPartSchema schema;
 
-		protected QueryObject(MethodParamInfo mpi, PropertyStore ps) {
+		protected QueryObject(ParamInfo mpi, PropertyStore ps) {
 			super(QUERY, mpi, getName(mpi));
 			this.schema = HttpPartSchema.create(Query.class, mpi);
 			this.partParser = createPartParser(schema.getParser(), ps);
@@ -448,7 +447,7 @@ class RestParamDefaults {
 				throw new InternalServerError("Use of multipart flag on @Query parameter that's not an array or Collection on method ''{0}''", mpi.getMethod());
 		}
 
-		private static String getName(MethodParamInfo mpi) {
+		private static String getName(ParamInfo mpi) {
 			for (Query h : mpi.getAnnotations(Query.class)) {
 				if (! h.name().isEmpty())
 					return h.name();
@@ -468,13 +467,13 @@ class RestParamDefaults {
 
 	static final class HasFormDataObject extends RestMethodParam {
 
-		protected HasFormDataObject(MethodParamInfo mpi) throws ServletException {
+		protected HasFormDataObject(ParamInfo mpi) throws ServletException {
 			super(FORM_DATA, mpi, getName(mpi));
 			if (getType() != Boolean.class && getType() != boolean.class)
 				throw new RestServletException("Use of @HasForm annotation on parameter that is not a boolean on method ''{0}''", mpi.getMethod());
 		}
 
-		private static String getName(MethodParamInfo mpi) {
+		private static String getName(ParamInfo mpi) {
 			for (HasFormData h : mpi.getAnnotations(HasFormData.class)) {
 				if (! h.name().isEmpty())
 					return h.name();
@@ -493,13 +492,13 @@ class RestParamDefaults {
 
 	static final class HasQueryObject extends RestMethodParam {
 
-		protected HasQueryObject(MethodParamInfo mpi) throws ServletException {
+		protected HasQueryObject(ParamInfo mpi) throws ServletException {
 			super(QUERY, mpi, getName(mpi));
 			if (getType() != Boolean.class && getType() != boolean.class)
 				throw new RestServletException("Use of @HasQuery annotation on parameter that is not a boolean on method ''{0}''", mpi.getMethod());
 		}
 
-		private static String getName(MethodParamInfo mpi) {
+		private static String getName(ParamInfo mpi) {
 			for (HasQuery h : mpi.getAnnotations(HasQuery.class)) {
 				if (! h.name().isEmpty())
 					return h.name();

@@ -328,7 +328,7 @@ final class SwaggerGenerator {
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
 
 				RestParamType in = mp.getParamType();
-				MethodParamInfo mpi = mp.getMethodParamInfo();
+				ParamInfo mpi = mp.getMethodParamInfo();
 
 				if (in.isAny(BODY, QUERY, FORM_DATA, HEADER, PATH)) {
 
@@ -445,7 +445,7 @@ final class SwaggerGenerator {
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
 
 				RestParamType in = mp.getParamType();
-				MethodParamInfo mpi = mp.getMethodParamInfo();
+				ParamInfo mpi = mp.getMethodParamInfo();
 
 				if (in == RESPONSE_HEADER) {
 					List<ResponseHeader> la = mpi.getAnnotations(ResponseHeader.class, true);

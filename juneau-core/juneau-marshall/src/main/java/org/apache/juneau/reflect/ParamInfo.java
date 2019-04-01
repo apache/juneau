@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
  * Lightweight utility class for introspecting information about a method parameter.
  */
 @BeanIgnore
-public final class MethodParamInfo {
+public final class ParamInfo {
 
 	private final ExecutableInfo eInfo;
 	private int index;
@@ -41,7 +41,7 @@ public final class MethodParamInfo {
 	 * @param eInfo The constructor or method wrapper.
 	 * @param index The parameter index.
 	 */
-	protected MethodParamInfo(ExecutableInfo eInfo, int index) {
+	protected ParamInfo(ExecutableInfo eInfo, int index) {
 		this.eInfo = eInfo;
 		this.index = index;
 	}
@@ -60,8 +60,8 @@ public final class MethodParamInfo {
 	 *
 	 * @return The method that this parameter belongs to.
 	 */
-	public Method getMethod() {
-		return (Method)eInfo.e;
+	public MethodInfo getMethod() {
+		return (MethodInfo)eInfo;
 	}
 
 	/**
@@ -69,8 +69,8 @@ public final class MethodParamInfo {
 	 *
 	 * @return The method that this parameter belongs to.
 	 */
-	public Constructor<?> getConstructor() {
-		return (Constructor<?>)eInfo.e;
+	public ConstructorInfo getConstructor() {
+		return (ConstructorInfo)eInfo;
 	}
 
 	/**
@@ -78,25 +78,7 @@ public final class MethodParamInfo {
 	 *
 	 * @return The class type of this parameter.
 	 */
-	public Class<?> getParameterType() {
-		return eInfo.getRawParamType(index);
-	}
-
-	/**
-	 * Returns the generic class type of this parameter.
-	 *
-	 * @return The generic class type of this parameter.
-	 */
-	public Type getGenericParameterType() {
-		return eInfo.getRawGenericParamType(index);
-	}
-
-	/**
-	 * Returns the generic class type of this parameter.
-	 *
-	 * @return The generic class type of this parameter.
-	 */
-	public ClassInfo getGenericParameterTypeInfo() {
+	public ClassInfo getParameterType() {
 		return eInfo.getParamType(index);
 	}
 

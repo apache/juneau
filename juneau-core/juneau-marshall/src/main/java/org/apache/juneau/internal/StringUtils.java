@@ -32,6 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflect.*;
 
 /**
  * Reusable string utility methods.
@@ -2251,7 +2252,7 @@ public final class StringUtils {
 		if (cm.isClass())
 			return ((Class<?>)o).getName();
 		if (cm.isMethod())
-			return ClassUtils.asString((Method)o);
+			return MethodInfo.of((Method)o).getShortName();
 		return o.toString();
 	}
 

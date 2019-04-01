@@ -16,7 +16,6 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a constructor.
@@ -125,14 +124,5 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 			}
 		}
 		return i;
-	}
-
-	/**
-	 * Returns a string representation of this constructor that consists of its name and simple arguments.
-	 *
-	 * @return A string representation of this constructor that consists of its name and simple arguments.
-	 */
-	public String getLabel() {
-		return ClassUtils.asString(c);
 	}
 }

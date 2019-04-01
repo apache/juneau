@@ -74,7 +74,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a03_basic_onParameter() throws Exception {
-		MethodParamInfo mpi = getMethodInfo(A03.class.getMethod("a", String.class)).getParam(0);
+		ParamInfo mpi = getMethodInfo(A03.class.getMethod("a", String.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
@@ -95,7 +95,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
-		MethodParamInfo mpi = getMethodInfo(A04.class.getMethod("a", A02.class)).getParam(0);
+		ParamInfo mpi = getMethodInfo(A04.class.getMethod("a", A02.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
