@@ -15,6 +15,7 @@ package org.apache.juneau.server.config.rest;
 import static org.apache.juneau.http.HttpMethodName.GET;
 
 import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.json.JsonSerializer;
 import org.apache.juneau.rest.RestServlet;
 import org.apache.juneau.rest.annotation.RestMethod;
 import org.apache.juneau.rest.annotation.RestResource;
@@ -25,25 +26,14 @@ public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;
 
-	@RestMethod(name = GET, path = "/{project}/*", consumes = "application/json", produces = "application/json")
-	public String get(@Path("project") String project) {
-
-		return "{'msg':'OK'}";
-	}
-
 	@RestMethod(name = GET, path = "/{project}/{branch}/*", consumes = "application/json", produces = "application/json")
-	public String gets(@Path("project") String project, @Path("branch") String branch) {
+	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
+		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 
-		try {
-			new GetConfiguration(project, branch).execute();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+		GetConfiguration config = new GetConfiguration(project, branch);
+		config.execute();
 
-		return "{'msg':'OK'}";
+		return jsonSerializer.serialize(config.get());
 	}
 
 }

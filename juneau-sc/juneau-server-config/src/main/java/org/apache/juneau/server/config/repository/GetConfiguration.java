@@ -13,8 +13,20 @@
 package org.apache.juneau.server.config.repository;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
-public class GetConfiguration implements Command {
+import org.apache.juneau.config.Config;
+
+public class GetConfiguration implements Command, GetValue<Map<String, ConfigItem>> {
+
+	private static final String APPLICATION = "APPLICATION";
+	private static final String PROJECT = "PROJECT";
+	private static final String EXT = ".cfg";
+	private static final String BAR = "/";
+
+	private Map<String, ConfigItem> configs = new HashMap<String, ConfigItem>();
 
 	private String project;
 	private String branch;
@@ -27,12 +39,15 @@ public class GetConfiguration implements Command {
 	@Override
 	public void execute() throws Exception {
 
-		GitControl gitControl = new GitControl("/home/marcelo/desenvolvimento/tmp/juneau-config-test",
-				"https://github.com/marcelosv/juneau-config-test.git");
+		Config config = Config.create().name("juneau-server-config.cfg").build();
 
-		String pathDefalt = "/home/marcelo/desenvolvimento/tmp/juneau-config-test";
+		String pathStr = config.getString("GitServer/pathLocal");
 
-		File path = new File(pathDefalt);
+		String git = config.get("GitServer/gitRemote");
+
+		GitControl gitControl = new GitControl(pathStr, git);
+
+		File path = new File(pathStr);
 
 		if (path.isDirectory()) {
 			gitControl.pullFromRepo();
@@ -43,6 +58,25 @@ public class GetConfiguration implements Command {
 		gitControl.branch(branch);
 		gitControl.pullFromRepo();
 
+		String fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
+		String fileProjectStr = this.project.concat(EXT);
+
+		File fileDefault = new File(pathStr.concat(BAR).concat(fileDefaultStr));
+		if (fileDefault.exists()) {
+			String lines = new String(Files.readAllBytes(fileDefault.toPath()));
+			configs.put(APPLICATION, new ConfigItem(lines));
+		}
+
+		File fileProject = new File(pathStr.concat(BAR).concat(fileProjectStr));
+		if (fileProject.exists()) {
+			String linesProject = new String(Files.readAllBytes(fileProject.toPath()));
+			configs.put(PROJECT, new ConfigItem(linesProject));
+		}
+	}
+
+	@Override
+	public Map<String, ConfigItem> get() {
+		return configs;
 	}
 
 }
