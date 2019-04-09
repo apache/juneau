@@ -26,7 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
 
@@ -2656,11 +2656,11 @@ public class BeanContext extends Context {
 		while (cc != null) {
 			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return implClass.getNoArgConstructorInfo(v);
+				return implClass.getNoArgConstructor(v);
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return implClass.getNoArgConstructorInfo(v);
+					return implClass.getNoArgConstructor(v);
 			}
 			cc = cc.getSuperclass();
 		}
@@ -2674,11 +2674,11 @@ public class BeanContext extends Context {
 		while (cc != null) {
 			ClassInfo implClass = implClasses.get(cc.getName());
 			if (implClass != null)
-				return (Class<T>) implClass.inner();
+				return implClass.<T>inner();
 			for (Class ic : cc.getInterfaces()) {
 				implClass = implClasses.get(ic.getName());
 				if (implClass != null)
-					return (Class<T>) implClass.inner();
+					return implClass.<T>inner();
 			}
 			cc = cc.getSuperclass();
 		}
@@ -2696,8 +2696,8 @@ public class BeanContext extends Context {
 			return null;
 		String[] s = null;
 		ClassInfo ci = getClassInfo(c);
-		for (ClassInfo c2 : ci.getParentInfos(false, true)) {
-			s = includeProperties.get(c2.getName());
+		for (ClassInfo c2 : ci.getAllParents()) {
+			s = includeProperties.get(c2.getFullName());
 			if (s != null)
 				return s;
 			s = includeProperties.get(c2.getSimpleName());
@@ -2718,8 +2718,8 @@ public class BeanContext extends Context {
 			return null;
 		String[] s = null;
 		ClassInfo ci = getClassInfo(c);
-		for (ClassInfo c2 : ci.getParentInfos(false, true)) {
-			s = excludeProperties.get(c2.getName());
+		for (ClassInfo c2 : ci.getAllParents()) {
+			s = excludeProperties.get(c2.getFullName());
 			if (s != null)
 				return s;
 			s = excludeProperties.get(c2.getSimpleName());

@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -214,7 +217,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -249,7 +252,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo title(Object value) {
-		return setTitle(toStringVal(value));
+		return setTitle(stringify(value));
 	}
 
 	/**
@@ -285,7 +288,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -606,7 +609,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -975,7 +978,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -1208,7 +1211,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo discriminator(Object value) {
-		return setDiscriminator(toStringVal(value));
+		return setDiscriminator(stringify(value));
 	}
 
 	/**
@@ -1395,7 +1398,7 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	@BeanProperty("$ref")
 	public SchemaInfo setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = StringUtils.stringify(value);
 		return this;
 	}
 

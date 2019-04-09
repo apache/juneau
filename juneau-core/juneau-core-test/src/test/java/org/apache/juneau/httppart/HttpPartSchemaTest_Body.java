@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.jsonschema.annotation.Items;
 import org.apache.juneau.jsonschema.annotation.Schema;
 import org.apache.juneau.jsonschema.annotation.SubItems;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.runners.*;
@@ -74,7 +74,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a03_basic_onParameter() throws Exception {
-		MethodParamInfo mpi = getMethodInfo(A03.class.getMethod("a", String.class)).getParam(0);
+		ParamInfo mpi = getMethodInfo(A03.class.getMethod("a", String.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
@@ -95,7 +95,7 @@ public class HttpPartSchemaTest_Body {
 
 	@Test
 	public void a04_basic_onParameterAndClass() throws Exception {
-		MethodParamInfo mpi = getMethodInfo(A04.class.getMethod("a", A02.class)).getParam(0);
+		ParamInfo mpi = getMethodInfo(A04.class.getMethod("a", A02.class)).getParam(0);
 		HttpPartSchema s = HttpPartSchema.create().apply(Body.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}

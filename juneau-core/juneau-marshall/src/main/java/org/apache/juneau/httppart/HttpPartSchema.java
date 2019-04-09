@@ -28,7 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -113,7 +113,7 @@ public class HttpPartSchema {
 	 * @param mpi The Java method parameter.
 	 * @return The schema information about the parameter.
 	 */
-	public static HttpPartSchema create(Class<? extends Annotation> c, MethodParamInfo mpi) {
+	public static HttpPartSchema create(Class<? extends Annotation> c, ParamInfo mpi) {
 		return create().apply(c, mpi).build();
 	}
 

@@ -451,7 +451,7 @@ public final class ArrayUtils {
 		String[] r = new String[c.size()];
 		int i = 0;
 		for (Object o : c)
-			r[i++] = asString(o);
+			r[i++] = stringify(o);
 		return r;
 	}
 

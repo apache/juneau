@@ -65,7 +65,7 @@ public class Value<T> {
 		} else if (t instanceof Class) {
 			Class<?> c = (Class<?>)t;
 			if (Value.class.isAssignableFrom(c)) {
-				return getClassInfo(Value.class).getParameterType(0, c);
+				return getClassInfo(c).getParameterType(0, Value.class);
 			}
 		}
 

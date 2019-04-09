@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -49,7 +48,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
@@ -266,7 +265,7 @@ public final class RestCall extends BeanSession implements Closeable {
 			if (isNotEmpty(s))
 				uriBuilder.setCustomQuery(s);
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to query(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -393,7 +392,7 @@ public final class RestCall extends BeanSession implements Closeable {
 				body(new StringEntity(value.toString()));
 			} catch (UnsupportedEncodingException e) {}
 		} else {
-			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
+			throw new FormattedRuntimeException("Invalid name ''{0}'' passed to formData(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -521,7 +520,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		} else if (isBean(value)) {
 			return path(name, toBeanMap(value), serializer, schema);
 		} else if (value != null) {
-			throw new RestCallException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, getReadableClassNameForObject(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to path(name,value) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -707,7 +706,7 @@ public final class RestCall extends BeanSession implements Closeable {
 		} else if (isBean(value)) {
 			return header(name, toBeanMap(value), skipIfEmpty, serializer, schema);
 		} else {
-			throw new RestCallException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, getReadableClassNameForObject(value));
+			throw new RestCallException("Invalid name ''{0}'' passed to header(name,value,skipIfEmpty) for data type ''{1}''", name, className(value));
 		}
 		return this;
 	}
@@ -2287,10 +2286,10 @@ public final class RestCall extends BeanSession implements Closeable {
 					// So instantiate the object anyway if it has a no-arg constructor.
 					// This allows a remote resource method to return a NoContent object for example.
 					if (in == null && (sc < SC_OK || sc == SC_NO_CONTENT || sc == SC_NOT_MODIFIED || sc == SC_RESET_CONTENT)) {
-						ConstructorInfo c = type.getInfo().getNoArgConstructorInfo(Visibility.PUBLIC);
+						ConstructorInfo c = type.getInfo().getPublicConstructor();
 						if (c != null) {
 							try {
-								return (T)c.invoke();
+								return c.<T>invoke();
 							} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 								throw new ParseException(e);
 							}
@@ -2485,5 +2484,9 @@ public final class RestCall extends BeanSession implements Closeable {
 		if (StringUtils.isEmpty(def) && skipIfEmpty)
 			return false;
 		return true;
+	}
+
+	private static String className(Object o) {
+		return ClassInfo.of(o).getFullName();
 	}
 }

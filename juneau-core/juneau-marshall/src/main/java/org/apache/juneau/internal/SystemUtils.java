@@ -79,7 +79,7 @@ public class SystemUtils {
 	public static void setProperty(String key, Object value, boolean overwrite) {
 		if (value != null) {
 			if (System.getProperty(key) == null || overwrite)
-				System.setProperty(key, StringUtils.asString(value));
+				System.setProperty(key, StringUtils.stringify(value));
 		}
 	}
 

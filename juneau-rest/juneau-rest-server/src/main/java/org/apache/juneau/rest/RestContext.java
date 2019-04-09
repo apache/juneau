@@ -21,7 +21,6 @@ import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.FormattedIllegalArgumentException.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
@@ -56,7 +55,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.remote.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converters.*;
@@ -3230,13 +3229,13 @@ public final class RestContext extends BeanContext {
 				_postInitChildFirstMethodParams = new ArrayList<>(),
 				_destroyMethodParams = new ArrayList<>();
 
-			for (MethodInfo mi : rci.getPublicMethodInfos()) {
+			for (MethodInfo mi : rci.getPublicMethods()) {
 				RestMethod a = mi.getAnnotation(RestMethod.class);
 				if (a != null) {
-					methodsFound.add(mi.getName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
+					methodsFound.add(mi.getSimpleName() + "," + emptyIfNull(firstNonEmpty(a.name(), a.method())) + "," + fixMethodPath(a.path()));
 					try {
 						if (mi.isNotPublic())
-							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getName());
+							throw new RestServletException("@RestMethod method {0}.{1} must be defined as public.", resourceClass.getName(), mi.getSimpleName());
 
 						RestJavaMethod sm = new RestJavaMethod(resource, mi.inner(), this);
 						String httpMethod = sm.getHttpMethod();
@@ -3249,7 +3248,7 @@ public final class RestContext extends BeanContext {
 							final ClassMeta<?> interfaceClass = beanContext.getClassMeta(mi.inner().getGenericReturnType());
 							final RemoteInterfaceMeta rim = new RemoteInterfaceMeta(interfaceClass.getInnerClass(), null);
 							if (rim.getMethodsByPath().isEmpty())
-								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getReadableName());
+								throw new RestException(SC_INTERNAL_SERVER_ERROR, "Method {0} returns an interface {1} that doesn't define any remote methods.", mi.getSignature(), interfaceClass.getFullName());
 
 							sm = new RestJavaMethod(resource, mi.inner(), this) {
 
@@ -3296,12 +3295,12 @@ public final class RestContext extends BeanContext {
 								}
 							};
 
-							_javaRestMethods.put(mi.getName(), sm);
+							_javaRestMethods.put(mi.getSimpleName(), sm);
 							addToRouter(routers, "GET", sm);
 							addToRouter(routers, "POST", sm);
 
 						} else {
-							_javaRestMethods.put(mi.getName(), sm);
+							_javaRestMethods.put(mi.getSimpleName(), sm);
 							addToRouter(routers, httpMethod, sm);
 						}
 					} catch (Throwable e) {
@@ -3310,7 +3309,7 @@ public final class RestContext extends BeanContext {
 				}
 			}
 
-			for (MethodInfo m : rci.getAllMethodInfos(true)) {
+			for (MethodInfo m : rci.getAllMethodsParentFirst()) {
 				if (m.isPublic() && m.hasAnnotation(RestHook.class)) {
 					HookEvent he = m.getAnnotation(RestHook.class).value();
 					String sig = m.getSignature();
@@ -3335,7 +3334,7 @@ public final class RestContext extends BeanContext {
 							if (! _startCallMethods.containsKey(sig)) {
 								m.setAccessible();
 								_startCallMethods.put(sig, m.inner());
-								_startCallMethodParams.add(m.getParameterTypes());
+								_startCallMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
@@ -3344,7 +3343,7 @@ public final class RestContext extends BeanContext {
 							if (! _endCallMethods.containsKey(sig)) {
 								m.setAccessible();
 								_endCallMethods.put(sig, m.inner());
-								_endCallMethodParams.add(m.getParameterTypes());
+								_endCallMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, HttpServletRequest.class, HttpServletResponse.class);
 							}
 							break;
@@ -3353,7 +3352,7 @@ public final class RestContext extends BeanContext {
 							if (! _postInitMethods.containsKey(sig)) {
 								m.setAccessible();
 								_postInitMethods.put(sig, m.inner());
-								_postInitMethodParams.add(m.getParameterTypes());
+								_postInitMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -3362,7 +3361,7 @@ public final class RestContext extends BeanContext {
 							if (! _postInitChildFirstMethods.containsKey(sig)) {
 								m.setAccessible();
 								_postInitChildFirstMethods.put(sig, m.inner());
-								_postInitChildFirstMethodParams.add(m.getParameterTypes());
+								_postInitChildFirstMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -3371,7 +3370,7 @@ public final class RestContext extends BeanContext {
 							if (! _destroyMethods.containsKey(sig)) {
 								m.setAccessible();
 								_destroyMethods.put(sig, m.inner());
-								_destroyMethodParams.add(m.getParameterTypes());
+								_destroyMethodParams.add(m.getRawParamTypes());
 								assertArgsOnlyOfType(m, RestContext.class);
 							}
 							break;
@@ -4572,21 +4571,21 @@ public final class RestContext extends BeanContext {
 	 */
 	protected RestMethodParam[] findParams(MethodInfo mi, boolean isPreOrPost, UrlPathPattern pathPattern) throws ServletException {
 
-		Type[] pt = mi.getGenericParameterTypes();
-		RestMethodParam[] rp = new RestMethodParam[pt.length];
+		List<ClassInfo> pt = mi.getParamTypes();
+		RestMethodParam[] rp = new RestMethodParam[pt.size()];
 		PropertyStore ps = getPropertyStore();
 
-		for (int i = 0; i < pt.length; i++) {
+		for (int i = 0; i < pt.size(); i++) {
 
-			Type t = pt[i];
-			if (t instanceof Class) {
-				Class<?> c = (Class<?>)t;
+			ClassInfo t = pt.get(i);
+			if (t.inner() != null) {
+				Class<?> c = t.inner();
 				rp[i] = paramResolvers.get(c);
 				if (rp[i] == null)
 					rp[i] = RestParamDefaults.STANDARD_RESOLVERS.get(c);
 			}
 
-			MethodParamInfo mpi = mi.getParam(i);
+			ParamInfo mpi = mi.getParam(i);
 
 			if (mpi.hasAnnotation(Header.class)) {
 				rp[i] = new RestParamDefaults.HeaderObject(mpi, ps);

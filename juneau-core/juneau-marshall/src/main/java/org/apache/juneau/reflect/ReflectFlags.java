@@ -10,48 +10,58 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
-
-import static org.apache.juneau.internal.StringUtils.*;
-
-import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.annotation.*;
+package org.apache.juneau.reflect;
 
 /**
- * Specialized matcher for matching client versions.
- *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.ClientVersioning}
- * </ul>
+ * Identifies possible modifiers on classes, methods, fields, and constructors.
  */
-public class ClientVersionMatcher extends RestMatcher {
+public enum ReflectFlags {
 
-	private final String clientVersionHeader;
-	private final VersionRange range;
+	/** PUBLIC */
+	PUBLIC,
 
-	/**
-	 * Constructor.
-	 *
-	 * @param clientVersionHeader
-	 * 	The HTTP request header name containing the client version.
-	 * 	If <jk>null</jk> or an empty string, uses <js>"X-Client-Version"</js>
-	 * @param mi The version string that the client version must match.
-	 */
-	protected ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
-		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "X-Client-Version" : clientVersionHeader;
-		RestMethod m = mi.getAnnotation(RestMethod.class);
-		range = new VersionRange(m.clientVersion());
-	}
+	/** NOT_PUBLIC */
+	NOT_PUBLIC,
 
-	@Override /* RestMatcher */
-	public boolean matches(RestRequest req) {
-		return range.matches(req.getHeader(clientVersionHeader));
-	}
+	/** STATIC */
+	STATIC,
 
-	@Override /* RestMatcher */
-	public boolean mustMatch() {
-		return true;
-	}
+	/** NOT_STATIC */
+	NOT_STATIC,
+
+	/** MEMBER */
+	MEMBER,
+
+	/** NOT_MEMBER */
+	NOT_MEMBER,
+
+	/** INTERFACE */
+	INTERFACE,
+
+	/** CLASS */
+	CLASS,
+
+	/** HAS_PARAMS */
+	HAS_PARAMS,
+
+	/** HAS_NO_PARAMS */
+	HAS_NO_PARAMS,
+
+	/** DEPRECATED */
+	DEPRECATED,
+
+	/** NOT_DEPRECATED */
+	NOT_DEPRECATED,
+
+	/** ABSTRACT */
+	ABSTRACT,
+
+	/** NOT_ABSTRACT */
+	NOT_ABSTRACT,
+
+	/** TRANSIENT */
+	TRANSIENT,
+
+	/** NOT_TRANSIENT */
+	NOT_TRANSIENT
 }

@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 
@@ -204,7 +205,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger swagger(Object value) {
-		return setSwagger(toStringVal(value));
+		return setSwagger(stringify(value));
 	}
 
 	/**
@@ -308,7 +309,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger host(Object value) {
-		return setHost(toStringVal(value));
+		return setHost(stringify(value));
 	}
 
 	/**
@@ -355,7 +356,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Swagger basePath(Object value) {
-		return setBasePath(toStringVal(value));
+		return setBasePath(stringify(value));
 	}
 
 	/**

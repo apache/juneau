@@ -336,6 +336,7 @@
 					<excludes>
 						<exclude>**/doc/**/*</exclude>
 						<exclude>**/examples/**/*</exclude>
+						<exclude>**/testutils/**/*</exclude>
 					</excludes>
 					<fileSets>
 						<fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">

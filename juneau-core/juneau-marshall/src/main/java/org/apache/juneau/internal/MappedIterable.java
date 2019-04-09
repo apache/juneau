@@ -10,48 +10,56 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
-import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.rest.annotation.*;
+import java.util.*;
+import java.util.function.*;
 
 /**
- * Specialized matcher for matching client versions.
+ * Combines an {@link Iterable} with a {@link Function} so that you can map
+ * entries while iterating over them.
  *
- * <h5 class='section'>See Also:</h5>
- * <ul>
- * 	<li class='link'>{@doc juneau-rest-server.ClientVersioning}
- * </ul>
+ * @param <I> The unmapped type.
+ * @param <E> The mapped type.
  */
-public class ClientVersionMatcher extends RestMatcher {
+public class MappedIterable<I,E> implements Iterable<E> {
 
-	private final String clientVersionHeader;
-	private final VersionRange range;
+	final Iterator<I> i;
+	final Function<I,E> f;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param clientVersionHeader
-	 * 	The HTTP request header name containing the client version.
-	 * 	If <jk>null</jk> or an empty string, uses <js>"X-Client-Version"</js>
-	 * @param mi The version string that the client version must match.
+	 * @param i The original iterable being wrapped.
+	 * @param f The function to use to convert from unmapped to mapped types.
 	 */
-	protected ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
-		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "X-Client-Version" : clientVersionHeader;
-		RestMethod m = mi.getAnnotation(RestMethod.class);
-		range = new VersionRange(m.clientVersion());
+	protected MappedIterable(Iterable<I> i, Function<I,E> f) {
+		this.i = i.iterator();
+		this.f = f;
 	}
 
-	@Override /* RestMatcher */
-	public boolean matches(RestRequest req) {
-		return range.matches(req.getHeader(clientVersionHeader));
+	/**
+	 * Constructor.
+	 *
+	 * @param i The original iterable being wrapped.
+	 * @param f The function to use to convert from unmapped to mapped types.
+	 * @return A new iterable.
+	 */
+	public static <I,E> Iterable<E> of(Iterable<I> i, Function<I,E> f) {
+		return new MappedIterable<>(i, f);
 	}
 
-	@Override /* RestMatcher */
-	public boolean mustMatch() {
-		return true;
+	@Override
+	public Iterator<E> iterator() {
+		return new Iterator<E>() {
+			@Override
+			public boolean hasNext() {
+				return i.hasNext();
+			}
+			@Override
+			public E next() {
+				return f.apply(i.next());
+			}
+		};
 	}
 }

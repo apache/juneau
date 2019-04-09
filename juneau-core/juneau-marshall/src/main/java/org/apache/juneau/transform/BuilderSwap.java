@@ -18,7 +18,7 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Specialized transform for builder classes.
@@ -139,13 +139,14 @@ public class BuilderSwap<T,B> {
 		if (bci.isNotPublic())
 			return null;
 
-		Class<?> pojoClass = getClassInfo(Builder.class).getParameterType(0, builderClass);
+//		Class<?> pojoClass = getClassInfo(Builder.class).getParameterType(0, builderClass);
+		Class<?> pojoClass = getClassInfo(builderClass).getParameterType(0, Builder.class);
 
 		MethodInfo createPojoMethod, createBuilderMethod;
-		Constructor<?> pojoConstructor;
+		ConstructorInfo pojoConstructor;
 		ConstructorInfo builderConstructor;
 
-		createPojoMethod = bci.getBuilderBuildMethodInfo();
+		createPojoMethod = bci.getBuilderBuildMethod();
 		if (createPojoMethod != null)
 			pojoClass = createPojoMethod.getReturnType().inner();
 
@@ -158,12 +159,12 @@ public class BuilderSwap<T,B> {
 		if (pojoConstructor == null)
 			return null;
 
-		builderConstructor = bci.getNoArgConstructorInfo(cVis);
-		createBuilderMethod = pci.getBuilderCreateMethodInfo();
+		builderConstructor = bci.getNoArgConstructor(cVis);
+		createBuilderMethod = pci.getBuilderCreateMethod();
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
-		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createPojoMethod);
+		return new BuilderSwap(pojoClass, builderClass, pojoConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createPojoMethod);
 	}
 
 
@@ -179,7 +180,7 @@ public class BuilderSwap<T,B> {
 	public static BuilderSwap<?,?> findSwapFromPojoClass(Class<?> pojoClass, Visibility cVis, Visibility mVis) {
 		Class<?> builderClass = null;
 		MethodInfo pojoCreateMethod, builderCreateMethod;
-		Constructor<?> pojoConstructor = null;
+		ConstructorInfo pojoConstructor = null;
 		ConstructorInfo builderConstructor;
 
 		org.apache.juneau.annotation.Builder b = pojoClass.getAnnotation(org.apache.juneau.annotation.Builder.class);
@@ -189,18 +190,18 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = getClassInfo(pojoClass);
 
-		builderCreateMethod = pci.getBuilderCreateMethodInfo();
+		builderCreateMethod = pci.getBuilderCreateMethod();
 
 		if (builderClass == null && builderCreateMethod != null)
 			builderClass = builderCreateMethod.getReturnType().inner();
 
 		if (builderClass == null) {
-			for (ConstructorInfo cc : pci.getConstructorInfos()) {
-				if (cc.isVisible(cVis) && cc.hasNumArgs(1)) {
-					Class<?>[] pt = cc.getParameterTypes();
-					if (getClassInfo(pt[0]).isChildOf(Builder.class)) {
-						pojoConstructor = cc.inner();
-						builderClass = pt[0];
+			for (ConstructorInfo cc : pci.getPublicConstructors()) {
+				if (cc.isVisible(cVis) && cc.hasNumParams(1)) {
+					ClassInfo pt = cc.getParamType(0);
+					if (pt.isChildOf(Builder.class)) {
+						pojoConstructor = cc;
+						builderClass = pt.inner();
 					}
 				}
 			}
@@ -210,17 +211,17 @@ public class BuilderSwap<T,B> {
 			return null;
 
 		ClassInfo bci = getClassInfo(builderClass);
-		builderConstructor = bci.getNoArgConstructorInfo(cVis);
+		builderConstructor = bci.getNoArgConstructor(cVis);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
-		pojoCreateMethod = bci.getBuilderBuildMethodInfo();
+		pojoCreateMethod = bci.getBuilderBuildMethod();
 		if (pojoConstructor == null)
 			pojoConstructor = pci.getConstructor(cVis, builderClass);
 
 		if (pojoConstructor == null && pojoCreateMethod == null)
 			return null;
 
-		return new BuilderSwap(pojoClass, builderClass, pojoConstructor, builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, pojoCreateMethod);
+		return new BuilderSwap(pojoClass, builderClass, pojoConstructor == null ? null : pojoConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, pojoCreateMethod);
 	}
 }

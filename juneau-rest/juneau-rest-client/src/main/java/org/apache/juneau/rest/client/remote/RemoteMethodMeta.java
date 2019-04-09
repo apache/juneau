@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Contains the meta-data about a Java method on a REST proxy class.
@@ -113,7 +113,7 @@ public class RemoteMethodMeta {
 
 			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
 
-			for (MethodParamInfo mpi : mi.getParams()) {
+			for (ParamInfo mpi : mi.getParams()) {
 				RemoteMethodArg rma = RemoteMethodArg.create(mpi);
 				boolean annotated = false;
 				if (rma != null) {

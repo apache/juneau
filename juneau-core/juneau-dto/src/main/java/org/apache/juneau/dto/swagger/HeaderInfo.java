@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -168,7 +170,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -227,7 +229,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -278,7 +280,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -380,7 +382,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo collectionFormat(Object value) {
-		return setCollectionFormat(toStringVal(value));
+		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -762,7 +764,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -1047,7 +1049,7 @@ public class HeaderInfo extends SwaggerElement {
 	 */
 	@BeanProperty("$ref")
 	public HeaderInfo setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = StringUtils.stringify(value);
 		return this;
 	}
 

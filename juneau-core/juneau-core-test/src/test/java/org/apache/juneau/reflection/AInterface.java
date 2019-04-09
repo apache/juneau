@@ -10,46 +10,6 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau.reflection;
 
-/**
- * Identifies possible modifiers on classes, methods, fields, and constructors.
- */
-public enum ClassFlags {
-
-	/** PUBLIC */
-	PUBLIC,
-
-	/** NOT_PUBLIC */
-	NOT_PUBLIC,
-
-	/** STATIC */
-	STATIC,
-
-	/** NOT_STATIC */
-	NOT_STATIC,
-
-	/** HAS_ARGS */
-	HAS_ARGS,
-
-	/** HAS_NO_ARGS */
-	HAS_NO_ARGS,
-
-	/** DEPRECATED */
-	DEPRECATED,
-
-	/** NOT_DEPRECATED */
-	NOT_DEPRECATED,
-
-	/** ABSTRACT */
-	ABSTRACT,
-
-	/** NOT_ABSTRACT */
-	NOT_ABSTRACT,
-
-	/** TRANSIENT */
-	TRANSIENT,
-
-	/** NOT_TRANSIENT */
-	NOT_TRANSIENT
-}
+public interface AInterface {}

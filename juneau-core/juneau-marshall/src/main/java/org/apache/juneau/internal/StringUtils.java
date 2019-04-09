@@ -32,6 +32,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.reflect.*;
 
 /**
  * Reusable string utility methods.
@@ -485,7 +486,7 @@ public final class StringUtils {
 		for (int i = 0; i < tokens.length; i++) {
 			if (i > 0)
 				sb.append(d);
-			sb.append(escapeChars(asString(tokens[i]), as));
+			sb.append(escapeChars(stringify(tokens[i]), as));
 		}
 		return sb;
 	}
@@ -541,7 +542,7 @@ public final class StringUtils {
 		AsciiSet as = getEscapeSet(d);
 		StringBuilder sb = new StringBuilder();
 		for (Iterator<?> iter = tokens.iterator(); iter.hasNext();) {
-			sb.append(escapeChars(asString(iter.next()), as));
+			sb.append(escapeChars(stringify(iter.next()), as));
 			if (iter.hasNext())
 				sb.append(d);
 		}
@@ -1574,7 +1575,7 @@ public final class StringUtils {
 	 * @param o The object to convert to a string.
 	 * @return The object converted to a string, or <jk>null</jk> if the object was null.
 	 */
-	public static String asString(Object o) {
+	public static String stringify(Object o) {
 		return (o == null ? null : o.toString());
 	}
 
@@ -1584,14 +1585,14 @@ public final class StringUtils {
 	 * @param o The array of objects to convert to strings.
 	 * @return A new array of objects converted to strings.
 	 */
-	public static String[] asStrings(Object...o) {
+	public static String[] stringifyAll(Object...o) {
 		if (o == null)
 			return null;
 		if (o instanceof String[])
 			return (String[])o;
 		String[] s = new String[o.length];
 		for (int i = 0; i < o.length; i++)
-			s[i] = asString(o[i]);
+			s[i] = stringify(o[i]);
 		return s;
 	}
 
@@ -1815,7 +1816,7 @@ public final class StringUtils {
 	public static String urlEncodePath(Object o) {
 		if (o == null)
 			return null;
-		String s = asString(o);
+		String s = stringify(o);
 
 		boolean needsEncode = false;
 		for (int i = 0; i < s.length() && ! needsEncode; i++)
@@ -2242,7 +2243,7 @@ public final class StringUtils {
 		if (o == null)
 			return null;
 		if (o instanceof ClassMeta)
-			return ((ClassMeta<?>)o).getReadableName();
+			return ((ClassMeta<?>)o).getFullName();
 		if (BeanContext.DEFAULT == null)
 			return o.toString();
 		ClassMeta<?> cm = BeanContext.DEFAULT.getClassMetaForObject(o);
@@ -2251,7 +2252,7 @@ public final class StringUtils {
 		if (cm.isClass())
 			return ((Class<?>)o).getName();
 		if (cm.isMethod())
-			return ClassUtils.asString((Method)o);
+			return MethodInfo.of((Method)o).getShortName();
 		return o.toString();
 	}
 

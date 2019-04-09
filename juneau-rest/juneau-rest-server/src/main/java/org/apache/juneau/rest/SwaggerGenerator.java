@@ -42,7 +42,7 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.RestUtils;
 import org.apache.juneau.serializer.*;
@@ -120,7 +120,7 @@ final class SwaggerGenerator {
 			omSwagger = new ObjectMap();
 
 		// Combine it with @RestResource(swagger)
-		for (RestResource rr : rci.getAnnotations(RestResource.class, true)) {
+		for (RestResource rr : rci.getAnnotationsParentFirst(RestResource.class)) {
 
 			ObjectMap sInfo = omSwagger.getObjectMap("info", true);
 			sInfo.appendSkipEmpty("title",
@@ -328,7 +328,7 @@ final class SwaggerGenerator {
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
 
 				RestParamType in = mp.getParamType();
-				MethodParamInfo mpi = mp.getMethodParamInfo();
+				ParamInfo mpi = mp.getMethodParamInfo();
 
 				if (in.isAny(BODY, QUERY, FORM_DATA, HEADER, PATH)) {
 
@@ -383,9 +383,9 @@ final class SwaggerGenerator {
 
 			ObjectMap responses = op.getObjectMap("responses", true);
 
-			for (ClassInfo eci : mi.getExceptionInfos()) {
+			for (ClassInfo eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
-					List<Response> la = eci.getAnnotations(Response.class, true);
+					List<Response> la = eci.getAnnotationsParentFirst(Response.class);
 					Set<Integer> codes = getCodes(la, 500);
 					for (Response a : la) {
 						for (Integer code : codes) {
@@ -395,14 +395,14 @@ final class SwaggerGenerator {
 								om.appendSkipEmpty("schema", getSchema(om.getObjectMap("schema"), eci.inner()));
 						}
 					}
-					for (MethodInfo ecmi : eci.getAllMethodInfos(true)) {
+					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 							String ha = a.name();
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getGenericReturnType()));
+								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType()));
 							}
 						}
 					}
@@ -422,14 +422,14 @@ final class SwaggerGenerator {
 					}
 				}
 				if (mi.getReturnType().hasAnnotation(Response.class)) {
-					for (MethodInfo ecmi : mi.getReturnType().getAllMethodInfos(true)) {
+					for (MethodInfo ecmi : mi.getReturnType().getAllMethodsParentFirst()) {
 						if (ecmi.hasAnnotation(ResponseHeader.class)) {
 							ResponseHeader a = ecmi.getAnnotation(ResponseHeader.class);
 							String ha = a.name();
 							for (Integer code : codes) {
 								ObjectMap header = responses.getObjectMap(String.valueOf(code), true).getObjectMap("headers", true).getObjectMap(ha, true);
 								merge(header, a);
-								mergePartSchema(header, getSchema(header, ecmi.getGenericReturnType()));
+								mergePartSchema(header, getSchema(header, ecmi.getReturnType().innerType()));
 							}
 						}
 					}
@@ -445,7 +445,7 @@ final class SwaggerGenerator {
 			for (RestMethodParam mp : context.getRestMethodParams(m)) {
 
 				RestParamType in = mp.getParamType();
-				MethodParamInfo mpi = mp.getMethodParamInfo();
+				ParamInfo mpi = mp.getMethodParamInfo();
 
 				if (in == RESPONSE_HEADER) {
 					List<ResponseHeader> la = mpi.getAnnotations(ResponseHeader.class, true);

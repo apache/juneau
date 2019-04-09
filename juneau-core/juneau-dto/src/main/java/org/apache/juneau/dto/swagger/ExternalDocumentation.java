@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.net.*;
 import java.net.URI;
@@ -122,7 +122,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ExternalDocumentation description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**

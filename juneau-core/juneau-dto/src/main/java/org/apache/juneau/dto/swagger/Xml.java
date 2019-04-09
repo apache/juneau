@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 
@@ -145,7 +146,7 @@ public class Xml extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -186,7 +187,7 @@ public class Xml extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml namespace(Object value) {
-		return setNamespace(toStringVal(value));
+		return setNamespace(stringify(value));
 	}
 
 	/**
@@ -227,7 +228,7 @@ public class Xml extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml prefix(Object value) {
-		return setPrefix(toStringVal(value));
+		return setPrefix(stringify(value));
 	}
 
 	/**

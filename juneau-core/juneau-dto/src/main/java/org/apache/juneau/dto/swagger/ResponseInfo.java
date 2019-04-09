@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -172,7 +175,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ResponseInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**

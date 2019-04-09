@@ -16,7 +16,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -80,82 +80,11 @@ public final class ClassUtils {
 	 * @param o The objects.
 	 * @return An array of readable class type strings.
 	 */
-	public static ObjectList getReadableClassNames(Object[] o) {
+	public static ObjectList getFullClassNames(Object[] o) {
 		ObjectList l = new ObjectList();
 		for (int i = 0; i < o.length; i++)
-			l.add(o[i] == null ? "null" : getReadableClassName(o[i].getClass()));
+			l.add(o[i] == null ? "null" : ClassInfo.of((o[i].getClass())).getFullName());
 		return l;
-	}
-
-	/**
-	 * Shortcut for calling <code><jsm>getReadableClassName</jsm>(c.getName())</code>
-	 *
-	 * @param c The class.
-	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
-	 */
-	public static String getReadableClassName(Class<?> c) {
-		if (c == null)
-			return null;
-		return getReadableClassName(c.getName());
-	}
-
-	/**
-	 * Shortcut for calling <code><jsm>getReadableClassName</jsm>(c.getClass().getName())</code>
-	 *
-	 * @param o The object whose class we want to render.
-	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
-	 */
-	public static String getReadableClassNameForObject(Object o) {
-		if (o == null)
-			return null;
-		return getReadableClassName(o.getClass().getName());
-	}
-
-	/**
-	 * Converts the specified class name to a readable form when class name is a special construct like <js>"[[Z"</js>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"java.lang.Object"</js>);  <jc>// Returns "java.lang.Object"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"boolean"</js>);  <jc>// Returns "boolean"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"[Z"</js>);  <jc>// Returns "boolean[]"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"[[Z"</js>);  <jc>// Returns "boolean[][]"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<js>"[Ljava.lang.Object;"</js>);  <jc>// Returns "java.lang.Object[]"</jc>
-	 * 	<jsm>getReadableClassName</jsm>(<jk>null</jk>);  <jc>// Returns null</jc>
-	 * </p>
-	 *
-	 * @param className The class name.
-	 * @return A readable class type name, or <jk>null</jk> if parameter is <jk>null</jk>.
-	 */
-	public static String getReadableClassName(String className) {
-		if (className == null)
-			return null;
-		if (! StringUtils.startsWith(className, '['))
-			return className;
-		int depth = 0;
-		for (int i = 0; i < className.length(); i++) {
-			if (className.charAt(i) == '[')
-				depth++;
-			else
-				break;
-		}
-		char type = className.charAt(depth);
-		String c;
-		switch (type) {
-			case 'Z': c = "boolean"; break;
-			case 'B': c = "byte"; break;
-			case 'C': c = "char"; break;
-			case 'D': c = "double"; break;
-			case 'F': c = "float"; break;
-			case 'I': c = "int"; break;
-			case 'J': c = "long"; break;
-			case 'S': c = "short"; break;
-			default: c = className.substring(depth+1, className.length()-1);
-		}
-		StringBuilder sb = new StringBuilder(c.length() + 2*depth).append(c);
-		for (int i = 0; i < depth; i++)
-			sb.append("[]");
-		return sb.toString();
 	}
 
 	/**
@@ -176,6 +105,23 @@ public final class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified argument types are valid for the specified parameter types.
+	 *
+	 * @param paramTypes The parameters types specified on a method.
+	 * @param argTypes The class types of the arguments being passed to the method.
+	 * @return <jk>true</jk> if the arguments match the parameters.
+	 */
+	public static boolean argsMatch(List<ClassInfo> paramTypes, Class<?>[] argTypes) {
+		if (paramTypes.size() == argTypes.length) {
+			for (int i = 0; i < paramTypes.size(); i++)
+				if (! paramTypes.get(i).isParentOf(argTypes[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Returns a number representing the number of arguments that match the specified parameters.
 	 *
 	 * @param paramTypes The parameters types specified on a method.
@@ -188,6 +134,28 @@ public final class ClassUtils {
 			p = getClassInfo(p).getWrapperIfPrimitive();
 			for (Class<?> a : argTypes) {
 				if (getClassInfo(p).isParentOf(a)) {
+					matches++;
+					continue outer;
+				}
+			}
+			return -1;
+		}
+		return matches;
+	}
+
+	/**
+	 * Returns a number representing the number of arguments that match the specified parameters.
+	 *
+	 * @param paramTypes The parameters types specified on a method.
+	 * @param argTypes The class types of the arguments being passed to the method.
+	 * @return The number of matching arguments, or <code>-1</code> a parameter was found that isn't in the list of args.
+	 */
+	public static int fuzzyArgsMatch(List<ClassInfo> paramTypes, Class<?>... argTypes) {
+		int matches = 0;
+		outer: for (ClassInfo p : paramTypes) {
+			p = p.getWrapperInfoIfPrimitive();
+			for (Class<?> a : argTypes) {
+				if (p.isParentOf(a)) {
 					matches++;
 					continue outer;
 				}
@@ -283,23 +251,23 @@ public final class ClassUtils {
 					return null;
 
 				// First look for an exact match.
-				Constructor<?> con = c3.getPublicConstructor(args);
+				ConstructorInfo con = c3.getPublicConstructor(args);
 				if (con != null)
-					return (T)con.newInstance(args);
+					return con.<T>invoke(args);
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
 					args = new AList<>().append(outer).appendAll(args).toArray();
 					con = c3.getPublicConstructor(args);
 					if (con != null)
-						return (T)con.newInstance(args);
+						return con.<T>invoke(args);
 				}
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
 					con = c3.getPublicConstructorFuzzy(args);
 					if (con != null)
-						return (T)con.newInstance(getMatchingArgs(con.getParameterTypes(), args));
+						return con.<T>invoke(getMatchingArgs(con.getParamTypes(), args));
 				}
 
 				throw new FormattedRuntimeException("Could not instantiate class {0}/{1}.  Constructor not found.", c.getName(), c2);
@@ -340,36 +308,29 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns a readable representation of the specified method.
+	 * Matches arguments to a list of parameter types.
 	 *
 	 * <p>
-	 * The format of the string is <js>"full-qualified-class.method-name(parameter-simple-class-names)"</js>.
+	 * Extra parameters are ignored.
+	 * <br>Missing parameters are left null.
 	 *
-	 * @param m The method to stringify.
-	 * @return The stringified method.
+	 * @param paramTypes The parameter types.
+	 * @param args The arguments to match to the parameter types.
+	 * @return
+	 * 	An array of parameters.
 	 */
-	public static String asString(Method m) {
-		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
-		for (int i = 0; i < m.getParameterTypes().length; i++) {
-			if (i > 0)
-				sb.append(",");
-			sb.append(m.getParameterTypes()[i].getSimpleName());
+	public static Object[] getMatchingArgs(List<ClassInfo> paramTypes, Object... args) {
+		Object[] params = new Object[paramTypes.size()];
+		for (int i = 0; i < paramTypes.size(); i++) {
+			ClassInfo pt = paramTypes.get(i).getWrapperInfoIfPrimitive();
+			for (int j = 0; j < args.length; j++) {
+				if (pt.isParentOf(args[j].getClass())) {
+					params[i] = args[j];
+					break;
+				}
+			}
 		}
-		sb.append(")");
-		return sb.toString();
-	}
-
-	/**
-	 * Returns a readable representation of the specified field.
-	 *
-	 * <p>
-	 * The format of the string is <js>"full-qualified-class.field-name"</js>.
-	 *
-	 * @param f The field to stringify.
-	 * @return The stringified field.
-	 */
-	public static String asString(Field f) {
-		return f.getDeclaringClass().getName() + "." + f.getName();
+		return params;
 	}
 
 	/**
@@ -380,7 +341,7 @@ public final class ClassUtils {
 	 * <ul>
 	 * 	<li>Have a public constructor that takes in a single <code>String</code> argument.
 	 * 	<li>Have a static <code>fromString(String)</code> (or related) method.
-	 * 		<br>See {@link ClassInfo#getFromStringMethodInfo()} for the list of possible static method names.
+	 * 		<br>See {@link ClassInfo#getFromStringMethod()} for the list of possible static method names.
 	 * 	<li>Be an <code>enum</code>.
 	 * </ul>
 	 *

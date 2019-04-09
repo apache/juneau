@@ -20,7 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -61,17 +61,19 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	public static List<SurrogateSwap<?,?>> findPojoSwaps(Class<?> c) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		ClassInfo ci = getClassInfo(c);
-		for (ConstructorInfo cc : ci.getConstructorInfos()) {
-			Class<?>[] pt = cc.getParameterTypes();
-			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumArgs(1) && cc.isPublic() && pt[0] != c.getDeclaringClass()) {
-				// Find the unswap method if there is one.
-				Method unswapMethod = null;
-				for (MethodInfo m : ci.getPublicMethodInfos()) {
-					if (m.getReturnType().is(pt[0]) && m.isPublic())
-					unswapMethod = m.inner();
-				}
+		for (ConstructorInfo cc : ci.getPublicConstructors()) {
+			if (cc.getAnnotation(BeanIgnore.class) == null && cc.hasNumParams(1) && cc.isPublic()) {
+				Class<?> pt = cc.getRawParamType(0);
+				if (! pt.equals(c.getDeclaringClass())) {
+					// Find the unswap method if there is one.
+					Method unswapMethod = null;
+					for (MethodInfo m : ci.getPublicMethods()) {
+						if (m.getReturnType().is(pt) && m.isPublic())
+						unswapMethod = m.inner();
+					}
 
-				l.add(new SurrogateSwap(pt[0], cc.inner(), unswapMethod));
+					l.add(new SurrogateSwap(pt, cc.inner(), unswapMethod));
+				}
 			}
 		}
 		return l;
@@ -91,7 +93,7 @@ public class SurrogateSwap<T,F> extends PojoSwap<T,F> {
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
 			throw new ParseException("unswap() method not implement on surrogate class ''{1}''",
-				f.getClass().getName(), getNormalClass().getName());
+				f.getClass().getName(), getNormalClass().getFullName());
 		try {
 			return (T)unswapMethod.invoke(f);
 		} catch (Exception e) {

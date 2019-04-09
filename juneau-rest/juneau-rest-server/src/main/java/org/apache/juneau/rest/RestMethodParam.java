@@ -25,7 +25,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Date;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -115,7 +115,7 @@ import org.apache.juneau.utils.*;
 public abstract class RestMethodParam {
 
 	final RestParamType paramType;
-	final MethodParamInfo mpi;
+	final ParamInfo mpi;
 	final String name;
 	final Type type;
 	final Class<?> c;
@@ -130,7 +130,7 @@ public abstract class RestMethodParam {
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 * @param type The object type to convert the parameter to.
 	 */
-	protected RestMethodParam(RestParamType paramType, MethodParamInfo mpi, String name, Type type) {
+	protected RestMethodParam(RestParamType paramType, ParamInfo mpi, String name, Type type) {
 		this.paramType = paramType;
 		this.mpi = mpi;
 		this.name = name;
@@ -147,8 +147,8 @@ public abstract class RestMethodParam {
 	 * 	The parameter name.
 	 * 	Can be <jk>null</jk> if parameter doesn't have a name (e.g. the request body).
 	 */
-	protected RestMethodParam(RestParamType paramType, MethodParamInfo mpi, String name) {
-		this(paramType, mpi, name, mpi.getGenericParameterType());
+	protected RestMethodParam(RestParamType paramType, ParamInfo mpi, String name) {
+		this(paramType, mpi, name, mpi.getParameterType().innerType());
 	}
 
 	/**
@@ -157,8 +157,8 @@ public abstract class RestMethodParam {
 	 * @param paramType The Swagger parameter type.
 	 * @param mpi The method parameter.
 	 */
-	protected RestMethodParam(RestParamType paramType, MethodParamInfo mpi) {
-		this(paramType, mpi, null, mpi.getGenericParameterType());
+	protected RestMethodParam(RestParamType paramType, ParamInfo mpi) {
+		this(paramType, mpi, null, mpi.getParameterType().innerType());
 	}
 
 	/**
@@ -169,6 +169,16 @@ public abstract class RestMethodParam {
 	 */
 	protected RestMethodParam(RestParamType paramType, Type type) {
 		this(paramType, null, null, type);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param paramType The Swagger parameter type.
+	 * @param type The object type to convert the parameter to.
+	 */
+	protected RestMethodParam(RestParamType paramType, ClassInfo type) {
+		this(paramType, null, null, type.innerType());
 	}
 
 	/**
@@ -219,7 +229,7 @@ public abstract class RestMethodParam {
 	 *
 	 * @return The parameter info.
 	 */
-	public MethodParamInfo getMethodParamInfo() {
+	public ParamInfo getMethodParamInfo() {
 		return mpi;
 	}
 

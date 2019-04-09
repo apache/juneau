@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 
@@ -125,7 +126,7 @@ public class Tag extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Tag name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -167,7 +168,7 @@ public class Tag extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Tag description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**

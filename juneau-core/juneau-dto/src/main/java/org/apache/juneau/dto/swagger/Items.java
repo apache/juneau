@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -194,7 +196,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -245,7 +247,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -356,7 +358,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items collectionFormat(Object value) {
-		return setCollectionFormat(toStringVal(value));
+		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -740,7 +742,7 @@ public class Items extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -1025,7 +1027,7 @@ public class Items extends SwaggerElement {
 	 */
 	@BeanProperty("$ref")
 	public Items setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = StringUtils.stringify(value);
 		return this;
 	}
 

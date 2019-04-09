@@ -192,14 +192,14 @@ public class OpenApiParserSession extends UonParserSession {
 							for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
 								String key = e.getKey();
 								BeanPropertyMeta bpm = m.getPropertyMeta(key);
-								m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
+								m.put(key, parse(partType, schema.getProperty(key), stringify(e.getValue()), bpm == null ? object() : bpm.getClassMeta()));
 							}
 							return m.getBean();
 						}
 						Map<String,Object> m = (Map<String,Object>)type.newInstance();
 						for (Map.Entry<String,Object> e : parse(partType, DEFAULT_SCHEMA, in, CM_ObjectMap).entrySet()) {
 							String key = e.getKey();
-							m.put(key, parse(partType, schema.getProperty(key), asString(e.getValue()), object()));
+							m.put(key, parse(partType, schema.getProperty(key), stringify(e.getValue()), object()));
 						}
 						return (T)m;
 					} catch (Exception e1) {

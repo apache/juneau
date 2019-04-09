@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.reflection.ClassInfo;
+import org.apache.juneau.reflect.ClassInfo;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;

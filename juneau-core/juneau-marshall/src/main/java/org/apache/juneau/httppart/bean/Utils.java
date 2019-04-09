@@ -15,7 +15,7 @@ package org.apache.juneau.httppart.bean;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Utility methods.
@@ -23,7 +23,7 @@ import org.apache.juneau.reflection.*;
 class Utils {
 
 	static void assertNoArgs(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
-		if (m.getParameterTypes().length != 0)
+		if (m.getParamCount() != 0)
 			throw new InvalidAnnotationException("Method with @{0} annotation cannot have arguments.  Method=''{1}''", a.getSimpleName(), m);
 	}
 
@@ -42,7 +42,7 @@ class Utils {
 	}
 
 	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
-		Class<?>[] ptt = m.getParameterTypes();
+		Class<?>[] ptt = m.getRawParamTypes();
 		if (ptt.length != 1)
 			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", a.getSimpleName(), m);
 		Class<?> rt = ptt[0];

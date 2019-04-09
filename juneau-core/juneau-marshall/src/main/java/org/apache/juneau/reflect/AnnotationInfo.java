@@ -10,58 +10,57 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
+package org.apache.juneau.reflect;
+
+import java.lang.annotation.*;
 
 /**
- * Represents a simple object pair.
+ * Represents an annotation instance on a class and the class it was found on.
  *
- * @param <F> The first object type.
- * @param <S> The second object type.
+ * @param <T> The annotation type.
  */
-public class Pair<F,S> {
-	private final F first;
-	private final S second;
+public class AnnotationInfo<T extends Annotation> {
+
+	private ClassInfo c;
+	private T a;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param first The first object in the pair.
-	 * @param second The second object in the pair.
+	 * @param c The class where the annotation was found.
+	 * @param a The annotation found.
 	 */
-	public Pair(F first, S second) {
-		this.first = first;
-		this.second = second;
+	public AnnotationInfo(ClassInfo c, T a) {
+		this.c = c;
+		this.a = a;
 	}
 
 	/**
-	 * Returns the first object in the pair.
+	 * Convenience constructor.
 	 *
-	 * @return The first object in the pair.
+	 * @param c The class where the annotation was found.
+	 * @param a The annotation found.
+	 * @return A new {@link AnnotationInfo} object.
 	 */
-	public F first() {
-		return first;
+	public static <T extends Annotation> AnnotationInfo<T> of(ClassInfo c, T a) {
+		return new AnnotationInfo<>(c, a);
 	}
 
 	/**
-	 * Returns the second object in the pair.
+	 * Returns the class where the annotation was found.
 	 *
-	 * @return The second object in the pair.
+	 * @return the class where the annotation was found.
 	 */
-	public S second() {
-		return second;
+	public ClassInfo getClassOn() {
+		return c;
 	}
 
-	@Override /* Object */
-	public boolean equals(Object o) {
-		if (o instanceof Pair) {
-			Pair<?,?> p = (Pair<?,?>)o;
-			return ObjectUtils.equals(first, p.first) && ObjectUtils.equals(second, p.second);
-		}
-		return false;
-	}
-
-	@Override /* Object */
-	public int hashCode() {
-		return (first == null ? 0 : first.hashCode()) ^ (second == null ? 0 : second.hashCode());
+	/**
+	 * Returns the annotation found.
+	 *
+	 * @return The annotation found.
+	 */
+	public T getAnnotation() {
+		return a;
 	}
 }

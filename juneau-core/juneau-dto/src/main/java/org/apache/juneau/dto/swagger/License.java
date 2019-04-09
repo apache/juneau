@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.net.*;
 import java.net.URI;
@@ -121,7 +121,7 @@ public class License extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public License name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**

@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A lookup table for resolving bean types by name.
@@ -77,7 +77,7 @@ public class BeanRegistry {
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = castOrCreate(Map.class, c);
 					for (Map.Entry<?,?> e : m.entrySet()) {
-						String typeName = asString(e.getKey());
+						String typeName = stringify(e.getKey());
 						Object v = e.getValue();
 						ClassMeta<?> val = null;
 						if (v instanceof Type)

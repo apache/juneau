@@ -21,7 +21,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -154,7 +154,6 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @param create If bean hasn't been instantiated yet, then instantiate it.
 	 * @return The inner bean object.
 	 */
-	@SuppressWarnings("unchecked")
 	public T getBean(boolean create) {
 		/** If this is a read-only bean, then we need to create it. */
 		if (bean == null && create && meta.constructorArgs.length > 0) {
@@ -164,12 +163,12 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			for (int i = 0; i < props.length; i++)
 				args[i] = propertyCache.remove(props[i]);
 			try {
-				bean = (T)c.invoke(args);
+				bean = c.<T>invoke(args);
 				for (Map.Entry<String,Object> e : propertyCache.entrySet())
 					put(e.getKey(), e.getValue());
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
-				throw new BeanRuntimeException(e, meta.classMeta.innerClass, "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getName(), SimpleJsonSerializer.DEFAULT.toString(ClassUtils.getClasses(args)));
+				throw new BeanRuntimeException(e, meta.classMeta.innerClass, "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(), SimpleJsonSerializer.DEFAULT.toString(ClassUtils.getClasses(args)));
 			} catch (Exception e) {
 				throw new BeanRuntimeException(e);
 			}
@@ -295,7 +294,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	@Override /* Map */
 	public Object get(Object property) {
-		String pName = asString(property);
+		String pName = stringify(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return null;
@@ -312,7 +311,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return The raw property value.
 	 */
 	public Object getRaw(Object property) {
-		String pName = asString(property);
+		String pName = stringify(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
 		if (p == null)
 			return null;

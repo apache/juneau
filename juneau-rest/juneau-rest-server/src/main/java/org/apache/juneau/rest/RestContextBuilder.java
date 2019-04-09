@@ -35,7 +35,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.reshandlers.*;
 import org.apache.juneau.rest.util.RestUtils;
@@ -136,11 +136,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			VarResolver vr = varResolverBuilder.build();
 
-			List<ClassAnnotation<RestResource>> restResourceAnnotationsParentFirst = rci.getClassAnnotations(RestResource.class, true);
+			List<AnnotationInfo<RestResource>> restResourceAnnotationsParentFirst = rci.getAnnotationInfosParentFirst(RestResource.class);
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			String configPath = "";
-			for (ClassAnnotation<RestResource> r : restResourceAnnotationsParentFirst)
+			for (AnnotationInfo<RestResource> r : restResourceAnnotationsParentFirst)
 				if (! r.getAnnotation().config().isEmpty())
 					configPath = r.getAnnotation().config();
 			String cf = vr.resolve(configPath);
@@ -170,8 +170,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 
 			// Load stuff from parent-to-child order.
 			// This allows child settings to overwrite parent settings.
-			for (ClassAnnotation<RestResource> e : restResourceAnnotationsParentFirst) {
-				ClassInfo c = e.getClassInfo();
+			for (AnnotationInfo<RestResource> e : restResourceAnnotationsParentFirst) {
+				ClassInfo c = e.getClassOn();
 				RestResource r = e.getAnnotation();
 				for (Property p : r.properties())
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
@@ -295,7 +295,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		widgets(false, widgets);
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
-		for (MethodInfo m : rci.getAllMethodInfos(true)) {
+		for (MethodInfo m : rci.getAllMethodsParentFirst()) {
 			if (m.hasAnnotation(RestHook.class) && m.getAnnotation(RestHook.class).value() == HookEvent.INIT) {
 				m.setAccessible();
 				String sig = m.getSignature();
@@ -305,7 +305,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 		}
 		for (MethodInfo m : map.values()) {
 			assertArgsOnlyOfType(m, RestContextBuilder.class, ServletConfig.class);
-			Class<?>[] pt = m.getParameterTypes();
+			Class<?>[] pt = m.getRawParamTypes();
 			Object[] args = new Object[pt.length];
 			for (int i = 0; i < args.length; i++) {
 				if (pt[i] == RestContextBuilder.class)

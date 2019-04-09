@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassFlags.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 
 import java.beans.BeanInfo;
@@ -26,7 +26,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.transform.*;
 import org.apache.juneau.utils.*;
 
@@ -185,7 +185,7 @@ public class BeanMeta<T> {
 				}
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : classMeta.getInfo().getAnnotations(Bean.class, true))
+				for (Bean b : classMeta.getInfo().getAnnotationsParentFirst(Bean.class))
 					if (! b.typePropertyName().isEmpty())
 						typePropertyName = b.typePropertyName();
 				if (typePropertyName == null)
@@ -218,13 +218,13 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @BeanConstructor constructor.
-				for (ConstructorInfo x : ci.getConstructorInfos()) {
-					if (x.isAnnotationPresent(BeanConstructor.class)) {
+				for (ConstructorInfo x : ci.getPublicConstructors()) {
+					if (x.hasAnnotation(BeanConstructor.class)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
 						constructor = x;
 						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties());
-						if (constructorArgs.length != x.getParameterTypes().length)
+						if (constructorArgs.length != x.getParamCount())
 							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
 						constructor.setAccessible();
 					}
@@ -235,7 +235,7 @@ public class BeanMeta<T> {
 					constructor = ctx.getImplClassConstructor(c, conVis);
 
 				if (constructor == null)
-					constructor = ci.getNoArgConstructorInfo(conVis);
+					constructor = ci.getNoArgConstructor(conVis);
 
 				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";
@@ -580,7 +580,7 @@ public class BeanMeta<T> {
 			if (b.setter == null)
 				return true;
 
-			return type.isChildOf(b.setter.getParameterTypes()[0], true);
+			return type.isStrictChildOf(b.setter.getParameterTypes()[0]);
 		}
 
 		@Override /* Object */
@@ -602,10 +602,12 @@ public class BeanMeta<T> {
 		List<BeanMethod> l = new LinkedList<>();
 
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (MethodInfo m : c2.getDeclaredMethodInfos()) {
+			for (MethodInfo m : c2.getDeclaredMethods()) {
 				if (m.isStatic())
 					continue;
 				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
+					continue;
+				if (m.getParamCount() > 2)
 					continue;
 
 				BeanIgnore bi = m.getAnnotation(BeanIgnore.class);
@@ -616,9 +618,9 @@ public class BeanMeta<T> {
 				if (! (m.isVisible(v) || bp != null))
 					continue;
 
-				String n = m.getName();
+				String n = m.getSimpleName();
 
-				Class<?>[] pt = m.getParameterTypes();
+				List<ClassInfo> pt = m.getParamTypes();
 				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
 				String bpName = bpName(bp);
@@ -626,7 +628,7 @@ public class BeanMeta<T> {
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
 
-				if (pt.length == 0) {
+				if (pt.size() == 0) {
 					if ("*".equals(bpName)) {
 						if (rt.isChildOf(Collection.class)) {
 							methodType = EXTRAKEYS;
@@ -652,12 +654,12 @@ public class BeanMeta<T> {
 							n = bpName;
 						}
 					}
-				} else if (pt.length == 1) {
+				} else if (pt.size() == 1) {
 					if ("*".equals(bpName)) {
-						if (getClassInfo(pt[0]).isChildOf(Map.class)) {
+						if (pt.get(0).isChildOf(Map.class)) {
 							methodType = SETTER;
 							n = bpName;
-						} else if (pt[0] == String.class) {
+						} else if (pt.get(0).is(String.class)) {
 							methodType = GETTER;
 							n = bpName;
 						}
@@ -676,8 +678,8 @@ public class BeanMeta<T> {
 					} else if (fluentSetters && rt.isParentOf(c)) {
 						methodType = SETTER;
 					}
-				} else if (pt.length == 2) {
-					if ("*".equals(bpName) && pt[0] == String.class) {
+				} else if (pt.size() == 2) {
+					if ("*".equals(bpName) && pt.get(0).is(String.class)) {
 						if (n.startsWith("set") && (rt.isParentOf(c) || rt.is(Void.TYPE))) {
 							methodType = SETTER;
 						} else {
@@ -689,7 +691,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type on method ''{0}''.", m.getName());
+					throw new BeanRuntimeException(c, "Found @BeanProperty(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
 
 				if (methodType != UNKNOWN) {
 					if (bpName != null && ! bpName.isEmpty()) {
@@ -709,7 +711,7 @@ public class BeanMeta<T> {
 	static final Collection<Field> findBeanFields(Class<?> c, Class<?> stopClass, Visibility v, Set<String> filterProps) {
 		List<Field> l = new LinkedList<>();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredFieldInfos()) {
+			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
@@ -732,7 +734,7 @@ public class BeanMeta<T> {
 
 	static final Field findInnerBeanField(Class<?> c, Class<?> stopClass, String name) {
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredFieldInfos()) {
+			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
 				if (f.isAnnotationPresent(BeanIgnore.class))
@@ -820,10 +822,10 @@ public class BeanMeta<T> {
 	protected T newBean(Object outer) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		if (classMeta.isMemberClass()) {
 			if (constructor != null)
-				return (T)constructor.invoke(outer);
+				return constructor.<T>invoke(outer);
 		} else {
 			if (constructor != null)
-				return (T)constructor.invoke((Object[])null);
+				return constructor.<T>invoke((Object[])null);
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (h != null) {
 				ClassLoader cl = classMeta.innerClass.getClassLoader();

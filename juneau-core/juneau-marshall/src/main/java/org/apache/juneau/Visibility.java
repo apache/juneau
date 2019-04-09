@@ -88,17 +88,7 @@ public enum Visibility {
 	 * @param x The constructor to check.
 	 * @return <jk>true</jk> if the constructor is at least as visible as this object.
 	 */
-	public boolean isVisible(Constructor<?> x) {
-		return isVisible(x.getModifiers());
-	}
-
-	/**
-	 * Shortcut for <code>isVisible(x.getModifiers());</code>
-	 *
-	 * @param x The method to check.
-	 * @return <jk>true</jk> if the method is at least as visible as this object.
-	 */
-	public boolean isVisible(Method x) {
+	public boolean isVisible(Executable x) {
 		return isVisible(x.getModifiers());
 	}
 

@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.format;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.*;
 import java.text.*;
 import java.util.regex.*;
@@ -28,7 +27,7 @@ import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
 import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Exception representing a <code>400+</code> HTTP response code against a remote resource.
@@ -168,19 +167,19 @@ public final class RestCallException extends IOException {
 	}
 
 	private void doThrow(Class<?> t, String msg) throws Throwable {
-		Constructor<?> c = null;
+		ConstructorInfo c = null;
 		ClassInfo ci = getClassInfo(t);
 		if (msg != null) {
 			c = ci.getPublicConstructor(String.class);
 			if (c != null)
-				throw (Throwable)c.newInstance(msg);
+				throw c.<Throwable>invoke(msg);
 			c = ci.getPublicConstructor(Object.class);
 			if (c != null)
-				throw (Throwable)c.newInstance(msg);
+				throw c.<Throwable>invoke(msg);
 		}
 		c = ci.getPublicConstructor();
 		if (c != null)
-			throw (Throwable)c.newInstance();
+			throw c.<Throwable>invoke();
 	}
 
 	/**

@@ -39,7 +39,7 @@ public class ConfigBuilderTest {
 	}
 
 	@Test
-	public void testGet() throws Exception {
+	public void testGet_LONGRUNNING() throws Exception {
 		File f;
 		ConfigFileStore cfs = ConfigFileStore.create().directory(TEMP_DIR).useWatcher().watcherSensitivity(WatcherSensitivity.HIGH).build();
 		ConfigBuilder cb = Config.create().store(cfs).name("TestGet.cfg");

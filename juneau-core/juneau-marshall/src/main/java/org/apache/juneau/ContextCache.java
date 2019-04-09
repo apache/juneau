@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Stores a cache of {@link Context} instances mapped by the property stores used to create them.
@@ -137,7 +137,7 @@ public class ContextCache {
 		String[] prefixes = prefixCache.get(c);
 		if (prefixes == null) {
 			Set<String> ps = new HashSet<>();
-			for (ClassInfo c2 : getClassInfo(c).getParentInfos(false, true))
+			for (ClassInfo c2 : getClassInfo(c).getAllParents())
 				ps.add(c2.getSimpleName());
 			prefixes = ps.toArray(new String[ps.size()]);
 			String[] p2 = prefixCache.putIfAbsent(c, prefixes);

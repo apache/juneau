@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -321,7 +323,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -385,7 +387,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo in(Object value) {
-		return setIn(toStringVal(value));
+		return setIn(stringify(value));
 	}
 
 	/**
@@ -430,7 +432,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -599,7 +601,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -648,7 +650,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -816,7 +818,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo collectionFormat(Object value) {
-		return setCollectionFormat(toStringVal(value));
+		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -1173,7 +1175,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -1454,7 +1456,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public ParameterInfo example(Object value) {
-		example = StringUtils.asString(value);
+		example = StringUtils.stringify(value);
 		return this;
 	}
 

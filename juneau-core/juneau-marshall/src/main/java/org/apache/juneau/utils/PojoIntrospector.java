@@ -17,7 +17,7 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Used to invoke methods on {@code Objects} using arguments in serialized form.

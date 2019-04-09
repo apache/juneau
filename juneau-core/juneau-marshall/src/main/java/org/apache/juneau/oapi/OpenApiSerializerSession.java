@@ -167,25 +167,25 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				if (f == HttpPartSchema.Format.UON)
 					out = super.serialize(partType, null, value);
 				else
-					out = asString(toType(value, CM_Boolean));
+					out = stringify(toType(value, CM_Boolean));
 
 			} else if (t == INTEGER) {
 
 				if (f == HttpPartSchema.Format.UON)
 					out = super.serialize(partType, null, value);
 				else if (f == INT64)
-					out = asString(toType(value, CM_Long));
+					out = stringify(toType(value, CM_Long));
 				else
-					out = asString(toType(value, CM_Integer));
+					out = stringify(toType(value, CM_Integer));
 
 			} else if (t == NUMBER) {
 
 				if (f == HttpPartSchema.Format.UON)
 					out = super.serialize(partType, null, value);
 				else if (f == DOUBLE)
-					out = asString(toType(value, CM_Double));
+					out = stringify(toType(value, CM_Double));
 				else
-					out = asString(toType(value, CM_Float));
+					out = stringify(toType(value, CM_Float));
 
 			} else if (t == OBJECT) {
 
@@ -229,7 +229,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			}
 		} else {
 			for (Map.Entry e : (Set<Map.Entry>)((Map)o).entrySet())
-				m.put(asString(e.getKey()), toObject(partType, e.getValue(), s.getProperty(asString(e.getKey()))));
+				m.put(stringify(e.getKey()), toObject(partType, e.getValue(), s.getProperty(stringify(e.getKey()))));
 		}
 		if (isSortMaps())
 			return sort(m);

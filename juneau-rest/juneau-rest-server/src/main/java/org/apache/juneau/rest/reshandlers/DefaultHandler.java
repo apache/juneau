@@ -90,7 +90,7 @@ public class DefaultHandler implements ResponseHandler {
 					if ("*".equals(n) && ho instanceof Map) {
 						@SuppressWarnings("rawtypes") Map m = (Map)ho;
 						for (Object key : m.keySet()) {
-							String k = asString(key);
+							String k = stringify(key);
 							Object v = m.get(key);
 							HttpPartSchema s = hm.getSchema().getProperty(k);
 							res.setHeader(new HttpPart(k, RESPONSE_HEADER, s, hm.getSerializer(req.getPartSerializer()), req.getSerializerSessionArgs(), v));

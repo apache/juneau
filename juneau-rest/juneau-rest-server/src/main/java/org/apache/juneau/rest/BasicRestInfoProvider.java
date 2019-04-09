@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
 
@@ -69,7 +69,7 @@ public class BasicRestInfoProvider implements RestInfoProvider {
 
 		Builder(RestContext context) {
 			ClassInfo ci = getClassInfo(context.getResource().getClass());
-			for (RestResource r : ci.getAnnotations(RestResource.class, true)) {
+			for (RestResource r : ci.getAnnotationsParentFirst(RestResource.class)) {
 				if (! r.siteName().isEmpty())
 					siteName = r.siteName();
 				if (r.title().length > 0)

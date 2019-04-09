@@ -22,7 +22,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents the metadata gathered from a parameter or class annotated with {@link Request}.
@@ -38,7 +38,7 @@ public class RequestBeanMeta {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(MethodParamInfo mpi, PropertyStore ps) {
+	public static RequestBeanMeta create(ParamInfo mpi, PropertyStore ps) {
 		if (! mpi.hasAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(ps).apply(mpi).build();
@@ -90,19 +90,19 @@ public class RequestBeanMeta {
 			this.ps = ps;
 		}
 
-		Builder apply(MethodParamInfo mpi) {
-			return apply(mpi.getParameterType()).apply(mpi.getAnnotation(Request.class));
+		Builder apply(ParamInfo mpi) {
+			return apply(mpi.getParameterType().inner()).apply(mpi.getAnnotation(Request.class));
 		}
 
 		Builder apply(Class<?> c) {
 			ClassInfo ci = getClassInfo(c);
 			apply(ci.getAnnotation(Request.class));
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			for (MethodInfo m : cm.getInfo().getAllMethodInfos()) {
+			for (MethodInfo m : cm.getInfo().getAllMethods()) {
 
 				if (m.isPublic()) {
 					assertNoInvalidAnnotations(m, ResponseHeader.class, ResponseBody.class, ResponseStatus.class);
-					String n = m.getName();
+					String n = m.getSimpleName();
 					if (m.hasAnnotation(Body.class)) {
 						assertNoArgs(m, Body.class);
 						assertReturnNotVoid(m, Body.class);

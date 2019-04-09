@@ -1276,7 +1276,7 @@ public class RestClient extends BeanContext implements Closeable {
 	public <T> T getRrpcInterface(final Class<T> interfaceClass, Object restUrl, final Serializer serializer, final Parser parser) {
 
 		if (restUrl == null) {
-			RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, asString(restUrl));
+			RemoteInterfaceMeta rm = new RemoteInterfaceMeta(interfaceClass, stringify(restUrl));
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
 				if (rootUrl == null)
@@ -1286,7 +1286,7 @@ public class RestClient extends BeanContext implements Closeable {
 			restUrl = path;
 		}
 
-		final String restUrl2 = asString(restUrl);
+		final String restUrl2 = stringify(restUrl);
 
 		try {
 			return (T)Proxy.newProxyInstance(

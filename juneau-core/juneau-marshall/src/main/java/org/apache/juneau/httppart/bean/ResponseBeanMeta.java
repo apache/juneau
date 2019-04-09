@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents the metadata gathered from a parameter or class annotated with {@link Response}.
@@ -52,7 +52,7 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(ps);
 		b.apply(ci.innerType());
-		for (Response r : ci.getAnnotations(Response.class, true))
+		for (Response r : ci.getAnnotationsParentFirst(Response.class))
 			b.apply(r);
 		return b.build();
 	}
@@ -70,7 +70,7 @@ public class ResponseBeanMeta {
 		if (! m.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		b.apply(m.getGenericReturnTypeInfo().resolved().innerType());
+		b.apply(m.getReturnType().resolved().innerType());
 		for (Response r : m.getAnnotations(Response.class, true))
 			b.apply(r);
 		return b.build();
@@ -85,11 +85,11 @@ public class ResponseBeanMeta {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(MethodParamInfo mpi, PropertyStore ps) {
+	public static ResponseBeanMeta create(ParamInfo mpi, PropertyStore ps) {
 		if (! mpi.hasAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(ps);
-		b.apply(mpi.getGenericParameterTypeInfo().resolved().innerType());
+		b.apply(mpi.getParameterType().resolved().innerType());
 		for (Response r : mpi.getAnnotations(Response.class))
 			b.apply(r);
 		return b.build();
@@ -156,7 +156,7 @@ public class ResponseBeanMeta {
 			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			ClassInfo ci = cm.getInfo();
-			for (MethodInfo m : ci.getAllMethodInfos()) {
+			for (MethodInfo m : ci.getAllMethods()) {
 				if (m.isPublic()) {
 					assertNoInvalidAnnotations(m, Header.class, Query.class, FormData.class, Path.class);
 					if (m.hasAnnotation(ResponseHeader.class)) {
@@ -169,8 +169,7 @@ public class ResponseBeanMeta {
 						assertReturnType(m, ResponseHeader.class, int.class, Integer.class);
 						statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
 					} else if (m.hasAnnotation(ResponseBody.class)) {
-						Class<?>[] pt = m.getParameterTypes();
-						if (pt.length == 0)
+						if (m.getParamCount() == 0)
 							assertReturnNotVoid(m, ResponseHeader.class);
 						else
 							assertArgType(m, ResponseHeader.class, OutputStream.class, Writer.class);

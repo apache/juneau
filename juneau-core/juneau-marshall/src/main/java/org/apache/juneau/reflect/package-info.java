@@ -10,46 +10,9 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.internal;
-
-import java.util.*;
 
 /**
- * Combination of a {@link LinkedList} and <code>IdentitySet</code>.
- *
- * <ul class='spaced-list'>
- * 	<li>
- * 		Duplicate objects (by identity) will be skipped during insertion.
- * 	<li>
- * 		Order of insertion maintained.
- * </ul>
- *
- * <h5 class='section'>Notes:</h5>
- * <ul class='spaced-list'>
- * 	<li>
- * 		This class is NOT thread safe, and is intended for use on small lists.
- * </ul>
- *
- * @param <T> Entry type.
+ * Reflection API
  */
-public class IdentityList<T> extends LinkedList<T> {
+package org.apache.juneau.reflect;
 
-	private static final long serialVersionUID = 1L;
-
-	@Override /* List */
-	public boolean add(T t) {
-		for (T t2 : this)
-			if (t2 == t)
-				return false;
-		super.add(t);
-		return true;
-	}
-
-	@Override /* List */
-	public boolean contains(Object t) {
-		for (T t2 : this)
-			if (t2 == t)
-				return true;
-		return false;
-	}
-}

@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 
@@ -173,7 +175,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -214,7 +216,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -255,7 +257,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -306,7 +308,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme in(Object value) {
-		return setIn(toStringVal(value));
+		return setIn(stringify(value));
 	}
 
 	/**
@@ -361,7 +363,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme flow(Object value) {
-		return setFlow(toStringVal(value));
+		return setFlow(stringify(value));
 	}
 
 	/**
@@ -404,7 +406,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme authorizationUrl(Object value) {
-		return setAuthorizationUrl(toStringVal(value));
+		return setAuthorizationUrl(stringify(value));
 	}
 
 	/**
@@ -447,7 +449,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecurityScheme tokenUrl(Object value) {
-		return setTokenUrl(toStringVal(value));
+		return setTokenUrl(stringify(value));
 	}
 
 	/**

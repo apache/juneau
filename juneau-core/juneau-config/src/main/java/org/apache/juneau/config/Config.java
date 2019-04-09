@@ -537,7 +537,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 		String mod = ce == null ? "" : ce.getModifiers();
 
-		String s = asString(value);
+		String s = stringify(value);
 		for (ConfigMod m : ConfigMod.asModifiers(mod)) {
 			if (m == ENCODED) {
 				s = encoder.encode(key, s);

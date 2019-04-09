@@ -17,7 +17,7 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents the metadata about the returned object of a method on a remote proxy interface.
@@ -43,7 +43,7 @@ public final class RemoteMethodReturn {
 		} else {
 			this.meta = null;
 		}
-		this.returnType = m.getGenericReturnType();
+		this.returnType = m.getReturnType().innerType();
 		this.returnValue = rv;
 	}
 

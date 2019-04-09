@@ -10,23 +10,26 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a field.
  */
 @BeanIgnore
-public final class FieldInfo {
+public final class FieldInfo implements Comparable<FieldInfo> {
 
 	private final Field f;
 	private ClassInfo declaringClass, type;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -34,7 +37,7 @@ public final class FieldInfo {
 	 * @param declaringClass The class that declares this method.
 	 * @param f The field being wrapped.
 	 */
-	public FieldInfo(ClassInfo declaringClass, Field f) {
+	protected FieldInfo(ClassInfo declaringClass, Field f) {
 		this.declaringClass = declaringClass;
 		this.f = f;
 	}
@@ -78,7 +81,7 @@ public final class FieldInfo {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClassInfo() {
+	public ClassInfo getDeclaringClass() {
 		if (declaringClass == null)
 			declaringClass = ClassInfo.of(f.getDeclaringClass());
 		return declaringClass;
@@ -108,8 +111,8 @@ public final class FieldInfo {
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
-	public boolean isAll(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
+	public boolean isAll(ReflectFlags...flags) {
+		for (ReflectFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isNotDeprecated())
@@ -119,9 +122,9 @@ public final class FieldInfo {
 					if (isDeprecated())
 						return false;
 					break;
-				case HAS_ARGS:
+				case HAS_PARAMS:
 					break;
-				case HAS_NO_ARGS:
+				case HAS_NO_PARAMS:
 					break;
 				case PUBLIC:
 					if (isNotPublic())
@@ -147,11 +150,8 @@ public final class FieldInfo {
 					if (isTransient())
 						return false;
 					break;
-				case ABSTRACT:
-				case NOT_ABSTRACT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for field: " + f);
 			}
 		}
 		return true;
@@ -163,8 +163,8 @@ public final class FieldInfo {
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
-	public boolean isAny(ClassFlags...flags) {
-		for (ClassFlags f : flags) {
+	public boolean isAny(ReflectFlags...flags) {
+		for (ReflectFlags f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isDeprecated())
@@ -198,13 +198,8 @@ public final class FieldInfo {
 					if (isNotTransient())
 						return true;
 					break;
-				case HAS_ARGS:
-				case HAS_NO_ARGS:
-				case ABSTRACT:
-				case NOT_ABSTRACT:
 				default:
-					break;
-
+					throw new RuntimeException("Invalid flag for field: " + f);
 			}
 		}
 		return false;
@@ -348,6 +343,11 @@ public final class FieldInfo {
 	@Override
 	public String toString() {
 		return f.getDeclaringClass().getName() + "." + f.getName();
+	}
+
+	@Override
+	public int compareTo(FieldInfo o) {
+		return getName().compareTo(o.getName());
 	}
 
 	/**

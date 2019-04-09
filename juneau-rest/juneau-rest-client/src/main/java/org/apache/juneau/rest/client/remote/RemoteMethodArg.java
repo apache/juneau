@@ -18,7 +18,7 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflection.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a REST proxy class.
@@ -107,7 +107,7 @@ public final class RemoteMethodArg {
 		return schema;
 	}
 
-	static RemoteMethodArg create(MethodParamInfo mpi) {
+	static RemoteMethodArg create(ParamInfo mpi) {
 		int i = mpi.getIndex();
 		if (mpi.hasAnnotation(Header.class)) {
 			return new RemoteMethodArg(i, HEADER, HttpPartSchema.create(Header.class, mpi));

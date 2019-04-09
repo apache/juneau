@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -25,37 +25,27 @@ import org.apache.juneau.annotation.*;
  * Lightweight utility class for introspecting information about a method parameter.
  */
 @BeanIgnore
-public final class MethodParamInfo {
+public final class ParamInfo {
 
-	private final MethodInfo methodInfo;
-	private final ConstructorInfo constructorInfo;
-	private final boolean isConstructor;
-	private int index;
+	private final ExecutableInfo eInfo;
+	private final Parameter p;
+	private final int index;
 	private Map<Class<?>,Optional<Annotation>> annotationMap = new ConcurrentHashMap<>();
 
-	/**
-	 * Constructor.
-	 *
-	 * @param methodInfo The method wrapper.
-	 * @param index The parameter index.
-	 */
-	protected MethodParamInfo(MethodInfo methodInfo, int index) {
-		this.methodInfo = methodInfo;
-		this.constructorInfo = null;
-		this.isConstructor = false;
-		this.index = index;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
 	 *
-	 * @param constructorInfo The constructor wrapper.
+	 * @param eInfo The constructor or method wrapper.
+	 * @param p The parameter being wrapped.
 	 * @param index The parameter index.
 	 */
-	protected MethodParamInfo(ConstructorInfo constructorInfo, int index) {
-		this.methodInfo = null;
-		this.constructorInfo = constructorInfo;
-		this.isConstructor = true;
+	protected ParamInfo(ExecutableInfo eInfo, Parameter p, int index) {
+		this.eInfo = eInfo;
+		this.p = p;
 		this.index = index;
 	}
 
@@ -73,8 +63,8 @@ public final class MethodParamInfo {
 	 *
 	 * @return The method that this parameter belongs to.
 	 */
-	public Method getMethod() {
-		return isConstructor ? null : methodInfo.inner();
+	public MethodInfo getMethod() {
+		return (MethodInfo)eInfo;
 	}
 
 	/**
@@ -82,8 +72,8 @@ public final class MethodParamInfo {
 	 *
 	 * @return The method that this parameter belongs to.
 	 */
-	public Constructor<?> getConstructor() {
-		return isConstructor ? constructorInfo.inner() : null;
+	public ConstructorInfo getConstructor() {
+		return (ConstructorInfo)eInfo;
 	}
 
 	/**
@@ -91,26 +81,8 @@ public final class MethodParamInfo {
 	 *
 	 * @return The class type of this parameter.
 	 */
-	public Class<?> getParameterType() {
-		return isConstructor ? constructorInfo.getParameterType(index) : methodInfo.getParameterType(index);
-	}
-
-	/**
-	 * Returns the generic class type of this parameter.
-	 *
-	 * @return The generic class type of htis parameter.
-	 */
-	public Type getGenericParameterType() {
-		return isConstructor ? constructorInfo.getGenericParameterType(index) : methodInfo.getGenericParameterType(index);
-	}
-
-	/**
-	 * Returns the generic class type of this parameter.
-	 *
-	 * @return The generic class type of this parameter.
-	 */
-	public ClassInfo getGenericParameterTypeInfo() {
-		return isConstructor ? constructorInfo.getGenericParameterTypeInfo(index) : methodInfo.getGenericParameterTypeInfo(index);
+	public ClassInfo getParameterType() {
+		return eInfo.getParamType(index);
 	}
 
 	/**
@@ -119,7 +91,7 @@ public final class MethodParamInfo {
 	 * @return The parameter annotations defined on this parameter.
 	 */
 	public Annotation[] getParameterAnnotations() {
-		return isConstructor ? constructorInfo.getParameterAnnotations(index) : methodInfo.getParameterAnnotations(index);
+		return eInfo.getParameterAnnotations(index);
 	}
 
 	/**
@@ -162,17 +134,18 @@ public final class MethodParamInfo {
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T findAnnotation(Class<T> a) {
-		if (isConstructor) {
-			for (Annotation a2 : constructorInfo.getParameterAnnotations(index))
+		if (eInfo.isConstructor()) {
+			for (Annotation a2 : eInfo.getParameterAnnotations(index))
 				if (a.isInstance(a2))
 					return (T)a2;
-			return constructorInfo.getGenericParameterTypeInfo(index).resolved().getAnnotation(a);
+			return eInfo.getParamType(index).resolved().getAnnotation(a);
 		}
-		for (Method m2 : methodInfo.getMatching())
+		MethodInfo mi = (MethodInfo)eInfo;
+		for (Method m2 : mi.getMatching())
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		return methodInfo.getGenericParameterTypeInfo(index).resolved().getAnnotation(a);
+		return eInfo.getParamType(index).resolved().getAnnotation(a);
 	}
 
 	/**
@@ -230,11 +203,11 @@ public final class MethodParamInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
-		if (isConstructor) {
-			ClassInfo ci = constructorInfo.getGenericParameterTypeInfo(index).resolved();
-			Annotation[] annotations = constructorInfo.getParameterAnnotations(index);
+		if (eInfo.isConstructor) {
+			ClassInfo ci = eInfo.getParamType(index).resolved();
+			Annotation[] annotations = eInfo.getParameterAnnotations(index);
 			if (parentFirst) {
-				ci.appendAnnotations(l, a, true);
+				ci.appendAnnotationsParentFirst(l, a);
 				for (Annotation a2 : annotations)
 					if (a.isInstance(a2))
 						l.add((T)a2);
@@ -245,10 +218,11 @@ public final class MethodParamInfo {
 				ci.appendAnnotations(l, a);
 			}
 		} else {
-			List<Method> methods = methodInfo.getMatching();
-			ClassInfo ci = methodInfo.getGenericParameterTypeInfo(index).resolved();
+			MethodInfo mi = (MethodInfo)eInfo;
+			List<Method> methods = mi.getMatching();
+			ClassInfo ci = eInfo.getParamType(index).resolved();
 			if (parentFirst) {
-				ci.appendAnnotations(l, a, true);
+				ci.appendAnnotationsParentFirst(l, a);
 				for (Method m2 : iterable(methods, true))
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
 						if (a.isInstance(a2))
@@ -264,6 +238,29 @@ public final class MethodParamInfo {
 		return l;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the parameter has a name provided by the class file.
+	 *
+	 * @return <jk>true</jk> if the parameter has a name provided by the class file.
+	 */
+	public boolean hasName() {
+		return p.isNamePresent();
+	}
+
+	/**
+	 * Returns the name of the parameter.
+	 *
+	 * <p>
+	 * If the parameter's name is present, then this method returns the name provided by the class file.
+	 * Otherwise, this method synthesizes a name of the form argN, where N is the index of the parameter in the descriptor of the method which declares the parameter.
+	 *
+	 * @return The name of the parameter.
+	 * @see Parameter#getName()
+	 */
+	public String getName() {
+		return p.getName();
+	}
+
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
 		if (annotationMap == null)
 			annotationMap = new ConcurrentHashMap<>();
@@ -272,6 +269,6 @@ public final class MethodParamInfo {
 
 	@Override
 	public String toString() {
-		return (isConstructor ? getConstructor().getName() : getMethod().getName()) + "[" + index + "]";
+		return (eInfo.getSimpleName()) + "[" + index + "]";
 	}
 }
