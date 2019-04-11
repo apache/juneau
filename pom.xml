@@ -115,6 +115,7 @@
         <module>juneau-examples</module>
         <module>juneau-doc</module>
 		<module>juneau-releng</module>
+		<module>juneau-sc</module>
     </modules>
 
 	<distributionManagement>
