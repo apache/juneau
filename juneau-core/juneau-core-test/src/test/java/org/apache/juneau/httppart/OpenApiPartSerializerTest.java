@@ -890,7 +890,7 @@ public class OpenApiPartSerializerTest {
 		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, AList.create(AList.create("1","2"),AList.create("3","null",null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, new Object[][]{{1d,2d},{"3","null",null},null}));
 		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, AList.create(new Object[]{1d,2d},new Object[]{"3","null",null},null)));
-		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, AList.create(AList.create(1d,2f),AList.create(3d,"null",null),null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, AList.<Object>create(AList.create(1d,2f),AList.create(3d,"null",null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, new G3[][]{{new G3(1d),new G3(2d)},{new G3(3d),new G3(null),null},null}));
 		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, AList.create(new G3[]{new G3(1d),new G3(2d)},new G3[]{new G3(3d),new G3(null),null},null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", s.serialize(ps, AList.create(AList.create(new G3(1d),new G3(2d)),AList.create(new G3(3d),new G3(null),null),null)));
