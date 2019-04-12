@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -147,6 +149,7 @@ public abstract class ExecutableInfo {
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
 	public final ParamInfo getParam(int index) {
+		checkIndex(index);
 		if (params != null)
 			return params.get(index);
 		return new ParamInfo(this, rawParameters()[index], index);
@@ -159,13 +162,15 @@ public abstract class ExecutableInfo {
 	 */
 	public final List<ClassInfo> getParamTypes() {
 		if (paramTypes == null) {
-			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
-			// always return an empty array.
 			Class<?>[] ptc = rawParamTypes();
+			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
+			// always return an empty array.  This appears to be fixed in Java 8 b75.
 			Type[] ptt = rawGenericParamTypes();
+			if (ptt.length != ptc.length)
+				ptt = ptc;
 			List<ClassInfo> l = new ArrayList<>(ptc.length);
 			for (int i = 0; i < ptc.length; i++)
-				l.add(ClassInfo.of(ptc[i], ptt.length > i ? ptt[i] : ptc[i]));
+				l.add(ClassInfo.of(ptc[i], ptt[i]));
 			paramTypes = Collections.unmodifiableList(l);
 		}
 		return paramTypes;
@@ -178,6 +183,7 @@ public abstract class ExecutableInfo {
 	 * @return The parameter type of the parameter at the specified index.
 	 */
 	public final ClassInfo getParamType(int index) {
+		checkIndex(index);
 		if (paramTypes != null)
 			return getParamTypes().get(index);
 		return ClassInfo.of(getRawParamType(index), getRawGenericParamType(index));
@@ -199,6 +205,7 @@ public abstract class ExecutableInfo {
 	 * @return The raw parameter type of the parameter at the specified index.
 	 */
 	public final Class<?> getRawParamType(int index) {
+		checkIndex(index);
 		return rawParamTypes()[index];
 	}
 
@@ -209,6 +216,17 @@ public abstract class ExecutableInfo {
 	 */
 	public final Type[] getRawGenericParamTypes() {
 		return rawGenericParamTypes().clone();
+	}
+
+	/**
+	 * Returns the raw generic parameter type of the parameter at the specified index.
+	 *
+	 * @param index The parameter index.
+	 * @return The raw generic parameter type of the parameter at the specified index.
+	 */
+	public final Type getRawGenericParamType(int index) {
+		checkIndex(index);
+		return rawGenericParamTypes()[index];
 	}
 
 	/**
@@ -229,17 +247,8 @@ public abstract class ExecutableInfo {
 	 * @see Executable#getParameters()
 	 */
 	public final Parameter getRawParameter(int index) {
+		checkIndex(index);
 		return rawParameters()[index];
-	}
-
-	/**
-	 * Returns the raw generic parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The raw generic parameter type of the parameter at the specified index.
-	 */
-	public final Type getRawGenericParamType(int index) {
-		return rawGenericParamTypes()[index];
 	}
 
 	Class<?>[] rawParamTypes() {
@@ -258,6 +267,14 @@ public abstract class ExecutableInfo {
 		if (rawParameters == null)
 			rawParameters = e.getParameters();
 		return rawParameters;
+	}
+
+	private void checkIndex(int index) {
+		int pc = getParamCount();
+		if (pc == 0)
+			throw new IndexOutOfBoundsException(format("Invalid index ''{0}''.  No parameters.", index));
+		if (index < 0 || index >= pc)
+			throw new IndexOutOfBoundsException(format("Invalid index ''{0}''.  Parameter count: {1}", index, pc));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -280,6 +297,7 @@ public abstract class ExecutableInfo {
 	 * @return The parameter annotations on the parameter at the specified index.
 	 */
 	public final Annotation[] getParameterAnnotations(int index) {
+		checkIndex(index);
 		return e.getParameterAnnotations()[index];
 	}
 
@@ -311,6 +329,8 @@ public abstract class ExecutableInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T extends Annotation> T getAnnotation(Class<T> a) {
+		if (a == null)
+			return null;
 		Optional<Annotation> o = annotationMap().get(a);
 		if (o == null) {
 			o = Optional.ofNullable(findAnnotation(a));
