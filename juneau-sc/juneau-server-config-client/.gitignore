@@ -1,7 +1,10 @@
+**/.classpath
 **/.DS_Store
 target
 derby.log
 .idea/
 *.iml
 **/.settings
-**/.classpath
+.project
+.classpath
+.settings/
