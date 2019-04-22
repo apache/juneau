@@ -344,19 +344,19 @@ final class SwaggerGenerator {
 					try {
 						if (mpi != null) {
 							if (in == BODY) {
-								for (Body a : mpi.getAnnotations(Body.class, true))
+								for (Body a : mpi.getAnnotationsParentFirst(Body.class))
 									merge(param, a);
 							} else if (in == QUERY) {
-								for (Query a : mpi.getAnnotations(Query.class, true))
+								for (Query a : mpi.getAnnotationsParentFirst(Query.class))
 									merge(param, a);
 							} else if (in == FORM_DATA) {
-								for (FormData a : mpi.getAnnotations(FormData.class, true))
+								for (FormData a : mpi.getAnnotationsParentFirst(FormData.class))
 									merge(param, a);
 							} else if (in == HEADER) {
-								for (Header a : mpi.getAnnotations(Header.class, true))
+								for (Header a : mpi.getAnnotationsParentFirst(Header.class))
 									merge(param, a);
 							} else if (in == PATH) {
-								for (Path a : mpi.getAnnotations(Path.class, true))
+								for (Path a : mpi.getAnnotationsParentFirst(Path.class))
 									merge(param, a);
 							}
 						}
@@ -410,7 +410,7 @@ final class SwaggerGenerator {
 			}
 
 			if (mi.hasAnnotation(Response.class)) {
-				List<Response> la = mi.getAnnotations(Response.class, true);
+				List<Response> la = mi.getAnnotationsParentFirst(Response.class);
 				Set<Integer> codes = getCodes(la, 200);
 				for (Response a : la) {
 					for (Integer code : codes) {
@@ -448,7 +448,7 @@ final class SwaggerGenerator {
 				ParamInfo mpi = mp.getMethodParamInfo();
 
 				if (in == RESPONSE_HEADER) {
-					List<ResponseHeader> la = mpi.getAnnotations(ResponseHeader.class, true);
+					List<ResponseHeader> la = mpi.getAnnotationsParentFirst(ResponseHeader.class);
 					Set<Integer> codes = getCodes2(la, 200);
 					for (ResponseHeader a : la) {
 						for (Integer code : codes) {
@@ -459,7 +459,7 @@ final class SwaggerGenerator {
 					}
 
 				} else if (in == RESPONSE) {
-					List<Response> la = mpi.getAnnotations(Response.class, true);
+					List<Response> la = mpi.getAnnotationsParentFirst(Response.class);
 					Set<Integer> codes = getCodes(la, 200);
 					for (Response a : la) {
 						for (Integer code : codes) {

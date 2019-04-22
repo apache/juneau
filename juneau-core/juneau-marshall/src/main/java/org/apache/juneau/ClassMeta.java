@@ -519,25 +519,25 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			for (FieldInfo f : ci.getAllFieldsParentFirst()) {
-				if (f.isAnnotationPresent(ParentProperty.class)) {
+				if (f.hasAnnotation(ParentProperty.class)) {
 					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
-					f.setAccessible(false);
+					f.setAccessible();
 					parentPropertyMethod = new Setter.FieldSetter(f.inner());
 				}
-				if (f.isAnnotationPresent(NameProperty.class)) {
+				if (f.hasAnnotation(NameProperty.class)) {
 					if (f.isStatic())
 						throw new ClassMetaRuntimeException("@NameProperty used on invalid field ''{0}''.  Must be static.", f);
-					f.setAccessible(false);
+					f.setAccessible();
 					namePropertyMethod = new Setter.FieldSetter(f.inner());
 				}
 			}
 
 			for (FieldInfo f : ci.getDeclaredFields()) {
-				if (f.isAnnotationPresent(Example.class)) {
+				if (f.hasAnnotation(Example.class)) {
 					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
 						throw new ClassMetaRuntimeException("@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
-					f.setAccessible(false);
+					f.setAccessible();
 					exampleField = f.inner();
 				}
 			}

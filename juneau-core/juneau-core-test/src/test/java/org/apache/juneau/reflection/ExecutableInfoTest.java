@@ -14,6 +14,8 @@ package org.apache.juneau.reflection;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.reflect.ReflectFlags.*;
+
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -22,6 +24,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
@@ -39,26 +42,16 @@ public class ExecutableInfoTest {
 				return null;
 			if (t instanceof List)
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
-			if (t instanceof Iterable)
-				return StreamSupport.stream(((Iterable<?>)t).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t.getClass().isArray())
 				return StreamSupport.stream(ArrayUtils.toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof Annotation)
 				return t.toString().replaceAll("\\@[^\\$]*\\$(.*)", "@$1");
 			if (t instanceof Class)
 				return ((Class<?>)t).getSimpleName();
-			if (t instanceof Package)
-				return ((Package)t).getName();
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getSimpleName();
-			if (t instanceof MethodInfo)
-				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
 			if (t instanceof ConstructorInfo)
 				return ((ConstructorInfo)t).getShortName();
-			if (t instanceof FieldInfo)
-				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getName();
-			if (t instanceof AnnotationInfo)
-				return apply(((AnnotationInfo<?>)t).getAnnotation());
 			if (t instanceof ParamInfo)
 				return apply(((ParamInfo)t).toString());
 			return t.toString();
@@ -381,71 +374,214 @@ public class ExecutableInfoTest {
 	// Characteristics
 	//-----------------------------------------------------------------------------------------------------------------
 
+	static abstract class E {
+		@Deprecated public void deprecated() {}
+		public void notDeprecated() {}
+		public void hasParams(int foo) {}
+		public void hasNoParams() {}
+		public void isPublic() {}
+		protected void isNotPublic() {}
+		public static void isStatic() {}
+		public void isNotStatic() {}
+		public abstract void isAbstract();
+		public void isNotAbstract() {}
+	}
+	static ClassInfo e = ClassInfo.of(E.class);
+	static ExecutableInfo
+		e_deprecated = e.getPublicMethod("deprecated"),
+		e_notDeprecated = e.getPublicMethod("notDeprecated"),
+		e_hasParams = e.getPublicMethod("hasParams", int.class),
+		e_hasNoParams = e.getPublicMethod("hasNoParams"),
+		e_isPublic = e.getPublicMethod("isPublic"),
+		e_isNotPublic = e.getMethod("isNotPublic"),
+		e_isStatic = e.getPublicMethod("isStatic"),
+		e_isNotStatic = e.getPublicMethod("isNotStatic"),
+		e_isAbstract = e.getPublicMethod("isAbstract"),
+		e_isNotAbstract = e.getPublicMethod("isNotAbstract")
+	;
+
 	@Test
 	public void isAll() {
+		assertTrue(e_deprecated.isAll(DEPRECATED));
+		assertTrue(e_notDeprecated.isAll(NOT_DEPRECATED));
+		assertTrue(e_hasParams.isAll(HAS_PARAMS));
+		assertTrue(e_hasNoParams.isAll(HAS_NO_PARAMS));
+		assertTrue(e_isPublic.isAll(PUBLIC));
+		assertTrue(e_isNotPublic.isAll(NOT_PUBLIC));
+		assertTrue(e_isStatic.isAll(STATIC));
+		assertTrue(e_isNotStatic.isAll(NOT_STATIC));
+		assertTrue(e_isAbstract.isAll(ABSTRACT));
+		assertTrue(e_isNotAbstract.isAll(NOT_ABSTRACT));
+
+		assertFalse(e_deprecated.isAll(NOT_DEPRECATED));
+		assertFalse(e_notDeprecated.isAll(DEPRECATED));
+		assertFalse(e_hasParams.isAll(HAS_NO_PARAMS));
+		assertFalse(e_hasNoParams.isAll(HAS_PARAMS));
+		assertFalse(e_isPublic.isAll(NOT_PUBLIC));
+		assertFalse(e_isNotPublic.isAll(PUBLIC));
+		assertFalse(e_isStatic.isAll(NOT_STATIC));
+		assertFalse(e_isNotStatic.isAll(STATIC));
+		assertFalse(e_isAbstract.isAll(NOT_ABSTRACT));
+		assertFalse(e_isNotAbstract.isAll(ABSTRACT));
+	}
+
+	@Test
+	public void isAll_invalidFlag() {
+		try {
+			e_deprecated.isAll(TRANSIENT);
+		} catch (RuntimeException e) {
+			assertEquals("Invalid flag for executable: TRANSIENT", e.getLocalizedMessage());
+		}
 	}
 
 	@Test
 	public void isAny() {
+		assertTrue(e_deprecated.isAny(DEPRECATED));
+		assertTrue(e_notDeprecated.isAny(NOT_DEPRECATED));
+		assertTrue(e_hasParams.isAny(HAS_PARAMS));
+		assertTrue(e_hasNoParams.isAny(HAS_NO_PARAMS));
+		assertTrue(e_isPublic.isAny(PUBLIC));
+		assertTrue(e_isNotPublic.isAny(NOT_PUBLIC));
+		assertTrue(e_isStatic.isAny(STATIC));
+		assertTrue(e_isNotStatic.isAny(NOT_STATIC));
+		assertTrue(e_isAbstract.isAny(ABSTRACT));
+		assertTrue(e_isNotAbstract.isAny(NOT_ABSTRACT));
+
+		assertFalse(e_deprecated.isAny(NOT_DEPRECATED));
+		assertFalse(e_notDeprecated.isAny(DEPRECATED));
+		assertFalse(e_hasParams.isAny(HAS_NO_PARAMS));
+		assertFalse(e_hasNoParams.isAny(HAS_PARAMS));
+		assertFalse(e_isPublic.isAny(NOT_PUBLIC));
+		assertFalse(e_isNotPublic.isAny(PUBLIC));
+		assertFalse(e_isStatic.isAny(NOT_STATIC));
+		assertFalse(e_isNotStatic.isAny(STATIC));
+		assertFalse(e_isAbstract.isAny(NOT_ABSTRACT));
+		assertFalse(e_isNotAbstract.isAny(ABSTRACT));
+	}
+
+	@Test
+	public void isAny_invalidFlag() {
+		try {
+			e_deprecated.isAny(TRANSIENT);
+		} catch (RuntimeException e) {
+			assertEquals("Invalid flag for executable: TRANSIENT", e.getLocalizedMessage());
+		}
 	}
 
 	@Test
 	public void hasArgs() {
+		assertTrue(e_hasParams.hasArgs(int.class));
+		assertFalse(e_hasParams.hasArgs());
+		assertFalse(e_hasParams.hasArgs(long.class));
+		assertTrue(e_hasNoParams.hasArgs());
+		assertFalse(e_hasNoParams.hasArgs(long.class));
 	}
 
 	@Test
 	public void hasFuzzyArgs() {
+		assertTrue(e_hasParams.hasFuzzyArgs(int.class));
+		assertTrue(e_hasParams.hasFuzzyArgs(int.class, long.class));
+		assertFalse(e_hasParams.hasFuzzyArgs(long.class));
+		assertTrue(e_hasNoParams.hasFuzzyArgs());
+		assertTrue(e_hasNoParams.hasFuzzyArgs(long.class));
 	}
 
 	@Test
 	public void isDeprecated() {
+		assertTrue(e_deprecated.isDeprecated());
+		assertFalse(e_notDeprecated.isDeprecated());
 	}
 
 	@Test
 	public void isNotDeprecated() {
+		assertFalse(e_deprecated.isNotDeprecated());
+		assertTrue(e_notDeprecated.isNotDeprecated());
 	}
 
 	@Test
 	public void isAbstract() {
+		assertTrue(e_isAbstract.isAbstract());
+		assertFalse(e_isNotAbstract.isAbstract());
 	}
 
 	@Test
 	public void isNotAbstract() {
+		assertFalse(e_isAbstract.isNotAbstract());
+		assertTrue(e_isNotAbstract.isNotAbstract());
 	}
 
 	@Test
 	public void isPublic() {
+		assertTrue(e_isPublic.isPublic());
+		assertFalse(e_isNotPublic.isPublic());
 	}
 
 	@Test
 	public void isNotPublic() {
+		assertFalse(e_isPublic.isNotPublic());
+		assertTrue(e_isNotPublic.isNotPublic());
 	}
 
 	@Test
 	public void isStatic() {
+		assertTrue(e_isStatic.isStatic());
+		assertFalse(e_isNotStatic.isStatic());
 	}
 
 	@Test
 	public void isNotStatic() {
+		assertFalse(e_isStatic.isNotStatic());
+		assertTrue(e_isNotStatic.isNotStatic());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Visibility
+	//-----------------------------------------------------------------------------------------------------------------
 
+	static abstract class F {
+		public void isPublic() {}
+		protected void isProtected() {}
+		@SuppressWarnings("unused")
+		private void isPrivate() {}
+		void isDefault() {}
+	}
+	static ClassInfo f = ClassInfo.of(F.class);
+	static ExecutableInfo
+		f_isPublic = f.getPublicMethod("isPublic"),
+		f_isProtected = f.getMethod("isProtected"),
+		f_isPrivate = f.getMethod("isPrivate"),
+		f_isDefault = f.getMethod("isDefault");
 
+	@Test
+	public void setAccessible() {
+		f_isPublic.setAccessible();
+		f_isProtected.setAccessible();
+		f_isPrivate.setAccessible();
+		f_isDefault.setAccessible();
+	}
 
+	@Test
+	public void isVisible() {
+		assertTrue(f_isPublic.isVisible(Visibility.PUBLIC));
+		assertTrue(f_isPublic.isVisible(Visibility.PROTECTED));
+		assertTrue(f_isPublic.isVisible(Visibility.PRIVATE));
+		assertTrue(f_isPublic.isVisible(Visibility.DEFAULT));
 
+		assertFalse(f_isProtected.isVisible(Visibility.PUBLIC));
+		assertTrue(f_isProtected.isVisible(Visibility.PROTECTED));
+		assertTrue(f_isProtected.isVisible(Visibility.PRIVATE));
+		assertTrue(f_isProtected.isVisible(Visibility.DEFAULT));
 
+		assertFalse(f_isPrivate.isVisible(Visibility.PUBLIC));
+		assertFalse(f_isPrivate.isVisible(Visibility.PROTECTED));
+		assertTrue(f_isPrivate.isVisible(Visibility.PRIVATE));
+		assertFalse(f_isPrivate.isVisible(Visibility.DEFAULT));
 
-
-
-
-
-
-
-
-
-
-
-
+		assertFalse(f_isDefault.isVisible(Visibility.PUBLIC));
+		assertFalse(f_isDefault.isVisible(Visibility.PROTECTED));
+		assertTrue(f_isDefault.isVisible(Visibility.PRIVATE));
+		assertTrue(f_isDefault.isVisible(Visibility.DEFAULT));
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Labels
@@ -459,7 +595,7 @@ public class ExecutableInfoTest {
 		public void foo(String foo){}
 		public void foo(Map<String,Object> foo){}
 	}
-	ClassInfo x = ClassInfo.of(X.class);
+	static ClassInfo x = ClassInfo.of(X.class);
 
 	@Test
 	public void getFullName_method() {

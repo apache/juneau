@@ -19,7 +19,7 @@
 
 package org.apache.juneau.examples.core.pojo;
 
-import org.apache.juneau.annotation.BeanConstructor;
+import org.apache.juneau.annotation.*;
 
 /**
  * Sample pojo class.
@@ -33,8 +33,8 @@ public class Pojo {
 	private final String id;
 	private final String name;
 
-	@BeanConstructor(properties = "id,name")
-	public Pojo(String id, String name) {
+	@BeanConstructor
+	public Pojo(@Name("id") String id, @Name("name") String name) {
 		this.id = id;
 		this.name = name;
 	}

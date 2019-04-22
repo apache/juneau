@@ -101,8 +101,8 @@ public class ClassInfoTest {
 	public class A2 extends Value<A1>{};
 	public class A3 extends Value<Map<String,List<String>>>{};
 	public class A4 extends Value<Map<String,String[][]>>{};
-	public Type aType, pType, pTypeDimensional, pTypeGeneric, pTypeGenericArg;
-	{
+	public static Type aType, pType, pTypeDimensional, pTypeGeneric, pTypeGenericArg;
+	static {
 		aType = ((ParameterizedType)A2.class.getGenericSuperclass()).getActualTypeArguments()[0];
 		pType = ((ParameterizedType)A3.class.getGenericSuperclass()).getActualTypeArguments()[0];
 		pTypeDimensional = ((ParameterizedType)A4.class.getGenericSuperclass()).getActualTypeArguments()[0];
@@ -111,8 +111,8 @@ public class ClassInfoTest {
 		pTypeGenericArg = ((ParameterizedType)pTypeGeneric).getActualTypeArguments()[1];
 	}
 
-	public ClassInfo aTypeInfo=of(aType), pTypeInfo=of(pType), pTypeDimensionalInfo=of(pTypeDimensional), pTypeGenericInfo=of(pTypeGeneric), pTypeGenericArgInfo=of(pTypeGenericArg);
-	public ClassInfo aClass=of(AClass.class), aInterface=of(AInterface.class);
+	static ClassInfo aTypeInfo=of(aType), pTypeInfo=of(pType), pTypeDimensionalInfo=of(pTypeDimensional), pTypeGenericInfo=of(pTypeGeneric), pTypeGenericArgInfo=of(pTypeGenericArg);
+	static ClassInfo aClass=of(AClass.class), aInterface=of(AInterface.class);
 
 	@Test
 	public void ofType() {
@@ -161,7 +161,7 @@ public class ClassInfoTest {
 	static class BC2 extends BC1 implements BI3 {}
 	static class BC3 extends BC2 {}
 
-	ClassInfo bi1=of(BI1.class), bi2=of(BI2.class), bi3=of(BI3.class), bi4=of(BI4.class), bc1=of(BC1.class), bc2=of(BC2.class), bc3=of(BC3.class), object=of(Object.class);
+	static ClassInfo bi1=of(BI1.class), bi2=of(BI2.class), bi3=of(BI3.class), bi4=of(BI4.class), bc1=of(BC1.class), bc2=of(BC2.class), bc3=of(BC3.class), object=of(Object.class);
 
 	@Test
 	public void getDeclaredInterfaces() {
@@ -289,7 +289,7 @@ public class ClassInfoTest {
 		public void c3a() {}
 		protected void c3b() {}
 	}
-	ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
+	static ClassInfo cc3 = of(CC3.class), ci2 = of(CI2.class);
 
 	@Test
 	public void getPublicMethods() throws Exception {
@@ -350,6 +350,46 @@ public class ClassInfoTest {
 		check("", pTypeGenericArgInfo.getDeclaredMethods());
 	}
 
+	static class C2 {
+		public void a1() {}
+		public void a2(int x){}
+		void b1() {}
+		void b2(int x){}
+	}
+	static ClassInfo c2 = ClassInfo.of(C2.class);
+
+	@Test
+	public void getPublicMethod_noArgs() {
+		check("C2.a1()", c2.getPublicMethod("a1"));
+		check(null, c2.getPublicMethod("a2"));
+		check(null, c2.getPublicMethod("b1"));
+		check(null, c2.getPublicMethod("b2"));
+	}
+
+	@Test
+	public void getPublicMethod_withArgs() {
+		check(null, c2.getPublicMethod("a1", int.class));
+		check("C2.a2(int)", c2.getPublicMethod("a2", int.class));
+		check(null, c2.getPublicMethod("b1", int.class));
+		check(null, c2.getPublicMethod("b2", int.class));
+	}
+
+	@Test
+	public void getMethod_noArgs() {
+		check("C2.a1()", c2.getMethod("a1"));
+		check(null, c2.getMethod("a2"));
+		check("C2.b1()", c2.getMethod("b1"));
+		check(null, c2.getMethod("b2"));
+	}
+
+	@Test
+	public void getMethod_withArgs() {
+		check(null, c2.getMethod("a1", int.class));
+		check("C2.a2(int)", c2.getMethod("a2", int.class));
+		check(null, c2.getMethod("b1", int.class));
+		check("C2.b2(int)", c2.getMethod("b2", int.class));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Special methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -379,7 +419,7 @@ public class ClassInfoTest {
 	static class DA8 {
 		public static DA8 create2(String s1) {return null;}
 	}
-	ClassInfo da1=of(DA1.class), da2=of(DA2.class), da3=of(DA3.class), da4=of(DA4.class), da5=of(DA5.class), da6=of(DA6.class), da7=of(DA7.class), da8=of(DA8.class);
+	static ClassInfo da1=of(DA1.class), da2=of(DA2.class), da3=of(DA3.class), da4=of(DA4.class), da5=of(DA5.class), da6=of(DA6.class), da7=of(DA7.class), da8=of(DA8.class);
 
 	@Test
 	public void getFromStringMethod() throws Exception {
@@ -434,7 +474,7 @@ public class ClassInfoTest {
 	static class DB11 {
 		public static DB11 fromFoo(DBx x) {return null;}
 	}
-	ClassInfo db1=of(DB1.class), db2=of(DB2.class), db3=of(DB3.class), db4=of(DB4.class), db5=of(DB5.class), db6=of(DB6.class), db7=of(DB7.class), db8=of(DB8.class), db9=of(DB9.class), db10=of(DB10.class), db11=of(DB11.class);
+	static ClassInfo db1=of(DB1.class), db2=of(DB2.class), db3=of(DB3.class), db4=of(DB4.class), db5=of(DB5.class), db6=of(DB6.class), db7=of(DB7.class), db8=of(DB8.class), db9=of(DB9.class), db10=of(DB10.class), db11=of(DB11.class);
 
 	@Test
 	public void getStaticCreateMethod() throws Exception {
@@ -473,7 +513,7 @@ public class ClassInfoTest {
 	static class DC5 {
 		public static DCx createFoo() {return null;}
 	}
-	ClassInfo dc1=of(DC1.class), dc2=of(DC2.class), dc3=of(DC3.class), dc4=of(DC4.class), dc5=of(DC5.class);
+	static ClassInfo dc1=of(DC1.class), dc2=of(DC2.class), dc3=of(DC3.class), dc4=of(DC4.class), dc5=of(DC5.class);
 
 	@Test
 	public void getBuilderCreateMethod() throws Exception {
@@ -500,7 +540,7 @@ public class ClassInfoTest {
 	static class DD5 {
 		public DDx build(String x) {return null;}
 	}
-	ClassInfo dd1=of(DD1.class), dd2=of(DD2.class), dd3=of(DD3.class), dd4=of(DD4.class), dd5=of(DD5.class);
+	static ClassInfo dd1=of(DD1.class), dd2=of(DD2.class), dd3=of(DD3.class), dd4=of(DD4.class), dd5=of(DD5.class);
 
 	@Test
 	public void getBuilderBuildMethod() throws Exception {
@@ -539,7 +579,7 @@ public class ClassInfoTest {
 	class E6 {
 		public E6(String a) {}
 	}
-	ClassInfo e1=of(E1.class), e2=of(E2.class), e3=of(E3.class), e4=of(E4.class), e5=of(E5.class), e6=of(E6.class);
+	static ClassInfo e1=of(E1.class), e2=of(E2.class), e3=of(E3.class), e4=of(E4.class), e5=of(E5.class), e6=of(E6.class);
 
 	@Test
 	public void getPublicConstructors() {
@@ -636,6 +676,13 @@ public class ClassInfoTest {
 		check("E5()", e5.getConstructor(Visibility.PUBLIC));
 	}
 
+	@Test
+	public void getDeclaredConstructor() {
+		check("E1()", e1.getDeclaredConstructor());
+		check("E1(int)", e1.getDeclaredConstructor(int.class));
+		check(null, e1.getDeclaredConstructor(Object.class));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fields
 	//-----------------------------------------------------------------------------------------------------------------
@@ -650,7 +697,7 @@ public class ClassInfoTest {
 		@Deprecated int f2c;
 		protected int f2d;
 	}
-	ClassInfo f1=of(F1.class), f2=of(F2.class);
+	static ClassInfo f1=of(F1.class), f2=of(F2.class);
 
 	@Test
 	public void getPublicFields() {
@@ -719,6 +766,26 @@ public class ClassInfoTest {
 		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFieldsParentFirst());
 	}
 
+	static class F3 {
+		public int a1;
+		int a2;
+	}
+	static ClassInfo f3=of(F3.class);
+
+	@Test
+	public void getPublicField() {
+		check("F3.a1", f3.getPublicField("a1"));
+		check(null, f3.getPublicField("a2"));
+		check(null, f3.getPublicField("a3"));
+	}
+
+	@Test
+	public void getDeclaredField() {
+		check("F3.a1", f3.getDeclaredField("a1"));
+		check("F3.a2", f3.getDeclaredField("a2"));
+		check(null, f3.getDeclaredField("a3"));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
@@ -742,7 +809,7 @@ public class ClassInfoTest {
 
 	static class G5 implements GI3 {}
 
-	ClassInfo g3=of(G3.class), g4=of(G4.class), g5=of(G5.class);
+	static ClassInfo g3=of(G3.class), g4=of(G4.class), g5=of(G5.class);
 
 	@Test
 	public void getAnnotation() {
@@ -792,6 +859,11 @@ public class ClassInfoTest {
 	public void getDeclaredAnnotation() {
 		check("@A(7)", g3.getDeclaredAnnotation(A.class));
 		check(null, g3.getDeclaredAnnotation(B.class));
+	}
+
+	@Test
+	public void getDeclaredAnnotation_null() {
+		check(null, g3.getDeclaredAnnotation(null));
 	}
 
 	@Test
@@ -858,7 +930,7 @@ public class ClassInfoTest {
 	public abstract class H_AbstractPublic {}
 	@Deprecated public class H_PublicDeprecated {}
 
-	ClassInfo hPublic=of(H_Public.class), hPackage=of(H_Package.class), hProtected=of(H_Protected.class), hPrivate=of(H_Private.class), hPublicMember=of(H_PublicMember.class), hAbstractPublic=of(H_AbstractPublic.class), hPublicDeprecated=of(H_PublicDeprecated.class);
+	static ClassInfo hPublic=of(H_Public.class), hPackage=of(H_Package.class), hProtected=of(H_Protected.class), hPrivate=of(H_Private.class), hPublicMember=of(H_PublicMember.class), hAbstractPublic=of(H_AbstractPublic.class), hPublicDeprecated=of(H_PublicDeprecated.class);
 
 	@Test
 	public void isDeprecated() {
@@ -1165,7 +1237,7 @@ public class ClassInfoTest {
 	abstract class H2_Abstract {}
 	class H2_NotAbstract {}
 
-	ClassInfo h2a=of(H2a.class), h2b=of(H2b.class), h2Deprecated=of(H2_Deprecated.class), h2NotDeprecated=of(H2_NotDeprecated.class), h2Public=of(H2_Public.class), h2NotPublic=of(H2_NotPublic.class), h2Static=of(H2_Static.class), h2NotStatic=of(H2_NotStatic.class), h2Member=of(H2_Member.class), h2StaticMember=of(H2_StaticMember.class), h2Abstract=of(H2_Abstract.class), h2NotAbstract=of(H2_NotAbstract.class);
+	static ClassInfo h2a=of(H2a.class), h2b=of(H2b.class), h2Deprecated=of(H2_Deprecated.class), h2NotDeprecated=of(H2_NotDeprecated.class), h2Public=of(H2_Public.class), h2NotPublic=of(H2_NotPublic.class), h2Static=of(H2_Static.class), h2NotStatic=of(H2_NotStatic.class), h2Member=of(H2_Member.class), h2StaticMember=of(H2_StaticMember.class), h2Abstract=of(H2_Abstract.class), h2NotAbstract=of(H2_NotAbstract.class);
 
 	@Test
 	public void isAll() {
@@ -1399,9 +1471,9 @@ public class ClassInfoTest {
 	// Primitive wrappers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	List<Class<?>> primitives = AList.create(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
-	List<Class<?>> primitiveWrappers = AList.create(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
-	List<Object> primitiveDefaults = AList.create(false,(byte)0,(short)0,(char)0,0,0l,0f,0d);
+	static List<Class<?>> primitives = AList.create(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
+	static List<Class<?>> primitiveWrappers = AList.create(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
+	static List<Object> primitiveDefaults = AList.create(false,(byte)0,(short)0,(char)0,0,0l,0f,0d);
 
 	@Test
 	public void hasPrimitiveWrapper() {
@@ -1466,6 +1538,7 @@ public class ClassInfoTest {
 	@Test
 	public void getWrapperInfoIfPrimitive_onType() {
 		assertEquals(aTypeInfo.getWrapperInfoIfPrimitive().innerType(), aType);
+		check("V", pTypeGenericArgInfo.getWrapperInfoIfPrimitive());
 	}
 
 	@Test
@@ -1487,7 +1560,7 @@ public class ClassInfoTest {
 	public class J1 {}
 	public static class J2 {}
 
-	ClassInfo j1=of(J1.class), j2=of(J2.class), j1_3d=of(J1[][].class), j2_3d=of(J2[][].class);
+	static ClassInfo j1=of(J1.class), j2=of(J2.class), j1_3d=of(J1[][].class), j2_3d=of(J2[][].class);
 
 	@Test
 	public void getFullName_simple() {
@@ -1700,6 +1773,14 @@ public class ClassInfoTest {
 		assertEquals("LocalClass", of(LocalClass.class).getSimpleName());
 	}
 
+	@Test
+	public void getName() {
+		assertEquals("org.apache.juneau.reflection.AClass", aClass.getName());
+		assertEquals("java.util.AbstractMap", pTypeGenericInfo.getName());
+		assertEquals("V", pTypeGenericArgInfo.getName());
+	}
+
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Hierarchy
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1708,7 +1789,7 @@ public class ClassInfoTest {
 	public static class KB implements KA {}
 	public static class KC extends KB {}
 
-	public ClassInfo ka=of(KA.class), kb=of(KB.class), kc=of(KC.class);
+	static ClassInfo ka=of(KA.class), kb=of(KB.class), kc=of(KC.class);
 
 
 	@Test
@@ -1840,6 +1921,39 @@ public class ClassInfoTest {
 	}
 
 	@Test
+	public void is_ClassInfo() {
+		assertTrue(ka.is(of(KA.class)));
+		assertFalse(ka.is(of(KB.class)));
+		assertFalse(ka.is(of(KC.class)));
+		assertFalse(kb.is(of(KA.class)));
+		assertTrue(kb.is(of(KB.class)));
+		assertFalse(kb.is(of(KC.class)));
+		assertFalse(kc.is(of(KA.class)));
+		assertFalse(kc.is(of(KB.class)));
+		assertTrue(kc.is(of(KC.class)));
+	}
+
+	@Test
+	public void is_ClassInfo_genType() {
+		assertFalse(pTypeGenericArgInfo.is(of(KA.class)));
+	}
+
+	@Test
+	public void isAnyType() {
+		assertTrue(ka.isAny(KA.class));
+		assertTrue(ka.isAny(KA.class, KB.class));
+		assertFalse(ka.isAny(KB.class));
+		assertFalse(ka.isAny(KC.class));
+		assertFalse(kb.isAny(KA.class));
+		assertTrue(kb.isAny(KB.class));
+		assertFalse(kb.isAny(KC.class));
+		assertFalse(kc.isAny(KA.class));
+		assertFalse(kc.isAny(KB.class));
+		assertTrue(kc.isAny(KC.class));
+	}
+
+
+	@Test
 	public void is_type() {
 		assertFalse(aTypeInfo.is(KA.class));
 		assertFalse(pTypeInfo.is(KA.class));
@@ -1918,7 +2032,7 @@ public class ClassInfoTest {
 
 	public static class LA {}
 
-	ClassInfo la=of(LA.class);
+	static ClassInfo la=of(LA.class);
 
 	@Test
 	public void newInstance() {
@@ -1998,7 +2112,7 @@ public class ClassInfoTest {
 	}
 
 
-	ClassInfo ma=of(MA.class), mb=of(MB.class), mc=of(MC.class), md=of(MD.class), me=of(ME.class), mf=of(MF.class), mg=of(MG.class), mh=of(MH.class), mi=of(MI.class), mj=of(MJ.class), ml=of(ML.class), mn=of(MM.MN.class);
+	static ClassInfo ma=of(MA.class), mb=of(MB.class), mc=of(MC.class), md=of(MD.class), me=of(ME.class), mf=of(MF.class), mg=of(MG.class), mh=of(MH.class), mi=of(MI.class), mj=of(MJ.class), ml=of(ML.class), mn=of(MM.MN.class);
 
 	@Test
 	public void getParameterType_simpleMap() {

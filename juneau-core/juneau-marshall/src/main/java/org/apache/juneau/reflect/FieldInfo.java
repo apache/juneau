@@ -98,7 +98,19 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <T extends Annotation> T getAnnotation(Class<T> a) {
+		if (a == null)
+			return null;
 		return f.getAnnotation(a);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present.
+	 */
+	public boolean hasAnnotation(Class<? extends Annotation> a) {
+		return f.isAnnotationPresent(a);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -121,10 +133,6 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 				case NOT_DEPRECATED:
 					if (isDeprecated())
 						return false;
-					break;
-				case HAS_PARAMS:
-					break;
-				case HAS_NO_PARAMS:
 					break;
 				case PUBLIC:
 					if (isNotPublic())
@@ -287,6 +295,25 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 		return f.getName().equals(name);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Visibility
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 *
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public boolean setAccessible() {
+		try {
+			if (! (f.isAccessible()))
+				f.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			return false;
+		}
+	}
+
 	/**
 	 * Identifies if the specified visibility matches this field.
 	 *
@@ -298,36 +325,8 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations.
+	// Other methods.
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present.
-	 *
-	 * @param a The annotation to check for.
-	 * @return <jk>true</jk> if the specified annotation is present.
-	 */
-	public boolean isAnnotationPresent(Class<? extends Annotation> a) {
-		return f.isAnnotationPresent(a);
-	}
-
-	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 *
-	 * @param ignoreExceptions Ignore {@link SecurityException SecurityExceptions} and just return <jk>false</jk> if thrown.
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public boolean setAccessible(boolean ignoreExceptions) {
-		try {
-			if (! (f.isAccessible()))
-				f.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			if (ignoreExceptions)
-				return false;
-			throw new ClassMetaRuntimeException("Could not set accessibility to true on field ''{0}''", f);
-		}
-	}
 
 	/**
 	 * Returns the type of this field.

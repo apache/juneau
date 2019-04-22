@@ -127,24 +127,23 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return getAnnotations(a, false);
+		return appendAnnotations(new ArrayList<>(), a, false);
 	}
 
 	/**
-	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
+	 * Identical to {@link #getAnnotations(Class)} but returns the list in reverse (parent-to-child) order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
-	 * @param parentFirst If <jk>true</jk>, results are in parent-to-child order.
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a, boolean parentFirst) {
-		return appendAnnotations(new ArrayList<>(), a, parentFirst);
+	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
+		return appendAnnotations(new ArrayList<>(), a, true);
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified method and methods onsuperclasses/interfaces to the specified
+	 * Finds and appends the specified annotation on the specified method and methods on superclasses/interfaces to the specified
 	 * list.
 	 *
 	 * <p>
@@ -164,11 +163,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @param l The list of annotations.
 	 * @param a The annotation.
-	 * @param parentFirst If <jk>true</jk>, results are ordered in parent-to-child order.
 	 * @return The same list.
 	 */
+	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
+		return appendAnnotations(l, a, true);
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
+	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		List<Method> methods = getMatching();
 		for (Method m2 : iterable(methods, parentFirst))
 			for (Annotation a2 :  m2.getAnnotations())
@@ -207,6 +209,17 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	//-----------------------------------------------------------------------------------------------------------------
 	// Return type.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the generic return type of this method as a {@link ClassInfo} object.
+	 *
+	 * @return The generic return type of this method.
+	 */
+	public ClassInfo getReturnType() {
+		if (returnType == null)
+			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
+		return returnType;
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this method has this return type.
@@ -322,9 +335,9 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *  <jc>// Example method:</jc>
 	 * 	<jk>public void</jk> foo(String bar, Integer baz);
 	 *
-	 * 	isArgsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>);  <jc>// True.</jc>
-	 * 	isArgsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>, Map.<jk>class</jk>);  <jc>// True.</jc>
-	 * 	isArgsOnlyOfType(fooMethod, String.<jk>class</jk>);  <jc>// False.</jc>
+	 * 	argsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	argsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>, Map.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	argsOnlyOfType(fooMethod, String.<jk>class</jk>);  <jc>// False.</jc>
 	 * </p>
 	 *
 	 * @param args The valid class types (exact) for the arguments.
@@ -340,29 +353,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 				return false;
 		}
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder(m.getDeclaringClass().getName() + "." + m.getName() + "(");
-		for (int i = 0; i < rawParamTypes().length; i++) {
-			if (i > 0)
-				sb.append(",");
-			sb.append(rawParamTypes()[i].getSimpleName());
-		}
-		sb.append(")");
-		return sb.toString();
-	}
-
-	/**
-	 * Returns the generic return type of this method as a {@link ClassInfo} object.
-	 *
-	 * @return The generic return type of this method.
-	 */
-	public ClassInfo getReturnType() {
-		if (returnType == null)
-			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
-		return returnType;
 	}
 
 	/**
@@ -386,23 +376,5 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			}
 		}
 		return i;
-	}
-
-	/**
-	 * Returns a readable representation of this method.
-	 *
-	 * @return A readable representation of this method.
-	 */
-	public Object getReadableName() {
-		StringBuilder sb = new StringBuilder(128);
-		sb.append(m.getDeclaringClass().getName()).append('.').append(m.getName()).append('(');
-		List<ParamInfo> mpis = getParams();
-		for (int i = 0; i < mpis.size(); i++) {
-			if (i > 0)
-				sb.append(',');
-			mpis.get(i).getParameterType().appendFullName(sb);
-		}
-		sb.append(')');
-		return sb.toString();
 	}
 }

@@ -721,4 +721,9 @@ public abstract class ExecutableInfo {
 	public final String getSimpleName() {
 		return isConstructor ? e.getDeclaringClass().getSimpleName() : e.getName();
 	}
+
+	@Override
+	public String toString() {
+		return getShortName();
+	}
 }

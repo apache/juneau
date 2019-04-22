@@ -56,14 +56,14 @@ public @interface BeanConstructor {
 	/**
 	 * The names of the properties of the constructor arguments.
 	 * <p>
-	 *	The {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation is used to 
+	 *	The {@link org.apache.juneau.annotation.BeanConstructor @BeanConstructor} annotation is used to
 	 *	map constructor arguments to property names on bean with read-only properties.
-	 * 	<br>Since method parameter names are lost during compilation, this annotation essentially redefines 
+	 * 	<br>Since method parameter names are lost during compilation, this annotation essentially redefines
 	 *	them so that they are available at runtime.
 	 *	</p>
 	 * 	<p>
 	 *	The definition of a read-only bean is a bean with properties with only getters, like shown below:
-	 *	</p>	
+	 *	</p>
 	 *	<p class='bpcode w800'>
 	 *		<jc>// Our read-only bean.</jc>
 	 *		<jk>public class</jk> Person {
@@ -86,7 +86,7 @@ public @interface BeanConstructor {
 	 *			<jk>public int</jk> getAge() {
 	 *				<jk>return</jk> <jf>age</jf>;
 	 *			}
-	 *		}			
+	 *		}
 	 *	</p>
 	 *	<p class='bpcode w800'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
@@ -95,7 +95,11 @@ public @interface BeanConstructor {
 	 *		String name = p.getName();  <jc>// "John Smith"</jc>
 	 *		<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
 	 *	</p>
-	*/
-	
+	 * <p>
+	 * 	Note that the {@link Name @Name} annotation can also be used to identify bean property names on constructor
+	 * 	arguments.  If neither this annotation or {@link Name @Name} is used, then we try to get the property names
+	 * 	from the parameter names if they are available in the bytecode.
+	 * </p>
+	 */
 	String properties() default "";
 }

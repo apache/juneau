@@ -131,9 +131,10 @@ public final class ClassUtils {
 	public static int fuzzyArgsMatch(Class<?>[] paramTypes, Class<?>... argTypes) {
 		int matches = 0;
 		outer: for (Class<?> p : paramTypes) {
-			p = getClassInfo(p).getWrapperIfPrimitive();
+			ClassInfo pi = getClassInfo(p).getWrapperInfoIfPrimitive();
 			for (Class<?> a : argTypes) {
-				if (getClassInfo(p).isParentOf(a)) {
+				ClassInfo ai = getClassInfo(a).getWrapperInfoIfPrimitive();
+				if (pi.isParentOf(ai.inner())) {
 					matches++;
 					continue outer;
 				}

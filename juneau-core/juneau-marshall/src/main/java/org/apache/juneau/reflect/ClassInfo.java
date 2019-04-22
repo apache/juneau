@@ -327,6 +327,21 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns the method with the specified method name and argument types.
+	 *
+	 * @param name The method name (e.g. <js>"toString"</js>).
+	 * @param args The exact argument types.
+	 * @return
+	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
+	 */
+	public MethodInfo getMethod(String name, Class<?>...args) {
+		for (MethodInfo mi : getAllMethods())
+			if (mi.hasName(name) && mi.hasArgs(args))
+				return mi;
+		return null;
+	}
+
+	/**
 	 * Returns all methods declared on this class.
 	 *
 	 * @return
@@ -500,6 +515,20 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getPublicConstructor(Class<?>...args) {
 		for (ConstructorInfo ci : getPublicConstructors())
+			if (ci.hasArgs(args))
+				return ci;
+		return null;
+	}
+
+	/**
+	 * Returns the declared constructor with the specified argument types.
+	 *
+	 * @param args The exact argument types.
+	 * @return
+	 *  The declared constructor with the specified argument types, or <jk>null</jk> if not found.
+	 */
+	public ConstructorInfo getDeclaredConstructor(Class<?>...args) {
+		for (ConstructorInfo ci : getDeclaredConstructors())
 			if (ci.hasArgs(args))
 				return ci;
 		return null;
@@ -720,6 +749,33 @@ public final class ClassInfo {
 		return m;
 	}
 
+
+	/**
+	 * Returns the public field with the specified name.
+	 *
+	 * @param name The field name.
+	 * @return The public field, or <jk>null</jk> if not found.
+	 */
+	public FieldInfo getPublicField(String name) {
+		for (FieldInfo f : getPublicFields())
+			if (f.getName().equals(name))
+				return f;
+		return null;
+	}
+
+	/**
+	 * Returns the declared field with the specified name.
+	 *
+	 * @param name The field name.
+	 * @return The declared field, or <jk>null</jk> if not found.
+	 */
+	public FieldInfo getDeclaredField(String name) {
+		for (FieldInfo f : getDeclaredFields())
+			if (f.getName().equals(name))
+				return f;
+		return null;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
@@ -774,6 +830,8 @@ public final class ClassInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
+		if (a == null)
+			return null;
 		Optional<Annotation> o = declaredAnnotationMap().get(a);
 		if (o == null) {
 			o = Optional.ofNullable(findDeclaredAnnotation(a));
@@ -995,10 +1053,9 @@ public final class ClassInfo {
 
 	@SuppressWarnings("unchecked")
 	private <T extends Annotation> T findDeclaredAnnotation(Class<T> a) {
-		if (c != null)
-			for (Annotation a2 : c.getDeclaredAnnotations())
-				if (a2.annotationType() == a)
-					return (T)a2;
+		for (Annotation a2 : c.getDeclaredAnnotations())
+			if (a2.annotationType() == a)
+				return (T)a2;
 		return null;
 	}
 
@@ -1654,7 +1711,9 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if the specified class is the same as this one.
 	 */
 	public boolean is(ClassInfo c) {
-		return this.c != null && this.c.equals(c.inner());
+		if (this.c != null)
+			return this.c.equals(c.inner());
+		return t.equals(c.t);
 	}
 
 	/**

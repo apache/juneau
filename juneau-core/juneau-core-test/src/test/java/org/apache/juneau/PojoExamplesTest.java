@@ -204,12 +204,12 @@ public class PojoExamplesTest {
 		try {
 			bs.getClassMeta(F1.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid method 'org.apache.juneau.PojoExamplesTest$F1.example(String)'");
+			assertContains(e.getMessage(), "@Example used on invalid method 'example(String)'");
 		}
 		try {
 			bs.getClassMeta(F2.class);
 		} catch (Exception e) {
-			assertContains(e.getMessage(), "@Example used on invalid method 'org.apache.juneau.PojoExamplesTest$F2.example()'");
+			assertContains(e.getMessage(), "@Example used on invalid method 'example()'");
 		}
 		try {
 			bs.getClassMeta(F3.class);

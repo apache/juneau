@@ -20,27 +20,14 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 public class ConstructorInfoTest {
 
 	private static void check(String expected, Object o) {
-		if (o instanceof List) {
-			List<?> l = (List<?>)o;
-			String actual = l
-				.stream()
-				.map(TO_STRING)
-				.collect(Collectors.joining(","));
-			assertEquals(expected, actual);
-		} else if (o instanceof Iterable) {
-			String actual = StreamSupport.stream(((Iterable<?>)o).spliterator(), false)
-				.map(TO_STRING)
-				.collect(Collectors.joining(","));
-			assertEquals(expected, actual);
-		} else {
-			assertEquals(expected, TO_STRING.apply(o));
-		}
+		assertEquals(expected, TO_STRING.apply(o));
 	}
 
 	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
@@ -48,37 +35,22 @@ public class ConstructorInfoTest {
 		public String apply(Object t) {
 			if (t == null)
 				return null;
-			if (t instanceof Class)
-				return ((Class<?>)t).getSimpleName();
-			if (t instanceof Constructor) {
-				Constructor<?> x = (Constructor<?>)t;
-				return x.getDeclaringClass().getSimpleName() + '(' + argTypes(x.getParameterTypes()) + ')';
-			}
-//			if (t instanceof Package)
-//				return ((Package)t).getName();
+			if (t instanceof Iterable)
+				return StreamSupport.stream(((Iterable<?>)t).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getSimpleName();
-//			if (t instanceof MethodInfo)
-//				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getLabel();
-//			if (t instanceof ConstructorInfo)
-//				return ((ConstructorInfo)t).getLabel();
-//			if (t instanceof FieldInfo)
-//				return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getLabel();
-//			if (t instanceof AnnotationInfo)
-//				return apply(((AnnotationInfo<?>)t).getAnnotation());
+			if (t instanceof ConstructorInfo)
+				return ((ConstructorInfo)t).getShortName();
+			if (t instanceof Constructor)
+				return ConstructorInfo.of((Constructor<?>)t).getShortName();
 			return t.toString();
 		}
 	};
-
-	private static String argTypes(Class<?>[] t) {
-		return Arrays.asList(t).stream().map(x -> x.getSimpleName()).collect(Collectors.joining(","));
-	}
 
 	private static ConstructorInfo ofc(Class<?> c, Class<?>...pt) {
 		try {
 			return of(c.getConstructor(pt));
 		} catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
 			fail(e.getLocalizedMessage());
 		}
 		return null;
@@ -91,7 +63,12 @@ public class ConstructorInfoTest {
 	static class A {
 		public A() {}
 	}
-	ConstructorInfo a = ofc(A.class);
+	static ConstructorInfo a = ofc(A.class);
+
+	@Test
+	public void of_withDeclaringClass() throws Exception {
+		check("A()", ConstructorInfo.of(ClassInfo.of(A.class), a.inner()));
+	}
 
 	@Test
 	public void of_noDeclaringClass() throws Exception {
@@ -103,5 +80,63 @@ public class ConstructorInfoTest {
 		check("A", a.getDeclaringClass());
 	}
 
+	@Test
+	public void of_null() throws Exception {
+		check(null, ConstructorInfo.of(null));
+		check(null, ConstructorInfo.of(null, null));
+	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class B {
+		private String f;
+		public B() {}
+		public B(String f) {
+			this.f = f;
+		}
+		public B(String f, String f2) {
+			this.f = f;
+		}
+		protected B(int f) {}
+		@Override
+		public String toString() {
+			return f;
+		}
+	}
+	static ClassInfo b = ClassInfo.of(B.class);
+	static ConstructorInfo
+		b_c1 = b.getPublicConstructor(),
+		b_c2 = b.getPublicConstructor(String.class),
+		b_c3 = b.getDeclaredConstructor(int.class),
+		b_c4 = b.getPublicConstructor(String.class, String.class);
+
+
+	@Test
+	public void invoke() {
+		try {
+			assertEquals(null, b_c1.invoke().toString());
+			assertEquals("foo", b_c2.invoke("foo").toString());
+		} catch (Exception e) {
+			fail(e.getLocalizedMessage());
+		}
+	}
+
+	@Test
+	public void makeAccessible() {
+		b_c3.makeAccessible(Visibility.PROTECTED);
+		try {
+			assertEquals(null, b_c3.invoke(123).toString());
+		} catch (Exception e) {
+			fail(e.getLocalizedMessage());
+		}
+	}
+
+	@Test
+	public void compareTo() {
+		Set<ConstructorInfo> s = new TreeSet<>(Arrays.asList(b_c1, b_c2, b_c3, b_c4, a));
+		check("A(),B(),B(int),B(String),B(String,String)", s);
+
+	}
 }

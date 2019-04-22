@@ -67,7 +67,7 @@ public class HttpPartSchemaBuilder {
 
 	HttpPartSchemaBuilder apply(Class<? extends Annotation> c, ParamInfo mpi) {
 		apply(c, mpi.getParameterType().innerType());
-		for (Annotation a : mpi.getParameterAnnotations())
+		for (Annotation a : mpi.getDeclaredAnnotations())
 			if (c.isInstance(a))
 				apply(a);
 		return this;

@@ -68,8 +68,8 @@ public class UriContext {
 	 * @param pathInfo
 	 * 	The path info (e.g. <js>"/path-info"</js>, or <js>"path-info"</js>)
 	 */
-	@BeanConstructor(properties="authority,contextRoot,servletPath,pathInfo")
-	public UriContext(String authority, String contextRoot, String servletPath, String pathInfo) {
+	@BeanConstructor
+	public UriContext(@Name("authority") String authority, @Name("contextRoot") String contextRoot, @Name("servletPath") String servletPath, @Name("pathInfo") String pathInfo) {
 		this.authority = nullIfEmpty(trimSlashes(authority));
 		this.contextRoot = nullIfEmpty(trimSlashes(contextRoot));
 		this.servletPath = nullIfEmpty(trimSlashes(servletPath));

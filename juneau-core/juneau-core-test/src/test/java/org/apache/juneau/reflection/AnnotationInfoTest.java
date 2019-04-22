@@ -10,57 +10,67 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflect;
+package org.apache.juneau.reflection;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+import static org.junit.Assert.*;
 
 import java.lang.annotation.*;
+import java.util.function.*;
 
-/**
- * Represents an annotation instance on a class and the class it was found on.
- *
- * @param <T> The annotation type.
- */
-public class AnnotationInfo<T extends Annotation> {
+import org.apache.juneau.reflect.*;
+import org.junit.*;
 
-	private ClassInfo c;
-	private T a;
+public class AnnotationInfoTest {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param c The class where the annotation was found.
-	 * @param a The annotation found.
-	 */
-	protected AnnotationInfo(ClassInfo c, T a) {
-		this.c = c;
-		this.a = a;
+	private static void check(String expected, Object o) {
+		assertEquals(expected, TO_STRING.apply(o));
 	}
 
-	/**
-	 * Convenience constructor.
-	 *
-	 * @param c The class where the annotation was found.
-	 * @param a The annotation found.
-	 * @return A new {@link AnnotationInfo} object.
-	 */
-	public static <T extends Annotation> AnnotationInfo<T> of(ClassInfo c, T a) {
-		return new AnnotationInfo<>(c, a);
+	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
+		@Override
+		public String apply(Object t) {
+			if (t instanceof A)
+				return "@A(" + ((A)t).value() + ")";
+			if (t instanceof ClassInfo)
+				return ((ClassInfo)t).getSimpleName();
+			return t.toString();
+		}
+	};
+
+	private static ClassInfo of(Class<?> c) {
+		try {
+			return ClassInfo.of(c);
+		} catch (SecurityException e) {
+			fail(e.getLocalizedMessage());
+		}
+		return null;
 	}
 
-	/**
-	 * Returns the class where the annotation was found.
-	 *
-	 * @return the class where the annotation was found.
-	 */
-	public ClassInfo getClassOn() {
-		return c;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instantiation.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Documented
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface A {
+		int value();
 	}
 
-	/**
-	 * Returns the annotation found.
-	 *
-	 * @return The annotation found.
-	 */
-	public T getAnnotation() {
-		return a;
+	@A(1)
+	static class B {}
+	static ClassInfo b = of(B.class);
+
+	@Test
+	public void getClassOn() {
+		check("B", b.getAnnotationInfos(A.class).get(0).getClassOn());
+	}
+
+	@Test
+	public void getAnnotation() {
+		check("@A(1)", b.getAnnotationInfos(A.class).get(0).getAnnotation());
 	}
 }

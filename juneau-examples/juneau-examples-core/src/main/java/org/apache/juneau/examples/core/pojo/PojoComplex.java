@@ -38,8 +38,8 @@ public class PojoComplex {
 	 * @param innerPojo
 	 * @param values
 	 */
-	@BeanConstructor(properties = "id,innerPojo,values")
-	public PojoComplex(String id, Pojo innerPojo, HashMap<String, List<Pojo>> values) {
+	@BeanConstructor
+	public PojoComplex(@Name("id") String id, @Name("innerPojo") Pojo innerPojo, @Name("values") HashMap<String, List<Pojo>> values) {
 		this.id = id;
 		this.innerPojo = innerPojo;
 		this.values = values;

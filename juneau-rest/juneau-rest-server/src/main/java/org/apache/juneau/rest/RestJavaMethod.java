@@ -593,7 +593,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		} catch (IllegalArgumentException e) {
 			throw new BadRequest(e,
 				"Invalid argument type passed to the following method: ''{0}''.\n\tArgument types: {1}",
-				info.toString(), info.getReadableName()
+				info.toString(), info.getFullName()
 			);
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();		// Get the throwable thrown from the doX() method.

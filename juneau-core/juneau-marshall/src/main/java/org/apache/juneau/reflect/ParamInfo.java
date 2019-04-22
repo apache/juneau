@@ -30,7 +30,7 @@ public final class ParamInfo {
 	private final ExecutableInfo eInfo;
 	private final Parameter p;
 	private final int index;
-	private Map<Class<?>,Optional<Annotation>> annotationMap = new ConcurrentHashMap<>();
+	private volatile Map<Class<?>,Optional<Annotation>> annotationMap;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instantiation.
@@ -61,19 +61,19 @@ public final class ParamInfo {
 	/**
 	 * Returns the method that this parameter belongs to.
 	 *
-	 * @return The method that this parameter belongs to.
+	 * @return The method that this parameter belongs to, or <jk>null</jk> if it belongs to a constructor.
 	 */
 	public MethodInfo getMethod() {
-		return (MethodInfo)eInfo;
+		return eInfo.isConstructor() ? null : (MethodInfo)eInfo;
 	}
 
 	/**
-	 * Returns the method that this parameter belongs to.
+	 * Returns the constructor that this parameter belongs to.
 	 *
-	 * @return The method that this parameter belongs to.
+	 * @return The constructor that this parameter belongs to, or <jk>null</jk> if it belongs to a method.
 	 */
 	public ConstructorInfo getConstructor() {
-		return (ConstructorInfo)eInfo;
+		return eInfo.isConstructor() ? (ConstructorInfo)eInfo : null;
 	}
 
 	/**
@@ -85,13 +85,34 @@ public final class ParamInfo {
 		return eInfo.getParamType(index);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Returns the parameter annotations defined on this parameter.
+	 * Returns the parameter annotations declared on this parameter.
 	 *
-	 * @return The parameter annotations defined on this parameter.
+	 * @return The parameter annotations declared on this parameter, or an empty array if none found.
 	 */
-	public Annotation[] getParameterAnnotations() {
+	public Annotation[] getDeclaredAnnotations() {
 		return eInfo.getParameterAnnotations(index);
+	}
+
+	/**
+	 * Returns the specified parameter annotation declared on this parameter.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @param <T>
+	 * @return The specified parameter annotation declared on this parameter, or <jk>null</jk> if not found.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
+		if (a != null)
+			for (Annotation aa : eInfo.getParameterAnnotations(index))
+				if (a.isInstance(aa))
+					return (T)aa;
+		return null;
 	}
 
 	/**
@@ -161,48 +182,23 @@ public final class ParamInfo {
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return getAnnotations(a, false);
+		return appendAnnotations(new ArrayList<>(), a, false);
 	}
 
 	/**
-	 * Identical to {@link #getAnnotations(Class)} but optionally returns the list in reverse (parent-to-child) order.
+	 * Identical to {@link #getAnnotations(Class)} but returns the list in reverse (parent-to-child) order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
-	 * @param parentFirst If <jk>true</jk>, results are in parent-to-child order.
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a, boolean parentFirst) {
-		return appendAnnotations(new ArrayList<>(), a, parentFirst);
+	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
+		return appendAnnotations(new ArrayList<>(), a, true);
 	}
 
-	/**
-	 * Finds and appends the specified annotation on the specified method and methods onsuperclasses/interfaces to the specified
-	 * list.
-	 *
-	 * <p>
-	 * Results are ordered in child-to-parent order.
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation.
-	 * @return The same list.
-	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		return appendAnnotations(l, a, false);
-	}
-
-	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation.
-	 * @param parentFirst If <jk>true</jk>, results are ordered in parent-to-child order.
-	 * @return The same list.
-	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
+	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).resolved();
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);
@@ -238,13 +234,23 @@ public final class ParamInfo {
 		return l;
 	}
 
+	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
+		if (annotationMap == null)
+			annotationMap = new ConcurrentHashMap<>();
+		return annotationMap;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Returns <jk>true</jk> if the parameter has a name provided by the class file.
 	 *
 	 * @return <jk>true</jk> if the parameter has a name provided by the class file.
 	 */
 	public boolean hasName() {
-		return p.isNamePresent();
+		return p.isNamePresent() || p.isAnnotationPresent(Name.class);
 	}
 
 	/**
@@ -258,13 +264,12 @@ public final class ParamInfo {
 	 * @see Parameter#getName()
 	 */
 	public String getName() {
-		return p.getName();
-	}
-
-	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
-		if (annotationMap == null)
-			annotationMap = new ConcurrentHashMap<>();
-		return annotationMap;
+		Name n = p.getAnnotation(Name.class);
+		if (n != null)
+			return n.value();
+		if (p.isNamePresent())
+			return p.getName();
+		return null;
 	}
 
 	@Override

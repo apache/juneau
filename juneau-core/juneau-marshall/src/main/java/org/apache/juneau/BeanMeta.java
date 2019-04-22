@@ -224,8 +224,18 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@BeanConstructor' found.");
 						constructor = x;
 						constructorArgs = split(x.getAnnotation(BeanConstructor.class).properties());
-						if (constructorArgs.length != x.getParamCount())
-							throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
+						if (constructorArgs.length != x.getParamCount()) {
+							if (constructorArgs.length != 0)
+								throw new BeanRuntimeException(c, "Number of properties defined in '@BeanConstructor' annotation does not match number of parameters in constructor.");
+							constructorArgs = new String[x.getParamCount()];
+							int i = 0;
+							for (ParamInfo pi : x.getParams()) {
+								String pn = pi.getName();
+								if (pn == null)
+									throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+								constructorArgs[i++] = pn;
+							}
+						}
 						constructor.setAccessible();
 					}
 				}
@@ -477,7 +487,8 @@ public class BeanMeta<T> {
 		 */
 		private String findPropertyName(Field f, Set<String> fixedBeanProps) {
 			BeanProperty bp = f.getAnnotation(BeanProperty.class);
-			String name = bpName(bp);
+			Name n = f.getAnnotation(Name.class);
+			String name = bpName(bp, n);
 			if (isNotEmpty(name)) {
 				if (fixedBeanProps.isEmpty() || fixedBeanProps.contains(name))
 					return name;
@@ -615,7 +626,8 @@ public class BeanMeta<T> {
 					continue;
 
 				BeanProperty bp = m.getAnnotation(BeanProperty.class);
-				if (! (m.isVisible(v) || bp != null))
+				Name n2 = m.getAnnotation(Name.class);
+				if (! (m.isVisible(v) || bp != null || n2 != null))
 					continue;
 
 				String n = m.getSimpleName();
@@ -623,7 +635,7 @@ public class BeanMeta<T> {
 				List<ClassInfo> pt = m.getParamTypes();
 				ClassInfo rt = m.getReturnType();
 				MethodType methodType = UNKNOWN;
-				String bpName = bpName(bp);
+				String bpName = bpName(bp, n2);
 
 				if (! (isEmpty(bpName) || filterProps.isEmpty() || filterProps.contains(bpName)))
 					throw new BeanRuntimeException(c, "Found @BeanProperty(\"{0}\") but name was not found in @Bean(properties)", bpName);
@@ -714,11 +726,12 @@ public class BeanMeta<T> {
 			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
-				if (f.isAnnotationPresent(BeanIgnore.class))
+				if (f.hasAnnotation(BeanIgnore.class))
 					continue;
 
 				BeanProperty bp = f.getAnnotation(BeanProperty.class);
-				String bpName = bpName(bp);
+				Name n = f.getAnnotation(Name.class);
+				String bpName = bpName(bp, n);
 
 				if (! (v.isVisible(f.inner()) || bp != null))
 					continue;
@@ -737,7 +750,7 @@ public class BeanMeta<T> {
 			for (FieldInfo f : c2.getDeclaredFields()) {
 				if (f.isAny(STATIC, TRANSIENT))
 					continue;
-				if (f.isAnnotationPresent(BeanIgnore.class))
+				if (f.hasAnnotation(BeanIgnore.class))
 					continue;
 				if (f.hasName(name))
 					return f.inner();
@@ -897,7 +910,11 @@ public class BeanMeta<T> {
 		}
 	}
 
-	static final String bpName(BeanProperty bp) {
+	static final String bpName(BeanProperty bp, Name n) {
+		if (bp == null && n == null)
+			return null;
+		if (n != null)
+			return n.value();
 		if (bp == null)
 			return null;
 		if (! bp.name().isEmpty())
