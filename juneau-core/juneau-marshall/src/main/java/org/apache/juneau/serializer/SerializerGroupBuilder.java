@@ -21,6 +21,9 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
@@ -126,6 +129,15 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 		return new SerializerGroup(getPropertyStore(), ArrayUtils.toReverseArray(Serializer.class, l));
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public SerializerGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -666,12 +678,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -680,6 +686,24 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -696,12 +720,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -710,6 +728,24 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -798,6 +834,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> SerializerGroupBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -846,7 +888,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> SerializerGroupBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public SerializerGroupBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -870,12 +912,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -888,14 +924,26 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanClassesRemove(Object...values) {
+	public SerializerGroupBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public SerializerGroupBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -912,14 +960,26 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder notBeanPackagesRemove(Object...values) {
+	public SerializerGroupBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerGroupBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public SerializerGroupBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -932,6 +992,24 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -956,6 +1034,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerGroupBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerGroupBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

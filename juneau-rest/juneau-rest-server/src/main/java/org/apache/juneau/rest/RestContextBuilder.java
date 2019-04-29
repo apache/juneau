@@ -177,15 +177,15 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 					set(vr.resolve(p.name()), vr.resolve(p.value()));
 				for (String p : r.flags())
 					set(p, true);
-				serializers(false, merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), r.serializers()));
-				parsers(false, merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), r.parsers()));
+				serializers(merge(ObjectUtils.toType(psb.peek(REST_serializers), Object[].class), r.serializers()));
+				parsers(merge(ObjectUtils.toType(psb.peek(REST_parsers), Object[].class), r.parsers()));
 				partSerializer(r.partSerializer());
 				partParser(r.partParser());
 				encoders(r.encoders());
 				if (r.produces().length > 0)
-					produces(false, resolveVars(vr, r.produces()));
+					producesReplace(resolveVars(vr, r.produces()));
 				if (r.consumes().length > 0)
-					consumes(false, resolveVars(vr, r.consumes()));
+					consumesReplace(resolveVars(vr, r.consumes()));
 				defaultRequestHeaders(resolveVars(vr, r.defaultRequestHeaders()));
 				defaultAccept(vr.resolve(r.defaultAccept()));
 				defaultContentType(vr.resolve(r.defaultContentType()));
@@ -194,8 +194,8 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 				converters(r.converters());
 				guards(reverse(r.guards()));
 				children(r.children());
-				beanFilters(false, merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), r.beanFilters()));
-				pojoSwaps(false, merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), r.pojoSwaps()));
+				beanFilters(merge(ObjectUtils.toType(psb.peek(BEAN_beanFilters), Object[].class), r.beanFilters()));
+				pojoSwaps(merge(ObjectUtils.toType(psb.peek(BEAN_pojoSwaps), Object[].class), r.pojoSwaps()));
 				paramResolvers(r.paramResolvers());
 				serializerListener(r.serializerListener());
 				parserListener(r.parserListener());
@@ -292,7 +292,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			hdb.script("INHERIT", "$W{"+w.getName()+".script}");
 			hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 		}
-		widgets(false, widgets);
+		widgetsReplace(widgets);
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
 		for (MethodInfo m : rci.getAllMethodsParentFirst()) {
@@ -480,7 +480,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public VarResolverBuilder getVarResolverBuilder() {
 		return varResolverBuilder;
 	}
-
 
 	//----------------------------------------------------------------------------------------------------
 	// Properties
@@ -1274,26 +1273,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Parsers.
 	 *
 	 * <p>
-	 * Same as {@link #parsers(Class...)} except allows you to overwrite the previous value.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RestContext#REST_parsers}
-	 * </ul>
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value.
-	 * @param values The values to add to this setting.
-	 * @return This object (for method chaining).
-	 */
-	public RestContextBuilder parsers(boolean append, Object...values) {
-		return set(append, REST_parsers, values);
-	}
-
-	/**
-	 * Configuration property:  Parsers.
-	 *
-	 * <p>
 	 * Same as {@link #parsers(Class...)} except input is pre-constructed instances.
 	 *
 	 * <p>
@@ -1310,6 +1289,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 */
 	public RestContextBuilder parsers(Object...values) {
 		return addTo(REST_parsers, values);
+	}
+
+	/**
+	 * Configuration property:  Parsers.
+	 *
+	 * <p>
+	 * Same as {@link #parsers(Class...)} except allows you to overwrite the previous value.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_parsers}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder parsersReplace(Object...values) {
+		return set(REST_parsers, values);
 	}
 
 	/**
@@ -1576,20 +1573,18 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  Serializers.
 	 *
 	 * <p>
-	 * Same as {@link #serializers(Class...)} except allows you to overwrite the previous value.
+	 * Same as {@link #serializers(Class[])} but replaces any existing values.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_serializers}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value.
-	 * @param values The values to add to this setting.
+	 * @param values The values to set on this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder serializers(boolean append, Object...values) {
-		return set(append, REST_serializers, values);
+	public RestContextBuilder serializersReplace(Class<?>...values) {
+		return set(REST_serializers, values);
 	}
 
 	/**
@@ -1615,6 +1610,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	/**
+	 * Configuration property:  Serializers.
+	 *
+	 * <p>
+	 * Same as {@link #serializers(Class...)} except allows you to overwrite the previous value.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_serializers}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder serializersReplace(Object...values) {
+		return set(REST_serializers, values);
+	}
+
+	/**
 	 * Configuration property:  Static file response headers.
 	 *
 	 * <p>
@@ -1625,22 +1638,40 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value.
 	 * @param headers
 	 * 	The headers to add to this list.
 	 * 	<br>The default is <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder staticFileResponseHeaders(boolean append, Map<String,String> headers) {
-		return set(append, REST_staticFileResponseHeaders, headers);
+	public RestContextBuilder staticFileResponseHeaders(Map<String,String> headers) {
+		return addTo(REST_staticFileResponseHeaders, headers);
 	}
 
 	/**
 	 * Configuration property:  Static file response headers.
 	 *
 	 * <p>
-	 * Same as {@link #staticFileResponseHeaders(boolean, Map)} with append=<jk>true</jk> except headers are strings
+	 * Same as {@link #staticFileResponseHeaders(Map)} but replaces any previous values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_staticFileResponseHeaders}
+	 * </ul>
+	 *
+	 * @param headers
+	 * 	The headers to set on this list.
+	 * 	<br>The default is <code>{<js>'Cache-Control'</js>: <js>'max-age=86400, public</js>}</code>.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder staticFileResponseHeadersReplace(Map<String,String> headers) {
+		return set(REST_staticFileResponseHeaders, headers);
+	}
+
+	/**
+	 * Configuration property:  Static file response headers.
+	 *
+	 * <p>
+	 * Same as {@link #staticFileResponseHeaders(Map)} with append=<jk>true</jk> except headers are strings
 	 * composed of key/value pairs.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1814,33 +1845,65 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value.
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder produces(boolean append, String...values) {
-		return set(append, REST_produces, values);
+	public RestContextBuilder produces(String...values) {
+		return addTo(REST_produces, values);
 	}
 
 	/**
 	 * Configuration property:  Supported accept media types.
 	 *
 	 * <p>
-	 * Same as {@link #produces(boolean, String...)} except input is {@link MediaType} instances.
+	 * Same as {@link #produces(String...)} but replaces any previous values.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_produces}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value.
+	 * @param values The values to set on this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder producesReplace(String...values) {
+		return set(REST_produces, values);
+	}
+
+	/**
+	 * Configuration property:  Supported accept media types.
+	 *
+	 * <p>
+	 * Same as {@link #produces(String...)} except input is {@link MediaType} instances.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * </ul>
+	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder produces(boolean append, MediaType...values) {
-		return set(append, REST_produces, values);
+	public RestContextBuilder produces(MediaType...values) {
+		return addTo(REST_produces, values);
+	}
+
+	/**
+	 * Configuration property:  Supported accept media types.
+	 *
+	 * <p>
+	 * Same as {@link #produces(MediaType...)} but replaces any previous values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_produces}
+	 * </ul>
+	 *
+	 * @param values The values to set on this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder producesReplace(MediaType...values) {
+		return set(REST_produces, values);
 	}
 
 	/**
@@ -1854,33 +1917,65 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value.
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder consumes(boolean append, String...values) {
-		return set(append, REST_consumes, values);
+	public RestContextBuilder consumes(String...values) {
+		return addTo(REST_consumes, values);
 	}
 
 	/**
 	 * Configuration property:  Supported content media types.
 	 *
 	 * <p>
-	 * Same as {@link #consumes(boolean, String...)} except input is {@link MediaType} instances.
+	 * Same as {@link #consumes(String...)} but replaces any existing values.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link RestContext#REST_consumes}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, append to the existing list, otherwise overwrite the previous value.
+	 * @param values The values to set on this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder consumesReplace(String...values) {
+		return set(REST_consumes, values);
+	}
+
+	/**
+	 * Configuration property:  Supported content media types.
+	 *
+	 * <p>
+	 * Same as {@link #consumes(String...)} except input is {@link MediaType} instances.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * </ul>
+	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder consumes(boolean append, MediaType...values) {
-		return set(append, REST_consumes, values);
+	public RestContextBuilder consumes(MediaType...values) {
+		return addTo(REST_consumes, values);
+	}
+
+	/**
+	 * Configuration property:  Supported content media types.
+	 *
+	 * <p>
+	 * Same as {@link #consumes(MediaType...)} except replaces any existing values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_consumes}
+	 * </ul>
+	 *
+	 * @param values The values to set on this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RestContextBuilder consumesReplace(MediaType...values) {
+		return set(REST_consumes, values);
 	}
 
 	/**
@@ -2042,6 +2137,25 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Configuration property:  HTML Widgets.
 	 *
 	 * <p>
+	 * Same as {@link #widgets(Class...)} but replaces any previous values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RestContext#REST_widgets}
+	 * </ul>
+	 *
+	 * @param values The values to set on this setting.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public RestContextBuilder widgetsReplace(Class<? extends Widget>...values) {
+		return set(REST_widgets, values);
+	}
+
+	/**
+	 * Configuration property:  HTML Widgets.
+	 *
+	 * <p>
 	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -2067,14 +2181,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * 	<li class='jf'>{@link RestContext#REST_widgets}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, appends to the existing list of widgets.
-	 * 	<br>Otherwise, replaces the previous list.
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RestContextBuilder widgets(boolean append, Widget...values) {
-		return set(append, REST_widgets, values);
+	public RestContextBuilder widgetsReplace(Widget...values) {
+		return set(REST_widgets, values);
 	}
 
 	@Override /* BeanContextBuilder */
@@ -2086,12 +2197,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public RestContextBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
 		return this;
 	}
 
@@ -2108,6 +2213,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
@@ -2120,12 +2243,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestContextBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -2134,6 +2251,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -2222,6 +2357,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> RestContextBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RestContextBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -2270,7 +2411,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> RestContextBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public RestContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -2294,12 +2435,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RestContextBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -2312,14 +2447,26 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder notBeanClassesRemove(Object...values) {
+	public RestContextBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public RestContextBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -2336,14 +2483,26 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder notBeanPackagesRemove(Object...values) {
+	public RestContextBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RestContextBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public RestContextBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -2356,6 +2515,24 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -2380,6 +2557,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	@Override /* BeanContextBuilder */
 	public RestContextBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RestContextBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

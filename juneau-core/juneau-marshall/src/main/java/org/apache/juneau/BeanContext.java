@@ -250,8 +250,10 @@ public class BeanContext extends Context {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionary(boolean,Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryReplace(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryReplace(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanDictionaryRemove(Class...)}
 	 * 			<li class='jm'>{@link BeanFilterBuilder#beanDictionary(Class...)}
 	 * 		</ul>
 	 * </ul>
@@ -383,8 +385,10 @@ public class BeanContext extends Context {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#beanFilters(boolean,Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersReplace(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersReplace(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersRemove(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#beanFiltersRemove(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1352,7 +1356,9 @@ public class BeanContext extends Context {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(Object...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClasses(boolean, Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesReplace(Class...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesReplace(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesRemove(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanClassesRemove(Object...)}
 	 * 		</ul>
 	 * </ul>
@@ -1419,8 +1425,10 @@ public class BeanContext extends Context {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(String...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackages(boolean, Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesReplace(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesReplace(String...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesRemove(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#notBeanPackagesRemove(String...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -1487,8 +1495,10 @@ public class BeanContext extends Context {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
-	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwaps(boolean, Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Class...)}
 	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
+	 * 			<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *

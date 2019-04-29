@@ -18,7 +18,12 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.uon.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of UON serializers.
@@ -46,6 +51,26 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 		return build(UonSerializer.class);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public UonSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(UonConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (UonConfig a : m.get(UonConfig.class)) {
+			if (! a.addBeanTypes().isEmpty())
+				addBeanTypes(r.bool(a.addBeanTypes()));
+			if (! a.encoding().isEmpty())
+				encoding(r.bool(a.encoding()));
+			if (! a.paramFormat().isEmpty())
+				paramFormat(r.string(a.paramFormat()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -106,6 +131,26 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	 */
 	public UonSerializerBuilder paramFormat(ParamFormat value) {
 		return set(UON_paramFormat, value);
+	}
+
+	/**
+	 * Configuration property:  Format to use for query/form-data/header values.
+	 *
+	 * <p>
+	 * Specifies the format to use for URL GET parameter keys and values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link UonSerializer#UON_paramFormat}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default value is {@link ParamFormat#UON}.
+	 * @return This object (for method chaining).
+	 */
+	public UonSerializerBuilder paramFormat(String value) {
+		return set(UON_paramFormat, ParamFormat.valueOf(value));
 	}
 
 	/**
@@ -323,12 +368,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -337,6 +376,24 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -353,12 +410,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -367,6 +418,24 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -455,6 +524,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> UonSerializerBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -503,7 +578,7 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> UonSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public UonSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -527,12 +602,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -545,14 +614,26 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanClassesRemove(Object...values) {
+	public UonSerializerBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public UonSerializerBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -569,14 +650,26 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder notBeanPackagesRemove(Object...values) {
+	public UonSerializerBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public UonSerializerBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public UonSerializerBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -589,6 +682,24 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -613,6 +724,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public UonSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public UonSerializerBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

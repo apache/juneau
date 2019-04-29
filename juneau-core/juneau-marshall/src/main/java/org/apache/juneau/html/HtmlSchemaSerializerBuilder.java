@@ -20,7 +20,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of HTML Schema serializers.
@@ -48,6 +51,15 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		return build(HtmlSchemaSerializer.class);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public HtmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -423,12 +435,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -441,6 +447,24 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
@@ -449,12 +473,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder beanFieldVisibility(Visibility value) {
 		super.beanFieldVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
 		return this;
 	}
 
@@ -555,6 +573,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> HtmlSchemaSerializerBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -603,7 +627,7 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> HtmlSchemaSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public HtmlSchemaSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -627,12 +651,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -651,12 +669,6 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder notBeanPackages(Object...values) {
 		super.notBeanPackages(values);
 		return this;
@@ -669,14 +681,26 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder notBeanPackagesRemove(Object...values) {
+	public HtmlSchemaSerializerBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public HtmlSchemaSerializerBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public HtmlSchemaSerializerBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -689,6 +713,24 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -713,6 +755,12 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public HtmlSchemaSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public HtmlSchemaSerializerBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

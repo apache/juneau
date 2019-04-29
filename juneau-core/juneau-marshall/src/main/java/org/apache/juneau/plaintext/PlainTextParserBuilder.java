@@ -17,6 +17,8 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of plain-text parsers.
@@ -44,6 +46,15 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 		return build(PlainTextParser.class);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public PlainTextParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -134,12 +145,6 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -148,6 +153,24 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -164,12 +187,6 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -178,6 +195,24 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -266,6 +301,12 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> PlainTextParserBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -314,7 +355,7 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> PlainTextParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public PlainTextParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -338,12 +379,6 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -356,14 +391,26 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder notBeanClassesRemove(Object...values) {
+	public PlainTextParserBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public PlainTextParserBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -380,14 +427,26 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder notBeanPackagesRemove(Object...values) {
+	public PlainTextParserBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public PlainTextParserBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public PlainTextParserBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -400,6 +459,24 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -424,6 +501,12 @@ public class PlainTextParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public PlainTextParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public PlainTextParserBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

@@ -21,6 +21,8 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for creating instances of {@link ParserGroup}.
@@ -124,6 +126,16 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 			}
 		}
 		return new ParserGroup(getPropertyStore(), ArrayUtils.toReverseArray(Parser.class, l));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public ParserGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		return this;
 	}
 
 
@@ -393,12 +405,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -407,6 +413,24 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -423,12 +447,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -437,6 +455,24 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -525,6 +561,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> ParserGroupBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -573,7 +615,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> ParserGroupBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public ParserGroupBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -597,12 +639,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -615,14 +651,26 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanClassesRemove(Object...values) {
+	public ParserGroupBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public ParserGroupBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -639,14 +687,26 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder notBeanPackagesRemove(Object...values) {
+	public ParserGroupBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public ParserGroupBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public ParserGroupBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -659,6 +719,24 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -683,6 +761,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public ParserGroupBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ParserGroupBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

@@ -19,6 +19,10 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.annotation.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Base builder class for building instances of reader-based parsers.
@@ -41,6 +45,24 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 		super(ps);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public ReaderParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(ParserConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (ParserConfig a : m.get(ParserConfig.class)) {
+			if (! a.fileCharset().isEmpty())
+				fileCharset(r.string(a.fileCharset()));
+			if (! a.inputStreamCharset().isEmpty())
+				inputStreamCharset(r.string(a.inputStreamCharset()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -199,12 +221,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -213,6 +229,24 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -229,12 +263,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -243,6 +271,24 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -331,6 +377,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> ReaderParserBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -379,7 +431,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> ReaderParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public ReaderParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -403,12 +455,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -421,14 +467,26 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanClassesRemove(Object...values) {
+	public ReaderParserBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public ReaderParserBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -445,14 +503,26 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder notBeanPackagesRemove(Object...values) {
+	public ReaderParserBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public ReaderParserBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public ReaderParserBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -465,6 +535,24 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -489,6 +577,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* BeanContextBuilder */
 	public ReaderParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public ReaderParserBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

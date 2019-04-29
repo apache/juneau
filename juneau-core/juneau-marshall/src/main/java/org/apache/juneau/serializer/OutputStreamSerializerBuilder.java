@@ -18,6 +18,11 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Base class for all stream-based serializer builders.
@@ -40,6 +45,22 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		super(ps);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public OutputStreamSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(SerializerConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (SerializerConfig a : m.get(SerializerConfig.class)) {
+			if (! a.binaryFormat().isEmpty())
+				binaryFormat(r.string(a.binaryFormat()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -65,6 +86,26 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 		return set(OSSERIALIZER_binaryFormat, value);
 	}
 
+	/**
+	 * Configuration property:  Binary output format.
+	 *
+	 * <p>
+	 * When using the {@link Serializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * when converting the resulting byte array to a string.
+	 *
+	 * <ul>
+	 * 	<li class='jf'>{@link OutputStreamSerializer#OSSERIALIZER_binaryFormat}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is {@link BinaryFormat#HEX}.
+	 * @return This object (for method chaining).
+	 */
+	public OutputStreamSerializerBuilder binaryFormat(String value) {
+		return set(OSSERIALIZER_binaryFormat, BinaryFormat.valueOf(value));
+	}
+
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanClassVisibility(Visibility value) {
 		super.beanClassVisibility(value);
@@ -74,12 +115,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanConstructorVisibility(Visibility value) {
 		super.beanConstructorVisibility(value);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
 		return this;
 	}
 
@@ -96,6 +131,24 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanDictionaryRemove(Object...values) {
 		super.beanDictionaryRemove(values);
 		return this;
@@ -108,12 +161,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public OutputStreamSerializerBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -122,6 +169,24 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -210,6 +275,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> OutputStreamSerializerBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -258,7 +329,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> OutputStreamSerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public OutputStreamSerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -282,12 +353,6 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -300,14 +365,26 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanClassesRemove(Object...values) {
+	public OutputStreamSerializerBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public OutputStreamSerializerBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -324,14 +401,26 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public OutputStreamSerializerBuilder notBeanPackagesRemove(Object...values) {
+	public OutputStreamSerializerBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public OutputStreamSerializerBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public OutputStreamSerializerBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -344,6 +433,24 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -368,6 +475,12 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	@Override /* BeanContextBuilder */
 	public OutputStreamSerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public OutputStreamSerializerBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

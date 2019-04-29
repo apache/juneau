@@ -574,6 +574,27 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
 	}
 
+	@Override /* Context */
+	public HtmlDocSerializerBuilder builder() {
+		return new HtmlDocSerializerBuilder(getPropertyStore());
+	}
+
+	/**
+	 * Instantiates a new clean-slate {@link HtmlDocSerializerBuilder} object.
+	 *
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> HtmlDocSerializerBuilder()</code>.
+	 *
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * the settings of the object called on.
+	 *
+	 * @return A new {@link HtmlDocSerializerBuilder} object.
+	 */
+	public static HtmlDocSerializerBuilder create() {
+		return new HtmlDocSerializerBuilder();
+	}
+
 	@Override /* Serializer */
 	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlDocSerializerSession(this, args);

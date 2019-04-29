@@ -16,7 +16,12 @@ import static org.apache.juneau.BeanTraverseContext.*;
 
 import java.util.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of bean traversals.
@@ -39,6 +44,28 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 		super(ps);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public BeanTraverseBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(BeanConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (BeanConfig a : m.get(BeanConfig.class)) {
+			if (! a.detectRecursions().isEmpty())
+				detectRecursions(r.bool(a.detectRecursions()));
+			if (! a.ignoreRecursions().isEmpty())
+				ignoreRecursions(r.bool(a.ignoreRecursions()));
+			if (! a.initialDepth().isEmpty())
+				initialDepth(r.integer(a.initialDepth()));
+			if (! a.maxDepth().isEmpty())
+				maxDepth(r.integer(a.maxDepth()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -187,12 +214,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public BeanTraverseBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -201,6 +222,24 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -217,12 +256,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public BeanTraverseBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -231,6 +264,24 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -319,6 +370,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> BeanTraverseBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -367,7 +424,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> BeanTraverseBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public BeanTraverseBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -391,12 +448,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public BeanTraverseBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -409,14 +460,26 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public BeanTraverseBuilder notBeanClassesRemove(Object...values) {
+	public BeanTraverseBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public BeanTraverseBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public BeanTraverseBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -433,14 +496,26 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public BeanTraverseBuilder notBeanPackagesRemove(Object...values) {
+	public BeanTraverseBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public BeanTraverseBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public BeanTraverseBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -453,6 +528,24 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -477,6 +570,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* BeanContextBuilder */
 	public BeanTraverseBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public BeanTraverseBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

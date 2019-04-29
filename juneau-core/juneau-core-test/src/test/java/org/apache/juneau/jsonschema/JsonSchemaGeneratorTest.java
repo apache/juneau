@@ -686,7 +686,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void addExample_STRING_wDefault() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("string")
-			.example(String.class, "bar1")
+			.exampleJson(String.class, "bar1")
 			.example(StringBuilder.class, new StringBuilder("bar2"))
 			.example(Character.class, 'b')
 			.example(char.class, 'c')
@@ -709,7 +709,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void addExample_STRING_2darray_wDefault() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.builder().addExamplesTo("string")
-			.example(String.class, "bar1")
+			.exampleJson(String.class, "bar1")
 			.example(StringBuilder.class, new StringBuilder("bar2"))
 			.example(Character.class, 'b')
 			.example(char.class, 'c')

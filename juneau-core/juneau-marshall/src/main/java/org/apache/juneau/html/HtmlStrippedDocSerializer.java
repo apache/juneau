@@ -72,6 +72,27 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		super(ps, produces, accept);
 	}
 
+	@Override /* Context */
+	public HtmlStrippedDocSerializerBuilder builder() {
+		return new HtmlStrippedDocSerializerBuilder(getPropertyStore());
+	}
+
+	/**
+	 * Instantiates a new clean-slate {@link HtmlStrippedDocSerializerBuilder} object.
+	 *
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> HtmlStrippedDocSerializerBuilder()</code>.
+	 *
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * the settings of the object called on.
+	 *
+	 * @return A new {@link HtmlStrippedDocSerializerBuilder} object.
+	 */
+	public static HtmlStrippedDocSerializerBuilder create() {
+		return new HtmlStrippedDocSerializerBuilder();
+	}
+
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlStrippedDocSerializerSession(this, args);

@@ -47,8 +47,10 @@ import org.apache.juneau.serializer.*;
  * 	<li class='ja'>{@link Swaps @Swaps}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Object...)}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(Class...)}
- * 	<li class='jm'>{@link BeanContextBuilder#pojoSwaps(boolean, Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsReplace(Class...)}
  * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Object...)}
+ * 	<li class='jm'>{@link BeanContextBuilder#pojoSwapsRemove(Class...)}
  * </ul>
  *
  * <p>

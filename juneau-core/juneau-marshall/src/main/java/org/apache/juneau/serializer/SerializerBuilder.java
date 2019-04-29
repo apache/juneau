@@ -18,6 +18,11 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of serializers.
@@ -40,6 +45,46 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 		super(ps);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public SerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(SerializerConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (SerializerConfig a : m.get(SerializerConfig.class)) {
+			if (! a.addBeanTypes().isEmpty())
+				addBeanTypes(r.bool(a.addBeanTypes()));
+			if (! a.addRootType().isEmpty())
+				addRootType(r.bool(a.addRootType()));
+			if (a.listener() != SerializerListener.Null.class)
+				listener(a.listener());
+			if (! a.sortCollections().isEmpty())
+				sortCollections(r.bool(a.sortCollections()));
+			if (! a.sortMaps().isEmpty())
+				sortMaps(r.bool(a.sortMaps()));
+			if (! a.trimEmptyCollections().isEmpty())
+				trimEmptyCollections(r.bool(a.trimEmptyCollections()));
+			if (! a.trimEmptyMaps().isEmpty())
+				trimEmptyMaps(r.bool(a.trimEmptyMaps()));
+			if (! a.trimNullProperties().isEmpty())
+				trimNullProperties(r.bool(a.trimNullProperties()));
+			if (! a.trimStrings().isEmpty())
+				trimStrings(r.bool(a.trimStrings()));
+			if (! a.uriContext().isEmpty())
+				uriContext(r.string(a.uriContext()));
+			if (! a.uriRelativity().isEmpty())
+				uriRelativity(r.string(a.uriRelativity()));
+			if (! a.uriResolution().isEmpty())
+				uriResolution(r.string(a.uriResolution()));
+			if (! a.useWhitespace().isEmpty())
+				useWhitespace(r.bool(a.useWhitespace()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -587,12 +632,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SerializerBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -601,6 +640,24 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -617,12 +674,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SerializerBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -631,6 +682,24 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -719,6 +788,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> SerializerBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public SerializerBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -767,7 +842,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> SerializerBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public SerializerBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -791,12 +866,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public SerializerBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -809,14 +878,26 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder notBeanClassesRemove(Object...values) {
+	public SerializerBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public SerializerBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -833,14 +914,26 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder notBeanPackagesRemove(Object...values) {
+	public SerializerBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public SerializerBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public SerializerBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -853,6 +946,24 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -877,6 +988,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public SerializerBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public SerializerBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

@@ -27,6 +27,11 @@ import org.apache.juneau.annotation.*;
 public interface PropertyNamer {
 
 	/**
+	 * Represents a non-existent class.
+	 */
+	public interface Null extends PropertyNamer {}
+
+	/**
 	 * Convert the specified default property name to some other value.
 	 *
 	 * @param name The original bean property name.

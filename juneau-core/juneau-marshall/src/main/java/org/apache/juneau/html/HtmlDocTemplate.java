@@ -56,6 +56,11 @@ package org.apache.juneau.html;
 public interface HtmlDocTemplate {
 
 	/**
+	 * Represents a non-existent doc template.
+	 */
+	public interface Null extends HtmlDocTemplate {}
+
+	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.

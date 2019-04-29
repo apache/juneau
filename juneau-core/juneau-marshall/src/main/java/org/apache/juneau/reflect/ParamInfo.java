@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -215,16 +213,15 @@ public final class ParamInfo {
 			}
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
-			List<Method> methods = mi.getMatching();
 			ClassInfo ci = eInfo.getParamType(index).resolved();
 			if (parentFirst) {
 				ci.appendAnnotationsParentFirst(l, a);
-				for (Method m2 : iterable(methods, true))
+				for (Method m2 : mi.getMatchingParentFirst())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
 						if (a.isInstance(a2))
 							l.add((T)a2);
 			} else {
-				for (Method m2 : methods)
+				for (Method m2 : mi.getMatching())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
 						if (a.isInstance(a2))
 							l.add((T)a2);

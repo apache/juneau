@@ -26,6 +26,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
@@ -48,6 +49,14 @@ public class ClassInfoTest {
 		int value();
 	}
 
+	@Documented
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	@Inherited
+	static @interface AConfig {
+		int value();
+	}
+
 	private static void check(String expected, Object o) {
 		if (o instanceof List) {
 			List<?> l = (List<?>)o;
@@ -67,6 +76,7 @@ public class ClassInfoTest {
 	}
 
 	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public String apply(Object t) {
 			if (t == null)
@@ -87,8 +97,14 @@ public class ClassInfoTest {
 				return "@A(" + ((A)t).value() + ")";
 			if (t instanceof PA)
 				return "@PA(" + ((PA)t).value() + ")";
+			if (t instanceof AConfig)
+				return "@AConfig(" + ((AConfig)t).value() + ")";
 			if (t instanceof AnnotationInfo)
 				return apply(((AnnotationInfo<?>)t).getAnnotation());
+			if (t instanceof AnnotationsMap) {
+				AnnotationsMap m = (AnnotationsMap)t;
+				return new ClassTreeSet((Set)m.keySet()).stream().map(x -> x.getSimpleName() + "=[" + (m.get(x).stream().map(y -> apply(y))).collect(Collectors.joining(",")) +"]").collect(Collectors.joining(","));
+			}
 			return t.toString();
 		}
 	};
@@ -790,23 +806,14 @@ public class ClassInfoTest {
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@A(1)
-	static interface GI1 {}
-	@A(2)
-	static interface GI2 extends GI1 {}
-	@A(3)
-	static interface GI3 {}
-	@A(4)
-	static interface GI4 {}
-	@A(5)
-	static class G1 implements GI1, GI2 {}
-	@A(6)
-	static class G2 extends G1 implements GI3 {}
-	@A(7)
-	static class G3 extends G2 {}
-
+	@A(1) static interface GI1 {}
+	@A(2) static interface GI2 extends GI1 {}
+	@A(3) static interface GI3 {}
+	@A(4) static interface GI4 {}
+	@A(5) static class G1 implements GI1, GI2 {}
+	@A(6) static class G2 extends G1 implements GI3 {}
+	@A(7) static class G3 extends G2 {}
 	static class G4 extends G3 {}
-
 	static class G5 implements GI3 {}
 
 	static ClassInfo g3=of(G3.class), g4=of(G4.class), g5=of(G5.class);
@@ -916,6 +923,46 @@ public class ClassInfoTest {
 	@Test
 	public void getPackageAnnotationInfo() {
 		check("@PA(10)", g3.getPackageAnnotationInfo(PA.class));
+	}
+
+	@Test
+	public void getAnnotationsMap() {
+		check("A=[@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)],PA=[@PA(10)]", g3.getAnnotationsMap());
+		check("A=[@A(7),@A(6),@A(5),@A(3),@A(1),@A(2)],PA=[@PA(10)]", g4.getAnnotationsMap());
+		check("A=[@A(3)],PA=[@PA(10)]", g5.getAnnotationsMap());
+	}
+
+	@Test
+	public void getAnnotationsMapParentFirst() {
+		check("A=[@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)],PA=[@PA(10)]", g3.getAnnotationsMapParentFirst());
+		check("A=[@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)],PA=[@PA(10)]", g4.getAnnotationsMapParentFirst());
+		check("A=[@A(3)],PA=[@PA(10)]", g5.getAnnotationsMapParentFirst());
+	}
+
+	@A(1) @AConfig(1) static interface GBI1 {}
+	@A(2) @AConfig(2) static interface GBI2 extends GBI1 {}
+	@A(3) @AConfig(3) static interface GBI3 {}
+	@A(4) @AConfig(4) static interface GBI4 {}
+	@A(5) @AConfig(5) static class GB1 implements GBI1, GBI2 {}
+	@A(6) @AConfig(6) static class GB2 extends GB1 implements GBI3 {}
+	@A(7) @AConfig(7) static class GB3 extends GB2 {}
+	static class GB4 extends GB3 {}
+	static class GB5 implements GBI3 {}
+
+	static ClassInfo gb3=of(GB3.class), gb4=of(GB4.class), gb5=of(GB5.class);
+
+	@Test
+	public void getConfigAnnotationsMap() {
+		check("AConfig=[@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)]", gb3.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(7),@AConfig(6),@AConfig(5),@AConfig(3),@AConfig(1),@AConfig(2)]", gb4.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(3)]", gb5.getConfigAnnotationsMap());
+	}
+
+	@Test
+	public void getConfigAnnotationsMapParentFirst() {
+		check("AConfig=[@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)]", gb3.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)]", gb4.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(3)]", gb5.getConfigAnnotationsMapParentFirst());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

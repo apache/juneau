@@ -19,8 +19,11 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -50,10 +53,512 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 		return build(RdfParser.class);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public RdfParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(RdfConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (RdfConfig a : m.get(RdfConfig.class)) {
+			if (! a.language().isEmpty())
+				language(r.string(a.language()));
+			if (! a.juneauNs().isEmpty())
+				juneauNs(r.string(a.juneauNs()));
+			if (! a.juneauBpNs().isEmpty())
+				juneauBpNs(r.string(a.juneauBpNs()));
+			if (! a.useXmlNamespaces().isEmpty())
+				useXmlNamespaces(r.bool(a.useXmlNamespaces()));
+			if (! a.arp_iriRules().isEmpty())
+				arp_iriRules(r.string(a.arp_iriRules()));
+			if (! a.arp_errorMode().isEmpty())
+				arp_errorMode(r.string(a.arp_errorMode()));
+			if (! a.arp_embedding().isEmpty())
+				arp_embedding(r.bool(a.arp_embedding()));
+			if (! a.rdfxml_xmlBase().isEmpty())
+				rdfxml_xmlBase(r.string(a.rdfxml_xmlBase()));
+			if (! a.rdfxml_longId().isEmpty())
+				rdfxml_longId(r.bool(a.rdfxml_longId()));
+			if (! a.rdfxml_allowBadUris().isEmpty())
+				rdfxml_allowBadUris(r.bool(a.rdfxml_allowBadUris()));
+			if (! a.rdfxml_relativeUris().isEmpty())
+				rdfxml_relativeUris(r.string(a.rdfxml_relativeUris()));
+			if (! a.rdfxml_showXmlDeclaration().isEmpty())
+				rdfxml_showXmlDeclaration(r.string(a.rdfxml_showXmlDeclaration()));
+			if (! a.rdfxml_showDoctypeDeclaration().isEmpty())
+				rdfxml_showDoctypeDeclaration(r.bool(a.rdfxml_showDoctypeDeclaration()));
+			if (! a.rdfxml_tab().isEmpty())
+				rdfxml_tab(r.integer(a.rdfxml_tab()));
+			if (! a.rdfxml_attributeQuoteChar().isEmpty())
+				rdfxml_attributeQuoteChar(r.string(a.rdfxml_attributeQuoteChar()));
+			if (! a.rdfxml_blockRules().isEmpty())
+				rdfxml_blockRules(r.string(a.rdfxml_blockRules()));
+			if (! a.n3_minGap().isEmpty())
+				n3_minGap(r.integer(a.n3_minGap()));
+			if (! a.n3_objectLists().isEmpty())
+				n3_objectLists(r.bool(a.n3_objectLists()));
+			if (! a.n3_subjectColumn().isEmpty())
+				n3_subjectColumn(r.integer(a.n3_subjectColumn()));
+			if (! a.n3_propertyColumn().isEmpty())
+				n3_propertyColumn(r.integer(a.n3_propertyColumn()));
+			if (! a.n3_indentProperty().isEmpty())
+				n3_indentProperty(r.integer(a.n3_indentProperty()));
+			if (! a.n3_widePropertyLen().isEmpty())
+				n3_widePropertyLen(r.integer(a.n3_widePropertyLen()));
+			if (! a.n3_abbrevBaseUri().isEmpty())
+				n3_abbrevBaseUri(r.bool(a.n3_abbrevBaseUri()));
+			if (! a.n3_usePropertySymbols().isEmpty())
+				n3_usePropertySymbols(r.bool(a.n3_usePropertySymbols()));
+			if (! a.n3_useTripleQuotedStrings().isEmpty())
+				n3_useTripleQuotedStrings(r.bool(a.n3_useTripleQuotedStrings()));
+			if (! a.n3_useDoubles().isEmpty())
+				n3_useDoubles(r.bool(a.n3_useDoubles()));
+			if (! a.collectionFormat().isEmpty())
+				collectionFormat(r.string(a.collectionFormat()));
+			if (! a.looseCollections().isEmpty())
+				looseCollections(r.bool(a.looseCollections()));
+			if (! a.trimWhitespace().isEmpty())
+				trimWhitespace(r.bool(a.trimWhitespace()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder juneauNs(String value) {
+		return set(RDF_juneauNs, value);
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder juneauBpNs(String value) {
+		return set(RDF_juneauBpNs, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>iri_rules</code>.
+	 *
+	 * <p>
+	 * Set the engine for checking and resolving.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
+	 * 		is not good practice.
+	 * 	<li>
+	 * 		<js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces
+	 * 		in IRIs.
+	 * 	<li>
+	 * 		<js>"iri"</js> - Sets the IRI engine to IRI
+	 * 		({@doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
+	 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
+	 *
+	 * </ul>
+	 * 
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder arp_iriRules(String value) {
+		return set(RDF_arp_iriRules, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML ARP property: <code>error-mode</code>.
+	 *
+	 * <p>
+	 * This allows a coarse-grained approach to control of error handling.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"default"</js>
+	 * 	<li><js>"lax"</js>
+	 * 	<li><js>"strict"</js>
+	 * 	<li><js>"strict-ignore"</js>
+	 * 	<li><js>"strict-warning"</js>
+	 * 	<li><js>"strict-error"</js>
+	 * 	<li><js>"strict-fatal"</js>
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder arp_errorMode(String value) {
+		return set(RDF_arp_errorMode, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML ARP property: <code>error-mode</code>.
+	 *
+	 * <p>
+	 * Sets ARP to look for RDF embedded within an enclosing XML document.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder arp_embedding(boolean value) {
+		return set(RDF_arp_embedding, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>xmlbase</code>.
+	 *
+	 * <p>
+	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_xmlBase(String value) {
+		return set(RDF_rdfxml_xmlBase, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>longId</code>.
+	 *
+	 * <p>
+	 * Whether to use long ID's for anon resources.
+	 * Short ID's are easier to read, but can run out of memory on very large models.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_longId(boolean value) {
+		return set(RDF_rdfxml_longId, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>allowBadURIs</code>.
+	 *
+	 * <p>
+	 * URIs in the graph are, by default, checked prior to serialization.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_allowBadUris(boolean value) {
+		return set(RDF_rdfxml_allowBadUris, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>relativeURIs</code>.
+	 *
+	 * <p>
+	 * What sort of relative URIs should be used.
+	 *
+	 * <p>
+	 * A comma separate list of options:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"same-document"</js> - Same-document references (e.g. <js>""</js> or <js>"#foo"</js>)
+	 * 	<li>
+	 * 		<js>"network"</js>  - Network paths (e.g. <js>"//example.org/foo"</js> omitting the URI scheme)
+	 * 	<li>
+	 * 		<js>"absolute"</js> - Absolute paths (e.g. <js>"/foo"</js> omitting the scheme and authority)
+	 * 	<li>
+	 * 		<js>"relative"</js> - Relative path not beginning in <js>"../"</js>
+	 * 	<li>
+	 * 		<js>"parent"</js> - Relative path beginning in <js>"../"</js>
+	 * 	<li>
+	 * 		<js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
+	 * </ul>
+	 *
+	 * <p>
+	 * The default value is <js>"same-document, absolute, relative, parent"</js>.
+	 * To switch off relative URIs use the value <js>""</js>.
+	 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_relativeUris(String value) {
+		return set(RDF_rdfxml_relativeUris, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>showXmlDeclaration</code>.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"true"</js> - Add XML Declaration to the output.
+	 * 	<li>
+	 * 		<js>"false"</js> - Don't add XML Declaration to the output.
+	 * 	<li>
+	 * 		<js>"default"</js> - Only add an XML Declaration when asked to write to an <code>OutputStreamWriter</code>
+	 * 		that uses some encoding other than <code>UTF-8</code> or <code>UTF-16</code>.
+	 * 		In this case the encoding is shown in the XML declaration.
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_showXmlDeclaration(String value) {
+		return set(RDF_rdfxml_showXmlDeclaration, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>showDoctypeDeclaration</code>.
+	 *
+	 * <p>
+	 * If true, an XML doctype declaration is included in the output.
+	 * This declaration includes a <code>!ENTITY</code> declaration for each prefix mapping in the model, and any
+	 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
+	 * invocation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_showDoctypeDeclaration(boolean value) {
+		return set(RDF_rdfxml_showDoctypeDeclaration, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>tab</code>.
+	 *
+	 * <p>
+	 * The number of spaces with which to indent XML child elements.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_tab(int value) {
+		return set(RDF_rdfxml_tab, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>attributeQuoteChar</code>.
+	 *
+	 * <p>
+	 * The XML attribute quote character.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_attributeQuoteChar(String value) {
+		return set(RDF_rdfxml_attributeQuoteChar, value);
+	}
+
+	/**
+	 * Configuration property:  RDF/XML property: <code>blockRules</code>.
+	 *
+	 * <p>
+	 * A list of <code>Resource</code> or a <code>String</code> being a comma separated list of fragment IDs from
+	 * {@doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
+	 * rules that will not be used.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder rdfxml_blockRules(String value) {
+		return set(RDF_rdfxml_blockRules, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>minGap</code>.
+	 *
+	 * <p>
+	 * Minimum gap between items on a line.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_minGap(int value) {
+		return set(RDF_n3_minGap, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>objectLists</code>.
+	 *
+	 * <p>
+	 * Print object lists as comma separated lists.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_objectLists(boolean value) {
+		return set(RDF_n3_objectLists, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>subjectColumn</code>.
+	 *
+	 * <p>
+	 * If the subject is shorter than this value, the first property may go on the same line.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_subjectColumn(int value) {
+		return set(RDF_n3_subjectColumn, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>propertyColumn</code>.
+	 *
+	 * <p>
+	 * Width of the property column.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_propertyColumn(int value) {
+		return set(RDF_n3_propertyColumn, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>indentProperty</code>.
+	 *
+	 * <p>
+	 * Width to indent properties.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_indentProperty(int value) {
+		return set(RDF_n3_indentProperty, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>widePropertyLen</code>.
+	 *
+	 * <p>
+	 * Width of the property column.
+	 * Must be longer than <code>propertyColumn</code>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_widePropertyLen(int value) {
+		return set(RDF_n3_widePropertyLen, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>abbrevBaseURI</code>.
+	 *
+	 * <p>
+	 * Control whether to use abbreviations <code>&lt;&gt;</code> or <code>&lt;#&gt;</code>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_abbrevBaseUri(boolean value) {
+		return set(RDF_n3_abbrevBaseUri, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>usePropertySymbols</code>.
+	 *
+	 * <p>
+	 * Control whether to use <code>a</code>, <code>=</code> and <code>=&gt;</code> in output
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_usePropertySymbols(boolean value) {
+		return set(RDF_n3_usePropertySymbols, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>useTripleQuotedStrings</code>.
+	 *
+	 * <p>
+	 * Allow the use of <code>"""</code> to delimit long strings.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_useTripleQuotedStrings(boolean value) {
+		return set(RDF_n3_useTripleQuotedStrings, value);
+	}
+
+	/**
+	 * Configuration property:  N3/Turtle property: <code>useDoubles</code>.
+	 *
+	 * <p>
+	 * Allow the use doubles as <code>123.456</code>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder n3_useDoubles(boolean value) {
+		return set(RDF_n3_useDoubles, value);
+	}
+
+	/**
+	 * Configuration property:  RDF format for representing collections and arrays.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"SEQ"</js> - RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"BAG"</js> - RDF Bag container.
+	 * 	<li>
+	 * 		<js>"LIST"</js> - RDF List container.
+	 * 	<li>
+	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
+	 * 		lost.
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public RdfParserBuilder collectionFormat(String value) {
+		return set(RDF_collectionFormat, value);
+	}
 
 	/**
 	 * Configuration property:  RDF format for representing collections and arrays.
@@ -422,12 +927,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -436,6 +935,24 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -452,12 +969,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -466,6 +977,24 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -554,6 +1083,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> RdfParserBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public RdfParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -602,7 +1137,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> RdfParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public RdfParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -626,12 +1161,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public RdfParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -644,14 +1173,26 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanClassesRemove(Object...values) {
+	public RdfParserBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public RdfParserBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -668,14 +1209,26 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder notBeanPackagesRemove(Object...values) {
+	public RdfParserBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public RdfParserBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public RdfParserBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -688,6 +1241,24 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -712,6 +1283,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public RdfParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public RdfParserBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

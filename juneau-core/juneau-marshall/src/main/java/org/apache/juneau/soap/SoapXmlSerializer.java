@@ -70,6 +70,27 @@ public final class SoapXmlSerializer extends XmlSerializer {
 		soapAction = getStringProperty(SOAPXML_SOAPAction, "http://www.w3.org/2003/05/soap-envelope");
 	}
 
+	@Override /* Context */
+	public SoapXmlSerializerBuilder builder() {
+		return new SoapXmlSerializerBuilder(getPropertyStore());
+	}
+
+	/**
+	 * Instantiates a new clean-slate {@link SoapXmlSerializerBuilder} object.
+	 *
+	 * <p>
+	 * This is equivalent to simply calling <code><jk>new</jk> SoapXmlSerializerBuilder()</code>.
+	 *
+	 * <p>
+	 * Note that this method creates a builder initialized to all default settings, whereas {@link #builder()} copies
+	 * the settings of the object called on.
+	 *
+	 * @return A new {@link SoapXmlSerializerBuilder} object.
+	 */
+	public static SoapXmlSerializerBuilder create() {
+		return new SoapXmlSerializerBuilder();
+	}
+
 	@Override /* Serializer */
 	public WriterSerializerSession createSession(SerializerSessionArgs args) {
 		return new SoapXmlSerializerSession(this, args);

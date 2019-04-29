@@ -23,13 +23,14 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 public class MethodInfoTest {
 
 	@Documented
-	@Target(METHOD)
+	@Target({METHOD,TYPE})
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface A {
@@ -37,10 +38,18 @@ public class MethodInfoTest {
 	}
 
 	@Documented
-	@Target(METHOD)
+	@Target({METHOD,TYPE})
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface AX {
+		String value();
+	}
+
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface AConfig {
 		String value();
 	}
 
@@ -49,6 +58,7 @@ public class MethodInfoTest {
 	}
 
 	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		public String apply(Object t) {
 			if (t == null)
@@ -61,6 +71,14 @@ public class MethodInfoTest {
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
 			if (t instanceof A)
 				return "@A(" + ((A)t).value() + ")";
+			if (t instanceof PA)
+				return "@PA(" + ((PA)t).value() + ")";
+			if (t instanceof AConfig)
+				return "@AConfig(" + ((AConfig)t).value() + ")";
+			if (t instanceof AnnotationsMap) {
+				AnnotationsMap m = (AnnotationsMap)t;
+				return new ClassTreeSet((Set)m.keySet()).stream().map(x -> x.getSimpleName() + "=[" + (m.get(x).stream().map(y -> apply(y))).collect(Collectors.joining(",")) +"]").collect(Collectors.joining(","));
+			}
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getSimpleName();
 			return t.toString();
@@ -137,6 +155,7 @@ public class MethodInfoTest {
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@A("C1")
 	public static interface C1 {
 		@A("a1") void a1();
 		@A("a2a") void a2();
@@ -145,6 +164,7 @@ public class MethodInfoTest {
 		void a5();
 	}
 
+	@A("C2")
 	public static class C2 implements C1 {
 		@Override public void a1() {}
 		@Override @A("a2b") public void a2() {}
@@ -153,6 +173,7 @@ public class MethodInfoTest {
 		@Override public void a5() {}
 	}
 
+	@A("C3")
 	public static class C3 extends C2 {
 		@Override public void a1() {}
 		@Override public void a2() {}
@@ -170,11 +191,11 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotations() {
-		check("@A(a1)", c_a1.getAnnotations(A.class));
-		check("@A(a2b),@A(a2a)", c_a2.getAnnotations(A.class));
-		check("@A(a3)", c_a3.getAnnotations(A.class));
-		check("@A(a4)", c_a4.getAnnotations(A.class));
-		check("", c_a5.getAnnotations(A.class));
+		check("@A(a1),@A(C3),@A(C2),@A(C1)", c_a1.getAnnotations(A.class));
+		check("@A(a2b),@A(a2a),@A(C3),@A(C2),@A(C1)", c_a2.getAnnotations(A.class));
+		check("@A(a3),@A(C3),@A(C2),@A(C1)", c_a3.getAnnotations(A.class));
+		check("@A(a4),@A(C3),@A(C2),@A(C1)", c_a4.getAnnotations(A.class));
+		check("@A(C3),@A(C2),@A(C1)", c_a5.getAnnotations(A.class));
 	}
 
 	@Test
@@ -188,29 +209,29 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst() {
-		check("@A(a1)", c_a1.getAnnotationsParentFirst(A.class));
-		check("@A(a2a),@A(a2b)", c_a2.getAnnotationsParentFirst(A.class));
-		check("@A(a3)", c_a3.getAnnotationsParentFirst(A.class));
-		check("@A(a4)", c_a4.getAnnotationsParentFirst(A.class));
-		check("", c_a5.getAnnotationsParentFirst(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.getAnnotationsParentFirst(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.getAnnotationsParentFirst(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.getAnnotationsParentFirst(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotationsParentFirst(A.class));
+		check("@A(C1),@A(C2),@A(C3)", c_a5.getAnnotationsParentFirst(A.class));
 	}
 
 	@Test
 	public void appendAnnotations() {
-		check("@A(a1)", c_a1.appendAnnotations(new ArrayList<>(), A.class));
-		check("@A(a2b),@A(a2a)", c_a2.appendAnnotations(new ArrayList<>(), A.class));
-		check("@A(a3)", c_a3.appendAnnotations(new ArrayList<>(), A.class));
-		check("@A(a4)", c_a4.appendAnnotations(new ArrayList<>(), A.class));
-		check("", c_a5.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(a1),@A(C3),@A(C2),@A(C1)", c_a1.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(a2b),@A(a2a),@A(C3),@A(C2),@A(C1)", c_a2.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(a3),@A(C3),@A(C2),@A(C1)", c_a3.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(a4),@A(C3),@A(C2),@A(C1)", c_a4.appendAnnotations(new ArrayList<>(), A.class));
+		check("@A(C3),@A(C2),@A(C1)", c_a5.appendAnnotations(new ArrayList<>(), A.class));
 	}
 
 	@Test
 	public void appendAnnotationsParentFirst() {
-		check("@A(a1)", c_a1.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("@A(a2a),@A(a2b)", c_a2.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("@A(a3)", c_a3.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("@A(a4)", c_a4.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
-		check("", c_a5.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
+		check("@A(C1),@A(C2),@A(C3)", c_a5.appendAnnotationsParentFirst(new ArrayList<>(), A.class));
 	}
 
 	@Test
@@ -229,6 +250,76 @@ public class MethodInfoTest {
 		check("@A(a3)", c_a3.getAnnotation(AX.class, A.class));
 		check("@A(a4)", c_a4.getAnnotation(AX.class, A.class));
 		check(null, c_a5.getAnnotation(AX.class, A.class));
+	}
+
+	@Test
+	public void getAnnotationsMap() {
+		check("A=[@A(a1),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a1.getAnnotationsMap());
+		check("A=[@A(a2b),@A(a2a),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a2.getAnnotationsMap());
+		check("A=[@A(a3),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a3.getAnnotationsMap());
+		check("A=[@A(a4),@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a4.getAnnotationsMap());
+		check("A=[@A(C3),@A(C2),@A(C1)],PA=[@PA(10)]", c_a5.getAnnotationsMap());
+	}
+
+	@Test
+	public void getAnnotationsMapParentFirst() {
+		check("A=[@A(C1),@A(C2),@A(C3),@A(a1)],PA=[@PA(10)]", c_a1.getAnnotationsMapParentFirst());
+		check("A=[@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)],PA=[@PA(10)]", c_a2.getAnnotationsMapParentFirst());
+		check("A=[@A(C1),@A(C2),@A(C3),@A(a3)],PA=[@PA(10)]", c_a3.getAnnotationsMapParentFirst());
+		check("A=[@A(C1),@A(C2),@A(C3),@A(a4)],PA=[@PA(10)]", c_a4.getAnnotationsMapParentFirst());
+		check("A=[@A(C1),@A(C2),@A(C3)],PA=[@PA(10)]", c_a5.getAnnotationsMapParentFirst());
+	}
+
+	@A("C1") @AConfig("C1")
+	public static interface CB1 {
+		@A("a1") @AConfig("a1") void a1();
+		@A("a2a") @AConfig("a2a") void a2();
+		@A("a3") @AConfig("a3") void a3(CharSequence foo);
+		void a4();
+		void a5();
+	}
+
+	@A("C2") @AConfig("C2")
+	public static class CB2 implements CB1 {
+		@Override public void a1() {}
+		@Override @A("a2b") @AConfig("a2b") public void a2() {}
+		@Override public void a3(CharSequence s) {}
+		@Override public void a4() {}
+		@Override public void a5() {}
+	}
+
+	@A("C3") @AConfig("C3")
+	public static class CB3 extends CB2 {
+		@Override public void a1() {}
+		@Override public void a2() {}
+		@Override public void a3(CharSequence foo) {}
+		@Override @A("a4") @AConfig("a4") public void a4() {}
+		@Override public void a5() {}
+	}
+
+	static MethodInfo
+		cb_a1 = ofm(CB3.class, "a1"),
+		cb_a2 = ofm(CB3.class, "a2"),
+		cb_a3 = ofm(CB3.class, "a3", CharSequence.class),
+		cb_a4 = ofm(CB3.class, "a4"),
+		cb_a5 = ofm(CB3.class, "a5");
+
+	@Test
+	public void getConfigAnnotationsMap() {
+		check("AConfig=[@AConfig(a1),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a1.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(a2b),@AConfig(a2a),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a2.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(a3),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a3.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(a4),@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a4.getConfigAnnotationsMap());
+		check("AConfig=[@AConfig(C3),@AConfig(C2),@AConfig(C1)]", cb_a5.getConfigAnnotationsMap());
+	}
+
+	@Test
+	public void getConfigAnnotationsMapParentFirst() {
+		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a1)]", cb_a1.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a2a),@AConfig(a2b)]", cb_a2.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a3)]", cb_a3.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)]", cb_a4.getConfigAnnotationsMapParentFirst());
+		check("AConfig=[@AConfig(C1),@AConfig(C2),@AConfig(C3)]", cb_a5.getConfigAnnotationsMapParentFirst());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

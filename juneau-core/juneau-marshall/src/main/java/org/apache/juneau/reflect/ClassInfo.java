@@ -927,6 +927,78 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Constructs an {@link AnnotationsMap} of all annotations found on this class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getAnnotationsMap() {
+		return appendAnnotationsMap(new AnnotationsMap());
+	}
+
+	/**
+	 * Constructs an {@link AnnotationsMap} of all annotations found on this class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getAnnotationsMapParentFirst() {
+		return appendAnnotationsMapParentFirst(new AnnotationsMap());
+	}
+
+	/**
+	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getConfigAnnotationsMap() {
+		return appendAnnotationsMap(new ConfigAnnotationsMap());
+	}
+
+	/**
+	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getConfigAnnotationsMapParentFirst() {
+		return appendAnnotationsMapParentFirst(new ConfigAnnotationsMap());
+	}
+
+	/**
 	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
 	 * list.
 	 *
@@ -1028,6 +1100,26 @@ public final class ClassInfo {
 		for (ClassInfo ci : getParentsParentFirst())
 			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
 		return l;
+	}
+
+	AnnotationsMap appendAnnotationsMap(AnnotationsMap m) {
+		for (ClassInfo ci : getParents())
+			m.addAll(ci.c.getDeclaredAnnotations());
+		for (ClassInfo ci : getInterfaces())
+			m.addAll(ci.c.getDeclaredAnnotations());
+		if (c.getPackage() != null)
+			m.addAll(c.getPackage().getDeclaredAnnotations());
+		return m;
+	}
+
+	AnnotationsMap appendAnnotationsMapParentFirst(AnnotationsMap m) {
+		if (c.getPackage() != null)
+			m.addAll(c.getPackage().getDeclaredAnnotations());
+		for (ClassInfo ci : getInterfacesParentFirst())
+			m.addAll(ci.c.getDeclaredAnnotations());
+		for (ClassInfo ci : getParentsParentFirst())
+			m.addAll(ci.c.getDeclaredAnnotations());
+		return m;
 	}
 
 	private <T extends Annotation> T findAnnotation(Class<T> a) {

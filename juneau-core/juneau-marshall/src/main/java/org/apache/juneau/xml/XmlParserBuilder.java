@@ -21,7 +21,11 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
+import org.apache.juneau.xml.annotation.*;
 
 /**
  * Builder class for building XML parsers.
@@ -49,6 +53,30 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 		return build(XmlParser.class);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public XmlParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(XmlConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (XmlConfig a : m.get(XmlConfig.class)) {
+			if (a.eventAllocator() != XmlEventAllocator.Null.class)
+				eventAllocator(a.eventAllocator());
+			if (! a.preserveRootElement().isEmpty())
+				preserveRootElement(r.bool(a.preserveRootElement()));
+			if (a.reporter() != XmlReporter.Null.class)
+				reporter(a.reporter());
+			if (a.resolver() != XmlResolver.Null.class)
+				resolver(a.resolver());
+			if (! a.validating().isEmpty())
+				validating(r.bool(a.validating()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -69,6 +97,24 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public XmlParserBuilder eventAllocator(XMLEventAllocator value) {
+		return set(XML_eventAllocator, value);
+	}
+
+	/**
+	 * Configuration property:  XML event allocator.
+	 *
+	 * <p>
+	 * Associates an {@link XMLEventAllocator} with this parser.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlParser#XML_eventAllocator}
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public XmlParserBuilder eventAllocator(Class<? extends XMLEventAllocator> value) {
 		return set(XML_eventAllocator, value);
 	}
 
@@ -129,6 +175,24 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
+	 * Configuration property:  XML reporter.
+	 *
+	 * <p>
+	 * Associates an {@link XMLReporter} with this parser.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlParser#XML_reporter}
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public XmlParserBuilder reporter(Class<? extends XMLReporter> value) {
+		return set(XML_reporter, value);
+	}
+
+	/**
 	 * Configuration property:  XML resolver.
 	 *
 	 * <p>
@@ -143,6 +207,24 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public XmlParserBuilder resolver(XMLResolver value) {
+		return set(XML_resolver, value);
+	}
+
+	/**
+	 * Configuration property:  XML resolver.
+	 *
+	 * <p>
+	 * Associates an {@link XMLResolver} with this parser.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link XmlParser#XML_resolver}
+	 * </ul>
+	 *
+	 * @param value The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public XmlParserBuilder resolver(Class<? extends XMLResolver> value) {
 		return set(XML_resolver, value);
 	}
 
@@ -268,12 +350,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlParserBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -282,6 +358,24 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -298,12 +392,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlParserBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -312,6 +400,24 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -400,6 +506,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> XmlParserBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public XmlParserBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -448,7 +560,7 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> XmlParserBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public XmlParserBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -472,12 +584,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public XmlParserBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -490,14 +596,26 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder notBeanClassesRemove(Object...values) {
+	public XmlParserBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public XmlParserBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -514,14 +632,26 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder notBeanPackagesRemove(Object...values) {
+	public XmlParserBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public XmlParserBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public XmlParserBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -534,6 +664,24 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -558,6 +706,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* BeanContextBuilder */
 	public XmlParserBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public XmlParserBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

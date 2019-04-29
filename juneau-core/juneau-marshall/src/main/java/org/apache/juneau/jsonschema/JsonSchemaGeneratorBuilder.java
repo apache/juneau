@@ -19,6 +19,11 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of JSON Schema generators.
@@ -46,6 +51,36 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		return build(JsonSchemaGenerator.class);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		super.applyAnnotations(m, sr);
+		if (! m.containsKey(JsonSchemaConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (JsonSchemaConfig a : m.get(JsonSchemaConfig.class)) {
+			if (! a.addDescriptionsTo().isEmpty())
+				addDescriptionsTo(r.string(a.addDescriptionsTo()));
+			if (! a.addExamplesTo().isEmpty())
+				addExamplesTo(r.string(a.addExamplesTo()));
+			if (! a.allowNestedDescriptions().isEmpty())
+				allowNestedDescriptions(r.bool(a.allowNestedDescriptions()));
+			if (! a.allowNestedExamples().isEmpty())
+				allowNestedExamples(r.bool(a.allowNestedExamples()));
+			if (a.beanDefMapper() != BeanDefMapper.Null.class)
+				beanDefMapper(a.beanDefMapper());
+			for (CSEntry e : a.defaultSchemas())
+				defaultSchema(e.key(), new ObjectMap(r.string(e.value())));
+			if (! a.ignoreTypes().isEmpty())
+				ignoreTypes(r.string(a.ignoreTypes()));
+			if (! a.useBeanDefs().isEmpty())
+				useBeanDefs(r.bool(a.useBeanDefs()));
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
@@ -111,10 +146,48 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
 	 * </ul>
 	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchemaGeneratorBuilder allowNestedDescriptions(boolean value) {
+		return set(JSONSCHEMA_allowNestedDescriptions, value);
+	}
+
+	/**
+	 * Configuration property:  Allow nested descriptions.
+	 *
+	 * <p>
+	 * Identifies whether nested descriptions are allowed in schema definitions.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions}
+	 * </ul>
+	 *
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaGeneratorBuilder allowNestedDescriptions() {
 		return set(JSONSCHEMA_allowNestedDescriptions, true);
+	}
+
+	/**
+	 * Configuration property:  Allow nested examples.
+	 *
+	 * <p>
+	 * Identifies whether nested examples are allowed in schema definitions.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples}
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchemaGeneratorBuilder allowNestedExamples(boolean value) {
+		return set(JSONSCHEMA_allowNestedExamples, value);
 	}
 
 	/**
@@ -175,7 +248,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>The default is <jk>false</jk>.
 	 * @return This object (for method chaining).
 	 */
 	public JsonSchemaGeneratorBuilder beanDefMapper(BeanDefMapper value) {
@@ -203,6 +275,58 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	 */
 	public JsonSchemaGeneratorBuilder defaultSchema(Class<?> c, ObjectMap schema) {
 		return addTo(JSONSCHEMA_defaultSchemas, c.getName(), schema);
+	}
+
+	/**
+	 * Configuration property:  Ignore types from schema definitions.
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
+	 * Swagger documentation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
+	 * 	<ja>@RestResource</ja>(
+	 * 			properties={
+	 * 				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
+	 * 			}
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * @param value
+	 * 	A comma-delimited list of types to ignore.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchemaGeneratorBuilder ignoreTypes(String value) {
+		return set(JSONSCHEMA_ignoreTypes, value);
+	}
+
+	/**
+	 * Configuration property:  Use bean definitions.
+	 *
+	 * <p>
+	 * When enabled, schemas on beans will be serialized as the following:
+	 * <p class='bcode w800'>
+	 * 	{
+	 * 		type: <js>'object'</js>,
+	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
+	 * <p>
+	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>The default is <jk>false</jk>.
+	 * @return This object (for method chaining).
+	 */
+	public JsonSchemaGeneratorBuilder useBeanDefs(boolean value) {
+		return set(JSONSCHEMA_useBeanDefs, value);
 	}
 
 	/**
@@ -241,12 +365,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanDictionary(boolean append, Object...values) {
-		super.beanDictionary(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beanDictionary(Class<?>...values) {
 		super.beanDictionary(values);
 		return this;
@@ -255,6 +373,24 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beanDictionary(Object...values) {
 		super.beanDictionary(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanDictionaryReplace(Class<?>...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanDictionaryReplace(Object...values) {
+		super.beanDictionaryReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanDictionaryRemove(Class<?>...values) {
+		super.beanDictionaryRemove(values);
 		return this;
 	}
 
@@ -271,12 +407,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder beanFilters(boolean append, Object...values) {
-		super.beanFilters(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beanFilters(Class<?>...values) {
 		super.beanFilters(values);
 		return this;
@@ -285,6 +415,24 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder beanFilters(Object...values) {
 		super.beanFilters(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanFiltersReplace(Class<?>...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanFiltersReplace(Object...values) {
+		super.beanFiltersReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder beanFiltersRemove(Class<?>...values) {
+		super.beanFiltersRemove(values);
 		return this;
 	}
 
@@ -373,6 +521,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
+	public <T> JsonSchemaGeneratorBuilder exampleJson(Class<T> c, String value) {
+		super.exampleJson(c, value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder ignoreInvocationExceptionsOnGetters(boolean value) {
 		super.ignoreInvocationExceptionsOnGetters(value);
 		return this;
@@ -421,7 +575,7 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public <T> JsonSchemaGeneratorBuilder implClass(Class<T> interfaceClass, Class<? extends T> implClass) {
+	public JsonSchemaGeneratorBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		super.implClass(interfaceClass, implClass);
 		return this;
 	}
@@ -445,12 +599,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClasses(boolean append, Object...values) {
-		super.notBeanClasses(append, values);
-		return this;
-	}
-
-	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder notBeanClasses(Class<?>...values) {
 		super.notBeanClasses(values);
 		return this;
@@ -463,14 +611,26 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanClassesRemove(Object...values) {
+	public JsonSchemaGeneratorBuilder notBeanClassesReplace(Class<?>...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder notBeanClassesReplace(Object...values) {
+		super.notBeanClassesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder notBeanClassesRemove(Class<?>...values) {
 		super.notBeanClassesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackages(boolean append, Object...values) {
-		super.notBeanPackages(append, values);
+	public JsonSchemaGeneratorBuilder notBeanClassesRemove(Object...values) {
+		super.notBeanClassesRemove(values);
 		return this;
 	}
 
@@ -487,14 +647,26 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder notBeanPackagesRemove(Object...values) {
+	public JsonSchemaGeneratorBuilder notBeanPackagesReplace(String...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder notBeanPackagesReplace(Object...values) {
+		super.notBeanPackagesReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder notBeanPackagesRemove(String...values) {
 		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
 	@Override /* BeanContextBuilder */
-	public JsonSchemaGeneratorBuilder pojoSwaps(boolean append, Object...values) {
-		super.pojoSwaps(append, values);
+	public JsonSchemaGeneratorBuilder notBeanPackagesRemove(Object...values) {
+		super.notBeanPackagesRemove(values);
 		return this;
 	}
 
@@ -507,6 +679,24 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder pojoSwaps(Object...values) {
 		super.pojoSwaps(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder pojoSwapsReplace(Class<?>...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder pojoSwapsReplace(Object...values) {
+		super.pojoSwapsReplace(values);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder pojoSwapsRemove(Class<?>...values) {
+		super.pojoSwapsRemove(values);
 		return this;
 	}
 
@@ -531,6 +721,12 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* BeanContextBuilder */
 	public JsonSchemaGeneratorBuilder timeZone(TimeZone value) {
 		super.timeZone(value);
+		return this;
+	}
+
+	@Override /* BeanContextBuilder */
+	public JsonSchemaGeneratorBuilder useEnumNames(boolean value) {
+		super.useEnumNames(value);
 		return this;
 	}
 

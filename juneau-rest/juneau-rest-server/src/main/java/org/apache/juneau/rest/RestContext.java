@@ -1629,7 +1629,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContextBuilder#parsers(Object...)}
 	 * 			<li class='jm'>{@link RestContextBuilder#parsers(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#parsers(boolean,Object...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#parsersReplace(Object...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#parsersReplace(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2182,7 +2183,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContextBuilder#serializers(Object...)}
 	 * 			<li class='jm'>{@link RestContextBuilder#serializers(Class...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#serializers(boolean,Object...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#serializersReplace(Object...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#serializersReplace(Class...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2282,9 +2284,10 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeaders(boolean,Map)}
+	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeaders(Map)}
 	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeaders(String...)}
 	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeader(String,String)}
+	 * 			<li class='jm'>{@link RestContextBuilder#staticFileResponseHeadersReplace(Map)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2421,8 +2424,10 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#produces(boolean,String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#produces(boolean,MediaType...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#produces(String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#produces(MediaType...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#producesReplace(String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#producesReplace(MediaType...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2482,8 +2487,10 @@ public final class RestContext extends BeanContext {
 	 * 		</ul>
 	 * 	<li><b>Methods:</b>
 	 * 		<ul>
-	 * 			<li class='jm'>{@link RestContextBuilder#consumes(boolean,String...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#consumes(boolean,MediaType...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#consumes(String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#consumes(MediaType...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#consumesReplace(String...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#consumesReplace(MediaType...)}
 	 * 		</ul>
 	 * </ul>
 	 *
@@ -2911,7 +2918,8 @@ public final class RestContext extends BeanContext {
 	 * 		<ul>
 	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Class...)}
 	 * 			<li class='jm'>{@link RestContextBuilder#widgets(Widget...)}
-	 * 			<li class='jm'>{@link RestContextBuilder#widgets(boolean,Widget...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#widgetsReplace(Class...)}
+	 * 			<li class='jm'>{@link RestContextBuilder#widgetsReplace(Widget...)}
 	 * 		</ul>
 	 * </ul>
 	 *

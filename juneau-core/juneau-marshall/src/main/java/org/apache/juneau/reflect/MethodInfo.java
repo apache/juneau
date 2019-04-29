@@ -98,6 +98,17 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return matching;
 	}
 
+	/**
+	 * Convenience method for retrieving values in {@link #getMatching()} in parent-to-child order.
+	 *
+	 * @return
+	 * 	All matching methods including this method itself.
+	 * 	<br>Methods are ordered from parent-to-child order.
+	 */
+	public Iterable<Method> getMatchingParentFirst() {
+		return iterable(getMatching(), true);
+	}
+
 	private static List<Method> findMatching(List<Method> l, Method m, Class<?> c) {
 		for (Method m2 : c.getDeclaredMethods())
 			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
@@ -127,7 +138,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	A list of all matching annotations found in child-to-parent order, or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a, false);
+		return appendAnnotations(new ArrayList<>(), a);
 	}
 
 	/**
@@ -139,7 +150,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotationsParentFirst(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a, true);
+		return appendAnnotationsParentFirst(new ArrayList<>(), a);
 	}
 
 	/**
@@ -153,8 +164,15 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param a The annotation.
 	 * @return The same list.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		return appendAnnotations(l, a, false);
+		for (Method m2 : getMatching())
+			for (Annotation a2 :  m2.getDeclaredAnnotations())
+				if (a.isInstance(a2))
+					l.add((T)a2);
+		getReturnType().resolved().appendAnnotations(l, a);
+		declaringClass.appendAnnotations(l, a);
+		return l;
 	}
 
 	/**
@@ -165,15 +183,11 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param a The annotation.
 	 * @return The same list.
 	 */
-	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
-		return appendAnnotations(l, a, true);
-	}
-
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
-		List<Method> methods = getMatching();
-		for (Method m2 : iterable(methods, parentFirst))
-			for (Annotation a2 :  m2.getAnnotations())
+	public <T extends Annotation> List<T> appendAnnotationsParentFirst(List<T> l, Class<T> a) {
+		declaringClass.appendAnnotationsParentFirst(l, a);
+		for (Method m2 : getMatchingParentFirst())
+			for (Annotation a2 :  m2.getDeclaredAnnotations())
 				if (a.isInstance(a2))
 					l.add((T)a2);
 		getReturnType().resolved().appendAnnotations(l, a);
@@ -196,6 +210,82 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return null;
 	}
 
+	/**
+	 * Constructs an {@link AnnotationsMap} of all annotations found on this method.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On this method and matching methods ordered child-to-parent.
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getAnnotationsMap() {
+		return appendAnnotationsMap(new AnnotationsMap());
+	}
+
+	/**
+	 * Constructs an {@link AnnotationsMap} of all annotations found on this method.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * 	<li>On this method and matching methods ordered parent-to-child.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getAnnotationsMapParentFirst() {
+		return appendAnnotationsMapParentFirst(new AnnotationsMap());
+	}
+
+	/**
+	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On this method and matching methods ordered child-to-parent.
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getConfigAnnotationsMap() {
+		return appendAnnotationsMap(new ConfigAnnotationsMap());
+	}
+
+	/**
+	 * Constructs an {@link ConfigAnnotationsMap} of all annotations found on this class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * 	<li>On this method and matching methods ordered parent-to-child.
+	 * </ol>
+	 *
+	 * @return A new {@link AnnotationsMap} object on every call.
+	 */
+	public AnnotationsMap getConfigAnnotationsMapParentFirst() {
+		return appendAnnotationsMapParentFirst(new ConfigAnnotationsMap());
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	protected <T extends Annotation> T findAnnotation(Class<T> a) {
@@ -204,6 +294,20 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 				if (a.isInstance(a2))
 					return (T)a2;
 		return getReturnType().resolved().getAnnotation(a);
+	}
+
+	AnnotationsMap appendAnnotationsMap(AnnotationsMap m) {
+		for (Method m2 : getMatching())
+			m.addAll(m2.getDeclaredAnnotations());
+		declaringClass.appendAnnotationsMap(m);
+		return m;
+	}
+
+	AnnotationsMap appendAnnotationsMapParentFirst(AnnotationsMap m) {
+		declaringClass.appendAnnotationsMapParentFirst(m);
+		for (Method m2 : getMatchingParentFirst())
+			m.addAll(m2.getDeclaredAnnotations());
+		return m;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

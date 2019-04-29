@@ -20,8 +20,13 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.transform.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of serializers, parsers, and bean contexts.
@@ -81,6 +86,117 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Override /* ContextBuilder */
 	public BeanContext build() {
 		return build(BeanContext.class);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Apply annotations to this builder.
+	 *
+	 * @param m
+	 * 	Annotations map.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param sr The string resolver to use for resolving variables in the annotations.
+	 * @return This object (for method chaining).
+	 * @throws ParseException
+	 */
+	public BeanContextBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
+		if (! m.containsKey(BeanConfig.class))
+			return this;
+		ObjectResolver r = new ObjectResolver(sr);
+		for (BeanConfig a : m.get(BeanConfig.class)) {
+			if (! a.beanClassVisibility().isEmpty())
+				beanClassVisibility(r.visibility(a.beanClassVisibility()));
+			if (! a.beanConstructorVisibility().isEmpty())
+				beanConstructorVisibility(r.visibility(a.beanConstructorVisibility()));
+			if (a.beanDictionary().length != 0)
+				beanDictionary(a.beanDictionary());
+			if (a.beanDictionary_replace().length != 0)
+				beanDictionaryReplace(a.beanDictionary_replace());
+			if (a.beanDictionary_remove().length != 0)
+				beanDictionaryRemove(a.beanDictionary_remove());
+			if (! a.beanFieldVisibility().isEmpty())
+				beanFieldVisibility(r.visibility(a.beanFieldVisibility()));
+			if (a.beanFilters().length != 0)
+				beanFilters(a.beanFilters());
+			if (a.beanFilters_replace().length != 0)
+				beanFiltersReplace(a.beanFilters_replace());
+			if (a.beanFilters_remove().length != 0)
+				beanFiltersRemove(a.beanFilters_remove());
+			if (! a.beanMapPutReturnsOldValue().isEmpty())
+				beanMapPutReturnsOldValue(r.bool(a.beanMapPutReturnsOldValue()));
+			if (! a.beanMethodVisibility().isEmpty())
+				beanMethodVisibility(r.visibility(a.beanMethodVisibility()));
+			if (! a.beansRequireDefaultConstructor().isEmpty())
+				beansRequireDefaultConstructor(r.bool(a.beansRequireDefaultConstructor()));
+			if (! a.beansRequireSerializable().isEmpty())
+				beansRequireSerializable(r.bool(a.beansRequireSerializable()));
+			if (! a.beansRequireSettersForGetters().isEmpty())
+				beansRequireSettersForGetters(r.bool(a.beansRequireSettersForGetters()));
+			if (! a.beansRequireSomeProperties().isEmpty())
+				beansRequireSomeProperties(r.bool(a.beansRequireSomeProperties()));
+			if (! a.beanTypePropertyName().isEmpty())
+				beanTypePropertyName(r.string(a.beanTypePropertyName()));
+			if (! a.debug().isEmpty())
+				debug(r.bool(a.debug()));
+			for (CSEntry e : a.examples())
+				exampleJson(e.key(), r.string(e.value()));
+			for (CSEntry e : a.excludeProperties())
+				excludeProperties(e.key(), r.string(e.value()));
+			if (! a.fluentSetters().isEmpty())
+				fluentSetters(r.bool(a.fluentSetters()));
+			if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
+				ignoreInvocationExceptionsOnGetters(r.bool(a.ignoreInvocationExceptionsOnGetters()));
+			if (! a.ignoreInvocationExceptionsOnSetters().isEmpty())
+				ignoreInvocationExceptionsOnSetters(r.bool(a.ignoreInvocationExceptionsOnSetters()));
+			if (! a.ignorePropertiesWithoutSetters().isEmpty())
+				ignorePropertiesWithoutSetters(r.bool(a.ignorePropertiesWithoutSetters()));
+			if (! a.ignoreUnknownBeanProperties().isEmpty())
+				ignoreUnknownBeanProperties(r.bool(a.ignoreUnknownBeanProperties()));
+			if (! a.ignoreUnknownNullBeanProperties().isEmpty())
+				ignoreUnknownNullBeanProperties(r.bool(a.ignoreUnknownNullBeanProperties()));
+			for (CCEntry e : a.implClasses())
+				implClass(e.key(), e.value());
+			for (CSEntry e : a.includeProperties())
+				includeProperties(e.key(), r.string(e.value()));
+			if (! a.locale().isEmpty())
+				locale(r.locale(a.locale()));
+			if (! a.mediaType().isEmpty())
+				mediaType(r.mediaType(a.mediaType()));
+			if (a.notBeanClasses().length != 0)
+				notBeanClasses(a.notBeanClasses());
+			if (a.notBeanClasses_replace().length != 0)
+				notBeanClassesReplace(a.notBeanClasses_replace());
+			if (a.notBeanClasses_remove().length != 0)
+				notBeanClassesRemove(a.notBeanClasses_remove());
+			if (a.notBeanPackages().length != 0)
+				notBeanPackages(r.strings(a.notBeanPackages()));
+			if (a.notBeanPackages_replace().length != 0)
+				notBeanPackagesReplace(r.strings(a.notBeanPackages_replace()));
+			if (a.notBeanPackages_remove().length != 0)
+				notBeanPackagesRemove(r.strings(a.notBeanPackages_remove()));
+			if (a.pojoSwaps().length != 0)
+				pojoSwaps(a.pojoSwaps());
+			if (a.pojoSwaps_replace().length != 0)
+				pojoSwapsReplace(a.pojoSwaps_replace());
+			if (a.pojoSwaps_remove().length != 0)
+				pojoSwapsRemove(a.pojoSwaps_remove());
+			if (a.propertyNamer() != PropertyNamer.Null.class)
+				propertyNamer(a.propertyNamer());
+			if (! a.sortProperties().isEmpty())
+				sortProperties(r.bool(a.sortProperties()));
+			if (! a.timeZone().isEmpty())
+				timeZone(r.timeZone(a.timeZone()));
+			if (! a.useEnumNames().isEmpty())
+				useEnumNames(r.bool(a.useEnumNames()));
+			if (! a.useInterfaceProxies().isEmpty())
+				useInterfaceProxies(r.bool(a.useInterfaceProxies()));
+			if (! a.useJavaBeanIntrospector().isEmpty())
+				useJavaBeanIntrospector(r.bool(a.useJavaBeanIntrospector()));
+		}
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -173,21 +289,57 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Configuration property:  Bean dictionary.
 	 *
 	 * <p>
-	 * Same as {@link #beanDictionary(Object...)} but allows you to optionally overwrite the previous value.
+	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced.
 	 * @param values
 	 * 	The new values for this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder beanDictionary(boolean append, Object...values) {
-		return set(append, BEAN_beanDictionary, values);
+	public BeanContextBuilder beanDictionaryReplace(Class<?>...values) {
+		return set(false, BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Same as {@link #beanDictionary(Object...)} but replaces the existing value.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new values for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder beanDictionaryReplace(Object...values) {
+		return set(false, BEAN_beanDictionary, values);
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * <p>
+	 * Removes from the list of classes that make up the bean dictionary in this bean context.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanDictionary}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder beanDictionaryRemove(Class<?>...values) {
+		return removeFrom(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -280,15 +432,38 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Configuration property:  Bean filters.
 	 *
 	 * <p>
-	 * Same as {@link #beanFilters(Object...)} but allows you to optionally overwrite the previous value.
+	 * Same as {@link #beanFilters(Object...)} but replaces the existing values.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced.
+	 * @param values
+	 * 	The new values for this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
+	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder beanFiltersReplace(Class<?>...values) {
+		return set(false, BEAN_beanFilters, values);
+	}
+
+	/**
+	 * Configuration property:  Bean filters.
+	 *
+	 * <p>
+	 * Same as {@link #beanFilters(Object...)} but replaces the existing values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * </ul>
+	 *
 	 * @param values
 	 * 	The new values for this property.
 	 * 	<br>Values can consist of any of the following types:
@@ -300,8 +475,33 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder beanFilters(boolean append, Object...values) {
-		return set(append, BEAN_beanFilters, values);
+	public BeanContextBuilder beanFiltersReplace(Object...values) {
+		return set(false, BEAN_beanFilters, values);
+	}
+
+	/**
+	 * Configuration property:  Bean filters.
+	 *
+	 * <p>
+	 * Removes from the list of classes that make up the bean filters in this bean context.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
+	 * 		<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+	 * 		<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder beanFiltersRemove(Class<?>...values) {
+		return removeFrom(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -609,6 +809,30 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	/**
+	 * Configuration property:  POJO example.
+	 *
+	 * <p>
+	 * Specifies an example of the specified class.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * </ul>
+	 *
+	 * @param <T>
+	 * @param pojoClass The POJO class.
+	 * @param json The simple JSON representation of the example.
+	 * @return This object (for method chaining).
+	 */
+	public <T> BeanContextBuilder exampleJson(Class<T> pojoClass, String json) {
+		try {
+			return addTo(BEAN_examples, pojoClass.getName(), SimpleJson.DEFAULT.read(json, pojoClass));
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * Configuration property:  Bean property excludes.
 	 *
 	 * <p>
@@ -876,10 +1100,9 @@ public class BeanContextBuilder extends ContextBuilder {
 	 *
 	 * @param interfaceClass The interface class.
 	 * @param implClass The implementation class.
-	 * @param <I> The class type of the interface.
 	 * @return This object (for method chaining).
 	 */
-	public <I> BeanContextBuilder implClass(Class<I> interfaceClass, Class<? extends I> implClass) {
+	public BeanContextBuilder implClass(Class<?> interfaceClass, Class<?> implClass) {
 		return addTo(BEAN_implClasses, interfaceClass.getName(), implClass);
 	}
 
@@ -1001,34 +1224,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * Configuration property:  Bean class exclusions.
 	 *
 	 * <p>
-	 * Not-bean classes are converted to <code>Strings</code> during serialization even if they appear to be
-	 * bean-like.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
-	 * </ul>
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.
-	 * 	<br>Otherwise, the previous value is replaced.
-	 * @param values
-	 * 	The new value for this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Classes.
-	 * 		<li>Arrays and collections of classes.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	public BeanContextBuilder notBeanClasses(boolean append, Object...values) {
-		return set(append, BEAN_notBeanClasses, values);
-	}
-
-	/**
-	 * Configuration property:  Bean class exclusions.
-	 *
-	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
 	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
 	 *
@@ -1072,6 +1267,67 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean class exclusions.
 	 *
+	 * <p>
+	 * Not-bean classes are converted to <code>Strings</code> during serialization even if they appear to be
+	 * bean-like.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new value for this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder notBeanClassesReplace(Class<?>...values) {
+		return set(false, BEAN_notBeanClasses, values);
+	}
+
+	/**
+	 * Configuration property:  Bean class exclusions.
+	 *
+	 * <p>
+	 * Not-bean classes are converted to <code>Strings</code> during serialization even if they appear to be
+	 * bean-like.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The new value for this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Classes.
+	 * 		<li>Arrays and collections of classes.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder notBeanClassesReplace(Object...values) {
+		return set(false, BEAN_notBeanClasses, values);
+	}
+
+	/**
+	 * Configuration property:  Bean class exclusions.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder notBeanClassesRemove(Class<?>...values) {
+		return removeFrom(BEAN_notBeanClasses, values);
+	}
+
+	/**
+	 * Configuration property:  Bean class exclusions.
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
@@ -1093,28 +1349,17 @@ public class BeanContextBuilder extends ContextBuilder {
 	/**
 	 * Configuration property:  Bean package exclusions.
 	 *
-	 * <p>
-	 * When specified, the current list of ignore packages are appended to.
-	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
 	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.
-	 * 	<br>Otherwise, the previous value is replaced.
 	 * @param values
-	 * 	The new values for this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Classes.
-	 * 		<li>Arrays and collections of classes.
-	 * 	</ul>
+	 * 	The values to add to this property.
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder notBeanPackages(boolean append, Object...values) {
-		return set(append, BEAN_notBeanPackages, values);
+	public BeanContextBuilder notBeanPackages(String...values) {
+		return addTo(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -1147,11 +1392,47 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * </ul>
 	 *
 	 * @param values
-	 * 	The values to add to this property.
+	 * 	<br>Values can consist of any of the following types:
 	 * @return This object (for method chaining).
 	 */
-	public BeanContextBuilder notBeanPackages(String...values) {
-		return addTo(BEAN_notBeanPackages, values);
+	public BeanContextBuilder notBeanPackagesReplace(String...values) {
+		return set(false, BEAN_notBeanPackages, values);
+	}
+
+	/**
+	 * Configuration property:  Bean package exclusions.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<br>Possible values are:
+	 * 	<ul>
+	 * 		<li>Strings.
+	 * 		<li>Arrays and collections of strings.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder notBeanPackagesReplace(Object...values) {
+		return set(false, BEAN_notBeanPackages, values);
+	}
+
+	/**
+	 * Configuration property:  Bean package exclusions.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
+	 * </ul>
+	 *
+	 * @param values The values to remove from this property.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder notBeanPackagesRemove(String...values) {
+		return removeFrom(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -1173,37 +1454,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder notBeanPackagesRemove(Object...values) {
 		return removeFrom(BEAN_notBeanPackages, values);
-	}
-
-	/**
-	 * Configuration property:  POJO swaps.
-	 *
-	 * <p>
-	 * POJO swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
-	 * and "swap in" the non-serializable class during parsing.
-	 *
-	 * <p>
-	 * An example of a POJO swap would be a <code>Calendar</code> object that gets swapped out for an ISO8601 string.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
-	 * </ul>
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.
-	 * 	<br>Otherwise, the previous value is replaced.
-	 * @param values
-	 * 	The new value for this property.
-	 * 	<br>Values can consist of any of the following types:
-	 * 	<ul>
-	 * 		<li>Strings.
-	 * 		<li>Arrays and collections of strings.
-	 * 	</ul>
-	 * @return This object (for method chaining).
-	 */
-	public BeanContextBuilder pojoSwaps(boolean append, Object...values) {
-		return set(append, BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1241,6 +1491,71 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder pojoSwaps(Object...values) {
 		return addTo(BEAN_pojoSwaps, values);
+	}
+
+	/**
+	 * Configuration property:  POJO swaps.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any subclass of {@link PojoSwap}.
+	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 		<li>Any array or collection of the objects above.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder pojoSwapsReplace(Class<?>...values) {
+		return set(false, BEAN_pojoSwaps, values);
+	}
+
+	/**
+	 * Configuration property:  POJO swaps.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any subclass of {@link PojoSwap}.
+	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 		<li>Any array or collection of the objects above.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder pojoSwapsReplace(Object...values) {
+		return set(false, BEAN_pojoSwaps, values);
+	}
+
+	/**
+	 * Configuration property:  POJO swaps.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
+	 * </ul>
+	 *
+	 * @param values
+	 * 	The values to remove from this property.
+	 * 	<br>Values can consist of any of the following types:
+	 * 	<ul>
+	 * 		<li>Any subclass of {@link PojoSwap}.
+	 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+	 * 	</ul>
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder pojoSwapsRemove(Class<?>...values) {
+		return removeFrom(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1336,6 +1651,24 @@ public class BeanContextBuilder extends ContextBuilder {
 	 */
 	public BeanContextBuilder timeZone(TimeZone value) {
 		return set(BEAN_timeZone, value);
+	}
+
+	/**
+	 * Configuration property:  Use enum names.
+	 *
+	 * <p>
+	 * When enabled, enums are always serialized by name instead of using {@link Object#toString()}.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_useEnumNames}
+	 * </ul>
+	 *
+	 * @param value The property value.
+	 * @return This object (for method chaining).
+	 */
+	public BeanContextBuilder useEnumNames(boolean value) {
+		return set(BEAN_useEnumNames, value);
 	}
 
 	/**

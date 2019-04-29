@@ -22,6 +22,11 @@ import org.apache.juneau.*;
 public interface BeanDefMapper {
 
 	/**
+	 * Represents the absence of a bean definition mapper class.
+	 */
+	public interface Null extends BeanDefMapper {}
+
+	/**
 	 * Returns the ID for the specified class.
 	 *
 	 * @param cm The class.

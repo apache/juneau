@@ -224,7 +224,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.
 	 * 	<ja>@RestResource</ja>(
 	 * 			properties={
-	 * 				<ja>@Property</ja>(name=<jsf>INFOPROVIDER_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
+	 * 				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value=<js>"Swagger,*.proto.*"</js>)
 	 * 			}
 	 * 	<jk>public class</jk> MyResource {...}
 	 * </p>
@@ -236,7 +236,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.useBeanDefs.o"</js>
+	 * 	<li><b>Name:</b>  <js>"JsonSchemaGenerator.useBeanDefs.b"</js>
 	 * 	<li><b>Data type:</b>  <code>Boolean</code>
 	 * 	<li><b>Default:</b>  <jk>false</jk>
 	 * 	<li><b>Methods:</b>

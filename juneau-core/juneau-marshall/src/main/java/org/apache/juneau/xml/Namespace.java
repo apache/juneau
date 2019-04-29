@@ -114,6 +114,14 @@ public final class Namespace {
 		if (o instanceof Namespace[])
 			return (Namespace[])o;
 
+		if (o instanceof String[]) {
+			String[] ss = (String[])o;
+			Namespace[] n = new Namespace[ss.length];
+			for (int i = 0; i < ss.length; i++)
+				n[i] = create(ss[i]);
+			return n;
+		}
+
 		if (o instanceof CharSequence) {
 			String[] ss = StringUtils.split(o.toString());
 			Namespace[] n = new Namespace[ss.length];
