@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-DtoExamples
+{updated} DtoExamples
 
 <p>
 	The <l>DtoExamples</l> resource is a resource group for demonstrating various DTO examples.
@@ -69,13 +69,10 @@ DtoExamples
 				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
 			}
 		),
-		properties={ 
-			<ja>@Property</ja>(name=<jsf>SERIALIZER_quoteChar</jsf>, value=<js>"'"</js>), 
-			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>), 
-			<ja>@Property</ja>(name=<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>)
-		}, 
 		encoders=GzipEncoder.<jk>class</jk> 
 	) 
+	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
+	<ja>@RdfConfig</ja>(rdfxml_tab=<js>"5"</js>, addRootProperty=<js>"true"</js>)
 	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena { 
 	
 		<jk>private</jk> Feed <jf>feed</jf>; <jc>// The root resource object</jc> 

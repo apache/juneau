@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-Parameter Examples
+{updated} Parameter Examples
 
 <p>
 	The <code>model</code> select box in the parameters can be expanded to show examples:
@@ -169,10 +169,10 @@ Parameter Examples
 
 		<ja>@RestMethod</ja>(name=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>,
 			...
-			properties={
-				<jc>// Add x-example to the following types:</jc>
-				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addExamplesTo</jsf>, value=<js>"bean,collection,array,map"</js>),
-			},
+		)
+		<ja>@JsonSchemaConfig</ja>(
+			<jc>// Add x-example to the following types:</jc>
+			addExamplesTo=<js>"bean,collection,array,map"</js>,
 			...
 		)
 		<jk>public</jk> Swagger getOptions(RestRequest req) {...}
@@ -213,18 +213,14 @@ Parameter Examples
 	}
 </p>
 <p>
-	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext#BEAN_examples} property at either the class or method level.
+	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext#BEAN_examples} property or {@link oaj.annotation.BeanConfig#examples() @BeanConfig(examples)} annotation at either the class or method level.
 </p>
 <h5 class='figure'>Example:</h5>
 <p class='bpcode w800'>
 	<jc>// Examples defined at class level.</jc>
-	<ja>@RestResource</ja>(
-		properties={
-			<ja>@Property</ja>(
-				name=<jsf>BEAN_examples</jsf>,
-				value=<js>"{'org.apache.juneau.examples.rest.petstore.PetCreate': {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
-			)
-		}
+	<ja>@RestResource</ja>(...)
+	<ja>@BeanConfig</ja>(
+		examples=<js>"{PetCreate: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
 	)
 </p>
 <h5 class='section'>See Also:</h5>

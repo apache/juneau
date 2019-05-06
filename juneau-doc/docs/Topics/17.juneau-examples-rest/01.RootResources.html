@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-RootResources
+{updated} RootResources
 
 <p>
 	The <l>RootResources</l> class is the main page for the REST microservice.
@@ -103,12 +103,6 @@ RootResources
 				<js>"&lt;/div&gt;"</js>
 			}
 		),
-		properties={
-			<jc>// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
-			// String comparisons.
-			// You can apply any of the Serializer/Parser/BeanContext settings this way.</jc>
-			<ja>@Property</ja>(name=<jsf>WSERIALIZER_quoteChar</jsf>, value=<js>"'"</js>)
-		},
 		children={
 			HelloWorldResource.<jk>class</jk>,
 			PetStoreResource.<jk>class</jk>,
@@ -118,6 +112,11 @@ RootResources
 			DebugResource.<jk>class</jk>,
 			ShutdownResource.<jk>class</jk>
 		}
+	)
+	<ja>@SerializerConfig</ja>(
+		<jc>// For testing purposes, we want to use single quotes in all the serializers so it's easier to do simple
+		// String comparisons.</jc>
+		quoteChar=<js>"'"</js>
 	)
 	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {
 		<jc>// No code!</jc>

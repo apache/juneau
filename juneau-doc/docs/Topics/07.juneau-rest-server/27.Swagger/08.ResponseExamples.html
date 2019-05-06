@@ -147,17 +147,14 @@ Response Examples
 	}
 </p>
 <p>
-	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext#BEAN_examples} property at either the class or method level.
+	Examples can also be specified via generic properties as well using the {@link oaj.BeanContext#BEAN_examples} property 
+	or {@link oaj.annoation.BeanConfig#examples @BeanConfig(examples)} annotation at either the class or method level.
 </p>
 <p class='bpcode w800'>
 	<jc>// Examples defined at class level.</jc>
-	<ja>@RestResource</ja>(
-		properties={
-			<ja>@Property</ja>(
-				name=<jsf>BEAN_examples</jsf>,
-				value=<js>"{'org.apache.juneau.examples.rest.petstore.PetCreate': {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
-			)
-		}
+	<ja>@RestResource</ja>(...)
+	<ja>@BeanConfig</ja>(
+		examples=<js>"{PetCreate: {name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}}"</js>
 	)
 </p>
 <p>

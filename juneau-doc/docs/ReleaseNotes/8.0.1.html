@@ -53,6 +53,60 @@
 <h5 class='topic w800'>juneau-rest-server</h5>
 <ul class='spaced-list'>
 	<li>
+		New annotations that can be applied to REST classes and methods to configure serializers and parsers.
+		<p class='bcode w800'>
+	<jc>// Old way using generic properties.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>,
+		properties={
+			<ja>@Property</ja>(name=<jsf>WSERIALIZER_quoteChar</jsf>, value=<js>"'"</js>),
+			<ja>@Property</ja>(name=<jsf>RDF_rdfxml_tab</jsf>, value=<js>"5"</js>),
+			<ja>@Property</ja>(name<jsf>RDF_addRootProperty</jsf>, value=<js>"true"</js>),
+			<ja>@Property</ja>(name=<jsf>BEAN_examples</jsf>, value=<js>"{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}"</js>)
+		}
+		...
+	)
+	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena {
+		...
+	}
+		
+	<jc>New way using specific annotations.</jc>
+	<ja>@RestResource</ja>(
+		path=<js>"/atom"</js>,
+		title=<js>"Sample ATOM feed resource"</js>
+		...
+	)
+	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
+	<ja>@RdfConfig</ja>(rdfxml_tab=<js>"5"</js>, addRootProperty=<js>"true"</js>)
+	<ja>@BeanConfig</ja>(examples=<js>"Feed: $F{AtomFeedResource_example.json}"</js>)
+	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena {
+		...
+	}
+		</p>
+		<p>
+			Config annotations are provided for all serializers and parsers:
+		</p>
+		<ul>
+			<li class='ja'>{@link oaj.annotation.BeanConfig BeanConfig}
+			<li class='ja'>{@link oaj.csv.annotation.CsvConfig CsvConfig}
+			<li class='ja'>{@link oaj.html.annotation.HtmlConfig HtmlConfig}
+			<li class='ja'>{@link oaj.html.annotation.HtmlDocConfig HtmlDocConfig}
+			<li class='ja'>{@link oaj.jso.annotation.JsoConfig JsoConfig}
+			<li class='ja'>{@link oaj.json.annotation.JsonConfig JsonConfig}
+			<li class='ja'>{@link oaj.jsonschema.annotation.JsonSchemaConfig JsonSchemaConfig}
+			<li class='ja'>{@link oaj.msgpack.annotation.MsgPackConfig MsgPackConfig}
+			<li class='ja'>{@link oaj.oapi.annotation.OpenApiConfig OpenApiConfig}
+			<li class='ja'>{@link oaj.parser.annotation.ParserConfig ParserConfig}
+			<li class='ja'>{@link oaj.plaintext.annotation.PlainTextConfig PlainTextConfig}
+			<li class='ja'>{@link oaj.jena.annotation.RdfConfig RdfConfig}
+			<li class='ja'>{@link oaj.serializer.annotation.SerializerConfig SerializerConfig}
+			<li class='ja'>{@link oaj.soap.annotation.SoapXmlConfig SoapXmlConfig}
+			<li class='ja'>{@link oaj.uon.annotation.UonConfig UonConfig}
+			<li class='ja'>{@link oaj.urlencoding.annotation.UrlEncodingConfig UrlEncodingConfig}
+			<li class='ja'>{@link oaj.xml.annotation.XmlConfig XmlConfig}
+		</ul>
+	<li>
 		Added the following classes that provide the same support as the servlet classes but doesn't extend from <code>HttpServlet</code>.
 		<br>This fixes an issue where instances of {@link oajr.BasicRestServlet} are registered as top-level servlets even though
 		you don't want them to be.  

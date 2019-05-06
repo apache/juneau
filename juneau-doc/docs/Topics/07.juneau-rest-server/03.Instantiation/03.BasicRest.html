@@ -61,30 +61,26 @@
 				},
 				<jc>// Never show aside contents of page inherited from class.</jc>
 				aside=<js>"NONE"</js>
-			),
-		
-			<jc>// POJO swaps to apply to all serializers/parsers.</jc>
+			)
+		)
+		<ja>@JsonSchemaConfig</ja>(
+			<jc>// Add descriptions to the following types when not specified:</jc>
+			addDescriptionsTo=<js>"bean,collection,array,map,enum"</js>,
+			<jc>// Add x-example to the following types:</jc>
+			addExamplesTo=<js>"bean,collection,array,map"</js>,
+			<jc>// Don't generate schema information on the Swagger bean itself or HTML beans.</jc>
+			ignoreTypes=<js>"Swagger,org.apache.juneau.dto.html5.*"</js>,
+			<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
+			useBeanDefs=<js>"true"</js>
+		)
+		<ja>@BeanConfig</ja>(
+			<jc>// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.</jc>
+			ignoreUnknownBeanProperties=<js>"true"</js>,
+			<jc>// POJO swaps to apply to all serializers/parsers on this method.</jc>
 			pojoSwaps={
 				<jc>// Use the SwaggerUI swap when rendering Swagger beans.</jc>
+				<jc>// This is a per-media-type swap that only applies to text/html requests.</jc>
 				SwaggerUI.<jk>class</jk>
-			},
-			
-			<jc>// Properties to apply to all serializers/parsers and REST-specific API objects.</jc>
-			properties={
-				<jc>// Add descriptions to the following types when not specified:</jc>
-				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addDescriptionsTo</jsf>, value=<js>"bean,collection,array,map,enum"</js>),
-		
-				<jc>// Automatically add examples to the following types:</jc>
-				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_addExamplesTo</jsf>, value=<js>"bean,collection,array,map"</js>),
-		
-				<jc>// Don't generate schema information on the Swagger bean itself or HTML beans.</jc>
-				<ja>@Property</ja>(name=<jsf>JSONSCHEMA_ignoreTypes</jsf>, value="<js>Swagger,org.apache.juneau.dto.html5.*"</js>)
-			},
-			
-			<jc>// Shortcut for boolean properties.</jc>
-			flags={
-				<jc>// Use $ref references for bean definitions to reduce duplication in Swagger.</jc>
-				<jsf>JSONSCHEMA_useBeanDefs</jsf>
 			}
 		)
 		<jk>public</jk> Swagger getOptions(RestRequest req) {
