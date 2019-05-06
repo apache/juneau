@@ -51,6 +51,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
@@ -3006,6 +3007,7 @@ public final class RestContext extends BeanContext {
 	private final ParserGroup parsers;
 	private final HttpPartSerializer partSerializer;
 	private final HttpPartParser partParser;
+	private final JsonSchemaGenerator jsonSchemaGenerator;
 	private final EncoderGroup encoders;
 	private final List<MediaType>
 		consumes,
@@ -3035,6 +3037,7 @@ public final class RestContext extends BeanContext {
 	private final RestResourceResolver resourceResolver;
 	private final UriResolution uriResolution;
 	private final UriRelativity uriRelativity;
+	private final AnnotationsMap configAnnotationsMap;
 
 	// Lifecycle methods
 	private final Method[]
@@ -3107,9 +3110,34 @@ public final class RestContext extends BeanContext {
 			this.parentContext = builder.parentContext;
 			resourceResolver = getInstanceProperty(REST_resourceResolver, resource, RestResourceResolver.class, parentContext == null ? BasicRestResourceResolver.class : parentContext.resourceResolver, ResourceResolver.FUZZY, this);
 
-			PropertyStore ps = getPropertyStore().builder().add(builder.properties).build();
+			varResolver = builder.varResolverBuilder
+				.vars(
+					FileVar.class,
+					LocalizationVar.class,
+					RequestAttributeVar.class,
+					RequestFormDataVar.class,
+					RequestHeaderVar.class,
+					RequestPathVar.class,
+					RequestQueryVar.class,
+					RequestVar.class,
+					RestInfoVar.class,
+					SerializedRequestAttrVar.class,
+					ServletInitParamVar.class,
+					SwaggerVar.class,
+					UrlVar.class,
+					UrlEncodeVar.class,
+					WidgetVar.class
+				)
+				.build()
+			;
+
+			VarResolverSession vrs = this.varResolver.createSession();
+			config = builder.config.resolving(vrs);
+
 			Class<?> resourceClass = resource.getClass();
 			ClassInfo rci = getClassInfo(resourceClass);
+			configAnnotationsMap = rci.getConfigAnnotationsMapParentFirst();
+			PropertyStore ps = getPropertyStore().builder().add(builder.properties).applyAnnotations(configAnnotationsMap, vrs).build();
 
 			uriContext = nullIfEmpty(getStringProperty(REST_uriContext, null));
 			uriAuthority = nullIfEmpty(getStringProperty(REST_uriAuthority, null));
@@ -3146,34 +3174,38 @@ public final class RestContext extends BeanContext {
 			if (debug)
 				logger.setLevel(Level.FINE);
 
-			varResolver = builder.varResolverBuilder
-				.vars(
-					FileVar.class,
-					LocalizationVar.class,
-					RequestAttributeVar.class,
-					RequestFormDataVar.class,
-					RequestHeaderVar.class,
-					RequestPathVar.class,
-					RequestQueryVar.class,
-					RequestVar.class,
-					RestInfoVar.class,
-					SerializedRequestAttrVar.class,
-					ServletInitParamVar.class,
-					SwaggerVar.class,
-					UrlVar.class,
-					UrlEncodeVar.class,
-					WidgetVar.class
-				)
-				.build()
-			;
-
-			config = builder.config.resolving(this.varResolver.createSession());
-
 			properties = builder.properties;
-			serializers = SerializerGroup.create().append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], resourceResolver, resource, ps)).build();
-			parsers = ParserGroup.create().append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], resourceResolver, resource, ps)).build();
-			partSerializer = getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, resourceResolver, resource, ps);
-			partParser = getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiParser.class, resourceResolver, resource, ps);
+			serializers =
+				SerializerGroup
+				.create()
+				.append(getInstanceArrayProperty(REST_serializers, Serializer.class, new Serializer[0], resourceResolver, resource, ps))
+				.build();
+			parsers =
+				ParserGroup
+				.create()
+				.append(getInstanceArrayProperty(REST_parsers, Parser.class, new Parser[0], resourceResolver, resource, ps))
+				.build();
+			partSerializer =
+				(HttpPartSerializer)
+				SerializerGroup
+				.create()
+				.append(getInstanceProperty(REST_partSerializer, HttpPartSerializer.class, OpenApiSerializer.class, resourceResolver, resource, ps))
+				.build()
+				.getSerializers()
+				.get(0);
+			partParser =
+				(HttpPartParser)
+				ParserGroup
+				.create()
+				.append(getInstanceProperty(REST_partParser, HttpPartParser.class, OpenApiParser.class, resourceResolver, resource, ps))
+				.build()
+				.getParsers()
+				.get(0);
+			jsonSchemaGenerator =
+				JsonSchemaGenerator
+				.create()
+				.apply(ps)
+				.build();
 			encoders = new EncoderGroupBuilder().append(getInstanceArrayProperty(REST_encoders, Encoder.class, new Encoder[0], resourceResolver, resource, ps)).build();
 			beanContext = BeanContext.create().apply(ps).build();
 
@@ -4282,6 +4314,17 @@ public final class RestContext extends BeanContext {
 	}
 
 	/**
+	 * Returns the JSON-Schema generator associated with this resource.
+	 *
+	 * @return
+	 * 	The HTTP-part serializer associated with this resource.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public JsonSchemaGenerator getJsonSchemaGenerator() {
+		return jsonSchemaGenerator;
+	}
+
+	/**
 	 * Returns the encoders associated with this resource.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -4818,6 +4861,10 @@ public final class RestContext extends BeanContext {
 		if (this.res.get() != null)
 			System.err.println("WARNING:  Thread-local response object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
 		this.res.set(res);
+	}
+
+	AnnotationsMap getConfigAnnotationsMap() {
+		return configAnnotationsMap;
 	}
 
 	/**

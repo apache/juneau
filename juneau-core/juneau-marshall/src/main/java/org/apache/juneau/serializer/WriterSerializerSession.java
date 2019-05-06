@@ -98,7 +98,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
-	public final int getMaxIndent() {
+	protected final int getMaxIndent() {
 		return ctx.getMaxIndent();
 	}
 
@@ -109,9 +109,13 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
-	public final char getQuoteChar() {
+	protected final char getQuoteChar() {
 		return ctx.getQuoteChar();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
 	public ObjectMap asMap() {

@@ -950,47 +950,25 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
+	 * Configuration property:  Add type attribute to root nodes.
 	 *
-	 * @see #SERIALIZER_trimNullProperties
+	 * @see #SERIALIZER_addRootType
 	 * @return
-	 * 	<jk>true</jk> if null bean values are not serialized to the output.
+	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
-	protected final boolean isTrimNullProperties() {
-		return trimNullProperties;
+	protected final boolean isAddRootType() {
+		return addRootType;
 	}
 
 	/**
-	 * Configuration property:  Trim empty lists and arrays.
+	 * Configuration property:  Serializer listener.
 	 *
-	 * @see #SERIALIZER_trimEmptyCollections
+	 * @see #SERIALIZER_listener
 	 * @return
-	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
+	 * 	Class used to listen for errors and warnings that occur during serialization.
 	 */
-	protected final boolean isTrimEmptyCollections() {
-		return trimEmptyCollections;
-	}
-
-	/**
-	 * Configuration property:  Trim empty maps.
-	 *
-	 * @see #SERIALIZER_trimEmptyMaps
-	 * @return
-	 * 	<jk>true</jk> if empty map values are not serialized to the output.
-	 */
-	protected final boolean isTrimEmptyMaps() {
-		return trimEmptyMaps;
-	}
-
-	/**
-	 * Configuration property:  Trim strings.
-	 *
-	 * @see #SERIALIZER_trimStrings
-	 * @return
-	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 */
-	protected final boolean isTrimStrings() {
-		return trimStrings;
+	protected final Class<? extends SerializerListener> getListener() {
+		return listener;
 	}
 
 	/**
@@ -1016,14 +994,47 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Add type attribute to root nodes.
+	 * Configuration property:  Trim empty lists and arrays.
 	 *
-	 * @see #SERIALIZER_addRootType
+	 * @see #SERIALIZER_trimEmptyCollections
 	 * @return
-	 * 	<jk>true</jk> if type property should be added to root node.
+	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
-	protected final boolean isAddRootType() {
-		return addRootType;
+	protected final boolean isTrimEmptyCollections() {
+		return trimEmptyCollections;
+	}
+
+	/**
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * @see #SERIALIZER_trimEmptyMaps
+	 * @return
+	 * 	<jk>true</jk> if empty map values are not serialized to the output.
+	 */
+	protected final boolean isTrimEmptyMaps() {
+		return trimEmptyMaps;
+	}
+
+	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 * @see #SERIALIZER_trimNullProperties
+	 * @return
+	 * 	<jk>true</jk> if null bean values are not serialized to the output.
+	 */
+	protected final boolean isTrimNullProperties() {
+		return trimNullProperties;
+	}
+
+	/**
+	 * Configuration property:  Trim strings.
+	 *
+	 * @see #SERIALIZER_trimStrings
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 */
+	protected final boolean isTrimStrings() {
+		return trimStrings;
 	}
 
 	/**
@@ -1038,17 +1049,6 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  URI resolution.
-	 *
-	 * @see #SERIALIZER_uriResolution
-	 * @return
-	 * 	Defines the resolution level for URIs when serializing URIs.
-	 */
-	protected final UriResolution getUriResolution() {
-		return uriResolution;
-	}
-
-	/**
 	 * Configuration property:  URI relativity.
 	 *
 	 * @see #SERIALIZER_uriRelativity
@@ -1057,6 +1057,17 @@ public abstract class Serializer extends BeanTraverseContext {
 	 */
 	protected final UriRelativity getUriRelativity() {
 		return uriRelativity;
+	}
+
+	/**
+	 * Configuration property:  URI resolution.
+	 *
+	 * @see #SERIALIZER_uriResolution
+	 * @return
+	 * 	Defines the resolution level for URIs when serializing URIs.
+	 */
+	protected final UriResolution getUriResolution() {
+		return uriResolution;
 	}
 
 	/**
@@ -1070,16 +1081,9 @@ public abstract class Serializer extends BeanTraverseContext {
 		return useWhitespace;
 	}
 
-	/**
-	 * Configuration property:  Serializer listener.
-	 *
-	 * @see #SERIALIZER_listener
-	 * @return
-	 * 	Class used to listen for errors and warnings that occur during serialization.
-	 */
-	protected final Class<? extends SerializerListener> getListener() {
-		return listener;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

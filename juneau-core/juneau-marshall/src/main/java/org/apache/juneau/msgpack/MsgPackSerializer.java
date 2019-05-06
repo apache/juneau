@@ -144,8 +144,13 @@ public class MsgPackSerializer extends OutputStreamSerializer {
 		return new MsgPackSerializerBuilder();
 	}
 
+	@Override /* Context */
+	public MsgPackSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
-	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+	public MsgPackSerializerSession createSession(SerializerSessionArgs args) {
 		return new MsgPackSerializerSession(this, args);
 	}
 

@@ -21,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
@@ -127,16 +126,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 			}
 		}
 		return new SerializerGroup(getPropertyStore(), ArrayUtils.toReverseArray(Serializer.class, l));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public SerializerGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1074,12 +1063,6 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SerializerGroupBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public SerializerGroupBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -1112,6 +1095,12 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	@Override /* ContextBuilder */
 	public SerializerGroupBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public SerializerGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

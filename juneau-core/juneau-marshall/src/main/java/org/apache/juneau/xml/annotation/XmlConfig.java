@@ -21,6 +21,7 @@ import javax.xml.stream.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xmlschema.*;
@@ -32,9 +33,10 @@ import org.apache.juneau.xmlschema.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(XmlConfigApply.class)
 public @interface XmlConfig {
 
 	//-------------------------------------------------------------------------------------------------------------------

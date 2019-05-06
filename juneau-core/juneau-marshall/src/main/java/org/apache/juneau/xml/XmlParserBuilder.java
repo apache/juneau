@@ -21,11 +21,9 @@ import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Builder class for building XML parsers.
@@ -51,31 +49,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* ContextBuilder */
 	public XmlParser build() {
 		return build(XmlParser.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public XmlParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(XmlConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (XmlConfig a : m.get(XmlConfig.class)) {
-			if (a.eventAllocator() != XmlEventAllocator.Null.class)
-				eventAllocator(a.eventAllocator());
-			if (! a.preserveRootElement().isEmpty())
-				preserveRootElement(r.bool(a.preserveRootElement()));
-			if (a.reporter() != XmlReporter.Null.class)
-				reporter(a.reporter());
-			if (a.resolver() != XmlResolver.Null.class)
-				resolver(a.resolver());
-			if (! a.validating().isEmpty())
-				validating(r.bool(a.validating()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -746,12 +719,6 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public XmlParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -784,6 +751,12 @@ public class XmlParserBuilder extends ReaderParserBuilder {
 	@Override /* ContextBuilder */
 	public XmlParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public XmlParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

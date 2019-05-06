@@ -18,11 +18,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.uon.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -49,27 +46,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public UonSerializer build() {
 		return build(UonSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public UonSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(UonConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (UonConfig a : m.get(UonConfig.class)) {
-			if (! a.addBeanTypes().isEmpty())
-				addBeanTypes(r.bool(a.addBeanTypes()));
-			if (! a.encoding().isEmpty())
-				encoding(r.bool(a.encoding()));
-			if (! a.paramFormat().isEmpty())
-				paramFormat(r.string(a.paramFormat()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -764,12 +740,6 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UonSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public UonSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -802,6 +772,12 @@ public class UonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public UonSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public UonSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

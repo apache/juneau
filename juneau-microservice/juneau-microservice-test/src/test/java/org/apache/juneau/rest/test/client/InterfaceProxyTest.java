@@ -32,6 +32,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock2.*;
 import org.apache.juneau.rest.testutils.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.utils.*;
@@ -229,9 +230,9 @@ public class InterfaceProxyTest {
 	}
 
 	@RestResource(
-		flags={Serializer.SERIALIZER_addRootType, Serializer.SERIALIZER_addBeanTypes},
 		logger=NoOpRestLogger.class
 	)
+	@SerializerConfig(addRootType="true",addBeanTypes="true")
 	public static class InterfaceProxyResource extends BasicRestServletJena {
 		private static final long serialVersionUID = 1L;
 

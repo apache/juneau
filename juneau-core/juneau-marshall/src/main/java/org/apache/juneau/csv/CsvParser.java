@@ -60,7 +60,12 @@ public class CsvParser extends ReaderParser {
 	}
 
 	@Override /* Parser */
-	public ReaderParserSession createSession(ParserSessionArgs args) {
+	public CsvParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
+	public CsvParserSession createSession(ParserSessionArgs args) {
 		return new CsvParserSession(this, args);
 	}
 

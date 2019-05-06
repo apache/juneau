@@ -286,6 +286,19 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return appendAnnotationsMapParentFirst(new ConfigAnnotationsMap());
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this method or parent methods have any annotations annotated with {@link PropertyStoreApply}.
+	 *
+	 * @return <jk>true</jk> if this method or parent methods have any annotations annotated with {@link PropertyStoreApply}.
+	 */
+	public boolean hasConfigAnnotations() {
+		for (Method m2 : getMatching())
+			for (Annotation a2 :  m2.getAnnotations())
+				if (a2.annotationType().getAnnotation(PropertyStoreApply.class) != null)
+					return true;
+		return false;
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	protected <T extends Annotation> T findAnnotation(Class<T> a) {

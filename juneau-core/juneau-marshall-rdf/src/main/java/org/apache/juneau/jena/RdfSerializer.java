@@ -175,6 +175,27 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 */
 	public static final String RDF_namespaces = PREFIX + "namespaces.ls";
 
+	/**
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
+	 * 	<li><b>Data type:</b>  <code>Boolean</code>
+	 * 	<li><b>Default:</b>  <jk>true</jk>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link RdfSerializerBuilder#useXmlNamespaces(boolean)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
+	 */
+	public static final String RDF_useXmlNamespaces = PREFIX + "useXmlNamespaces.b";
+
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -190,7 +211,7 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	private final Namespace juneauNs;
 	private final Namespace juneauBpNs;
 	private final RdfCollectionFormat collectionFormat;
-	final Map<String,Object> jenaSettings;
+	final Map<String,Object> jenaProperties;
 	final Namespace[] namespaces;
 
 	/**
@@ -233,11 +254,11 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		namespaces = getProperty(RDF_namespaces, Namespace[].class, new Namespace[0]);
 		addBeanTypes = getBooleanProperty(RDF_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 
-		Map<String,Object> m = new LinkedHashMap<>();
+		Map<String,Object> m = new TreeMap<>();
 		for (String k : getPropertyKeys("RdfCommon"))
 			if (k.startsWith("jena."))
-				m.put(k.substring(5), getProperty(k));
-		jenaSettings = unmodifiableMap(m);
+				m.put(k.substring(5), getProperty("RdfCommon." + k));
+		jenaProperties = unmodifiableMap(m);
 	}
 
 	/**
@@ -272,14 +293,106 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 		return new RdfSerializerBuilder();
 	}
 
+	@Override /* Context */
+	public  RdfSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public RdfSerializerSession createSession(SerializerSessionArgs args) {
 		return new RdfSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Common properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  RDF format for representing collections and arrays.
+	 *
+	 * @see #RDF_collectionFormat
+	 * @return
+	 * 	RDF format for representing collections and arrays.
+	 */
+	protected final RdfCollectionFormat getCollectionFormat() {
+		return collectionFormat;
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 *
+	 * @see #RDF_juneauBpNs
+	 * @return
+	 * 	The XML namespace to use for bean properties.
+	 */
+	protected final Namespace getJuneauBpNs() {
+		return juneauBpNs;
+	}
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 *
+	 * @see #RDF_juneauNs
+	 * @return
+	 * 	The XML namespace to use for Juneau properties.
+	 */
+	protected final Namespace getJuneauNs() {
+		return juneauNs;
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 *
+	 * @see #RDF_language
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	protected final String getLanguage() {
+		return rdfLanguage;
+	}
+
+	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see #RDF_looseCollections
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	protected final boolean isLooseCollections() {
+		return looseCollections;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Jena properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  All Jena-related configuration properties.
+	 *
+	 * @return
+	 * 	A map of all Jena-related configuration properties.
+	 */
+	protected final Map<String,Object> getJenaProperties() {
+		return jenaProperties;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see #RDF_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
+	}
 
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
@@ -300,32 +413,8 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
 	 */
-	protected final boolean isAddRootProp() {
+	protected final boolean isAddRootProperty() {
 		return addRootProperty;
-	}
-
-	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 *
-	 * @see #RDF_useXmlNamespaces
-	 * @return
-	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
-	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 */
-	protected final boolean isUseXmlNamespaces() {
-		return useXmlNamespaces;
-	}
-
-	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
-	 *
-	 * @see #RDF_looseCollections
-	 * @return
-	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
-	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 */
-	protected final boolean isLooseCollections() {
-		return looseCollections;
 	}
 
 	/**
@@ -340,61 +429,31 @@ public class RdfSerializer extends WriterSerializer implements RdfCommon {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Default namespaces.
 	 *
-	 * @see #RDF_addBeanTypes
+	 * @see #RDF_namespaces
 	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
+	 * 	The default list of namespaces associated with this serializer.
 	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
+	public Namespace[] getNamespaces() {
+		return namespaces;
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 *
-	 * @see #RDF_language
+	 * @see #RDF_useXmlNamespaces
 	 * @return
-	 * 	The RDF language to use.
+	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
-	protected final String getRdfLanguage() {
-		return rdfLanguage;
+	protected final boolean isUseXmlNamespaces() {
+		return useXmlNamespaces;
 	}
 
-	/**
-	 * Configuration property:  XML namespace for Juneau properties.
-	 *
-	 * @see #RDF_juneauNs
-	 * @return
-	 * 	The XML namespace to use for Juneau properties.
-	 */
-	protected final Namespace getJuneauNs() {
-		return juneauNs;
-	}
-
-	/**
-	 * Configuration property:  Default XML namespace for bean properties.
-	 *
-	 * @see #RDF_juneauBpNs
-	 * @return
-	 * 	The XML namespace to use for bean properties.
-	 */
-	protected final Namespace getJuneauBpNs() {
-		return juneauBpNs;
-	}
-
-	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
-	 *
-	 * @see #RDF_collectionFormat
-	 * @return
-	 * 	RDF format for representing collections and arrays.
-	 */
-	protected final RdfCollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

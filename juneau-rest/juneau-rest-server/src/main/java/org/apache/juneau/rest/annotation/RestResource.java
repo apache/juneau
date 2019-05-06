@@ -20,12 +20,14 @@ import java.lang.annotation.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -139,7 +141,10 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link BeanConfig#beanFilters()}
 	 */
+	@Deprecated
 	Class<?>[] beanFilters() default {};
 
 	/**
@@ -634,7 +639,10 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
+	 *
+	 * @deprecated {@link BeanConfig#pojoSwaps()}
 	 */
+	@Deprecated
 	Class<?>[] pojoSwaps() default {};
 
 	/**
@@ -731,7 +739,10 @@ public @interface RestResource {
 	 * <ul>
 	 * 	<li class='jf'>{@link Serializer#SERIALIZER_listener}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link SerializerConfig#listener()}
 	 */
+	@Deprecated
 	Class<? extends SerializerListener> serializerListener() default SerializerListener.Null.class;
 
 	/**

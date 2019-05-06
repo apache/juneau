@@ -18,11 +18,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -49,23 +47,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* ContextBuilder */
 	public UrlEncodingParser build() {
 		return build(UrlEncodingParser.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public UrlEncodingParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(UrlEncodingConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (UrlEncodingConfig a : m.get(UrlEncodingConfig.class)) {
-			if (! a.expandedParams().isEmpty())
-				expandedParams(r.bool(a.expandedParams()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -572,12 +553,6 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public UrlEncodingParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -610,6 +585,12 @@ public class UrlEncodingParserBuilder extends UonParserBuilder {
 	@Override /* ContextBuilder */
 	public UrlEncodingParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public UrlEncodingParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

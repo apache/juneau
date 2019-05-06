@@ -1,0 +1,219 @@
+// ***************************************************************************************************************************
+// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+// * with the License.  You may obtain a copy of the License at                                                              *
+// *                                                                                                                         *
+// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+// *                                                                                                                         *
+// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+// * specific language governing permissions and limitations under the License.                                              *
+// ***************************************************************************************************************************
+package org.apache.juneau.serializer;
+
+import static org.junit.Assert.*;
+
+import java.util.function.*;
+
+import org.apache.juneau.json.*;
+import org.apache.juneau.msgpack.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.utils.*;
+import org.junit.*;
+
+/**
+ * Tests the @SerializerConfig annotation.
+ */
+public class SerializerConfigAnnotationTest {
+
+	private static void check(String expected, Object o) {
+		assertEquals(expected, TO_STRING.apply(o));
+	}
+
+	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
+		@Override
+		public String apply(Object t) {
+			if (t == null)
+				return null;
+			if (t instanceof AA)
+				return "AA";
+			return t.toString();
+		}
+	};
+
+	static StringResolver sr = new StringResolver() {
+		@Override
+		public String resolve(String input) {
+			if (input.startsWith("$"))
+				input = input.substring(1);
+			return input;
+		}
+	};
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class AA extends SerializerListener {}
+
+	@SerializerConfig(
+		addBeanTypes="$true",
+		addRootType="$true",
+		binaryFormat="$HEX",
+		listener=AA.class,
+		maxIndent="$1",
+		quoteChar="$'",
+		sortCollections="$true",
+		sortMaps="$true",
+		trimEmptyCollections="$true",
+		trimEmptyMaps="$true",
+		trimNullProperties="$true",
+		trimStrings="$true",
+		uriContext="${}",
+		uriRelativity="$RESOURCE",
+		uriResolution="$ABSOLUTE",
+		useWhitespace="$true"
+	)
+	static class A {}
+	static ClassInfo a = ClassInfo.of(A.class);
+
+	@Test
+	public void basicWriterSerializer() throws Exception {
+		AnnotationsMap m = a.getAnnotationsMap();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		check("true", ((SerializerSession)x).isAddBeanTypes());
+		check("true", x.isAddRootType());
+		check("AA", x.getListener());
+		check("1", x.getMaxIndent());
+		check("'", x.getQuoteChar());
+		check("true", x.isSortCollections());
+		check("true", x.isSortMaps());
+		check("true", x.isTrimEmptyCollections());
+		check("true", x.isTrimEmptyMaps());
+		check("true", x.isTrimNullProperties());
+		check("true", x.isTrimStrings());
+		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("RESOURCE", x.getUriRelativity());
+		check("ABSOLUTE", x.getUriResolution());
+		check("true", x.isUseWhitespace());
+	}
+
+	@Test
+	public void basicOutputStreamSerializer() throws Exception {
+		AnnotationsMap m = a.getAnnotationsMap();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		check("true", ((SerializerSession)x).isAddBeanTypes());
+		check("true", x.isAddRootType());
+		check("HEX", x.getBinaryFormat());
+		check("AA", x.getListener());
+		check("true", x.isSortCollections());
+		check("true", x.isSortMaps());
+		check("true", x.isTrimEmptyCollections());
+		check("true", x.isTrimEmptyMaps());
+		check("true", x.isTrimNullProperties());
+		check("true", x.isTrimStrings());
+		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("RESOURCE", x.getUriRelativity());
+		check("ABSOLUTE", x.getUriResolution());
+		check("true", x.isUseWhitespace());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotation with no values.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SerializerConfig()
+	static class B {}
+	static ClassInfo b = ClassInfo.of(B.class);
+
+	@Test
+	public void noValuesWriterSerializer() throws Exception {
+		AnnotationsMap m = b.getAnnotationsMap();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddRootType());
+		check(null, x.getListener());
+		check("100", x.getMaxIndent());
+		check("\"", x.getQuoteChar());
+		check("false", x.isSortCollections());
+		check("false", x.isSortMaps());
+		check("false", x.isTrimEmptyCollections());
+		check("false", x.isTrimEmptyMaps());
+		check("true", x.isTrimNullProperties());
+		check("false", x.isTrimStrings());
+		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("RESOURCE", x.getUriRelativity());
+		check("NONE", x.getUriResolution());
+		check("false", x.isUseWhitespace());
+	}
+
+	@Test
+	public void noValuesOutputStreamSerializer() throws Exception {
+		AnnotationsMap m = b.getAnnotationsMap();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddRootType());
+		check("HEX", x.getBinaryFormat());
+		check(null, x.getListener());
+		check("false", x.isSortCollections());
+		check("false", x.isSortMaps());
+		check("false", x.isTrimEmptyCollections());
+		check("false", x.isTrimEmptyMaps());
+		check("true", x.isTrimNullProperties());
+		check("false", x.isTrimStrings());
+		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("RESOURCE", x.getUriRelativity());
+		check("NONE", x.getUriResolution());
+		check("false", x.isUseWhitespace());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// No annotation.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	static class C {}
+	static ClassInfo c = ClassInfo.of(C.class);
+
+	@Test
+	public void noAnnotationWriterSerializer() throws Exception {
+		AnnotationsMap m = c.getAnnotationsMap();
+		JsonSerializerSession x = JsonSerializer.create().applyAnnotations(m, sr).build().createSession();
+		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddRootType());
+		check(null, x.getListener());
+		check("100", x.getMaxIndent());
+		check("\"", x.getQuoteChar());
+		check("false", x.isSortCollections());
+		check("false", x.isSortMaps());
+		check("false", x.isTrimEmptyCollections());
+		check("false", x.isTrimEmptyMaps());
+		check("true", x.isTrimNullProperties());
+		check("false", x.isTrimStrings());
+		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("RESOURCE", x.getUriRelativity());
+		check("NONE", x.getUriResolution());
+		check("false", x.isUseWhitespace());
+	}
+
+	@Test
+	public void noAnnotationOutputStreamSerializer() throws Exception {
+		AnnotationsMap m = c.getAnnotationsMap();
+		MsgPackSerializerSession x = MsgPackSerializer.create().applyAnnotations(m, sr).build().createSession();
+		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddRootType());
+		check("HEX", x.getBinaryFormat());
+		check(null, x.getListener());
+		check("false", x.isSortCollections());
+		check("false", x.isSortMaps());
+		check("false", x.isTrimEmptyCollections());
+		check("false", x.isTrimEmptyMaps());
+		check("true", x.isTrimNullProperties());
+		check("false", x.isTrimStrings());
+		check("{absoluteAuthority:'/',absoluteContextRoot:'/',absolutePathInfo:'/',absolutePathInfoParent:'/',absoluteServletPath:'/',absoluteServletPathParent:'/',rootRelativeContextRoot:'/',rootRelativePathInfo:'/',rootRelativePathInfoParent:'/',rootRelativeServletPath:'/',rootRelativeServletPathParent:'/'}", x.getUriContext());
+		check("RESOURCE", x.getUriRelativity());
+		check("NONE", x.getUriResolution());
+		check("false", x.isUseWhitespace());
+	}
+}

@@ -57,7 +57,6 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -1013,16 +1012,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	 */
 	public RestClientBuilder warning(Object value) {
 		return header("Warning", value);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public RestClientBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2666,12 +2655,6 @@ public class RestClientBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RestClientBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public RestClientBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -2707,6 +2690,11 @@ public class RestClientBuilder extends BeanContextBuilder {
 		return this;
 	}
 
+	@Override
+	public RestClientBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
+		return this;
+	}
 
 	//------------------------------------------------------------------------------------------------
 	// Passthrough methods for HttpClientBuilder.

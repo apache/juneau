@@ -115,7 +115,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	public String getAnchorText(BeanPropertyMeta pMeta, Object o) {
 		String s = o.toString();
-		if (isLookForLabelParameters()) {
+		if (isDetectLabelParameters()) {
 			Matcher m = labelPattern.matcher(s);
 			if (m.find())
 				return urlDecode(m.group(1));
@@ -818,30 +818,22 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		}
 		return th;
 	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Look for link labels in URIs.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see HtmlSerializer#HTML_detectLabelParameters
+	 * @see HtmlSerializer#HTML_addBeanTypes
 	 * @return
-	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
 	 */
-	protected final boolean isLookForLabelParameters() {
-		return ctx.isLookForLabelParameters();
-	}
-
-	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
-	 *
-	 * @see HtmlSerializer#HTML_detectLinksInStrings
-	 * @return
-	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
-	 */
-	protected final boolean isDetectLinksInStrings() {
-		return ctx.isDetectLinksInStrings();
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
 	}
 
 	/**
@@ -856,16 +848,25 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Look for link labels in URIs.
 	 *
-	 * @see HtmlSerializer#HTML_addBeanTypes
+	 * @see HtmlSerializer#HTML_detectLabelParameters
 	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
+	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
+	protected final boolean isDetectLabelParameters() {
+		return ctx.isDetectLabelParameters();
+	}
+
+	/**
+	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 *
+	 * @see HtmlSerializer#HTML_detectLinksInStrings
+	 * @return
+	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
+	 */
+	protected final boolean isDetectLinksInStrings() {
+		return ctx.isDetectLinksInStrings();
 	}
 
 	/**

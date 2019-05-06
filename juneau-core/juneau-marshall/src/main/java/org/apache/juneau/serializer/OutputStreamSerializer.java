@@ -127,6 +127,11 @@ public abstract class OutputStreamSerializer extends Serializer {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override /* Context */
+	public OutputStreamSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
 	public final boolean isWriterSerializer() {
 		return false;
@@ -158,6 +163,10 @@ public abstract class OutputStreamSerializer extends Serializer {
 	protected final BinaryFormat getBinaryFormat() {
 		return binaryFormat;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

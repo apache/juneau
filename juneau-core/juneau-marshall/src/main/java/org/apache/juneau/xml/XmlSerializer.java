@@ -542,46 +542,18 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public XmlSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Serializer */
+	public XmlSerializerSession createSession(SerializerSessionArgs args) {
 		return new XmlSerializerSession(this, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Configuration property:  Auto-detect namespace usage.
-	 *
-	 * @see #XML_autoDetectNamespaces
-	 * @return
-	 * 	<jk>true</jk> if namespace usage is detected before serialization.
-	 */
-	protected final boolean isAutoDetectNamespaces() {
-		return autoDetectNamespaces;
-	}
-
-	/**
-	 * Configuration property:  Enable support for XML namespaces.
-	 *
-	 * @see #XML_enableNamespaces
-	 * @return
-	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
-	 */
-	protected final boolean isEnableNamespaces() {
-		return enableNamespaces;
-	}
-
-	/**
-	 * Configuration property:  Add namespace URLs to the root element.
-	 *
-	 * @see #XML_addNamespaceUrisToRoot
-	 * @return
-	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
-	 */
-	protected final boolean isAddNamespaceUrlsToRoot() {
-		return addNamespaceUrlsToRoot;
-	}
 
 	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
@@ -597,6 +569,28 @@ public class XmlSerializer extends WriterSerializer {
 	}
 
 	/**
+	 * Configuration property:  Add namespace URLs to the root element.
+	 *
+	 * @see #XML_addNamespaceUrisToRoot
+	 * @return
+	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
+	 */
+	protected final boolean isAddNamespaceUrlsToRoot() {
+		return addNamespaceUrlsToRoot;
+	}
+
+	/**
+	 * Configuration property:  Auto-detect namespace usage.
+	 *
+	 * @see #XML_autoDetectNamespaces
+	 * @return
+	 * 	<jk>true</jk> if namespace usage is detected before serialization.
+	 */
+	protected final boolean isAutoDetectNamespaces() {
+		return autoDetectNamespaces;
+	}
+
+	/**
 	 * Configuration property:  Default namespace.
 	 *
 	 * @see #XML_defaultNamespace
@@ -605,6 +599,28 @@ public class XmlSerializer extends WriterSerializer {
 	 */
 	protected final Namespace getDefaultNamespace() {
 		return defaultNamespace;
+	}
+
+	/**
+	 * Configuration property:  Enable support for XML namespaces.
+	 *
+	 * @see #XML_enableNamespaces
+	 * @return
+	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
+	 */
+	protected final boolean isEnableNamespaces() {
+		return enableNamespaces;
+	}
+
+	/**
+	 * Configuration property:  Default namespaces.
+	 *
+	 * @see #XML_namespaces
+	 * @return
+	 * 	The default list of namespaces associated with this serializer.
+	 */
+	protected final Namespace[] getNamespaces() {
+		return namespaces;
 	}
 
 	/**
@@ -619,16 +635,9 @@ public class XmlSerializer extends WriterSerializer {
 		return xsNamespace;
 	}
 
-	/**
-	 * Configuration property:  Default namespaces.
-	 *
-	 * @see #XML_namespaces
-	 * @return
-	 * 	The default list of namespaces associated with this serializer.
-	 */
-	protected final Namespace[] getNamespaces() {
-		return namespaces;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

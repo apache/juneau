@@ -47,16 +47,6 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public JsoParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -535,12 +525,6 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsoParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public JsoParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -573,6 +557,12 @@ public class JsoParserBuilder extends InputStreamParserBuilder {
 	@Override /* ContextBuilder */
 	public JsoParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public JsoParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

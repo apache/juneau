@@ -18,9 +18,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.json.annotation.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -49,27 +46,6 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public JsonSerializer build() {
 		return build(JsonSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public JsonSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(JsonConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (JsonConfig a : m.get(JsonConfig.class)) {
-			if (! a.addBeanTypes().isEmpty())
-				addBeanTypes(r.bool(a.addBeanTypes()));
-			if (! a.escapeSolidus().isEmpty())
-				escapeSolidus(r.bool(a.escapeSolidus()));
-			if (! a.simpleMode().isEmpty())
-				simple(r.bool(a.simpleMode()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -763,12 +739,6 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public JsonSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -801,6 +771,12 @@ public class JsonSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public JsonSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public JsonSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

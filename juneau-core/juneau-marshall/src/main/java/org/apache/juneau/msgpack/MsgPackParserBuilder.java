@@ -47,16 +47,6 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public MsgPackParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -535,12 +525,6 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public MsgPackParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public MsgPackParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -573,6 +557,12 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 	@Override /* ContextBuilder */
 	public MsgPackParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public MsgPackParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

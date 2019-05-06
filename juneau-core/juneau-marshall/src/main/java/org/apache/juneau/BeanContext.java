@@ -2607,10 +2607,17 @@ public class BeanContext extends Context {
 			Object o = examples.get(c.getName());
 			if (o != null)
 				return o;
+			o = examples.get(c.getSimpleName());
+			if (o != null)
+				return o;
 			Class<?> c2 = findImplClass(c);
 			if (c2 == null)
 				return null;
-			return examples.get(c2.getName());
+			o = examples.get(c2.getName());
+			if (o != null)
+				return o;
+			o = examples.get(c2.getSimpleName());
+			return o;
 		}
 		return null;
 	}
@@ -2801,6 +2808,86 @@ public class BeanContext extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  Minimum bean class visibility.
+	 *
+	 * @see #BEAN_beanClassVisibility
+	 * @return
+	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
+	 */
+	protected final Visibility getBeanClassVisibility() {
+		return beanClassVisibility;
+	}
+
+	/**
+	 * Configuration property:  Minimum bean constructor visibility.
+	 *
+	 * @see #BEAN_beanConstructorVisibility
+	 * @return
+	 * 	Only look for constructors with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanConstructorVisibility() {
+		return beanConstructorVisibility;
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * @see #BEAN_beanDictionary
+	 * @return
+	 * 	The list of classes that make up the bean dictionary in this bean context.
+	 */
+	protected final List<Class<?>> getBeanDictionaryClasses() {
+		return beanDictionaryClasses;
+	}
+
+	/**
+	 * Configuration property:  Minimum bean field visibility.
+	 *
+	 *
+	 * @see #BEAN_beanFieldVisibility
+	 * @return
+	 * 	Only look for bean fields with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanFieldVisibility() {
+		return beanFieldVisibility;
+	}
+
+	/**
+	 * Configuration property:  Bean filters.
+	 *
+	 *
+	 * @see BeanContext#BEAN_beanFilters
+	 * @return
+	 * 	Only look for bean fields with this specified minimum visibility.
+	 */
+	protected final BeanFilter[] getBeanFilters() {
+		return beanFilters;
+	}
+
+	/**
+	 * Configuration property:  BeanMap.put() returns old property value.
+	 *
+	 * @see #BEAN_beanMapPutReturnsOldValue
+	 * @return
+	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
+	 * 	<br>Otherwise, it returns <jk>null</jk>.
+	 */
+	protected final boolean isBeanMapPutReturnsOldValue() {
+		return beanMapPutReturnsOldValue;
+	}
+
+	/**
+	 * Configuration property:  Minimum bean method visibility.
+	 *
+	 * @see #BEAN_beanMethodVisibility
+	 * @return
+	 * 	Only look for bean methods with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanMethodVisibility() {
+		return beanMethodVisibility;
+	}
+
+	/**
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
 	 * @see #BEAN_beansRequireDefaultConstructor
@@ -2849,27 +2936,96 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Configuration property:  BeanMap.put() returns old property value.
+	 * Configuration property:  Bean type property name.
 	 *
-	 * @see #BEAN_beanMapPutReturnsOldValue
+	 * @see #BEAN_beanTypePropertyName
 	 * @return
-	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
-	 * 	<br>Otherwise, it returns <jk>null</jk>.
+	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
-	protected final boolean isBeanMapPutReturnsOldValue() {
-		return beanMapPutReturnsOldValue;
+	protected final String getBeanTypePropertyName() {
+		return beanTypePropertyName;
 	}
 
 	/**
-	 * Configuration property:  Use interface proxies.
+	 * Configuration property:  Debug mode.
 	 *
-	 * @see #BEAN_useInterfaceProxies
+	 * @see #BEAN_debug
 	 * @return
-	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
-	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
+	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	protected final boolean isUseInterfaceProxies() {
-		return useInterfaceProxies;
+	protected boolean isDebug() {
+		return debug;
+	}
+
+	/**
+	 * Configuration property:  POJO examples.
+	 *
+	 * @see #BEAN_examples
+	 * @return
+	 * 	A map of POJO examples keyed by class name.
+	 */
+	protected final Map<String,?> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * @see #BEAN_excludeProperties
+	 * @return
+	 * 	The list of property names to exclude keyed by class name.
+	 */
+	protected final Map<String,String[]> getExcludeProperties() {
+		return excludeProperties;
+	}
+
+	/**
+	 * Configuration property:  Find fluent setters.
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 *
+	 * @see #BEAN_fluentSetters
+	 * @return
+	 * 	<jk>true</jk> if fluent setters are detected on beans.
+	 */
+	protected final boolean isFluentSetters() {
+		return fluentSetters;
+	}
+
+	/**
+	 * Configuration property:  Ignore invocation errors on getters.
+	 *
+	 * @see #BEAN_ignoreInvocationExceptionsOnGetters
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
+	 */
+	protected final boolean isIgnoreInvocationExceptionsOnGetters() {
+		return ignoreInvocationExceptionsOnGetters;
+	}
+
+	/**
+	 * Configuration property:  Ignore invocation errors on setters.
+	 *
+	 * @see #BEAN_ignoreInvocationExceptionsOnSetters
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
+	 */
+	protected final boolean isIgnoreInvocationExceptionsOnSetters() {
+		return ignoreInvocationExceptionsOnSetters;
+	}
+
+	/**
+	 * Configuration property:  Ignore properties without setters.
+	 *
+	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 *
+	 * @see #BEAN_ignorePropertiesWithoutSetters
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
+	 */
+	protected final boolean isIgnorePropertiesWithoutSetters() {
+		return ignorePropertiesWithoutSetters;
 	}
 
 	/**
@@ -2896,152 +3052,25 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Configuration property:  Ignore properties without setters.
+	 * Configuration property:  Implementation classes.
 	 *
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
-	 *
-	 * @see #BEAN_ignorePropertiesWithoutSetters
+	 * @see #BEAN_implClasses
 	 * @return
-	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
+	 * 	Implementation classes keyed by interface class names.
 	 */
-	protected final boolean isIgnorePropertiesWithoutSetters() {
-		return ignorePropertiesWithoutSetters;
+	protected final Map<String,ClassInfo> getImplClasses() {
+		return implClasses;
 	}
 
 	/**
-	 * Configuration property:  Ignore invocation errors on getters.
+	 * Configuration property:  Bean property includes.
 	 *
-	 * @see #BEAN_ignoreInvocationExceptionsOnGetters
+	 * @see #BEAN_includeProperties
 	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
+	 * 	Include properties keyed by class name.
 	 */
-	protected final boolean isIgnoreInvocationExceptionsOnGetters() {
-		return ignoreInvocationExceptionsOnGetters;
-	}
-
-	/**
-	 * Configuration property:  Ignore invocation errors on setters.
-	 *
-	 * @see #BEAN_ignoreInvocationExceptionsOnSetters
-	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
-	 */
-	protected final boolean isIgnoreInvocationExceptionsOnSetters() {
-		return ignoreInvocationExceptionsOnSetters;
-	}
-
-	/**
-	 * Configuration property:  Use Java Introspector.
-	 *
-	 * @see #BEAN_useJavaBeanIntrospector
-	 * @return
-	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
-	 */
-	protected final boolean isUseJavaBeanIntrospector() {
-		return useJavaBeanIntrospector;
-	}
-
-	/**
-	 * Configuration property:  Use enum names.
-	 *
-	 * @see #BEAN_useEnumNames
-	 * @return
-	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
-	 */
-	protected final boolean isUseEnumNames() {
-		return useEnumNames;
-	}
-
-	/**
-	 * Configuration property:  Sort bean properties.
-	 *
-	 * @see #BEAN_sortProperties
-	 * @return
-	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
-	 */
-	protected final boolean isSortProperties() {
-		return sortProperties;
-	}
-
-	/**
-	 * Configuration property:  Find fluent setters.
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 *
-	 * @see #BEAN_fluentSetters
-	 * @return
-	 * 	<jk>true</jk> if fluent setters are detected on beans.
-	 */
-	protected final boolean isFluentSetters() {
-		return fluentSetters;
-	}
-
-	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * @see #BEAN_debug
-	 * @return
-	 * 	<jk>true</jk> if debug mode is enabled.
-	 */
-	protected boolean isDebug() {
-		return debug;
-	}
-
-	/**
-	 * Configuration property:  Minimum bean constructor visibility.
-	 *
-	 * @see #BEAN_beanConstructorVisibility
-	 * @return
-	 * 	Only look for constructors with this specified minimum visibility.
-	 */
-	protected final Visibility getBeanConstructorVisibility() {
-		return beanConstructorVisibility;
-	}
-
-	/**
-	 * Configuration property:  Minimum bean class visibility.
-	 *
-	 * @see #BEAN_beanClassVisibility
-	 * @return
-	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
-	 */
-	protected final Visibility getBeanClassVisibility() {
-		return beanClassVisibility;
-	}
-
-	/**
-	 * Configuration property:  Minimum bean method visibility.
-	 *
-	 * @see #BEAN_beanMethodVisibility
-	 * @return
-	 * 	Only look for bean methods with this specified minimum visibility.
-	 */
-	protected final Visibility getBeanMethodVisibility() {
-		return beanMethodVisibility;
-	}
-
-	/**
-	 * Configuration property:  Minimum bean field visibility.
-	 *
-	 *
-	 * @see #BEAN_beanFieldVisibility
-	 * @return
-	 * 	Only look for bean fields with this specified minimum visibility.
-	 */
-	protected final Visibility getBeanFieldVisibility() {
-		return beanFieldVisibility;
-	}
-
-	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * @see #BEAN_beanDictionary
-	 * @return
-	 * 	The list of classes that make up the bean dictionary in this bean context.
-	 */
-	protected final List<Class<?>> getBeanDictionaryClasses() {
-		return beanDictionaryClasses;
+	protected final Map<String,String[]> getIncludeProperties() {
+		return includeProperties;
 	}
 
 	/**
@@ -3056,17 +3085,6 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Configuration property:  Time zone.
-	 *
-	 * @see #BEAN_timeZone
-	 * @return
-	 * 	The default timezone for serializer and parser sessions.
-	 */
-	protected final TimeZone getTimeZone() {
-		return timeZone;
-	}
-
-	/**
 	 * Configuration property:  Media type.
 	 *
 	 * @see #BEAN_mediaType
@@ -3075,6 +3093,50 @@ public class BeanContext extends Context {
 	 */
 	protected final MediaType getMediaType() {
 		return mediaType;
+	}
+
+	/**
+	 * Configuration property:  Bean class exclusions.
+	 *
+	 * @see #BEAN_notBeanClasses
+	 * @return
+	 * 	The list of classes that are explicitly not beans.
+	 */
+	protected final Class<?>[] getNotBeanClasses() {
+		return notBeanClasses;
+	}
+
+	/**
+	 * Configuration property:  Bean package exclusions.
+	 *
+	 * @see #BEAN_notBeanPackages
+	 * @return
+	 * 	The list of fully-qualified package names to exclude from being classified as beans.
+	 */
+	protected final String[] getNotBeanPackagesNames() {
+		return notBeanPackageNames;
+	}
+
+	/**
+	 * Configuration property:  Bean package exclusions.
+	 *
+	 * @see #BEAN_notBeanPackages
+	 * @return
+	 * 	The list of package name prefixes to exclude from being classified as beans.
+	 */
+	protected final String[] getNotBeanPackagesPrefixes() {
+		return notBeanPackagePrefixes;
+	}
+
+	/**
+	 * Configuration property:  POJO swaps.
+	 *
+	 * @see #BEAN_pojoSwaps
+	 * @return
+	 * 	The list POJO swaps defined.
+	 */
+	protected final PojoSwap<?,?>[] getPojoSwaps() {
+		return pojoSwaps;
 	}
 
 	/**
@@ -3089,15 +3151,64 @@ public class BeanContext extends Context {
 	}
 
 	/**
-	 * Configuration property:  Bean type property name.
+	 * Configuration property:  Sort bean properties.
 	 *
-	 * @see #BEAN_beanTypePropertyName
+	 * @see #BEAN_sortProperties
 	 * @return
-	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
+	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
 	 */
-	protected final String getBeanTypePropertyName() {
-		return beanTypePropertyName;
+	protected final boolean isSortProperties() {
+		return sortProperties;
 	}
+
+	/**
+	 * Configuration property:  Time zone.
+	 *
+	 * @see #BEAN_timeZone
+	 * @return
+	 * 	The default timezone for serializer and parser sessions.
+	 */
+	protected final TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * Configuration property:  Use enum names.
+	 *
+	 * @see #BEAN_useEnumNames
+	 * @return
+	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
+	 */
+	protected final boolean isUseEnumNames() {
+		return useEnumNames;
+	}
+
+	/**
+	 * Configuration property:  Use interface proxies.
+	 *
+	 * @see #BEAN_useInterfaceProxies
+	 * @return
+	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
+	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
+	 */
+	protected final boolean isUseInterfaceProxies() {
+		return useInterfaceProxies;
+	}
+
+	/**
+	 * Configuration property:  Use Java Introspector.
+	 *
+	 * @see #BEAN_useJavaBeanIntrospector
+	 * @return
+	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
+	 */
+	protected final boolean isUseJavaBeanIntrospector() {
+		return useJavaBeanIntrospector;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

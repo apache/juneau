@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -45,16 +44,6 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public CsvSerializer build() {
 		return build(CsvSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public CsvSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -655,12 +644,6 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public CsvSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public CsvSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -693,6 +676,12 @@ public class CsvSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public CsvSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public CsvSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

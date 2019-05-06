@@ -19,9 +19,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
@@ -49,37 +46,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	@Override /* ContextBuilder */
 	public JsonSchemaGenerator build() {
 		return build(JsonSchemaGenerator.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(JsonSchemaConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (JsonSchemaConfig a : m.get(JsonSchemaConfig.class)) {
-			if (! a.addDescriptionsTo().isEmpty())
-				addDescriptionsTo(r.string(a.addDescriptionsTo()));
-			if (! a.addExamplesTo().isEmpty())
-				addExamplesTo(r.string(a.addExamplesTo()));
-			if (! a.allowNestedDescriptions().isEmpty())
-				allowNestedDescriptions(r.bool(a.allowNestedDescriptions()));
-			if (! a.allowNestedExamples().isEmpty())
-				allowNestedExamples(r.bool(a.allowNestedExamples()));
-			if (a.beanDefMapper() != BeanDefMapper.Null.class)
-				beanDefMapper(a.beanDefMapper());
-			for (CSEntry e : a.defaultSchemas())
-				defaultSchema(e.key(), new ObjectMap(r.string(e.value())));
-			if (! a.ignoreTypes().isEmpty())
-				ignoreTypes(r.string(a.ignoreTypes()));
-			if (! a.useBeanDefs().isEmpty())
-				useBeanDefs(r.bool(a.useBeanDefs()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -761,12 +727,6 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonSchemaGeneratorBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public JsonSchemaGeneratorBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -802,4 +762,9 @@ public class JsonSchemaGeneratorBuilder extends BeanTraverseBuilder {
 		return this;
 	}
 
+	@Override
+	public JsonSchemaGeneratorBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
+		return this;
+	}
 }

@@ -59,11 +59,11 @@ public class RdfParserSession extends ReaderParserSession {
 		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
 		pType = model.createProperty(ctx.getJuneauBpNs().getUri(), RDF_juneauNs_TYPE);
 		pRdfType = model.createProperty("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
-		rdfReader = model.getReader(ctx.getRdfLanguage());
+		rdfReader = model.getReader(ctx.getLanguage());
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
-		if (! ctx.getRdfLanguage().equals(LANG_NTRIPLE)) {
-			for (Map.Entry<String,Object> e : ctx.jenaSettings.entrySet())
+		if (! ctx.getLanguage().equals(LANG_NTRIPLE)) {
+			for (Map.Entry<String,Object> e : ctx.jenaProperties.entrySet())
 				rdfReader.setProperty(e.getKey(), e.getValue());
 		}
 	}
@@ -430,52 +430,18 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
+	// Common properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Trim whitespace from text elements.
+	 * Configuration property:  RDF format for representing collections and arrays.
 	 *
-	 * @see RdfParser#RDF_trimWhitespace
+	 * @see RdfParser#RDF_collectionFormat
 	 * @return
-	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
+	 * 	RDF format for representing collections and arrays.
 	 */
-	protected final boolean isTrimWhitespace() {
-		return ctx.isTrimWhitespace();
-	}
-
-	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
-	 *
-	 * @see RdfParser#RDF_looseCollections
-	 * @return
-	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
-	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 */
-	protected final boolean isLooseCollections() {
-		return ctx.isLooseCollections();
-	}
-
-	/**
-	 * Configuration property:  RDF language.
-	 *
-	 * @see RdfParser#RDF_language
-	 * @return
-	 * 	The RDF language to use.
-	 */
-	protected final String getRdfLanguage() {
-		return ctx.getRdfLanguage();
-	}
-
-	/**
-	 * Configuration property:  XML namespace for Juneau properties.
-	 *
-	 * @see RdfParser#RDF_juneauNs
-	 * @return
-	 * 	XML namespace for Juneau properties.
-	 */
-	protected final Namespace getJuneauNs() {
-		return ctx.getJuneauNs();
+	protected final RdfCollectionFormat getCollectionFormat() {
+		return ctx.getCollectionFormat();
 	}
 
 	/**
@@ -490,13 +456,65 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * Configuration property:  XML namespace for Juneau properties.
 	 *
-	 * @see RdfParser#RDF_collectionFormat
+	 * @see RdfParser#RDF_juneauNs
 	 * @return
-	 * 	RDF format for representing collections and arrays.
+	 * 	XML namespace for Juneau properties.
 	 */
-	protected final RdfCollectionFormat getCollectionFormat() {
-		return ctx.getCollectionFormat();
+	protected final Namespace getJuneauNs() {
+		return ctx.getJuneauNs();
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 *
+	 * @see RdfParser#RDF_language
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	protected final String getLanguage() {
+		return ctx.getLanguage();
+	}
+
+	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see RdfParser#RDF_looseCollections
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	protected final boolean isLooseCollections() {
+		return ctx.isLooseCollections();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Jena properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  All Jena-related configuration properties.
+	 *
+	 * @return
+	 * 	A map of all Jena-related configuration properties.
+	 */
+	protected final Map<String,Object> getJenaProperties() {
+		return ctx.getJenaProperties();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Trim whitespace from text elements.
+	 *
+	 * @see RdfParser#RDF_trimWhitespace
+	 * @return
+	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
+	 */
+	protected final boolean isTrimWhitespace() {
+		return ctx.isTrimWhitespace();
 	}
 }

@@ -305,7 +305,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final boolean
-		encodeChars,
+		encoding,
 		addBeanTypes;
 
 	private final ParamFormat
@@ -349,7 +349,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 */
 	public UonSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
-		encodeChars = getBooleanProperty(UON_encoding, false);
+		encoding = getBooleanProperty(UON_encoding, false);
 		addBeanTypes = getBooleanProperty(UON_addBeanTypes, getBooleanProperty(SERIALIZER_addBeanTypes, false));
 		paramFormat = getProperty(UON_paramFormat, ParamFormat.class, ParamFormat.UON);
 	}
@@ -380,8 +380,13 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	// Entry point methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override /* Context */
+	public  UonSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public UonSerializerSession createSession(SerializerSessionArgs args) {
 		return new UonSerializerSession(this, null, args);
 	}
 
@@ -410,17 +415,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
-	 *
-	 * @see #UON_encoding
-	 * @return
-	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
-	 */
-	protected final boolean isEncodeChars() {
-		return encodeChars;
-	}
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see #UON_addBeanTypes
@@ -434,6 +428,17 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	}
 
 	/**
+	 * Configuration property:  Encode non-valid URI characters.
+	 *
+	 * @see #UON_encoding
+	 * @return
+	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
+	 */
+	protected final boolean isEncoding() {
+		return encoding;
+	}
+
+	/**
 	 * Configuration property:  Format to use for query/form-data/header values.
 	 *
 	 * @see #UON_paramFormat
@@ -444,11 +449,15 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		return paramFormat;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UonSerializer", new ObjectMap()
-				.append("encodeChars", encodeChars)
+				.append("encoding", encoding)
 				.append("addBeanTypes", addBeanTypes)
 				.append("paramFormat", paramFormat)
 			);

@@ -110,6 +110,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	String path;
 	HtmlDocBuilder htmlDocBuilder;
 
+	@SuppressWarnings("deprecation")
 	RestContextBuilder(ServletConfig servletConfig, Class<?> resourceClass, RestContext parentContext) throws ServletException {
 		this.inner = servletConfig;
 		this.resourceClass = resourceClass;
@@ -2594,12 +2595,6 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	public RestContextBuilder set(String name, Object value) {
 		super.set(name, value);
 		this.properties.put(name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
-	public RestContextBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
 		return this;
 	}
 

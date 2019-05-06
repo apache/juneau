@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -43,7 +42,6 @@ import org.apache.juneau.transforms.*;
 	title="Log files",
 	description="Log files from this service",
 	properties={
-		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME"),
 		@Property(name=LogsResource.LOGS_RESOURCE_logDir, value="$C{Logging/logDir}"),
 		@Property(name=LogsResource.LOGS_RESOURCE_allowDeletes, value="$C{Logging/allowDeletes,true}"),
 		@Property(name=LogsResource.LOGS_RESOURCE_logFormat, value="$C{Logging/format}"),
@@ -56,6 +54,7 @@ import org.apache.juneau.transforms.*;
 		DateSwap.ISO8601DT.class  // Serialize Date objects as ISO8601 strings.
 	}
 )
+@HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
 public class LogsResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;

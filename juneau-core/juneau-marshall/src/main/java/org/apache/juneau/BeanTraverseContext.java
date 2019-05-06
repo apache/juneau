@@ -237,6 +237,11 @@ public abstract class BeanTraverseContext extends BeanContext {
 	}
 
 	@Override /* Context */
+	public BeanTraverseSession createSession() {
+		return new BeanTraverseSession(this, createDefaultSessionArgs());
+	}
+
+	@Override /* Context */
 	public BeanTraverseSession createSession(BeanSessionArgs args) {
 		return new BeanTraverseSession(this, args);
 	}
@@ -245,6 +250,29 @@ public abstract class BeanTraverseContext extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Automatically detect POJO recursions.
+	 *
+	 * @see #BEANTRAVERSE_detectRecursions
+	 * @return
+	 * 	<jk>true</jk> if recursions should be checked for during traversal.
+	 */
+	protected final boolean isDetectRecursions() {
+		return detectRecursions;
+	}
+
+	/**
+	 * Configuration property:  Ignore recursion errors.
+	 *
+	 * @see #BEANTRAVERSE_ignoreRecursions
+	 * @return
+	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 */
+	protected final boolean isIgnoreRecursions() {
+		return ignoreRecursions;
+	}
 
 	/**
 	 * Configuration property:  Initial depth.
@@ -269,27 +297,9 @@ public abstract class BeanTraverseContext extends BeanContext {
 		return maxDepth;
 	}
 
-	/**
-	 * Configuration property:  Automatically detect POJO recursions.
-	 * @see #BEANTRAVERSE_detectRecursions
-	 * @return
-	 * 	<jk>true</jk> if recursions should be checked for during traversal.
-	 */
-	protected final boolean isDetectRecursions() {
-		return detectRecursions;
-	}
-
-	/**
-	 * Configuration property:  Ignore recursion errors.
-	 *
-	 * @see #BEANTRAVERSE_ignoreRecursions
-	 * @return
-	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
-	 */
-	protected final boolean isIgnoreRecursions() {
-		return ignoreRecursions;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

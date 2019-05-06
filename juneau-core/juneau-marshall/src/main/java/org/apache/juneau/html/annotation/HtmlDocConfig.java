@@ -20,6 +20,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 
 /**
@@ -29,9 +30,10 @@ import org.apache.juneau.html.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(HtmlDocConfigApply.class)
 public @interface HtmlDocConfig {
 
 	//-------------------------------------------------------------------------------------------------------------------

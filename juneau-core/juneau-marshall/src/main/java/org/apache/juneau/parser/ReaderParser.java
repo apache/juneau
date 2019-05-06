@@ -160,6 +160,17 @@ public abstract class ReaderParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  File charset.
+	 *
+	 * @see #RPARSER_fileCharset
+	 * @return
+	 * 	The character set to use for reading <code>Files</code> from the file system.
+	 */
+	protected final String getFileCharset() {
+		return fileCharset;
+	}
+
+	/**
 	 * Configuration property:  Input stream charset.
 	 *
 	 * @see #RPARSER_inputStreamCharset
@@ -170,16 +181,9 @@ public abstract class ReaderParser extends Parser {
 		return inputStreamCharset;
 	}
 
-	/**
-	 * Configuration property:  File charset.
-	 *
-	 * @see #RPARSER_fileCharset
-	 * @return
-	 * 	The character set to use for reading <code>Files</code> from the file system.
-	 */
-	protected final String getFileCharset() {
-		return fileCharset;
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

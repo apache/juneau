@@ -92,7 +92,27 @@ public final class SoapXmlSerializer extends XmlSerializer {
 	}
 
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public SoapXmlSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Serializer */
+	public SoapXmlSerializerSession createSession(SerializerSessionArgs args) {
 		return new SoapXmlSerializerSession(this, args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  The SOAPAction HTTP header value to set on responses.
+	 *
+	 * @see #SOAPXML_SOAPAction
+	 * @return
+	 * 	The SOAPAction HTTP header value to set on responses.
+	 */
+	public String getSoapAction() {
+		return soapAction;
 	}
 }

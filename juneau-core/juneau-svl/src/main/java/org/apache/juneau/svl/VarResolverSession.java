@@ -19,6 +19,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
@@ -41,7 +42,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */
-public class VarResolverSession {
+public class VarResolverSession implements StringResolver {
 
 	private final VarResolverContext context;
 	private final Map<String,Object> sessionObjects;
@@ -84,6 +85,7 @@ public class VarResolverSession {
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
 	 * 	<br>Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
+	@Override /* StringResolver */
 	public String resolve(String s) {
 
 		if (s == null || s.isEmpty())

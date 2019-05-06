@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -46,16 +45,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* ContextBuilder */
 	public XmlSchemaSerializer build() {
 		return build(XmlSchemaSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public XmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -698,12 +687,6 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSchemaSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public XmlSchemaSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -736,6 +719,12 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* ContextBuilder */
 	public XmlSchemaSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public XmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

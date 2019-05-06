@@ -323,14 +323,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 		return new JsonSchemaGeneratorBuilder();
 	}
 
-	@Override
-	public JsonSchemaGeneratorSession createSession(BeanSessionArgs args) {
-		return new JsonSchemaGeneratorSession(this, args);
+	@Override /* Context */
+	public JsonSchemaGeneratorSession createSession() {
+		return createSession(createDefaultSessionArgs());
 	}
 
 	@Override
-	public JsonSchemaGeneratorSession createSession() {
-		return new JsonSchemaGeneratorSession(this, null);
+	public JsonSchemaGeneratorSession createSession(BeanSessionArgs args) {
+		return new JsonSchemaGeneratorSession(this, args);
 	}
 
 	JsonSerializer getJsonSerializer() {
@@ -342,47 +342,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Use bean definitions.
+	 * Configuration property:  Add descriptions to types.
 	 *
-	 * @see #JSONSCHEMA_useBeanDefs
+	 * @see #JSONSCHEMA_addDescriptionsTo
 	 * @return
-	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
+	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
-	protected final boolean isUseBeanDefs() {
-		return useBeanDefs;
-	}
-
-	/**
-	 * Configuration property:  Allow nested examples.
-	 *
-	 * @see #JSONSCHEMA_allowNestedExamples
-	 * @return
-	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
-	 */
-	protected final boolean isAllowNestedExamples() {
-		return allowNestedExamples;
-	}
-
-	/**
-	 * Configuration property:  Allow nested descriptions.
-	 *
-	 * @see #JSONSCHEMA_allowNestedDescriptions
-	 * @return
-	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
-	 */
-	protected final boolean isAllowNestedDescriptions() {
-		return allowNestedDescriptions;
-	}
-
-	/**
-	 * Configuration property:  Bean schema definition mapper.
-	 *
-	 * @see #JSONSCHEMA_beanDefMapper
-	 * @return
-	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
-	 */
-	protected final BeanDefMapper getBeanDefMapper() {
-		return beanDefMapper;
+	protected final Set<TypeCategory> getAddDescriptionsTo() {
+		return addDescriptionsTo;
 	}
 
 	/**
@@ -397,14 +364,36 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	}
 
 	/**
-	 * Configuration property:  Add descriptions to types.
+	 * Configuration property:  Allow nested descriptions.
 	 *
-	 * @see #JSONSCHEMA_addDescriptionsTo
+	 * @see #JSONSCHEMA_allowNestedDescriptions
 	 * @return
-	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
+	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
-	protected final Set<TypeCategory> getAddDescriptionsTo() {
-		return addDescriptionsTo;
+	protected final boolean isAllowNestedDescriptions() {
+		return allowNestedDescriptions;
+	}
+
+	/**
+	 * Configuration property:  Allow nested examples.
+	 *
+	 * @see #JSONSCHEMA_allowNestedExamples
+	 * @return
+	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedExamples() {
+		return allowNestedExamples;
+	}
+
+	/**
+	 * Configuration property:  Bean schema definition mapper.
+	 *
+	 * @see #JSONSCHEMA_beanDefMapper
+	 * @return
+	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
+	 */
+	protected final BeanDefMapper getBeanDefMapper() {
+		return beanDefMapper;
 	}
 
 	/**
@@ -417,6 +406,32 @@ public class JsonSchemaGenerator extends BeanTraverseContext {
 	protected final Map<String,ObjectMap> getDefaultSchemas() {
 		return defaultSchemas;
 	}
+
+	/**
+	 * Configuration property:  Ignore types from schema definitions.
+	 *
+	 * @see JsonSchemaGenerator#JSONSCHEMA_ignoreTypes
+	 * @return
+	 * 	Custom schema information for particular class types.
+	 */
+	public Set<Pattern> getIgnoreTypes() {
+		return ignoreTypes;
+	}
+
+	/**
+	 * Configuration property:  Use bean definitions.
+	 *
+	 * @see #JSONSCHEMA_useBeanDefs
+	 * @return
+	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
+	 */
+	protected final boolean isUseBeanDefs() {
+		return useBeanDefs;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns <jk>true</jk> if the specified type is ignored.

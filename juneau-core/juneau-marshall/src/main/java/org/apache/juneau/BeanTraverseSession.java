@@ -243,29 +243,6 @@ public class BeanTraverseSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Initial depth.
-	 *
-	 * @see BeanTraverseContext#BEANTRAVERSE_initialDepth
-	 * @return
-	 * 	The initial indentation level at the root.
-	 */
-	protected final int getInitialDepth() {
-		return ctx.getInitialDepth();
-	}
-
-	/**
-	 * Configuration property:  Max traversal depth.
-	 *
-	 * @see BeanTraverseContext#BEANTRAVERSE_maxDepth
-	 * @return
-	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
-	 *	<br>If this depth is exceeded, an exception is thrown.
-	 */
-	protected final int getMaxDepth() {
-		return ctx.getMaxDepth();
-	}
-
-	/**
 	 * Configuration property:  Automatically detect POJO recursions.
 	 *
 	 * @see BeanTraverseContext#BEANTRAVERSE_detectRecursions
@@ -286,5 +263,28 @@ public class BeanTraverseSession extends BeanSession {
 	 */
 	protected final boolean isIgnoreRecursions() {
 		return ctx.isIgnoreRecursions();
+	}
+
+	/**
+	 * Configuration property:  Initial depth.
+	 *
+	 * @see BeanTraverseContext#BEANTRAVERSE_initialDepth
+	 * @return
+	 * 	The initial indentation level at the root.
+	 */
+	protected final int getInitialDepth() {
+		return ctx.getInitialDepth();
+	}
+
+	/**
+	 * Configuration property:  Max traversal depth.
+	 *
+	 * @see BeanTraverseContext#BEANTRAVERSE_maxDepth
+	 * @return
+	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
+	 *	<br>If this depth is exceeded, an exception is thrown.
+	 */
+	protected final int getMaxDepth() {
+		return ctx.getMaxDepth();
 	}
 }

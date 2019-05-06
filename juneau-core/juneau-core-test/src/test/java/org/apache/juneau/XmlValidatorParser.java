@@ -34,8 +34,8 @@ public class XmlValidatorParser extends XmlParser {
 	}
 
 	@Override /* Parser */
-	public ReaderParserSession createSession(ParserSessionArgs args) {
-		return new ReaderParserSession(null, args) {
+	public XmlParserSession createSession(ParserSessionArgs args) {
+		return new XmlParserSession(null, args) {
 
 			@Override
 			protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {

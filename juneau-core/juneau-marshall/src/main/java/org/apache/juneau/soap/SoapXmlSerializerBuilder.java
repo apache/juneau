@@ -18,11 +18,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
@@ -50,23 +47,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* ContextBuilder */
 	public SoapXmlSerializer build() {
 		return build(SoapXmlSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public SoapXmlSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(SoapXmlConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (SoapXmlConfig a : m.get(SoapXmlConfig.class)) {
-			if (! a.soapAction().isEmpty())
-				soapAction(r.string(a.soapAction()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -684,12 +664,6 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SoapXmlSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public SoapXmlSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -722,6 +696,12 @@ public class SoapXmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* ContextBuilder */
 	public SoapXmlSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public SoapXmlSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

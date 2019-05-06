@@ -29,9 +29,10 @@ import org.apache.juneau.serializer.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(SerializerConfigApply.class)
 public @interface SerializerConfig {
 
 	//-------------------------------------------------------------------------------------------------------------------

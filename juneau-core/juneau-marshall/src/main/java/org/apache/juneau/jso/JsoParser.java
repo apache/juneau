@@ -69,7 +69,12 @@ public final class JsoParser extends InputStreamParser {
 	}
 
 	@Override /* Parser */
-	public InputStreamParserSession createSession(ParserSessionArgs args) {
+	public JsoParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
+	public JsoParserSession createSession(ParserSessionArgs args) {
 		return new JsoParserSession(args);
 	}
 }

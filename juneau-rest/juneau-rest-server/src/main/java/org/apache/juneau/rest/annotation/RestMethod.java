@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.remote.*;
 
@@ -52,7 +53,10 @@ public @interface RestMethod {
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanFilters}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link BeanConfig#beanFilters()}
 	 */
+	@Deprecated
 	Class<?>[] beanFilters() default {};
 
 	/**
@@ -109,7 +113,10 @@ public @interface RestMethod {
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link BeanConfig#bpi()}
 	 */
+	@Deprecated
 	String[] bpi() default {};
 
 	/**
@@ -165,7 +172,10 @@ public @interface RestMethod {
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link BeanConfig#bpx()}
 	 */
+	@Deprecated
 	String[] bpx() default {};
 
 	/**
@@ -669,7 +679,10 @@ public @interface RestMethod {
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_pojoSwaps}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link BeanConfig#pojoSwaps()}
 	 */
+	@Deprecated
 	Class<?>[] pojoSwaps() default {};
 
 	/**

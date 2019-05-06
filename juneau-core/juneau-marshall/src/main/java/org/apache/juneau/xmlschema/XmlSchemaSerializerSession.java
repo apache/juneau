@@ -241,6 +241,7 @@ public class XmlSchemaSerializerSession extends XmlSerializerSession {
 			processedAttributes = new HashSet<>(),
 			processedElements = new HashSet<>();
 
+		@SuppressWarnings("synthetic-access")
 		public Schema(Schemas schemas, Namespace xs, Namespace targetNs, Namespace defaultNs, Namespace[] allNs) throws IOException {
 			this.schemas = schemas;
 			this.defaultNs = defaultNs;

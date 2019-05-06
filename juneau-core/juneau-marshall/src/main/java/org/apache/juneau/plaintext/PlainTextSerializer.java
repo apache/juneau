@@ -109,8 +109,13 @@ public class PlainTextSerializer extends WriterSerializer {
 		return new PlainTextSerializerBuilder();
 	}
 
+	@Override /* Context */
+	public  PlainTextSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public PlainTextSerializerSession createSession(SerializerSessionArgs args) {
 		return new PlainTextSerializerSession(this, args);
 	}
 }

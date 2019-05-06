@@ -155,7 +155,7 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	private final boolean
-		decodeChars, validateEnd;
+		decoding, validateEnd;
 
 	/**
 	 * Constructor.
@@ -177,7 +177,7 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	 */
 	public UonParser(PropertyStore ps, String...consumes) {
 		super(ps, consumes);
-		this.decodeChars = getBooleanProperty(UON_decoding, false);
+		this.decoding = getBooleanProperty(UON_decoding, false);
 		this.validateEnd = getBooleanProperty(UON_validateEnd, false);
 	}
 
@@ -267,8 +267,8 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
 	 */
-	protected final boolean isDecodeChars() {
-		return decodeChars;
+	protected final boolean isDecoding() {
+		return decoding;
 	}
 
 	/**
@@ -283,11 +283,15 @@ public class UonParser extends ReaderParser implements HttpPartParser {
 		return validateEnd;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UonParser", new ObjectMap()
-				.append("decodeChars", decodeChars)
+				.append("decoding", decoding)
 			);
 	}
 }

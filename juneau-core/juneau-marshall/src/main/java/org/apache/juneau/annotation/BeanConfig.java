@@ -32,9 +32,10 @@ import org.apache.juneau.transform.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(BeanConfigApply.class)
 public @interface BeanConfig {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -374,6 +375,126 @@ public @interface BeanConfig {
 	String beanTypePropertyName() default "";
 
 	/**
+	 * Configuration property:  Bean property includes.
+	 *
+	 * Shortcut for specifying the {@link BeanContext#BEAN_includeProperties} property on all serializers.
+	 *
+	 * <p>
+	 * The typical use case is when you're rendering summary and details views of the same bean in a resource and
+	 * you want to expose or hide specific properties depending on the level of detail you want.
+	 *
+	 * <p>
+	 * In the example below, our 'summary' view is a list of beans where we only want to show the ID property,
+	 * and our detail view is a single bean where we want to expose different fields:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our bean</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<jc>// Summary properties</jc>
+	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
+	 * 		<jk>public</jk> String <jf>id</jf>;
+	 *
+	 * 		<jc>// Detail properties</jc>
+	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Only render "id" property.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>)
+	 * 	<ja>@BeanConfig</ja>(bpi=<js>"MyBean: id"</js>)
+	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary() {...}
+	 *
+	 * 	<jc>// Only render "a" and "b" properties.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>)
+	 * 	<ja>@BeanConfig</ja>(bpi=<js>"MyBean: a,b"</js>)
+	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
+	 * 	<li>
+	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Semicolons can be used as an additional separator for multiple values:
+	 * 		<p class='bcode w800'>
+	 * 	<jc>// Equivalent</jc>
+	 * 	bpi={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
+	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
+	 * 		</p>
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
+	 * </ul>
+	 */
+	String[] bpi() default {};
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * Shortcut for specifying the {@link BeanContext#BEAN_excludeProperties} property on all serializers.
+	 *
+	 * <p>
+	 * Same as {@link #bpi()} except you specify a list of bean property names that you want to exclude from
+	 * serialization.
+	 *
+	 * <p>
+	 * In the example below, our 'summary' view is a list of beans where we want to exclude some properties:
+	 * <p class='bcode w800'>
+	 * 	<jc>// Our bean</jc>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<jc>// Summary properties</jc>
+	 * 		<ja>@Html</ja>(link=<js>"servlet:/mybeans/{id}"</js>)
+	 * 		<jk>public</jk> String <jf>id</jf>;
+	 *
+	 * 		<jc>// Detail properties</jc>
+	 * 		<jk>public</jk> String <jf>a</jf>, <jf>b</jf>;
+	 * 	}
+	 *
+	 * 	<jc>// Don't show "a" and "b" properties.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans"</js>)
+	 * 	<ja>@BeanConfig</ja>(bpx=<js>"MyBean: a,b"</js>)
+	 * 	<jk>public</jk> List&lt;MyBean&gt; getBeanSummary() {...}
+	 *
+	 * 	<jc>// Render all properties.</jc>
+	 * 	<ja>@RestMethod</ja>(name=<jsf>GET</jsf>, path=<js>"/mybeans/{id}"</js>)
+	 * 	<jk>public</jk> MyBean getBeanDetails(<ja>@Path</ja> String id) {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format of each value is: <js>"Key: comma-delimited-tokens"</js>.
+	 * 	<li>
+	 * 		Keys can be fully-qualified or short class names or <js>"*"</js> to represent all classes.
+	 * 	<li>
+	 * 		Values are comma-delimited lists of bean property names.
+	 * 	<li>
+	 * 		Properties apply to specified class and all subclasses.
+	 * 	<li>
+	 * 		Semicolons can be used as an additional separator for multiple values:
+	 * 		<p class='bcode w800'>
+	 * 	<jc>// Equivalent</jc>
+	 * 	bpx={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
+	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
+	 * 		</p>
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
+	 * </ul>
+	 */
+	String[] bpx() default {};
+
+	/**
 	 * Configuration property:  Debug mode.
 	 *
 	 * <p>
@@ -445,7 +566,37 @@ public @interface BeanConfig {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
 	 */
-	CSEntry[] examples() default {};
+	CS[] example() default {};
+
+	/**
+	 * Configuration property:  POJO examples.
+	 *
+	 * <p>
+	 * Same as {@link #example()} but allows you to define examples as a Simple-JSON string.
+	 *
+	 * <p>
+	 * Keys are the class of the example and can be the fully-qualified name or simple name.
+	 * <br>Values are Simple-JSON representation of that class.
+	 *
+	 * <p>
+	 * The individual strings are concatenated together and the whole string is treated as a JSON Object.
+	 * <br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<ja>@BeanConfig</ja>(
+	 * 		examples={
+	 * 			<js>"MyBean: {foo:'bar'}"</js>  <jc>// Could also be "{MyBean: {foo:'bar'}}"</jc>
+	 * 		}
+	 * 	)
+	 * <p>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * </ul>
+	 */
+	String[] examples() default {};
 
 	/**
 	 * Configuration property:  Bean property excludes.
@@ -474,7 +625,7 @@ public @interface BeanConfig {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_excludeProperties}
 	 * </ul>
 	 */
-	CSEntry[] excludeProperties() default {};
+	CS[] excludeProperties() default {};
 
 	/**
 	 * Configuration property:  Find fluent setters.
@@ -632,7 +783,7 @@ public @interface BeanConfig {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_implClasses}
 	 * </ul>
 	 */
-	CCEntry[] implClasses() default {};
+	CC[] implClasses() default {};
 
 	/**
 	 * Configuration property:  Bean property includes.
@@ -661,7 +812,7 @@ public @interface BeanConfig {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_includeProperties}
 	 * </ul>
 	 */
-	CSEntry[] includeProperties() default {};
+	CS[] includeProperties() default {};
 
 	/**
 	 * Configuration property:  Locale.

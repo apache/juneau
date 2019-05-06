@@ -581,16 +581,6 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		return Collections.emptyMap();
 	}
 
-
-	/**
-	 * Returns the listener associated with this session.
-	 *
-	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
-	 */
-	public SerializerListener getListener() {
-		return listener;
-	}
-
 	/**
 	 * Returns the listener associated with this session.
 	 *
@@ -607,17 +597,6 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Use whitespace.
-	 *
-	 * @see Serializer#SERIALIZER_useWhitespace
-	 * @return
-	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
-	 */
-	public final boolean isUseWhitespace() {
-		return useWhitespace;
-	}
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see Serializer#SERIALIZER_addBeanTypes
@@ -630,47 +609,23 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Trim null bean property values.
+	 * Configuration property:  Add type attribute to root nodes.
 	 *
-	 * @see Serializer#SERIALIZER_trimNullProperties
+	 * @see Serializer#SERIALIZER_addRootType
 	 * @return
-	 * 	<jk>true</jk> if null bean values are not serialized to the output.
+	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
-	protected final boolean isTrimNullProperties() {
-		return ctx.isTrimNullProperties();
+	protected final boolean isAddRootType() {
+		return ctx.isAddRootType();
 	}
 
 	/**
-	 * Configuration property:  Trim empty lists and arrays.
+	 * Returns the listener associated with this session.
 	 *
-	 * @see Serializer#SERIALIZER_trimEmptyCollections
-	 * @return
-	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
-	protected final boolean isTrimEmptyCollections() {
-		return ctx.isTrimEmptyCollections();
-	}
-
-	/**
-	 * Configuration property:  Trim empty maps.
-	 *
-	 * @see Serializer#SERIALIZER_trimEmptyMaps
-	 * @return
-	 * 	<jk>true</jk> if empty map values are not serialized to the output.
-	 */
-	protected final boolean isTrimEmptyMaps() {
-		return ctx.isTrimEmptyMaps();
-	}
-
-	/**
-	 * Configuration property:  Trim strings.
-	 *
-	 * @see Serializer#SERIALIZER_trimStrings
-	 * @return
-	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
-	 */
-	protected boolean isTrimStrings() {
-		return ctx.isTrimStrings();
+	public SerializerListener getListener() {
+		return listener;
 	}
 
 	/**
@@ -696,14 +651,47 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Add type attribute to root nodes.
+	 * Configuration property:  Trim empty lists and arrays.
 	 *
-	 * @see Serializer#SERIALIZER_addRootType
+	 * @see Serializer#SERIALIZER_trimEmptyCollections
 	 * @return
-	 * 	<jk>true</jk> if type property should be added to root node.
+	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
-	protected final boolean isAddRootType() {
-		return ctx.isAddRootType();
+	protected final boolean isTrimEmptyCollections() {
+		return ctx.isTrimEmptyCollections();
+	}
+
+	/**
+	 * Configuration property:  Trim empty maps.
+	 *
+	 * @see Serializer#SERIALIZER_trimEmptyMaps
+	 * @return
+	 * 	<jk>true</jk> if empty map values are not serialized to the output.
+	 */
+	protected final boolean isTrimEmptyMaps() {
+		return ctx.isTrimEmptyMaps();
+	}
+
+	/**
+	 * Configuration property:  Trim null bean property values.
+	 *
+	 * @see Serializer#SERIALIZER_trimNullProperties
+	 * @return
+	 * 	<jk>true</jk> if null bean values are not serialized to the output.
+	 */
+	protected final boolean isTrimNullProperties() {
+		return ctx.isTrimNullProperties();
+	}
+
+	/**
+	 * Configuration property:  Trim strings.
+	 *
+	 * @see Serializer#SERIALIZER_trimStrings
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 */
+	protected boolean isTrimStrings() {
+		return ctx.isTrimStrings();
 	}
 
 	/**
@@ -714,7 +702,18 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
 	protected final UriContext getUriContext() {
-		return getUriContext();
+		return ctx.getUriContext();
+	}
+
+	/**
+	 * Configuration property:  URI relativity.
+	 *
+	 * @see Serializer#SERIALIZER_uriRelativity
+	 * @return
+	 * 	Defines what relative URIs are relative to when serializing any of the following:
+	 */
+	protected final UriRelativity getUriRelativity() {
+		return ctx.getUriRelativity();
 	}
 
 	/**
@@ -729,13 +728,13 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  URI relativity.
+	 * Configuration property:  Use whitespace.
 	 *
-	 * @see Serializer#SERIALIZER_uriRelativity
+	 * @see Serializer#SERIALIZER_useWhitespace
 	 * @return
-	 * 	Defines what relative URIs are relative to when serializing any of the following:
+	 * 	<jk>true</jk> if whitespace is added to the output to improve readability.
 	 */
-	protected final UriRelativity getUriRelativity() {
-		return ctx.getUriRelativity();
+	protected final boolean isUseWhitespace() {
+		return useWhitespace;
 	}
 }

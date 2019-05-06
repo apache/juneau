@@ -1131,6 +1131,87 @@ public class BeanSession extends Session {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  Minimum bean class visibility.
+	 *
+	 * @see BeanContext#BEAN_beanClassVisibility
+	 * @return
+	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
+	 */
+	protected final Visibility getBeanClassVisibility() {
+		return ctx.getBeanClassVisibility();
+	}
+
+	/**
+	 * Configuration property:  Minimum bean constructor visibility.
+	 *
+	 * @see BeanContext#BEAN_beanConstructorVisibility
+	 * @return
+	 * 	Only look for constructors with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanConstructorVisibility() {
+		return ctx.getBeanConstructorVisibility();
+	}
+
+	/**
+	 * Configuration property:  Bean dictionary.
+	 *
+	 * @see BeanContext#BEAN_beanDictionary
+	 * @return
+	 * 	The list of classes that make up the bean dictionary in this bean context.
+	 */
+	// TODO - Rename to getBeanDictionary()
+	protected final List<Class<?>> getBeanDictionaryClasses() {
+		return ctx.getBeanDictionaryClasses();
+	}
+
+	/**
+	 * Configuration property:  Minimum bean field visibility.
+	 *
+	 *
+	 * @see BeanContext#BEAN_beanFieldVisibility
+	 * @return
+	 * 	Only look for bean fields with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanFieldVisibility() {
+		return ctx.getBeanFieldVisibility();
+	}
+
+	/**
+	 * Configuration property:  Bean filters.
+	 *
+	 *
+	 * @see BeanContext#BEAN_beanFilters
+	 * @return
+	 * 	Only look for bean fields with this specified minimum visibility.
+	 */
+	protected BeanFilter[] getBeanFilters() {
+		return ctx.getBeanFilters();
+	}
+
+	/**
+	 * Configuration property:  BeanMap.put() returns old property value.
+	 *
+	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
+	 * @return
+	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
+	 * 	<br>Otherwise, it returns <jk>null</jk>.
+	 */
+	protected final boolean isBeanMapPutReturnsOldValue() {
+		return ctx.isBeanMapPutReturnsOldValue();
+	}
+
+	/**
+	 * Configuration property:  Minimum bean method visibility.
+	 *
+	 * @see BeanContext#BEAN_beanMethodVisibility
+	 * @return
+	 * 	Only look for bean methods with this specified minimum visibility.
+	 */
+	protected final Visibility getBeanMethodVisibility() {
+		return ctx.getBeanMethodVisibility();
+	}
+
+	/**
 	 * Configuration property:  Beans require no-arg constructors.
 	 *
 	 * @see BeanContext#BEAN_beansRequireDefaultConstructor
@@ -1179,27 +1260,98 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  BeanMap.put() returns old property value.
+	 * Configuration property:  Bean type property name.
 	 *
-	 * @see BeanContext#BEAN_beanMapPutReturnsOldValue
+	 * @see BeanContext#BEAN_beanTypePropertyName
 	 * @return
-	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
-	 * 	<br>Otherwise, it returns <jk>null</jk>.
+	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
-	protected final boolean isBeanMapPutReturnsOldValue() {
-		return ctx.isBeanMapPutReturnsOldValue();
+	protected final String getBeanTypePropertyName() {
+		return ctx.getBeanTypePropertyName();
 	}
 
 	/**
-	 * Configuration property:  Use interface proxies.
+	 * Configuration property:  Debug mode.
 	 *
-	 * @see BeanContext#BEAN_useInterfaceProxies
+	 * @see BeanContext#BEAN_debug
 	 * @return
-	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
-	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
+	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	protected final boolean isUseInterfaceProxies() {
-		return ctx.isUseInterfaceProxies();
+	protected final boolean isDebug() {
+		return debug;
+	}
+
+	/**
+	 * Configuration property:  POJO examples.
+	 *
+	 * @see BeanContext#BEAN_examples
+	 * @return
+	 * 	A map of POJO examples keyed by class name.
+	 */
+	protected final Map<String,?> getExamples() {
+		return ctx.getExamples();
+	}
+
+
+	/**
+	 * Configuration property:  Bean property excludes.
+	 *
+	 * @see BeanContext#BEAN_excludeProperties
+	 * @return
+	 * 	The list of property names to exclude keyed by class name.
+	 */
+	protected final Map<String,String[]> getExcludeProperties() {
+		return ctx.getExcludeProperties();
+	}
+
+
+	/**
+	 * Configuration property:  Find fluent setters.
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 *
+	 * @see BeanContext#BEAN_fluentSetters
+	 * @return
+	 * 	<jk>true</jk> if fluent setters are detected on beans.
+	 */
+	protected final boolean isFluentSetters() {
+		return ctx.isFluentSetters();
+	}
+
+	/**
+	 * Configuration property:  Ignore invocation errors on getters.
+	 *
+	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
+	 */
+	protected final boolean isIgnoreInvocationExceptionsOnGetters() {
+		return ctx.isIgnoreInvocationExceptionsOnGetters();
+	}
+
+	/**
+	 * Configuration property:  Ignore invocation errors on setters.
+	 *
+	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
+	 */
+	protected final boolean isIgnoreInvocationExceptionsOnSetters() {
+		return ctx.isIgnoreInvocationExceptionsOnSetters();
+	}
+
+	/**
+	 * Configuration property:  Ignore properties without setters.
+	 *
+	 * <br>Otherwise, a {@code RuntimeException} is thrown.
+	 *
+	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
+	 */
+	protected final boolean isIgnorePropertiesWithoutSetters() {
+		return ctx.isIgnorePropertiesWithoutSetters();
 	}
 
 	/**
@@ -1226,174 +1378,25 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Ignore properties without setters.
+	 * Configuration property:  Implementation classes.
 	 *
-	 * <br>Otherwise, a {@code RuntimeException} is thrown.
-	 *
-	 * @see BeanContext#BEAN_ignorePropertiesWithoutSetters
+	 * @see BeanContext#BEAN_implClasses
 	 * @return
-	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter is silently ignored.
+	 * 	Implementation classes keyed by interface class names.
 	 */
-	protected final boolean isIgnorePropertiesWithoutSetters() {
-		return ctx.isIgnorePropertiesWithoutSetters();
+	protected final Map<String,ClassInfo> getImplClasses() {
+		return ctx.getImplClasses();
 	}
 
 	/**
-	 * Configuration property:  Ignore invocation errors on getters.
+	 * Configuration property:  Bean property includes.
 	 *
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnGetters
+	 * @see BeanContext#BEAN_includeProperties
 	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
+	 * 	Include properties keyed by class name.
 	 */
-	protected final boolean isIgnoreInvocationExceptionsOnGetters() {
-		return ctx.isIgnoreInvocationExceptionsOnGetters();
-	}
-
-	/**
-	 * Configuration property:  Ignore invocation errors on setters.
-	 *
-	 * @see BeanContext#BEAN_ignoreInvocationExceptionsOnSetters
-	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
-	 */
-	protected final boolean isIgnoreInvocationExceptionsOnSetters() {
-		return ctx.isIgnoreInvocationExceptionsOnSetters();
-	}
-
-	/**
-	 * Configuration property:  Use Java Introspector.
-	 *
-	 * @see BeanContext#BEAN_useJavaBeanIntrospector
-	 * @return
-	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
-	 */
-	protected final boolean isUseJavaBeanIntrospector() {
-		return ctx.isUseJavaBeanIntrospector();
-	}
-
-	/**
-	 * Configuration property:  Use enum names.
-	 *
-	 * @see BeanContext#BEAN_useEnumNames
-	 * @return
-	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
-	 */
-	protected final boolean isUseEnumNames() {
-		return ctx.isUseEnumNames();
-	}
-
-	/**
-	 * Configuration property:  Sort bean properties.
-	 *
-	 * @see BeanContext#BEAN_sortProperties
-	 * @return
-	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
-	 */
-	protected final boolean isSortProperties() {
-		return ctx.isSortProperties();
-	}
-
-	/**
-	 * Configuration property:  Find fluent setters.
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 *
-	 * @see BeanContext#BEAN_fluentSetters
-	 * @return
-	 * 	<jk>true</jk> if fluent setters are detected on beans.
-	 */
-	protected final boolean isFluentSetters() {
-		return ctx.isFluentSetters();
-	}
-
-	/**
-	 * Configuration property:  Minimum bean constructor visibility.
-	 *
-	 * @see BeanContext#BEAN_beanConstructorVisibility
-	 * @return
-	 * 	Only look for constructors with this specified minimum visibility.
-	 */
-	protected final Visibility getBeanConstructorVisibility() {
-		return ctx.getBeanConstructorVisibility();
-	}
-
-	/**
-	 * Configuration property:  Minimum bean class visibility.
-	 *
-	 * @see BeanContext#BEAN_beanClassVisibility
-	 * @return
-	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
-	 */
-	protected final Visibility getBeanClassVisibility() {
-		return ctx.getBeanClassVisibility();
-	}
-
-	/**
-	 * Configuration property:  Minimum bean method visibility.
-	 *
-	 * @see BeanContext#BEAN_beanMethodVisibility
-	 * @return
-	 * 	Only look for bean methods with this specified minimum visibility.
-	 */
-	protected final Visibility getBeanMethodVisibility() {
-		return ctx.getBeanMethodVisibility();
-	}
-
-	/**
-	 * Configuration property:  Minimum bean field visibility.
-	 *
-	 *
-	 * @see BeanContext#BEAN_beanFieldVisibility
-	 * @return
-	 * 	Only look for bean fields with this specified minimum visibility.
-	 */
-	protected final Visibility getBeanFieldVisibility() {
-		return ctx.getBeanFieldVisibility();
-	}
-
-	/**
-	 * Configuration property:  Bean dictionary.
-	 *
-	 * @see BeanContext#BEAN_beanDictionary
-	 * @return
-	 * 	The list of classes that make up the bean dictionary in this bean context.
-	 */
-	protected final List<Class<?>> getBeanDictionaryClasses() {
-		return ctx.getBeanDictionaryClasses();
-	}
-
-	/**
-	 * Configuration property:  Bean property namer.
-	 *
-	 * @see BeanContext#BEAN_propertyNamer
-	 * @return
-	 * 	The interface used to calculate bean property names.
-	 */
-	protected final PropertyNamer getPropertyNamer() {
-		return ctx.getPropertyNamer();
-	}
-
-	/**
-	 * Configuration property:  Bean type property name.
-	 *
-	 * @see BeanContext#BEAN_beanTypePropertyName
-	 * @return
-	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
-	 */
-	protected final String getBeanTypePropertyName() {
-		return ctx.getBeanTypePropertyName();
-	}
-
-	/**
-	 * Configuration property:  Debug mode.
-	 *
-	 * @see BeanContext#BEAN_debug
-	 * @return
-	 * 	<jk>true</jk> if debug mode is enabled.
-	 */
-	protected final boolean isDebug() {
-		return debug;
+	protected final Map<String,String[]> getIncludeProperties() {
+		return ctx.getIncludeProperties();
 	}
 
 	/**
@@ -1416,6 +1419,84 @@ public class BeanSession extends Session {
 	}
 
 	/**
+	 * Configuration property:  Media type.
+	 *
+	 * <p>
+	 * For example, <js>"application/json"</js>.
+	 *
+	 * @see BeanContext#BEAN_mediaType
+	 * @return The media type for this session, or <jk>null</jk> if not specified.
+	 */
+	public final MediaType getMediaType() {
+		return mediaType;
+	}
+
+	/**
+	 * Configuration property:  Bean class exclusions.
+	 *
+	 * @see BeanContext#BEAN_notBeanClasses
+	 * @return
+	 * 	The list of classes that are explicitly not beans.
+	 */
+	protected final Class<?>[] getNotBeanClasses() {
+		return ctx.getNotBeanClasses();
+	}
+
+	/**
+	 * Configuration property:  Bean package exclusions.
+	 *
+	 * @see BeanContext#BEAN_notBeanPackages
+	 * @return
+	 * 	The list of fully-qualified package names to exclude from being classified as beans.
+	 */
+	protected final String[] getNotBeanPackagesNames() {
+		return ctx.getNotBeanPackagesNames();
+	}
+
+	/**
+	 * Configuration property:  Bean package exclusions.
+	 *
+	 * @see BeanContext#BEAN_notBeanPackages
+	 * @return
+	 * 	The list of package name prefixes to exclude from being classified as beans.
+	 */
+	protected final String[] getNotBeanPackagesPrefixes() {
+		return ctx.getNotBeanPackagesPrefixes();
+	}
+
+	/**
+	 * Configuration property:  POJO swaps.
+	 *
+	 * @see BeanContext#BEAN_pojoSwaps
+	 * @return
+	 * 	The list POJO swaps defined.
+	 */
+	protected final PojoSwap<?,?>[] getPojoSwaps() {
+		return ctx.getPojoSwaps();
+	}
+	/**
+	 * Configuration property:  Bean property namer.
+	 *
+	 * @see BeanContext#BEAN_propertyNamer
+	 * @return
+	 * 	The interface used to calculate bean property names.
+	 */
+	protected final PropertyNamer getPropertyNamer() {
+		return ctx.getPropertyNamer();
+	}
+
+	/**
+	 * Configuration property:  Sort bean properties.
+	 *
+	 * @see BeanContext#BEAN_sortProperties
+	 * @return
+	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
+	 */
+	protected final boolean isSortProperties() {
+		return ctx.isSortProperties();
+	}
+
+	/**
 	 * Configuration property:  Time zone.
 	 *
 	 * <p>
@@ -1434,17 +1515,42 @@ public class BeanSession extends Session {
 	}
 
 	/**
-	 * Configuration property:  Media type.
+	 * Configuration property:  Use enum names.
 	 *
-	 * <p>
-	 * For example, <js>"application/json"</js>.
-	 *
-	 * @see BeanContext#BEAN_mediaType
-	 * @return The media type for this session, or <jk>null</jk> if not specified.
+	 * @see BeanContext#BEAN_useEnumNames
+	 * @return
+	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
-	public final MediaType getMediaType() {
-		return mediaType;
+	protected final boolean isUseEnumNames() {
+		return ctx.isUseEnumNames();
 	}
+
+	/**
+	 * Configuration property:  Use interface proxies.
+	 *
+	 * @see BeanContext#BEAN_useInterfaceProxies
+	 * @return
+	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
+	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
+	 */
+	protected final boolean isUseInterfaceProxies() {
+		return ctx.isUseInterfaceProxies();
+	}
+
+	/**
+	 * Configuration property:  Use Java Introspector.
+	 *
+	 * @see BeanContext#BEAN_useJavaBeanIntrospector
+	 * @return
+	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
+	 */
+	protected final boolean isUseJavaBeanIntrospector() {
+		return ctx.isUseJavaBeanIntrospector();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * HTTP part schema of object being serialized or parsed.

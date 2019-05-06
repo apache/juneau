@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
@@ -66,11 +65,9 @@ import org.apache.juneau.utils.*;
 			"options: servlet:/?method=OPTIONS"
 		}
 	),
-	allowedMethodParams="*",
-	properties={
-		@Property(name=HTML_uriAnchorText, value="PROPERTY_NAME")
-	}
+	allowedMethodParams="*"
 )
+@HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
 public class DirectoryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;

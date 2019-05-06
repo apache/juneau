@@ -41,7 +41,6 @@ public class AnnotationsMap extends HashMap<Class<? extends Annotation>,List<Ann
 		return this;
 	}
 
-
 	/**
 	 * Convenience method for adding an array of annotations.
 	 *

@@ -48,6 +48,7 @@ import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.remote.*;
@@ -1705,6 +1706,16 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public ResponsePartMeta getResponseBodyMeta(Object o) {
 		return restJavaMethod == null ? null : restJavaMethod.getResponseBodyMeta(o);
 	}
+
+	/**
+	 * Returns the schema generator with settings assigned on this method and class.
+	 *
+	 * @return The schema generator.
+	 */
+	public JsonSchemaGenerator getJsonSchemaGenerator() {
+		return restJavaMethod == null ? context.getJsonSchemaGenerator() : restJavaMethod.getJsonSchemaGenerator();
+	}
+
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods

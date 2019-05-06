@@ -246,7 +246,12 @@ public class XmlParser extends ReaderParser {
 	}
 
 	@Override /* Parser */
-	public ReaderParserSession createSession(ParserSessionArgs args) {
+	public XmlParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
+	public XmlParserSession createSession(ParserSessionArgs args) {
 		return new XmlParserSession(this, args);
 	}
 
@@ -255,14 +260,14 @@ public class XmlParser extends ReaderParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Enable validation.
+	 * Configuration property:  XML event allocator.
 	 *
-	 * @see #XML_validating
+	 * @see #XML_eventAllocator
 	 * @return
-	 * 	<jk>true</jk> if XML document will be validated.
+	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final boolean isValidating() {
-		return validating;
+	protected final XMLEventAllocator getEventAllocator() {
+		return eventAllocator;
 	}
 
 	/**
@@ -300,15 +305,19 @@ public class XmlParser extends ReaderParser {
 	}
 
 	/**
-	 * Configuration property:  XML event allocator.
+	 * Configuration property:  Enable validation.
 	 *
-	 * @see #XML_eventAllocator
+	 * @see #XML_validating
 	 * @return
-	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
+	 * 	<jk>true</jk> if XML document will be validated.
 	 */
-	protected final XMLEventAllocator getEventAllocator() {
-		return eventAllocator;
+	protected final boolean isValidating() {
+		return validating;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

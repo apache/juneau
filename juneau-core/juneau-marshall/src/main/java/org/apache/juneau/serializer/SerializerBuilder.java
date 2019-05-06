@@ -18,10 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -43,47 +40,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	 */
 	public SerializerBuilder(PropertyStore ps) {
 		super(ps);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public SerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(SerializerConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (SerializerConfig a : m.get(SerializerConfig.class)) {
-			if (! a.addBeanTypes().isEmpty())
-				addBeanTypes(r.bool(a.addBeanTypes()));
-			if (! a.addRootType().isEmpty())
-				addRootType(r.bool(a.addRootType()));
-			if (a.listener() != SerializerListener.Null.class)
-				listener(a.listener());
-			if (! a.sortCollections().isEmpty())
-				sortCollections(r.bool(a.sortCollections()));
-			if (! a.sortMaps().isEmpty())
-				sortMaps(r.bool(a.sortMaps()));
-			if (! a.trimEmptyCollections().isEmpty())
-				trimEmptyCollections(r.bool(a.trimEmptyCollections()));
-			if (! a.trimEmptyMaps().isEmpty())
-				trimEmptyMaps(r.bool(a.trimEmptyMaps()));
-			if (! a.trimNullProperties().isEmpty())
-				trimNullProperties(r.bool(a.trimNullProperties()));
-			if (! a.trimStrings().isEmpty())
-				trimStrings(r.bool(a.trimStrings()));
-			if (! a.uriContext().isEmpty())
-				uriContext(r.string(a.uriContext()));
-			if (! a.uriRelativity().isEmpty())
-				uriRelativity(r.string(a.uriRelativity()));
-			if (! a.uriResolution().isEmpty())
-				uriResolution(r.string(a.uriResolution()));
-			if (! a.useWhitespace().isEmpty())
-				useWhitespace(r.bool(a.useWhitespace()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1028,12 +984,6 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public SerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public SerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -1066,6 +1016,12 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	@Override /* ContextBuilder */
 	public SerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public SerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 

@@ -14,14 +14,18 @@ package org.apache.juneau;
 
 import static java.util.Collections.*;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.PropertyStore.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A builder for {@link PropertyStore} objects.
@@ -93,6 +97,33 @@ public class PropertyStoreBuilder {
 				else
 					g1.apply(g2);
 			}
+		return this;
+	}
+
+	/**
+	 * Applies the settings in the specified annotations to this property store.
+	 *
+	 * @param annotationsMap The map of annotations to apply.
+	 * @param r The string resolver used to resolve any variables in the annotations.
+	 * @return This object (for method chaining).
+	 */
+	public PropertyStoreBuilder applyAnnotations(AnnotationsMap annotationsMap, StringResolver r) {
+		for (Map.Entry<Class<? extends Annotation>,List<Annotation>> e : annotationsMap.entrySet()) {
+			Class<? extends Annotation> ac = e.getKey();
+			PropertyStoreApply apply = ac.getAnnotation(PropertyStoreApply.class);
+			if (apply != null) {
+				try {
+					ConfigApply<Annotation> ca = apply.value().getConstructor(Class.class, StringResolver.class).newInstance(ac, r);
+					for (Annotation a : e.getValue()) {
+						ca.apply(a, this);
+					}
+				} catch (ConfigException ex) {
+					throw ex;
+				} catch (Exception ex) {
+					throw new ConfigException(ex, "Could not instantiate ConfigApply class {0}", apply.value());
+				}
+			}
+		}
 		return this;
 	}
 

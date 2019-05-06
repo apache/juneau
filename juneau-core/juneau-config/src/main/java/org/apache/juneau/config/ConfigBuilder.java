@@ -300,12 +300,6 @@ public class ConfigBuilder extends ContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ConfigBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public ConfigBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;

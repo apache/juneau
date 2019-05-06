@@ -18,8 +18,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
@@ -48,23 +46,6 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	@Override /* ContextBuilder */
 	public JsonParser build() {
 		return build(JsonParser.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public JsonParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(JsonConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (JsonConfig a : m.get(JsonConfig.class)) {
-			if (! a.validateEnd().isEmpty())
-				validateEnd(r.bool(a.validateEnd()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -590,12 +571,6 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public JsonParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public JsonParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -628,6 +603,12 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 	@Override /* ContextBuilder */
 	public JsonParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public JsonParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

@@ -19,13 +19,10 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Builder class for building instances of RDF parsers.
@@ -51,79 +48,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* ContextBuilder */
 	public RdfParser build() {
 		return build(RdfParser.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public RdfParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(RdfConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (RdfConfig a : m.get(RdfConfig.class)) {
-			if (! a.language().isEmpty())
-				language(r.string(a.language()));
-			if (! a.juneauNs().isEmpty())
-				juneauNs(r.string(a.juneauNs()));
-			if (! a.juneauBpNs().isEmpty())
-				juneauBpNs(r.string(a.juneauBpNs()));
-			if (! a.useXmlNamespaces().isEmpty())
-				useXmlNamespaces(r.bool(a.useXmlNamespaces()));
-			if (! a.arp_iriRules().isEmpty())
-				arp_iriRules(r.string(a.arp_iriRules()));
-			if (! a.arp_errorMode().isEmpty())
-				arp_errorMode(r.string(a.arp_errorMode()));
-			if (! a.arp_embedding().isEmpty())
-				arp_embedding(r.bool(a.arp_embedding()));
-			if (! a.rdfxml_xmlBase().isEmpty())
-				rdfxml_xmlBase(r.string(a.rdfxml_xmlBase()));
-			if (! a.rdfxml_longId().isEmpty())
-				rdfxml_longId(r.bool(a.rdfxml_longId()));
-			if (! a.rdfxml_allowBadUris().isEmpty())
-				rdfxml_allowBadUris(r.bool(a.rdfxml_allowBadUris()));
-			if (! a.rdfxml_relativeUris().isEmpty())
-				rdfxml_relativeUris(r.string(a.rdfxml_relativeUris()));
-			if (! a.rdfxml_showXmlDeclaration().isEmpty())
-				rdfxml_showXmlDeclaration(r.string(a.rdfxml_showXmlDeclaration()));
-			if (! a.rdfxml_showDoctypeDeclaration().isEmpty())
-				rdfxml_showDoctypeDeclaration(r.bool(a.rdfxml_showDoctypeDeclaration()));
-			if (! a.rdfxml_tab().isEmpty())
-				rdfxml_tab(r.integer(a.rdfxml_tab()));
-			if (! a.rdfxml_attributeQuoteChar().isEmpty())
-				rdfxml_attributeQuoteChar(r.string(a.rdfxml_attributeQuoteChar()));
-			if (! a.rdfxml_blockRules().isEmpty())
-				rdfxml_blockRules(r.string(a.rdfxml_blockRules()));
-			if (! a.n3_minGap().isEmpty())
-				n3_minGap(r.integer(a.n3_minGap()));
-			if (! a.n3_objectLists().isEmpty())
-				n3_objectLists(r.bool(a.n3_objectLists()));
-			if (! a.n3_subjectColumn().isEmpty())
-				n3_subjectColumn(r.integer(a.n3_subjectColumn()));
-			if (! a.n3_propertyColumn().isEmpty())
-				n3_propertyColumn(r.integer(a.n3_propertyColumn()));
-			if (! a.n3_indentProperty().isEmpty())
-				n3_indentProperty(r.integer(a.n3_indentProperty()));
-			if (! a.n3_widePropertyLen().isEmpty())
-				n3_widePropertyLen(r.integer(a.n3_widePropertyLen()));
-			if (! a.n3_abbrevBaseUri().isEmpty())
-				n3_abbrevBaseUri(r.bool(a.n3_abbrevBaseUri()));
-			if (! a.n3_usePropertySymbols().isEmpty())
-				n3_usePropertySymbols(r.bool(a.n3_usePropertySymbols()));
-			if (! a.n3_useTripleQuotedStrings().isEmpty())
-				n3_useTripleQuotedStrings(r.bool(a.n3_useTripleQuotedStrings()));
-			if (! a.n3_useDoubles().isEmpty())
-				n3_useDoubles(r.bool(a.n3_useDoubles()));
-			if (! a.collectionFormat().isEmpty())
-				collectionFormat(r.string(a.collectionFormat()));
-			if (! a.looseCollections().isEmpty())
-				looseCollections(r.bool(a.looseCollections()));
-			if (! a.trimWhitespace().isEmpty())
-				trimWhitespace(r.bool(a.trimWhitespace()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -173,7 +97,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
 	 *
 	 * </ul>
-	 * 
+	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * @return This object (for method chaining).
@@ -793,28 +717,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 *
-	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be
-	 * inherited by the RDF parsers.
-	 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RdfParser#RDF_useXmlNamespaces}
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The default is <jk>true</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public RdfParserBuilder useXmlNamespaces(boolean value) {
-		return set(RDF_useXmlNamespaces, value);
-	}
-
-	/**
 	 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1323,12 +1225,6 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public RdfParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public RdfParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -1361,6 +1257,12 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	@Override /* ContextBuilder */
 	public RdfParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public RdfParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

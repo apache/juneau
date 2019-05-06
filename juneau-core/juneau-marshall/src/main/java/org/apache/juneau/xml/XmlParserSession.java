@@ -681,19 +681,20 @@ public class XmlParserSession extends ReaderParserSession {
 		}
 		return s;
 	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Enable validation.
+	 * Configuration property:  XML event allocator.
 	 *
-	 * @see XmlParser#XML_validating
+	 * @see XmlParser#XML_eventAllocator
 	 * @return
-	 * 	<jk>true</jk> if XML document will be validated.
+	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final boolean isValidating() {
-		return ctx.isValidating();
+	protected final XMLEventAllocator getEventAllocator() {
+		return ctx.getEventAllocator();
 	}
 
 	/**
@@ -731,13 +732,13 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  XML event allocator.
+	 * Configuration property:  Enable validation.
 	 *
-	 * @see XmlParser#XML_eventAllocator
+	 * @see XmlParser#XML_validating
 	 * @return
-	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
+	 * 	<jk>true</jk> if XML document will be validated.
 	 */
-	protected final XMLEventAllocator getEventAllocator() {
-		return ctx.getEventAllocator();
+	protected final boolean isValidating() {
+		return ctx.isValidating();
 	}
 }

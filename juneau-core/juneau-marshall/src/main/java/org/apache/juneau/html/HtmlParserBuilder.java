@@ -51,16 +51,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public HtmlParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -563,12 +553,6 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public HtmlParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -601,6 +585,12 @@ public class HtmlParserBuilder extends XmlParserBuilder {
 	@Override /* ContextBuilder */
 	public HtmlParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public HtmlParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

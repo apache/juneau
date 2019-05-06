@@ -17,7 +17,6 @@ import java.util.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Configurable properties common to both the {@link RdfSerializer} and {@link RdfParser} classes.
@@ -134,28 +133,6 @@ public interface RdfCommon {
 	 * </ul>
 	 */
 	public static final String RDF_juneauBpNs = PREFIX + "juneauBpNs.s";
-
-	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 *
-	 * <h5 class='section'>Property:</h5>
-	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"Rdf.useXmlNamespaces.b"</js>
-	 * 	<li><b>Data type:</b>  <code>Boolean</code>
-	 * 	<li><b>Default:</b>  <jk>true</jk>
-	 * 	<li><b>Methods:</b>
-	 * 		<ul>
-	 * 			<li class='jm'>{@link RdfSerializerBuilder#useXmlNamespaces(boolean)}
-	 * 			<li class='jm'>{@link RdfParserBuilder#useXmlNamespaces(boolean)}
-	 * 		</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
-	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 */
-	public static final String RDF_useXmlNamespaces = PREFIX + "useXmlNamespaces.b";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>iri_rules</code>.

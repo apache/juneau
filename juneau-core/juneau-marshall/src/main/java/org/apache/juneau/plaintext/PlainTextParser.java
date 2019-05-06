@@ -94,7 +94,12 @@ public class PlainTextParser extends ReaderParser {
 	}
 
 	@Override /* Parser */
-	public ReaderParserSession createSession(ParserSessionArgs args) {
+	public PlainTextParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
+	public PlainTextParserSession createSession(ParserSessionArgs args) {
 		return new PlainTextParserSession(this, args);
 	}
 }

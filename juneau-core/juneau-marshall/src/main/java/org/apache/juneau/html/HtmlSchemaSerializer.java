@@ -133,14 +133,14 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		return new HtmlSchemaSerializerBuilder(getPropertyStore());
 	}
 
-	@Override /* Serializer */
-	public HtmlSchemaSerializerSession createSession(SerializerSessionArgs args) {
-		return new HtmlSchemaSerializerSession(this, args);
-	}
-
 	@Override /* Context */
 	public HtmlSchemaSerializerSession createSession() {
 		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Serializer */
+	public HtmlSchemaSerializerSession createSession(SerializerSessionArgs args) {
+		return new HtmlSchemaSerializerSession(this, args);
 	}
 
 	JsonSchemaGenerator getGenerator() {

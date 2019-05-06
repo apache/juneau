@@ -18,8 +18,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
@@ -42,33 +40,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	 */
 	public ParserBuilder(PropertyStore ps) {
 		super(ps);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public ParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(ParserConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (ParserConfig a : m.get(ParserConfig.class)) {
-			if (! a.autoCloseStreams().isEmpty())
-				autoCloseStreams(r.bool(a.autoCloseStreams()));
-			if (! a.debugOutputLines().isEmpty())
-				debugOutputLines(r.integer(a.debugOutputLines()));
-			if (a.listener() != ParserListener.Null.class)
-				listener(a.listener());
-			if (! a.strict().isEmpty())
-				strict(r.bool(a.strict()));
-			if (! a.trimStrings().isEmpty())
-				trimStrings(r.bool(a.trimStrings()));
-			if (! a.unbuffered().isEmpty())
-				unbuffered(r.bool(a.unbuffered()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -673,12 +644,6 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public ParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -711,6 +676,12 @@ public class ParserBuilder extends BeanContextBuilder {
 	@Override /* ContextBuilder */
 	public ParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public ParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 

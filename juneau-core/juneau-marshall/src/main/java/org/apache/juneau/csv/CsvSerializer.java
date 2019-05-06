@@ -62,8 +62,13 @@ public final class CsvSerializer extends WriterSerializer {
 		return new CsvSerializerBuilder();
 	}
 
+	@Override /* Context */
+	public CsvSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public CsvSerializerSession createSession(SerializerSessionArgs args) {
 		return new CsvSerializerSession(this, args);
 	}
 

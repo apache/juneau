@@ -74,6 +74,11 @@ public class HtmlParser extends XmlParser {
 	}
 
 	@Override /* Parser */
+	public HtmlParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
 	public HtmlParserSession createSession(ParserSessionArgs args) {
 		return new HtmlParserSession(this, args);
 	}

@@ -49,7 +49,6 @@ public class XmlDocSerializer extends XmlSerializer {
 		}
 	}
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
@@ -64,7 +63,12 @@ public class XmlDocSerializer extends XmlSerializer {
 	}
 
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public XmlDocSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Serializer */
+	public XmlDocSerializerSession createSession(SerializerSessionArgs args) {
 		return new XmlDocSerializerSession(this, args);
 	}
 }

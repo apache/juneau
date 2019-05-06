@@ -17,10 +17,7 @@ import static org.apache.juneau.html.HtmlSerializer.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -50,33 +47,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* ContextBuilder */
 	public HtmlSerializer build() {
 		return build(HtmlSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public HtmlSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(HtmlConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (HtmlConfig a : m.get(HtmlConfig.class)) {
-			if (! a.addBeanTypes().isEmpty())
-				addBeanTypes(r.bool(a.addBeanTypes()));
-			if (! a.addKeyValueTableHeaders().isEmpty())
-				addKeyValueTableHeaders(r.bool(a.addKeyValueTableHeaders()));
-			if (! a.detectLabelParameters().isEmpty())
-				detectLabelParameters(r.bool(a.detectLabelParameters()));
-			if (! a.detectLinksInStrings().isEmpty())
-				detectLinksInStrings(r.bool(a.detectLinksInStrings()));
-			if (! a.labelParameter().isEmpty())
-				labelParameter(r.string(a.labelParameter()));
-			if (! a.uriAnchorText().isEmpty())
-				uriAnchorText(r.string(a.uriAnchorText()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -855,12 +825,6 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public HtmlSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -893,6 +857,12 @@ public class HtmlSerializerBuilder extends XmlSerializerBuilder {
 	@Override /* ContextBuilder */
 	public HtmlSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public HtmlSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

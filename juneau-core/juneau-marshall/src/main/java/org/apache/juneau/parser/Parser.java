@@ -836,29 +836,6 @@ public abstract class Parser extends BeanContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Trim parsed strings.
-	 *
-	 * @see #PARSER_trimStrings
-	 * @return
-	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * 	the POJO.
-	 */
-	protected final boolean isTrimStrings() {
-		return trimStrings;
-	}
-
-	/**
-	 * Configuration property:  Strict mode.
-	 *
-	 * @see #PARSER_strict
-	 * @return
-	 * 	<jk>true</jk> if strict mode for the parser is enabled.
-	 */
-	protected final boolean isStrict() {
-		return strict;
-	}
-
-	/**
 	 * Configuration property:  Auto-close streams.
 	 *
 	 * @see #PARSER_autoCloseStreams
@@ -868,17 +845,6 @@ public abstract class Parser extends BeanContext {
 	 */
 	protected final boolean isAutoCloseStreams() {
 		return autoCloseStreams;
-	}
-
-	/**
-	 * Configuration property:  Unbuffered.
-	 *
-	 * @see #PARSER_unbuffered
-	 * @return
-	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
-	 */
-	protected final boolean isUnbuffered() {
-		return unbuffered;
 	}
 
 	/**
@@ -899,7 +865,41 @@ public abstract class Parser extends BeanContext {
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
-	protected final Class<? extends ParserListener> getListenerClass() {
+	protected final Class<? extends ParserListener> getListener() {
 		return listener;
+	}
+
+	/**
+	 * Configuration property:  Strict mode.
+	 *
+	 * @see #PARSER_strict
+	 * @return
+	 * 	<jk>true</jk> if strict mode for the parser is enabled.
+	 */
+	protected final boolean isStrict() {
+		return strict;
+	}
+
+	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * @see #PARSER_trimStrings
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * 	the POJO.
+	 */
+	protected final boolean isTrimStrings() {
+		return trimStrings;
+	}
+
+	/**
+	 * Configuration property:  Unbuffered.
+	 *
+	 * @see #PARSER_unbuffered
+	 * @return
+	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
+	 */
+	protected final boolean isUnbuffered() {
+		return unbuffered;
 	}
 }

@@ -237,7 +237,12 @@ public class JsonParser extends ReaderParser {
 	}
 
 	@Override /* Parser */
-	public ReaderParserSession createSession(ParserSessionArgs args) {
+	public JsonParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
+	public JsonParserSession createSession(ParserSessionArgs args) {
 		return new JsonParserSession(this, args);
 	}
 
@@ -256,6 +261,10 @@ public class JsonParser extends ReaderParser {
 	protected final boolean isValidateEnd() {
 		return validateEnd;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

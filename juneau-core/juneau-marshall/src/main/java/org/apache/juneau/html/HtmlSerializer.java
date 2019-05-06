@@ -629,7 +629,7 @@ public class HtmlSerializer extends XmlSerializer {
 
 	private final AnchorText uriAnchorText;
 	private final boolean
-		lookForLabelParameters,
+		detectLabelParameters,
 		detectLinksInStrings,
 		addKeyValueTableHeaders,
 		addBeanTypes;
@@ -677,7 +677,7 @@ public class HtmlSerializer extends XmlSerializer {
 	public HtmlSerializer(PropertyStore ps, String produces, String accept) {
 		super(ps, produces, accept);
 		uriAnchorText = getProperty(HTML_uriAnchorText, AnchorText.class, AnchorText.TO_STRING);
-		lookForLabelParameters = getBooleanProperty(HTML_detectLabelParameters, true);
+		detectLabelParameters = getBooleanProperty(HTML_detectLabelParameters, true);
 		detectLinksInStrings = getBooleanProperty(HTML_detectLinksInStrings, true);
 		labelParameter = getStringProperty(HTML_labelParameter, "label");
 		addKeyValueTableHeaders = getBooleanProperty(HTML_addKeyValueTableHeaders, false);
@@ -706,7 +706,12 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public HtmlSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Serializer */
+	public HtmlSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlSerializerSession(this, args);
 	}
 
@@ -722,25 +727,16 @@ public class HtmlSerializer extends XmlSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Look for link labels in URIs.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #HTML_detectLabelParameters
+	 * @see #HTML_addBeanTypes
 	 * @return
-	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
 	 */
-	protected final boolean isLookForLabelParameters() {
-		return lookForLabelParameters;
-	}
-
-	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
-	 *
-	 * @see #HTML_detectLinksInStrings
-	 * @return
-	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
-	 */
-	protected final boolean isDetectLinksInStrings() {
-		return detectLinksInStrings;
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/**
@@ -755,16 +751,25 @@ public class HtmlSerializer extends XmlSerializer {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Look for link labels in URIs.
 	 *
-	 * @see #HTML_addBeanTypes
+	 * @see #HTML_detectLabelParameters
 	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
+	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
+	protected final boolean isDetectLabelParameters() {
+		return detectLabelParameters;
+	}
+
+	/**
+	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 *
+	 * @see #HTML_detectLinksInStrings
+	 * @return
+	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
+	 */
+	protected final boolean isDetectLinksInStrings() {
+		return detectLinksInStrings;
 	}
 
 	/**
@@ -790,12 +795,16 @@ public class HtmlSerializer extends XmlSerializer {
 		return uriAnchorText;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("HtmlSerializer", new ObjectMap()
 				.append("uriAnchorText", uriAnchorText)
-				.append("lookForLabelParameters", lookForLabelParameters)
+				.append("detectLabelParameters", detectLabelParameters)
 				.append("detectLinksInStrings", detectLinksInStrings)
 				.append("labelParameter", labelParameter)
 				.append("addKeyValueTableHeaders", addKeyValueTableHeaders)

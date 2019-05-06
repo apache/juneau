@@ -70,8 +70,13 @@ public class JsoSerializer extends OutputStreamSerializer {
 		return new JsoSerializerBuilder();
 	}
 
+	@Override /* Context */
+	public JsoSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
-	public OutputStreamSerializerSession createSession(SerializerSessionArgs args) {
+	public JsoSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsoSerializerSession(this, args);
 	}
 }

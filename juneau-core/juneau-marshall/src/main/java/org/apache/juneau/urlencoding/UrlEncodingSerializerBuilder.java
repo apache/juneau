@@ -18,12 +18,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -50,23 +47,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* ContextBuilder */
 	public UrlEncodingSerializer build() {
 		return build(UrlEncodingSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public UrlEncodingSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(UrlEncodingConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (UrlEncodingConfig a : m.get(UrlEncodingConfig.class)) {
-			if (! a.expandedParams().isEmpty())
-				expandedParams(r.bool(a.expandedParams()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -729,12 +709,6 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public UrlEncodingSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public UrlEncodingSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -767,6 +741,12 @@ public class UrlEncodingSerializerBuilder extends UonSerializerBuilder {
 	@Override /* ContextBuilder */
 	public UrlEncodingSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public UrlEncodingSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

@@ -17,10 +17,7 @@ import static org.apache.juneau.html.HtmlDocSerializer.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -53,54 +50,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public HtmlDocSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(HtmlDocConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (HtmlDocConfig a : m.get(HtmlDocConfig.class)) {
-			if (a.aside().length > 0)
-				aside(r.strings(a.aside()));
-			if (a.footer().length > 0)
-				footer(r.strings(a.footer()));
-			if (a.head().length > 0)
-				head(r.strings(a.head()));
-			if (a.header().length > 0)
-				header(r.strings(a.header()));
-			if (a.nav().length > 0)
-				nav(r.strings(a.nav()));
-			if (a.navlinks().length > 0)
-				navlinks(r.strings(a.navlinks()));
-			if (a.navlinks_replace().length > 0)
-				navlinks_replace(r.strings(a.navlinks_replace()));
-			if (! a.noResultsMessage().isEmpty())
-				noResultsMessage(r.string(a.noResultsMessage()));
-			if (! a.nowrap().isEmpty())
-				nowrap(r.bool(a.nowrap()));
-			if (a.script().length > 0)
-				script(r.strings(a.script()));
-			if (a.script_replace().length > 0)
-				script_replace(r.strings(a.script_replace()));
-			if (a.style().length > 0)
-				style(r.strings(a.style()));
-			if (a.style_replace().length > 0)
-				style_replace(r.strings(a.style_replace()));
-			if (a.stylesheet().length > 0)
-				stylesheet(r.strings(a.stylesheet()));
-			if (a.stylesheet_replace().length > 0)
-				stylesheet_replace
-				(r.strings(a.stylesheet_replace()));
-			if (a.template() != HtmlDocTemplate.Null.class)
-				template(a.template());
-		}
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -130,8 +79,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder aside(String[] value) {
+	public HtmlDocSerializerBuilder aside(String[] value) {
 		set(HTMLDOC_aside, value);
 		return this;
 	}
@@ -156,8 +106,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder footer(String[] value) {
+	public HtmlDocSerializerBuilder footer(String[] value) {
 		set(HTMLDOC_footer, value);
 		return this;
 	}
@@ -179,8 +130,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder head(String[] value) {
+	public HtmlDocSerializerBuilder head(String[] value) {
 		set(HTMLDOC_head, value);
 		return this;
 	}
@@ -203,8 +155,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder header(String[] value) {
+	public HtmlDocSerializerBuilder header(String[] value) {
 		set(HTMLDOC_header, value);
 		return this;
 	}
@@ -230,8 +183,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder nav(String[] value) {
+	public HtmlDocSerializerBuilder nav(String[] value) {
 		set(HTMLDOC_nav, value);
 		return this;
 	}
@@ -274,8 +228,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder navlinks_replace(String[] value) {
+	public HtmlDocSerializerBuilder navlinks_replace(String[] value) {
 		set(HTMLDOC_navlinks, value);
 		return this;
 	}
@@ -285,8 +240,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The value to add to this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder navlinks(String[] value) {
+	public HtmlDocSerializerBuilder navlinks(String[] value) {
 		set(HTMLDOC_navlinks_add, value);
 		return this;
 	}
@@ -309,8 +265,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder noResultsMessage(String value) {
+	public HtmlDocSerializerBuilder noResultsMessage(String value) {
 		set(HTMLDOC_noResultsMessage, value);
 		return this;
 	}
@@ -323,8 +280,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder nowrap(boolean value) {
+	public HtmlDocSerializerBuilder nowrap(boolean value) {
 		set(HTMLDOC_nowrap, value);
 		return this;
 	}
@@ -346,8 +304,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder script_replace(String[] value) {
+	public HtmlDocSerializerBuilder script_replace(String[] value) {
 		set(HTMLDOC_script, value);
 		return this;
 	}
@@ -357,8 +316,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The value to add to this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder script(String[] value) {
+	public HtmlDocSerializerBuilder script(String[] value) {
 		set(HTMLDOC_script_add, value);
 		return this;
 	}
@@ -381,8 +341,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder style_replace(String[] value) {
+	public HtmlDocSerializerBuilder style_replace(String[] value) {
 		set(HTMLDOC_style, value);
 		return this;
 	}
@@ -392,8 +353,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The value to add to this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder style(String[] value) {
+	public HtmlDocSerializerBuilder style(String[] value) {
 		set(HTMLDOC_style_add, value);
 		return this;
 	}
@@ -409,8 +371,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder stylesheet_replace(String[] value) {
+	public HtmlDocSerializerBuilder stylesheet_replace(String[] value) {
 		set(HTMLDOC_stylesheet, value);
 		return this;
 	}
@@ -420,8 +383,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The value to add to this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder stylesheet(String[] value) {
+	public HtmlDocSerializerBuilder stylesheet(String[] value) {
 		set(HTMLDOC_stylesheet_add, value);
 		return this;
 	}
@@ -445,8 +409,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * @return This object (for method chaining).
 	 */
-	private HtmlDocSerializerBuilder template(Class<?> value) {
+	public HtmlDocSerializerBuilder template(Class<?> value) {
 		set(HTMLDOC_template, value);
 		return this;
 	}
@@ -1129,12 +1094,6 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public HtmlDocSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public HtmlDocSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -1167,6 +1126,12 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	@Override /* ContextBuilder */
 	public HtmlDocSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public HtmlDocSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

@@ -271,15 +271,16 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Simple JSON mode.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see JsonSerializer#JSON_simpleMode
+	 * @see JsonSerializer#JSON_addBeanTypes
 	 * @return
-	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
-	 * 	<br>Otherwise, they are always quoted.
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
 	 */
-	protected final boolean isSimpleMode() {
-		return ctx.isSimpleMode();
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
 	}
 
 	/**
@@ -294,15 +295,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Simple JSON mode.
 	 *
-	 * @see JsonSerializer#JSON_addBeanTypes
+	 * @see JsonSerializer#JSON_simpleMode
 	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
+	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
+	 * 	<br>Otherwise, they are always quoted.
 	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
+	protected final boolean isSimpleMode() {
+		return ctx.isSimpleMode();
 	}
 }

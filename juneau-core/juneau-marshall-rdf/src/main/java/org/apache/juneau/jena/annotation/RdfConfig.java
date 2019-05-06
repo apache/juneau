@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -29,9 +30,10 @@ import org.apache.juneau.xml.annotation.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(RdfConfigApply.class)
 public @interface RdfConfig {
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -43,7 +45,7 @@ public @interface RdfConfig {
 	 *
 	 * <p>
 	 * 	The RDF language to use.
-	 * 
+	 *
 	 * <p>
 	 * Can be any of the following:
 	 * <ul class='spaced-list'>
@@ -100,27 +102,6 @@ public @interface RdfConfig {
 	 * </ul>
 	 */
 	String juneauBpNs() default "";
-
-	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 *
-	 * <p>
-	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
-	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js> (default)
-	 * 	<li><js>"false"</js>
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link RdfCommon#RDF_useXmlNamespaces}
-	 * </ul>
-	 */
-	String useXmlNamespaces() default "";
 
 	/**
 	 * Configuration property:  RDF/XML property: <code>iri_rules</code>.
@@ -635,4 +616,25 @@ public @interface RdfConfig {
 	 * </ul>
 	 */
 	String[] namespaces() default {};
+
+	/**
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 *
+	 * <p>
+	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"true"</js> (default)
+	 * 	<li><js>"false"</js>
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link RdfSerializer#RDF_useXmlNamespaces}
+	 * </ul>
+	 */
+	String useXmlNamespaces() default "";
 }

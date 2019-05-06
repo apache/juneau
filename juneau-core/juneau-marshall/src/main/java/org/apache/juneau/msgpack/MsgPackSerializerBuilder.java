@@ -16,9 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.msgpack.annotation.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
@@ -47,23 +44,6 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* ContextBuilder */
 	public MsgPackSerializer build() {
 		return build(MsgPackSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public MsgPackSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(MsgPackConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (MsgPackConfig a : m.get(MsgPackConfig.class)) {
-			if (! a.addBeanTypes().isEmpty())
-				addBeanTypes(r.bool(a.addBeanTypes()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -634,12 +614,6 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public MsgPackSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public MsgPackSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -672,6 +646,12 @@ public class MsgPackSerializerBuilder extends OutputStreamSerializerBuilder {
 	@Override /* ContextBuilder */
 	public MsgPackSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public MsgPackSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

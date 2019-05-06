@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.petstore.rest;
 
-import static org.apache.juneau.html.HtmlSerializer.*;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
@@ -28,6 +27,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Path;
@@ -72,10 +72,6 @@ import org.apache.juneau.serializer.*;
 		},
 		stylesheet="servlet:/htdocs/themes/dark.css"
 	),
-	properties={
-		// Make the anchor text on URLs be just the path relative to the servlet.
-		@Property(name=HTML_uriAnchorText, value="SERVLET_RELATIVE")
-	},
 	swagger=@ResourceSwagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
 		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
@@ -83,6 +79,10 @@ import org.apache.juneau.serializer.*;
 		termsOfService="You are on your own.",
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
+)
+@HtmlConfig(
+	// Make the anchor text on URLs be just the path relative to the servlet.
+	uriAnchorText="SERVLET_RELATIVE"
 )
 public class PhotosResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;

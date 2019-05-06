@@ -93,6 +93,10 @@ public abstract class InputStreamParserSession extends ParserSession {
 		return ctx.getBinaryFormat();
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()

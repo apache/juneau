@@ -14,6 +14,9 @@ package org.apache.juneau;
 
 import java.util.*;
 
+import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
+
 /**
  * Builder class for building instances of serializers and parsers.
  */
@@ -86,6 +89,18 @@ public abstract class ContextBuilder {
 	}
 
 	/**
+	 * Applies a set of annotations to this property store.
+	 *
+	 * @param annotationsMap The annotations map.
+	 * @param r The string resolver for resolving variables in annotation values.
+	 * @return This object (for method chaining).
+	 */
+	public ContextBuilder applyAnnotations(AnnotationsMap annotationsMap, StringResolver r) {
+		this.psb.applyAnnotations(annotationsMap, r);
+		return this;
+	}
+
+	/**
 	 * Build a new instance of the specified object.
 	 *
 	 * @param c The subclass of {@link Context} to instantiate.
@@ -119,24 +134,6 @@ public abstract class ContextBuilder {
 	 */
 	public ContextBuilder set(String name, Object value) {
 		psb.set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets or adds to a SET or LIST property.
-	 *
-	 * @param append
-	 * 	If <jk>true</jk>, the previous value is appended to.  Otherwise, the previous value is replaced.
-	 * @param name The property name.
-	 * @param value The property value.
-	 * @return This object (for method chaining).
-	 * @see PropertyStoreBuilder#set(String, Object)
-	 */
-	public ContextBuilder set(boolean append, String name, Object value) {
-		if (append)
-			psb.addTo(name, value);
-		else
-			psb.set(name, value);
 		return this;
 	}
 

@@ -109,7 +109,7 @@ public class OpenApiSerializer extends UonSerializer {
 
 	@Override /* Context */
 	public OpenApiSerializerSession createSession() {
-		return createSession(null);
+		return createSession(createDefaultSessionArgs());
 	}
 
 	@Override /* Serializer */

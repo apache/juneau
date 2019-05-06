@@ -76,4 +76,19 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	public Map<String,String> getResponseHeaders() {
 		return new AMap<String,String>().append("SOAPAction", soapAction);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  The SOAPAction HTTP header value to set on responses.
+	 *
+	 * @see #SOAPXML_SOAPAction
+	 * @return
+	 * 	The SOAPAction HTTP header value to set on responses.
+	 */
+	public String getSoapAction() {
+		return soapAction;
+	}
 }

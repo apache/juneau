@@ -393,6 +393,11 @@ public class JsonSerializer extends WriterSerializer {
 	// Entry point methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override /* Context */
+	public JsonSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
 	public JsonSerializerSession createSession(SerializerSessionArgs args) {
 		return new JsonSerializerSession(this, args);
@@ -403,15 +408,16 @@ public class JsonSerializer extends WriterSerializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Simple JSON mode.
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
-	 * @see #JSON_simpleMode
+	 * @see #JSON_addBeanTypes
 	 * @return
-	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
-	 * 	<br>Otherwise, they are always quoted.
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
 	 */
-	protected final boolean isSimpleMode() {
-		return simpleMode;
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return addBeanTypes;
 	}
 
 	/**
@@ -426,17 +432,20 @@ public class JsonSerializer extends WriterSerializer {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Simple JSON mode.
 	 *
-	 * @see #JSON_addBeanTypes
+	 * @see #JSON_simpleMode
 	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
+	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
+	 * 	<br>Otherwise, they are always quoted.
 	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
+	protected final boolean isSimpleMode() {
+		return simpleMode;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

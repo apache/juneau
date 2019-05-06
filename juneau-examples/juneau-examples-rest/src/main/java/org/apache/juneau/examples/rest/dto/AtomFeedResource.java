@@ -13,19 +13,20 @@
 package org.apache.juneau.examples.rest.dto;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
-import static org.apache.juneau.jena.RdfCommon.*;
-import static org.apache.juneau.jena.RdfSerializer.*;
 
-import java.net.*;
+import java.net.URI;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.serializer.annotation.*;
 
 /**
  * Sample resource that shows how to generate ATOM feeds.
@@ -52,12 +53,6 @@ import org.apache.juneau.rest.widget.*;
 			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
 		}
 	),
-	properties={
-		@Property(name=WSERIALIZER_quoteChar, value="'"),
-		@Property(name=RDF_rdfxml_tab, value="5"),
-		@Property(name=RDF_addRootProperty, value="true"),
-		@Property(name=BEAN_examples, value="{'org.apache.juneau.dto.atom.Feed': $F{AtomFeedResource_example.json}}")
-	},
 	encoders=GzipEncoder.class,
 	swagger=@ResourceSwagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
@@ -66,6 +61,16 @@ import org.apache.juneau.rest.widget.*;
 		termsOfService="You are on your own.",
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
+)
+@SerializerConfig(
+	quoteChar="'"
+)
+@RdfConfig(
+	rdfxml_tab="5", 
+	addRootProperty="true"
+)
+@BeanConfig(
+	examples="Feed: $F{AtomFeedResource_example.json}"
 )
 public class AtomFeedResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;

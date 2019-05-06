@@ -19,8 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
@@ -43,25 +41,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	 */
 	public ReaderParserBuilder(PropertyStore ps) {
 		super(ps);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public ReaderParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(ParserConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (ParserConfig a : m.get(ParserConfig.class)) {
-			if (! a.fileCharset().isEmpty())
-				fileCharset(r.string(a.fileCharset()));
-			if (! a.inputStreamCharset().isEmpty())
-				inputStreamCharset(r.string(a.inputStreamCharset()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -617,12 +596,6 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ReaderParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public ReaderParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -655,6 +628,12 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	@Override /* ContextBuilder */
 	public ReaderParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public ReaderParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

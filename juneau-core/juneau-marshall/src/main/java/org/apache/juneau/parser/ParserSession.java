@@ -61,7 +61,7 @@ public abstract class ParserSession extends BeanSession {
 		this.ctx = ctx;
 		javaMethod = args.javaMethod;
 		outer = args.outer;
-		listener = getInstanceProperty(PARSER_listener, ParserListener.class, ctx.getListenerClass());
+		listener = getInstanceProperty(PARSER_listener, ParserListener.class, ctx.getListener());
 	}
 
 	/**
@@ -729,15 +729,6 @@ public abstract class ParserSession extends BeanSession {
 	/**
 	 * Returns the listener associated with this session.
 	 *
-	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
-	 */
-	public ParserListener getListener() {
-		return listener;
-	}
-
-	/**
-	 * Returns the listener associated with this session.
-	 *
 	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
@@ -812,29 +803,6 @@ public abstract class ParserSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Trim parsed strings.
-	 *
-	 * @see Parser#PARSER_trimStrings
-	 * @return
-	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
-	 * 	the POJO.
-	 */
-	protected final boolean isTrimStrings() {
-		return ctx.isTrimStrings();
-	}
-
-	/**
-	 * Configuration property:  Strict mode.
-	 *
-	 * @see Parser#PARSER_strict
-	 * @return
-	 * 	<jk>true</jk> if strict mode for the parser is enabled.
-	 */
-	protected final boolean isStrict() {
-		return ctx.isStrict();
-	}
-
-	/**
 	 * Configuration property:  Auto-close streams.
 	 *
 	 * @see Parser#PARSER_autoCloseStreams
@@ -844,17 +812,6 @@ public abstract class ParserSession extends BeanSession {
 	 */
 	protected final boolean isAutoCloseStreams() {
 		return ctx.isAutoCloseStreams();
-	}
-
-	/**
-	 * Configuration property:  Unbuffered.
-	 *
-	 * @see Parser#PARSER_unbuffered
-	 * @return
-	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
-	 */
-	protected final boolean isUnbuffered() {
-		return ctx.isUnbuffered();
 	}
 
 	/**
@@ -869,6 +826,53 @@ public abstract class ParserSession extends BeanSession {
 	}
 
 	/**
+	 * Returns the listener associated with this session.
+	 *
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
+	 */
+	public ParserListener getListener() {
+		return listener;
+	}
+
+	/**
+	 * Configuration property:  Strict mode.
+	 *
+	 * @see Parser#PARSER_strict
+	 * @return
+	 * 	<jk>true</jk> if strict mode for the parser is enabled.
+	 */
+	protected final boolean isStrict() {
+		return ctx.isStrict();
+	}
+
+	/**
+	 * Configuration property:  Trim parsed strings.
+	 *
+	 * @see Parser#PARSER_trimStrings
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
+	 * 	the POJO.
+	 */
+	protected final boolean isTrimStrings() {
+		return ctx.isTrimStrings();
+	}
+
+	/**
+	 * Configuration property:  Unbuffered.
+	 *
+	 * @see Parser#PARSER_unbuffered
+	 * @return
+	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
+	 */
+	protected final boolean isUnbuffered() {
+		return ctx.isUnbuffered();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
 	 * Configuration property:  Parser listener.
 	 *
 	 * @see Parser#PARSER_listener
@@ -876,6 +880,6 @@ public abstract class ParserSession extends BeanSession {
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
 	protected final Class<? extends ParserListener> getListenerClass() {
-		return ctx.getListenerClass();
+		return ctx.getListener();
 	}
 }

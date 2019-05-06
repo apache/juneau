@@ -30,9 +30,10 @@ import org.apache.juneau.jsonschema.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(JsonSchemaConfigApply.class)
 public @interface JsonSchemaConfig {
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -179,7 +180,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='jf'>{@link JsonSchemaGenerator#JSONSCHEMA_defaultSchemas}
 	 * </ul>
 	 */
-	CSEntry[] defaultSchemas() default {};
+	CS[] defaultSchemas() default {};
 
 	/**
 	 * Configuration property:  Ignore types from schema definitions.

@@ -322,8 +322,13 @@ public class UrlEncodingSerializer extends UonSerializer {
 	// Entry point methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override /* Context */
+	public UrlEncodingSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public UrlEncodingSerializerSession createSession(SerializerSessionArgs args) {
 		return new UrlEncodingSerializerSession(this, null, args);
 	}
 
@@ -342,6 +347,10 @@ public class UrlEncodingSerializer extends UonSerializer {
 	protected final boolean isExpandedParams() {
 		return expandedParams;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

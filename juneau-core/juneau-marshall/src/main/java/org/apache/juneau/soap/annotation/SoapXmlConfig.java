@@ -17,6 +17,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.soap.*;
 
 /**
@@ -26,9 +27,10 @@ import org.apache.juneau.soap.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  */
 @Documented
-@Target(TYPE)
+@Target({TYPE,METHOD})
 @Retention(RUNTIME)
 @Inherited
+@PropertyStoreApply(SoapXmlConfigApply.class)
 public @interface SoapXmlConfig {
 
 	//-------------------------------------------------------------------------------------------------------------------

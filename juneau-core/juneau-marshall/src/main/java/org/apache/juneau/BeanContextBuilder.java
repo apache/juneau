@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.BeanContext.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -20,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -86,117 +86,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Override /* ContextBuilder */
 	public BeanContext build() {
 		return build(BeanContext.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Apply annotations to this builder.
-	 *
-	 * @param m
-	 * 	Annotations map.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param sr The string resolver to use for resolving variables in the annotations.
-	 * @return This object (for method chaining).
-	 * @throws ParseException
-	 */
-	public BeanContextBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		if (! m.containsKey(BeanConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (BeanConfig a : m.get(BeanConfig.class)) {
-			if (! a.beanClassVisibility().isEmpty())
-				beanClassVisibility(r.visibility(a.beanClassVisibility()));
-			if (! a.beanConstructorVisibility().isEmpty())
-				beanConstructorVisibility(r.visibility(a.beanConstructorVisibility()));
-			if (a.beanDictionary().length != 0)
-				beanDictionary(a.beanDictionary());
-			if (a.beanDictionary_replace().length != 0)
-				beanDictionaryReplace(a.beanDictionary_replace());
-			if (a.beanDictionary_remove().length != 0)
-				beanDictionaryRemove(a.beanDictionary_remove());
-			if (! a.beanFieldVisibility().isEmpty())
-				beanFieldVisibility(r.visibility(a.beanFieldVisibility()));
-			if (a.beanFilters().length != 0)
-				beanFilters(a.beanFilters());
-			if (a.beanFilters_replace().length != 0)
-				beanFiltersReplace(a.beanFilters_replace());
-			if (a.beanFilters_remove().length != 0)
-				beanFiltersRemove(a.beanFilters_remove());
-			if (! a.beanMapPutReturnsOldValue().isEmpty())
-				beanMapPutReturnsOldValue(r.bool(a.beanMapPutReturnsOldValue()));
-			if (! a.beanMethodVisibility().isEmpty())
-				beanMethodVisibility(r.visibility(a.beanMethodVisibility()));
-			if (! a.beansRequireDefaultConstructor().isEmpty())
-				beansRequireDefaultConstructor(r.bool(a.beansRequireDefaultConstructor()));
-			if (! a.beansRequireSerializable().isEmpty())
-				beansRequireSerializable(r.bool(a.beansRequireSerializable()));
-			if (! a.beansRequireSettersForGetters().isEmpty())
-				beansRequireSettersForGetters(r.bool(a.beansRequireSettersForGetters()));
-			if (! a.beansRequireSomeProperties().isEmpty())
-				beansRequireSomeProperties(r.bool(a.beansRequireSomeProperties()));
-			if (! a.beanTypePropertyName().isEmpty())
-				beanTypePropertyName(r.string(a.beanTypePropertyName()));
-			if (! a.debug().isEmpty())
-				debug(r.bool(a.debug()));
-			for (CSEntry e : a.examples())
-				exampleJson(e.key(), r.string(e.value()));
-			for (CSEntry e : a.excludeProperties())
-				excludeProperties(e.key(), r.string(e.value()));
-			if (! a.fluentSetters().isEmpty())
-				fluentSetters(r.bool(a.fluentSetters()));
-			if (! a.ignoreInvocationExceptionsOnGetters().isEmpty())
-				ignoreInvocationExceptionsOnGetters(r.bool(a.ignoreInvocationExceptionsOnGetters()));
-			if (! a.ignoreInvocationExceptionsOnSetters().isEmpty())
-				ignoreInvocationExceptionsOnSetters(r.bool(a.ignoreInvocationExceptionsOnSetters()));
-			if (! a.ignorePropertiesWithoutSetters().isEmpty())
-				ignorePropertiesWithoutSetters(r.bool(a.ignorePropertiesWithoutSetters()));
-			if (! a.ignoreUnknownBeanProperties().isEmpty())
-				ignoreUnknownBeanProperties(r.bool(a.ignoreUnknownBeanProperties()));
-			if (! a.ignoreUnknownNullBeanProperties().isEmpty())
-				ignoreUnknownNullBeanProperties(r.bool(a.ignoreUnknownNullBeanProperties()));
-			for (CCEntry e : a.implClasses())
-				implClass(e.key(), e.value());
-			for (CSEntry e : a.includeProperties())
-				includeProperties(e.key(), r.string(e.value()));
-			if (! a.locale().isEmpty())
-				locale(r.locale(a.locale()));
-			if (! a.mediaType().isEmpty())
-				mediaType(r.mediaType(a.mediaType()));
-			if (a.notBeanClasses().length != 0)
-				notBeanClasses(a.notBeanClasses());
-			if (a.notBeanClasses_replace().length != 0)
-				notBeanClassesReplace(a.notBeanClasses_replace());
-			if (a.notBeanClasses_remove().length != 0)
-				notBeanClassesRemove(a.notBeanClasses_remove());
-			if (a.notBeanPackages().length != 0)
-				notBeanPackages(r.strings(a.notBeanPackages()));
-			if (a.notBeanPackages_replace().length != 0)
-				notBeanPackagesReplace(r.strings(a.notBeanPackages_replace()));
-			if (a.notBeanPackages_remove().length != 0)
-				notBeanPackagesRemove(r.strings(a.notBeanPackages_remove()));
-			if (a.pojoSwaps().length != 0)
-				pojoSwaps(a.pojoSwaps());
-			if (a.pojoSwaps_replace().length != 0)
-				pojoSwapsReplace(a.pojoSwaps_replace());
-			if (a.pojoSwaps_remove().length != 0)
-				pojoSwapsRemove(a.pojoSwaps_remove());
-			if (a.propertyNamer() != PropertyNamer.Null.class)
-				propertyNamer(a.propertyNamer());
-			if (! a.sortProperties().isEmpty())
-				sortProperties(r.bool(a.sortProperties()));
-			if (! a.timeZone().isEmpty())
-				timeZone(r.timeZone(a.timeZone()));
-			if (! a.useEnumNames().isEmpty())
-				useEnumNames(r.bool(a.useEnumNames()));
-			if (! a.useInterfaceProxies().isEmpty())
-				useInterfaceProxies(r.bool(a.useInterfaceProxies()));
-			if (! a.useJavaBeanIntrospector().isEmpty())
-				useJavaBeanIntrospector(r.bool(a.useJavaBeanIntrospector()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -301,7 +190,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beanDictionaryReplace(Class<?>...values) {
-		return set(false, BEAN_beanDictionary, values);
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -320,7 +209,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beanDictionaryReplace(Object...values) {
-		return set(false, BEAN_beanDictionary, values);
+		return set(BEAN_beanDictionary, values);
 	}
 
 	/**
@@ -450,7 +339,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beanFiltersReplace(Class<?>...values) {
-		return set(false, BEAN_beanFilters, values);
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -476,7 +365,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder beanFiltersReplace(Object...values) {
-		return set(false, BEAN_beanFilters, values);
+		return set(BEAN_beanFilters, values);
 	}
 
 	/**
@@ -830,6 +719,30 @@ public class BeanContextBuilder extends ContextBuilder {
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Configuration property:  POJO examples.
+	 *
+	 * <p>
+	 * Specifies an example of the specified class.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
+	 * </ul>
+	 *
+	 * @param json The simple JSON representation of the example.
+	 * @return This object (for method chaining).
+	 * @throws ParseException If parameter is not valid Simple-JSON.
+	 */
+	public BeanContextBuilder examples(String json) throws ParseException {
+		if (! isObjectMap(json, true))
+			json = "{" + json + "}";
+		ObjectMap m = new ObjectMap(json);
+		for (Map.Entry<String,Object> e : m.entrySet())
+			addTo(BEAN_examples, e.getKey(), e.getValue());
+		return this;
 	}
 
 	/**
@@ -1281,7 +1194,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder notBeanClassesReplace(Class<?>...values) {
-		return set(false, BEAN_notBeanClasses, values);
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -1306,7 +1219,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder notBeanClassesReplace(Object...values) {
-		return set(false, BEAN_notBeanClasses, values);
+		return set(BEAN_notBeanClasses, values);
 	}
 
 	/**
@@ -1396,7 +1309,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder notBeanPackagesReplace(String...values) {
-		return set(false, BEAN_notBeanPackages, values);
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -1417,7 +1330,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder notBeanPackagesReplace(Object...values) {
-		return set(false, BEAN_notBeanPackages, values);
+		return set(BEAN_notBeanPackages, values);
 	}
 
 	/**
@@ -1512,7 +1425,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder pojoSwapsReplace(Class<?>...values) {
-		return set(false, BEAN_pojoSwaps, values);
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1534,7 +1447,7 @@ public class BeanContextBuilder extends ContextBuilder {
 	 * @return This object (for method chaining).
 	 */
 	public BeanContextBuilder pojoSwapsReplace(Object...values) {
-		return set(false, BEAN_pojoSwaps, values);
+		return set(BEAN_pojoSwaps, values);
 	}
 
 	/**
@@ -1758,12 +1671,6 @@ public class BeanContextBuilder extends ContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public BeanContextBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public BeanContextBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -1796,6 +1703,12 @@ public class BeanContextBuilder extends ContextBuilder {
 	@Override /* ContextBuilder */
 	public BeanContextBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public BeanContextBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

@@ -68,13 +68,13 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		Object output = out.getRawOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), plainTextParams, getUriResolver());
+		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
 
 	private final UonWriter getUonWriter(Writer out) throws Exception {
-		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncodeChars(), isTrimStrings(), plainTextParams, getUriResolver());
+		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getUriResolver());
 	}
 
 	@Override /* Serializer */
@@ -299,17 +299,6 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
-	 *
-	 * @see UonSerializer#UON_encoding
-	 * @return
-	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
-	 */
-	protected final boolean isEncodeChars() {
-		return ctx.isEncodeChars();
-	}
-
-	/**
 	 * Configuration property:  Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see UonSerializer#UON_addBeanTypes
@@ -320,6 +309,17 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	@Override
 	protected final boolean isAddBeanTypes() {
 		return ctx.isAddBeanTypes();
+	}
+
+	/**
+	 * Configuration property:  Encode non-valid URI characters.
+	 *
+	 * @see UonSerializer#UON_encoding
+	 * @return
+	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
+	 */
+	protected final boolean isEncoding() {
+		return ctx.isEncoding();
 	}
 
 	/**

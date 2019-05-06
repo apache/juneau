@@ -31,16 +31,16 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.testutils.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
  * JUnit automated testcase resource.
  */
 @RestResource(
-	path="/testThirdPartyProxy",
-	flags={Serializer.SERIALIZER_addRootType, Serializer.SERIALIZER_addBeanTypes}
+	path="/testThirdPartyProxy"
 )
+@SerializerConfig(addRootType="true",addBeanTypes="true")
 @SuppressWarnings("serial")
 public class ThirdPartyProxyResource extends BasicRestServletJena {
 

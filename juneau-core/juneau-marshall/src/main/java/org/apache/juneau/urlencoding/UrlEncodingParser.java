@@ -152,6 +152,11 @@ public class UrlEncodingParser extends UonParser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Parser */
+	public UrlEncodingParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
 	public UrlEncodingParserSession createSession(ParserSessionArgs args) {
 		return new UrlEncodingParserSession(this, args);
 	}
@@ -171,6 +176,10 @@ public class UrlEncodingParser extends UonParser {
 	protected final boolean isExpandedParams() {
 		return expandedParams;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

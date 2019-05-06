@@ -12,8 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.dto;
 
-import static org.apache.juneau.BeanContext.*;
-
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.http.annotation.*;
@@ -35,9 +34,6 @@ import org.apache.juneau.rest.widget.*;
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
-	properties={
-		@Property(name=BEAN_examples, value="{'org.apache.juneau.dto.jsonschema.Schema': $F{JsonSchemaResource_example.json}}")
-	},
 	htmldoc=@HtmlDoc(
 		widgets={
 			ContentTypeMenuItem.class,
@@ -63,6 +59,9 @@ import org.apache.juneau.rest.widget.*;
 		termsOfService="You are on your own.",
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
+)
+@BeanConfig(
+	examples="Schema: $F{JsonSchemaResource_example.json}"
 )
 public class JsonSchemaResource extends BasicRestServletJena {
 	private static final long serialVersionUID = 1L;

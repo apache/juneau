@@ -116,6 +116,10 @@ public abstract class InputStreamParser extends Parser {
 		return binaryFormat;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
 	@Override /* Context */
 	public ObjectMap asMap() {
 		return super.asMap()

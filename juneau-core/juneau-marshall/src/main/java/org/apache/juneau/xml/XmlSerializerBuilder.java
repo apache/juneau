@@ -18,12 +18,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Builder class for building instances of XML serializers.
@@ -49,35 +46,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public XmlSerializer build() {
 		return build(XmlSerializer.class);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public XmlSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(XmlConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (XmlConfig a : m.get(XmlConfig.class)) {
-			if (! a.addBeanTypes().isEmpty())
-				addBeanTypes(r.bool(a.addBeanTypes()));
-			if (! a.addNamespaceUrisToRoot().isEmpty())
-				addNamespaceUrisToRoot(r.bool(a.addNamespaceUrisToRoot()));
-			if (! a.autoDetectNamespaces().isEmpty())
-				autoDetectNamespaces(r.bool(a.autoDetectNamespaces()));
-			if (! a.defaultNamespace().isEmpty())
-				defaultNamespace(r.string(a.defaultNamespace()));
-			if (! a.enableNamespaces().isEmpty())
-				enableNamespaces(r.bool(a.enableNamespaces()));
-			if (a.namespaces().length > 0)
-				namespaces(r.strings(a.namespaces()));
-			if (! a.xsNamespace().isEmpty())
-				xsNamespace(r.string(a.xsNamespace()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -887,12 +855,6 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public XmlSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public XmlSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -925,6 +887,12 @@ public class XmlSerializerBuilder extends WriterSerializerBuilder {
 	@Override /* ContextBuilder */
 	public XmlSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public XmlSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

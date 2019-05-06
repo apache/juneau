@@ -165,6 +165,11 @@ public abstract class WriterSerializer extends Serializer {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override /* Context */
+	public WriterSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
 	@Override /* Serializer */
 	public final boolean isWriterSerializer() {
 		return true;
@@ -245,6 +250,10 @@ public abstract class WriterSerializer extends Serializer {
 	protected final char getQuoteChar() {
 		return quoteChar;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

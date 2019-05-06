@@ -45,7 +45,12 @@ public class XmlSchemaDocSerializer extends XmlSchemaSerializer {
 	}
 
 	@Override /* Serializer */
-	public WriterSerializerSession createSession(SerializerSessionArgs args) {
+	public XmlSchemaSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Serializer */
+	public XmlSchemaSerializerSession createSession(SerializerSessionArgs args) {
 		return new XmlSchemaSerializerSession(this, args);
 	}
 }

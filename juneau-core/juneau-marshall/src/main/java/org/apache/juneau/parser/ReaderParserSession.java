@@ -89,6 +89,17 @@ public abstract class ReaderParserSession extends ParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Configuration property:  File charset.
+	 *
+	 * @see ReaderParser#RPARSER_fileCharset
+	 * @return
+	 * 	The character set to use for reading <code>Files</code> from the file system.
+	 */
+	protected final String getFileCharset() {
+		return ctx.getFileCharset();
+	}
+
+	/**
 	 * Configuration property:  Input stream charset.
 	 *
 	 * @see ReaderParser#RPARSER_inputStreamCharset
@@ -99,16 +110,9 @@ public abstract class ReaderParserSession extends ParserSession {
 		return ctx.getInputStreamCharset();
 	}
 
-	/**
-	 * Configuration property:  File charset.
-	 *
-	 * @see ReaderParser#RPARSER_fileCharset
-	 * @return
-	 * 	The character set to use for reading <code>Files</code> from the file system.
-	 */
-	protected final String getFileCharset() {
-		return ctx.getFileCharset();
-	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Session */
 	public ObjectMap asMap() {

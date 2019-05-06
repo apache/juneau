@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import static org.apache.juneau.serializer.Serializer.*;
-
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -58,10 +57,6 @@ import org.apache.juneau.transforms.*;
 		},
 		nowrap="false"
 	),
-	properties={
-		@Property(name=BEANTRAVERSE_maxDepth, value="5"),
-		@Property(name=BEANTRAVERSE_detectRecursions, value="true")
-	},
 	beanFilters={
 		// Interpret these as their parent classes, not subclasses
 		HttpServletRequest.class, HttpSession.class, ServletContext.class,
@@ -77,6 +72,10 @@ import org.apache.juneau.transforms.*;
 		termsOfService="You are on your own.",
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
+)
+@BeanConfig(
+	maxDepth="5", 
+	detectRecursions="true"
 )
 public class RequestEchoResource extends BasicRest {
 

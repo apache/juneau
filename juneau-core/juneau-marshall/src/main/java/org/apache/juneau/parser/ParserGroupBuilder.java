@@ -129,17 +129,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public ParserGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
-	}
-
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -801,12 +790,6 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public ParserGroupBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public ParserGroupBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -839,6 +822,12 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	@Override /* ContextBuilder */
 	public ParserGroupBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public ParserGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

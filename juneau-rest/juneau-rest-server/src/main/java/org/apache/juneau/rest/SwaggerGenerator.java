@@ -77,14 +77,13 @@ final class SwaggerGenerator {
 	/**
 	 * Constructor.
 	 * @param req
-	 *
 	 */
 	public SwaggerGenerator(RestRequest req) {
 		this.req = req;
 		this.vr = req.getVarResolverSession();
 		this.locale = req.getLocale();
 		this.context = req.getContext();
-		this.js = new JsonSchemaGenerator(req.getPropertyStore()).createSession();
+		this.js = req.getJsonSchemaGenerator().createSession();
 		this.c = context.getResource().getClass();
 		this.resource = context.getResource();
 		this.mb = context.getMessages();

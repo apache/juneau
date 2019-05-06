@@ -66,12 +66,12 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			addModelPrefix(ns);
 		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
 		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
-		writer = model.getWriter(ctx.getRdfLanguage());
+		writer = model.getWriter(ctx.getLanguage());
 
 		// Only apply properties with this prefix!
-		String propPrefix = RdfCommon.LANG_PROP_MAP.get(ctx.getRdfLanguage());
+		String propPrefix = RdfCommon.LANG_PROP_MAP.get(ctx.getLanguage());
 		if (propPrefix == null)
-			throw new FormattedRuntimeException("Unknown RDF language encountered: ''{0}''", ctx.getRdfLanguage());
+			throw new FormattedRuntimeException("Unknown RDF language encountered: ''{0}''", ctx.getLanguage());
 
 		// RDF/XML specific properties.
 		if (propPrefix.equals("rdfXml.")) {
@@ -79,7 +79,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			writer.setProperty("attributeQuoteChar", Character.toString(getQuoteChar()));
 		}
 
-		for (Map.Entry<String,Object> e : ctx.jenaSettings.entrySet())
+		for (Map.Entry<String,Object> e : ctx.jenaProperties.entrySet())
 			if (e.getKey().startsWith(propPrefix, 5))
 				writer.setProperty(e.getKey().substring(5 + propPrefix.length()), e.getValue());
 
@@ -138,7 +138,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				r = n.asResource();
 			}
 
-			if (isAddRootProp())
+			if (isAddRootProperty())
 				r.addProperty(pRoot, "true");
 		}
 
@@ -402,8 +402,95 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// Common properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  RDF format for representing collections and arrays.
+	 *
+	 * @see RdfSerializer#RDF_collectionFormat
+	 * @return
+	 * 	RDF format for representing collections and arrays.
+	 */
+	protected final RdfCollectionFormat getCollectionFormat() {
+		return ctx.getCollectionFormat();
+	}
+
+	/**
+	 * Configuration property:  Default XML namespace for bean properties.
+	 *
+	 * @see RdfSerializer#RDF_juneauBpNs
+	 * @return
+	 * 	The XML namespace to use for bean properties.
+	 */
+	protected final Namespace getJuneauBpNs() {
+		return ctx.getJuneauBpNs();
+	}
+
+	/**
+	 * Configuration property:  XML namespace for Juneau properties.
+	 *
+	 * @see RdfSerializer#RDF_juneauNs
+	 * @return
+	 * 	The XML namespace to use for Juneau properties.
+	 */
+	protected final Namespace getJuneauNs() {
+		return ctx.getJuneauNs();
+	}
+
+	/**
+	 * Configuration property:  RDF language.
+	 *
+	 * @see RdfSerializer#RDF_language
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	protected final String getLanguage() {
+		return ctx.getLanguage();
+	}
+
+	/**
+	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see RdfSerializer#RDF_looseCollections
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	protected final boolean isLooseCollections() {
+		return ctx.isLooseCollections();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Jena properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  All Jena-related configuration properties.
+	 *
+	 * @return
+	 * 	A map of all Jena-related configuration properties.
+	 */
+	protected final Map<String,Object> getJenaProperties() {
+		return ctx.getJenaProperties();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see RdfSerializer#RDF_addBeanTypes
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
 
 	/**
 	 * Configuration property:  Add XSI data types to non-<code>String</code> literals.
@@ -424,32 +511,8 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if RDF property <code>http://www.apache.org/juneau/root</code> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
 	 */
-	protected final boolean isAddRootProp() {
-		return ctx.isAddRootProp();
-	}
-
-	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
-	 *
-	 * @see RdfSerializer#RDF_useXmlNamespaces
-	 * @return
-	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be inherited by the RDF serializers.
-	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-	 */
-	protected final boolean isUseXmlNamespaces() {
-		return ctx.isUseXmlNamespaces();
-	}
-
-	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
-	 *
-	 * @see RdfSerializer#RDF_looseCollections
-	 * @return
-	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
-	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 */
-	protected final boolean isLooseCollections() {
-		return ctx.isLooseCollections();
+	protected final boolean isAddRootProperty() {
+		return ctx.isAddRootProperty();
 	}
 
 	/**
@@ -464,59 +527,25 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Configuration property:  Default namespaces.
 	 *
-	 * @see RdfSerializer#RDF_addBeanTypes
+	 * @see #RDF_namespaces
 	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
+	 * 	The default list of namespaces associated with this serializer.
 	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
+	protected final Namespace[] getNamespaces() {
+		return ctx.getNamespaces();
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
 	 *
-	 * @see RdfSerializer#RDF_language
+	 * @see RdfSerializer#RDF_useXmlNamespaces
 	 * @return
-	 * 	The RDF language to use.
+	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be inherited by the RDF serializers.
+	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
-	protected final String getRdfLanguage() {
-		return ctx.getRdfLanguage();
-	}
-
-	/**
-	 * Configuration property:  XML namespace for Juneau properties.
-	 *
-	 * @see RdfSerializer#RDF_juneauNs
-	 * @return
-	 * 	The XML namespace to use for Juneau properties.
-	 */
-	protected final Namespace getJuneauNs() {
-		return ctx.getJuneauNs();
-	}
-
-	/**
-	 * Configuration property:  Default XML namespace for bean properties.
-	 *
-	 * @see RdfSerializer#RDF_juneauBpNs
-	 * @return
-	 * 	The XML namespace to use for bean properties.
-	 */
-	protected final Namespace getJuneauBpNs() {
-		return ctx.getJuneauBpNs();
-	}
-
-	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
-	 *
-	 * @see RdfSerializer#RDF_collectionFormat
-	 * @return
-	 * 	RDF format for representing collections and arrays.
-	 */
-	protected final RdfCollectionFormat getCollectionFormat() {
-		return ctx.getCollectionFormat();
+	protected final boolean isUseXmlNamespaces() {
+		return ctx.isUseXmlNamespaces();
 	}
 }

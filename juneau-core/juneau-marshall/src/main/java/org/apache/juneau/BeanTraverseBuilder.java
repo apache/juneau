@@ -16,10 +16,7 @@ import static org.apache.juneau.BeanTraverseContext.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.utils.*;
 
@@ -42,29 +39,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	 */
 	public BeanTraverseBuilder(PropertyStore ps) {
 		super(ps);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public BeanTraverseBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(BeanConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (BeanConfig a : m.get(BeanConfig.class)) {
-			if (! a.detectRecursions().isEmpty())
-				detectRecursions(r.bool(a.detectRecursions()));
-			if (! a.ignoreRecursions().isEmpty())
-				ignoreRecursions(r.bool(a.ignoreRecursions()));
-			if (! a.initialDepth().isEmpty())
-				initialDepth(r.integer(a.initialDepth()));
-			if (! a.maxDepth().isEmpty())
-				maxDepth(r.integer(a.maxDepth()));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -610,12 +584,6 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public BeanTraverseBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public BeanTraverseBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -648,6 +616,12 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	@Override /* ContextBuilder */
 	public BeanTraverseBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public BeanTraverseBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 

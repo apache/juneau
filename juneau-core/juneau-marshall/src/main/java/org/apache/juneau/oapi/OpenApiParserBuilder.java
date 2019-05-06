@@ -48,16 +48,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public OpenApiParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -517,12 +507,6 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public OpenApiParserBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public OpenApiParserBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -555,6 +539,12 @@ public class OpenApiParserBuilder extends UonParserBuilder {
 	@Override /* ContextBuilder */
 	public OpenApiParserBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+	
+	@Override
+	public OpenApiParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 }

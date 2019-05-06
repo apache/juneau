@@ -596,6 +596,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	@Override /* Serializer */
+	public HtmlDocSerializerSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Serializer */
 	public HtmlDocSerializerSession createSession(SerializerSessionArgs args) {
 		return new HtmlDocSerializerSession(this, args);
 	}
@@ -607,53 +612,30 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		return schemaSerializer;
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  CSS style code.
+	 * Configuration property:  Aside section contents.
 	 *
-	 * @see #HTMLDOC_style
+	 * @see #HTMLDOC_aside
 	 * @return
-	 * 	The CSS instructions to add to the HTML page.
+	 * 	The overridden contents of the aside section on the HTML page.
 	 */
-	protected final String[] getStyle() {
-		return style;
+	protected final String[] getAside() {
+		return aside;
 	}
 
 	/**
-	 * Configuration property:  Stylesheet import URLs.
+	 * Configuration property:  Footer section contents.
 	 *
-	 * @see #HTMLDOC_stylesheet
+	 * @see #HTMLDOC_footer
 	 * @return
-	 * 	The link to the stylesheet of the HTML page.
+	 * 	The overridden contents of the footer section on the HTML page.
 	 */
-	protected final String[] getStylesheet() {
-		return stylesheet;
-	}
-
-	/**
-	 * Configuration property:  Javascript code.
-	 *
-	 * @see #HTMLDOC_script
-	 * @return
-	 * 	Arbitrary Javascript to add to the HTML page.
-	 */
-	protected final String[] getScript() {
-		return script;
-	}
-
-	/**
-	 * Configuration property:  Page navigation links.
-	 *
-	 * @see #HTMLDOC_navlinks
-	 * @return
-	 * 	Navigation links to add to the HTML page.
-	 */
-	protected final String[] getNavlinks() {
-		return navlinks;
+	protected final String[] getFooter() {
+		return footer;
 	}
 
 	/**
@@ -690,25 +672,14 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
-	 * Configuration property:  Aside section contents.
+	 * Configuration property:  Page navigation links.
 	 *
-	 * @see #HTMLDOC_aside
+	 * @see #HTMLDOC_navlinks
 	 * @return
-	 * 	The overridden contents of the aside section on the HTML page.
+	 * 	Navigation links to add to the HTML page.
 	 */
-	protected final String[] getAside() {
-		return aside;
-	}
-
-	/**
-	 * Configuration property:  Footer section contents.
-	 *
-	 * @see #HTMLDOC_footer
-	 * @return
-	 * 	The overridden contents of the footer section on the HTML page.
-	 */
-	protected final String[] getFooter() {
-		return footer;
+	protected final String[] getNavlinks() {
+		return navlinks;
 	}
 
 	/**
@@ -734,6 +705,39 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	/**
+	 * Configuration property:  Javascript code.
+	 *
+	 * @see #HTMLDOC_script
+	 * @return
+	 * 	Arbitrary Javascript to add to the HTML page.
+	 */
+	protected final String[] getScript() {
+		return script;
+	}
+
+	/**
+	 * Configuration property:  CSS style code.
+	 *
+	 * @see #HTMLDOC_style
+	 * @return
+	 * 	The CSS instructions to add to the HTML page.
+	 */
+	protected final String[] getStyle() {
+		return style;
+	}
+
+	/**
+	 * Configuration property:  Stylesheet import URLs.
+	 *
+	 * @see #HTMLDOC_stylesheet
+	 * @return
+	 * 	The link to the stylesheet of the HTML page.
+	 */
+	protected final String[] getStylesheet() {
+		return stylesheet;
+	}
+
+	/**
 	 * Configuration property:  HTML document template.
 	 *
 	 * @see #HTMLDOC_template
@@ -743,6 +747,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	protected final HtmlDocTemplate getTemplate() {
 		return template;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
 	public ObjectMap asMap() {

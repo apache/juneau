@@ -18,10 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -43,25 +40,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	 */
 	public WriterSerializerBuilder(PropertyStore ps) {
 		super(ps);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public WriterSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) throws ParseException {
-		super.applyAnnotations(m, sr);
-		if (! m.containsKey(SerializerConfig.class))
-			return this;
-		ObjectResolver r = new ObjectResolver(sr);
-		for (SerializerConfig a : m.get(SerializerConfig.class)) {
-			if (! a.maxIndent().isEmpty())
-				maxIndent(r.integer(a.maxIndent()));
-			if (! a.quoteChar().isEmpty())
-				quoteChar(r.string(a.quoteChar()).charAt(0));
-		}
-		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -534,12 +512,6 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override /* ContextBuilder */
-	public WriterSerializerBuilder set(boolean append, String name, Object value) {
-		super.set(append, name, value);
-		return this;
-	}
-
-	@Override /* ContextBuilder */
 	public WriterSerializerBuilder set(Map<String,Object> properties) {
 		super.set(properties);
 		return this;
@@ -572,6 +544,12 @@ public class WriterSerializerBuilder extends SerializerBuilder {
 	@Override /* ContextBuilder */
 	public WriterSerializerBuilder apply(PropertyStore copyFrom) {
 		super.apply(copyFrom);
+		return this;
+	}
+
+	@Override
+	public WriterSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+		super.applyAnnotations(m, sr);
 		return this;
 	}
 

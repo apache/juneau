@@ -17,6 +17,7 @@ import static org.apache.juneau.jsonschema.TypeCategory.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
@@ -351,47 +352,14 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Use bean definitions.
+	 * Configuration property:  Add descriptions to types.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_useBeanDefs
+	 * @see JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo
 	 * @return
-	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
+	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
-	protected final boolean isUseBeanDefs() {
-		return ctx.isUseBeanDefs();
-	}
-
-	/**
-	 * Configuration property:  Allow nested examples.
-	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples
-	 * @return
-	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
-	 */
-	protected final boolean isAllowNestedExamples() {
-		return ctx.isAllowNestedExamples();
-	}
-
-	/**
-	 * Configuration property:  Allow nested descriptions.
-	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions
-	 * @return
-	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
-	 */
-	protected final boolean isAllowNestedDescriptions() {
-		return ctx.isAllowNestedDescriptions();
-	}
-
-	/**
-	 * Configuration property:  Bean schema definition mapper.
-	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_beanDefMapper
-	 * @return
-	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
-	 */
-	protected final BeanDefMapper getBeanDefMapper() {
-		return ctx.getBeanDefMapper();
+	protected final Set<TypeCategory> getAddDescriptionsTo() {
+		return ctx.getAddDescriptionsTo();
 	}
 
 	/**
@@ -406,14 +374,36 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Add descriptions to types.
+	 * Configuration property:  Allow nested descriptions.
 	 *
-	 * @see JsonSchemaGenerator#JSONSCHEMA_addDescriptionsTo
+	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedDescriptions
 	 * @return
-	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
+	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
-	protected final Set<TypeCategory> getAddDescriptionsTo() {
-		return ctx.getAddDescriptionsTo();
+	protected final boolean isAllowNestedDescriptions() {
+		return ctx.isAllowNestedDescriptions();
+	}
+
+	/**
+	 * Configuration property:  Allow nested examples.
+	 *
+	 * @see JsonSchemaGenerator#JSONSCHEMA_allowNestedExamples
+	 * @return
+	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedExamples() {
+		return ctx.isAllowNestedExamples();
+	}
+
+	/**
+	 * Configuration property:  Bean schema definition mapper.
+	 *
+	 * @see JsonSchemaGenerator#JSONSCHEMA_beanDefMapper
+	 * @return
+	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
+	 */
+	protected final BeanDefMapper getBeanDefMapper() {
+		return ctx.getBeanDefMapper();
 	}
 
 	/**
@@ -425,6 +415,28 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 */
 	protected final Map<String,ObjectMap> getDefaultSchemas() {
 		return ctx.getDefaultSchemas();
+	}
+
+	/**
+	 * Configuration property:  Ignore types from schema definitions.
+	 *
+	 * @see JsonSchemaGenerator#JSONSCHEMA_ignoreTypes
+	 * @return
+	 * 	Custom schema information for particular class types.
+	 */
+	protected final Set<Pattern> getIgnoreTypes() {
+		return ctx.getIgnoreTypes();
+	}
+
+	/**
+	 * Configuration property:  Use bean definitions.
+	 *
+	 * @see JsonSchemaGenerator#JSONSCHEMA_useBeanDefs
+	 * @return
+	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
+	 */
+	protected final boolean isUseBeanDefs() {
+		return ctx.isUseBeanDefs();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

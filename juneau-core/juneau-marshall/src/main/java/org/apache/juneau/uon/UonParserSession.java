@@ -41,7 +41,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
 
 	private final UonParser ctx;
-	private final boolean decodeChars;
+	private final boolean decoding;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -55,14 +55,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	protected UonParserSession(UonParser ctx, ParserSessionArgs args) {
 		super(ctx, args);
 		this.ctx = ctx;
-		decodeChars = getProperty(UON_decoding, boolean.class, ctx.isDecodeChars());
+		decoding = getProperty(UON_decoding, boolean.class, ctx.isDecoding());
 	}
 
 	@Override /* Session */
 	public ObjectMap asMap() {
 		return super.asMap()
 			.append("UonParser", new ObjectMap()
-				.append("decodeChars", decodeChars)
+				.append("decoding", decoding)
 			);
 	}
 
@@ -78,18 +78,18 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * 	The context contains all the configuration settings for this object.
 	 * @param args
 	 * 	Runtime session arguments.
-	 * @param decodeChars
+	 * @param decoding
 	 * 	Whether to decode characters.
 	 */
-	protected UonParserSession(UonParser ctx, ParserSessionArgs args, boolean decodeChars) {
+	protected UonParserSession(UonParser ctx, ParserSessionArgs args, boolean decoding) {
 		super(ctx, args);
 		this.ctx = ctx;
-		this.decodeChars = decodeChars;
+		this.decoding = decoding;
 	}
 
 	@Override /* ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws Exception {
-		try (UonReader r = getUonReader(pipe, decodeChars)) {
+		try (UonReader r = getUonReader(pipe, decoding)) {
 			T o = parseAnything(type, r, getOuter(), true, null);
 			validateEnd(r);
 			return o;
@@ -98,7 +98,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@Override /* ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		try (UonReader r = getUonReader(pipe, decodeChars)) {
+		try (UonReader r = getUonReader(pipe, decoding)) {
 			m = parseIntoMap(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 			validateEnd(r);
 			return m;
@@ -107,7 +107,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@Override /* ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		try (UonReader r = getUonReader(pipe, decodeChars)) {
+		try (UonReader r = getUonReader(pipe, decoding)) {
 			c = parseIntoCollection(r, c, (ClassMeta<E>)getClassMeta(elementType), false, null);
 			validateEnd(r);
 			return c;
@@ -359,7 +359,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 						skipSpace(r);
 					else {
 						r.unread();
-						Object attr = parseAttr(r, decodeChars);
+						Object attr = parseAttr(r, decoding);
 						currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
 						state = S2;
 						c = 0; // Avoid isInEscape if c was '\'
@@ -535,7 +535,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 						else {
 							r.unread();
 							mark();
-							currAttr = parseAttrName(r, decodeChars);
+							currAttr = parseAttrName(r, decoding);
 							if (currAttr == null) { // Value was '%00'
 								return null;
 							}
@@ -849,8 +849,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
 	 */
-	protected final boolean isDecodeChars() {
-		return decodeChars;
+	protected final boolean isDecoding() {
+		return decoding;
 	}
 
 	/**

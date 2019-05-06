@@ -41,6 +41,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.internal.HttpUtils;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -50,6 +51,7 @@ import org.apache.juneau.rest.util.UrlPathPattern;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
@@ -73,6 +75,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	final EncoderGroup encoders;
 	final HttpPartSerializer partSerializer;
 	final HttpPartParser partParser;
+	final JsonSchemaGenerator jsonSchemaGenerator;
 	final Map<String,Object>
 		defaultRequestHeaders,
 		defaultQuery,
@@ -107,6 +110,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		this.encoders = b.encoders;
 		this.partParser = b.partParser;
 		this.partSerializer = b.partSerializer;
+		this.jsonSchemaGenerator = b.jsonSchemaGenerator;
 		this.beanContext = b.beanContext;
 		this.properties = b.properties;
 		this.propertyStore = b.propertyStore;
@@ -134,6 +138,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		EncoderGroup encoders;
 		HttpPartParser partParser;
 		HttpPartSerializer partSerializer;
+		JsonSchemaGenerator jsonSchemaGenerator;
 		BeanContext beanContext;
 		RestMethodProperties properties;
 		PropertyStore propertyStore;
@@ -144,6 +149,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 		List<MediaType> supportedAcceptTypes, supportedContentTypes;
 		ResponseBeanMeta responseMeta;
 
+		@SuppressWarnings("deprecation")
 		Builder(Object servlet, java.lang.reflect.Method method, RestContext context) throws RestServletException {
 			String sig = method.getDeclaringClass().getName() + '.' + method.getName();
 			MethodInfo mi = getMethodInfo(method);
@@ -155,16 +161,19 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					throw new RestServletException("@RestMethod annotation not found on method ''{0}''", sig);
 
 				VarResolver vr = context.getVarResolver();
+				boolean hasConfigAnnotations = mi.hasConfigAnnotations();
 
 				serializers = context.getSerializers();
 				parsers = context.getParsers();
 				partSerializer = context.getPartSerializer();
 				partParser = context.getPartParser();
+				jsonSchemaGenerator = context.getJsonSchemaGenerator();
 				beanContext = context.getBeanContext();
 				encoders = context.getEncoders();
 				properties = new RestMethodProperties(context.getProperties());
 				defaultCharset = context.getDefaultCharset();
 				maxInput = context.getMaxInput();
+				AnnotationsMap configAnnotationsMap = hasConfigAnnotations ? mi.getConfigAnnotationsMapParentFirst() : context.getConfigAnnotationsMap();
 
 				if (! m.defaultCharset().isEmpty())
 					defaultCharset = vr.resolve(m.defaultCharset());
@@ -188,6 +197,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				ParserGroupBuilder pgb = null;
 				ParserBuilder uepb = null;
 				BeanContextBuilder bcb = null;
+				JsonSchemaGeneratorBuilder jsgb = null;
 				PropertyStore cps = context.getPropertyStore();
 
 				Object[] mSerializers = merge(cps.getArrayProperty(REST_serializers, Object.class), m.serializers());
@@ -197,11 +207,12 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				if (m.serializers().length > 0 || m.parsers().length > 0 || m.properties().length > 0 || m.flags().length > 0
 						|| m.beanFilters().length > 0 || m.pojoSwaps().length > 0 || m.bpi().length > 0
-						|| m.bpx().length > 0) {
+						|| m.bpx().length > 0 || hasConfigAnnotations) {
 					sgb = SerializerGroup.create();
 					pgb = ParserGroup.create();
 					uepb = Parser.create();
 					bcb = beanContext.builder();
+					jsgb = JsonSchemaGenerator.create();
 					sgb.append(mSerializers);
 					pgb.append(mParsers);
 				}
@@ -242,11 +253,15 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
+				StringResolver sr = vr.createSession();
+
 				PropertyStoreBuilder psb = PropertyStore.create().add(properties).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
 				for (Property p1 : m.properties())
 					psb.set(p1.name(), p1.value());
 				for (String p1 : m.flags())
 					psb.set(p1, true);
+				if (hasConfigAnnotations)
+					psb.applyAnnotations(configAnnotationsMap, sr);
 				this.propertyStore = psb.build();
 
 				if (sgb != null) {
@@ -295,7 +310,14 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 
 				if (bcb != null) {
 					bcb.apply(propertyStore);
+					bcb.beanFilters(mBeanFilters);
 					bcb.pojoSwaps(mPojoSwaps);
+				}
+
+				if (jsgb != null) {
+					jsgb.apply(propertyStore);
+					jsgb.beanFilters(mBeanFilters);
+					jsgb.pojoSwaps(mPojoSwaps);
 				}
 
 				if (m.properties().length > 0 || m.flags().length > 0) {
@@ -382,10 +404,16 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 					parsers = pgb.build();
 				if (uepb != null && partParser instanceof Parser) {
 					Parser pp = (Parser)partParser;
-					partParser = (HttpPartParser)pp.builder().apply(uepb.getPropertyStore()).build();
+					partParser = (HttpPartParser)pp
+						.builder()
+						.apply(uepb.getPropertyStore())
+						.applyAnnotations(configAnnotationsMap, sr)
+						.build();
 				}
 				if (bcb != null)
 					beanContext = bcb.build();
+				if (jsgb != null)
+					jsonSchemaGenerator = jsgb.build();
 
 				supportedAcceptTypes =
 					m.produces().length > 0
@@ -678,6 +706,15 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 	 */
 	public HttpPartParser getPartParser() {
 		return partParser;
+	}
+
+	/**
+	 * Returns the JSON-Schema generator applicable to this Java method.
+	 *
+	 * @return The JSON-Schema generator applicable to this Java method.
+	 */
+	public JsonSchemaGenerator getJsonSchemaGenerator() {
+		return jsonSchemaGenerator;
 	}
 
 	@Override /* Object */

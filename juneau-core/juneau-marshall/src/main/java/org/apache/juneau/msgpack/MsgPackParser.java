@@ -106,6 +106,11 @@ public class MsgPackParser extends InputStreamParser {
 	}
 
 	@Override /* Parser */
+	public MsgPackParserSession createSession() {
+		return createSession(createDefaultSessionArgs());
+	}
+
+	@Override /* Parser */
 	public MsgPackParserSession createSession(ParserSessionArgs args) {
 		return new MsgPackParserSession(this, args);
 	}
