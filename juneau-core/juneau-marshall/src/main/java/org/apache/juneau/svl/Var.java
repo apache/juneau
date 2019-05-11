@@ -128,6 +128,19 @@ public abstract class Var {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this variable can be resolved in the specified session.
+	 *
+	 * <p>
+	 * For example, some variable cannot resolve unless specific context or session objects are available.
+	 *
+	 * @param session The current session.
+	 * @return <jk>true</jk> if this variable can be resolved in the specified session.
+	 */
+	protected boolean canResolve(VarResolverSession session) {
+		return true;
+	}
+
+	/**
 	 * The method called from {@link VarResolver}.
 	 *
 	 * <p>

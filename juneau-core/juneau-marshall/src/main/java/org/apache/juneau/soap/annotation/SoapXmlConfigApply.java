@@ -14,7 +14,7 @@ package org.apache.juneau.soap.annotation;
 
 import static org.apache.juneau.soap.SoapXmlSerializer.*;
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link SoapXmlConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -27,7 +27,7 @@ public class SoapXmlConfigApply extends ConfigApply<SoapXmlConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public SoapXmlConfigApply(Class<SoapXmlConfig> c, StringResolver r) {
+	public SoapXmlConfigApply(Class<SoapXmlConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

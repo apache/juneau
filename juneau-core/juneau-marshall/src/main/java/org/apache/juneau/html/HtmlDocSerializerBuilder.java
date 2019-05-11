@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -414,6 +414,81 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 	public HtmlDocSerializerBuilder template(Class<?> value) {
 		set(HTMLDOC_template, value);
 		return this;
+	}
+
+	/**
+	 * Configuration property:  HTML Widgets.
+	 *
+	 * <p>
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement text.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public HtmlDocSerializerBuilder widgets(Class<? extends HtmlWidget>...values) {
+		return addTo(HTMLDOC_widgets, values);
+	}
+
+	/**
+	 * Configuration property:  HTML Widgets.
+	 *
+	 * <p>
+	 * Same as {@link #widgets(Class...)} but replaces any previous values.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
+	 * </ul>
+	 *
+	 * @param values The values to set on this setting.
+	 * @return This object (for method chaining).
+	 */
+	@SuppressWarnings("unchecked")
+	public HtmlDocSerializerBuilder widgetsReplace(Class<? extends HtmlWidget>...values) {
+		return set(HTMLDOC_widgets, values);
+	}
+
+	/**
+	 * Configuration property:  HTML Widgets.
+	 *
+	 * <p>
+	 * Same as {@link #widgets(Class...)} except input is pre-constructed instances.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlDocSerializerBuilder widgets(HtmlWidget...values) {
+		return addTo(HTMLDOC_widgets, values);
+	}
+
+	/**
+	 * Configuration property:  HTML Widgets.
+	 *
+	 * <p>
+	 * Same as {@link #widgets(HtmlWidget...)} except allows you to overwrite the previous value.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_widgets}
+	 * </ul>
+	 *
+	 * @param values The values to add to this setting.
+	 * @return This object (for method chaining).
+	 */
+	public HtmlDocSerializerBuilder widgetsReplace(HtmlWidget...values) {
+		return set(HTMLDOC_widgets, values);
 	}
 
 	@Override /* HtmlSerializerBuilder */
@@ -1128,9 +1203,9 @@ public class HtmlDocSerializerBuilder extends HtmlStrippedDocSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override
-	public HtmlDocSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public HtmlDocSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

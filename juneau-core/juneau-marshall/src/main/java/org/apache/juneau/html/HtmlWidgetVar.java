@@ -10,46 +10,66 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jsonschema.annotation;
+package org.apache.juneau.html;
 
-import static org.apache.juneau.jsonschema.JsonSchemaGenerator.*;
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.jsonschema.*;
+import java.util.*;
+
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Applies {@link JsonSchemaConfig} annotations to a {@link PropertyStoreBuilder}.
+ * HTML widget variable resolver.
+ *
+ * <p>
+ * The format for this var is <js>"$W{widgetName}"</js>.
+ *
+ * <p>
+ * Widgets are simple class that produce some sort of string based on a passed-in HTTP request.
+ *
+ * <p>
+ * They're registered via the following mechanisms:
+ * <ul>
+ * 	<li>{@link HtmlDocConfig#widgets() @HtmlDocConfig(widgets)}
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
+ * </ul>
  */
-public class JsonSchemaConfigApply extends ConfigApply<JsonSchemaConfig> {
+public class HtmlWidgetVar extends SimpleVar {
+
+	/**
+	 * The name of the session or context object that identifies the object containing the widgets to resolve.
+	 */
+	public static final String SESSION_htmlWidgets = "htmlWidgets";
+
+	/**
+	 * The name of this variable.
+	 */
+	public static final String NAME = "W";
 
 	/**
 	 * Constructor.
-	 *
-	 * @param c The annotation class.
-	 * @param r The resolver for resolving values in annotations.
 	 */
-	public JsonSchemaConfigApply(Class<JsonSchemaConfig> c, VarResolverSession r) {
-		super(c, r);
+	public HtmlWidgetVar() {
+		super(NAME);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* Parameter */
+	public String resolve(VarResolverSession session, String key) throws Exception {
+		Map<String,HtmlWidget> widgets = (Map<String,HtmlWidget>)session.getSessionObject(Object.class, SESSION_htmlWidgets, false);
+
+		HtmlWidget w = widgets.get(key);
+		if (w == null)
+			return "unknown-widget-"+key;
+
+		return w.getHtml(session);
 	}
 
 	@Override
-	public void apply(JsonSchemaConfig a, PropertyStoreBuilder psb) {
-		if (! a.addDescriptionsTo().isEmpty())
-			psb.set(JSONSCHEMA_addDescriptionsTo, string(a.addDescriptionsTo()));
-		if (! a.addExamplesTo().isEmpty())
-			psb.set(JSONSCHEMA_addExamplesTo, string(a.addExamplesTo()));
-		if (! a.allowNestedDescriptions().isEmpty())
-			psb.set(JSONSCHEMA_allowNestedDescriptions, bool(a.allowNestedDescriptions()));
-		if (! a.allowNestedExamples().isEmpty())
-			psb.set(JSONSCHEMA_allowNestedExamples, bool(a.allowNestedExamples()));
-		if (a.beanDefMapper() != BeanDefMapper.Null.class)
-			psb.set(JSONSCHEMA_beanDefMapper, a.beanDefMapper());
-		for (CS e : a.defaultSchemas())
-			psb.addTo(JSONSCHEMA_defaultSchemas, e.k().getName(), objectMap(e.v(), "defaultSchemas"));
-		if (! a.ignoreTypes().isEmpty())
-			psb.set(JSONSCHEMA_ignoreTypes, string(a.ignoreTypes()));
-		if (! a.useBeanDefs().isEmpty())
-			psb.set(JSONSCHEMA_useBeanDefs, bool(a.useBeanDefs()));
+	public boolean canResolve(VarResolverSession session) {
+		return session.getSessionObject(Object.class, SESSION_htmlWidgets, false) != null;
 	}
 }

@@ -18,16 +18,16 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Class used to add properties to a {@link PropertyStore} from an annotation (e.g. {@link BeanConfig}).
- * 
+ *
  * @param <T> The annotation that this <code>ConfigApply</code> reads from.
  */
 public abstract class ConfigApply<T extends Annotation> {
 
-	private final StringResolver r;
+	private final VarResolverSession r;
 	private final Class<T> c;
 
 	/**
@@ -36,8 +36,8 @@ public abstract class ConfigApply<T extends Annotation> {
 	 * @param c The annotation class.
 	 * @param r The string resolver to use for resolving strings.
 	 */
-	protected ConfigApply(Class<T> c, StringResolver r) {
-		this.r = r == null ? StringResolver.NOOP : r;
+	protected ConfigApply(Class<T> c, VarResolverSession r) {
+		this.r = r == null ? VarResolver.DEFAULT.createSession() : r;
 		this.c = c;
 	}
 

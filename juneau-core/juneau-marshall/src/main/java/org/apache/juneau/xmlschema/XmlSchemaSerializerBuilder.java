@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -723,7 +723,7 @@ public class XmlSchemaSerializerBuilder extends XmlSerializerBuilder {
 	}
 
 	@Override
-	public XmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public XmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

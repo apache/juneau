@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
+import org.apache.juneau.*;
 import org.apache.juneau.plaintext.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 /**
@@ -22,14 +23,7 @@ import org.junit.*;
  */
 public class PlainTextConfigAnnotationTest {
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotation with no values.

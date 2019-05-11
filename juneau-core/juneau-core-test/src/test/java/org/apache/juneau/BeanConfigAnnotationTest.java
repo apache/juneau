@@ -23,8 +23,8 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
@@ -75,14 +75,7 @@ public class BeanConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input != null && input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -110,54 +103,54 @@ public class BeanConfigAnnotationTest {
 	}
 
 	@BeanConfig(
-		beanClassVisibility="$PRIVATE",
-		beanConstructorVisibility="$PRIVATE",
+		beanClassVisibility="$X{PRIVATE}",
+		beanConstructorVisibility="$X{PRIVATE}",
 		beanDictionary={A1.class,A2.class},
 		beanDictionary_replace={A1.class,A2.class,A3.class},
 		beanDictionary_remove=A2.class,
-		beanFieldVisibility="$PRIVATE",
+		beanFieldVisibility="$X{PRIVATE}",
 		beanFilters={A1.class,A2.class},
 		beanFilters_replace={A1.class,A2.class,A3.class},
 		beanFilters_remove=A2.class,
-		beanMapPutReturnsOldValue="$true",
-		beanMethodVisibility="$PRIVATE",
-		beansRequireDefaultConstructor="$true",
-		beansRequireSerializable="$true",
-		beansRequireSettersForGetters="$true",
-		beansRequireSomeProperties="$true",
-		beanTypePropertyName="$foo",
-		debug="$true",
-		detectRecursions="$true",
-		examples="$A1: {foo:1}",
-		excludeProperties=@CS(k=A1.class,v="$foo"),
-		fluentSetters="$true",
-		ignoreInvocationExceptionsOnGetters="$true",
-		ignoreInvocationExceptionsOnSetters="$true",
-		ignorePropertiesWithoutSetters="$true",
-		ignoreRecursions="$true",
-		ignoreUnknownBeanProperties="$true",
-		ignoreUnknownNullBeanProperties="$true",
+		beanMapPutReturnsOldValue="$X{true}",
+		beanMethodVisibility="$X{PRIVATE}",
+		beansRequireDefaultConstructor="$X{true}",
+		beansRequireSerializable="$X{true}",
+		beansRequireSettersForGetters="$X{true}",
+		beansRequireSomeProperties="$X{true}",
+		beanTypePropertyName="$X{foo}",
+		debug="$X{true}",
+		detectRecursions="$X{true}",
+		examples="$X{A1}: {foo:1}",
+		excludeProperties=@CS(k=A1.class,v="$X{foo}"),
+		fluentSetters="$X{true}",
+		ignoreInvocationExceptionsOnGetters="$X{true}",
+		ignoreInvocationExceptionsOnSetters="$X{true}",
+		ignorePropertiesWithoutSetters="$X{true}",
+		ignoreRecursions="$X{true}",
+		ignoreUnknownBeanProperties="$X{true}",
+		ignoreUnknownNullBeanProperties="$X{true}",
 		implClasses=@CC(k=A1.class,v=A1.class),
-		includeProperties=@CS(k=A1.class,v="$foo"),
-		initialDepth="$1",
-		locale="$en-US",
-		maxDepth="$1",
-		mediaType="$text/foo",
+		includeProperties=@CS(k=A1.class,v="$X{foo}"),
+		initialDepth="$X{1}",
+		locale="$X{en-US}",
+		maxDepth="$X{1}",
+		mediaType="$X{text/foo}",
 		notBeanClasses={A1.class,A2.class},
 		notBeanClasses_replace={A1.class,A2.class,A3.class},
 		notBeanClasses_remove=A2.class,
-		notBeanPackages={"$foo1","$foo2"},
-		notBeanPackages_replace={"$foo1","$foo2","$foo3"},
-		notBeanPackages_remove={"$foo2"},
+		notBeanPackages={"$X{foo1}","$X{foo2}"},
+		notBeanPackages_replace={"$X{foo1}","$X{foo2}","$X{foo3}"},
+		notBeanPackages_remove={"$X{foo2}"},
 		pojoSwaps={AB1.class,AB2.class},
 		pojoSwaps_replace={AB1.class,AB2.class,AB3.class},
 		pojoSwaps_remove=AB2.class,
 		propertyNamer=PropertyNamerULC.class,
-		sortProperties="$true",
-		timeZone="$z",
-		useEnumNames="$true",
-		useInterfaceProxies="$true",
-		useJavaBeanIntrospector="$true"
+		sortProperties="$X{true}",
+		timeZone="$X{z}",
+		useEnumNames="$X{true}",
+		useInterfaceProxies="$X{true}",
+		useJavaBeanIntrospector="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

@@ -15,7 +15,7 @@ package org.apache.juneau.uon.annotation;
 import static org.apache.juneau.uon.UonSerializer.*;
 import static org.apache.juneau.uon.UonParser.*;
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link UonConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -28,7 +28,7 @@ public class UonConfigApply extends ConfigApply<UonConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public UonConfigApply(Class<UonConfig> c, StringResolver r) {
+	public UonConfigApply(Class<UonConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

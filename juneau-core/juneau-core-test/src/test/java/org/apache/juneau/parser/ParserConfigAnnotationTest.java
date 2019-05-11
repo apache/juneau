@@ -16,11 +16,12 @@ import static org.junit.Assert.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 /**
@@ -43,14 +44,7 @@ public class ParserConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -59,15 +53,15 @@ public class ParserConfigAnnotationTest {
 	public static class AA extends ParserListener {}
 
 	@ParserConfig(
-		autoCloseStreams="$true",
-		binaryFormat="HEX",
-		debugOutputLines="$1",
-		fileCharset="$foo",
-		inputStreamCharset="$foo",
+		autoCloseStreams="$X{true}",
+		binaryFormat="$X{HEX}",
+		debugOutputLines="$X{1}",
+		fileCharset="$X{foo}",
+		inputStreamCharset="$X{foo}",
 		listener=AA.class,
-		strict="$true",
-		trimStrings="$true",
-		unbuffered="$true"
+		strict="$X{true}",
+		trimStrings="$X{true}",
+		unbuffered="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

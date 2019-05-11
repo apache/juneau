@@ -13,7 +13,7 @@
 package org.apache.juneau.jso.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link JsoConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -26,7 +26,7 @@ public class JsoConfigApply extends ConfigApply<JsoConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public JsoConfigApply(Class<JsoConfig> c, StringResolver r) {
+	public JsoConfigApply(Class<JsoConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

@@ -22,7 +22,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of HTML Schema serializers.
@@ -818,9 +818,9 @@ public class HtmlSchemaSerializerBuilder extends HtmlSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override
-	public HtmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public HtmlSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

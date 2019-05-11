@@ -16,9 +16,10 @@ import static org.junit.Assert.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 /**
@@ -39,26 +40,19 @@ public class HtmlConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@HtmlConfig(
-		addBeanTypes="$true",
-		addKeyValueTableHeaders="$true",
-		detectLabelParameters="$true",
-		detectLinksInStrings="$true",
-		labelParameter="$foo",
-		uriAnchorText="$TO_STRING"
+		addBeanTypes="$X{true}",
+		addKeyValueTableHeaders="$X{true}",
+		detectLabelParameters="$X{true}",
+		detectLinksInStrings="$X{true}",
+		labelParameter="$X{foo}",
+		uriAnchorText="$X{TO_STRING}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

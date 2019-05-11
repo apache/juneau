@@ -18,6 +18,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Runtime arguments common to all serializer sessions.
@@ -35,6 +36,7 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	Method javaMethod;
 	UriContext uriContext;
 	Boolean useWhitespace;
+	VarResolverSession resolver;
 
 	/**
 	 * Constructor
@@ -71,12 +73,15 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 * 	<br>Identifies the current request URI used for resolution of URIs to absolute or root-relative form.
 	 * @param useWhitespace
 	 * 	Override the use-whitespace flag on the serializer.
+	 * @param resolver
+	 * 	String variable resolver.
 	 */
-	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug, UriContext uriContext, Boolean useWhitespace) {
+	public SerializerSessionArgs(ObjectMap properties, Method javaMethod, Locale locale, TimeZone timeZone, MediaType mediaType, HttpPartSchema schema, Boolean debug, UriContext uriContext, Boolean useWhitespace, VarResolverSession resolver) {
 		super(properties, locale, timeZone, mediaType, schema, debug);
 		this.javaMethod = javaMethod;
 		this.uriContext = uriContext;
 		this.useWhitespace = useWhitespace;
+		this.resolver = resolver == null ? null : resolver;
 	}
 
 	/**
@@ -115,6 +120,18 @@ public final class SerializerSessionArgs extends BeanSessionArgs {
 	 */
 	public SerializerSessionArgs useWhitespace(Boolean useWhitespace) {
 		this.useWhitespace = useWhitespace;
+		return this;
+	}
+
+	/**
+	 * String variable resolver.
+	 *
+	 * @param value
+	 * 	String variable resolver.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSessionArgs resolver(VarResolverSession value) {
+		this.resolver = value;
 		return this;
 	}
 

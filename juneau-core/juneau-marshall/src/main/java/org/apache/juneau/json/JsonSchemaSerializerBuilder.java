@@ -22,7 +22,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of JSON Schema serializers.
@@ -884,9 +884,9 @@ public class JsonSchemaSerializerBuilder extends JsonSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override
-	public JsonSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public JsonSchemaSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

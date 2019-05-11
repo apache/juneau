@@ -78,6 +78,17 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	private final String beanTypePropertyName;
 
 	/**
+	 * Convenience method for wrapping a bean inside a {@link BeanMap}.
+	 *
+	 * @param <T> The bean type.
+	 * @param bean The bean being wrapped.
+	 * @return A new {@link BeanMap} instance wrapping the bean.
+	 */
+	public static <T> BeanMap<T> create(T bean) {
+		return BeanContext.DEFAULT.createBeanSession().toBeanMap(bean);
+	}
+
+	/**
 	 * Instance of this class are instantiated through the BeanContext class.
 	 *
 	 * @param session The bean session object that created this bean map.

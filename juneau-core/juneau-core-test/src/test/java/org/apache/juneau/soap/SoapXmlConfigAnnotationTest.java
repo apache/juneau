@@ -16,9 +16,10 @@ import static org.junit.Assert.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.soap.annotation.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 /**
@@ -37,21 +38,14 @@ public class SoapXmlConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SoapXmlConfig(
-		soapAction="$foo"
+		soapAction="$X{foo}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

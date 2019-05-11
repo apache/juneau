@@ -15,7 +15,7 @@ package org.apache.juneau;
 import java.util.*;
 
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of serializers and parsers.
@@ -95,7 +95,7 @@ public abstract class ContextBuilder {
 	 * @param r The string resolver for resolving variables in annotation values.
 	 * @return This object (for method chaining).
 	 */
-	public ContextBuilder applyAnnotations(AnnotationsMap annotationsMap, StringResolver r) {
+	public ContextBuilder applyAnnotations(AnnotationsMap annotationsMap, VarResolverSession r) {
 		this.psb.applyAnnotations(annotationsMap, r);
 		return this;
 	}

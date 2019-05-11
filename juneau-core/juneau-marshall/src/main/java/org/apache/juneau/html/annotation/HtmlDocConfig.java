@@ -22,6 +22,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Annotation for specifying config properties defined in {@link HtmlSerializer}, {@link HtmlParser}, and {@link HtmlDocSerializer}.
@@ -211,16 +212,6 @@ public @interface HtmlDocConfig {
 	String[] navlinks() default {};
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_navlinks} property.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_navlinks}
-	 * </ul>
-	 */
-	String[] navlinks_replace() default {};
-
-	/**
 	 * Configuration property:  No-results message.
 	 *
 	 * <p>
@@ -285,16 +276,6 @@ public @interface HtmlDocConfig {
 	String[] script() default {};
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_script} property.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_script}
-	 * </ul>
-	 */
-	String[] script_replace() default {};
-
-	/**
 	 * Configuration property:  CSS style code.
 	 *
 	 * <p>
@@ -317,16 +298,6 @@ public @interface HtmlDocConfig {
 	String[] style() default {};
 
 	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_style} property.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_style}
-	 * </ul>
-	 */
-	String[] style_replace() default {};
-
-	/**
 	 * Configuration property:  Stylesheet import URLs.
 	 *
 	 * <p>
@@ -341,16 +312,6 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 */
 	String[] stylesheet() default {};
-
-	/**
-	 * Configuration property:  Add to the {@link #HTMLDOC_stylesheet} property.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_stylesheet}
-	 * </ul>
-	 */
-	String[] stylesheet_replace() default {};
 
 	/**
 	 * Configuration property:  HTML document template.
@@ -375,4 +336,52 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.Null.class;
+
+	/**
+	 * Configuration property:  HTML Widgets.
+	 *
+	 * <p>
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement text.
+	 *
+	 * <p>
+	 * Widgets resolve the following variables:
+	 *
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.
+	 * </ul>
+	 *
+	 * <p>
+	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+	 * and aside section of the page:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<ja>@HtmlDocConfig</ja>(
+	 * 		widgets={
+	 * 			MyWidget.<jk>class</jk>
+	 * 		}
+	 * 		navlinks={
+	 * 			<js>"$W{MyWidget}"</js>
+	 * 		},
+	 * 		aside={
+	 * 			<js>"Check out this widget:  $W{MyWidget}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
+	 * 	<li>
+	 * 		Values are appended to the existing list.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+	 * </ul>
+	 */
+	Class<? extends HtmlWidget>[] widgets() default {};
 }

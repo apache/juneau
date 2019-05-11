@@ -20,7 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Base builder class for building instances of reader-based parsers.
@@ -632,7 +632,7 @@ public abstract class ReaderParserBuilder extends ParserBuilder {
 	}
 
 	@Override
-	public ReaderParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public ReaderParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

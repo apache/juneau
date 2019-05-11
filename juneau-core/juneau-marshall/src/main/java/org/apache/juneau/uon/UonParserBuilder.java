@@ -20,8 +20,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of UON parsers.
@@ -646,7 +646,7 @@ public class UonParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override
-	public UonParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public UonParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

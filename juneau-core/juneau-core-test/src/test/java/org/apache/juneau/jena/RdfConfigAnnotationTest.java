@@ -19,11 +19,12 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 /**
@@ -51,54 +52,47 @@ public class RdfConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@RdfConfig(
-		addBeanTypes="$true",
-		addLiteralTypes="$true",
-		addRootProperty="$true",
-		arp_embedding="$true",
-		arp_errorMode="$strict",
-		arp_iriRules="$strict",
-		autoDetectNamespaces="$true",
-		collectionFormat="$SEQ",
-		juneauBpNs="$foo:http://foo",
-		juneauNs="$foo:http://foo",
-		language="$N3",
-		looseCollections="$true",
-		n3_abbrevBaseUri="$true",
-		n3_indentProperty="$1",
-		n3_minGap="$1",
-		n3_objectLists="$true",
-		n3_propertyColumn="$1",
-		n3_subjectColumn="$1",
-		n3_useDoubles="$true",
-		n3_usePropertySymbols="$true",
-		n3_useTripleQuotedStrings="$true",
-		n3_widePropertyLen="$1",
-		namespaces="$foo:http://foo",
-		rdfxml_allowBadUris="$true",
-		rdfxml_attributeQuoteChar="$'",
-		rdfxml_blockRules="$foo",
-		rdfxml_longId="$true",
-		rdfxml_relativeUris="$absolute",
-		rdfxml_showDoctypeDeclaration="$true",
-		rdfxml_showXmlDeclaration="$true",
-		rdfxml_tab="$1",
-		rdfxml_xmlBase="$foo",
-		trimWhitespace="$true",
-		useXmlNamespaces="$true"
+		addBeanTypes="$X{true}",
+		addLiteralTypes="$X{true}",
+		addRootProperty="$X{true}",
+		arp_embedding="$X{true}",
+		arp_errorMode="$X{strict}",
+		arp_iriRules="$X{strict}",
+		autoDetectNamespaces="$X{true}",
+		collectionFormat="$X{SEQ}",
+		juneauBpNs="$X{foo:http://foo}",
+		juneauNs="$X{foo:http://foo}",
+		language="$X{N3}",
+		looseCollections="$X{true}",
+		n3_abbrevBaseUri="$X{true}",
+		n3_indentProperty="$X{1}",
+		n3_minGap="$X{1}",
+		n3_objectLists="$X{true}",
+		n3_propertyColumn="$X{1}",
+		n3_subjectColumn="$X{1}",
+		n3_useDoubles="$X{true}",
+		n3_usePropertySymbols="$X{true}",
+		n3_useTripleQuotedStrings="$X{true}",
+		n3_widePropertyLen="$X{1}",
+		namespaces="$X{foo:http://foo}",
+		rdfxml_allowBadUris="$X{true}",
+		rdfxml_attributeQuoteChar="$X{'}",
+		rdfxml_blockRules="$X{foo}",
+		rdfxml_longId="$X{true}",
+		rdfxml_relativeUris="$X{absolute}",
+		rdfxml_showDoctypeDeclaration="$X{true}",
+		rdfxml_showXmlDeclaration="$X{true}",
+		rdfxml_tab="$X{1}",
+		rdfxml_xmlBase="$X{foo}",
+		trimWhitespace="$X{true}",
+		useXmlNamespaces="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

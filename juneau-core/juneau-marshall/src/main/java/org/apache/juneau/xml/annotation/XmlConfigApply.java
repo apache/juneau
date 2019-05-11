@@ -15,7 +15,7 @@ package org.apache.juneau.xml.annotation;
 import static org.apache.juneau.xml.XmlSerializer.*;
 import static org.apache.juneau.xml.XmlParser.*;
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -29,7 +29,7 @@ public class XmlConfigApply extends ConfigApply<XmlConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public XmlConfigApply(Class<XmlConfig> c, StringResolver r) {
+	public XmlConfigApply(Class<XmlConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

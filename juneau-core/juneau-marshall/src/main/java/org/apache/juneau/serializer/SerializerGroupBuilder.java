@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for creating instances of {@link SerializerGroup}.
@@ -1099,7 +1099,7 @@ public class SerializerGroupBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override
-	public SerializerGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public SerializerGroupBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

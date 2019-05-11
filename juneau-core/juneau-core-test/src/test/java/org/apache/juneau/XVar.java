@@ -10,28 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau;
+
+import java.io.*;
+
+import org.apache.juneau.svl.*;
 
 /**
- * Interface for resolving variables within strings.
+ * Dummy variable for resolving <code>$X{...}</code> variables.
  */
-public interface StringResolver {
+public class XVar extends Var {
 
 	/**
-	 * NO-OP resolver.
+	 * Constructor.
 	 */
-	public static final StringResolver NOOP = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			return input;
-		}
-	};
+	public XVar() {
+		super("X", false);
+	}
 
-	/**
-	 * Resolve any variables in the specified input string.
-	 *
-	 * @param input The string containing variables to resolve.
-	 * @return A string with variables resolved.
-	 */
-	String resolve(String input);
+	@Override
+	public String resolve(VarResolverSession session, String arg) throws Exception {
+		return arg;
+	}
+
+	@Override
+	public void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception {
+		w.append(arg);
+	}
 }

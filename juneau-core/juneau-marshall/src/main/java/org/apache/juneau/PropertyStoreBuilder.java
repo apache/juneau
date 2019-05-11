@@ -24,8 +24,9 @@ import org.apache.juneau.PropertyStore.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * A builder for {@link PropertyStore} objects.
@@ -107,13 +108,13 @@ public class PropertyStoreBuilder {
 	 * @param r The string resolver used to resolve any variables in the annotations.
 	 * @return This object (for method chaining).
 	 */
-	public PropertyStoreBuilder applyAnnotations(AnnotationsMap annotationsMap, StringResolver r) {
+	public PropertyStoreBuilder applyAnnotations(AnnotationsMap annotationsMap, VarResolverSession r) {
 		for (Map.Entry<Class<? extends Annotation>,List<Annotation>> e : annotationsMap.entrySet()) {
 			Class<? extends Annotation> ac = e.getKey();
 			PropertyStoreApply apply = ac.getAnnotation(PropertyStoreApply.class);
 			if (apply != null) {
 				try {
-					ConfigApply<Annotation> ca = apply.value().getConstructor(Class.class, StringResolver.class).newInstance(ac, r);
+					ConfigApply<Annotation> ca = apply.value().getConstructor(Class.class, VarResolverSession.class).newInstance(ac, r);
 					for (Annotation a : e.getValue()) {
 						ca.apply(a, this);
 					}
@@ -349,6 +350,21 @@ public class PropertyStoreBuilder {
 	}
 
 	/**
+	 * Same as {@link #peek(String)} but converts the value to the specified type.
+	 *
+	 * @param <T> The type to convert to.
+	 * @param c The type to convert to.
+	 * @param key The property key.
+	 * @return The property value, or <jk>null</jk> if it doesn't exist.
+	 */
+	public <T> T peek(Class<T> c, String key)  {
+		Object o = peek(key);
+		if (o == null)
+			return null;
+		return BeanContext.DEFAULT.createBeanSession().convertToType(o, c);
+	}
+
+	/**
 	 * Clears all entries in this property store.
 	 */
 	public synchronized void clear() {
@@ -437,6 +453,16 @@ public class PropertyStoreBuilder {
 		synchronized PropertyGroup build() {
 			return new PropertyGroup(properties);
 		}
+
+		/**
+		 * Used by the <code>toString()</code> method for debugging.
+		 *
+		 * @param bs The bean session.
+		 * @return This object converted to a map.
+		 */
+		public Map<String,MutableProperty> swap(BeanSession bs) {
+			return properties;
+		}
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -505,6 +531,11 @@ public class PropertyStoreBuilder {
 
 		Object convert(Object value) {
 			return value == null ? null : type.converter.convert(value);
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return StringUtils.stringify(peek());
 		}
 	}
 
@@ -905,5 +936,10 @@ public class PropertyStoreBuilder {
 			return "INHERIT".equals(s);
 		}
 		return false;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return SimpleJson.DEFAULT_READABLE.toString(groups);
 	}
 }

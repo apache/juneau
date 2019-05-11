@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSerializer} and its subclasses.
@@ -29,6 +30,8 @@ import org.apache.juneau.serializer.*;
  * This class is NOT thread safe.  It is meant to be discarded after one-time use.
  */
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
+
+	private static final VarResolver DEFAULT_VR = VarResolver.create().defaultVars().vars(HtmlWidgetVar.class).build();
 
 	private final HtmlDocSerializer ctx;
 	private final String[] navlinks, head, header, nav, aside, footer;
@@ -59,6 +62,13 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		script = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_script, String[].class, ctx.getScript())));
 
 		head = getProperty(HTMLDOC_head, String[].class, ctx.getHead());
+
+		varSessionObject(HtmlWidgetVar.SESSION_htmlWidgets, ctx.getWidgets());
+	}
+
+	@Override /* SerializerSession */
+	protected VarResolverSession createDefaultVarResolverSession() {
+		return DEFAULT_VR.createSession();
 	}
 
 	@Override /* Session */
@@ -245,4 +255,16 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	protected final HtmlDocTemplate getTemplate() {
 		return ctx.getTemplate();
 	}
+
+	/**
+	 * Configuration property:  Page navigation links.
+	 *
+	 * @see HtmlDocSerializer#HTMLDOC_navlinks
+	 * @return
+	 * 	Navigation links to add to the HTML page.
+	 */
+	protected final Collection<HtmlWidget> getWidgets() {
+		return ctx.getWidgets().values();
+	}
+
 }

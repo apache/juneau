@@ -1614,7 +1614,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public SerializerSessionArgs getSerializerSessionArgs() {
 		if (serializerSessionArgs == null)
-			serializerSessionArgs = new SerializerSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, null, isDebug() ? true : null, getUriContext(), isPlainText() ? true : null);
+			serializerSessionArgs = new SerializerSessionArgs(getProperties(), getJavaMethod(), getLocale(), getHeaders().getTimeZone(), null, null, isDebug() ? true : null, getUriContext(), isPlainText() ? true : null, getVarResolverSession());
 		return serializerSessionArgs;
 	}
 

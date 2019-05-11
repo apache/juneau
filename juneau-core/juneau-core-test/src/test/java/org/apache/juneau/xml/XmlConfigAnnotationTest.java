@@ -20,9 +20,10 @@ import javax.xml.stream.*;
 import javax.xml.stream.events.*;
 import javax.xml.stream.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
 
@@ -52,14 +53,7 @@ public class XmlConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -91,18 +85,18 @@ public class XmlConfigAnnotationTest {
 	}
 
 	@XmlConfig(
-		addBeanTypes="$true",
-		addNamespaceUrisToRoot="$true",
-		autoDetectNamespaces="$true",
-		defaultNamespace="$foo",
-		enableNamespaces="$true",
+		addBeanTypes="$X{true}",
+		addNamespaceUrisToRoot="$X{true}",
+		autoDetectNamespaces="$X{true}",
+		defaultNamespace="$X{foo}",
+		enableNamespaces="$X{true}",
 		eventAllocator=AA.class,
-		namespaces="$foo",
-		preserveRootElement="$true",
+		namespaces="$X{foo}",
+		preserveRootElement="$X{true}",
 		reporter=AB.class,
 		resolver=AC.class,
-		validating="$true",
-		xsNamespace="$foo"
+		validating="$X{true}",
+		xsNamespace="$X{foo}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

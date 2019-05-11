@@ -12,8 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Serializes POJOs to HTTP responses as HTML documents.
@@ -502,6 +506,74 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	public static final String HTMLDOC_template = PREFIX + "template.c";
 
+	/**
+	 * Configuration property:  HTML Widgets.
+	 *
+	 * <h5 class='section'>Property:</h5>
+	 * <ul>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.widgets.lo"</js>
+	 * 	<li><b>Data type:</b>  <code>List&lt;{@link HtmlWidget} | Class&lt;? <jk>extends</jk> {@link HtmlWidget}&gt;&gt;</code>
+	 * 	<li><b>Default:</b>  empty list
+	 * 	<li><b>Session property:</b>  <jk>false</jk>
+	 * 	<li><b>Annotations:</b>
+	 * 		<ul>
+	 * 			<li class='ja'>{@link HtmlDocConfig#widgets()}
+	 * 		</ul>
+	 * 	<li><b>Methods:</b>
+	 * 		<ul>
+	 * 			<li class='jm'>{@link HtmlDocSerializerBuilder#widgets(Class...)}
+	 * 			<li class='jm'>{@link HtmlDocSerializerBuilder#widgets(HtmlWidget...)}
+	 * 			<li class='jm'>{@link HtmlDocSerializerBuilder#widgetsReplace(Class...)}
+	 * 			<li class='jm'>{@link HtmlDocSerializerBuilder#widgetsReplace(HtmlWidget...)}
+	 * 		</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * generate arbitrary replacement text.
+	 *
+	 * Widgets resolve the following variables:
+	 * <ul class='spaced-list'>
+	 * 	<li><js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.
+	 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link HtmlWidget#getScript(VarResolverSession)}.
+	 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
+	 * 			 in the HTML page.
+	 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link HtmlWidget#getStyle(VarResolverSession)}.
+	 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
+	 * 			 in the HTML page.
+	 * </ul>
+	 *
+	 * <p>
+	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+	 * and aside section of the page:
+	 *
+	 * <p class='bcode w800'>
+	 * 	<ja>@HtmlDocSerializer</ja>(
+	 * 		widgets={
+	 * 			MyWidget.<jk>class</jk>
+	 * 		},
+	 * 		navlinks={
+	 * 			<js>"$W{MyWidget}"</js>
+	 * 		},
+	 * 		aside={
+	 * 			<js>"Check out this widget:  $W{MyWidget}"</js>
+	 * 		}
+	 * 	)
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
+	 * </ul>
+	 */
+	public static final String HTMLDOC_widgets = PREFIX + "widgets.lo";
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Predefined instances
@@ -519,6 +591,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	private final String noResultsMessage;
 	private final boolean nowrap;
 	private final HtmlDocTemplate template;
+	private final Map<String,HtmlWidget> widgets;
 
 	private volatile HtmlSchemaDocSerializer schemaSerializer;
 
@@ -572,6 +645,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		navlinks = getArrayProperty(HTMLDOC_navlinks, String.class);
 		noResultsMessage = getStringProperty(HTMLDOC_noResultsMessage, "<p>no results</p>");
 		template = getInstanceProperty(HTMLDOC_template, HtmlDocTemplate.class, BasicHtmlDocTemplate.class);
+
+		Map<String,HtmlWidget> widgets = new HashMap<>();
+		for (HtmlWidget w : getInstanceArrayProperty(HTMLDOC_widgets, HtmlWidget.class, new HtmlWidget[0]))
+			widgets.put(w.getName(), w);
+		this.widgets = Collections.unmodifiableMap(widgets);
 	}
 
 	@Override /* Context */
@@ -746,6 +824,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	protected final HtmlDocTemplate getTemplate() {
 		return template;
+	}
+
+	/**
+	 * Configuration property:  HTML widgets.
+	 *
+	 * @see #HTMLDOC_widgets
+	 * @return
+	 * 	Widgets defined on this serializers.
+	 */
+	protected final Map<String,HtmlWidget> getWidgets() {
+		return widgets;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

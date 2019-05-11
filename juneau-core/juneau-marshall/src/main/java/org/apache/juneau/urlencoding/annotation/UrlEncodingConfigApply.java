@@ -13,8 +13,8 @@
 package org.apache.juneau.urlencoding.annotation;
 
 import org.apache.juneau.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Applies {@link UrlEncodingConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -27,7 +27,7 @@ public class UrlEncodingConfigApply extends ConfigApply<UrlEncodingConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public UrlEncodingConfigApply(Class<UrlEncodingConfig> c, StringResolver r) {
+	public UrlEncodingConfigApply(Class<UrlEncodingConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

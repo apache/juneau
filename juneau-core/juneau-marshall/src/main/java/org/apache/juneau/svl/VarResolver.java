@@ -16,7 +16,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.svl.vars.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.
@@ -58,7 +57,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */
-public class VarResolver implements StringResolver {
+public class VarResolver {
 
 	/**
 	 * Default string variable resolver with support for system properties and environment variables:
@@ -160,7 +159,6 @@ public class VarResolver implements StringResolver {
 	 * @param s The input string.
 	 * @return The string with variables resolved, or the same string if it doesn't contain any variables to resolve.
 	 */
-	@Override /* StringResolver */
 	public String resolve(String s) {
 		return createSession(null).resolve(s);
 	}

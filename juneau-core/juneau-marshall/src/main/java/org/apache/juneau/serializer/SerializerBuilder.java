@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of serializers.
@@ -1020,7 +1020,7 @@ public class SerializerBuilder extends BeanTraverseBuilder {
 	}
 
 	@Override
-	public SerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public SerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

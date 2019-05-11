@@ -25,8 +25,8 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of serializers, parsers, and bean contexts.
@@ -1705,9 +1705,9 @@ public class BeanContextBuilder extends ContextBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override
-	public BeanContextBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public BeanContextBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

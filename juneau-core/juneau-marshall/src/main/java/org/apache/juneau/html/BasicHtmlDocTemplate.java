@@ -46,7 +46,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 		String[] head = session.getHead();
 		for (int i = 0; i < head.length; i++)
-			w.sIf(i > 0).appendln(2, head[i]);
+			w.sIf(i > 0).appendln(2, session.resolve(head[i]));
 
 		if (hasStyle(session)) {
 			w.sTag(2, "style").nl(2);
@@ -69,16 +69,15 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-
 		int i = 0;
 		for (String s : session.getStylesheet())
-			w.sIf(i++ > 0).append(3, "@import ").q().append(session.resolveUri(s)).q().appendln(";");
-
+			w.sIf(i++ > 0).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
 		if (session.isNowrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
-
 		for (String s : session.getStyle())
-			w.sIf(i > 0).appendln(3, s);
+			w.sIf(i++ > 0).appendln(3, session.resolve(s));
+		for (HtmlWidget hw : session.getWidgets())
+			w.sIf(i++ > 0).appendln(3, session.resolve(hw.getStyle(session.getVarResolver())));
 	}
 
 	/**
@@ -92,7 +91,9 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		int i = 0;
 		for (String s : session.getScript())
-			w.sIf(i++ > 0).append(3, s).append('\n'); // Must always append a newline even if whitespace disabled!
+			w.sIf(i++ > 0).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
+		for (HtmlWidget hw : session.getWidgets())
+			w.sIf(i++ > 0).append(3, session.resolve(hw.getScript(session.getVarResolver()))).append('\n'); // Must always append a newline even if whitespace disabled!
 	}
 
 	/**
@@ -150,7 +151,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		// Write the title of the page.
 		String[] header = session.getHeader();
 		for (int i = 0; i < header.length; i++)
-			w.sIf(i > 0).appendln(3, header[i]);
+			w.sIf(i > 0).appendln(3, session.resolve(header[i]));
 	}
 
 	/**
@@ -167,6 +168,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 			w.sTag(3, "ol").nl(3);
 			for (String l : links) {
 				w.sTag(4, "li");
+				l = session.resolve(l);
 				if (l.matches("(?s)\\S+\\:.*")) {
 					int i = l.indexOf(':');
 					String key = l.substring(0, i);
@@ -186,7 +188,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		String[] nav = session.getNav();
 		if (nav.length > 0) {
 			for (int i = 0; i < nav.length; i++)
-				w.sIf(i > 0).appendln(3, nav[i]);
+				w.sIf(i > 0).appendln(3, session.resolve(nav[i]));
 		}
 	}
 
@@ -201,7 +203,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] aside = session.getAside();
 		for (int i = 0; i < aside.length; i++)
-			w.sIf(i > 0).appendln(4, aside[i]);
+			w.sIf(i > 0).appendln(4, session.resolve(aside[i]));
 	}
 
 	/**
@@ -223,7 +225,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		} else if (ObjectUtils.isEmpty(o)){
 			String m = session.getNoResultsMessage();
 			if (exists(m))
-				w.append(6, m).nl(6);
+				w.append(6, session.resolve(m)).nl(6);
 		} else {
 			session.indent = 6;
 			w.flush();
@@ -245,7 +247,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] footer = session.getFooter();
 		for (int i = 0; i < footer.length; i++)
-			w.sIf(i > 0).appendln(3, footer[i]);
+			w.sIf(i > 0).appendln(3, session.resolve(footer[i]));
 	}
 
 	/**

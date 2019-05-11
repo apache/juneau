@@ -51,7 +51,6 @@ import org.apache.juneau.rest.util.UrlPathPattern;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestMethod @RestMethod}.
@@ -253,7 +252,7 @@ public class RestJavaMethod implements Comparable<RestJavaMethod>  {
 				this.requiredMatchers = requiredMatchers.toArray(new RestMatcher[requiredMatchers.size()]);
 				this.optionalMatchers = optionalMatchers.toArray(new RestMatcher[optionalMatchers.size()]);
 
-				StringResolver sr = vr.createSession();
+				VarResolverSession sr = vr.createSession();
 
 				PropertyStoreBuilder psb = PropertyStore.create().add(properties).set(BEAN_beanFilters, mBeanFilters).set(BEAN_pojoSwaps, mPojoSwaps);
 				for (Property p1 : m.properties())

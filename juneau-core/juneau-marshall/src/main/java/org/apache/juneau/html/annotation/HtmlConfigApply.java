@@ -14,7 +14,7 @@ package org.apache.juneau.html.annotation;
 
 import static org.apache.juneau.html.HtmlSerializer.*;
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link HtmlConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -27,7 +27,7 @@ public class HtmlConfigApply extends ConfigApply<HtmlConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public HtmlConfigApply(Class<HtmlConfig> c, StringResolver r) {
+	public HtmlConfigApply(Class<HtmlConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

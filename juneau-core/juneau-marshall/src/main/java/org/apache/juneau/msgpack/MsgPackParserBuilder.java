@@ -18,7 +18,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of MessagePack parsers.
@@ -559,9 +559,9 @@ public class MsgPackParserBuilder extends InputStreamParserBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override
-	public MsgPackParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public MsgPackParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

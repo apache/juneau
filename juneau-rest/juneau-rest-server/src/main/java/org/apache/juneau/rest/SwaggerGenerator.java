@@ -803,7 +803,7 @@ final class SwaggerGenerator {
 			if (mt != MediaType.HTML) {
 				Serializer s2 = sm.getSerializers().getSerializer(mt);
 				if (s2 != null) {
-					SerializerSessionArgs args = new SerializerSessionArgs(null, req.getJavaMethod(), req.getLocale(), null, mt, null, req.isDebug() ? true : null, req.getUriContext(), true);
+					SerializerSessionArgs args = new SerializerSessionArgs(null, req.getJavaMethod(), req.getLocale(), null, mt, null, req.isDebug() ? true : null, req.getUriContext(), true, req.getVarResolverSession());
 					try {
 						String eVal = s2.createSession(args).serializeToString(example);
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);

@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -1261,7 +1261,7 @@ public class RdfParserBuilder extends ReaderParserBuilder {
 	}
 
 	@Override
-	public RdfParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public RdfParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

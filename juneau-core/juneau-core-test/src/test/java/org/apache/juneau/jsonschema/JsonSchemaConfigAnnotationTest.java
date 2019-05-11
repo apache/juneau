@@ -18,10 +18,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 /**
@@ -47,28 +48,21 @@ public class JsonSchemaConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@JsonSchemaConfig(
-		addDescriptionsTo="$BEAN",
-		addExamplesTo="$BEAN",
-		allowNestedDescriptions="$true",
-		allowNestedExamples="$true",
+		addDescriptionsTo="$X{BEAN}",
+		addExamplesTo="$X{BEAN}",
+		allowNestedDescriptions="$X{true}",
+		allowNestedExamples="$X{true}",
 		beanDefMapper=BasicBeanDefMapper.class,
 		defaultSchemas=@CS(k=A.class,v="{foo:'bar'}"),
-		ignoreTypes="$foo",
-		useBeanDefs="$true"
+		ignoreTypes="$X{foo}",
+		useBeanDefs="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

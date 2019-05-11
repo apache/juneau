@@ -18,7 +18,7 @@ import static org.apache.juneau.parser.InputStreamParser.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link ParserConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -31,7 +31,7 @@ public class ParserConfigApply extends ConfigApply<ParserConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public ParserConfigApply(Class<ParserConfig> c, StringResolver r) {
+	public ParserConfigApply(Class<ParserConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of JSON parsers.
@@ -605,9 +605,9 @@ public class JsonParserBuilder extends ReaderParserBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override
-	public JsonParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public JsonParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

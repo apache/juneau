@@ -22,7 +22,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -1497,7 +1497,7 @@ public class RdfSerializerBuilder extends WriterSerializerBuilder {
 	}
 
 	@Override
-	public RdfSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public RdfSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

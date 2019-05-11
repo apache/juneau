@@ -13,7 +13,7 @@
 package org.apache.juneau.plaintext.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link PlainTextConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -26,7 +26,7 @@ public class PlainTextConfigApply extends ConfigApply<PlainTextConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public PlainTextConfigApply(Class<PlainTextConfig> c, StringResolver r) {
+	public PlainTextConfigApply(Class<PlainTextConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

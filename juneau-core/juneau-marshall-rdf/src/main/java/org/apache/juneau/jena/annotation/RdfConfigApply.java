@@ -17,7 +17,7 @@ import static org.apache.juneau.jena.RdfSerializer.*;
 import static org.apache.juneau.jena.RdfParser.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link RdfConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -30,7 +30,7 @@ public class RdfConfigApply extends ConfigApply<RdfConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public RdfConfigApply(Class<RdfConfig> c, StringResolver r) {
+	public RdfConfigApply(Class<RdfConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

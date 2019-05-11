@@ -13,9 +13,14 @@
 package org.apache.juneau.html.annotation;
 
 import static org.apache.juneau.html.HtmlDocSerializer.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.util.*;
+import java.util.regex.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link HtmlDocConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -28,43 +33,81 @@ public class HtmlDocConfigApply extends ConfigApply<HtmlDocConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public HtmlDocConfigApply(Class<HtmlDocConfig> c, StringResolver r) {
+	public HtmlDocConfigApply(Class<HtmlDocConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 
 	@Override
 	public void apply(HtmlDocConfig a, PropertyStoreBuilder psb) {
 		if (a.aside().length > 0)
-			psb.set(HTMLDOC_aside, strings(a.aside()));
+			psb.set(HTMLDOC_aside, resolveList(a.aside(), psb.peek(String[].class, HTMLDOC_aside)));
 		if (a.footer().length > 0)
-			psb.set(HTMLDOC_footer, strings(a.footer()));
+			psb.set(HTMLDOC_footer, resolveList(a.footer(), psb.peek(String[].class, HTMLDOC_footer)));
 		if (a.head().length > 0)
-			psb.set(HTMLDOC_head, strings(a.head()));
+			psb.set(HTMLDOC_head, resolveList(a.head(), psb.peek(String[].class, HTMLDOC_head)));
 		if (a.header().length > 0)
-			psb.set(HTMLDOC_header, strings(a.header()));
+			psb.set(HTMLDOC_header, resolveList(a.header(), psb.peek(String[].class, HTMLDOC_header)));
 		if (a.nav().length > 0)
-			psb.set(HTMLDOC_nav, strings(a.nav()));
+			psb.set(HTMLDOC_nav, resolveList(a.nav(), psb.peek(String[].class, HTMLDOC_nav)));
 		if (a.navlinks().length > 0)
-			psb.addTo(HTMLDOC_navlinks, strings(a.navlinks()));
-		if (a.navlinks_replace().length > 0)
-			psb.set(HTMLDOC_navlinks, strings(a.navlinks_replace()));
+			psb.set(HTMLDOC_navlinks, resolveLinks(a.navlinks(), psb.peek(String[].class, HTMLDOC_navlinks)));
 		if (! a.noResultsMessage().isEmpty())
 			psb.set(HTMLDOC_noResultsMessage, string(a.noResultsMessage()));
 		if (! a.nowrap().isEmpty())
 			psb.set(HTMLDOC_nowrap, bool(a.nowrap()));
 		if (a.script().length > 0)
-			psb.addTo(HTMLDOC_script, strings(a.script()));
-		if (a.script_replace().length > 0)
-			psb.set(HTMLDOC_script, strings(a.script_replace()));
+			psb.set(HTMLDOC_script, resolveList(a.script(), psb.peek(String[].class, HTMLDOC_script)));
 		if (a.style().length > 0)
-			psb.addTo(HTMLDOC_style, strings(a.style()));
-		if (a.style_replace().length > 0)
-			psb.set(HTMLDOC_style, strings(a.style_replace()));
+			psb.set(HTMLDOC_style, resolveList(a.style(), psb.peek(String[].class, HTMLDOC_style)));
 		if (a.stylesheet().length > 0)
-			psb.addTo(HTMLDOC_stylesheet, strings(a.stylesheet()));
-		if (a.stylesheet_replace().length > 0)
-			psb.set(HTMLDOC_stylesheet, strings(a.stylesheet_replace()));
+			psb.set(HTMLDOC_stylesheet, resolveList(a.stylesheet(), psb.peek(String[].class, HTMLDOC_stylesheet)));
 		if (a.template() != HtmlDocTemplate.Null.class)
 			psb.set(HTMLDOC_template, a.template());
+		for (Class<? extends HtmlWidget> w : a.widgets()) {
+			try {
+				psb.addTo(HTMLDOC_widgets, w.newInstance());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
+
+	private String[] resolveLinks(Object[] value, String[] prev) {
+		List<String> list = new ArrayList<>();
+		for (Object v : value) {
+			String s = string(stringify(v));
+			if ("INHERIT".equals(s)) {
+				if (prev != null)
+					list.addAll(Arrays.asList(prev));
+			} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
+				Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
+				lm.matches();
+				String key = lm.group(1);
+				int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
+				String remainder = lm.group(3);
+				list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+			} else {
+				list.add(s);
+			}
+		}
+		return list.toArray(new String[list.size()]);
+	}
+
+	private String[] resolveList(Object[] value, String[] prev) {
+		Set<String> set = new LinkedHashSet<>();
+		for (Object v : value) {
+			String s = string(stringify(v));
+			if ("INHERIT".equals(s)) {
+				if (prev != null)
+					set.addAll(Arrays.asList(prev));
+			} else if ("NONE".equals(s)) {
+				return new String[0];
+			} else {
+				set.add(s);
+			}
+		}
+		return set.toArray(new String[set.size()]);
 	}
 }

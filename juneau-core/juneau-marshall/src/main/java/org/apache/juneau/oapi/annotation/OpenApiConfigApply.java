@@ -13,7 +13,7 @@
 package org.apache.juneau.oapi.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link OpenApiConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -26,7 +26,7 @@ public class OpenApiConfigApply extends ConfigApply<OpenApiConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public OpenApiConfigApply(Class<OpenApiConfig> c, StringResolver r) {
+	public OpenApiConfigApply(Class<OpenApiConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

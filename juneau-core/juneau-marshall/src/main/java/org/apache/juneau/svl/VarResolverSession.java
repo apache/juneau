@@ -19,7 +19,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
@@ -42,7 +41,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-svl.VarResolvers}
  * </ul>
  */
-public class VarResolverSession implements StringResolver {
+public class VarResolverSession {
 
 	private final VarResolverContext context;
 	private final Map<String,Object> sessionObjects;
@@ -85,7 +84,6 @@ public class VarResolverSession implements StringResolver {
 	 * 	The new string with all variables resolved, or the same string if no variables were found.
 	 * 	<br>Returns <jk>null</jk> if the input was <jk>null</jk>.
 	 */
-	@Override /* StringResolver */
 	public String resolve(String s) {
 
 		if (s == null || s.isEmpty())
@@ -422,6 +420,7 @@ public class VarResolverSession implements StringResolver {
 	 * @return The {@link Var} instance, or <jk>null</jk> if no <code>Var</code> is associated with the specified name.
 	 */
 	protected Var getVar(String name) {
-		return this.context.getVarMap().get(name);
+		Var v = this.context.getVarMap().get(name);
+		return v != null && v.canResolve(this) ? v : null;
 	}
 }

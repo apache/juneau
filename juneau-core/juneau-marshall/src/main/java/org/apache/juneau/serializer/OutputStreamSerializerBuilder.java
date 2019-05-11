@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Base class for all stream-based serializer builders.
@@ -531,7 +531,7 @@ public class OutputStreamSerializerBuilder extends SerializerBuilder {
 	}
 
 	@Override
-	public OutputStreamSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public OutputStreamSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

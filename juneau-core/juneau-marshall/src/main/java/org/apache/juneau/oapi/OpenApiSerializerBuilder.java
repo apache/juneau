@@ -18,8 +18,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Builder class for building instances of {@link OpenApiSerializer}.
@@ -679,9 +679,9 @@ public class OpenApiSerializerBuilder extends UonSerializerBuilder {
 		super.apply(copyFrom);
 		return this;
 	}
-	
+
 	@Override
-	public OpenApiSerializerBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public OpenApiSerializerBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

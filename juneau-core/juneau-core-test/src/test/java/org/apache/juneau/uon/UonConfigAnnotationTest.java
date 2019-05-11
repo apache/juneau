@@ -16,9 +16,10 @@ import static org.junit.Assert.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.annotation.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 /**
@@ -37,25 +38,18 @@ public class UonConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@UonConfig(
-		addBeanTypes="$true",
-		decoding="$true",
-		encoding="$true",
-		paramFormat="$UON",
-		validateEnd="$true"
+		addBeanTypes="$X{true}",
+		decoding="$X{true}",
+		encoding="$X{true}",
+		paramFormat="$X{UON}",
+		validateEnd="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

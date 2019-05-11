@@ -18,7 +18,7 @@ import java.util.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of bean traversals.
@@ -620,7 +620,7 @@ public class BeanTraverseBuilder extends BeanContextBuilder {
 	}
 
 	@Override
-	public BeanTraverseBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public BeanTraverseBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

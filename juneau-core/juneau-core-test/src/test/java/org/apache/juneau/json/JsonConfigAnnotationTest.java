@@ -16,9 +16,10 @@ import static org.junit.Assert.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 import org.junit.*;
 
 /**
@@ -37,24 +38,17 @@ public class JsonConfigAnnotationTest {
 		}
 	};
 
-	static StringResolver sr = new StringResolver() {
-		@Override
-		public String resolve(String input) {
-			if (input.startsWith("$"))
-				input = input.substring(1);
-			return input;
-		}
-	};
+	static VarResolverSession sr = VarResolver.create().vars(XVar.class).build().createSession();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@JsonConfig(
-		addBeanTypes="$true",
-		escapeSolidus="$true",
-		simpleMode="$true",
-		validateEnd="$true"
+		addBeanTypes="$X{true}",
+		escapeSolidus="$X{true}",
+		simpleMode="$X{true}",
+		validateEnd="$X{true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

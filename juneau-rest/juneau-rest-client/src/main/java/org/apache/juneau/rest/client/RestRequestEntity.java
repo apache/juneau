@@ -62,7 +62,7 @@ public final class RestRequestEntity extends BasicHttpEntity {
 					// If no serializer specified, just close the stream.
 					os.close();
 				} else {
-					SerializerSessionArgs sArgs = new SerializerSessionArgs(null, null, null, null, null, schema, false, null, null);
+					SerializerSessionArgs sArgs = new SerializerSessionArgs(null, null, null, null, null, schema, false, null, null, null);
 					SerializerSession session = serializer.createSession(sArgs);
 					try (Closeable c = session.isWriterSerializer() ? new OutputStreamWriter(os, UTF8) : os) {
 						session.serialize(output, c);

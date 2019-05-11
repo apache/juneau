@@ -14,7 +14,7 @@ package org.apache.juneau.msgpack.annotation;
 
 import static org.apache.juneau.msgpack.MsgPackSerializer.*;
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link MsgPackConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -27,7 +27,7 @@ public class MsgPackConfigApply extends ConfigApply<MsgPackConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public MsgPackConfigApply(Class<MsgPackConfig> c, StringResolver r) {
+	public MsgPackConfigApply(Class<MsgPackConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

@@ -15,7 +15,7 @@ package org.apache.juneau.json.annotation;
 import static org.apache.juneau.json.JsonSerializer.*;
 import static org.apache.juneau.json.JsonParser.*;
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link JsonConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -28,7 +28,7 @@ public class JsonConfigApply extends ConfigApply<JsonConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public JsonConfigApply(Class<JsonConfig> c, StringResolver r) {
+	public JsonConfigApply(Class<JsonConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

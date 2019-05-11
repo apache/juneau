@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for creating instances of {@link ParserGroup}.
@@ -826,7 +826,7 @@ public class ParserGroupBuilder extends BeanContextBuilder {
 	}
 
 	@Override
-	public ParserGroupBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public ParserGroupBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

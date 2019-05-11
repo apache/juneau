@@ -19,7 +19,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Builder class for building instances of parsers.
@@ -680,7 +680,7 @@ public class ParserBuilder extends BeanContextBuilder {
 	}
 
 	@Override
-	public ParserBuilder applyAnnotations(AnnotationsMap m, StringResolver sr) {
+	public ParserBuilder applyAnnotations(AnnotationsMap m, VarResolverSession sr) {
 		super.applyAnnotations(m, sr);
 		return this;
 	}

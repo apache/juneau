@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.soap.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.transform.*;
 
 /**
@@ -50,6 +51,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 
 	private final Serializer ctx;
 	private final UriResolver uriResolver;
+	private VarResolverSession vrs;
 
 	private final Method javaMethod;                                                // Java method that invoked this serializer.
 
@@ -78,6 +80,40 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		this.uriResolver = new UriResolver(ctx.getUriResolution(), ctx.getUriRelativity(), args.uriContext == null ? ctx.getUriContext() : args.uriContext);
 		this.listener = castOrCreate(SerializerListener.class, ctx.getListener());
 		this.useWhitespace = args.useWhitespace != null ? args.useWhitespace : ctx.isUseWhitespace();
+		this.vrs = args.resolver;
+
+	}
+
+	/**
+	 * Adds a session object to the {@link VarResolverSession} in this session.
+	 *
+	 * @param name The session object key.
+	 * @param value The session object.
+	 * @return This object (for method chaining).
+	 */
+	public SerializerSession varSessionObject(String name, Object value) {
+		getVarResolver().sessionObject(name, value);
+		return this;
+	}
+
+	/**
+	 * Adds a session object to the {@link VarResolverSession} in this session.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	protected VarResolverSession createDefaultVarResolverSession() {
+		return VarResolver.DEFAULT.createSession();
+	}
+
+	/**
+	 * Returns the variable resolver session.
+	 *
+	 * @return The variable resolver session.
+	 */
+	public VarResolverSession getVarResolver() {
+		if (vrs == null)
+			vrs = createDefaultVarResolverSession();
+		return vrs;
 	}
 
 	/**
@@ -590,6 +626,16 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	@SuppressWarnings("unchecked")
 	public <T extends SerializerListener> T getListener(Class<T> c) {
 		return (T)listener;
+	}
+
+	/**
+	 * Resolves any variables in the specified string.
+	 *
+	 * @param string The string to resolve values in.
+	 * @return The string with variables resolved.
+	 */
+	public String resolve(String string) {
+		return getVarResolver().resolve(string);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

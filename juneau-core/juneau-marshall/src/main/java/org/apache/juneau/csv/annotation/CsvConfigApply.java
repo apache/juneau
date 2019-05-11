@@ -13,7 +13,7 @@
 package org.apache.juneau.csv.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link CsvConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -26,7 +26,7 @@ public class CsvConfigApply extends ConfigApply<CsvConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public CsvConfigApply(Class<CsvConfig> c, StringResolver r) {
+	public CsvConfigApply(Class<CsvConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 

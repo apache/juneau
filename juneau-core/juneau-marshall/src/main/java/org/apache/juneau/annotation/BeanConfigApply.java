@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Applies {@link BeanConfig} annotations to a {@link PropertyStoreBuilder}.
@@ -34,7 +34,7 @@ public class BeanConfigApply extends ConfigApply<BeanConfig> {
 	 * @param c The annotation class.
 	 * @param r The resolver for resolving values in annotations.
 	 */
-	public BeanConfigApply(Class<BeanConfig> c, StringResolver r) {
+	public BeanConfigApply(Class<BeanConfig> c, VarResolverSession r) {
 		super(c, r);
 	}
 
