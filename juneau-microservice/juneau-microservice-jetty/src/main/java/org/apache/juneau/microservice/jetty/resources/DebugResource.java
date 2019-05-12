@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpMethodName.*;
 
 import java.io.*;
 
+import org.apache.juneau.html.annotation.HtmlDocConfig;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.*;
@@ -29,14 +30,14 @@ import org.apache.juneau.rest.helper.*;
 	path="/debug",
 	title="Debug",
 	description="Debug Utilities.",
-	htmldoc=@HtmlDoc(
-		navlinks={
-			"up: request:/..",
-			"jetty-thread-dump: servlet:/jetty/dump?method=POST",
-			"options: servlet:/?method=OPTIONS"
-		}
-	),
 	allowedMethodParams="OPTIONS,POST"
+)
+@HtmlDocConfig(
+	navlinks={
+		"up: request:/..",
+		"jetty-thread-dump: servlet:/jetty/dump?method=POST",
+		"options: servlet:/?method=OPTIONS"
+	}
 )
 @SuppressWarnings("javadoc")
 public class DebugResource extends BasicRestServlet {

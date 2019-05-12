@@ -59,13 +59,13 @@ import org.apache.juneau.utils.*;
 @RestResource(
 	title="File System Explorer",
 	messages="nls/DirectoryResource",
-	htmldoc=@HtmlDoc(
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS"
-		}
-	),
 	allowedMethodParams="*"
+)
+@HtmlDocConfig(
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS"
+	}
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
@@ -121,10 +121,10 @@ public class DirectoryResource extends BasicRestServlet {
 		name=GET,
 		path="/*",
 		summary="View information on file or directory",
-		description="Returns information about the specified file or directory.",
-		htmldoc=@HtmlDoc(
-			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
-		)
+		description="Returns information about the specified file or directory."
+	)
+	@HtmlDocConfig(
+		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 	)
 	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 

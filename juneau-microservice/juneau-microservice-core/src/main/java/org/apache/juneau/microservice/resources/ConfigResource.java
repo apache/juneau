@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.html.annotation.HtmlDocConfig;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Path;
@@ -35,14 +36,14 @@ import org.apache.juneau.rest.exception.*;
 @RestResource(
 	path="/config",
 	title="Configuration",
-	description="Contents of configuration file.",
-	htmldoc=@HtmlDoc(
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
-			"edit: servlet:/edit"
-		}
-	)
+	description="Contents of configuration file."
+)
+@HtmlDocConfig(
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS",
+		"edit: servlet:/edit"
+	}
 )
 @SuppressWarnings("javadoc")
 public class ConfigResource extends BasicRestServlet {

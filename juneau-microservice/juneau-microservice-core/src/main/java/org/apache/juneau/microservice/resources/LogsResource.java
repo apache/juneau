@@ -115,10 +115,10 @@ public class LogsResource extends BasicRestServlet {
 		name=GET,
 		path="/*",
 		summary="View information on file or directory",
-		description="Returns information about the specified file or directory.",
-		htmldoc=@HtmlDoc(
-			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
-		)
+		description="Returns information about the specified file or directory."
+	)
+	@HtmlDocConfig(
+		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 	)
 	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
@@ -194,14 +194,14 @@ public class LogsResource extends BasicRestServlet {
 		converters=Queryable.class,
 		summary="View parsed contents of file",
 		description="View the parsed contents of a file.",
-		htmldoc=@HtmlDoc(
-			nav={"<h5>Folder:  $RA{fullPath}</h5>"}
-		),
 		swagger=@MethodSwagger(
 			parameters={
 				 Queryable.SWAGGER_PARAMS
 			}
 		)
+	)
+	@HtmlDocConfig(
+		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
 	)
 	public LogParser viewParsedEntries(
 			RestRequest req,
