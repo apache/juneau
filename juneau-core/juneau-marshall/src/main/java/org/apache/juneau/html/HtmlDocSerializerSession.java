@@ -36,6 +36,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	private final HtmlDocSerializer ctx;
 	private final String[] navlinks, head, header, nav, aside, footer;
 	private final Set<String> style, stylesheet, script;
+	private final boolean nowrap;
 
 	/**
 	 * Create a new session using properties specified in the context.
@@ -62,6 +63,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		script = new LinkedHashSet<>(Arrays.asList(getProperty(HTMLDOC_script, String[].class, ctx.getScript())));
 
 		head = getProperty(HTMLDOC_head, String[].class, ctx.getHead());
+		nowrap = getProperty(HTMLDOC_nowrap, boolean.class, ctx.isNowrap());
 
 		varSessionObject(HtmlWidgetVar.SESSION_htmlWidgets, ctx.getWidgets());
 	}
@@ -209,7 +211,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
 	 */
 	protected final boolean isNowrap() {
-		return ctx.isNowrap();
+		return nowrap;
 	}
 
 	/**

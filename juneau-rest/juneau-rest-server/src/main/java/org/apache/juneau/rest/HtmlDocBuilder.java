@@ -20,6 +20,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.utils.*;
 
@@ -41,7 +42,10 @@ import org.apache.juneau.utils.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
  * </ul>
+ *
+ * @deprecated Use {@link HtmlDocConfig}
  */
+@Deprecated
 public class HtmlDocBuilder {
 
 	private final ObjectMap properties;

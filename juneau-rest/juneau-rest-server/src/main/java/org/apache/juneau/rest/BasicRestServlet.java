@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.jso.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
@@ -144,7 +145,7 @@ import org.apache.juneau.xml.*;
  * <h5 class='section'>Notes:</h5>
  * <ul class='spaced-list'>
  * 	<li>
- * 		Provides a default HTML stylesheet by setting {@link HtmlDoc#stylesheet() @HtmlDoc(stylesheet)}
+ * 		Provides a default HTML stylesheet by setting {@link HtmlDocConfig#stylesheet() HtmlDocConfig(stylesheet)}
  * 		to <js>"styles/juneau.css"</js>.
  * 	<li>
  * 		Provides a default classpath entry "htdocs" by setting
@@ -159,18 +160,15 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @RestResource(
-
 	// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.
-	allowedMethodParams="OPTIONS",
-
-	// HTML-page specific settings.
-	htmldoc=@HtmlDoc(
-		// Basic page navigation links.
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS"
-		}
-	)
+	allowedMethodParams="OPTIONS"
+)
+@HtmlDocConfig(
+	// Basic page navigation links.
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS"
+	}
 )
 public abstract class BasicRestServlet extends RestServlet implements BasicRestConfig {
 	private static final long serialVersionUID = 1L;

@@ -26,6 +26,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -67,6 +68,7 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
+	@SuppressWarnings("deprecation")
 	private HtmlDocBuilder htmlDocBuilder;
 
 	private ResponseBeanMeta responseMeta;
@@ -236,7 +238,10 @@ public final class RestResponse extends HttpServletResponseWrapper {
 	 * </ul>
 	 *
 	 * @return A new programmatic interface for setting properties for the HTML doc view.
+	 *
+	 * @deprecated Use {@link HtmlDocConfig}
 	 */
+	@Deprecated
 	public HtmlDocBuilder getHtmlDocBuilder() {
 		if (htmlDocBuilder == null)
 			htmlDocBuilder = new HtmlDocBuilder(properties);

@@ -30,6 +30,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -108,6 +110,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	Config config;
 	VarResolverBuilder varResolverBuilder;
 	String path;
+	@SuppressWarnings("deprecation")
 	HtmlDocBuilder htmlDocBuilder;
 
 	@SuppressWarnings("deprecation")
@@ -280,10 +283,12 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	/*
 	 * Calls all @RestHook(INIT) methods on the specified resource object.
 	 */
+	@SuppressWarnings("deprecation")
 	RestContextBuilder init(Object resource) throws ServletException {
 		this.resource = resource;
 		ClassInfo rci = getClassInfo(resourceClass);
 
+		// >>> DEPRECATED - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// Once we have the resource object, we can construct the Widgets.
 		// We want to do that here so that we can update the script/style properties while they're still modifiable.
 		HtmlDocBuilder hdb = getHtmlDocBuilder();
@@ -294,6 +299,7 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 			hdb.style("INHERIT", "$W{"+w.getName()+".style}");
 		}
 		widgetsReplace(widgets);
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 		Map<String,MethodInfo> map = new LinkedHashMap<>();
 		for (MethodInfo m : rci.getAllMethodsParentFirst()) {
@@ -396,7 +402,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 * Returns an instance of an HTMLDOC builder for setting HTMLDOC-related properties.
 	 *
 	 * @return An instance of an HTMLDOC builder for setting HTMLDOC-related properties.
+	 *
+	 * @deprecated Use {@link HtmlDocConfig}
 	 */
+	@Deprecated
 	public HtmlDocBuilder getHtmlDocBuilder() {
 		return htmlDocBuilder;
 	}
@@ -2128,8 +2137,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 *
+	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgets(Class[])}
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public RestContextBuilder widgets(Class<? extends Widget>...values) {
 		return addTo(REST_widgets, values);
 	}
@@ -2147,8 +2159,11 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to set on this setting.
 	 * @return This object (for method chaining).
+	 *
+	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgetsReplace(Class[])}
 	 */
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public RestContextBuilder widgetsReplace(Class<? extends Widget>...values) {
 		return set(REST_widgets, values);
 	}
@@ -2166,7 +2181,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 *
+	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgets(Widget[])}
 	 */
+	@Deprecated
 	public RestContextBuilder widgets(Widget...values) {
 		return addTo(REST_widgets, values);
 	}
@@ -2184,7 +2202,10 @@ public class RestContextBuilder extends BeanContextBuilder implements ServletCon
 	 *
 	 * @param values The values to add to this setting.
 	 * @return This object (for method chaining).
+	 *
+	 * @deprecated Use {@link HtmlDocSerializerBuilder#widgetsReplace(Widget[])}
 	 */
+	@Deprecated
 	public RestContextBuilder widgetsReplace(Widget...values) {
 		return set(REST_widgets, values);
 	}

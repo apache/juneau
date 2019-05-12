@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.svl.*;
 
@@ -29,7 +29,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * They're registered via the following mechanisms:
  * <ul>
- * 	<li>{@link HtmlDoc#widgets() @HtmlDoc(widgets)}
+ * 	<li>{@link HtmlDocConfig#widgets() @HtmlDocConfig(widgets)}
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>
@@ -58,9 +58,10 @@ public class WidgetVar extends SimpleVar {
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		RestResponse res = session.getSessionObject(RestResponse.class, SESSION_res, true);
+
+		// >>> Deprecated - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		boolean isScript = false, isStyle = false;
 
-		// TODO - The following lines are deprecated.
 		if (key.endsWith(".script")) {
 			key = key.substring(0, key.length() - 7);
 			isScript = true;
@@ -70,7 +71,8 @@ public class WidgetVar extends SimpleVar {
 			key = key.substring(0, key.length() - 6);
 			isStyle = true;
 		}
-
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		
 		Widget w = req.getWidgets().get(key);
 		if (w == null)
 			return "unknown-widget-"+key;

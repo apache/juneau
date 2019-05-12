@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.annotation;
 
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -82,7 +83,10 @@ import org.apache.juneau.rest.widget.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
  * </ul>
+ *
+ * @deprecated Use {@link HtmlDocConfig}
  */
+@Deprecated
 public @interface HtmlDoc {
 
 	/**

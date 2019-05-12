@@ -13,18 +13,19 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.http.HttpMethodName.*;
-import static org.apache.juneau.serializer.Serializer.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.ui.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.annotation.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
@@ -71,45 +72,6 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 		PlainTextParser.class
 	},
 
-	// Properties to apply to all serializers/parsers and REST-specific API objects.
-	properties={
-		// Enable automatic resolution of URI objects to root-relative values.
-		@Property(name=SERIALIZER_uriResolution, value="ROOT_RELATIVE")
-	},
-
-	// HTML-page specific settings
-	htmldoc=@HtmlDoc(
-
-		// Default page header contents.
-		header={
-			"<h1>$R{resourceTitle}</h1>",  // Use @RestResource(title)
-			"<h2>$R{methodSummary,resourceDescription}</h2>", // Use either @RestMethod(summary) or @RestResource(description)
-			"$C{REST/header}"  // Extra header HTML defined in external config file.
-		},
-
-		// Basic page navigation links.
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS"
-		},
-
-		// Default stylesheet to use for the page.
-		// Can be overridden from external config file.
-		// Default is DevOps look-and-feel (aka Depression look-and-feel).
-		stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
-
-		// Default contents to add to the <head> section of the HTML page.
-		// Use it to add a favicon link to the page.
-		head="$C{REST/head}",
-
-		// No default page footer contents.
-		// Can be overridden from external config file.
-		footer="$C{REST/footer}",
-
-		// By default, table cell contents should not wrap.
-		nowrap="true"
-	),
-
 	// Optional external configuration file.
 	config="$S{juneau.configFile,SYSTEM_DEFAULT}",
 
@@ -117,6 +79,41 @@ import org.apache.juneau.xmlschema.XmlSchemaDocSerializer;
 	// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
 	// By default, we define static files through the external configuration file.
 	staticFiles="$C{REST/staticFiles,htdocs:htdocs}"
+)
+@SerializerConfig(
+	// Enable automatic resolution of URI objects to root-relative values.
+	uriResolution="ROOT_RELATIVE"
+)
+@HtmlDocConfig(
+
+	// Default page header contents.
+	header={
+		"<h1>$R{resourceTitle}</h1>",  // Use @RestResource(title)
+		"<h2>$R{methodSummary,resourceDescription}</h2>", // Use either @RestMethod(summary) or @RestResource(description)
+		"$C{REST/header}"  // Extra header HTML defined in external config file.
+	},
+
+	// Basic page navigation links.
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS"
+	},
+
+	// Default stylesheet to use for the page.
+	// Can be overridden from external config file.
+	// Default is DevOps look-and-feel (aka Depression look-and-feel).
+	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
+
+	// Default contents to add to the <head> section of the HTML page.
+	// Use it to add a favicon link to the page.
+	head="$C{REST/head}",
+
+	// No default page footer contents.
+	// Can be overridden from external config file.
+	footer="$C{REST/footer}",
+
+	// By default, table cell contents should not wrap.
+	nowrap="true"
 )
 public interface BasicRestConfig {
 
@@ -127,19 +124,8 @@ public interface BasicRestConfig {
 	 * @return A bean containing the contents for the OPTIONS page.
 	 */
 	@RestMethod(name=OPTIONS, path="/*",
-
 		summary="Swagger documentation",
-		description="Swagger documentation for this resource.",
-
-		htmldoc=@HtmlDoc(
-			// Override the nav links for the swagger page.
-			navlinks={
-				"back: servlet:/",
-				"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
-			},
-			// Never show aside contents of page inherited from class.
-			aside="NONE"
-		)
+		description="Swagger documentation for this resource."
 	)
 	@JsonSchemaConfig(
 		// Add descriptions to the following types when not specified:
@@ -160,6 +146,15 @@ public interface BasicRestConfig {
 			// This is a per-media-type swap that only applies to text/html requests.
 			SwaggerUI.class
 		}
+	)
+	@HtmlDocConfig(
+		// Override the nav links for the swagger page.
+		navlinks={
+			"back: servlet:/",
+			"json: servlet:/?method=OPTIONS&Accept=text/json&plainText=true"
+		},
+		// Never show aside contents of page inherited from class.
+		aside="NONE"
 	)
 	public Swagger getOptions(RestRequest req);
 }

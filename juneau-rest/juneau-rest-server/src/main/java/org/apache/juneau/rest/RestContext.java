@@ -36,6 +36,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.http.annotation.*;
@@ -2970,7 +2971,10 @@ public final class RestContext extends BeanContext {
 	 * <ul>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link HtmlDocSerializer#HTMLDOC_widgets}
 	 */
+	@Deprecated
 	public static final String REST_widgets = PREFIX + "widgets.lo";
 
 
@@ -2997,7 +3001,9 @@ public final class RestContext extends BeanContext {
 
 	final String fullPath;
 
+	// >>> DEPRECATED - Remove in 9.0 >>>
 	private final Map<String,Widget> widgets;
+	// <<<<<<
 
 	private final Set<String> allowedMethodParams;
 
@@ -3239,10 +3245,12 @@ public final class RestContext extends BeanContext {
 
 			this.childResources = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());  // Not unmodifiable on purpose so that children can be replaced.
 
+			// >>> DEPRECATED - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 			Map<String,Widget> _widgets = new LinkedHashMap<>();
 			for (Widget w : getInstanceArrayProperty(REST_widgets, resource, Widget.class, new Widget[0], resourceResolver, ps))
 				_widgets.put(w.getName(), w);
 			this.widgets = unmodifiableMap(_widgets);
+			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 			//----------------------------------------------------------------------------------------------------
 			// Initialize the child resources.
@@ -3543,23 +3551,23 @@ public final class RestContext extends BeanContext {
 	 * </p>
 	 *
 	 * <p>
-	 * A typical usage pattern involves using variables inside the {@link HtmlDoc @HtmlDoc} annotation:
+	 * A typical usage pattern involves using variables inside the {@link HtmlDocConfig @HtmlDocConfig} annotation:
 	 * <p class='bcode w800'>
 	 * 	<ja>@RestMethod</ja>(
-	 * 		name=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>,
-	 * 		htmldoc=@HtmlDoc(
-	 * 			navlinks={
-	 * 				<js>"up: $R{requestParentURI}"</js>,
-	 * 				<js>"options: servlet:/?method=OPTIONS"</js>,
-	 * 				<js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
-	 * 			}
-	 * 			header={
-	 * 				<js>"&lt;h1&gt;$L{MyLocalizedPageTitle}&lt;/h1&gt;"</js>
-	 * 			},
-	 * 			aside={
-	 * 				<js>"$F{resources/AsideText.html}"</js>
-	 * 			}
-	 * 		)
+	 * 		name=<jsf>GET</jsf>, path=<js>"/{name}/*"</js>
+	 * 	)
+	 * 	<ja>@HtmlDocConfig</ja>(
+	 * 		navlinks={
+	 * 			<js>"up: $R{requestParentURI}"</js>,
+	 * 			<js>"options: servlet:/?method=OPTIONS"</js>,
+	 * 			<js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
+	 * 		}
+	 * 		header={
+	 * 			<js>"&lt;h1&gt;$L{MyLocalizedPageTitle}&lt;/h1&gt;"</js>
+	 * 		},
+	 * 		aside={
+	 * 			<js>"$F{resources/AsideText.html}"</js>
+	 * 		}
 	 * 	)
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest req, <ja>@Path</ja> String name) <jk>throws</jk> Exception {
 	 * </p>

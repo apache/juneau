@@ -14,7 +14,6 @@ package org.apache.juneau.rest.vars;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -29,9 +28,6 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * See {@link UriResolver} for the kinds of URIs that can be resolved.
- * <ul>
- * 	<li>{@link HtmlDoc#widgets() @HtmlDoc(widgets)}
- * </ul>
  *
  * <p>
  * Uses the URI resolver returned by {@link RestRequest#getUriResolver()}.

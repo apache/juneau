@@ -23,7 +23,6 @@ import org.apache.juneau.rest.annotation.*;
  * and adds the following:
  * <ul>
  * 	<li class='ja'>{@link RestMethod#properties()}
- * 	<li class='ja'>{@link HtmlDoc}
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>

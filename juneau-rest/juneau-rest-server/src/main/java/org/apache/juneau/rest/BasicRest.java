@@ -15,6 +15,7 @@ package org.apache.juneau.rest;
 import javax.servlet.http.*;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 
 /**
@@ -26,18 +27,15 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 @RestResource(
-
 	// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.
-	allowedMethodParams="OPTIONS",
-
-	// HTML-page specific settings.
-	htmldoc=@HtmlDoc(
-		// Basic page navigation links.
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS"
-		}
-	)
+	allowedMethodParams="OPTIONS"
+)
+@HtmlDocConfig(
+	// Basic page navigation links.
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS"
+	}
 )
 public abstract class BasicRest implements BasicRestConfig {
 

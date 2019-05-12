@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
@@ -90,10 +91,10 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		name=GET,
 		path="/{javaInterface}",
 		summary="List of available methods on interface",
-		description="Shows a list of all the exposed methods on an interface.",
-		htmldoc=@HtmlDoc(
-			nav="<h5>Interface:  $RP{javaInterface}</h5>"
-		)
+		description="Shows a list of all the exposed methods on an interface."
+	)
+	@HtmlDocConfig(
+		nav="<h5>Interface:  $RP{javaInterface}</h5>"
 	)
 	public Collection<LinkString> listMethods(
 			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface
@@ -109,13 +110,13 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		name=GET,
 		path="/{javaInterface}/{javaMethod}",
 		summary="Form entry for interface method call",
-		description="Shows a form entry page for executing a remote interface method.",
-		htmldoc=@HtmlDoc(
-			nav={
-				"<h5>Interface:  $RP{javaInterface}</h5>",
-				"<h5>Method:  $RP{javaMethod}</h5>"
-			}
-		)
+		description="Shows a form entry page for executing a remote interface method."
+	)
+	@HtmlDocConfig(
+		nav={
+			"<h5>Interface:  $RP{javaInterface}</h5>",
+			"<h5>Method:  $RP{javaMethod}</h5>"
+		}
 	)
 	public Div showEntryForm(
 			@Path(name="javaInterface", description="Java interface name", example="com.foo.MyInterface") String javaInterface,
@@ -158,12 +159,6 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		path="/{javaInterface}/{javaMethod}",
 		summary="Invoke an interface method",
 		description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",
-		htmldoc=@HtmlDoc(
-			nav= {
-				"<h5>Interface:  $RP{javaInterface}</h5>",
-				"<h5>Method:  $RP{javaMethod}</h5>"
-			}
-		),
 		swagger=@MethodSwagger(
 			parameters= {
 				"{",
@@ -181,6 +176,12 @@ public abstract class RrpcServlet extends BasicRestServlet {
 				"200:{ description:'The return object serialized', schema:{type:'any'},'x-example':{foo:123} }",
 			}
 		)
+	)
+	@HtmlDocConfig(
+		nav= {
+			"<h5>Interface:  $RP{javaInterface}</h5>",
+			"<h5>Method:  $RP{javaMethod}</h5>"
+		}
 	)
 	public Object invoke(
 			Reader r,

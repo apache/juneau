@@ -21,6 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.remote.*;
+import org.apache.juneau.html.annotation.*;
 
 /**
  * Identifies a REST Java method on a {@link RestServlet} implementation class.
@@ -464,7 +465,10 @@ public @interface RestMethod {
 	 * <ul>
 	 * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation}
 	 * </ul>
+	 *
+	 * @deprecated Use {@link HtmlDocConfig}
 	 */
+	@Deprecated
 	HtmlDoc htmldoc() default @HtmlDoc;
 
 	/**
