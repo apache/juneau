@@ -86,6 +86,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 				.append("script", script)
 				.append("style", style)
 				.append("stylesheet", stylesheet)
+				.append("varResolver", getVarResolver())
 			);
 	}
 

@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.http.HttpMethodName.*;
 
 import org.apache.juneau.dto.swagger.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 
@@ -29,15 +30,15 @@ import org.apache.juneau.rest.annotation.*;
 @RestResource(
 	title="Hello World",
 	description="An example of the simplest-possible resource",
-	path="/helloWorld",
-	htmldoc=@HtmlDoc(
-		aside={
-			"<div style='max-width:400px' class='text'>",
-			"	<p>This page shows a resource that simply response with a 'Hello world!' message</p>",
-			"	<p>The POJO serialized is a simple String.</p>",
-			"</div>"
-		}
-	)
+	path="/helloWorld"
+)
+@HtmlDocConfig(
+	aside={
+		"<div style='max-width:400px' class='text'>",
+		"	<p>This page shows a resource that simply response with a 'Hello world!' message</p>",
+		"	<p>The POJO serialized is a simple String.</p>",
+		"</div>"
+	}
 )
 public class HelloWorldResource implements BasicRestConfig {
 

@@ -23,9 +23,11 @@ import java.util.Map;
 
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.examples.rest.petstore.*;
 import org.apache.juneau.examples.rest.petstore.dto.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Path;
@@ -54,37 +56,6 @@ import org.apache.juneau.rest.converters.*;
 		"This is a sample server Petstore server based on the Petstore sample at Swagger.io.",
 		"You can find out more about Swagger at http://swagger.io.",
 	},
-	htmldoc=@HtmlDoc(
-		widgets={
-			ContentTypeMenuItem.class,
-			ThemeMenuItem.class,
-		},
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
-			"init: servlet:/init",
-			"$W{ContentTypeMenuItem}",
-			"$W{ThemeMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/petstore/$R{servletClassSimple}.java"
-		},
-		head={
-			"<link rel='icon' href='$U{servlet:/htdocs/cat.png}'/>"  // Add a cat icon to the page.
-		},
-		header={
-			"<h1>$R{resourceTitle}</h1>",
-			"<h2>$R{methodSummary}</h2>",
-			"$C{PetStore/headerImage}"
-		},
-		aside={
-			"<div style='max-width:400px' class='text'>",
-			"	<p>This page shows a standard nested REST resource.</p>",
-			"	<p>It shows how different properties can be rendered on the same bean in different views.</p>",
-			"	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>",
-			"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
-			"</div>"
-		},
-		stylesheet="servlet:/htdocs/themes/dark.css"  // Use dark theme by default.
-	),
 	properties= {
 		// Resolve recursive references when showing schema info in the swagger.
 		@Property(name=SWAGGERUI_resolveRefsMaxDepth, value="99")
@@ -135,6 +106,37 @@ import org.apache.juneau.rest.converters.*;
 		PhotosResource.class
 	}
 )
+@HtmlDocConfig(
+	widgets={
+		ContentTypeMenuItem.class,
+		ThemeMenuItem.class,
+	},
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS",
+		"init: servlet:/init",
+		"$W{ContentTypeMenuItem}",
+		"$W{ThemeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/petstore/$R{servletClassSimple}.java"
+	},
+	head={
+		"<link rel='icon' href='$U{servlet:/htdocs/cat.png}'/>"  // Add a cat icon to the page.
+	},
+	header={
+		"<h1>$R{resourceTitle}</h1>",
+		"<h2>$R{methodSummary}</h2>",
+		"$C{PetStore/headerImage}"
+	},
+	aside={
+		"<div style='max-width:400px' class='text'>",
+		"	<p>This page shows a standard nested REST resource.</p>",
+		"	<p>It shows how different properties can be rendered on the same bean in different views.</p>",
+		"	<p>It also shows examples of HtmlRender classes and @BeanProperty(format) annotations.</p>",
+		"	<p>It also shows how the Queryable converter and query widget can be used to create searchable interfaces.</p>",
+		"</div>"
+	},
+	stylesheet="servlet:/htdocs/themes/dark.css"  // Use dark theme by default.
+)
 public class PetStoreResource extends BasicRestJena implements PetStore {
 	private static final long serialVersionUID = 1L;
 
@@ -148,18 +150,18 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 	@RestMethod(
 		name=GET,
 		path="/",
-		summary="Navigation page",
-		htmldoc=@HtmlDoc(
-			style={
-				"INHERIT",  // Flag for inheriting resource-level CSS.
-				"body { ",
-					"background-image: url('petstore/htdocs/background.jpg'); ",
-					"background-color: black; ",
-					"background-size: cover; ",
-					"background-attachment: fixed; ",
-				"}"
-			}
-		)
+		summary="Navigation page"
+	)
+	@HtmlDocConfig(
+		style={
+			"INHERIT",  // Flag for inheriting resource-level CSS.
+			"body { ",
+				"background-image: url('petstore/htdocs/background.jpg'); ",
+				"background-color: black; ",
+				"background-size: cover; ",
+				"background-attachment: fixed; ",
+			"}"
+		}
 	)
 	public ResourceDescriptions getTopPage() {
 		return new ResourceDescriptions()
@@ -228,19 +230,21 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 				Queryable.SWAGGER_PARAMS
 			}
 		),
-		bpx="Pet: tags,photo",
-		htmldoc=@HtmlDoc(
-			widgets={
-				QueryMenuItem.class,
-				AddPetMenuItem.class
-			},
-			navlinks={
-				"INHERIT",                // Inherit links from class.
-				"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
-				"[3]:$W{AddPetMenuItem}"  // Insert ADD link in position 3.
-			}
-		),
 		converters={Queryable.class}
+	)
+	@HtmlDocConfig(
+		widgets={
+			QueryMenuItem.class,
+			AddPetMenuItem.class
+		},
+		navlinks={
+			"INHERIT",                // Inherit links from class.
+			"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
+			"[3]:$W{AddPetMenuItem}"  // Insert ADD link in position 3.
+		}
+	)
+	@BeanConfig(
+		bpx="Pet: tags,photo"
 	)
 	public Collection<Pet> getPets() throws NotAcceptable {
 		return store.getPets();
@@ -449,18 +453,18 @@ public class PetStoreResource extends BasicRestJena implements PetStore {
 		summary="Petstore orders",
 		swagger=@MethodSwagger(
 			tags="store"
-		),
-		htmldoc=@HtmlDoc(
-			widgets={
-				QueryMenuItem.class,
-				AddOrderMenuItem.class
-			},
-			navlinks={
-				"INHERIT",                // Inherit links from class.
-				"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
-				"[3]:$W{AddOrderMenuItem}"  // Insert ADD link in position 3.
-			}
 		)
+	)
+	@HtmlDocConfig(
+		widgets={
+			QueryMenuItem.class,
+			AddOrderMenuItem.class
+		},
+		navlinks={
+			"INHERIT",                // Inherit links from class.
+			"[2]:$W{QueryMenuItem}",  // Insert QUERY link in position 2.
+			"[3]:$W{AddOrderMenuItem}"  // Insert ADD link in position 3.
+		}
 	)
 	public Collection<Order> getOrders() throws NotAcceptable {
 		return store.getOrders();

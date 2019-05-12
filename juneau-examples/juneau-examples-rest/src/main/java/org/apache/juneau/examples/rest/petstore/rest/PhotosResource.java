@@ -54,24 +54,6 @@ import org.apache.juneau.serializer.*;
 	messages="nls/PhotosResource",
 	title="Photo REST service",
 	description="Sample resource that allows images to be uploaded and retrieved.",
-	htmldoc=@HtmlDoc(
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
-			"$W{UploadPhotoMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
-		},
-		aside={
-			"<div style='max-width:400px;min-width:200px' class='text'>",
-			"	<p>Shows an example of using custom serializers and parsers to create REST interfaces over binary resources.</p>",
-			"	<p>In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a <code>TreeMap</code>).</p>",
-			"</div>"
-		},
-		widgets={
-			UploadPhotoMenuItem.class
-		},
-		stylesheet="servlet:/htdocs/themes/dark.css"
-	),
 	swagger=@ResourceSwagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
 		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
@@ -79,6 +61,24 @@ import org.apache.juneau.serializer.*;
 		termsOfService="You are on your own.",
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
+)
+@HtmlDocConfig(
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS",
+		"$W{UploadPhotoMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+	},
+	aside={
+		"<div style='max-width:400px;min-width:200px' class='text'>",
+		"	<p>Shows an example of using custom serializers and parsers to create REST interfaces over binary resources.</p>",
+		"	<p>In this case, our resources are marshalled jpeg and png binary streams and are stored in an in-memory 'database' (also known as a <code>TreeMap</code>).</p>",
+		"</div>"
+	},
+	widgets={
+		UploadPhotoMenuItem.class
+	},
+	stylesheet="servlet:/htdocs/themes/dark.css"
 )
 @HtmlConfig(
 	// Make the anchor text on URLs be just the path relative to the servlet.

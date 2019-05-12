@@ -12,6 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
+import java.util.*;
+
+import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.widget.*;
@@ -36,7 +39,10 @@ import org.apache.juneau.svl.*;
  * <ul>
  * 	<li class='link'>{@doc juneau-rest-server.SvlVariables}
  * </ul>
+ *
+ * @deprecated Use {@link HtmlWidgetVar}
  */
+@Deprecated
 public class WidgetVar extends SimpleVar {
 
 	private static final String SESSION_req = "req";
@@ -59,7 +65,6 @@ public class WidgetVar extends SimpleVar {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		RestResponse res = session.getSessionObject(RestResponse.class, SESSION_res, true);
 
-		// >>> Deprecated - Remove in 9.0 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		boolean isScript = false, isStyle = false;
 
 		if (key.endsWith(".script")) {
@@ -71,17 +76,28 @@ public class WidgetVar extends SimpleVar {
 			key = key.substring(0, key.length() - 6);
 			isStyle = true;
 		}
-		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		
-		Widget w = req.getWidgets().get(key);
+
+		HtmlWidget w = req.getWidgets().get(key);
+
+		if (w == null) {
+			Map<String,Widget> widgetMap = session.getSessionObject(Map.class, "htmlWidgets", false);
+			if (widgetMap != null)
+				w = widgetMap.get(key);
+		}
+
 		if (w == null)
 			return "unknown-widget-"+key;
 
-		if (isScript)
-			return w.getScript(req, res);
-		if (isStyle)
-			return w.getStyle(req, res);
-		return w.getHtml(req, res);
+		if (w instanceof Widget) {
+			Widget w2 = (Widget)w;
+			if (isScript)
+				return w2.getScript(req, res);
+			if (isStyle)
+				return w2.getStyle(req, res);
+			return w2.getHtml(req, res);
+		}
+
+		return w.getHtml(session);
 	}
 
 	@Override /* Var */

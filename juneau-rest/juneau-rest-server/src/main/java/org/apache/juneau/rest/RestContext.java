@@ -3103,6 +3103,7 @@ public final class RestContext extends BeanContext {
 	 * @param builder The servlet configuration object.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
+	@SuppressWarnings("deprecation")
 	RestContext(RestContextBuilder builder) throws Exception {
 		super(builder.getPropertyStore());
 

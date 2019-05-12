@@ -24,6 +24,7 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Query;
@@ -45,31 +46,6 @@ import org.apache.juneau.rest.widget.*;
 	path="/sql",
 	title="SQL query service",
 	description="Executes queries against the local derby '$C{SqlQueryResource/connectionUrl}' database",
-	htmldoc=@HtmlDoc(
-		widgets={
-			ThemeMenuItem.class
-		},
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
-			"$W{ThemeMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
-		},
-		aside={
-			"<div style='min-width:200px' class='text'>",
-			"	<p>An example of a REST interface over a relational database that serializes ResultSet objects.</p>",
-			"	<p>Specify one or more queries delimited by semicolons.</p>",
-			"	<h5>Examples:</h5>",
-			"	<ul>",
-			"		<li><a class='link' href='?sql=select+*+from+sys.systables'>Tables</a>",
-			"		<li><a class='link' href='?sql=select+*+from+PetstorePet'>Pets</a>",
-			"		<li><a class='link' href='?sql=select+*+from+PetstoreOrder'>Orders</a>",
-			"		<li><a class='link' href='?sql=select+*+from+PetstoreUser'>Users</a>",
-			"	</ul>",
-			"</div>"
-		},
-		stylesheet="servlet:/htdocs/themes/dark.css"
-	),
 	swagger=@ResourceSwagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
 		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
@@ -77,6 +53,31 @@ import org.apache.juneau.rest.widget.*;
 		termsOfService="You are on your own.",
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
+)
+@HtmlDocConfig(
+	widgets={
+		ThemeMenuItem.class
+	},
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS",
+		"$W{ThemeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+	},
+	aside={
+		"<div style='min-width:200px' class='text'>",
+		"	<p>An example of a REST interface over a relational database that serializes ResultSet objects.</p>",
+		"	<p>Specify one or more queries delimited by semicolons.</p>",
+		"	<h5>Examples:</h5>",
+		"	<ul>",
+		"		<li><a class='link' href='?sql=select+*+from+sys.systables'>Tables</a>",
+		"		<li><a class='link' href='?sql=select+*+from+PetstorePet'>Pets</a>",
+		"		<li><a class='link' href='?sql=select+*+from+PetstoreOrder'>Orders</a>",
+		"		<li><a class='link' href='?sql=select+*+from+PetstoreUser'>Users</a>",
+		"	</ul>",
+		"</div>"
+	},
+	stylesheet="servlet:/htdocs/themes/dark.css"
 )
 public class SqlQueryResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;

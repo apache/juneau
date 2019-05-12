@@ -20,6 +20,7 @@ import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.jena.annotation.*;
@@ -40,19 +41,6 @@ import org.apache.juneau.serializer.annotation.*;
 	path="/atom",
 	title="Sample ATOM feed resource",
 	description="Sample resource that shows how to render ATOM feeds",
-	htmldoc=@HtmlDoc(
-		widgets={
-			ContentTypeMenuItem.class,
-			ThemeMenuItem.class
-		},
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
-			"$W{ContentTypeMenuItem}",
-			"$W{ThemeMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
-		}
-	),
 	encoders=GzipEncoder.class,
 	swagger=@ResourceSwagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
@@ -62,11 +50,24 @@ import org.apache.juneau.serializer.annotation.*;
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
 )
+@HtmlDocConfig(
+	widgets={
+		ContentTypeMenuItem.class,
+		ThemeMenuItem.class
+	},
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS",
+		"$W{ContentTypeMenuItem}",
+		"$W{ThemeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
+	}
+)
 @SerializerConfig(
 	quoteChar="'"
 )
 @RdfConfig(
-	rdfxml_tab="5", 
+	rdfxml_tab="5",
 	addRootProperty="true"
 )
 @BeanConfig(

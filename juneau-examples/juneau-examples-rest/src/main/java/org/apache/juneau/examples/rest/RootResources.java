@@ -14,6 +14,7 @@ package org.apache.juneau.examples.rest;
 
 import org.apache.juneau.examples.rest.dto.*;
 import org.apache.juneau.examples.rest.petstore.rest.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -32,28 +33,6 @@ import org.apache.juneau.serializer.annotation.*;
 	path="/*",
 	title="Root resources",
 	description="Example of a router resource page.",
-	htmldoc=@HtmlDoc(
-		widgets={
-			ContentTypeMenuItem.class,
-			ThemeMenuItem.class
-		},
-		navlinks={
-			"options: ?method=OPTIONS",
-			"$W{ContentTypeMenuItem}",
-			"$W{ThemeMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
-		},
-		aside={
-			"<div style='max-width:400px' class='text'>",
-			"	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>",
-			"	<p>Resources can be nested arbitrarily deep through router pages.</p>",
-			"	<p>Note the <span class='link'>options</span> link provided that lets you see the generated swagger doc for this page.</p>",
-			"	<p>Also note the <span class='link'>sources</span> link on these pages to view the source code for the page.</p>",
-			"	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>",
-			"	<p>Other features (such as this aside) are added through annotations.</p>",
-			"</div>"
-		}
-	),
 	children={
 		HelloWorldResource.class,
 		PetStoreResource.class,
@@ -61,6 +40,28 @@ import org.apache.juneau.serializer.annotation.*;
 		ConfigResource.class,
 		LogsResource.class,
 		ShutdownResource.class
+	}
+)
+@HtmlDocConfig(
+	widgets={
+		ContentTypeMenuItem.class,
+		ThemeMenuItem.class
+	},
+	navlinks={
+		"options: ?method=OPTIONS",
+		"$W{ContentTypeMenuItem}",
+		"$W{ThemeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+	},
+	aside={
+		"<div style='max-width:400px' class='text'>",
+		"	<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>",
+		"	<p>Resources can be nested arbitrarily deep through router pages.</p>",
+		"	<p>Note the <span class='link'>options</span> link provided that lets you see the generated swagger doc for this page.</p>",
+		"	<p>Also note the <span class='link'>sources</span> link on these pages to view the source code for the page.</p>",
+		"	<p>All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.</p>",
+		"	<p>Other features (such as this aside) are added through annotations.</p>",
+		"</div>"
 	}
 )
 @SerializerConfig(

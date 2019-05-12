@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.dto;
 
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.widget.*;
@@ -29,28 +30,28 @@ import org.apache.juneau.serializer.annotation.*;
 	path="/dto",
 	title="DTO examples",
 	description="Example serialization of predefined Data Transfer Objects.",
-	htmldoc=@HtmlDoc(
-		widgets={
-			ContentTypeMenuItem.class,
-			ThemeMenuItem.class
-		},
-		navlinks={
-			"up: request:/..",
-			"options: ?method=OPTIONS",
-			"$W{ContentTypeMenuItem}",
-			"$W{ThemeMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
-		},
-		aside={
-			"<div style='max-width:400px' class='text'>",
-			"	<p>This is an example of a nested 'router' page that serves as a jumping-off point to other child resources.</p>",
-			"</div>"
-		}
-	),
 	children={
 		AtomFeedResource.class,
 		JsonSchemaResource.class,
 		PredefinedLabelsResource.class,
+	}
+)
+@HtmlDocConfig(
+	widgets={
+		ContentTypeMenuItem.class,
+		ThemeMenuItem.class
+	},
+	navlinks={
+		"up: request:/..",
+		"options: ?method=OPTIONS",
+		"$W{ContentTypeMenuItem}",
+		"$W{ThemeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
+	},
+	aside={
+		"<div style='max-width:400px' class='text'>",
+		"	<p>This is an example of a nested 'router' page that serves as a jumping-off point to other child resources.</p>",
+		"</div>"
 	}
 )
 @SerializerConfig(

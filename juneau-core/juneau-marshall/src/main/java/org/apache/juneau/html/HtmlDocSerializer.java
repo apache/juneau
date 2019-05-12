@@ -856,6 +856,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				.append("nowrap", nowrap)
 				.append("template", template)
 				.append("noResultsMessage", noResultsMessage)
+				.append("widgets", widgets.keySet())
 			);
 	}
 }

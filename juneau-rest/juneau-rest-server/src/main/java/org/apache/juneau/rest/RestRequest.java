@@ -1495,7 +1495,10 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 * @return
 	 * 	The widgets used for resolving <js>"$W{...}"</js> string variables.
 	 * 	Never <jk>null</jk>.
+	 *
+	 * @deprecated
 	 */
+	@Deprecated
 	public Map<String,Widget> getWidgets() {
 		return restJavaMethod == null ? Collections.<String,Widget>emptyMap() : restJavaMethod.widgets;
 	}

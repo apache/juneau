@@ -15,6 +15,7 @@ package org.apache.juneau.examples.rest.dto;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.jsonschema.annotation.ExternalDocs;
 import org.apache.juneau.dto.jsonschema.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.rest.*;
@@ -34,24 +35,6 @@ import org.apache.juneau.rest.widget.*;
 	messages="nls/JsonSchemaResource",
 	title="Sample JSON-Schema document",
 	description="Sample resource that shows how to generate JSON-Schema documents",
-	htmldoc=@HtmlDoc(
-		widgets={
-			ContentTypeMenuItem.class,
-			ThemeMenuItem.class
-		},
-		navlinks={
-			"up: request:/..",
-			"options: servlet:/?method=OPTIONS",
-			"$W{ContentTypeMenuItem}",
-			"$W{ThemeMenuItem}",
-			"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
-		},
-		aside={
-			"<div style='min-width:200px' class='text'>",
-			"	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>",
-			"</div>"
-		}
-	),
 	swagger=@ResourceSwagger(
 		contact=@Contact(name="Juneau Developer",email="dev@juneau.apache.org"),
 		license=@License(name="Apache 2.0",url="http://www.apache.org/licenses/LICENSE-2.0.html"),
@@ -59,6 +42,24 @@ import org.apache.juneau.rest.widget.*;
 		termsOfService="You are on your own.",
 		externalDocs=@ExternalDocs(description="Apache Juneau",url="http://juneau.apache.org")
 	)
+)
+@HtmlDocConfig(
+	widgets={
+		ContentTypeMenuItem.class,
+		ThemeMenuItem.class
+	},
+	navlinks={
+		"up: request:/..",
+		"options: servlet:/?method=OPTIONS",
+		"$W{ContentTypeMenuItem}",
+		"$W{ThemeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
+	},
+	aside={
+		"<div style='min-width:200px' class='text'>",
+		"	<p>Shows how to produce JSON-Schema documents in a variety of languages using the JSON-Schema DTOs.</p>",
+		"</div>"
+	}
 )
 @BeanConfig(
 	examples="Schema: $F{JsonSchemaResource_example.json}"
