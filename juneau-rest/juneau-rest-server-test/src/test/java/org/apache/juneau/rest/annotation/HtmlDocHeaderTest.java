@@ -19,9 +19,11 @@ import org.junit.runners.*;
 
 /**
  * Tests related to @HtmlDoc(header) annotation.
+ *
+ * TODO - Remove in 9.0.  Replaced by HtmlDocConfigHeaderTest.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"javadoc","serial","deprecation"})
 public class HtmlDocHeaderTest {
 
 	//=================================================================================================================

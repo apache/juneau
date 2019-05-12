@@ -19,9 +19,11 @@ import org.junit.runners.*;
 
 /**
  * Tests related to @HtmlDoc(aside) annotation.
+ *
+ * TODO - Remove in 9.0.  Replaced by HtmlDocConfigAsideTest.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","serial"})
+@SuppressWarnings({"javadoc","serial","deprecation"})
 public class HtmlDocAsideTest {
 
 	//=================================================================================================================

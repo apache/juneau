@@ -12,43 +12,47 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock2.*;
 import org.junit.*;
 import org.junit.runners.*;
 
 /**
- * Tests related to @HtmlDoc(script) annotation.
- *
- * TODO - Remove in 9.0.  Replaced by HtmlDocConfigScriptTest.
+ * Tests related to @HtmlDoc(footer) annotation.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@SuppressWarnings({"javadoc","serial","deprecation"})
-public class HtmlDocScriptTest {
+@SuppressWarnings({"javadoc","serial"})
+public class HtmlDocConfigFooterTest {
 
 	//=================================================================================================================
 	// Basic tests
 	//=================================================================================================================
 
-	@RestResource(htmldoc=@HtmlDoc(script={"a01a","a01b"}))
+	@RestResource()
+	@HtmlDocConfig(footer={"a01a","a01b"})
 	public static class A extends BasicRestServlet {
 		@RestMethod(path="/a01")
 		public Object a01() {
 			return "OK";
 		}
-		@RestMethod(path="/a02", htmldoc=@HtmlDoc(script={"a02a","a02b"}))
+		@RestMethod(path="/a02")
+		@HtmlDocConfig(footer={"a02a","a02b"})
 		public Object a02() {
 			return "OK";
 		}
-		@RestMethod(path="/a03", htmldoc=@HtmlDoc(script={"INHERIT","a03a","a03b"}))
+		@RestMethod(path="/a03")
+		@HtmlDocConfig(footer={"INHERIT","a03a","a03b"})
 		public Object a03() {
 			return "OK";
 		}
-		@RestMethod(path="/a04", htmldoc=@HtmlDoc(script={"a04a","INHERIT","a04b"}))
+		@RestMethod(path="/a04")
+		@HtmlDocConfig(footer={"a04a","INHERIT","a04b"})
 		public Object a04() {
 			return "OK";
 		}
-		@RestMethod(path="/a05", htmldoc=@HtmlDoc(script={"a05a","a05b","INHERIT"}))
+		@RestMethod(path="/a05")
+		@HtmlDocConfig(footer={"a05a","a05b","INHERIT"})
 		public Object a05() {
 			return "OK";
 		}
@@ -57,48 +61,53 @@ public class HtmlDocScriptTest {
 
 	@Test
 	public void a01() throws Exception {
-		a.get("/a01").accept("text/html").execute().assertBodyContains("<script>a01a\n a01b\n</script>");
+		a.get("/a01").accept("text/html").execute().assertBodyContains("<footer>a01a a01b</footer>");
 	}
 	@Test
 	public void a02() throws Exception {
-		a.get("/a02").accept("text/html").execute().assertBodyContains("<script>a02a\n a02b\n</script>");
+		a.get("/a02").accept("text/html").execute().assertBodyContains("<footer>a02a a02b</footer>");
 	}
 	@Test
 	public void a03() throws Exception {
-		a.get("/a03").accept("text/html").execute().assertBodyContains("<script>a01a\n a01b\n a03a\n a03b\n</script>");
+		a.get("/a03").accept("text/html").execute().assertBodyContains("<footer>a01a a01b a03a a03b</footer>");
 	}
 	@Test
 	public void a04() throws Exception {
-		a.get("/a04").accept("text/html").execute().assertBodyContains("<script>a04a\n a01a\n a01b\n a04b\n</script>");
+		a.get("/a04").accept("text/html").execute().assertBodyContains("<footer>a04a a01a a01b a04b</footer>");
 	}
 	@Test
 	public void a05() throws Exception {
-		a.get("/a05").accept("text/html").execute().assertBodyContains("<script>a05a\n a05b\n a01a\n a01b\n</script>");
+		a.get("/a05").accept("text/html").execute().assertBodyContains("<footer>a05a a05b a01a a01b</footer>");
 	}
 
 	//=================================================================================================================
 	// Inheritance
 	//=================================================================================================================
 
-	@RestResource(htmldoc=@HtmlDoc(script={"b01a","b01b"}))
+	@RestResource()
+	@HtmlDocConfig(footer={"b01a","INHERIT","b01b"})
 	public static class B extends A {
 		@RestMethod(path="/b01")
 		public Object b01() {
 			return "OK";
 		}
-		@RestMethod(path="/b02", htmldoc=@HtmlDoc(script={"b02a","b02b"}))
+		@RestMethod(path="/b02")
+		@HtmlDocConfig(footer={"b02a","b02b"})
 		public Object b02() {
 			return "OK";
 		}
-		@RestMethod(path="/b03", htmldoc=@HtmlDoc(script={"INHERIT","b03a","b03b"}))
+		@RestMethod(path="/b03")
+		@HtmlDocConfig(footer={"INHERIT","b03a","b03b"})
 		public Object b03() {
 			return "OK";
 		}
-		@RestMethod(path="/b04", htmldoc=@HtmlDoc(script={"b04a","INHERIT","b04b"}))
+		@RestMethod(path="/b04")
+		@HtmlDocConfig(footer={"b04a","INHERIT","b04b"})
 		public Object b04() {
 			return "OK";
 		}
-		@RestMethod(path="/b05", htmldoc=@HtmlDoc(script={"b05a","b05b","INHERIT"}))
+		@RestMethod(path="/b05")
+		@HtmlDocConfig(footer={"b05a","b05b","INHERIT"})
 		public Object b05() {
 			return "OK";
 		}
@@ -107,22 +116,22 @@ public class HtmlDocScriptTest {
 
 	@Test
 	public void b01() throws Exception {
-		b.get("/b01").accept("text/html").execute().assertBodyContains("<script>b01a\n b01b\n</script>");
+		b.get("/b01").accept("text/html").execute().assertBodyContains("<footer>b01a a01a a01b b01b</footer>");
 	}
 	@Test
 	public void b02() throws Exception {
-		b.get("/b02").accept("text/html").execute().assertBodyContains("<script>b02a\n b02b\n</script>");
+		b.get("/b02").accept("text/html").execute().assertBodyContains("<footer>b02a b02b</footer>");
 	}
 	@Test
 	public void b03() throws Exception {
-		b.get("/b03").accept("text/html").execute().assertBodyContains("<script>b01a\n b01b\n b03a\n b03b\n</script>");
+		b.get("/b03").accept("text/html").execute().assertBodyContains("<footer>b01a a01a a01b b01b b03a b03b</footer>");
 	}
 	@Test
 	public void b04() throws Exception {
-		b.get("/b04").accept("text/html").execute().assertBodyContains("<script>b04a\n b01a\n b01b\n b04b\n</script>");
+		b.get("/b04").accept("text/html").execute().assertBodyContains("<footer>b04a b01a a01a a01b b01b b04b</footer>");
 	}
 	@Test
 	public void b05() throws Exception {
-		b.get("/b05").accept("text/html").execute().assertBodyContains("<script>b05a\n b05b\n b01a\n b01b\n</script>");
+		b.get("/b05").accept("text/html").execute().assertBodyContains("<footer>b05a b05b b01a a01a a01b b01b</footer>");
 	}
 }
