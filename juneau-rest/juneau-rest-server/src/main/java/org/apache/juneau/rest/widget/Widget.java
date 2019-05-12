@@ -16,7 +16,9 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.html.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.
@@ -36,9 +38,12 @@ import org.apache.juneau.utils.*;
  * 	<li class='link'>{@doc juneau-rest-server.HtmlDocAnnotation.Widgets}
  * </ul>
  */
-public abstract class Widget {
+public abstract class Widget implements HtmlWidget {
 
 	private final ClasspathResourceManager rm = new ClasspathResourceManager(getClass(), ClasspathResourceFinderRecursive.INSTANCE, false);
+
+	private static final String SESSION_req = "req";
+	private static final String SESSION_res = "res";
 
 	/**
 	 * The widget key.
@@ -54,8 +59,32 @@ public abstract class Widget {
 	 *
 	 * @return The widget key.
 	 */
+	@Override
 	public String getName() {
 		return getClass().getSimpleName();
+	}
+
+	private RestRequest req(VarResolverSession session) {
+		return session.getSessionObject(RestRequest.class, SESSION_req, true);
+	}
+
+	private RestResponse res(VarResolverSession session) {
+		return session.getSessionObject(RestResponse.class, SESSION_res, true);
+	}
+
+	@Override /* HtmlWidget */
+	public String getHtml(VarResolverSession session) throws Exception {
+		return getHtml(req(session), res(session));
+	}
+
+	@Override /* HtmlWidget */
+	public String getScript(VarResolverSession session) throws Exception {
+		return getScript(req(session), res(session));
+	}
+
+	@Override /* HtmlWidget */
+	public String getStyle(VarResolverSession session) throws Exception {
+		return getStyle(req(session), res(session));
 	}
 
 	/**

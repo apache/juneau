@@ -71,11 +71,7 @@ import org.apache.juneau.svl.*;
  */
 public class RestInfoVar extends MultipartResolvingVar {
 
-	/**
-	 * The name of the session or context object that identifies the {@link RestRequest} object.
-	 */
-	public static final String SESSION_req = "req";
-
+	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "RI";
@@ -97,7 +93,7 @@ public class RestInfoVar extends MultipartResolvingVar {
 		return false;
 	}
 
-	@Override /* Parameter */
+	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) throws RestException, InternalServerError {
 		try {
 			RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
@@ -150,5 +146,10 @@ public class RestInfoVar extends MultipartResolvingVar {
 		} catch (Exception e) {
 			throw new InternalServerError(e);
 		}
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.hasSessionObject(SESSION_req);
 	}
 }

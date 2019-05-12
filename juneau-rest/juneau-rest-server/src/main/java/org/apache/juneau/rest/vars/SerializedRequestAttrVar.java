@@ -41,6 +41,8 @@ import org.apache.juneau.svl.*;
  */
 public class SerializedRequestAttrVar extends StreamedVar {
 
+	private static final String SESSION_req = "req";
+
 	/** The name of this variable. */
 	public static final String NAME = "SA";
 
@@ -51,13 +53,13 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		super(NAME);
 	}
 
-	@Override /* Parameter */
+	@Override /* Var */
 	public void resolveTo(VarResolverSession session, Writer w, String key) throws Exception {
 		int i = key.indexOf(',');
 		if (i == -1)
 			throw new RuntimeException("Invalid format for $SA var.  Must be of the format $SA{contentType,key[,defaultValue]}");
 		String[] s2 = split(key);
-		RestRequest req = session.getSessionObject(RestRequest.class, RequestVar.SESSION_req, true);
+		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		if (req != null) {
 			Object o = req.getAttribute(key);
 			if (o == null)
@@ -76,5 +78,10 @@ public class SerializedRequestAttrVar extends StreamedVar {
 	@Override  /* Var */
 	protected boolean allowRecurse() {
 		return false;
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.hasSessionObject(SESSION_req);
 	}
 }

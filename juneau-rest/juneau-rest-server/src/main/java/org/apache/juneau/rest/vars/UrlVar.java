@@ -55,9 +55,14 @@ public class UrlVar extends SimpleVar {
 		super(NAME);
 	}
 
-	@Override /* Parameter */
+	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		return req.getUriResolver().resolve(key);
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.hasSessionObject(SESSION_req);
 	}
 }

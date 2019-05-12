@@ -28,7 +28,6 @@ import org.apache.juneau.http.StreamResource;
 import org.apache.juneau.rest.RestContext.*;
 import org.apache.juneau.rest.exception.*;
 import org.apache.juneau.rest.util.RestUtils;
-import org.apache.juneau.rest.vars.*;
 
 /**
  * Default implementation of {@link RestCallHandler}.
@@ -141,6 +140,7 @@ public class BasicRestCallHandler implements RestCallHandler {
 
 			req = createRequest(r1);
 			RestResponse res = createResponse(req, r2);
+			req.setResponse(res);
 			context.setRequest(req);
 			context.setResponse(res);
 			String method = req.getMethod();
@@ -334,8 +334,8 @@ public class BasicRestCallHandler implements RestCallHandler {
 	@Override /* RestCallHandler */
 	public Map<String,Object> getSessionObjects(RestRequest req, RestResponse res) {
 		Map<String,Object> m = new HashMap<>();
-		m.put(RequestVar.SESSION_req, req);
-		m.put(RequestVar.SESSION_res, res);
+		m.put("req", req);
+		m.put("res", res);
 		return m;
 	}
 }

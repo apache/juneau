@@ -70,6 +70,6 @@ public class HtmlWidgetVar extends SimpleVar {
 
 	@Override
 	public boolean canResolve(VarResolverSession session) {
-		return session.getSessionObject(Object.class, SESSION_htmlWidgets, false) != null;
+		return session.hasSessionObject(SESSION_htmlWidgets);
 	}
 }

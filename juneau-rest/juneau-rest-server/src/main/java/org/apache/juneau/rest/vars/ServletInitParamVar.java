@@ -39,6 +39,8 @@ import org.apache.juneau.svl.*;
  */
 public class ServletInitParamVar extends DefaultingVar {
 
+	private static final String SESSION_req = "req";
+
 	/** The name of this variable. */
 	public static final String NAME = "I";
 
@@ -49,8 +51,13 @@ public class ServletInitParamVar extends DefaultingVar {
 		super(NAME);
 	}
 
-	@Override /* Parameter */
+	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getSessionObject(RestRequest.class, RequestVar.SESSION_req, true).getContext().getServletInitParameter(key);
+		return session.getSessionObject(RestRequest.class, SESSION_req, true).getContext().getServletInitParameter(key);
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.hasSessionObject(SESSION_req);
 	}
 }

@@ -484,8 +484,13 @@ public class TestUtils {
 
 	public static final void assertContains(Object value, String...substrings) {
 		for (String substring : substrings)
-			if (! contains(toString(value), substring))
+			if (! contains(toString(value), substring)) {
+				System.err.println("Text did not contain expected substring: '" + toString(substring) + "'");
+				System.err.println("=== TEXT ===");
+				System.err.println(toString(value));
+				System.err.println("============");
 				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));
+			}
 	}
 
 	public static final void assertContains(Exception e, String...substrings) {

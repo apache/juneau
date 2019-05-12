@@ -39,9 +39,6 @@ import org.apache.juneau.svl.*;
  */
 public class WidgetVar extends SimpleVar {
 
-	/**
-	 * The name of the session or context object that identifies the {@link RestRequest} object.
-	 */
 	private static final String SESSION_req = "req";
 	private static final String SESSION_res = "res";
 
@@ -57,12 +54,13 @@ public class WidgetVar extends SimpleVar {
 		super(NAME);
 	}
 
-	@Override /* Parameter */
+	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		RestResponse res = session.getSessionObject(RestResponse.class, SESSION_res, true);
 		boolean isScript = false, isStyle = false;
 
+		// TODO - The following lines are deprecated.
 		if (key.endsWith(".script")) {
 			key = key.substring(0, key.length() - 7);
 			isScript = true;
@@ -82,5 +80,10 @@ public class WidgetVar extends SimpleVar {
 		if (isStyle)
 			return w.getStyle(req, res);
 		return w.getHtml(req, res);
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.hasSessionObject(SESSION_req) && session.hasSessionObject(SESSION_res);
 	}
 }

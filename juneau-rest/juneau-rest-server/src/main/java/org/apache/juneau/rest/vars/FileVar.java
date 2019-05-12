@@ -82,7 +82,7 @@ public class FileVar extends DefaultingVar {
 		super(NAME);
 	}
 
-	@Override /* Parameter */
+	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, false);
@@ -96,5 +96,10 @@ public class FileVar extends DefaultingVar {
 			return crm.getString(key);
 
 		return null;
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.hasSessionObject(SESSION_req) || session.hasSessionObject(SESSION_crm);
 	}
 }

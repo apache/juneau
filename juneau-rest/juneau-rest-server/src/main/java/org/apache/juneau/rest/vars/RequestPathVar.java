@@ -48,11 +48,7 @@ import org.apache.juneau.svl.*;
  */
 public class RequestPathVar extends MultipartResolvingVar {
 
-	/**
-	 * The name of the session or context object that identifies the {@link RestRequest} object.
-	 */
-	public static final String SESSION_req = "req";
-
+	private static final String SESSION_req = "req";
 
 	/** The name of this variable. */
 	public static final String NAME = "RP";
@@ -74,11 +70,16 @@ public class RequestPathVar extends MultipartResolvingVar {
 		return false;
 	}
 
-	@Override /* Parameter */
+	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getSessionObject(RestRequest.class, SESSION_req, true);
 		if ("REMAINDER".equals(key))
 			return req.getPathRemainder();
 		return req.getPath(key);
+	}
+
+	@Override /* Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.hasSessionObject(SESSION_req);
 	}
 }

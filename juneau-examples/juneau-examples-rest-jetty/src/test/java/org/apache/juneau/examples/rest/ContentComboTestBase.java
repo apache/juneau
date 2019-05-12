@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.examples.rest.TestUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -98,10 +100,6 @@ public class ContentComboTestBase extends RestTestcase {
 	public void doTest() throws Exception {
 		RestClient rc = getClient(comboInput.mediaType);
 		String s = rc.doGet(comboInput.url).getResponseAsString();
-		for (String s2 : comboInput.expectedResults) {
-			if (! s.contains(s2)) {
-				throw new FormattedRuntimeException("String ''{0}'' not found at URL ''{1}'' for media type ''{2}''", s2, comboInput.url, comboInput.mediaType);
-			}
-		}
+		assertContains(s, comboInput.expectedResults);
 	}
 }

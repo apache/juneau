@@ -365,4 +365,29 @@ public class TestUtils {
 		String s2 = o.toString().replaceAll("\\r?\\n", "|");
 		Assert.assertEquals(s, s2);
 	}
+
+	/**
+	 * Tries to turn the serialized output to a String.
+	 * If it's a byte[], convert it to a UTF-8 encoded String.
+	 */
+	public static final String toString(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof String)
+			return (String)o;
+		if (o instanceof byte[])
+			return new String((byte[])o, UTF8);
+		return o.toString();
+	}
+
+	public static final void assertContains(Object value, String...substrings) {
+		for (String substring : substrings)
+			if (! contains(toString(value), substring)) {
+				System.err.println("Text did not contain expected substring: '" + toString(substring) + "'");
+				System.err.println("=== TEXT ===");
+				System.err.println(toString(value));
+				System.err.println("============");
+				throw new ComparisonFailure("Text did not contain expected substring.", toString(substring), toString(value));
+			}
+	}
 }

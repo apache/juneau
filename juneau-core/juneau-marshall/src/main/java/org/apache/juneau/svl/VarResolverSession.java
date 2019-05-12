@@ -414,6 +414,16 @@ public class VarResolverSession {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this session has the specified session object.
+	 *
+	 * @param name Session object name.
+	 * @return <jk>true</jk> if this session has the specified session object
+	 */
+	public boolean hasSessionObject(String name) {
+		return getSessionObject(Object.class, name, false) != null;
+	}
+
+	/**
 	 * Returns the {@link Var} with the specified name.
 	 *
 	 * @param name The var name (e.g. <js>"S"</js>).
@@ -422,5 +432,10 @@ public class VarResolverSession {
 	protected Var getVar(String name) {
 		Var v = this.context.getVarMap().get(name);
 		return v != null && v.canResolve(this) ? v : null;
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return "var=" + this.context.getVarMap().keySet() + ", contextObjects=" + this.context.getContextObjects().keySet() + ", sessionObjects=" + this.sessionObjects.keySet();
 	}
 }

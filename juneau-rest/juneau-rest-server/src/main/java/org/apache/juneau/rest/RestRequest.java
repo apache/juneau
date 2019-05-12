@@ -212,6 +212,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 		}
 	}
 
+	RestRequest setResponse(RestResponse res) {
+		this.res = res;
+		return this;
+	}
+
 	/**
 	 * Returns a string of the form <js>"HTTP method-name full-url"</js>
 	 *
@@ -1317,7 +1322,11 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public VarResolverSession getVarResolverSession() {
 		if (varSession == null)
-			varSession = context.getVarResolver().createSession(context.getCallHandler().getSessionObjects(this, context.getResponse()));
+			varSession = context
+				.getVarResolver()
+				.createSession(context.getCallHandler().getSessionObjects(this, context.getResponse()))
+				.sessionObject("req", this)
+				.sessionObject("res", res);
 		return varSession;
 	}
 
