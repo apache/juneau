@@ -46,15 +46,21 @@ public @interface UonConfig {
 	 * Specify <js>"true"</js> if URI encoded characters should be decoded, <js>"false"</js> if they've already been decoded
 	 * before being passed to this parser.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		The default is <js>"false"</js> for {@link UonParser}, <js>"true"</js> for {@link UrlEncodingParser}.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"UonParser.decoding.b"</js>.
 	 * </ul>
-	 *
-	 * <p>
-	 * The default is <js>"false"</js> for {@link UonParser}, <js>"true"</js> for {@link UrlEncodingParser}.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -70,13 +76,20 @@ public @interface UonConfig {
 	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"UonParser.validateEnd.b"</js>.
 	 * </ul>
-	 *
+
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link UonParser#UON_validateEnd}
@@ -99,11 +112,18 @@ public @interface UonConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"UonSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -131,8 +151,21 @@ public @interface UonConfig {
 	 * 	<li><js>"false"</js>
 	 * </ul>
 	 *
-	 * <p>
-	 * The default is <js>"false"</js> for {@link UonSerializer}, <js>"true"</js> for {@link UrlEncodingSerializer}.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		The default is <js>"false"</js> for {@link UonSerializer}, <js>"true"</js> for {@link UrlEncodingSerializer}.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"UonSerializer.encoding.b"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -147,11 +180,18 @@ public @interface UonConfig {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"UON"</js> (default) - Use UON notation for parameters.
-	 * 	<li><js>"PLAINTEXT"</js> - Use plain text for parameters.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"UON"</js> (default) - Use UON notation for parameters.
+	 * 			<li><js>"PLAINTEXT"</js> - Use plain text for parameters.
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"UonSerializer.paramFormat.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

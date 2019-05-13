@@ -202,7 +202,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"UrlEncodingSerializer.paramFormat.s"</js>
+	 * 	<li><b>Name:</b>  <js>"UonSerializer.paramFormat.s"</js>
 	 * 	<li><b>Data type:</b>  <code>String</code> ({@link ParamFormat})
 	 * 	<li><b>Default:</b>  <js>"UON"</js>
 	 * 	<li><b>Session property:</b>  <jk>false</jk>

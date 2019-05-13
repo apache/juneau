@@ -51,11 +51,18 @@ public @interface MsgPackConfig {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"MsgPackSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

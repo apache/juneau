@@ -13,16 +13,16 @@
  ***************************************************************************************************************************/
  -->
 
-@HtmlDoc
+{updated} @HtmlDocConfig
 
 <p>
-	The {@link oajr.annotation.HtmlDoc @HtmlDoc} annotation is used to customize the HTML 
+	The {@link oajr.annotation.HtmlDocConfig @HtmlDocConfig} annotation is used to customize the HTML 
 	view of your serialized POJOs.
 	It's used in the following locations:
 </p>
 <ul>
-	<li class='ja'>{@link oajr.annotation.RestResource#htmldoc() RestResource(htmldoc)}
-	<li class='ja'>{@link oajr.annotation.RestMethod#htmldoc() RestMethod(htmldoc)}
+	<li>{@link oajr.annotation.RestResource @RestResource}-annotated classes. 
+	<li>{@link oajr.annotation.RestMethod @RestMethod}-annotated methods.
 </ul>
 <p>
 	The annotation itself is just a convenience for setting configuration properties set
@@ -38,10 +38,9 @@
 	)
 
 	<jc>// Title defined via @HtmlDoc annotation.</jc>
-	<ja>@RestResource</ja>(
-		htmldoc=<ja>@HtmlDoc</ja>(
-			title=<js>"My Resource Page"</js>
-		)
+	<ja>@RestResource</ja>()
+	<ja>@HtmlDocConfig</ja>(
+		title=<js>"My Resource Page"</js>
 	)
 </p>
 <p>
@@ -86,19 +85,19 @@
 	 * Sample REST resource that prints out a simple "Hello world!" message.
 	 */</jd>
 	<ja>@RestResource</ja>(
-		path=<js>"/helloWorld"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>
-			},
-			aside={
-				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			}
-		)
+		path=<js>"/helloWorld"</js>
+	)
+	<ja>@HtmlDocConfig</ja>(
+		navlinks={
+			<js>"up: request:/.."</js>,
+			<js>"options: servlet:/?method=OPTIONS"</js>
+		},
+		aside={
+			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+			<js>"&lt;/div&gt;"</js>
+		}
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {...}
 </p>
@@ -109,27 +108,22 @@
 	<ja>@RestResource</ja>(
 		path=<js>"/helloWorld"</js>,
 		<jc>// Register a config file.</jc>
-		config=<js>"MyConfig.cfg"</js>,
-		htmldoc=<ja>@HtmlDoc</ja>(
-			navlinks={
-				<js>"up: request:/.."</js>,
-				<js>"options: servlet:/?method=OPTIONS"</js>,
-				<jc>// Add a nav link to view the source code for this class.</jc>
-				<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
-			},
-			aside={
-				<jc>// Localize our messages.</jc>
-				<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
-				<js>"	&lt;p&gt;$L{localizedMessage1}&lt;/p&gt;"</js>,
-				<js>"	&lt;p&gt;$L{localizedMessage2}&lt;/p&gt;"</js>,
-				<js>"&lt;/div&gt;"</js>
-			}
-		)
+		config=<js>"MyConfig.cfg"</js>
+	)
+	<ja>@HtmlDocConfig</ja>(
+		navlinks={
+			<js>"up: request:/.."</js>,
+			<js>"options: servlet:/?method=OPTIONS"</js>,
+			<jc>// Add a nav link to view the source code for this class.</jc>
+			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		},
+		aside={
+			<jc>// Localize our messages.</jc>
+			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+			<js>"	&lt;p&gt;$L{localizedMessage1}&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;$L{localizedMessage2}&lt;/p&gt;"</js>,
+			<js>"&lt;/div&gt;"</js>
+		}
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {...}
 </p>
-<h5 class='section'>See Also:</h5>
-<ul>
-	<li class='ja'>{@link oajr.annotation.HtmlDoc}
-	<li class='jc'>{@link oajr.HtmlDocBuilder}
-</ul>

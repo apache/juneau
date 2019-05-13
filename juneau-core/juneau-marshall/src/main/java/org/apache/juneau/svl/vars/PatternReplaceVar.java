@@ -2,7 +2,7 @@
 // * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 // * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
 // * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
-// * with the License.  You may obtain a copy of the License at                                                              * 
+// * with the License.  You may obtain a copy of the License at                                                              *
 // *                                                                                                                         *
 // *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
 // *                                                                                                                         *
@@ -22,13 +22,13 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is:
  * <ul>
- * 	<li><js>"$PR{stringArg, pattern, replace}"</js>
+ * 	<li><js>"$PR{stringArg,pattern,replace}"</js>
  * </ul>
  *
  * <p>
  * The pattern can be any string optionally containing <js>'*'</js> or <js>'?'</js> representing any or one character
  * respectively.
- * 
+ *
  * The replace can contain matched regex sub classes like \$1, \$2 ..
  *
  * <h5 class='section'>Example:</h5>
@@ -69,7 +69,7 @@ public class PatternReplaceVar extends MultipartVar {
 		String stringArg = args[0];
 		String pattern = args[1];
 		String replace = args[2];
-		
+
 		pattern = pattern.replace("*", ".*").replace("?", ".");
 		return stringArg.replaceAll(pattern, replace);
 	}

@@ -49,12 +49,19 @@ public @interface ParserConfig {
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
 	 * when converting the string into a byte array.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"SPACED_HEX"</js>
-	 * 	<li><js>"HEX"</js> (default)
-	 * 	<li><js>"BASE64"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"SPACED_HEX"</js>
+	 * 			<li><js>"HEX"</js> (default)
+	 * 			<li><js>"BASE64"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"InputStreamParser.binaryFormat.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -75,11 +82,18 @@ public @interface ParserConfig {
 	 * If <js>"true"</js>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * after parsing is complete.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"Parser.autoCloseStreams.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -95,6 +109,18 @@ public @interface ParserConfig {
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
 	 * error location to be printed as part of the exception message.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: integer
+	 * 	<li>
+	 * 		Default: 5
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"Parser.debugOutputLines.i"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -150,11 +176,18 @@ public @interface ParserConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"Parser.strict.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -171,11 +204,18 @@ public @interface ParserConfig {
 	 * If <js>"true"</js>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * the POJO.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"Parser.trimStrings.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -196,7 +236,6 @@ public @interface ParserConfig {
 	 * because it may contain multiple independent POJOs to parse.
 	 * <br>Buffering would cause the parser to read past the current POJO in the stream.
 	 *
-	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -211,13 +250,16 @@ public @interface ParserConfig {
 	 * 			<li class='jc'>{@link XmlParser}, {@link HtmlParser} - These use StAX which doesn't allow for more than one root element anyway.
 	 * 			<li>RDF parsers - These read everything into an internal model before any parsing begins.
 	 * 		</ul>
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"Parser.unbuffered.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -240,8 +282,15 @@ public @interface ParserConfig {
 	 * <p>
 	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
 	 *
-	 * <p>
-	 * <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"ReaderParser.fileCharset.s"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -258,6 +307,16 @@ public @interface ParserConfig {
 	 *
 	 * <p>
 	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"ReaderParser.inputStreamCharset.s"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

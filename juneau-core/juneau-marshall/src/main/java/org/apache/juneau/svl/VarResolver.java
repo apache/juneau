@@ -67,17 +67,18 @@ public class VarResolver {
 	 * 	<li><code>$E{key[,default]}</code> - {@link EnvVariablesVar}
 	 * 	<li><code>$A{key[,default]}</code> - {@link ArgsVar}
 	 * 	<li><code>$MF{key[,default]}</code> - {@link ManifestFileVar}
+	 * 	<li><code>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</code> - {@link SwitchVar}
 	 * 	<li><code>$IF{arg,then[,else]}</code> - {@link IfVar}
-	 * 	<li><code>$SW{arg,pattern1:then1[,pattern2:then2...]}</code> - {@link SwitchVar}
 	 * 	<li><code>$CO{arg[,arg2...]}</code> - {@link CoalesceVar}
 	 * 	<li><code>$PM{arg,pattern}</code> - {@link PatternMatchVar}
+	 * 	<li><code>$PR{stringArg,pattern,replace}</code>- {@link PatternReplaceVar}
+	 * 	<li><code>$PE{arg,pattern,groupIndex}</code> - {@link PatternExtractVar}
 	 * 	<li><code>$UC{arg}</code> - {@link UpperCaseVar}
 	 * 	<li><code>$LC{arg}</code> - {@link LowerCaseVar}
 	 * 	<li><code>$NE{arg}</code> - {@link NotEmptyVar}
+	 * 	<li><code>$LN{arg[,delimiter]}</code> - {@link LenVar}
+	 * 	<li><code>$ST{arg,start[,end]}</code> - {@link SubstringVar}
 	 * </ul>
-	 *
-	 * @see SystemPropertiesVar
-	 * @see EnvVariablesVar
 	 */
 	public static final VarResolver DEFAULT = new VarResolverBuilder().defaultVars().build();
 

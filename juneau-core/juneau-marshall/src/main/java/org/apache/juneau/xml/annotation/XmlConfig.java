@@ -63,11 +63,18 @@ public @interface XmlConfig {
 	 * If <js>"true"</js>, when parsing into a generic {@link ObjectMap}, the map will contain a single entry whose key
 	 * is the root element name.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlParser.preserveRootElement.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -118,11 +125,18 @@ public @interface XmlConfig {
 	 * <p>
 	 * See {@link XMLInputFactory#IS_VALIDATING} for more info.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlParser.validating.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -147,11 +161,18 @@ public @interface XmlConfig {
 	 * When present, this value overrides the {@link Serializer#SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -167,14 +188,20 @@ public @interface XmlConfig {
 	 * <p>
 	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
 	 *
-	 * <p>
-	 * This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		This setting is ignored if {@link XmlSerializer#XML_enableNamespaces} is not enabled.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlSerializer.addNamespaceUrisToRoot.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -208,13 +235,16 @@ public @interface XmlConfig {
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
 	 * 		disabled, and that namespaces be manually defined through the {@link XmlSerializer#XML_namespaces} property.
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlSerializer.autoDetectNamespaces.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -231,6 +261,14 @@ public @interface XmlConfig {
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlSerializer.defaultNamespace.s"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_defaultNamespace}
@@ -245,11 +283,18 @@ public @interface XmlConfig {
 	 * <p>
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 *		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlSerializer.enableNamespaces.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -266,6 +311,14 @@ public @interface XmlConfig {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlSerializer.namespaces.ls"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link XmlSerializer#XML_namespaces}
@@ -280,6 +333,14 @@ public @interface XmlConfig {
 	 * <p>
 	 * Specifies the namespace for the <code>XMLSchema</code> namespace, used by the schema generated by the
 	 * {@link XmlSchemaSerializer} class.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"XmlSerializer.xsNamespace.s"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

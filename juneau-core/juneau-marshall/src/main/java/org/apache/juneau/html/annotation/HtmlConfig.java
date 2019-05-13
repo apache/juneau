@@ -51,11 +51,18 @@ public @interface HtmlConfig {
 	 * When present, this value overrides the {@link #SERIALIZER_addBeanTypes} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerGroup}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlSerializer.addBeanTypes.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -96,11 +103,18 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlSerializer.addKeyValueTableHeaders.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -141,11 +155,18 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js> (default)
-	 * 	<li><js>"false"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js> (default)
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlSerializer.detectLinksInStrings.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -161,8 +182,15 @@ public @interface HtmlConfig {
 	 * <p>
 	 * The parameter name to look for when resolving link labels via {@link #HTML_detectLabelParameters}.
 	 *
-	 * <p>
-	 * The default value is <js>"label"</js>.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Default value: <js>"label"</js>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlSerializer.labelParameter.s"</js>.
+	 * </ul>
 	 *
 	 * <h5 class=''>See Also:</h5>
 	 * <ul>
@@ -205,11 +233,18 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js> (default)
-	 * 	<li><js>"false"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js> (default)
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlSerializer.detectLabelParameters.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -226,17 +261,24 @@ public @interface HtmlConfig {
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul>
-	 * 	<li><js>"TO_STRING"</js> - Set to whatever is returned by {@link #toString()} on the object.
-	 * 	<li><js>"PROPERTY_NAME"</js> - Set to the bean property name.
-	 * 	<li><js>"URI"</js> - Set to the URI value.
-	 * 	<li><js>"LAST_TOKEN"</js> - Set to the last token of the URI value.
-	 * 	<li><js>"URI_ANCHOR"</js> - Set to the anchor of the URL.
-	 * 	<li><js>"CONTEXT_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a context-relative path.
-	 * 	<li><js>"SERVLET_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a servlet-relative path.
-	 * 	<li><js>"PATH_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a path-relative path.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"TO_STRING"</js> - Set to whatever is returned by {@link #toString()} on the object.
+	 * 			<li><js>"PROPERTY_NAME"</js> - Set to the bean property name.
+	 * 			<li><js>"URI"</js> - Set to the URI value.
+	 * 			<li><js>"LAST_TOKEN"</js> - Set to the last token of the URI value.
+	 * 			<li><js>"URI_ANCHOR"</js> - Set to the anchor of the URL.
+	 * 			<li><js>"CONTEXT_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a context-relative path.
+	 * 			<li><js>"SERVLET_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a servlet-relative path.
+	 * 			<li><js>"PATH_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a path-relative path.
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlSerializer.uriAnchorText.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

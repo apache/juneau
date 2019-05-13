@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-System Default Config
+{updated} System Default Config
 
 <p>
 	Each JVM has a system default config.  This is a configuration file that serves as the default
@@ -49,6 +49,7 @@ System Default Config
 			<li><code>application.cfg</code>
 			<li><code>app.cfg</code>
 			<li><code>settings.cfg</code>
+			<li><code>application.properties</code>
 		</ol>
 </ol>
 <p>
@@ -62,4 +63,8 @@ System Default Config
 
 	<jc>// Use system property if set or the system default if not.</jc>
 	<ja>@RestResource</ja>(config=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>)
+</p>
+<p>
+	By default, all properties in the system default configuration are automatically set as system properties.
+	This can be disabled by setting the system property <js>"juneau.disableAutoSystemProps"</js> to <js>"true"</js>.
 </p>

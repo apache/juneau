@@ -192,7 +192,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * <h5 class='section'>Property:</h5>
 	 * <ul>
-	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.ls"</js>
+	 * 	<li><b>Name:</b>  <js>"HtmlDocSerializer.header.ls"</js>
 	 * 	<li><b>Data type:</b>  <code>List&lt;String&gt;</code>
 	 * 	<li><b>Default:</b>  empty list
 	 * 	<li><b>Session property:</b>  <jk>true</jk>

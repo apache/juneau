@@ -47,22 +47,24 @@ public @interface UrlEncodingConfig {
 	 * If <js>"false"</js>, serializing the array <code>[1,2,3]</code> results in <code>?key=$a(1,2,3)</code>.
 	 * <br>If <js>"true"</js>, serializing the same array results in <code>?key=1&amp;key=2&amp;key=3</code>.
 	 *
-	 * <p>
-	 * This option only applies to beans.
-	 *
 	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
 	 * 	<li>
 	 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 	 * 		is added to it.
-	 * </ul>
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * 	<li>
+	 * 		This option only applies to beans.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"UrlEncodingSerializer.expandedParams.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var:
  * <ul>
- * 	<li><js>"$PE{arg, pattern, groupIndex}"</js>
+ * 	<li><js>"$PE{arg,pattern,groupIndex}"</js>
  * </ul>
  *
  * <p>
@@ -70,14 +70,14 @@ public class PatternExtractVar extends MultipartVar {
 		String pattern = args[1];
 		String result = "";
 		int groupId = Integer.parseInt(args[2]);
-		
+
 		Pattern p = Pattern.compile(pattern.replace("*", ".*").replace("?", "."));
 		Matcher m = p.matcher(stringArg);
-			
+
 		if (m.find() && groupId <= m.groupCount() && groupId >= 0) {
 			result = m.group(groupId);
 		}
-		
+
 		return result;
 	}
 }

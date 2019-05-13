@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html.annotation;
 
-import static org.apache.juneau.html.HtmlDocSerializer.*;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
@@ -49,9 +47,6 @@ public @interface HtmlDocConfig {
 	 * The aside section floats on the right of the page for providing content supporting the serialized content of
 	 * the page.
 	 *
-	 * <p>
-	 * By default, the aside section is empty.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@HtmlDocConfig</ja>(
@@ -64,6 +59,28 @@ public @interface HtmlDocConfig {
 	 * 		}
 	 * 	)
 	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: HTML
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.aside.ls"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -78,9 +95,6 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Allows you to specify the contents of the footer section on the HTML page.
 	 *
-	 * <p>
-	 * By default, the footer section is empty.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@HtmlDocConfig</ja>(
@@ -89,6 +103,28 @@ public @interface HtmlDocConfig {
 	 * 		}
 	 * 	)
 	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: HTML
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.footer.ls"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -111,6 +147,26 @@ public @interface HtmlDocConfig {
 	 * 		}
 	 * 	)
 	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: HTML
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.head.ls"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -135,6 +191,28 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: HTML
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no header.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class if not overridden.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.header.ls"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_header}
@@ -158,8 +236,29 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * When this property is specified, the {@link #HTMLDOC_navlinks} property is ignored.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: HTML
+	 * 	<li>
+	 * 		When {@link #navlinks()} is also specified, this content is placed AFTER the navigation links.
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.nav.ls"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -204,6 +303,28 @@ public @interface HtmlDocConfig {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
 	 * </p>
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent links can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
+	 * 		to place a link inside the list of parent links.
+	 * 	<li>
+	 * 		Supports {@doc juneau-marshall.URIs} (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.navlinks.ls"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_navlinks}
@@ -224,8 +345,18 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <p>
-	 * A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: HTML
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.noResultsMessage.s"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -240,11 +371,19 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.nowrap.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -268,6 +407,28 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: Javascript
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.script.ls"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_script}
@@ -290,6 +451,28 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: CSS
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		A value of <js>"NONE"</js> can be used to force no value.
+	 * 	<li>
+	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
+	 * 	<li>
+	 * 		Multiple values are combined with newlines into a single string.
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.style.ls"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link HtmlDocSerializer#HTMLDOC_style}
@@ -305,6 +488,22 @@ public @interface HtmlDocConfig {
 	 *
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@RestResource</ja>.stylesheet()</code> annotation.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: URL
+	 * 	<li>
+	 * 		Supports {@doc DefaultRestSvlVariables}
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"HtmlDocSerializer.stylesheet.ls"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -329,6 +528,15 @@ public @interface HtmlDocConfig {
 	 * 		template=MySpecialDocTemplate.<jk>class</jk>
 	 * 	)
 	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
+	 * 	<li>
+	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
+	 * 		parent class.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

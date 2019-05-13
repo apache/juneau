@@ -25,11 +25,8 @@ import org.apache.juneau.svl.*;
  * The format for this var is one of the following:
  * <ul>
  * 	<li><js>"$LN{arg}"</js>
- * 	<li><js>"$LN{arg, delimiter}"</js>
+ * 	<li><js>"$LN{arg,delimiter}"</js>
  * </ul>
- *
- * <p>
- * 
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -65,13 +62,13 @@ public class LenVar extends MultipartVar {
 	public String resolve(VarResolverSession session, String[] args) {
 		if (args.length > 2)
 			illegalArg("Invalid number of arguments passed to $LN var.  Must have 1 or 2 arguments.");
-		
+
 		int len = 0;
 		String stringArg = args[0];
-		if (args.length == 1) 
+		if (args.length == 1)
 			len = stringArg.length();
-		else if (args.length == 2) { 
-			//delimiter is given 
+		else if (args.length == 2) {
+			//delimiter is given
 			String delimiter = Pattern.quote(args[1]);
 			len = stringArg.trim().split(delimiter).length;
 		}

@@ -49,19 +49,25 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 *
-	 * <p>
-	 * The format is a comma-delimited list of any of the following values:
-	 *
-	 * <ul class='doctree'>
-	 * 	<li><js>"BEAN"</js>
-	 * 	<li><js>"COLLECTION"</js>
-	 * 	<li><js>"ARRAY"</js>
-	 * 	<li><js>"MAP"</js>
-	 * 	<li><js>"STRING"</js>
-	 * 	<li><js>"NUMBER"</js>
-	 * 	<li><js>"BOOLEAN"</js>
-	 * 	<li><js>"ANY"</js>
-	 * 	<li><js>"OTHER"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a comma-delimited list of any of the following values:
+	 * 		<ul class='doctree'>
+	 * 			<li><js>"BEAN"</js>
+	 * 			<li><js>"COLLECTION"</js>
+	 * 			<li><js>"ARRAY"</js>
+	 * 			<li><js>"MAP"</js>
+	 * 			<li><js>"STRING"</js>
+	 * 			<li><js>"NUMBER"</js>
+	 * 			<li><js>"BOOLEAN"</js>
+	 * 			<li><js>"ANY"</js>
+	 * 			<li><js>"OTHER"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -84,19 +90,25 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='jf'>{@link BeanContext#BEAN_examples}
 	 * </ul>
 	 *
-	 * <p>
-	 * The format is a comma-delimited list of any of the following values:
-	 *
-	 * <ul class='doctree'>
-	 * 	<li><js>"BEAN"</js>
-	 * 	<li><js>"COLLECTION"</js>
-	 * 	<li><js>"ARRAY"</js>
-	 * 	<li><js>"MAP"</js>
-	 * 	<li><js>"STRING"</js>
-	 * 	<li><js>"NUMBER"</js>
-	 * 	<li><js>"BOOLEAN"</js>
-	 * 	<li><js>"ANY"</js>
-	 * 	<li><js>"OTHER"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The format is a comma-delimited list of any of the following values:
+	 * 		<ul class='doctree'>
+	 * 			<li><js>"BEAN"</js>
+	 * 			<li><js>"COLLECTION"</js>
+	 * 			<li><js>"ARRAY"</js>
+	 * 			<li><js>"MAP"</js>
+	 * 			<li><js>"STRING"</js>
+	 * 			<li><js>"NUMBER"</js>
+	 * 			<li><js>"BOOLEAN"</js>
+	 * 			<li><js>"ANY"</js>
+	 * 			<li><js>"OTHER"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.addDescriptionsTo.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -112,11 +124,18 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.allowNestedDescriptions.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -132,11 +151,18 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.allowNestedExamples.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -155,8 +181,11 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 *
-	 * <p>
-	 * This setting is ignored if {@link #JSONSCHEMA_useBeanDefs} is not enabled.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		This setting is ignored if {@link #JSONSCHEMA_useBeanDefs} is not enabled.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -171,9 +200,16 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Allows you to override or provide custom schema information for particular class types.
 	 *
-	 * <p>
-	 * Keys are the class.
-	 * <br>Values are Simple-JSON objects.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Keys are the class.
+	 * 		<br>Values are Simple-JSON objects.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.defaultSchema.smo"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -188,6 +224,15 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
 	 * Swagger documentation.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 		Format: Comma-delimited list of patterns
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.ignoreTypes.s"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -214,11 +259,18 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, ObjectMap)}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"JsonSchemaGenerator.useBeanDefs.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>

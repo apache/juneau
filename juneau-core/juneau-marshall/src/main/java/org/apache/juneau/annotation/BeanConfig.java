@@ -53,13 +53,20 @@ public @interface BeanConfig {
 	 * will not be interpreted as a bean class and be serialized as a string.
 	 * <br>Use this setting to reduce the visibility requirement.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"PUBLIC"</js> (default)
-	 * 	<li><js>"PROTECTED"</js>
-	 * 	<li><js>"DEFAULT"</js>
-	 * 	<li><js>"PRIVATE"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"PUBLIC"</js> (default)
+	 * 			<li><js>"PROTECTED"</js>
+	 * 			<li><js>"DEFAULT"</js>
+	 * 			<li><js>"PRIVATE"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beanClassVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -80,13 +87,20 @@ public @interface BeanConfig {
 	 * <br>Normally, only <jk>public</jk> no-arg constructors are used.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"PUBLIC"</js> (default)
-	 * 	<li><js>"PROTECTED"</js>
-	 * 	<li><js>"DEFAULT"</js>
-	 * 	<li><js>"PRIVATE"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"PUBLIC"</js> (default)
+	 * 			<li><js>"PROTECTED"</js>
+	 * 			<li><js>"DEFAULT"</js>
+	 * 			<li><js>"PRIVATE"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beanConstructorVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -151,13 +165,20 @@ public @interface BeanConfig {
 	 * <br>Normally only <jk>public</jk> fields are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"PUBLIC"</js> (default)
-	 * 	<li><js>"PROTECTED"</js>
-	 * 	<li><js>"DEFAULT"</js>
-	 * 	<li><js>"PRIVATE"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"PUBLIC"</js> (default)
+	 * 			<li><js>"PROTECTED"</js>
+	 * 			<li><js>"DEFAULT"</js>
+	 * 			<li><js>"PRIVATE"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beanFieldVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -175,15 +196,18 @@ public @interface BeanConfig {
 	 * <br>It's useful when you want to use the <code>@Bean</code> annotation functionality, but you don't have the ability to alter
 	 * the bean classes.
 	 *
-	 * <p>
-	 * Values can consist of any of the following types:
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>Any subclass of {@link BeanFilterBuilder}.
-	 * 		<br>These must have a public no-arg constructor.
-	 * 	<li>Any bean interfaces.
-	 * 		<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
-	 * 		<br>Any subclasses of an interface class will only have properties defined on the interface.
-	 * 		All other bean properties will be ignored.
+	 * 	<li>
+	 * 		Values can consist of any of the following types:
+	 * 		<ul class='spaced-list'>
+	 * 			<li>Any subclass of {@link BeanFilterBuilder}.
+	 * 				<br>These must have a public no-arg constructor.
+	 * 			<li>Any bean interfaces.
+	 * 				<br>A shortcut for defining a {@link InterfaceBeanFilterBuilder}.
+	 * 				<br>Any subclasses of an interface class will only have properties defined on the interface.
+	 * 				<br>All other bean properties will be ignored.
+	 * 		</ul>
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -223,11 +247,18 @@ public @interface BeanConfig {
 	 * values.
 	 * <br>Otherwise, it returns <jk>null</jk>.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default because it introduces a slight performance penalty during serialization)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default because it introduces a slight performance penalty during serialization)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beanMapPutReturnsOldValue.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -248,13 +279,20 @@ public @interface BeanConfig {
 	 * <br>Normally only <jk>public</jk> getters and setters are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"PUBLIC"</js> (default)
-	 * 	<li><js>"PROTECTED"</js>
-	 * 	<li><js>"DEFAULT"</js>
-	 * 	<li><js>"PRIVATE"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"PUBLIC"</js> (default)
+	 * 			<li><js>"PROTECTED"</js>
+	 * 			<li><js>"DEFAULT"</js>
+	 * 			<li><js>"PRIVATE"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beanMethodVisibility.s"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -271,15 +309,21 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireDefaultConstructor.b"</js>.
 	 * </ul>
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -295,15 +339,21 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireSerializable.b"</js>.
 	 * </ul>
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -319,11 +369,18 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * <br>Otherwise, they will be ignored.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireSettersForGetters.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -340,15 +397,19 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, then a Java class must contain at least 1 property to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js> (default)
-	 * 	<li><js>"false"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js> (default)
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beansRequireSomeProperties.b"</js>.
 	 * </ul>
-	 *
-	 * <p>
-	 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -364,9 +425,16 @@ public @interface BeanConfig {
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
 	 * parser knows the data type to reconstruct.
 	 *
-	 * <p>
-	 * The default value is <js>"_type"</js>.
-	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Default value: <js>"_type"</js>.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.beanTypePropertyName.s"</js>.
+	 * </ul>
+
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_beanTypePropertyName}
@@ -426,6 +494,10 @@ public @interface BeanConfig {
 	 * 	bpi={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
 	 * 	bpi=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.properties.sms"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -485,6 +557,10 @@ public @interface BeanConfig {
 	 * 	bpx={<js>"Bean1: foo"</js>,<js>"Bean2: bar,baz"</js>}
 	 * 	bpx=<js>"Bean1: foo; Bean2: bar,baz"</js>
 	 * 		</p>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.excludeProperties.sms"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -515,11 +591,18 @@ public @interface BeanConfig {
 	 * 		in order to determine how that method was invoked.
 	 * </ul>
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.debug.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -538,13 +621,6 @@ public @interface BeanConfig {
 	 * <p>
 	 * Examples are used in cases such as POJO examples in Swagger documents.
 	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
-	 * <p>
-	 * Keys are the class of the example.
-	 * <br>Values are Simple-JSON representation of that class.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanConfig</ja>(
@@ -552,13 +628,26 @@ public @interface BeanConfig {
 	 * 			<ja>@CSEntry</ja>(key=MyBean.<jk>class</jk>, value=<js>"{foo:'bar'}"</js>)
 	 * 		}
 	 * 	)
-	 * <p>
+	 * </p>
 	 *
-	 * POJO examples can also be defined on classes via the following:
+	 * <h5 class='section'>Notes:</h5>
 	 * <ul class='spaced-list'>
-	 * 	<li>A static field annotated with {@link Example @Example}.
-	 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-	 * 	<li>A static method with name <code>example</code> with no arguments or one {@link BeanSession} argument.
+	 * 	<li>
+	 * 		Setting applies to specified class and all subclasses.
+	 * 	<li>
+	 * 		Keys are the class of the example.
+	 * 		<br>Values are Simple-JSON representation of that class.
+	 * 	<li>
+	 * 		POJO examples can also be defined on classes via the following:
+	 * 		<ul class='spaced-list'>
+	 * 			<li>A static field annotated with {@link Example @Example}.
+	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+	 * 			<li>A static method with name <code>example</code> with no arguments or one {@link BeanSession} argument.
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.examples.smo"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -574,14 +663,6 @@ public @interface BeanConfig {
 	 * <p>
 	 * Same as {@link #example()} but allows you to define examples as a Simple-JSON string.
 	 *
-	 * <p>
-	 * Keys are the class of the example and can be the fully-qualified name or simple name.
-	 * <br>Values are Simple-JSON representation of that class.
-	 *
-	 * <p>
-	 * The individual strings are concatenated together and the whole string is treated as a JSON Object.
-	 * <br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanConfig</ja>(
@@ -589,7 +670,21 @@ public @interface BeanConfig {
 	 * 			<js>"MyBean: {foo:'bar'}"</js>  <jc>// Could also be "{MyBean: {foo:'bar'}}"</jc>
 	 * 		}
 	 * 	)
-	 * <p>
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Keys are the class of the example and can be the fully-qualified name or simple name.
+	 * 		<br>Values are Simple-JSON representation of that class.
+	 *	<li>
+	 * 		The individual strings are concatenated together and the whole string is treated as a JSON Object.
+	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.examples.smo"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -604,13 +699,6 @@ public @interface BeanConfig {
 	 * <p>
 	 * Specifies to exclude the specified list of properties for the specified bean class.
 	 *
-	 * <p>
-	 * Keys are the class applied to.
-	 * <br>Values are comma-delimited lists of property names.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanConfig</ja>(
@@ -619,6 +707,19 @@ public @interface BeanConfig {
 	 * 		}
 	 * 	)
 	 * <p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Keys are the class applied to.
+	 * 		<br>Values are comma-delimited lists of property names.
+	 *	<li>
+	 * 		Setting applies to specified class and all subclasses.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.excludeProperties.sms"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -642,11 +743,18 @@ public @interface BeanConfig {
 	 * 	<li>Return the bean itself.
 	 * </ul>
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.fluentSetters.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -663,11 +771,18 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, errors thrown when calling bean getter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreInvocationExceptionsOnGetters.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -684,11 +799,18 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, errors thrown when calling bean setter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreInvocationExceptionsOnSetters.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -705,11 +827,18 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, trying to set a value on a bean property without a setter will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js> (default)
-	 * 	<li><js>"false"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js> (default)
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.ignorePropertiesWithoutSetters.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -726,11 +855,18 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreUnknownBeanProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -747,11 +883,18 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, trying to set a <jk>null</jk> value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js> (default)
-	 * 	<li><js>"false"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js> (default)
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.ignoreUnknownNullBeanProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -791,13 +934,6 @@ public @interface BeanConfig {
 	 * <p>
 	 * Specifies the set and order of names of properties associated with the bean class.
 	 *
-	 * <p>
-	 * Keys are the class applied to.
-	 * <br>Values are comma-delimited lists of property names.
-	 *
-	 * <p>
-	 * Setting applies to specified class and all subclasses.
-	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@BeanConfig</ja>(
@@ -806,6 +942,19 @@ public @interface BeanConfig {
 	 * 		}
 	 * 	)
 	 * <p>
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Keys are the class applied to.
+	 * 		<br>Values are comma-delimited lists of property names.
+	 * 	<li>
+	 * 		Setting applies to specified class and all subclasses.
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.properties.sms"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -820,6 +969,14 @@ public @interface BeanConfig {
 	 * <p>
 	 * Specifies the default locale for serializer and parser sessions.
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.locale.s"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_locale}
@@ -832,6 +989,14 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * Specifies the default media type value for serializer and parser sessions.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.mediaType.s"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -846,6 +1011,14 @@ public @interface BeanConfig {
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
 	 * <br>Not-bean classes are converted to <code>Strings</code> during serialization.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.notBeanClasses.sc"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -886,22 +1059,29 @@ public @interface BeanConfig {
 	 * <p>
 	 * Note that you can specify suffix patterns to include all subpackages.
 	 *
-	 * <p>
-	 * The default value excludes the following packages:
-	 * 	<ul>
-	 * 		<li><code>java.lang</code>
-	 * 		<li><code>java.lang.annotation</code>
-	 * 		<li><code>java.lang.ref</code>
-	 * 		<li><code>java.lang.reflect</code>
-	 * 		<li><code>java.io</code>
-	 * 		<li><code>java.net</code>
-	 * 		<li><code>java.nio.*</code>
-	 * 		<li><code>java.util.*</code>
-	 * 	</ul>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The default value excludes the following packages:
+	 * 		<ul>
+	 * 			<li><code>java.lang</code>
+	 * 			<li><code>java.lang.annotation</code>
+	 * 			<li><code>java.lang.ref</code>
+	 * 			<li><code>java.lang.reflect</code>
+	 * 			<li><code>java.io</code>
+	 * 			<li><code>java.net</code>
+	 * 			<li><code>java.nio.*</code>
+	 * 			<li><code>java.util.*</code>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.notBeanPackages.ss"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
-	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanClasses}
+	 * 	<li class='jf'>{@link BeanContext#BEAN_notBeanPackages}
 	 * </ul>
 	 */
 	String[] notBeanPackages() default {};
@@ -1009,11 +1189,18 @@ public @interface BeanConfig {
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
 	 * in the Java file.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.sortProperties.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1029,6 +1216,14 @@ public @interface BeanConfig {
 	 * <p>
 	 * Specifies the default timezone for serializer and parser sessions.
 	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.timeZone.s"</js>.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jf'>{@link BeanContext#BEAN_timeZone}
@@ -1042,11 +1237,18 @@ public @interface BeanConfig {
 	 * <p>
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 *		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.useEnumNames.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1064,11 +1266,18 @@ public @interface BeanConfig {
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * <br>Otherwise, throws a {@link BeanRuntimeException}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js> (default)
-	 * 	<li><js>"false"</js>
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 *		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js> (default)
+	 * 			<li><js>"false"</js>
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.useInterfaceProxies.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1085,11 +1294,18 @@ public @interface BeanConfig {
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * <br>Most {@link Bean @Bean} annotations will be ignored.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 *		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanContext.useJavaBeanIntrospector.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1108,13 +1324,6 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * Specifies that recursions should be checked for during traversal.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
 	 *
 	 * <p>
 	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
@@ -1136,6 +1345,16 @@ public @interface BeanConfig {
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Checking for recursion can cause a small performance penalty.
+	 * 	<li>
+	 *		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.detectRecursions.b"</js>.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -1153,15 +1372,22 @@ public @interface BeanConfig {
 	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
 	 *
 	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <p>
 	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 *		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.ignoreRecursions.b"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1177,9 +1403,17 @@ public @interface BeanConfig {
 	 * The initial indentation level at the root.
 	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
 	 *
-	 * <p>
-	 * Format is an integer.
-	 * <br>The default value is <js>"0"</js>.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: integer
+	 *	<li>
+	 * 		Default value: <js>"0"</js>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.initialDepth.i"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
@@ -1195,9 +1429,17 @@ public @interface BeanConfig {
 	 * Abort traversal if specified depth is reached in the POJO tree.
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 *
-	 * <p>
-	 * Format is an integer.
-	 * <br>The default value is <js>"100"</js>.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Format: integer
+	 * 	<li>
+	 * 		Default value: <js>"100"</js>
+	 * 	<li>
+	 * 		Supports {@doc DefaultSvlVariables} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li>
+	 * 		A default global value can be set via the system property <js>"BeanTraverseContext.maxDepth.i"</js>.
+	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>

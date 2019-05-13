@@ -22,8 +22,8 @@ import org.apache.juneau.svl.*;
  * <p>
  * The format for this var is one of the following:
  * <ul>
- * 	<li><js>"$ST{arg, start}"</js>
- * 	<li><js>"$ST{arg, start, end}"</js>
+ * 	<li><js>"$ST{arg,start}"</js>
+ * 	<li><js>"$ST{arg,start,end}"</js>
  * </ul>
  *
  * <p>

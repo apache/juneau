@@ -46,6 +46,7 @@ import org.apache.juneau.svl.*;
  */
 public final class Config extends Context implements ConfigEventListener, Writable {
 
+	private static boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");
 	private static volatile Config SYSTEM_DEFAULT = findSystemDefault();
 
 	/**
@@ -70,8 +71,11 @@ public final class Config extends Context implements ConfigEventListener, Writab
 
 		for (String n : getCandidateSystemDefaultConfigNames()) {
 			Config config = find(n);
-			if (config != null)
+			if (config != null) {
+				if (! DISABLE_AUTO_SYSTEM_PROPS)
+					config.setSystemProperties();
 				return config;
+			}
 		}
 
 		return null;
@@ -91,6 +95,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 	 * 	<li><js>"application.cfg"</js>
 	 * 	<li><js>"app.cfg"</js>
 	 * 	<li><js>"settings.cfg"</js>
+	 * 	<li><js>"application.properties"</js>
 	 * </ol>
 	 * <p>
 	 *
@@ -126,6 +131,7 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		l.add("application.cfg");
 		l.add("app.cfg");
 		l.add("settings.cfg");
+		l.add("application.properties");
 
 		return l;
 	}
@@ -512,6 +518,24 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return val;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Takes the settings defined in this configuration and sets them as system properties.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public Config setSystemProperties() {
+		for (String section : getSections()) {
+			for (String key : getKeys(section)) {
+				String k = (section.isEmpty() ? key : section + '/' + key);
+				System.setProperty(k, get(k));
+			}
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Workhorse setters
@@ -1420,6 +1444,14 @@ public final class Config extends Context implements ConfigEventListener, Writab
 		return om;
 	}
 
+	/**
+	 * Returns the section names defined in this config.
+	 *
+	 * @return The section names defined in this config.
+	 */
+	public Set<String> getSections() {
+		return Collections.unmodifiableSet(configMap.getSections());
+	}
 
 	/**
 	 * Wraps a config file section inside a Java interface so that values in the section can be read and
